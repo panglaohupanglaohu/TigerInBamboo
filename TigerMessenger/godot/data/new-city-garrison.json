@@ -1,0 +1,292 @@
+{
+  "source": "new-city-layered-garrison-v1",
+  "frame": "castleContainer",
+  "scope": "Shared static posts; native battle state machine pending.",
+  "face": [
+    -0.4999999999999998,
+    -5.551115123125783e-17,
+    0.8660254037844388
+  ],
+  "rows": [
+    {
+      "index": 0,
+      "post": "forecourt-left",
+      "role": "spear",
+      "position": [
+        6.667614379899323,
+        4.0500000000000105,
+        55.2577595892885
+      ]
+    },
+    {
+      "index": 1,
+      "post": "forecourt-left",
+      "role": "gladius",
+      "position": [
+        7.403735973116095,
+        4.0500000000000105,
+        55.682759589288494
+      ]
+    },
+    {
+      "index": 2,
+      "post": "forecourt-left",
+      "role": "spear",
+      "position": [
+        8.13985756633286,
+        4.0500000000000105,
+        56.1077595892885
+      ]
+    },
+    {
+      "index": 3,
+      "post": "forecourt-left",
+      "role": "gladius",
+      "position": [
+        8.875979159549633,
+        4.0500000000000105,
+        56.532759589288496
+      ]
+    },
+    {
+      "index": 4,
+      "post": "forecourt-right",
+      "role": "spear",
+      "position": [
+        20.52402084045033,
+        4.0500000000000105,
+        63.2577595892885
+      ]
+    },
+    {
+      "index": 5,
+      "post": "forecourt-right",
+      "role": "gladius",
+      "position": [
+        21.26014243366711,
+        4.0500000000000105,
+        63.68275958928851
+      ]
+    },
+    {
+      "index": 6,
+      "post": "forecourt-right",
+      "role": "spear",
+      "position": [
+        21.996264026883882,
+        4.0500000000000105,
+        64.1077595892885
+      ]
+    },
+    {
+      "index": 7,
+      "post": "forecourt-right",
+      "role": "gladius",
+      "position": [
+        22.732385620100654,
+        4.049999999999982,
+        64.53275958928852
+      ]
+    },
+    {
+      "index": 8,
+      "post": "middle-left",
+      "role": "spear",
+      "position": [
+        13.667614379899321,
+        10.05000000000001,
+        43.13340393630638
+      ]
+    },
+    {
+      "index": 9,
+      "post": "middle-left",
+      "role": "gladius",
+      "position": [
+        14.4037359731161,
+        10.05000000000001,
+        43.55840393630636
+      ]
+    },
+    {
+      "index": 10,
+      "post": "middle-left",
+      "role": "spear",
+      "position": [
+        15.139857566332859,
+        10.05000000000001,
+        43.98340393630637
+      ]
+    },
+    {
+      "index": 11,
+      "post": "middle-left",
+      "role": "gladius",
+      "position": [
+        15.875979159549653,
+        10.05000000000001,
+        44.40840393630638
+      ]
+    },
+    {
+      "index": 12,
+      "post": "middle-right",
+      "role": "spear",
+      "position": [
+        29.68908434991144,
+        10.05000000000001,
+        52.383403936306365
+      ]
+    },
+    {
+      "index": 13,
+      "post": "middle-right",
+      "role": "gladius",
+      "position": [
+        30.425205943128226,
+        10.049999999999981,
+        52.80840393630638
+      ]
+    },
+    {
+      "index": 14,
+      "post": "middle-right",
+      "role": "spear",
+      "position": [
+        31.16132753634499,
+        10.05000000000001,
+        53.23340393630637
+      ]
+    },
+    {
+      "index": 15,
+      "post": "middle-right",
+      "role": "gladius",
+      "position": [
+        31.897449129561757,
+        10.05000000000001,
+        53.658403936306364
+      ]
+    },
+    {
+      "index": 16,
+      "post": "keep-left",
+      "role": "spear",
+      "position": [
+        20.66761437989933,
+        16.050000000000008,
+        31.009048283324226
+      ]
+    },
+    {
+      "index": 17,
+      "post": "keep-left",
+      "role": "gladius",
+      "position": [
+        21.403735973116095,
+        16.050000000000008,
+        31.434048283324216
+      ]
+    },
+    {
+      "index": 18,
+      "post": "keep-left",
+      "role": "spear",
+      "position": [
+        22.13985756633286,
+        16.050000000000008,
+        31.85904828332422
+      ]
+    },
+    {
+      "index": 19,
+      "post": "keep-left",
+      "role": "gladius",
+      "position": [
+        22.875979159549647,
+        16.050000000000008,
+        32.284048283324225
+      ]
+    },
+    {
+      "index": 20,
+      "post": "keep-right",
+      "role": "spear",
+      "position": [
+        34.524020840450326,
+        16.050000000000008,
+        39.00904828332422
+      ]
+    },
+    {
+      "index": 21,
+      "post": "keep-right",
+      "role": "gladius",
+      "position": [
+        35.26014243366711,
+        16.04999999999998,
+        39.434048283324216
+      ]
+    },
+    {
+      "index": 22,
+      "post": "keep-right",
+      "role": "spear",
+      "position": [
+        35.99626402688388,
+        16.050000000000008,
+        39.85904828332423
+      ]
+    },
+    {
+      "index": 23,
+      "post": "keep-right",
+      "role": "gladius",
+      "position": [
+        36.732385620100665,
+        16.050000000000008,
+        40.28404828332424
+      ]
+    },
+    {
+      "index": 24,
+      "post": "balcony-archer",
+      "role": "longbow",
+      "position": [
+        34.92081761017483,
+        37.049999999999976,
+        22.321776117882205
+      ]
+    },
+    {
+      "index": 25,
+      "post": "balcony-archer",
+      "role": "longbow",
+      "position": [
+        35.656939203391595,
+        37.049999999999976,
+        22.746776117882202
+      ]
+    },
+    {
+      "index": 26,
+      "post": "balcony-archer",
+      "role": "longbow",
+      "position": [
+        36.39306079660837,
+        37.049999999999976,
+        23.1717761178822
+      ]
+    },
+    {
+      "index": 27,
+      "post": "balcony-archer",
+      "role": "longbow",
+      "position": [
+        37.12918238982514,
+        37.05000000000003,
+        23.596776117882197
+      ]
+    }
+  ]
+}

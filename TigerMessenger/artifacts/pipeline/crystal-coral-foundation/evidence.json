@@ -1,0 +1,32 @@
+{
+  "task": "Lower crystal foundations and apply pale-top deep-bottom coral gradient",
+  "visual_observations": {
+    "source": "Assistant inspected final 8931 tower-wide and habitat close-up screenshots",
+    "image_sha256": "5dbb3d71cb3909ebb1fefe7fce3873b778925a075e7f675be09ea1600f9fb6b4",
+    "completed": [
+      "Blue added bedrock replaced by low coral bedrock, main nominal height 15 to 5.2",
+      "Existing shoreline rock upper spires compressed above 5, lower supports preserved",
+      "Crystal gradient visible pale coral crown to deeper coral base"
+    ],
+    "remaining": [
+      "Transparent surfaces show internal structural members",
+      "No full player harbour traversal in this batch"
+    ]
+  },
+  "checks": [
+    {
+      "name": "12 clusters / 60 prisms retained",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No browser or shader errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text-only triage; screenshots inspected by assistant",
+    "Do not claim full gameplay acceptance"
+  ]
+}

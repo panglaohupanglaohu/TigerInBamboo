@@ -1,0 +1,203 @@
+{
+  "createdUTC": "2026-09-27T08:25:57.854737+00:00",
+  "scope": "Web runtime and optional articulated assets; no Godot gameplay migration",
+  "note": "Snapshot absence is not an assertion that a file was originally absent. sceneDistanceCulling original snapshot was not captured; this remains a documented limitation.",
+  "sources": [
+    {
+      "path": "src/assets/bookshopRobots.js",
+      "sha256": "1447e15bec08ce3d952771c45e8f559a5a21c31550efb193fb9350ae58b4c311",
+      "bytes": 26002,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/assets/bookshopRobots.js",
+      "snapshotSHA256": "eaec676b1059dda591ea9c23d8caa076cfcbc00eb23e296c47cb24b54abc1818"
+    },
+    {
+      "path": "src/assets/freightMotion.js",
+      "sha256": "1d57d087e2c697952216342fc861655f7cf72829cb02a3b5f111fa3b0ebea5f9",
+      "bytes": 2500,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/assets/freightTrain.js",
+      "sha256": "d12577380c25096152fdc3bcad2ec54fa6a6d0a911c2397038b254e4a31a53df",
+      "bytes": 4865,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/assets/freightTrain.js",
+      "snapshotSHA256": "de684052ebfe60de6ed25f22f85a1ef22d70597a438ad6b47e17734577461c1d"
+    },
+    {
+      "path": "src/assets/robotArticulation.js",
+      "sha256": "4819db2103c87bd616b593835e86323b10566ead61719420655749ed62b40841",
+      "bytes": 13507,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/core/sceneDistanceCulling.js",
+      "sha256": "5e7ef23ced6414b6f9c4cae1d10a3e025eac232f560394fc05a9ca402eb098ad",
+      "bytes": 6361,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/combat.js",
+      "sha256": "d9047b884857ba8f7882905406574286aced34e09befb5951765771b941443ad",
+      "bytes": 15183,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/effects.js",
+      "sha256": "05637008d45d1fba6fab33bba954e4b154cb2f9767cccef30b996618ba229f8b",
+      "bytes": 4778,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/freightInterlocking.js",
+      "sha256": "c80890e23c746fa1daeadc126d04c72656f77fb52cb2cd88719995f8cb881b65",
+      "bytes": 2846,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/handlingRig.js",
+      "sha256": "d021675805e1594a3fd5629dda7653226895c6e0ebdf8786a71c24c40f6d8a96",
+      "bytes": 5750,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/logistics.js",
+      "sha256": "dadad49086a5fdbbbdc5256db8a0d665b3311882a8f465589b01b2288e15efed",
+      "bytes": 10081,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/navigation.js",
+      "sha256": "703403b8bbd535aaf41fc593cd2f057dda408b4b221e63f3ced426cb520dfbb3",
+      "bytes": 1834,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/panel.js",
+      "sha256": "268b967bb0048e8c59692540c2cc7d1fe7c33f5a0c32c42d41030790ab3de370",
+      "bytes": 9352,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/runtime.js",
+      "sha256": "8e0ddc804c42e58ecd19a284ed57c33d955aa28f1b2e786190fbb227f5648474",
+      "bytes": 12168,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/gameplay/robotOps/saveState.js",
+      "sha256": "798d2b13e77e431c039359c28a9d64011fbf80acfeb1ca5dec87ba5982576f61",
+      "bytes": 1851,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "800cc46ef0a9dda1ac8019c82119e076394e4762054003550a47a4552999116b",
+      "bytes": 91025,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/main.js",
+      "snapshotSHA256": "af58ba8f2530194fa11338656d27eebe6f7d37a1da551c48a713655e989d29ac"
+    },
+    {
+      "path": "src/player/tramRide.js",
+      "sha256": "ba611689e6c2b300e5e14a7df0bb15c6a967ac9c014fc6965a45ad9290e7cffb",
+      "bytes": 11161,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/player/tramRide.js",
+      "snapshotSHA256": "60c2e7cf0989cb923a59e4128ffc68c69a2f9444c36cb3115c88371cb9744040"
+    },
+    {
+      "path": "src/ui/touchControls.js",
+      "sha256": "4b9f36358ba5c78bd58b93148b1d15a404df3d48274e59199b003af8ce219eb3",
+      "bytes": 11635,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/ui/touchControls.js",
+      "snapshotSHA256": "66a27acab49aa510319fddfab05498f15b089a6918237f59c7e6482962b49fde"
+    },
+    {
+      "path": "src/world/bookshopBasePlaza.js",
+      "sha256": "98d5767545ba9b36328d98d29b4a582886c2ca61507ec407c2a3b750fdaae184",
+      "bytes": 7837,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/bookshopBasePlaza.js",
+      "snapshotSHA256": "e8c631fb1b7862c10488ae91bf8806191eec41aa46a7b39a91e576986ce8dcfe"
+    },
+    {
+      "path": "src/world/bookshopBaseServices.js",
+      "sha256": "89ea83adf38cfc53c1d3909f6b9da04c5cbcddf245038a8fb77e01d4477746cc",
+      "bytes": 4298,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/bookshopBaseServices.js",
+      "snapshotSHA256": "f420f1deb91fc953b3d9181a9ed2d86bab7289f607861636d8dffa9e33e4b8ea"
+    },
+    {
+      "path": "src/world/bookshopFactoryBase.js",
+      "sha256": "fd57294b013dd1cc8a9d6e75ed0e76f10414550d01179e0748298e4f41ddeb76",
+      "bytes": 7435,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/bookshopFactoryBase.js",
+      "snapshotSHA256": "97a8a00ee0c812855f85fc86e5f474e31cf28d39e66c7115c33bdf8b00e202af"
+    },
+    {
+      "path": "src/world/bookshopLoadingYards.js",
+      "sha256": "12366d7cea293970e6209b2fb61886112cc27f2771fd04c6356f8db1a46f61d1",
+      "bytes": 6398,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/bookshopLoadingYards.js",
+      "snapshotSHA256": "5bfe83168e721b4fbcb72701a7f64a8be3e392545b449638f075d7bcffcf4d70"
+    },
+    {
+      "path": "src/world/bookshopRobotBase.js",
+      "sha256": "1ece210c6b898975c467badc05e4c08b0b8178fdc75524140d5ea4b50c9c5231",
+      "bytes": 5866,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/bookshopRobotBase.js",
+      "snapshotSHA256": "1ece210c6b898975c467badc05e4c08b0b8178fdc75524140d5ea4b50c9c5231"
+    },
+    {
+      "path": "src/world/bookshopTownSite.js",
+      "sha256": "190e63364a9bcb19c26e4749253a8a864eb05593819cd23e01701c3df57ae2ff",
+      "bytes": 5041,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/bookshopTownSite.js",
+      "snapshotSHA256": "2d6259f1fbb677d73fb53cc484046482fc85957b135ad2c1196b3b84e31274e3"
+    },
+    {
+      "path": "src/world/citadel/coastalTramRoute.js",
+      "sha256": "75934cb13ba2f428313ddc28f9d7d6b04a4bb23903d88ef6896767fdd862d38a",
+      "bytes": 3509,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/citadel/coastalTramRoute.js",
+      "snapshotSHA256": "ef16e5fb01d0269ecf9fab4512ecfc811da220b1ba74f23a4b29771f62968f61"
+    },
+    {
+      "path": "src/world/citadel/coastalTramStructures.js",
+      "sha256": "1a2566a3ca3c105183c27f93214ed74b99ced444dcb049346ac3655b2275d641",
+      "bytes": 10580,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/citadel/coastalTramStructures.js",
+      "snapshotSHA256": "317558a82311a2ead85d5045f34b5547dc776a55ce8b027bcbdbfdfa4e895833"
+    },
+    {
+      "path": "src/world/citadel/highlandGate.js",
+      "sha256": "a313c3b4f8245b60136104dd401d5c22d6918a68e06c99162a43b3d4db4eca83",
+      "bytes": 16984,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/citadel/highlandGate.js",
+      "snapshotSHA256": "26a57277b930ada6adb4a0ec2a27f22f93282de5b930e649e84252a687af0cfd"
+    },
+    {
+      "path": "src/world/citadel/highlandGateWarp.js",
+      "sha256": "76783395d605e8b75f4f486047c98d797c3ddab5b84c8de5c4dc29a591eb05ee",
+      "bytes": 2886,
+      "snapshot": null,
+      "snapshotSHA256": null
+    },
+    {
+      "path": "src/world/tramSystem.js",
+      "sha256": "f594f3c06a0c9e572277eebc4d9ac40908605d4ebf9569cd2ba0794597800508",
+      "bytes": 58155,
+      "snapshot": "artifacts/pipeline/base-four-hour/source-before/src/world/tramSystem.js",
+      "snapshotSHA256": "c99cf21b769681cca52d41568acfac7214dab553d62f641e88ed5d757fa3e691"
+    }
+  ]
+}

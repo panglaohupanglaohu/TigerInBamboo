@@ -1,0 +1,92 @@
+{
+  "task": "Four-hour accepted bookstore-factory freight and articulated robot implementation: final text triage",
+  "target": "Red and blue world freight trains complete the circular plaza, serve three factories and transport full-size same-type batches of three. Advance the approved fictional robot combat design.",
+  "visual_observations": {
+    "source": "Astra inspected actual current Three.js render images named in evidence_revision on 2026-09-27. No images sent to this service.",
+    "completed": [
+      "Cargo-ring live image shows three Locust and three Ant robots on separate full-size flatcars around the circular plaza. Three distinct factory entrances and small coastal tourist bookstore remain.",
+      "Locust has separate armor panels, braced gun pose and olive colors; Ant has boiler torso, short walking legs, stowed cup and forearm cannon; Beetle retains four wheel limbs, front sensor and top turret.",
+      "Steam screen is visible in the actual arena. Freight locomotive wheel/rod overlay and exhaust are visible.",
+      "Route images show loaded flatcars within the blue gate and the refined highland gate corridor."
+    ],
+    "remaining": [
+      "Locust armor remains geometric and grips/joints lack target detail. Ant rust still looks spotted and foot motion lacks full footplant IK. Beetle wheel covers are too bulbous and shell panels simpler than the reference. Dynamic versions are not accepted as 8/10 artwork.",
+      "Steam remains stylized translucent puffs; factories and machinery are substantially simpler than the target paintings.",
+      "Whole-world frame rate remains low. Formal world campaign and railway recovery of damaged robots are not implemented."
+    ]
+  },
+  "checks": [
+    {
+      "name": "Both full 360-degree plaza loops: normal-clock 74-second recording",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "20-minute normal-clock stock-to-load-to-deploy run: all nine, no page errors; version hashes stored",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full world driver circuit after frame-order fix: riding retained, seat error below 1e-6, no errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Both trains: all three robot types physical crane bounds",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "24-unit cap produces eight complete transported batches; save/restore no duplicates",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Five-unit mixed battle vs three firing targets, repair and full ammunition",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "33 core regression tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "28,800 bounded static clearance ray samples (not exhaustive collision)",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "24 active robot world performance target",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "Formal world campaign and damaged unit railway recovery",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Preserve original static models and approved architecture; do not equate concept paintings with geometry.",
+    "Different reports identify their version boundaries and acceleration. The normal soak precedes the final passenger/cargo frame-order fix; the later full driver circuit and cargo-sync test validate that change.",
+    "No automatic release or 8/10 art approval from this triage.",
+    "The four-hour work window ends at 08:39:12 UTC; report remaining work honestly."
+  ],
+  "createdUTC": "2026-09-27T08:31:27.241712+00:00",
+  "evidence_revision": {
+    "rig-0-attack.png": "8ff20c1ad3407559c8f5ba99352285beb5904e3d652df2098283c041ee223db7",
+    "rig-1-move.png": "4bbc5b2657f71e6dbe53d1e8369a1cb2ea04a9b8f05f3594bb43bfae3a0055b0",
+    "rig-2-attack.png": "d694da25efbd1b729161c7cdd9dfb8ec873f9187319eda46623fec6aad44027b",
+    "cargo-ring-live.png": "54266f87a596a080a591e010c6e39f279b7df707ebc95472943218a7634422b0",
+    "freight-motion-red.png": "9f553552f507706a9aa9478a721ff1f2fd0e31fddf24823a0f7c517adb3af6f8",
+    "combat-ant-steam.png": "53c424492cd400649f9634ead36f0aeb21a089f852107e52cce5565a1582ec7e",
+    "route-after-highland-gate.png": "c847dd745b29229b535b98c75b7aaef8ceaa00470e639839efe47be188d22684",
+    "soak-v5/report.json": "216491008e863e2d3a182c0e1d56ef4c758985c566260c74d5d77a50f372233d",
+    "driver-tour.json": "01d58e626220b19fb5b3cff767a8137f47cac71a87f6566eeb6441adb25d6a6c",
+    "capacity-e2e.json": "adcd041dd4a6da946ff7d3ffd2bb35da027790f551cbb1f8d71dc104c14d61f0",
+    "mixed-squad.json": "26c9c2ba6be84bc215adcb16f58424f097ce7e5a66a03632577a8a08d7d4cc2e",
+    "core-tests.txt": "2802f471a3eea1c0e307aa5568c06a732a19607abd8a9302d3d687696d636a2b",
+    "source-manifest.json": "82ac1384ad1ad63db320a4b309df8a8cb97e79ca263067b9c971158132146f4c"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "kind": "beetle",
+  "rigVersion": 2,
+  "sourceModelVersion": 4,
+  "bytes": 5501316,
+  "nodes": 109,
+  "joints": 10,
+  "clips": [
+    {
+      "name": "idle",
+      "duration": 1,
+      "frames": 31
+    },
+    {
+      "name": "move",
+      "duration": 1.2566370614359172,
+      "frames": 39
+    },
+    {
+      "name": "attack",
+      "duration": 2.4,
+      "frames": 73
+    },
+    {
+      "name": "transport",
+      "duration": 1,
+      "frames": 31
+    },
+    {
+      "name": "disabled",
+      "duration": 1,
+      "frames": 31
+    }
+  ],
+  "limitations": [
+    "Rigid articulated nodes, not a skinned humanoid skeleton.",
+    "Procedural patina, outline effects and gameplay logic remain authoritative in the native Three.js model.",
+    "Movement clips are in place; navigation and projectile effects are not baked into the mesh.",
+    "Beetle rolling wheel phase is continuous within the move clip; continuous looping requires an engine animation controller."
+  ],
+  "sha256": "2b9180f7e251d14bd0cc703c59618384537997319b65e58bcd358b6ca49889b0"
+}

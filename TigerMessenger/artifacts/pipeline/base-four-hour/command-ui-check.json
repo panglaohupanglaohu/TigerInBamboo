@@ -1,0 +1,37 @@
+{
+  "selected": [
+    "LOC-0001",
+    "LOC-0004"
+  ],
+  "orders": [
+    {
+      "id": "LOC-0001",
+      "order": {
+        "type": "move",
+        "x": 0.6000050862630197,
+        "z": -10
+      }
+    },
+    {
+      "id": "LOC-0004",
+      "order": {
+        "type": "move",
+        "x": 5.40000508626302,
+        "z": -10
+      }
+    },
+    {
+      "id": "LOC-0007",
+      "order": {
+        "type": "cease"
+      }
+    }
+  ],
+  "braced": [
+    "LOC-0001",
+    "LOC-0004"
+  ],
+  "autoRetreatToggle": true,
+  "messages": "蝗虫 LOC-0001：架稳已执行\n蝗虫 LOC-0004：架稳已执行",
+  "errors": []
+}

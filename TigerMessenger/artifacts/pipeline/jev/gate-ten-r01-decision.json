@@ -1,0 +1,42 @@
+{
+  "request_hash": "ee919280c70d0bfcd78d43a8ea4158d88bbde97fc3e028d9fa4f5951b6938ff6",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.97
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.61,
+      "probabilities": {
+        "lighting": 0.0,
+        "review": 0.01,
+        "navigation": 0.69,
+        "dressing": 0.0,
+        "geometry": 0.3
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.59
+    }
+  },
+  "usage": {
+    "input_tokens": 558,
+    "output_tokens": 91
+  },
+  "elapsed_ms": 848,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "tram swept clearance",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

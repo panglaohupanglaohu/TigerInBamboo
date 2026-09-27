@@ -2,7 +2,7 @@ import {PLAZA_R03} from "./newPlazaLayout.js";
 import {CITY_ADVANCE} from './compactNewCity.js';
 import * as THREE from 'three';
 import data from '../../../assets/models/optimized/citadel-cypress/citadelCypressData.js';
-import {buildSlopeShrub} from '../highlandCitadelDesign.js';
+import {buildCitadelLeafyShrub as buildSlopeShrub} from './leafyShrub.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
 export function buildCitadelGarden(){
  const root=new THREE.Group();root.name='citadel-terrace-garden';
@@ -11,7 +11,7 @@ export function buildCitadelGarden(){
  trees.forEach(t=>t[2]+=t[1]===10?CITY_ADVANCE[1]:t[1]===16?CITY_ADVANCE[2]:0);
  trees.forEach(([x,y,z,size],i)=>{const tree=buildCitadelCypress(size,i*.91);tree.position.set(x,y,z);root.add(tree);});
  const shrubs={shrubs:[]};
- const shrubMat={shrubDeep:new THREE.MeshStandardMaterial({color:0x7fa89b,roughness:1,flatShading:true}),shrubMid:new THREE.MeshStandardMaterial({color:0x94b5a5,roughness:1,flatShading:true}),shrubLight:new THREE.MeshStandardMaterial({color:0x6b9488,roughness:1,flatShading:true})};
+ const shrubMat={shrubDeep:new THREE.MeshStandardMaterial({color:0x395c48,roughness:1,flatShading:true}),shrubMid:new THREE.MeshStandardMaterial({color:0x567653,roughness:1,flatShading:true}),shrubLight:new THREE.MeshStandardMaterial({color:0x73916a,roughness:1,flatShading:true})};
  const beds=[[52.4,10,23.8],[53,10,30.4],[52.2,10,36.2],[67,10,22.8],[67.7,10,29.3],[66.8,10,36.7],[48,4,84],[72,4,80],[46.3,4,58],[73.7,4,58],[44.5,10,33],[75.5,10,33],[40,16,12],[80,16,12]];
  if(PLAZA_R03){beds[7][0]=79;beds[7][2]=82;}
  beds.forEach(t=>t[2]+=t[1]===10?CITY_ADVANCE[1]:t[1]===16?CITY_ADVANCE[2]:0);

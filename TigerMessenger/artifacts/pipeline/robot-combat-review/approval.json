@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "date": "2026-09-27",
+  "status": "accepted",
+  "userStatement": "接受此战斗系统的设计",
+  "baseline": "design.md",
+  "scope": [
+    "three robot combat roles, actions and weaknesses",
+    "commander controls, ammo, heat, pressure and damage",
+    "three same-type robots per batch",
+    "production, reservations, loading, transport, deployment and repair",
+    "initial playtest parameters and staged acceptance criteria"
+  ],
+  "implementationStatus": "in progress; combat, production and loading not implemented"
+}

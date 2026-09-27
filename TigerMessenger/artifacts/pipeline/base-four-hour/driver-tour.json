@@ -1,0 +1,4584 @@
+{
+  "finished": true,
+  "fullCircuit": true,
+  "mode": "six cargo units prepared and red train positioned once before boarding; normal world updates only after F/C boarding",
+  "hashes": {
+    "src/main.js": "800cc46ef0a9dda1ac8019c82119e076394e4762054003550a47a4552999116b",
+    "src/world/tramSystem.js": "f594f3c06a0c9e572277eebc4d9ac40908605d4ebf9569cd2ba0794597800508",
+    "src/player/tramRide.js": "ba611689e6c2b300e5e14a7df0bb15c6a967ac9c014fc6965a45ad9290e7cffb",
+    "src/gameplay/robotOps/runtime.js": "8e0ddc804c42e58ecd19a284ed57c33d955aa28f1b2e786190fbb227f5648474",
+    "src/gameplay/robotOps/logistics.js": "dadad49086a5fdbbbdc5256db8a0d665b3311882a8f465589b01b2288e15efed"
+  },
+  "preparation": {
+    "invariants": {
+      "total": 9,
+      "counts": {
+        "transit": 6,
+        "ready": 3
+      }
+    },
+    "cargo": [
+      "LOC-0001",
+      "LOC-0004",
+      "LOC-0007",
+      "ANT-0002",
+      "ANT-0005",
+      "ANT-0008"
+    ]
+  },
+  "initial": {
+    "progress": 0.1200000000000001,
+    "seat": [
+      2.1000000000000014,
+      1.6500000000000004,
+      2.9976021664879227e-15
+    ]
+  },
+  "distance": 1.0011766572960152,
+  "pictures": [
+    "crystal-gate",
+    "plaza",
+    "highland-gate"
+  ],
+  "samples": [
+    {
+      "seconds": 2.024,
+      "distance": 0,
+      "progress": 0.1200000000000001,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 0,
+      "hold": false,
+      "dwell": 0.06290000003576271,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 4.05,
+      "distance": 0.005310128074923037,
+      "progress": 0.12531012807492314,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.6528905535182772e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 6.06,
+      "distance": 0.01083387093197219,
+      "progress": 0.1308338709319723,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.298391468841578e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 8.08,
+      "distance": 0.0163779580537442,
+      "progress": 0.1363779580537443,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.677047783012433e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 10.092,
+      "distance": 0.021895377693276208,
+      "progress": 0.14189537769327631,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.5025793032801376e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 12.136,
+      "distance": 0.027502147144933042,
+      "progress": 0.14750214714493315,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.445551307363594e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 14.147,
+      "distance": 0.03299867267444845,
+      "progress": 0.15299867267444855,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.213032780298074e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 16.156,
+      "distance": 0.038479252699133104,
+      "progress": 0.1584792526991332,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.006502527045632e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 18.183,
+      "distance": 0.04401729152611655,
+      "progress": 0.16401729152611666,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1729021540587178e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 20.562,
+      "distance": 0.05045542661573976,
+      "progress": 0.17045542661573987,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0486172543727411e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 22.582,
+      "distance": 0.05586452679075826,
+      "progress": 0.17586452679075837,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.161709277534674e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 24.596,
+      "distance": 0.06130716751050014,
+      "progress": 0.18130716751050024,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.2412670766236366e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 26.633,
+      "distance": 0.06672836427509687,
+      "progress": 0.18672836427509698,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.587211346887684e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 28.647,
+      "distance": 0.07219602294218141,
+      "progress": 0.19219602294218152,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.548717289613707e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 30.665,
+      "distance": 0.07774533359170355,
+      "progress": 0.19774533359170365,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.11026247635183e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 32.682,
+      "distance": 0.08283414905481679,
+      "progress": 0.2028341490548169,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.534436722516086e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 34.715,
+      "distance": 0.08823362694219372,
+      "progress": 0.20823362694219383,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.399155085589337e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 36.741,
+      "distance": 0.09365015002416976,
+      "progress": 0.21365015002416987,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.851200407275939e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 38.772,
+      "distance": 0.09920083528618862,
+      "progress": 0.21920083528618872,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.376277206893599e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 40.786,
+      "distance": 0.10469021283049185,
+      "progress": 0.22469021283049195,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.6044547363094277e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 42.804,
+      "distance": 0.11021972905992938,
+      "progress": 0.2302197290599295,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.146939457772153e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 44.814,
+      "distance": 0.115719003814438,
+      "progress": 0.2357190038144381,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.901701917595273e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 46.829,
+      "distance": 0.12123724822133641,
+      "progress": 0.24123724822133652,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0738933143935094e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 48.855,
+      "distance": 0.12681460096559571,
+      "progress": 0.24681460096559582,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.6629367034256575e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 50.884,
+      "distance": 0.13240405029992397,
+      "progress": 0.2524040502999241,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.024014020790186e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 52.891,
+      "distance": 0.1379242191642851,
+      "progress": 0.2579242191642852,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.869449096090586e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 54.925,
+      "distance": 0.14352109140606206,
+      "progress": 0.26352109140606217,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.527710733984247e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 56.928,
+      "distance": 0.1490233903079663,
+      "progress": 0.2690233903079664,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.010680676458378e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 58.937,
+      "distance": 0.1545449337849898,
+      "progress": 0.2745449337849899,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.468597635725995e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 61.233,
+      "distance": 0.15620024215347117,
+      "progress": 0.2762002421534713,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.232760081702144e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 63.252,
+      "distance": 0.1618028877676374,
+      "progress": 0.2818028877676375,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.175812898105352e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 65.286,
+      "distance": 0.16739288694693166,
+      "progress": 0.28739288694693177,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0682435616134307e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 67.294,
+      "distance": 0.1729015090663535,
+      "progress": 0.2929015090663536,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0815454288853562e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 69.323,
+      "distance": 0.1784706141357948,
+      "progress": 0.2984706141357949,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.733173138936631e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 71.356,
+      "distance": 0.18406803622237433,
+      "progress": 0.30406803622237444,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.377745716588144e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 73.368,
+      "distance": 0.18960415059173097,
+      "progress": 0.3096041505917311,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.0776173590788484e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 75.4,
+      "distance": 0.19517627980856744,
+      "progress": 0.31517627980856755,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.120830491896282e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 77.403,
+      "distance": 0.20068572669551932,
+      "progress": 0.3206857266955194,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.023641503345143e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 79.436,
+      "distance": 0.20627600079737896,
+      "progress": 0.32627600079737906,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.9290483291090935e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 81.457,
+      "distance": 0.2118379578817713,
+      "progress": 0.3318379578817714,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009554625647218e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 83.468,
+      "distance": 0.21736884872370532,
+      "progress": 0.33736884872370543,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.805635742760281e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 85.481,
+      "distance": 0.22290083925557203,
+      "progress": 0.34290083925557213,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 3.800791407964896e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 87.489,
+      "distance": 0.22840698707256357,
+      "progress": 0.3484069870725637,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.581288318348781e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 89.51,
+      "distance": 0.23396646985436398,
+      "progress": 0.3539664698543641,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.00369012195233e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 91.516,
+      "distance": 0.23948333964876545,
+      "progress": 0.35948333964876555,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.7395013843344475e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 93.527,
+      "distance": 0.2450164298707278,
+      "progress": 0.3650164298707279,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.0275243467429294e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 95.536,
+      "distance": 0.2505431968750085,
+      "progress": 0.3705431968750086,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.3324989059393183e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 97.542,
+      "distance": 0.25604851992447,
+      "progress": 0.3760485199244701,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.4364216359517026e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 99.567,
+      "distance": 0.2616085525514007,
+      "progress": 0.3816085525514008,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.976227170553343e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 101.612,
+      "distance": 0.2671974520404359,
+      "progress": 0.387197452040436,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.702842213767638e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 103.656,
+      "distance": 0.2728273149821363,
+      "progress": 0.3928273149821364,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 3.0546268830361725e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 106.083,
+      "distance": 0.2795225026086492,
+      "progress": 0.3995225026086493,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1189731823795352e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 108.087,
+      "distance": 0.2850368981006224,
+      "progress": 0.4050368981006225,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.072384598758384e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 110.112,
+      "distance": 0.29060132948744477,
+      "progress": 0.4106013294874449,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0376873978355337e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 112.124,
+      "distance": 0.29613441970940646,
+      "progress": 0.41613441970940657,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.9970517591782863e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 114.155,
+      "distance": 0.30171727090365197,
+      "progress": 0.4217172709036521,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0304531378109005e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 116.173,
+      "distance": 0.30726163294798803,
+      "progress": 0.42726163294798813,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.235376303066414e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 118.205,
+      "distance": 0.312843934297268,
+      "progress": 0.4328439342972681,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.33716685856993e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 120.215,
+      "distance": 0.31837674959666495,
+      "progress": 0.43837674959666506,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.7706747144499e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 122.227,
+      "distance": 0.3238930695461011,
+      "progress": 0.4438930695461012,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.9141791241147514e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 124.259,
+      "distance": 0.32949241609047153,
+      "progress": 0.44949241609047164,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.26552330045621e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 126.276,
+      "distance": 0.33502330693207827,
+      "progress": 0.4550233069320784,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 3.678494526727327e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 128.307,
+      "distance": 0.340624577933911,
+      "progress": 0.4606245779339111,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.4367797525182045e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 130.342,
+      "distance": 0.346209903430585,
+      "progress": 0.4662099034305851,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.509460642658433e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 132.348,
+      "distance": 0.3517215496975652,
+      "progress": 0.4717215496975653,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.2717264309667843e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 134.359,
+      "distance": 0.35724061887199454,
+      "progress": 0.47724061887199465,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.373991106814338e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 136.379,
+      "distance": 0.36276243727141777,
+      "progress": 0.4827624372714179,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1335697856308466e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 138.422,
+      "distance": 0.36839120052302166,
+      "progress": 0.48839120052302176,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0855801383086959e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 140.455,
+      "distance": 0.37393666225745426,
+      "progress": 0.49393666225745436,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.3009435996187304e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 142.479,
+      "distance": 0.3794562812763582,
+      "progress": 0.4994562812763583,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.026054108426267e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 144.526,
+      "distance": 0.3804988530989566,
+      "progress": 0.5004988530989567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.453670444495245e-15,
+      "hold": false,
+      "dwell": 1.3909999999999996,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 146.552,
+      "distance": 0.3821527868551049,
+      "progress": 0.502152786855105,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 2.5341311739065124e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 148.574,
+      "distance": 0.3875723340848036,
+      "progress": 0.5075723340848037,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.074153716986702e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 150.597,
+      "distance": 0.392883012004531,
+      "progress": 0.5128830120045311,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.222203316675691e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 152.641,
+      "distance": 0.3983094322970411,
+      "progress": 0.5183094322970412,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 3.748544367384395e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 154.682,
+      "distance": 0.4036352309543969,
+      "progress": 0.523635230954397,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0565217370635266e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 156.721,
+      "distance": 0.40893546181944407,
+      "progress": 0.5289354618194442,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.670186907578314e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 158.731,
+      "distance": 0.4139461187239566,
+      "progress": 0.5339461187239567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.247162907517536e-15,
+      "hold": false,
+      "dwell": 2.8340999999642373,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 160.753,
+      "distance": 0.4139461187239566,
+      "progress": 0.5339461187239567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.247162907517536e-15,
+      "hold": false,
+      "dwell": 0.8132000000476843,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 162.774,
+      "distance": 0.4171778327038034,
+      "progress": 0.5371778327038035,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1190695630917482e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 164.784,
+      "distance": 0.42272082013564316,
+      "progress": 0.5427208201356433,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1368305650365794e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "transit": 6,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 166.817,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 168.829,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 170.857,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 172.874,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 174.893,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 176.924,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 178.956,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 180.974,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 183.008,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 185.038,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "unloading": 1,
+          "transit": 5,
+          "ready": 3
+        }
+      }
+    },
+    {
+      "seconds": 187.047,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "ready": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 189.058,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "ready": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 191.078,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "ready": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 193.09,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "ready": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 195.12,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "ready": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 197.137,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 2
+        }
+      }
+    },
+    {
+      "seconds": 199.16,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 2
+        }
+      }
+    },
+    {
+      "seconds": 201.176,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 2
+        }
+      }
+    },
+    {
+      "seconds": 203.208,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 2
+        }
+      }
+    },
+    {
+      "seconds": 205.224,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 1,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 2
+        }
+      }
+    },
+    {
+      "seconds": 207.231,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 3,
+          "loading": 1,
+          "reserved": 2,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 209.266,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 1
+        }
+      }
+    },
+    {
+      "seconds": 211.298,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 1
+        }
+      }
+    },
+    {
+      "seconds": 213.322,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 1
+        }
+      }
+    },
+    {
+      "seconds": 215.35,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 1
+        }
+      }
+    },
+    {
+      "seconds": 217.367,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 1
+        }
+      }
+    },
+    {
+      "seconds": 219.401,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 4,
+          "loading": 1,
+          "unloading": 1,
+          "reserved": 1
+        }
+      }
+    },
+    {
+      "seconds": 221.416,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 5,
+          "unloading": 1,
+          "loading": 1
+        }
+      }
+    },
+    {
+      "seconds": 223.43,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 5,
+          "unloading": 1,
+          "loading": 1
+        }
+      }
+    },
+    {
+      "seconds": 225.477,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 2,
+          "transit": 5,
+          "unloading": 1,
+          "loading": 1
+        }
+      }
+    },
+    {
+      "seconds": 227.494,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 4,
+          "loading": 1
+        }
+      }
+    },
+    {
+      "seconds": 229.524,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 4,
+          "loading": 1
+        }
+      }
+    },
+    {
+      "seconds": 231.538,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 4,
+          "loading": 1
+        }
+      }
+    },
+    {
+      "seconds": 233.556,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 5
+        }
+      }
+    },
+    {
+      "seconds": 235.562,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 5
+        }
+      }
+    },
+    {
+      "seconds": 237.573,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 5
+        }
+      }
+    },
+    {
+      "seconds": 239.605,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 5
+        }
+      }
+    },
+    {
+      "seconds": 241.623,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 5
+        }
+      }
+    },
+    {
+      "seconds": 243.63,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 5
+        }
+      }
+    },
+    {
+      "seconds": 245.65,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 3,
+          "unloading": 1,
+          "transit": 5
+        }
+      }
+    },
+    {
+      "seconds": 247.669,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 249.699,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 251.723,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 253.727,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 255.766,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 257.771,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 259.792,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 261.824,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 263.835,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 265.873,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 4,
+          "transit": 4,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 267.901,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 269.905,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 271.937,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 273.961,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 275.981,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 277.988,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 279.997,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 282.018,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 284.043,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 286.073,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 288.086,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 3,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 5,
+          "transit": 3,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 290.121,
+      "distance": 0.4278621343489566,
+      "progress": 0.5478621343489567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.009959203037721e-15,
+      "hold": false,
+      "dwell": 1.4410000000000016,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 292.136,
+      "distance": 0.4294316668976741,
+      "progress": 0.5494316668976742,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.99876094748351e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 294.163,
+      "distance": 0.4350004970445529,
+      "progress": 0.555000497044553,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.06852285567849e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 296.202,
+      "distance": 0.44058884668878573,
+      "progress": 0.5605888466887858,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.184352219119619e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 298.205,
+      "distance": 0.4461208372206511,
+      "progress": 0.5661208372206512,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.730794148008032e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 300.228,
+      "distance": 0.4476375249739566,
+      "progress": 0.5676375249739567,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0410117061143658e-14,
+      "hold": false,
+      "dwell": 1.5548999999761577,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 302.258,
+      "distance": 0.44891811397595704,
+      "progress": 0.5689181139759572,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.272165632911129e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 304.277,
+      "distance": 0.45447787168032194,
+      "progress": 0.574477871680322,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.5223522072761987e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 306.295,
+      "distance": 0.4600227835696238,
+      "progress": 0.5800227835696239,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.703179460537409e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 308.315,
+      "distance": 0.4655863901889157,
+      "progress": 0.5855863901889158,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.2396803923084702e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 6,
+          "unloading": 1,
+          "transit": 2
+        }
+      }
+    },
+    {
+      "seconds": 310.32,
+      "distance": 0.4710961119984325,
+      "progress": 0.5910961119984326,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.152482600100037e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 312.329,
+      "distance": 0.47662122946781404,
+      "progress": 0.5966212294678142,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.7652370787090195e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 314.375,
+      "distance": 0.48215157046478163,
+      "progress": 0.6021515704647817,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.027150473277823e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 316.39,
+      "distance": 0.48768493560898163,
+      "progress": 0.6076849356089817,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.5747522756810052e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 318.415,
+      "distance": 0.49325706482581877,
+      "progress": 0.6132570648258189,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.2827881194349924e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 320.445,
+      "distance": 0.49876101326278377,
+      "progress": 0.6187610132627839,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1999785356165076e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 322.473,
+      "distance": 0.504328743719729,
+      "progress": 0.6243287437197291,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.497910738908618e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 324.49,
+      "distance": 0.5098511119641178,
+      "progress": 0.6298511119641179,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0843872863719266e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 326.534,
+      "distance": 0.5154587061834697,
+      "progress": 0.6354587061834698,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.633590686522166e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 328.56,
+      "distance": 0.5210192886553657,
+      "progress": 0.6410192886553658,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.2060396458986075e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 7,
+          "unloading": 1,
+          "transit": 1
+        }
+      }
+    },
+    {
+      "seconds": 330.571,
+      "distance": 0.5264201411550762,
+      "progress": 0.6464201411550763,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.054247961091848e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 332.577,
+      "distance": 0.5317627100849576,
+      "progress": 0.6517627100849577,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.0833104632340968e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 334.621,
+      "distance": 0.5369554462525306,
+      "progress": 0.6569554462525307,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.685580165500894e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 336.651,
+      "distance": 0.5419040512408129,
+      "progress": 0.661904051240813,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.7323237343941528e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 338.66,
+      "distance": 0.5467149200568557,
+      "progress": 0.6667149200568558,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.2118805517712668e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 340.687,
+      "distance": 0.5515260637954635,
+      "progress": 0.6715260637954636,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.820289329601011e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 342.73,
+      "distance": 0.5563372075340713,
+      "progress": 0.6763372075340714,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.735175986949513e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 344.739,
+      "distance": 0.5611483512726791,
+      "progress": 0.6811483512726793,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.9503334909160555e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 346.771,
+      "distance": 0.566349060192995,
+      "progress": 0.6863490601929951,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.6037572351271114e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 348.815,
+      "distance": 0.571562965393313,
+      "progress": 0.6915629653933131,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.071369595370878e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 8,
+          "unloading": 1
+        }
+      }
+    },
+    {
+      "seconds": 350.87,
+      "distance": 0.576969041420446,
+      "progress": 0.6969690414204461,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.239283052513658e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 352.885,
+      "distance": 0.5824713403223489,
+      "progress": 0.702471340322349,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.970865179277744e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 354.922,
+      "distance": 0.5880640887266368,
+      "progress": 0.708064088726637,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.3637346973908047e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 356.934,
+      "distance": 0.5935801337536726,
+      "progress": 0.7135801337536727,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.274350223077057e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 358.947,
+      "distance": 0.5991181725804919,
+      "progress": 0.719118172580492,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.093711011028398e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 360.99,
+      "distance": 0.6047241172646172,
+      "progress": 0.7247241172646173,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.218797605266909e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 362.995,
+      "distance": 0.6101876520942107,
+      "progress": 0.7301876520942108,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.205342290003077e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 365.015,
+      "distance": 0.6157592314659173,
+      "progress": 0.7357592314659174,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.55407823264362e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 367.023,
+      "distance": 0.6212750015703863,
+      "progress": 0.7412750015703864,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.220200024359997e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 369.04,
+      "distance": 0.6268204633048184,
+      "progress": 0.7468204633048185,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 3.1421469200065623e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 371.048,
+      "distance": 0.6323442061617042,
+      "progress": 0.7523442061617043,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.90742110450225e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 373.084,
+      "distance": 0.6379452022409735,
+      "progress": 0.7579452022409736,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.373771479125257e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 375.105,
+      "distance": 0.6434997364177533,
+      "progress": 0.7634997364177534,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.103697288266033e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 377.467,
+      "distance": 0.6499898318600144,
+      "progress": 0.7699898318600145,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.626103786990878e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 379.504,
+      "distance": 0.6555944019316424,
+      "progress": 0.7755944019316425,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.114653810271007e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 381.52,
+      "distance": 0.6611137460286363,
+      "progress": 0.7811137460286364,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.21837950308789e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 383.548,
+      "distance": 0.6666853254005076,
+      "progress": 0.7866853254005077,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 2.931738102910962e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 385.588,
+      "distance": 0.6722934694646612,
+      "progress": 0.7922934694646613,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 3.675492212195508e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 387.616,
+      "distance": 0.6778644989915659,
+      "progress": 0.797864498991566,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 2.964524164554547e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 389.622,
+      "distance": 0.6834121601058616,
+      "progress": 0.8034121601058617,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.406192177133736e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 391.628,
+      "distance": 0.6889232565278762,
+      "progress": 0.8089232565278763,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.339217920816914e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 393.653,
+      "distance": 0.6944920866745894,
+      "progress": 0.8144920866745895,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.690610161234867e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 395.673,
+      "distance": 0.7000378233315874,
+      "progress": 0.8200378233315875,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.3441036911163357e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 397.709,
+      "distance": 0.7056459673957405,
+      "progress": 0.8256459673957406,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.3772583993235298e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 399.726,
+      "distance": 0.7111622873451786,
+      "progress": 0.8311622873451787,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.466545363217662e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 401.741,
+      "distance": 0.7167181961344564,
+      "progress": 0.8367181961344565,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.3369316541647879e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 403.774,
+      "distance": 0.7223167179112957,
+      "progress": 0.8423167179112958,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.4897273554299458e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 405.781,
+      "distance": 0.7278418353806781,
+      "progress": 0.8478418353806783,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.064543736638133e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 407.817,
+      "distance": 0.7334260611874206,
+      "progress": 0.8534260611874207,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.328271240363393e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 409.82,
+      "distance": 0.7389327588493797,
+      "progress": 0.8589327588493798,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.3174282716727566e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 411.824,
+      "distance": 0.7444499035663465,
+      "progress": 0.8644499035663467,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1118316825781742e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 413.833,
+      "distance": 0.7499505529331885,
+      "progress": 0.8699505529331886,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 3.911074787101517e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 415.86,
+      "distance": 0.7555191081575003,
+      "progress": 0.8755191081575004,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.0009355010672645e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 417.875,
+      "distance": 0.7610620955895051,
+      "progress": 0.8810620955895052,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.137447593150905e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 419.908,
+      "distance": 0.7666377987987012,
+      "progress": 0.8866377987987013,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.412091796256955e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 421.934,
+      "distance": 0.7722192753804502,
+      "progress": 0.8922192753804503,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.499383768766125e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 423.955,
+      "distance": 0.7777718850999329,
+      "progress": 0.897771885099933,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.308890127958284e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 425.983,
+      "distance": 0.7833475883091303,
+      "progress": 0.9033475883091304,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.2351449449305828e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 428.007,
+      "distance": 0.788909545393524,
+      "progress": 0.9089095453935241,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.888835772847054e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 430.032,
+      "distance": 0.7944841489127892,
+      "progress": 0.9144841489127893,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.901266344137036e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 432.037,
+      "distance": 0.799988922117286,
+      "progress": 0.9199889221172861,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.597068560898891e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 434.062,
+      "distance": 0.8055206377265878,
+      "progress": 0.9255206377265879,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.156598210705884e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 436.08,
+      "distance": 0.8111034889209972,
+      "progress": 0.9311034889209973,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.391552999452448e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 438.092,
+      "distance": 0.8166250323978543,
+      "progress": 0.9366250323978544,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.092452105819847e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 440.127,
+      "distance": 0.8222296024696476,
+      "progress": 0.9422296024696477,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.36801836099855e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 442.13,
+      "distance": 0.8277393242790021,
+      "progress": 0.9477393242790022,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.516356605792057e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 444.152,
+      "distance": 0.8332146807761003,
+      "progress": 0.9532146807761004,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.0738433689655165e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 446.169,
+      "distance": 0.8387945078229513,
+      "progress": 0.9587945078229514,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.414445554006506e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 448.189,
+      "distance": 0.8442838853674188,
+      "progress": 0.9642838853674189,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.646207071388874e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 450.223,
+      "distance": 0.84988763067168,
+      "progress": 0.9698876306716802,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.950836838078908e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 452.237,
+      "distance": 0.8553671110062697,
+      "progress": 0.9753671110062698,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.4762250090771956e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 454.248,
+      "distance": 0.8609002012280671,
+      "progress": 0.9809002012280672,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.055813764361257e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 456.255,
+      "distance": 0.8664261434649796,
+      "progress": 0.9864261434649797,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1329171835124907e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 458.258,
+      "distance": 0.8719317414370058,
+      "progress": 0.9919317414370059,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 9.101797679571344e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 460.263,
+      "distance": 0.8774535598364277,
+      "progress": 0.9974535598364278,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.134988283768848e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 462.275,
+      "distance": 0.8829762030033799,
+      "progress": 0.0029762030033799736,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.06804503162802e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 464.301,
+      "distance": 0.8885392597777044,
+      "progress": 0.008539259777704533,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.546495453326586e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 466.314,
+      "distance": 0.8940808725970475,
+      "progress": 0.0140808725970476,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.5356381352535936e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 468.341,
+      "distance": 0.899655751038877,
+      "progress": 0.019655751038877067,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.9641850382783467e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 470.353,
+      "distance": 0.9051847174231844,
+      "progress": 0.02518471742318451,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.240322668380536e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 472.644,
+      "distance": 0.9067193348146807,
+      "progress": 0.026719334814680806,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1331347593131356e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 474.672,
+      "distance": 0.9123404002362705,
+      "progress": 0.032340400236270606,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.720641304371205e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 476.693,
+      "distance": 0.917902907165631,
+      "progress": 0.03790290716563116,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 8.122857819188465e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 478.713,
+      "distance": 0.923451393047459,
+      "progress": 0.04345139304745915,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.025522352822286e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 480.735,
+      "distance": 0.9290128002868865,
+      "progress": 0.04901280028688659,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.76871939594478e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 482.748,
+      "distance": 0.934548639733678,
+      "progress": 0.05454863973367807,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.794569825980851e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 484.754,
+      "distance": 0.9400305943706959,
+      "progress": 0.06003059437069602,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 5.443490401604861e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 486.773,
+      "distance": 0.9455843037801093,
+      "progress": 0.06558430378010938,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.9848890172662694e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 488.79,
+      "distance": 0.9511484602443661,
+      "progress": 0.07114846024436616,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 4.288393621505008e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 490.81,
+      "distance": 0.9567027194987439,
+      "progress": 0.07670271949874397,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.265632927836534e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 492.834,
+      "distance": 0.9622646765831371,
+      "progress": 0.08226467658313719,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.3525141343060567e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 494.86,
+      "distance": 0.9678379054899058,
+      "progress": 0.08783790548990589,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 7.589411837077887e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 496.893,
+      "distance": 0.973421856374248,
+      "progress": 0.09342185637424816,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.359359035643523e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 498.901,
+      "distance": 0.9789483484561274,
+      "progress": 0.09894834845612754,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.743176967498693e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 500.917,
+      "distance": 0.9844874869730411,
+      "progress": 0.10448748697304122,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 6.019889384828261e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 502.943,
+      "distance": 0.9900596161898774,
+      "progress": 0.11005961618987747,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 3.675492212195508e-15,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 504.983,
+      "distance": 0.9956567633540556,
+      "progress": 0.11565676335405572,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.1235215653782796e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "seconds": 506.993,
+      "distance": 1.0011766572960152,
+      "progress": 0.12117665729601534,
+      "state": "riding",
+      "mode": "driver",
+      "seatError": 1.4548582117584954e-14,
+      "hold": false,
+      "dwell": 0,
+      "cameraFinite": true,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    }
+  ],
+  "errors": []
+}

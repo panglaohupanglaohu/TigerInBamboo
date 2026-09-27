@@ -1,0 +1,26 @@
+{
+  "simulationSeconds": 120,
+  "min": [
+    -0.019999999241050496,
+    -1.874773236665275,
+    -1.249999974212842
+  ],
+  "max": [
+    1.5707963267948966,
+    -0.2738783689698695,
+    1.2499999980262542
+  ],
+  "range": [
+    1.590796326035947,
+    1.6008948676954056,
+    2.499999972239096
+  ],
+  "visible": true,
+  "attached": true,
+  "oceanOccluded": false,
+  "passed": true,
+  "limits": [
+    "Tracks actual mast, monkey arm, lizard movement; water delivery contact and visual occlusion are separate checks."
+  ],
+  "pageErrors": []
+}

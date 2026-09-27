@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';import{ROBOT_RULES}from'../../../src/gameplay/robotOps/combat.js';import{chromium}from'/Users/panglaohu/Downloads/TigerInBamboo/tools/shot/node_modules/playwright/index.mjs';import{writeFile}from'node:fs/promises';
+const dir='artifacts/pipeline/base-four-hour';const b=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});try{
+ const p=await b.newPage({viewport:{width:1600,height:1000}}),errors=[],stages=[];p.on('pageerror',e=>errors.push(e.stack));await p.goto('http://localhost:8931/TigerMessenger/?autostart=1&baseReview=1&robotOps=1');await p.waitForFunction(()=>window.__tm?.robotOperations,null,{timeout:180000});await p.waitForTimeout(1500);const start=p.getByRole('button',{name:'开始送信',exact:true});if(await start.isVisible())await start.click();
+ const preparation=await p.evaluate(()=>{
+  const o=__tm.robotOperations,t=__tm.messenger.landmarks.tramSystem;o.panel.element.hidden=true;o.logistics.update(271);o.update(.01);
+  for(const kind of['locust','ant','beetle']){const s=t.freightServices[0],load=s.loadingStops.find(x=>x.name===kind);t.seekFreight('red',load.progress-.001);t.update(1);o.update(38);const unload=s.loadingStops.find(x=>x.name==='frontline');t.seekFreight('red',unload.progress-.001);t.update(1);o.update(62);}
+  const units=o.combat.units.filter(u=>u.team==='friendly');o.combat.command(units.map(u=>u.id),'cease');window.actors={locust:units.filter(u=>u.kind==='locust'),ant:units.filter(u=>u.kind==='ant'),beetle:units.filter(u=>u.kind==='beetle')};
+  units.forEach((u,i)=>{u.x=-21+i*5.2;u.z=12;u.heading=Math.PI;});
+  o.startExercise();for(const e of o.combat.units.filter(u=>u.team==='enemy'))e.order={type:'cease'};
+  const camera=()=>{const T=__tm.THREE,field=o.field,focus=window.combatFocus||{x:0,z:-2};const target=field.localToWorld(new T.Vector3(focus.x,1,focus.z)),eye=field.localToWorld(new T.Vector3(focus.x+11,13,focus.z+19));__tm.camera.position.copy(eye);__tm.camera.up.copy(target.clone().normalize());__tm.camera.lookAt(target);__tm.camera.updateMatrixWorld();};o.updateCamera=camera;
+  return{invariants:o.logistics.assertInvariants(),ids:units.map(u=>({id:u.id,kind:u.kind}))};
+ });
+
+ const report=await p.evaluate(()=>{
+  const o=__tm.robotOperations,c=o.combat,chosen=[actors.locust[0],actors.locust[1],actors.ant[0],actors.beetle[0],actors.beetle[1]],ids=chosen.map(u=>u.id),positions=[[-18,0],[-13,2],[6,-5],[19,3],[22,8]],targets=c.units.filter(u=>u.team==='enemy');
+  c.units.filter(u=>u.team==='friendly'&&!ids.includes(u.id)).forEach((u,i)=>{u.x=-12+i*8;u.z=15;});
+  chosen.forEach((u,i)=>{u.x=positions[i][0];u.z=positions[i][1];u.heading=Math.PI;c.command([u.id],'attack',{id:targets[i<2?0:i===2?1:2].id});});
+  for(const e of targets)e.order={type:'hold',x:e.x,z:e.z};c.skill(chosen[0]);c.skill(chosen[1]);c.skill(chosen[3]);
+  const battle=[];let won=false,battleSeconds=0;for(let i=0;i<1200;i++){if(i===100)c.skill(chosen[2]);o.update(.1);if(i%20===0)battle.push({seconds:i*.1,aliveTargets:targets.filter(u=>u.hp>0).length,actors:chosen.map(u=>({id:u.id,hp:u.hp,state:u.state,magazine:u.magazine,heat:u.heat}))});if(targets.every(u=>u.hp<=0)){won=true;battleSeconds=(i+1)*.1;break;}}
+  const endBattle=chosen.map(u=>({id:u.id,kind:u.kind,hp:u.hp,magazine:u.magazine,reserve:u.reserve}));c.command(ids,'retreat');for(let i=0;i<1100;i++)o.update(.1);
+  const repaired=chosen.map(u=>({id:u.id,kind:u.kind,hp:u.hp,maxHp:u.maxHp,magazine:u.magazine,reserve:u.reserve,state:u.state,order:u.order,parts:u.damageParts}));const save=o.save(),restore=o.load();o.update(.01);return{ids,won,battleSeconds,battle,endBattle,repaired,save,restore,combat:c.snapshot(),invariants:o.logistics.assertInvariants(),events:c.events};
+ });
+ const png=await p.evaluate(()=>{__tm.renderer.render(__tm.scene,__tm.camera);return __tm.renderer.domElement.toDataURL('image/png').split(',')[1]});await writeFile(`${dir}/mixed-squad-finish.png`,Buffer.from(png,'base64'));await writeFile(`${dir}/mixed-squad.json`,JSON.stringify({mode:'accelerated integration diagnostic; all nine units produced, physically loaded and unloaded before five selected actors fight three live mechanical turrets, then retreat and resupply',report,errors},null,2));console.log(JSON.stringify({won:report.won,battleSeconds:report.battleSeconds,endBattle:report.endBattle,repaired:report.repaired,save:report.save,restore:report.restore,invariants:report.invariants,errors}));
+assert.equal(report.won,true,'mixed squad must defeat the live targets');assert.equal(report.repaired.length,5);for(const u of report.repaired){const rules=ROBOT_RULES[u.kind];assert.equal(u.hp,rules.hp,u.id+' fully repaired');assert.equal(u.magazine,rules.magazine,u.id+' magazine refilled');assert.equal(u.reserve,rules.reserve,u.id+' reserve refilled');assert.equal(u.order.type,'hold',u.id+' left repair');assert.ok(Object.values(u.parts).every(v=>v===0),u.id+' component damage repaired');}assert.equal(report.save,true);assert.equal(report.restore,true);assert.equal(report.invariants.counts.deployed,9);assert.deepEqual(errors,[]);
+}finally{await b.close()}

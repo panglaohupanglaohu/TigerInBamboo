@@ -25,14 +25,10 @@ export function buildProcessionalDetails(WEST_CITY=DEFAULT_CITY){
  }
  for(let tier=1;tier<WEST_CITY.districts.length;tier++){
   const low=WEST_CITY.districts[tier-1],high=WEST_CITY.districts[tier];
-  const start=low.z-2,end=high.z+2,n=11,run=(start-end)/n;
+  const start=low.z-2,end=high.z+2;
   for(const side of [-1,1]){
-   for(let i=0;i<n;i++){
-    const top=low.y+(high.y-low.y)*(i+1)/n;
-    const z=start-(i+.5)*run;
-    block('stair-parapet-'+tier+'-'+side+'-'+i,WEST_CITY.x+side*4.08,top+.42,z,.75,.84,run+.035);
-    block('stair-coping-'+tier+'-'+side+'-'+i,WEST_CITY.x+side*4.08,top+.89,z,.91,.14,run+.045,trim);
-   }
+   // Flight sidewalls are the Blender asset aligned with all thirty treads.
+   // Keep original end piers, banners and landing walls in this assembly.
    for(const [j,z,y] of [[0,start,low.y],[1,end,high.y]]){
     block('stair-pier-'+tier+'-'+side+'-'+j,WEST_CITY.x+side*4.25,y+.82,z,1.02,1.64,1.02);
     block('stair-pier-cap-'+tier+'-'+side+'-'+j,WEST_CITY.x+side*4.25,y+1.72,z,1.17,.16,1.17,trim);

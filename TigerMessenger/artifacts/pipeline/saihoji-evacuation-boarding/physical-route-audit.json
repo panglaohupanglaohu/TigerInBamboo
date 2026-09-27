@@ -1,0 +1,258 @@
+{
+  "physicalBoardingValidated": false,
+  "scope": "Read-only actual 8931 authored scene. Actor coordinates are prior diagnostic 240-second snapshot inputs; actors are not moved, saves are not changed, no natural boarding claim. Search bounded to 24m and stops on first invalid berth. No deck/seat route claimed without valid shore berth.",
+  "priorSourceHash": "9781594459dfb283af808dde2679341f8e35a12c6971db4b852bc2959f58b54b",
+  "landDir": [
+    -0.5195427401793733,
+    0.5237577109041861,
+    -0.6750949573173505
+  ],
+  "contract": {
+    "rootPoint": [
+      1.94,
+      0.664,
+      0.84
+    ],
+    "length": 1.35,
+    "width": 0.34,
+    "deployedPitch": 0.12,
+    "clearanceValidated": false,
+    "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.assembly.json"
+  },
+  "scale": 1.7,
+  "units": [
+    {
+      "uid": 79,
+      "position": [
+        -78.62272381239978,
+        84.81941390725427,
+        -112.5591558093475
+      ],
+      "radialHeight": 161.3859635524849,
+      "water": 160.5,
+      "drySupport": [
+        -78.51554597079583,
+        84.70378878937638,
+        -112.40571610658176
+      ],
+      "priorBlocked": "escort-support-discontinuity",
+      "priorFinished": false
+    },
+    {
+      "uid": 80,
+      "position": [
+        -78.49618693639694,
+        84.87540905043934,
+        -112.63600881366962
+      ],
+      "radialHeight": 161.40742519012633,
+      "water": 160.5,
+      "drySupport": [
+        -78.3891958168393,
+        84.75972298476361,
+        -112.48248476166384
+      ],
+      "priorBlocked": "escort-support-discontinuity",
+      "priorFinished": false
+    },
+    {
+      "uid": 81,
+      "position": [
+        -90.5869713784359,
+        83.03702138148756,
+        -102.1226356976167
+      ],
+      "radialHeight": 159.78166047846457,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 82,
+      "position": [
+        -89.83004038398424,
+        83.73796290289545,
+        -102.2288290515281
+      ],
+      "radialHeight": 159.78803483290446,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 83,
+      "position": [
+        -90.24799373510876,
+        84.35083936203584,
+        -101.37471668927452
+      ],
+      "radialHeight": 159.8017448531864,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 84,
+      "position": [
+        -90.49757656794691,
+        84.25191413196569,
+        -101.2345338440371
+      ],
+      "radialHeight": 159.8018374180692,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 85,
+      "position": [
+        -90.84115875985106,
+        83.27680032858117,
+        -101.70896215278567
+      ],
+      "radialHeight": 159.7869036560745,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 86,
+      "position": [
+        -89.97289902827394,
+        83.34357469580071,
+        -102.41729494160893
+      ],
+      "radialHeight": 159.78290367177274,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 87,
+      "position": [
+        -90.36415395132572,
+        82.31919829117322,
+        -102.88908743534658
+      ],
+      "radialHeight": 159.77576487039198,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 88,
+      "position": [
+        -89.42805403495157,
+        82.43973819436803,
+        -103.6141261753996
+      ],
+      "radialHeight": 159.77976851005195,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 89,
+      "position": [
+        -89.25970176804391,
+        82.70964351923989,
+        -103.54705169962213
+      ],
+      "radialHeight": 159.7816366372685,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 90,
+      "position": [
+        -89.59625336622325,
+        83.39019825322289,
+        -102.71051319400172
+      ],
+      "radialHeight": 159.78380175271676,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 91,
+      "position": [
+        -90.48168114226742,
+        82.67698409460003,
+        -102.50139324878317
+      ],
+      "radialHeight": 159.77782680726193,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 92,
+      "position": [
+        -90.75973297840649,
+        83.3929126905149,
+        -101.6880004444269
+      ],
+      "radialHeight": 159.78784826045205,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 93,
+      "position": [
+        -91.66359020485666,
+        82.67416411001366,
+        -101.46710387053089
+      ],
+      "radialHeight": 159.78987561296387,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    }
+  ],
+  "docks": [
+    {
+      "index": 0,
+      "valid": false,
+      "searchRadius": 24,
+      "elapsedMs": 560.1000000089407,
+      "reason": "No actual-mesh-clear dock within deployed boarding reach",
+      "attempts": 1952,
+      "rejected": {
+        "angle": 0,
+        "center": 1952,
+        "support": 0,
+        "hull": 0,
+        "entry": 0,
+        "approach": 0
+      },
+      "hullObstacles": {},
+      "entryObstacles": {},
+      "lastFailure": null
+    }
+  ],
+  "uniqueBerths": 0,
+  "requiredBerths": 3,
+  "stats": {
+    "envelope": 7,
+    "minimumDepth": 1.5,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 6,
+    "obstacleMeshes": 1412
+  }
+}

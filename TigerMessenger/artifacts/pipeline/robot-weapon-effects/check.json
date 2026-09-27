@@ -1,0 +1,79 @@
+{
+  "results": {
+    "locust": {
+      "count": 3,
+      "stats": {
+        "locust": 1,
+        "ant": 0,
+        "beetle": 0,
+        "sentry": 0
+      },
+      "names": [
+        "locust-muzzle-flash",
+        "locust-moving-tracer",
+        "locust-ejected-case"
+      ],
+      "completed": {
+        "stats": {
+          "locust": 3,
+          "ant": 0,
+          "beetle": 0,
+          "sentry": 0
+        },
+        "count": 0,
+        "pending": 0
+      }
+    },
+    "ant": {
+      "count": 6,
+      "stats": {
+        "locust": 0,
+        "ant": 1,
+        "beetle": 0,
+        "sentry": 0
+      },
+      "names": [
+        "weapon-pressure-steam",
+        "weapon-pressure-steam",
+        "weapon-pressure-steam",
+        "weapon-pressure-steam",
+        "weapon-pressure-steam",
+        "ant-pressure-shell"
+      ],
+      "completed": {
+        "stats": {
+          "locust": 0,
+          "ant": 1,
+          "beetle": 0,
+          "sentry": 0
+        },
+        "count": 0,
+        "pending": 0
+      }
+    },
+    "beetle": {
+      "count": 2,
+      "stats": {
+        "locust": 0,
+        "ant": 0,
+        "beetle": 1,
+        "sentry": 0
+      },
+      "names": [
+        "beetle-muzzle-flash",
+        "beetle-moving-tracer"
+      ],
+      "completed": {
+        "stats": {
+          "locust": 0,
+          "ant": 0,
+          "beetle": 5,
+          "sentry": 0
+        },
+        "count": 0,
+        "pending": 0
+      }
+    }
+  },
+  "errors": []
+}

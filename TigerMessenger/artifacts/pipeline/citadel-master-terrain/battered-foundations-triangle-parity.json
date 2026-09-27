@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "tolerance_m": 0.002,
+  "parts": [
+    {
+      "name": "citadel-upper-rock-middle-terrace-solid-0",
+      "triangles": 2390,
+      "max_vertex_distance_m": 0.0006990180654824549,
+      "unmatched": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "name": "citadel-upper-rock-west-city-crown-retaining-wall-0-0",
+      "triangles": 1005,
+      "max_vertex_distance_m": 0.0006738437928886827,
+      "unmatched": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "name": "citadel-upper-rock-west-city-crown-retaining-wall-1-0",
+      "triangles": 837,
+      "max_vertex_distance_m": 0.0005640086669432789,
+      "unmatched": 0,
+      "missing": 0,
+      "passed": true
+    },
+    {
+      "name": "citadel-upper-rock-west-city-crown-retaining-wall-2-0",
+      "triangles": 536,
+      "max_vertex_distance_m": 0.0003437491589808523,
+      "unmatched": 0,
+      "missing": 0,
+      "passed": true
+    }
+  ],
+  "scope": "One-to-one complete triangle correspondence despite Godot index reorder/compression; local geometry only. Separate runtime route and foot tests required."
+}

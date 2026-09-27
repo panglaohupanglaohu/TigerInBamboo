@@ -1,9 +1,13 @@
+import {freightBoardDistance} from './freightBoarding.js';
 // =====================================================================
 //  电车搭乘：F 上车/下车 · C 切换乘客窗景 / 司机视野
 //  车体约定（createChristchurchTram）：长轴 +X 为车头，±Z 为侧窗
 //  轨上姿态：电车 local +Z ≈ 轨道右侧（窗朝外）
 // =====================================================================
 import * as THREE from "three";
+import { citadelTramAlight } from "../world/citadel/coastalTramStructures.js";
+import { PLANET_RADIUS } from "../world/planet.js";
+import { showToast } from "../ui/hud.js";
 
 export const TRAM_BOARD_RANGE = 3.0;
 const BOARD_TIME = 0.85;
@@ -12,16 +16,17 @@ const DRIVER_DIST = 0.35; // 司机视野：贴驾驶室，近乎第一人称
 const DRIVER_FOV = 78; // 深峡谷进城段使用广角，强化城市揭幕与桥面速度感
 
 // 窗边座位：车内、贴右侧窗（local +Z 为窗外方向）
-const SEAT_LOCAL = new THREE.Vector3(0.35, 0.78, 0.36);
-// 驾驶位：车头驾驶室、略抬高（智能体眼高）
-const DRIVER_SEAT_LOCAL = new THREE.Vector3(1.72, 1.02, 0.0);
+const SEAT_LOCAL = new THREE.Vector3(0.90, 1.01, 0.90);
+// Freight cab eye just ahead of the front crossbar and roof lip; avoids their
+// near-camera occlusion across the lower half of the wide-angle view.
+const DRIVER_SEAT_LOCAL = new THREE.Vector3(2.82, 1.85, 0.0);
 // 侧门上车点（右舷）
-const DOOR_LOCAL = new THREE.Vector3(0.7, 0.28, 0.9);
+const DOOR_LOCAL = new THREE.Vector3(1.0, 0.36, 1.70);
 /**
  * 阿狸同伴卧位：乘客座旁地板/长椅（比乘客略低、略靠车心）
  * 导出供 foxNpc 挂接。
  */
-export const FOX_TRAM_SEAT_LOCAL = new THREE.Vector3(0.05, 0.5, 0.14);
+export const FOX_TRAM_SEAT_LOCAL = new THREE.Vector3(0.65, 0.67, -0.55);
 // 窗外方向（车体右侧）
 const LOOK_OUT = new THREE.Vector3(0, 0, 1);
 // 车头前进方向
@@ -46,6 +51,7 @@ const _look = new THREE.Vector3();
  */
 export function createTramRide({
   player,
+  playerGroup,
   getTram,
   cameraRig,
   elHint,
@@ -62,16 +68,26 @@ export function createTramRide({
   let prevFov = 60;
   let lookPhase = 0;
   let activeTram = null;
+  let previousPlayerVisible = true;
+  let hiddenCab=null,previousCabVisible=true;
+  function restoreCab(){if(hiddenCab){hiddenCab.visible=previousCabVisible;hiddenCab=null;}}
+  function syncCabVisibility(){
+    const cab=viewMode==='driver'&&state!=='idle'?(activeTram?.freightLocomotive||activeTram):null;
+    if(hiddenCab!==cab){restoreCab();if(cab){hiddenCab=cab;previousCabVisible=cab.visible;}}
+    if(hiddenCab)hiddenCab.visible=false;
+  }
 
   function tram() {
-    if (state !== "idle" && activeTram) return activeTram;
+    if (state !== "idle" && activeTram) return viewMode==='driver' ? (activeTram.freightLocomotive||activeTram) : activeTram;
     return getTram ? getTram() : null;
   }
 
+  const wagonSeat=new THREE.Vector3(-2.75,.70,1.35);
+  function passengerSeat(t){return t?.freightLocomotive&&t.freightLocomotive!==t?wagonSeat:SEAT_LOCAL;}
   function nearTram() {
     const t = tram();
     if (!t) return false;
-    return player.position.distanceTo(t.position) <= TRAM_BOARD_RANGE;
+    return !player.riding && freightBoardDistance(t,player.position) <= 1.8;
   }
 
   /** 车窗朝外的世界方向（切平面内） */
@@ -97,11 +113,15 @@ export function createTramRide({
   }
 
   function applyCameraForView() {
+    syncCabVisibility();
+    if(playerGroup)playerGroup.visible=viewMode==='driver'?false:previousPlayerVisible;
     if (!cameraRig?.setDist) return;
     if (viewMode === "driver") {
-      cameraRig.setDist(DRIVER_DIST);
+      cameraRig.setFirstPerson?.(true);
+      cameraRig.setDist(DRIVER_DIST,{force:true});
       cameraRig.setFov?.(DRIVER_FOV);
     } else {
+      cameraRig.setFirstPerson?.(false);
       cameraRig.setDist(RIDE_DIST);
       cameraRig.setFov?.(prevFov);
     }
@@ -139,10 +159,13 @@ export function createTramRide({
   }
 
   function alight() {
+    restoreCab();
     const t = tram();
+    if(state!=="idle"&&playerGroup)playerGroup.visible=previousPlayerVisible;
     state = "idle";
     viewMode = "passenger";
     player.riding = false;
+    cameraRig.setFirstPerson?.(false);
     if (cameraRig.setDist && prevDist) cameraRig.setDist(prevDist);
     cameraRig.setFov?.(prevFov);
     if (t) {
@@ -163,7 +186,7 @@ export function createTramRide({
   }
 
   window.addEventListener("keydown", (e) => {
-    if (e.repeat) return;
+    if (e.repeat || e.defaultPrevented || e.ctrlKey || e.metaKey || e.target?.closest?.('input,textarea,select,[contenteditable="true"]')) return;
 
     // C：仅在车上切换司机/乘客视野
     if (e.code === "KeyC") {
@@ -176,8 +199,11 @@ export function createTramRide({
     if (e.code !== "KeyF") return;
     if (state === "idle") {
       if (!nearTram()) return;
+      e.preventDefault();
+      const boardingVehicle=tram();
+      previousPlayerVisible = playerGroup?.visible ?? true;
       state = "boarding";
-      activeTram = tram();
+      activeTram = boardingVehicle;
       boardT = 0;
       viewMode = "passenger";
       prevDist = cameraRig.getDist ? cameraRig.getDist() : 0;
@@ -186,7 +212,19 @@ export function createTramRide({
       player.riding = true;
       onBoard?.(activeTram);
     } else {
+      // 圣城临海段是 10 米高架：只允许在车站下车，并落到站外实测可走的地面
+      const t = tram();
+      const rule = t ? citadelTramAlight(t.position, PLANET_RADIUS) : null;
+      if (rule?.blocked) {
+        showToast(`高架段不能下车 · 请到${rule.stations.join(" / ")}`, 2.2);
+        return;
+      }
       alight();
+      if (rule?.exit) {
+        player.position.copy(rule.exit);
+        player.velocity.set(0, 0, 0);
+        showToast(`${rule.station.name} · 已下车`, 1.8);
+      }
     }
   });
 
@@ -198,9 +236,8 @@ export function createTramRide({
     const t = tram();
 
     if (state === "idle") {
-      player.riding = false;
       if (elHint) {
-        const show = !!t && nearTram();
+        const show = !player.riding && !!t && nearTram();
         elHint.classList.toggle("show", show);
         if (show) {
           elHint.innerHTML = "[<kbd>F</kbd>] 上车 · 窗边看风景";
@@ -211,9 +248,11 @@ export function createTramRide({
 
     if (!t) {
       const lost = activeTram;
+      if(playerGroup)playerGroup.visible=previousPlayerVisible;
       state = "idle";
       viewMode = "passenger";
       player.riding = false;
+      cameraRig.setFirstPerson?.(false);
       activeTram = null;
       if (elHint) elHint.classList.remove("show");
       onAlight?.(lost || null);
@@ -228,7 +267,7 @@ export function createTramRide({
       const u = Math.min(1, boardT / BOARD_TIME);
       _tmp.copy(DOOR_LOCAL).applyQuaternion(t.quaternion).add(t.position);
       // 若已切司机，进站过程结束坐驾驶位
-      const targetSeat = viewMode === "driver" ? DRIVER_SEAT_LOCAL : SEAT_LOCAL;
+      const targetSeat = viewMode === "driver" ? DRIVER_SEAT_LOCAL : passengerSeat(t);
       _seat.copy(targetSeat).applyQuaternion(t.quaternion).add(t.position);
       player.position.lerpVectors(_tmp, _seat, u * u);
       player.velocity.set(0, 0, 0);
@@ -256,6 +295,7 @@ export function createTramRide({
       return true;
     }
 
+    syncCabVisibility();
     // ---------- riding ----------
     refreshRideHint();
     player.velocity.set(0, 0, 0);
@@ -276,7 +316,7 @@ export function createTramRide({
       player.facing.copy(_look);
     } else {
       // 乘客：窗内侧，面朝窗外
-      _seat.copy(SEAT_LOCAL).applyQuaternion(t.quaternion).add(t.position);
+      _seat.copy(passengerSeat(t)).applyQuaternion(t.quaternion).add(t.position);
       player.position.copy(_seat);
       windowOutDir(t, _up, _out);
       lookPhase += dt * 0.45;
@@ -300,9 +340,10 @@ export function createTramRide({
     getState: () => state,
     getViewMode: () => viewMode,
     isDriverView: () => viewMode === "driver" && state !== "idle",
-    getActiveTram: () => (state !== "idle" ? activeTram || tram() : null),
-    getPassengerSeatLocal: () => SEAT_LOCAL.clone(),
+    getActiveTram: () => (state !== "idle" ? tram() : null),
+    getPassengerSeatLocal: () => passengerSeat(tram()).clone(),
     getFoxSeatLocal: () => FOX_TRAM_SEAT_LOCAL.clone(),
     toggleDriverView,
+    forceExit: alight,
   };
 }

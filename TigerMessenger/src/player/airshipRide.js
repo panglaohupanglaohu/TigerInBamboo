@@ -19,6 +19,8 @@ const FLY_DIST = 16;       // 乘客第三人称：舱外跟拍
 const PILOT_DIST = 0.12;   // 驾驶员第一人称：贴眼，几乎无身后拉距
 const PILOT_FOV = 82;      // 驾驶员广角，开阔远景
 const SPEED = 9.0;         // 前后推进速度
+const BOOST_MULT = 2.5;    // 按住 E 加速倍率（2026-09-24 用户要求）
+const BOOST_RAMP = 3.0;    // 加速/减速平滑速率（1/s）
 const TURN_SPEED = 1.5;    // 转向角速度 rad/s
 const VERT_SPEED = 8.0;    // 升降速度
 // 水晶城晶皇塔尖高逾谷内 50+；升限必须越过塔顶才能真正"飞过"水晶城
@@ -184,11 +186,43 @@ export function createAirshipRide({
   let prevFov = 60;
   let yaw = 0;      // 绕局部 +Y（星球法线）的驾驶偏航
   let hover = 20;   // 当前悬浮高度
+  let boost = 1;    // 当前推进倍率（E 加速）
   let bombCd = 0;   // 投掷冷却计时
   const bombs = []; // 飞行中的烟雾弹
   const smokes = []; // 已引爆的烟雾团
   const _dir = new THREE.Vector3();
   const climbFrom = new THREE.Vector3();
+  const ropeTop = new THREE.Vector3(), ropeAxis = new THREE.Vector3();
+  const ropeDelta = new THREE.Vector3(), ropeEnd = new THREE.Vector3();
+  const ropeLocalTop = new THREE.Vector3(), ropeLocalAxis = new THREE.Vector3();
+
+  // Terrain can now lie far below the original sea-level mooring. Pay out the
+  // visible rope to a grounded player's reach, keeping its attachment fixed.
+  function fitBoardingRope(a) {
+    const rope = a?.userData?.rope;
+    if (!rope?.geometry || !rope.parent || player.riding || !player.onGround) return;
+    rope.geometry.computeBoundingBox();
+    const length = rope.geometry.boundingBox.max.y;
+    if (!(length > 0)) return;
+    rope.getWorldPosition(ropeEnd);
+    ropeTop.set(0,length,0);rope.localToWorld(ropeTop);
+    ropeAxis.copy(ropeTop).sub(ropeEnd).normalize();
+    ropeDelta.copy(player.position).sub(ropeEnd);
+    const vertical=ropeDelta.dot(ropeAxis);
+    ropeDelta.addScaledVector(ropeAxis,-vertical);
+    if (ropeDelta.length() > BOARD_RANGE+1) return;
+    const span=ropeTop.clone().sub(player.position).dot(ropeAxis)-.65;
+    if (span<1 || span>80) return;
+    ropeEnd.copy(ropeTop).addScaledVector(ropeAxis,-span);
+    ropeLocalTop.copy(ropeTop);rope.parent.worldToLocal(ropeLocalTop);
+    rope.parent.worldToLocal(ropeEnd);
+    ropeLocalAxis.set(0,1,0).applyQuaternion(rope.quaternion);
+    const scale=ropeLocalTop.sub(ropeEnd).dot(ropeLocalAxis)/length;
+    rope.position.copy(ropeEnd);rope.scale.y=scale;
+    const knot=rope.userData.boardingKnot;
+    if (knot) { knot.position.y=.12/scale;knot.scale.y=1/scale; }
+    rope.updateWorldMatrix(false,true);
+  }
 
   function airship() {
     return getAirship ? getAirship() : null;
@@ -250,12 +284,12 @@ export function createAirshipRide({
     if (viewMode === "pilot") {
       setHint(
         "[<kbd>C</kbd>] 舱外视角 · [<kbd>W</kbd>][<kbd>S</kbd>] 进退 · [<kbd>A</kbd>][<kbd>D</kbd>] 转向 · " +
-          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>F</kbd>] 下艇"
+          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>E</kbd>] 加速 · [<kbd>F</kbd>] 下艇"
       );
     } else {
       setHint(
         "[<kbd>C</kbd>] 驾驶员视角 · [<kbd>W</kbd>][<kbd>S</kbd>] 进退 · [<kbd>A</kbd>][<kbd>D</kbd>] 转向 · " +
-          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>F</kbd>] 下艇"
+          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>E</kbd>] 加速 · [<kbd>F</kbd>] 下艇"
       );
     }
   }
@@ -311,6 +345,7 @@ export function createAirshipRide({
     viewMode = "passenger";
     player.riding = false;
     if (a) {
+      _up.copy(a.position).normalize();
       a.userData.flying = false;
       a.visible = true;
       // 从绳尾滑落：站在绳尾末端，交还重力（自由落体回地面）
@@ -382,7 +417,9 @@ export function createAirshipRide({
 
     if (e.code !== "KeyF") return;
     if (state === "idle") {
+      if (e.defaultPrevented || player.riding) return;
       const a = airship();
+      fitBoardingRope(a);
       if (!a || !nearRope()) return;
       e.preventDefault();
       state = "climbing";
@@ -463,8 +500,9 @@ export function createAirshipRide({
 
     /* ---------- idle：绳尾感应提示 ---------- */
     if (state === "idle") {
+      fitBoardingRope(a);
       if (elHint) {
-        const show = !!a && nearRope();
+        const show = !player.riding && !!a && nearRope();
         elHint.classList.toggle("show", show);
         if (show) {
           elHint.innerHTML =
@@ -485,6 +523,9 @@ export function createAirshipRide({
 
     /* ---------- climbing：沿绳攀爬动画 ---------- */
     if (state === "climbing") {
+      player.riding = true;
+      player.boardingOnFoot = false;
+      player.onGround = false;
       setHint(null);
       climbT += dt;
       const u = Math.min(1, climbT / CLIMB_TIME);
@@ -545,6 +586,9 @@ export function createAirshipRide({
 
     // 推进（W 前进 / S 后退）：沿艇首切向移动后重新投影回球面
     const thrust = (keys?.KeyW ? 1 : 0) - (keys?.KeyS ? 1 : 0);
+    // 按住 E 加速：倍率平滑逼近目标，松开后回落
+    const boostTarget = keys?.KeyE ? BOOST_MULT : 1;
+    boost += (boostTarget - boost) * Math.min(1, BOOST_RAMP * dt);
 
     // 姿态：+Y 对齐法线 + 驾驶偏航
     quatYToDir(_dir, _q0);
@@ -559,7 +603,7 @@ export function createAirshipRide({
 
     if (thrust !== 0) {
       _pos.copy(_dir).multiplyScalar(planetRadius + hover);
-      _pos.addScaledVector(_fwd, thrust * SPEED * dt);
+      _pos.addScaledVector(_fwd, thrust * SPEED * boost * dt);
       _dir.copy(_pos).normalize();
       // 偏航角随球面平行移动做微小补偿（防经线汇聚漂移）
       a.position.copy(_dir).multiplyScalar(planetRadius + hover);
@@ -608,14 +652,15 @@ export function createAirshipRide({
   }
 
   /**
-   * [Q] 召唤飞艇：飞艇降临到玩家**面朝方向前方 ~10 单位、低空**——
-   * 绳尾恰好触地，玩家平视即可看见、走到绳下按 [F] 抓绳。
-   * （旧版放头顶 hover=20 高空：绳尾离地 7.1 米够不着，且飞出视锥外，
-   *   体感像"召唤无效"。）
-   * 仅 idle 状态可用（飞行中/攀爬中不可召唤）。召唤后标记 flown，防止回锚。
+   * [Q] 召唤飞艇：飞艇降临到玩家面朝方向前方 4.5 米低空——
+   * 自适应地表高程与艇身缩放倍率，绳尾距离地面恰好 0.6 米，
+   * 艇首正对玩家，登艇绳就在玩家面前 3 米处，可立即按 [F] 登艇。
+   * 召唤后标记 flown，防止回锚。
    */
   function summon() {
-    if (state !== "idle") return false;
+    if (state !== "idle") {
+      forceExit();
+    }
     const a = airship();
     if (!a) return false;
     // 玩家面朝方向（切平面投影）
@@ -624,25 +669,49 @@ export function createAirshipRide({
     _fwd.addScaledVector(_up, -_fwd.dot(_up));
     if (_fwd.lengthSq() < 1e-6) _fwd.set(0, 0, 1);
     _fwd.normalize();
-    // 锚点 = 玩家球面位置沿面朝方向前移 10 单位（球面小范围弦≈弧）
-    _dir.copy(player.position).addScaledVector(_fwd, 10).normalize();
-    // 低空：绳尾在艇心下 12.9（吊舱 -3.5 + 绳挂点 -0.4 + 绳长 9），
-    // hover 13.2 → 绳尾离地 0.3，玩家头部 dy≈1.3 落入抓绳判定窗。
-    hover = 13.2;
-    // 艇首朝玩家（玩家看到艇首正面与右前侧的登艇绳）
-    _fwd.negate();
-    // 反推偏航角：基准前向（局部+Z 经 quatYToDir）与期望前向的夹角
-    quatYToDir(_dir, _q0);
-    _f0.copy(FWD_LOCAL).applyQuaternion(_q0);
-    _f0.addScaledVector(_up, -_f0.dot(_up)).normalize();
-    _tmp.crossVectors(_f0, _fwd);
-    yaw = Math.atan2(_tmp.dot(_up), _f0.dot(_fwd));
+    // 锚点 = 玩家球面位置沿面朝方向前移 4.5 单位（在玩家正前方低空）
+    _dir.copy(player.position).addScaledVector(_fwd, 4.5).normalize();
+
+    // 飞艇动态缩放高度适应：基础绳长 12.9 随艇体 scale.y 同步缩放
+    const scaleY = a.scale.y || 1.25;
+    const ropeDrop = 12.9 * scaleY;
+    const playerR = player.position.length();
+    const localLift = terrainLiftUnder(_dir);
+    const canyonDrop = canyonOffsetDir ? canyonOffsetDir(_dir) : 0;
+    const terrainR = planetRadius + localLift + canyonDrop;
+    const baseGroundR = Math.max(playerR, terrainR);
+
+    // 目标离地高度：绳尾距当地地表恰好 0.6 米，平视可见且处于抓绳感应半径
+    const airshipR = baseGroundR + ropeDrop + 0.6;
+    hover = airshipR - planetRadius;
+
+    // 复位垂绳几何缩放，消除旧拉伸残留
+    const rope = a.userData?.rope;
+    if (rope) {
+      rope.scale.set(1, 1, 1);
+      rope.position.set(0.62, -9.4, 1.2);
+      if (rope.userData.boardingKnot) {
+        rope.userData.boardingKnot.position.set(0, 0, 0);
+        rope.userData.boardingKnot.scale.set(1, 1, 1);
+      }
+      rope.updateWorldMatrix(false, true);
+    }
+
     // 定位飞艇
-    a.position.copy(_dir).multiplyScalar(planetRadius + hover);
-    a.quaternion.copy(_q0).multiply(_qYaw.setFromAxisAngle(_yAxis, yaw));
+    a.position.copy(_dir).multiplyScalar(airshipR);
+
+    // 偏航角：艇首朝向玩家正面
+    quatYToDir(_dir, _q0);
+    yaw = yawToFace(a.position, player.position);
+    _qYaw.setFromAxisAngle(_yAxis, yaw);
+    a.quaternion.copy(_q0).multiply(_qYaw);
+
     a.userData.anchorDir = _dir.clone();
     a.userData.hover = hover;
     a.userData.yaw = yaw;
+    a.userData.flying = false;
+    a.userData.ropeState = "idle";
+    a.visible = true;
     // 标记已飞行：防止 messengerIsland 回锚逻辑把飞艇拉回湖沼
     a.userData.flown = true;
     return true;

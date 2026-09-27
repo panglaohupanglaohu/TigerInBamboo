@@ -1,0 +1,10 @@
+import{chromium}from'/Users/panglaohu/Downloads/TigerInBamboo/tools/shot/node_modules/playwright/index.mjs';import{writeFile}from'node:fs/promises';
+const out='artifacts/pipeline/bookshop-two-hour',b=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});try{const p=await b.newPage({viewport:{width:1440,height:1000}}),errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
+ await p.goto('http://localhost:8931/TigerMessenger/artifacts/pipeline/bookshop-two-hour/robots.html');await p.waitForFunction(()=>window.robotViewer);const models=[];
+ for(let i=0;i<3;i++){await p.evaluate(i=>show(i),i);models.push(await p.evaluate(()=>({name:window.model.userData.robotName,stats:window.model.userData.stats,visible:window.robotViewer.models.filter(m=>m.visible).length})));}
+ const before=await p.evaluate(()=>window.model.rotation.y);await p.mouse.move(700,500);await p.mouse.down();await p.mouse.move(850,500,{steps:8});await p.mouse.up();const after=await p.evaluate(()=>window.model.rotation.y);await p.mouse.wheel(0,150);await p.click('#rear');await p.click('#spin');await p.waitForTimeout(100);await p.click('#spin');
+ await p.screenshot({path:out+'/robot-viewer.png'});
+ await p.goto('http://localhost:8931/TigerMessenger/artifacts/pipeline/bookshop-two-hour/review.html');await p.waitForFunction(()=>[...document.images].every(i=>i.complete&&i.naturalWidth>0));await p.locator('.robots').screenshot({path:out+'/robots-overview.png'});await p.screenshot({path:out+'/review-desktop.png'});
+ await p.setViewportSize({width:390,height:844});await p.screenshot({path:out+'/review-mobile.png'});const mobileOverflow=await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
+ const report={models,rotationChanged:Math.abs(after-before)>.5,mobileOverflow,errors};await writeFile(out+'/viewer-check.json',JSON.stringify(report,null,2));console.log(report);
+ }finally{await b.close()}

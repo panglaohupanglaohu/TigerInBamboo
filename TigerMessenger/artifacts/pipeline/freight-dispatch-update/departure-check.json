@@ -1,0 +1,137 @@
+{
+  "results": {
+    "visits": [
+      {
+        "time": 0,
+        "id": "red",
+        "stop": null,
+        "count": 0
+      },
+      {
+        "time": 0,
+        "id": "blue",
+        "stop": null,
+        "count": 0
+      },
+      {
+        "time": 168.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 0
+      },
+      {
+        "time": 182.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 0
+      },
+      {
+        "time": 316,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 3
+      },
+      {
+        "time": 321,
+        "id": "red",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 324.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 3
+      },
+      {
+        "time": 365,
+        "id": "red",
+        "stop": "frontline",
+        "count": 6
+      },
+      {
+        "time": 375.5,
+        "id": "red",
+        "stop": "beetle",
+        "count": 6
+      }
+    ],
+    "loaded": {
+      "red": {
+        "time": 575.5,
+        "kinds": [
+          "locust",
+          "locust",
+          "locust",
+          "ant",
+          "ant",
+          "ant",
+          "beetle",
+          "beetle",
+          "beetle"
+        ]
+      }
+    },
+    "trains": {
+      "red": {
+        "id": "red",
+        "slots": [
+          "LOC-0001",
+          "LOC-0004",
+          "LOC-0007",
+          "ANT-0002",
+          "ANT-0005",
+          "ANT-0008",
+          "BTL-0012",
+          "BTL-0015",
+          "BTL-0018"
+        ],
+        "job": null,
+        "lastFactory": "beetle",
+        "haulDistance": 170.94661376861077
+      },
+      "blue": {
+        "id": "blue",
+        "slots": [
+          "BTL-0003",
+          "BTL-0006",
+          "BTL-0009",
+          "ANT-0011",
+          "ANT-0014",
+          "ANT-0017",
+          null,
+          null,
+          null
+        ],
+        "job": null,
+        "lastFactory": "ant",
+        "haulDistance": 89.11875967004835
+      }
+    },
+    "message": "甲壳虫三台齐备，开始逐台吊装。",
+    "stock": {
+      "locust": {
+        "kind": "locust",
+        "kits": 2,
+        "active": "LOC-0019",
+        "enabled": true,
+        "produced": 6
+      },
+      "ant": {
+        "kind": "ant",
+        "kits": 2,
+        "active": "ANT-0020",
+        "enabled": true,
+        "produced": 6
+      },
+      "beetle": {
+        "kind": "beetle",
+        "kits": 2,
+        "active": "BTL-0021",
+        "enabled": true,
+        "produced": 6
+      }
+    }
+  },
+  "errors": []
+}

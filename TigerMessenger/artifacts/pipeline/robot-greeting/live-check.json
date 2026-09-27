@@ -1,0 +1,33 @@
+{
+  "result": {
+    "greetings": [
+      {
+        "type": "locust",
+        "triggered": true
+      },
+      {
+        "type": "ant",
+        "triggered": true
+      },
+      {
+        "type": "beetle",
+        "triggered": true
+      }
+    ],
+    "boarding": [
+      {
+        "variant": "red",
+        "boarded": true,
+        "vehicle": "red-heavy-flatcar-5",
+        "driver": "red-freight-locomotive"
+      },
+      {
+        "variant": "blue",
+        "boarded": true,
+        "vehicle": "blue-heavy-flatcar-5",
+        "driver": "blue-freight-locomotive"
+      }
+    ]
+  },
+  "errors": []
+}

@@ -5,7 +5,7 @@ func run() -> void:
     root.add_child(world)
     while not world.ready_for_battle and world.load_error.is_empty(): await physics_frame
     world.set_physics_process(false)
-    var spacing := float(OS.get_environment("PINE_GRID_SPACING")) if OS.has_environment("PINE_GRID_SPACING") else 1.0
+    var spacing := float(OS.get_environment("PINE_GRID_SPACING")) if OS.has_environment("PINE_GRID_SPACING") else 0.6
     world.landing_planner.build(world.get_world_3d(), world.landing, 30.0, spacing)
     var cover = load("res://scripts/saihoji_pine_cover.gd").new()
     var report: Dictionary = cover.build(world.concealment_visual.node, world.kun, world.landing_planner.available)
@@ -19,6 +19,7 @@ func run() -> void:
         var point: Vector3 = cover.reserve(world.landing * 160.8)
         if point != Vector3.ZERO: selected.append(point)
     report.actual_reserved = selected.size()
+    report.fifty_real_cover_positions = selected.size()==50 and report.static_trees>0
     report.selected_positions = selected.map(func(v): return [v.x,v.y,v.z])
     report.distinct = true
     for i in range(selected.size()):
@@ -36,4 +37,4 @@ func run() -> void:
     FileAccess.open(output + "/report.json", FileAccess.WRITE).store_string(JSON.stringify(report, "  "))
     print(JSON.stringify(report))
     world.queue_free(); await process_frame
-    quit(0 if report.all_on_connected_ground and report.all_outside_moving_kun and report.distinct and report.moving_garden_rejected and report.exhaustion_returns_zero else 1)
+    quit(0 if report.fifty_real_cover_positions and report.all_on_connected_ground and report.all_outside_moving_kun and report.distinct and report.moving_garden_rejected and report.exhaustion_returns_zero else 1)

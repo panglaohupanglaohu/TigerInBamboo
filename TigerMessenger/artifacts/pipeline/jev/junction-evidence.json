@@ -1,0 +1,42 @@
+{
+  "task": "Canal-junction target iteration and level-generation triage",
+  "target": "Terraced colorful waterside castle, blue roofs, walk-through arch, open courtyard and harbor.",
+  "visual_observations": {
+    "source": "Astra inspected dressed-final.png; text observations, not Jev vision",
+    "image_sha256": "9fa79979c88b6e2f4681617ceeaa4ed6898fe6646c5bb9b01e94f389deb05d2b",
+    "remaining": [
+      "Building massing and terraces still simpler than target",
+      "Lighting and atmosphere not matched"
+    ],
+    "completed": [
+      "Facade details, courtyard tree, planters and dock props added"
+    ]
+  },
+  "checks": [
+    {
+      "name": "dock-to-keep pedestrian path",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "candidate harbor local routes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "actual dynamic boat sailing and boarding",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Preserve saved custom castles",
+    "Do not enable full-fleet dispatch based on local harbor tests",
+    "Keep authored path clear"
+  ],
+  "evidence_revision": {
+    "route-check.json": "340864b1f19e3396d596c04da8928f546d13db61be0d86b6ba85fc90570fb794",
+    "harbor-probe.json": "95dd9aa02deb8e2a0dd77f6357035c4c14ae35775bc7aed6a2c2c1f63381e107",
+    "dressed-final.png": "9fa79979c88b6e2f4681617ceeaa4ed6898fe6646c5bb9b01e94f389deb05d2b"
+  }
+}

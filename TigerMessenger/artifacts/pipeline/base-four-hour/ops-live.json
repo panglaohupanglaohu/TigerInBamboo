@@ -1,0 +1,107 @@
+{
+  "report": {
+    "logistics": {
+      "version": 1,
+      "time": 2.5013000000119203,
+      "serial": 3,
+      "units": [
+        {
+          "id": "LOC-0001",
+          "kind": "locust",
+          "status": "assembly",
+          "progress": 0.02779222222235468,
+          "factory": "locust",
+          "train": null,
+          "slot": null,
+          "batch": null,
+          "health": 1
+        },
+        {
+          "id": "ANT-0002",
+          "kind": "ant",
+          "status": "assembly",
+          "progress": 0.02779222222235468,
+          "factory": "ant",
+          "train": null,
+          "slot": null,
+          "batch": null,
+          "health": 1
+        },
+        {
+          "id": "BTL-0003",
+          "kind": "beetle",
+          "status": "assembly",
+          "progress": 0.02779222222235468,
+          "factory": "beetle",
+          "train": null,
+          "slot": null,
+          "batch": null,
+          "health": 1
+        }
+      ],
+      "factories": {
+        "locust": {
+          "kind": "locust",
+          "kits": 2,
+          "active": "LOC-0001",
+          "enabled": true,
+          "produced": 0
+        },
+        "ant": {
+          "kind": "ant",
+          "kits": 2,
+          "active": "ANT-0002",
+          "enabled": true,
+          "produced": 0
+        },
+        "beetle": {
+          "kind": "beetle",
+          "kits": 2,
+          "active": "BTL-0003",
+          "enabled": true,
+          "produced": 0
+        }
+      },
+      "trains": {
+        "red": {
+          "id": "red",
+          "slots": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "job": null,
+          "lastFactory": null
+        },
+        "blue": {
+          "id": "blue",
+          "slots": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "job": null,
+          "lastFactory": null
+        }
+      },
+      "materialDeliveries": 0
+    },
+    "combat": {
+      "version": 1,
+      "time": 2.5013000000119203,
+      "units": [],
+      "smoke": [],
+      "autoRetreat": true
+    },
+    "models": 3,
+    "shipment": 0,
+    "focus": "factory"
+  },
+  "errors": []
+}

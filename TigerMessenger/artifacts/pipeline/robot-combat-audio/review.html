@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>Robot combat audio review</title><style>body{background:#172027;color:#eee;font:18px Georgia;max-width:1000px;margin:50px auto;padding:24px}button,select{padding:14px;margin:8px;background:#cfb887;border:0;font-size:17px}p{line-height:1.8}img{width:100%}</style>
+<div id="toast"></div><h1>机器人战斗音效 · 实录枪声分层版</h1><p>蝗虫：三连发、枪机与退壳金属声。蚂蚁：重低频压力炮、阀门泄压。甲壳虫：快速双管短脉冲。点击后试听，同一套实录音源与混音已接入实际战斗与运输射击。</p>
+<select id="room"><option value="0">海滨开阔地</option><option value="0.45">厂房外墙附近</option><option value="0.9">厂房内（试听参数）</option></select><br>
+<button data-kind="locust">蝗虫三连发</button><button data-kind="ant">蚂蚁压力炮</button><button data-kind="beetle">甲壳虫双管连射</button><br><button id="crack">近身弹丸破空</button><button id="hit">确认命中</button><button id="kill">确认失能</button><button id="mute">静音切换</button><p id="status">等待试听</p>
+<p>游戏中根据附近实际厂房墙面做五方向探测，估计回声强度与延迟；不是完整声学传播模拟。命中反馈只由真实伤害事件触发。远处衰减、左右声像、共享声部预算与总线压缩，沿用全局 M 键静音。</p>
+<p>参考 <a href="https://blog.activision.com/call-of-duty/2019-07/Modern-Warfare-Initial-Intel-Creating-an-Orchestra-of-Incredible-Audio-Effects-Weapon-Sounds-in-Call-of-Duty-Modern-Warfare">Infinity Ward 官方武器音效介绍</a>的独立武器声、环境反射与延迟分层；枪声改用 <a href="https://opengameart.org/content/the-free-firearm-sound-library">The Free Firearm Sound Library</a> 的 CC0 实录素材：蝗虫 AK-47、甲壳虫 M45、蚂蚁 Nova 降调叠加压力尾声。未使用该游戏的录音，也不声称听感已经相同。</p>
+<p><a href="../september-28-fixes/review.html">其他修复与实际截图</a> · <a href="../../../?autostart=1&baseReview=1">进入游戏</a></p>
+<h2>录制试听</h2><audio controls src="../robot-audio-recorded/preview.webm"></audio><p>顺序：蝗虫、蚂蚁、甲壳虫、蚂蚁厂房回声、近身破空、命中、失能。</p><h2>信使肩线与臀胯修正</h2><img src="../courier-shoulder-hips/after-idle.png"><p>实际模型正、背、侧视图；收窄并降低肩关节，补出连贯裤装骨盆和上腿体积。行走、坐姿已检查，不声明达到目标图艺术验收。</p>
+<script type="module">
+import{loadRobotWeaponSamples}from'../../../src/audio/robotWeaponSamples.js';
+import{ensureAudio,isMuted}from'../../../src/audio/sfx.js';
+import{setSfxListener,sfxRobotShot,sfxRobotConfirmed,getRobotAudioSnapshot}from'../../../src/audio/worldSfx.js';
+setSfxListener({x:0,y:0,z:0});let generation=0;
+async function unlock(){const c=ensureAudio();await c?.resume();if(c)await loadRobotWeaponSamples(c);}
+for(const button of document.querySelectorAll('[data-kind]'))button.onclick=async()=>{await unlock();const kind=button.dataset.kind,count={locust:3,ant:1,beetle:5}[kind],gap={locust:110,ant:0,beetle:55}[kind],g=++generation;for(let i=0;i<count;i++)setTimeout(()=>{if(g!==generation)return;sfxRobotShot(kind,{x:2,y:0,z:3},{x:2,y:0,z:25},{enclosure:Number(room.value),reflectionDistance:8});document.querySelector('#status').textContent=JSON.stringify(getRobotAudioSnapshot());},i*gap);};
+crack.onclick=async()=>{await unlock();sfxRobotShot('locust',{x:-14,y:0,z:1},{x:14,y:0,z:1});};hit.onclick=async()=>{await unlock();sfxRobotConfirmed({x:0,y:0,z:2});};kill.onclick=async()=>{await unlock();sfxRobotConfirmed({x:0,y:0,z:2},true);};mute.onclick=()=>{window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyM'}));document.querySelector('#status').textContent=isMuted()?'已静音':'声音已恢复';};
+</script>

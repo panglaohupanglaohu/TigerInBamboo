@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "e28b41c18b206c25586daef2e972c6cc044b22fe54bafcf457a22e3248e242af",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.87,
+      "probabilities": {
+        "review": 0.04,
+        "geometry": 0.06,
+        "lighting": 0,
+        "dressing": 0,
+        "navigation": 0.9
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.91
+    }
+  },
+  "usage": {
+    "input_tokens": 612,
+    "output_tokens": 91,
+    "cost_usd": 0.000258,
+    "credits_remaining_usd": 4.996131
+  },
+  "elapsed_ms": 1791,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full harbour boarding",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

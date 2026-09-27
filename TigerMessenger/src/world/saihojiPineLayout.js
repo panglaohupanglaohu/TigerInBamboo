@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { mergeStaticGroup } from './geometryMerge.js';
+import { isSaihojiPool, SAIHOJI_TARGET_REVISION } from './saihojiTargetGarden.js';
 
 /** Deterministic redistribution on the actual Kun terrain, in island local space.
  * Cover anchors follow the island, not swaying crowns. Original seeds stay intact.
@@ -26,8 +27,8 @@ export function arrangeSaihojiPines(island, zones, whale) {
     return !stoneBoxes.some(b=>w.x>b.min.x-margin&&w.x<b.max.x+margin&&w.y>b.min.y-margin&&w.y<b.max.y+margin&&w.z>b.min.z-margin&&w.z<b.max.z+margin);
   }
   const candidates=[];
-  for(let z=-5.5,row=0;z<=5.5;z+=.65,row++)for(let x=-10.7+(row%2)*.31;x<=10.7;x+=.65){
-    if((x/10.9)**2+(z/5.65)**2>1)continue;
+  for(let z=-5.5,row=0;z<=5.5;z+=.65,row++)for(let x=-14.6+(row%2)*.31;x<=14.6;x+=.65){
+    if((x/14.85)**2+(z/5.65)**2>1||isSaihojiPool(x,z,.45))continue;
     const p=surface(x,z);if(p&&clearStone(p,.22))candidates.push(p);
   }
   const placed=[];
@@ -35,10 +36,10 @@ export function arrangeSaihojiPines(island, zones, whale) {
   entries.sort((a,b)=>(b.pine.userData.pineScale||1)-(a.pine.userData.pineScale||1));
   for(const entry of entries){
     let selected=null,best=Infinity;
-    for(const separation of [3.05,2.7,2.4]){
+    for(const separation of [3.35,3.05,2.75]){
       for(const p of candidates){
         if(placed.some(q=>Math.hypot(p.x-q.x,p.z-q.z)<separation))continue;
-        const distance=(p.x-entry.old.x)**2+(p.z-entry.old.z)**2;
+        const distance=(p.x-entry.old.x*1.35)**2+(p.z-entry.old.z)**2;
         const cost=distance+(Math.abs(p.z)<.8?30:0);
         if(cost<best){best=cost;selected=p;}
       }
@@ -53,8 +54,13 @@ export function arrangeSaihojiPines(island, zones, whale) {
     pine.quaternion.copy(pine.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(upright));
     // Target silhouette has broad layered crowns, not tall narrow trees.
     // Scale the whole branching silhouette together so foliage stays attached.
-    pine.scale.x*=1.35;pine.scale.z*=1.35;pine.scale.y*=1.2;
-    pine.userData.whaleBackCrownWidth=1.35;pine.userData.whaleBackHeight=1.2;
+    const authoredScale=pine.userData.pineScale||1;
+    // Keep small companion trees' equipment clearance. Compress only the
+    // towering heroes and, more gently, the middle tier as whole branching
+    // silhouettes so neither foliage nor branches detach from their trunks.
+    const heightScale=authoredScale>1.15?.93:authoredScale>=.95?1.07:1.2;
+    pine.scale.x*=1.42;pine.scale.z*=1.42;pine.scale.y*=heightScale;
+    pine.userData.whaleBackCrownWidth=1.42;pine.userData.whaleBackHeight=heightScale;
     const destination=selected.clone();destination.y+=.015;
     pine.position.copy(pine.parent.worldToLocal(island.localToWorld(destination.clone())));
     // Root moss is a separate group, so it follows this relocation before merging.
@@ -72,7 +78,7 @@ export function arrangeSaihojiPines(island, zones, whale) {
   const stonePoints=[];
   for(const stone of steppingStones){
     const desired=island.worldToLocal(stone.getWorldPosition(new THREE.Vector3()));
-    const valid=p=>p&&clearStone(p,.1)&&placed.every(q=>Math.hypot(p.x-q.x,p.z-q.z)>1.1)&&stonePoints.every(q=>Math.hypot(p.x-q.x,p.z-q.z)>.8);
+    const valid=p=>p&&!isSaihojiPool(p.x,p.z,.3)&&clearStone(p,.1)&&placed.every(q=>Math.hypot(p.x-q.x,p.z-q.z)>1.1)&&stonePoints.every(q=>Math.hypot(p.x-q.x,p.z-q.z)>.8);
     let p=surface(desired.x,desired.z);
     if(!valid(p))p=candidates.filter(valid).sort((a,b)=>a.distanceToSquared(desired)-b.distanceToSquared(desired))[0];
     if(!p){stone.visible=false;continue;}
@@ -94,12 +100,12 @@ export function arrangeSaihojiPines(island, zones, whale) {
   for(const entry of entries){
     for(let z=entry.current.z-4;z<=entry.current.z+4;z+=.3)for(let x=entry.current.x-4;x<=entry.current.x+4;x+=.3){
       const p=surface(x,z);
-      if(!p||!clearStone(p,.16)||placed.some(q=>Math.hypot(p.x-q.x,p.z-q.z)<1.1))continue;
+      if(!p||isSaihojiPool(p.x,p.z,.32)||!clearStone(p,.16)||placed.some(q=>Math.hypot(p.x-q.x,p.z-q.z)<1.1))continue;
       ray.set(island.localToWorld(new THREE.Vector3(p.x,15,p.z)),down.clone().transformDirection(island.matrixWorld));
       ray.far=20*worldScale;
       const leafHits=ray.intersectObject(entry.pine,true).filter(h=>['n10','n11','n12'].includes(h.object.userData.sourceNodeId));
       const clearance=leafHits.length?Math.min(...leafHits.map(h=>(island.worldToLocal(h.point.clone()).y-p.y)*worldScale)):0;
-      if(clearance<1.12)continue;
+      if(clearance<1.12)continue; // Taller bows receive higher slots in the ambush allocator.
       p.y+=.04;
       pool.push({anchor:island,localPoint:p,pine:entry.pine,canopyHeight:clearance,clearance});
     }
@@ -120,7 +126,7 @@ export function arrangeSaihojiPines(island, zones, whale) {
   let minSpacing=Infinity;
   for(let i=0;i<placed.length;i++)for(let j=0;j<i;j++)minSpacing=Math.min(minSpacing,placed[i].distanceTo(placed[j])*worldScale);
   whale.userData.saihojiCoverPoints=covers;
-  whale.userData.pineLayoutReport={revision:'kun-spread-v1',trees:entries.length,coverCount:covers.length,minRootWorldSpacing:minSpacing,
+  whale.userData.pineLayoutReport={revision:SAIHOJI_TARGET_REVISION,trees:entries.length,coverCount:covers.length,minRootWorldSpacing:minSpacing,
     entries:entries.map(e=>({seed:e.pine.userData.sourceSeed,zone:e.zone,before:e.old.toArray(),after:e.current.toArray()})),
     scope:'Actual terrain supported roots and cover slots; canopy overlap and walking routes require visual/runtime review'};
   return whale.userData.pineLayoutReport;

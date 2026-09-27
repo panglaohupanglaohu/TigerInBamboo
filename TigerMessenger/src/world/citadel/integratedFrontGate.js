@@ -1,3 +1,4 @@
+import landingSupport from '../../../assets/models/optimized/citadel-landing-support/landingSupportR03.js';
 import {citadelRevision} from "./layoutRelease.js";
 import {clipExteriorBox} from './clipExteriorBox.js';
 import * as THREE from 'three';
@@ -34,7 +35,14 @@ export function buildIntegratedFrontGate(castle,radius=160){
  box('integrated-side-court-link',50.6,midY,91,3,.4,3.4,true);
  // Occupied terrace over the defensive frontage, with a real stairwell slot.
  box('integrated-west-terrace',47.2,midY,98.5,8.4,.5,17,true);
- box('integrated-east-terrace',61.4,midY,98.5,9.8,.5,17,true);
+ // Retain the side gallery beside the stair, rather than a second empty
+ // nine-metre forecourt competing with the actual plaza above it.
+ const eastTerraces=[];
+ for(let i=0;i<3;i++){
+  const z=103-i*4,top=dockY+(midY-dockY)*(i+1)/3;
+  box('integrated-east-terrace',58.8,top,z,4.6,top-sea(58.8,z)+1,4,true);
+  eastTerraces.push({z,top});
+ }
  box('integrated-overgate-walk',54,midY,105.9,5.1,.5,2.2,true);
  const releasedPort=citadelRevision('citadelPort')==='4';
  const shop=buildHarborArchitecture(()=>0,{shops:[{id:'front-gate-side-shop',x:0,z:0,y:midY,w:5.2,d:3,h:3.7,bays:2,canopyReach:releasedPort?2:1.4,counter:releasedPort}],perimeter:false,mooring:false});shop.position.set(46,midY-4,92.5);root.add(shop);shop.userData.update(.85);
@@ -45,10 +53,25 @@ export function buildIntegratedFrontGate(castle,radius=160){
   market.userData.sourceId='citadel-reference-harbor-architecture-v1:original-blue-canvas';
  }
  // Continuous side walls tie the gate frontage to the terrace behind it.
- for(const [a,b]of [[42.5,48],[60,67]])box('integrated-front-wall',(a+b)/2,midY+.9,107,b-a,midY+.9-Math.min(sea(a,107),sea(b,107))+1,1.5);
- for(const x of [43,66.5])box('integrated-return-wall',x,midY+.9,98.5,.8,midY+.9-sea(x,98.5)+1,17);
+ for(const [a,b]of [[42.5,48],[60,61.8]])box('integrated-front-wall',(a+b)/2,midY+.9,107,b-a,midY+.9-Math.min(sea(a,107),sea(b,107))+1,1.5);
+ box('integrated-return-wall',43,midY+.9,98.5,.8,midY+.9-sea(43,98.5)+1,17);
+ // Each side terrace has its own retaining wall; the rear court stays at midY.
+ for(const {z,top}of eastTerraces)box('integrated-return-wall',61.4,top+.9,z,.8,top+.9-sea(61.4,z)+1,4);
+ box('integrated-return-wall',61.4,midY+.9,106,.8,midY+.9-sea(61.4,106)+1,2);
+ root.userData.eastTerraces=eastTerraces;
  if(citadelRevision('citadelPort')==='4')finishFrontHarbor(root,flights);
  if(citadelRevision('citadelPort')==='4')buildFrontHarborCargo(root,quays);
+ // Actual Blender foundation beneath the upper landing, fitted to the cliff.
+ // Top is below the walking slab, so the authored stair/route is unchanged.
+ const supportGeometry=new THREE.BufferGeometry();
+ supportGeometry.setAttribute('position',new THREE.Float32BufferAttribute(landingSupport.positions,3));
+ supportGeometry.setAttribute('normal',new THREE.Float32BufferAttribute(landingSupport.normals,3));
+ supportGeometry.computeBoundingBox();supportGeometry.computeBoundingSphere();
+ const support=new THREE.Mesh(supportGeometry,stone);support.name='integrated-upper-landing-support';
+ support.castShadow=true;support.receiveShadow=true;
+ support.userData={citadelSolidExterior:true,sourceBlender:landingSupport.source};root.add(support);
+ root.userData.landingSupport={...landingSupport.support,source:landingSupport.source,triangles:landingSupport.triangles};
+
  city.updateWorldMatrix(true,true);const edge=city.getObjectByName('citadel-plaza-edge-garden');
  const opened=edge?clipExteriorBox(edge,city,[60.4,3.85,85.2],[65.6,12,89.2]):0;root.userData.entryCutTriangles=opened;
  city.updateWorldMatrix(true,true);const toCastle=p=>castle.worldToLocal(city.localToWorld(new THREE.Vector3(...p))).toArray();

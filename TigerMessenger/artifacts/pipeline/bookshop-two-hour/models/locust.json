@@ -1,0 +1,64 @@
+{
+  "name": "locust",
+  "version": 4,
+  "sha256": "78f5b66ee1dc8f08b76ee506f90912569870905ce44cba1e2c559e926df37fd8",
+  "stats": {
+    "sourceParts": 288,
+    "meshes": 25,
+    "triangles": 26172
+  },
+  "radius": 160,
+  "source": "assembled default Web world; no saved browser edits copied",
+  "nodes": 39,
+  "meshes": 25,
+  "instances": 0,
+  "materials": 25,
+  "textures": 16,
+  "bytes": 2940208,
+  "landmarks": {
+    "robot": {
+      "node": 0,
+      "name": "bookshop-robot-locust",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "center": [
+        -0.003197193145751953,
+        2.3862499910173938,
+        -0.03207448124885559
+      ],
+      "size": [
+        3.4581973552703857,
+        4.76749997981824,
+        2.0308510661125183
+      ]
+    }
+  },
+  "warnings": [],
+  "limitations": [
+    "Static visible-state capture; source animations, physics, quests and shader logic still require native migration",
+    "Hidden states and non-mesh line/point effects excluded from this world overview; separate asset archives retain them",
+    "Procedural metal patina and line-based armor edge wear are preserved in the authoritative Three.js model, not baked into this portable GLB.",
+    "Static model; locomotion/combat rig is not implemented."
+  ]
+}

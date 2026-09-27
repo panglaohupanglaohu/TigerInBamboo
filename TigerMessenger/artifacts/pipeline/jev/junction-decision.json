@@ -1,0 +1,42 @@
+{
+  "request_hash": "f396555cd28a22c6c056b0896ec2a8d6405547754fe7ab2cc90c26c92baaa946",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.91
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.92,
+      "probabilities": {
+        "dressing": 0.0,
+        "lighting": 0.0,
+        "geometry": 0.04,
+        "navigation": 0.94,
+        "review": 0.02
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.96
+    }
+  },
+  "usage": {
+    "input_tokens": 984,
+    "output_tokens": 91
+  },
+  "elapsed_ms": 809,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "actual dynamic boat sailing and boarding",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

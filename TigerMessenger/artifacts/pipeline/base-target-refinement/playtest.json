@@ -1,0 +1,42 @@
+{
+  "initial": {
+    "radius": 160.9,
+    "ground": true,
+    "cameraRadius": 167.53370485835052,
+    "player": [
+      -64.27709671332683,
+      -52.50391183611534,
+      137.8426787319916
+    ]
+  },
+  "after": {
+    "radius": 160.9,
+    "ground": true,
+    "player": [
+      -62.39678459466021,
+      -63.95502443050492,
+      133.81033638079344
+    ]
+  },
+  "camera": [
+    {
+      "kind": "locust",
+      "cameraDistance": 4.193562385262389,
+      "wallHitsBetweenPlayerAndCamera": 0,
+      "finite": true
+    },
+    {
+      "kind": "ant",
+      "cameraDistance": 4.193562385262453,
+      "wallHitsBetweenPlayerAndCamera": 0,
+      "finite": true
+    },
+    {
+      "kind": "beetle",
+      "cameraDistance": 4.193562385262467,
+      "wallHitsBetweenPlayerAndCamera": 0,
+      "finite": true
+    }
+  ],
+  "errors": []
+}

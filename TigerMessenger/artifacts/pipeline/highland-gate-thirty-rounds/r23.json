@@ -1,0 +1,114 @@
+{
+  "stairs": {
+    "samples": 81,
+    "unsupported": 0,
+    "blocked": 14,
+    "details": [
+      {
+        "i": 63,
+        "t": 0.7875,
+        "hits": []
+      },
+      {
+        "i": 64,
+        "t": 0.8,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 65,
+        "t": 0.8125,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 67,
+        "t": 0.8375,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 68,
+        "t": 0.85,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 69,
+        "t": 0.8625,
+        "hits": []
+      },
+      {
+        "i": 73,
+        "t": 0.9125,
+        "hits": []
+      },
+      {
+        "i": 74,
+        "t": 0.925,
+        "hits": []
+      },
+      {
+        "i": 75,
+        "t": 0.9375,
+        "hits": []
+      },
+      {
+        "i": 76,
+        "t": 0.95,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 77,
+        "t": 0.9625,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 78,
+        "t": 0.975,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 79,
+        "t": 0.9875,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 80,
+        "t": 1,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      }
+    ]
+  },
+  "walking": {
+    "samples": 195,
+    "unsupported": 0,
+    "blocked": 0
+  },
+  "round": 23,
+  "railU": 0.6841666666666667,
+  "rays": 1944,
+  "hitCount": 0,
+  "hits": [],
+  "meshCount": 865,
+  "position": [
+    127.2117504058756,
+    109.01314370670208,
+    -22.01943748897003
+  ],
+  "errors": []
+}

@@ -1,0 +1,42 @@
+{
+  "request_hash": "5fa973002d56d9643530d572b6f9c49a655ae454728dbe6569ae20ad860e11cd",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.96
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.67,
+      "probabilities": {
+        "geometry": 0.15,
+        "dressing": 0.02,
+        "navigation": 0.74,
+        "lighting": 0.0,
+        "review": 0.09
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.88
+    }
+  },
+  "usage": {
+    "input_tokens": 614,
+    "output_tokens": 91
+  },
+  "elapsed_ms": 800,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "tram swept clearance 5040 rays",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

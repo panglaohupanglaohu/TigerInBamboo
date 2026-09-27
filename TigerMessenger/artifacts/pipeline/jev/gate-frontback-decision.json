@@ -1,0 +1,42 @@
+{
+  "request_hash": "a8cfe05631e4176412477772a6c2a5708467a944a5ea6462a447942b73bf2bf2",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.96
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.51,
+      "probabilities": {
+        "geometry": 0.61,
+        "review": 0.19,
+        "dressing": 0.01,
+        "lighting": 0.0,
+        "navigation": 0.19
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.95
+    }
+  },
+  "usage": {
+    "input_tokens": 645,
+    "output_tokens": 91
+  },
+  "elapsed_ms": 842,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "both sides continuous open arch visual validation",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

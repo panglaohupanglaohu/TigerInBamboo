@@ -1,0 +1,162 @@
+{
+  "created": "2026-09-27T08:33:36.963Z",
+  "images": [
+    {
+      "src": "cargo-ring-live.png",
+      "width": 1400,
+      "height": 950
+    },
+    {
+      "src": "freight-motion-red.png",
+      "width": 1600,
+      "height": 1000
+    },
+    {
+      "src": "freight-motion-blue.png",
+      "width": 1600,
+      "height": 1000
+    },
+    {
+      "src": "hoist-locust-load.png",
+      "width": 1500,
+      "height": 1000
+    },
+    {
+      "src": "hoist-ant-load.png",
+      "width": 1500,
+      "height": 1000
+    },
+    {
+      "src": "hoist-beetle-load.png",
+      "width": 1500,
+      "height": 1000
+    },
+    {
+      "src": "route-after-crystal-gate.png",
+      "width": 1500,
+      "height": 1000
+    },
+    {
+      "src": "route-after-highland-gate.png",
+      "width": 1500,
+      "height": 1000
+    },
+    {
+      "src": "ring-live-clean.png",
+      "width": 1500,
+      "height": 1000
+    }
+  ],
+  "links": [
+    {
+      "url": "http://localhost:8931/TigerMessenger/?autostart=1&baseReview=1&robotOps=1",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/robots.html",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/PROGRESS.md",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/mixed-squad.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/capacity-e2e.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/performance-24.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/command-ui-check.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/ring-drive.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/ring-check.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/soak-v4/report.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/soak-v5/report.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/world-clearance.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/hoist-verify.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/hoist-blue-verify.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/combat-review.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/freight-motion-check.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/core-tests.txt",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/driver-tour.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/cargo-sync.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/source-manifest.json",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/review.html",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/models/locust-actions.glb",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/base-four-hour/models/locust-actions.blend",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/bookshop-two-hour/models/locust.glb",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/bookshop-two-hour/models/locust.blend",
+      "status": 200
+    }
+  ],
+  "mobile": {
+    "width": 390,
+    "scroll": 390
+  },
+  "modelMobile": {
+    "width": 390,
+    "scroll": 390,
+    "model": 4
+  },
+  "errors": []
+}

@@ -98,7 +98,7 @@ export function createTouchControls({
         <div class="touch-btns">
           <button type="button" class="touch-btn" data-action="jump" aria-label="跳跃">跳</button>
           <button type="button" class="touch-btn touch-btn-e" data-action="interact" aria-label="交互 E">E</button>
-          <button type="button" class="touch-btn touch-btn-f" data-action="tram" aria-label="电车 F">F</button>
+          <button type="button" class="touch-btn touch-btn-f" data-action="tram" aria-label="货运机车 F">F</button>
           <button type="button" class="touch-btn touch-btn-c" data-action="driver" aria-label="司机视野 C">C</button>
           <button type="button" class="touch-btn touch-btn-g" data-action="fire" aria-label="气泡弹 G">G</button>
         </div>

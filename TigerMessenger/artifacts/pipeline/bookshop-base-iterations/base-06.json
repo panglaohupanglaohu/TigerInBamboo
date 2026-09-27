@@ -1,0 +1,17 @@
+{
+  "revision": 6,
+  "triangles": 40120,
+  "finite": true,
+  "circle": {
+    "center": [
+      0,
+      32
+    ],
+    "plazaRadius": 32,
+    "promenadeRadius": 39.5,
+    "shoreRadius": 40,
+    "seawardArc": "continuous semicircle; no chord"
+  },
+  "change": "Low curved shoreline masonry meets the sea",
+  "errors": []
+}

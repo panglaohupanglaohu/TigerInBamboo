@@ -1,4 +1,7 @@
+import {applyAshleyPalette} from './ashleyPalette.js';
 import {CITY_ADVANCE,COMPACT_CITY_ENABLED} from './compactNewCity.js';
+import {applyHolyCityRoofPalette} from './holyCityStyleV2.js';
+import {buildProcessionalParapets} from './processionalParapets.js';
 import {PLAZA_LAYOUT as PLAZA,PLAZA_SHIFT} from './newPlazaLayout.js';
 import {buildMiddleTerraces} from './middleTerraces.js';
 import {buildPlazaEdgeGarden} from './plazaEdgeGarden.js';
@@ -129,6 +132,8 @@ export function buildWestCity(buildTown,waterHeight) {
       const lower=WEST_CITY.districts[tier-1];
       const startZ=lower.z-2,endZ=district.z+2;
       const n=COMPACT_CITY_ENABLED?30:44;
+      const parapets=buildProcessionalParapets(WEST_CITY.x,lower.y,startZ,endZ,district.y-lower.y);
+      parapets.name+='-'+tier;root.add(parapets);
       route.push([WEST_CITY.x,lower.y,startZ+.12]);
       for(let i=0;i<n;i++)walkBox('west-city-stair-'+tier+'-'+i,WEST_CITY.x,
         lower.y+(district.y-lower.y)*(i+1)/n-.1,startZ+(endZ-startZ)*(i+.5)/n,
@@ -140,7 +145,8 @@ export function buildWestCity(buildTown,waterHeight) {
   const courtChildStart=root.children.length,courtRouteStart=route.length;
   // Gate court switchback: two separated flights reach the east front tower roof.
   // Narrow inner flights leave the original main entrance axis accessible.
-  route.push([WEST_CITY.x,16,9.5],[WEST_CITY.x+3,16,9.5]);
+  walkBox('west-city-court-entry-pad',WEST_CITY.x+1.5,15.9,8.8,4.8,.2,1.4,paving);
+  route.push([WEST_CITY.x,16,8.9],[WEST_CITY.x+3,16,8.9]);
   const courtSteps=24;
   const courtStone=new THREE.Group();courtStone.name='citadel-court-structure';root.add(courtStone);
   function courtBlock(name,x,y,z,w,h,d){
@@ -148,12 +154,12 @@ export function buildWestCity(buildTown,waterHeight) {
   }
 
   for(let flight=0;flight<2;flight++){
-    const x=WEST_CITY.x+(flight===0?3:0),start=flight===0?9:2,end=flight===0?2:9;
+    const x=WEST_CITY.x+(flight===0?3:0),start=flight===0?8.5:2,end=flight===0?2:8.1;
     const base=16+flight*3.15;
     if(flight===1)route.push([x,base,1.8]);
     for(let i=0;i<courtSteps;i++){
       const z=start+(end-start)*(i+.5)/courtSteps,y=base+3.15*(i+1)/courtSteps;
-      walkBox('west-city-court-stair-'+flight+'-'+i,x,y-.1,z,1.8,.2,7/courtSteps+.04,paving);
+      walkBox('west-city-court-stair-'+flight+'-'+i,x,y-.1,z,1.8,.2,Math.abs(end-start)/courtSteps+.04,paving);
       route.push([x,y,z]);
       for(const side of [-1,1]){
         // Supporting cheeks extend down to the courtyard, outside clear tread width.
@@ -166,29 +172,43 @@ export function buildWestCity(buildTown,waterHeight) {
       route.push([x,19.15,1.8]);
     }
   }
-  walkBox('west-city-court-upper-landing',WEST_CITY.x+1.5,22.2,9.5,4.8,.2,1.6,paving);
-  walkBox('west-city-court-upper-link',WEST_CITY.x+3,22.2,8.85,1.6,.2,1.9,paving);
+  walkBox('west-city-court-upper-landing',WEST_CITY.x+1.5,22.2,8.6,4.8,.2,2.2,paving);
+  walkBox('west-city-court-upper-link',WEST_CITY.x+3,22.2,8.3,1.6,.2,1.5,paving);
   walkBox('west-city-court-upper-gallery',WEST_CITY.x+4.5,22.2,8.3,4.6,.2,1.5,paving);
-  route.push([WEST_CITY.x,22.3,9.4],[WEST_CITY.x+3,22.3,9.4],[WEST_CITY.x+3,22.3,8.3],[WEST_CITY.x+6,22.3,8.3]);
+  route.push([WEST_CITY.x,22.3,8.8],[WEST_CITY.x+3,22.3,8.8],[WEST_CITY.x+3,22.3,8.3],[WEST_CITY.x+6,22.3,8.3]);
   // Retain the stair-mouth opening while protecting the exposed turning edge.
-  courtBlock('court-upper-front-guard',WEST_CITY.x+1.5,22.72,10.42,5.05,.84,.22);
-  courtBlock('court-upper-left-guard',WEST_CITY.x-1.08,22.72,9.5,.22,.84,1.85);
-  courtBlock('court-upper-inner-guard',WEST_CITY.x+1.53,22.72,8.60,1.10,.84,.20);
+  courtBlock('court-upper-front-guard',WEST_CITY.x+1.5,22.72,9.82,5.05,.84,.22);
+  courtBlock('court-upper-left-guard',WEST_CITY.x-1.08,22.72,8.6,.22,.84,2.2);
+  courtBlock('court-upper-inner-guard',WEST_CITY.x+1.53,22.72,7.60,1.10,.84,.20);
   courtBlock('court-turn-rear-guard',WEST_CITY.x+1.5,19.57,1.04,5.08,.84,.24);
   courtBlock('court-turn-left-support',WEST_CITY.x-1.06,17.55,1.75,.28,3.1,1.1);
   courtBlock('court-turn-right-support',WEST_CITY.x+4.06,17.55,1.75,.28,3.1,1.1);
   // Upper gallery enters the WFC-reserved doorway at the central tower front.
-  walkBox('west-city-main-tower-entry-bridge',WEST_CITY.x+3,22.2,6.1,1.5,.2,5.8,paving);
-  walkBox('west-city-main-tower-entry-crossing',WEST_CITY.x+1.5,22.2,4,4.5,.2,1.5,paving);
-  walkBox('west-city-main-tower-entry-floor',WEST_CITY.x,22.2,-.6,3.5,.2,10.6,paving);
-  route.push([WEST_CITY.x+3,22.3,8.3],[WEST_CITY.x+3,22.3,4],[WEST_CITY.x,22.3,4],[WEST_CITY.x-1,22.3,-2.8],[WEST_CITY.x-1,22.3,-3.4]);
+  // Cross above the low turning landing, not above the rising second flight.
+  // The shortened tower floor leaves the ascending stair open overhead.
+  walkBox('west-city-main-tower-entry-bridge',WEST_CITY.x+3,22.2,5.05,1.5,.2,6.7,paving);
+  walkBox('west-city-main-tower-entry-crossing',WEST_CITY.x+1.5,22.2,1.8,4.5,.2,1.5,paving);
+  walkBox('west-city-main-tower-entry-floor',WEST_CITY.x,22.2,-1.75,3.5,.2,8.3,paving);
+  route.push([WEST_CITY.x+3,22.3,8.3],[WEST_CITY.x+3,22.3,1.8],[WEST_CITY.x,22.3,1.8],[WEST_CITY.x-1,22.3,-2.8],[WEST_CITY.x-1,22.3,-3.4]);
   const interiorStairs=buildTowerInteriorStairs();root.add(interiorStairs);route.push(...interiorStairs.userData.route);
   walkBox('west-city-main-tower-upper-exit',WEST_CITY.x,36.9,-.05,2.2,.2,6.1,paving);
   walkBox('west-city-main-tower-upper-balcony',WEST_CITY.x,36.9,2.4,6,.2,3.2,paving);
   route.push([WEST_CITY.x,37,-2.5],[WEST_CITY.x,37,2.4]);
   // Enclose exposed balcony edges, keeping the central tower approach open.
-  courtBlock('tower-balcony-front-parapet',WEST_CITY.x,37.48,3.86,6,.96,.28);
-  courtBlock('tower-balcony-front-coping',WEST_CITY.x,38.01,3.86,6.16,.14,.42);
+  // Four real firing embrasures, aligned with the original four bow posts.
+  // Keep a continuous low sill and side protection, not an invisible collider.
+  courtBlock('tower-balcony-front-sill',WEST_CITY.x,37.15,3.86,6,.3,.28);
+  const firingGaps=Array.from({length:4},(_,i)=>[(i-1.5)*.85-.32,(i-1.5)*.85+.32]);
+  let merlonStart=-3;
+  for(const gap of [...firingGaps,[3,3]]){
+    const width=gap[0]-merlonStart;
+    if(width>.001){
+      const center=WEST_CITY.x+(merlonStart+gap[0])/2;
+      courtBlock('tower-balcony-front-merlon',center,37.63,3.86,width,.66,.28);
+      courtBlock('tower-balcony-front-coping',center,38.01,3.86,width+.04,.14,.42);
+    }
+    merlonStart=gap[1];
+  }
   for(const side of [-1,1]){
     courtBlock('tower-balcony-side-parapet',WEST_CITY.x+side*2.86,37.48,2.35,.28,.96,3.3);
     courtBlock('tower-balcony-side-coping',WEST_CITY.x+side*2.86,38.01,2.35,.42,.14,3.44);
@@ -255,12 +275,21 @@ export function buildWestCity(buildTown,waterHeight) {
   root.userData.horsePlazaExit=horseSoldierExitRoute();
   root.userData.artStatus='blue-dome-and-statue-pass; main-facade-horse-harbor-lighting-pending';
   // A raised crossing leaves an open water corridor between the two cities.
-  const direction=bridgeEnd.clone().sub(bridgeStart),length=direction.length();
-  const axis=direction.clone().normalize(),normal=new THREE.Vector3(0,1,0).addScaledVector(axis,-axis.y).normalize();
-  const side=new THREE.Vector3().crossVectors(axis,normal).normalize();
-  const center=bridgeStart.clone().add(bridgeEnd).multiplyScalar(.5).addScaledVector(normal,-.15);
-  const bridge=walkBox('west-city-bridge-deck',center.x,center.y,center.z,length+.3,.3,3.5,paving);
-  bridge.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(axis,normal,side));
+  // 2026-09-24 (user): the footbridge now follows the coastal tram on its inner
+  // side (~4.5 m from the rail centre, ~10 m above it) from B to above the old
+  // station, then runs up the old-town shelf edge to A. Points are west-city local.
+  const bridgeVia=[[15.44,5.03,47.59],[25.1,5.03,44.9],[36.5,5.03,47.15],[44.0,5.03,47.7]].map(p=>new THREE.Vector3(...p));
+  const bridgePath=[bridgeStart,...bridgeVia,bridgeEnd];
+  for(let i=0;i<bridgePath.length-1;i++){
+    const a=bridgePath[i],b=bridgePath[i+1];
+    const direction=b.clone().sub(a),length=direction.length();
+    const axis=direction.clone().normalize(),normal=new THREE.Vector3(0,1,0).addScaledVector(axis,-axis.y).normalize();
+    const side=new THREE.Vector3().crossVectors(axis,normal).normalize();
+    const center=a.clone().add(b).multiplyScalar(.5).addScaledVector(normal,-.15);
+    const deck=walkBox('west-city-bridge-deck',center.x,center.y,center.z,length+.3,.3,3.5,paving);
+    deck.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(axis,normal,side));
+    if(i>0)walkBox('west-city-bridge-deck',a.x,a.y-.15,a.z,3.9,.3,3.9,paving); // turn pad
+  }
   for(const [i,p] of [bridgeStart,bridgeEnd].entries())walkBox('west-city-bridge-landing-'+i,p.x,p.y-.1,p.z,.6,.2,3.8,paving);
   const descent=[];const run=4.4,n=8,descentStart=bridgeEnd.x+2.6;
   walkBox('west-city-bridge-apron',bridgeEnd.x+1.25,4.93,bridgeEnd.z,2.7,.2,3.8,paving);
@@ -269,8 +298,8 @@ export function buildWestCity(buildTown,waterHeight) {
     walkBox('west-city-stair-bridge-'+i,x,y-.1,bridgeEnd.z,run/n+.04,.2,3.5,paving);
     descent.push([x,y,bridgeEnd.z]);
   }
-  route.splice(1,0,bridgeEnd.toArray(),[descentStart-.12,5.03,bridgeEnd.z],...descent,[WEST_CITY.x,4,WEST_CITY.districts[0].z]);
-  for(const t of [.25,.7]){const p=bridgeStart.clone().lerp(bridgeEnd,t);box('west-city-bridge-pier-'+t,p.x,p.y-4,p.z,1.2,7.6,1.8);}
+  route.splice(1,0,...bridgeVia.map(p=>p.toArray()),bridgeEnd.toArray(),[descentStart-.12,5.03,bridgeEnd.z],...descent,[WEST_CITY.x,4,WEST_CITY.districts[0].z]);
+  bridgeVia.slice(1).forEach((p,i)=>box('west-city-bridge-pier-'+i,p.x,p.y-6.3,p.z,1.4,12.2,1.4));
   root.userData.districts=reports;
   root.userData.connectedToMainGate=false;
   root.userData.walkRoute=route;
@@ -284,5 +313,7 @@ export function buildWestCity(buildTown,waterHeight) {
     onSurface:(mesh,_material,segments)=>{mesh.userData.faceToCell=segments.map(s=>({triStart:s.triStart,triCount:s.triCount,cell:s.mesh.userData.cell,cells:s.mesh.userData.cells}));},
   }));
   applyTargetCastleSilhouette(root);
+  applyHolyCityRoofPalette(root);
+  applyAshleyPalette(root);
   return root;
 }

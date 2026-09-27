@@ -1,0 +1,28 @@
+{
+  "status": "partial-not-playable-boarding",
+  "identityAPI": true,
+  "reservationPlanner": true,
+  "productionResetDisposal": true,
+  "capacityFixture": {
+    "originalPassengers": 59,
+    "extraPassengers": 15,
+    "captainSeatsUsed": 0,
+    "passed": true
+  },
+  "checks": [
+    "test_warship_crew_continuity.mjs",
+    "test_warship_passenger_reservations.mjs",
+    "test_warship_evacuation_plan.mjs"
+  ],
+  "physicalBoardingValidated": false,
+  "naturalCombatValidated": false,
+  "nativeAfterFPS": null,
+  "blocker": "Measured original bay water is shallower than vessel clearance; shore/plank/deck route not established.",
+  "note": "Identity tests use fixtures; boarding proof tests do not prove actual shore or model clearance.",
+  "defaultBattleRegression": {
+    "checks": 19,
+    "passed": true,
+    "sourceStable": true,
+    "report": "artifacts/pipeline/saihoji-ambush-web/2026-09-20T13-17-25.163Z/report.json"
+  }
+}

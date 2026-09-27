@@ -1,0 +1,15 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import {writeFile} from 'node:fs/promises';
+const b=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});
+try{const p=await b.newPage();await p.addInitScript(()=>{const raf=requestAnimationFrame.bind(window);window.requestAnimationFrame=cb=>cb.name==='animate'?0:raf(cb);});await p.goto('http://localhost:8931/TigerMessenger/?autostart=1');await p.waitForFunction(()=>window.__tm?.scene.getObjectByName('citadel-upper-rock-middle-terrace-solid-0'),null,{timeout:180000});
+const report=await p.evaluate(()=>{
+ const t=window.__tm,T=t.THREE,city=t.scene.getObjectByName('highland-west-city'),castle=t.scene.getObjectByName('castleContainer');t.scene.updateMatrixWorld(true);
+ const ground=['citadel-oskar-grid-mountain-surface','citadel-coastal-cliff-seal','new-city-rock-shoulder'].map(n=>castle.getObjectByName(n)).concat(t.scene.getObjectByName('planet-surface')).filter(Boolean),up=new T.Vector3(0,1,0).transformDirection(city.matrixWorld),ray=new T.Raycaster();ray.layers.enableAll();ray.far=200;
+ const parts=[];city.traverseVisible(m=>{if(!m.isMesh||!m.name.startsWith('citadel-upper-rock-')||m.userData.isOutline)return;
+ const footSet=m.userData.foundationFeet?new Set(m.userData.foundationFeet):null;
+ const a=m.geometry.attributes.position,matrix=new T.Matrix4().multiplyMatrices(city.matrixWorld.clone().invert(),m.matrixWorld),seen=new Set(),samples=[];
+ for(let i=0;i<a.count;i+=3){const v=[0,1,2].map(j=>new T.Vector3().fromBufferAttribute(a,i+j).applyMatrix4(matrix)),normal=v[1].clone().sub(v[0]).cross(v[2].clone().sub(v[0])).normalize();if(!footSet&&normal.y>-.6)continue;
+ for(let j=0;j<3;j++){if(footSet&&!footSet.has(i+j))continue;const local=new T.Vector3().fromBufferAttribute(a,i+j),key=local.toArray().map(x=>x.toFixed(5)).join(',');if(!footSet&&seen.has(key))continue;seen.add(key);const q=v[j];ray.set(city.localToWorld(new T.Vector3(q.x,100,q.z)),up.clone().negate());const hit=ray.intersectObjects(ground,false)[0];const surfaceY=hit?city.worldToLocal(hit.point.clone()).y:null;samples.push({local:local.toArray(),city:q.toArray(),surfaceY,gap:surfaceY===null?null:q.y-surfaceY});}
+ }
+ parts.push({name:m.name,matrix:matrix.toArray(),samples});});const passed=parts.length===4&&parts.every(p=>p.samples.length>0&&p.samples.every(s=>s.gap!==null&&s.gap<=.04));return {passed,scope:'Actual downward rock faces against current mountain, original lower-face vertex identities retained after deformation; 4 cm tolerance, not continuous surface certification',parts};
+});await writeFile(new URL('../../artifacts/pipeline/citadel-master-terrain/battered-foundation-feet.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report.parts.map(p=>({name:p.name,samples:p.samples.length,missing:p.samples.filter(s=>s.surfaceY===null).length,maxGap:Math.max(...p.samples.map(s=>s.gap??-Infinity))}))));if(!report.passed)throw new Error('Foundation foot support failed');}finally{await b.close();}

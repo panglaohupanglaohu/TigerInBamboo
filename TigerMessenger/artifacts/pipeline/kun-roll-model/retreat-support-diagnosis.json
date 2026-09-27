@@ -1,0 +1,42 @@
+{
+  "status": "diagnosis-and-node-tested-candidate-not-live-validated",
+  "home": [
+    -91.0846292618634,
+    81.62509114955196,
+    -102.82659041592653
+  ],
+  "storedHomeRadius": 159.78852552517182,
+  "officialWaterRadius": 160.5,
+  "belowWater": 0.7114744748281794,
+  "escortUid": 80,
+  "blockedStep": {
+    "from": 161.37795061217082,
+    "to": 162.1559343000737,
+    "difference": 0.7779836879028892
+  },
+  "finishedAtOld66sWindow": 6,
+  "total": 15,
+  "missingEvidence": [
+    "old report has no precise blocked triangle/position; cannot claim exact ledge identity",
+    "stored home direction not verified dry at current terrain pose",
+    "66-second cutoff cannot classify every unfinished actor as blocked"
+  ],
+  "implementedCandidate": {
+    "module": "src/world/garrisonEvacuationRoutes.js",
+    "sameShoreSearchRadius": 8,
+    "normalBodyRadius": 0.55,
+    "escortBodyRadius": 0.8,
+    "escortTrailDistance": 0.65,
+    "existingNavigation": "soccoGroundRoutes.planReturn",
+    "stepThresholdUnchanged": 0.7,
+    "dryMargin": 0.075,
+    "explicitFailures": [
+      "no-dry-home-near-stop",
+      "no-dry-connected-home",
+      "route-support-no-longer-dry",
+      "support-step",
+      "escort-support-discontinuity"
+    ]
+  },
+  "nodeEvidence": "evacuation-route-node.json"
+}

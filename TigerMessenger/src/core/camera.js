@@ -75,6 +75,7 @@ export function createCameraRig(camera, player, opts = {}) {
   let camDist = P.camDist;
   /** 第一人称：贴眼向前看（飞艇驾驶员等），不走身后高位俯视 */
   let firstPerson = false;
+  let followProfile = null;
   const defaultFov = camera.fov;
   let midDrag = false;
   let rightDrag = false;
@@ -105,6 +106,33 @@ export function createCameraRig(camera, player, opts = {}) {
       camDist = 0.08;
     }
   }
+  let closeup = false;
+  let savedCamDist = camDist;
+  let savedFov = defaultFov;
+  let savedOrbit = 0;
+  let savedPitch = 0;
+
+  function setCloseup(on) {
+    const next = !!on;
+    if (closeup === next) return;
+    closeup = next;
+    if (closeup) {
+      savedCamDist = camDist;
+      savedFov = camera.fov;
+      savedOrbit = camOrbit;
+      savedPitch = camPitch;
+      camDist = 1.35;
+      camOrbit = Math.PI * 0.86;
+      camPitch = 0.04;
+      setFov(38);
+    } else {
+      camDist = savedCamDist;
+      camOrbit = savedOrbit;
+      camPitch = savedPitch;
+      setFov(savedFov);
+    }
+  }
+
   function zoomBy(delta) {
     if (firstPerson) return; // 第一人称不滚轮拉距
     camDist = clampDist(camDist + delta);
@@ -123,7 +151,7 @@ export function createCameraRig(camera, player, opts = {}) {
     camOrbit -= dx;
   }
   function orbitPitchBy(dy) {
-    camPitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, camPitch + dy));
+    camPitch = Math.min(firstPerson ? 1.25 : PITCH_MAX, Math.max(firstPerson ? -1.25 : PITCH_MIN, camPitch + dy));
   }
 
   function update(dt) {
@@ -148,8 +176,15 @@ export function createCameraRig(camera, player, opts = {}) {
         _fwd.set(0, 0, 1).addScaledVector(up, -up.z);
       }
       _fwd.normalize();
-      // 极轻抬头，地平线略低于画面中心
-      _fwd.addScaledVector(_upSmooth, 0.04).normalize();
+      // Right drag applies to the view, not the character/train heading.
+      // Previously this branch ignored both offsets and always locked forward.
+      if (!orbiting) {
+        const k = 1 - Math.exp(-SPRING_BACK * dt);
+        camOrbit -= camOrbit * k;
+        camPitch -= camPitch * k;
+      }
+      _fwd.applyAxisAngle(up, camOrbit);
+      _fwd.multiplyScalar(Math.cos(camPitch)).addScaledVector(up, -Math.sin(camPitch) + .04).normalize();
 
       // 眼位 = 玩家位置（已是驾驶员眼高）
       camDesired.copy(player.position);
@@ -178,14 +213,15 @@ export function createCameraRig(camera, player, opts = {}) {
     _back.normalize();
     _right.crossVectors(up, _back).normalize();
 
-    const c = Math.cos(camOrbit);
-    const s = Math.sin(camOrbit);
+    const yaw=camOrbit+(followProfile?.yaw??0);
+    const c = Math.cos(yaw);
+    const s = Math.sin(yaw);
     const bx = _back.x * c + _right.x * s;
     const by = _back.y * c + _right.y * s;
     const bz = _back.z * c + _right.z * s;
     _back.set(bx, by, bz).normalize();
 
-    const height = CAMERA_HEIGHT * (0.45 + 0.55 * (camDist / 7.5));
+    const height = closeup ? 1.58 + (followProfile?.height ?? 0) : CAMERA_HEIGHT * (0.45 + 0.55 * (camDist / 7.5))+(followProfile?.height??0);
     camDesired
       .copy(player.position)
       .addScaledVector(up, height)
@@ -200,8 +236,9 @@ export function createCameraRig(camera, player, opts = {}) {
 
     // ---------- 遮挡回拉：沿“看点→期望机位”这条线收短，保持取景方向不变 ----------
     lastOcclusionDist = null;
+    const lookY = closeup ? 1.58 : CAMERA_LOOK_Y;
     if (occlusionEnabled && getColliders) {
-      lookAtPoint.copy(player.position).addScaledVector(_upSmooth, CAMERA_LOOK_Y);
+      lookAtPoint.copy(player.position).addScaledVector(_upSmooth, lookY);
       _ray.copy(camDesired).sub(lookAtPoint);
       const rayLen = _ray.length();
       if (rayLen > 1e-4) {
@@ -233,7 +270,14 @@ export function createCameraRig(camera, player, opts = {}) {
     camera.position.lerp(camDesired, posT);
     camera.up.copy(_upSmooth);
 
-    lookAtPoint.copy(player.position).addScaledVector(_upSmooth, CAMERA_LOOK_Y);
+    lookAtPoint.copy(player.position).addScaledVector(_upSmooth, lookY);
+    // Sean Bradley Follow Cam: 行进速度前瞻微移 (Velocity Lookahead)
+    if (player.velocity) {
+      const spd = player.velocity.length();
+      if (spd > 0.5) {
+        lookAtPoint.addScaledVector(player.velocity, Math.min(0.25, 0.02 * spd));
+      }
+    }
     camTarget.lerp(lookAtPoint, t);
     camera.lookAt(camTarget);
   }
@@ -270,11 +314,15 @@ export function createCameraRig(camera, player, opts = {}) {
     getFov: () => camera.fov,
     getDefaultFov: () => defaultFov,
     getDist: () => camDist,
+    getFollowProfile: () => followProfile ? {...followProfile} : null,
+    setFollowProfile: value => {followProfile=value?{yaw:Number(value.yaw)||0,height:Number(value.height)||0}:null;},
     getYaw: () => camOrbit,
     getOrbit: () => ({ yaw: camOrbit, pitch: camPitch }), // 验收用
     setOcclusionEnabled: (on) => { occlusionEnabled = !!on; },
     setOccluderMeshes: (fn) => { getOccluderMeshes = typeof fn === 'function' ? fn : null; },
     isOcclusionEnabled: () => occlusionEnabled,
     getOcclusionDist: () => lastOcclusionDist, // 验收用：null=本帧无遮挡
+    setCloseup,
+    isCloseup: () => closeup,
   };
 }

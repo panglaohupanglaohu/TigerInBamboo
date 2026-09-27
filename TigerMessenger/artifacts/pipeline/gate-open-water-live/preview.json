@@ -1,0 +1,261 @@
+{
+  "objects": [
+    "moebius-grand-community-tower",
+    "moebius-trackside-gold-right",
+    "moebius-trackside-gold-left",
+    "moebius-swamp-placement",
+    "crystal-mother-port",
+    "v7-bank-rock-0",
+    "v7-bank-rock-1",
+    "v7-bank-rock-2",
+    "v7-swamp-outer-embankment",
+    "v7-continuous-swamp-promenade",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector"
+  ],
+  "scope": "Default live gameplay, no preview transformations applied",
+  "runtime": {
+    "placement": {
+      "degrees": 30,
+      "scope": "mother, two satellites, swamp, shores, port and navigation",
+      "swamp": {
+        "lx": 0.28248711305964286,
+        "lz": -0.07071796769724471
+      }
+    },
+    "port": true,
+    "boardingRoute": [
+      [
+        -51.221090368179844,
+        -118.42072350636292,
+        -48.11657793443429
+      ],
+      [
+        -50.958873655320374,
+        -119.15476026040531,
+        -46.38382508442593
+      ],
+      [
+        -50.58190885505797,
+        -119.9942847716776,
+        -44.142933267685066
+      ]
+    ],
+    "records": [
+      {
+        "center": [
+          -51.363500051856015,
+          -118.06674556584065,
+          -48.931942331264835
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -51.076181132125924,
+          -118.82637539675478,
+          -47.15900399100861
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -51.34529828479748,
+          -118.07302188602706,
+          -48.93735560022771
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -51.879803374370226,
+          -118.63601879216719,
+          -50.081837488637255
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -55.61312729992609,
+          -128.04610440797953,
+          -45.13076190420216
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -56.459611918703224,
+          -129.6632200627032,
+          -39.50829867149123
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -54.97774509487788,
+          -129.4349856561177,
+          -45.43456830979333
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -57.06910385088451,
+          -128.47862021279334,
+          -45.474363943843215
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -51.925606900677124,
+          -118.55247544523948,
+          -50.25881925651736
+        ],
+        "finite": true
+      }
+    ]
+  },
+  "checks": {
+    "navigationMoves": true,
+    "berthReturnError": 7.105427357601002e-15,
+    "portPlatformFinite": true,
+    "waterMask": [
+      39.54819582835,
+      -9.90051547761426
+    ],
+    "towerCount": 12,
+    "placement": {
+      "degrees": 30,
+      "scope": "mother, two satellites, swamp, shores, port and navigation",
+      "swamp": {
+        "lx": 0.28248711305964286,
+        "lz": -0.07071796769724471
+      }
+    }
+  },
+  "gateChecks": {
+    "removed": [
+      "canyon-shoulder-1",
+      "canyon-shoulder--1"
+    ],
+    "remainingShoulders": 0,
+    "heroWorld": [
+      7.626541584813367,
+      -66.62022277940488,
+      -156.12661333471797
+    ],
+    "connection": {
+      "shift": [
+        9,
+        -3.26,
+        6
+      ],
+      "bridgeCenter": [
+        -6.7,
+        0,
+        -13.3
+      ],
+      "width": 3
+    },
+    "samples": [
+      {
+        "x": -10,
+        "radius": 169.49567044238353
+      },
+      {
+        "x": -9.75,
+        "radius": 169.4811596586328
+      },
+      {
+        "x": -9.5,
+        "radius": 169.46701504078098
+      },
+      {
+        "x": -9.25,
+        "radius": 169.4532366805219
+      },
+      {
+        "x": -9,
+        "radius": 169.39964452405005
+      },
+      {
+        "x": -8.75,
+        "radius": 169.4267790878306
+      },
+      {
+        "x": -8.5,
+        "radius": 169.41410002705035
+      },
+      {
+        "x": -8.25,
+        "radius": 169.40178756716148
+      },
+      {
+        "x": -8,
+        "radius": 169.4099259488956
+      },
+      {
+        "x": -7.75,
+        "radius": 169.39834555535762
+      },
+      {
+        "x": -7.5,
+        "radius": 169.3871320389519
+      },
+      {
+        "x": -7.25,
+        "radius": 169.3762854725455
+      },
+      {
+        "x": -7,
+        "radius": 169.3658059266393
+      },
+      {
+        "x": -6.75,
+        "radius": 169.35569346936578
+      },
+      {
+        "x": -6.5,
+        "radius": 169.3459481664868
+      },
+      {
+        "x": -6.25,
+        "radius": 169.33657008139147
+      },
+      {
+        "x": -6,
+        "radius": 169.3275592750941
+      },
+      {
+        "x": -5.75,
+        "radius": 169.31891580623207
+      },
+      {
+        "x": -5.5,
+        "radius": 169.31063973106424
+      },
+      {
+        "x": -5.25,
+        "radius": 169.30273110346886
+      },
+      {
+        "x": -5,
+        "radius": 169.29518997494185
+      }
+    ]
+  },
+  "errors": []
+}

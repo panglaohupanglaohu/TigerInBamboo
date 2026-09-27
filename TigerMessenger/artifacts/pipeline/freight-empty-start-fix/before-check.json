@@ -1,0 +1,92 @@
+{
+  "initial": {
+    "time": 0.052199999988079074,
+    "trains": [
+      {
+        "id": "red",
+        "progress": 0.00014350954462738486,
+        "lastStop": null,
+        "status": "运行中",
+        "slots": []
+      },
+      {
+        "id": "blue",
+        "progress": 0.9998598582626612,
+        "lastStop": null,
+        "status": "运行中",
+        "slots": []
+      }
+    ]
+  },
+  "restored": {
+    "time": 0.1531999999880791,
+    "trains": [
+      {
+        "id": "red",
+        "progress": 0.503252005556722,
+        "lastStop": "locust",
+        "status": "站内停留",
+        "slots": []
+      },
+      {
+        "id": "blue",
+        "progress": 0.5463947503592428,
+        "lastStop": "beetle",
+        "status": "站内停留",
+        "slots": []
+      }
+    ]
+  },
+  "realTime": {
+    "time": 11.767600000023858,
+    "trains": [
+      {
+        "id": "red",
+        "progress": 0.5345021711353137,
+        "lastStop": "locust",
+        "status": "运行中",
+        "slots": []
+      },
+      {
+        "id": "blue",
+        "progress": 0.5240802543360759,
+        "lastStop": "frontline",
+        "status": "运行中",
+        "slots": []
+      }
+    ]
+  },
+  "mixed": {
+    "red": {
+      "time": 725.8155,
+      "kinds": [
+        "ant",
+        "ant",
+        "ant",
+        "beetle",
+        "beetle",
+        "beetle",
+        "locust",
+        "locust",
+        "locust"
+      ],
+      "visible": true
+    },
+    "blue": {
+      "time": 725.8155,
+      "kinds": [
+        "ant",
+        "ant",
+        "ant",
+        "locust",
+        "locust",
+        "locust",
+        "beetle",
+        "beetle",
+        "beetle"
+      ],
+      "visible": true
+    }
+  },
+  "errors": []
+}

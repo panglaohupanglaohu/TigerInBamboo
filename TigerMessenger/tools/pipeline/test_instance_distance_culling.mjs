@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {readFile,writeFile} from 'node:fs/promises';
+import * as T from '../../vendor/three.module.js';
+const source=(await readFile(new URL('../../src/core/sceneDistanceCulling.js',import.meta.url),'utf8')).replace('import * as THREE from "three";','');
+const {createSceneDistanceCulling}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const scene=new T.Scene(),camera=new T.PerspectiveCamera(),g=new T.CylinderGeometry(.4,.6,6,5),m=new T.MeshBasicMaterial();
+const wide=new T.InstancedMesh(g,m,2);wide.name='wide-stand';wide.position.x=250;wide.setMatrixAt(0,new T.Matrix4().makeTranslation(-240,0,0));wide.setMatrixAt(1,new T.Matrix4().makeTranslation(0,0,0));scene.add(wide);
+const compact=new T.InstancedMesh(g,m,2);compact.name='compact-stand';compact.position.x=250;compact.setMatrixAt(0,new T.Matrix4().makeTranslation(-240,0,0));compact.setMatrixAt(1,new T.Matrix4().makeTranslation(-239,0,0));scene.add(compact);
+const near=new T.Mesh(g,m);near.position.x=20;scene.add(near);const far=new T.Mesh(g,m);far.position.x=300;scene.add(far);
+const c=createSceneDistanceCulling(T,{scene,getCamera:()=>camera,cullDistance:100,altitudeFactor:0});c.update(3);c.update(.4);
+assert(wide.visible,'Large forest must not be classified as one small tree');assert(compact.visible,'Compact displaced instances use their actual center');assert(near.visible);assert(!far.visible,'Ordinary far small props remain culled');
+const result={passed:true,wideStand:wide.visible,offsetCompactStand:compact.visible,nearProp:near.visible,farProp:far.visible,scope:'Real Three.js instance bounds and ordinary prop culling regression.'};await writeFile(new URL('../../artifacts/pipeline/citadel-master-terrain/instance-culling-test.json',import.meta.url),JSON.stringify(result,null,2));console.log(result);c.dispose();

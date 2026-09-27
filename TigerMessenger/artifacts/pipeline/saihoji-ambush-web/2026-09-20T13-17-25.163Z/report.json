@@ -1,0 +1,658 @@
+{
+  "checks": [
+    {
+      "name": "time alone cannot discover whale or ambush",
+      "passed": true
+    },
+    {
+      "name": "concealment retains visible actor and lowers body pose",
+      "passed": true
+    },
+    {
+      "name": "concealed actor follows moving cover anchor",
+      "passed": true
+    },
+    {
+      "name": "discovery event distinct from ambush",
+      "passed": true
+    },
+    {
+      "name": "ambush restores body pose and identity",
+      "passed": true
+    },
+    {
+      "name": "reset clears event and pose state",
+      "passed": true
+    },
+    {
+      "name": "approaching soldier does not inherit island lift",
+      "passed": true
+    },
+    {
+      "name": "concealment presentation respects casualty pose",
+      "passed": true
+    },
+    {
+      "name": "insufficient real cover blocks instead of hiding or attacking",
+      "passed": true
+    },
+    {
+      "name": "actual garden has at least 50 anchored cover slots",
+      "passed": true,
+      "detail": {
+        "count": 50
+      }
+    },
+    {
+      "name": "early nearby fleet cannot reveal whale before troops hide",
+      "passed": true,
+      "detail": {
+        "earlyLiftMax": 0,
+        "earlyHeavy": false,
+        "concealedAt": 1751
+      }
+    },
+    {
+      "name": "actual traditional ship troops reach concealment",
+      "passed": true,
+      "detail": {
+        "concealedAt": 1751,
+        "state": {
+          "stage": "concealed",
+          "discovery": null,
+          "blocked": null,
+          "settleSeconds": 1.6,
+          "registered": 50,
+          "concealed": 50
+        },
+        "actors": 50
+      }
+    },
+    {
+      "name": "concealed actors stand on island local up",
+      "passed": true,
+      "detail": {
+        "minDot": 1
+      }
+    },
+    {
+      "name": "concealed visible equipment fits below measured canopy",
+      "passed": true,
+      "detail": [
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 57,
+          "role": "spear",
+          "top": 1.0403413410289035,
+          "clearance": 2.064274624493039,
+          "margin": 1.0039332834641352
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 58,
+          "role": "spear",
+          "top": 1.0403413410289022,
+          "clearance": 1.5333446158998647,
+          "margin": 0.4730032748709625
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 59,
+          "role": "spear",
+          "top": 1.040341341028919,
+          "clearance": 2.871718456948089,
+          "margin": 1.81137711591917
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 60,
+          "role": "spear",
+          "top": 1.0403413410289,
+          "clearance": 2.578744844806779,
+          "margin": 1.5184035037778791
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1.0000000000000002,
+          "uid": 61,
+          "role": "spear",
+          "top": 1.040341341028914,
+          "clearance": 1.3733008592853089,
+          "margin": 0.3129595182563949
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 62,
+          "role": "spear",
+          "top": 1.0403413410289115,
+          "clearance": 2.691172256922472,
+          "margin": 1.6308309158935606
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 63,
+          "role": "gladius",
+          "top": 1.0469793568520842,
+          "clearance": 2.1162684951384856,
+          "margin": 1.0492891382864014
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 64,
+          "role": "longbow",
+          "top": 1.0468206012097316,
+          "clearance": 2.92773847628837,
+          "margin": 1.8609178750786382
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 65,
+          "role": "gladius",
+          "top": 1.0469793568520833,
+          "clearance": 1.5500091186433458,
+          "margin": 0.48302976179126245
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 66,
+          "role": "spear",
+          "top": 1.0403413410289126,
+          "clearance": 1.9074714725232136,
+          "margin": 0.8471301314943009
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 67,
+          "role": "spear",
+          "top": 1.0403413410289037,
+          "clearance": 1.920506044019647,
+          "margin": 0.8601647029907433
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 68,
+          "role": "longbow",
+          "top": 1.169482985939235,
+          "clearance": 1.4272090957935013,
+          "margin": 0.23772610985426623
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 69,
+          "role": "longbow",
+          "top": 1.0468206012097272,
+          "clearance": 1.5623848199217043,
+          "margin": 0.4955642187119771
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 70,
+          "role": "longbow",
+          "top": 1.1694829859392222,
+          "clearance": 2.723704272700162,
+          "margin": 1.53422128676094
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 71,
+          "role": "spear",
+          "top": 1.0403413410289066,
+          "clearance": 2.42629349334618,
+          "margin": 1.3659521523172735
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 72,
+          "role": "spear",
+          "top": 1.0403413410289089,
+          "clearance": 1.3437923663266538,
+          "margin": 0.2834510252977449
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 73,
+          "role": "gladius",
+          "top": 1.0469793568520787,
+          "clearance": 2.033937096343892,
+          "margin": 0.9669577394918132
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 74,
+          "role": "longbow",
+          "top": 1.0463480055810126,
+          "clearance": 2.9096285398417208,
+          "margin": 1.8432805342607081
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 75,
+          "role": "gladius",
+          "top": 1.0469793568520827,
+          "clearance": 1.6178385676505804,
+          "margin": 0.5508592107984978
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 76,
+          "role": "spear",
+          "top": 1.0403413410289075,
+          "clearance": 1.7118250153876893,
+          "margin": 0.6514836743587817
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 77,
+          "role": "spear",
+          "top": 1.0403413410289044,
+          "clearance": 1.6023902848359917,
+          "margin": 0.5420489438070872
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 78,
+          "role": "spear",
+          "top": 1.0403413410288984,
+          "clearance": 1.1788098240271556,
+          "margin": 0.11846848299825719
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 79,
+          "role": "spear",
+          "top": 1.0403413410289089,
+          "clearance": 1.3872302263931722,
+          "margin": 0.3268888853642633
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 80,
+          "role": "spear",
+          "top": 1.0403413410289086,
+          "clearance": 1.873902561768774,
+          "margin": 0.8135612207398653
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 81,
+          "role": "spear",
+          "top": 1.0403413410289146,
+          "clearance": 2.0689311612979973,
+          "margin": 1.0085898202690826
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 82,
+          "role": "spear",
+          "top": 1.0403413410289044,
+          "clearance": 1.1695910236643674,
+          "margin": 0.10924968263546297
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 83,
+          "role": "spear",
+          "top": 1.0403413410289102,
+          "clearance": 1.8173355030744185,
+          "margin": 0.7569941620455083
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 84,
+          "role": "spear",
+          "top": 1.0403413410289035,
+          "clearance": 2.1988644024428377,
+          "margin": 1.1385230614139341
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 85,
+          "role": "spear",
+          "top": 1.0403413410289113,
+          "clearance": 1.6407395345011657,
+          "margin": 0.5803981934722544
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1.0000000000000002,
+          "uid": 86,
+          "role": "spear",
+          "top": 1.0403413410289102,
+          "clearance": 2.781893685771139,
+          "margin": 1.721552344742229
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1.0000000000000002,
+          "uid": 87,
+          "role": "spear",
+          "top": 1.0403413410289102,
+          "clearance": 3.0448755982247078,
+          "margin": 1.9845342571957976
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 88,
+          "role": "gladius",
+          "top": 1.0469793568520873,
+          "clearance": 3.146255170888226,
+          "margin": 2.0792758140361385
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 89,
+          "role": "longbow",
+          "top": 1.0468206012097403,
+          "clearance": 1.919358697991016,
+          "margin": 0.8525380967812757
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 90,
+          "role": "gladius",
+          "top": 1.0469793568520744,
+          "clearance": 1.1608660358212153,
+          "margin": 0.09388667896914082
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 91,
+          "role": "spear",
+          "top": 1.0403413410289122,
+          "clearance": 3.050591563862214,
+          "margin": 1.9902502228333019
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 92,
+          "role": "spear",
+          "top": 1.0403413410289066,
+          "clearance": 1.348201318557927,
+          "margin": 0.28785997752902026
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 93,
+          "role": "longbow",
+          "top": 1.1694829859392153,
+          "clearance": 1.4456677323576066,
+          "margin": 0.2561847464183913
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 94,
+          "role": "longbow",
+          "top": 1.0468206012097268,
+          "clearance": 2.8000726695134985,
+          "margin": 1.7332520683037718
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 95,
+          "role": "longbow",
+          "top": 1.0468206012097285,
+          "clearance": 1.5557882130629543,
+          "margin": 0.4889676118532258
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 96,
+          "role": "spear",
+          "top": 1.0403413410289102,
+          "clearance": 1.460098257276315,
+          "margin": 0.39975691624740484
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 97,
+          "role": "spear",
+          "top": 1.0403413410289006,
+          "clearance": 1.6664005868196348,
+          "margin": 0.6060592457907341
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 98,
+          "role": "gladius",
+          "top": 1.0469793568520782,
+          "clearance": 1.4771597210720422,
+          "margin": 0.41018036421996396
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 99,
+          "role": "longbow",
+          "top": 1.046820601209729,
+          "clearance": 1.5391849047105104,
+          "margin": 0.4723643035007814
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 100,
+          "role": "gladius",
+          "top": 1.0469793568520724,
+          "clearance": 1.9868056754426684,
+          "margin": 0.9198263185905959
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 101,
+          "role": "spear",
+          "top": 1.0403413410289044,
+          "clearance": 1.6888414409710897,
+          "margin": 0.6285000999421853
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 102,
+          "role": "spear",
+          "top": 1.040341341028894,
+          "clearance": 1.9913117293717741,
+          "margin": 0.9309703883428802
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 103,
+          "role": "spear",
+          "top": 1.0403413410289064,
+          "clearance": 1.4280500119664914,
+          "margin": 0.36770867093758497
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 104,
+          "role": "spear",
+          "top": 1.0403413410289044,
+          "clearance": 2.822090508675673,
+          "margin": 1.7617491676467685
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 105,
+          "role": "spear",
+          "top": 1.0403413410289044,
+          "clearance": 1.4172606104029348,
+          "margin": 0.3569192693740304
+        },
+        {
+          "footOffset": 0.02,
+          "upDot": 1,
+          "uid": 106,
+          "role": "spear",
+          "top": 1.040341341028908,
+          "clearance": 2.036718693683242,
+          "margin": 0.976377352654334
+        }
+      ]
+    },
+    {
+      "name": "all 50 initial troops are blue and genuinely present",
+      "passed": true
+    },
+    {
+      "name": "actual ten-second hidden wait fires no arrows and no heavy deployment",
+      "passed": true,
+      "detail": {
+        "stage": "concealed",
+        "arrows": 0,
+        "assaultPhase": "idle"
+      }
+    },
+    {
+      "name": "actual whale rise and fleet lock drive discovery",
+      "passed": true,
+      "detail": {
+        "discoveredAt": 154,
+        "ambushAt": 155,
+        "lift": 0.4356044818806387,
+        "whaleRadius": 163.11087472051358,
+        "events": [
+          {
+            "from": "landing",
+            "to": "concealed",
+            "seconds": 29.183333333332957
+          },
+          {
+            "from": "concealed",
+            "to": "discovered",
+            "seconds": 41.76666666666558,
+            "evidence": {
+              "detected": true,
+              "source": "saihojiGarden.whaleLock+actualLift",
+              "fleetMembers": 5,
+              "whaleLockActive": true,
+              "whaleRisen": true,
+              "seconds": 41.76666666666558
+            }
+          },
+          {
+            "from": "discovered",
+            "to": "ambush",
+            "seconds": 41.783333333332244
+          }
+        ]
+      }
+    },
+    {
+      "name": "ambush itself does not start heavy drop",
+      "passed": true,
+      "detail": {
+        "assaultPhase": "idle"
+      }
+    },
+    {
+      "name": "ambush resumes original traditional attack and preserves soldiers",
+      "passed": true,
+      "detail": {
+        "arrows": 39,
+        "initialArrows": 0
+      }
+    }
+  ],
+  "passed": true,
+  "state": {
+    "stage": "ambush",
+    "discovery": {
+      "detected": true,
+      "source": "saihojiGarden.whaleLock+actualLift",
+      "fleetMembers": 5,
+      "whaleLockActive": true,
+      "whaleRisen": true,
+      "seconds": 41.76666666666558
+    },
+    "blocked": null,
+    "settleSeconds": 1.6,
+    "registered": 50,
+    "concealed": 50
+  },
+  "events": [
+    {
+      "from": "landing",
+      "to": "concealed",
+      "seconds": 29.183333333332957
+    },
+    {
+      "from": "concealed",
+      "to": "discovered",
+      "seconds": 41.76666666666558,
+      "evidence": {
+        "detected": true,
+        "source": "saihojiGarden.whaleLock+actualLift",
+        "fleetMembers": 5,
+        "whaleLockActive": true,
+        "whaleRisen": true,
+        "seconds": 41.76666666666558
+      }
+    },
+    {
+      "from": "discovered",
+      "to": "ambush",
+      "seconds": 41.783333333332244
+    }
+  ],
+  "scope": "Actual Web scene and real garden/battle updates with diagnostic fleet position. Not a naturally timed whole-game fleet tour; Godot not changed.",
+  "errors": [],
+  "sourceBefore": {
+    "src/world/saihojiPhalanx.js": "66258c850e43594114d9493215673de92b352192430b577bef1ed3e9e71bda58",
+    "src/world/saihojiAmbush.js": "3274e8cf63c0a1a29261fa92f7c3ca2fc51700b18bbb6dde089134c7512d90f5",
+    "src/scenes/saihojiGarden.js": "ce749fc909109a328552dcb9d40638e5565949012a988e8d11e7aea0b2db0fbb",
+    "src/world/vanguardAssault.js": "50576662d5ce973a767211e12f749ae81f0e186c3c65a242e21a01e2604c076a",
+    "src/world/saihojiPineLayout.js": "1497b67b10698f1c3f46f2cdf266ade2a96fa63ecfba60e3e29935ac8099bef9",
+    "src/assets/saihojiPineOptimized.js": "7514586a471cebdbae1bd7af100f14d49151ec611b3d63161efb7fd4b8033de4"
+  },
+  "sourceAfter": {
+    "src/world/saihojiPhalanx.js": "66258c850e43594114d9493215673de92b352192430b577bef1ed3e9e71bda58",
+    "src/world/saihojiAmbush.js": "3274e8cf63c0a1a29261fa92f7c3ca2fc51700b18bbb6dde089134c7512d90f5",
+    "src/scenes/saihojiGarden.js": "ce749fc909109a328552dcb9d40638e5565949012a988e8d11e7aea0b2db0fbb",
+    "src/world/vanguardAssault.js": "50576662d5ce973a767211e12f749ae81f0e186c3c65a242e21a01e2604c076a",
+    "src/world/saihojiPineLayout.js": "1497b67b10698f1c3f46f2cdf266ade2a96fa63ecfba60e3e29935ac8099bef9",
+    "src/assets/saihojiPineOptimized.js": "7514586a471cebdbae1bd7af100f14d49151ec611b3d63161efb7fd4b8033de4"
+  },
+  "sourceStable": true
+}

@@ -1,5 +1,7 @@
 extends Control
 const ENTRIES = [
+    ["水晶城 V7 · 三轮美术对照", "res://scenes/crystal_v7_review.tscn", "原塔与原湖沼的 Blender 候选，切换三轮、拖动旋转、滚轮缩放。局部美术场景；全球轨道、剧情与通行尚未合入。"],
+    ["叹息之门 · 密信盟约测试", "res://scenes/gate_pact_chapter.tscn", "明确从已携书店密信开始。人类信使在会面台上步行，靠近后按 R 交付；英雄接信、阅读、点头。仅章节测试，完整救援主线尚未迁移。"],
     ["高山圣城 · 当前优化", "res://scenes/citadel_world.tscn", "WFC 城堡、空腔塔身、连续旋梯。右侧选择三种士兵的通行演练；完整攻城仍在接入。"],
     ["苔庭之战 · 战斗测试", "res://scenes/saihoji_battle_world.tscn", "开始任务，等待士兵隐蔽到位，再按 R 发出信号。测试舰队、反击、鲲与撤离；登岸动画仍待完善。"],
     ["原作球体 · 全局检视", "res://scenes/original_world.tscn", "查看原场景布局和已接入的书店、虎、侦察机、城堡；区域列表用于定位，完整跨区玩法尚未迁完。"],

@@ -15,6 +15,7 @@
 //  约定：旋涡坐标系 = 叹息之门 seatRoot（+X 右 · +Y 上 · +Z 轨向）
 // =====================================================================
 import * as THREE from "three";
+import {GATE_TARGET_LAYOUT as TARGET} from "./gateTargetLayout.js";
 import { toonMat, INK_COLOR } from "../assets/toon.js";
 import { TRANQ_DURATION_BIRD } from "./tranquilizer.js";
 
@@ -54,23 +55,17 @@ const BOB_HZ = 0.5;
 const TRAM_SEP_R = 7.5;
 
 // ---------- 双子塔 / 拱墙体量（与 abandonedGate 同规，gate 局部坐标） ----------
-const TOWER_OFF = 5.0;
-const TOWER_TIERS = [
-  { w: 9.2, d: 16.0, h: 12.5, y0: 0.0 },
-  { w: 8.0, d: 13.8, h: 11.0, y0: 11.75 },
-  { w: 6.9, d: 11.8, h: 10.0, y0: 22.1 },
-  { w: 5.9, d: 10.0, h: 8.5, y0: 31.5 },
-];
+const TOWER_TIERS = TARGET.tiers;
 const ARCH_PITCH = 13.2; // 三重拱沿轨中心距
 const ARCH_HALF_DEPTH = 1.1; // 单片拱墙半厚
-const ARCH_TOP = 15.0;
-const ARCH_X_HALF = 8.2; // 拱墙横向半宽内缘
+const ARCH_TOP = TARGET.archTop;
+const ARCH_X_HALF = TARGET.archHalfWidth; // 拱墙横向半宽内缘
 const ARCH_Z = [-ARCH_PITCH, 0, ARCH_PITCH]; // 三片拱墙中心 z（gate 局部）
-const PASS_HALF = 3.0; // 券洞半宽（净宽 6.0，鸟可穿洞）
-// 塔体内缘 x≈±4.26，券洞穿越通道必须收在其内侧，否则「过洞豁免」会把鸟
+const PASS_HALF = TARGET.passHalf; // 认可目标：券洞净宽10.2米
+// 塔体内缘 x≈±6，券洞穿越通道必须收在其内侧，否则「过洞豁免」会把鸟
 // 放进塔基实体里（这正是拱门右侧立面成片贴鸟的元凶之一）。
-const TOWER_INNER_X = 4.26;
-const ARCH_SPRING = 11.0; // 起拱线高
+const TOWER_INNER_X = TARGET.towerInner;
+const ARCH_SPRING = TARGET.spring; // 起拱线高
 
 // ---------- 墙体动态避障（Obstacle Avoidance & Wall Push） ----------
 /** 绝对安全距离锁：小于此值即被强行推开（世界单位） */
@@ -482,8 +477,8 @@ export class BirdVortexManager {
       pick -= tw[ti];
     }
     const t = TOWER_TIERS[ti];
-    const xInner = TOWER_OFF - 0.08 * t.w;
-    const xOuter = TOWER_OFF + 0.92 * t.w;
+    const xInner = TARGET.towerCenter - t.w * .5;
+    const xOuter = TARGET.towerCenter + t.w * .5;
     const zHalf = t.d * 0.5;
     const facePick = Math.random();
     if (facePick < 0.4) {
@@ -566,7 +561,7 @@ export class BirdVortexManager {
         for (let k = 0; k < TOWER_TIERS.length; k++) {
           const tw = TOWER_TIERS[k];
           if (s.ly < tw.y0 || s.ly > tw.y0 + tw.h) continue;
-          const cx = sg * (TOWER_OFF + tw.w * 0.42);
+          const cx = sg * TARGET.towerCenter;
           const gx = Math.abs(s.lx - cx) - tw.w * 0.5;
           const gz = Math.abs(s.lz) - tw.d * 0.5;
           if (gx < 0 && gz < 0) {
@@ -1155,7 +1150,7 @@ export class BirdVortexManager {
     for (let s = -1; s <= 1; s += 2) {
       for (let k = 0; k < TOWER_TIERS.length; k++) {
         const tw = TOWER_TIERS[k];
-        const cx = s * (TOWER_OFF + tw.w * 0.42);
+        const cx = s * TARGET.towerCenter;
         const hx = tw.w * 0.5;
         const hz = tw.d * 0.5;
         if (ly < tw.y0 - safe || ly > tw.y0 + tw.h + safe) continue;

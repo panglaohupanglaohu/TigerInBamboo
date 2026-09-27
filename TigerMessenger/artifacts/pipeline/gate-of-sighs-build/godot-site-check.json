@@ -1,0 +1,13 @@
+{
+  "importExit": 0,
+  "testExit": 0,
+  "passed": true,
+  "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nGATE_TARGET_EVIDENCE seat=cyber-megalithic-twin-gates[109]/gate-seat-root[0] hidden_roots=7 preserved_pod_nodes=132 placement=(23.1349, -71.74019, -141.4267)\n{\"failures\":[],\"passed\":true,\"test\":\"gate_target_adapter\"}\n",
+  "lightingParameterChecks": [
+    "dusk",
+    "night",
+    "noon"
+  ],
+  "siteTriangles": 3812,
+  "scope": "Geometry/placement/pods/reversible binding and light parameters. Native pact animation and shared viewer clock not ported."
+}

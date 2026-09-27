@@ -1,0 +1,17 @@
+{
+  "revision": 11,
+  "triangles": 56828,
+  "finite": true,
+  "circle": {
+    "center": [
+      0,
+      32
+    ],
+    "plazaRadius": 32,
+    "promenadeRadius": 39.5,
+    "shoreRadius": 40,
+    "seawardArc": "continuous semicircle; no chord"
+  },
+  "change": "Separate cargo dock approach outside the public circle",
+  "errors": []
+}

@@ -1,0 +1,89 @@
+{
+  "results": {
+    "loading": [
+      "BTL-0003"
+    ],
+    "reserved": [
+      "BTL-0003",
+      "BTL-0006",
+      "BTL-0009"
+    ],
+    "haulBefore": 0,
+    "loaded": {
+      "ids": [
+        "BTL-0003",
+        "BTL-0006",
+        "BTL-0009"
+      ],
+      "job": null,
+      "transit": 3
+    },
+    "journey": {
+      "seconds": 378,
+      "haul": 2495.8205610217237,
+      "length": 2546.1721090772016,
+      "job": "unload",
+      "slots": [
+        "BTL-0003",
+        "BTL-0006",
+        "BTL-0009"
+      ],
+      "errors": []
+    },
+    "deployment": {
+      "count": 9,
+      "minimum": 5.599999999999998,
+      "positions": [
+        {
+          "id": "BTL-0003",
+          "x": -20,
+          "z": 12
+        },
+        {
+          "id": "BTL-0006",
+          "x": 19.199999999999996,
+          "z": 12
+        },
+        {
+          "id": "BTL-0009",
+          "x": -20,
+          "z": 6.4
+        },
+        {
+          "id": "ANT-0002",
+          "x": -14.4,
+          "z": 12
+        },
+        {
+          "id": "ANT-0005",
+          "x": -8.8,
+          "z": 12
+        },
+        {
+          "id": "ANT-0008",
+          "x": -3.200000000000001,
+          "z": 12
+        },
+        {
+          "id": "LOC-0001",
+          "x": 2.3999999999999986,
+          "z": 12
+        },
+        {
+          "id": "LOC-0004",
+          "x": 7.999999999999998,
+          "z": 12
+        },
+        {
+          "id": "LOC-0007",
+          "x": 13.599999999999998,
+          "z": 12
+        }
+      ],
+      "saved": true,
+      "loaded": true
+    }
+  },
+  "errors": [],
+  "note": "Headless isolated world. First trip uses accelerated actual tram updates; all subsequent batches also use actual tram updates. No user save changed."
+}

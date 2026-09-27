@@ -1,0 +1,63 @@
+{
+  "rubric": {
+    "silhouette": 3,
+    "mechanical_structure": 3,
+    "materials_details": 2,
+    "reference_features": 1,
+    "scene_fit": 1
+  },
+  "threshold": 8,
+  "assessment": "Human visual assessment against user references; no model qualifies",
+  "models": [
+    {
+      "name": "蝗虫",
+      "score": 6,
+      "parts": [
+        1.8,
+        1.6,
+        1.0,
+        0.8,
+        0.8
+      ],
+      "issues": [
+        "Oversized flat torso and box shoulders",
+        "Insufficient layered armor and joint engineering"
+      ]
+    },
+    {
+      "name": "蚂蚁",
+      "score": 5.5,
+      "parts": [
+        1.8,
+        1.3,
+        0.8,
+        0.8,
+        0.8
+      ],
+      "issues": [
+        "Shoulder armor has visibly broken thin edges",
+        "UV stretching resembles wood rather than weathered copper"
+      ]
+    },
+    {
+      "name": "甲壳虫",
+      "score": 6,
+      "parts": [
+        1.8,
+        1.6,
+        1.0,
+        0.8,
+        0.8
+      ],
+      "issues": [
+        "Oval balloon wheel-leg guards",
+        "Coarse shell seams and simplistic chassis"
+      ]
+    }
+  ],
+  "image_hashes": {
+    "model-0-front.png": "453032e85c4299d5e0ef022b9277a1b182ab52182ad059ea0542dac6d4704448",
+    "model-1-front.png": "4b6b4c533aec65218fe4bb2f539a775e03cec84afe8c23291cf8ecc330b5f212",
+    "model-2-front.png": "6f692db92d1cc7b7ce06ba0390d08e7305371a64cd26deea8a9053b305975730"
+  }
+}

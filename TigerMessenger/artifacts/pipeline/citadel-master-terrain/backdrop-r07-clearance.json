@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "routePoints": 293,
+  "conflicts": [],
+  "shore": [
+    {
+      "name": "citadel-backdrop-ridge-near",
+      "boundarySamples": 436,
+      "minRelativeSea": -3.000002375663115,
+      "maxRelativeSea": -2.999997385842647
+    },
+    {
+      "name": "citadel-backdrop-ridge-mid",
+      "boundarySamples": 484,
+      "minRelativeSea": -3.0000047379379566,
+      "maxRelativeSea": -2.9999962070728543
+    },
+    {
+      "name": "citadel-backdrop-ridge-far",
+      "boundarySamples": 532,
+      "minRelativeSea": -3.000004621017581,
+      "maxRelativeSea": -2.9999951708311983
+    }
+  ],
+  "scope": "Actual upper-to-harbor route vertical clearance against three background meshes; all open perimeter edges remain 3m below official spherical ocean. Not full navigation or campaign."
+}

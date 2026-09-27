@@ -248,11 +248,10 @@ export function mountGatePodCraft(abandonedGate, { scale = 1, count = 3 } = {}) 
   squadron.name = "gate-pod-squadron";
   squadron.userData.anchor = { kind: "triple-gate" };
 
-  // 三台的停位：一台高悬在门楣外侧、一台低掠过夹道、一台停在塔肩上。
-  // 门总高 44 / 夹道宽 10，所以横向别超过 ±16，否则飞出峡谷框景。
+  // 认可目标塔基加宽：两台移到屏幕右侧塔外，保留姿态与型号，避免穿入塔身。
   const berths = [
-    { pos: [-12.5, 27.0, 9.5], yaw: 0.38, pitch: -0.06, roll: 0.10, scale: 1.00 },
-    { pos: [10.8, 20.5, -7.0], yaw: -2.62, pitch: 0.05, roll: -0.13, scale: 0.86 },
+    { pos: [-33.0, 22.0, 9.5], yaw: 0.38, pitch: -0.06, roll: 0.10, scale: 1.00 },
+    { pos: [-34.0, 17.5, -7.0], yaw: -2.62, pitch: 0.05, roll: -0.13, scale: 0.86 },
     { pos: [1.2, 33.5, 17.5], yaw: 0.12, pitch: -0.10, roll: 0.04, scale: 1.12 },
   ];
   berths.slice(0, Math.max(0, Math.min(berths.length, count))).forEach((berth, i) => {

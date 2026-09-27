@@ -1,0 +1,168 @@
+{
+  "triangles": 1015016,
+  "finite": true,
+  "normalError": 0,
+  "paths": [
+    {
+      "district": "locust-bookshop-court",
+      "label": "bookstore",
+      "grounded": 61,
+      "samples": 61,
+      "maxPush": 0.2700000000000218
+    },
+    {
+      "district": "locust-bookshop-court",
+      "label": "factory",
+      "grounded": 61,
+      "samples": 61,
+      "maxPush": 5.126874814344906e-14
+    },
+    {
+      "district": "ant-bookshop-court",
+      "label": "bookstore",
+      "grounded": 61,
+      "samples": 61,
+      "maxPush": 0.27000000000001384
+    },
+    {
+      "district": "ant-bookshop-court",
+      "label": "factory",
+      "grounded": 61,
+      "samples": 61,
+      "maxPush": 4.5496934130773415e-14
+    },
+    {
+      "district": "beetle-bookshop-court",
+      "label": "bookstore",
+      "grounded": 61,
+      "samples": 61,
+      "maxPush": 0.2700000000000217
+    },
+    {
+      "district": "beetle-bookshop-court",
+      "label": "factory",
+      "grounded": 61,
+      "samples": 61,
+      "maxPush": 4.263256414560601e-14
+    }
+  ],
+  "robots": [
+    {
+      "name": "蝗虫",
+      "pairedShop": "蝗虫书店",
+      "world": [
+        -23.573989111703014,
+        -89.70314619225155,
+        131.47784072068134
+      ],
+      "stats": {
+        "sourceParts": 288,
+        "meshes": 25,
+        "triangles": 26172
+      }
+    },
+    {
+      "name": "蚂蚁",
+      "pairedShop": "蚂蚁书店",
+      "world": [
+        -58.08939433069349,
+        -103.8317792546221,
+        108.32079155505012
+      ],
+      "stats": {
+        "sourceParts": 230,
+        "meshes": 10,
+        "triangles": 85536
+      }
+    },
+    {
+      "name": "甲壳虫",
+      "pairedShop": "甲壳虫书店",
+      "world": [
+        -94.25510986315618,
+        -79.11989172513948,
+        103.65725733438332
+      ],
+      "stats": {
+        "sourceParts": 344,
+        "meshes": 22,
+        "triangles": 48986
+      }
+    }
+  ],
+  "site": {
+    "name": "南海蒸汽工业基地",
+    "ground": "sphere-conforming, no raised terrace",
+    "size": [
+      200,
+      200
+    ],
+    "outline": {
+      "shape": "circle",
+      "center": [
+        0,
+        -26
+      ],
+      "radius": 100
+    },
+    "latitude": -35,
+    "longitude": 115
+  },
+  "shopScale": 1.05,
+  "freightSpurs": [
+    {
+      "factory": "locust-bookshop-court",
+      "start": [
+        -24.971501716922045,
+        0,
+        -2.6228455048681054
+      ],
+      "end": [
+        -26.499228339756446,
+        0,
+        11.179795932857694
+      ],
+      "gauge": 1.4,
+      "length": 15.864159222148064,
+      "role": "architectural spur; train dispatch not implemented"
+    },
+    {
+      "factory": "ant-bookshop-court",
+      "start": [
+        15.004432223974835,
+        0,
+        -8.460782519461677
+      ],
+      "end": [
+        2.5290832437326087,
+        0,
+        -1.6049659715088964
+      ],
+      "gauge": 1.4,
+      "length": 16.152449824254493,
+      "role": "architectural spur; train dispatch not implemented"
+    },
+    {
+      "factory": "beetle-bookshop-court",
+      "start": [
+        42.589547885031365,
+        0,
+        23.017400335830096
+      ],
+      "end": [
+        29.76841944006346,
+        0,
+        16.203443285308914
+      ],
+      "gauge": 1.4,
+      "length": 16.51321155085558,
+      "role": "architectural spur; train dispatch not implemented"
+    }
+  ],
+  "atmosphereWeights": {
+    "insideDay": 0.88,
+    "insideNight": 0,
+    "oppositeWorld": 0
+  },
+  "errors": []
+}

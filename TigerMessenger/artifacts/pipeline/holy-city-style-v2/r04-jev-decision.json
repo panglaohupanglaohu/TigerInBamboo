@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "17774407e09d32036f3bc21862f13c408c967edf42214dcdac0cc561eff99ba0",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.88
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.46,
+      "probabilities": {
+        "geometry": 0.57,
+        "dressing": 0,
+        "review": 0.13,
+        "lighting": 0,
+        "navigation": 0.3
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.94
+    }
+  },
+  "usage": {
+    "input_tokens": 768,
+    "output_tokens": 91,
+    "cost_usd": 0.000323,
+    "credits_remaining_usd": 4.998259
+  },
+  "elapsed_ms": 2097,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full foot routes and story after facade edits",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

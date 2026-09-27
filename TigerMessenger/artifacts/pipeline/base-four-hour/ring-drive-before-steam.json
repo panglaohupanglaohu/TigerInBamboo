@@ -1,0 +1,564 @@
+{
+  "mode": "single diagnostic positioning at start, then unmodified normal world update; no time acceleration",
+  "done": true,
+  "wallSeconds": 74.236,
+  "audit": {
+    "ring": {
+      "red": {
+        "from": 0.356625,
+        "to": 0.430875,
+        "angle": -360.1406766777756,
+        "arcLength": 189.0532790989822,
+        "minRadius": 31.239598437040048,
+        "maxRadius": 37.691987910277625
+      },
+      "blue": {
+        "from": 0.3490625,
+        "to": 0.43125,
+        "angle": -360.1169711928418,
+        "arcLength": 214.29242325232195,
+        "minRadius": 35.67867550283572,
+        "maxRadius": 37.669402144529776
+      }
+    },
+    "junctions": [
+      {
+        "center": {
+          "x": -129.83789647023792,
+          "y": -35.41417398312365,
+          "z": 88.53490128399949
+        },
+        "radius": 13,
+        "count": 16,
+        "id": "junction-1",
+        "owner": null,
+        "entered": false
+      },
+      {
+        "center": {
+          "x": -65.51148678793817,
+          "y": -36.40182012718974,
+          "z": 142.27186562781665
+        },
+        "radius": 27.773686154104475,
+        "count": 55,
+        "id": "junction-2",
+        "owner": null,
+        "entered": false
+      }
+    ]
+  },
+  "samples": [
+    {
+      "seconds": 2.05,
+      "red": {
+        "progress": 0.3601989924915372,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4277598801037885,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 4.118,
+      "red": {
+        "progress": 0.36404790748242344,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4240012894463301,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 6.125,
+      "red": {
+        "progress": 0.36734697747461165,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4207796403113657,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 8.174,
+      "red": {
+        "progress": 0.3711958924654979,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4170210496539073,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 10.229,
+      "red": {
+        "progress": 0.37531972995573315,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.41299398823520184,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 12.26,
+      "red": {
+        "progress": 0.3791686449466194,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4092353975777434,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 14.324,
+      "red": {
+        "progress": 0.38301755993750564,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.405476806920285,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 16.374,
+      "red": {
+        "progress": 0.3868664749283919,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.40171821626282656,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 18.4,
+      "red": {
+        "progress": 0.3907153899192781,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.39795962560536813,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 20.42,
+      "red": {
+        "progress": 0.39456430491016437,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3942010349479097,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 22.455,
+      "red": {
+        "progress": 0.3984132199010506,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3904424442904513,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 24.48,
+      "red": {
+        "progress": 0.40226213489193685,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.38668385363299285,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 26.494,
+      "red": {
+        "progress": 0.4061110498828231,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3829252629755344,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 28.537,
+      "red": {
+        "progress": 0.40995996487370934,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.379166672318076,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 30.572,
+      "red": {
+        "progress": 0.4138088798645956,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.37540808166061757,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 32.585,
+      "red": {
+        "progress": 0.4176577948554818,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.37164949100315914,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 34.604,
+      "red": {
+        "progress": 0.42150670984636807,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3678909003457007,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 36.62,
+      "red": {
+        "progress": 0.4253556248372543,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 38.643,
+      "red": {
+        "progress": 0.42920453982814055,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 40.656,
+      "red": {
+        "progress": 0.4330534548190268,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 42.686,
+      "red": {
+        "progress": 0.43690236980991304,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 44.714,
+      "red": {
+        "progress": 0.4407512848007993,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 46.737,
+      "red": {
+        "progress": 0.4446001997916855,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 48.767,
+      "red": {
+        "progress": 0.44844911478257177,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 50.801,
+      "red": {
+        "progress": 0.45161072352508547,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 52.829,
+      "red": {
+        "progress": 0.4551847160166227,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 54.901,
+      "red": {
+        "progress": 0.4588961697578344,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 56.971,
+      "red": {
+        "progress": 0.46260762349904616,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 58.976,
+      "red": {
+        "progress": 0.4661816159905834,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.36628007577821853,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 61.028,
+      "red": {
+        "progress": 0.4698930697317951,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3626557205013836,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 63.089,
+      "red": {
+        "progress": 0.47360452347300686,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3590313652245487,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 65.167,
+      "red": {
+        "progress": 0.4773159772142186,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3554070099477138,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 67.222,
+      "red": {
+        "progress": 0.4810274309554303,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3517826546708789,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 69.227,
+      "red": {
+        "progress": 0.48460142344696755,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3482925347746675,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      }
+    }
+  ],
+  "errors": []
+}

@@ -6,7 +6,6 @@ import * as THREE from "three";
 import {
   createLowPolyHouse,
   createLowPolyRock,
-  createLowPolyTree,
   createLowPolyFlower,
   createLowPolyCloud,
   createLowPolySignpost,
@@ -15,6 +14,7 @@ import {
   placeOnSphere,
   INK_FLOWER_COLORS,
 } from "../assets/lowPoly.js";
+import { createOptimizedSaihojiPine, SAIHOJI_PINE_SEEDS } from "../assets/saihojiPineOptimized.js";
 import { placeObjectOnSphere, latLonToDir, flatXZToLatLon, flatToWorld } from "./sphereMath.js";
 
 import { QUEST_DEFS } from "../quest/questSystem.js";
@@ -343,7 +343,18 @@ export function decorateCorridorForests(scene, planetRadius, opts = {}) {
     trackCurves = null,
     trackClearR = 2.6,
     acceptTree = null,
+    // buildHills 返回值（用 sampleRadius 查真实网格表面）。解析高度场在
+    // 低多边形网格的三角形弦面之上（山脊凸处最明显），按场种树会悬空。
+    hills = null,
   } = opts;
+
+  // 主人 2026-09-16：走廊林带整片换成苔庭松（西芳寺同款 Blender 松，
+  // createOptimizedSaihojiPine，替代原低模叠锥松）。
+  // 苔庭松原料高 ~5.32（工厂根缩放 1.02 后 ~5.43）、冠幅半径 2.8~3.6；
+  // 原低模松设计高 ~4.3——乘 FIT 对齐「树 = 玩家 2~3 倍」的小世界量纲。
+  const PINE_FIT = 4.3 / (5.32 * 1.02);
+  // 净空用保守冠幅（取 25 颗种子里的最大值 ~3.57），书店等避让方按它算。
+  const PINE_CROWN_RADIUS = 3.6;
 
   const rnd = lcg(seed);
   const S = WORLD_SCALE;
@@ -368,6 +379,7 @@ export function decorateCorridorForests(scene, planetRadius, opts = {}) {
     }
   }
   const _tw = new THREE.Vector3();
+  const _sp = new THREE.Vector3();
   const nearTrack = (wx, wz, lift) => {
     if (!trackPts.length) return false;
     flatToWorld(wx, lift, wz, planetRadius, _tw);
@@ -406,23 +418,35 @@ export function decorateCorridorForests(scene, planetRadius, opts = {}) {
         if (!(lift > SEA_LEVEL)) continue; // 不种在水里
         if (nearTrack(wx, wz, lift)) continue; // 轨道走廊会被削平，树会悬空
 
-        const tree = createLowPolyTree();
-        placeObjectOnSphere(tree, wx, wz, lift, planetRadius);
+        // 贴地修正：解析场在弦面之上，直接用 lift 会悬浮（苔庭松细干露缝）。
+        // 用 hills 网格的真实半径落树，嵌地 0.08（根盘 0.14×scale 仍埋住）；
+        // 采样失败（网格外等）退回解析场。settle pass 兜底并同步碰撞体。
+        let placeLift = lift;
+        if (hills?.sampleRadius) {
+          flatToWorld(wx, lift, wz, planetRadius, _sp);
+          const surfaceR = hills.sampleRadius(_sp);
+          if (surfaceR && surfaceR - planetRadius > SEA_LEVEL) {
+            placeLift = surfaceR - planetRadius - 0.08;
+          }
+        }
+
+        const seedIdx = (rnd() * SAIHOJI_PINE_SEEDS.length) | 0;
+        const tree = createOptimizedSaihojiPine(SAIHOJI_PINE_SEEDS[seedIdx]);
+        placeObjectOnSphere(tree, wx, wz, placeLift, planetRadius);
         tree.rotateY(rnd() * Math.PI * 2);
-        const s = 0.85 + rnd() * 0.5;
+        const s = (0.85 + rnd() * 0.5) * PINE_FIT;
         tree.scale.multiplyScalar(s);
         tree.userData.corridorId = corridor.id;
-        // Apply site clearance AFTER consuming the existing tree/yaw/scale RNG.
-        // Rejecting an obstructing tree must not rearrange the rest of the forest.
-        if (acceptTree && !acceptTree(tree)) {
-          const geometries = new Set();
-          tree.traverse(node => { if (node.geometry) geometries.add(node.geometry); });
-          for (const geometry of geometries) geometry.dispose();
-          continue; // No orphan collision is registered for the rejected tree.
-        }
+        tree.userData.pineCrownRadius = PINE_CROWN_RADIUS;
+        tree.userData.settle = true;
+        // 苔庭松的几何/材质是全局共享缓存（saihojiPineOptimized.js template），
+        // 被避让拒绝的树直接丢弃即可；dispose 会砸坏其它实例的 GPU 资源。
+        // 避让判定放在树/朝向/缩放的随机数消耗之后：拒绝一棵不得重排整片林带。
+        if (acceptTree && !acceptTree(tree)) continue;
         scene.add(tree);
         meshes.push(tree);
-        colliders.push({ position: tree.position.clone(), radius: 0.55 * s });
+        const cr = (tree.userData.collideRadius ?? 0.55) * tree.scale.x;
+        colliders.push({ position: tree.position.clone(), radius: Math.max(0.45, cr * 1.15) });
       }
     }
   }

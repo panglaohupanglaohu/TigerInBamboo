@@ -1,4 +1,5 @@
 import {citadelRevision} from "./layoutRelease.js";
+import {holyStyleRound,addCathedralFacade} from './holyCityStyleV2.js';
 import {CITY_ADVANCE} from './compactNewCity.js';
 import * as THREE from 'three';
 import {solveCastleFacade} from './castleFacadeWfc.js';
@@ -14,13 +15,14 @@ export function applyTargetCastleSilhouette(city){
  const placementR02=typeof location!=='undefined'&&citadelRevision('citadelMassing')==='2';
 
  const root=new THREE.Group();root.name='citadel-target-castle-silhouette';root.position.z=CITY_ADVANCE[2];
- const stone=new THREE.MeshStandardMaterial({color:0xcac3b1,roughness:.94});
- const edge=new THREE.MeshStandardMaterial({color:0xd9ceb8,roughness:.92});
+ const stone=new THREE.MeshStandardMaterial({color:holyStyleRound()?0xe8e1ce:0xcac3b1,roughness:.94});
+ const edge=new THREE.MeshStandardMaterial({color:holyStyleRound()?0xf1e8d5:0xd9ceb8,roughness:.92});
  const shadow=new THREE.MeshStandardMaterial({color:0x766e66,roughness:1});
- const blue=new THREE.MeshStandardMaterial({color:0x1c61b1,roughness:.85,flatShading:true});
+ const blue=new THREE.MeshStandardMaterial({color:holyStyleRound()?0xbc825e:0x1c61b1,roughness:.94,flatShading:true});
  const warm=new THREE.MeshStandardMaterial({color:0x573c23,emissive:0xffb767,emissiveIntensity:.6,roughness:.86});
  const unit=new THREE.BoxGeometry(1,1,1);
  const facadeReports=[];
+ const openingProbes=[];
  const massingReports=[];
  const alternateStone=stone.clone();alternateStone.color.setHex(0xc6bfad);
  function box(name,x,y,z,w,h,d,mat=stone){
@@ -35,7 +37,9 @@ export function applyTargetCastleSilhouette(city){
   const recess=new THREE.Mesh(geometry,shadow);recess.position.set(x,y-.1,z);recess.rotation.y=angle;recess.scale.set(1.36,1.16,1);root.add(recess);
   const pane=new THREE.Mesh(geometry,warm);pane.position.set(x+Math.sin(angle)*.015,y,z+Math.cos(angle)*.015);pane.rotation.y=angle;root.add(pane);
  }
- function facade(id,x,front,w,bottom,top){
+ function facade(id,x,front,w,bottom,top,yaw=0){
+  const firstChild=root.children.length,turn=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),yaw),anchor=new THREE.Vector3(x,0,front);
+  const localToRoot=p=>p.sub(anchor).applyQuaternion(turn).add(anchor);
   const rows=Math.max(1,Math.round((top-bottom)/7.4));
   const solved=solveCastleFacade({rows,seed:20260913+facadeReports.length});
   const cw=w/3,ch=(top-bottom)/rows;
@@ -54,8 +58,16 @@ export function applyTargetCastleSilhouette(city){
    mesh.name=id+'-wfc-'+tile;mesh.position.set(cx,low,front-.21);mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);
    const paneShape=new THREE.Shape();paneShape.moveTo(-ww/2,0);paneShape.lineTo(ww/2,0);paneShape.lineTo(ww/2,wh-ww/2);paneShape.absarc(0,wh-ww/2,ww/2,0,Math.PI,false);paneShape.closePath();
    const pane=new THREE.Mesh(new THREE.ShapeGeometry(paneShape,6),warm);pane.position.set(cx,low+wy,front-.18);root.add(pane);openings++;
+   // Thin dressed stone surround follows the actual arch opening. The void
+   // stays open to the recessed pane; no painted window on a solid side wall.
+   const trim=new THREE.Shape(),tw=ww+.28,th=wh+.14;
+   trim.moveTo(-tw/2,0);trim.lineTo(tw/2,0);trim.lineTo(tw/2,th-tw/2);trim.absarc(0,th-tw/2,tw/2,0,Math.PI,false);trim.closePath();
+   const voidPath=new THREE.Path();voidPath.moveTo(-ww/2,.07);voidPath.lineTo(-ww/2,.07+wh-ww/2);voidPath.absarc(0,.07+wh-ww/2,ww/2,Math.PI,0,true);voidPath.lineTo(ww/2,.07);voidPath.closePath();trim.holes.push(voidPath);
+   const surround=new THREE.Mesh(new THREE.ExtrudeGeometry(trim,{depth:.10,bevelEnabled:false,curveSegments:6}),edge);surround.position.set(cx,low+wy-.07,front+.21);surround.castShadow=true;surround.receiveShadow=true;root.add(surround);
+   openingProbes.push({id,tile,center:localToRoot(new THREE.Vector3(cx,low+wy+.5,front)).toArray(),wall:localToRoot(new THREE.Vector3(cx+ww/2+.20,low+wy+.5,front)).toArray(),normal:new THREE.Vector3(0,0,1).applyQuaternion(turn).toArray()});
   }));
-  facadeReports.push({id,rows,modules:rows*3,openings,grid:solved.grid,solutionHash:solved.solutionHash});
+  if(yaw!==0)for(const child of root.children.slice(firstChild)){localToRoot(child.position);child.quaternion.premultiply(turn);}
+  facadeReports.push({id,rows,modules:rows*3,openings,grid:solved.grid,solutionHash:solved.solutionHash,yaw,anchor:[x,front],width:w,bottom,top});
  }
  function tower({id,x,z,w,d=w,bottom=16,top,cap=false,shaft=false}){
   if(placementR02){
@@ -63,14 +75,17 @@ export function applyTargetCastleSilhouette(city){
    // stair shaft is deliberately absent: its two portals are route anchors.
    const sizes={
     'left-gate-bastion':[9.4,8,28],
-    'right-gate-bastion':[9.6,8,31.2],
-    'left-outer-turret':[7.2,8.4,23.8],
-    'right-outer-turret':[7.4,9.2,27],
-    'left-blue-tower':[10.2,10.2,32.6],
-    'right-blue-tower':[12,12,38.8],
-    'offset-high-keep':[15,14,46.4],
+    'right-gate-bastion':[9.6,8,29.6],
+    'left-outer-turret':[7.2,8.4,22],
+    'right-outer-turret':[7.4,9.2,24.5],
+    'left-blue-tower':[9.4,8.6,31],
+    'right-blue-tower':[11.0,9.6,35.2],
+    'offset-high-keep':[13.0,11.6,43.6],
    };
    if(sizes[id])[w,d,top]=sizes[id];
+   // Keep a rear junction with the unchanged stair shaft after narrowing
+   // the high tower; its facade must not become a detached floating shell.
+   if(id==='offset-high-keep')z=-14.6;
   }
   const h=top-bottom,t=.45,front=z+d/2;
   massingReports.push({id,x,z,w,d,bottom,top,shaft,cap,bodySlenderness:h/w});
@@ -81,11 +96,15 @@ export function applyTargetCastleSilhouette(city){
   if(cap){
    // Seven perimeter panels surround an open interior; front remains a real WFC facade.
    footprint.forEach((a,i)=>{if(i===4)return;const b=footprint[(i+1)%8],dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz),nx=-dz/len,nz=dx/len;
+    const exteriorSide=x<60?6:2,exteriorChamfer=x<60?5:3;
+    if(i===exteriorSide||i===exteriorChamfer){facade(id+'-side-'+i,x+(a[0]+b[0])/2+nx*t/2,z+(a[1]+b[1])/2+nz*t/2,len,bottom,top,Math.atan2(-nx,-nz));return;}
     const m=box(id+'-octagonal-wall',x+(a[0]+b[0])/2+nx*t/2,bottom+h/2,z+(a[1]+b[1])/2+nz*t/2,len+.01,h,t);m.rotation.y=-Math.atan2(dz,dx);
    });
   }else{
-   box(id+'-west',x-w/2+t/2,bottom+h/2,z+(t-.21)/2,t,h,d-t-.21);
-   box(id+'-east',x+w/2-t/2,bottom+h/2,z+(t-.21)/2,t,h,d-t-.21);
+   if(!shaft&&x<60)facade(id+'-west',x-w/2+t/2,z+(t-.21)/2,d-t-.21,bottom,top,-Math.PI/2);
+   else box(id+'-west',x-w/2+t/2,bottom+h/2,z+(t-.21)/2,t,h,d-t-.21);
+   if(!shaft&&x>=60)facade(id+'-east',x+w/2-t/2,z+(t-.21)/2,d-t-.21,bottom,top,Math.PI/2);
+   else box(id+'-east',x+w/2-t/2,bottom+h/2,z+(t-.21)/2,t,h,d-t-.21);
    box(id+'-rear',x,bottom+h/2,z-d/2+t/2,w,h,t);
   }
   if(shaft){
@@ -114,9 +133,9 @@ export function applyTargetCastleSilhouette(city){
   if(cap){
    const radius=Math.max(w,d)*.55;
    const drum=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,.85,8),stone);drum.position.set(x,top+.2,z);drum.rotation.y=Math.PI/8;root.add(drum);
-   const rise=radius*(placementR02?.58:.70);
+   const rise=radius*(placementR02?.52:.70);
    const profile=[new THREE.Vector2(radius,0),new THREE.Vector2(radius*.96,rise*.22),new THREE.Vector2(radius*.68,rise*.68),new THREE.Vector2(radius*.31,rise*.95),new THREE.Vector2(0,rise)];
-   const roof=new THREE.Mesh(new THREE.LatheGeometry(profile,8),blue);roof.position.set(x,top+.63,z);roof.rotation.y=Math.PI/8;roof.castShadow=true;root.add(roof);
+   const roof=new THREE.Mesh(new THREE.LatheGeometry(profile,8),blue);roof.position.set(x,top+.63,z);roof.rotation.y=Math.PI/8;roof.castShadow=true;if(holyStyleRound()<4)root.add(roof);
   }else{
    // Thin roof slab: no new solid block is inserted through the stair shaft.
    box(id+'-roof',x,top-.25,z,w-.35,.22,d-.35);
@@ -129,7 +148,7 @@ export function applyTargetCastleSilhouette(city){
   }
   for(let y=bottom+5;y<top-2;y+=7.4){
    if(shaft&&!((y<25.8&&y>20)||(y>35&&y<40)))window(x,y,front+.24,.6,1.65);
-   window(x+w/2+.018,y+1,z,.57,1.55,Math.PI/2);
+   if(shaft||(!cap&&x<60))window(x+w/2+.018,y+1,z,.57,1.55,Math.PI/2);
   }
  }
  // Readable uneven skyline: terrace bastions, one offset high keep, and only
@@ -146,12 +165,14 @@ export function applyTargetCastleSilhouette(city){
  frontPanel('west-gate-shoulder',53.95,11.2,1.7,16,29.0);
  frontPanel('east-gate-shoulder',67.2,11.2,3.7,16,30.5);
  for(const x of [54.2,56.7,59.2,61.7,64.2])box('gate-top-merlon',x,29.55,11,.7,.8,.65,edge);
+ addCathedralFacade(root);
  mergeStaticGroup(root,{mergedTag:'target-castle-silhouette'});
  root.traverse(m=>{if(m.isMesh){m.name='target-castle-exterior';m.userData.isCitadelTerrain=false;m.userData.westCityWalkable=false;m.userData.citadelSolidExterior=true;}});
  root.userData.sourceId='reference-broad-blue-towers-v4-wfc-facades';
  if(placementR02)root.userData.sourceId='placement-r02-stepped-keep-massing';
+ root.userData.proportionRevision='stepped-shoulders-preserved-stair-shaft-v2';
  root.userData.towerMassing=massingReports;
- root.userData.facadeWfc={scope:'seven front facades; authored volumes, side walls and stair keep',towers:facadeReports};
+ root.userData.facadeWfc={scope:'seven front and ten exposed side facades; authored volumes and preserved central stair keep',revision:'side-openings-stone-arch-surrounds-v1',towers:facadeReports,openingProbes};
  root.userData.originalArchivedNode='west-city-crown';
  root.userData.update=phase=>{warm.emissiveIntensity=.04+nightWeightAt(phase)*1.1;};
  root.userData.update(.85);

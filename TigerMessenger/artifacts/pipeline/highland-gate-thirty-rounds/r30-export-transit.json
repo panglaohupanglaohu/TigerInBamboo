@@ -1,0 +1,57 @@
+{
+  "manifest": {
+    "radius": 160,
+    "source": "assembled default Web world; no saved browser edits copied",
+    "nodes": 342,
+    "meshes": 342,
+    "instances": 0,
+    "materials": 342,
+    "textures": 1,
+    "bytes": 8279520,
+    "landmarks": {},
+    "warnings": [],
+    "limitations": [
+      "Static visible-state capture; source animations, physics, quests and shader logic still require native migration",
+      "Hidden states and non-mesh line/point effects excluded from this world overview; separate asset archives retain them"
+    ]
+  },
+  "nonfinite": 0,
+  "transit": {
+    "red": {
+      "samples": 95,
+      "minZ": -21.404888262661775,
+      "maxZ": 23.572820066320112
+    },
+    "blue": {
+      "samples": 101,
+      "minZ": -23.468717407367045,
+      "maxZ": 23.913304040156778
+    }
+  },
+  "player": {
+    "position": [
+      123.92999348623188,
+      114.15404335026764,
+      5.250337388169757
+    ],
+    "support": 168.57447891481644
+  },
+  "merge": {
+    "before": 631,
+    "after": 15
+  },
+  "transform": {
+    "position": [
+      127.2117504058756,
+      109.01314370670208,
+      -22.01943748897003
+    ],
+    "quaternion": [
+      0.36106995810504594,
+      0.8457232317630942,
+      -0.21691248148178638,
+      0.32761208156541133
+    ]
+  },
+  "errors": []
+}

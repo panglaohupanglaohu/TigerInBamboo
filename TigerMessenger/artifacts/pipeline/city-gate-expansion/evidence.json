@@ -1,0 +1,49 @@
+{
+  "task": "Crystal V10 doubled districts and Gate V8 wider water channel review",
+  "target": "Accepted blue Moebius crystal city and connected bilateral three bay arcades",
+  "visual_observations": {
+    "source": "Assistant directly inspected real 8931 after overview/front and city aerial PNGs",
+    "image_sha256": "a15f35877d79f5edf61365a2da5e9d9e6ab42c0def6575472f1da48acef03840",
+    "completed": [
+      "Gate height 1.30 width 1.35 length 1.20; both side arcades remain connected",
+      "Water exposed on both sides by lowering bank toes; planting rooted to new bank mesh",
+      "City 3 to 6 clusters, 15 to 30 crystal prisms; new silhouettes staggered"
+    ],
+    "remaining": [
+      "Prototype materials and sparse foliage still differ from ink illustration",
+      "Planet curvature and elevated rail partly obscure far crystal clusters; no claim of target likeness acceptance"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Gate 2880 train envelope rays",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Gate 8 foundation and 4 terrace support samples",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Original collision solver reaches meeting deck",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "City 6 clusters and rail rays no hits, 55 ground samples",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No JS renderer errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text-only assistance, not visual JEV",
+    "No other civilization or original asset replacement",
+    "Do not count these edits as tiger rounds"
+  ]
+}

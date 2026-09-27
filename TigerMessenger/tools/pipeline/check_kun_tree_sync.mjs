@@ -1,0 +1,7 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import {writeFile} from 'node:fs/promises';
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+try{const page=await browser.newPage();await page.goto('http://localhost:8931/TigerMessenger/artifacts/pipeline/kun-roll-model/');await page.waitForFunction(()=>window.rollReview?.kun,null,{timeout:120000});
+const rows=await page.evaluate(async()=>{const T=await import('three');const data=await(await fetch('../../../godot/data/saihoji-target-garden-20260919.json')).json();const {kun,pose}=rollReview;pose(0);const island=kun.getObjectByName('leviathan-island');const actual=[];kun.traverse(n=>{if(n.name==='giantTreeGroup'){const m=island.matrixWorld.clone().invert().multiply(n.matrixWorld).elements;const expected=data.trees.find(t=>t.seed===n.userData.sourceSeed);actual.push({seed:n.userData.sourceSeed,maxMatrixError:expected?Math.max(...m.map((v,i)=>Math.abs(v-expected.matrix[i]))):null,matrix:m})}});return actual});
+await writeFile('TigerMessenger/artifacts/pipeline/saihoji-target-integration/tree-transform-sync.json',JSON.stringify({rows,passed:rows.length===25&&rows.every(r=>r.maxMatrixError!==null&&r.maxMatrixError<1e-5)},null,2));console.log(rows.map(r=>({seed:r.seed,error:r.maxMatrixError})));if(rows.length!==25||rows.some(r=>r.maxMatrixError===null||r.maxMatrixError>=1e-5))process.exitCode=1;
+}finally{await browser.close()}

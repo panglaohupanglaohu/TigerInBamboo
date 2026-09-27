@@ -11,6 +11,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { arrangeSaihojiPines } from "../world/saihojiPineLayout.js";
+import { buildSaihojiTargetGarden } from "../world/saihojiTargetGarden.js";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { applyWhaleCombatShake } from "../world/whaleMaw.js";
 import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
@@ -26,6 +27,7 @@ import {
   rearmPhalanxAlarm,
   sfxWhaleStep,
 } from "../audio/sfx.js";
+import { setFleetSuction, sfxEnergyPulse } from "../audio/worldSfx.js";
 
 /** 鲸体升空锚点：地壳板（背脊）悬停在球面 +24 上方，鲸腹不压苔丘 */
 const WHALE_LIFT = 24;
@@ -178,6 +180,7 @@ export const saihojiGardenScene = {
     }
     islandGroup.add(garden);
     arrangeSaihojiPines(islandGroup, built.landmarks.zones, leviathanGroup);
+    buildSaihojiTargetGarden(islandGroup);
 
     // ---------- 扫描吸食感：松树波动 + 树叶螺旋升空被吸进灯艇 ----------
     // 扫描灯艇掠近时（同升空触发圈），古松按强度左右摇摆；
@@ -310,6 +313,11 @@ export const saihojiGardenScene = {
     //   编队合计每中 50 支箭鲸下一档，6 档共 300 支落地；飞艇不掉高度
     // 2 收束：鲸回原位 → 机队离开 → 终扫一次 → 再离开 → 中箭计数清零
     //   （吸取力随缓动恢复）、故事复位回 0
+    let rollPending = false;
+    let rollCycleCompleted = false;
+    let rollTime = -1;
+    let rollStartR = buriedR;
+    leviathanGroup.userData.victoryRoll = { active:false, completed:0, reason:"awaiting-battle-and-withdrawal" };
     let storyPhase = 0;
     let finaleLeft = false;
     let finaleScanned = false;
@@ -404,6 +412,8 @@ export const saihojiGardenScene = {
       if (!squad) squad = scene.getObjectByName("moebius-aircraft-squad") || null;
       if (phalanxRoot) {let owner=phalanxRoot;while(owner.parent)owner=owner.parent;if(owner!==scene)phalanxRoot=null;}
       if (!phalanxRoot) phalanxRoot = scene.getObjectByName("saihoji-phalanx-battle") || null;
+      const campaign = phalanxRoot?.userData?.campaignStatus;
+      const isSignaled = !!(campaign?.managed && campaign.discoveryAllowed);
       let target = null;
       let scanDist = Infinity;
       let near = false;
@@ -424,7 +434,6 @@ export const saihojiGardenScene = {
         if (storyPhase === 0) {
           // 伏击序章：蓝盔先完成松下隐蔽。提前掠过的舰队可以扫描，
           // 但尚不能揭示鲲、提前吸起承载正在登陆士兵的苔台。
-          const campaign = phalanxRoot?.userData?.campaignStatus;
           const ambushState = phalanxRoot?.userData?.saihojiAmbush?.state;
           const gateReason = !ambushState ? "missing-phalanx" :
             ambushState.stage === "landing" ? "allies-landing" :
@@ -435,7 +444,7 @@ export const saihojiGardenScene = {
             target = buriedR;
             stormArmed = false;
             stormPreludeT = 0;
-          } else if (near) {
+          } else if (near || isSignaled) {
             // 升起前先触发一次《狂风暴雨》；真正升空后切 Terminator 2
             if (!stormArmed) {
               cueLeviathanStormOnce();
@@ -443,7 +452,7 @@ export const saihojiGardenScene = {
               stormPreludeT = 0;
             }
             stormPreludeT += step;
-            if (stormPreludeT >= STORM_PRELUDE_SEC) {
+            if (isSignaled || stormPreludeT >= STORM_PRELUDE_SEC) {
               setLeviathanStormBgm(true);
               target = risenR;
             } else {
@@ -463,7 +472,7 @@ export const saihojiGardenScene = {
             storyPhase = 1; // 苔庭鲸升空：故事线以鲸为主
           }
         } else if (storyPhase === 1) {
-          // 战斗期：飞艇不掉高度。每 50 支箭鲸下一档，6 档 / 300 支落地。
+          // 战斗期：飞艇不掉高度。每 50 支箭鲸下一档，12 档 / 600 支落地。
           setLeviathanStormBgm(true);
           const sinkStep = readWhaleSinkStep(squad);
           const suction01 = 1 - sinkStep / ARROW_SINK_STEPS;
@@ -508,6 +517,7 @@ export const saihojiGardenScene = {
             finaleLeft = false;
             finaleScanned = false;
             returnSignaled = false;
+            rollCycleCompleted = false;
             stormArmed = false;
             tug01 = 0;
             setLeviathanStormBgm(false, { fade: 1.6 });
@@ -521,12 +531,13 @@ export const saihojiGardenScene = {
           if (!returnSignaled && lift01 < 0.03) {
             // 苔庭鲸恢复原位：士兵离开返回高山圣城（此后才重新受鼓声控制）
             returnSignaled = true;
+            rollPending = true;
             if (phalanxRoot?.userData?.whaleReturned) phalanxRoot.userData.whaleReturned();
             else phalanxRoot?.userData?.reset?.();
           }
           if (far) finaleLeft = true;
           if (finaleLeft && near) finaleScanned = true;
-          if (finaleScanned && far) {
+          if (finaleScanned && far && rollCycleCompleted) {
             const members = squad?.userData?.members;
             if (members) {
               for (const m of members) m.userData.arrowHits = 0; // 吸取力随缓动恢复
@@ -559,7 +570,7 @@ export const saihojiGardenScene = {
       if (squad) {
         const lock = squad.userData.whaleLock || (squad.userData.whaleLock = {});
         const wantLock =
-          storyPhase === 1 || (storyPhase === 0 && near && lift01 > 0.03);
+          storyPhase === 1 || isSignaled || (storyPhase === 0 && near && lift01 > 0.03);
         if (wantLock && !lock.active) {
           // 新一轮锁定：重置过渡起点（从当前航线位平滑俯冲/爬升到盘顶）
           lock.active = true;
@@ -581,6 +592,7 @@ export const saihojiGardenScene = {
           pulseCd -= step;
           if (pulseCd <= 0) {
             pulseCd = 15 + Math.random() * 9;
+            sfxEnergyPulse(hubDir.clone().multiplyScalar(R + 0.5).addScaledVector(_hubNorth, 19.5));
             // 落点在北翼长弓列阵处（机队盘旋一侧）
             squad.userData.groundPulse = {
               t: 1.2,
@@ -624,6 +636,37 @@ export const saihojiGardenScene = {
         currentR += (target - currentR) * k;
         if (Math.abs(target - currentR) < 0.02) currentR = target;
         leviathan.setAnchorRadius(currentR);
+      }
+      // The local rescue finale must be visible before the next chapter.
+      // Start after real embark ownership clears the island; do not wait for an
+      // extra leave/rescan/leave patrol or arrival at the distant citadel.
+      const departed = phalanxRoot?.userData?.kunDeparture?.cleared === true;
+      const rollStatus = leviathanGroup.userData.victoryRoll;
+      rollStatus.pending = rollPending;
+      rollStatus.reason = rollTime >= 0 ? "rolling" : rollPending ?
+        (departed ? "departure-cleared" : (phalanxRoot?.userData?.kunDeparture?.reason || "awaiting-actual-embark")) :
+        rollCycleCompleted ? "completed" : "awaiting-rescue";
+      if (rollPending && departed && rollTime < 0) {
+        rollPending = false; rollTime = 0; rollStartR = currentR;
+        leviathanGroup.userData.victoryRoll.active = true;
+        rollStatus.pending = false;
+        rollStatus.reason = "rolling";
+      }
+      if (rollTime >= 0) {
+        rollTime = Math.min(12, rollTime + step);
+        const smooth = x => x * x * (3 - 2 * x);
+        const lift = rollTime < 3 ? smooth(rollTime / 3) : rollTime > 9 ? smooth((12 - rollTime) / 3) : 1;
+        const turn = smooth(THREE.MathUtils.clamp((rollTime - 3) / 6, 0, 1));
+        currentR = THREE.MathUtils.lerp(rollStartR, risenR, lift);
+        leviathan.setAnchorRadius(currentR);
+        leviathan.setRollAngle(turn >= 1 ? 0 : turn * Math.PI * 2);
+        if (rollTime >= 12) {
+          rollTime = -1; leviathan.setRollAngle(0);
+          leviathanGroup.userData.victoryRoll.active = false;
+          leviathanGroup.userData.victoryRoll.completed++;
+          rollCycleCompleted = true;
+          rollStatus.reason = "completed";
+        }
       }
       leviathan.update(dt, t);
       // 苔庭之鲸参战（主人 2026-09-06）：把 whaleMaw 发布的挣扎甩动补上。
@@ -717,9 +760,12 @@ export const saihojiGardenScene = {
         beamSpot.position.copy(squadPos);
         beamSpot.target.position.copy(_plateTop);
         beamSpot.intensity = 6 * scanSmooth * (0.4 + 0.6 * suction01) * pulseFlash * stepFlash;
+        // 舰队吸取：一路循环，强度随光束（不按每架飞机叠加）
+        setFleetSuction(scanSmooth * (0.4 + 0.6 * suction01), _beamMid);
       } else {
         beamGroup.visible = false;
         beamSpot.intensity = 0;
+        setFleetSuction(0, null);
       }
     };
     update(0, 0);
@@ -746,6 +792,12 @@ export const saihojiGardenScene = {
           1
         ),
       getStoryPhase: () => storyPhase,
+      previewRoll(angle) {
+        leviathan.setAnchorRadius(risenR);
+        leviathan.setRollAngle(angle);
+        leviathan.update(0, 0);
+        leviathanGroup.updateMatrixWorld(true);
+      },
       update,
       dispose() {
         setLeviathanStormBgm(false, { fade: 0.4 });

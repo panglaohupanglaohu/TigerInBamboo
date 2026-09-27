@@ -1,0 +1,39 @@
+{
+  "task": "Moebius civilization palette from user reference screenshots",
+  "target": "Cyan-blue large fields, blue-violet shadows, cream lights, restrained coral accents; holy civilization separate",
+  "visual_observations": {
+    "source": "Assistant inspected actual before/after gate and swamp screenshots",
+    "image_sha256": "c1c5f639acd1fea304c08072d2c6c3ae45fc03b45181c72d11abad68bfdcec90",
+    "completed": [
+      "Gate stone warmer and lighter, blue terrain separated from cream arcade",
+      "Regional sky changed from dark cobalt to pale cyan",
+      "Swamp foliage teal, paths light stone, blossoms peach"
+    ],
+    "remaining": [
+      "Geometry remains simple and does not match reference detail",
+      "Gate water still contains line-pattern artifacts, separate water task unfinished"
+    ]
+  },
+  "checks": [
+    {
+      "name": "12 crystal groups retained",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "60 prisms retained",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No console or page errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text-only triage, not visual acceptance",
+    "Do not infer complete gameplay regression from object counts",
+    "Tiger twenty drinking iterations remain pending"
+  ]
+}

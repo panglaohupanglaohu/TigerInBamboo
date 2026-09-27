@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "736c6d24b01f7ce798af24acf8ab3d2d4339691a05ceae313abf40e02f2864c2",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.89
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.86,
+      "probabilities": {
+        "geometry": 0.02,
+        "navigation": 0.89,
+        "review": 0.09,
+        "dressing": 0,
+        "lighting": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.78
+    }
+  },
+  "usage": {
+    "input_tokens": 655,
+    "output_tokens": 91,
+    "cost_usd": 0.000276,
+    "credits_remaining_usd": 4.994611
+  },
+  "elapsed_ms": 1923,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full story and boarding",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Blender and Godot synchronization",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

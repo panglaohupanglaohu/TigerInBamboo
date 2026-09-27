@@ -1,0 +1,44 @@
+{
+  "task": "Moebius mother-tower first port continuation",
+  "target": "Preserve original crystal towers; provide usable rail/water interchange without through-tower connections. Crystal-transit concept remains candidate.",
+  "visual_observations": {
+    "source": "Astra inspected mother-port-preview.png and mother-port-live.png after new quay and camera fix",
+    "image_sha256": "59af848a232f2ce1438ca32eb6338542d57ce8077a84056fa9113350ca4b40b8",
+    "completed": [
+      "Quay, upper walkway and lift present beside original tower",
+      "Actual game boarding shows courier on ship, camera no longer buried in nearby obstacle"
+    ],
+    "remaining": [
+      "Large original pier forest dominates backdrop",
+      "Tower hillside pad has visibly ragged triangles",
+      "Quay is a functional first pass, not crystal-city target art completion"
+    ]
+  },
+  "checks": [
+    {
+      "name": "100 full boat mesh poses against local visible scene",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Real game loop F boarding from quay spawn",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Godot port mesh and lift construction",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Godot player boarding and city-wide navigation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Keep working mother port and original bridge; no wholesale bridge demolition",
+    "Do not claim city-wide rail or ferry loop completed",
+    "Next prioritize safe tower-platform continuation and shared Godot interaction before other harbors"
+  ]
+}

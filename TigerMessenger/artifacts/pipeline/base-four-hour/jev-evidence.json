@@ -1,0 +1,59 @@
+{
+  "task": "Approved steampunk base freight and articulated robots iteration",
+  "target": "Long red and blue freight trains complete the circular plaza loop, visit three factories, transport three full-size same-type robots, then demonstrate combat safely on mechanical targets.",
+  "visual_observations": {
+    "source": "Astra inspected current actual Three.js screenshots. Text-only review; no images sent.",
+    "completed": [
+      "Three Locust robots sit on full-size flatcars with no scaling cheat.",
+      "Ant gait has grounded sole, attached hands, pressure cannon and stowed cup.",
+      "Beetle retains four separate wheel limbs, green shell and front sensor."
+    ],
+    "remaining": [
+      "Locust raised armor obscures most of two-handed weapon grip; detailed silhouette review remains.",
+      "Driver view was too high and has been switched to cockpit mode; fresh close view required.",
+      "Gate end pier clipped the route; analytic realignment removed gate hits in fresh ray test, fresh gate screenshot pending.",
+      "Rail support in lower route was removed; two low crossing sleeper candidates still being corrected."
+    ]
+  },
+  "checks": [
+    {
+      "name": "Full plaza loop real-time red and blue",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Production load unload identity and cargo fit",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Final-route world loaded clearance",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Fresh screenshots after final route corrections",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "All three combat skill visual validation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Preserve original static robots and approved gate/bookstores.",
+    "Do not equate concept imagery with implemented models.",
+    "No claimed 8/10 artistic acceptance from code tests."
+  ],
+  "evidence_revision": {
+    "rig-0-attack.png": "241a4038616d8c29cff2a7b744833ba2437e6cda8ce104c44bfc19c4600a2cf0",
+    "rig-1-move.png": "63c6b2dad9852d29afdd0b0d5bdd92618b8733c5ea4407fcf7c413cd8fd9cfe5",
+    "rig-2-idle.png": "9b575570582c70d1cdcb274cedaf4223febd35b5b3efb5a7c3a9c287904174e0",
+    "e2e-loaded.png": "8eddd9779267cffea8ecf1df4f7d5e4ebe3c72af55a17bfdf55bcc33acfc844a",
+    "clearance-gate.png": "878fef20df5153c6c10a0abf89ba639e11ea803e27991669417c20e33c552637",
+    "world-clearance.json": "600ac3c43b4c34cd155562a1afbc3d817c5d8a535b7926e69644b6394bbd3e10",
+    "ring-drive.json": "1bde3f760a26cb57e0b8a982c5f00dd64b2b1a9770efd8eb5ddb87eca08554d0"
+  }
+}

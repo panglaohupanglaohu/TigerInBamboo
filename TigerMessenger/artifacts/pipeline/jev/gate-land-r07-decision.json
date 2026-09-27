@@ -1,0 +1,36 @@
+{
+  "request_hash": "94859faa3ade96a01bba41ac735b0d198b1ac8268f66483ffee7d22cdf750e91",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.06
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "dressing",
+      "confidence": 0.91,
+      "probabilities": {
+        "dressing": 0.9400000000000001,
+        "geometry": 0.0,
+        "lighting": 0.0,
+        "review": 0.06,
+        "navigation": 0.0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.74
+    }
+  },
+  "usage": {
+    "input_tokens": 599,
+    "output_tokens": 93
+  },
+  "elapsed_ms": 820,
+  "cache_hit": false,
+  "next_step": "dressing",
+  "hard_gate_blockers": [],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

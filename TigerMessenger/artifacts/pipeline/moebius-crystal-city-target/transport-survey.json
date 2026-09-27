@@ -1,0 +1,1247 @@
+{
+  "units": "game world units (not independently calibrated to real metres)",
+  "lake": {
+    "center": [
+      -0.24079247675463145,
+      -0.766044443118978,
+      -0.5959822936169372
+    ],
+    "surfaceR": 136,
+    "angR": 0.75,
+    "shoreAng": 0.48571428571428565,
+    "visible": true,
+    "attached": true
+  },
+  "link": null,
+  "vehicles": {
+    "tram": {
+      "name": "heritage-tram-red-11",
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -2.759999998211863,
+        -0.1599999868870156,
+        -0.6026480001862575
+      ],
+      "max": [
+        2.7599999982118613,
+        1.907500000186218,
+        0.6026480001862833
+      ],
+      "size": [
+        5.519999996423724,
+        2.0674999870732336,
+        1.2052960003725408
+      ],
+      "vertices": 2992
+    },
+    "boat": {
+      "name": "ocean-warship-0",
+      "scale": [
+        1.84,
+        1.8400000000000003,
+        1.8400000000000003
+      ],
+      "min": [
+        -4.783999824523929,
+        -0.5585892625452448,
+        -4.3469999122619605
+      ],
+      "max": [
+        6.697600193023679,
+        7.1575997543334715,
+        4.346999912261967
+      ],
+      "size": [
+        11.481600017547608,
+        7.716189016878716,
+        8.693999824523928
+      ],
+      "vertices": 199586
+    },
+    "pod": {
+      "name": "moebius-bubble-pod",
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ],
+      "min": [
+        -2.034000034332271,
+        -1.9440000343322958,
+        -2.0340000343322666
+      ],
+      "max": [
+        2.034000034332279,
+        1.9440000343322548,
+        2.0340000343322835
+      ],
+      "size": [
+        4.06800006866455,
+        3.8880000686645504,
+        4.06800006866455
+      ],
+      "vertices": 5221
+    },
+    "rowingEnvelope": {
+      "min": [
+        -5.6144607652910405,
+        -1.167515185507527,
+        -4.399114621198454
+      ],
+      "max": [
+        6.697600193023679,
+        7.1575997543334715,
+        4.399073475741602
+      ],
+      "size": [
+        12.31206095831472,
+        8.325114939840999,
+        8.798188096940056
+      ],
+      "poses": 120,
+      "method": "All authored rowing frames 60..119 plus half-frame interpolation including wrap",
+      "draftAtPatrolWaterline": 1.0475151855075269,
+      "heightAbovePatrolWaterline": 7.277599754333472
+    }
+  },
+  "boatTrace": [],
+  "waterAndBridgeSamples": [
+    {
+      "u": 0.234619140625,
+      "direction": [
+        0.30077636188449547,
+        -0.3658029612876229,
+        -0.8807506875641556
+      ],
+      "waterRadius": 160.2868026451772,
+      "waterSource": "official-ocean",
+      "oceanRadius": 160.2868026451772,
+      "lakeMeshRadius": 135.9794308133124,
+      "planetBedRadius": 155.28219323981887,
+      "planetDepth": 5.004609405358337,
+      "lakeDatumDifference": 24.286802645177204,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.237548828125,
+      "direction": [
+        0.27691801592642956,
+        -0.3815132023654705,
+        -0.8819093427763499
+      ],
+      "waterRadius": 160.24960089854213,
+      "waterSource": "official-ocean",
+      "oceanRadius": 160.24960089854213,
+      "lakeMeshRadius": 135.98944360801246,
+      "planetBedRadius": 153.8421290471185,
+      "planetDepth": 6.407471851423622,
+      "lakeDatumDifference": 24.249600898542127,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.240478515625,
+      "direction": [
+        0.2525776172832443,
+        -0.39654911669765014,
+        -0.8825833361750222
+      ],
+      "waterRadius": 159.84475425725643,
+      "waterSource": "official-ocean",
+      "oceanRadius": 159.84475425725643,
+      "lakeMeshRadius": 135.98946975065857,
+      "planetBedRadius": 152.26223728659798,
+      "planetDepth": 7.582516970658446,
+      "lakeDatumDifference": 23.844754257256426,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.243408203125,
+      "direction": [
+        0.22784079018115552,
+        -0.41080809202273805,
+        -0.8827940223281217
+      ],
+      "waterRadius": 159.011042370002,
+      "waterSource": "official-ocean",
+      "oceanRadius": 159.011042370002,
+      "lakeMeshRadius": 135.97907888808746,
+      "planetBedRadius": 150.54322845115337,
+      "planetDepth": 8.467813918848634,
+      "lakeDatumDifference": 23.011042370002002,
+      "overhead": {
+        "height": 10.038994367169039,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.246337890625,
+      "direction": [
+        0.2024166443387081,
+        -0.4238796855099894,
+        -0.8828100103117371
+      ],
+      "waterRadius": 157.35544600476973,
+      "waterSource": "official-ocean",
+      "oceanRadius": 157.35544600476973,
+      "lakeMeshRadius": 135.98237254726675,
+      "planetBedRadius": 148.48934118136427,
+      "planetDepth": 8.866104823405465,
+      "lakeDatumDifference": 21.355446004769732,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.249267578125,
+      "direction": [
+        0.17621284772286885,
+        -0.4353983010516786,
+        -0.8828235110930774
+      ],
+      "waterRadius": 155.84638460353793,
+      "waterSource": "official-ocean",
+      "oceanRadius": 155.84638460353793,
+      "lakeMeshRadius": 135.9833069418303,
+      "planetBedRadius": 146.549260797599,
+      "planetDepth": 9.297123805938924,
+      "lakeDatumDifference": 19.846384603537928,
+      "overhead": {
+        "height": 13.203746230348997,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.252197265625,
+      "direction": [
+        0.14956604699856346,
+        -0.44572547178516403,
+        -0.882586427148705
+      ],
+      "waterRadius": 153.60427899741083,
+      "waterSource": "official-ocean",
+      "oceanRadius": 153.60427899741083,
+      "lakeMeshRadius": 135.9796135148289,
+      "planetBedRadius": 144.98757176974632,
+      "planetDepth": 8.616707227664506,
+      "lakeDatumDifference": 17.60427899741083,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.255126953125,
+      "direction": [
+        0.12271046046911799,
+        -0.45552210162254386,
+        -0.8817265777012949
+      ],
+      "waterRadius": 149.53657347902472,
+      "waterSource": "official-ocean",
+      "oceanRadius": 149.53657347902472,
+      "lakeMeshRadius": 135.981561151487,
+      "planetBedRadius": 144.20815078196435,
+      "planetDepth": 5.328422697060375,
+      "lakeDatumDifference": 13.536573479024725,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.258056640625,
+      "direction": [
+        0.09595877802249073,
+        -0.4653913263994967,
+        -0.8798879623182415
+      ],
+      "waterRadius": 145.73761020925878,
+      "waterSource": "official-ocean",
+      "oceanRadius": 145.73761020925878,
+      "lakeMeshRadius": 135.9822892470551,
+      "planetBedRadius": 141.72425609706318,
+      "planetDepth": 4.0133541121956,
+      "lakeDatumDifference": 9.737610209258776,
+      "overhead": {
+        "height": 23.312673861205894,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.260986328125,
+      "direction": [
+        0.06945956087339311,
+        -0.47596193046532986,
+        -0.876718660774933
+      ],
+      "waterRadius": 142.01957639901804,
+      "waterSource": "official-ocean",
+      "oceanRadius": 142.01957639901804,
+      "lakeMeshRadius": 135.98044178350492,
+      "planetBedRadius": 139.07148737732223,
+      "planetDepth": 2.9480890216958073,
+      "lakeDatumDifference": 6.019576399018035,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.263916015625,
+      "direction": [
+        0.0439505461908485,
+        -0.487523946168626,
+        -0.8720027244233223
+      ],
+      "waterRadius": 138.28568513820866,
+      "waterSource": "official-ocean",
+      "oceanRadius": 138.28568513820866,
+      "lakeMeshRadius": 135.98686954400497,
+      "planetBedRadius": 137.11730685229907,
+      "planetDepth": 1.168378285909597,
+      "lakeDatumDifference": 2.285685138208663,
+      "overhead": {
+        "height": 4.571457824095518,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": false
+    },
+    {
+      "u": 0.266845703125,
+      "direction": [
+        0.01957278048673797,
+        -0.50044941865986,
+        -0.8655445023954725
+      ],
+      "waterRadius": 135.98290631335112,
+      "waterSource": "lake-disc",
+      "oceanRadius": 134.69495517620354,
+      "lakeMeshRadius": 135.98290631335112,
+      "planetBedRadius": 135.3972986268976,
+      "planetDepth": 0.5856076864535282,
+      "lakeDatumDifference": -0.017093686648877338,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.269775390625,
+      "direction": [
+        -0.0043354007108811835,
+        -0.5148888900289967,
+        -0.8572459595853361
+      ],
+      "waterRadius": 135.99018043916328,
+      "waterSource": "lake-disc",
+      "oceanRadius": 131.51806706273453,
+      "lakeMeshRadius": 135.99018043916328,
+      "planetBedRadius": 133.72888789925744,
+      "planetDepth": 2.2612925399058383,
+      "lakeDatumDifference": -0.009819560836717756,
+      "overhead": {
+        "height": 33.06014313717125,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.272705078125,
+      "direction": [
+        -0.02677670041516177,
+        -0.5296444982557388,
+        -0.8477969767475603
+      ],
+      "waterRadius": 135.99079296987986,
+      "waterSource": "lake-disc",
+      "oceanRadius": 128.53158929035473,
+      "lakeMeshRadius": 135.99079296987986,
+      "planetBedRadius": 131.7810730257047,
+      "planetDepth": 4.209719944175163,
+      "lakeDatumDifference": -0.00920703012013746,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.275634765625,
+      "direction": [
+        -0.048539624105793405,
+        -0.5448341486152689,
+        -0.8371377756345386
+      ],
+      "waterRadius": 135.99430130433015,
+      "waterSource": "lake-disc",
+      "oceanRadius": 125.73733153484952,
+      "lakeMeshRadius": 135.99430130433015,
+      "planetBedRadius": 130.05022996525426,
+      "planetDepth": 5.94407133907589,
+      "lakeDatumDifference": -0.005698695669849485,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.278564453125,
+      "direction": [
+        -0.06960076934492306,
+        -0.5601142360519722,
+        -0.8254863872157495
+      ],
+      "waterRadius": 135.99021622718607,
+      "waterSource": "lake-disc",
+      "oceanRadius": 123.04504258106867,
+      "lakeMeshRadius": 135.99021622718607,
+      "planetBedRadius": 128.43960856267256,
+      "planetDepth": 7.550607664513507,
+      "lakeDatumDifference": -0.0097837728139325,
+      "overhead": {
+        "height": 33.05989018813585,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.281494140625,
+      "direction": [
+        -0.09021333773659573,
+        -0.5754222250370906,
+        -0.8128658048090021
+      ],
+      "waterRadius": 135.98806309919766,
+      "waterSource": "lake-disc",
+      "oceanRadius": 120.1566392830021,
+      "lakeMeshRadius": 135.98806309919766,
+      "planetBedRadius": 126.74897511482403,
+      "planetDepth": 9.239087984373626,
+      "lakeDatumDifference": -0.011936900802339778,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.284423828125,
+      "direction": [
+        -0.11038229486126709,
+        -0.590548599232935,
+        -0.7994173509032554
+      ],
+      "waterRadius": 135.98822024398197,
+      "waterSource": "lake-disc",
+      "oceanRadius": 117.47019238526744,
+      "lakeMeshRadius": 135.98822024398197,
+      "planetBedRadius": 125.07210607081022,
+      "planetDepth": 10.91611417317175,
+      "lakeDatumDifference": -0.011779756018029275,
+      "overhead": {
+        "height": 33.06183254911488,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.287353515625,
+      "direction": [
+        -0.13022928529672156,
+        -0.6054044475708865,
+        -0.7851915614119238
+      ],
+      "waterRadius": 135.9925862696788,
+      "waterSource": "lake-disc",
+      "oceanRadius": 114.98549634951613,
+      "lakeMeshRadius": 135.9925862696788,
+      "planetBedRadius": 123.06985330739033,
+      "planetDepth": 12.922732962288478,
+      "lakeDatumDifference": -0.00741373032118986,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.290283203125,
+      "direction": [
+        -0.14988037479392685,
+        -0.6199153887961243,
+        -0.7702212565135954
+      ],
+      "waterRadius": 135.99599847081916,
+      "waterSource": "lake-disc",
+      "oceanRadius": 112.58768570934903,
+      "lakeMeshRadius": 135.99599847081916,
+      "planetBedRadius": 121.23528961537288,
+      "planetDepth": 14.760708855446282,
+      "lakeDatumDifference": -0.00400152918084018,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.293212890625,
+      "direction": [
+        -0.1693037556801483,
+        -0.6339000115344472,
+        -0.7546568847424797
+      ],
+      "waterRadius": 135.99454152461428,
+      "waterSource": "lake-disc",
+      "oceanRadius": 110.39112442414358,
+      "lakeMeshRadius": 135.99454152461428,
+      "planetBedRadius": 119.55990265813266,
+      "planetDepth": 16.43463886648162,
+      "lakeDatumDifference": -0.00545847538572275,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.296142578125,
+      "direction": [
+        -0.18865591116267955,
+        -0.6473155965935687,
+        -0.7385062393711317
+      ],
+      "waterRadius": 135.99217798781027,
+      "waterSource": "lake-disc",
+      "oceanRadius": 108.36812064347045,
+      "lakeMeshRadius": 135.99217798781027,
+      "planetBedRadius": 116.1734903019549,
+      "planetDepth": 19.818687685855366,
+      "lakeDatumDifference": -0.00782201218973455,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.299072265625,
+      "direction": [
+        -0.20802625611458364,
+        -0.6600868797282952,
+        -0.7218104931195672
+      ],
+      "waterRadius": 135.99086198652785,
+      "waterSource": "lake-disc",
+      "oceanRadius": 106.65146913858213,
+      "lakeMeshRadius": 135.99086198652785,
+      "planetBedRadius": 113.90588810808562,
+      "planetDepth": 22.084973878442227,
+      "lakeDatumDifference": -0.009138013472153261,
+      "overhead": {
+        "height": 33.05914655806578,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.302001953125,
+      "direction": [
+        -0.2274189790703194,
+        -0.6722301661003047,
+        -0.7045475227004708
+      ],
+      "waterRadius": 135.99081386897916,
+      "waterSource": "lake-disc",
+      "oceanRadius": 105.25033868244489,
+      "lakeMeshRadius": 135.99081386897916,
+      "planetBedRadius": 112.44238445497547,
+      "planetDepth": 23.548429414003692,
+      "lakeDatumDifference": -0.009186131020840094,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.304931640625,
+      "direction": [
+        -0.24656620418164646,
+        -0.6837007722325195,
+        -0.6868466794009499
+      ],
+      "waterRadius": 135.9912698778861,
+      "waterSource": "lake-disc",
+      "oceanRadius": 103.98012313559083,
+      "lakeMeshRadius": 135.9912698778861,
+      "planetBedRadius": 111.11977134856349,
+      "planetDepth": 24.871498529322622,
+      "lakeDatumDifference": -0.008730122113888683,
+      "overhead": {
+        "height": 33.058921442077434,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.307861328125,
+      "direction": [
+        -0.2656012131880121,
+        -0.6946734480101737,
+        -0.6684944249451245
+      ],
+      "waterRadius": 135.9934812009849,
+      "waterSource": "lake-disc",
+      "oceanRadius": 103.19641648099966,
+      "lakeMeshRadius": 135.9934812009849,
+      "planetBedRadius": 109.90992369433529,
+      "planetDepth": 26.083557506649598,
+      "lakeDatumDifference": -0.006518799015111654,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.310791015625,
+      "direction": [
+        -0.28433918639433664,
+        -0.7051143494725078,
+        -0.6495883167426648
+      ],
+      "waterRadius": 135.99470721049912,
+      "waterSource": "lake-disc",
+      "oceanRadius": 102.56289405777825,
+      "lakeMeshRadius": 135.99470721049912,
+      "planetBedRadius": 109.99959017978036,
+      "planetDepth": 25.99511703071876,
+      "lakeDatumDifference": -0.005292789500884965,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.313720703125,
+      "direction": [
+        -0.30273131416643484,
+        -0.715067251400873,
+        -0.630105211371136
+      ],
+      "waterRadius": 135.998619614308,
+      "waterSource": "lake-disc",
+      "oceanRadius": 102.38903728542478,
+      "lakeMeshRadius": 135.998619614308,
+      "planetBedRadius": 111.03657218482155,
+      "planetDepth": 24.96204742948646,
+      "lakeDatumDifference": -0.0013803856919878399,
+      "overhead": {
+        "height": 33.051591262433334,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.316650390625,
+      "direction": [
+        -0.32073974156955076,
+        -0.7245790697066676,
+        -0.6100091719973707
+      ],
+      "waterRadius": 135.99564864571826,
+      "waterSource": "lake-disc",
+      "oceanRadius": 102.68437775886296,
+      "lakeMeshRadius": 135.99564864571826,
+      "planetBedRadius": 112.1525722692153,
+      "planetDepth": 23.843076376502964,
+      "lakeDatumDifference": -0.00435135428173794,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.319580078125,
+      "direction": [
+        -0.33824974068252944,
+        -0.7336599654820433,
+        -0.589347238881365
+      ],
+      "waterRadius": 135.99249024815347,
+      "waterSource": "lake-disc",
+      "oceanRadius": 103.05114739483356,
+      "lakeMeshRadius": 135.99249024815347,
+      "planetBedRadius": 113.34746076398068,
+      "planetDepth": 22.645029484172795,
+      "lakeDatumDifference": -0.007509751846527024,
+      "overhead": {
+        "height": 33.05752032220218,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.322509765625,
+      "direction": [
+        -0.3552174030311522,
+        -0.7423661702998977,
+        -0.5680783975632829
+      ],
+      "waterRadius": 135.99120125642796,
+      "waterSource": "lake-disc",
+      "oceanRadius": 103.92578625428412,
+      "lakeMeshRadius": 135.99120125642796,
+      "planetBedRadius": 114.84040903679966,
+      "planetDepth": 21.1507922196283,
+      "lakeDatumDifference": -0.008798743572043577,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.325439453125,
+      "direction": [
+        -0.37161732489873706,
+        -0.750771892098113,
+        -0.5461154913299253
+      ],
+      "waterRadius": 135.99121161031837,
+      "waterSource": "lake-disc",
+      "oceanRadius": 104.91724466033175,
+      "lakeMeshRadius": 135.99121161031837,
+      "planetBedRadius": 116.43050203651411,
+      "planetDepth": 19.56070957380426,
+      "lakeDatumDifference": -0.00878838968162654,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.328369140625,
+      "direction": [
+        -0.38721673419243036,
+        -0.7588623678399883,
+        -0.5236326073093951
+      ],
+      "waterRadius": 135.99105192580447,
+      "waterSource": "lake-disc",
+      "oceanRadius": 106.3892335409523,
+      "lakeMeshRadius": 135.99105192580447,
+      "planetBedRadius": 116.99314764994503,
+      "planetDepth": 18.99790427585944,
+      "lakeDatumDifference": -0.008948074195529898,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.331298828125,
+      "direction": [
+        -0.4019973668370226,
+        -0.7667653599925468,
+        -0.5004687800168962
+      ],
+      "waterRadius": 135.99011025913165,
+      "waterSource": "lake-disc",
+      "oceanRadius": 108.09417063899224,
+      "lakeMeshRadius": 135.99011025913165,
+      "planetBedRadius": 118.42023635212507,
+      "planetDepth": 17.56987390700658,
+      "lakeDatumDifference": -0.009889740868345598,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.334228515625,
+      "direction": [
+        -0.41580428173175943,
+        -0.7745627720331013,
+        -0.47661232828571826
+      ],
+      "waterRadius": 135.99119592790888,
+      "waterSource": "lake-disc",
+      "oceanRadius": 109.96547721352137,
+      "lakeMeshRadius": 135.99119592790888,
+      "planetBedRadius": 121.0047094400991,
+      "planetDepth": 14.98648648780977,
+      "lakeDatumDifference": -0.008804072091123771,
+      "overhead": {
+        "height": 33.058856758377715,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.337158203125,
+      "direction": [
+        -0.4281821381282299,
+        -0.7824448973184965,
+        -0.4521504608514568
+      ],
+      "waterRadius": 135.9906164271474,
+      "waterSource": "lake-disc",
+      "oceanRadius": 111.98798657817132,
+      "lakeMeshRadius": 135.9906164271474,
+      "planetBedRadius": 123.71920092151313,
+      "planetDepth": 12.271415505634252,
+      "lakeDatumDifference": -0.009383572852613042,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.340087890625,
+      "direction": [
+        -0.43873291677475235,
+        -0.7907128775448957,
+        -0.42695031680862944
+      ],
+      "waterRadius": 135.991451624282,
+      "waterSource": "lake-disc",
+      "oceanRadius": 114.07238055314411,
+      "lakeMeshRadius": 135.991451624282,
+      "planetBedRadius": 125.55312314933923,
+      "planetDepth": 10.438328474942779,
+      "lakeDatumDifference": -0.00854837571799294,
+      "overhead": {
+        "height": 33.05863369864085,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.343017578125,
+      "direction": [
+        -0.44758815480269426,
+        -0.7992456814011675,
+        -0.40108750222601436
+      ],
+      "waterRadius": 135.9930282728574,
+      "waterSource": "lake-disc",
+      "oceanRadius": 116.37486768905873,
+      "lakeMeshRadius": 135.9930282728574,
+      "planetBedRadius": 125.4718063278094,
+      "planetDepth": 10.521221945047998,
+      "lakeDatumDifference": -0.006971727142598638,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.345947265625,
+      "direction": [
+        -0.45508361495955735,
+        -0.8077110332002937,
+        -0.3748356843229515
+      ],
+      "waterRadius": 135.99491206721862,
+      "waterSource": "lake-disc",
+      "oceanRadius": 118.83839518995666,
+      "lakeMeshRadius": 135.99491206721862,
+      "planetBedRadius": 125.49305796879224,
+      "planetDepth": 10.501854098426378,
+      "lakeDatumDifference": -0.005087932781378868,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.348876953125,
+      "direction": [
+        -0.46166177405076186,
+        -0.8158539148670566,
+        -0.34821084988322937
+      ],
+      "waterRadius": 135.99389781358016,
+      "waterSource": "lake-disc",
+      "oceanRadius": 121.31780313902121,
+      "lakeMeshRadius": 135.99389781358016,
+      "planetBedRadius": 126.1008020787555,
+      "planetDepth": 9.893095734824655,
+      "lakeDatumDifference": -0.006102186419838063,
+      "overhead": {
+        "height": 11.820125602139399,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.351806640625,
+      "direction": [
+        -0.4677412569126454,
+        -0.8233933772306311,
+        -0.3213120958110888
+      ],
+      "waterRadius": 135.9927517932502,
+      "waterSource": "lake-disc",
+      "oceanRadius": 123.94860422736782,
+      "lakeMeshRadius": 135.9927517932502,
+      "planetBedRadius": 128.9316932927759,
+      "planetDepth": 7.061058500474303,
+      "lakeDatumDifference": -0.007248206749807196,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.354736328125,
+      "direction": [
+        -0.4737967472946743,
+        -0.83006374897179,
+        -0.2941272086969912
+      ],
+      "waterRadius": 135.98865222403515,
+      "waterSource": "lake-disc",
+      "oceanRadius": 126.60273364578087,
+      "lakeMeshRadius": 135.98865222403515,
+      "planetBedRadius": 132.03012811022424,
+      "planetDepth": 3.9585241138109097,
+      "lakeDatumDifference": -0.01134777596485037,
+      "overhead": {
+        "height": 32.858696974236494,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.357666015625,
+      "direction": [
+        -0.48033546450701625,
+        -0.8355151687187948,
+        -0.26681874817492185
+      ],
+      "waterRadius": 135.98516975321849,
+      "waterSource": "lake-disc",
+      "oceanRadius": 129.46196732249183,
+      "lakeMeshRadius": 135.98516975321849,
+      "planetBedRadius": 134.20505452078106,
+      "planetDepth": 1.7801152324374243,
+      "lakeDatumDifference": -0.014830246781514234,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.360595703125,
+      "direction": [
+        -0.4880167943937996,
+        -0.8393409601335865,
+        -0.23947100248595693
+      ],
+      "waterRadius": 135.98321581153493,
+      "waterSource": "lake-disc",
+      "oceanRadius": 132.38835546722746,
+      "lakeMeshRadius": 135.98321581153493,
+      "planetBedRadius": 134.12465166707477,
+      "planetDepth": 1.8585641444601606,
+      "lakeDatumDifference": -0.016784188465067018,
+      "overhead": {
+        "height": 32.48151775216684,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.363525390625,
+      "direction": [
+        -0.4975045112245012,
+        -0.8410430116352674,
+        -0.21245214494269038
+      ],
+      "waterRadius": 135.9872904536955,
+      "waterSource": "lake-disc",
+      "oceanRadius": 135.75250806027498,
+      "lakeMeshRadius": 135.9872904536955,
+      "planetBedRadius": 134.16662769667835,
+      "planetDepth": 1.8206627570171463,
+      "lakeDatumDifference": -0.012709546304506603,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.366455078125,
+      "direction": [
+        -0.5088680635559307,
+        -0.840515926992976,
+        -0.18597384322526542
+      ],
+      "waterRadius": 139.60828059581067,
+      "waterSource": "official-ocean",
+      "oceanRadius": 139.60828059581067,
+      "lakeMeshRadius": 135.99217580687412,
+      "planetBedRadius": 136.9166046493547,
+      "planetDepth": 2.691675946455973,
+      "lakeDatumDifference": 3.608280595810669,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.369384765625,
+      "direction": [
+        -0.5213951092895155,
+        -0.8381147600458563,
+        -0.16034584186143042
+      ],
+      "waterRadius": 144.47653660877998,
+      "waterSource": "official-ocean",
+      "oceanRadius": 144.47653660877998,
+      "lakeMeshRadius": 135.9955222856929,
+      "planetBedRadius": 140.25509001699174,
+      "planetDepth": 4.2214465917882364,
+      "lakeDatumDifference": 8.47653660877998,
+      "overhead": {
+        "height": 23.36283467150122,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.372314453125,
+      "direction": [
+        -0.5349273375437048,
+        -0.8340035229387258,
+        -0.1352437328462867
+      ],
+      "waterRadius": 149.3745115365524,
+      "waterSource": "official-ocean",
+      "oceanRadius": 149.3745115365524,
+      "lakeMeshRadius": 135.98978173621285,
+      "planetBedRadius": 143.37233906663326,
+      "planetDepth": 6.002172469919145,
+      "lakeDatumDifference": 13.374511536552404,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.375244140625,
+      "direction": [
+        -0.5492521128532841,
+        -0.8282691595832188,
+        -0.11087071664561353
+      ],
+      "waterRadius": 153.39557011815896,
+      "waterSource": "official-ocean",
+      "oceanRadius": 153.39557011815896,
+      "lakeMeshRadius": 135.98195171596774,
+      "planetBedRadius": 146.7291275709971,
+      "planetDepth": 6.666442547161864,
+      "lakeDatumDifference": 17.395570118158957,
+      "overhead": {
+        "height": 13.948178128782018,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": true
+    },
+    {
+      "u": 0.378173828125,
+      "direction": [
+        -0.5642118337515889,
+        -0.821002967806006,
+        -0.08728764808608198
+      ],
+      "waterRadius": 156.45076685851464,
+      "waterSource": "official-ocean",
+      "oceanRadius": 156.45076685851464,
+      "lakeMeshRadius": 135.97729199167378,
+      "planetBedRadius": 149.85477413175863,
+      "planetDepth": 6.595992726756009,
+      "lakeDatumDifference": 20.45076685851464,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.381103515625,
+      "direction": [
+        -0.5797030600125015,
+        -0.8122744001984475,
+        -0.06445665981412971
+      ],
+      "waterRadius": 158.44604381672983,
+      "waterSource": "official-ocean",
+      "oceanRadius": 158.44604381672983,
+      "lakeMeshRadius": 135.97878929990105,
+      "planetBedRadius": 151.20530104873632,
+      "planetDepth": 7.24074276799351,
+      "lakeDatumDifference": 22.446043816729826,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.384033203125,
+      "direction": [
+        -0.5955808797805828,
+        -0.8021710607294119,
+        -0.04248535004018512
+      ],
+      "waterRadius": 159.69785348186292,
+      "waterSource": "official-ocean",
+      "oceanRadius": 159.69785348186292,
+      "lakeMeshRadius": 135.98822301312353,
+      "planetBedRadius": 151.26149127545634,
+      "planetDepth": 8.436362206406585,
+      "lakeDatumDifference": 23.69785348186292,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.386962890625,
+      "direction": [
+        -0.611930887435763,
+        -0.7906186960296697,
+        -0.021509683643057106
+      ],
+      "waterRadius": 160.1125184122694,
+      "waterSource": "official-ocean",
+      "oceanRadius": 160.1125184122694,
+      "lakeMeshRadius": 135.97495009638894,
+      "planetBedRadius": 155.01526437636136,
+      "planetDepth": 5.097254035908037,
+      "lakeDatumDifference": 24.112518412269395,
+      "overhead": null,
+      "mastClearAtCenterline": null
+    },
+    {
+      "u": 0.389892578125,
+      "direction": [
+        -0.6287351979263622,
+        -0.7776175528913624,
+        -0.0017298334450552163
+      ],
+      "waterRadius": 160.3692593627747,
+      "waterSource": "official-ocean",
+      "oceanRadius": 160.3692593627747,
+      "lakeMeshRadius": 135.9744046090264,
+      "planetBedRadius": 159.0862934161823,
+      "planetDepth": 1.2829659465924124,
+      "lakeDatumDifference": 24.3692593627747,
+      "overhead": {
+        "height": 5.988351067073012,
+        "mesh": "christchurch-tram-system"
+      },
+      "mastClearAtCenterline": false
+    }
+  ],
+  "samplingLimit": "Bridge radial centerline rays and planet bed only; not full hull swept collision or piers/banks. Boat route absent in main scene; no successful lake passage claimed.",
+  "cityTrack": {
+    "samples": 647,
+    "minimumRadius": {
+      "u": 0.362060546875,
+      "radius": 41.978229038480954,
+      "point": [
+        -83.14533819934711,
+        -141.89150988184664,
+        -38.13661661306894
+      ]
+    },
+    "worst": [
+      {
+        "u": 0.362060546875,
+        "radius": 41.978229038480954,
+        "point": [
+          -83.14533819934711,
+          -141.89150988184664,
+          -38.13661661306894
+        ]
+      },
+      {
+        "u": 0.36181640625,
+        "radius": 42.802067061806135,
+        "point": [
+          -83.02192875062654,
+          -141.8809735931181,
+          -38.52108541921696
+        ]
+      },
+      {
+        "u": 0.3623046875,
+        "radius": 43.218167354222956,
+        "point": [
+          -83.27131180712932,
+          -141.8991995003793,
+          -37.7528140370564
+        ]
+      },
+      {
+        "u": 0.363525390625,
+        "radius": 43.47182339166193,
+        "point": [
+          -83.93649963784408,
+          -141.89661570662412,
+          -35.84387474829215
+        ]
+      },
+      {
+        "u": 0.362548828125,
+        "radius": 44.24554737670219,
+        "point": [
+          -83.3997610898505,
+          -141.9040849404533,
+          -37.36958130539111
+        ]
+      },
+      {
+        "u": 0.36376953125,
+        "radius": 44.290672903991776,
+        "point": [
+          -84.0775973683818,
+          -141.8879336245808,
+          -35.461205096676366
+        ]
+      },
+      {
+        "u": 0.360595703125,
+        "radius": 44.482498696892144,
+        "point": [
+          -82.4393330210457,
+          -141.7875567512152,
+          -40.453176918524285
+        ]
+      },
+      {
+        "u": 0.361572265625,
+        "radius": 44.60423119495547,
+        "point": [
+          -82.90098309018414,
+          -141.86763236066173,
+          -38.906331657364724
+        ]
+      }
+    ],
+    "laneRadii": [
+      {
+        "name": "red",
+        "samples": 4096,
+        "radius": 40.62390753446071,
+        "u": 0.362548828125
+      },
+      {
+        "name": "red",
+        "samples": 8192,
+        "radius": 39.69010999088691,
+        "u": 0.3626708984375
+      },
+      {
+        "name": "blue",
+        "samples": 4096,
+        "radius": 39.33175362917947,
+        "u": 0.36083984375
+      },
+      {
+        "name": "blue",
+        "samples": 8192,
+        "radius": 38.366683224866755,
+        "u": 0.3609619140625
+      }
+    ]
+  },
+  "meshInventory": [
+    {
+      "name": "planet-surface",
+      "vertices": 45765
+    },
+    {
+      "name": "moon-lake-orb-body",
+      "vertices": 1740
+    },
+    {
+      "name": "moon-lake-orb-earthshine",
+      "vertices": 74
+    },
+    {
+      "name": "planet-v8-curved-ocean",
+      "vertices": 18504
+    },
+    {
+      "name": "planet-v8-cloud-impostors",
+      "vertices": 4
+    },
+    {
+      "name": "swamp-lake-floor",
+      "vertices": 144
+    },
+    {
+      "name": "mossy-terrain",
+      "vertices": 1008
+    },
+    {
+      "name": "mossy-terrain",
+      "vertices": 4225
+    },
+    {
+      "name": "canyon-shoulder--1",
+      "vertices": 8220
+    },
+    {
+      "name": "canyon-shoulder-1",
+      "vertices": 8220
+    }
+  ],
+  "boatState": null,
+  "createdAt": "2026-09-22T07:34:05.049Z",
+  "errors": []
+}

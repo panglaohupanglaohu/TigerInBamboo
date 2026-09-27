@@ -1,0 +1,1831 @@
+{
+  "invalidVertices": 0,
+  "invalidExamples": [],
+  "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+  "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+  "boatScale": 1.7,
+  "waterlineRootOffset": 0.25,
+  "minimumLocalY": -1.0786825083493212,
+  "requiredGeometricDraft": 1.3286825083493212,
+  "maxHorizontalRadius": 6.188000178337097,
+  "samples": 121,
+  "verticesInspected": 24161522,
+  "rows": [
+    {
+      "frame": 60,
+      "lowest": {
+        "y": -0.5193637958604947,
+        "point": [
+          -3.775740539005237,
+          -0.5193637958604947,
+          3.7040625981188318
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 60.5,
+      "lowest": {
+        "y": -0.5200218480683677,
+        "point": [
+          -3.798737595010988,
+          -0.5200218480683677,
+          3.694410534627767
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 61,
+      "lowest": {
+        "y": -0.5205623604236118,
+        "point": [
+          -3.8216695954673576,
+          -0.5205623604236118,
+          3.684596869798649
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 61.5,
+      "lowest": {
+        "y": -0.5207805928335026,
+        "point": [
+          -3.8326795183295967,
+          -0.5207805928335026,
+          3.6798182605224166
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 62,
+      "lowest": {
+        "y": -0.5209717884275651,
+        "point": [
+          -3.8436739973004967,
+          -0.5209717884275651,
+          3.6750024760044386
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 62.5,
+      "lowest": {
+        "y": -0.521021998422887,
+        "point": [
+          -3.8468460944384395,
+          -0.521021998422887,
+          3.6736044783248776
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 63,
+      "lowest": {
+        "y": -0.5210699280339123,
+        "point": [
+          -3.850016799331085,
+          -0.5210699280339123,
+          3.672203394387599
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 63.5,
+      "lowest": {
+        "y": -0.5210733939543353,
+        "point": [
+          -3.850247408449405,
+          -0.5210733939543353,
+          3.672100928769027
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 64,
+      "lowest": {
+        "y": -0.5210768436622952,
+        "point": [
+          -3.8504776173225346,
+          -0.5210768436622952,
+          3.6719988737184233
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 64.5,
+      "lowest": {
+        "y": -0.5211128393811846,
+        "point": [
+          -3.8529531626923763,
+          -0.5211128393811846,
+          3.67090224274481
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 65,
+      "lowest": {
+        "y": -0.5211474352551915,
+        "point": [
+          -3.855428196356339,
+          -0.5211474352551915,
+          3.6698030327229265
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 65.5,
+      "lowest": {
+        "y": -0.5212688909131884,
+        "point": [
+          -3.8650902555478224,
+          -0.5212688909131884,
+          3.6654921709387125
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 66,
+      "lowest": {
+        "y": -0.5213694188142017,
+        "point": [
+          -3.8747397288012877,
+          -0.5213694188142017,
+          3.6611525438114563
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 66.5,
+      "lowest": {
+        "y": -0.5215183094936466,
+        "point": [
+          -3.895703249956412,
+          -0.5215183094936466,
+          3.6516023712857506
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 67,
+      "lowest": {
+        "y": -0.5215687003387502,
+        "point": [
+          -3.9166048856054356,
+          -0.5215687003387502,
+          3.641916357252996
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 67.5,
+      "lowest": {
+        "y": -0.5215054004338199,
+        "point": [
+          -3.8930043897261633,
+          -0.5215054004338199,
+          -3.6528405806611066
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 68,
+      "lowest": {
+        "y": -0.5215676360390697,
+        "point": [
+          -3.9130784353797745,
+          -0.5215676360390697,
+          -3.643562413232458
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 68.5,
+      "lowest": {
+        "y": -0.5214737729887661,
+        "point": [
+          -3.9471251859863146,
+          -0.5214737729887661,
+          -3.6274691156365315
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 69,
+      "lowest": {
+        "y": -0.5211193964247229,
+        "point": [
+          -3.9809974398237244,
+          -0.5211193964247229,
+          -3.611015352726921
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 69.5,
+      "lowest": {
+        "y": -0.5201705513959535,
+        "point": [
+          -4.030005944310236,
+          -0.5201705513959535,
+          -3.5863851324791933
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 70,
+      "lowest": {
+        "y": -0.5186782412904305,
+        "point": [
+          -4.078613172090802,
+          -0.5186782412904305,
+          -3.5609975702479617
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 70.5,
+      "lowest": {
+        "y": -0.5159958416415308,
+        "point": [
+          -4.1415634212998755,
+          -0.5159958416415308,
+          -3.5265844749365343
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 71,
+      "lowest": {
+        "y": -0.5124062173691443,
+        "point": [
+          -4.20375381160574,
+          -0.5124062173691443,
+          -3.4908959861074713
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 71.5,
+      "lowest": {
+        "y": -0.5070740527170565,
+        "point": [
+          -4.277569704926089,
+          -0.5070740527170565,
+          -3.446103831554657
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 72,
+      "lowest": {
+        "y": -0.5004707372103471,
+        "point": [
+          -4.3501539936452165,
+          -0.5004707372103471,
+          -3.3995042284348096
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 72.5,
+      "lowest": {
+        "y": -0.4918866802102907,
+        "point": [
+          -4.430060636878298,
+          -0.4918866802102907,
+          -3.3448152442943293
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 73,
+      "lowest": {
+        "y": -0.4817701634178493,
+        "point": [
+          -4.5082276751975146,
+          -0.4817701634178493,
+          -3.287919163036871
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 73.5,
+      "lowest": {
+        "y": -0.46997206408902437,
+        "point": [
+          -4.588472116254835,
+          -0.46997206408902437,
+          -3.2253124685496752
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 74,
+      "lowest": {
+        "y": -0.45656580340337927,
+        "point": [
+          -4.666569005782991,
+          -0.45656580340337927,
+          -3.160357553729436
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 74.5,
+      "lowest": {
+        "y": -0.44237987268691165,
+        "point": [
+          -4.741383119736036,
+          -0.44237987268691165,
+          -3.09349724053003
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 75,
+      "lowest": {
+        "y": -0.42672123169173204,
+        "point": [
+          -4.813889507581724,
+          -0.42672123169173204,
+          -3.02445834900511
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 75.5,
+      "lowest": {
+        "y": -0.41165119075949613,
+        "point": [
+          -4.878438449579864,
+          -0.41165119075949613,
+          -2.9584901090528635
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 76,
+      "lowest": {
+        "y": -0.3954130408298001,
+        "point": [
+          -4.940859925263821,
+          -0.3954130408298001,
+          -2.8907750192380255
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 76.5,
+      "lowest": {
+        "y": -0.38131742061463764,
+        "point": [
+          -4.991867600277552,
+          -0.38131742061463764,
+          -2.8317011631308997
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 77,
+      "lowest": {
+        "y": -0.3664388443074264,
+        "point": [
+          -5.041246882301964,
+          -0.3664388443074264,
+          -2.771447069962837
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 77.5,
+      "lowest": {
+        "y": -0.35513888505061886,
+        "point": [
+          -5.077104121265137,
+          -0.35513888505061886,
+          -2.7252140375543616
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 78,
+      "lowest": {
+        "y": -0.3434236673572036,
+        "point": [
+          -5.111999501630882,
+          -0.3434236673572036,
+          -2.6783522863233538
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 78.5,
+      "lowest": {
+        "y": -0.33638124890449167,
+        "point": [
+          -5.132363784840705,
+          -0.33638124890449167,
+          -2.6499034067634137
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 79,
+      "lowest": {
+        "y": -0.3405925748224947,
+        "point": [
+          -5.1537663750169616,
+          -0.3405925748224947,
+          2.603651922540497
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 79.5,
+      "lowest": {
+        "y": -0.37779828086671213,
+        "point": [
+          -5.123928790871353,
+          -0.37779828086671213,
+          2.611789115041659
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 80,
+      "lowest": {
+        "y": -0.41472334866554633,
+        "point": [
+          -5.093577870990917,
+          -0.41472334866554633,
+          2.6192801539903274
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 80.5,
+      "lowest": {
+        "y": -0.4566083227564648,
+        "point": [
+          -5.047803295067739,
+          -0.4566083227564648,
+          2.645996728059768
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 81,
+      "lowest": {
+        "y": -0.49798545156840807,
+        "point": [
+          -5.000932034658164,
+          -0.49798545156840807,
+          2.6715794025709956
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 81.5,
+      "lowest": {
+        "y": -0.5433112332593452,
+        "point": [
+          -4.939043759204484,
+          -0.5433112332593452,
+          2.7126274433517925
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 82,
+      "lowest": {
+        "y": -0.5876866509915729,
+        "point": [
+          -4.875352245417202,
+          -0.5876866509915729,
+          2.751918057288383
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 82.5,
+      "lowest": {
+        "y": -0.6342854343172387,
+        "point": [
+          -4.798165539979889,
+          -0.6342854343172387,
+          2.8017294832808344
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 83,
+      "lowest": {
+        "y": -0.6793440564274028,
+        "point": [
+          -4.718592843265085,
+          -0.6793440564274028,
+          2.849146787028651
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 83.5,
+      "lowest": {
+        "y": -0.7244307783026082,
+        "point": [
+          -4.628572850375448,
+          -0.7244307783026082,
+          2.9017588363377946
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 84,
+      "lowest": {
+        "y": -0.7673809493122385,
+        "point": [
+          -4.535904346907281,
+          -0.7673809493122385,
+          2.951481013026572
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 84.5,
+      "lowest": {
+        "y": -0.8081494278885231,
+        "point": [
+          -4.437413899211399,
+          -0.8081494278885231,
+          3.001514112948056
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 85,
+      "lowest": {
+        "y": -0.8463521569770392,
+        "point": [
+          -4.336398648617864,
+          -0.8463521569770392,
+          3.048442542719381
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 85.5,
+      "lowest": {
+        "y": -0.8806699117179959,
+        "point": [
+          -4.23532901837282,
+          -0.8806699117179959,
+          3.0918887981098475
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 86,
+      "lowest": {
+        "y": -0.9122964943142734,
+        "point": [
+          -4.132168840114212,
+          -0.9122964943142734,
+          3.132362572318562
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 86.5,
+      "lowest": {
+        "y": -0.9392081556496663,
+        "point": [
+          -4.035048964642737,
+          -0.9392081556496663,
+          3.166964458524321
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 87,
+      "lowest": {
+        "y": -0.9636468331846466,
+        "point": [
+          -3.936418080486526,
+          -0.9636468331846466,
+          3.199035366225701
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 87.5,
+      "lowest": {
+        "y": -0.9834702307424724,
+        "point": [
+          -3.8492962178424053,
+          -0.9834702307424724,
+          3.2242146146273885
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 88,
+      "lowest": {
+        "y": -1.0013083518747217,
+        "point": [
+          -3.7612205850930214,
+          -1.0013083518747217,
+          3.247489823077929
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 88.5,
+      "lowest": {
+        "y": -1.0153022866573675,
+        "point": [
+          -3.6886887067861713,
+          -1.0153022866573675,
+          3.263946321597419
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 89,
+      "lowest": {
+        "y": -1.0279187677438453,
+        "point": [
+          -3.6156336568427543,
+          -1.0279187677438453,
+          3.27915379547584
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 89.5,
+      "lowest": {
+        "y": -1.0376994612302115,
+        "point": [
+          -3.560229325480768,
+          -1.0376994612302115,
+          3.2883598549050195
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 90,
+      "lowest": {
+        "y": -1.0466723527716342,
+        "point": [
+          -3.504577913641793,
+          -1.0466723527716342,
+          3.2968689108969365
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 90.5,
+      "lowest": {
+        "y": -1.0536397217847033,
+        "point": [
+          -3.4666203227404186,
+          -1.0536397217847033,
+          3.300644769979978
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 91,
+      "lowest": {
+        "y": -1.0602235928304469,
+        "point": [
+          -3.4285644873498717,
+          -1.0602235928304469,
+          3.304104428904287
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 91.5,
+      "lowest": {
+        "y": -1.0652062102692315,
+        "point": [
+          -3.4063244758623132,
+          -1.0652062102692315,
+          3.3043763588110795
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 92,
+      "lowest": {
+        "y": -1.0700534465462168,
+        "point": [
+          -3.3840536885591725,
+          -1.0700534465462168,
+          3.304541696331135
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 92.5,
+      "lowest": {
+        "y": -1.073247977195232,
+        "point": [
+          -3.3741413773280065,
+          -1.073247977195232,
+          3.303263257482246
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 93,
+      "lowest": {
+        "y": -1.0764132367483426,
+        "point": [
+          -3.364222663187016,
+          -1.0764132367483426,
+          3.301962928261354
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 93.5,
+      "lowest": {
+        "y": -1.0775479146376732,
+        "point": [
+          -3.362085479019593,
+          -1.0775479146376732,
+          3.301121807933884
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 94,
+      "lowest": {
+        "y": -1.0786808281550178,
+        "point": [
+          -3.3599478657285258,
+          -1.0786808281550178,
+          3.300279381236514
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 94.5,
+      "lowest": {
+        "y": -1.077403760440315,
+        "point": [
+          -3.3624335962204497,
+          -1.077403760440315,
+          -3.301209456411476
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 95,
+      "lowest": {
+        "y": -1.0786825083493212,
+        "point": [
+          -3.3599462892121705,
+          -1.0786825083493212,
+          -3.300278237845475
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 95.5,
+      "lowest": {
+        "y": -1.0774452258399023,
+        "point": [
+          -3.3604235354965093,
+          -1.0774452258399023,
+          -3.301669537494473
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 96,
+      "lowest": {
+        "y": -1.0762069819820699,
+        "point": [
+          -3.3609005532864438,
+          -1.0762069819820699,
+          -3.3030601686326793
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 96.5,
+      "lowest": {
+        "y": -1.0719233196029732,
+        "point": [
+          -3.3591447982253198,
+          -1.0719233196029732,
+          -3.3087151627397904
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 97,
+      "lowest": {
+        "y": -1.0676264904237545,
+        "point": [
+          -3.357384232115695,
+          -1.0676264904237545,
+          -3.3143587230071425
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 97.5,
+      "lowest": {
+        "y": -1.0597910003078044,
+        "point": [
+          -3.348669242205884,
+          -1.0597910003078044,
+          -3.325928350017068
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 98,
+      "lowest": {
+        "y": -1.0518900840360588,
+        "point": [
+          -3.339932820939435,
+          -1.0518900840360588,
+          -3.337437106320115
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 98.5,
+      "lowest": {
+        "y": -1.0399539479508213,
+        "point": [
+          -3.320465621477655,
+          -1.0399539479508213,
+          -3.3559768794163203
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 99,
+      "lowest": {
+        "y": -1.027811189593303,
+        "point": [
+          -3.30093854381571,
+          -1.027811189593303,
+          -3.3743184366558125
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 99.5,
+      "lowest": {
+        "y": -1.0110856648559732,
+        "point": [
+          -3.268233440428116,
+          -1.0110856648559732,
+          -3.3999905790113707
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 100,
+      "lowest": {
+        "y": -0.9938852340029892,
+        "point": [
+          -3.2354094039294328,
+          -0.9938852340029892,
+          -3.425193046303793
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 100.5,
+      "lowest": {
+        "y": -0.9715132560844376,
+        "point": [
+          -3.188581655639397,
+          -0.9715132560844376,
+          -3.457097606610877
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 101,
+      "lowest": {
+        "y": -0.9482761608563914,
+        "point": [
+          -3.1415780213746385,
+          -0.9482761608563914,
+          -3.4881129295158235
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 101.5,
+      "lowest": {
+        "y": -0.9193767913632501,
+        "point": [
+          -3.0815435041818175,
+          -0.9193767913632501,
+          -3.524343236210034
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 102,
+      "lowest": {
+        "y": -0.8891636978470695,
+        "point": [
+          -3.0213183724982033,
+          -0.8891636978470695,
+          -3.5591572031072025
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 102.5,
+      "lowest": {
+        "y": -0.853154354830279,
+        "point": [
+          -2.950854970910732,
+          -0.853154354830279,
+          -3.5971251641514326
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 103,
+      "lowest": {
+        "y": -0.8154354111006605,
+        "point": [
+          -2.880261068366894,
+          -0.8154354111006605,
+          -3.6331405323347847
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 103.5,
+      "lowest": {
+        "y": -0.7724675405031113,
+        "point": [
+          -2.8038376027545677,
+          -0.7724675405031113,
+          -3.6701119401070583
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 104,
+      "lowest": {
+        "y": -0.7275692055380851,
+        "point": [
+          -2.727415961298526,
+          -0.7275692055380851,
+          -3.7047174093992714
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 104.5,
+      "lowest": {
+        "y": -0.6789071725423569,
+        "point": [
+          -2.650730720389025,
+          -0.6789071725423569,
+          -3.7384173513118317
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 105,
+      "lowest": {
+        "y": -0.6283511615812608,
+        "point": [
+          -2.5741998849546266,
+          -0.6283511615812608,
+          -3.7695847954956125
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 105.5,
+      "lowest": {
+        "y": -0.5765096405966119,
+        "point": [
+          -2.503478339919184,
+          -0.5765096405966119,
+          -3.798692947536335
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 106,
+      "lowest": {
+        "y": -0.5230692659829891,
+        "point": [
+          -2.433005378051512,
+          -0.5230692659829891,
+          -3.8254153408542133
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 106.5,
+      "lowest": {
+        "y": -0.47157990631260227,
+        "point": [
+          -2.374214911070517,
+          -0.47157990631260227,
+          -3.849775356363445
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 107,
+      "lowest": {
+        "y": -0.41895637514410256,
+        "point": [
+          -2.3156518887379285,
+          -0.41895637514410256,
+          -3.8721815020275345
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 107.5,
+      "lowest": {
+        "y": -0.37176037444674875,
+        "point": [
+          -2.2738735197685687,
+          -0.37176037444674875,
+          -3.89267631834904
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 108,
+      "lowest": {
+        "y": -0.3239135745657767,
+        "point": [
+          -2.232192865342192,
+          -0.3239135745657767,
+          -3.9118161539815874
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 108.5,
+      "lowest": {
+        "y": -0.28453122404562026,
+        "point": [
+          -2.211278832733468,
+          -0.28453122404562026,
+          -3.92993891011421
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 109,
+      "lowest": {
+        "y": -0.2448393402353011,
+        "point": [
+          -2.1903003915541612,
+          -0.2448393402353011,
+          -3.947295429258413
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 109.5,
+      "lowest": {
+        "y": -0.21556463999985756,
+        "point": [
+          -2.1928149719961767,
+          -0.21556463999985756,
+          -3.964552831245579
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 110,
+      "lowest": {
+        "y": -0.18605882026946732,
+        "point": [
+          -2.1951720878748624,
+          -0.18605882026946732,
+          -3.9814349544782357
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 110.5,
+      "lowest": {
+        "y": -0.1962966767358655,
+        "point": [
+          -2.2533661571000883,
+          -0.1962966767358655,
+          3.9911158308451755
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 111,
+      "lowest": {
+        "y": -0.21000409126919645,
+        "point": [
+          -2.286105757581109,
+          -0.21000409126919645,
+          3.991591387182183
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 111.5,
+      "lowest": {
+        "y": -0.2322321749135151,
+        "point": [
+          -2.341504425263937,
+          -0.2322321749135151,
+          3.991808801296287
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 112,
+      "lowest": {
+        "y": -0.2537342257856284,
+        "point": [
+          -2.39718490608869,
+          -0.2537342257856284,
+          3.9910936258815886
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 112.5,
+      "lowest": {
+        "y": -0.28084453907266355,
+        "point": [
+          -2.47205874520762,
+          -0.28084453907266355,
+          3.988967087106195
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 113,
+      "lowest": {
+        "y": -0.30665162197879775,
+        "point": [
+          -2.547325921482191,
+          -0.30665162197879775,
+          3.985164634330298
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 113.5,
+      "lowest": {
+        "y": -0.33484309287906516,
+        "point": [
+          -2.63682121689058,
+          -0.33484309287906516,
+          3.9788865738433956
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 114,
+      "lowest": {
+        "y": -0.36120886105492594,
+        "point": [
+          -2.726676227337275,
+          -0.36120886105492594,
+          3.97025320594707
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 114.5,
+      "lowest": {
+        "y": -0.3871042205465268,
+        "point": [
+          -2.824601687532913,
+          -0.3871042205465268,
+          3.958621502279158
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 115,
+      "lowest": {
+        "y": -0.4108534126437265,
+        "point": [
+          -2.9227007336172246,
+          -0.4108534126437265,
+          3.944205281940955
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 115.5,
+      "lowest": {
+        "y": -0.43214759042911804,
+        "point": [
+          -3.0221366066073174,
+          -0.43214759042911804,
+          3.927137106640395
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 116,
+      "lowest": {
+        "y": -0.45126005626103716,
+        "point": [
+          -3.1214849500845023,
+          -0.45126005626103716,
+          3.907216111181772
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 116.5,
+      "lowest": {
+        "y": -0.4669899621090774,
+        "point": [
+          -3.2156806464314784,
+          -0.4669899621090774,
+          3.8859310307280706
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 117,
+      "lowest": {
+        "y": -0.48077851666581,
+        "point": [
+          -3.3095658437011437,
+          -0.48077851666581,
+          3.862082993255179
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 117.5,
+      "lowest": {
+        "y": -0.4911922443362554,
+        "point": [
+          -3.392856155643019,
+          -0.4911922443362554,
+          3.83885819721262
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 118,
+      "lowest": {
+        "y": -0.500091891574303,
+        "point": [
+          -3.475733340069382,
+          -0.500091891574303,
+          3.8136143798955437
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 118.5,
+      "lowest": {
+        "y": -0.5062242441019341,
+        "point": [
+          -3.544211360835329,
+          -0.5062242441019341,
+          3.791200815770017
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 119,
+      "lowest": {
+        "y": -0.5113307626372813,
+        "point": [
+          -3.612306721358968,
+          -0.5113307626372813,
+          3.7674065752149817
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 119.5,
+      "lowest": {
+        "y": -0.51608790561243,
+        "point": [
+          -3.694376446571692,
+          -0.51608790561243,
+          3.7367390146967425
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    },
+    {
+      "frame": 180,
+      "lowest": {
+        "y": -0.5202933435275751,
+        "point": [
+          -3.8520190438357487,
+          -0.5202933435275751,
+          -3.6719361809856053
+        ],
+        "material": "MeshToonMaterial_m13",
+        "instanced": true
+      },
+      "radius": 6.188000178337097,
+      "vertices": 199682
+    }
+  ],
+  "scope": "Actual rendered vertices for saved rowing cycle 60..119.5 with 119\u219260 wrap at half-frame steps and resting frame180; full 26 crew. Conservative flat-water vertical draft, no waves, roll, grounding or collision certificate."
+}

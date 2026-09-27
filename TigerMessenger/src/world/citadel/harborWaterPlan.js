@@ -8,7 +8,7 @@ export const CITADEL_HARBOR_WATER_PLAN = Object.freeze({
  approach:[[30,142],[44,134],[54,119]],
  turning:{center:[48,130],radius:9},
  holdingBerth:{center:[54,114.5],heading:[-1,0],status:'holding pose; boarding connector still required'},
- minimumDepth:1.25,turnClearanceRadius:7,
+ minimumDepth:1.5,turnClearanceRadius:7,
  designDepth:4.6,bedTargetDepth:5.5,
  waterAuthority:'planet-v8-curved-ocean; no secondary local water plane',
 });

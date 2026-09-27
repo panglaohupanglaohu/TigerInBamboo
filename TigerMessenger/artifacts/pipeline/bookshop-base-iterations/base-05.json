@@ -1,0 +1,17 @@
+{
+  "revision": 5,
+  "triangles": 38920,
+  "finite": true,
+  "circle": {
+    "center": [
+      0,
+      32
+    ],
+    "plazaRadius": 32,
+    "promenadeRadius": 39.5,
+    "shoreRadius": 40,
+    "seawardArc": "continuous semicircle; no chord"
+  },
+  "change": "Full circular perimeter kerb; no straight seaward chord",
+  "errors": []
+}

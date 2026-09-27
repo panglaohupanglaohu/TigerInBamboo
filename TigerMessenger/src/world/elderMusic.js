@@ -14,11 +14,14 @@ export const ELDER_MUSIC_RANGE = 4.5;
  * @param {import("three").Object3D|null} deps.elder
  * @param {HTMLElement|null} deps.elHint
  * @param {() => boolean} deps.isGameStarted
+ * @param {() => boolean} [deps.shouldYieldKeyE] 主线暗号交互需要 E 时让位
  */
 export function createElderMusicInteraction({
   player, elder: elderInit, elHint, isGameStarted,
   /** 送信人是否正在驾驶载具——是则不许隔着船舷听八音盒 */
   isBusyRiding = () => false,
+  // 主线对暗号的 E 优先（狐狸就在八音盒旁）：虎/狐章节靠近目标时八音盒让位
+  shouldYieldKeyE = () => false,
 }) {
   let elder = elderInit || null;
   let notePulse = 0;
@@ -36,7 +39,8 @@ export function createElderMusicInteraction({
 
   function refreshHint() {
     if (!elHint) return;
-    const show = !!isGameStarted?.() && nearElder();
+    // 主线暗号优先时隐藏八音盒提示（狐狸就在八音盒旁，避免 E 含义混淆）
+    const show = !!isGameStarted?.() && nearElder() && !shouldYieldKeyE?.();
     elHint.classList.toggle("show", show);
     if (show) {
       elHint.innerHTML = isMusicBoxPlaying()
@@ -47,6 +51,8 @@ export function createElderMusicInteraction({
 
   function onKeyDown(event) {
     if (event.code !== "KeyE" || event.repeat || !isGameStarted?.()) return;
+    // 主线对暗号（虎/狐章节靠近按 E）优先，八音盒让位
+    if (shouldYieldKeyE?.()) return;
     if (!nearElder()) return;
     // 捕获阶段接管老人附近的 E，避免与送信 NPC / 阿狸同时触发。
     event.preventDefault();

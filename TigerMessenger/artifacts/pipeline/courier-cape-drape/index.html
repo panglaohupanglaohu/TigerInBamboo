@@ -1,0 +1,9 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>信使斗篷与飞艇登艇修正</title>
+<style>body{max-width:1100px;margin:32px auto;padding:0 20px;background:#17232d;color:#eee;font:18px/1.7 system-ui}a{color:#9cdbff}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}img{width:100%}</style>
+<h1>信使斗篷与飞艇登艇修正</h1><p>已接入 <a href="http://localhost:8931/TigerMessenger/">8931 原游戏</a>。刷新游戏后生效。</p>
+<p>斗篷从肩背到下摆只逐渐增加约12%的宽度，保留酒红色、金边、卷轴及原来的头部。下面是同机位 Blender 实际渲染。</p>
+<div class="grid"><div>修改前<img src="before.png"></div><div>修改后<img src="after.png"></div></div>
+<p>飞艇靠近地面玩家时，垂绳自动延长到可抓的位置，吊舱端保持连接。修正空闲电车错误清除搭乘状态的问题。</p>
+<p>已验证：实际入口落稳后 F → 攀爬 → 登艇 → F 下艇。测试只将角色放到飞艇下方，再由游戏正常重力落地；没有直接设置飞行状态。</p>
+<p><a href="airship-check.json">实际入口检查记录</a> · <a href="../../../assets/models/optimized/human-courier-cape-drape/human-courier.blend">修改后的 Blender 源文件</a></p>
+</html>

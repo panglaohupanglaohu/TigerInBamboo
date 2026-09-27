@@ -1,0 +1,110 @@
+{
+  "result": {
+    "ground": {
+      "active": true,
+      "intruders": 1,
+      "defenders": 3,
+      "shotsFired": 26,
+      "movingShots": 26,
+      "transportShots": 0,
+      "weaponEffects": {
+        "locust": 7,
+        "ant": 2,
+        "beetle": 15,
+        "sentry": 0
+      },
+      "movement": [
+        {
+          "kind": "locust",
+          "metres": 7.149712238689801,
+          "animation": {
+            "firing": true,
+            "transport": false,
+            "speed": 1.4300000000000002,
+            "aim": 3.5602784170265123e-16,
+            "pitch": 0.19246417421296805
+          }
+        },
+        {
+          "kind": "ant",
+          "metres": 4.868919640581768,
+          "animation": {
+            "firing": true,
+            "transport": false,
+            "speed": 0.9750000000000001,
+            "aim": 1.201963628050075e-16,
+            "pitch": 0.21669221343387024
+          }
+        },
+        {
+          "kind": "beetle",
+          "metres": 12.347458287310829,
+          "animation": {
+            "firing": true,
+            "transport": false,
+            "speed": 2.47,
+            "aim": 1.8220949657297587e-16,
+            "pitch": 0.29526701043292947
+          }
+        }
+      ]
+    },
+    "mounted": [
+      {
+        "kind": "locust",
+        "shots": 19,
+        "progressChanged": true,
+        "maxAnchorError": 0,
+        "animation": {
+          "firing": true,
+          "transport": true,
+          "speed": 0,
+          "aim": -6.45947941600091e-17,
+          "pitch": 0.17985349979247875
+        }
+      },
+      {
+        "kind": "ant",
+        "shots": 4,
+        "progressChanged": true,
+        "maxAnchorError": 0,
+        "animation": {
+          "firing": true,
+          "transport": true,
+          "speed": 0,
+          "aim": 6.45947941600091e-17,
+          "pitch": 0.17985349979247794
+        }
+      },
+      {
+        "kind": "beetle",
+        "shots": 45,
+        "progressChanged": true,
+        "maxAnchorError": 0,
+        "animation": {
+          "firing": true,
+          "transport": true,
+          "speed": 0,
+          "aim": -1.9378438248002736e-16,
+          "pitch": 0.17985349979247844
+        }
+      }
+    ],
+    "train": {
+      "active": false,
+      "intruders": 0,
+      "defenders": 9,
+      "shotsFired": 173,
+      "movingShots": 0,
+      "transportShots": 173,
+      "weaponEffects": {
+        "locust": 57,
+        "ant": 11,
+        "beetle": 105,
+        "sentry": 0
+      }
+    },
+    "errors": []
+  },
+  "errors": []
+}

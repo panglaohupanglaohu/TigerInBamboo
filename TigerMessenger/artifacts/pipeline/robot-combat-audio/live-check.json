@@ -1,0 +1,20 @@
+{
+  "result": [
+    {
+      "kind": "locust",
+      "shotDelta": 3,
+      "impactDelta": 3
+    },
+    {
+      "kind": "ant",
+      "shotDelta": 1,
+      "impactDelta": 1
+    },
+    {
+      "kind": "beetle",
+      "shotDelta": 5,
+      "impactDelta": 3
+    }
+  ],
+  "errors": []
+}

@@ -2,6 +2,8 @@
 //  电车 / 运河交汇古堡 / 星海运河 / 战船 / 叹息之门
 // =====================================================================
 import * as THREE from "three";
+import {applyJunctionHarbor} from "../../world/junctionHarbor.js";
+import {installCanalJunctionTarget} from "../../world/canalJunctionTarget.js";
 import {dockFrontHarborPatrol} from '../../world/citadel/frontHarborBerth.js';
 import { buildChristchurchTramSystem } from "../../world/tramSystem.js";
 import { carveHillsForTrack } from "../../world/hills.js";
@@ -82,9 +84,10 @@ export function loadCanalNetwork({
     const cjsObjectsKey = citadelTerrainObjectsKey("canal-junction");
     canalJunctionStorage = { levels: cjsLevelsKey, terrain: cjsTerrainKey, objects: cjsObjectsKey };
     let cjSpec;
+    let hasCustomJunction=false;
     try {
       const saved = JSON.parse(localStorage.getItem(cjsLevelsKey) || "null");
-      if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) cjSpec = saved;
+      if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) {cjSpec = saved;hasCustomJunction=true;}
     } catch { /* 回落空布局 */ }
     if (!cjSpec) cjSpec = CANAL_JUNCTION_TOWN_SPEC;
     let cjContour;
@@ -130,6 +133,7 @@ export function loadCanalNetwork({
     canalJunctionCitadel.position.copy(up).multiplyScalar(R + waterLift - townLift);
     canalJunctionCitadel.updateMatrixWorld(true);
     junctionBox.group.userData.citadel = canalJunctionCitadel;
+    if(!hasCustomJunction||new URLSearchParams(location.search).get('junctionReview')==='1'){installCanalJunctionTarget(canalJunctionCitadel);applyJunctionHarbor(scene,canalJunctionCitadel);}
   }
 
   const cityCanalWaypoint = waterCityCanalWaypointDir();
@@ -149,12 +153,19 @@ export function loadCanalNetwork({
     canalPush(canyonDir || latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3()), "水晶城峡谷");
   }
   if (useOceanRoutes) {
-    canalPush(bookshop?.position, "书店镇", oceanAnchors);
-    canalPush(camp?.landmarks?.anchor?.position, "出发营地", oceanAnchors);
-    canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖", oceanAnchors);
-    canalPush(odysseyCitadel?.position, "高山圣城", oceanAnchors);
-    canalPush(canalJunctionCitadel?.position, "运河交汇古堡", oceanAnchors);
-    canalPush(harbor?.position, "旧港", oceanAnchors);
+    // 纯深海大洋航道：战船严格走球面大洋水体，绝不穿过书店镇、月亮湖、营地等内陆陆地
+    const seaR = R + OFFICIAL_OCEAN_SEA_LEVEL;
+    const oceanWaypoints = [
+      harbor?.position || latLonToDir(22.0, 38.0, new THREE.Vector3()).multiplyScalar(seaR),
+      latLonToDir(10.0, 90.0, new THREE.Vector3()).multiplyScalar(seaR),
+      latLonToDir(0.0, 150.0, new THREE.Vector3()).multiplyScalar(seaR),
+      latLonToDir(-25.0, -160.0, new THREE.Vector3()).multiplyScalar(seaR),
+      latLonToDir(0.0, -90.0, new THREE.Vector3()).multiplyScalar(seaR),
+      latLonToDir(15.0, -20.0, new THREE.Vector3()).multiplyScalar(seaR),
+    ];
+    for (const pt of oceanWaypoints) {
+      oceanAnchors.push(pt.clone());
+    }
   }
 
   let canalSys = null;
@@ -170,6 +181,7 @@ export function loadCanalNetwork({
     const routes = compileWaterRoutes({ harborAnchors, radius: R + OFFICIAL_OCEAN_SEA_LEVEL });
     const oceanPatrol = buildOceanPatrolCurve(oceanAnchors, R, OFFICIAL_OCEAN_SEA_LEVEL);
     if (oceanPatrol) {
+      scene.userData.oceanPatrol = oceanPatrol;
       canalBoats = createCanalBoatPatrol(scene, oceanPatrol, {
         count: Math.max(0, P.oceanWarshipCount ?? 3),
         scale: 1.84,
@@ -246,15 +258,17 @@ export function loadAbandonedGateBlock({ scene, R, tramSystem, flock, canyonDir 
   });
   scene.add(abandonedGate);
 
+  const birdGate = scene.getObjectByName("highland-gate") || abandonedGate;
   const gateBirdVortex = new BirdVortexManager(scene, {
     name: "bird-vortex-triple-gate",
-    getTram: () => tramSystem?.getNearestTram?.(abandonedGate.position) || tramSystem?.tram || null,
+    getTram: () => tramSystem?.getNearestTram?.(birdGate.position) || tramSystem?.tram || null,
   });
-  gateBirdVortex.syncToGate(abandonedGate, { respawn: true });
-  gateBirdVortex.root.userData.anchor = { kind: "triple-gate" };
+  gateBirdVortex.syncToGate(birdGate, { respawn: true });
+  gateBirdVortex.hostGate = birdGate;
+  gateBirdVortex.root.userData.anchor = { kind: birdGate === abandonedGate ? "triple-gate" : "highland-gate" };
 
   {
-    const seat = abandonedGate.userData?.seatRoot;
+    const seat = birdGate.userData?.seatRoot || birdGate;
     seat?.updateWorldMatrix?.(true, false);
     const gateOrigin = new THREE.Vector3();
     const gateQ = new THREE.Quaternion();

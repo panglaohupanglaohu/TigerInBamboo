@@ -1,0 +1,42 @@
+{
+  "request_hash": "ab0f7e91cc81ea251e6e0db8d21a108fd0f9937dc62d83100392c7b8f2bc6f98",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.88
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.94,
+      "probabilities": {
+        "geometry": 0.04,
+        "lighting": 0.0,
+        "review": 0.01,
+        "navigation": 0.95,
+        "dressing": 0.0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.91
+    }
+  },
+  "usage": {
+    "input_tokens": 873,
+    "output_tokens": 91
+  },
+  "elapsed_ms": 1180,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Godot player boarding and city-wide navigation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

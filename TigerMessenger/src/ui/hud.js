@@ -122,3 +122,4 @@ export function showNpcHint() {
 export function hideNpcHint() {
   elNpcHint.classList.remove("show");
 }
+

@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "b400dc9647243ef283e11b1e0c2352eded8d066665f17ef9981f23fcbece03ec",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.82
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.62,
+      "probabilities": {
+        "lighting": 0,
+        "review": 0.7,
+        "navigation": 0.27,
+        "dressing": 0.01,
+        "geometry": 0.02
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.28
+    }
+  },
+  "usage": {
+    "input_tokens": 1250,
+    "output_tokens": 91,
+    "cost_usd": 0.000525,
+    "credits_remaining_usd": 4.977389
+  },
+  "elapsed_ms": 1598,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "full Saihoji battle regression",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

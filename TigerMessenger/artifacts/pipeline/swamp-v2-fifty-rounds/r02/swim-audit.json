@@ -1,0 +1,29 @@
+{
+  "round": 2,
+  "simulationSeconds": 120,
+  "whales": [
+    {
+      "samples": 7201,
+      "maxPositionError": 1.2560739669470201e-15,
+      "finite": true,
+      "minY": 23.00000004266949,
+      "maxY": 23.79999997518422,
+      "minTreeAxisDistance": 2.3326981563340787
+    },
+    {
+      "samples": 7201,
+      "maxPositionError": 1.2560739669470201e-15,
+      "finite": true,
+      "minY": 22.40000000246507,
+      "maxY": 23.19999999165866,
+      "minTreeAxisDistance": 4.656819418208318
+    }
+  ],
+  "passed": true,
+  "limits": [
+    "Factory animation sampled in disposable browser; not realtime end-to-end gameplay.",
+    "Tree-axis distance measures whale origin only, not mesh clearance.",
+    "Aircraft feeding, tiger drinking, repair and delivery actions not validated here."
+  ],
+  "pageErrors": []
+}

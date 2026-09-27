@@ -1,0 +1,56 @@
+{
+  "task": "Actual steam base integration and secondary citadel greenery pass",
+  "target": "User approved three separate large factory/bookshop targets around complete coastal circular plaza. Luffy-like low hat, goggles above eyes, sloping shoulders and lapel jacket courier. Nine real mixed robots per outgoing freight train. Holy city layered cypress, broad pine and understory from existing approved targets.",
+  "visual_observations": {
+    "source": "Assistant inspected current runtime screenshots for all changes",
+    "images": {
+      "base.png": "4ecd383aafe8359d52360d3b62a0646579e80f6e69322fa3ae7f0c8a7d9e3436",
+      "ant.png": "e106320317c5d19d8e649444010f5ec3172afdf5e68e7c0e08896d1e7d7f43da",
+      "beetle.png": "c92dea877768d82d7cb6e7eb7417062a48b45a26b68f427216e2116369cd1a73"
+    },
+    "completed": [
+      "Actual courier runtime source switched from old Codrops builder; visible in base",
+      "Cab crossbar no longer fills lower view",
+      "Copper pressure vessel, translucent domes, lit shelves and navy banners added",
+      "Citadel shrubs show individual leaves in unchanged camera comparison",
+      "Final recapture after widened crane footings inspected: same circular footprint, supports at runway ends; factory simplification remains visible"
+    ],
+    "remaining": [
+      "Factory massing and materials remain simplified relative to painted targets",
+      "Character anatomy remains stylized; no >8 acceptance",
+      "Full Saihoji frontline delivery not completed"
+    ]
+  },
+  "checks": [
+    {
+      "name": "34 robot operations regression tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Both red/blue actually produce and load three kinds, three each",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "3621 sampled public and logistical routes grounded and clear",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full end-to-end war delivery at Saihoji",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "6500 simulated seconds: 27 deployed visible, both nine-unit manifests retained when receiving bays insufficient, save/load successful",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Preserve originals and target images",
+    "No inferred art approval from numerical tests",
+    "No unsupported full-game completion claim"
+  ]
+}

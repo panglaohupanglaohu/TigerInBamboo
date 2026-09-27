@@ -1,0 +1,10 @@
+{
+  "source": "Recorded from tool console output before repair, not a new run",
+  "waterDropCount": 5,
+  "simulationSeconds": 120,
+  "dropSamples": 12757,
+  "nonfiniteDrops": 12757,
+  "legacyMovementPassed": true,
+  "waterDeliveryPassed": false,
+  "note": "The original passed field only covered mast/monkey/lizard movement. The new audit also gates finite drops and proximity."
+}

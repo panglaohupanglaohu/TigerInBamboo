@@ -1,0 +1,55 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "bb7b214c0efe99a74e2d825c43301b2cd802e5d4f4edb48a11cc56cf4608850c",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.92
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.56,
+      "probabilities": {
+        "geometry": 0.01,
+        "navigation": 0.66,
+        "lighting": 0,
+        "dressing": 0,
+        "review": 0.33
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.92
+    }
+  },
+  "usage": {
+    "input_tokens": 1377,
+    "output_tokens": 91,
+    "cost_usd": 0.000579,
+    "credits_remaining_usd": 4.980077
+  },
+  "elapsed_ms": 1578,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Final-route world loaded clearance",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Fresh screenshots after final route corrections",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "All three combat skill visual validation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

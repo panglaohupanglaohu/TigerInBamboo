@@ -1,0 +1,24 @@
+{
+  "errors": [],
+  "entry": "http://localhost:8931/TigerMessenger/",
+  "grounded": {
+    "groundRadius": 124.11189936169067,
+    "ropeDistance": 0.7683669429303562,
+    "onGround": true,
+    "source": "assets/models/optimized/human-courier-cape-drape/human-courier.blend"
+  },
+  "afterF": {
+    "state": "climbing",
+    "riding": true
+  },
+  "boarded": {
+    "state": "flying",
+    "riding": true,
+    "radius": 176.17499999999998
+  },
+  "exited": {
+    "state": "idle",
+    "riding": false
+  },
+  "passed": true
+}

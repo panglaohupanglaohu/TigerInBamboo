@@ -43,8 +43,19 @@ export function setupEnvironment(scene) {
         midColor: { value: new THREE.Color(0x76cdc7) },
         botColor: { value: new THREE.Color(0xa8e1d4) },
         cloudColor: { value: new THREE.Color(0xc2eee0) },
+        holyDayBlend: { value: 0 },
         citadelBlend: { value: 0 },
         citadelUp: { value: new THREE.Vector3(0,1,0) },
+        moebiusV10Blend: { value: 0 },
+        moebiusV10Up: { value: new THREE.Vector3(0,-1,0) },
+        moebiusV10Day: { value: 1 },
+        // 朝霞/暮云霞光（2026-09-24）：按相机局部天顶与虚拟日向计算，任何经纬都贴地平线
+        localUp: { value: new THREE.Vector3(0,1,0) },
+        glowSunDir: { value: new THREE.Vector3(1,0,0) },
+        glowAmount: { value: 0 },
+        glowGold: { value: new THREE.Color(0xffc46e) },
+        glowRose: { value: new THREE.Color(0xff7a8a) },
+        glowViolet: { value: new THREE.Color(0x7a5fa8) },
       },
       vertexShader: /* glsl */ `
         varying vec3 vWorldPos;
@@ -61,8 +72,18 @@ export function setupEnvironment(scene) {
         uniform vec3 midColor;
         uniform vec3 botColor;
         uniform vec3 cloudColor;
+        uniform float holyDayBlend;
         uniform float citadelBlend;
         uniform vec3 citadelUp;
+        uniform float moebiusV10Blend;
+        uniform vec3 moebiusV10Up;
+        uniform float moebiusV10Day;
+        uniform vec3 localUp;
+        uniform vec3 glowSunDir;
+        uniform float glowAmount;
+        uniform vec3 glowGold;
+        uniform vec3 glowRose;
+        uniform vec3 glowViolet;
         varying vec3 vWorldPos;
         void main() {
           vec3 d = normalize(vWorldPos);
@@ -72,7 +93,8 @@ export function setupEnvironment(scene) {
           col = mix(col, topColor, smoothstep(0.08, 0.86, h));
 
           // 低频宽带 + 高频破边，形成参考图中大片、不规则的薄荷云纹。
-          float broad = sin(lon * 1.35 + h * 8.0) + 0.45 * sin(lon * 3.1 - h * 13.0);
+          // 经度方向的频率必须是整数：atan 在 ±π 处回绕，非整数频率会留下一条笔直接缝
+          float broad = sin(lon * 1.0 + h * 8.0) + 0.45 * sin(lon * 3.0 - h * 13.0);
           float torn = sin(lon * 7.0 + h * 24.0) * 0.18;
           float cloud = smoothstep(0.48, 0.7, broad * 0.5 + 0.5 + torn);
           cloud *= smoothstep(-0.5, -0.05, h) * (1.0 - smoothstep(0.72, 0.94, h));
@@ -80,6 +102,35 @@ export function setupEnvironment(scene) {
           float localH=dot(normalize(vWorldPos-cameraPosition),citadelUp);
           vec3 gorgeSky=mix(vec3(.035,.18,.39),vec3(.035,.40,.68),smoothstep(-.15,.55,localH));
           col=mix(col,gorgeSky,citadelBlend);
+          float crystalH=dot(normalize(vWorldPos-cameraPosition),moebiusV10Up);
+          vec3 crystalSky=mix(vec3(.52,.76,.83),vec3(.13,.48,.73),smoothstep(-.12,.9,crystalH));
+          crystalSky*=mix(.24,1.0,moebiusV10Day);
+          col=mix(col,crystalSky,moebiusV10Blend);
+          vec3 holySky=mix(vec3(.72,.84,.88),vec3(.29,.59,.80),smoothstep(-.12,.72,localH));
+          float holyCloud=smoothstep(.68,.91,sin(lon*4.+localH*16.)*.28+sin(lon*8.-localH*23.)*.15+.5)*(1.-smoothstep(.5,.8,localH));
+          holySky=mix(holySky,vec3(.94,.94,.89),holyCloud*.8);
+          col=mix(col,holySky,holyDayBlend);
+          // ---- 霞光：地平线暖带 + 日侧光晕 + 云缘镶金 + 天顶紫晕 ----
+          if (glowAmount > 0.001) {
+            vec3 v = normalize(vWorldPos - cameraPosition);
+            float gh = dot(v, localUp);
+            vec3 flatV = v - localUp * gh;
+            vec3 sunFlat = glowSunDir - localUp * dot(glowSunDir, localUp);
+            float facing = dot(normalize(flatV + 1e-5), normalize(sunFlat + 1e-5)) * 0.5 + 0.5;
+            float sunSide = facing * facing;
+            float band = exp(-pow((gh - 0.03) / 0.15, 2.0));
+            float lowBand = exp(-pow((gh + 0.02) / 0.07, 2.0));
+            vec3 horizon = mix(glowRose, glowGold, sunSide);
+            col = mix(col, horizon, clamp(glowAmount * band * (0.14 + 0.46 * sunSide), 0.0, 0.55));
+            col += glowGold * glowAmount * lowBand * sunSide * 0.16;
+            float halo = max(dot(v, normalize(glowSunDir)), 0.0);
+            col += glowGold * glowAmount * (pow(halo, 14.0) * 0.22 + pow(halo, 140.0) * 0.55);
+            // 高空侧光把云带边缘染成金红（霞光闪耀）
+            float rim = cloud * (0.35 + 0.65 * sunSide) * smoothstep(-0.2, 0.45, gh);
+            col = mix(col, mix(glowRose, glowGold, sunSide) * 1.12, clamp(rim * sunSide * glowAmount * 0.5, 0.0, 0.42));
+            // 背日侧天顶泛紫，拉开冷暖
+            col = mix(col, glowViolet, glowAmount * (0.3 + 0.22 * (1.0 - sunSide)) * smoothstep(0.08, 0.75, gh));
+          }
           gl_FragColor = vec4(col, 1.0);
         }
       `,
@@ -90,13 +141,38 @@ export function setupEnvironment(scene) {
     sky.rotation.y = Math.PI / 2;
     sky.frustumCulled=false;
     const anchor=new THREE.Vector3();
+    const _east=new THREE.Vector3(),_worldY=new THREE.Vector3(0,1,0);
     sky.onBeforeRender=(_r,_s,camera)=>{
+      // 霞光时段：朝霞 t≈0.285、暮云 t≈0.765（与 dayNight 关键帧对齐），余晖到 0.8
+      const tod=((P.timeOfDay??.5)%1+1)%1;
+      const bell=(c,w)=>{const u=1-THREE.MathUtils.clamp(Math.abs(tod-c)/w,0,1);return u*u*(3-2*u);};
+      const dawnG=bell(.285,.065),duskG=bell(.77,.075),glow=Math.max(dawnG,duskG);
+      const U=skyMat.uniforms;
+      U.glowAmount.value=glow;
+      U.localUp.value.copy(camera.position).normalize();
+      _east.crossVectors(_worldY,U.localUp.value);
+      if(_east.lengthSq()<1e-6)_east.set(1,0,0);
+      _east.normalize();
+      // 日出东方、日落西方：虚拟日向只用于天空着色，不改真实灯光
+      const ang=Math.PI*THREE.MathUtils.clamp((tod-.22)/.6,0,1);
+      U.glowSunDir.value.copy(_east).multiplyScalar(Math.cos(ang)).addScaledVector(U.localUp.value,Math.max(.03,Math.sin(ang)*.35)).normalize();
+      if(duskG>=dawnG){U.glowGold.value.setHex(0xffb872);U.glowRose.value.setHex(0xf08490);U.glowViolet.value.setHex(0x5c64a8);}
+      else{U.glowGold.value.setHex(0xffd896);U.glowRose.value.setHex(0xf4a6b2);U.glowViolet.value.setHex(0x86a6d4);}
+      const crystalUp=scene.userData.moebiusV10SkyUp;
+      skyMat.uniforms.moebiusV10Blend.value=(crystalUp?THREE.MathUtils.smoothstep(camera.position.clone().normalize().dot(crystalUp),.45,.75):0)*(1-.85*glow);
+      if(crystalUp)skyMat.uniforms.moebiusV10Up.value.copy(crystalUp);
+      skyMat.uniforms.moebiusV10Day.value=1-THREE.MathUtils.smoothstep(Math.abs((P.timeOfDay??.5)-.5),.22,.43);
       const city=scene.getObjectByName('highland-west-city');
       if(!city)return;
       city.localToWorld(anchor.set(35,15,20));
       const near=1-THREE.MathUtils.smoothstep(camera.position.distanceTo(anchor),170,320);
       const dusk=1-THREE.MathUtils.smoothstep(Math.abs((P.timeOfDay??.5)-.85),.025,.14);
-      skyMat.uniforms.citadelBlend.value=near*dusk;
+      skyMat.uniforms.citadelBlend.value=near*dusk*(1-glow);
+      const highland=scene.getObjectByName('highland-gate');
+      const gateNear=highland?1-THREE.MathUtils.smoothstep(camera.position.distanceTo(highland.position),140,230):0;
+      // 圣城白天天色只在正午前后生效，朝霞暮云时让位给昼夜本色与霞光
+      const holyNoon=1-THREE.MathUtils.smoothstep(Math.abs(tod-.5),.12,.2);
+      skyMat.uniforms.holyDayBlend.value=highland?.userData.round>=21?Math.max(near,gateNear)*holyNoon*(1-glow):0;
       skyMat.uniforms.citadelUp.value.set(0,1,0).transformDirection(city.matrixWorld);
     };
     scene.add(sky);

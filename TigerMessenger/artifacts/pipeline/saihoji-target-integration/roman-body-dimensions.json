@@ -1,0 +1,218 @@
+{
+  "units": "GLB local metres including every imported node transform; production actor root uses unit world scale",
+  "pose": "imported neutral only, no concealment/attack animation sweep",
+  "body_definition": "all visible meshes except n31 equipment and n29 crate descendants; armor/helmet/crest/hands included",
+  "roles": [
+    {
+      "role": "gladius",
+      "source": "godot/assets/roman-family-v1/romanSoldier_gladius_blue.glb",
+      "sha256": "3b7f3d8f1e4ff95cbcd1b525d051c7d8b09bd94251f475f857bff0d13063c2fa",
+      "body_armor_helmet_without_carried_equipment": {
+        "min_xyz": [
+          -0.16333334147930145,
+          0.01600800617483273,
+          -0.2870240143775469
+        ],
+        "max_xyz": [
+          0.30537217948269935,
+          1.1766667366027832,
+          0.2989935196444866
+        ],
+        "width_x": 0.4687055209620008,
+        "height_y": 1.1606587304279505,
+        "depth_z": 0.5860175340220335,
+        "maximum_xz_radius_from_root": 0.36913329766140074,
+        "vertices": 5277
+      },
+      "all_visible": {
+        "min_xyz": [
+          -0.16333334147930145,
+          0.01600800617483273,
+          -0.2870240143775469
+        ],
+        "max_xyz": [
+          0.6545310437077285,
+          1.1766667366027832,
+          0.5305466623659439
+        ],
+        "width_x": 0.81786438518703,
+        "height_y": 1.1606587304279505,
+        "depth_z": 0.8175706767434908,
+        "maximum_xz_radius_from_root": 0.683747375617714,
+        "vertices": 5909
+      },
+      "legs_and_feet": {
+        "min_xyz": [
+          -0.06525916419923306,
+          0.01600800617483273,
+          -0.13902528161833055
+        ],
+        "max_xyz": [
+          0.06525916419923306,
+          0.34379366919759463,
+          0.1496668947334535
+        ],
+        "width_x": 0.1305183283984661,
+        "height_y": 0.3277856630227619,
+        "depth_z": 0.288692176351784,
+        "maximum_xz_radius_from_root": 0.1501471923868643,
+        "vertices": 120
+      },
+      "excluded_carried_meshes": [
+        "Gold_Lower_Bracket",
+        "Gold_Upper_Bracket",
+        "n33",
+        "n35",
+        "shield-boss",
+        "shield-sigil",
+        "Wooden_Grip",
+        "n51",
+        "n53",
+        "Sword_guard",
+        "Sword_pommel"
+      ]
+    },
+    {
+      "role": "spear",
+      "source": "godot/assets/roman-family-v1/romanSoldier_spear_blue.glb",
+      "sha256": "4d1282f74c39ad603eddf32ef4194ae86f6d1b812201b4813ce14163e9cc14a8",
+      "body_armor_helmet_without_carried_equipment": {
+        "min_xyz": [
+          -0.16333334147930145,
+          0.01600800617483273,
+          -0.34488155580215774
+        ],
+        "max_xyz": [
+          0.24526739536059805,
+          1.1766667366027832,
+          0.2989935196444866
+        ],
+        "width_x": 0.4086007368398995,
+        "height_y": 1.1606587304279505,
+        "depth_z": 0.6438750754466444,
+        "maximum_xz_radius_from_root": 0.3476193606089878,
+        "vertices": 5277
+      },
+      "all_visible": {
+        "min_xyz": [
+          -0.16333334147930145,
+          0.01600800617483273,
+          -0.34488155580215774
+        ],
+        "max_xyz": [
+          0.3954108767153922,
+          1.7177772387432377,
+          0.5305466623659439
+        ],
+        "width_x": 0.5587442181946937,
+        "height_y": 1.701769232568405,
+        "depth_z": 0.8754282181681017,
+        "maximum_xz_radius_from_root": 0.5632498698163314,
+        "vertices": 6057
+      },
+      "legs_and_feet": {
+        "min_xyz": [
+          -0.06525916419923306,
+          0.01600800617483273,
+          -0.13902528161833055
+        ],
+        "max_xyz": [
+          0.06525916419923306,
+          0.34379366919759463,
+          0.1496668947334535
+        ],
+        "width_x": 0.1305183283984661,
+        "height_y": 0.3277856630227619,
+        "depth_z": 0.288692176351784,
+        "maximum_xz_radius_from_root": 0.1501471923868643,
+        "vertices": 120
+      },
+      "excluded_carried_meshes": [
+        "Gold_Lower_Bracket",
+        "Gold_Upper_Bracket",
+        "n33",
+        "n35",
+        "shield-boss",
+        "shield-sigil",
+        "Wooden_Grip",
+        "long-spear-head",
+        "n42",
+        "n44",
+        "n46",
+        "Spear_grip_wrap"
+      ]
+    },
+    {
+      "role": "longbow",
+      "source": "godot/assets/roman-family-v1/romanSoldier_longbow_blue.glb",
+      "sha256": "a7ba02aff336357ca962b4e16fa050948cb46d7a85e51f93eea12bd0538782a8",
+      "body_armor_helmet_without_carried_equipment": {
+        "min_xyz": [
+          -0.2239568656380413,
+          -0.005274996127086619,
+          -0.20785103358750442
+        ],
+        "max_xyz": [
+          0.5189237413629203,
+          1.1547254300409031,
+          0.1887012790291463
+        ],
+        "width_x": 0.7428806070009616,
+        "height_y": 1.1600004261679897,
+        "depth_z": 0.3965523126166507,
+        "maximum_xz_radius_from_root": 0.5455391075597634,
+        "vertices": 5021
+      },
+      "all_visible": {
+        "min_xyz": [
+          -0.2239568656380413,
+          -0.005274996127086619,
+          -0.20785103358750442
+        ],
+        "max_xyz": [
+          0.5189237413629203,
+          1.2451751575538765,
+          0.1887012790291463
+        ],
+        "width_x": 0.7428806070009616,
+        "height_y": 1.2504501536809631,
+        "depth_z": 0.3965523126166507,
+        "maximum_xz_radius_from_root": 0.5455391075597634,
+        "vertices": 5885
+      },
+      "legs_and_feet": {
+        "min_xyz": [
+          -0.08749007307443758,
+          -0.005274996127086619,
+          -0.1390252858473107
+        ],
+        "max_xyz": [
+          0.04810424689514701,
+          0.32546316662038066,
+          0.14966690235617894
+        ],
+        "width_x": 0.1355943199695846,
+        "height_y": 0.33073816274746726,
+        "depth_z": 0.28869218820348963,
+        "maximum_xz_radius_from_root": 0.15422342253893112,
+        "vertices": 120
+      },
+      "excluded_carried_meshes": [
+        "n59",
+        "n61",
+        "n54",
+        "n56",
+        "bow-string-bot",
+        "bow-string-top",
+        "n51",
+        "n75",
+        "n77",
+        "n79",
+        "n81",
+        "n83",
+        "n85",
+        "n87"
+      ]
+    }
+  ]
+}

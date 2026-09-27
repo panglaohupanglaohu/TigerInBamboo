@@ -1,0 +1,45 @@
+{
+  "r": {
+    "trains": [
+      {
+        "name": "red-freight-locomotive",
+        "wagons": 8,
+        "stops": [
+          {
+            "name": "locust",
+            "progress": 0.45523034240087945
+          },
+          {
+            "name": "ant",
+            "progress": 0.48989831115087945
+          },
+          {
+            "name": "beetle",
+            "progress": 0.5245662799008795
+          }
+        ]
+      },
+      {
+        "name": "blue-freight-locomotive",
+        "wagons": 8,
+        "stops": [
+          {
+            "name": "locust",
+            "progress": 0.4393310663550505
+          },
+          {
+            "name": "ant",
+            "progress": 0.4744873163550505
+          },
+          {
+            "name": "beetle",
+            "progress": 0.5096435663550505
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "base": "bookshop-steampunk-robots"
+  },
+  "errors": []
+}

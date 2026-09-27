@@ -1,0 +1,342 @@
+{
+  "label": "before",
+  "setup": {
+    "stage": "ambush",
+    "clock": 32.100000000000186,
+    "scope": "Real 8931 scene and running game loop, diagnostic campaign/fleet placement; software GPU timings are not hardware FPS."
+  },
+  "frames": 60,
+  "frameMs": 437.6950000000497,
+  "calls": 1,
+  "triangles": 2,
+  "rows": [
+    {
+      "path": "saihoji-phalanx-battle/citadel-red-garrison",
+      "draws": 65400
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-cohort-1",
+      "draws": 60114
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-cohort-0",
+      "draws": 60006
+    },
+    {
+      "path": "christchurch-tram-system/Mesh",
+      "draws": 31740
+    },
+    {
+      "path": "leviathanGroup/leviathan-island",
+      "draws": 21240
+    },
+    {
+      "path": "cyber-megalithic-twin-gates/gate-seat-root",
+      "draws": 20618
+    },
+    {
+      "path": "mossyGround/Mesh",
+      "draws": 11160
+    },
+    {
+      "path": "flock-root/flock-bird",
+      "draws": 6366
+    },
+    {
+      "path": "Group/Courier",
+      "draws": 5940
+    },
+    {
+      "path": "crystal-scout-defense-squad/triple-gate-scout-aircraft",
+      "draws": 4800
+    },
+    {
+      "path": "ocean-warship-1/blender-v6-render",
+      "draws": 4200
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-troopship-0",
+      "draws": 4200
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-troopship-1",
+      "draws": 4200
+    },
+    {
+      "path": "old-harbor-scene/fisher-boat",
+      "draws": 3540
+    },
+    {
+      "path": "swamp-shipwreck/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "ocean-warship-0/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "ocean-warship-2/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "leviathanGroup/leviathan-barnacle",
+      "draws": 2400
+    },
+    {
+      "path": "leviathanGroup/leviathan-rain",
+      "draws": 1163
+    },
+    {
+      "path": "saihoji-phalanx-battle/phalanx-javelin",
+      "draws": 1138
+    },
+    {
+      "path": "citadel-trojan-horse/horse-tiedown-squad",
+      "draws": 1080
+    },
+    {
+      "path": "mossyGround/saihoji-shore-stones",
+      "draws": 480
+    },
+    {
+      "path": "boat-wake-ring",
+      "draws": 430
+    },
+    {
+      "path": "leviathanGroup/leviathan-pectoral-L",
+      "draws": 420
+    },
+    {
+      "path": "leviathanGroup/leviathan-pectoral-R",
+      "draws": 420
+    }
+  ],
+  "perf": {
+    "fps": 13.4,
+    "frameMs": 74.5,
+    "samples": 1,
+    "windowFull": false,
+    "hitches": 64,
+    "worstMs": 942.2,
+    "calls": 1,
+    "triangles": 2,
+    "programs": 87,
+    "geometries": 2801,
+    "textures": 15,
+    "bootMs": 30803
+  },
+  "phase": "fight",
+  "cpu": [
+    {
+      "name": "uniformMatrix4fv",
+      "url": "",
+      "line": 0,
+      "ms": 4913.321
+    },
+    {
+      "name": "uniformMatrix4fv",
+      "url": "",
+      "line": 0,
+      "ms": 2455.46
+    },
+    {
+      "name": "uniform3f",
+      "url": "",
+      "line": 0,
+      "ms": 1636.329
+    },
+    {
+      "name": "checkGeometryIntersection",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 12054,
+      "ms": 1541.013
+    },
+    {
+      "name": "_computeIntersections",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11886,
+      "ms": 1401.947
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 877.278
+    },
+    {
+      "name": "(program)",
+      "url": "",
+      "line": 0,
+      "ms": 811.032
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 751.405
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 699.03
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 663.346
+    },
+    {
+      "name": "drawElements",
+      "url": "",
+      "line": 0,
+      "ms": 615.472
+    },
+    {
+      "name": "bindVertexArray",
+      "url": "",
+      "line": 0,
+      "ms": 490.319
+    },
+    {
+      "name": "checkGeometryIntersection",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 12054,
+      "ms": 466.103
+    },
+    {
+      "name": "_computeIntersections",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11886,
+      "ms": 453.986
+    },
+    {
+      "name": "intersectTriangle",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 5888,
+      "ms": 448.279
+    },
+    {
+      "name": "uniformMatrix3fv",
+      "url": "",
+      "line": 0,
+      "ms": 444.981
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 429.522
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 428.957
+    },
+    {
+      "name": "drawArrays",
+      "url": "",
+      "line": 0,
+      "ms": 404.02
+    },
+    {
+      "name": "getZ",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10243,
+      "ms": 392.329
+    },
+    {
+      "name": "getX",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10203,
+      "ms": 362.188
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 266.949
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 249.753
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 220.731
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 203.548
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 196.384
+    },
+    {
+      "name": "getVertexPosition",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11796,
+      "ms": 191.022
+    },
+    {
+      "name": "fromBufferAttribute",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 4675,
+      "ms": 178.813
+    },
+    {
+      "name": "getZ",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10243,
+      "ms": 145.028
+    },
+    {
+      "name": "toArray",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 6859,
+      "ms": 138.016
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 131.861
+    },
+    {
+      "name": "intersectTriangle",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 5888,
+      "ms": 120.75
+    },
+    {
+      "name": "getY",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10223,
+      "ms": 115.436
+    },
+    {
+      "name": "WebGLRenderer.renderBufferDirect",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.module.js",
+      "line": 15422,
+      "ms": 115.213
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 103.651
+    }
+  ],
+  "errors": []
+}

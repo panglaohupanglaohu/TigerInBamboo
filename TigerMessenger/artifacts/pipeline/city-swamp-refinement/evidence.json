@@ -1,0 +1,38 @@
+{
+  "task": "Crystal city and swamp target-driven refinement",
+  "visual_observations": {
+    "source": "Assistant viewed live 8931 botanical, swamp overview, canopy and underwater images",
+    "image_sha256": "6b466700d63ba3cc60057085bf7a1ee30f98d1cb3c04669fd4264faed77d7e77",
+    "completed": [
+      "Denser broadleaf planting inside existing glass habitats",
+      "Central crown clusters have varied silhouette",
+      "Underwater floor mildly brighter"
+    ],
+    "remaining": [
+      "Rock banks too regular",
+      "Canopies still clumped",
+      "Whole target not accepted; no FPS claim"
+    ]
+  },
+  "checks": [
+    {
+      "name": "12 clusters 60 prisms and no console errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "120-second whale updates",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "600-second aircraft foraging, 9 feeds",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text-only evidence triage, no image acceptance",
+    "Do not count this as completion of other pending work"
+  ]
+}

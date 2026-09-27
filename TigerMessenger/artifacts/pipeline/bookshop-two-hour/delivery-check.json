@@ -1,0 +1,171 @@
+{
+  "checkedAt": "2026-09-27T03:09:42.394Z",
+  "passed": true,
+  "sourceFiles": 19,
+  "entrySamples": 366,
+  "routeSamples": 3621,
+  "links": [
+    {
+      "path": "review.html",
+      "status": 200
+    },
+    {
+      "path": "../../../?autostart=1&baseReview=1",
+      "status": 200
+    },
+    {
+      "path": "robots.html",
+      "status": 200
+    },
+    {
+      "path": "actions.html",
+      "status": 200
+    },
+    {
+      "path": "overview.png",
+      "status": 200
+    },
+    {
+      "path": "locust-court.png",
+      "status": 200
+    },
+    {
+      "path": "locust-door.png",
+      "status": 200
+    },
+    {
+      "path": "ant-court.png",
+      "status": 200
+    },
+    {
+      "path": "ant-door.png",
+      "status": 200
+    },
+    {
+      "path": "ant-interior.png",
+      "status": 200
+    },
+    {
+      "path": "beetle-court.png",
+      "status": 200
+    },
+    {
+      "path": "beetle-door.png",
+      "status": 200
+    },
+    {
+      "path": "tourist.png",
+      "status": 200
+    },
+    {
+      "path": "dock.png",
+      "status": 200
+    },
+    {
+      "path": "ship.png",
+      "status": 200
+    },
+    {
+      "path": "robots.html?model=locust",
+      "status": 200
+    },
+    {
+      "path": "robots/locust-front.png",
+      "status": 200
+    },
+    {
+      "path": "robots.html?model=ant",
+      "status": 200
+    },
+    {
+      "path": "robots/ant-front.png",
+      "status": 200
+    },
+    {
+      "path": "robots.html?model=beetle",
+      "status": 200
+    },
+    {
+      "path": "robots/beetle-front.png",
+      "status": 200
+    },
+    {
+      "path": "robots/locust-back.png",
+      "status": 200
+    },
+    {
+      "path": "robots/ant-back.png",
+      "status": 200
+    },
+    {
+      "path": "robots/beetle-back.png",
+      "status": 200
+    },
+    {
+      "path": "live-report.json",
+      "status": 200
+    },
+    {
+      "path": "route-check.json",
+      "status": 200
+    },
+    {
+      "path": "playtest.json",
+      "status": 200
+    },
+    {
+      "path": "performance.json",
+      "status": 200
+    },
+    {
+      "path": "PROGRESS.md",
+      "status": 200
+    },
+    {
+      "path": "base-target-v2.png",
+      "status": 200
+    },
+    {
+      "path": "map.png",
+      "status": 200
+    },
+    {
+      "path": "actions/locust-actions.png",
+      "status": 200
+    },
+    {
+      "path": "actions/ant-actions.png",
+      "status": 200
+    },
+    {
+      "path": "actions/beetle-actions.png",
+      "status": 200
+    },
+    {
+      "path": "models/locust.glb",
+      "status": 200
+    },
+    {
+      "path": "models/locust.blend",
+      "status": 200
+    },
+    {
+      "path": "models/ant.glb",
+      "status": 200
+    },
+    {
+      "path": "models/ant.blend",
+      "status": 200
+    },
+    {
+      "path": "models/beetle.glb",
+      "status": 200
+    },
+    {
+      "path": "models/beetle.blend",
+      "status": 200
+    }
+  ],
+  "robotImports": 3,
+  "scope": "Scene construction, static robot assets, presentation pages and generated action targets; no robot animation/combat gameplay claim"
+}

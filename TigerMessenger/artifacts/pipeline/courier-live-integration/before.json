@@ -1,0 +1,29 @@
+{
+  "result": {
+    "source": "courierCodrops.js · Codrops 方法论整体重建（设定图）",
+    "wasteland": false,
+    "checks": [
+      {
+        "pose": "idle",
+        "valid": true,
+        "letter": false
+      },
+      {
+        "pose": "walk",
+        "valid": true,
+        "letter": false
+      },
+      {
+        "pose": "ride",
+        "valid": true,
+        "letter": false
+      },
+      {
+        "pose": "letter",
+        "valid": true,
+        "letter": true
+      }
+    ]
+  },
+  "errors": []
+}

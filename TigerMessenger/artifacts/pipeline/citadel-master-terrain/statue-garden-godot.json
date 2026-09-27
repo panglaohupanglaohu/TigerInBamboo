@@ -1,0 +1,22 @@
+{
+  "parts": [
+    {
+      "expected_vertices": 82560.0,
+      "groups": 1,
+      "meshes": 12,
+      "name": "citadel-terrace-planting",
+      "passed": true,
+      "vertices": 82560
+    },
+    {
+      "expected_vertices": 41145.0,
+      "groups": 1,
+      "meshes": 12,
+      "name": "citadel-plaza-edge-garden",
+      "passed": true,
+      "vertices": 41145
+    }
+  ],
+  "passed": true,
+  "scope": "Actual Godot two planting groups match Web inventory, with real close-view capture; full route checked separately."
+}

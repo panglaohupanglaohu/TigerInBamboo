@@ -3,7 +3,7 @@ import portalBlenderData from '../../assets/citadelPortalBlenderData.js';
 import {nightWeightAt} from '../../render/lighting/highlandLightVolumes.js';
 
 // Main portal joins the WFC shoulder/wings; the opening is real geometry,
-// with a 7.2-wide passage at ground level, not a door painted on a box.
+// with a real ground-level passage remodeled against the original soldier scale.
 export function buildCitadelMainGate(){
  const root=new THREE.Group();root.name='citadel-new-main-gate';
  const stone=new THREE.MeshStandardMaterial({color:0xe6dfcc,roughness:.9});
@@ -58,6 +58,7 @@ export function buildCitadelMainGate(){
  root.userData.sourceId='citadel-main-portal-v3-blender-beveled';
  root.userData.blenderSource='artifacts/citadel-reference-pass/citadel-portal-refined.blend';
  root.userData.update=phase=>{const w=nightWeightAt(phase);glowMaterials.forEach((m,i)=>m.emissiveIntensity=w*(.22+i*.12));};
- root.userData.opening={width:7.2,springHeight:5.7,apexHeight:8.8};
+ root.userData.opening={width:4.984615,springHeight:5.3,apexHeight:8.5};
+ root.userData.blenderSource='artifacts/pipeline/citadel-tall-portal/portal-tall-arch.blend';
  return root;
 }

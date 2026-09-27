@@ -1,12 +1,23 @@
+import {ROBOT_CARGO_SLOTS} from '../gameplay/robotOps/logistics.js';
+import {freightBoardDistance} from '../player/freightBoarding.js';
+import {bookshopTownPose} from './bookshopTownSite.js';
+import {createFreightInterlocking} from '../gameplay/robotOps/freightInterlocking.js';
+import {factoryFreightStops, factoryFreightEntry, factoryFreightExit, freightTrainingDepot} from './bookshopLoadingYards.js';
 // =====================================================================
 //  基督城有轨电车环形轨道系统
 //  平面设计坐标上的平滑环线：不爬坡、不进建筑、无锐角弯
 //  CatmullRomCurve3 闭合环；双线四钢轨贴球面；红/蓝电车相向运行
 // =====================================================================
 import * as THREE from "three";
+import {GATE_SITE_ORIGIN,GATE_SITE_QUATERNION} from './gateSite.js';
+import {gateThirtyRound} from "./gateTargetThirty.js";
+import {mergeStaticGroup} from "./geometryMerge.js";
+import {citadelCoastalTramPoints, citadelCoastalTramEnabled, inCitadelTramTunnel} from "./citadel/coastalTramRoute.js";
+import {addCitadelCoastalTramStructures, inCitadelCoastalWindow} from "./citadel/coastalTramStructures.js";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { facet } from "../assets/lowPoly.js";
-import { createChristchurchTram } from "../assets/tram.js";
+import { createFreightVehicle, FREIGHT_PITCH, FREIGHT_WAGONS } from "../assets/freightTrain.js";
+import { addFreightMotion } from '../assets/freightMotion.js';
 import { flatToWorld, latLonToDir, quatYToDir } from "./sphereMath.js";
 import { groundLiftAt, worldToFlatXZ, ISLAND_BASE_LIFT } from "./hills.js";
 import { PLANET_RADIUS } from "./planet.js";
@@ -14,6 +25,7 @@ import { P } from "../core/params.js";
 import { updateTramSound } from "../audio/sfx.js";
 import { LAKE, HARBOR } from "./lake.js";
 import { CANYON, canyonOffsetDir, canyonOffsetDirSmooth } from "./canyon.js";
+import { citadelRangeLiftDir, citadelWalkLiftDir } from "./citadelRange.js";
 import { WORLD_SCALE } from "./worldScale.js";
 
 const WORLD_LAYOUT_SCALE = WORLD_SCALE;
@@ -22,11 +34,12 @@ const SLEEPER = 0x3e2723;
 const RAIL = 0x757575;
 const SURFACE_EPS = 0.08;
 const BOARDING_RADIUS = 3.6;
-const LANE_OFFSET = 0.9; // 两条线路中心距 1.8，车辆交会保留约 0.7 净空
-const RAIL_GAUGE_HALF = 0.32;
+const LANE_OFFSET = 2.05; // 两条货运线中心距 4.1 m，宽 3.3 m 平车留 0.8 m 静态净空
+const RAIL_GAUGE_HALF = .875;
 
 // 轨道只贴岛面/缓坡，不随山丘抬升（禁止“上山坡”）
 const TRACK_LIFT_CAP = ISLAND_BASE_LIFT + 0.1;
+const BOOKSHOP_HILL_DIR = new THREE.Vector3(-47, 152, 27).normalize();
 
 const _p = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -284,7 +297,9 @@ function trackSurfaceRadiusAt(dir, R) {
   const flat = worldToFlatXZ(dir, R);
   if (flat) {
     const dist = Math.hypot(flat.x, flat.z);
-    const ground = Math.min(groundLiftAt(flat.x, flat.z), TRACK_LIFT_CAP);
+    // 书店镇东侧小丘只高出轨面约 1 米：放开抬升上限让轨道翻坡而过，不再生成隧道（用户 2026-09-24）
+    const overHill = dir.clone().normalize().angleTo(BOOKSHOP_HILL_DIR) * R < 48;
+    const ground = overHill ? groundLiftAt(flat.x, flat.z) + 0.15 : Math.min(groundLiftAt(flat.x, flat.z), TRACK_LIFT_CAP);
     const w = smooth01((dist - ISLAND_EDGE_DIST) / 2.2);
     const edgeLevel = ISLAND_BASE_LIFT + SURFACE_EPS;
     return R + Math.max(
@@ -300,11 +315,16 @@ function trackSurfaceRadiusAt(dir, R) {
   return R + Math.min(VIADUCT_HEIGHT, drop + 3.55);
 }
 
-/** 立柱/桥面判定用地面半径（岛上=地面，岛外=裸面/阶梯谷底） */
+const _tmpNorm = new THREE.Vector3();
+
+/** 立柱/桥面判定用地面半径（岛上=地面，城堡=高山，岛外=裸面/阶梯谷底） */
 function groundRadiusAt(dir, R) {
   const flat = worldToFlatXZ(dir, R);
   if (flat) return R + groundLiftAt(flat.x, flat.z);
-  return R + canyonOffsetDir(dir);
+  _tmpNorm.copy(dir).normalize();
+  const cit = typeof citadelRangeLiftDir === "function" ? Math.max(citadelRangeLiftDir(_tmpNorm), citadelWalkLiftDir?.(_tmpNorm) || 0) : 0;
+  if (cit > 0.05) return R + cit;
+  return R + canyonOffsetDir(_tmpNorm);
 }
 
 /** 曲线采样点贴轨面：原始 authored 半径与连续目标半径取较大值 */
@@ -333,7 +353,7 @@ function trackFloorRadiusAt(dir, R) {
 /** 基于中心曲线沿球面横向偏移，生成一条完整的平行线路（输入曲线已投影，不再二次投影）。 */
 function buildParallelCurve(centerCurve, offset, R) {
   const points = [];
-  const SEG = 420;
+  const SEG = 840;
   for (let i = 0; i < SEG; i++) {
     const t = i / SEG;
     centerCurve.getPointAt(t, _p);
@@ -345,10 +365,12 @@ function buildParallelCurve(centerCurve, offset, R) {
       _p.clone().addScaledVector(_right, offset).normalize().multiplyScalar(radius)
     );
   }
-  return new THREE.CatmullRomCurve3(points, true, "centripetal", 0.5);
+  const lane=new THREE.CatmullRomCurve3(points, true, "centripetal", 0.5);
+  lane.arcLengthDivisions=8192; lane.updateArcLengths(); return lane;
 }
 
 function addTrackLane(group, curve, R, sleeperMat, railMat) {
+  curve.arcLengthDivisions=8192; curve.updateArcLengths();
   const trackLen = curve.getLength();
   const sleeperCount = Math.max(32, Math.floor(trackLen / 1.35));
   for (let i = 0; i < sleeperCount; i++) {
@@ -361,9 +383,10 @@ function addTrackLane(group, curve, R, sleeperMat, railMat) {
     _up.crossVectors(_fwd, _right).normalize();
     _m.makeBasis(_right, _up, _fwd);
     const sleeper = new THREE.Mesh(
-      facet(new THREE.BoxGeometry(0.88, 0.06, 0.24)),
+      facet(new THREE.BoxGeometry(2.18, 0.06, 0.24)),
       sleeperMat
     );
+    sleeper.name="tram-static-sleeper";
     sleeper.quaternion.setFromRotationMatrix(_m);
     sleeper.position.copy(_p);
     sleeper.receiveShadow = true;
@@ -372,7 +395,7 @@ function addTrackLane(group, curve, R, sleeperMat, railMat) {
 
   for (const railSide of [-1, 1]) {
     const railPoints = [];
-    const SEG = 360;
+    const SEG = 720;
     for (let i = 0; i < SEG; i++) {
       const t = i / SEG;
       curve.getPointAt(t, _p);
@@ -440,9 +463,10 @@ function sweepTrackRibbon(samples, width, topOffset, bottomOffset, lateral, mat)
  * 连续高架桥面 + 双侧梁：覆盖岛缘→跨洋→峡谷→水晶城 8 字→回岛的全程高架段。
  * 一整条扫掠带状几何（非箱体段拼接），随坡度倾斜，彻底消除段间台阶。
  */
-function addViaductDeck(group, curve, R) {
+function addViaductDeck(group, curve, R, allSegments=false) {
   const deckMat = toonMat(0x66717c, { flatShading: true, side: THREE.DoubleSide });
   const girderMat = toonMat(0x39434d, { flatShading: true, side: THREE.DoubleSide });
+  curve.arcLengthDivisions=8192; curve.updateArcLengths();
   const trackLen = curve.getLength();
   const N = Math.max(240, Math.floor(trackLen / 0.6));
   const samples = [];
@@ -464,27 +488,260 @@ function addViaductDeck(group, curve, R) {
   const groundIdx = samples.findIndex((s) => !s.elevated);
   if (groundIdx < 0) return null;
   const ordered = [...samples.slice(groundIdx + 1), ...samples.slice(0, groundIdx + 1)];
-  const run = [];
+  let run = [];
+  const runs=[];
   for (const s of ordered) {
     if (!s.elevated) {
-      if (run.length) break;
+      if (run.length) {
+        if(!allSegments)break;
+        runs.push(run);run=[];
+      }
       continue;
     }
     run.push(s);
   }
-  if (run.length < 2) return null;
+  if(run.length)runs.push(run);
+  if(!runs.some(r=>r.length>=2))return null;
   const viaduct = new THREE.Group();
   viaduct.name = "moebius-city-viaduct";
-  const deck = sweepTrackRibbon(run, 3.35, -0.06, -0.24, 0, deckMat);
+  for(const run of runs){
+  if(run.length<2)continue;
+  const deck = sweepTrackRibbon(run, 8.15, -0.06, -0.24, 0, deckMat);
   addOutline(deck, 0.012);
   viaduct.add(deck);
-  for (const side of [-1.58, 1.58]) {
+  for (const side of [-3.98, 3.98]) {
     const girder = sweepTrackRibbon(run, 0.12, -0.24, -0.7, side, girderMat);
     addOutline(girder, 0.01);
     viaduct.add(girder);
   }
+  }
   group.add(viaduct);
   return viaduct;
+}
+
+/**
+ * 2026-09-18 涵洞系统（主人）：有轨电车穿行高山古堡山体与主岛丘陵时，
+ * 为其建立完整的双向石券涵洞（含进出拱券门额、八字翼墙、连续拱顶涵身与内壁暖光照明）。
+ */
+function addTramCulverts(group, curve, R) {
+  const N = 720;
+  const flags = new Array(N).fill(false);
+  const forced = new Array(N).fill(false);
+  for (let i = 0; i < N; i++) {
+    const t = i / N;
+    curve.getPointAt(t, _p);
+    const terrR = groundRadiusAt(_p, R);
+    const trackR = _p.length();
+    if (terrR - trackR > 0.08) {
+      flags[i] = true;
+    }
+    // 圣城新城山体隧道（用户 2026-09-24）：山体为网格而非解析地形，按区域强制成洞
+    if (citadelCoastalTramEnabled() && inCitadelTramTunnel(_p)) { flags[i] = true; forced[i] = true; }
+  }
+
+  // 余量外扩 4 个采样点（约 9 米），确保洞门稳健立于山体外侧坡面
+  const expanded = [...flags];
+  const MARGIN = 4;
+  for (let i = 0; i < N; i++) {
+    // 强制段（圣城新城隧道）按实测覆土定界，不再外扩，洞门贴崖脚、洞壳不伸出山体
+    if (flags[i] && !forced[i]) {
+      for (let d = -MARGIN; d <= MARGIN; d++) {
+        expanded[(i + d + N) % N] = true;
+      }
+    }
+  }
+
+  let firstFalse = -1;
+  for (let i = 0; i < N; i++) {
+    if (!expanded[i]) { firstFalse = i; break; }
+  }
+  if (firstFalse < 0) return;
+
+  const runs = [];
+  let inRun = false;
+  let start = 0;
+  for (let offset = 0; offset < N; offset++) {
+    const idx = (firstFalse + offset) % N;
+    if (expanded[idx]) {
+      if (!inRun) {
+        inRun = true;
+        start = idx;
+      }
+    } else {
+      if (inRun) {
+        inRun = false;
+        const end = (idx - 1 + N) % N;
+        runs.push({ start, end });
+      }
+    }
+  }
+  if (inRun) {
+    const end = (firstFalse - 1 + N) % N;
+    runs.push({ start, end });
+  }
+
+  if (!runs.length) return;
+
+  // 2026-09-18 主人（建筑业界规律）：涵洞只在轨道真正穿越足够厚的山体处才有意义。
+  // 过滤：①覆盖段弧长 ≥ 30 单位（N=720 全环采样，1 点 ≈ 2 单位）
+  //      ②段内最大埋深 ≥ 1.0 单位（浅皮土丘不配涵洞，避免"孤门立平地"）
+  var minRunLen = 0, minRunIdx = -1;
+  for (var r = 0; r < runs.length; r++) {
+    var len = (runs[r].end - runs[r].start + N) % N + 1;
+    if (minRunIdx < 0 || len > (runs[minRunIdx].end - runs[minRunIdx].start + N) % N + 1) minRunIdx = r;
+  }
+  var depthOf = function (idx) {
+    var p2 = curve.getPointAt(idx / N, new THREE.Vector3());
+    return groundRadiusAt(p2, R) - p2.length();
+  };
+  var kept = [];
+  for (var r = 0; r < runs.length; r++) {
+    var g = runs[r];
+    var len = (g.end - g.start + N) % N + 1;
+    var maxDepth = 0;
+    for (var k = 0; k <= len; k++) {
+      var dd = depthOf((g.start + k) % N);
+      if (dd > maxDepth) maxDepth = dd;
+    }
+    let isForced = false;
+    for (let k = 0; k < len && !isForced; k++) isForced = forced[(g.start + k) % N];
+    if (isForced || (len >= 15 && maxDepth >= 0.85)) kept.push(g);
+    else console.log("[tram] 涵洞跳过：覆盖段 " + len + " 点、最大埋深 " + maxDepth.toFixed(2) + " 不足");
+  }
+  runs.length = 0;
+  for (var k = 0; k < kept.length; k++) runs.push(kept[k]);
+  if (!runs.length) return;
+
+  const stoneMat = toonMat(0x565c64, { flatShading: true, side: THREE.DoubleSide });
+  const trimMat = toonMat(0x3e434a, { flatShading: true });
+  const lampMat = new THREE.MeshBasicMaterial({ color: 0xffd175 });
+
+  const PROFILE = [
+    [-4.9,-.25],[-4.9,5.9],[-3.45,7.05],[0,7.85],[3.45,7.05],[4.9,5.9],[4.9,-.25],
+    [4.4,-.05],[4.4,5.65],[3.15,6.55],[0,7.3],[-3.15,6.55],[-4.4,5.65],[-4.4,-.05],
+  ];
+  const M = PROFILE.length;
+
+  for (let runIdx = 0; runIdx < runs.length; runIdx++) {
+    const { start: runStart, end: runEnd } = runs[runIdx];
+    const ptCount = (runEnd - runStart + N) % N + 1;
+    if (ptCount < 4) continue;
+
+    const samples = [];
+    for (let k = 0; k < ptCount; k++) {
+      const idx = (runStart + k) % N;
+      const t = idx / N;
+      curve.getPointAt(t, _p);
+      curve.getTangentAt(t, _fwd).normalize();
+      _up.copy(_p).normalize();
+      _right.crossVectors(_up, _fwd).normalize();
+      _up.crossVectors(_fwd, _right).normalize();
+      samples.push({
+        p: _p.clone(),
+        fwd: _fwd.clone(),
+        up: _up.clone(),
+        right: _right.clone(),
+      });
+    }
+
+    const culvertGroup = new THREE.Group();
+    culvertGroup.name = `tram-culvert-${runIdx}`;
+
+    // 1. 扫掠拱顶涵身 (Tunnel Vault Tube)
+    const posArr = new Float32Array(samples.length * M * 3);
+    const v = new THREE.Vector3();
+    for (let i = 0; i < samples.length; i++) {
+      const s = samples[i];
+      for (let j = 0; j < M; j++) {
+        const [lx, ly] = PROFILE[j];
+        v.copy(s.p).addScaledVector(s.right, lx).addScaledVector(s.up, ly);
+        const pIdx = (i * M + j) * 3;
+        posArr[pIdx] = v.x;
+        posArr[pIdx + 1] = v.y;
+        posArr[pIdx + 2] = v.z;
+      }
+    }
+    const idxArr = [];
+    for (let i = 0; i < samples.length - 1; i++) {
+      for (let j = 0; j < M; j++) {
+        const nextJ = (j + 1) % M;
+        const a = i * M + j;
+        const b = (i + 1) * M + j;
+        const c = (i + 1) * M + nextJ;
+        const d = i * M + nextJ;
+        idxArr.push(a, b, d);
+        idxArr.push(b, c, d);
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(posArr, 3));
+    geo.setIndex(idxArr);
+    geo.computeVertexNormals();
+    const vaultMesh = new THREE.Mesh(geo, stoneMat);
+    vaultMesh.castShadow = true;
+    vaultMesh.receiveShadow = true;
+    addOutline(vaultMesh, 0.015);
+    culvertGroup.add(vaultMesh);
+
+    // 2. 涵洞进出洞门（拱门、门额、八字挡土翼墙）
+    function buildPortal(sample, fwdSign) {
+      const portal = new THREE.Group();
+      portal.position.copy(sample.p);
+      const fwd = sample.fwd.clone().multiplyScalar(fwdSign);
+      const up = sample.up.clone();
+      const right = sample.right.clone().multiplyScalar(fwdSign);
+      const m = new THREE.Matrix4().makeBasis(right, up, fwd);
+      portal.quaternion.setFromRotationMatrix(m);
+
+      // 洞顶压顶石/门额
+      const cornice = new THREE.Mesh(facet(new THREE.BoxGeometry(10.6, 0.7, 1.2)), trimMat);
+      cornice.position.set(0, 8.1, 0);
+      cornice.castShadow = true;
+      addOutline(cornice, 0.012);
+      portal.add(cornice);
+
+      // 拱顶石 (Keystone)
+      const keystone = new THREE.Mesh(facet(new THREE.BoxGeometry(0.72, 0.95, 1.35)), trimMat);
+      keystone.position.set(0, 7.65, 0.1);
+      keystone.castShadow = true;
+      addOutline(keystone, 0.012);
+      portal.add(keystone);
+
+      // 洞门两侧立柱券石
+      const leftPost = new THREE.Mesh(facet(new THREE.BoxGeometry(0.75, 7.6, 1.05)), stoneMat);
+      leftPost.position.set(-4.75, 3.8, 0);
+      const rightPost = new THREE.Mesh(facet(new THREE.BoxGeometry(0.75, 7.6, 1.05)), stoneMat);
+      rightPost.position.set(4.75, 3.8, 0);
+      portal.add(leftPost, rightPost);
+
+      // 两侧八字翼墙（向外喇叭张开 28°，深深插入山体斜坡）
+      const leftWing = new THREE.Mesh(facet(new THREE.BoxGeometry(0.55, 3.9, 3.4)), stoneMat);
+      leftWing.position.set(-5.6, 1.95, -1.3);
+      leftWing.rotation.y = THREE.MathUtils.degToRad(-28);
+      const rightWing = new THREE.Mesh(facet(new THREE.BoxGeometry(0.55, 3.9, 3.4)), stoneMat);
+      rightWing.position.set(5.6, 1.95, -1.3);
+      rightWing.rotation.y = THREE.MathUtils.degToRad(28);
+      portal.add(leftWing, rightWing);
+
+      return portal;
+    }
+
+    culvertGroup.add(buildPortal(samples[0], 1));
+    culvertGroup.add(buildPortal(samples[samples.length - 1], -1));
+
+    // 3. 涵洞内壁照明（每隔约 6 个采样点布设暖光壁灯）
+    const lampGeo = new THREE.SphereGeometry(0.14, 6, 4);
+    for (let sIdx = 3; sIdx < samples.length - 3; sIdx += 6) {
+      const s = samples[sIdx];
+      for (const side of [-4.30, 4.30]) {
+        const lamp = new THREE.Mesh(lampGeo, lampMat);
+        lamp.position.copy(s.p).addScaledVector(s.right, side).addScaledVector(s.up, 1.8);
+        culvertGroup.add(lamp);
+      }
+    }
+
+    group.add(culvertGroup);
+  }
 }
 
 function makeEnergyBeam(group, color) {
@@ -588,14 +845,38 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
     ...islandRideFlat.map(({ x, z }) => toWorld(x, z)),
     latLonToDir(-10, -60).multiplyScalar(R + 0.3), // G 跨赤道，进入长距离悬空引桥
     ...buildMoebiusCitySCurve(R), // H-I-J：高架 S 型穿城（钝角缓弯，半楼高巡航）
-    latLonToDir(-12, 165).multiplyScalar(R + 0.3), // K 回北折返
+    ...factoryFreightEntry(R),
+    ...factoryFreightStops(R).flatMap(stop=>stop.points),
+    ...factoryFreightExit(R),
+    // Base departure now joins the northeast main line tangentially.
+    // 2026-09-18 东海北延：K → 越赤道东行 → 高山古堡前港（车站）→ 折向西南
+    // 接回近岛段。全程深水高架（桥面/桥墩系统自动覆盖），古堡前港站
+    // (26.5N, 42E) 距古堡山体前港 ~16 单位，电车在港前高架停靠。
+    latLonToDir(-2, 130).multiplyScalar(R + 0.3), // K→NE 北上
+    ...(citadelCoastalTramEnabled() ? [] : [latLonToDir(12, 78).multiplyScalar(R + 0.3)]), // Coastal route approaches from open eastern sea.
+    ...(citadelCoastalTramEnabled()
+      ? citadelCoastalTramPoints(R)
+      : [latLonToDir(24, 56).multiplyScalar(R + 0.3),
+         latLonToDir(26.5, 42).multiplyScalar(R + 0.55),
+         latLonToDir(24, 28).multiplyScalar(R + 0.3)]),
+    ...(citadelCoastalTramEnabled() ? [] : [latLonToDir(18, 15).multiplyScalar(R + 0.3)]), // Legacy return; coastal candidate uses its longer transition.
+    ...(citadelCoastalTramEnabled() ? [] : [latLonToDir(11, 11).multiplyScalar(R+.3)]), // 西南大洋平缓钝角转弯
+    ...(citadelCoastalTramEnabled() ? [] : [latLonToDir(3,14).multiplyScalar(R+.3)]),  // 南向大洋顺滑过渡
+    ...(citadelCoastalTramEnabled() ? [] : [latLonToDir(-3,24).multiplyScalar(R+.3)]), // 东南深水开敞航段
+    latLonToDir(-6, 38).multiplyScalar(R + 0.3), // 转向东行
+    latLonToDir(-4, 54).multiplyScalar(R + 0.3), // 东偏北深水段
+    latLonToDir(2, 68).multiplyScalar(R + 0.3),  // 东北开敞海域钝角缓弯
+    latLonToDir(12, 82).multiplyScalar(R + 0.3), // 东北深水进岛引桥
+    latLonToDir(26, 94).multiplyScalar(R + 0.3), // 近岛东北深水段
+    latLonToDir(42, 102).multiplyScalar(R + 0.3), // 对齐回程开敞水面
     ...islandApproachFlat.map(({ x, z }) => toWorld(x, z)), // K→W0：切线对齐
   ];
 
   // —— 一次性投影 + 平滑：之后枕木/钢轨/桥面/立柱/车辆统一用最终曲线，不再二次投影 ——
   // 这正是“断开/台阶”的根因修复：所有几何共用同一条连续轨面。
   const initialCurve = new THREE.CatmullRomCurve3(controls, true, "centripetal", 0.5);
-  const RESAMPLE = 720;
+  initialCurve.arcLengthDivisions=8192; initialCurve.updateArcLengths();
+  const RESAMPLE = 1440;
   const projected = [];
   for (let i = 0; i < RESAMPLE; i++) {
     initialCurve.getPointAt(i / RESAMPLE, _p);
@@ -615,40 +896,137 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
       );
     }
   }
+  // Locally relax only freight-incompatible bends; keep the authored route elsewhere.
+  for(let pass=0;pass<24;pass++){
+    const src=projected.map(p=>p.clone());
+    for(let i=0;i<RESAMPLE;i++){
+      const a=src[(i-1+RESAMPLE)%RESAMPLE],b=src[i],c=src[(i+1)%RESAMPLE],ab=b.clone().sub(a),bc=c.clone().sub(b);
+      const turn=ab.angleTo(bc),step=(ab.length()+bc.length())/2;
+      if(turn>step/19)projected[i].lerp(a.clone().add(c).multiplyScalar(.5),.38);
+    }
+  }
   // 平滑后只做“平滑下界”钳制（岛缘斜坡/峡谷净空），不再重贴凹凸地形，避免摆动折角
   for (let i = 0; i < RESAMPLE; i++) {
     const len = projected[i].length();
     const floor = trackFloorRadiusAt(projected[i], R);
     if (len < floor) projected[i].multiplyScalar(floor / len);
   }
+  // Gate viaduct: raise the shared rail/vehicle curve above the actual ocean.
+  // Fixed geographic direction survives arc-length reparameterization.
+  const gateDirection = new THREE.Vector3(23.134897, -71.740187, -141.426689).normalize();
+  for (const point of projected) {
+    const direction = point.clone().normalize();
+    const distance = direction.angleTo(gateDirection) * R;
+    const blend = 1 - smooth01((distance - 145) / 65);
+    if (blend > 0) {
+      const floor = R + 9.5; // Level viaduct across the canyon, not a ramp following its waterfall.
+      point.setLength(Math.max(point.length(), THREE.MathUtils.lerp(point.length(), floor, blend)));
+    }
+  }
+  // Both approaches meet the factory railway at one grade. Leaving the world
+  // approach at +0.3 m put its wheels through the +1.12 m crossing sleepers.
+  const baseDirection=bookshopTownPose(R).position.normalize();
+  for(const point of projected){const distance=point.clone().normalize().angleTo(baseDirection)*R,blend=1-THREE.MathUtils.smoothstep(distance,110,155);if(blend>0)point.setLength(Math.max(point.length(),R+.3+.82*blend));}
+  // Keep the world railway outside the accepted canal-junction castle's west
+  // towers. This is the surveyed fixed town frame, independent of arc fractions.
+  const junctionFrame=new THREE.Matrix4().fromArray([.9084787455290392,-.08088380399918296,.4100294857356054,0,.3927368378574174,.5007108878138331,-.7713924960838288,0,-.14291306837283957,.8618273708088557,.4866512486503609,0,62.830039320429634,80.10372783245701,-123.40737152349092,1]);
+  const junctionInverse=junctionFrame.clone().invert();
+  for(const point of projected){const local=point.clone().applyMatrix4(junctionInverse),radius=point.length();
+    if(local.y< -40||local.y>60||local.x>25||Math.abs(local.z)>85)continue;
+    // Feather all spatial boundaries. A hard x=0 cutoff created a sharp kink
+    // when the far approach crossed that plane even though the tower was clear.
+    const blend=(1-THREE.MathUtils.smoothstep(Math.abs(local.z),18,70))*(1-THREE.MathUtils.smoothstep(local.x,-5,25))*THREE.MathUtils.smoothstep(local.y,-40,-25)*(1-THREE.MathUtils.smoothstep(local.y,35,60));
+    const outside=-27-3*Math.log1p(Math.exp((-27-local.x)/3));
+    local.x=THREE.MathUtils.lerp(local.x,outside,blend);
+    point.copy(local.applyMatrix4(junctionFrame)).setLength(radius);
+  }
+  // The approved gate is a straight arcade. Keep the heavy twin tracks in its
+  // opening instead of letting the spherical S-curve clip the end pillars.
+  const gateFrame=new THREE.Matrix4().compose(new THREE.Vector3(...GATE_SITE_ORIGIN),new THREE.Quaternion(...GATE_SITE_QUATERNION),new THREE.Vector3(1,1,1));
+  const gateInverse=gateFrame.clone().invert();
+  for(const point of projected){
+    const local=point.clone().applyMatrix4(gateInverse);
+    if(Math.abs(local.x)>30||Math.abs(local.y)>25||Math.abs(local.z)>80)continue;
+    const blend=1-THREE.MathUtils.smoothstep(Math.abs(local.z),30,80);
+    local.x*=1-blend;local.y=THREE.MathUtils.lerp(local.y,.22,blend);
+    point.copy(local.applyMatrix4(gateFrame));
+  }
+  // Re-check the final freight geometry after clearance offsets: moving a
+  // coastal control or feathering a building detour can introduce a new bend.
+  // Preserve each sample's rail height while relaxing only excessive turns.
+  for(let pass=0;pass<128;pass++){
+    const source=projected.map(p=>p.clone());
+    for(let i=0;i<RESAMPLE;i++){
+      const a=source[(i-1+RESAMPLE)%RESAMPLE],b=source[i],c=source[(i+1)%RESAMPLE],ab=b.clone().sub(a),bc=c.clone().sub(b),step=(ab.length()+bc.length())*.5;
+      if(ab.angleTo(bc)>step/24)projected[i].lerp(a.clone().add(c).multiplyScalar(.5),.42).setLength(b.length());
+    }
+  }
   // centripetal：间距不均时也不过冲/尖角
   const curve = new THREE.CatmullRomCurve3(projected, true, "centripetal", 0.5);
+  curve.arcLengthDivisions=8192; curve.updateArcLengths();
   const trackLen = curve.getLength();
   // 中心线两侧各铺一条完整线路（每线 = 枕木 + 两根钢轨）。
   const redCurve = buildParallelCurve(curve, -LANE_OFFSET, R);
   const blueCurve = buildParallelCurve(curve, LANE_OFFSET, R);
   const sleeperMat = toonMat(SLEEPER);
   const railMat = toonMat(RAIL);
+  const priorRailCompile=railMat.onBeforeCompile;
+  railMat.onBeforeCompile=shader=>{
+    priorRailCompile?.(shader);
+    shader.uniforms.gateRailDirection={value:gateDirection};
+    shader.uniforms.gateRailSand={value:new THREE.Color(0xc4a273)};
+    shader.vertexShader='varying vec3 railWorld;\n'+shader.vertexShader;
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nrailWorld=(modelMatrix*vec4(position,1.)).xyz;');
+    shader.fragmentShader='varying vec3 railWorld; uniform vec3 gateRailDirection; uniform vec3 gateRailSand;\n'+shader.fragmentShader;
+    shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\nfloat gateTint=smoothstep(.92,.985,dot(normalize(railWorld),gateRailDirection));diffuseColor.rgb=mix(diffuseColor.rgb,gateRailSand,gateTint);');
+  };
+  railMat.customProgramCacheKey=()=> 'gate-warm-sand-rail-v1';
   addTrackLane(group, redCurve, R, sleeperMat, railMat);
   addTrackLane(group, blueCurve, R, sleeperMat, railMat);
-  addViaductDeck(group, curve, R);
+  addViaductDeck(group, curve, R, citadelCoastalTramEnabled());
+  addTramCulverts(group, curve, R);
+  const coastalCitadel = citadelCoastalTramEnabled();
+  // 圣城临海段：石墩石拱桥、栏杆、路灯与两站（替代下方通用细立柱）
+  if (coastalCitadel) {
+    addCitadelCoastalTramStructures(group, curve, R, groundRadiusAt);
+    // 圣城新城隧道：外壳/洞门换成与连拱桥同色的米白石，读作城墙基座而非深灰管道
+    const cream = toonMat(0xd9ceb6, { flatShading: true, side: THREE.DoubleSide });
+    const creamTrim = toonMat(0xb9ad94, { flatShading: true });
+    const _c = new THREE.Vector3();
+    for (const culvert of group.children.filter((c) => /^tram-culvert-/.test(c.name))) {
+      culvert.updateMatrixWorld(true);
+      new THREE.Box3().setFromObject(culvert).getCenter(_c);
+      if (!inCitadelTramTunnel(_c)) continue;
+      culvert.traverse((o) => {
+        if (!o.isMesh || o.userData.isOutline || o.material?.isMeshBasicMaterial) return;
+        o.material = o.material?.color?.getHex?.() === 0x3e434a ? creamTrim : cream;
+      });
+    }
+  }
 
   // ---------- 高架立柱：桥面下方每 ~2 单位一根，落到真实地面/阶梯谷底 ----------
   {
     const pierMat = toonMat(0x8a8f94);
     const count = Math.floor(trackLen / 2);
+    const clearanceSamples=Array.from({length:1200},(_,i)=>curve.getPointAt(i/1200));
     for (let i = 0; i < count; i++) {
       const t = i / count;
       curve.getPointAt(t, _p);
       _up.copy(_p).normalize();
+      // The gate arcade supports this span; avoid duplicate generic columns in its openings.
+      if(gateThirtyRound()>=16 && Math.acos(THREE.MathUtils.clamp(_up.dot(gateDirection),-1,1))*R<25)continue;
       const footR = groundRadiusAt(_up, R);
       const topR = _p.length() - 0.45; // 顶到桥面/梁底
       const len = topR - footR;
       if (len < 0.5) continue; // 贴地段与低堤段不需要墩
+      if (coastalCitadel && inCitadelCoastalWindow(_p)) continue; // 圣城段用石墩
+      // An upper viaduct must not plant a support through a lower rail crossing.
+      if(clearanceSamples.some((q,j)=>{const gap=Math.min(Math.abs(j/1200-t),1-Math.abs(j/1200-t))*trackLen;if(gap<80||q.length()+.4>topR||q.length()+6<footR)return false;return q.clone().addScaledVector(_up,-q.dot(_up)).length()<4.8;}))continue;
       const pier = new THREE.Mesh(
         facet(new THREE.BoxGeometry(0.55, len, 0.55)),
         pierMat
       );
+      pier.name="tram-static-pier";
       pier.position.copy(_up).multiplyScalar(footR + len / 2);
       pier.quaternion.copy(quatYToDir(_up, new THREE.Quaternion()));
       pier.castShadow = true;
@@ -657,13 +1035,21 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
     }
   }
 
+  // Spatial batches retain local frustum culling; rolling stock and collision routes are untouched.
+  const staticBuckets=new Map();
+  for(const mesh of [...group.children])if(/^tram-static-(sleeper|pier)$/.test(mesh.name)){
+    const p=mesh.position,key=[p.x,p.y,p.z].map(v=>Math.floor(v/36)).join(':');
+    let bucket=staticBuckets.get(key);if(!bucket){bucket=new THREE.Group();bucket.name='tram-static-sector';group.add(bucket);staticBuckets.set(key,bucket);}bucket.add(mesh);
+  }
+  for(const bucket of staticBuckets.values())mergeStaticGroup(bucket);
+
   // ---------- 红 / 蓝双车：同站并排、方向相反 ----------
-  const redTram = createChristchurchTram({
+  const redTram = createFreightVehicle({
     variant: "red",
     routeNumber: "11",
     destination: "CITY TOUR",
   });
-  const blueTram = createChristchurchTram({
+  const blueTram = createFreightVehicle({
     variant: "blue",
     routeNumber: "12",
     destination: "COAST LINE",
@@ -701,6 +1087,33 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
       farewellT: 0,
     },
   ];
+  for (const service of services) {
+    service.wagons = Array.from({length:FREIGHT_WAGONS},(_,wagon)=>{
+      const car=createFreightVehicle({variant:service.tram.userData.variant,wagon});group.add(car);return car;
+    });
+    service.tram.userData.freightWagons=service.wagons;
+    service.runningGear=[addFreightMotion(service.tram,{locomotive:true}),...service.wagons.map((car,i)=>addFreightMotion(car,{heavy:i<ROBOT_CARGO_SLOTS}))];
+    service.couplers=service.wagons.map(()=>{
+      const link=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,1,6),new THREE.MeshStandardMaterial({color:0x303638}));link.name='freight-coupler';group.add(link);return link;
+    });
+  }
+  const interlocking=createFreightInterlocking(curve,services,FREIGHT_PITCH);
+  group.userData.freightJunctions=interlocking.zones;
+  const linkA=new THREE.Vector3(),linkB=new THREE.Vector3(),linkDir=new THREE.Vector3();
+  function placeVehicle(vehicle,service,progress){
+    service.curve.getPointAt(wrap01(progress),_p);
+    service.curve.getTangentAt(wrap01(progress),_fwd).normalize().multiplyScalar(service.direction);
+    _up.copy(_p).normalize();_right.crossVectors(_up,_fwd).normalize();_up.crossVectors(_fwd,_right).normalize();
+    _m.makeBasis(_right,_up,_fwd);vehicle.quaternion.setFromRotationMatrix(_m);vehicle.rotateY(-Math.PI/2);
+    vehicle.position.copy(_p).addScaledVector(_up,.12);
+  }
+  for(const service of services){
+    service.loadingStops=[...factoryFreightStops(R),freightTrainingDepot(R)].map(stop=>{
+      let best=Infinity,progress=0;for(let i=0;i<4096;i++){const u=i/4096,dist=service.curve.getPointAt(u).distanceToSquared(stop.center);if(dist<best){best=dist;progress=u;}}
+      // Locomotive pulls half the consist past the middle of the receiving row.
+      return {name:stop.name,progress:wrap01(progress+service.direction*FREIGHT_PITCH*((ROBOT_CARGO_SLOTS+1)/2)/service.trackLen)};
+    });service.dwell=0;service.lastStop=null;
+  }
   // 车体抬升：车底最低件相对轨面留净空，防岛面/草坡缘剃车底（原 0.06 会擦地）
   const bodyLift = 0.12;
   /** 离城送别最短/最长时长（秒）；BGM 未结束时会延长到 BGM 完 */
@@ -773,22 +1186,32 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
   function update(dt, listenerPosition) {
     let nearest = null;
     let nearestDistance = Infinity;
+    const blocked=interlocking.update();
     for (const service of services) {
-      service.progress = wrap01(
-        service.progress + (service.direction * P.tramSpeed * dt) / service.trackLen
-      );
-      service.curve.getPointAt(service.progress, _p);
-      service.curve.getTangentAt(service.progress, _fwd).normalize();
-      _fwd.multiplyScalar(service.direction);
-      _up.copy(_p).normalize();
-      _right.crossVectors(_up, _fwd).normalize();
-      // 不把切线重新压回球面：保留 8 字线路下降/上升的真实坡度。
-      _up.crossVectors(_fwd, _right).normalize();
-      _m.makeBasis(_right, _up, _fwd);
-      _q.setFromRotationMatrix(_m);
-      service.tram.quaternion.copy(_q);
-      service.tram.rotateY(-Math.PI / 2);
-      service.tram.position.copy(_p).addScaledVector(_up, bodyLift);
+      const previousProgress=service.progress;
+      const travelDirection=service.direction*(service.shuntingBack?-1:1);
+      const controller=group.userData.freightController,variant=service.tram.userData.variant;
+      service.tram.userData.signalHold=blocked.has(variant);
+      if(blocked.has(variant)){}else if(controller?.isHolding(variant)){service.dwell=Math.max(.25,service.dwell);}else if(service.dwell>0){service.dwell=Math.max(0,service.dwell-dt);}else{
+        const step=Math.max(0,P.tramSpeed*dt/service.trackLen);
+        const stop=service.loadingStops.filter(s=>s.name!==service.lastStop && wrap01((s.progress-service.progress)*travelDirection)<=step).sort((a,b)=>wrap01((a.progress-service.progress)*travelDirection)-wrap01((b.progress-service.progress)*travelDirection))[0];
+        if(stop){service.progress=stop.progress;service.dwell=controller?3:12;service.lastStop=stop.name;controller?.onArrive(variant,stop.name);}else service.progress=wrap01(service.progress+travelDirection*step);
+      }
+      service.tram.userData.loadingDwell=service.dwell;
+      service.tram.userData.loadingStops=service.loadingStops;
+      const traveled=wrap01((service.progress-previousProgress)*travelDirection)*service.trackLen*(service.shuntingBack?-1:1);
+      for(const motion of service.runningGear)motion.update(dt,traveled);
+      placeVehicle(service.tram,service,service.progress);
+      service.tram.userData.trackProgress=service.progress;
+      let previous=service.tram;
+      service.wagons.forEach((car,i)=>{
+        placeVehicle(car,service,service.progress-service.direction*(i+1)*FREIGHT_PITCH/service.trackLen);
+        linkA.set(-(previous.userData.couplingHalfLength||1.98),previous.userData.couplingHeight||.36,0).applyQuaternion(previous.quaternion).add(previous.position);
+        linkB.set(car.userData.couplingHalfLength||1.98,car.userData.couplingHeight||.36,0).applyQuaternion(car.quaternion).add(car.position);
+        const link=service.couplers[i];linkDir.subVectors(linkB,linkA);link.position.copy(linkA).add(linkB).multiplyScalar(.5);
+        link.scale.y=linkDir.length();link.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),linkDir.normalize());
+        previous=car;
+      });
 
       // ---- 离城送别状态机（与是否乘车无关；红车优先可见）----
       {
@@ -854,6 +1277,16 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
     return nearest;
   }
 
+  function getNearestBoardable(position) {
+    let nearest=null,best=Infinity;
+    for(const service of services)for(const vehicle of [service.tram,...(service.wagons||[])]){
+      const distance=freightBoardDistance(vehicle,position);
+      if(distance<best){nearest=vehicle;best=distance;}
+      vehicle.freightLocomotive=service.tram;
+    }
+    return nearest;
+  }
+
   /** 两辆车都可搭乘；以最近车辆做距离判定。 */
   function isNearTram(position, radius = BOARDING_RADIUS) {
     if (!position) return false;
@@ -911,12 +1344,16 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
     blueTram,
     update,
     getNearestTram,
+    getNearestBoardable,
     isNearTram,
     /** 进谷音频：{ inCanyon, secondsToEntry } */
     getCanyonAudioCue,
     /** 离城送别伴飞电车（红车优先） */
     getFarewellEscortTram,
     boardingRadius: BOARDING_RADIUS,
+    freightServices: services,
+    setFreightController(controller){group.userData.freightController=controller;},
+    seekFreight(variant,progress){const s=services.find(s=>s.tram.userData.variant===variant);if(!s||!Number.isFinite(progress))return false;s.progress=wrap01(progress);s.dwell=0;s.lastStop=null;update(0);return true;},
     waypointsFlat: loopFlat,
   };
 }

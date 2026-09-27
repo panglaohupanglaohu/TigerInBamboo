@@ -458,7 +458,15 @@ function pushTerrainTriangle(positions, colors, a, b, c, color) {
   for (let i = 0; i < 3; i++) colors.push(tint.r, tint.g, tint.b);
 }
 
-function buildMossTerrainTopography(rnd) {
+function buildMossTerrainTopography(rnd, supportBody) {
+  // Seat the expanded outer skirt into the actual authored hull triangles.
+  // Checking the mesh (rather than its bounding box) avoids an overhanging slab.
+  supportBody.updateMatrix();
+  const supportGeometry = supportBody.geometry.clone().applyMatrix4(supportBody.matrix);
+  const supportMaterial = new THREE.MeshBasicMaterial({side:THREE.DoubleSide});
+  const supportMesh = new THREE.Mesh(supportGeometry,supportMaterial);
+  supportMesh.updateMatrixWorld(true);
+  const supportRay = new THREE.Raycaster();
   const count = 18;
   const layers = [
     { rx: 14.25, rz: 7.65, y: -1.75, jitter: 0.12, palette: MOSS_TERRAIN_BASE },
@@ -470,9 +478,19 @@ function buildMossTerrainTopography(rnd) {
   const phase = rnd() * Math.PI * 2;
   const contours = layers.map((layer, i) => {
     const ring = makeMossContour(rnd, layer.rx, layer.rz, count, phase, layer.jitter);
+    // The approved battle target uses the length of Kun's back. Expand only
+    // longitudinally; preserving width keeps the plate on the original flank.
+    for (const point of ring) point.x *= 1.35;
     for (const point of ring) point.y = layer.y + (i === layers.length - 1 ? rnd() * 0.035 : 0);
+    if(i===0)for(const point of ring){
+      supportRay.set(new THREE.Vector3(point.x,30,point.z),new THREE.Vector3(0,-1,0));
+      const hit=supportRay.intersectObject(supportMesh,false)[0];
+      if(!hit)throw new Error('Expanded Kun garden skirt leaves the actual whale back');
+      point.y=Math.min(point.y,hit.point.y-LEVIATHAN_PLATE_Y-.18);
+    }
     return ring;
   });
+  supportGeometry.dispose();supportMaterial.dispose();
 
   const positions = [];
   const colors = [];
@@ -889,7 +907,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
     // 地形由五条不规则等高线组成：顶面是苔庭连续的浅台，下面逐级
     // 收成湿润深色坡脚。这样远景读到的是一座小型苔丘，而不是漂浮
     // 在天空中的矩形地板；顶面仍保留足够平缓的可行走区域。
-    const { terrain, topContour } = buildMossTerrainTopography(rnd);
+    const { terrain, topContour } = buildMossTerrainTopography(rnd,group.getObjectByName('leviathan-body'));
     terrain.name = "leviathan-crust-plate";
     island.add(terrain);
 
@@ -1195,6 +1213,9 @@ export function buildEcoLeviathanIsland(opts = {}) {
   // 不破坏球面定位；另叠极低频的切向漂移（±1.1），呼应「缓缓漂移」。
   const _anchor = new THREE.Vector3();
   const _base = new THREE.Vector3();
+  let rollAngle = 0;
+  const rollQ = new THREE.Quaternion();
+  const rollAxis = new THREE.Vector3(1, 0, 0); // head-to-tail local axis
   let _prevAnchorR = anchorR;
   let rainSpeed = 0;
   let rainAcc = 0;
@@ -1266,13 +1287,20 @@ export function buildEcoLeviathanIsland(opts = {}) {
       // 尾鳍比尾柄滞后半拍，像大动物甩尾的跟随动作
       flukes.rotation.y = Math.sin(time * 0.8 - 0.55) * 0.09 * tailT;
     }
+    // Stylized follow-through during the longitudinal roll, not tail-driven yaw.
+    // Local X is the whale length; local Z bending moves the tail dorsoventrally.
+    const rollP = THREE.MathUtils.clamp(rollAngle / (Math.PI * 2), 0, 1);
+    const rollEnvelope = Math.sin(Math.PI * rollP) ** 2;
+    tailRoot.rotation.z += 0.12 * rollEnvelope * Math.sin(rollP * Math.PI * 4);
+    tailRoot.rotation.x = -0.10 * rollEnvelope;
+    if (flukes) flukes.rotation.z = 0.08 * rollEnvelope * Math.sin(rollP * Math.PI * 4 - 0.55);
     // 苔庭岛随鲸/留地：升空时骑在鲸背（Y=PLATE_Y），藏地时脱离鲸体、
     // 留在地表（plateWorldLift）——鲸身沉入地下，只见苔庭
     {
       const rideY = LEVIATHAN_PLATE_Y;
       const detachWorld = plateWorldLift - anchorR;
       island.position.y =
-        detachWorld > rideY * size ? detachWorld / size : rideY;
+        Math.abs(rollAngle) > 1e-6 ? rideY : (detachWorld > rideY * size ? detachWorld / size : rideY);
     }
 
     // ---- 升空落雨：上升速度驱动发射，峰值在中段；下沉不落雨 ----
@@ -1286,8 +1314,10 @@ export function buildEcoLeviathanIsland(opts = {}) {
       rainAcc -= 1;
     }
     updateRain(step);
+    // Rotate the common root: body, dorsal terrain, pools and pine trees together.
+    group.quaternion.multiply(rollQ.setFromAxisAngle(rollAxis, rollAngle));
   };
   update(0, 0);
 
-  return { group, update, setAnchorRadius, island };
+  return { group, update, setAnchorRadius, island, setRollAngle(angle) { rollAngle = Number.isFinite(angle) ? angle : 0; } };
 }

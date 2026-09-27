@@ -1,3 +1,4 @@
+import {createStaticMeshRaycast} from './staticMeshRaycast.js';
 import {findDockConnector,placeDockConnector} from './warshipDockConnector.js';
 import * as THREE from 'three';
 import { createWarshipClearance } from './warshipClearance.js';
@@ -7,13 +8,59 @@ import { orientWarship } from './warshipNavigation.js';
 export function createWarshipWaterRoutes(scene, radius) {
   scene.updateMatrixWorld(true);
   const water=scene.getObjectByName('planet-v8-curved-ocean');
+  const planet=scene.getObjectByName('planet-surface');
+  const waterQuery=water?createStaticMeshRaycast(water):null,bedQuery=planet?createStaticMeshRaycast(planet):null;
   const roots=new Set();
+  const kun=scene.getObjectByName('leviathanGroup');
+  if(kun)roots.add(kun);
+  const kunIsland=scene.getObjectByName('leviathan-island');
+  const revision=o=>o?.userData?.terrainGeometryVersion ?? 0;
+  const attrVersion=a=>a?.isInterleavedBufferAttribute?a.data.version:a?.version;
+  const geometryState=o=>({geometry:o?.geometry,position:o?.geometry?.attributes.position,index:o?.geometry?.index,
+    pv:attrVersion(o?.geometry?.attributes.position),iv:attrVersion(o?.geometry?.index),
+    instance:o?.instanceMatrix,instanceVersion:attrVersion(o?.instanceMatrix),count:o?.count});
+  function geometryMatches(o,s){const g=o?.geometry;return g===s.geometry&&g?.attributes.position===s.position&&g?.index===s.index&&
+    attrVersion(g?.attributes.position)===s.pv&&attrVersion(g?.index)===s.iv&&
+    o?.instanceMatrix===s.instance&&attrVersion(o?.instanceMatrix)===s.instanceVersion&&o?.count===s.count;}
+  const fixed=[water,planet,kun,kunIsland].filter(Boolean).map(o=>({o,parent:o.parent,matrix:o.matrixWorld.clone(),
+    visible:o.visible,revision:revision(o),navigationRevision:o.userData.navigationGeometryVersion,geometry:geometryState(o)}));
+  const kunNodes=[];
+  kun?.traverse(o=>kunNodes.push({o,parent:o.parent,children:[...o.children],matrix:o.matrixWorld.clone(),visible:o.visible,
+    geometry:geometryState(o),materials:(Array.isArray(o.material)?o.material:o.material?[o.material]:[]).map(m=>({m,visible:m.visible,opacity:m.opacity}))}));
+  let stale=false;
+  function currentGeometry(){
+    if(stale)return false;
+    for(const s of fixed){s.o.updateWorldMatrix(true,false);
+      if(s.o.parent!==s.parent||s.o.visible!==s.visible||!s.o.matrixWorld.equals(s.matrix)||revision(s.o)!==s.revision||
+        s.o.userData.navigationGeometryVersion!==s.navigationRevision||!geometryMatches(s.o,s.geometry)){stale=true;return false;}}
+    return true;
+  }
+  // A solver is a frozen, synchronous planning snapshot. Call this once before
+  // each cross-frame batch of surface/clear queries. Planning entrypoints below
+  // do so themselves. Never traverse the whole scene per sample. Animators may
+  // also bump kun.userData.navigationGeometryVersion to invalidate in O(1).
+  function validateSnapshot(){
+    if(!currentGeometry())return false;
+    kun?.updateWorldMatrix(true,true);
+    for(const s of kunNodes){const o=s.o,materials=Array.isArray(o.material)?o.material:o.material?[o.material]:[];
+      if(o.parent!==s.parent||o.visible!==s.visible||!o.matrixWorld.equals(s.matrix)||!geometryMatches(o,s.geometry)||
+        o.children.length!==s.children.length||o.children.some((child,i)=>child!==s.children[i])||
+        materials.length!==s.materials.length||materials.some((m,i)=>m!==s.materials[i].m||m.visible!==s.materials[i].visible||m.opacity!==s.materials[i].opacity)){
+        stale=true;return false;
+      }
+    }
+    return true;
+  }
+  // 2026-09-18：hills/camp/skirt 不能当航线障碍——整岛包围盒会把古堡→苔庭
+  // 的运兵航线整个挡掉（苔庭之战因此永不触发）。恢复原四根。
   for(const name of ['castleContainer','canal-junction-box','citadel-navona-canal-plaza','old-harbor-scene']){const o=scene.getObjectByName(name);if(o)roots.add(o);}
   scene.traverse(o=>{if(o.userData.highlandAssaultAnchors||o.userData.kind==='odyssey-citadel'||o.name==='mossyGround'||o.name==='planet-surface'||/^planet-v[89].*terrain/.test(o.name))roots.add(o);});
   const obstacles=[],seen=new Set();
   function visible(o){for(let n=o;n;n=n.parent)if(!n.visible)return false;return true;}
   for(const root of roots){const meshes=[];root.traverse(o=>{
-    if(!o.isMesh||seen.has(o)||!visible(o)||o.parent?.isMesh||!o.geometry?.attributes.position)return;
+    if(!o.isMesh||seen.has(o)||!visible(o)||(o.parent?.isMesh&&root!==kun)||!o.geometry?.attributes.position)return;
+    const materials=Array.isArray(o.material)?o.material:[o.material];
+    if(materials.length&&materials.every(m=>m?.visible===false||m?.transparent&&m.opacity<=.0001))return;
     if(/water|ocean|reflection|shadow|outline/i.test(o.name)||o.userData.isOutline||o.userData.backlitHighlight)return;
     // The official ocean covers the whole sphere. `planet-surface` is its
     // underwater bed and the player's fallback ground, not a boat collision
@@ -22,35 +69,39 @@ export function createWarshipWaterRoutes(scene, radius) {
     if(o.name==='planet-surface')return;
     seen.add(o);o.geometry.computeBoundingBox();if(o.isInstancedMesh)o.computeBoundingBox();
     const box=(o.isInstancedMesh?o.boundingBox:o.geometry.boundingBox).clone().applyMatrix4(o.matrixWorld);
-    meshes.push({mesh:o,box});
+    const support=root!==kun||o.name==='leviathan-crust-plate'||o.name==='leviathan-terrain-topography'||o.name.startsWith('leviathan-moss-bed');
+    meshes.push({mesh:o,box,support});
   });if(meshes.length){const box=new THREE.Box3();for(const item of meshes)box.union(item.box);obstacles.push({root,box,meshes});}}
   const ray=new THREE.Raycaster(),cache=new Map(),Y=new THREE.Vector3(0,1,0);
   // Terrain/platform render layers must still participate in navigation support.
   ray.layers.enableAll();
   function surface(direction){
+    if(!currentGeometry())return null;
     const d=direction.clone().normalize(),key=d.toArray().map(v=>v.toFixed(6)).join(',');if(cache.has(key))return cache.get(key);
     ray.set(d.clone().multiplyScalar(radius+90),d.clone().negate());ray.far=130;
-    const wh=water&&visible(water)?ray.intersectObject(water,false)[0]:null;
+    const wh=water&&visible(water)?waterQuery.firstHit(ray.ray,ray.far):null;
     if(!wh){cache.set(key,null);return null;}
     let top=-Infinity,object=null,seabed=-Infinity;
-    const planet=scene.getObjectByName('planet-surface');
     if(planet&&visible(planet)){
-      const bedHit=ray.intersectObject(planet,false)[0];
+      const bedHit=bedQuery.firstHit(ray.ray,ray.far);
       if(bedHit)seabed=bedHit.point.length();
     }
-    for(const group of obstacles){if(!ray.ray.intersectsBox(group.box))continue;for(const {mesh,box} of group.meshes){if(!ray.ray.intersectsBox(box))continue;const hit=ray.intersectObject(mesh,false)[0];if(hit&&hit.point.length()>top){top=hit.point.length();object=mesh.name;}}}
+    for(const group of obstacles){if(!ray.ray.intersectsBox(group.box))continue;for(const {mesh,box,support} of group.meshes){if(support===false||!ray.ray.intersectsBox(box))continue;const hit=ray.intersectObject(mesh,false)[0];if(hit&&hit.point.length()>top){top=hit.point.length();object=mesh.name;}}}
     const result={water:wh.point.length(),ground:top,object,seabed};cache.set(key,result);return result;
   }
   // Circular hull/oar reservation is independent of heading and protects turns.
+  const minimumDepth=1.5; // Measured v11 rowing draft 1.329m at scale1.7 + clearance margin.
   const envelope=7,clearCache=new Map(),clearFailures=new Map();
   function clear(direction){
+    if(!currentGeometry())return false;
     const d=direction.clone().normalize(),key=d.toArray().map(v=>v.toFixed(6)).join(',');if(clearCache.has(key))return clearCache.get(key);
     const e=Y.clone().cross(d).normalize();if(e.lengthSq()<.1)e.set(1,0,0);const n=d.clone().cross(e).normalize();
     const points=[[0,0]];for(let ring=1;ring<=2;ring++)for(let k=0;k<12;k++)points.push([Math.cos(k*Math.PI/6)*envelope*ring/2,Math.sin(k*Math.PI/6)*envelope*ring/2]);
-    const valid=points.every(([x,z])=>{const point=d.clone().multiplyScalar(radius).addScaledVector(e,x).addScaledVector(n,z),s=surface(point);if(s&&s.ground<s.water-1.25)return true;clearFailures.set(key,{point:point.toArray(),object:s?.object??'no-water',water:s?.water,ground:s?.ground,requiredDepth:1.25});return false;});
+    const valid=points.every(([x,z])=>{const point=d.clone().multiplyScalar(radius).addScaledVector(e,x).addScaledVector(n,z),s=surface(point);if(s&&Math.max(s.ground,s.seabed)<s.water-minimumDepth)return true;clearFailures.set(key,{point:point.toArray(),object:s?(s.seabed>s.ground?'planet-surface':s.object):'no-water',water:s?.water,ground:s?.ground,seabed:s?.seabed,depth:s?s.water-Math.max(s.ground,s.seabed):null,requiredDepth:minimumDepth});return false;});
     clearCache.set(key,valid);return valid;
   }
   function berth(target,used=[],options={}){
+    if(!validateSnapshot())return null;
     const d=target.clone().normalize(),e=Y.clone().cross(d).normalize(),n=d.clone().cross(e).normalize();
     for(let distance=0;distance<=(options.maxDistance??64);distance+=2){const count=Math.max(1,Math.ceil(distance*Math.PI*2/2));for(let i=0;i<count;i++){
       const candidate=d.clone().multiplyScalar(radius).addScaledVector(e,Math.cos(i/count*Math.PI*2)*distance).addScaledVector(n,Math.sin(i/count*Math.PI*2)*distance).normalize();
@@ -59,6 +110,7 @@ export function createWarshipWaterRoutes(scene, radius) {
     }}return null;
   }
   function dock(boat,target,used=[],options={}) {
+    if(!validateSnapshot())return {valid:false,reason:'stale-navigation-snapshot',attempts:0};
     const meshCheck=createWarshipClearance(boat,obstacles),scale=boat.scale.x;
     // Read the CURRENT Blender assembly: the V6 deployed hinge moved outward.
     const contract=boat.userData.warshipV6?.boardingContract;
@@ -85,7 +137,7 @@ export function createWarshipWaterRoutes(scene, radius) {
           if(Math.abs(ratio)>1){p=null;break;}angle=Math.asin(ratio);
         }
         if(!p||Math.abs(angle)>25*Math.PI/180||used.some(other=>p.distanceTo(other.position)<13.8)){rejected.angle++;continue;}
-        const centerSurface=surface(d);if(centerSurface.ground>=centerSurface.water-.3){rejected.center++;continue;}
+        const centerSurface=surface(d);if(Math.max(centerSurface.ground,centerSurface.seabed)>=centerSurface.water-minimumDepth){rejected.center++;continue;}
         const tip=new THREE.Vector3(hx,hy-length*Math.sin(angle),hz+length*Math.cos(angle)).multiplyScalar(scale).applyQuaternion(q).add(p);
         let supported=true;
         for(const lane of [-.18,0,.18]){const edge=tip.clone().addScaledVector(x,lane*scale),hit=surface(edge);if(!hit||hit.ground<hit.water+.08||Math.abs(edge.length()-hit.ground)>.055){supported=false;break;}}
@@ -110,6 +162,7 @@ export function createWarshipWaterRoutes(scene, radius) {
     }}return {valid:false,attempts,reason:'No actual-mesh-clear dock within deployed boarding reach',rejected,hullObstacles,entryObstacles,firstHullPose,firstEntryPose,lastFailure};
   }
   function route(start,end,options={}){
+    if(!validateSnapshot()){route.lastFailure={reason:'stale-navigation-snapshot'};return null;}
     const angle=start.angleTo(end),length=angle*radius,forward=end.clone().addScaledVector(start,-end.dot(start)).normalize(),side=start.clone().cross(forward).normalize(),step=4;
     const nx=Math.ceil(length/step),dx=length/nx,cells=new Map(),open=[],closed=new Set();let visits=0;
     const lateralSteps=options.lateralSteps??18,maxVisits=options.maxVisits??5000;
@@ -127,8 +180,34 @@ export function createWarshipWaterRoutes(scene, radius) {
     return null;
   }
   function position(direction,out=new THREE.Vector3()){const sample=surface(direction);return sample?out.copy(direction).normalize().multiplyScalar(sample.water-.25):null;}
+  function placeSnapshot(boat,path,progress){
+    if(path.segments?.length){
+      let remaining=THREE.MathUtils.clamp(progress,0,1)*path.length;
+      for(let i=0;i<path.segments.length;i++){
+        const part=path.segments[i];
+        if(remaining<=part.length||i===path.segments.length-1)return placeSnapshot(boat,part,part.length?remaining/part.length:1);
+        remaining-=part.length;
+      }
+      return false;
+    }
+    if(placeDockConnector(boat,path,progress))return true;
+    let distance=THREE.MathUtils.clamp(progress,0,1)*path.length;
+    for(let i=1;i<path.points.length;i++){
+      const a=path.points[i-1],b=path.points[i],span=a.angleTo(b)*radius;
+      if(distance<=span||i===path.points.length-1){
+        const d=a.clone().lerp(b,span?Math.min(1,distance/span):1).normalize();
+        const point=position(d);if(!point)return false;
+        boat.position.copy(point);orientWarship(boat,d,b.clone().sub(a));return true;
+      }
+      distance-=span;
+    }
+    return false;
+  }
+  // One full snapshot check per motion frame, not per recursive path segment.
   function place(boat,path,progress){
-    if(path.segments?.length){let remaining=THREE.MathUtils.clamp(progress,0,1)*path.length;for(let i=0;i<path.segments.length;i++){const part=path.segments[i];if(remaining<=part.length||i===path.segments.length-1){place(boat,part,part.length?remaining/part.length:1);return;}remaining-=part.length;}return;}
-    if(placeDockConnector(boat,path,progress))return;let distance=THREE.MathUtils.clamp(progress,0,1)*path.length;for(let i=1;i<path.points.length;i++){const a=path.points[i-1],b=path.points[i],span=a.angleTo(b)*radius;if(distance<=span||i===path.points.length-1){const d=a.clone().lerp(b,Math.min(1,distance/span)).normalize();position(d,boat.position);orientWarship(boat,d,b.clone().sub(a));return;}distance-=span;}}
-  return {surface,clear,berth,dock,route,place,position,obstacles,stats:{envelope,water:water?.name||null,obstacleRoots:obstacles.length,obstacleMeshes:seen.size}};
+    if(!validateSnapshot())return false;
+    return placeSnapshot(boat,path,progress);
+  }
+
+  return {surface,clear,berth,dock,route,place,position,obstacles,currentGeometry,validateSnapshot,stats:{envelope,minimumDepth,water:water?.name||null,obstacleRoots:obstacles.length,obstacleMeshes:seen.size}};
 }

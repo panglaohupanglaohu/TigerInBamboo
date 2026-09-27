@@ -1,0 +1,31 @@
+{
+  "parts": [
+    {
+      "name": "citadel-upper-rock-middle-terrace-solid-0",
+      "passed": true,
+      "vertices": 7170,
+      "visible_copies": 1
+    },
+    {
+      "name": "citadel-upper-rock-west-city-crown-retaining-wall-0-0",
+      "passed": true,
+      "vertices": 3015,
+      "visible_copies": 1
+    },
+    {
+      "name": "citadel-upper-rock-west-city-crown-retaining-wall-1-0",
+      "passed": true,
+      "vertices": 2511,
+      "visible_copies": 1
+    },
+    {
+      "name": "citadel-upper-rock-west-city-crown-retaining-wall-2-0",
+      "passed": true,
+      "vertices": 1608,
+      "visible_copies": 1
+    }
+  ],
+  "passed": true,
+  "scope": "Actual native inventory and vertex dump; triangle geometry must pass compare_battered_foundations.py separately.",
+  "source": "assets/models/optimized/citadel-compact-foundations/compact-foundations-r05.blend"
+}

@@ -102,6 +102,13 @@ func bind_released(patch:Node3D,castle:Node3D)->void:
             if shell!=null:shell.visible=false
         for row in profile.points:
             var lights=old_points if row.side=="old" else points
+            if int(row.index)==lights.size() and row.side=="new":
+                var added=OmniLight3D.new()
+                added.name=str(row.get("name","NewCityLanding_"+str(row.index)))
+                added.omni_attenuation=2.0
+                added.light_energy=0
+                castle.add_child(added)
+                lights.append(added)
             if int(row.index)>=lights.size():continue
             var light=lights[int(row.index)]
             light.global_position=castle.to_global(Vector3(row.castlePosition[0],row.castlePosition[1],row.castlePosition[2]))
@@ -119,6 +126,14 @@ func bind_released(patch:Node3D,castle:Node3D)->void:
         for surface in range(mesh.mesh.get_surface_count()):
             var source=mesh.get_active_material(surface) as StandardMaterial3D
             if source==null:continue
+            if str(mesh.name)=="citadel-fixed-ridge-lines":
+                var gold=source.duplicate() as StandardMaterial3D
+                var silver=source.duplicate() as StandardMaterial3D
+                gold.albedo_color=Color(mesh.get_meta("ridge_day","#d6aa58"));gold.albedo_color.a=.82
+                silver.albedo_color=Color(mesh.get_meta("ridge_night","#cad6e7"));silver.albedo_color.a=.82
+                rows.append({"mesh":mesh,"surface":surface,"day":gold,"night":silver,"city":"ridge"})
+                mesh.set_surface_override_material(surface,silver if enabled else gold)
+                continue
             var window_surface=str(mesh.name).begins_with("town-window") or source.resource_name.begins_with("claude-house-win_") or str(mesh.name).begins_with("target-castle-exterior")
             if not window_surface or not (str(mesh.name).begins_with("town-window") or (source.emission_enabled and source.emission.v>0.001)):continue
             var day=source.duplicate() as StandardMaterial3D
@@ -179,6 +194,6 @@ func evidence()->Dictionary:
     for row in rows:
         if not seen.has(row.mesh):
             seen[row.mesh]=true
-            counts[row.city]+=1
+            counts[row.city]=int(counts.get(row.city,0))+1
         if is_instance_valid(row.mesh) and row.mesh.get_active_material(row.surface)==(row.night if enabled else row.day):matching+=1
     return {"old_point_lights":old_points.size(),"old_lit_points":old_points.filter(func(p):return p.light_energy>0).size(),"environment_matching":environment_rows.all(func(row):return is_equal_approx(row.env.ambient_light_energy,float(night_environment.get("ambientEnergy",0.5)) if enabled else row.energy) and row.env.background_color==(Color("223950") if enabled else row.background)),"environment_count":environment_rows.size(),"energies":points.map(func(p):return p.light_energy),"point_lights":points.size(),"lit_points":points.filter(func(p):return p.light_energy>0).size(),"counts":counts,"enabled":enabled,"matching":matching,"total":rows.size()}

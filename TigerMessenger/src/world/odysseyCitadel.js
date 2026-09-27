@@ -1,3 +1,4 @@
+import {createFixedRidgeHighlight} from './citadel/fixedRidgeHighlight.js';
 import { OLD_CITY_SHELF_BASE_YS, isOldCityShelves, migrateOldCityShelves, oldCityShelfSupported, oldCityFoundationOutline } from './citadel/oldCityShelves.js';
 import {applyCitadelCompositionFrame} from './citadel/compositionFrame.js';
 // ============================================================================
@@ -44,9 +45,9 @@ import {
   highlandTerrainSurfaceHeight,
 } from "./highlandCitadelDesign.js?v=20260828-reference-light-v9";
 import { mountHighlandLocalHeroClouds } from "./highlandHeroClouds.js?v=20260828-reference-light-v9";
+import { mountRidgeFlowClouds } from "./citadel/ridgeFlowClouds.js";
 import { mountHighlandSlopeGrass } from "./highlandSlopeGrass.js";
 import { applyHighlandCityShelves, mountHighlandSlopeShrubs, mountHighlandCanopyGroves } from "./highlandCitadelDesign.js?v=20260828-reference-light-v9";
-import { createBacklitHighlightLayer } from "./backlitHighlight.js?v=backlit-s16-v1";
 import {
   v3HighlandWallPalette,
   v3HighlandGateColor,
@@ -2741,6 +2742,8 @@ export function buildOdysseyCitadel(options = {}) {
     // 参考图植被（2026-08-28）：大团鼠尾草绿树冠群落（InstancedMesh 单 draw call）
     mountHighlandCanopyGroves(THREE, outerTerrainSystem);
     mountHighlandLocalHeroClouds(THREE, castleContainer);
+    // 山脊流云（2026-09-25）：雾团在真实山脊生成，随风沿脊漂移、顺背风坡流淌
+    try { mountRidgeFlowClouds(castleContainer, { timeOfDay: () => P.timeOfDay }); } catch (error) { console.warn('[citadel] ridge-flow clouds skipped:', error?.message); }
     // S18 光体积灯（主人验收 2026-08-27/28）：OskSta 点光源 light volume 方法
     // + 参考图夜港配色——暖橙灯下密上疏、港口岸湾灯、塔楼暖光冠、立面窗光、
     // 岸湾水面倒影光斑。海面局部 Y = (R + 海平面) − 城堡原点半径；
@@ -2768,18 +2771,12 @@ export function buildOdysseyCitadel(options = {}) {
     // 数据侧（bakeContourFoamBand / traceGridOutlineRings）已经烘好并有回归，
     // 打开 ?foamBandV1=1 才会挂进场景——等着色单独过一轮再改默认值。
     castleContainer.userData.highlandShoreWaves = null;
-    // S16 背光高光：连续山体反向轮廓高光层（逆光构图时轮廓亮线），
-    // main.js animate 每帧驱动 sunDir/camera。
-    try {
-      const terrainMesh = outerTerrainSystem.getObjectByName("citadel-oskar-grid-mountain-surface");
-      if (terrainMesh) {
-        const backlit = createBacklitHighlightLayer(THREE, terrainMesh, { scale: 1.02 });
-        outerTerrainSystem.add(backlit.layer);
-        castleContainer.userData.highlandBacklit = backlit;
-      }
-    } catch (error) {
-      console.warn("[citadel] backlit highlight skipped:", error?.message);
-    }
+    // A uniformly expanded inverted shell is unsuitable for this relocated,
+    // traversable terrain: its offset grows with distance from the mesh origin,
+    // exposing gold sheets beside the player. Camera-dependent alpha then makes
+    // those sheets appear to follow movement. Light the real rock surface only.
+    castleContainer.userData.highlandBacklit = null;
+    castleContainer.userData.highlandRidges = createFixedRidgeHighlight(castleContainer);
   }
   const terrainOutlinedSurfaceCount = skipOuterTerrain
     ? 0
@@ -2806,8 +2803,10 @@ export function buildOdysseyCitadel(options = {}) {
       citadelAssembly.scale.setScalar(bounce);
       if (u >= 1) citadelAssembly.scale.setScalar(1);
     }
+    castleContainer.userData.highlandRidges?.update?.(P.timeOfDay);
     outerTerrainSystem.userData.highlandSlopeGrass?.update?.(t);
     castleContainer.userData.highlandHeroClouds?.update?.(t);
+    castleContainer.userData.ridgeFlowClouds?.userData.update?.(t);
     castleContainer.userData.highlandLightVolumes?.update?.(t);
     castleContainer.getObjectByName("citadel-new-city-lighting")?.userData.update?.(P.timeOfDay);
     castleContainer.getObjectByName("citadel-harbor-architecture")?.userData.update?.(P.timeOfDay);
@@ -3170,6 +3169,7 @@ function closeDirtyOverSpanningParts(layers, dirty) {
 }
 
 export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys = [], options = {}) {
+  castleContainer?.userData?.restoreOriginalTown?.();
   const animate = options.animate === true;
   const layers = castleContainer?.userData?.layers;
   if (!layers?.length) return { ok: false, error: "no-layers" };
@@ -3483,6 +3483,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
 }
 
 export function rebuildCitadelTown(castleContainer, spec, options = {}) {
+  castleContainer?.userData?.restoreOriginalTown?.();
   const layers = castleContainer?.userData?.layers;
   if (!layers?.length) return null;
   const wfcFlag = options.wfcTownV1 ?? castleContainer.userData.wfcTownV1;
@@ -3694,6 +3695,7 @@ export function trimCitadelTownToTerrain(castleContainer, contourSpec, spec = nu
  * @returns {THREE.Group|null} 新外围地势系统；非圣城容器返回 null
  */
 export function rebuildCitadelTerrain(castleContainer, contourSpec) {
+  castleContainer?.userData?.restoreOriginalTown?.();
   // 无台地模式（运河交汇古堡）：不重建外围台地，只更新镇体基座
   if (castleContainer?.userData?.skipOuterTerrain) {
     const baseY = castleContainer.userData.townBaseLift ?? 0.6;
@@ -3786,6 +3788,7 @@ export function rebuildCitadelTerrain(castleContainer, contourSpec) {
 
 /** Hot-rebuild the two editable terrain-object types without touching town cells. */
 export function rebuildCitadelTerrainObjects(castleContainer, placements) {
+  castleContainer?.userData?.restoreOriginalTown?.();
   if (!castleContainer?.userData?.contourSpec) return null;
   const old = castleContainer.userData.terrainObjects;
   if (old) {

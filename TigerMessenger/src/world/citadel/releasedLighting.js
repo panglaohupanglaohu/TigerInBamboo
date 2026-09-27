@@ -25,12 +25,38 @@ export function alignReleasedLighting(castle,radius=160){
   light.position.copy(old.worldToLocal(parcels.localToWorld(p)));
  });
  const newPoints=fresh.children.filter(o=>o.isPointLight);
- newPoints[1].position.set(PLAZA_LAYOUT.statueX,9,80);
+ // Follow the actual rebuilt opening, rather than the pre-compaction stair
+ // coordinate (ten metres in front of the present gate).
+ const mainGate=city.getObjectByName('citadel-new-main-gate');
+ if(mainGate){
+  const opening=mainGate.userData.opening;
+  const point=mainGate.localToWorld(new THREE.Vector3(0,opening.springHeight*.72,2.8));
+  newPoints[0].position.copy(fresh.worldToLocal(point));
+  newPoints[0].distance=14;
+ }
+ newPoints[1].position.set(PLAZA_LAYOUT.statueX-3.5,7.5,81);
  const gate=city.getObjectByName('citadel-front-harbor')?.userData.layout?.gate;
  if(gate)newPoints[2].position.set(gate[0],gate[1]+3.2,gate[2]+1);
+ // Real light at existing lantern heads: reveal the intermediate landings
+ // without adding lamps, or increasing the fixed eight-slot render pool.
+ for(const index of [4,7]){
+  const holder=fresh.getObjectByName('new-city-lantern-'+index);
+  if(!holder)continue;
+  const light=new THREE.PointLight(0xffb368,0,10,2);
+  light.name='new-city-light-landing-'+index;
+  light.position.copy(fresh.worldToLocal(holder.localToWorld(new THREE.Vector3(0,2.8,0))));
+  fresh.add(light);newPoints.push(light);
+ }
+ // Warm reflected fill on the exposed upper fronts, separate from the
+ // gateway practical. These remain candidates in the existing eight lights.
+ for(const [name,position] of [['west',[45,35,26]],['east',[83,39,24]]]){
+  const light=new THREE.PointLight(0xffd7ad,0,40,2);
+  light.name='new-city-light-upper-'+name;light.position.set(...position);
+  fresh.add(light);newPoints.push(light);
+ }
  // Two cached architectural shadows. Moving characters are deliberately not
  // included in this static mask; actor shadows belong to the character pass.
- for(const name of ['citadel-target-castle-silhouette','citadel-plaza-hero-statue','west-city-plaza-deck','west-city-plaza-paving-ring','citadel-front-harbor']){
+ for(const name of ['citadel-target-castle-silhouette','citadel-new-main-gate','citadel-court-structure','citadel-plaza-hero-statue','west-city-plaza-deck','west-city-plaza-paving-ring','citadel-front-harbor']){
   castle.getObjectByName(name)?.traverse(o=>{if(o.isMesh){o.layers.enable(3);o.castShadow=true;o.receiveShadow=true;}});
  }
  for(const light of newPoints.slice(0,2)){
@@ -40,7 +66,7 @@ export function alignReleasedLighting(castle,radius=160){
   light.shadow.autoUpdate=false;light.shadow.needsUpdate=true;
  }
  castle.userData.invalidateCitadelShadowMaps=()=>newPoints.slice(0,2).forEach(l=>l.shadow.needsUpdate=true);
- const profiles={old:[{intensity:105,godotEnergy:6,color:0xffa55d},{intensity:145,godotEnergy:8,color:0xffac65},{intensity:180,godotEnergy:10,color:0xffb56f}],new:[{intensity:300,godotEnergy:95,color:0xffab5c},{intensity:85,godotEnergy:20,color:0xffb873},{intensity:65,godotEnergy:25,color:0xffa55a}]};
+ const profiles={old:[{intensity:105,godotEnergy:6,color:0xffa55d},{intensity:145,godotEnergy:8,color:0xffac65},{intensity:180,godotEnergy:10,color:0xffb56f}],new:[{intensity:190,godotEnergy:18,color:0xffab5c},{intensity:85,godotEnergy:8,color:0xffb873},{intensity:65,godotEnergy:25,color:0xffa55a},{intensity:45,godotEnergy:7,color:0xffb368},{intensity:45,godotEnergy:7,color:0xffb368},{intensity:240,godotEnergy:45,color:0xffd7ad},{intensity:200,godotEnergy:38,color:0xffd0a0}]};
  for(const [side,root]of [['old',old],['new',fresh]]){
   const lights=root.children.filter(o=>o.isPointLight),prior=side==='old'?root.update:root.userData.update;
   lights.forEach((light,i)=>{light.color.setHex(profiles[side][i].color);light.layers.enable(1);});
@@ -50,7 +76,7 @@ export function alignReleasedLighting(castle,radius=160){
  castle.updateWorldMatrix(true,true);
  for(const [side,root]of [['old',old],['new',fresh]])root.children.filter(o=>o.isPointLight).forEach((light,i)=>{
   const spec=profiles[side][i];
-  report.points.push({side,index:i,castlePosition:castle.worldToLocal(light.getWorldPosition(new THREE.Vector3())).toArray(),color:light.color.getHex(),radius:light.distance,godotEnergy:spec.godotEnergy,shadow:light.castShadow,shadowMapSize:light.castShadow?512:0});
+  report.points.push({side,index:i,name:light.name,castlePosition:castle.worldToLocal(light.getWorldPosition(new THREE.Vector3())).toArray(),color:light.color.getHex(),radius:light.distance,godotEnergy:spec.godotEnergy,shadow:light.castShadow,shadowMapSize:light.castShadow?512:0});
  });
  fresh.userData.update(P.timeOfDay);old.update(0,P.timeOfDay);
  castle.userData.releasedLighting=report;return report;

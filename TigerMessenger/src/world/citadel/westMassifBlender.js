@@ -14,6 +14,8 @@ export function conformWestMassifToOcean(castle,radius=160){
  if(!authored.has(wall.geometry))authored.set(wall.geometry,p.array.slice());const base=authored.get(wall.geometry),v=new THREE.Vector3();let changed=0,maxFootClearance=-Infinity;
  for(let i=0;i<p.count;i++){
   const y=base[i*3+1];v.fromArray(base,i*3);
+  // Compress only the exposed skyline; retain original coastal foot and ledges.
+  if(y>18)v.y=18+(y-18)*.42;
   if(y<8){v.applyMatrix4(wall.matrixWorld);const r=v.length(),sea=radius+officialOceanLevelAt(v),fade=Math.min(1,Math.max(0,(8-y)/13));const target=sea-(y<-8?3:1.5);v.multiplyScalar((r+Math.min(0,target-r)*fade)/r);if(y<=-4.99)maxFootClearance=Math.max(maxFootClearance,v.length()-sea);v.applyMatrix4(inverse);changed++;}
   p.setXYZ(i,v.x,v.y,v.z);
  }

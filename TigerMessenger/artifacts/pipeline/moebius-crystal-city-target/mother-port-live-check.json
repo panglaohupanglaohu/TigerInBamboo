@@ -1,0 +1,37 @@
+{
+  "start": {
+    "riding": false,
+    "quayGap": 1.4921397450962104e-13,
+    "progress": 1,
+    "playerR": 137.70356904015307,
+    "camera": [
+      7.89343346881229,
+      4.3031029325908605,
+      11.497438105832927
+    ],
+    "profile": null,
+    "occlusion": null
+  },
+  "aboard": {
+    "riding": true,
+    "quayGap": 4.321400236034629,
+    "progress": 1,
+    "playerR": 137.4982052201524,
+    "camera": [
+      9.39725000829234,
+      5.069630293335251,
+      3.2765643924174768
+    ],
+    "profile": {
+      "yaw": 2.748893571891069,
+      "height": 1
+    },
+    "occlusion": null,
+    "audit": {
+      "yaw": 2.748893571891069,
+      "height": 1
+    }
+  },
+  "errors": [],
+  "passed": true
+}

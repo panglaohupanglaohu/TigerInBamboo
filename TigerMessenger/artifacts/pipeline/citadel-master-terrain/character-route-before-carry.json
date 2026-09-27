@@ -1,0 +1,70 @@
+{
+  "roles": {
+    "gladius": {
+      "blocked": {},
+      "completed_steps": 292,
+      "geometry_queries": 1362594,
+      "max_plant_adjustment": 0.00296476423740387,
+      "phase": "arrived",
+      "point": 292,
+      "role": "gladius",
+      "route_points": 293,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": true
+    },
+    "longbow": {
+      "blocked": {
+        "lowest": -0.00271314382553101,
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/highland-west-city/west-city-main-tower-entry-crossing",
+        "obstacle_bounds": "[P: (59.25, 22.1, 15.25), S: (4.500011, 0.20001, 1.50001)]",
+        "part": "n56",
+        "phase": "turn",
+        "point": 167,
+        "progress": 0.208333333333333,
+        "reason": "mesh_overlap",
+        "route_position": "(35.58041, 20.33124, 23.72932)",
+        "step_end": "(35.43457, 20.48019, 23.98191)",
+        "step_start": "(35.58042, 20.34897, 23.72932)"
+      },
+      "completed_steps": 167,
+      "geometry_queries": 911277,
+      "max_plant_adjustment": 0.00128425318747759,
+      "phase": "blocked",
+      "point": 167,
+      "role": "longbow",
+      "route_points": 293,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.01,
+      "surface_following": true
+    },
+    "spear": {
+      "blocked": {
+        "lowest": 0.0181261897087097,
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/CitadelReleasedLayout/citadel-front-harbor/integrated-stair-0",
+        "obstacle_bounds": "[P: (51.6, -6.742973, 104.6758), S: (4.800011, 1.308705, 0.330193)]",
+        "part": "n44",
+        "phase": "hop",
+        "point": 0,
+        "progress": 0.972222222222222,
+        "reason": "mesh_overlap",
+        "route_position": "(-15.44615, -5.611832, 100.1099)",
+        "step_end": "(-14.01615, -5.614944, 97.6331)",
+        "step_start": "(-15.44616, -5.611969, 100.1099)"
+      },
+      "completed_steps": 0,
+      "geometry_queries": 10180,
+      "max_plant_adjustment": 0.00296476423740387,
+      "phase": "blocked",
+      "point": 0,
+      "role": "spear",
+      "route_points": 293,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.01,
+      "surface_following": true
+    }
+  },
+  "route_points": 293,
+  "route_source": "common-frame-citadel-placement-r05-full-route.json",
+  "scope": "Current full new-city route with original three weapon-bearing models and guarded rigid-leg clearance. Not natural patrol AI, combat actions or full gameplay."
+}

@@ -1,0 +1,741 @@
+{
+  "checks": [
+    {
+      "name": "outside 30 m does not claim elder music",
+      "passed": true
+    },
+    {
+      "name": "inside region plays existing elder recording exclusively",
+      "passed": true
+    },
+    {
+      "name": "real media time advances",
+      "passed": true
+    },
+    {
+      "name": "distant siege cannot replace elder",
+      "passed": true
+    },
+    {
+      "name": "tram silences elder",
+      "passed": true
+    },
+    {
+      "name": "elder resumes after transport releases music",
+      "passed": true
+    },
+    {
+      "name": "local event replaces regional music exclusively",
+      "passed": true
+    },
+    {
+      "name": "regional music resumes after event ends",
+      "passed": true
+    },
+    {
+      "name": "30 m boundary is silent",
+      "passed": true
+    },
+    {
+      "name": "leaving pauses elder without remote battle takeover",
+      "passed": true
+    }
+  ],
+  "states": [
+    {
+      "label": "31 m",
+      "owner": null,
+      "revision": 0,
+      "listener": {
+        "x": 116.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": false,
+          "inRange": null,
+          "distance": 31
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": []
+    },
+    {
+      "label": "20 m",
+      "owner": "citadelElder",
+      "revision": 1,
+      "listener": {
+        "x": 105.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 20
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "native clock",
+      "owner": "citadelElder",
+      "revision": 1,
+      "listener": {
+        "x": 105.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 20
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 0.236869
+        }
+      ]
+    },
+    {
+      "label": "remote battle",
+      "owner": "citadelElder",
+      "revision": 1,
+      "listener": {
+        "x": 105.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 20
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "siege",
+          "active": true,
+          "inRange": false,
+          "distance": 520
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 0.236869
+        }
+      ]
+    },
+    {
+      "label": "tram priority",
+      "owner": "tram",
+      "revision": 2,
+      "listener": {
+        "x": 105.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 20
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "siege",
+          "active": true,
+          "inRange": false,
+          "distance": 520
+        },
+        {
+          "key": "tram",
+          "active": true,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.237386
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": false,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "return to elder",
+      "owner": "citadelElder",
+      "revision": 3,
+      "listener": {
+        "x": 105.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 20
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "siege",
+          "active": true,
+          "inRange": false,
+          "distance": 520
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 0.394739
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "local siege",
+      "owner": "siege",
+      "revision": 4,
+      "listener": {
+        "x": 105.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 20
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "siege",
+          "active": true,
+          "inRange": true,
+          "distance": 20
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.394739
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "siege",
+          "source": "http://localhost:8931/TigerMessenger/music/Aoife%20Ni%20Fhearraigh-The%20Best%20Is%20Yet%20To%20Come.mp3",
+          "paused": false,
+          "volume": 0.05011111113760206,
+          "currentTime": 0.01366
+        }
+      ]
+    },
+    {
+      "label": "event ended",
+      "owner": "citadelElder",
+      "revision": 5,
+      "listener": {
+        "x": 105.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 20
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "siege",
+          "active": false,
+          "inRange": true,
+          "distance": 20
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 0.394739
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "siege",
+          "source": "http://localhost:8931/TigerMessenger/music/Aoife%20Ni%20Fhearraigh-The%20Best%20Is%20Yet%20To%20Come.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.013774
+        }
+      ]
+    },
+    {
+      "label": "30 m",
+      "owner": null,
+      "revision": 6,
+      "listener": {
+        "x": 115.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": false,
+          "inRange": null,
+          "distance": 30
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "siege",
+          "active": false,
+          "inRange": true,
+          "distance": 20
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "siege",
+          "source": "http://localhost:8931/TigerMessenger/music/Aoife%20Ni%20Fhearraigh-The%20Best%20Is%20Yet%20To%20Come.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.013774
+        }
+      ]
+    },
+    {
+      "label": "leave region",
+      "owner": null,
+      "revision": 6,
+      "listener": {
+        "x": 116.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": false,
+          "inRange": null,
+          "distance": 31
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "siege",
+          "active": false,
+          "inRange": true,
+          "distance": 20
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "siege",
+          "source": "http://localhost:8931/TigerMessenger/music/Aoife%20Ni%20Fhearraigh-The%20Best%20Is%20Yet%20To%20Come.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.013774
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "scope": "Actual 8931 audio module and native HTMLAudio clocks, diagnostic listener distances and transport intent. Not a complete walking/boarding journey or subjective listening review.",
+  "errors": []
+}

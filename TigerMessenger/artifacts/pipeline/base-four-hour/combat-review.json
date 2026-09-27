@@ -1,0 +1,2905 @@
+{
+  "mode": "actual runtime models; production and loading accelerated for setup, skill chapters use the normal game clock; enemy turrets held for readable demonstration",
+  "preparation": {
+    "invariants": {
+      "total": 9,
+      "counts": {
+        "deployed": 9
+      }
+    },
+    "ids": [
+      {
+        "id": "LOC-0001",
+        "kind": "locust"
+      },
+      {
+        "id": "LOC-0004",
+        "kind": "locust"
+      },
+      {
+        "id": "LOC-0007",
+        "kind": "locust"
+      },
+      {
+        "id": "ANT-0002",
+        "kind": "ant"
+      },
+      {
+        "id": "ANT-0005",
+        "kind": "ant"
+      },
+      {
+        "id": "ANT-0008",
+        "kind": "ant"
+      },
+      {
+        "id": "BTL-0003",
+        "kind": "beetle"
+      },
+      {
+        "id": "BTL-0006",
+        "kind": "beetle"
+      },
+      {
+        "id": "BTL-0009",
+        "kind": "beetle"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "name": "locust-braced",
+      "combat": {
+        "version": 1,
+        "time": 308.44450000003434,
+        "units": [
+          {
+            "id": "LOC-0001",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -17,
+            "z": 0,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.058451421701352,
+            "turretYaw": 0,
+            "state": "attack",
+            "order": {
+              "type": "hold",
+              "x": -17,
+              "z": 0
+            },
+            "target": "TARGET-1-1",
+            "magazine": 18,
+            "reserve": 120,
+            "heat": 33.08399999999997,
+            "pressure": 100,
+            "cooldown": 1.233399999976158,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": true,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": {
+              "x": -16,
+              "z": -12,
+              "time": 308.44450000003434
+            },
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0004",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -15.8,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0007",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -10.6,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0002",
+            "kind": "ant",
+            "team": "friendly",
+            "x": -5.399999999999999,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0005",
+            "kind": "ant",
+            "team": "friendly",
+            "x": -0.1999999999999993,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0008",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 5,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0003",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 10.200000000000003,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0006",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 15.399999999999999,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0009",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 20.6,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-1",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": -16,
+            "z": -12,
+            "hp": 355.2,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "LOC-0001",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.40800000000000003,
+              "weapon": 0.10800000000000004,
+              "sensor": 0.008000000000000007
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-2",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 0,
+            "z": -12,
+            "hp": 600,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-3",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 16,
+            "z": -12,
+            "hp": 600,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          }
+        ],
+        "smoke": [],
+        "autoRetreat": true
+      },
+      "effects": 0,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "name": "ant-cannon",
+      "combat": {
+        "version": 1,
+        "time": 313.15700000003426,
+        "units": [
+          {
+            "id": "LOC-0001",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -17,
+            "z": 0,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.058451421701352,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 18,
+            "reserve": 120,
+            "heat": 4.808999999999968,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 3.3248999999761613,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": {
+              "x": -16,
+              "z": -12,
+              "time": 308.4819000000105
+            },
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0004",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -15.8,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0007",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -10.6,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0002",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 14,
+            "z": -5,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 2.8632929945846817,
+            "turretYaw": 0,
+            "state": "attack",
+            "order": {
+              "type": "hold",
+              "x": 14,
+              "z": -5
+            },
+            "target": "TARGET-1-3",
+            "magazine": 6,
+            "reserve": 24,
+            "heat": 40.70779999971388,
+            "pressure": 75,
+            "cooldown": 4.5,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": {
+              "x": 16,
+              "z": -12,
+              "time": 313.15700000003426
+            },
+            "recoil": 1,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0005",
+            "kind": "ant",
+            "team": "friendly",
+            "x": -0.1999999999999993,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0008",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 5,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0003",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 10.200000000000003,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0006",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 15.399999999999999,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0009",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 20.6,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-1",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": -16,
+            "z": -12,
+            "hp": 355.2,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "LOC-0001",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.40800000000000003,
+              "weapon": 0.10800000000000004,
+              "sensor": 0.008000000000000007
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-2",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 0,
+            "z": -12,
+            "hp": 600,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-3",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 16,
+            "z": -12,
+            "hp": 430,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "ANT-0002",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.2833333333333333,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          }
+        ],
+        "smoke": [],
+        "autoRetreat": true
+      },
+      "effects": 6,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "name": "ant-steam",
+      "combat": {
+        "version": 1,
+        "time": 314.7563000000462,
+        "units": [
+          {
+            "id": "LOC-0001",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -17,
+            "z": 0,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.058451421701352,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 18,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 1.72559999996424,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": {
+              "x": -16,
+              "z": -12,
+              "time": 308.4819000000105
+            },
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0004",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -15.8,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0007",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -10.6,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0002",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 13.26178209161634,
+            "z": -2.785346274849015,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": -0.32175055439664374,
+            "turretYaw": 0,
+            "state": "move",
+            "order": {
+              "type": "retreat",
+              "x": -10.5,
+              "z": 12
+            },
+            "target": null,
+            "magazine": 6,
+            "reserve": 24,
+            "heat": 31.11199999964231,
+            "pressure": 51.19510000008346,
+            "cooldown": 2.9006999999880794,
+            "reload": 0,
+            "skillCooldown": 16.443699999988073,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [
+              {
+                "x": 13,
+                "z": -2
+              },
+              {
+                "x": 13,
+                "z": 0
+              },
+              {
+                "x": 13,
+                "z": 2
+              },
+              {
+                "x": 13,
+                "z": 4
+              },
+              {
+                "x": 11,
+                "z": 6
+              },
+              {
+                "x": 9,
+                "z": 8
+              },
+              {
+                "x": 7,
+                "z": 8
+              },
+              {
+                "x": 5,
+                "z": 8
+              },
+              {
+                "x": 3,
+                "z": 8
+              },
+              {
+                "x": 1,
+                "z": 8
+              },
+              {
+                "x": -1,
+                "z": 8
+              },
+              {
+                "x": -3,
+                "z": 8
+              },
+              {
+                "x": -5,
+                "z": 10
+              },
+              {
+                "x": -7,
+                "z": 10
+              },
+              {
+                "x": -9,
+                "z": 10
+              },
+              {
+                "x": -11,
+                "z": 12
+              }
+            ],
+            "lastSeen": {
+              "x": 16,
+              "z": -12,
+              "time": 313.20000000003427
+            },
+            "recoil": 0,
+            "speed": 1.5000000000000002,
+            "overheated": false,
+            "repairAmmo": 0,
+            "pathGoal": {
+              "x": -10.5,
+              "z": 12
+            }
+          },
+          {
+            "id": "ANT-0005",
+            "kind": "ant",
+            "team": "friendly",
+            "x": -0.1999999999999993,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0008",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 5,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0003",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 10.200000000000003,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0006",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 15.399999999999999,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0009",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 20.6,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-1",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": -16,
+            "z": -12,
+            "hp": 355.2,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "LOC-0001",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.40800000000000003,
+              "weapon": 0.10800000000000004,
+              "sensor": 0.008000000000000007
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-2",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 0,
+            "z": -12,
+            "hp": 600,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-3",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 16,
+            "z": -12,
+            "hp": 430,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "ANT-0002",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.2833333333333333,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          }
+        ],
+        "smoke": [
+          {
+            "x": 14,
+            "z": -5,
+            "radius": 5.5,
+            "expires": 319.20000000003427
+          }
+        ],
+        "autoRetreat": true
+      },
+      "effects": 16,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "name": "beetle-moving",
+      "combat": {
+        "version": 1,
+        "time": 323.0280000000944,
+        "units": [
+          {
+            "id": "LOC-0001",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -17,
+            "z": 0,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.058451421701352,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 18,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": {
+              "x": -16,
+              "z": -12,
+              "time": 308.4819000000105
+            },
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0004",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -15.8,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0007",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -10.6,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0002",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 8.864821758745741,
+            "z": 7.800034810051285,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": -1.4639743140807457,
+            "turretYaw": 0,
+            "state": "move",
+            "order": {
+              "type": "retreat",
+              "x": -10.5,
+              "z": 12
+            },
+            "target": null,
+            "magazine": 6,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 8.17199999994038,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [
+              {
+                "x": 7,
+                "z": 8
+              },
+              {
+                "x": 5,
+                "z": 8
+              },
+              {
+                "x": 3,
+                "z": 8
+              },
+              {
+                "x": 1,
+                "z": 8
+              },
+              {
+                "x": -1,
+                "z": 8
+              },
+              {
+                "x": -3,
+                "z": 8
+              },
+              {
+                "x": -5,
+                "z": 10
+              },
+              {
+                "x": -7,
+                "z": 10
+              },
+              {
+                "x": -9,
+                "z": 10
+              },
+              {
+                "x": -11,
+                "z": 12
+              }
+            ],
+            "lastSeen": {
+              "x": 16,
+              "z": -12,
+              "time": 313.20000000003427
+            },
+            "recoil": 0,
+            "speed": 1.5000000000000002,
+            "overheated": false,
+            "repairAmmo": 0,
+            "pathGoal": {
+              "x": -10.5,
+              "z": 12
+            }
+          },
+          {
+            "id": "ANT-0005",
+            "kind": "ant",
+            "team": "friendly",
+            "x": -0.1999999999999993,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0008",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 5,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0003",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 20,
+            "z": -9.663720000135902,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 1.0421724173126636,
+            "state": "aim",
+            "order": {
+              "type": "hold",
+              "x": 20,
+              "z": -9.663720000135902
+            },
+            "target": "TARGET-1-3",
+            "magazine": 50,
+            "reserve": 240,
+            "heat": 17.587799999713898,
+            "pressure": 100,
+            "cooldown": 0.5663999999761578,
+            "reload": 0,
+            "skillCooldown": 8.842699999988081,
+            "scan": 1.8426999999880767,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": {
+              "x": 16,
+              "z": -12,
+              "time": 323.0280000000944
+            },
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0006",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 15.399999999999999,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0009",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 20.6,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-1",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": -16,
+            "z": -12,
+            "hp": 355.2,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "LOC-0001",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.40800000000000003,
+              "weapon": 0.10800000000000004,
+              "sensor": 0.008000000000000007
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-2",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 0,
+            "z": -12,
+            "hp": 600,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0,
+            "markedUntil": 324.8707000000823,
+            "lastMarkedPosition": {
+              "x": 0,
+              "z": -12,
+              "time": 319.8707000000823
+            }
+          },
+          {
+            "id": "TARGET-1-3",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 16,
+            "z": -12,
+            "hp": 384.1,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "BTL-0003",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.35983333333333334,
+              "weapon": 0.05983333333333335,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0,
+            "markedUntil": 324.8707000000823,
+            "lastMarkedPosition": {
+              "x": 16,
+              "z": -12,
+              "time": 319.8707000000823
+            }
+          }
+        ],
+        "smoke": [],
+        "autoRetreat": true
+      },
+      "effects": 2,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    },
+    {
+      "name": "retreat",
+      "combat": {
+        "version": 1,
+        "time": 327.6001000000586,
+        "units": [
+          {
+            "id": "LOC-0001",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -17.754996028198395,
+            "z": 1.6178486318536833,
+            "hp": 220,
+            "maxHp": 1000,
+            "heading": -0.43662715981354083,
+            "turretYaw": 0,
+            "state": "move",
+            "order": {
+              "type": "retreat",
+              "x": -22.6,
+              "z": 12
+            },
+            "target": null,
+            "magazine": 18,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.78,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": {
+              "x": -16,
+              "z": -12,
+              "time": 308.4819000000105
+            },
+            "recoil": 0,
+            "speed": 0.8800000000000002,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0004",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -15.8,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "LOC-0007",
+            "kind": "locust",
+            "team": "friendly",
+            "x": -10.6,
+            "z": 12,
+            "hp": 1000,
+            "maxHp": 1000,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 30,
+            "reserve": 120,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0002",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 2.015650534050036,
+            "z": 7.999609090392134,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": -1.5704114408765049,
+            "turretYaw": 0,
+            "state": "move",
+            "order": {
+              "type": "retreat",
+              "x": -10.5,
+              "z": 12
+            },
+            "target": null,
+            "magazine": 6,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 3.599899999976142,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [
+              {
+                "x": 1,
+                "z": 8
+              },
+              {
+                "x": -1,
+                "z": 8
+              },
+              {
+                "x": -3,
+                "z": 8
+              },
+              {
+                "x": -5,
+                "z": 10
+              },
+              {
+                "x": -7,
+                "z": 10
+              },
+              {
+                "x": -9,
+                "z": 10
+              },
+              {
+                "x": -11,
+                "z": 12
+              }
+            ],
+            "lastSeen": {
+              "x": 16,
+              "z": -12,
+              "time": 313.20000000003427
+            },
+            "recoil": 0,
+            "speed": 1.5000000000000002,
+            "overheated": false,
+            "repairAmmo": 0,
+            "pathGoal": {
+              "x": -10.5,
+              "z": 12
+            }
+          },
+          {
+            "id": "ANT-0005",
+            "kind": "ant",
+            "team": "friendly",
+            "x": -0.1999999999999993,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "ANT-0008",
+            "kind": "ant",
+            "team": "friendly",
+            "x": 5,
+            "z": 12,
+            "hp": 1400,
+            "maxHp": 1400,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 8,
+            "reserve": 24,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0003",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 20,
+            "z": -9.663720000135902,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 1.0421724173126636,
+            "state": "aim",
+            "order": {
+              "type": "hold",
+              "x": 20,
+              "z": -9.663720000135902
+            },
+            "target": "TARGET-1-3",
+            "magazine": 35,
+            "reserve": 240,
+            "heat": 44.15519999992843,
+            "pressure": 100,
+            "cooldown": 1.4727000000476835,
+            "reload": 0,
+            "skillCooldown": 4.270600000023841,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": {
+              "x": 16,
+              "z": -12,
+              "time": 327.6001000000586
+            },
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0006",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 15.399999999999999,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "BTL-0009",
+            "kind": "beetle",
+            "team": "friendly",
+            "x": 20.6,
+            "z": 12,
+            "hp": 650,
+            "maxHp": 650,
+            "heading": 3.141592653589793,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 60,
+            "reserve": 240,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-1",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": -16,
+            "z": -12,
+            "hp": 355.2,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "LOC-0001",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.40800000000000003,
+              "weapon": 0.10800000000000004,
+              "sensor": 0.008000000000000007
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0
+          },
+          {
+            "id": "TARGET-1-2",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 0,
+            "z": -12,
+            "hp": 600,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": null,
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0,
+              "weapon": 0,
+              "sensor": 0
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0,
+            "markedUntil": 324.8707000000823,
+            "lastMarkedPosition": {
+              "x": 0,
+              "z": -12,
+              "time": 319.8707000000823
+            }
+          },
+          {
+            "id": "TARGET-1-3",
+            "kind": "sentry",
+            "team": "enemy",
+            "x": 16,
+            "z": -12,
+            "hp": 269.35,
+            "maxHp": 600,
+            "heading": 0,
+            "turretYaw": 0,
+            "state": "idle",
+            "order": {
+              "type": "cease"
+            },
+            "target": "BTL-0003",
+            "magazine": 20,
+            "reserve": 80,
+            "heat": 0,
+            "pressure": 100,
+            "cooldown": 0,
+            "reload": 0,
+            "skillCooldown": 0,
+            "scan": 0,
+            "braced": false,
+            "damageParts": {
+              "legs": 0.5510833333333334,
+              "weapon": 0.2510833333333334,
+              "sensor": 0.15108333333333335
+            },
+            "path": [],
+            "lastSeen": null,
+            "recoil": 0,
+            "speed": 0,
+            "overheated": false,
+            "repairAmmo": 0,
+            "markedUntil": 324.8707000000823,
+            "lastMarkedPosition": {
+              "x": 16,
+              "z": -12,
+              "time": 319.8707000000823
+            }
+          }
+        ],
+        "smoke": [],
+        "autoRetreat": true
+      },
+      "effects": 12,
+      "invariants": {
+        "total": 9,
+        "counts": {
+          "deployed": 9
+        }
+      }
+    }
+  ],
+  "final": {
+    "invariants": {
+      "total": 9,
+      "counts": {
+        "deployed": 9
+      }
+    },
+    "events": [
+      {
+        "type": "hit",
+        "time": 301.95850000003435,
+        "id": "LOC-0001",
+        "target": "TARGET-1-1",
+        "damage": 61.199999999999996,
+        "sequence": 1
+      },
+      {
+        "type": "shot",
+        "time": 301.95850000003435,
+        "id": "LOC-0001",
+        "target": "TARGET-1-1",
+        "kind": "locust",
+        "shots": 3,
+        "from": {
+          "x": -17,
+          "z": 0
+        },
+        "to": {
+          "x": -16,
+          "z": -12
+        },
+        "sequence": 2
+      },
+      {
+        "type": "hit",
+        "time": 303.8923000000462,
+        "id": "LOC-0001",
+        "target": "TARGET-1-1",
+        "damage": 61.199999999999996,
+        "sequence": 3
+      },
+      {
+        "type": "shot",
+        "time": 303.8923000000462,
+        "id": "LOC-0001",
+        "target": "TARGET-1-1",
+        "kind": "locust",
+        "shots": 3,
+        "from": {
+          "x": -17,
+          "z": 0
+        },
+        "to": {
+          "x": -16,
+          "z": -12
+        },
+        "sequence": 4
+      },
+      {
+        "type": "hit",
+        "time": 305.83420000002224,
+        "id": "LOC-0001",
+        "target": "TARGET-1-1",
+        "damage": 61.199999999999996,
+        "sequence": 5
+      },
+      {
+        "type": "shot",
+        "time": 305.83420000002224,
+        "id": "LOC-0001",
+        "target": "TARGET-1-1",
+        "kind": "locust",
+        "shots": 3,
+        "from": {
+          "x": -17,
+          "z": 0
+        },
+        "to": {
+          "x": -16,
+          "z": -12
+        },
+        "sequence": 6
+      },
+      {
+        "type": "hit",
+        "time": 307.7579000000104,
+        "id": "LOC-0001",
+        "target": "TARGET-1-1",
+        "damage": 61.199999999999996,
+        "sequence": 7
+      },
+      {
+        "type": "shot",
+        "time": 307.7579000000104,
+        "id": "LOC-0001",
+        "target": "TARGET-1-1",
+        "kind": "locust",
+        "shots": 3,
+        "from": {
+          "x": -17,
+          "z": 0
+        },
+        "to": {
+          "x": -16,
+          "z": -12
+        },
+        "sequence": 8
+      },
+      {
+        "type": "hit",
+        "time": 308.6082999999867,
+        "id": "ANT-0002",
+        "target": "TARGET-1-3",
+        "damage": 85,
+        "sequence": 9
+      },
+      {
+        "type": "shot",
+        "time": 308.6082999999867,
+        "id": "ANT-0002",
+        "target": "TARGET-1-3",
+        "kind": "ant",
+        "shots": 1,
+        "from": {
+          "x": 14,
+          "z": -5
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 10
+      },
+      {
+        "type": "hit",
+        "time": 313.15700000003426,
+        "id": "ANT-0002",
+        "target": "TARGET-1-3",
+        "damage": 85,
+        "sequence": 11
+      },
+      {
+        "type": "shot",
+        "time": 313.15700000003426,
+        "id": "ANT-0002",
+        "target": "TARGET-1-3",
+        "kind": "ant",
+        "shots": 1,
+        "from": {
+          "x": 14,
+          "z": -5
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 12
+      },
+      {
+        "type": "steam-screen",
+        "time": 313.20000000003427,
+        "id": "ANT-0002",
+        "x": 14,
+        "z": -5,
+        "sequence": 13
+      },
+      {
+        "type": "scan",
+        "time": 319.8707000000823,
+        "id": "BTL-0003",
+        "target": "TARGET-1-2",
+        "sequence": 14
+      },
+      {
+        "type": "scan",
+        "time": 319.8707000000823,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "sequence": 15
+      },
+      {
+        "type": "hit",
+        "time": 319.95930000004654,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "damage": 22.95,
+        "sequence": 16
+      },
+      {
+        "type": "shot",
+        "time": 319.95930000004654,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "kind": "beetle",
+        "shots": 5,
+        "from": {
+          "x": 20,
+          "z": 1.6633200001358988
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 17
+      },
+      {
+        "type": "hit",
+        "time": 321.79440000007037,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "damage": 22.95,
+        "sequence": 18
+      },
+      {
+        "type": "shot",
+        "time": 321.79440000007037,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "kind": "beetle",
+        "shots": 5,
+        "from": {
+          "x": 20,
+          "z": -5.3100599999547
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 19
+      },
+      {
+        "type": "hit",
+        "time": 323.6078000001063,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "damage": 38.25,
+        "sequence": 20
+      },
+      {
+        "type": "shot",
+        "time": 323.6078000001063,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "kind": "beetle",
+        "shots": 5,
+        "from": {
+          "x": 20,
+          "z": -9.663720000135902
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 21
+      },
+      {
+        "type": "hit",
+        "time": 325.4483000001064,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "damage": 38.25,
+        "sequence": 22
+      },
+      {
+        "type": "shot",
+        "time": 325.4483000001064,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "kind": "beetle",
+        "shots": 5,
+        "from": {
+          "x": 20,
+          "z": -9.663720000135902
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 23
+      },
+      {
+        "type": "retreat",
+        "time": 325.6133000001064,
+        "id": "LOC-0001",
+        "sequence": 24
+      },
+      {
+        "type": "hit",
+        "time": 327.2728000001063,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "damage": 38.25,
+        "sequence": 25
+      },
+      {
+        "type": "shot",
+        "time": 327.2728000001063,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "kind": "beetle",
+        "shots": 5,
+        "from": {
+          "x": 20,
+          "z": -9.663720000135902
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 26
+      },
+      {
+        "type": "hit",
+        "time": 329.10630000004676,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "damage": 38.25,
+        "sequence": 27
+      },
+      {
+        "type": "shot",
+        "time": 329.10630000004676,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "kind": "beetle",
+        "shots": 5,
+        "from": {
+          "x": 20,
+          "z": -9.663720000135902
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 28
+      },
+      {
+        "type": "hit",
+        "time": 330.925200000023,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "damage": 38.25,
+        "sequence": 29
+      },
+      {
+        "type": "shot",
+        "time": 330.925200000023,
+        "id": "BTL-0003",
+        "target": "TARGET-1-3",
+        "kind": "beetle",
+        "shots": 5,
+        "from": {
+          "x": 20,
+          "z": -9.663720000135902
+        },
+        "to": {
+          "x": 16,
+          "z": -12
+        },
+        "sequence": 30
+      }
+    ],
+    "save": true,
+    "restore": true
+  },
+  "errors": []
+}

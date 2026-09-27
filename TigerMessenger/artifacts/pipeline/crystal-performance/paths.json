@@ -1,0 +1,737 @@
+{
+  "towers": [
+    {
+      "position": [
+        -79.12612660443787,
+        -115.48221558162625,
+        -43.14388204272878
+      ],
+      "meshes": 14,
+      "groups": 69,
+      "triangles": 738,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 3,
+        "v10-service-spine": 5,
+        "v12-crystal-bedrock": 1
+      }
+    },
+    {
+      "position": [
+        -51.46420230628186,
+        -79.34904810984321,
+        -98.5433164894382
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -99.2099536360561,
+        -77.9841470814744,
+        -71.50698903079031
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -24.112601694350715,
+        -109.56937008123244,
+        -77.89201449454967
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -110.288000343912,
+        -99.11991635458361,
+        -41.067051061105985
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -59.10591426784398,
+        -130.87796602134452,
+        -20.28916870792996
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -27.910255768429348,
+        -86.81732367458457,
+        -101.67236667226867
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -27.26504579881135,
+        -125.69751072911558,
+        -45.94710917144105
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -98.98708476254536,
+        -117.03672309982507,
+        -9.934105463526475
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -133.8038738804872,
+        -70.88257748476491,
+        -58.097304978699725
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -85.29057604406616,
+        -61.74412600236119,
+        -99.73468157212713
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    },
+    {
+      "position": [
+        -51.11021686198505,
+        -58.430858226183446,
+        -112.36792526318112
+      ],
+      "meshes": 10,
+      "groups": 65,
+      "triangles": 252,
+      "names": {
+        "v9-crystal-prism": 60,
+        "v9-organic-stem": 2,
+        "v10-service-spine": 3
+      }
+    }
+  ],
+  "nearest": 332,
+  "views": [
+    {
+      "name": "overview",
+      "eye": [
+        -117.602535908888,
+        -110.89242875018529,
+        -312.4390385238115
+      ],
+      "at": [
+        -84.63681556384194,
+        -113.53017837151621,
+        -87.00544839344214
+      ],
+      "up": [
+        -0.5092467843793136,
+        -0.6830937326806029,
+        -0.5234984861217938
+      ]
+    },
+    {
+      "name": "tram-28",
+      "eye": [
+        -42.199104683126016,
+        -117.47295488969827,
+        -118.33568845118755
+      ],
+      "at": [
+        -50.62395903059685,
+        -122.21386231693236,
+        -109.92071064355696
+      ],
+      "up": [
+        -0.24534365374017067,
+        -0.682982356727996,
+        -0.6879982499742973
+      ]
+    },
+    {
+      "name": "tram0",
+      "eye": [
+        -69.62715092765869,
+        -132.16069419831456,
+        -85.2619948915395
+      ],
+      "at": [
+        -74.95330860043038,
+        -135.59907693471212,
+        -74.67694778217775
+      ],
+      "up": [
+        -0.40480903747676983,
+        -0.7683761678869608,
+        -0.49570929767403
+      ]
+    },
+    {
+      "name": "tram28",
+      "eye": [
+        -82.72790572639418,
+        -143.53371282098038,
+        -44.65220032618044
+      ],
+      "at": [
+        -86.58617997290753,
+        -143.7853015864107,
+        -32.877392900530246
+      ],
+      "up": [
+        -0.48215391056842877,
+        -0.8365416763229108,
+        -0.2602414845838882
+      ]
+    }
+  ],
+  "profile": [
+    [
+      "_/christchurch-tram-system/_/_",
+      {
+        "calls": 1948,
+        "triangles": 0,
+        "parents": [
+          "christchurch-tram-system",
+          "christchurch-tram-system"
+        ]
+      }
+    ],
+    [
+      "v9-crystal-prism/crystal-v9-tower/moebius-trackside-gold-left/moebius-metropolis",
+      {
+        "calls": 600,
+        "triangles": 0,
+        "parents": [
+          "crystal-v9-tower",
+          "crystal-v9-tower"
+        ]
+      }
+    ],
+    [
+      "_/_/christchurch-tram-system/_",
+      {
+        "calls": 320,
+        "triangles": 0,
+        "parents": [
+          "",
+          ""
+        ]
+      }
+    ],
+    [
+      "v9-petal-vein/crystal-v9-tower/moebius-trackside-gold-left/moebius-metropolis",
+      {
+        "calls": 320,
+        "triangles": 0,
+        "parents": [
+          "crystal-v9-tower",
+          "crystal-v9-tower"
+        ]
+      }
+    ],
+    [
+      "v12-leaf-branch/gate-moebius-v10/gate-seat-root/cyber-megalithic-twin-gates",
+      {
+        "calls": 217,
+        "triangles": 0,
+        "parents": [
+          "gate-moebius-v10",
+          "gate-moebius-v10"
+        ]
+      }
+    ],
+    [
+      "v12-botanical-leaf/gate-moebius-v10/gate-seat-root/cyber-megalithic-twin-gates",
+      {
+        "calls": 215,
+        "triangles": 0,
+        "parents": [
+          "gate-moebius-v10",
+          "gate-moebius-v10"
+        ]
+      }
+    ],
+    [
+      "_/gate-moebius-v10/gate-seat-root/cyber-megalithic-twin-gates",
+      {
+        "calls": 210,
+        "triangles": 0,
+        "parents": [
+          "gate-moebius-v10",
+          "gate-moebius-v10"
+        ]
+      }
+    ],
+    [
+      "v11-bearing-rivet/gate-moebius-v10/gate-seat-root/cyber-megalithic-twin-gates",
+      {
+        "calls": 160,
+        "triangles": 0,
+        "parents": [
+          "gate-moebius-v10",
+          "gate-moebius-v10"
+        ]
+      }
+    ],
+    [
+      "v11-arch-stone-joint/gate-moebius-v10/gate-seat-root/cyber-megalithic-twin-gates",
+      {
+        "calls": 120,
+        "triangles": 0,
+        "parents": [
+          "gate-moebius-v10",
+          "gate-moebius-v10"
+        ]
+      }
+    ],
+    [
+      "_/_/_/_",
+      {
+        "calls": 90,
+        "triangles": 0,
+        "parents": [
+          "",
+          ""
+        ]
+      }
+    ],
+    [
+      "_/_/airship-lattice/airship-envelope",
+      {
+        "calls": 90,
+        "triangles": 0,
+        "parents": [
+          "",
+          ""
+        ]
+      }
+    ],
+    [
+      "v12-collar-fastener/gate-moebius-v10/gate-seat-root/cyber-megalithic-twin-gates",
+      {
+        "calls": 89,
+        "triangles": 0,
+        "parents": [
+          "gate-moebius-v10",
+          "gate-moebius-v10"
+        ]
+      }
+    ],
+    [
+      "_/_/swamp-native-doll/swamp-lotus-leaf-boat",
+      {
+        "calls": 80,
+        "triangles": 0,
+        "parents": [
+          "",
+          ""
+        ]
+      }
+    ],
+    [
+      "_/swamp-native-doll/swamp-lotus-leaf-boat/moebius-swamp-zone",
+      {
+        "calls": 80,
+        "triangles": 0,
+        "parents": [
+          "swamp-native-doll",
+          "swamp-native-doll"
+        ]
+      }
+    ],
+    [
+      "_/blender-v6-render/swamp-warship-depart/moebius-swamp-zone",
+      {
+        "calls": 70,
+        "triangles": 0,
+        "parents": [
+          "blender-v6-render",
+          "blender-v6-render"
+        ]
+      }
+    ],
+    [
+      "_/blender-v6-render/swamp-shipwreck/_",
+      {
+        "calls": 70,
+        "triangles": 0,
+        "parents": [
+          "blender-v6-render",
+          "blender-v6-render"
+        ]
+      }
+    ],
+    [
+      "_/blender-v6-render/swamp-warship-repair/moebius-swamp-zone",
+      {
+        "calls": 70,
+        "triangles": 0,
+        "parents": [
+          "blender-v6-render",
+          "blender-v6-render"
+        ]
+      }
+    ],
+    [
+      "_/blender-v6-render/crystal-mother-port-boat/_",
+      {
+        "calls": 70,
+        "triangles": 0,
+        "parents": [
+          "blender-v6-render",
+          "blender-v6-render"
+        ]
+      }
+    ],
+    [
+      "_/blender-v6-render/ocean-warship-1/_",
+      {
+        "calls": 70,
+        "triangles": 0,
+        "parents": [
+          "blender-v6-render",
+          "blender-v6-render"
+        ]
+      }
+    ],
+    [
+      "_/_/sea-tube-worms/city-sea-lake",
+      {
+        "calls": 67,
+        "triangles": 0,
+        "parents": [
+          "",
+          ""
+        ]
+      }
+    ],
+    [
+      "_/sea-tube-worms/city-sea-lake/_",
+      {
+        "calls": 67,
+        "triangles": 0,
+        "parents": [
+          "sea-tube-worms",
+          "sea-tube-worms"
+        ]
+      }
+    ],
+    [
+      "_/gate-pod-escort-pod-41-7/gate-pod-escort/moebius-aircraft-squad",
+      {
+        "calls": 66,
+        "triangles": 0,
+        "parents": [
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-41-7"
+        ]
+      }
+    ],
+    [
+      "_/gate-pod-escort-pod-08-9/gate-pod-escort/moebius-aircraft-squad",
+      {
+        "calls": 66,
+        "triangles": 0,
+        "parents": [
+          "gate-pod-escort-pod-08-9",
+          "gate-pod-escort-pod-08-9"
+        ]
+      }
+    ],
+    [
+      "_/gate-pod-escort-pod-55-2/gate-pod-escort/moebius-aircraft-squad",
+      {
+        "calls": 64,
+        "triangles": 0,
+        "parents": [
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-55-2"
+        ]
+      }
+    ],
+    [
+      "v11-bearing-ring/gate-moebius-v10/gate-seat-root/cyber-megalithic-twin-gates",
+      {
+        "calls": 60,
+        "triangles": 0,
+        "parents": [
+          "gate-moebius-v10",
+          "gate-moebius-v10"
+        ]
+      }
+    ],
+    [
+      "v9-crystal-prism/crystal-v9-tower/moebius-grand-community-tower/moebius-metropolis",
+      {
+        "calls": 60,
+        "triangles": 0,
+        "parents": [
+          "crystal-v9-tower",
+          "crystal-v9-tower"
+        ]
+      }
+    ],
+    [
+      "v9-crystal-prism/crystal-v9-tower/moebius-trackside-gold-right/moebius-metropolis",
+      {
+        "calls": 60,
+        "triangles": 0,
+        "parents": [
+          "crystal-v9-tower",
+          "crystal-v9-tower"
+        ]
+      }
+    ],
+    [
+      "_/vanguard-hauler-0/_/_",
+      {
+        "calls": 57,
+        "triangles": 0,
+        "parents": [
+          "vanguard-hauler-0",
+          "vanguard-hauler-0"
+        ]
+      }
+    ],
+    [
+      "_/vanguard-hauler-1/_/_",
+      {
+        "calls": 57,
+        "triangles": 0,
+        "parents": [
+          "vanguard-hauler-1",
+          "vanguard-hauler-1"
+        ]
+      }
+    ],
+    [
+      "_/vanguard-hauler-2/_/_",
+      {
+        "calls": 57,
+        "triangles": 0,
+        "parents": [
+          "vanguard-hauler-2",
+          "vanguard-hauler-2"
+        ]
+      }
+    ],
+    [
+      "_/_/_/airship-lattice",
+      {
+        "calls": 50,
+        "triangles": 0,
+        "parents": [
+          "",
+          ""
+        ]
+      }
+    ],
+    [
+      "v12-bedrock-creases/crystal-v9-tower/moebius-trackside-gold-left/moebius-metropolis",
+      {
+        "calls": 50,
+        "triangles": 0,
+        "parents": [
+          "crystal-v9-tower",
+          "crystal-v9-tower"
+        ]
+      }
+    ],
+    [
+      "v9-ink/v9-crystal-prism/crystal-v9-tower/moebius-trackside-gold-left",
+      {
+        "calls": 50,
+        "triangles": 0,
+        "parents": [
+          "v9-crystal-prism",
+          "v9-crystal-prism"
+        ]
+      }
+    ],
+    [
+      "v10-crystalline-inclusions/v9-crystal-prism/crystal-v9-tower/moebius-trackside-gold-left",
+      {
+        "calls": 50,
+        "triangles": 0,
+        "parents": [
+          "v9-crystal-prism",
+          "v9-crystal-prism"
+        ]
+      }
+    ],
+    [
+      "v14-side-gallery-post/gate-moebius-v10/gate-seat-root/cyber-megalithic-twin-gates",
+      {
+        "calls": 45,
+        "triangles": 0,
+        "parents": [
+          "gate-moebius-v10",
+          "gate-moebius-v10"
+        ]
+      }
+    ],
+    [
+      "_/airship-lattice/airship-envelope/airship-rig",
+      {
+        "calls": 40,
+        "triangles": 0,
+        "parents": [
+          "airship-lattice",
+          "airship-lattice"
+        ]
+      }
+    ],
+    [
+      "_/_/flock-bird/flock-root",
+      {
+        "calls": 36,
+        "triangles": 0,
+        "parents": [
+          "",
+          ""
+        ]
+      }
+    ],
+    [
+      "_/_/_/flock-bird",
+      {
+        "calls": 36,
+        "triangles": 0,
+        "parents": [
+          "",
+          ""
+        ]
+      }
+    ],
+    [
+      "_/moebius-swamp-zone/moebius-swamp-placement/_",
+      {
+        "calls": 32,
+        "triangles": 0,
+        "parents": [
+          "moebius-swamp-zone",
+          "moebius-swamp-zone"
+        ]
+      }
+    ],
+    [
+      "v9-petal-vein/crystal-v9-tower/moebius-grand-community-tower/moebius-metropolis",
+      {
+        "calls": 32,
+        "triangles": 0,
+        "parents": [
+          "crystal-v9-tower",
+          "crystal-v9-tower"
+        ]
+      }
+    ]
+  ],
+  "samples": [
+    {
+      "name": "overview",
+      "medianMs": 126.09999999403954,
+      "p90Ms": 140.90000000596046,
+      "calls": 32111,
+      "triangles": 3766215,
+      "pixelRatio": 1
+    },
+    {
+      "name": "tram-28",
+      "medianMs": 88.7999999821186,
+      "p90Ms": 103.80000001192093,
+      "calls": 12371,
+      "triangles": 2270997,
+      "pixelRatio": 1
+    },
+    {
+      "name": "tram0",
+      "medianMs": 79.5,
+      "p90Ms": 94.69999998807907,
+      "calls": 7680,
+      "triangles": 1674278,
+      "pixelRatio": 1
+    },
+    {
+      "name": "tram28",
+      "medianMs": 72.2999999821186,
+      "p90Ms": 86.80000001192093,
+      "calls": 2514,
+      "triangles": 776652,
+      "pixelRatio": 1
+    }
+  ],
+  "errors": []
+}

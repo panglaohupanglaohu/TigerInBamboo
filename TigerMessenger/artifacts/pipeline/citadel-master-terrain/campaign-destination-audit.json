@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "final target shares authored new plaza anchor",
+      "passed": true
+    },
+    {
+      "name": "old castle root cannot finish new-city arrival",
+      "passed": true
+    },
+    {
+      "name": "battle context remains visible in final chapter",
+      "passed": true
+    },
+    {
+      "name": "actual R at new plaza completes arrival",
+      "passed": true
+    }
+  ],
+  "target": [
+    125.01172891988396,
+    103.23202596982624,
+    39.95643741301093
+  ],
+  "oldRootDistance": 58.80235423902132,
+  "panel": "盟约已成，蓝盔盟军正在准备出航。",
+  "scope": "Restored final chapter, real R interactions with diagnostic positioning; not a full rescue/boat journey or native Godot story.",
+  "errors": []
+}

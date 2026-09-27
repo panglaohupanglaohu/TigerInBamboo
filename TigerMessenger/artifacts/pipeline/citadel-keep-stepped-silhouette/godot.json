@@ -1,0 +1,359 @@
+{
+  "meshes": 6,
+  "passed": true,
+  "scope": "Actual released Godot facade triangles: 39 opening and wall ray depths compared with Web. Not full gameplay.",
+  "vertices": 34887,
+  "windows": [
+    {
+      "depths": {
+        "center": 0.779800415039062,
+        "wall": 0.389900207519531
+      },
+      "id": "left-gate-bastion-west",
+      "max_depth_error": 0.000199890136709846,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.779804229736328,
+        "wall": 0.389904022216797
+      },
+      "id": "left-gate-bastion-west",
+      "max_depth_error": 0.000196075439454879,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.779993057250977,
+        "wall": 0.39000129699707
+      },
+      "id": "left-gate-bastion",
+      "max_depth_error": 0.00000724792479533942,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780008316040039,
+        "wall": 0.390008926391602
+      },
+      "id": "left-gate-bastion",
+      "max_depth_error": 0.0000089645385759618,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780189514160156,
+        "wall": 0.390281677246094
+      },
+      "id": "right-gate-bastion-east",
+      "max_depth_error": 0.000285339355470371,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780181884765625,
+        "wall": 0.390281677246094
+      },
+      "id": "right-gate-bastion-east",
+      "max_depth_error": 0.000285339355463821,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780305862426758,
+        "wall": 0.390310287475586
+      },
+      "id": "right-gate-bastion",
+      "max_depth_error": 0.000310325622561836,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780302047729492,
+        "wall": 0.390298843383789
+      },
+      "id": "right-gate-bastion",
+      "max_depth_error": 0.000301742553716622,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780006408691406,
+        "wall": 0.389804840087891
+      },
+      "id": "left-outer-turret-west",
+      "max_depth_error": 0.000193786621099035,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780400276184082,
+        "wall": 0.390194892883301
+      },
+      "id": "left-outer-turret",
+      "max_depth_error": 0.0004007339477482,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.779998779296875,
+        "wall": 0.390487670898438
+      },
+      "id": "right-outer-turret-east",
+      "max_depth_error": 0.000489807128898123,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780108451843262,
+        "wall": 0.390101432800293
+      },
+      "id": "right-outer-turret",
+      "max_depth_error": 0.000108528137213515,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780049204826355,
+        "wall": 0.389730751514435
+      },
+      "id": "left-blue-tower-side-5",
+      "max_depth_error": 0.000269568553241173,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.77979564666748,
+        "wall": 0.389795660972595
+      },
+      "id": "left-blue-tower-side-5",
+      "max_depth_error": 0.000205173888609078,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.779403686523438,
+        "wall": 0.389499664306641
+      },
+      "id": "left-blue-tower-side-6",
+      "max_depth_error": 0.000595092773442718,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.779407501220703,
+        "wall": 0.389507293701172
+      },
+      "id": "left-blue-tower-side-6",
+      "max_depth_error": 0.000591278076159774,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780203342437744,
+        "wall": 0.390001773834229
+      },
+      "id": "left-blue-tower",
+      "max_depth_error": 0.000203347206108262,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780203342437744,
+        "wall": 0.390005588531494
+      },
+      "id": "left-blue-tower",
+      "max_depth_error": 0.00020334720611026,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.78009033203125,
+        "wall": 0.39068603515625
+      },
+      "id": "right-blue-tower-side-2",
+      "max_depth_error": 0.000686645507822659,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780097961425781,
+        "wall": 0.39068603515625
+      },
+      "id": "right-blue-tower-side-2",
+      "max_depth_error": 0.000686645507818551,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.78009033203125,
+        "wall": 0.39068603515625
+      },
+      "id": "right-blue-tower-side-2",
+      "max_depth_error": 0.000686645507818551,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780252873897552,
+        "wall": 0.390472948551178
+      },
+      "id": "right-blue-tower-side-3",
+      "max_depth_error": 0.000470399391633791,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780247449874878,
+        "wall": 0.390459448099136
+      },
+      "id": "right-blue-tower-side-3",
+      "max_depth_error": 0.000456898939584449,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780258238315582,
+        "wall": 0.390464842319489
+      },
+      "id": "right-blue-tower-side-3",
+      "max_depth_error": 0.000462293159946947,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780197978019714,
+        "wall": 0.390114665031433
+      },
+      "id": "right-blue-tower",
+      "max_depth_error": 0.000197958946216881,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780205607414246,
+        "wall": 0.390107035636902
+      },
+      "id": "right-blue-tower",
+      "max_depth_error": 0.000205588340756235,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780217051506042,
+        "wall": 0.390103220939636
+      },
+      "id": "right-blue-tower",
+      "max_depth_error": 0.000217032432558772,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780487060546875,
+        "wall": 0.390373229980469
+      },
+      "id": "offset-high-keep-side-2",
+      "max_depth_error": 0.000483703613281428,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780479431152344,
+        "wall": 0.390373229980469
+      },
+      "id": "offset-high-keep-side-2",
+      "max_depth_error": 0.00047607421874829,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780479431152344,
+        "wall": 0.390388488769531
+      },
+      "id": "offset-high-keep-side-2",
+      "max_depth_error": 0.000476074218763278,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780487060546875,
+        "wall": 0.390388488769531
+      },
+      "id": "offset-high-keep-side-2",
+      "max_depth_error": 0.000483703613281428,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780521869659424,
+        "wall": 0.390415370464325
+      },
+      "id": "offset-high-keep-side-3",
+      "max_depth_error": 0.000522867740024524,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780521869659424,
+        "wall": 0.390431553125381
+      },
+      "id": "offset-high-keep-side-3",
+      "max_depth_error": 0.000522867740030519,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780511081218719,
+        "wall": 0.390431553125381
+      },
+      "id": "offset-high-keep-side-3",
+      "max_depth_error": 0.000512079299336388,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780521869659424,
+        "wall": 0.390426158905029
+      },
+      "id": "offset-high-keep-side-3",
+      "max_depth_error": 0.000522867740040733,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780407905578613,
+        "wall": 0.390397071838379
+      },
+      "id": "offset-high-keep",
+      "max_depth_error": 0.000408363342283113,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780407905578613,
+        "wall": 0.390397071838379
+      },
+      "id": "offset-high-keep",
+      "max_depth_error": 0.000408363342296769,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780400276184082,
+        "wall": 0.39040470123291
+      },
+      "id": "offset-high-keep",
+      "max_depth_error": 0.000404548645030534,
+      "passed": true
+    },
+    {
+      "depths": {
+        "center": 0.780411720275879,
+        "wall": 0.390408515930176
+      },
+      "id": "offset-high-keep",
+      "max_depth_error": 0.000412178039539191,
+      "passed": true
+    }
+  ]
+}

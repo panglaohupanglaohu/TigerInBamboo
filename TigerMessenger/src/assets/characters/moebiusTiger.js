@@ -413,7 +413,7 @@ export function createMoebiusTigerModel(rnd = Math.random, { optimizedGeometry =
       legPositions: legs.map(leg => leg.position.clone()),
       footPoints: [],
       headPosition: headGroup.position.clone(), headRotation: headGroup.rotation.clone(),
-      bodyRotation: bodyGroup.rotation.clone(), tailRotation: tailRoot.rotation.clone(),
+      bodyPosition: bodyGroup.position.clone(), bodyRotation: bodyGroup.rotation.clone(), tailRotation: tailRoot.rotation.clone(),
       tailJoints: tailSegs.map(joint => joint.rotation.clone()),
     };
     // Serialized Blender extras contain the OLD brush-tail values. Actual
@@ -474,6 +474,10 @@ export function createMoebiusTigerModel(rnd = Math.random, { optimizedGeometry =
   tigerGroup.userData.tailSegs = tailSegs;
   tigerGroup.userData.tailRoot = tailRoot;
   tigerGroup.userData.anatomyLegs = legs;
+  tigerGroup.userData.refreshTigerFootGeometry = () => {
+    tigerGroup.updateMatrixWorld(true);rest.footPoints=[];
+    for(const leg of legs){const inverse=leg.matrixWorld.clone().invert(),points=[];leg.traverseVisible(node=>{if(!node.isMesh||node.userData.isOutline)return;const p=node.geometry?.getAttribute('position');if(!p)return;const matrix=inverse.clone().multiply(node.matrixWorld);for(let i=0;i<p.count;i++)points.push(new THREE.Vector3().fromBufferAttribute(p,i).applyMatrix4(matrix));});rest.footPoints.push(points);}
+  };
 
   tigerGroup.userData.update = function updateTiger(dt, t) {
     const walking = tigerGroup.userData._walking;
@@ -535,8 +539,11 @@ export function createMoebiusTigerModel(rnd = Math.random, { optimizedGeometry =
     anim.headDown += (target - anim.headDown) * Math.min(1, dt * 3);
     headGroup.rotation.x = rest.headRotation.x + anim.headDown * 0.95;
     headGroup.position.z = rest.headPosition.z - anim.headDown * 0.5;
-    headGroup.position.y = rest.headPosition.y - anim.headDown * 0.55;
-    bodyGroup.rotation.x = rest.bodyRotation.x + anim.headDown * 0.1;
+    const v2Drinking=tigerGroup.userData.swampTigerV2Coat;
+    headGroup.position.y = rest.headPosition.y - anim.headDown * (v2Drinking ? 1.4 : 0.55);
+    bodyGroup.position.y = rest.bodyPosition.y - anim.headDown * (v2Drinking ? .25 : 0);
+    bodyGroup.rotation.x = rest.bodyRotation.x + anim.headDown * (v2Drinking ? .13 : .1);
+    tigerGroup.userData.updateTargetNeck?.(dt,t);
   };
 
   return tigerGroup;

@@ -1,0 +1,196 @@
+{
+  "scope": "offline replacement candidates only, no production edits; existing49 positions fixed per search, accepted replacements participate in subsequent spacing; max4 local displacement; no travel-path or action-sweep proof",
+  "elapsed_seconds": 0.48975654201058205,
+  "accepted": [
+    {
+      "id": "pine-3011-cover-15",
+      "original": [
+        -6.339999999999974,
+        0.07483638521919375,
+        -4.049999999999926
+      ],
+      "candidate": [
+        -5.339999999999974,
+        0.030948818558664444,
+        -4.549999999999926
+      ],
+      "displacement_local": 1.118033988749895,
+      "minimum_slot_spacing_local": 2.5495097567964176,
+      "role": "gladius",
+      "yaw_degrees": 0.0,
+      "matrix": [
+        1.9999993848319442,
+        -0.0015686528749777474,
+        -3.9576392934318345e-08,
+        0.0,
+        0.001568622417678511,
+        1.999960865583923,
+        -0.01241271753145016,
+        0.0,
+        9.775198139532798e-06,
+        0.012412713682456299,
+        1.9999614807399373,
+        0.0,
+        -5.339993717436236,
+        0.038958956287874276,
+        -4.550049714761215,
+        1.0
+      ],
+      "poses": [
+        "neutral",
+        "conceal_lean"
+      ],
+      "all_visible_meshes_checked": {
+        "neutral": 29,
+        "conceal_lean": 29
+      },
+      "all_tree_parts_checked": 50,
+      "surface_contacts": 0,
+      "uncertain": false,
+      "body_cylinder_clear": true,
+      "pool_margin_local": 0.76
+    },
+    {
+      "id": "pine-3011-cover-17",
+      "original": [
+        -6.039999999999977,
+        0.08154762835946713,
+        -1.649999999999892
+      ],
+      "candidate": [
+        -8.539999999999978,
+        0.03536439216508185,
+        -3.649999999999892
+      ],
+      "displacement_local": 3.2015621187164243,
+      "minimum_slot_spacing_local": 1.5264337522473717,
+      "role": "gladius",
+      "yaw_degrees": 180.0,
+      "matrix": [
+        -1.9999955916497008,
+        -0.004199212038429823,
+        1.4347985446317706e-07,
+        0.0,
+        -0.004199211647345335,
+        1.9999953734641993,
+        -0.0009342073316766155,
+        0.0,
+        1.8179878142270879e-06,
+        -0.0009342055737711685,
+        -1.9999997818141486,
+        0.0,
+        -8.540016759895472,
+        0.04334677463710304,
+        -3.650003728608632,
+        1.0
+      ],
+      "poses": [
+        "neutral",
+        "conceal_lean"
+      ],
+      "all_visible_meshes_checked": {
+        "neutral": 29,
+        "conceal_lean": 29
+      },
+      "all_tree_parts_checked": 50,
+      "surface_contacts": 0,
+      "uncertain": false,
+      "body_cylinder_clear": true,
+      "pool_margin_local": 0.76
+    },
+    {
+      "id": "pine-3011-cover-20",
+      "original": [
+        -7.23999999999998,
+        0.07846756984705736,
+        -2.849999999999895
+      ],
+      "candidate": [
+        -8.98999999999998,
+        0.03039804637270519,
+        -5.099999999999895
+      ],
+      "displacement_local": 2.850438562747845,
+      "minimum_slot_spacing_local": 1.5182226450689011,
+      "role": "gladius",
+      "yaw_degrees": 90.0,
+      "matrix": [
+        2.6002290342413753e-05,
+        -0.01241274174170893,
+        -1.9999614804206438,
+        0.0,
+        0.001568622417678511,
+        1.999960865583923,
+        -0.01241271753145016,
+        0.0,
+        1.9999993846868032,
+        -0.0015684308267980658,
+        3.573723403063836e-05,
+        0.0,
+        -8.989993717116896,
+        0.03840859126300643,
+        -5.100049717288221,
+        1.0
+      ],
+      "poses": [
+        "neutral",
+        "conceal_lean"
+      ],
+      "all_visible_meshes_checked": {
+        "neutral": 29,
+        "conceal_lean": 29
+      },
+      "all_tree_parts_checked": 50,
+      "surface_contacts": 0,
+      "uncertain": false,
+      "body_cylinder_clear": true,
+      "pool_margin_local": 0.76
+    }
+  ],
+  "attempts": [
+    {
+      "id": "pine-3011-cover-15",
+      "counts": {
+        "tested": 68,
+        "spacing": 25,
+        "pool": 0,
+        "support": 0,
+        "body": 42,
+        "exact_contact_or_uncertain": 0
+      },
+      "found": true
+    },
+    {
+      "id": "pine-3011-cover-17",
+      "counts": {
+        "tested": 510,
+        "spacing": 396,
+        "pool": 32,
+        "support": 0,
+        "body": 80,
+        "exact_contact_or_uncertain": 14
+      },
+      "found": true
+    },
+    {
+      "id": "pine-3011-cover-20",
+      "counts": {
+        "tested": 410,
+        "spacing": 257,
+        "pool": 17,
+        "support": 0,
+        "body": 129,
+        "exact_contact_or_uncertain": 73
+      },
+      "found": true
+    }
+  ],
+  "criteria": {
+    "spacing_local": 1.45,
+    "pool_margin_local": 0.76,
+    "body_radius_m": 0.38,
+    "body_height_m": 1.22,
+    "island_world_scale": 0.5
+  },
+  "uncertainty_policy": "any uncertain exact result rejects candidate"
+}

@@ -1,0 +1,67 @@
+{
+  "checks": [
+    {
+      "name": "time alone cannot discover whale or ambush",
+      "passed": true
+    },
+    {
+      "name": "concealment retains visible actor and lowers body pose",
+      "passed": true
+    },
+    {
+      "name": "concealed actor follows moving cover anchor",
+      "passed": true
+    },
+    {
+      "name": "discovery event distinct from ambush",
+      "passed": true
+    },
+    {
+      "name": "ambush restores body pose and identity",
+      "passed": true
+    },
+    {
+      "name": "reset clears event and pose state",
+      "passed": true
+    },
+    {
+      "name": "approaching soldier does not inherit island lift",
+      "passed": true
+    },
+    {
+      "name": "concealment presentation respects casualty pose",
+      "passed": true
+    },
+    {
+      "name": "insufficient real cover blocks instead of hiding or attacking",
+      "passed": true
+    },
+    {
+      "name": "actual garden has at least 50 anchored cover slots",
+      "passed": false,
+      "detail": {
+        "count": 48
+      }
+    }
+  ],
+  "passed": false,
+  "blocked": "actual-cover-provider-not-ready",
+  "errors": [],
+  "sourceBefore": {
+    "src/world/saihojiPhalanx.js": "0eb36114099668a1cb84424f4827b06aeb21eaf9b4b7db307b5090a84e40348f",
+    "src/world/saihojiAmbush.js": "78c8e7df12cab4a390f992e3ba86817f5669f4a14c198e02a8e99ee15723751a",
+    "src/scenes/saihojiGarden.js": "b90b89b69a77b8c64064f5c8111fde4e08bcd3ca8792ae999bae4a90402ddc5a",
+    "src/world/vanguardAssault.js": "f75f57ebd7555b1ef84b1d41aa1c05492e64e31ac47eadccaa4ba688a6428aec",
+    "src/world/saihojiPineLayout.js": "f9088ea945942331970851dac580eff5dd0f31df52e1488af587b0f88b70dd05",
+    "src/assets/saihojiPineOptimized.js": "7514586a471cebdbae1bd7af100f14d49151ec611b3d63161efb7fd4b8033de4"
+  },
+  "sourceAfter": {
+    "src/world/saihojiPhalanx.js": "0eb36114099668a1cb84424f4827b06aeb21eaf9b4b7db307b5090a84e40348f",
+    "src/world/saihojiAmbush.js": "78c8e7df12cab4a390f992e3ba86817f5669f4a14c198e02a8e99ee15723751a",
+    "src/scenes/saihojiGarden.js": "b90b89b69a77b8c64064f5c8111fde4e08bcd3ca8792ae999bae4a90402ddc5a",
+    "src/world/vanguardAssault.js": "f75f57ebd7555b1ef84b1d41aa1c05492e64e31ac47eadccaa4ba688a6428aec",
+    "src/world/saihojiPineLayout.js": "f9088ea945942331970851dac580eff5dd0f31df52e1488af587b0f88b70dd05",
+    "src/assets/saihojiPineOptimized.js": "7514586a471cebdbae1bd7af100f14d49151ec611b3d63161efb7fd4b8033de4"
+  },
+  "sourceStable": true
+}

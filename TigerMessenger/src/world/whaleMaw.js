@@ -33,6 +33,7 @@
 import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { soilVanguardUniform } from "./vanguardTrooper.js";
+import { sfxWhaleGroan, sfxWhaleInhale, sfxWhaleGulp, sfxWhaleExpel } from "../audio/worldSfx.js";
 
 /** 鲸体几何（与 leviathanIsland.js 锁死一致，勿各算各的） */
 const WHALE = Object.freeze({
@@ -442,6 +443,7 @@ export function createWhaleMaw({
     if (next > 0.05 && st.tug <= 0.05) {
       st.struggle = 1;        // 刚被拽住：猛地一挣
       st.struggleClock = 0;
+      sfxWhaleGroan(mouthWorld(), 0.8);
     }
     st.tug = next;
     return st.tug;
@@ -453,6 +455,7 @@ export function createWhaleMaw({
     if (!attach()) return false;
     st.phase = "gape";
     st.phaseT = 0;
+    sfxWhaleGroan(mouthWorld());
     return true;
   }
 
@@ -667,7 +670,9 @@ export function createWhaleMaw({
         if (k >= 1) {
           st.phase = "suck";
           st.phaseT = 0;
-          if (beginSuck() === 0) {
+          const eatenNow = beginSuck();
+          if (eatenNow > 0) sfxWhaleInhale(mouthWorld(), WHALE_MAW.suckTime);
+          if (eatenNow === 0) {
             // 一个都够不着：合上嘴，进冷却，别空张着
             st.phase = "idle";
             st.cooldown = WHALE_MAW.cooldown * 0.4;
@@ -680,6 +685,7 @@ export function createWhaleMaw({
         updateSuck(dt);
         if (st.phaseT >= WHALE_MAW.suckTime) {
           for (const e of st.eaten) { e.tr.visible = false; }
+          if (st.eaten.length) sfxWhaleGulp(mouthWorld());
           st.phase = "hold";
           st.phaseT = 0;
         }
@@ -700,6 +706,7 @@ export function createWhaleMaw({
         if (k >= 1) {
           if (bulge) bulge.visible = false;
           beginExpel();
+          if (st.eaten.length) sfxWhaleExpel(ventWorld());
           st.phase = "expel";
           st.phaseT = 0;
         }

@@ -319,7 +319,12 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
    * @param {number} [baseDrop] 额外基础下沉（deep/rim 分层用）
    */
   const makeSphericalDisc = (radius, segments, sphereR, baseDrop = 0) => {
-    const geo = new THREE.CircleGeometry(radius, segments);
+    // A centre-to-rim triangle fan has long radial chords: at this lake's
+    // scale its interior falls almost 10 units below the declared waterline.
+    // Subdivide radially as well as around the rim. Preserve the original UVs,
+    // footprint and local XY orientation used by water/deep/rim layers.
+    const radialSegments = Math.max(1, Math.ceil(radius / 3));
+    const geo = new THREE.RingGeometry(0, radius, segments, radialSegments);
     const pos = geo.attributes.position;
     const rr2 = sphereR * sphereR;
     for (let i = 0; i < pos.count; i++) {
@@ -331,6 +336,7 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
     }
     pos.needsUpdate = true;
     geo.computeVertexNormals();
+    geo.userData.sphericalWater = { radius, sphereR, baseDrop, radialSegments, segments };
     return geo;
   };
 

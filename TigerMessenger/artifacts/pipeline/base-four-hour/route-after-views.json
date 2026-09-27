@@ -1,0 +1,46 @@
+{
+  "mode": "six full-size robots loaded through runtime, then diagnostic geographic positioning along current curves",
+  "report": [
+    {
+      "name": "junction",
+      "anchor": [
+        54,
+        78,
+        -140
+      ],
+      "nearestProgress": 0.08775,
+      "loaded": 6
+    },
+    {
+      "name": "crystal-gate",
+      "anchor": [
+        24.379584336862383,
+        -75.50847929576958,
+        -148.87509937918298
+      ],
+      "nearestProgress": 0.168,
+      "loaded": 6
+    },
+    {
+      "name": "highland-gate",
+      "anchor": [
+        126.89754838952439,
+        108.76562526866314,
+        -21.994306627499984
+      ],
+      "nearestProgress": 0.7625625,
+      "loaded": 6
+    },
+    {
+      "name": "highland-shore",
+      "anchor": [
+        119,
+        92,
+        60
+      ],
+      "nearestProgress": 0.7276875,
+      "loaded": 6
+    }
+  ],
+  "errors": []
+}

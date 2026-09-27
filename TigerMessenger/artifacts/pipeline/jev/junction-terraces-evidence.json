@@ -1,0 +1,28 @@
+{
+  "task": "Junction castle stepped massing and regional spatial audit",
+  "image_sha256": "5a3604832839286da94d6f17ee4d317b7dd1ebd525424a73c0114e5b07c862eb",
+  "observations": [
+    "Front/middle/rear houses now three/four/five storeys, six upper floor setbacks have supported garden terraces. Keep roof replaced by battlement terrace. Duplicate window and balcony planes removed; actual WFC cell width/depth matched.",
+    "Same central collision route still passes. Model 21 meshes / 37048 triangles. Godot visual adapter passes, not full campaign test.",
+    "Correct previous attribution: foreground left repeated pillars are legacy tram-system meshes, not Gate of Sighs bridge. Gate center 162.3m from city. Surface distances in local audit; do not infer conflict from whole group bounding box.",
+    "Still missing: reference keep buttresses and varied facade, fuller gardens and boats; background terrain stretched spikes remain visible and require separate source diagnosis."
+  ],
+  "checks": [
+    {
+      "name": "11 WFC region solves",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "dock to keep collision route",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Godot visual adapter",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "scope": "Text triage only. Not image inspection, no full visual acceptance."
+}

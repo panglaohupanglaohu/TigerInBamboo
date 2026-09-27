@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "06525326c622e24399281f4f81ca96f11b117b79cdd9b2b2f2b74145a3f5c77f",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.96
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.26,
+      "probabilities": {
+        "lighting": 0,
+        "geometry": 0.42,
+        "navigation": 0.25,
+        "dressing": 0.02,
+        "review": 0.31
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.98
+    }
+  },
+  "usage": {
+    "input_tokens": 2231,
+    "output_tokens": 91,
+    "cost_usd": 0.000938,
+    "credits_remaining_usd": 4.979139
+  },
+  "elapsed_ms": 2253,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "24 active robot world performance target",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "Formal world campaign and damaged unit railway recovery",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

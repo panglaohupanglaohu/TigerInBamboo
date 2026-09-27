@@ -1,0 +1,28 @@
+{
+  "swamp": {
+    "position": [
+      -68.89845161756955,
+      -46.86223078983698,
+      -111.07763416885717
+    ],
+    "scale": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "name": "moebius-swamp-placement",
+    "children": [
+      "moebius-swamp-zone"
+    ]
+  },
+  "towers": [
+    {
+      "name": "moebius-grand-community-tower",
+      "position": [
+        -79.12612660443787,
+        -115.48221558162625,
+        -43.14388204272878
+      ]
+    }
+  ]
+}

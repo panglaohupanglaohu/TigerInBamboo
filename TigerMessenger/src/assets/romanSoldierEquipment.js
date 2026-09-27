@@ -79,7 +79,8 @@ function groupFrom(kind, shared, archer = false) {
     mesh.name = spec.name;
     if (isArcherHelmet) mesh.userData.romanEquipmentVariant = "archer-head-clearance";
     mesh.castShadow = mesh.receiveShadow = true;
-    mesh.frustumCulled = false;
+    mesh.frustumCulled = true;
+    mesh.userData.rigidFrustumCulling = true;
     group.add(mesh);
   }
   return group;

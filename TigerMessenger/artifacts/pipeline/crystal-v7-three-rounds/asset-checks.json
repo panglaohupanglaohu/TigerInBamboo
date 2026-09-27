@@ -1,0 +1,44 @@
+{
+  "results": [
+    {
+      "round": 1,
+      "bytes": 10693044,
+      "sha256": "ed0c5ab7e7ef821273e297d591fd77f638af5ed7d272266f5fe68a6a004c80b7",
+      "nodes": 5874,
+      "meshes": 2045,
+      "towers": 3,
+      "swamp_roots": 1,
+      "finite_transforms": true,
+      "valid_buffer_ranges": true,
+      "godot_copy_matches": true
+    },
+    {
+      "round": 2,
+      "bytes": 10920264,
+      "sha256": "0a54866e3f2b440df57f1a604674b4d9b497142fecb6eb56e24be6c753f0c8a4",
+      "nodes": 6056,
+      "meshes": 2227,
+      "towers": 3,
+      "swamp_roots": 1,
+      "finite_transforms": true,
+      "valid_buffer_ranges": true,
+      "godot_copy_matches": true
+    },
+    {
+      "round": 3,
+      "bytes": 11244980,
+      "sha256": "f8d4ac804dbed9272ebbd543f7fb334793e0486828d44ba17cf9548a70f6c26d",
+      "nodes": 6190,
+      "meshes": 2361,
+      "towers": 3,
+      "swamp_roots": 1,
+      "finite_transforms": true,
+      "valid_buffer_ranges": true,
+      "godot_copy_matches": true
+    }
+  ],
+  "same_native_camera": true,
+  "source_sha256": "cbade0229d33e38d085d612a7bc292c5417c02027bf9771b21b9ba1a2e9d3405",
+  "target_sha256": "5f02e7aa44b757395376a8a448a5096782e911bc1519c81612cc01c7e078df16",
+  "scope": "Asset integrity and actual native render only; not pathfinding, boarding, global transit or visual equivalence to target."
+}

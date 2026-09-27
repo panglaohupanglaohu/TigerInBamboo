@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "checks": [
+    "missing-dock-rejected",
+    "missing-shore-rejected",
+    "parallel-pair-width-rejected",
+    "stowed-board-rejected",
+    "production-X-forward-body-axis"
+  ],
+  "actualAssetCandidate": {
+    "valid": false,
+    "reason": "missing-authored-aisle-support",
+    "local": [
+      1.940000057220459,
+      0.664,
+      0.7599999737739563
+    ]
+  },
+  "scope": "Real saved Blender V11 geometry, synthetic shore at its deployed foot; actor clearance callback stub solely isolates floor measurement, not a natural berth or actor navigation acceptance."
+}

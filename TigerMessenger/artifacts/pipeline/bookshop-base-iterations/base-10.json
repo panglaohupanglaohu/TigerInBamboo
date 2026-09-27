@@ -1,0 +1,17 @@
+{
+  "revision": 10,
+  "triangles": 55676,
+  "finite": true,
+  "circle": {
+    "center": [
+      0,
+      32
+    ],
+    "plazaRadius": 32,
+    "promenadeRadius": 39.5,
+    "shoreRadius": 40,
+    "seawardArc": "continuous semicircle; no chord"
+  },
+  "change": "Broad radial approaches to three large compounds",
+  "errors": []
+}

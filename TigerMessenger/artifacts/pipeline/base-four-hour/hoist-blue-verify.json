@@ -1,0 +1,156 @@
+{
+  "mode": "accelerated handling diagnostics, actual runtime rigs and source geometry",
+  "samples": [
+    {
+      "kind": "locust",
+      "mode": "load",
+      "id": "LOC-0001",
+      "reach": {
+        "x": -17.9687296800155,
+        "z": -41.88627334580483,
+        "minX": -28,
+        "maxX": 28,
+        "front": -31,
+        "rear": -53,
+        "inside": true
+      },
+      "audit": {
+        "samples": 294,
+        "outside": [],
+        "counts": {
+          "total": 9,
+          "counts": {
+            "transit": 3,
+            "ready": 6
+          }
+        }
+      }
+    },
+    {
+      "kind": "locust",
+      "mode": "unload",
+      "id": "LOC-0001",
+      "reach": {
+        "x": -2.116594827477886,
+        "z": -68.17793504288437,
+        "minX": -32,
+        "maxX": 60,
+        "front": -39,
+        "rear": -100,
+        "inside": true
+      },
+      "audit": {
+        "samples": 493,
+        "outside": [],
+        "counts": {
+          "total": 9,
+          "counts": {
+            "deployed": 3,
+            "ready": 6
+          }
+        }
+      }
+    },
+    {
+      "kind": "ant",
+      "mode": "load",
+      "id": "ANT-0002",
+      "reach": {
+        "x": -17.966277948532486,
+        "z": -41.971325417896644,
+        "minX": -28,
+        "maxX": 28,
+        "front": -31,
+        "rear": -53,
+        "inside": true
+      },
+      "audit": {
+        "samples": 293,
+        "outside": [],
+        "counts": {
+          "total": 9,
+          "counts": {
+            "deployed": 3,
+            "transit": 3,
+            "ready": 3
+          }
+        }
+      }
+    },
+    {
+      "kind": "ant",
+      "mode": "unload",
+      "id": "ANT-0002",
+      "reach": {
+        "x": 0.8729088164163653,
+        "z": -68.185000035751,
+        "minX": -32,
+        "maxX": 60,
+        "front": -39,
+        "rear": -100,
+        "inside": true
+      },
+      "audit": {
+        "samples": 493,
+        "outside": [],
+        "counts": {
+          "total": 9,
+          "counts": {
+            "deployed": 6,
+            "ready": 3
+          }
+        }
+      }
+    },
+    {
+      "kind": "beetle",
+      "mode": "load",
+      "id": "BTL-0003",
+      "reach": {
+        "x": -17.955731759756972,
+        "z": -41.968763192763596,
+        "minX": -28,
+        "maxX": 28,
+        "front": -31,
+        "rear": -53,
+        "inside": true
+      },
+      "audit": {
+        "samples": 293,
+        "outside": [],
+        "counts": {
+          "total": 9,
+          "counts": {
+            "deployed": 6,
+            "transit": 3
+          }
+        }
+      }
+    },
+    {
+      "kind": "beetle",
+      "mode": "unload",
+      "id": "BTL-0003",
+      "reach": {
+        "x": 3.8814539311618703,
+        "z": -68.18979431448355,
+        "minX": -32,
+        "maxX": 60,
+        "front": -39,
+        "rear": -100,
+        "inside": true
+      },
+      "audit": {
+        "samples": 493,
+        "outside": [],
+        "counts": {
+          "total": 9,
+          "counts": {
+            "deployed": 9
+          }
+        }
+      }
+    }
+  ],
+  "errors": []
+}

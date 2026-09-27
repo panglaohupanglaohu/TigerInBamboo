@@ -1,0 +1,41 @@
+✔ fire uses ammo, harms enemies only, disables at zero (2.590333ms)
+✔ walls, friends and steam block fire (0.148833ms)
+✔ skills enforce cooldown and pressure; scanner does not see through walls (0.135ms)
+✔ movement stays clear of obstacles, low health retreats and save keeps IDs (1.371542ms)
+✔ reload cannot invent ammunition and cancelled movement does not continue (0.227833ms)
+✔ A* routes around a wall to reach the far side (0.462167ms)
+✔ group movement assigns separated destinations and can finish without a pile-up (1.90975ms)
+✔ overheat requires cooling below the release threshold and repair grants whole rounds (0.376958ms)
+✔ group retreat reaches separate repair bays (1.064125ms)
+✔ invalid combat restore preserves live state and hold is saveable (0.789125ms)
+✔ Beetle can roll and fire sideways while its chassis follows the movement order (0.266416ms)
+✔ broken weapon and damaged sensor are meaningful, and repair restores parts (0.295584ms)
+✔ Locust brace holds position and cooldown begins when it folds or moves away (0.145708ms)
+✔ empty reserves request resupply; direct friendly fire remains blocked (0.060791ms)
+✔ steam prevents a scanner from discovering a new target; the previous marker stays at its last position (0.076125ms)
+✔ events created between frames have distinct cursors even at the same combat time (0.121958ms)
+✔ repair refills a partially used magazine before releasing a fully stocked unit (0.066375ms)
+✔ a teammate parking on an old waypoint triggers a safe route around it (0.420583ms)
+✔ junction detection finds nonadjacent crossings, not each normal bend (2.723792ms)
+✔ opposed traffic yields at occupied crossing then clears without deadlock (2.289167ms)
+✔ three same-type completed units, continuous cargo slots, capacity and no duplication (3.543042ms)
+✔ save during吊装 recovers same identities and no duplicate load (2.054167ms)
+✔ cancellation retains loaded cargo, frees reserved cargo, invalid dt ignored (0.980625ms)
+✔ three sequential batches survive round trip and replenish (2.08075ms)
+✔ shared crane serializes two trains without duplication or concurrent吊装 (5.288208ms)
+✔ corrupt save is rejected atomically without changing current production (0.997917ms)
+✔ tall receiving gantry uses its slower unloading duration without releasing a moving robot (0.926958ms)
+✔ parallel factories reach the 24-unit cap only in complete shippable batches (8.256708ms)
+✔ whole save preserves ownership, live trains and shipment together (3.257417ms)
+✔ reject broken train and cross-system references before touching a live scene (2.080125ms)
+✔ reject missing or resurrected deployed identities and malformed repair orders (1.500167ms)
+✔ gate refinement keeps authored bounds and UVs while preventing long chord triangles (3.078166ms)
+✔ short gate pieces retain their original geometry instance (0.102458ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 61.023583

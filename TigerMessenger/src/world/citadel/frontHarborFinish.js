@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {mergeStaticGroup} from '../geometryMerge.js';
-import baked from '../../../assets/models/optimized/citadel-front-harbor-finish/frontHarborFinishR04.js';
+import baked from '../../../assets/models/optimized/citadel-front-harbor-finish/frontHarborFinishR06.js';
 
 // Surface finish follows the actual harbor walls; it does not close the gate
 // or insert decorative solids into the stair's 4.8 m clear width.
@@ -54,6 +54,6 @@ export function finishFrontHarbor(root,flights){
   const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(part.positions,3));geometry.setAttribute('normal',new THREE.Float32BufferAttribute(part.normals,3));geometry.computeBoundingSphere();
   mesh.geometry.dispose();mesh.geometry=geometry;mesh.userData.sourceBlender=baked.source;
  });
- root.add(group);root.userData.finish={revision:4,blocks,clearStairWidth:4.8,blender:baked?.source??'pending',scope:'wall courses, coping, side guards and terrace paving'};
+ root.add(group);root.userData.finish={revision:6,blocks,clearStairWidth:4.8,blender:baked?.source??'pending',scope:'wall courses, coping, side guards and stepped east gallery paving'};
  return group;
 }

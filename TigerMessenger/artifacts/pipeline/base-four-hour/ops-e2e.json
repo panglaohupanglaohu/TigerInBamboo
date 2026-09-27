@@ -1,0 +1,2196 @@
+{
+  "mode": "accelerated diagnostic; actual source models and runtime controllers",
+  "fit": [
+    {
+      "id": "LOC-0001",
+      "slot": 0,
+      "min": [
+        -2.228697657585579,
+        0.6500000000000054,
+        -1.3093750178814005
+      ],
+      "max": [
+        2.1205305720124086,
+        5.165357899069204,
+        1.5185100162193208
+      ],
+      "ground": 0.65
+    },
+    {
+      "id": "LOC-0004",
+      "slot": 1,
+      "min": [
+        -2.228697657585575,
+        0.6500000000000057,
+        -1.30937501788139
+      ],
+      "max": [
+        2.120530572012427,
+        5.165357899069204,
+        1.5185100162193315
+      ],
+      "ground": 0.65
+    },
+    {
+      "id": "LOC-0007",
+      "slot": 2,
+      "min": [
+        -2.2286976575855593,
+        0.6500000000000058,
+        -1.30937501788139
+      ],
+      "max": [
+        2.120530572012415,
+        5.165357899069205,
+        1.5185100162193321
+      ],
+      "ground": 0.65
+    }
+  ],
+  "snapshots": [
+    {
+      "name": "stock",
+      "state": {
+        "logistics": {
+          "version": 1,
+          "time": 273.5610999999643,
+          "serial": 9,
+          "units": [
+            {
+              "id": "LOC-0001",
+              "kind": "locust",
+              "status": "ready",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "ANT-0002",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0003",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0004",
+              "kind": "locust",
+              "status": "ready",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "ANT-0005",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0006",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0007",
+              "kind": "locust",
+              "status": "ready",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "ANT-0008",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0009",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            }
+          ],
+          "factories": {
+            "locust": {
+              "kind": "locust",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "ant": {
+              "kind": "ant",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "beetle": {
+              "kind": "beetle",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            }
+          },
+          "trains": {
+            "red": {
+              "id": "red",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": null
+            },
+            "blue": {
+              "id": "blue",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": null
+            }
+          },
+          "materialDeliveries": 0
+        },
+        "combat": {
+          "version": 1,
+          "time": 2.5610999999642363,
+          "units": [],
+          "smoke": [],
+          "autoRetreat": true
+        },
+        "models": 9,
+        "effects": 0,
+        "shipment": 0,
+        "focus": "factory"
+      }
+    },
+    {
+      "name": "hoist",
+      "state": {
+        "logistics": {
+          "version": 1,
+          "time": 277.16109999996445,
+          "serial": 9,
+          "units": [
+            {
+              "id": "LOC-0001",
+              "kind": "locust",
+              "status": "loading",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 0,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0002",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0003",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0004",
+              "kind": "locust",
+              "status": "reserved",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 1,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0005",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0006",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0007",
+              "kind": "locust",
+              "status": "reserved",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 2,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0008",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0009",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            }
+          ],
+          "factories": {
+            "locust": {
+              "kind": "locust",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "ant": {
+              "kind": "ant",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "beetle": {
+              "kind": "beetle",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            }
+          },
+          "trains": {
+            "red": {
+              "id": "red",
+              "slots": [
+                "LOC-0001",
+                "LOC-0004",
+                "LOC-0007",
+                null,
+                null,
+                null
+              ],
+              "job": {
+                "type": "load",
+                "createdAt": 273.6110999999643,
+                "factory": "locust",
+                "ids": [
+                  "LOC-0001",
+                  "LOC-0004",
+                  "LOC-0007"
+                ],
+                "index": 0,
+                "elapsed": 3.549999999999998
+              },
+              "lastFactory": "locust"
+            },
+            "blue": {
+              "id": "blue",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": null
+            }
+          },
+          "materialDeliveries": 0
+        },
+        "combat": {
+          "version": 1,
+          "time": 6.1610999999642235,
+          "units": [],
+          "smoke": [],
+          "autoRetreat": true
+        },
+        "models": 9,
+        "effects": 0,
+        "shipment": 0,
+        "focus": "factory"
+      }
+    },
+    {
+      "name": "loaded",
+      "state": {
+        "logistics": {
+          "version": 1,
+          "time": 315.70299999994063,
+          "serial": 9,
+          "units": [
+            {
+              "id": "LOC-0001",
+              "kind": "locust",
+              "status": "transit",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 0,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0002",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0003",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0004",
+              "kind": "locust",
+              "status": "transit",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 1,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0005",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0006",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0007",
+              "kind": "locust",
+              "status": "transit",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 2,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0008",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0009",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            }
+          ],
+          "factories": {
+            "locust": {
+              "kind": "locust",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "ant": {
+              "kind": "ant",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "beetle": {
+              "kind": "beetle",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            }
+          },
+          "trains": {
+            "red": {
+              "id": "red",
+              "slots": [
+                "LOC-0001",
+                "LOC-0004",
+                "LOC-0007",
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": "locust"
+            },
+            "blue": {
+              "id": "blue",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": null
+            }
+          },
+          "materialDeliveries": 0
+        },
+        "combat": {
+          "version": 1,
+          "time": 44.702999999940005,
+          "units": [],
+          "smoke": [],
+          "autoRetreat": true
+        },
+        "models": 9,
+        "effects": 0,
+        "shipment": 0,
+        "focus": "train"
+      }
+    },
+    {
+      "name": "unloading",
+      "state": {
+        "logistics": {
+          "version": 1,
+          "time": 319.30269999992885,
+          "serial": 9,
+          "units": [
+            {
+              "id": "LOC-0001",
+              "kind": "locust",
+              "status": "unloading",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 0,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0002",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0003",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0004",
+              "kind": "locust",
+              "status": "transit",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 1,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0005",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0006",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0007",
+              "kind": "locust",
+              "status": "transit",
+              "progress": 1,
+              "factory": "locust",
+              "train": "red",
+              "slot": 2,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0008",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0009",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            }
+          ],
+          "factories": {
+            "locust": {
+              "kind": "locust",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "ant": {
+              "kind": "ant",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "beetle": {
+              "kind": "beetle",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            }
+          },
+          "trains": {
+            "red": {
+              "id": "red",
+              "slots": [
+                "LOC-0001",
+                "LOC-0004",
+                "LOC-0007",
+                null,
+                null,
+                null
+              ],
+              "job": {
+                "type": "unload",
+                "createdAt": 315.80269999992873,
+                "factory": null,
+                "ids": [
+                  "LOC-0001",
+                  "LOC-0004",
+                  "LOC-0007"
+                ],
+                "index": 0,
+                "elapsed": 3.4999999999999982
+              },
+              "lastFactory": "locust"
+            },
+            "blue": {
+              "id": "blue",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": null
+            }
+          },
+          "materialDeliveries": 0
+        },
+        "combat": {
+          "version": 1,
+          "time": 48.30269999992788,
+          "units": [],
+          "smoke": [],
+          "autoRetreat": true
+        },
+        "models": 9,
+        "effects": 0,
+        "shipment": 0,
+        "focus": "field"
+      }
+    },
+    {
+      "name": "deployed",
+      "state": {
+        "logistics": {
+          "version": 1,
+          "time": 357.80269999992896,
+          "serial": 9,
+          "units": [
+            {
+              "id": "LOC-0001",
+              "kind": "locust",
+              "status": "deployed",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0002",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0003",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0004",
+              "kind": "locust",
+              "status": "deployed",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": "LOC-B0001",
+              "health": 0.97
+            },
+            {
+              "id": "ANT-0005",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0006",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0007",
+              "kind": "locust",
+              "status": "deployed",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0008",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0009",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            }
+          ],
+          "factories": {
+            "locust": {
+              "kind": "locust",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "ant": {
+              "kind": "ant",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "beetle": {
+              "kind": "beetle",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            }
+          },
+          "trains": {
+            "red": {
+              "id": "red",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": "locust"
+            },
+            "blue": {
+              "id": "blue",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": null
+            }
+          },
+          "materialDeliveries": 0
+        },
+        "combat": {
+          "version": 1,
+          "time": 86.8026999999257,
+          "units": [
+            {
+              "id": "LOC-0001",
+              "kind": "locust",
+              "team": "friendly",
+              "x": -19.96043164203462,
+              "z": 11.010791050865425,
+              "hp": 1000,
+              "maxHp": 1000,
+              "heading": 3.101613966466503,
+              "state": "move",
+              "order": {
+                "type": "move",
+                "x": -19.4,
+                "z": -3
+              },
+              "target": null,
+              "magazine": 30,
+              "reserve": 120,
+              "heat": 0,
+              "pressure": 100,
+              "cooldown": 0,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": null,
+              "recoil": 0,
+              "speed": 2.2,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "LOC-0004",
+              "kind": "locust",
+              "team": "friendly",
+              "x": -14.413198826823091,
+              "z": 11.010087988268404,
+              "hp": 970,
+              "maxHp": 1000,
+              "heading": -3.1282601102956478,
+              "state": "move",
+              "order": {
+                "type": "move",
+                "x": -14.6,
+                "z": -3
+              },
+              "target": "TARGET-1-1",
+              "magazine": 30,
+              "reserve": 120,
+              "heat": 0,
+              "pressure": 100,
+              "cooldown": 0,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0.030000000000000027,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": null,
+              "recoil": 0,
+              "speed": 2.2,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "LOC-0007",
+              "kind": "locust",
+              "team": "friendly",
+              "x": -9.513366041424247,
+              "z": 11.313553431837038,
+              "hp": 1000,
+              "maxHp": 1000,
+              "heading": -2.3369660910926373,
+              "state": "move",
+              "order": {
+                "type": "move",
+                "x": -19.4,
+                "z": 1.7999999999999998
+              },
+              "target": null,
+              "magazine": 30,
+              "reserve": 120,
+              "heat": 0,
+              "pressure": 100,
+              "cooldown": 0,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": null,
+              "recoil": 0,
+              "speed": 2.2,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "TARGET-1-1",
+              "kind": "sentry",
+              "team": "enemy",
+              "x": -16,
+              "z": -12,
+              "hp": 600,
+              "maxHp": 600,
+              "heading": 0.06885210137722644,
+              "state": "attack",
+              "order": {
+                "type": "hold",
+                "x": -16,
+                "z": -12
+              },
+              "target": "LOC-0004",
+              "magazine": 18,
+              "reserve": 80,
+              "heat": 15.599999999999994,
+              "pressure": 100,
+              "cooldown": 2.6000000000000014,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": {
+                "x": -14.413198826823091,
+                "z": 11.010087988268404,
+                "time": 86.8026999999257
+              },
+              "recoil": 0,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "TARGET-1-2",
+              "kind": "sentry",
+              "team": "enemy",
+              "x": 0,
+              "z": -12,
+              "hp": 600,
+              "maxHp": 600,
+              "heading": 0,
+              "state": "idle",
+              "order": {
+                "type": "hold",
+                "x": 0,
+                "z": -12
+              },
+              "target": null,
+              "magazine": 20,
+              "reserve": 80,
+              "heat": 0,
+              "pressure": 100,
+              "cooldown": 0,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": null,
+              "recoil": 0,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "TARGET-1-3",
+              "kind": "sentry",
+              "team": "enemy",
+              "x": 16,
+              "z": -12,
+              "hp": 600,
+              "maxHp": 600,
+              "heading": 0,
+              "state": "idle",
+              "order": {
+                "type": "hold",
+                "x": 16,
+                "z": -12
+              },
+              "target": null,
+              "magazine": 20,
+              "reserve": 80,
+              "heat": 0,
+              "pressure": 100,
+              "cooldown": 0,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": null,
+              "recoil": 0,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            }
+          ],
+          "smoke": [],
+          "autoRetreat": true
+        },
+        "models": 12,
+        "effects": 0,
+        "shipment": 0,
+        "focus": "field"
+      }
+    },
+    {
+      "name": "combat",
+      "state": {
+        "logistics": {
+          "version": 1,
+          "time": 371.50269999992935,
+          "serial": 9,
+          "units": [
+            {
+              "id": "LOC-0001",
+              "kind": "locust",
+              "status": "deployed",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": "LOC-B0001",
+              "health": 0.88
+            },
+            {
+              "id": "ANT-0002",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0003",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0004",
+              "kind": "locust",
+              "status": "deployed",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": "LOC-B0001",
+              "health": 0.85
+            },
+            {
+              "id": "ANT-0005",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0006",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "LOC-0007",
+              "kind": "locust",
+              "status": "deployed",
+              "progress": 1,
+              "factory": "locust",
+              "train": null,
+              "slot": null,
+              "batch": "LOC-B0001",
+              "health": 1
+            },
+            {
+              "id": "ANT-0008",
+              "kind": "ant",
+              "status": "ready",
+              "progress": 1,
+              "factory": "ant",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            },
+            {
+              "id": "BTL-0009",
+              "kind": "beetle",
+              "status": "ready",
+              "progress": 1,
+              "factory": "beetle",
+              "train": null,
+              "slot": null,
+              "batch": null,
+              "health": 1
+            }
+          ],
+          "factories": {
+            "locust": {
+              "kind": "locust",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "ant": {
+              "kind": "ant",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            },
+            "beetle": {
+              "kind": "beetle",
+              "kits": 0,
+              "active": null,
+              "enabled": true,
+              "produced": 3
+            }
+          },
+          "trains": {
+            "red": {
+              "id": "red",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": "locust"
+            },
+            "blue": {
+              "id": "blue",
+              "slots": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "job": null,
+              "lastFactory": null
+            }
+          },
+          "materialDeliveries": 0
+        },
+        "combat": {
+          "version": 1,
+          "time": 100.50269999992491,
+          "units": [
+            {
+              "id": "LOC-0001",
+              "kind": "locust",
+              "team": "friendly",
+              "x": -19.41526759895601,
+              "z": -2.6183100260998042,
+              "hp": 880,
+              "maxHp": 1000,
+              "heading": 2.020923549078956,
+              "state": "attack",
+              "order": {
+                "type": "hold",
+                "x": -19.41526759895601,
+                "z": -2.6183100260998042
+              },
+              "target": "TARGET-1-2",
+              "magazine": 21,
+              "reserve": 120,
+              "heat": 12.299999999999919,
+              "pressure": 100,
+              "cooldown": 0.35000000000000003,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0.12,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": {
+                "x": 0,
+                "z": -12,
+                "time": 100.50269999992491
+              },
+              "recoil": 0,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "LOC-0004",
+              "kind": "locust",
+              "team": "friendly",
+              "x": -14.595049329718968,
+              "z": -2.628699728922468,
+              "hp": 850,
+              "maxHp": 1000,
+              "heading": -2.992780389871829,
+              "state": "attack",
+              "order": {
+                "type": "hold",
+                "x": -14.595049329718968,
+                "z": -2.628699728922468
+              },
+              "target": "TARGET-1-1",
+              "magazine": 18,
+              "reserve": 120,
+              "heat": 27.599999999999913,
+              "pressure": 100,
+              "cooldown": 2.35,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0.15000000000000002,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": {
+                "x": -16,
+                "z": -12,
+                "time": 100.50269999992491
+              },
+              "recoil": 0.75,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "LOC-0007",
+              "kind": "locust",
+              "team": "friendly",
+              "x": -19.170180628378187,
+              "z": 1.9838882147619334,
+              "hp": 1000,
+              "maxHp": 1000,
+              "heading": -2.2456240688733655,
+              "state": "idle",
+              "order": {
+                "type": "hold",
+                "x": -19.170180628378187,
+                "z": 1.9838882147619334
+              },
+              "target": null,
+              "magazine": 30,
+              "reserve": 120,
+              "heat": 0,
+              "pressure": 100,
+              "cooldown": 0,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": null,
+              "recoil": 0,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "TARGET-1-1",
+              "kind": "sentry",
+              "team": "enemy",
+              "x": -16,
+              "z": -12,
+              "hp": 355.2,
+              "maxHp": 600,
+              "heading": 0.14881226371796458,
+              "state": "attack",
+              "order": {
+                "type": "hold",
+                "x": -16,
+                "z": -12
+              },
+              "target": "LOC-0004",
+              "magazine": 10,
+              "reserve": 80,
+              "heat": 6.599999999999977,
+              "pressure": 100,
+              "cooldown": 1.1000000000000028,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0.40800000000000003,
+                "weapon": 0.10800000000000004,
+                "sensor": 0.008000000000000007
+              },
+              "path": [],
+              "lastSeen": {
+                "x": -14.595049329718968,
+                "z": -2.628699728922468,
+                "time": 100.50269999992491
+              },
+              "recoil": 0,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "TARGET-1-2",
+              "kind": "sentry",
+              "team": "enemy",
+              "x": 0,
+              "z": -12,
+              "hp": 416.4,
+              "maxHp": 600,
+              "heading": -1.1206691045108372,
+              "state": "attack",
+              "order": {
+                "type": "hold",
+                "x": 0,
+                "z": -12
+              },
+              "target": "LOC-0001",
+              "magazine": 12,
+              "reserve": 80,
+              "heat": 14.09999999999999,
+              "pressure": 100,
+              "cooldown": 2.3500000000000023,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0.30600000000000005,
+                "weapon": 0.006000000000000061,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": {
+                "x": -19.41526759895601,
+                "z": -2.6183100260998042,
+                "time": 100.50269999992491
+              },
+              "recoil": 0,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            },
+            {
+              "id": "TARGET-1-3",
+              "kind": "sentry",
+              "team": "enemy",
+              "x": 16,
+              "z": -12,
+              "hp": 600,
+              "maxHp": 600,
+              "heading": 0,
+              "state": "idle",
+              "order": {
+                "type": "hold",
+                "x": 16,
+                "z": -12
+              },
+              "target": null,
+              "magazine": 20,
+              "reserve": 80,
+              "heat": 0,
+              "pressure": 100,
+              "cooldown": 0,
+              "reload": 0,
+              "skillCooldown": 0,
+              "scan": 0,
+              "braced": false,
+              "damageParts": {
+                "legs": 0,
+                "weapon": 0,
+                "sensor": 0
+              },
+              "path": [],
+              "lastSeen": null,
+              "recoil": 0,
+              "speed": 0,
+              "overheated": false,
+              "repairAmmo": 0
+            }
+          ],
+          "smoke": [],
+          "autoRetreat": true
+        },
+        "models": 12,
+        "effects": 5,
+        "shipment": 0,
+        "focus": "field"
+      }
+    }
+  ],
+  "state": {
+    "invariants": {
+      "total": 9,
+      "counts": {
+        "deployed": 3,
+        "ready": 6
+      }
+    },
+    "combat": {
+      "version": 1,
+      "time": 100.55269999992491,
+      "units": [
+        {
+          "id": "LOC-0001",
+          "kind": "locust",
+          "team": "friendly",
+          "x": -19.41526759895601,
+          "z": -2.6183100260998042,
+          "hp": 880,
+          "maxHp": 1000,
+          "heading": 2.020923549078956,
+          "state": "attack",
+          "order": {
+            "type": "hold",
+            "x": -19.41526759895601,
+            "z": -2.6183100260998042
+          },
+          "target": "TARGET-1-2",
+          "magazine": 21,
+          "reserve": 120,
+          "heat": 11.999999999999918,
+          "pressure": 100,
+          "cooldown": 0.30000000000000004,
+          "reload": 0,
+          "skillCooldown": 0,
+          "scan": 0,
+          "braced": false,
+          "damageParts": {
+            "legs": 0.12,
+            "weapon": 0,
+            "sensor": 0
+          },
+          "path": [],
+          "lastSeen": {
+            "x": 0,
+            "z": -12,
+            "time": 100.55269999992491
+          },
+          "recoil": 0,
+          "speed": 0,
+          "overheated": false,
+          "repairAmmo": 0
+        },
+        {
+          "id": "LOC-0004",
+          "kind": "locust",
+          "team": "friendly",
+          "x": -14.595049329718968,
+          "z": -2.628699728922468,
+          "hp": 850,
+          "maxHp": 1000,
+          "heading": -2.992780389871829,
+          "state": "attack",
+          "order": {
+            "type": "hold",
+            "x": -14.595049329718968,
+            "z": -2.628699728922468
+          },
+          "target": "TARGET-1-1",
+          "magazine": 18,
+          "reserve": 120,
+          "heat": 27.299999999999912,
+          "pressure": 100,
+          "cooldown": 2.3000000000000003,
+          "reload": 0,
+          "skillCooldown": 0,
+          "scan": 0,
+          "braced": false,
+          "damageParts": {
+            "legs": 0.15000000000000002,
+            "weapon": 0,
+            "sensor": 0
+          },
+          "path": [],
+          "lastSeen": {
+            "x": -16,
+            "z": -12,
+            "time": 100.55269999992491
+          },
+          "recoil": 0.5,
+          "speed": 0,
+          "overheated": false,
+          "repairAmmo": 0
+        },
+        {
+          "id": "LOC-0007",
+          "kind": "locust",
+          "team": "friendly",
+          "x": -19.170180628378187,
+          "z": 1.9838882147619334,
+          "hp": 1000,
+          "maxHp": 1000,
+          "heading": -2.2456240688733655,
+          "state": "idle",
+          "order": {
+            "type": "hold",
+            "x": -19.170180628378187,
+            "z": 1.9838882147619334
+          },
+          "target": null,
+          "magazine": 30,
+          "reserve": 120,
+          "heat": 0,
+          "pressure": 100,
+          "cooldown": 0,
+          "reload": 0,
+          "skillCooldown": 0,
+          "scan": 0,
+          "braced": false,
+          "damageParts": {
+            "legs": 0,
+            "weapon": 0,
+            "sensor": 0
+          },
+          "path": [],
+          "lastSeen": null,
+          "recoil": 0,
+          "speed": 0,
+          "overheated": false,
+          "repairAmmo": 0
+        },
+        {
+          "id": "TARGET-1-1",
+          "kind": "sentry",
+          "team": "enemy",
+          "x": -16,
+          "z": -12,
+          "hp": 355.2,
+          "maxHp": 600,
+          "heading": 0.14881226371796458,
+          "state": "attack",
+          "order": {
+            "type": "hold",
+            "x": -16,
+            "z": -12
+          },
+          "target": "LOC-0004",
+          "magazine": 10,
+          "reserve": 80,
+          "heat": 6.299999999999978,
+          "pressure": 100,
+          "cooldown": 1.0500000000000027,
+          "reload": 0,
+          "skillCooldown": 0,
+          "scan": 0,
+          "braced": false,
+          "damageParts": {
+            "legs": 0.40800000000000003,
+            "weapon": 0.10800000000000004,
+            "sensor": 0.008000000000000007
+          },
+          "path": [],
+          "lastSeen": {
+            "x": -14.595049329718968,
+            "z": -2.628699728922468,
+            "time": 100.55269999992491
+          },
+          "recoil": 0,
+          "speed": 0,
+          "overheated": false,
+          "repairAmmo": 0
+        },
+        {
+          "id": "TARGET-1-2",
+          "kind": "sentry",
+          "team": "enemy",
+          "x": 0,
+          "z": -12,
+          "hp": 416.4,
+          "maxHp": 600,
+          "heading": -1.1206691045108372,
+          "state": "attack",
+          "order": {
+            "type": "hold",
+            "x": 0,
+            "z": -12
+          },
+          "target": "LOC-0001",
+          "magazine": 12,
+          "reserve": 80,
+          "heat": 13.79999999999999,
+          "pressure": 100,
+          "cooldown": 2.3000000000000025,
+          "reload": 0,
+          "skillCooldown": 0,
+          "scan": 0,
+          "braced": false,
+          "damageParts": {
+            "legs": 0.30600000000000005,
+            "weapon": 0.006000000000000061,
+            "sensor": 0
+          },
+          "path": [],
+          "lastSeen": {
+            "x": -19.41526759895601,
+            "z": -2.6183100260998042,
+            "time": 100.55269999992491
+          },
+          "recoil": 0,
+          "speed": 0,
+          "overheated": false,
+          "repairAmmo": 0
+        },
+        {
+          "id": "TARGET-1-3",
+          "kind": "sentry",
+          "team": "enemy",
+          "x": 16,
+          "z": -12,
+          "hp": 600,
+          "maxHp": 600,
+          "heading": 0,
+          "state": "idle",
+          "order": {
+            "type": "hold",
+            "x": 16,
+            "z": -12
+          },
+          "target": null,
+          "magazine": 20,
+          "reserve": 80,
+          "heat": 0,
+          "pressure": 100,
+          "cooldown": 0,
+          "reload": 0,
+          "skillCooldown": 0,
+          "scan": 0,
+          "braced": false,
+          "damageParts": {
+            "legs": 0,
+            "weapon": 0,
+            "sensor": 0
+          },
+          "path": [],
+          "lastSeen": null,
+          "recoil": 0,
+          "speed": 0,
+          "overheated": false,
+          "repairAmmo": 0
+        }
+      ],
+      "smoke": [],
+      "autoRetreat": true
+    },
+    "events": [
+      {
+        "type": "hit",
+        "time": 86.40269999992572,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 86.40269999992572,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "shots": 2,
+        "from": {
+          "x": -16,
+          "z": -12
+        },
+        "to": {
+          "x": -14.401466536313677,
+          "z": 11.890009776474267
+        }
+      },
+      {
+        "type": "hit",
+        "time": 89.45269999992554,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 89.45269999992554,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "shots": 2,
+        "from": {
+          "x": -16,
+          "z": -12
+        },
+        "to": {
+          "x": -14.49092525144796,
+          "z": 5.180606141404564
+        }
+      },
+      {
+        "type": "hit",
+        "time": 90.70269999992547,
+        "id": "TARGET-1-2",
+        "target": "LOC-0001",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 90.70269999992547,
+        "id": "TARGET-1-2",
+        "target": "LOC-0001",
+        "shots": 2,
+        "from": {
+          "x": 0,
+          "z": -12
+        },
+        "to": {
+          "x": -19.617505873001335,
+          "z": 2.437646825032448
+        }
+      },
+      {
+        "type": "hit",
+        "time": 92.50269999992537,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 92.50269999992537,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "shots": 2,
+        "from": {
+          "x": -16,
+          "z": -12
+        },
+        "to": {
+          "x": -14.58038396658221,
+          "z": -1.5287974936651396
+        }
+      },
+      {
+        "type": "hit",
+        "time": 93.10269999992533,
+        "id": "LOC-0004",
+        "target": "TARGET-1-1",
+        "damage": 61.199999999999996
+      },
+      {
+        "type": "shot",
+        "time": 93.10269999992533,
+        "id": "LOC-0004",
+        "target": "TARGET-1-1",
+        "shots": 3,
+        "from": {
+          "x": -14.595049329718968,
+          "z": -2.628699728922468
+        },
+        "to": {
+          "x": -16,
+          "z": -12
+        }
+      },
+      {
+        "type": "hit",
+        "time": 93.55269999992531,
+        "id": "LOC-0001",
+        "target": "TARGET-1-2",
+        "damage": 61.199999999999996
+      },
+      {
+        "type": "shot",
+        "time": 93.55269999992531,
+        "id": "LOC-0001",
+        "target": "TARGET-1-2",
+        "shots": 3,
+        "from": {
+          "x": -19.41526759895601,
+          "z": -2.6183100260998042
+        },
+        "to": {
+          "x": 0,
+          "z": -12
+        }
+      },
+      {
+        "type": "hit",
+        "time": 93.7526999999253,
+        "id": "TARGET-1-2",
+        "target": "LOC-0001",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 93.7526999999253,
+        "id": "TARGET-1-2",
+        "target": "LOC-0001",
+        "shots": 2,
+        "from": {
+          "x": 0,
+          "z": -12
+        },
+        "to": {
+          "x": -19.41526759895601,
+          "z": -2.6183100260998042
+        }
+      },
+      {
+        "type": "hit",
+        "time": 95.5526999999252,
+        "id": "LOC-0004",
+        "target": "TARGET-1-1",
+        "damage": 61.199999999999996
+      },
+      {
+        "type": "shot",
+        "time": 95.5526999999252,
+        "id": "LOC-0004",
+        "target": "TARGET-1-1",
+        "shots": 3,
+        "from": {
+          "x": -14.595049329718968,
+          "z": -2.628699728922468
+        },
+        "to": {
+          "x": -16,
+          "z": -12
+        }
+      },
+      {
+        "type": "hit",
+        "time": 95.5526999999252,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 95.5526999999252,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "shots": 2,
+        "from": {
+          "x": -16,
+          "z": -12
+        },
+        "to": {
+          "x": -14.595049329718968,
+          "z": -2.628699728922468
+        }
+      },
+      {
+        "type": "hit",
+        "time": 96.00269999992517,
+        "id": "LOC-0001",
+        "target": "TARGET-1-2",
+        "damage": 61.199999999999996
+      },
+      {
+        "type": "shot",
+        "time": 96.00269999992517,
+        "id": "LOC-0001",
+        "target": "TARGET-1-2",
+        "shots": 3,
+        "from": {
+          "x": -19.41526759895601,
+          "z": -2.6183100260998042
+        },
+        "to": {
+          "x": 0,
+          "z": -12
+        }
+      },
+      {
+        "type": "hit",
+        "time": 96.80269999992512,
+        "id": "TARGET-1-2",
+        "target": "LOC-0001",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 96.80269999992512,
+        "id": "TARGET-1-2",
+        "target": "LOC-0001",
+        "shots": 2,
+        "from": {
+          "x": 0,
+          "z": -12
+        },
+        "to": {
+          "x": -19.41526759895601,
+          "z": -2.6183100260998042
+        }
+      },
+      {
+        "type": "hit",
+        "time": 98.00269999992506,
+        "id": "LOC-0004",
+        "target": "TARGET-1-1",
+        "damage": 61.199999999999996
+      },
+      {
+        "type": "shot",
+        "time": 98.00269999992506,
+        "id": "LOC-0004",
+        "target": "TARGET-1-1",
+        "shots": 3,
+        "from": {
+          "x": -14.595049329718968,
+          "z": -2.628699728922468
+        },
+        "to": {
+          "x": -16,
+          "z": -12
+        }
+      },
+      {
+        "type": "hit",
+        "time": 98.45269999992503,
+        "id": "LOC-0001",
+        "target": "TARGET-1-2",
+        "damage": 61.199999999999996
+      },
+      {
+        "type": "shot",
+        "time": 98.45269999992503,
+        "id": "LOC-0001",
+        "target": "TARGET-1-2",
+        "shots": 3,
+        "from": {
+          "x": -19.41526759895601,
+          "z": -2.6183100260998042
+        },
+        "to": {
+          "x": 0,
+          "z": -12
+        }
+      },
+      {
+        "type": "hit",
+        "time": 98.60269999992502,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 98.60269999992502,
+        "id": "TARGET-1-1",
+        "target": "LOC-0004",
+        "shots": 2,
+        "from": {
+          "x": -16,
+          "z": -12
+        },
+        "to": {
+          "x": -14.595049329718968,
+          "z": -2.628699728922468
+        }
+      },
+      {
+        "type": "hit",
+        "time": 99.85269999992495,
+        "id": "TARGET-1-2",
+        "target": "LOC-0001",
+        "damage": 30
+      },
+      {
+        "type": "shot",
+        "time": 99.85269999992495,
+        "id": "TARGET-1-2",
+        "target": "LOC-0001",
+        "shots": 2,
+        "from": {
+          "x": 0,
+          "z": -12
+        },
+        "to": {
+          "x": -19.41526759895601,
+          "z": -2.6183100260998042
+        }
+      },
+      {
+        "type": "hit",
+        "time": 100.45269999992492,
+        "id": "LOC-0004",
+        "target": "TARGET-1-1",
+        "damage": 61.199999999999996
+      },
+      {
+        "type": "shot",
+        "time": 100.45269999992492,
+        "id": "LOC-0004",
+        "target": "TARGET-1-1",
+        "shots": 3,
+        "from": {
+          "x": -14.595049329718968,
+          "z": -2.628699728922468
+        },
+        "to": {
+          "x": -16,
+          "z": -12
+        }
+      }
+    ],
+    "save": true,
+    "restore": true
+  },
+  "errors": []
+}

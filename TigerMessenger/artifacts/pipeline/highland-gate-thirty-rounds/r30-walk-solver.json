@@ -1,0 +1,26 @@
+{
+  "results": {
+    "passage": {
+      "stalledAt": null,
+      "seconds": 29.48333333333294,
+      "endpoint": [
+        -4.589540016513038,
+        -1.7473175068431317,
+        30.26820423817095
+      ],
+      "supported": true
+    },
+    "stairs": {
+      "stalledAt": null,
+      "seconds": 7.716666666666645,
+      "endpoint": [
+        -18.582990641854597,
+        1.7344132247970094,
+        -8.803373847301456
+      ],
+      "supported": true
+    }
+  },
+  "passed": true,
+  "scope": "Actual movement/ground/wall solver driven by synthetic waypoints; not manual keyboard playthrough"
+}

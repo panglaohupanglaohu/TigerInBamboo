@@ -1,0 +1,6646 @@
+{
+  "scope": "120s of actual Web combat at 60Hz, debug entry and explicit day/night input. Not normal campaign arrival, full playthrough or Godot combat.",
+  "samples": [
+    {
+      "seconds": 10,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "siege",
+        "shipCount": 2,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 22,
+      "marchWaits": 1588,
+      "counts": {
+        "blue-climb": 49,
+        "blue-downed": 1,
+        "red-guard": 29,
+        "red-dead": 1,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 3,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 13,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 14,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 15,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 34,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 8008.740000000002
+    },
+    {
+      "seconds": 20,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "siege",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 34,
+      "marchWaits": 12147,
+      "counts": {
+        "blue-climb": 49,
+        "blue-downed": 1,
+        "red-guard": 29,
+        "red-dead": 1,
+        "red-downed": 2,
+        "blue-gather": 50
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 56,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 56,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 40,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 15,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 34,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 8377.602000000003
+    },
+    {
+      "seconds": 30,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "siege",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 44,
+      "marchWaits": 24503,
+      "counts": {
+        "blue-climb": 46,
+        "blue-downed": 4,
+        "red-guard": 29,
+        "red-dead": 1,
+        "red-downed": 2,
+        "blue-gather": 50
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 116,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 116,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 97,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 15,
+          "index": 83,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 71,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 60,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 64,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 58,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 55,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 50,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 46,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 48,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 44,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 39,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 19,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 8,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 10930.125333999997
+    },
+    {
+      "seconds": 40,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "siege",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 56,
+      "marchWaits": 42151,
+      "counts": {
+        "blue-climb": 91,
+        "blue-downed": 9,
+        "red-guard": 29,
+        "red-dead": 1,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 138,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 138,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 129,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 15,
+          "index": 127,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 115,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 109,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 103,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 106,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 100,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 97,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 10149.799166999997
+    },
+    {
+      "seconds": 50,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "siege",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 65,
+      "marchWaits": 76756,
+      "counts": {
+        "blue-climb": 90,
+        "blue-downed": 10,
+        "red-guard": 29,
+        "red-dead": 1,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 207,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 207,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 190,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 15,
+          "index": 174,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 126,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 122,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 117,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 7,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 12,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 9,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 6,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 9797.637750000002
+    },
+    {
+      "seconds": 60,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "siege",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 73,
+      "marchWaits": 127914,
+      "counts": {
+        "blue-climb": 87,
+        "blue-capture": 1,
+        "blue-downed": 12,
+        "red-guard": 27,
+        "red-dead": 3,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 231,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 231,
+          "stage": "capture",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 15,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 126,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 122,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 117,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 7,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 12,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 9,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 6,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 10439.869665999999
+    },
+    {
+      "seconds": 70,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "siegeNight",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 76,
+      "marchWaits": 143317,
+      "counts": {
+        "blue-climb": 86,
+        "blue-capture": 1,
+        "blue-downed": 12,
+        "blue-dead": 1,
+        "red-guard": 32,
+        "red-dead": 4,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 231,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 231,
+          "stage": "capture",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 15,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 126,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 122,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 119,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 7,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 12,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 9,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 6,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 9448.209583000003
+    },
+    {
+      "seconds": 80,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "siegeNight",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 76,
+      "marchWaits": 143317,
+      "counts": {
+        "blue-climb": 82,
+        "blue-capture": 1,
+        "blue-downed": 12,
+        "blue-dead": 5,
+        "red-guard": 32,
+        "red-dead": 4,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 231,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 231,
+          "stage": "capture",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 2,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 15,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 126,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 122,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 119,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 7,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 12,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 9,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 6,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 10418.954125000004
+    },
+    {
+      "seconds": 90,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "done",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 76,
+      "marchWaits": 143317,
+      "counts": {
+        "blue-climb": 82,
+        "blue-capture": 1,
+        "blue-downed": 12,
+        "blue-dead": 5,
+        "red-guard": 32,
+        "red-dead": 4,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 231,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 231,
+          "stage": "capture",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 2,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 15,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 126,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 122,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 119,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 7,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 12,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 9,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 6,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 8884.407625000007
+    },
+    {
+      "seconds": 100,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "done",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 76,
+      "marchWaits": 143317,
+      "counts": {
+        "blue-climb": 82,
+        "blue-capture": 1,
+        "blue-downed": 12,
+        "blue-dead": 5,
+        "red-guard": 32,
+        "red-dead": 4,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 231,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 231,
+          "stage": "capture",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 2,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 15,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 126,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 122,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 119,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 7,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 12,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 9,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 6,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 8463.296290999991
+    },
+    {
+      "seconds": 110,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "done",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 76,
+      "marchWaits": 143317,
+      "counts": {
+        "blue-climb": 82,
+        "blue-capture": 1,
+        "blue-downed": 12,
+        "blue-dead": 5,
+        "red-guard": 32,
+        "red-dead": 4,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 231,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 231,
+          "stage": "capture",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 2,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 15,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 126,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 122,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 119,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 7,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 12,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 9,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 6,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 7641.161208999998
+    },
+    {
+      "seconds": 120,
+      "status": {
+        "managed": true,
+        "chapter": 0,
+        "launchAllowed": false,
+        "discoveryAllowed": false,
+        "phase": "done",
+        "shipCount": 4,
+        "waitingReason": null
+      },
+      "blockedShots": 0,
+      "wallHits": 76,
+      "marchWaits": 143317,
+      "counts": {
+        "blue-climb": 82,
+        "blue-capture": 1,
+        "blue-downed": 12,
+        "blue-dead": 5,
+        "red-guard": 32,
+        "red-dead": 4,
+        "red-downed": 2
+      },
+      "invalidRotations": [],
+      "maxRouteIndex": 231,
+      "blue": [
+        {
+          "uid": 1,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 2,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 3,
+          "index": 2,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 4,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 5,
+          "index": 231,
+          "stage": "capture",
+          "dead": false
+        },
+        {
+          "uid": 6,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 7,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 8,
+          "index": 2,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 9,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 10,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 11,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 12,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 13,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 14,
+          "index": 1,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 15,
+          "index": 231,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 16,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 17,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 18,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 19,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 20,
+          "index": 126,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 21,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 22,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 23,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 24,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 25,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 26,
+          "index": 125,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 27,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 28,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 29,
+          "index": 123,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 30,
+          "index": 121,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 31,
+          "index": 122,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 32,
+          "index": 119,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 33,
+          "index": 119,
+          "stage": "climb",
+          "dead": true
+        },
+        {
+          "uid": 34,
+          "index": 32,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 35,
+          "index": 29,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 36,
+          "index": 31,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 37,
+          "index": 27,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 38,
+          "index": 26,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 39,
+          "index": 24,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 40,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 41,
+          "index": 23,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 42,
+          "index": 21,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 43,
+          "index": 20,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 44,
+          "index": 18,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 45,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 46,
+          "index": 17,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 47,
+          "index": 15,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 48,
+          "index": 14,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 49,
+          "index": 0,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 50,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 83,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 84,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 85,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 86,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 87,
+          "index": 7,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 88,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 89,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 90,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 91,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 92,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 93,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 94,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 95,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 96,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 97,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 98,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 99,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 100,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 101,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 102,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 103,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 104,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 105,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 106,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 107,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 108,
+          "index": 12,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 109,
+          "index": 10,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 110,
+          "index": 9,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 111,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 112,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 113,
+          "index": 6,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 114,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 115,
+          "index": 4,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 116,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 117,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 118,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 119,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 120,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 121,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 122,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 123,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 124,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 125,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 126,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 127,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 128,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 129,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 130,
+          "index": 3,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 131,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        },
+        {
+          "uid": 132,
+          "index": 1,
+          "stage": "climb",
+          "dead": false
+        }
+      ],
+      "processingMs": 8218.703500000003
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

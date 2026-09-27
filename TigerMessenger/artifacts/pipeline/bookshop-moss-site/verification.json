@@ -1,0 +1,1350 @@
+{
+  "site": {
+    "name": "南海蒸汽工业基地",
+    "ground": "sphere-conforming, no raised terrace",
+    "size": [
+      70,
+      54
+    ],
+    "latitude": -35,
+    "longitude": 115
+  },
+  "originalVisible": [
+    "bookshop-soil-berm",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "bookshop-blender-window-joinery",
+    "bookshop-blender-entrance-path",
+    "bookshop-hydrangeas"
+  ],
+  "originalArt": {
+    "version": 3,
+    "source": "assets/models/optimized/bookshop-art-v3.blend",
+    "sha256": "e2b65549a56af4f37ca3d1f9f0b7cdbebf223fbebc6cadd8d202fcad1956b3a5",
+    "joineryMembers": 50
+  },
+  "shops": [
+    {
+      "name": "locust-bookshop-court",
+      "world": [
+        -55.701747841153534,
+        -92.2884486088833,
+        119.45278372983216
+      ]
+    },
+    {
+      "name": "ant-bookshop-court",
+      "world": [
+        -42.79450797936986,
+        -80.87727553263993,
+        132.3491835608407
+      ]
+    },
+    {
+      "name": "beetle-bookshop-court",
+      "world": [
+        -73.8775771263449,
+        -80.87727553263989,
+        117.85491037864483
+      ]
+    }
+  ],
+  "robots": [
+    {
+      "name": "蝗虫",
+      "pairedShop": "原书店／蝗虫书店",
+      "world": [
+        -50.92873050009325,
+        -91.41414087465355,
+        122.22327625210293
+      ],
+      "stats": {
+        "sourceParts": 261,
+        "meshes": 23,
+        "triangles": 59492
+      }
+    },
+    {
+      "name": "蚂蚁",
+      "pairedShop": "蚂蚁书店",
+      "world": [
+        -43.43559119205322,
+        -76.00209389552182,
+        135.00311530217778
+      ],
+      "stats": {
+        "sourceParts": 200,
+        "meshes": 10,
+        "triangles": 150052
+      }
+    },
+    {
+      "name": "甲壳虫",
+      "pairedShop": "甲壳虫书店",
+      "world": [
+        -75.49852644332238,
+        -76.00209389552182,
+        120.05192305158315
+      ],
+      "stats": {
+        "sourceParts": 264,
+        "meshes": 17,
+        "triangles": 70378
+      }
+    }
+  ],
+  "groundRadius": [
+    160.41999940029882,
+    160.90000061723532
+  ],
+  "gardenDistance": 296.6361099563711,
+  "citadelDistance": 245.96923147629303,
+  "oldQuayPresent": false,
+  "samples": [
+    {
+      "x": 0,
+      "z": 2.9,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 3.062,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 3.2239999999999998,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 3.386,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 3.548,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 3.71,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 3.872,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 4.034,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 4.196,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 4.358,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 4.52,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 4.682,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 4.843999999999999,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 0,
+      "z": 5.006,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 5.168,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 5.33,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 5.492,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 5.654,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 5.816,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 5.978,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 6.140000000000001,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 6.302,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 6.464,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 6.6259999999999994,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 6.788,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 6.949999999999999,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 7.112,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 7.273999999999999,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 0,
+      "z": 7.436,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 7.597999999999999,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 7.76,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 7.921999999999999,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 8.084,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 8.246,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 8.408,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 8.569999999999999,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 8.732,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 8.894,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 0,
+      "z": 9.056,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 0,
+      "z": 9.218,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 9.38,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 9.542,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 9.703999999999999,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 9.866,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 10.028,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 10.19,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 10.352,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 10.514,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 10.676,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 10.838,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -0.18,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -0.36,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -0.54,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -0.72,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -0.9,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -1.08,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -1.2600000000000002,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -1.44,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -1.6199999999999999,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -1.8,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -1.98,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -2.16,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -2.34,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -2.5200000000000005,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": -2.6999999999999997,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -2.88,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -3.06,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -3.2399999999999998,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -3.42,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -3.6,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -3.78,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -3.96,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -4.140000000000001,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -4.32,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -4.5,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -4.68,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -4.86,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -5.040000000000001,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -5.22,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -5.3999999999999995,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -5.58,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": -5.76,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": -5.94,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -6.12,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -6.3,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -6.4799999999999995,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -6.66,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -6.84,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": -7.0200000000000005,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -7.2,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -7.38,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -7.56,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -7.74,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -7.92,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -8.1,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -8.280000000000001,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -8.459999999999999,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -8.64,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -8.82,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": -9,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0.18,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0.36,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0.54,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0.72,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0.9,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 1.08,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 1.2600000000000002,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 1.44,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 1.6199999999999999,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 1.8,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 1.98,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 2.16,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 2.34,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 2.5200000000000005,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 2.6999999999999997,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 2.88,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 3.06,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 3.2399999999999998,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 3.42,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 3.6,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 3.78,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 3.96,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 4.140000000000001,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 4.32,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 4.5,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 4.68,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 4.86,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 5.040000000000001,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 5.22,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 5.3999999999999995,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 5.58,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 5.76,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 5.94,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 6.12,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 6.3,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 6.4799999999999995,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 6.66,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 6.84,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 7.0200000000000005,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 7.2,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 7.38,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 7.56,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 7.74,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 7.92,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 8.1,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 8.280000000000001,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 8.459999999999999,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 8.64,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 8.82,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 9,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 11,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 11.54,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 12.08,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 12.62,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 13.16,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 13.7,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 14.24,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 14.780000000000001,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 15.32,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 0,
+      "z": 15.86,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 16.4,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 0,
+      "z": 16.94,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 17.48,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 18.02,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 18.560000000000002,
+      "grounded": true,
+      "radius": 160.89999999999998
+    },
+    {
+      "x": 0,
+      "z": 19.1,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 19.64,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 20.18,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 20.72,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 21.259999999999998,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 21.8,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 22.34,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 22.880000000000003,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 23.42,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 23.96,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 24.5,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 25.04,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 25.580000000000002,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 26.12,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 26.659999999999997,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 27.2,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 27.74,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 28.28,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 28.82,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 29.360000000000003,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 29.9,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 30.439999999999998,
+      "grounded": true,
+      "radius": 160.9
+    },
+    {
+      "x": 0,
+      "z": 30.98,
+      "grounded": false,
+      "radius": 160.86999999999998
+    },
+    {
+      "x": 0,
+      "z": 31.52,
+      "grounded": false,
+      "radius": 160.87
+    },
+    {
+      "x": 0,
+      "z": 32.06,
+      "grounded": false,
+      "radius": 160.86999999999998
+    },
+    {
+      "x": 0,
+      "z": 32.6,
+      "grounded": false,
+      "radius": 160.87000000000003
+    },
+    {
+      "x": 0,
+      "z": 33.14,
+      "grounded": false,
+      "radius": 160.87
+    },
+    {
+      "x": 0,
+      "z": 33.68,
+      "grounded": false,
+      "radius": 160.86999999999998
+    },
+    {
+      "x": 0,
+      "z": 34.22,
+      "grounded": false,
+      "radius": 160.87
+    },
+    {
+      "x": 0,
+      "z": 34.760000000000005,
+      "grounded": false,
+      "radius": 160.87
+    },
+    {
+      "x": 0,
+      "z": 35.3,
+      "grounded": false,
+      "radius": 160.87
+    },
+    {
+      "x": 0,
+      "z": 35.84,
+      "grounded": false,
+      "radius": 160.86999999999998
+    },
+    {
+      "x": 0,
+      "z": 36.379999999999995,
+      "grounded": false,
+      "radius": 160.87
+    },
+    {
+      "x": 0,
+      "z": 36.92,
+      "grounded": false,
+      "radius": 160.86999999999998
+    },
+    {
+      "x": 0,
+      "z": 37.46,
+      "grounded": false,
+      "radius": 160.86999999999998
+    },
+    {
+      "x": 0,
+      "z": 38,
+      "grounded": false,
+      "radius": 160.87
+    }
+  ],
+  "errors": []
+}

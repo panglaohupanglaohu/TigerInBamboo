@@ -1,0 +1,572 @@
+{
+  "started": "2026-09-27T08:13:30.884Z",
+  "ended": "2026-09-27T08:15:07.559Z",
+  "hashes": {
+    "src/world/tramSystem.js": "f594f3c06a0c9e572277eebc4d9ac40908605d4ebf9569cd2ba0794597800508",
+    "src/assets/freightMotion.js": "1d57d087e2c697952216342fc861655f7cf72829cb02a3b5f111fa3b0ebea5f9",
+    "src/gameplay/robotOps/runtime.js": "8e0ddc804c42e58ecd19a284ed57c33d955aa28f1b2e786190fbb227f5648474",
+    "src/gameplay/robotOps/logistics.js": "dadad49086a5fdbbbdc5256db8a0d665b3311882a8f465589b01b2288e15efed"
+  },
+  "mode": "single diagnostic positioning at start, then unmodified normal world update; no time acceleration",
+  "done": true,
+  "wallSeconds": 74.246,
+  "audit": {
+    "ring": {
+      "red": {
+        "from": 0.356625,
+        "to": 0.430875,
+        "angle": -360.1406766777756,
+        "arcLength": 189.0532790989822,
+        "minRadius": 31.239598437040048,
+        "maxRadius": 37.691987910277625
+      },
+      "blue": {
+        "from": 0.3490625,
+        "to": 0.43125,
+        "angle": -360.1169711928418,
+        "arcLength": 214.29242325232195,
+        "minRadius": 35.67867550283572,
+        "maxRadius": 37.669402144529776
+      }
+    },
+    "junctions": [
+      {
+        "center": {
+          "x": -129.83789647023792,
+          "y": -35.41417398312365,
+          "z": 88.53490128399949
+        },
+        "radius": 13,
+        "count": 16,
+        "id": "junction-1",
+        "owner": null,
+        "entered": false
+      },
+      {
+        "center": {
+          "x": -65.51148678793817,
+          "y": -36.40182012718974,
+          "z": 142.27186562781665
+        },
+        "radius": 27.773686154104475,
+        "count": 55,
+        "id": "junction-2",
+        "owner": null,
+        "entered": false
+      }
+    ]
+  },
+  "samples": [
+    {
+      "seconds": 2.009,
+      "red": {
+        "progress": 0.3601989924915372,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4277598801037885,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 4.02,
+      "red": {
+        "progress": 0.36404790748242344,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4240012894463301,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 6.078,
+      "red": {
+        "progress": 0.36748443872428616,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4206454049307422,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 8.086,
+      "red": {
+        "progress": 0.3713333537151724,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4168868142732838,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 10.118,
+      "red": {
+        "progress": 0.37518226870605864,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.41312822361582535,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 12.13,
+      "red": {
+        "progress": 0.3790311836969449,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4093696329583669,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 14.151,
+      "red": {
+        "progress": 0.3828800986878311,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4056110423009085,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 16.168,
+      "red": {
+        "progress": 0.38672901367871737,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.40185245164345007,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 18.177,
+      "red": {
+        "progress": 0.3905779286696036,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.39809386098599164,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 20.191,
+      "red": {
+        "progress": 0.39442684366048986,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3943352703285332,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 22.198,
+      "red": {
+        "progress": 0.3982757586513761,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3905766796710748,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 24.21,
+      "red": {
+        "progress": 0.40212467364226234,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.38681808901361636,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 26.285,
+      "red": {
+        "progress": 0.4061110498828231,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3829252629755344,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 28.357,
+      "red": {
+        "progress": 0.41009742612338385,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3790324369374525,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 30.422,
+      "red": {
+        "progress": 0.4140838023639446,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.37513961089937053,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 32.433,
+      "red": {
+        "progress": 0.41793271735483084,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3713810202419121,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 34.45,
+      "red": {
+        "progress": 0.4217816323457171,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3676224295844537,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 36.469,
+      "red": {
+        "progress": 0.4256305473366033,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 38.493,
+      "red": {
+        "progress": 0.42947946232748957,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 40.52,
+      "red": {
+        "progress": 0.4333283773183758,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 42.538,
+      "red": {
+        "progress": 0.43717729230926206,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 44.557,
+      "red": {
+        "progress": 0.4410262073001483,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 46.571,
+      "red": {
+        "progress": 0.44487512229103454,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 48.585,
+      "red": {
+        "progress": 0.4487240372819208,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 50.63,
+      "red": {
+        "progress": 0.4518856460244345,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 52.666,
+      "red": {
+        "progress": 0.4555970997656462,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 54.702,
+      "red": {
+        "progress": 0.45930855350685795,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 56.762,
+      "red": {
+        "progress": 0.4630200072480697,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3668170173007126,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 58.813,
+      "red": {
+        "progress": 0.4667314609892814,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.36574313425572447,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 60.863,
+      "red": {
+        "progress": 0.47044291473049316,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.36211877897888956,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 62.881,
+      "red": {
+        "progress": 0.4741543684717049,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.35849442370205464,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 64.924,
+      "red": {
+        "progress": 0.4778658222129166,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.35487006842521973,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 66.971,
+      "red": {
+        "progress": 0.48157727595412836,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3512457131483848,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 69.036,
+      "red": {
+        "progress": 0.4854261909450146,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3474871224909264,
+        "done": true,
+        "hold": false,
+        "dwell": 0
+      }
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,322 @@
+{
+  "deck_local": [
+    35.2145080566406,
+    -2.0347900390625,
+    0.0538330078125
+  ],
+  "grid": {
+    "body_height_metres": 1.22,
+    "body_radius_metres": 0.38,
+    "cells": 282,
+    "scope": "dry local graph; role equipment and route endpoints require separate validation",
+    "spacing_local": 0.6,
+    "trunk_blocked": 585
+  },
+  "passed": false,
+  "ramp_distance": null,
+  "reachable": 0,
+  "rows": [
+    {
+      "id": "pine-1247-cover-0",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-5566-cover-1",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-4101-cover-2",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": false
+    },
+    {
+      "id": "pine-820-cover-3",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1247-cover-4",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1229-cover-5",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1401-cover-6",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-5566-cover-7",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-5566-cover-8",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-5566-cover-9",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": false
+    },
+    {
+      "id": "pine-1256-cover-10",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-2171-cover-11",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1401-cover-12",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1997-cover-13",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-811-cover-14",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-3011-cover-15",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-4110-cover-16",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-3011-cover-17",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-820-cover-18",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1401-cover-19",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-3011-cover-20",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-4110-cover-21",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1419-cover-22",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1997-cover-23",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1410-cover-24",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-3020-cover-25",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": false
+    },
+    {
+      "id": "pine-2171-cover-26",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-2162-cover-27",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1428-cover-28",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1410-cover-29",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": false
+    },
+    {
+      "id": "pine-2153-cover-30",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": false
+    },
+    {
+      "id": "pine-1428-cover-31",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-4110-cover-32",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-2180-cover-33",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1997-cover-34",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-811-cover-35",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-4137-cover-36",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-4110-cover-37",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1247-cover-38",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-2180-cover-39",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-820-cover-40",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-1238-cover-41",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-4119-cover-42",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-829-cover-43",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-2162-cover-44",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-3020-cover-45",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-2153-cover-46",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-2171-cover-47",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    },
+    {
+      "id": "pine-4101-cover-48",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": false
+    },
+    {
+      "id": "pine-1229-cover-49",
+      "path_points": 0,
+      "reachable": false,
+      "trunk_blocked": true
+    }
+  ],
+  "scope": "candidate local routes; not activated in battle",
+  "total": 50
+}

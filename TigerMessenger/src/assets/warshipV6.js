@@ -41,11 +41,15 @@ export function createWarshipV6(){
   }
  }
  const batches=[];
- for(const group of dynamicGroups.values()){const mesh=new THREE.InstancedMesh(group.part.g,materials[group.part.material],group.nodes.length);mesh.frustumCulled=false;mesh.castShadow=mesh.receiveShadow=true;renderRoot.add(mesh);batches.push({...group,mesh});}
+ for(const group of dynamicGroups.values()){const mesh=new THREE.InstancedMesh(group.part.g,materials[group.part.material],group.nodes.length);mesh.frustumCulled=true;mesh.userData.animatedWarshipCulling=true;mesh.castShadow=mesh.receiveShadow=true;renderRoot.add(mesh);batches.push({...group,mesh});}
  const matA=new THREE.Matrix4(),matB=new THREE.Matrix4(),pa=new THREE.Vector3(),pb=new THREE.Vector3(),qa=new THREE.Quaternion(),qb=new THREE.Quaternion(),sa=new THREE.Vector3(),sb=new THREE.Vector3(),zero=new THREE.Matrix4().makeScale(0,0,0);
  const tracks=source.poseKeys.map((k,i)=>({key:k,node:byId.get(k),offset:i*16})),stride=source.poseKeys.length*16;
  function pose(frameA,frameB,alpha){for(const tr of tracks){if(!tr.node)continue;matA.fromArray(poses,source.frameIndex[frameA]*stride+tr.offset).decompose(pa,qa,sa);matB.fromArray(poses,source.frameIndex[frameB]*stride+tr.offset).decompose(pb,qb,sb);tr.node.position.copy(pa).lerp(pb,alpha);tr.node.quaternion.copy(qa).slerp(qb,alpha);tr.node.scale.copy(sa).lerp(sb,alpha);}}
- function render(){boat.updateMatrixWorld(true);inv.copy(boat.matrixWorld).invert();for(const b of batches){b.nodes.forEach((n,i)=>b.mesh.setMatrixAt(i,hidden(n)?zero:matA.multiplyMatrices(inv,n.matrixWorld)));b.mesh.instanceMatrix.needsUpdate=true;}}
+ function render(){boat.updateMatrixWorld(true);inv.copy(boat.matrixWorld).invert();for(const b of batches){b.nodes.forEach((n,i)=>b.mesh.setMatrixAt(i,hidden(n)?zero:matA.multiplyMatrices(inv,n.matrixWorld)));b.mesh.instanceMatrix.needsUpdate=true;
+  // Oars, gangplank and crew change their boat-local bounds. Recompute only
+  // after writing instances, so both camera and shadow frusta see this pose.
+  b.mesh.computeBoundingSphere();
+ }}
  const rows=Array.from({length:26},(_,i)=>({attach:byId.get('n'+(193+i)),side:i<13?-1:1,index:i%13,sedateT:0,embarked:true,weaponStored:true}));crew.userData.rows=rows;
  const rowTracks=rows.map((_,i)=>tracks.filter(tr=>tr.key==='n'+(63+i*5)||tr.key==='n'+(193+i)||new RegExp('^n(?:22[0-9]|230):i'+i+'$').test(tr.key)||tr.key==='add:forearm-'+i+'L'||tr.key==='add:forearm-'+i+'R'||tr.key==='add:hand-'+i+'L'||tr.key==='add:hand-'+i+'R'));
  const crewVisuals=rows.map((_,i)=>[...byId.entries()].filter(([key])=>new RegExp('^n(?:22[0-9]|230):i'+i+'$').test(key)||key==='add:forearm-'+i+'L'||key==='add:forearm-'+i+'R'||key==='add:hand-'+i+'L'||key==='add:hand-'+i+'R').map(([,node])=>({node,visible:node.visible})));

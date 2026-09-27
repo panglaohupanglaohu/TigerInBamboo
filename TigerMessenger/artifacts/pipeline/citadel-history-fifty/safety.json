@@ -1,0 +1,126 @@
+{
+  "result": {
+    "defaults": [
+      {
+        "round": 50,
+        "pass": "三处：远景纹理抗闪烁与色差平衡",
+        "semanticSurfaces": 0,
+        "relief": [
+          {
+            "name": "historic-old-stone-cornices",
+            "visible": true,
+            "parts": 142
+          },
+          {
+            "name": "historic-new-stone-cornices",
+            "visible": true,
+            "parts": 316
+          }
+        ],
+        "materials": 236,
+        "meshes": 1817,
+        "chipped": 144,
+        "districts": {
+          "old": 783,
+          "new": 1034,
+          "gate": 0
+        },
+        "roles": {
+          "old": {
+            "stone": 87,
+            "paving": 1,
+            "roof": 11,
+            "recess": 1,
+            "bronze": 3
+          },
+          "new": {
+            "stone": 76,
+            "paving": 12,
+            "roof": 33,
+            "recess": 8,
+            "bronze": 4
+          },
+          "gate": {
+            "stone": 0,
+            "paving": 0,
+            "roof": 0,
+            "recess": 0,
+            "bronze": 0
+          }
+        },
+        "chipsByDistrict": {
+          "old": 133,
+          "new": 11,
+          "gate": 0
+        }
+      },
+      {
+        "round": 50,
+        "pass": "三处：远景纹理抗闪烁与色差平衡",
+        "semanticSurfaces": 15,
+        "relief": [
+          {
+            "name": "historic-gate-stone-cornices",
+            "visible": true,
+            "parts": 4
+          }
+        ],
+        "materials": 289,
+        "meshes": 289,
+        "chipped": 2,
+        "districts": {
+          "old": 0,
+          "new": 0,
+          "gate": 289
+        },
+        "roles": {
+          "old": {
+            "stone": 0,
+            "paving": 0,
+            "roof": 0,
+            "recess": 0,
+            "bronze": 0
+          },
+          "new": {
+            "stone": 0,
+            "paving": 0,
+            "roof": 0,
+            "recess": 0,
+            "bronze": 0
+          },
+          "gate": {
+            "stone": 187,
+            "paving": 82,
+            "roof": 8,
+            "recess": 9,
+            "bronze": 3
+          }
+        },
+        "chipsByDistrict": {
+          "old": 0,
+          "new": 0,
+          "gate": 2
+        }
+      }
+    ],
+    "walkMeshes": 581,
+    "walkGeometryUnchanged": true,
+    "newGeometryMeshes": 5,
+    "railSamples": 28800,
+    "newRailObstructions": [],
+    "portalProbes": 39,
+    "newPortalObstructions": [],
+    "nan": 0,
+    "vertices": 2249867,
+    "frameMedianMs": 40,
+    "frameP95Ms": 43.19999998807907,
+    "render": {
+      "frame": 332,
+      "calls": 7452,
+      "triangles": 2665930,
+      "points": 0,
+      "lines": 41178
+    }
+  },
+  "errors": []
+}

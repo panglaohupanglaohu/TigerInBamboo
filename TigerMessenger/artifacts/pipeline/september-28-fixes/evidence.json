@@ -1,0 +1,48 @@
+{
+  "task": "Base bug fixes, mobile and transport robot shooting, greener locust, English signs with traditional Ant exception",
+  "visual_observations": {
+    "source": "Assistant inspected actual base captures plus explicitly isolated combat fixtures",
+    "observations": [
+      "Locust visibly greener than sage beetle",
+      "Sign captures show English industry labels and traditional Ant title",
+      "Trooper soles above actual paving rather than buried legs",
+      "Transport pose keeps robots on flatcars while weapons aim"
+    ],
+    "images": {
+      "freight-empty-start-fix/loaded.png": "cf55e1116d0faa87ded50e3c0877b24b9901307885d0c070b9b7a2d99a6d9df5",
+      "vanguard-base-ground-fix/grounded.png": "25175271d2c85351558edd3aac17b828e218b8a89701ec9d87cc24f0cf40a437",
+      "freight-driver-clear/red-0.08.png": "41496be458f4d64ba8c8a3ab4f716d0be31b28434ebfd70edc23bca5fe7e3edd",
+      "locust-green-paint/after.png": "725971a9481057f2ae5cb75ad75a33810e19c2a6c486bf8b04f7ca511881d617",
+      "robot-mobile-fire/transport-fire.png": "37931ef9a6164b513864f3e362679723ebed5db369fc79628bec5946f8824390",
+      "bookshop-english-signs/ant.png": "aad8495f4b5391bd6d8f8ae1847a6debf18b6c25cacabe4a7d2766cade610ef3",
+      "bookshop-english-signs/locust.png": "93ea06ec325f3890c30b7805302f0468f1e68a95beeb218c033018c367e32757"
+    }
+  },
+  "checks": [
+    {
+      "name": "37 robotOps tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "new-start and near-platform save reload hold in normal clock",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "three types moving and on moving train fire in controlled scene",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full Saihoji battle regression",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No visual score claim",
+    "No assertion of full-book movement descriptions",
+    "Do not confuse controlled target fixture with real campaign completion"
+  ]
+}

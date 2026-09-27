@@ -1,0 +1,3 @@
+import {chromium} from '/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+const b=await chromium.launch({channel:'chrome',headless:true});
+try {const p=await b.newPage();await p.goto('http://localhost:8931/TigerMessenger/?autostart=1');await p.waitForFunction(()=>window.__tm?.messenger?.landmarks?.abandonedGate,null,{timeout:180000});console.log(await p.evaluate(()=>{const t=window.__tm,g=t.messenger.landmarks.abandonedGate,s=g.userData.seatRoot;return {seat:s.position.toArray(),site:s.userData.siteRoot.position.toArray(),distance:s.position.distanceTo(s.userData.siteRoot.position),q:s.quaternion.toArray(),siteQ:s.userData.siteRoot.quaternion.toArray()};}));}finally{await b.close()}

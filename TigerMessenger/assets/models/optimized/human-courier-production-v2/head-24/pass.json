@@ -1,0 +1,14 @@
+{
+  "stage": 24,
+  "checks": [
+    "face",
+    "features",
+    "top",
+    "profile"
+  ],
+  "headVertices": 4560,
+  "headTriangles": 8962,
+  "sourcePreserved": true,
+  "sourceSHA256": "0a79a213bdd4113279fe4afab51e704f575c5ef0c69f8996568b4ad7238d7329",
+  "status": "candidate, not production integration or user acceptance"
+}

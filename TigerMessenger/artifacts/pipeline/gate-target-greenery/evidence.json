@@ -1,0 +1,37 @@
+{
+  "task": "Correct missing target-reference greenery at Gate of Sighs",
+  "visual_observations": {
+    "source": "Assistant inspected updated live 8931 overview, reverse and botanical detail screenshots",
+    "image_sha256": "24c6d9eae4f77978dfdce6ba2e60cb6a9ea1e68939b9410e3a46aa81a51b2ca0",
+    "completed": [
+      "Dense irregular olive/teal shrubs around approach rock and stairs; broad water gap retained",
+      "Layered foliage down distant mountain shoulders",
+      "Botanical columns enriched; terrace plants have physical pots"
+    ],
+    "remaining": [
+      "Foliage silhouettes are still simplified versus intricate illustrated reference",
+      "Entire gate is not a fidelity match; no claim of full target acceptance"
+    ]
+  },
+  "checks": [
+    {
+      "name": "1152 rail envelope rays",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Original collision solver approach walk",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Browser runtime errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Jev text-only triage; not image inspection",
+    "Five additional merged mesh batches; no measured FPS claim"
+  ]
+}

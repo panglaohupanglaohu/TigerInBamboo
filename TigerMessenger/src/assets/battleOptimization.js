@@ -40,9 +40,12 @@ function release(data,shared) {
 function material(spec) {
   const source = JSON.parse(spec.extras?.three_source || '{}');
   const pbr=spec.pbrMetallicRoughness || {}, rgba=pbr.baseColorFactor || [1,1,1,1];
-  const options={color:new THREE.Color().fromArray(rgba),opacity:rgba[3],transparent:spec.alphaMode==='BLEND',side:spec.doubleSided?THREE.DoubleSide:THREE.FrontSide,flatShading:true};
+  const options={color:new THREE.Color().fromArray(rgba),opacity:rgba[3],transparent:spec.alphaMode==='BLEND',side:spec.doubleSided?THREE.DoubleSide:THREE.FrontSide};
   const basic=source.type==='MeshBasicMaterial' || !!spec.extensions?.KHR_materials_unlit;
   const mat=basic?new THREE.MeshBasicMaterial(options):new THREE.MeshToonMaterial(options);
+  // Set after construction (as toonMat does): passing flatShading to these
+  // constructors only triggers three.js 'not a property' warnings.
+  mat.flatShading=true;
   if (!basic) mat.emissive.fromArray(spec.emissiveFactor || [0,0,0]);
   if (spec.alphaMode==='MASK') mat.alphaTest=spec.alphaCutoff ?? .5;
   if (options.transparent) mat.depthWrite=false;

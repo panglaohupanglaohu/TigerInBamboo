@@ -1,0 +1,64 @@
+{
+  "name": "beetle",
+  "version": 4,
+  "sha256": "142a60f069e06a9b1904966f22bc57963e2134688270447591a553372dd8f968",
+  "stats": {
+    "sourceParts": 344,
+    "meshes": 22,
+    "triangles": 48986
+  },
+  "radius": 160,
+  "source": "assembled default Web world; no saved browser edits copied",
+  "nodes": 46,
+  "meshes": 22,
+  "instances": 0,
+  "materials": 22,
+  "textures": 13,
+  "bytes": 5371376,
+  "landmarks": {
+    "robot": {
+      "node": 0,
+      "name": "bookshop-robot-beetle",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "center": [
+        0.006652653217315674,
+        1.3182500433176756,
+        0
+      ],
+      "size": [
+        2.996233105659485,
+        2.6835000850260258,
+        2.367000102996826
+      ]
+    }
+  },
+  "warnings": [],
+  "limitations": [
+    "Static visible-state capture; source animations, physics, quests and shader logic still require native migration",
+    "Hidden states and non-mesh line/point effects excluded from this world overview; separate asset archives retain them",
+    "Procedural metal patina and line-based armor edge wear are preserved in the authoritative Three.js model, not baked into this portable GLB.",
+    "Static model; locomotion/combat rig is not implemented."
+  ]
+}

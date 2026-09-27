@@ -13,8 +13,9 @@ try{
  await page.goto(base+'/pine-layout-fixture.html');
  const report=await page.evaluate(async(base)=>{
   const T=await import('three'),M=await import(base+'/src/scenes/saihojiGarden.js');
+  const {PLANET_RADIUS}=await import(base+'/src/world/planet.js');
   const scene=new T.Scene();scene.background=new T.Color('#aabfc3');
-  const loaded=M.saihojiGardenScene.load({scene,planetRadius:161,options:{}});
+  const loaded=M.saihojiGardenScene.load({scene,planetRadius:PLANET_RADIUS,options:{}});
   scene.updateMatrixWorld(true);
   const whale=loaded.group,island=whale.getObjectByName('leviathan-island');
   const pines=[];whale.traverse(n=>{if(n.name==='giantTreeGroup')pines.push(n);});

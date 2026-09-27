@@ -1,0 +1,142 @@
+{
+  "fps": 24,
+  "units": "metres",
+  "rounds": {
+    "3": {
+      "walk": {
+        "actualRound": 3,
+        "maxFootIK": 0.0008656769510884884,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 0.0008044417635223039,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "run": {
+        "actualRound": 3,
+        "maxFootIK": 2.7755575615628914e-16,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 2.914335439641036e-16,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "jump": {
+        "actualRound": 3,
+        "maxFootIK": 3.510833468576701e-16,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 2.3592239273284576e-16,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "vault": {
+        "actualRound": 3,
+        "maxFootIK": 7.469550889370673e-16,
+        "maxHandIK": 2.618455766672135e-16,
+        "maxContactSoleGap": 2.3592239273284576e-16,
+        "maxSupportPalmGap": 4.440892098500626e-16,
+        "wallVertexSamples": 68,
+        "finite": true
+      }
+    },
+    "4": {
+      "walk": {
+        "actualRound": 4,
+        "maxFootIK": 2.2887833992611187e-16,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 2.220446049250313e-16,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "run": {
+        "actualRound": 4,
+        "maxFootIK": 3.1401849173675503e-16,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 1.5265566588595902e-16,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "jump": {
+        "actualRound": 4,
+        "maxFootIK": 3.510833468576701e-16,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 2.3592239273284576e-16,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "vault": {
+        "actualRound": 4,
+        "maxFootIK": 7.469550889370673e-16,
+        "maxHandIK": 3.152427400121712e-16,
+        "maxContactSoleGap": 2.3592239273284576e-16,
+        "maxSupportPalmGap": 2.220446049250313e-16,
+        "wallVertexSamples": 0,
+        "finite": true
+      }
+    },
+    "5": {
+      "vault": {
+        "actualRound": 5,
+        "maxFootIK": 5.688200336284365e-16,
+        "maxHandIK": 3.236828524569469e-16,
+        "maxContactSoleGap": 2.636779683484747e-16,
+        "maxSupportPalmGap": 4.440892098500626e-16,
+        "wallVertexSamples": 0,
+        "finite": true
+      }
+    },
+    "6": {
+      "vault": {
+        "actualRound": 6,
+        "maxFootIK": 5.688200336284365e-16,
+        "maxHandIK": 3.236828524569469e-16,
+        "maxContactSoleGap": 2.636779683484747e-16,
+        "maxSupportPalmGap": 4.440892098500626e-16,
+        "wallVertexSamples": 0,
+        "finite": true
+      }
+    },
+    "7": {
+      "walk": {
+        "actualRound": 4,
+        "maxFootIK": 2.2887833992611187e-16,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 2.220446049250313e-16,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "run": {
+        "actualRound": 4,
+        "maxFootIK": 3.1401849173675503e-16,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 1.5265566588595902e-16,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "jump": {
+        "actualRound": 4,
+        "maxFootIK": 3.510833468576701e-16,
+        "maxHandIK": 0,
+        "maxContactSoleGap": 2.3592239273284576e-16,
+        "maxSupportPalmGap": 0,
+        "wallVertexSamples": 0,
+        "finite": true
+      },
+      "vault": {
+        "actualRound": 7,
+        "maxFootIK": 5.688200336284365e-16,
+        "maxHandIK": 3.236828524569469e-16,
+        "maxContactSoleGap": 2.636779683484747e-16,
+        "maxSupportPalmGap": 4.440892098500626e-16,
+        "wallVertexSamples": 0,
+        "finite": true
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "revision": 2,
+  "triangles": 27648,
+  "finite": true,
+  "circle": {
+    "center": [
+      0,
+      32
+    ],
+    "plazaRadius": 32,
+    "promenadeRadius": 39.5,
+    "shoreRadius": 40,
+    "seawardArc": "continuous semicircle; no chord"
+  },
+  "change": "Concentric stone courses articulate the full circle",
+  "errors": []
+}

@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {vacantGarrisonSlots} from '../../src/world/citadel/garrisonAdmission.js';
+const point=x=>({x,distanceToSquared(other){return (this.x-other.x)**2;}});
+const groups=[{id:'left',points:[0,1,2,3].map(point)},{id:'right',points:[10,11,12,13].map(point)}];
+const actor=(x,extra={})=>({position:point(x),visible:true,userData:{dead:false,...extra}});
+const full=groups.flatMap(g=>g.points.map(p=>actor(p.x)));
+assert.equal(vacantGarrisonSlots(groups,full),null,'full posts hold reinforcements');
+assert.equal(vacantGarrisonSlots(groups,full.slice(0,5)),null,'three vacancies must not partially unload a four-person crew');
+const four=vacantGarrisonSlots(groups,full.slice(0,4));
+assert.deepEqual(four.map(s=>s.point.x),[10,11,12,13]);
+assert.equal(vacantGarrisonSlots(groups,[...full.slice(0,4),actor(10,{downed:true})]),null,'downed living actor still occupies the post');
+assert.equal(vacantGarrisonSlots(groups,[...full.slice(0,4),actor(10.3)]),null,'nearby enemy/friendly blocks arrival too');
+assert.equal(vacantGarrisonSlots(groups,[...full.slice(0,4),actor(10,{dead:true})]).length,4);
+const landed=four.map(s=>actor(s.point.x));
+assert.equal(vacantGarrisonSlots(groups,[...full.slice(0,4),...landed]),null,'next admission observes newly occupied posts');
+assert.equal(vacantGarrisonSlots(groups,[]).length,4,'reset makes all slots available');
+console.log('PASS: full berth, partial vacancies, downed and nearby actors, death, repeat admission and reset');

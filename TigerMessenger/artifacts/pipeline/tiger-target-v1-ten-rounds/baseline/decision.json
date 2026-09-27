@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "dad3e1c4382850a26c28baf63d8fbc05cb1a15ce1541c15ba59dd8ecc21aa3c9",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.79
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.78,
+      "probabilities": {
+        "review": 0.18,
+        "dressing": 0,
+        "lighting": 0,
+        "navigation": 0,
+        "geometry": 0.82
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.96
+    }
+  },
+  "usage": {
+    "input_tokens": 818,
+    "output_tokens": 91,
+    "cost_usd": 0.000344,
+    "credits_remaining_usd": 4.993296
+  },
+  "elapsed_ms": 1484,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "New neck deformation and drinking pose",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

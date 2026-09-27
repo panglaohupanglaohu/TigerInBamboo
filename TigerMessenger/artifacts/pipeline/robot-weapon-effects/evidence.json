@@ -1,0 +1,51 @@
+{
+  "task": "Robot weapon differentiation, stable deployment, loaded freight and courier hat revision",
+  "target": "Accepted three action targets; raised goggles on distinctive courier hat, exposed handsome face; visible robot freight with no overlapping deployments.",
+  "visual_observations": {
+    "source": "Assistant directly inspected actual locust/ant/beetle effect screenshots, loaded train and 9-unit deployment screenshots, courier head closeup",
+    "completed": [
+      "Separate moving tracer + case ejection, shell + steam, alternating twin barrel burst",
+      "Three actual robots visible on consecutive flatcars",
+      "9 robots spaced on deployment ground",
+      "Goggles on hat and unobscured face; brim seams and leather band"
+    ],
+    "remaining": [
+      "Courier face and clothes still geometric, not accepted above 8/10",
+      "Factory walls are plain; loading view not cinematic quality yet",
+      "Whole base performance still below desired rate"
+    ]
+  },
+  "checks": [
+    {
+      "name": "33 robotOps regression tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Isolated actual 9-unit freight update and save/load, min distance5.6",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "3/1/5 visual shots and full effect cleanup",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Courier whole model >8/10 visual acceptance",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "Do not label accelerated transport as real-time elapsed play",
+    "Do not claim courier switched into live game",
+    "Keep source snapshots and original accepted images"
+  ],
+  "evidence_revision": {
+    "check.json": "6f0f0017238507c8e961ac42cdf27073d706eb1fb5c5fef7cac171a046a26c11",
+    "freight-check.json": "fc84e822c61760bf185fe9c71f2191c4fa8f021b6b01b6e4e0eaa46baad9c37f",
+    "real-loaded-train.png": "bb44ff6d93bbd633c822dcbbec86ee6fa4d22bf3430b59b202b6fb0371cb1ba5",
+    "separated-deployment.png": "66d861284acb187d23a53ab6e643e04122e69af93a13550c19abfc7bc5a65e93"
+  }
+}

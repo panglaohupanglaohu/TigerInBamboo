@@ -1,0 +1,36 @@
+{
+  "stairs": {
+    "samples": 81,
+    "unsupported": 0,
+    "blocked": 2,
+    "details": [
+      {
+        "i": 78,
+        "t": 0.975,
+        "hits": []
+      },
+      {
+        "i": 79,
+        "t": 0.9875,
+        "hits": []
+      }
+    ]
+  },
+  "walking": {
+    "samples": 195,
+    "unsupported": 0,
+    "blocked": 0
+  },
+  "round": 29,
+  "railU": 0.6841666666666667,
+  "rays": 1944,
+  "hitCount": 0,
+  "hits": [],
+  "meshCount": 349,
+  "position": [
+    127.2117504058756,
+    109.01314370670208,
+    -22.01943748897003
+  ],
+  "errors": []
+}

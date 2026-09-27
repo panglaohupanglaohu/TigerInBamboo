@@ -1,0 +1,173 @@
+{
+  "stages": [
+    {
+      "stats": {
+        "shots": 4,
+        "cracks": 0,
+        "impacts": 0,
+        "confirmed": 0,
+        "reflected": 0,
+        "rejected": 2,
+        "sampled": 4,
+        "fallback": 0
+      },
+      "budget": {
+        "ready": true,
+        "listener": {
+          "has": true,
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "rx": 1,
+          "ry": 0,
+          "rz": 0
+        },
+        "robotSamples": {
+          "loaded": {
+            "locust": 2,
+            "ant": 2,
+            "beetle": 3
+          },
+          "error": null
+        },
+        "oneShots": [
+          {
+            "id": "robot-locust",
+            "cat": "weapon"
+          },
+          {
+            "id": "robot-locust",
+            "cat": "weapon"
+          }
+        ],
+        "foreground": 2,
+        "engines": [],
+        "suction": false,
+        "weather": {
+          "rain": 0,
+          "snow": 0,
+          "wind": 0.8
+        },
+        "caps": {
+          "FOREGROUND_CAP": 6,
+          "ONESHOT_CAP": 8,
+          "ENGINE_SLOTS": 2
+        }
+      }
+    },
+    {
+      "stats": {
+        "shots": 5,
+        "cracks": 0,
+        "impacts": 0,
+        "confirmed": 0,
+        "reflected": 0,
+        "rejected": 2,
+        "sampled": 5,
+        "fallback": 0
+      },
+      "budget": {
+        "ready": true,
+        "listener": {
+          "has": true,
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "rx": 1,
+          "ry": 0,
+          "rz": 0
+        },
+        "robotSamples": {
+          "loaded": {
+            "locust": 2,
+            "ant": 2,
+            "beetle": 3
+          },
+          "error": null
+        },
+        "oneShots": [
+          {
+            "id": "robot-ant",
+            "cat": "weapon"
+          }
+        ],
+        "foreground": 1,
+        "engines": [],
+        "suction": false,
+        "weather": {
+          "rain": 0,
+          "snow": 0,
+          "wind": 0.8
+        },
+        "caps": {
+          "FOREGROUND_CAP": 6,
+          "ONESHOT_CAP": 8,
+          "ENGINE_SLOTS": 2
+        }
+      }
+    },
+    {
+      "stats": {
+        "shots": 10,
+        "cracks": 0,
+        "impacts": 0,
+        "confirmed": 0,
+        "reflected": 0,
+        "rejected": 2,
+        "sampled": 10,
+        "fallback": 0
+      },
+      "budget": {
+        "ready": true,
+        "listener": {
+          "has": true,
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "rx": 1,
+          "ry": 0,
+          "rz": 0
+        },
+        "robotSamples": {
+          "loaded": {
+            "locust": 2,
+            "ant": 2,
+            "beetle": 3
+          },
+          "error": null
+        },
+        "oneShots": [],
+        "foreground": 0,
+        "engines": [],
+        "suction": false,
+        "weather": {
+          "rain": 0,
+          "snow": 0,
+          "wind": 0.8
+        },
+        "caps": {
+          "FOREGROUND_CAP": 6,
+          "ONESHOT_CAP": 8,
+          "ENGINE_SLOTS": 2
+        }
+      }
+    }
+  ],
+  "result": {
+    "stats": {
+      "shots": 12,
+      "cracks": 1,
+      "impacts": 0,
+      "confirmed": 2,
+      "reflected": 1,
+      "rejected": 3,
+      "sampled": 12,
+      "fallback": 0
+    },
+    "far": true,
+    "mute": true,
+    "pcmPeak": 0.5087828636169434,
+    "context": "running"
+  },
+  "errors": []
+}

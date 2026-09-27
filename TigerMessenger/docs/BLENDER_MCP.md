@@ -40,3 +40,6 @@ MCP 负责连接 Blender、读取场景和执行建模操作；不会自动提�
 - [Codex 官方 MCP 文档](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
 
 这些来源说明连接方式；具体安装成功与当前场景信息以本项目测试报告为证据。
+
+## 2026-09-20 连接恢复
+本轮原生工具首次查询连接失败，进程检查无运行中的Blender主程序。启动已安装Blender并运行现有setup_blender_mcp.py后，原生get_scene_info成功返回空白Scene的Cube/Light/Camera三个对象。未覆盖任何原资产或未保存模型，未声称本轮已做Blender建模。

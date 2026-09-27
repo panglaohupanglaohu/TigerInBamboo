@@ -1,0 +1,2060 @@
+{
+ "errors": [],
+ "rail": [
+  {
+   "t": 0.5355555555555556,
+   "local": [
+    106.9,
+    -43.8,
+    88.6
+   ],
+   "alt": 8.54,
+   "ground": -0.17,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5366666666666666,
+   "local": [
+    105.4,
+    -42.4,
+    89
+   ],
+   "alt": 8.55,
+   "ground": -0.21,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5377777777777778,
+   "local": [
+    103.8,
+    -41,
+    89.4
+   ],
+   "alt": 8.55,
+   "ground": -0.26,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5388888888888889,
+   "local": [
+    102.2,
+    -39.6,
+    89.7
+   ],
+   "alt": 8.55,
+   "ground": -0.29,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.54,
+   "local": [
+    100.6,
+    -38.3,
+    90.1
+   ],
+   "alt": 8.55,
+   "ground": -0.3,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5411111111111111,
+   "local": [
+    99,
+    -36.9,
+    90.5
+   ],
+   "alt": 8.56,
+   "ground": -0.28,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5422222222222223,
+   "local": [
+    97.4,
+    -35.6,
+    90.8
+   ],
+   "alt": 8.56,
+   "ground": -0.23,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5433333333333333,
+   "local": [
+    95.7,
+    -34.3,
+    91.2
+   ],
+   "alt": 8.57,
+   "ground": -0.21,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5444444444444444,
+   "local": [
+    94.1,
+    -33,
+    91.6
+   ],
+   "alt": 8.59,
+   "ground": -0.24,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5455555555555556,
+   "local": [
+    92.4,
+    -31.7,
+    92
+   ],
+   "alt": 8.62,
+   "ground": -0.25,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5466666666666666,
+   "local": [
+    90.7,
+    -30.5,
+    92.4
+   ],
+   "alt": 8.66,
+   "ground": -0.23,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5477777777777778,
+   "local": [
+    89,
+    -29.3,
+    92.8
+   ],
+   "alt": 8.71,
+   "ground": -0.19,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5488888888888889,
+   "local": [
+    87.3,
+    -28.1,
+    93.3
+   ],
+   "alt": 8.77,
+   "ground": -0.15,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.55,
+   "local": [
+    85.6,
+    -26.9,
+    93.8
+   ],
+   "alt": 8.84,
+   "ground": -0.18,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5511111111111111,
+   "local": [
+    83.9,
+    -25.7,
+    94.4
+   ],
+   "alt": 8.92,
+   "ground": -0.2,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5522222222222222,
+   "local": [
+    82.1,
+    -24.6,
+    95
+   ],
+   "alt": 9.01,
+   "ground": -0.19,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5533333333333333,
+   "local": [
+    80.4,
+    -23.6,
+    95.8
+   ],
+   "alt": 9.1,
+   "ground": -0.2,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5544444444444444,
+   "local": [
+    78.8,
+    -22.6,
+    96.5
+   ],
+   "alt": 9.17,
+   "ground": -0.25,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5555555555555556,
+   "local": [
+    77.1,
+    -21.7,
+    97.4
+   ],
+   "alt": 9.24,
+   "ground": -0.28,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5566666666666666,
+   "local": [
+    75.3,
+    -20.8,
+    98.2
+   ],
+   "alt": 9.29,
+   "ground": -0.28,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5577777777777778,
+   "local": [
+    73.6,
+    -20,
+    99.1
+   ],
+   "alt": 9.33,
+   "ground": -0.25,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5588888888888889,
+   "local": [
+    71.8,
+    -19.2,
+    100
+   ],
+   "alt": 9.37,
+   "ground": -0.19,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.56,
+   "local": [
+    70,
+    -18.4,
+    100.9
+   ],
+   "alt": 9.4,
+   "ground": -0.12,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5611111111111111,
+   "local": [
+    68.2,
+    -17.6,
+    101.6
+   ],
+   "alt": 9.43,
+   "ground": -0.11,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5622222222222222,
+   "local": [
+    66.3,
+    -16.8,
+    102.3
+   ],
+   "alt": 9.47,
+   "ground": -0.13,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5633333333333334,
+   "local": [
+    64.5,
+    -15.9,
+    102.9
+   ],
+   "alt": 9.52,
+   "ground": -0.16,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5644444444444444,
+   "local": [
+    62.6,
+    -15.1,
+    103.4
+   ],
+   "alt": 9.57,
+   "ground": -0.23,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5655555555555556,
+   "local": [
+    60.6,
+    -14.3,
+    103.9
+   ],
+   "alt": 9.62,
+   "ground": -0.27,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.5666666666666667,
+   "local": [
+    58.7,
+    -13.4,
+    104.3
+   ],
+   "alt": 9.67,
+   "ground": -0.01,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.5677777777777778,
+   "local": [
+    56.8,
+    -12.6,
+    104.7
+   ],
+   "alt": 9.72,
+   "ground": -0.01,
+   "over": null
+  },
+  {
+   "t": 0.5688888888888889,
+   "local": [
+    54.9,
+    -11.8,
+    105
+   ],
+   "alt": 9.77,
+   "ground": 0,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.57,
+   "local": [
+    52.9,
+    -11,
+    105.3
+   ],
+   "alt": 9.83,
+   "ground": 0.03,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.5711111111111111,
+   "local": [
+    50.9,
+    -10.2,
+    105.6
+   ],
+   "alt": 9.87,
+   "ground": 0.05,
+   "over": null
+  },
+  {
+   "t": 0.5722222222222222,
+   "local": [
+    48.9,
+    -9.5,
+    105.8
+   ],
+   "alt": 9.92,
+   "ground": 0.08,
+   "over": null
+  },
+  {
+   "t": 0.5733333333333334,
+   "local": [
+    47,
+    -8.7,
+    106.1
+   ],
+   "alt": 9.95,
+   "ground": 0.12,
+   "over": null
+  },
+  {
+   "t": 0.5744444444444444,
+   "local": [
+    45,
+    -8,
+    106.3
+   ],
+   "alt": 9.98,
+   "ground": 0.21,
+   "over": null
+  },
+  {
+   "t": 0.5755555555555556,
+   "local": [
+    42.9,
+    -7.4,
+    106.5
+   ],
+   "alt": 9.99,
+   "ground": 0.27,
+   "over": null
+  },
+  {
+   "t": 0.5766666666666667,
+   "local": [
+    40.9,
+    -6.7,
+    106.6
+   ],
+   "alt": 10,
+   "ground": 0.37,
+   "over": null
+  },
+  {
+   "t": 0.5777777777777777,
+   "local": [
+    38.9,
+    -6.1,
+    106.8
+   ],
+   "alt": 10,
+   "ground": 0.49,
+   "over": null
+  },
+  {
+   "t": 0.5788888888888889,
+   "local": [
+    36.8,
+    -5.5,
+    106.9
+   ],
+   "alt": 9.99,
+   "ground": 0.58,
+   "over": null
+  },
+  {
+   "t": 0.58,
+   "local": [
+    34.8,
+    -5,
+    106.9
+   ],
+   "alt": 9.98,
+   "ground": 0.68,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.5811111111111111,
+   "local": [
+    32.7,
+    -4.4,
+    106.9
+   ],
+   "alt": 9.97,
+   "ground": 0.71,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.5822222222222222,
+   "local": [
+    30.7,
+    -3.8,
+    106.9
+   ],
+   "alt": 9.97,
+   "ground": 0.76,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.5833333333333334,
+   "local": [
+    28.6,
+    -3.3,
+    106.8
+   ],
+   "alt": 9.98,
+   "ground": 0.84,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.5844444444444444,
+   "local": [
+    26.5,
+    -2.8,
+    106.8
+   ],
+   "alt": 9.99,
+   "ground": 4.53,
+   "over": "new-city-rock-shoulder"
+  },
+  {
+   "t": 0.5855555555555556,
+   "local": [
+    24.5,
+    -2.2,
+    106.6
+   ],
+   "alt": 10,
+   "ground": 6.49,
+   "over": "new-city-rock-shoulder"
+  },
+  {
+   "t": 0.5866666666666667,
+   "local": [
+    22.4,
+    -1.7,
+    106.5
+   ],
+   "alt": 10.01,
+   "ground": 1.69,
+   "over": "new-city-rock-shoulder"
+  },
+  {
+   "t": 0.5877777777777777,
+   "local": [
+    20.3,
+    -1.3,
+    106.3
+   ],
+   "alt": 10.04,
+   "ground": 0.58,
+   "over": null
+  },
+  {
+   "t": 0.5888888888888889,
+   "local": [
+    18.3,
+    -0.7,
+    106
+   ],
+   "alt": 10.06,
+   "ground": 0.58,
+   "over": null
+  },
+  {
+   "t": 0.59,
+   "local": [
+    16.2,
+    -0.2,
+    105.5
+   ],
+   "alt": 10.09,
+   "ground": 0.59,
+   "over": null
+  },
+  {
+   "t": 0.5911111111111111,
+   "local": [
+    14.3,
+    0.3,
+    104.9
+   ],
+   "alt": 10.13,
+   "ground": 0.59,
+   "over": null
+  },
+  {
+   "t": 0.5922222222222222,
+   "local": [
+    12.4,
+    0.9,
+    104.1
+   ],
+   "alt": 10.17,
+   "ground": 0.57,
+   "over": null
+  },
+  {
+   "t": 0.5933333333333334,
+   "local": [
+    10.6,
+    1.5,
+    103
+   ],
+   "alt": 10.21,
+   "ground": 0.58,
+   "over": null
+  },
+  {
+   "t": 0.5944444444444444,
+   "local": [
+    9,
+    2.1,
+    101.8
+   ],
+   "alt": 10.26,
+   "ground": 0.07,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.5955555555555555,
+   "local": [
+    7.5,
+    2.7,
+    100.4
+   ],
+   "alt": 10.3,
+   "ground": 0.06,
+   "over": "camp-flat-patch"
+  },
+  {
+   "t": 0.5966666666666667,
+   "local": [
+    6.1,
+    3.3,
+    98.8
+   ],
+   "alt": 10.35,
+   "ground": 0.3,
+   "over": "new-city-rock-shoulder"
+  },
+  {
+   "t": 0.5977777777777777,
+   "local": [
+    4.9,
+    3.9,
+    97.2
+   ],
+   "alt": 10.39,
+   "ground": 1.12,
+   "over": "new-city-rock-shoulder"
+  },
+  {
+   "t": 0.5988888888888889,
+   "local": [
+    3.8,
+    4.5,
+    95.4
+   ],
+   "alt": 10.43,
+   "ground": 1.18,
+   "over": "new-city-rock-shoulder"
+  },
+  {
+   "t": 0.6,
+   "local": [
+    2.8,
+    5,
+    93.6
+   ],
+   "alt": 10.45,
+   "ground": 2.03,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6011111111111112,
+   "local": [
+    2,
+    5.5,
+    91.7
+   ],
+   "alt": 10.47,
+   "ground": 3.21,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6022222222222222,
+   "local": [
+    1.3,
+    6,
+    89.7
+   ],
+   "alt": 10.49,
+   "ground": 8.41,
+   "over": "integrated-stair-1"
+  },
+  {
+   "t": 0.6033333333333334,
+   "local": [
+    0.7,
+    6.5,
+    87.7
+   ],
+   "alt": 10.49,
+   "ground": 7.59,
+   "over": "integrated-stair-1"
+  },
+  {
+   "t": 0.6044444444444445,
+   "local": [
+    0.3,
+    6.9,
+    85.7
+   ],
+   "alt": 10.5,
+   "ground": 8.46,
+   "over": "plaza-edge-planting"
+  },
+  {
+   "t": 0.6055555555555555,
+   "local": [
+    0,
+    7.3,
+    83.6
+   ],
+   "alt": 10.49,
+   "ground": 7.16,
+   "over": "west-city-plaza-deck"
+  },
+  {
+   "t": 0.6066666666666667,
+   "local": [
+    -0.2,
+    7.6,
+    81.5
+   ],
+   "alt": 10.49,
+   "ground": 6.82,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6077777777777778,
+   "local": [
+    -0.4,
+    8,
+    79.4
+   ],
+   "alt": 10.48,
+   "ground": 6.48,
+   "over": "west-city-plaza-deck"
+  },
+  {
+   "t": 0.6088888888888889,
+   "local": [
+    -0.4,
+    8.2,
+    77.3
+   ],
+   "alt": 10.46,
+   "ground": 6.21,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.61,
+   "local": [
+    -0.3,
+    8.5,
+    75.2
+   ],
+   "alt": 10.44,
+   "ground": 5.95,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6111111111111112,
+   "local": [
+    -0.1,
+    8.7,
+    73.1
+   ],
+   "alt": 10.41,
+   "ground": 5.73,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6122222222222222,
+   "local": [
+    0.1,
+    8.8,
+    70.9
+   ],
+   "alt": 10.38,
+   "ground": 5.53,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6133333333333333,
+   "local": [
+    0.5,
+    9,
+    68.8
+   ],
+   "alt": 10.36,
+   "ground": 5.37,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6144444444444445,
+   "local": [
+    0.8,
+    9.1,
+    66.7
+   ],
+   "alt": 10.33,
+   "ground": 5.24,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6155555555555555,
+   "local": [
+    1.2,
+    9.2,
+    64.6
+   ],
+   "alt": 10.31,
+   "ground": 5.13,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6166666666666667,
+   "local": [
+    1.4,
+    9.2,
+    62.5
+   ],
+   "alt": 10.29,
+   "ground": 5.04,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6177777777777778,
+   "local": [
+    1.5,
+    9.3,
+    60.3
+   ],
+   "alt": 10.28,
+   "ground": 4.97,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6188888888888889,
+   "local": [
+    1.3,
+    9.4,
+    58.2
+   ],
+   "alt": 10.26,
+   "ground": 4.91,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.62,
+   "local": [
+    1,
+    9.4,
+    56.1
+   ],
+   "alt": 10.23,
+   "ground": 4.86,
+   "over": "west-city-plaza-paving-ring"
+  },
+  {
+   "t": 0.6211111111111111,
+   "local": [
+    0.3,
+    9.4,
+    54.1
+   ],
+   "alt": 10.18,
+   "ground": -0.32,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6222222222222222,
+   "local": [
+    -0.4,
+    9.3,
+    52.1
+   ],
+   "alt": 10.13,
+   "ground": 1.68,
+   "over": "west-city-stair-harbor-77"
+  },
+  {
+   "t": 0.6233333333333333,
+   "local": [
+    -1.3,
+    9.3,
+    50.1
+   ],
+   "alt": 10.06,
+   "ground": 1.46,
+   "over": "west-city-stair-harbor-82"
+  },
+  {
+   "t": 0.6244444444444445,
+   "local": [
+    -2.3,
+    9.2,
+    48.2
+   ],
+   "alt": 9.99,
+   "ground": 1.48,
+   "over": "west-city-harbor-quay"
+  },
+  {
+   "t": 0.6255555555555555,
+   "local": [
+    -3.2,
+    9.1,
+    46.3
+   ],
+   "alt": 9.92,
+   "ground": 1.5,
+   "over": "west-city-harbor-boarding-step-0"
+  },
+  {
+   "t": 0.6266666666666667,
+   "local": [
+    -4.2,
+    8.9,
+    44.4
+   ],
+   "alt": 9.85,
+   "ground": 2.14,
+   "over": null
+  },
+  {
+   "t": 0.6277777777777778,
+   "local": [
+    -5.3,
+    8.8,
+    42.6
+   ],
+   "alt": 9.78,
+   "ground": 0.58,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6288888888888889,
+   "local": [
+    -6.4,
+    8.6,
+    40.7
+   ],
+   "alt": 9.71,
+   "ground": 0.58,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.63,
+   "local": [
+    -7.7,
+    8.4,
+    39
+   ],
+   "alt": 9.64,
+   "ground": 0.58,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6311111111111111,
+   "local": [
+    -9,
+    8.2,
+    37.4
+   ],
+   "alt": 9.57,
+   "ground": 0.58,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6322222222222222,
+   "local": [
+    -10.5,
+    7.9,
+    35.9
+   ],
+   "alt": 9.5,
+   "ground": 0.58,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6333333333333333,
+   "local": [
+    -12.2,
+    7.7,
+    34.5
+   ],
+   "alt": 9.42,
+   "ground": -0.06,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6344444444444445,
+   "local": [
+    -14,
+    7.4,
+    33.3
+   ],
+   "alt": 9.35,
+   "ground": 0.25,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6355555555555555,
+   "local": [
+    -15.8,
+    7.1,
+    32.3
+   ],
+   "alt": 9.27,
+   "ground": 0.27,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6366666666666667,
+   "local": [
+    -17.8,
+    6.9,
+    31.5
+   ],
+   "alt": 9.19,
+   "ground": 0.31,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6377777777777778,
+   "local": [
+    -19.9,
+    6.6,
+    31
+   ],
+   "alt": 9.12,
+   "ground": 0.04,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6388888888888888,
+   "local": [
+    -22,
+    6.4,
+    30.8
+   ],
+   "alt": 9.04,
+   "ground": -0.02,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.64,
+   "local": [
+    -24.1,
+    6.1,
+    30.8
+   ],
+   "alt": 8.97,
+   "ground": 0.18,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6411111111111111,
+   "local": [
+    -26.2,
+    5.9,
+    30.9
+   ],
+   "alt": 8.9,
+   "ground": 0.43,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6422222222222222,
+   "local": [
+    -28.4,
+    5.6,
+    31
+   ],
+   "alt": 8.84,
+   "ground": 1.57,
+   "over": "navona-rim-lip-L"
+  },
+  {
+   "t": 0.6433333333333333,
+   "local": [
+    -30.5,
+    5.3,
+    31.2
+   ],
+   "alt": 8.78,
+   "ground": 1.14,
+   "over": "navona-plaza-basin-stone"
+  },
+  {
+   "t": 0.6444444444444445,
+   "local": [
+    -32.6,
+    5,
+    31.3
+   ],
+   "alt": 8.72,
+   "ground": 1.5,
+   "over": "citadel-moat-outer-lip"
+  },
+  {
+   "t": 0.6455555555555555,
+   "local": [
+    -34.7,
+    4.7,
+    31.4
+   ],
+   "alt": 8.67,
+   "ground": 0.81,
+   "over": "navona-plaza-basin-stone"
+  },
+  {
+   "t": 0.6466666666666666,
+   "local": [
+    -36.8,
+    4.3,
+    31.6
+   ],
+   "alt": 8.62,
+   "ground": 0.67,
+   "over": "navona-plaza-basin-stone"
+  },
+  {
+   "t": 0.6477777777777778,
+   "local": [
+    -38.9,
+    4,
+    31.8
+   ],
+   "alt": 8.58,
+   "ground": 0.56,
+   "over": "navona-plaza-basin-stone"
+  },
+  {
+   "t": 0.6488888888888888,
+   "local": [
+    -41,
+    3.6,
+    32
+   ],
+   "alt": 8.54,
+   "ground": 0.26,
+   "over": "navona-plaza-inlay-channel"
+  },
+  {
+   "t": 0.65,
+   "local": [
+    -43,
+    3.2,
+    32.4
+   ],
+   "alt": 8.5,
+   "ground": 1.09,
+   "over": "old-shore-blender-rock-support"
+  },
+  {
+   "t": 0.6511111111111111,
+   "local": [
+    -45.1,
+    2.8,
+    32.9
+   ],
+   "alt": 8.46,
+   "ground": 6.15,
+   "over": "shore-cypress-geometry"
+  },
+  {
+   "t": 0.6522222222222223,
+   "local": [
+    -47.1,
+    2.4,
+    33.4
+   ],
+   "alt": 8.43,
+   "ground": 5.07,
+   "over": "old-shore-defenses"
+  },
+  {
+   "t": 0.6533333333333333,
+   "local": [
+    -49.1,
+    2,
+    34.1
+   ],
+   "alt": 8.39,
+   "ground": 4.29,
+   "over": "old-shore-walkable"
+  },
+  {
+   "t": 0.6544444444444445,
+   "local": [
+    -51,
+    1.5,
+    34.8
+   ],
+   "alt": 8.36,
+   "ground": 3.88,
+   "over": "old-shore-walkable"
+  },
+  {
+   "t": 0.6555555555555556,
+   "local": [
+    -52.9,
+    1.1,
+    35.6
+   ],
+   "alt": 8.34,
+   "ground": 3.64,
+   "over": "old-shore-walkable"
+  },
+  {
+   "t": 0.6566666666666666,
+   "local": [
+    -54.8,
+    0.7,
+    36.5
+   ],
+   "alt": 8.31,
+   "ground": 3.16,
+   "over": "old-shore-blender-rock-support"
+  },
+  {
+   "t": 0.6577777777777778,
+   "local": [
+    -56.7,
+    0.2,
+    37.4
+   ],
+   "alt": 8.29,
+   "ground": 2.67,
+   "over": "old-shore-blender-rock-support"
+  },
+  {
+   "t": 0.6588888888888889,
+   "local": [
+    -58.6,
+    -0.3,
+    38.4
+   ],
+   "alt": 8.26,
+   "ground": 2.2,
+   "over": "old-shore-blender-rock-support"
+  },
+  {
+   "t": 0.66,
+   "local": [
+    -60.4,
+    -0.7,
+    39.4
+   ],
+   "alt": 8.24,
+   "ground": 1.23,
+   "over": "old-shore-blender-rock-support"
+  },
+  {
+   "t": 0.6611111111111111,
+   "local": [
+    -62.2,
+    -1.2,
+    40.4
+   ],
+   "alt": 8.22,
+   "ground": 5.47,
+   "over": "harbor-detail-harbor-cobalt-roof"
+  },
+  {
+   "t": 0.6622222222222223,
+   "local": [
+    -64,
+    -1.8,
+    41.5
+   ],
+   "alt": 8.21,
+   "ground": 6.66,
+   "over": "harbor-detail-harbor-cobalt-roof"
+  },
+  {
+   "t": 0.6633333333333333,
+   "local": [
+    -65.7,
+    -2.3,
+    42.6
+   ],
+   "alt": 8.19,
+   "ground": 6.7,
+   "over": "harbor-detail-harbor-cobalt-roof"
+  },
+  {
+   "t": 0.6644444444444444,
+   "local": [
+    -67.4,
+    -2.8,
+    43.8
+   ],
+   "alt": 8.18,
+   "ground": 1.94,
+   "over": "old-shore-arcade-founded-terrace"
+  },
+  {
+   "t": 0.6655555555555556,
+   "local": [
+    -69,
+    -3.3,
+    45.1
+   ],
+   "alt": 8.18,
+   "ground": 3.45,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6666666666666666,
+   "local": [
+    -70.6,
+    -3.8,
+    46.4
+   ],
+   "alt": 8.17,
+   "ground": 5.57,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6677777777777778,
+   "local": [
+    -72.1,
+    -4.4,
+    47.9
+   ],
+   "alt": 8.18,
+   "ground": 8.09,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6688888888888889,
+   "local": [
+    -73.5,
+    -4.9,
+    49.4
+   ],
+   "alt": 8.18,
+   "ground": 9.41,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.67,
+   "local": [
+    -74.9,
+    -5.4,
+    50.9
+   ],
+   "alt": 8.19,
+   "ground": 10.56,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6711111111111111,
+   "local": [
+    -76.2,
+    -5.9,
+    52.5
+   ],
+   "alt": 8.2,
+   "ground": 11.98,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6722222222222223,
+   "local": [
+    -77.5,
+    -6.4,
+    54.1
+   ],
+   "alt": 8.22,
+   "ground": 10.25,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6733333333333333,
+   "local": [
+    -78.8,
+    -7,
+    55.7
+   ],
+   "alt": 8.24,
+   "ground": 8.03,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6744444444444444,
+   "local": [
+    -80,
+    -7.5,
+    57.4
+   ],
+   "alt": 8.26,
+   "ground": 7.76,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6755555555555556,
+   "local": [
+    -81.2,
+    -8.1,
+    59
+   ],
+   "alt": 8.28,
+   "ground": 7.47,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6766666666666666,
+   "local": [
+    -82.4,
+    -8.7,
+    60.7
+   ],
+   "alt": 8.3,
+   "ground": 7.16,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6777777777777778,
+   "local": [
+    -83.6,
+    -9.3,
+    62.4
+   ],
+   "alt": 8.32,
+   "ground": 6.75,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6788888888888889,
+   "local": [
+    -84.8,
+    -10,
+    64
+   ],
+   "alt": 8.34,
+   "ground": 6.36,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.68,
+   "local": [
+    -86.1,
+    -10.7,
+    65.6
+   ],
+   "alt": 8.37,
+   "ground": 5.86,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6811111111111111,
+   "local": [
+    -87.5,
+    -11.4,
+    67
+   ],
+   "alt": 8.41,
+   "ground": 5.4,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6822222222222222,
+   "local": [
+    -89,
+    -12.3,
+    68.2
+   ],
+   "alt": 8.47,
+   "ground": 4.97,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6833333333333333,
+   "local": [
+    -90.6,
+    -13.2,
+    69.3
+   ],
+   "alt": 8.54,
+   "ground": 4.51,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6844444444444444,
+   "local": [
+    -92.3,
+    -14.1,
+    70.1
+   ],
+   "alt": 8.62,
+   "ground": 4.02,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6855555555555556,
+   "local": [
+    -94.1,
+    -15.1,
+    70.8
+   ],
+   "alt": 8.72,
+   "ground": 3.64,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6866666666666666,
+   "local": [
+    -96,
+    -16.1,
+    71.3
+   ],
+   "alt": 8.83,
+   "ground": 3.16,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6877777777777778,
+   "local": [
+    -97.8,
+    -17.1,
+    71.7
+   ],
+   "alt": 8.96,
+   "ground": 2.66,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6888888888888889,
+   "local": [
+    -99.7,
+    -18.2,
+    71.9
+   ],
+   "alt": 9.08,
+   "ground": 2.01,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.69,
+   "local": [
+    -101.6,
+    -19.2,
+    71.9
+   ],
+   "alt": 9.21,
+   "ground": 1.71,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6911111111111111,
+   "local": [
+    -103.4,
+    -20.2,
+    71.7
+   ],
+   "alt": 9.34,
+   "ground": 1.49,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6922222222222222,
+   "local": [
+    -105.2,
+    -21.3,
+    71.2
+   ],
+   "alt": 9.46,
+   "ground": 1.25,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6933333333333334,
+   "local": [
+    -107,
+    -22.3,
+    70.6
+   ],
+   "alt": 9.58,
+   "ground": 0.88,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6944444444444444,
+   "local": [
+    -108.7,
+    -23.3,
+    69.7
+   ],
+   "alt": 9.7,
+   "ground": 0.59,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6955555555555556,
+   "local": [
+    -110.4,
+    -24.2,
+    68.7
+   ],
+   "alt": 9.83,
+   "ground": 0.3,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6966666666666667,
+   "local": [
+    -111.9,
+    -25.1,
+    67.6
+   ],
+   "alt": 9.95,
+   "ground": -0.05,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6977777777777778,
+   "local": [
+    -113.4,
+    -26,
+    66.3
+   ],
+   "alt": 10.08,
+   "ground": -0.32,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6988888888888889,
+   "local": [
+    -114.9,
+    -26.8,
+    65
+   ],
+   "alt": 10.22,
+   "ground": -0.38,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7,
+   "local": [
+    -116.2,
+    -27.6,
+    63.5
+   ],
+   "alt": 10.35,
+   "ground": -0.36,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7011111111111111,
+   "local": [
+    -117.6,
+    -28.4,
+    62
+   ],
+   "alt": 10.48,
+   "ground": -0.32,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7022222222222222,
+   "local": [
+    -118.8,
+    -29.2,
+    60.4
+   ],
+   "alt": 10.61,
+   "ground": -0.24,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7033333333333334,
+   "local": [
+    -120,
+    -30,
+    58.8
+   ],
+   "alt": 10.73,
+   "ground": -0.31,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7044444444444444,
+   "local": [
+    -121.1,
+    -30.7,
+    57.2
+   ],
+   "alt": 10.84,
+   "ground": -0.37,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7055555555555556,
+   "local": [
+    -122,
+    -31.4,
+    55.4
+   ],
+   "alt": 10.94,
+   "ground": -0.41,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7066666666666667,
+   "local": [
+    -122.9,
+    -32,
+    53.7
+   ],
+   "alt": 11.04,
+   "ground": -0.43,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7077777777777777,
+   "local": [
+    -123.7,
+    -32.7,
+    51.8
+   ],
+   "alt": 11.13,
+   "ground": -0.41,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7088888888888889,
+   "local": [
+    -124.5,
+    -33.3,
+    49.9
+   ],
+   "alt": 11.24,
+   "ground": -0.37,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.71,
+   "local": [
+    -125.2,
+    -33.8,
+    47.9
+   ],
+   "alt": 11.36,
+   "ground": -0.31,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7111111111111111,
+   "local": [
+    -125.8,
+    -34.3,
+    45.9
+   ],
+   "alt": 11.48,
+   "ground": -0.21,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7122222222222222,
+   "local": [
+    -126.3,
+    -34.8,
+    43.9
+   ],
+   "alt": 11.61,
+   "ground": -0.24,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7133333333333334,
+   "local": [
+    -126.8,
+    -35.3,
+    41.9
+   ],
+   "alt": 11.75,
+   "ground": -0.28,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7144444444444444,
+   "local": [
+    -127.2,
+    -35.7,
+    39.8
+   ],
+   "alt": 11.88,
+   "ground": -0.29,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7155555555555555,
+   "local": [
+    -127.6,
+    -36.1,
+    37.8
+   ],
+   "alt": 12.02,
+   "ground": -0.28,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7166666666666667,
+   "local": [
+    -127.9,
+    -36.6,
+    35.7
+   ],
+   "alt": 12.16,
+   "ground": -0.24,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7177777777777777,
+   "local": [
+    -128.2,
+    -37,
+    33.6
+   ],
+   "alt": 12.29,
+   "ground": -0.17,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7188888888888889,
+   "local": [
+    -128.5,
+    -37.4,
+    31.6
+   ],
+   "alt": 12.42,
+   "ground": -0.17,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.72,
+   "local": [
+    -128.7,
+    -37.9,
+    29.5
+   ],
+   "alt": 12.55,
+   "ground": -0.15,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7211111111111111,
+   "local": [
+    -128.9,
+    -38.4,
+    27.4
+   ],
+   "alt": 12.66,
+   "ground": -0.15,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7222222222222222,
+   "local": [
+    -129,
+    -38.8,
+    25.3
+   ],
+   "alt": 12.76,
+   "ground": -0.27,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7233333333333334,
+   "local": [
+    -129.1,
+    -39.4,
+    23.3
+   ],
+   "alt": 12.84,
+   "ground": -0.35,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7244444444444444,
+   "local": [
+    -129.2,
+    -39.9,
+    21.2
+   ],
+   "alt": 12.9,
+   "ground": -0.42,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7255555555555555,
+   "local": [
+    -129.2,
+    -40.5,
+    19.2
+   ],
+   "alt": 12.93,
+   "ground": -0.45,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7266666666666667,
+   "local": [
+    -129.2,
+    -41.1,
+    17.1
+   ],
+   "alt": 12.94,
+   "ground": -0.47,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7277777777777777,
+   "local": [
+    -129.2,
+    -41.7,
+    15.1
+   ],
+   "alt": 12.93,
+   "ground": -0.46,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7288888888888889,
+   "local": [
+    -129.1,
+    -42.4,
+    13.1
+   ],
+   "alt": 12.89,
+   "ground": -0.42,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.73,
+   "local": [
+    -129,
+    -43.1,
+    11.1
+   ],
+   "alt": 12.84,
+   "ground": -0.37,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7311111111111112,
+   "local": [
+    -128.9,
+    -43.8,
+    9.1
+   ],
+   "alt": 12.77,
+   "ground": -0.37,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7322222222222222,
+   "local": [
+    -128.7,
+    -44.6,
+    7.1
+   ],
+   "alt": 12.7,
+   "ground": -0.44,
+   "over": "planet-surface"
+  }
+ ],
+ "minDeckAboveGround": -3.780000000000001,
+ "buried": [
+  {
+   "t": 0.6677777777777778,
+   "local": [
+    -72.1,
+    -4.4,
+    47.9
+   ],
+   "alt": 8.18,
+   "ground": 8.09,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6688888888888889,
+   "local": [
+    -73.5,
+    -4.9,
+    49.4
+   ],
+   "alt": 8.18,
+   "ground": 9.41,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.67,
+   "local": [
+    -74.9,
+    -5.4,
+    50.9
+   ],
+   "alt": 8.19,
+   "ground": 10.56,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6711111111111111,
+   "local": [
+    -76.2,
+    -5.9,
+    52.5
+   ],
+   "alt": 8.2,
+   "ground": 11.98,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6722222222222223,
+   "local": [
+    -77.5,
+    -6.4,
+    54.1
+   ],
+   "alt": 8.22,
+   "ground": 10.25,
+   "over": "highland-ravine-wall-west"
+  },
+  {
+   "t": 0.6733333333333333,
+   "local": [
+    -78.8,
+    -7,
+    55.7
+   ],
+   "alt": 8.24,
+   "ground": 8.03,
+   "over": "citadel-oskar-grid-mountain-surface"
+  }
+ ],
+ "cams": {
+  "plan": {
+   "pos": [
+    0,
+    330,
+    40
+   ],
+   "look": [
+    0,
+    0,
+    40
+   ],
+   "fov": 55
+  },
+  "target": {
+   "pos": [
+    -20,
+    70,
+    215
+   ],
+   "look": [
+    -5,
+    5,
+    40
+   ],
+   "fov": 52
+  }
+ }
+}

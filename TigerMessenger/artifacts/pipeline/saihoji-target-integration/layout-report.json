@@ -1,0 +1,26 @@
+{
+  "revision": "ambush-target-20260919-v2",
+  "checks": {
+    "trees": true,
+    "covers": true,
+    "rootsAvoidPools": true,
+    "coversAvoidPools": true,
+    "stonesAvoidPools": true,
+    "finite": true
+  },
+  "errors": [],
+  "scope": "Shared visual layout. Godot retains its static shore concealment positions; Web uses island anchored positions.",
+  "meshes": 81,
+  "trees": 25,
+  "covers": 50,
+  "captures": [
+    {
+      "calls": 438,
+      "triangles": 116146
+    },
+    {
+      "calls": 373,
+      "triangles": 113488
+    }
+  ]
+}

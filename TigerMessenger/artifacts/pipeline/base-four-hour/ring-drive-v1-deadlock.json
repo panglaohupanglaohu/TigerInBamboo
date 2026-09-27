@@ -1,0 +1,1143 @@
+{
+  "mode": "single diagnostic positioning at start, then unmodified normal world update; no time acceleration",
+  "done": false,
+  "wallSeconds": 159.273,
+  "audit": {
+    "ring": {
+      "red": {
+        "from": 0.352125,
+        "to": 0.4263125,
+        "angle": -360.12041301426297,
+        "arcLength": 189.02222927976405,
+        "minRadius": 31.240612669236317,
+        "maxRadius": 37.65884727152339
+      },
+      "blue": {
+        "from": 0.3446875,
+        "to": 0.42675,
+        "angle": -359.8532170413995,
+        "arcLength": 214.11851784997532,
+        "minRadius": 35.67839950659129,
+        "maxRadius": 37.687582243551915
+      }
+    },
+    "junctions": [
+      {
+        "id": "junction-1",
+        "center": {
+          "x": -129.38349167118284,
+          "y": -35.18765434571133,
+          "z": 88.49345268062187
+        },
+        "radius": 13,
+        "owner": null,
+        "entered": false
+      },
+      {
+        "id": "junction-2",
+        "center": {
+          "x": -68.35960281191672,
+          "y": -36.24585937557469,
+          "z": 141.04891249845238
+        },
+        "radius": 13,
+        "owner": null,
+        "entered": false
+      },
+      {
+        "id": "junction-3",
+        "center": {
+          "x": -52.01936748012415,
+          "y": -37.37339072063851,
+          "z": 147.79582287726055
+        },
+        "radius": 13,
+        "owner": null,
+        "entered": false
+      }
+    ]
+  },
+  "samples": [
+    {
+      "seconds": 2.021,
+      "red": {
+        "progress": 0.35569657066960936,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.42326235793382927,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 4.05,
+      "red": {
+        "progress": 0.35954287754457326,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.41950643570872237,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 6.121,
+      "red": {
+        "progress": 0.3629770801115053,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4161529337220198,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 8.129,
+      "red": {
+        "progress": 0.3668233869864692,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4123970114969129,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 10.159,
+      "red": {
+        "progress": 0.3706696938614331,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.408641089271806,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 12.182,
+      "red": {
+        "progress": 0.374516000736397,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4048851670466991,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 14.199,
+      "red": {
+        "progress": 0.3783623076113609,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.4011292448215922,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 16.233,
+      "red": {
+        "progress": 0.3822086144863248,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3973733225964853,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 18.249,
+      "red": {
+        "progress": 0.3860549213612887,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3936174003713784,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 20.254,
+      "red": {
+        "progress": 0.3899012282362526,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3898614781462715,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 22.265,
+      "red": {
+        "progress": 0.3937475351112165,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3861055559211646,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 24.286,
+      "red": {
+        "progress": 0.3975938419861804,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3823496336960577,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 26.354,
+      "red": {
+        "progress": 0.4015775169638216,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3784595713914827,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 28.391,
+      "red": {
+        "progress": 0.4054238238387855,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3747036491663758,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 30.424,
+      "red": {
+        "progress": 0.408583290200363,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3716184273386094,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 32.47,
+      "red": {
+        "progress": 0.4122922289726496,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3679966451929706,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 34.511,
+      "red": {
+        "progress": 0.41600116774493623,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3643748630473318,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 36.569,
+      "red": {
+        "progress": 0.41971010651722285,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.360753080901693,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 38.616,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3571312987560542,
+        "done": false,
+        "hold": false,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 40.651,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 42.713,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 44.79,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 46.804,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 48.835,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 50.888,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 54.7,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 56.729,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 58.782,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 60.846,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 62.883,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 64.944,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 66.986,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 69.033,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 71.09,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 73.131,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 75.187,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 77.247,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 79.297,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 81.353,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 83.411,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 85.482,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 87.55,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 89.554,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 91.567,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 93.639,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 95.716,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 98.869,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 100.932,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 102.988,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 105.063,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 107.138,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 109.15,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 111.164,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 113.198,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 115.222,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 117.271,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 119.308,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 121.319,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 123.39,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 125.41,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 127.476,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 129.489,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 131.494,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 133.525,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 135.598,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 137.673,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 139.714,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 141.765,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 143.826,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 145.876,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 147.945,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    },
+    {
+      "seconds": 150.005,
+      "red": {
+        "progress": 0.42204536426273664,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      },
+      "blue": {
+        "progress": 0.3541802170077559,
+        "done": false,
+        "hold": true,
+        "dwell": 0
+      }
+    }
+  ],
+  "errors": []
+}

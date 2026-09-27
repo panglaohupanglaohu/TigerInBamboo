@@ -160,6 +160,7 @@ export function buildWorld(scene) {
 
 export function updatePlatformPulse(platforms, t) {
   for (const p of platforms) {
+    p.update?.(t);
     if (!p.mat) continue;
     const phase = p.pulsePhase || 0;
     const base = p.baseEmissive ?? 0.06;

@@ -19,10 +19,10 @@ export function createBookshopPlantingClearance(bookshop) {
     accepts(tree) {
       tree.updateWorldMatrix(true, false);
       tree.getWorldPosition(local).applyMatrix4(inverse);
-      // The source conifer crown radius is <= .9 before its authored 1.6 scale;
-      // include a small ink/branch margin and the tree's actual placement scale.
+      // 树种自带冠幅（userData.pineCrownRadius，原料尺度）；走廊林带现为
+      // 苔庭松（冠幅 3.6）。旧低模松等没有该字段，沿用 0.95 的冠幅估计。
       tree.getWorldScale(scale);
-      const crownRadius = .95 * Math.max(scale.x, scale.z);
+      const crownRadius = (tree.userData.pineCrownRadius ?? .95) * Math.max(scale.x, scale.z);
       const zone = BOOKSHOP_PLANTING_CLEARANCE.find(area =>
         local.x + crownRadius > area.minX && local.x - crownRadius < area.maxX &&
         local.z + crownRadius > area.minZ && local.z - crownRadius < area.maxZ);

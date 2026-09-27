@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "opening": {
+    "width": 4.984615,
+    "springHeight": 5.3,
+    "apexHeight": 8.5
+  },
+  "source": "artifacts/pipeline/citadel-tall-portal/portal-tall-arch.blend",
+  "probes": [
+    {
+      "x": -2,
+      "y": 1.5,
+      "expected": false,
+      "hit": false,
+      "depth": null
+    },
+    {
+      "x": 0,
+      "y": 1.5,
+      "expected": false,
+      "hit": false,
+      "depth": null
+    },
+    {
+      "x": 2,
+      "y": 1.5,
+      "expected": false,
+      "hit": false,
+      "depth": null
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "expected": false,
+      "hit": false,
+      "depth": null
+    },
+    {
+      "x": 0,
+      "y": 6.8,
+      "expected": false,
+      "hit": false,
+      "depth": null
+    },
+    {
+      "x": 0,
+      "y": 8,
+      "expected": false,
+      "hit": false,
+      "depth": null
+    },
+    {
+      "x": -4,
+      "y": 5,
+      "expected": true,
+      "hit": true,
+      "depth": 3.7999999523162886
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "expected": true,
+      "hit": true,
+      "depth": 3.7999999523162824
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "expected": true,
+      "hit": true,
+      "depth": 3.799999952316275
+    }
+  ],
+  "errors": []
+}

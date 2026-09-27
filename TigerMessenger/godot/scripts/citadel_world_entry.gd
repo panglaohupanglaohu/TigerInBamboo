@@ -15,10 +15,12 @@ func _ready() -> void:
         if arg.begins_with("--terrain-revision=") or arg.begins_with("--placement-r") or arg=="--citadel-layout=legacy":explicit_revision=true
     if not explicit_revision:
         preload("res://scripts/citadel_layout_release.gd").mount(self,true)
+        garrison_posts.mount(self)
     status.text = "高山圣城 · 原场景与 WFC 城堡
 右侧可启动三兵种通行演练；完整攻城接入中"
 
 var assault_route=preload("res://scripts/citadel_assault_route.gd").new()
+var garrison_posts=preload("res://scripts/citadel_garrison_posts.gd").new()
 var landmarks:Dictionary={}
 var _cutaway_hidden:Array[Node3D]=[]
 var carry_preview:Array[Node3D]=[]
@@ -63,7 +65,7 @@ func _build_assault_view()->void:
     var interior=Button.new();interior.text="检视旋梯内部";interior.pressed.connect(_inspect_stair_interior);panel.add_child(interior)
     var soldiers=Button.new();soldiers.text="检视三兵种携行";soldiers.pressed.connect(_show_carry_preview);panel.add_child(soldiers)
     for spec in [["短剑兵","gladius"],["长矛兵","spear"],["弓箭兵","longbow"]]:
-        var walk=Button.new();walk.text=spec[0]+" · 通行演练";walk.pressed.connect(_start_traversal.bind(spec[1]));panel.add_child(walk)
+        var walk=Button.new();walk.text=spec[0]+" · 码头到主堡";walk.pressed.connect(_start_traversal.bind(spec[1],true));panel.add_child(walk)
     var west_walk=Button.new();west_walk.text="短剑兵 · 新圣城行军";west_walk.pressed.connect(_start_traversal.bind("gladius",true));panel.add_child(west_walk)
     var front_walk=Button.new();front_walk.text="短剑兵 · 前港登陆到广场";front_walk.pressed.connect(_start_traversal.bind("gladius",true,true));panel.add_child(front_walk)
     if preload("res://scripts/citadel_surface_variant.gd").harbor_enabled():
@@ -193,18 +195,16 @@ func _start_traversal(kind:String,west_city:bool=false,front_harbor:bool=false,o
     traversal=preload("res://scripts/citadel_roman_traversal.gd").new()
     traversal_in_west_city=west_city
     traversal_is_old_shore=old_shore
-    var path:Array=preload("res://scripts/west_city_route.gd").new().points(get_meta("front_harbor_data_path","res://data/citadel-front-harbor-route.json") if front_harbor else "res://data/citadel-plaza-keep-route.json") if west_city else []
-    if old_shore:
-        path=[]
-        var data=JSON.parse_string(FileAccess.get_file_as_string("res://data/old-harbor-ocean-grade.json"))
-        for p in data.shore.route:path.append(Vector3(p[0],p[1],p[2]))
-    var route_frame=castle_adapter.original if west_city else null
-    if horse_exit:
-        path=[]
-        var data=JSON.parse_string(FileAccess.get_file_as_string(get_meta("horse_exit_data_path","res://data/citadel-horse-plaza-exit.json")))
-        for p in data.points:path.append(Vector3(p[0],p[1],p[2]))
-        route_frame=castle_adapter.original.find_child("highland-west-city",true,false)
-    if not traversal.bind(self,kind,route_frame,path,old_shore):status.text="士兵携行或路线绑定失败";return
+    var selection=preload("res://scripts/citadel_traversal_route.gd").resolve(self,west_city,front_harbor,old_shore,horse_exit)
+    if not selection.get("valid",false):
+        status.text="实际路线缺失或坐标系不符；通行演练未启动"
+        traversal.dispose();traversal=null
+        return
+    if not traversal.bind(self,kind,selection.frame,selection.points,selection.surface_following):
+        status.text="士兵携行或路线绑定失败"
+        traversal.dispose();traversal=null
+        return
+    traversal.actor.set_meta("route_source",selection.source)
     if not west_city:_inspect_stair_interior(true)
     route_toggle.button_pressed=false
 func _physics_process(dt:float)->void:
@@ -216,7 +216,7 @@ func _physics_process(dt:float)->void:
     status.text="%s · %s / %s 段\n%s"%["旧港沿坡入城" if traversal_is_old_shore else ("新圣城行军" if traversal_in_west_city else "塔内通行演练"),row.completed_steps,row.route_points-1,"已到达；尚未启动攻城" if row.phase=="arrived" else ("碰撞停止："+str(row.blocked.get("part",row.blocked.get("reason",""))) if row.phase=="blocked" else "刚性腿跃步候选；非最终步态")]
     if is_instance_valid(traversal.actor) and row.phase in ["turn","hop"]:
         var a:Node3D=traversal.actor
-        camera.position=a.global_position+stair_candidate.root.global_basis.x*3.0+a.global_basis.y*1.7+stair_candidate.root.global_basis.z*2.2
+        camera.position=a.global_position-a.global_basis.x*3.0+a.global_basis.y*1.7+a.global_basis.z*2.2
         camera.look_at(a.global_position+a.global_basis.y*0.6,a.global_basis.y)
 
 func _set_stairs(value:bool)->void:

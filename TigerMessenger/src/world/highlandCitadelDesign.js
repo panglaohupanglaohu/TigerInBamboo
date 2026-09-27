@@ -1,4 +1,5 @@
 import {buildWestMassifGeometry} from './citadel/westMassifBlender.js';
+import {addOldPalaceCrown} from './citadel/holyCityStyleV2.js';
 import {rotateOldCityPoint} from './citadel/oldCityOrientation.js';
 import {isOldCityShelves, oldCityShelfIndex, OLD_CITY_SHELF_BASE_YS} from './citadel/oldCityShelves.js';
 import { installTowerShell } from "./citadel/towerShell.js";
@@ -149,8 +150,8 @@ export function highlandMountainGridHeight(x, z) {
   const naturalMountain = Math.max(
     0.9,
     3.2 + shoulder + basin + terraces
-      + ridge(-10, -39, 28, 51)
-      + ridge(-35, -15, 22, 35)
+      + ridge(-10, -48, 34, 23)
+      + ridge(-35, -23, 28, 20)
       + ridge(60, -22, 22, 38)
       + ridge(-61, 13, 24, 22)
       + ridge(72, 18, 24, 19)
@@ -2094,6 +2095,7 @@ export function buildHighlandCitadelLatestDesign(options = {}) {
   // 85 栋整栋参数模型只留作显式旧版回退，不再与新网格重叠渲染。
   const valleyCity = externalTownscaperCity ? null : buildValleyCityDistricts(materials);
   const centralTower = buildCentralSacredTower(materials);
+  addOldPalaceCrown(centralTower);
   const ridgeTowers = new THREE.Group();
   ridgeTowers.name = "highland-secondary-ridge-towers";
   ridgeTowers.userData.nonNavigable = true;

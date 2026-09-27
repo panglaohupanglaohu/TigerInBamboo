@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "de623edc344420f2925afd6e381cf8b5ab12b96558e7dea35b46bc4e4629c900",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.87
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.48,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.38,
+        "navigation": 0.58,
+        "review": 0.04,
+        "lighting": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.89
+    }
+  },
+  "usage": {
+    "input_tokens": 587,
+    "output_tokens": 91,
+    "cost_usd": 0.000247,
+    "credits_remaining_usd": 4.995376
+  },
+  "elapsed_ms": 2315,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full railing collision and story encounter",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

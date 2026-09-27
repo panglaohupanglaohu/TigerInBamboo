@@ -1,0 +1,36 @@
+{
+  "round": 1,
+  "clips": [
+    {
+      "name": "walk",
+      "start": 1,
+      "end": 27,
+      "fps": 24
+    },
+    {
+      "name": "run",
+      "start": 28,
+      "end": 44,
+      "fps": 24
+    },
+    {
+      "name": "jump",
+      "start": 45,
+      "end": 74,
+      "fps": 24
+    },
+    {
+      "name": "vault",
+      "start": 75,
+      "end": 111,
+      "fps": 24
+    }
+  ],
+  "sourceSHA256": "9e7af41f47af3f7ed1e5318869bdb25d859bd2870069a81959d7fc044a7c9df6",
+  "rig": "object hierarchy with ankle joints; sampled shape-key cloth",
+  "bakeChecks": {
+    "maxLocalPositionError": 2.6269581041185636e-07,
+    "maxClothVertexError": 1.4901161193847656e-08
+  },
+  "status": "review candidate; no production integration"
+}

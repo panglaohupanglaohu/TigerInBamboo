@@ -6,7 +6,7 @@ import { PLANET_RADIUS } from "./planet.js";
 
 export function createMoebiusTiger(rnd = Math.random, roam = null, modelOptions = {}) {
   const tiger = createMoebiusTigerModel(rnd, modelOptions);
-  if (roam) attachRoamBehavior(tiger, roam);
+  if (roam) { tiger.userData.tigerRoam=roam; attachRoamBehavior(tiger, roam); }
   return tiger;
 }
 
@@ -48,7 +48,23 @@ function attachRoamBehavior(tiger, roam) {
    * 球面贴地：与 applySwampSphereFit 同公式，消除坑缘“平面斜坡”悬空感。
    * pathY = 设计路径高度（如 SWAMP_GROUND_Y 或石阶 y）
    */
+  const footingRay = new THREE.Raycaster();
+  const footingOrigin = new THREE.Vector3(), footingDown = new THREE.Vector3();
   function groundY(x, z, pathY) {
+    // V2 paths and entrance stair meshes are authored in the flat local frame.
+    // Only the rim vegetation receives applySwampSphereFit; applying its drop
+    // here buries the tiger beneath the unchanged walkway and stairs.
+    if (tiger.parent?.userData.swampV2Round) {
+      const frame=tiger.parent,surfaces=frame.userData.tigerWalkSurfaces||[];
+      frame.updateWorldMatrix(true,false);
+      footingOrigin.set(x,60,z);frame.localToWorld(footingOrigin);
+      footingDown.set(0,-1,0).transformDirection(frame.matrixWorld);
+      footingRay.set(footingOrigin,footingDown);
+      for(const surface of surfaces)surface.updateWorldMatrix(true,false);
+      const hits=footingRay.intersectObjects(surfaces,false);
+      if(hits.length)return frame.worldToLocal(hits[0].point.clone()).y+.08;
+      return pathY + 0.65;
+    }
     let scale = 1;
     let o = tiger.parent;
     while (o) {
@@ -95,6 +111,18 @@ function attachRoamBehavior(tiger, roam) {
 
   const seek = (target, dt, arrive, spd = speed, pathY) => {
     if (!target) return true;
+    if (tiger.parent?.userData.swampV2Round && mode === "patrol") {
+      const radius = Math.hypot(target.x, target.z);
+      const angle = Math.atan2(tiger.position.z, tiger.position.x);
+      const delta = Math.atan2(Math.sin(Math.atan2(target.z,target.x)-angle), Math.cos(Math.atan2(target.z,target.x)-angle));
+      if (Math.abs(delta)*radius < arrive) return true;
+      const next = angle + Math.sign(delta)*Math.min(Math.abs(delta),spd*dt/radius);
+      const x=radius*Math.cos(next),z=radius*Math.sin(next);
+      tiger.rotation.y=Math.atan2(x-tiger.position.x,z-tiger.position.z);
+      tiger.position.x=x;tiger.position.z=z;
+      tiger.userData._baseY=groundY(x,z,target.y);
+      return false;
+    }
     const dx = target.x - tiger.position.x;
     const dz = target.z - tiger.position.z;
     const d = Math.hypot(dx, dz);
@@ -151,6 +179,15 @@ function attachRoamBehavior(tiger, roam) {
 
   const prevUpdate = tiger.userData.update;
   tiger.userData.update = function (dt, t, runtime) {
+    // 救援护送接管移动（rescueCampaign.escort，主人 2026-09-18 对暗号同行）：
+    // 本体漫游/迎客 AI 让位（不再写位置）；_walking 由护送方按实际位移
+    // 速度设置——这里不能清它，否则随行时四条腿僵住不迈步。
+    if (tiger.userData._companion) {
+      tiger.userData._drinking = false;
+      tiger.userData._greeting = false;
+      prevUpdate(dt, t);
+      return;
+    }
     const player = runtime?.player ?? null;
     if (greetCd > 0) greetCd -= dt;
 

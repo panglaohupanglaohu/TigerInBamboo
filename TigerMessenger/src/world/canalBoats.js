@@ -169,7 +169,7 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
     markNeedsSnap(boat) {
       // The front-port resident remains where the player moored it; never snap
       // it across the city to the old global patrol curve after F dismount.
-      if(boat?.userData.frontHarborBerth){boat.userData.harborDocked=true;boat.userData.needsSnap=false;return;}
+      if(boat?.userData.frontHarborBerth || boat?.userData.crystalMotherPortResident){boat.userData.harborDocked=true;boat.userData.needsSnap=false;return;}
       if (boat?.userData?.canalPatrol) boat.userData.needsSnap = true;
     },
   };

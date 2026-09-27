@@ -1,0 +1,15 @@
+{
+  "source": "src/world/citySeaLake.js",
+  "maxTriangleCenterWaterlineError": 0.02992611486814667,
+  "badNormals": 0,
+  "waterTriangles": 7936,
+  "surfaceR": 136,
+  "previouslyLowBridge": {
+    "u": 0.293212890625,
+    "railRadius": 169.500000904101,
+    "railAboveLakeDatum": 33.500000904101,
+    "note": "Nominal lake datum comparison; no boat clearance approval"
+  },
+  "passed": true,
+  "errors": []
+}

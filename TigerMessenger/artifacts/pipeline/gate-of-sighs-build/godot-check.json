@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-09-20T18:02:46.349933+00:00",
+  "asset": "godot/assets/art-pilots/gate-of-sighs-v1.glb",
+  "sha256": "708a655511ae876ac3b6f329058ca1f688ef83d488e189c1ec9aff20502c5ef1",
+  "meshes": 11,
+  "triangles": 18472,
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "headlessImportExitCode": 0,
+  "test": "godot/tests/test_gate_target_adapter.gd",
+  "exitCode": 0,
+  "passed": true,
+  "scope": "Architecture replacement and pod berth placement only; no Godot story migration, gameplay or visual acceptance.",
+  "evidence": {
+    "seatSourcePath": "cyber-megalithic-twin-gates[109]/gate-seat-root[0]",
+    "hiddenBuildingRoots": 7,
+    "candidateLocalTransform": "identity",
+    "podRootBerths": [
+      [
+        -33,
+        22,
+        9.5
+      ],
+      [
+        -34,
+        17.5,
+        -7
+      ]
+    ],
+    "podRootBasisPreserved": true,
+    "unchangedPodDescendants": 130,
+    "podVisibilityPreserved": true,
+    "unbindRestoresOriginalPodPositions": true,
+    "idempotentAndRebind": true
+  },
+  "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nGATE_TARGET_EVIDENCE seat=cyber-megalithic-twin-gates[109]/gate-seat-root[0] hidden_roots=7 preserved_pod_nodes=132 placement=(-130.2621, -88.58857, 22.98906)\n{\"failures\":[],\"passed\":true,\"test\":\"gate_target_adapter\"}\n"
+}

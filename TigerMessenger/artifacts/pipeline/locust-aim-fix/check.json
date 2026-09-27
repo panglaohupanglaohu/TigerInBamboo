@@ -1,0 +1,116 @@
+{
+  "r": {
+    "results": [
+      {
+        "state": "aim",
+        "yaw": -1,
+        "height": 3,
+        "dot": 0.9999999999999998
+      },
+      {
+        "state": "aim",
+        "yaw": -1,
+        "height": 12,
+        "dot": 0.9999999999999998
+      },
+      {
+        "state": "aim",
+        "yaw": 0,
+        "height": 3,
+        "dot": 0.9999999999999997
+      },
+      {
+        "state": "aim",
+        "yaw": 0,
+        "height": 12,
+        "dot": 1.0000000000000002
+      },
+      {
+        "state": "aim",
+        "yaw": 1,
+        "height": 3,
+        "dot": 1
+      },
+      {
+        "state": "aim",
+        "yaw": 1,
+        "height": 12,
+        "dot": 1
+      },
+      {
+        "state": "move",
+        "yaw": -1,
+        "height": 3,
+        "dot": 0.9999999999999999
+      },
+      {
+        "state": "move",
+        "yaw": -1,
+        "height": 12,
+        "dot": 0.9999999999999998
+      },
+      {
+        "state": "move",
+        "yaw": 0,
+        "height": 3,
+        "dot": 1
+      },
+      {
+        "state": "move",
+        "yaw": 0,
+        "height": 12,
+        "dot": 1
+      },
+      {
+        "state": "move",
+        "yaw": 1,
+        "height": 3,
+        "dot": 1
+      },
+      {
+        "state": "move",
+        "yaw": 1,
+        "height": 12,
+        "dot": 0.9999999999999999
+      },
+      {
+        "state": "transport",
+        "yaw": -1,
+        "height": 3,
+        "dot": 1
+      },
+      {
+        "state": "transport",
+        "yaw": -1,
+        "height": 12,
+        "dot": 1.0000000000000002
+      },
+      {
+        "state": "transport",
+        "yaw": 0,
+        "height": 3,
+        "dot": 0.9999999999999999
+      },
+      {
+        "state": "transport",
+        "yaw": 0,
+        "height": 12,
+        "dot": 1.0000000000000002
+      },
+      {
+        "state": "transport",
+        "yaw": 1,
+        "height": 3,
+        "dot": 0.9999999999999998
+      },
+      {
+        "state": "transport",
+        "yaw": 1,
+        "height": 12,
+        "dot": 1.0000000000000002
+      }
+    ],
+    "minDot": 0.9999999999999997
+  },
+  "errors": []
+}

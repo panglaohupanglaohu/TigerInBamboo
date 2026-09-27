@@ -1,0 +1,93 @@
+{
+  "foundations": [
+    {
+      "side": -1,
+      "z": -19.8,
+      "supported": true,
+      "ground": [
+        -7.9999999999999964,
+        -22.597842094157386,
+        -19.800000000000015
+      ]
+    },
+    {
+      "side": -1,
+      "z": -6.6,
+      "supported": true,
+      "ground": [
+        -7.9999999999999964,
+        -21.666168616894566,
+        -6.600000000000008
+      ]
+    },
+    {
+      "side": -1,
+      "z": 6.6,
+      "supported": true,
+      "ground": [
+        -8.00000000000001,
+        -14.781512617953865,
+        6.5999999999999925
+      ]
+    },
+    {
+      "side": -1,
+      "z": 19.8,
+      "supported": true,
+      "ground": [
+        -8.000000000000004,
+        -15.334100888211509,
+        19.799999999999997
+      ]
+    },
+    {
+      "side": 1,
+      "z": -19.8,
+      "supported": true,
+      "ground": [
+        7.999999999999982,
+        -29.24033787604955,
+        -19.800000000000004
+      ]
+    },
+    {
+      "side": 1,
+      "z": -6.6,
+      "supported": true,
+      "ground": [
+        7.999999999999989,
+        -21.821895053301347,
+        -6.600000000000003
+      ]
+    },
+    {
+      "side": 1,
+      "z": 6.6,
+      "supported": true,
+      "ground": [
+        7.999999999999982,
+        -18.866542597771996,
+        6.599999999999991
+      ]
+    },
+    {
+      "side": 1,
+      "z": 19.8,
+      "supported": true,
+      "ground": [
+        7.9999999999999964,
+        -15.334100888211509,
+        19.79999999999999
+      ]
+    }
+  ],
+  "sideArcades": 6,
+  "seatSiteOffset": 0,
+  "arches": 4,
+  "botanicalPods": 8,
+  "railRays": 2880,
+  "railFailures": [],
+  "scope": "Gate assembly and full canyon site, 80m two-track envelope; not entire global railway.",
+  "errors": [],
+  "passed": true
+}

@@ -52,25 +52,25 @@
       "id": "left-blue-tower",
       "x": 48.2,
       "z": -3.5,
-      "w": 10.2,
-      "d": 10.2,
+      "w": 8.6,
+      "d": 8.6,
       "bottom": 16,
       "top": 32.6,
       "shaft": false,
       "cap": true,
-      "bodySlenderness": 1.627450980392157
+      "bodySlenderness": 1.9302325581395352
     },
     {
       "id": "right-blue-tower",
       "x": 72,
       "z": -3.6,
-      "w": 12,
-      "d": 12,
+      "w": 9.6,
+      "d": 9.6,
       "bottom": 16,
       "top": 38.8,
       "shaft": false,
       "cap": true,
-      "bodySlenderness": 1.8999999999999997
+      "bodySlenderness": 2.375
     },
     {
       "id": "central-stair-keep",
@@ -87,14 +87,14 @@
     {
       "id": "offset-high-keep",
       "x": 63.8,
-      "z": -15.5,
-      "w": 15,
-      "d": 14,
+      "z": -14.6,
+      "w": 11.6,
+      "d": 11.6,
       "bottom": 16,
       "top": 46.4,
       "shaft": false,
       "cap": true,
-      "bodySlenderness": 2.0266666666666664
+      "bodySlenderness": 2.6206896551724137
     }
   ],
   "wfc": {
@@ -317,11 +317,11 @@
       "id": "left-blue-tower",
       "tile": "arch",
       "opening": {
-        "depth": 0.7800000429153493,
+        "depth": 0.7799999952316359,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.3900000572204561,
+        "depth": 0.3900000095367448,
         "emissive": 0
       }
     },
@@ -329,11 +329,11 @@
       "id": "left-blue-tower",
       "tile": "arch",
       "opening": {
-        "depth": 0.7800000429153551,
+        "depth": 0.7799999952316339,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.39000005722046743,
+        "depth": 0.390000009536747,
         "emissive": 0
       }
     },
@@ -341,11 +341,11 @@
       "id": "right-blue-tower",
       "tile": "arch",
       "opening": {
-        "depth": 0.7799999713897724,
+        "depth": 0.7800000190734916,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.3900001049041765,
+        "depth": 0.39000003337858874,
         "emissive": 0
       }
     },
@@ -353,11 +353,11 @@
       "id": "right-blue-tower",
       "tile": "arch",
       "opening": {
-        "depth": 0.7799999713897791,
+        "depth": 0.7800000190734995,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.3900001049041809,
+        "depth": 0.3900000333785981,
         "emissive": 0
       }
     },
@@ -365,11 +365,11 @@
       "id": "right-blue-tower",
       "tile": "arch",
       "opening": {
-        "depth": 0.779999971389769,
+        "depth": 0.7800000190734743,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.3900001049041649,
+        "depth": 0.39000003337860034,
         "emissive": 0
       }
     },
@@ -377,11 +377,11 @@
       "id": "offset-high-keep",
       "tile": "arch",
       "opening": {
-        "depth": 0.78000030517578,
+        "depth": 0.7799995422363302,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.3899999618530298,
+        "depth": 0.3900001525878994,
         "emissive": 0
       }
     },
@@ -389,11 +389,11 @@
       "id": "offset-high-keep",
       "tile": "slit",
       "opening": {
-        "depth": 0.7800003051757834,
+        "depth": 0.7799995422363165,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.3899999618530377,
+        "depth": 0.3900001525878762,
         "emissive": 0
       }
     },
@@ -401,11 +401,11 @@
       "id": "offset-high-keep",
       "tile": "arch",
       "opening": {
-        "depth": 0.7800003051757834,
+        "depth": 0.7799995422363122,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.3899999618530355,
+        "depth": 0.3900001525878937,
         "emissive": 0
       }
     },
@@ -413,11 +413,11 @@
       "id": "offset-high-keep",
       "tile": "slit",
       "opening": {
-        "depth": 0.7800003051757812,
+        "depth": 0.7799995422363302,
         "emissive": 16758631
       },
       "wall": {
-        "depth": 0.3899999618530118,
+        "depth": 0.3900001525879016,
         "emissive": 0
       }
     }

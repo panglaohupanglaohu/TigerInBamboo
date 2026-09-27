@@ -1,0 +1,31 @@
+{
+  "forests": [
+    {
+      "count": 80,
+      "max_position_error_m": 0.000034332275390625,
+      "missing": 0,
+      "name": "citadel-backdrop-cypress-forest-near",
+      "passed": true,
+      "visible_groups": 1
+    },
+    {
+      "count": 92,
+      "max_position_error_m": 0.000023592599973199,
+      "missing": 0,
+      "name": "citadel-backdrop-cypress-forest-mid",
+      "passed": true,
+      "visible_groups": 1
+    },
+    {
+      "count": 106,
+      "max_position_error_m": 0.0000389024316973519,
+      "missing": 0,
+      "name": "citadel-backdrop-cypress-forest-far",
+      "passed": true,
+      "visible_groups": 1
+    }
+  ],
+  "passed": true,
+  "scope": "All three actual native forest groups and 278 instance root positions compared to released Web castle frame. Does not certify every root footprint or campaign.",
+  "visible_ranges": 1
+}

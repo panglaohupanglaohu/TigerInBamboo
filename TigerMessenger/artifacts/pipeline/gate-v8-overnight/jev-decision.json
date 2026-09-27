@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "a992cb92f6dbed5382cd246e3fdad8903cbd0d75d8a95608825a66143036cb7d",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.87
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.89,
+      "probabilities": {
+        "lighting": 0,
+        "dressing": 0,
+        "navigation": 0.91,
+        "review": 0.03,
+        "geometry": 0.06
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.91
+    }
+  },
+  "usage": {
+    "input_tokens": 664,
+    "output_tokens": 91,
+    "cost_usd": 0.000279,
+    "credits_remaining_usd": 4.996927
+  },
+  "elapsed_ms": 5185,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full manual city docking/boarding",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

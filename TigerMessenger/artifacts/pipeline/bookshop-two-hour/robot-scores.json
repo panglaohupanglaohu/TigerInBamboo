@@ -1,0 +1,50 @@
+{
+  "scope": "Subjective visual review of actual static stylized models, not user acceptance or rig/combat completion",
+  "weights": {
+    "silhouette": 0.35,
+    "mechanical_structure": 0.3,
+    "material": 0.25,
+    "geometry_integrity": 0.1
+  },
+  "models": [
+    {
+      "id": "locust",
+      "ratings": [
+        8,
+        8,
+        7.5,
+        9
+      ],
+      "total": 8.0,
+      "remaining": "Shoulder armor is still more rectilinear than the reference."
+    },
+    {
+      "id": "ant",
+      "ratings": [
+        8.4,
+        8,
+        7.5,
+        9
+      ],
+      "total": 8.1,
+      "remaining": "Procedural copper wear remains less nuanced than the painted reference."
+    },
+    {
+      "id": "beetle",
+      "ratings": [
+        8,
+        8.5,
+        7.5,
+        9
+      ],
+      "total": 8.1,
+      "remaining": "Paint wear and optical reflections remain simplified."
+    }
+  ],
+  "limitations": [
+    "No animation rig",
+    "No factory production gameplay",
+    "No combat AI",
+    "GLB does not bake procedural patina"
+  ]
+}

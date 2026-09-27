@@ -1,0 +1,46 @@
+{
+  "task": "Citadel historic stone construction: text triage after current actual renders",
+  "version": "513e02612bfef80272c1329c931aa0feb1ba22e1ba782425f203495d27a3aacc",
+  "goal": "Age existing old city, new city and Highland Gate while retaining routes. 50 incremental material/detail construction passes are not final art acceptance.",
+  "observations": {
+    "author": "Codex actual image inspection",
+    "images": {
+      "artifacts/pipeline/citadel-history-fifty/r50-old.jpg": "52dc3424954231df9ee591fdc37b508b0d213b8078349d8bd2f5aff9969b60c5",
+      "artifacts/pipeline/citadel-history-fifty/r50-new.jpg": "2e3f3ee2b9ba04068c1117389f8d0bc40d545ffeb252c5008f0321de66cf1a98",
+      "artifacts/pipeline/citadel-history-fifty/r50-gate.jpg": "84d1f7e561785c2112d256abfc336d7ea8bc8a443ffb6b873b2fd8870a5b1d08"
+    },
+    "seen": [
+      "Stone no longer reads as uniform luminous white; mortar, ashlar variations and facade cornices are visible.",
+      "Gate ivy/cypress now green after fixing merged-surface classification. Natural rocks no longer receive masonry texture.",
+      "Large architectural massing, mountain silhouette and vegetation still differ substantially from target illustrations. New city remains sparse and low-poly."
+    ]
+  },
+  "checks": [
+    {
+      "name": "39 automated robot/gate tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No page or shader errors through 51 cumulative stages",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "581 walk meshes unchanged and 28800 incremental rail rays clear",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full manual city route and combat playthrough",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No asset deletion",
+    "No target art score claimed",
+    "No Blender/Godot synchronization claimed",
+    "Do not infer final art acceptance from cumulative pass count"
+  ]
+}

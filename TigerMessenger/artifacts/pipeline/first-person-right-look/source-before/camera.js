@@ -1,0 +1,321 @@
+// =====================================================================
+//  球面第三人称相机：up = 球面法线，身后跟随 + 缩放/环绕
+// =====================================================================
+import * as THREE from "three";
+import {
+  CAMERA_DIST_MIN,
+  CAMERA_DIST_MAX,
+  CAMERA_HEIGHT,
+  CAMERA_LOOK_Y,
+} from "./constants.js";
+import { P } from "./params.js";
+import { surfaceNormal } from "../world/sphereMath.js";
+
+const PITCH_MIN = -0.8;
+const PITCH_MAX = 1.0;
+const SPRING_BACK = 3; // 松手后环绕/俯仰回弹速率
+
+// ---------------- 相机遮挡回拉 ----------------
+// 原来的装配把相机固定摆在身后 camDist 处，不做任何遮挡检测，所以信使一走进
+// 建筑（主门洞、塔内旋梯、民居），相机还留在墙外，画面被墙面糊满、人物看不见。
+// 资产碰撞体本来就是球体数组 {position, radius}，线段对球解析求交极便宜，
+// 因此直接用它做回拉，不需要网格射线，也不需要新的场景遍历。
+const OCCLUDER_MIN_RADIUS = 1.2;  // 只认墙体/房屋体量，忽略花草道具
+const OCCLUDER_PAD = 0.55;        // 命中点前留出的余量，避免贴面穿模
+const OCCLUDER_MIN_DIST = 2.0;    // 回拉下限：再近就会钻进人物模型
+const OCCLUDER_CHORD_MIN = 0.5;   // 擦边不算遮挡，必须真的穿过一段
+
+/**
+ * 视线 origin→(origin+dir*maxLen) 与碰撞球求最近有效遮挡距离。
+ * 玩家已经在球体内部时跳过该球：那是“人在屋里”，再按它回拉会把相机顶到墙上。
+ * @returns {number} 可用距离；无遮挡时返回 maxLen
+ */
+function occludedDistance(origin, dirN, maxLen, colliders, _oc) {
+  if (!colliders || !colliders.length) return maxLen;
+  let best = maxLen;
+  for (const c of colliders) {
+    const r = c.radius || 0;
+    if (r < OCCLUDER_MIN_RADIUS || !c.position) continue;
+    _oc.copy(c.position).sub(origin);
+    const proj = _oc.dot(dirN);
+    const distSq = _oc.lengthSq();
+    if (distSq <= r * r) continue;              // 相机目标点的起点在球内：人在屋内
+    if (proj <= 0 || proj - r > best) continue; // 在身后，或比已知遮挡更远
+    const perpSq = distSq - proj * proj;
+    const rSq = r * r;
+    if (perpSq >= rSq) continue;                // 擦不到
+    const half = Math.sqrt(rSq - perpSq);
+    if (half * 2 < OCCLUDER_CHORD_MIN) continue;
+    const enter = proj - half;
+    if (enter > 0 && enter < best) best = enter;
+  }
+  return best;
+}
+
+export function createCameraRig(camera, player, opts = {}) {
+  const camTarget = new THREE.Vector3();
+  const camDesired = new THREE.Vector3();
+  const lookAtPoint = new THREE.Vector3();
+  const _up = new THREE.Vector3();
+  const _upSmooth = new THREE.Vector3(); // 平滑翻转的相机 Up（snapToPlayer 时初始化）
+  const _back = new THREE.Vector3();
+  const _right = new THREE.Vector3();
+  const _offset = new THREE.Vector3();
+  const _fwd = new THREE.Vector3();
+  const _occ = new THREE.Vector3();
+  const _ray = new THREE.Vector3();
+  const getColliders = typeof opts.colliders === 'function' ? opts.colliders : null;
+  let getOccluderMeshes = typeof opts.occluderMeshes === 'function' ? opts.occluderMeshes : null;
+  const _camRay = new THREE.Raycaster();
+  _camRay.layers.enableAll();
+  let occlusionEnabled = true;
+  let lastOcclusionDist = null;
+  let camOrbit = 0; // 绕法线的环绕角（yaw）
+  let camPitch = 0; // 俯仰角（pitch）
+  let camDist = P.camDist;
+  /** 第一人称：贴眼向前看（飞艇驾驶员等），不走身后高位俯视 */
+  let firstPerson = false;
+  let followProfile = null;
+  const defaultFov = camera.fov;
+  let midDrag = false;
+  let rightDrag = false;
+
+  function clampDist(d) {
+    return Math.min(CAMERA_DIST_MAX, Math.max(CAMERA_DIST_MIN, d));
+  }
+  /**
+   * @param {number} d
+   * @param {{ force?: boolean }} [opts] force=true 时允许低于 CAMERA_DIST_MIN（驾驶员第一人称）
+   */
+  function setDist(d, opts = {}) {
+    if (opts?.force) {
+      camDist = Math.max(0.05, Math.min(CAMERA_DIST_MAX, Number(d) || 0.05));
+    } else {
+      camDist = clampDist(d);
+    }
+  }
+  /**
+   * 第一人称模式：相机在眼位，沿 player.forward 看向远方（不看地面）。
+   * @param {boolean} on
+   */
+  function setFirstPerson(on) {
+    firstPerson = !!on;
+    if (firstPerson) {
+      camOrbit = 0;
+      camPitch = 0;
+      camDist = 0.08;
+    }
+  }
+  let closeup = false;
+  let savedCamDist = camDist;
+  let savedFov = defaultFov;
+  let savedOrbit = 0;
+  let savedPitch = 0;
+
+  function setCloseup(on) {
+    const next = !!on;
+    if (closeup === next) return;
+    closeup = next;
+    if (closeup) {
+      savedCamDist = camDist;
+      savedFov = camera.fov;
+      savedOrbit = camOrbit;
+      savedPitch = camPitch;
+      camDist = 1.35;
+      camOrbit = Math.PI * 0.86;
+      camPitch = 0.04;
+      setFov(38);
+    } else {
+      camDist = savedCamDist;
+      camOrbit = savedOrbit;
+      camPitch = savedPitch;
+      setFov(savedFov);
+    }
+  }
+
+  function zoomBy(delta) {
+    if (firstPerson) return; // 第一人称不滚轮拉距
+    camDist = clampDist(camDist + delta);
+  }
+  function setFov(fov) {
+    camera.fov = THREE.MathUtils.clamp(fov, 35, 90);
+    camera.updateProjectionMatrix();
+  }
+  function setMidDrag(on) {
+    midDrag = !!on;
+  }
+  function setRightDrag(on) {
+    rightDrag = !!on;
+  }
+  function orbitBy(dx) {
+    camOrbit -= dx;
+  }
+  function orbitPitchBy(dy) {
+    camPitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, camPitch + dy));
+  }
+
+  function update(dt) {
+    const orbiting = midDrag || rightDrag;
+    const up = surfaceNormal(player.position, _up);
+
+    // 相机 Up 平滑追踪球面法线
+    if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up);
+    _upSmooth.lerp(up, 1 - Math.exp(-P.upLerp * dt));
+    if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up);
+    _upSmooth.normalize();
+
+    const t = 1 - Math.exp(-(orbiting ? 12 : P.camLerp) * dt);
+
+    // ---------- 第一人称：贴眼、沿 forward 看向远方（飞艇驾驶员） ----------
+    if (firstPerson) {
+      const rawFwd = player.forward || player.facing || new THREE.Vector3(0, 0, 1);
+      _fwd.copy(rawFwd);
+      // 压到切平面：水平向前，不朝球心/地面
+      _fwd.addScaledVector(up, -_fwd.dot(up));
+      if (_fwd.lengthSq() < 1e-6) {
+        _fwd.set(0, 0, 1).addScaledVector(up, -up.z);
+      }
+      _fwd.normalize();
+      // 极轻抬头，地平线略低于画面中心
+      _fwd.addScaledVector(_upSmooth, 0.04).normalize();
+
+      // 眼位 = 玩家位置（已是驾驶员眼高）
+      camDesired.copy(player.position);
+      camera.position.lerp(camDesired, Math.min(1, t * 1.4));
+      camera.up.copy(_upSmooth);
+      // 看向正前方远处
+      lookAtPoint.copy(player.position).addScaledVector(_fwd, 40);
+      camTarget.lerp(lookAtPoint, Math.min(1, t * 1.4));
+      camera.lookAt(camTarget);
+      return;
+    }
+
+    // ---------- 第三人称：身后跟随 ----------
+    // 松手后 yaw / pitch 平滑回弹到默认斜后方视角
+    if (!orbiting) {
+      const k = 1 - Math.exp(-SPRING_BACK * dt);
+      camOrbit -= camOrbit * k;
+      camPitch -= camPitch * k;
+    }
+
+    // 背后：-forward 切向，再绕 up 旋转 camOrbit
+    const fwd = player.forward || player.facing || new THREE.Vector3(0, 0, 1);
+    _back.copy(fwd).multiplyScalar(-1);
+    _back.addScaledVector(up, -_back.dot(up));
+    if (_back.lengthSq() < 1e-6) _back.set(0, 0, 1).addScaledVector(up, -up.z);
+    _back.normalize();
+    _right.crossVectors(up, _back).normalize();
+
+    const yaw=camOrbit+(followProfile?.yaw??0);
+    const c = Math.cos(yaw);
+    const s = Math.sin(yaw);
+    const bx = _back.x * c + _right.x * s;
+    const by = _back.y * c + _right.y * s;
+    const bz = _back.z * c + _right.z * s;
+    _back.set(bx, by, bz).normalize();
+
+    const height = closeup ? 1.58 + (followProfile?.height ?? 0) : CAMERA_HEIGHT * (0.45 + 0.55 * (camDist / 7.5))+(followProfile?.height??0);
+    camDesired
+      .copy(player.position)
+      .addScaledVector(up, height)
+      .addScaledVector(_back, camDist);
+
+    // pitch：相机偏移绕切平面右向轴俯仰
+    if (camPitch !== 0) {
+      _offset.copy(camDesired).sub(player.position);
+      _offset.applyAxisAngle(_right, camPitch);
+      camDesired.copy(player.position).add(_offset);
+    }
+
+    // ---------- 遮挡回拉：沿“看点→期望机位”这条线收短，保持取景方向不变 ----------
+    lastOcclusionDist = null;
+    const lookY = closeup ? 1.58 : CAMERA_LOOK_Y;
+    if (occlusionEnabled && getColliders) {
+      lookAtPoint.copy(player.position).addScaledVector(_upSmooth, lookY);
+      _ray.copy(camDesired).sub(lookAtPoint);
+      const rayLen = _ray.length();
+      if (rayLen > 1e-4) {
+        _ray.multiplyScalar(1 / rayLen);
+        let free = occludedDistance(lookAtPoint, _ray, rayLen, getColliders(), _occ);
+        // Authored walls (gate jambs, tower shell, court stone) are meshes, not collider
+        // spheres — only 7 spheres in the whole world are wall-sized, so the sphere pass
+        // alone never catches a building. Raycast the same short list the walk collision
+        // uses; it is a handful of meshes, filtered by proximity.
+        if (getOccluderMeshes) {
+          const meshes = getOccluderMeshes(lookAtPoint, rayLen + 2);
+          if (meshes && meshes.length) {
+            _camRay.set(lookAtPoint, _ray);
+            _camRay.far = Math.min(free, rayLen);
+            const hits = _camRay.intersectObjects(meshes, false);
+            if (hits.length && hits[0].distance < free) free = hits[0].distance;
+          }
+        }
+        if (free < rayLen) {
+          const pulled = Math.max(OCCLUDER_MIN_DIST, free - OCCLUDER_PAD);
+          camDesired.copy(lookAtPoint).addScaledVector(_ray, pulled);
+          lastOcclusionDist = pulled;
+        }
+      }
+    }
+
+    // 被遮挡时收得快、恢复时放得慢，避免在门洞口来回抽搐
+    const posT = lastOcclusionDist != null ? Math.min(1, t * 2.4) : t;
+    camera.position.lerp(camDesired, posT);
+    camera.up.copy(_upSmooth);
+
+    lookAtPoint.copy(player.position).addScaledVector(_upSmooth, lookY);
+    // Sean Bradley Follow Cam: 行进速度前瞻微移 (Velocity Lookahead)
+    if (player.velocity) {
+      const spd = player.velocity.length();
+      if (spd > 0.5) {
+        lookAtPoint.addScaledVector(player.velocity, Math.min(0.25, 0.02 * spd));
+      }
+    }
+    camTarget.lerp(lookAtPoint, t);
+    camera.lookAt(camTarget);
+  }
+
+  function snapToPlayer() {
+    const up = surfaceNormal(player.position, _up);
+    _upSmooth.copy(up); // 初始/复位时 Up 直接就位
+    const fwd = player.forward || new THREE.Vector3(0, 0, 1);
+    _back.copy(fwd).multiplyScalar(-1).addScaledVector(up, 0);
+    _back.addScaledVector(up, -_back.dot(up));
+    if (_back.lengthSq() < 1e-6) _back.set(0, 0, 1);
+    _back.normalize();
+    camera.position
+      .copy(player.position)
+      .addScaledVector(up, CAMERA_HEIGHT)
+      .addScaledVector(_back, camDist);
+    camera.up.copy(_upSmooth);
+    camTarget.copy(player.position).addScaledVector(up, CAMERA_LOOK_Y);
+    camera.lookAt(camTarget);
+  }
+
+  return {
+    update,
+    snapToPlayer,
+    setDist,
+    setFirstPerson,
+    isFirstPerson: () => firstPerson,
+    zoomBy,
+    setMidDrag,
+    setRightDrag,
+    orbitBy,
+    orbitPitchBy,
+    setFov,
+    getFov: () => camera.fov,
+    getDefaultFov: () => defaultFov,
+    getDist: () => camDist,
+    getFollowProfile: () => followProfile ? {...followProfile} : null,
+    setFollowProfile: value => {followProfile=value?{yaw:Number(value.yaw)||0,height:Number(value.height)||0}:null;},
+    getYaw: () => camOrbit,
+    getOrbit: () => ({ yaw: camOrbit, pitch: camPitch }), // 验收用
+    setOcclusionEnabled: (on) => { occlusionEnabled = !!on; },
+    setOccluderMeshes: (fn) => { getOccluderMeshes = typeof fn === 'function' ? fn : null; },
+    isOcclusionEnabled: () => occlusionEnabled,
+    getOcclusionDist: () => lastOcclusionDist, // 验收用：null=本帧无遮挡
+    setCloseup,
+    isCloseup: () => closeup,
+  };
+}

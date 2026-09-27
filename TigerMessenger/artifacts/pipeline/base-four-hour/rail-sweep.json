@@ -1,0 +1,57 @@
+{
+  "report": {
+    "measure": {
+      "red": {
+        "length": 2546.1721090772016,
+        "worst": {
+          "angle": 15.480227811543797,
+          "u": 0.713125
+        },
+        "centerSpacing": {
+          "min": 6.969411549270119,
+          "max": 7.000040118191438
+        }
+      },
+      "blue": {
+        "length": 2607.360282917985,
+        "worst": {
+          "angle": 15.104635918613942,
+          "u": 0.73625
+        },
+        "centerSpacing": {
+          "min": 6.9722223901946805,
+          "max": 7.0001503090641615
+        }
+      }
+    },
+    "ringBodyRays": 1848,
+    "ringBuildingHits": [],
+    "junctions": [
+      {
+        "center": {
+          "x": -129.83789647023792,
+          "y": -35.41417398312365,
+          "z": 88.53490128399949
+        },
+        "radius": 13,
+        "count": 16,
+        "id": "junction-1",
+        "owner": null,
+        "entered": false
+      },
+      {
+        "center": {
+          "x": -65.51148678793817,
+          "y": -36.40182012718974,
+          "z": 142.27186562781665
+        },
+        "radius": 27.773686154104475,
+        "count": 55,
+        "id": "junction-2",
+        "owner": null,
+        "entered": false
+      }
+    ]
+  },
+  "errors": []
+}

@@ -1,0 +1,30 @@
+{
+  "checks": [
+    {
+      "name": "closed terrain topology",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "5040 tram clearance rays",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "gate approach walk",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "junction dock to keep walk",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Godot gate and junction adapters",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "scope": "Synthetic navigation and static clearance; no manual full playthrough"
+}

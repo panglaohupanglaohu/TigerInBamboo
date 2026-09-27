@@ -25,7 +25,8 @@ export function createSaihojiAmbush({getCoverPoints,projectGround=null,onEvent=(
   function register(unit,covers,claimed) {
     unit.getWorldPosition(world);
     let cover=null,dist=Infinity;
-    for(const candidate of covers){if(claimed.has(candidate.id)||(Number.isFinite(candidate.clearance)&&candidate.clearance<1.10))continue;const p=point(candidate,target);if(!p)continue;const d=p.distanceToSquared(world);if(d<dist){dist=d;cover=candidate;}}
+    const requiredClearance=unit.userData.phalanxRole==='longbow'?1.22:1.12;
+    for(const candidate of covers){if(claimed.has(candidate.id)||(Number.isFinite(candidate.clearance)&&candidate.clearance<requiredClearance))continue;const p=point(candidate,target);if(!p)continue;const d=p.distanceToSquared(world);if(d<dist){dist=d;cover=candidate;}}
     if(!cover)return null;claimed.add(cover.id);
     const parts=unit.userData.parts||{},body=parts.body;
     const record={unit,cover,age:0,ready:false,previousTarget:null,body,bodyY:body?.position.y??0,legs:['legL','legR'].map(k=>({node:parts[k],x:parts[k]?.rotation.x||0,z:parts[k]?.rotation.z||0}))};
@@ -37,7 +38,8 @@ export function createSaihojiAmbush({getCoverPoints,projectGround=null,onEvent=(
     get active(){return state.stage==='ambush';},
     update(dt,{units=[],allLanded=false,discovery=null}={}) {
       clock+=Math.max(0,dt);if(state.stage==='ambush')return;
-      const living=units.filter(s=>s.parent&&!s.userData.dead&&!s.userData.downed);
+      const living=units.filter(s=>s.parent&&!s.userData.dead&&!s.userData.downed)
+        .sort((a,b)=>Number(b.userData.phalanxRole==='longbow')-Number(a.userData.phalanxRole==='longbow'));
       const covers=getCoverPoints?.()||[],claimed=new Set([...records.values()].map(r=>r.cover.id));
       state.blocked=null;
       for(const unit of living) {
@@ -59,7 +61,7 @@ export function createSaihojiAmbush({getCoverPoints,projectGround=null,onEvent=(
         if(distance>maxStep)world.lerp(target,maxStep/distance);else world.copy(target);
         // The final cover slot already has a sampled foot offset; do not fight
         // it with the legacy marching sampler's different ground skin.
-        if(distance>.6)projectGround?.(world,record.cover);
+        if(distance>.6&&!record.cover?.anchor)projectGround?.(world,record.cover);
         unit.position.copy(world);unit.parent.worldToLocal(unit.position);
         up.copy(world).normalize();
         if(distance<.6&&record.cover.anchor)up.set(0,1,0).applyQuaternion(record.cover.anchor.getWorldQuaternion(new THREE.Quaternion())).normalize();
@@ -72,7 +74,7 @@ export function createSaihojiAmbush({getCoverPoints,projectGround=null,onEvent=(
       state.registered=living.length;state.concealed=living.filter(u=>records.get(u)?.ready).length;
       if(state.stage==='landing'&&allLanded&&living.length>0&&state.concealed===living.length&&!state.blocked)stage('concealed');
       // Discovery is provided by actual whale/fleet state, never elapsed time.
-      else if(state.stage==='concealed'&&discovery?.detected) {state.discovery={...discovery,seconds:clock};stage('discovered',state.discovery);}
+      else if(state.stage==='concealed'&&allLanded&&living.length>0&&state.concealed===living.length&&!state.blocked&&discovery?.detected) {state.discovery={...discovery,seconds:clock};stage('discovered',state.discovery);}
       else if(state.stage==='discovered') {
         stage('ambush');for(const record of records.values()){if(!record.unit.userData.dead&&!record.unit.userData.downed)posture(record,false);record.unit.userData.ambushStage='ambush';record.unit.userData.patrol=null;}
       }

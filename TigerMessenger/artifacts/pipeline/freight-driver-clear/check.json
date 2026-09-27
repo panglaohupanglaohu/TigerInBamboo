@@ -1,0 +1,23 @@
+{
+  "checks": [
+    {
+      "variant": "red",
+      "hidden": true,
+      "restored": true,
+      "driver": true
+    },
+    {
+      "exitRestored": true
+    },
+    {
+      "variant": "blue",
+      "hidden": true,
+      "restored": true,
+      "driver": true
+    },
+    {
+      "exitRestored": true
+    }
+  ],
+  "errors": []
+}

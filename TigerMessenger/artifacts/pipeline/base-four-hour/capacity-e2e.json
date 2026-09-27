@@ -1,0 +1,440 @@
+{
+  "mode": "accelerated integration diagnostic: two actual shipment requests, 28-second material unload, parallel factory production and physical train loading/unloading. No manual unit insertion.",
+  "report": {
+    "shipments": [
+      true,
+      true
+    ],
+    "batches": [
+      {
+        "round": 0,
+        "kind": "locust",
+        "ids": [
+          "LOC-0001",
+          "LOC-0004",
+          "LOC-0007"
+        ],
+        "invariants": {
+          "total": 9,
+          "counts": {
+            "deployed": 3,
+            "ready": 6
+          }
+        }
+      },
+      {
+        "round": 0,
+        "kind": "ant",
+        "ids": [
+          "ANT-0002",
+          "ANT-0005",
+          "ANT-0008"
+        ],
+        "invariants": {
+          "total": 9,
+          "counts": {
+            "deployed": 6,
+            "ready": 3
+          }
+        }
+      },
+      {
+        "round": 0,
+        "kind": "beetle",
+        "ids": [
+          "BTL-0003",
+          "BTL-0006",
+          "BTL-0009"
+        ],
+        "invariants": {
+          "total": 9,
+          "counts": {
+            "deployed": 9
+          }
+        }
+      },
+      {
+        "round": 1,
+        "kind": "locust",
+        "ids": [
+          "LOC-0010",
+          "LOC-0013",
+          "LOC-0016"
+        ],
+        "invariants": {
+          "total": 18,
+          "counts": {
+            "deployed": 12,
+            "ready": 6
+          }
+        }
+      },
+      {
+        "round": 1,
+        "kind": "ant",
+        "ids": [
+          "ANT-0011",
+          "ANT-0014",
+          "ANT-0017"
+        ],
+        "invariants": {
+          "total": 18,
+          "counts": {
+            "deployed": 15,
+            "ready": 3
+          }
+        }
+      },
+      {
+        "round": 1,
+        "kind": "beetle",
+        "ids": [
+          "BTL-0012",
+          "BTL-0015",
+          "BTL-0018"
+        ],
+        "invariants": {
+          "total": 18,
+          "counts": {
+            "deployed": 18
+          }
+        }
+      },
+      {
+        "round": 2,
+        "kind": "locust",
+        "ids": [
+          "LOC-0019",
+          "LOC-0021",
+          "LOC-0023"
+        ],
+        "invariants": {
+          "total": 24,
+          "counts": {
+            "deployed": 21,
+            "ready": 3
+          }
+        }
+      },
+      {
+        "round": 2,
+        "kind": "ant",
+        "ids": [
+          "ANT-0020",
+          "ANT-0022",
+          "ANT-0024"
+        ],
+        "invariants": {
+          "total": 24,
+          "counts": {
+            "deployed": 24
+          }
+        }
+      }
+    ],
+    "save": true,
+    "restore": true,
+    "invariants": {
+      "total": 24,
+      "counts": {
+        "deployed": 24
+      }
+    },
+    "sameIds": true,
+    "counts": {
+      "locust": 9,
+      "ant": 9,
+      "beetle": 6
+    },
+    "factories": {
+      "locust": {
+        "kind": "locust",
+        "kits": 0,
+        "active": null,
+        "enabled": true,
+        "produced": 9
+      },
+      "ant": {
+        "kind": "ant",
+        "kits": 0,
+        "active": null,
+        "enabled": true,
+        "produced": 9
+      },
+      "beetle": {
+        "kind": "beetle",
+        "kits": 3,
+        "active": null,
+        "enabled": true,
+        "produced": 6
+      }
+    },
+    "units": [
+      {
+        "id": "LOC-0001",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0001",
+        "health": 1
+      },
+      {
+        "id": "ANT-0002",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0002",
+        "health": 1
+      },
+      {
+        "id": "BTL-0003",
+        "kind": "beetle",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "beetle",
+        "train": null,
+        "slot": null,
+        "batch": "BTL-B0003",
+        "health": 1
+      },
+      {
+        "id": "LOC-0004",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0001",
+        "health": 1
+      },
+      {
+        "id": "ANT-0005",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0002",
+        "health": 1
+      },
+      {
+        "id": "BTL-0006",
+        "kind": "beetle",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "beetle",
+        "train": null,
+        "slot": null,
+        "batch": "BTL-B0003",
+        "health": 1
+      },
+      {
+        "id": "LOC-0007",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0001",
+        "health": 1
+      },
+      {
+        "id": "ANT-0008",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0002",
+        "health": 1
+      },
+      {
+        "id": "BTL-0009",
+        "kind": "beetle",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "beetle",
+        "train": null,
+        "slot": null,
+        "batch": "BTL-B0003",
+        "health": 1
+      },
+      {
+        "id": "LOC-0010",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0010",
+        "health": 1
+      },
+      {
+        "id": "ANT-0011",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0011",
+        "health": 1
+      },
+      {
+        "id": "BTL-0012",
+        "kind": "beetle",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "beetle",
+        "train": null,
+        "slot": null,
+        "batch": "BTL-B0012",
+        "health": 1
+      },
+      {
+        "id": "LOC-0013",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0010",
+        "health": 1
+      },
+      {
+        "id": "ANT-0014",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0011",
+        "health": 1
+      },
+      {
+        "id": "BTL-0015",
+        "kind": "beetle",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "beetle",
+        "train": null,
+        "slot": null,
+        "batch": "BTL-B0012",
+        "health": 1
+      },
+      {
+        "id": "LOC-0016",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0010",
+        "health": 1
+      },
+      {
+        "id": "ANT-0017",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0011",
+        "health": 1
+      },
+      {
+        "id": "BTL-0018",
+        "kind": "beetle",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "beetle",
+        "train": null,
+        "slot": null,
+        "batch": "BTL-B0012",
+        "health": 1
+      },
+      {
+        "id": "LOC-0019",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0019",
+        "health": 1
+      },
+      {
+        "id": "ANT-0020",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0020",
+        "health": 1
+      },
+      {
+        "id": "LOC-0021",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0019",
+        "health": 1
+      },
+      {
+        "id": "ANT-0022",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0020",
+        "health": 1
+      },
+      {
+        "id": "LOC-0023",
+        "kind": "locust",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "locust",
+        "train": null,
+        "slot": null,
+        "batch": "LOC-B0019",
+        "health": 1
+      },
+      {
+        "id": "ANT-0024",
+        "kind": "ant",
+        "status": "deployed",
+        "progress": 1,
+        "factory": "ant",
+        "train": null,
+        "slot": null,
+        "batch": "ANT-B0020",
+        "health": 1
+      }
+    ]
+  },
+  "errors": []
+}

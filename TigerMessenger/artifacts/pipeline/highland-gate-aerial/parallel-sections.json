@@ -1,0 +1,103 @@
+{
+  "stairs": {
+    "samples": 81,
+    "unsupported": 0,
+    "blocked": 0,
+    "details": []
+  },
+  "walking": {
+    "samples": 195,
+    "unsupported": 36,
+    "blocked": 12
+  },
+  "round": 30,
+  "railU": 0.6841666666666667,
+  "rays": 1944,
+  "hitCount": 7,
+  "hits": [
+    {
+      "lane": "red",
+      "local": [
+        -5.995170706874855,
+        -1.5291969462247437,
+        -19.49993100821855
+      ],
+      "h": 0.35,
+      "side": -0.9,
+      "name": "highland-walk-safety-curb"
+    },
+    {
+      "lane": "red",
+      "local": [
+        -5.594833806494302,
+        -1.4538164277395822,
+        -19.050702355339308
+      ],
+      "h": 0.35,
+      "side": -0.9,
+      "name": "highland-walk-safety-curb"
+    },
+    {
+      "lane": "red",
+      "local": [
+        -5.212622645748926,
+        -1.3803060852372084,
+        -18.590918029066888
+      ],
+      "h": 0.35,
+      "side": -0.9,
+      "name": "highland-walk-baluster"
+    },
+    {
+      "lane": "red",
+      "local": [
+        -4.850055366239301,
+        -1.3091433520899898,
+        -18.1243116652776
+      ],
+      "h": 0.35,
+      "side": -0.9,
+      "name": "highland-walk-safety-curb"
+    },
+    {
+      "lane": "red",
+      "local": [
+        -4.500022022334585,
+        -1.2392693627960512,
+        -17.64581000393651
+      ],
+      "h": 0.35,
+      "side": -0.9,
+      "name": "highland-walk-safety-curb"
+    },
+    {
+      "lane": "red",
+      "local": [
+        -4.163838979352547,
+        -1.1708083139751864,
+        -17.155982050750527
+      ],
+      "h": 0.35,
+      "side": -0.9,
+      "name": "highland-walk-baluster"
+    },
+    {
+      "lane": "red",
+      "local": [
+        -3.8424218224347158,
+        -1.103793580127416,
+        -16.65463188574222
+      ],
+      "h": 0.35,
+      "side": -0.9,
+      "name": "highland-walk-baluster"
+    }
+  ],
+  "meshCount": 342,
+  "position": [
+    127.2117504058756,
+    109.01314370670208,
+    -22.01943748897003
+  ],
+  "errors": []
+}

@@ -1,0 +1,25 @@
+{
+  "source": "human-courier.blend",
+  "target": "approved-target.png",
+  "method": "local Blender authored geometry; no external 3D service",
+  "polygons": 4511,
+  "status": "model candidate; user visual acceptance pending",
+  "forward": "+Z",
+  "joints": [
+    "Courier",
+    "body",
+    "armL",
+    "elbowL",
+    "handL",
+    "armR",
+    "elbowR",
+    "handR",
+    "letter",
+    "cape",
+    "head",
+    "legL",
+    "kneeL",
+    "legR",
+    "kneeR"
+  ]
+}

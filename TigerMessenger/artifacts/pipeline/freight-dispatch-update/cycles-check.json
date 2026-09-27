@@ -1,0 +1,300 @@
+{
+  "results": {
+    "visits": [
+      {
+        "time": 0,
+        "id": "red",
+        "stop": null,
+        "count": 0
+      },
+      {
+        "time": 0,
+        "id": "blue",
+        "stop": null,
+        "count": 0
+      },
+      {
+        "time": 168.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 0
+      },
+      {
+        "time": 182.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 0
+      },
+      {
+        "time": 316,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 3
+      },
+      {
+        "time": 321,
+        "id": "red",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 324.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 3
+      },
+      {
+        "time": 365,
+        "id": "red",
+        "stop": "frontline",
+        "count": 6
+      },
+      {
+        "time": 375.5,
+        "id": "red",
+        "stop": "beetle",
+        "count": 6
+      },
+      {
+        "time": 591.5,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 918,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 933.5,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 942,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 977.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 988,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 1130,
+        "id": "red",
+        "stop": "ant",
+        "count": 0
+      },
+      {
+        "time": 1145.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 3
+      },
+      {
+        "time": 1196.5,
+        "id": "red",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 1240.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 6
+      },
+      {
+        "time": 1251,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 1312,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 0
+      },
+      {
+        "time": 1629,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 1644.5,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 1653,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 1656,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 3
+      },
+      {
+        "time": 1664.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 1716,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 1841,
+        "id": "red",
+        "stop": "ant",
+        "count": 0
+      },
+      {
+        "time": 1856.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 0
+      },
+      {
+        "time": 1931,
+        "id": "red",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 1975,
+        "id": "red",
+        "stop": "frontline",
+        "count": 6
+      },
+      {
+        "time": 1985.5,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      }
+    ],
+    "loaded": {
+      "red": {
+        "time": 575.5,
+        "kinds": [
+          "locust",
+          "locust",
+          "locust",
+          "ant",
+          "ant",
+          "ant",
+          "beetle",
+          "beetle",
+          "beetle"
+        ]
+      },
+      "blue": {
+        "time": 627,
+        "kinds": [
+          "beetle",
+          "beetle",
+          "beetle",
+          "ant",
+          "ant",
+          "ant",
+          "locust",
+          "locust",
+          "locust"
+        ]
+      }
+    },
+    "trains": {
+      "red": {
+        "id": "red",
+        "slots": [
+          "LOC-0037",
+          "LOC-0040",
+          "LOC-0043",
+          "ANT-0038",
+          "ANT-0041",
+          "ANT-0044",
+          "BTL-0039",
+          "BTL-0042",
+          "BTL-0045"
+        ],
+        "job": {
+          "type": "load",
+          "createdAt": 1985.552800000012,
+          "factory": "beetle",
+          "ids": [
+            "BTL-0039",
+            "BTL-0042",
+            "BTL-0045"
+          ],
+          "index": 0,
+          "elapsed": 0.5
+        },
+        "lastFactory": "beetle",
+        "haulDistance": 170.94661376861077
+      },
+      "blue": {
+        "id": "blue",
+        "slots": [
+          "BTL-0030",
+          "BTL-0033",
+          "BTL-0036",
+          "ANT-0029",
+          "ANT-0032",
+          "ANT-0035",
+          "LOC-0028",
+          "LOC-0031",
+          "LOC-0034"
+        ],
+        "job": null,
+        "lastFactory": "locust",
+        "haulDistance": 1795.2375193401795
+      }
+    },
+    "message": "红列正在甲壳虫工厂装车。",
+    "stock": {
+      "locust": {
+        "kind": "locust",
+        "kits": 0,
+        "active": null,
+        "enabled": true,
+        "produced": 15
+      },
+      "ant": {
+        "kind": "ant",
+        "kits": 0,
+        "active": null,
+        "enabled": true,
+        "produced": 15
+      },
+      "beetle": {
+        "kind": "beetle",
+        "kits": 0,
+        "active": null,
+        "enabled": true,
+        "produced": 15
+      }
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,575 @@
+{
+  "held": {
+    "total": 28,
+    "alive": 28,
+    "guards": [
+      {
+        "uid": 51,
+        "role": "spear"
+      },
+      {
+        "uid": 52,
+        "role": "gladius"
+      },
+      {
+        "uid": 53,
+        "role": "spear"
+      },
+      {
+        "uid": 54,
+        "role": "gladius"
+      },
+      {
+        "uid": 55,
+        "role": "spear"
+      },
+      {
+        "uid": 56,
+        "role": "gladius"
+      },
+      {
+        "uid": 57,
+        "role": "spear"
+      },
+      {
+        "uid": 58,
+        "role": "gladius"
+      },
+      {
+        "uid": 59,
+        "role": "spear"
+      },
+      {
+        "uid": 60,
+        "role": "gladius"
+      },
+      {
+        "uid": 61,
+        "role": "spear"
+      },
+      {
+        "uid": 62,
+        "role": "gladius"
+      },
+      {
+        "uid": 63,
+        "role": "spear"
+      },
+      {
+        "uid": 64,
+        "role": "gladius"
+      },
+      {
+        "uid": 65,
+        "role": "spear"
+      },
+      {
+        "uid": 66,
+        "role": "gladius"
+      },
+      {
+        "uid": 67,
+        "role": "spear"
+      },
+      {
+        "uid": 68,
+        "role": "gladius"
+      },
+      {
+        "uid": 69,
+        "role": "spear"
+      },
+      {
+        "uid": 70,
+        "role": "gladius"
+      },
+      {
+        "uid": 71,
+        "role": "spear"
+      },
+      {
+        "uid": 72,
+        "role": "gladius"
+      },
+      {
+        "uid": 73,
+        "role": "spear"
+      },
+      {
+        "uid": 74,
+        "role": "gladius"
+      },
+      {
+        "uid": 75,
+        "role": "longbow"
+      },
+      {
+        "uid": 76,
+        "role": "longbow"
+      },
+      {
+        "uid": 77,
+        "role": "longbow"
+      },
+      {
+        "uid": 78,
+        "role": "longbow"
+      }
+    ],
+    "ships": [
+      {
+        "name": "red-reinforce-ship-0",
+        "visible": true,
+        "crew": [
+          {
+            "uid": 79,
+            "role": "spear",
+            "seat": 0,
+            "combatant": true,
+            "embarked": true,
+            "weaponStored": true,
+            "stage": "seated"
+          },
+          {
+            "uid": 80,
+            "role": "gladius",
+            "seat": 1,
+            "combatant": true,
+            "embarked": true,
+            "weaponStored": true,
+            "stage": "seated"
+          },
+          {
+            "uid": 81,
+            "role": "spear",
+            "seat": 2,
+            "combatant": true,
+            "embarked": true,
+            "weaponStored": true,
+            "stage": "seated"
+          },
+          {
+            "uid": 82,
+            "role": "gladius",
+            "seat": 3,
+            "combatant": true,
+            "embarked": true,
+            "weaponStored": true,
+            "stage": "seated"
+          }
+        ]
+      }
+    ],
+    "pendingCohorts": 1,
+    "arrival": {
+      "waterRoutesEnabled": false,
+      "boatWorld": [
+        64.67225624191263,
+        143.94218047597377,
+        27.883415344962245
+      ],
+      "boatCity": [
+        66.99525513800054,
+        -10.486619532055073,
+        113.37629676274328
+      ],
+      "quayCity": [
+        54,
+        -5.611819752202763,
+        108
+      ],
+      "boatToQuay": 14.8843842961831,
+      "hingeToQuay": 11.763328864309702,
+      "hingeCity": [
+        64.1045906548041,
+        -9.078629072280165,
+        112.92487429351975
+      ],
+      "waterSupport": {
+        "water": 160.4977360198518,
+        "ground": 157.79959484164164,
+        "object": "camp-flat-patch",
+        "seabed": 155.1200800201326,
+        "seabedDepth": 5.377655999719195
+      },
+      "allSceneSurfaces": [
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "radius": 160.4977360198518,
+          "material": "ShaderMaterial",
+          "transparent": true,
+          "depthTest": true,
+          "layer": 1
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "radius": 157.79959484164164,
+          "material": "MeshToonMaterial",
+          "transparent": false,
+          "depthTest": true,
+          "layer": 1
+        },
+        {
+          "name": "hills-closed-skirt",
+          "parent": "",
+          "radius": 157.799078344385,
+          "material": "MeshStandardMaterial",
+          "transparent": false,
+          "depthTest": true,
+          "layer": 1
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "radius": 157.79902127433544,
+          "material": "MeshToonMaterial",
+          "transparent": false,
+          "depthTest": true,
+          "layer": 1
+        },
+        {
+          "name": "planet-surface",
+          "parent": "",
+          "radius": 155.1200800201326,
+          "material": "MeshToonMaterial",
+          "transparent": false,
+          "depthTest": true,
+          "layer": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parent": "citadel-continuous-mountain-terrain-system",
+          "radius": 136.05250026151575,
+          "material": "MeshStandardMaterial",
+          "transparent": false,
+          "depthTest": true,
+          "layer": 1
+        }
+      ],
+      "route": {
+        "source": "validated-new-front-harbor",
+        "length": 191.28848803116577,
+        "boardingVerified": false,
+        "reason": null
+      },
+      "boardingVerified": false,
+      "reason": "Measured arrival route is separate from physical boarding and post walking."
+    },
+    "oarSpeed": 3.2589126926480824e-7
+  },
+  "admitted": {
+    "total": 32,
+    "alive": 28,
+    "guards": [
+      {
+        "uid": 51,
+        "role": "spear"
+      },
+      {
+        "uid": 52,
+        "role": "gladius"
+      },
+      {
+        "uid": 53,
+        "role": "spear"
+      },
+      {
+        "uid": 54,
+        "role": "gladius"
+      },
+      {
+        "uid": 55,
+        "role": "spear"
+      },
+      {
+        "uid": 56,
+        "role": "gladius"
+      },
+      {
+        "uid": 57,
+        "role": "spear"
+      },
+      {
+        "uid": 58,
+        "role": "gladius"
+      },
+      {
+        "uid": 59,
+        "role": "spear"
+      },
+      {
+        "uid": 60,
+        "role": "gladius"
+      },
+      {
+        "uid": 61,
+        "role": "spear"
+      },
+      {
+        "uid": 62,
+        "role": "gladius"
+      },
+      {
+        "uid": 63,
+        "role": "spear"
+      },
+      {
+        "uid": 64,
+        "role": "gladius"
+      },
+      {
+        "uid": 65,
+        "role": "spear"
+      },
+      {
+        "uid": 66,
+        "role": "gladius"
+      },
+      {
+        "uid": 67,
+        "role": "spear"
+      },
+      {
+        "uid": 68,
+        "role": "gladius"
+      },
+      {
+        "uid": 69,
+        "role": "spear"
+      },
+      {
+        "uid": 70,
+        "role": "gladius"
+      },
+      {
+        "uid": 71,
+        "role": "spear"
+      },
+      {
+        "uid": 72,
+        "role": "gladius"
+      },
+      {
+        "uid": 73,
+        "role": "spear"
+      },
+      {
+        "uid": 74,
+        "role": "gladius"
+      },
+      {
+        "uid": 75,
+        "role": "longbow"
+      },
+      {
+        "uid": 76,
+        "role": "longbow"
+      },
+      {
+        "uid": 77,
+        "role": "longbow"
+      },
+      {
+        "uid": 78,
+        "role": "longbow"
+      },
+      {
+        "uid": 79,
+        "role": "spear",
+        "embarked": false,
+        "storage": "actor"
+      },
+      {
+        "uid": 80,
+        "role": "gladius",
+        "embarked": false,
+        "storage": "actor"
+      },
+      {
+        "uid": 81,
+        "role": "spear",
+        "embarked": false,
+        "storage": "actor"
+      },
+      {
+        "uid": 82,
+        "role": "gladius",
+        "embarked": false,
+        "storage": "actor"
+      }
+    ],
+    "ships": [
+      {
+        "name": "red-reinforce-ship-0",
+        "visible": false,
+        "crew": [
+          {
+            "uid": 79,
+            "role": "spear",
+            "seat": 0,
+            "combatant": true,
+            "embarked": false,
+            "weaponStored": false,
+            "stage": "ashore"
+          },
+          {
+            "uid": 80,
+            "role": "gladius",
+            "seat": 1,
+            "combatant": true,
+            "embarked": false,
+            "weaponStored": false,
+            "stage": "ashore"
+          },
+          {
+            "uid": 81,
+            "role": "spear",
+            "seat": 2,
+            "combatant": true,
+            "embarked": false,
+            "weaponStored": false,
+            "stage": "ashore"
+          },
+          {
+            "uid": 82,
+            "role": "gladius",
+            "seat": 3,
+            "combatant": true,
+            "embarked": false,
+            "weaponStored": false,
+            "stage": "ashore"
+          }
+        ]
+      }
+    ],
+    "pendingCohorts": 0
+  },
+  "reset": {
+    "total": 28,
+    "alive": 28,
+    "guards": [
+      {
+        "uid": 133,
+        "role": "spear"
+      },
+      {
+        "uid": 134,
+        "role": "gladius"
+      },
+      {
+        "uid": 135,
+        "role": "spear"
+      },
+      {
+        "uid": 136,
+        "role": "gladius"
+      },
+      {
+        "uid": 137,
+        "role": "spear"
+      },
+      {
+        "uid": 138,
+        "role": "gladius"
+      },
+      {
+        "uid": 139,
+        "role": "spear"
+      },
+      {
+        "uid": 140,
+        "role": "gladius"
+      },
+      {
+        "uid": 141,
+        "role": "spear"
+      },
+      {
+        "uid": 142,
+        "role": "gladius"
+      },
+      {
+        "uid": 143,
+        "role": "spear"
+      },
+      {
+        "uid": 144,
+        "role": "gladius"
+      },
+      {
+        "uid": 145,
+        "role": "spear"
+      },
+      {
+        "uid": 146,
+        "role": "gladius"
+      },
+      {
+        "uid": 147,
+        "role": "spear"
+      },
+      {
+        "uid": 148,
+        "role": "gladius"
+      },
+      {
+        "uid": 149,
+        "role": "spear"
+      },
+      {
+        "uid": 150,
+        "role": "gladius"
+      },
+      {
+        "uid": 151,
+        "role": "spear"
+      },
+      {
+        "uid": 152,
+        "role": "gladius"
+      },
+      {
+        "uid": 153,
+        "role": "spear"
+      },
+      {
+        "uid": 154,
+        "role": "gladius"
+      },
+      {
+        "uid": 155,
+        "role": "spear"
+      },
+      {
+        "uid": 156,
+        "role": "gladius"
+      },
+      {
+        "uid": 157,
+        "role": "longbow"
+      },
+      {
+        "uid": 158,
+        "role": "longbow"
+      },
+      {
+        "uid": 159,
+        "role": "longbow"
+      },
+      {
+        "uid": 160,
+        "role": "longbow"
+      }
+    ],
+    "ships": [],
+    "pendingCohorts": 0
+  },
+  "scope": "Actual Web admission/queue/reset with debug siege, blue combat disabled and 1-second scheduler steps. Not normal storyline or combat validation.",
+  "identityPreserved": true,
+  "endpointError": 1.1059158862475287e-13,
+  "newHarborArrival": true,
+  "errors": [],
+  "passed": true
+}

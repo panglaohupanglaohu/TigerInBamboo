@@ -553,11 +553,12 @@ function setAmbienceDuck(level) {
 
 
 // Regional rendition of the elder's existing track. One music owner at a time.
+const CITADEL_ELDER_RANGE = 30;
 let citadelElderEl=null, citadelElderRetryAt=0;
 export function updateCitadelElderBgm({listener,newCity,gameStarted=true}) {
   const valid=p=>p&&['x','y','z'].every(k=>Number.isFinite(p[k]));
   const distance=valid(listener)&&valid(newCity)?Math.hypot(listener.x-newCity.x,listener.y-newCity.y,listener.z-newCity.z):Infinity;
-  const active=gameStarted&&!muted&&distance<=200;
+  const active=gameStarted&&!muted&&distance<CITADEL_ELDER_RANGE;
   const permitted=bgmOwnership.request('citadelElder',active,{source:newCity,distance});
   if(!active){if(citadelElderEl){citadelElderEl.pause();citadelElderEl.currentTime=MUSIC_BOX_START_SEC;}return;}
   if(!permitted)return;
@@ -567,7 +568,7 @@ export function updateCitadelElderBgm({listener,newCity,gameStarted=true}) {
     citadelElderEl.addEventListener('timeupdate',()=>{if(citadelElderEl.currentTime>=MUSIC_BOX_END_SEC)citadelElderEl.currentTime=MUSIC_BOX_START_SEC;});
   }
   setAmbienceDuck(AMBIENCE_DUCK_MUSIC_BOX);
-  citadelElderEl.volume=MUSIC_BOX_VOLUME*Math.min(1,Math.max(0,(200-distance)/10));
+  citadelElderEl.volume=MUSIC_BOX_VOLUME*Math.min(1,Math.max(0,(CITADEL_ELDER_RANGE-distance)/5));
   const now=performance.now();
   if(citadelElderEl.paused&&now>=citadelElderRetryAt){
     citadelElderRetryAt=now+3000;

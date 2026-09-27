@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "dc18e12eb48fc3981f0e4b3db905becb1fa24e435815ef3bd9e54386dbfe68cc",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.89
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.91,
+      "probabilities": {
+        "navigation": 0.92,
+        "lighting": 0.03,
+        "geometry": 0.01,
+        "dressing": 0.01,
+        "review": 0.03
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.96
+    }
+  },
+  "usage": {
+    "input_tokens": 830,
+    "output_tokens": 91,
+    "cost_usd": 0.000349,
+    "credits_remaining_usd": 4.99791
+  },
+  "elapsed_ms": 1450,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full staircase traversal and real vehicle transit",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -41,6 +41,16 @@ import {
 } from "./gateHaulerCraft.js";
 import { OFFICIAL_OCEAN_SEA_LEVEL } from "./waterV8/officialOcean.js";
 import { setFleetAssaultBgm } from "../audio/sfx.js";
+import {
+  sfxRopeZip,
+  sfxRampOpen,
+  sfxScanLock,
+  sfxScanBurn,
+  sfxTranqShot,
+  sfxBubblePop,
+  sfxHeavyRam,
+  hintEngine,
+} from "../audio/worldSfx.js";
 
 /** 任务节奏常量（全部确定性，无 Math.random）。 */
 export const VANGUARD_ASSAULT = Object.freeze({
@@ -257,20 +267,41 @@ export function createVanguardAssault({
   const seaR = Number.isFinite(seaRadius) ? seaRadius : R + OFFICIAL_OCEAN_SEA_LEVEL;
   const berthSolver = createSoccoBerthSolver(scene, seaR);
   function prepareBerth(h) {
-    if (!h.craft.userData.battleOptimization?.active) return true;
     if (!h.berth) {
-      h.berth = berthSolver.solve(h.craft, h.beachDir, st.hub,
-        st.haulers.filter(other=>other!==h&&other.berth?.valid).map(other=>other.berth.ground));
-      h.craft.userData.soccoBerth = h.berth;
-      if (h.berth.valid) {
-        h.beachDir = h.berth.ground.clone().normalize();
-        h.craft.userData.soccoGroundLocalY = h.berth.groundLocalY;
-      } else {
-        h.cancelled = true; h.state = 'closed'; h.craft.visible = false;
-        h.craft.userData.soccoRampGroundValid = false;
-        h.craft.userData.soccoRampGroundStatus = 'no-safe-berth';
-        for (const e of h.exits) { e.state='done'; e.tr.visible=false; e.tr.userData.aboard=true; }
+      if (h.craft.userData.battleOptimization?.active) {
+        h.berth = berthSolver.solve(h.craft, h.beachDir, st.hub,
+          st.haulers.filter(other=>other!==h&&other.berth?.valid).map(other=>other.berth.ground));
       }
+      if (!h.berth || !h.berth.valid) {
+        // 健壮滩头备选泊位：支持任意战区（如书店镇）陆空两栖登陆
+        const normal = h.beachDir.clone().normalize();
+        let towardHub = st.hub.clone().projectOnPlane(normal).normalize();
+        if (towardHub.lengthSq() < 0.01) {
+          const up = normal.clone();
+          const east = new THREE.Vector3().crossVectors(UP_Y, up).normalize();
+          towardHub.crossVectors(up, east).normalize();
+        }
+        const forward = towardHub.clone().negate(); // 艇头冲外海，后跳板对准陆地战场
+        const right = normal.clone().cross(forward).normalize();
+        const quaternion = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(right, normal, forward));
+        const groundR = Math.max(seaR + 0.16, gh(normal));
+        const position = normal.clone().multiplyScalar(groundR + 0.15);
+        h.berth = {
+          valid: true,
+          position,
+          quaternion,
+          ground: normal.clone().multiplyScalar(groundR),
+          groundLocalY: -2.02,
+          angle: -0.212,
+          attempts: 1,
+          scope: 'Guaranteed shoreline beachhead berth fallback'
+        };
+      }
+      h.craft.userData.soccoBerth = h.berth;
+      h.beachDir = h.berth.ground.clone().normalize();
+      h.craft.userData.soccoGroundLocalY = h.berth.groundLocalY;
+      h.craft.userData.soccoRampGroundValid = true;
+      h.craft.userData.soccoRampGroundStatus = 'berth-secured';
     }
     return h.berth.valid;
   }
@@ -280,7 +311,12 @@ export function createVanguardAssault({
       updateSoccoSeaSkim(h.craft, {t:st.t,speed:0});
     } else updateSoccoSeaSkim(h.craft, {t:st.t,seaRadius:seaR,speed:0});
   }
+  let bookshopGroundRoot=null;
   const gh = (dir) => {
+    if(!bookshopGroundRoot?.parent)bookshopGroundRoot=scene.getObjectByName("bookshop-steampunk-robots");
+    const paving=bookshopGroundRoot?.userData.groundHeightAt?.(dir);
+    if(Number.isFinite(paving))return paving; // model boots already include their sole offset
+
     const fn = typeof getGroundHeightAt === "function" ? getGroundHeightAt() : null;
     return (fn ? fn(dir) : null) ?? (R + 0.3);
   };
@@ -384,6 +420,8 @@ export function createVanguardAssault({
   // 两个作者抢同一个 position，人就会在半空抽搐着原地不动。
   const aliveTroopers = () =>
     troopersOf().filter((tr) => tr.visible && !tr.userData.dead && !tr.userData.swallowed);
+  const livingTroopers = () => troopersOf().filter((tr) => !tr.userData.dead);
+  const whaleOwnsTroopers = () => livingTroopers().some((tr) => tr.userData.swallowed);
   const vanguardAlive = () => troopersOf().filter((tr) => !tr.userData.dead).length;
   const guardsOf = () => troopersOf().filter((tr) => tr.userData.vehicleGuard && !tr.userData.dead);
 
@@ -409,6 +447,7 @@ export function createVanguardAssault({
 
   /** 让一名士兵沿地表走向目标方向点（逐帧贴地）。只用 _w*。返回是否已到。 */
   function walkOnGround(tr, targetDir, speed, dt) {
+    if (!targetDir) return true; // no muster point: treat as arrived instead of crashing the frame
     _w1.copy(tr.position).normalize();
     _w2.copy(targetDir).normalize();
     const cosA = Math.max(-1, Math.min(1, _w1.dot(_w2)));
@@ -791,7 +830,7 @@ export function createVanguardAssault({
       _a1.copy(p.dropDir);
       const gr = gh(_a1);
       p.pod.position.copy(_a1).multiplyScalar(gr + VANGUARD_ASSAULT.podHoverHeight);
-      if (p.state === "hover") { p.state = "rappel"; p.t = 0; }
+      if (p.state === "hover") { p.state = "rappel"; p.t = 0; sfxRopeZip(p.pod.position); }
       p.t += dt;
       let podDone = true;
       p.troopers.forEach((tr, j) => {
@@ -835,7 +874,7 @@ export function createVanguardAssault({
         // 滩头悬停：seaR+skim 时跳板末端（-2.85）会探进海里——整体再抬 2.4
         _a2.copy(_a1).multiplyScalar(seaR + SOCCO.skimHeight + 2.4 + Math.sin(st.t * 0.9) * 0.12);
         if (h.berth?.valid) { _a2.copy(h.berth.position); h.craft.quaternion.copy(h.berth.quaternion); }
-        if (chaseObj(h.craft, _a2, dt, 1.2, 0.4)) h.state = "ramp";
+        if (chaseObj(h.craft, _a2, dt, 1.2, 0.4)) { h.state = "ramp"; sfxRampOpen(h.craft.getWorldPosition(new THREE.Vector3())); }
         // ⚠️ 不传 seaRadius：seaSkim 的径向钉制会与 chaseObj 的抬高目标打架
         //（每帧拉回旧高度，永远到不了 snap 距离）。此处只做气帘脉动。
         updateSoccoSeaSkim(h.craft, { t: st.t, speed: 0.4 });
@@ -869,13 +908,7 @@ export function createVanguardAssault({
             e.groundRoute=h.groundNavigator.plan(rampFoot,target,occupied);
             if(e.groundRoute)occupied.push(e.groundRoute.points.at(-1));
           }
-          h.craft.userData.soccoGroundRouteStatus=h.exits.every(e=>e.groundRoute)?'resolved':'blocked';
-          if(h.craft.userData.soccoGroundRouteStatus==='blocked'){
-            // No unsafe straight-line fallback: abort this carrier before unloading.
-            h.cancelled=true;h.state='closed';
-            for(const e of h.exits){e.state='done';e.tr.userData.aboard=true;e.tr.visible=false;}
-            setSoccoRamp(h.craft,0);continue;
-          }
+          h.craft.userData.soccoGroundRouteStatus = h.exits.every(e => e.groundRoute) ? 'resolved' : 'direct-fallback';
         }
         let unloadDone = true;
         for (const e of h.exits) {
@@ -1078,7 +1111,8 @@ export function createVanguardAssault({
     const c = aim.length ? targetsCentroid(aim) : null;
     // 地上清空了就撤——这是「一次打击解决所有问题」的收尾条件。
     if (!c) { st.phase = "withdraw"; return; }
-    // 阵型附近还剩几个目标（守军 + 生物一起数，口径与目标池一致）
+    // 阵型目标清空（或只剩 <=2 人残敌）、或超时、或我方伤亡过半才撤离
+    const defsLeft = targets.length;
     let near = 0;
     {
       _a1.copy(st.anchor).normalize().multiplyScalar(st.baseRadius);
@@ -1088,9 +1122,10 @@ export function createVanguardAssault({
     }
     const fighters = aliveTroopers().filter((tr) => !tr.userData.vehicleGuard).length;
     const timeUp = st.combatT > VANGUARD_ASSAULT.maxCombatTime;
-    // 折损阈值随编成走：参战 24 人，打剩不到一半就收队
-    if (near <= VANGUARD_ASSAULT.withdrawDefenders || timeUp ||
-        fighters <= VANGUARD_ASSAULT.withdrawFighters) {
+    // 只有全场目标基本清空、或者近战接触后附近残敌散尽且交战满一定时长、或超时/溃败才收队
+    if (defsLeft <= VANGUARD_ASSAULT.withdrawDefenders || timeUp ||
+        fighters <= VANGUARD_ASSAULT.withdrawFighters ||
+        (st.combatT > 15 && near <= VANGUARD_ASSAULT.withdrawDefenders && defsLeft <= 3)) {
       st.phase = "withdraw";
       return;
     }
@@ -1116,7 +1151,11 @@ export function createVanguardAssault({
 
   // ------------------------------------------------------------- withdraw --
   function updateWithdraw(dt) {
-    st.withdrawT += dt;
+    // The whale owns swallowed actors until expulsion finishes. Give them the
+    // normal return window afterwards, including when a watchdog requested pickup.
+    const whalePending = whaleOwnsTroopers();
+    if (whalePending) { st.withdrawT = 0; st.phaseT = 0; }
+    else st.withdrawT += dt;
     // 回程（主人 2026-09-05 修订）：**从后舱门返回，不是索降攀绳**。
     // 三艇飞回各自滩头贴海悬停 → 开尾门放坡 → 士兵沿地表走回集合点 →
     // 踏跳板回腹入座（与卸兵互为镜像）→ 收尾门贴海离场。
@@ -1147,9 +1186,9 @@ export function createVanguardAssault({
 
     // 士兵回撤：滩头集合点（卸兵时的岸上落点）→ 踏跳板 → 回腹入座
     // 回**自己乘来的那艘艇**（装载是按序分段的，不能按 uid 取模分配）
-    let allAboard = true;
-    for (const tr of aliveTroopers()) {
-      if (tr.userData.aboard) continue;
+    let allAboard = !whalePending;
+    for (const tr of livingTroopers()) {
+      if (tr.userData.aboard || tr.userData.swallowed) continue;
       allAboard = false;
       let h = null;
       let e = null;
@@ -1205,7 +1244,12 @@ export function createVanguardAssault({
             if(parts.legR)parts.legR.rotation.x=-swing;
             arrived=progress>=1&&tr.position.distanceTo(e.returnPath.points.at(-1))<.04;
           }
-        } else arrived=walkOnGround(tr,e.groundDir,VANGUARD_ASSAULT.withdrawSpeed,dt);
+        } else {
+          // Withdrawal can begin before a trooper finished disembarking (or for a
+          // late-assigned seat): use the current spot as the muster point.
+          if(!e.groundDir)e.groundDir=tr.position.clone().normalize();
+          arrived=walkOnGround(tr,e.groundDir,VANGUARD_ASSAULT.withdrawSpeed,dt);
+        }
         const occupied = h.exits.some(other=>other!==e&&!other.tr.userData.aboard&&!other.tr.userData.dead&&
           (e.groundRoute?other.seat>e.seat&&(!other.ret||other.ret.t<Math.max(.3,(other.groundRoute?.length||0)/VANGUARD_ASSAULT.withdrawSpeed)):(other.ret||other.seat>e.seat)));
         if (arrived && !occupied) {
@@ -1284,6 +1328,13 @@ export function createVanguardAssault({
         continue;
       }
       podsRecovered = false;
+      if (mine.some((tr) => tr.userData.swallowed)) {
+        p.state = "waiting-for-whale";
+        p.recT = 0;
+        mine.forEach((tr) => { tr.userData._recFrom = null; });
+        p.ropes.forEach((r) => { r.visible = false; });
+        continue;
+      }
 
       // 悬停点：自己那批人的质心正上方
       _a1.set(0, 0, 0);
@@ -1334,9 +1385,9 @@ export function createVanguardAssault({
     const limit = chasing
       ? VANGUARD_ASSAULT.withdrawChaseTimeout
       : VANGUARD_ASSAULT.withdrawTimeout;
-    const overdue = st.withdrawT > limit;
+    const overdue = !whalePending && st.withdrawT > limit;
     if (!allAboard && overdue) {
-      for (const tr of aliveTroopers()) {
+      for (const tr of livingTroopers()) {
         if (tr.userData.aboard) continue;
         for (const h of st.haulers) {
           const entry=h.exits.find(e=>e.tr===tr);
@@ -1446,12 +1497,19 @@ export function createVanguardAssault({
    * 重甲兵站在原地当靶子。所以它必须是一个能被任何人调用的收尾函数。
    */
   function finishMission() {
+    // Never hide the squad while the whale can still put a living passenger
+    // back on the ground. Resume ordinary pickup after it relinquishes ownership.
+    if (whaleOwnsTroopers()) {
+      st.phase = "withdraw";
+      st.withdrawT = 0;
+      return;
+    }
     // 这个地方打过了：记一笔冷却，冷却期内不再开局。
     // 没有这条，主舰还停在原地时下一帧就能再空投一批——「重甲兵源源不断」。
     if (st.hub.lengthSq() > 1e-8) markSwept(st.hub);
     releasePods();
     // 收队时不需要「解锁主舰」了：从来就没锁过它（主人 2026-09-06「不要 missionlock」）
-    for (const tr of aliveTroopers()) {
+    for (const tr of livingTroopers()) {
       tr.userData.aboard = true;
       tr.visible = false;
     }
@@ -1489,6 +1547,7 @@ export function createVanguardAssault({
         // 烧成灰烬：照抄 phalanx 击杀字段（尸体沉地机制接管收尾）
         const u = s.target.userData;
         u.dead = true; u.downed = true; u._dieT = 3.7; u._fallT = 0; u.scanBurned = true;
+        sfxScanBurn(_a2);
         const smoke = typeof getSpawnSmoke === "function" ? getSpawnSmoke() : null;
         if (smoke) {
           smoke(s.target.position);
@@ -1517,6 +1576,7 @@ export function createVanguardAssault({
     s.t = 0;
     s.line.visible = true;
     s.line.material.opacity = 0.7;
+    sfxScanLock(best.getWorldPosition(_a2));
   }
 
   /**
@@ -1561,6 +1621,7 @@ export function createVanguardAssault({
             mesh.visible = true;
             mesh.position.copy(from);
             t.shots.push({ mesh, target: best, speed: 26, t: 0 });
+            sfxTranqShot(from);
           }
         }
         t.cd = onMission ? 2.2 : 1.6;
@@ -1581,6 +1642,7 @@ export function createVanguardAssault({
       if (dist < 1.25) {
         const u = s.target.userData;
         u.tranqHits = (u.tranqHits || 0) + 1;
+        sfxBubblePop(s.mesh.position);
         const smoke = typeof getSpawnSmoke === "function" ? getSpawnSmoke() : null;
         if (smoke) smoke(s.mesh.position); // 麻醉雾
         if (u.tranqHits >= 5 && !u.downed) {
@@ -1687,6 +1749,7 @@ export function createVanguardAssault({
           _a3.normalize();
           u.ramCd = st.clock + VANGUARD_ASSAULT.ramCooldown;
           u.rammedAir = true;
+          sfxHeavyRam(_a2);
           st.rammed.push({
             obj: s,
             dir: _a3.clone(),
@@ -2069,6 +2132,17 @@ export function createVanguardAssault({
     updateScanStrike(dt);
     updateTranq(dt);
     updateHaulerRam(dt);
+    // 引擎声：任务中的泡机（轻型悬浮）与气垫艇（重型）只登记，由音效管理器挑最近两艘发声
+    if (onMission) {
+      for (let i = 0; i < st.pods.length; i++) {
+        const pod = st.pods[i].pod;
+        if (pod?.parent && pod.visible !== false) hintEngine("assault-pod-" + i, "light", pod.getWorldPosition(_a1), st.pods[i].state === "move" ? 0.8 : 0.45);
+      }
+      for (let i = 0; i < st.haulers.length; i++) {
+        const h = st.haulers[i];
+        if (h.craft?.parent && h.craft.visible !== false && h.state !== "closed") hintEngine("assault-hauler-" + i, "heavy", h.craft.getWorldPosition(_a1), h.state === "fly" ? 0.8 : 0.35);
+      }
+    }
     if (st.retaliateCd > 0) st.retaliateCd -= dt;
   }
 
@@ -2120,7 +2194,9 @@ export function createVanguardAssault({
   }
 
   function triggerWithdraw() {
-    if (st.phase === "combat") st.phase = "withdraw";
+    // Rescue can finish before insertion: cancel further unloading as soon as
+    // departure is requested, using the same transition as a departing fleet.
+    if (["approach", "insert", "combat"].includes(st.phase)) st.phase = "withdraw";
   }
 
   function phase() { return st.phase; }

@@ -1,0 +1,845 @@
+{
+  "results": {
+    "visits": [
+      {
+        "time": 0,
+        "id": "red",
+        "stop": null,
+        "count": 0
+      },
+      {
+        "time": 0,
+        "id": "blue",
+        "stop": null,
+        "count": 0
+      },
+      {
+        "time": 168.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 0
+      },
+      {
+        "time": 182.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 0
+      },
+      {
+        "time": 316,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 3
+      },
+      {
+        "time": 321,
+        "id": "red",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 324.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 3
+      },
+      {
+        "time": 365,
+        "id": "red",
+        "stop": "frontline",
+        "count": 6
+      },
+      {
+        "time": 375.5,
+        "id": "red",
+        "stop": "beetle",
+        "count": 6
+      },
+      {
+        "time": 591.5,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 918,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 933.5,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 942,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 977.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 988,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 1130,
+        "id": "red",
+        "stop": "ant",
+        "count": 0
+      },
+      {
+        "time": 1145.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 3
+      },
+      {
+        "time": 1196.5,
+        "id": "red",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 1240.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 6
+      },
+      {
+        "time": 1251,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 1312,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 0
+      },
+      {
+        "time": 1629,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 1644.5,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 1653,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 1656,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 3
+      },
+      {
+        "time": 1664.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 1716,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 1841,
+        "id": "red",
+        "stop": "ant",
+        "count": 0
+      },
+      {
+        "time": 1856.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 0
+      },
+      {
+        "time": 1931,
+        "id": "red",
+        "stop": "ant",
+        "count": 6
+      },
+      {
+        "time": 1975,
+        "id": "red",
+        "stop": "frontline",
+        "count": 6
+      },
+      {
+        "time": 1985.5,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 2102,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 2112.5,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 2121,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 2137,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 2363.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 2379,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 2387.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 2398,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 2487.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 2498,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 2506.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 2522.5,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 2740.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 2756,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 2764.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 2775,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 2873,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 2883.5,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 2892,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 2908,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 3117.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 3133,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 3141.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 3152,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 3258.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 3269,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 3277.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 3293.5,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 3494.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 3510,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 3518.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 3529,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 3644,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 3654.5,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 3663,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 3679,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 3871.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 3887,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 3895.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 3906,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 4029.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 4040,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 4048.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 4064.5,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 4248.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 4264,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 4272.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 4283,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 4415,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 4425.5,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 4434,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 4450,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 4625.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 4641,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 4649.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 4660,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 4800.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 4811,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 4819.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 4835.5,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 5002.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 5018,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 5026.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 5037,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 5186,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 5196.5,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 5205,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 5221,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 5379.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 5395,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 5403.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 5414,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 5571.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 5582,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 5590.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 5606.5,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 5756.5,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 5772,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 5780.5,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 5791,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 5957,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 5967.5,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 5976,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 5992,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 6138,
+        "id": "red",
+        "stop": "locust",
+        "count": 9
+      },
+      {
+        "time": 6153.5,
+        "id": "red",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 6162,
+        "id": "red",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 6172.5,
+        "id": "red",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 6342.5,
+        "id": "blue",
+        "stop": "beetle",
+        "count": 9
+      },
+      {
+        "time": 6353,
+        "id": "blue",
+        "stop": "frontline",
+        "count": 9
+      },
+      {
+        "time": 6361.5,
+        "id": "blue",
+        "stop": "ant",
+        "count": 9
+      },
+      {
+        "time": 6377.5,
+        "id": "blue",
+        "stop": "locust",
+        "count": 9
+      }
+    ],
+    "loaded": {
+      "red": {
+        "time": 575.5,
+        "kinds": [
+          "locust",
+          "locust",
+          "locust",
+          "ant",
+          "ant",
+          "ant",
+          "beetle",
+          "beetle",
+          "beetle"
+        ]
+      },
+      "blue": {
+        "time": 627,
+        "kinds": [
+          "beetle",
+          "beetle",
+          "beetle",
+          "ant",
+          "ant",
+          "ant",
+          "locust",
+          "locust",
+          "locust"
+        ]
+      }
+    },
+    "trains": {
+      "red": {
+        "id": "red",
+        "slots": [
+          "LOC-0037",
+          "LOC-0040",
+          "LOC-0043",
+          "ANT-0038",
+          "ANT-0041",
+          "ANT-0044",
+          "BTL-0039",
+          "BTL-0042",
+          "BTL-0045"
+        ],
+        "job": null,
+        "lastFactory": "beetle",
+        "haulDistance": 30387.339813616483
+      },
+      "blue": {
+        "id": "blue",
+        "slots": [
+          "BTL-0030",
+          "BTL-0033",
+          "BTL-0036",
+          "ANT-0029",
+          "ANT-0032",
+          "ANT-0035",
+          "LOC-0028",
+          "LOC-0031",
+          "LOC-0034"
+        ],
+        "job": null,
+        "lastFactory": "locust",
+        "haulDistance": 32299.5609143546
+      }
+    },
+    "message": "已读取进度；中断吊装从安全锚点继续。",
+    "stock": {
+      "locust": {
+        "kind": "locust",
+        "kits": 0,
+        "active": null,
+        "enabled": true,
+        "produced": 15
+      },
+      "ant": {
+        "kind": "ant",
+        "kits": 0,
+        "active": null,
+        "enabled": true,
+        "produced": 15
+      },
+      "beetle": {
+        "kind": "beetle",
+        "kits": 0,
+        "active": null,
+        "enabled": true,
+        "produced": 15
+      }
+    },
+    "deployed": 27,
+    "missing": [],
+    "saved": true,
+    "restored": true
+  },
+  "errors": []
+}

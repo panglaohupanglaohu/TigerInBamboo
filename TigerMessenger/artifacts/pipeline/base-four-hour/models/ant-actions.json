@@ -1,0 +1,42 @@
+{
+  "kind": "ant",
+  "rigVersion": 2,
+  "sourceModelVersion": 4,
+  "bytes": 9429132,
+  "nodes": 86,
+  "joints": 13,
+  "clips": [
+    {
+      "name": "idle",
+      "duration": 1,
+      "frames": 31
+    },
+    {
+      "name": "move",
+      "duration": 1.6534698176788385,
+      "frames": 51
+    },
+    {
+      "name": "attack",
+      "duration": 2.4,
+      "frames": 73
+    },
+    {
+      "name": "transport",
+      "duration": 1,
+      "frames": 31
+    },
+    {
+      "name": "disabled",
+      "duration": 1,
+      "frames": 31
+    }
+  ],
+  "limitations": [
+    "Rigid articulated nodes, not a skinned humanoid skeleton.",
+    "Procedural patina, outline effects and gameplay logic remain authoritative in the native Three.js model.",
+    "Movement clips are in place; navigation and projectile effects are not baked into the mesh.",
+    "Beetle rolling wheel phase is continuous within the move clip; continuous looping requires an engine animation controller."
+  ],
+  "sha256": "9db34e7a5937a76247af4d37ea9f7424cc36e96e8baa0c36ae5b777209ef0a2e"
+}

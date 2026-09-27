@@ -1,0 +1,55 @@
+{
+  "scope": "8931 Three.js runtime; no Godot performance claim",
+  "beforeSoftwareFrameMs": 437.6950000000497,
+  "afterSoftwareFrameMs": 359.8666666666667,
+  "softwareFrameTimeReductionPercent": 17.781407905818934,
+  "sameFrameCulling": {
+    "meshes": 4012,
+    "before": {
+      "calls": 7581,
+      "triangles": 1698202
+    },
+    "after": {
+      "calls": 4755,
+      "triangles": 1505626
+    },
+    "changedPixels": 0,
+    "maxChannelDelta": 0,
+    "scope": "Same frozen production frame, raw scene render (no postprocessing), culling only"
+  },
+  "groundCpuSampleBeforeMs": 11839.62,
+  "groundCpuSampleAfterMs": 67.6,
+  "sampleFrames": 60,
+  "terrainIndex": {
+    "passed": true,
+    "cases": 1906,
+    "maxError": 0,
+    "referenceMs": 279.02253,
+    "indexedMs": 36.703381999999195,
+    "speedup": 7.602093180405177,
+    "scope": "Exact nearest-hit comparison: exported ground, indexed sphere, 3 sides, 4 moving transforms, groups/drawRange, vertex/interleaved revisions, excluded fallback layers"
+  },
+  "hardwareFps": "unavailable; default headless hardware initialization timed out",
+  "note": "Battle setup uses diagnostic story progress and fleet placement. Baseline renderer.info was incorrect due to postprocess auto reset, so compare draw calls using the frozen A/B only.",
+  "finalRuntime": {
+    "report": "final.json",
+    "frameMs": 358.9583333333333,
+    "errors": [],
+    "phase": "fight",
+    "groundCpuSampleMs": 82.098,
+    "culling": {
+      "meshes": 4012,
+      "before": {
+        "calls": 7581,
+        "triangles": 1698202
+      },
+      "after": {
+        "calls": 4755,
+        "triangles": 1505626
+      },
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "scope": "Same frozen production frame, raw scene render (no postprocessing), culling only"
+    }
+  }
+}

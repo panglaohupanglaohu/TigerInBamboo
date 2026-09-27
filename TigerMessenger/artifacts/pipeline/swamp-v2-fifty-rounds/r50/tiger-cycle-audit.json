@@ -1,0 +1,41 @@
+{
+  "modes": {
+    "patrol": 25852,
+    "to-steps": 6235,
+    "descend": 955,
+    "drink": 2033,
+    "ascend": 925
+  },
+  "radiusMin": 34.62264931460544,
+  "finite": true,
+  "drinkSeen": true,
+  "position": [
+    -25.023797909046472,
+    40.67846216457392,
+    -27.79513515360559
+  ],
+  "world": [
+    -71.59774407870225,
+    -110.96302816857363,
+    -61.66237705732518
+  ],
+  "mode": "patrol",
+  "ancestors": [
+    {
+      "name": "moebius-cyber-ink-tiger",
+      "visible": true
+    },
+    {
+      "name": "moebius-swamp-zone",
+      "visible": true
+    },
+    {
+      "name": "moebius-swamp-placement",
+      "visible": true
+    },
+    {
+      "name": "",
+      "visible": true
+    }
+  ]
+}

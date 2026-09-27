@@ -30,7 +30,7 @@ blend_name='plaza-edge-r03.blend' if WIDE else 'plaza-edge-r02.blend'
 if PORT:
  folder=ROOT/'assets/models/optimized/citadel-front-harbor-finish'
  folder.mkdir(parents=True,exist_ok=True)
- blend_name='front-harbor-finish-r04.blend'
+ blend_name='front-harbor-finish-r06.blend'
 bpy.ops.wm.save_as_mainfile(filepath=str(folder/blend_name))
-(folder/('frontHarborFinishR04.js' if PORT else ('plazaEdgeR03.js' if WIDE else 'plazaEdgeR02.js'))).write_text('export default '+json.dumps({'source':str((folder/blend_name).relative_to(ROOT)),'parts':parts},separators=(',',':'))+';\n')
+(folder/('frontHarborFinishR06.js' if PORT else ('plazaEdgeR03.js' if WIDE else 'plazaEdgeR02.js'))).write_text('export default '+json.dumps({'source':str((folder/blend_name).relative_to(ROOT)),'parts':parts},separators=(',',':'))+';\n')
 print('Blender stone edge triangles:',sum(len(p['positions'])//9 for p in parts))

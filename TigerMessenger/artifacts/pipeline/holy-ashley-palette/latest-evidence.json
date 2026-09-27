@@ -1,0 +1,27 @@
+{
+  "task": "holy-ashley-palette final palette review",
+  "target": "User reference-driven regional palette",
+  "visual_observations": {
+    "source": "Assistant personally inspected latest actual 8931 screenshots",
+    "image_sha256": "4a77e6b39151eab89c22b7afe7b8a45e750014f30a699ac33483bbcecc650cea",
+    "completed": [
+      "Inspected new and old city: bone stone, rust domes, olive and smoke-grey terrain.",
+      "Old city silhouette retained; this is palette application, not oil brushwork."
+    ],
+    "remaining": [
+      "Bright blue foreground umbrellas remain outside building palette scope",
+      "No full gameplay regression performed"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Capture produced no page errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text only triage; not image acceptance",
+    "Do not count palette edits as tiger modeling iterations"
+  ]
+}

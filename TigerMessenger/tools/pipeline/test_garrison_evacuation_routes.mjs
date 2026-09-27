@@ -1,0 +1,20 @@
+import * as T from '../../vendor/three.module.js';
+import assert from 'node:assert/strict';
+import {createGarrisonEvacuationRoutes} from '../../src/world/garrisonEvacuationRoutes.js';
+import {writeFile} from 'node:fs/promises';
+const scene=new T.Scene();
+const ground=new T.Mesh(new T.PlaneGeometry(80,80,1,1),new T.MeshBasicMaterial({side:T.DoubleSide}));
+ground.name='mossy-terrain';ground.rotation.x=-Math.PI/2;ground.position.y=160.8;scene.add(ground);
+const tree=new T.Group();tree.name='giantTreeGroup';const trunk=new T.Mesh(new T.BoxGeometry(3,5,3),new T.MeshBasicMaterial());trunk.position.set(0,163.3,0);tree.add(trunk);scene.add(tree);scene.updateMatrixWorld(true);
+const nav=createGarrisonEvacuationRoutes(scene);
+const start=new T.Vector3(-7,161.02,0),home=new T.Vector3(7,159.7,0);
+const route=nav.plan(start,home);
+assert.equal(route.valid,true,'must find dry supported detour around real tree triangles');
+assert.ok(route.points.some(p=>Math.abs(p.z)>1.5),'must route around trunk, not through it');
+assert.ok(route.destination[1]>160.5,'resample dry destination rather than stored underwater height');
+const pair=nav.plan(start,home,{pair:true});assert.equal(pair.valid,true);
+for(let d=0;d<=pair.length;d+=.16){const p=nav.pointAt(pair,d);assert.ok(p&&p.length()>160.575);}
+const empty=new T.Scene(),none=createGarrisonEvacuationRoutes(empty).plan(start,home);
+assert.equal(none.valid,false,'missing support fails closed rather than planet fallback');
+const report={passed:true,checks:['dry-home-resampling','tree-triangle-detour','pair-clearance-route','sampled-dry-points','missing-ground-fails-closed'],route:{length:route.length,points:route.points.map(p=>p.toArray()),homeAdjustment:route.homeAdjustment,destination:route.destination},pair:{length:pair.length},unreachable:none,scope:'Node synthetic rigid terrain and real obstacle meshes; production route module. Not the actual 8931 ground.'};
+await writeFile('TigerMessenger/artifacts/pipeline/kun-roll-model/evacuation-route-node.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));

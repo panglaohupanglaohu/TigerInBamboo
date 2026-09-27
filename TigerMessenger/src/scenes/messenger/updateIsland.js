@@ -31,6 +31,7 @@ export function updateMessengerIsland(s, dt, t, runtime) {
   s.canalJunctionBox?.userData?.update?.(dt, t);
   s.canalJunctionCitadel?.update?.(dt, t);
   s.harborBuilt?.update?.(dt, t);
+  s.bookshopFactoryBase?.userData.update?.(dt,t);
   // 弹唱老人（2026-08-29 修订）：不再随狐——老人在旧港灯杆/半沉战船旁站立（loadCitadel snap 落位）。
 
 
@@ -138,13 +139,13 @@ export function updateMessengerIsland(s, dt, t, runtime) {
   }
 
   if (s.gateBirdVortex) {
-    const tram = s.tramSystem.getNearestTram?.(runtime?.player?.position) || s.tramSystem.tram || null;
+    const tram = s.tramSystem.getNearestTram?.(s.gateBirdVortex.origin) || s.tramSystem.tram || null;
     s.gateBirdVortex.update(dt, t, { tram, viewer: runtime?.player?.position || null });
   }
   if (s.gatePods) updateGatePodCraft(s.gatePods, t); // 叹息之门泡形飞行器悬停摆动
   if (s.gateHaulers) updateGateHaulerCraft(s.gateHaulers, t); // 重型运输艇（更重更慢）
   if (s.terraceBirds) {
-    const tram = s.tramSystem.getNearestTram?.(runtime?.player?.position) || s.tramSystem.tram || null;
+    const tram = s.tramSystem.getNearestTram?.(s.gateBirdVortex.origin) || s.tramSystem.tram || null;
     s.terraceBirds.update(dt, t, {
       phase: P.timeOfDay,
       tram,

@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "0a06a4ff7ac817ada1ec639dded337541e06627b40dc52c59c3459eb0d30d2d3",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.89
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.65,
+      "probabilities": {
+        "geometry": 0.16,
+        "lighting": 0.01,
+        "review": 0.11,
+        "navigation": 0.72,
+        "dressing": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.97
+    }
+  },
+  "usage": {
+    "input_tokens": 1196,
+    "output_tokens": 91,
+    "cost_usd": 0.000503,
+    "credits_remaining_usd": 4.99901
+  },
+  "elapsed_ms": 2258,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Complete new shore walking route and story regression",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

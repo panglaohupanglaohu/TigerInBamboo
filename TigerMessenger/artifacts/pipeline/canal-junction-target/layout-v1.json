@@ -1,0 +1,133 @@
+{
+  "status": "spatial study, not final geometry; no WFC solve in this blockout",
+  "quayHeight": 0.65,
+  "courtHeight": 3.35,
+  "keepLanding": 6.59,
+  "frontArchClearWidth": 4,
+  "courtSize": [
+    13,
+    7.6
+  ],
+  "mainStairWidth": 4.2,
+  "sourceWaterAllocation": [
+    44,
+    36
+  ],
+  "regions": [
+    [
+      "left-front-coral",
+      -11,
+      -6,
+      3.35,
+      4.8,
+      4.8,
+      7,
+      "coral"
+    ],
+    [
+      "left-mid-yellow",
+      -12,
+      0.3,
+      3.35,
+      4.8,
+      5,
+      10,
+      "yellow"
+    ],
+    [
+      "left-rear-teal",
+      -9,
+      6.8,
+      3.35,
+      5,
+      4.8,
+      8,
+      "teal"
+    ],
+    [
+      "left-watchtower",
+      -14,
+      8.5,
+      3.35,
+      3.5,
+      3.5,
+      17,
+      "cream"
+    ],
+    [
+      "right-front-teal",
+      11,
+      -6,
+      3.35,
+      4.8,
+      4.8,
+      7,
+      "teal"
+    ],
+    [
+      "right-mid-coral",
+      12,
+      0.3,
+      3.35,
+      4.8,
+      5,
+      9,
+      "coral"
+    ],
+    [
+      "right-rear-yellow",
+      10,
+      6.8,
+      3.35,
+      4.8,
+      4.8,
+      8,
+      "yellow"
+    ],
+    [
+      "right-watchtower",
+      15,
+      8.5,
+      3.35,
+      3.5,
+      3.5,
+      13,
+      "cream"
+    ],
+    [
+      "rear-keep",
+      0,
+      12,
+      6.59,
+      7,
+      4,
+      11,
+      "cream"
+    ],
+    [
+      "keep-tower-left",
+      -4.6,
+      11.8,
+      6.59,
+      2.5,
+      3,
+      13,
+      "cream"
+    ],
+    [
+      "keep-tower-right",
+      4.6,
+      11.8,
+      6.59,
+      2.5,
+      3,
+      15,
+      "cream"
+    ]
+  ],
+  "caveats": [
+    "Harbor approach requires original-world bathymetry test",
+    "Front ring height exceeds court, parapet massing pending",
+    "No changes to saved user layout or production game"
+  ]
+}

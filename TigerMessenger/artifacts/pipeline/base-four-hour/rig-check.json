@@ -1,0 +1,65 @@
+{
+  "report": [
+    {
+      "state": "idle",
+      "name": "bookshop-robot-locust-articulated",
+      "joints": 11
+    },
+    {
+      "state": "move",
+      "name": "bookshop-robot-locust-articulated",
+      "joints": 11
+    },
+    {
+      "state": "attack",
+      "name": "bookshop-robot-locust-articulated",
+      "joints": 11
+    },
+    {
+      "state": "transport",
+      "name": "bookshop-robot-locust-articulated",
+      "joints": 11
+    },
+    {
+      "state": "idle",
+      "name": "bookshop-robot-ant-articulated",
+      "joints": 11
+    },
+    {
+      "state": "move",
+      "name": "bookshop-robot-ant-articulated",
+      "joints": 11
+    },
+    {
+      "state": "attack",
+      "name": "bookshop-robot-ant-articulated",
+      "joints": 11
+    },
+    {
+      "state": "transport",
+      "name": "bookshop-robot-ant-articulated",
+      "joints": 11
+    },
+    {
+      "state": "idle",
+      "name": "bookshop-robot-beetle-articulated",
+      "joints": 10
+    },
+    {
+      "state": "move",
+      "name": "bookshop-robot-beetle-articulated",
+      "joints": 10
+    },
+    {
+      "state": "attack",
+      "name": "bookshop-robot-beetle-articulated",
+      "joints": 10
+    },
+    {
+      "state": "transport",
+      "name": "bookshop-robot-beetle-articulated",
+      "joints": 10
+    }
+  ],
+  "errors": []
+}

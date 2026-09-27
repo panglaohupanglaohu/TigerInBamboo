@@ -1,0 +1,123 @@
+{
+  "boats": [
+    {
+      "name": "swamp-warship-repair",
+      "palette": 8,
+      "materials": {
+        "MeshToonMaterial_m13": "c4a273",
+        "MeshToonMaterial_m22": "c4a273",
+        "MeshToonMaterial_m0": "368fc3",
+        "MeshToonMaterial_m10": "9a7434",
+        "MeshToonMaterial_m2": "e88e7c",
+        "MeshToonMaterial_m4": "eee6cf",
+        "MeshToonMaterial_m6": "2a2620",
+        "MeshToonMaterial_m28": "777fa9",
+        "MeshToonMaterial_m27": "e88e7c",
+        "": "a8e8ff",
+        "MeshToonMaterial_m26": "eee6cf",
+        "Roman_Handle_Dark_Wood.009": "764d2c",
+        "MeshToonMaterial_m13.011": "e2c584",
+        "MeshToonMaterial_m15.010": "2b4359",
+        "MeshToonMaterial_m12.010": "3f6f91",
+        "Roman_Handle_Gold_Brackets.009": "e1c26f",
+        "Candidate bronze.005": "c08e4d",
+        "MeshToonMaterial_m18.003": "4b3523",
+        "MeshToonMaterial_m20.002": "3a2a18",
+        "MeshToonMaterial_m19.002": "6b4a24",
+        "MeshToonMaterial_m18.007": "4a3020",
+        "Taut flax bowstring.002": "3c342c",
+        "Roman_Handle_Dark_Wood.003": "764d2c",
+        "MeshToonMaterial_m13.004": "e2c584",
+        "MeshToonMaterial_m15.004": "2b4359",
+        "MeshToonMaterial_m12.003": "3f6f91",
+        "Roman_Handle_Gold_Brackets.003": "e1c26f",
+        "Spear leather grip.001": "6f4d35",
+        "MeshToonMaterial_m5.002": "d6bd7d",
+        "MeshToonMaterial_m17.003": "5c4936",
+        "Candidate bronze.002": "c08e4d",
+        "MeshToonMaterial_m17": "d9a06b",
+        "MeshToonMaterial_m0.001": "4d718d",
+        "MeshToonMaterial_m6.001": "2563eb",
+        "MeshToonMaterial_m7": "1e3a8a",
+        "MeshToonMaterial_m9": "93c5fd",
+        "MeshToonMaterial_m3": "d9a06b",
+        "Roman_V2_Original_Bronze.001": "d6bd7d",
+        "Roman_V2_Original_Skirt.001": "293c50"
+      },
+      "oarMoved": true,
+      "crew": 26
+    },
+    {
+      "name": "swamp-warship-depart",
+      "palette": 8,
+      "materials": {
+        "MeshToonMaterial_m13": "c4a273",
+        "MeshToonMaterial_m22": "c4a273",
+        "MeshToonMaterial_m0": "368fc3",
+        "MeshToonMaterial_m10": "9a7434",
+        "MeshToonMaterial_m2": "e88e7c",
+        "MeshToonMaterial_m4": "eee6cf",
+        "MeshToonMaterial_m6": "2a2620",
+        "MeshToonMaterial_m28": "777fa9",
+        "MeshToonMaterial_m27": "e88e7c",
+        "": "4a3a24",
+        "MeshToonMaterial_m26": "eee6cf",
+        "Roman_Handle_Dark_Wood.009": "764d2c",
+        "MeshToonMaterial_m13.011": "e2c584",
+        "MeshToonMaterial_m15.010": "2b4359",
+        "MeshToonMaterial_m12.010": "3f6f91",
+        "Roman_Handle_Gold_Brackets.009": "e1c26f",
+        "Candidate bronze.005": "c08e4d",
+        "MeshToonMaterial_m18.003": "4b3523",
+        "MeshToonMaterial_m20.002": "3a2a18",
+        "MeshToonMaterial_m19.002": "6b4a24",
+        "MeshToonMaterial_m18.007": "4a3020",
+        "Taut flax bowstring.002": "3c342c",
+        "Roman_Handle_Dark_Wood.003": "764d2c",
+        "MeshToonMaterial_m13.004": "e2c584",
+        "MeshToonMaterial_m15.004": "2b4359",
+        "MeshToonMaterial_m12.003": "3f6f91",
+        "Roman_Handle_Gold_Brackets.003": "e1c26f",
+        "Spear leather grip.001": "6f4d35",
+        "MeshToonMaterial_m5.002": "d6bd7d",
+        "MeshToonMaterial_m17.003": "5c4936",
+        "Candidate bronze.002": "c08e4d",
+        "MeshToonMaterial_m17": "d9a06b",
+        "MeshToonMaterial_m0.001": "4d718d",
+        "MeshToonMaterial_m6.001": "2563eb",
+        "MeshToonMaterial_m7": "1e3a8a",
+        "MeshToonMaterial_m9": "93c5fd",
+        "MeshToonMaterial_m3": "d9a06b",
+        "Roman_V2_Original_Bronze.001": "d6bd7d",
+        "Roman_V2_Original_Skirt.001": "293c50"
+      },
+      "oarMoved": true,
+      "crew": 26
+    }
+  ],
+  "crystals": 12,
+  "prisms": 60,
+  "tram": true,
+  "swampUpdate": "function",
+  "gate": 12,
+  "redSail": [
+    {
+      "parents": [
+        "",
+        "tram-static-sector",
+        "christchurch-tram-system",
+        ""
+      ],
+      "material": "",
+      "color": "8a8f94"
+    },
+    {
+      "parents": [
+        "sky-background",
+        ""
+      ],
+      "material": ""
+    }
+  ],
+  "errors": []
+}

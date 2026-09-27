@@ -131,6 +131,7 @@
     {
       "side": "old",
       "index": 0,
+      "name": "old-city-tier-old-shore-court",
       "castlePosition": [
         -66.72243186433545,
         7.929999904632522,
@@ -145,6 +146,7 @@
     {
       "side": "old",
       "index": 1,
+      "name": "old-city-tier-old-middle-court",
       "castlePosition": [
         -69.39230484541325,
         14.95023906468759,
@@ -159,6 +161,7 @@
     {
       "side": "old",
       "index": 2,
+      "name": "old-city-tier-old-upper-court",
       "castlePosition": [
         -53.777568135664524,
         27.004354684486536,
@@ -173,34 +176,37 @@
     {
       "side": "new",
       "index": 0,
+      "name": "new-city-light-main-gate",
       "castlePosition": [
-        27.24999999999998,
-        22.999999999999996,
-        38.1580219542991
+        30.849999999999973,
+        19.816,
+        31.922639047051128
       ],
       "color": 16755548,
-      "radius": 24,
-      "godotEnergy": 95,
+      "radius": 14,
+      "godotEnergy": 18,
       "shadow": true,
       "shadowMapSize": 512
     },
     {
       "side": "new",
       "index": 1,
+      "name": "new-city-light-plaza",
       "castlePosition": [
-        8.080127018922191,
-        8.999999999999998,
-        81.3612159321677
+        4.549038105676655,
+        7.499999999999998,
+        80.47724133595214
       ],
       "color": 16758899,
       "radius": 18,
-      "godotEnergy": 20,
+      "godotEnergy": 8,
       "shadow": true,
       "shadowMapSize": 512
     },
     {
       "side": "new",
       "index": 2,
+      "name": "new-city-light-moon-fill",
       "castlePosition": [
         -15.446152422706627,
         -2.411819752202774,
@@ -209,6 +215,66 @@
       "color": 16754010,
       "radius": 10,
       "godotEnergy": 25,
+      "shadow": false,
+      "shadowMapSize": 0
+    },
+    {
+      "side": "new",
+      "index": 3,
+      "name": "new-city-light-landing-4",
+      "castlePosition": [
+        19.55384757729335,
+        12.800000000000036,
+        39.48814897322131
+      ],
+      "color": 16757608,
+      "radius": 10,
+      "godotEnergy": 7,
+      "shadow": false,
+      "shadowMapSize": 0
+    },
+    {
+      "side": "new",
+      "index": 4,
+      "name": "new-city-light-landing-7",
+      "castlePosition": [
+        36.44615242270662,
+        18.800000000000036,
+        34.22981872402361
+      ],
+      "color": 16757608,
+      "radius": 10,
+      "godotEnergy": 7,
+      "shadow": false,
+      "shadowMapSize": 0
+    },
+    {
+      "side": "new",
+      "index": 5,
+      "name": "new-city-light-upper-west",
+      "castlePosition": [
+        17.759618943233402,
+        34.99999999999999,
+        24.595844127808014
+      ],
+      "color": 16766893,
+      "radius": 40,
+      "godotEnergy": 45,
+      "shadow": false,
+      "shadowMapSize": 0
+    },
+    {
+      "side": "new",
+      "index": 6,
+      "name": "new-city-light-upper-east",
+      "castlePosition": [
+        51.668584287042066,
+        38.999999999999964,
+        41.86379332023912
+      ],
+      "color": 16765088,
+      "radius": 40,
+      "godotEnergy": 38,
       "shadow": false,
       "shadowMapSize": 0
     }

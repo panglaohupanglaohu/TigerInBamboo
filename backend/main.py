@@ -20,6 +20,7 @@ import httpx
 from fastapi import FastAPI, Body, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
+from .archive_static import ArchiveStaticFiles
 
 from backend.runtime_config import get_runtime, set_runtime
 
@@ -1206,7 +1207,7 @@ def config_page() -> FileResponse:
 if TIGER_MESSENGER.is_dir():
     app.mount(
         "/TigerMessenger",
-        StaticFiles(directory=TIGER_MESSENGER, html=True),
+        ArchiveStaticFiles(directory=TIGER_MESSENGER, archive_objects=TIGER_MESSENGER.parent.parent / "TigerMessenger-Archive" / "objects", html=True),
         name="tiger_messenger",
     )
 

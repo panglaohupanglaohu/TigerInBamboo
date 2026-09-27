@@ -1,3 +1,4 @@
+import {buildStatueGarden} from './statueGarden.js';
 import {PLAZA_SHIFT,PLAZA_OFFSET_ENABLED,PLAZA_R03,PLAZA_LAYOUT} from './newPlazaLayout.js';
 import newBaked from '../../../assets/models/optimized/citadel-plaza-edge/plazaEdgeR02.js';
 import wideBaked from '../../../assets/models/optimized/citadel-plaza-edge/plazaEdgeR03.js';
@@ -24,14 +25,28 @@ export function buildPlazaEdgeGarden(){
   box('plaza-planter-soil',x,4.22,z,w-.3,.3,1.2,soil,plants);
   for(const side of [-1,1])box('plaza-planter-rim',x,4.27,z+side*.76,w,.54,.24,cap);
   for(const side of [-1,1])box('plaza-planter-end',x+side*(w/2-.12),4.27,z,.24,.54,1.3,cap);
-  for(let j=0;j<5;j++)plants.add(buildSlopeShrub(shrubMat,100+i*7+j,x+(j-2)*w/6,z+Math.sin(j+i)*.2,.52,{surfaceY:4.36}));
+  // Layered planting stays inside the existing beds; the broad court and
+  // western stair landing remain open, as in the approved terrain target.
+  for(let j=0;j<11;j++){
+    const dx=(j/10-.5)*(w-.8),dz=(j%2?-.25:.25);
+    plants.add(buildSlopeShrub(shrubMat,100+i*13+j,x+dx,z+dz,.40+(j%3)*.065,{surfaceY:4.36}));
+  }
  });
- const trees=[[48.5,86.7,.70],[66.5,86.7,.60],[77,86.7,.78]];
+ const trees=[[48.5,86.7,.70],[57.3,86.7,.52],[66.5,86.7,.60],[77,86.7,.78]];
  trees.forEach(t=>t[0]=edge(t[0]));
  trees.forEach(([x,z,size],i)=>{const t=buildCitadelCypress(size,.7*i);t.position.set(x,4.35,z);plants.add(t);});
+ // The east edge descends beside the horse terrace. Plant the existing
+ // narrow strip, not the horse exit ramp or the statue's concentric paving.
+ const sideBeds=[];
+ for(let i=0;i<13;i++){
+   const x=edge(79.45)-(i%2)*.42,z=80.3+i*.47;
+   plants.add(buildSlopeShrub(shrubMat,200+i,x,z,.43+(i%3)*.07,{surfaceY:4.02}));
+   sideBeds.push([x,4.02,z]);
+ }
  mergeStaticGroup(wall,{mergedTag:'plaza-parapet',onSurface:m=>{m.name='plaza-edge-solid';m.userData.citadelSolidExterior=true;}});
  if(baked){wall.children.forEach((m,i)=>{const part=baked.parts[i];if(!part)throw new Error('Missing Blender plaza edge');const input=m.geometry.index?m.geometry.toNonIndexed():m.geometry;let digest=2166136261;for(const v of input.attributes.position.array)digest=Math.imul(digest^Math.round(v*1e4),16777619)>>>0;if(digest!==part.sourceDigest)throw new Error('Plaza edge changed: regenerate Blender asset');if(input!==m.geometry)input.dispose();const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(part.positions,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(part.normals,3));m.geometry.dispose();m.geometry=g;});root.userData.sourceBlender=baked.source;}
+ const statueGarden=buildStatueGarden(PLAZA_LAYOUT.statueX,76,shrubMat);plants.add(statueGarden);
  mergeStaticGroup(plants,{mergedTag:'plaza-edge-planting',onSurface:m=>{m.name='plaza-edge-planting';}});
- root.userData.layout={lines,beds,trees,entrance:{x:45.2,z:82,clearWidth:3.5},plazaFloor:4,ringCenter:[PLAZA_LAYOUT.statueX,76],ringRadius:PLAZA_LAYOUT.ringRadius};
+ root.userData.layout={statueGarden:statueGarden.userData.layout,lines,beds,trees,sideBeds,entrance:{x:45.2,z:82,clearWidth:3.5},plazaFloor:4,ringCenter:[PLAZA_LAYOUT.statueX,76],ringRadius:PLAZA_LAYOUT.ringRadius};
  return root;
 }

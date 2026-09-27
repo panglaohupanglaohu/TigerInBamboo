@@ -1,0 +1,36 @@
+{
+  "simulationSeconds": 600,
+  "modes": {
+    "cruise": 86870,
+    "approach": 906,
+    "hover": 1074,
+    "depart": 1150
+  },
+  "feedsBefore": 0,
+  "feedsAfter": 7,
+  "nectarFrames": 17747,
+  "nonfinite": 0,
+  "minScanDistance": 72.17173443515038,
+  "whaleLockActive": false,
+  "scan": {
+    "found": false,
+    "memory": 0,
+    "heat": 0,
+    "inRange": false,
+    "proximity": 0,
+    "dist": 286.6333666859316,
+    "justFound": false
+  },
+  "patrol": [
+    -15.034737260102792,
+    176.31672471220116,
+    25.06842352432359
+  ],
+  "passed": true,
+  "limits": [
+    "Isolated actual factory updates, not realtime player session",
+    "No forced discovery or nectar injected",
+    "Geometry collision not covered"
+  ],
+  "pageErrors": []
+}

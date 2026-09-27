@@ -1,0 +1,447 @@
+{
+  "tramRetreat": {
+    "count": 15,
+    "finished": 0,
+    "tramDebug": {
+      "drop": {
+        "cars": 2,
+        "at": 18.70020000000298,
+        "nextTramDrop": 3,
+        "distance": 9.977935622372922,
+        "landing": [
+          -82.58774134711857,
+          84.27872911070483,
+          -108.05721076663912
+        ]
+      },
+      "world": [
+        -91.70407699788919,
+        84.28002657893703,
+        -104.00115086776148
+      ],
+      "hub": [
+        -0.4272684655926635,
+        0.5267501661183565,
+        -0.7348305388348901
+      ],
+      "stage": "ambush",
+      "phase": "fight"
+    },
+    "tramNames": [
+      "heritage-tram-red-11",
+      "heritage-tram-blue-12"
+    ],
+    "drums": false,
+    "patientUid": 79,
+    "preserved": true,
+    "posePreserved": true,
+    "maxPatientStep": 0,
+    "maxStepFrame": null,
+    "blockedWithOccupant": true,
+    "retreat": {
+      "target": {
+        "x": -91.03475426830903,
+        "y": 81.59514233297442,
+        "z": -102.89415512102501
+      },
+      "finished": false,
+      "blocked": "needs-escort"
+    },
+    "units": [
+      {
+        "uid": 79,
+        "retreat": {
+          "finished": false,
+          "blocked": "needs-escort",
+          "position": [
+            -67.96878229548844,
+            85.32254011733347,
+            -118.25709416417429
+          ]
+        }
+      },
+      {
+        "uid": 80,
+        "retreat": {
+          "finished": false,
+          "blocked": "obstructed-endpoint",
+          "routeFailure": {
+            "valid": false,
+            "reason": "obstructed-endpoint"
+          },
+          "position": [
+            -67.61878229548844,
+            85.32254011733347,
+            -118.25709416417429
+          ]
+        }
+      },
+      {
+        "uid": 81,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -90.61081885692246,
+              82.9520192868247,
+              -102.15987744937587
+            ],
+            "attempts": []
+          },
+          "position": [
+            -60.66650036126603,
+            100.4617916866723,
+            -108.85435108997018
+          ]
+        }
+      },
+      {
+        "uid": 82,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-connected-home",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-connected-home",
+            "originalHome": [
+              -89.77956339156246,
+              83.70781666610338,
+              -102.29323663647808
+            ],
+            "attempts": [
+              {
+                "destination": [
+                  -84.2441885677883,
+                  84.17664447397625,
+                  -108.16570359873552
+                ],
+                "reason": "missing-dry-endpoint"
+              }
+            ]
+          },
+          "position": [
+            -49.340019592873276,
+            105.84517128487934,
+            -109.22807865006054
+          ]
+        }
+      },
+      {
+        "uid": 83,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -90.1868834455359,
+              84.30889624067497,
+              -101.42559977772673
+            ],
+            "attempts": []
+          },
+          "position": [
+            -51.20344594183223,
+            106.24707612202154,
+            -107.90395420490391
+          ]
+        }
+      },
+      {
+        "uid": 84,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -90.5465552909735,
+              84.15604053540538,
+              -101.2691764195222
+            ],
+            "attempts": []
+          },
+          "position": [
+            -62.81392926415595,
+            100.48850845463828,
+            -107.69267216707148
+          ]
+        }
+      },
+      {
+        "uid": 85,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -90.91290134932646,
+              83.22776856987736,
+              -101.80218835517088
+            ],
+            "attempts": []
+          },
+          "position": [
+            -64.87526622563291,
+            100.39315651463659,
+            -106.40040965575106
+          ]
+        }
+      },
+      {
+        "uid": 86,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -89.975150833559,
+              83.22109944921885,
+              -102.43510185084583
+            ],
+            "attempts": []
+          },
+          "position": [
+            -66.92687193028452,
+            100.3004829756959,
+            -105.11218882107374
+          ]
+        }
+      },
+      {
+        "uid": 87,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -90.34149689191196,
+              82.29282748369081,
+              -102.96811378649453
+            ],
+            "attempts": []
+          },
+          "position": [
+            -53.59516544784392,
+            106.44228047896799,
+            -106.52766367094159
+          ]
+        }
+      },
+      {
+        "uid": 88,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-connected-home",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-connected-home",
+            "originalHome": [
+              -89.4037463761445,
+              82.28615836303233,
+              -103.60102728216945
+            ],
+            "attempts": [
+              {
+                "destination": [
+                  -84.07043298745404,
+                  86.26546139312111,
+                  -106.64578123686833
+                ],
+                "reason": "missing-dry-endpoint"
+              }
+            ]
+          },
+          "position": [
+            -56.31162587686431,
+            106.50541115167917,
+            -105.12429545752444
+          ]
+        }
+      },
+      {
+        "uid": 89,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-connected-home",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-connected-home",
+            "originalHome": [
+              -89.1578561371382,
+              82.61036384976424,
+              -103.53625585083088
+            ],
+            "attempts": [
+              {
+                "destination": [
+                  -84.52034151956184,
+                  84.89423091801193,
+                  -107.3893361865588
+                ],
+                "reason": "missing-dry-endpoint"
+              },
+              {
+                "destination": [
+                  -83.82172528336898,
+                  86.59296390178746,
+                  -106.57582986720288
+                ],
+                "reason": "missing-dry-endpoint"
+              },
+              {
+                "destination": [
+                  -83.64541144917855,
+                  83.14416375168379,
+                  -109.44828789041225
+                ],
+                "reason": "missing-dry-endpoint"
+              }
+            ]
+          },
+          "position": [
+            -70.93355691854948,
+            97.288860720559,
+            -105.11581932344892
+          ]
+        }
+      },
+      {
+        "uid": 90,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-connected-home",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-connected-home",
+            "originalHome": [
+              -89.55242446813517,
+              83.33268818606993,
+              -102.76000628699539
+            ],
+            "attempts": [
+              {
+                "destination": [
+                  -84.01043395516528,
+                  83.81170220194522,
+                  -108.62898412738565
+                ],
+                "reason": "missing-dry-endpoint"
+              }
+            ]
+          },
+          "position": [
+            -72.30741865893808,
+            98.04125099484095,
+            -103.52807676750189
+          ]
+        }
+      },
+      {
+        "uid": 91,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -90.41923570307476,
+              82.63592747654342,
+              -102.55224970673238
+            ],
+            "attempts": []
+          },
+          "position": [
+            -74.36641540904243,
+            97.70292322462329,
+            -102.45334013808836
+          ]
+        }
+      },
+      {
+        "uid": 92,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -90.81380403407172,
+              83.35825181284912,
+              -101.7760001428969
+            ],
+            "attempts": []
+          },
+          "position": [
+            -69.51580878807297,
+            95.6931615978274,
+            -107.48342942346453
+          ]
+        }
+      },
+      {
+        "uid": 93,
+        "retreat": {
+          "finished": false,
+          "blocked": "no-dry-home-near-stop",
+          "routeFailure": {
+            "valid": false,
+            "reason": "no-dry-home-near-stop",
+            "originalHome": [
+              -91.68061526901133,
+              82.66149110332259,
+              -101.56824356263388
+            ],
+            "attempts": []
+          },
+          "position": [
+            -71.3350677709832,
+            95.61352116013322,
+            -106.33874890850764
+          ]
+        }
+      }
+    ]
+  },
+  "reachedFight": true,
+  "waveCount": 2,
+  "blockedWithAshore": true,
+  "started": null,
+  "completed": null,
+  "last": {
+    "phase": "siege",
+    "departure": {
+      "cleared": false,
+      "waves": 5,
+      "ashore": 109,
+      "onIsland": 2,
+      "boatsClear": true,
+      "boatClearRadius": 17.63927707004706,
+      "reason": "actors-on-island",
+      "source": "actual-embark-plus-local-actors-and-vessel-clearance"
+    },
+    "roll": {
+      "active": false,
+      "completed": 0,
+      "reason": "actors-on-island",
+      "pending": true
+    }
+  },
+  "capture": null,
+  "scope": "Tram car, injured actor and escort positions are diagnostic injections, injured flag injected. Actual 8931 game scene and original two waves + actual embark ownership. Restored chapter3 save, held RAF, manually stepped production garden/battle, fixed nearby fleet and injected 600 hit counter. No phase/embark/clearance writes. Not a natural full combat playthrough.",
+  "passed": false,
+  "variant": "dry-route-candidate-disabled"
+}

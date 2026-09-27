@@ -1,0 +1,88 @@
+{
+  "scope": "72 discrete cases, two static poses; intermediate turning and animation sweeps untested; any uncertain blocks acceptance",
+  "eligible_as_unrestricted_all_role_slot": [],
+  "rows": [
+    {
+      "id": "pine-3011-cover-15",
+      "role": "gladius",
+      "clear_headings_both_poses": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "all_four_headings_clear": true
+    },
+    {
+      "id": "pine-3011-cover-15",
+      "role": "spear",
+      "clear_headings_both_poses": [
+        0,
+        90
+      ],
+      "all_four_headings_clear": false
+    },
+    {
+      "id": "pine-3011-cover-15",
+      "role": "longbow",
+      "clear_headings_both_poses": [
+        0,
+        90
+      ],
+      "all_four_headings_clear": false
+    },
+    {
+      "id": "pine-3011-cover-17",
+      "role": "gladius",
+      "clear_headings_both_poses": [
+        180
+      ],
+      "all_four_headings_clear": false
+    },
+    {
+      "id": "pine-3011-cover-17",
+      "role": "spear",
+      "clear_headings_both_poses": [
+        180
+      ],
+      "all_four_headings_clear": false
+    },
+    {
+      "id": "pine-3011-cover-17",
+      "role": "longbow",
+      "clear_headings_both_poses": [
+        90,
+        180
+      ],
+      "all_four_headings_clear": false
+    },
+    {
+      "id": "pine-3011-cover-20",
+      "role": "gladius",
+      "clear_headings_both_poses": [
+        90,
+        180,
+        270
+      ],
+      "all_four_headings_clear": false
+    },
+    {
+      "id": "pine-3011-cover-20",
+      "role": "spear",
+      "clear_headings_both_poses": [
+        90,
+        270
+      ],
+      "all_four_headings_clear": false
+    },
+    {
+      "id": "pine-3011-cover-20",
+      "role": "longbow",
+      "clear_headings_both_poses": [
+        90,
+        270
+      ],
+      "all_four_headings_clear": false
+    }
+  ]
+}

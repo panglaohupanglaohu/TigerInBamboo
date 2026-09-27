@@ -1,0 +1,27 @@
+{
+  "task": "Holy-city V2 next pass, completely separate from Moebius crystal city.",
+  "visual_observations": [
+    {
+      "path": "TigerMessenger/artifacts/pipeline/holy-city-style-v2/r04.png",
+      "sha256": "86290228cf46e6b111b95d4b2fb5ac8fa13eddc179356a78a0189960a091afb0",
+      "observation": "New-city pediment and single ribbed terracotta dome visible; old tower now pale dome pavilion. Still a stacked rectangular fortress, not a coherent cathedral; old city is a spindly tower with tiny houses, not broad stepped palace. Mountains remain coarse, waterfall absent, sky green."
+    }
+  ],
+  "checks": [
+    {
+      "name": "185 regional rail samples and two-track sweep no collisions/pageerror",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full foot routes and story after facade edits",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Preserve existing stair and capture interfaces",
+    "No Moebius crystal materials or mechanical props",
+    "Do not claim target achieved"
+  ]
+}

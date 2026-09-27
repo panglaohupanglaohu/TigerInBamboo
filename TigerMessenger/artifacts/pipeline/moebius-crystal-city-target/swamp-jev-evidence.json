@@ -1,0 +1,34 @@
+{
+  "task": "Crystal city three-tower swamp target integration",
+  "target": "Relocate existing swamp assembly into three tower enclosure while preserving actual identity and rail/harbor access",
+  "visual_observations": {
+    "source": "Astra inspected v6 target and isolated actual swamp-existing.png; no runtime migration yet",
+    "image_sha256": "c09157c8d441ef875ba6c0b5d89f3a62c86f8048a4a92806c89d78aea358c798",
+    "completed": [
+      "Existing assembly verified: deep circular pool, tall sparse flat-canopy trees, luminous flowers, central tree and vines"
+    ],
+    "remaining": [
+      "Concept has open sea where swamp must sit; requires dry shore rim",
+      "Runtime tower arrangement not yet matching concept",
+      "Tiger rescue, airship anchor, wreck, terrain and water exclusion must migrate together"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Actual root and assembly source inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Proposed runtime swamp footprint and navigation clearance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Single continuous tram corridor; straight through gate",
+    "Existing swamp identity and scale retained; expand tower enclosure to fit if necessary",
+    "Sunken pool must not be flooded by sea; foreground harbor passage stays open",
+    "Concept only; do not release untested relocation"
+  ]
+}

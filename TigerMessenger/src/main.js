@@ -1,5 +1,10 @@
+import {setSfxListener,updateWorldSfx} from './audio/worldSfx.js';
+import {createRobotGreeting} from './gameplay/robotGreeting.js';
+import {createRobotOperations} from './gameplay/robotOps/runtime.js';
+import {createJunctionPlayerSupport} from './world/canalJunctionTarget.js';
 import {createCitadelPlayerWalls,createCitadelCameraOccluders} from './world/citadel/playerWalls.js';
 import {createCitadelPlayerGround} from './world/citadel/playerGround.js';
+import {createGatePlayerGround,createGatePlayerWalls} from './world/gateTarget.js';
 import { bindOriginalWorldRomanArmor } from "./world/romanWorldArmor.js";
 // =====================================================================
 //  TigerMessenger 运行时入口（薄装配）
@@ -61,6 +66,7 @@ import { createG8DebugOverlay } from "./render/debug/g8Overlay.js";
 import { refreshTownV4 } from "./world/citadel/presentationMesh.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { createDayNight } from "./world/dayNight.js";
+import { createBookshopAtmosphere } from "./world/bookshopAtmosphere.js";
 import { createTramRide } from "./player/tramRide.js";
 import { createAirshipRide } from "./player/airshipRide.js";
 import { createAircraftRide } from "./player/aircraftRide.js";
@@ -113,6 +119,7 @@ import {
   isTramRideBgmPlaying,
   setCanyonApproachBgm,
   isCanyonBgmPlaying,
+  setSiegeAssaultBgm,
 } from "./audio/sfx.js";
 import { journalCount } from "./quest/letterJournal.js";
 import {
@@ -129,6 +136,8 @@ import {
 
 // ---------- 舞台 ----------
 const { scene, camera, renderer } = createStage();
+// Include the scene and every post-processing pass in frame diagnostics.
+renderer.info.autoReset = false;
 // 性能探针（F10 显隐 / F9 截图）。performance.now() 以页面导航为起点，
 // 首帧读数即完整 boot 耗时，无需额外基准。
 const perfProbe = createPerfProbe(renderer);
@@ -202,7 +211,7 @@ const CLOUD_WALL_KEY = "tm.equatorialClouds.enabled";
 const trackCurve = messenger?.landmarks?.tramSystem?.curve ?? null;
 const equatorialClouds = createDynamicMoebiusClouds(scene, PLANET_RADIUS, {
   trackCurve,
-  anchorU: trackCurve ? findGateSeatU(trackCurve, PLANET_RADIUS) : null,
+  anchorU: messenger?.landmarks?.abandonedGate?.userData.anchor?.gateU ?? null,
   crownY: GATE.wallTop,
   spanX: GATE_DEPTH,
 });
@@ -238,6 +247,16 @@ distanceCulling?.recollect();
 // ---------- 玩家 / 相机 / 输入 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
 
+// Codrops 交互：光标滑动驱动信使头部与上半身视线朝向 (moveJoint)
+player.lookTarget = { x: 0, y: 0 };
+if (typeof window !== "undefined") {
+  window.addEventListener("pointermove", (e) => {
+    if (!window.innerWidth || !window.innerHeight) return;
+    player.lookTarget.x = (e.clientX / window.innerWidth) * 2 - 1;
+    player.lookTarget.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  }, { passive: true });
+}
+
 // Open the rescue story at its first readable landmark. Legacy panorama remains
 // available through ?spawn=legacy; the dedicated garden tour keeps its spawn.
 const entryParams = new URLSearchParams(location.search);
@@ -245,7 +264,7 @@ const entryBookshop = messenger?.landmarks?.bookshop;
 if (entryBookshop && !entryParams.has('tour') && entryParams.get('spawn') !== 'legacy') {
   entryBookshop.updateWorldMatrix(true, false);
   const start = entryBookshop.localToWorld(new THREE.Vector3(0, 0, 7));
-  start.setLength((hills?.sampleRadius?.(start) ?? entryBookshop.position.length()) + 0.15);
+  start.setLength((entryBookshop.userData.townSite ? PLANET_RADIUS+.9 : (hills?.sampleRadius?.(start) ?? entryBookshop.position.length())) + 0.15);
   resolveAssetColliders(start, assetColliders);
   player.position.copy(start);
   player.checkpoint.copy(start);
@@ -272,6 +291,15 @@ if (new URLSearchParams(location.search).get("tour") === "saihoji") {
       player.facing.copy(player.forward);
     }
   }
+}
+// Optional local playtest entry; default story progression still begins at the bookshop.
+if (['crystal-mother-port','crystal-v7'].includes(entryParams.get('tour')) && messenger?.landmarks?.crystalMotherPort) {
+  const port=messenger.landmarks.crystalMotherPort;
+  player.position.copy(port.boardingRoute[0]);player.checkpoint.copy(player.position);
+  player.groundR=player.position.length();player.onGround=true;
+  const up=player.position.clone().normalize();
+  player.forward.copy(port.boat.position).sub(player.position);
+  player.forward.addScaledVector(up,-player.forward.dot(up)).normalize();player.facing.copy(player.forward);
 }
 const cameraRig = createCameraRig(camera, player, {
   // 相机遮挡回拉复用资产碰撞球，避免信使进建筑后被墙挡住
@@ -332,7 +360,15 @@ function isPlayerPilotingVehicle() {
   if (scoutAircraftRide?.isRiding?.()) return true;
   if (bubblePodRide?.isRiding?.()) return true;
   if (boatRide?.isRiding?.()) return true;
+  // 电车也算乘坐：救援护送（虎虎/红狐）据此在电车上随行（主人 2026-09-18）。
+  if (tramRide?.isRiding?.()) return true;
   return false;
+}
+
+// 救援主线的暗号交互（虎/狐章节靠近按 E）优先于八音盒的 E。
+// 函数声明提升：rescueCampaign 在更晚处构造，调用时才解引用（同上 ride 先例）。
+function rescueWantsCodePhraseE() {
+  return rescueCampaign?.wantsCodePhraseE?.() ?? false;
 }
 
 // ---------- 任务（依赖平台；无 messenger 场景时任务仍可创建但不贴台） ----------
@@ -458,7 +494,7 @@ const storyboardPanel = createStoryboardPanel({
 });
 
 // ---------- 三重门 / 云墙：可交互定位（存 localStorage，刷新后保留） ----------
-const GATE_ANCHOR_KEY = "tm.gateAnchorU.v1";
+const GATE_ANCHOR_KEY = "tm.gateAnchorU.v2";
 
 /** 找轨道上距给定世界位置最近的参数 u（弧长参数化，采样 1200 点足够） */
 function nearestTrackU(worldPos) {
@@ -486,10 +522,11 @@ function moveGateAndCloudsTo(u) {
   // 三重门千鸟漩涡随门重锚
   const vortex =
     messenger?.landmarks?.gateBirdVortex || messenger?.landmarks?.birdVortex;
-  const okBird = okGate ? vortex?.syncToGate?.(gate, { respawn: true }) ?? false : false;
+  const birdGate = vortex?.hostGate || gate;
+  const okBird = okGate ? vortex?.syncToGate?.(birdGate, { respawn: true }) ?? false : false;
   // 小群 Boids 家域也跟着门走
   if (okGate && messenger?.landmarks?.flock?.setHome) {
-    const seat = gate.userData?.seatRoot;
+    const seat = birdGate.userData?.seatRoot || birdGate;
     if (seat) {
       seat.updateWorldMatrix(true, false);
       const up = new THREE.Vector3(0, 1, 0).applyQuaternion(seat.quaternion).normalize();
@@ -593,7 +630,7 @@ const devPanel = createDevPanel({
   },
   onGateHere: () => {
     const hit = nearestTrackU(player.position);
-    if (!hit) return "找不到电车轨道，无法定位";
+    if (!hit) return "找不到货运铁路，无法定位";
     const { okGate, okBird, okCloud } = moveGateAndCloudsTo(hit.u);
     if (!okGate && !okBird && !okCloud) return "三重门/鸟群/云墙未就绪";
     localStorage.setItem(GATE_ANCHOR_KEY, String(hit.u));
@@ -820,7 +857,9 @@ const g8Debug = createG8DebugOverlay({
 // ---------- 电车搭乘（近车 [F] 上车 · 窗边乘坐看风景） ----------
 const tramRide = createTramRide({
   player,
+  playerGroup,
   getTram: () =>
+    messenger?.landmarks?.tramSystem?.getNearestBoardable?.(player.position) ||
     messenger?.landmarks?.tramSystem?.getNearestTram?.(player.position) ||
     messenger?.landmarks?.tramSystem?.tram ||
     null,
@@ -835,7 +874,7 @@ const tramRide = createTramRide({
     const foxHint =
       foxNpc?.isFollowing?.() ? " · 阿狸卧在身旁" : "";
     showToast(
-      `已登上${color}电车 · 窗边乘客 · [C] 司机视野 · [F] 下车${foxHint}`,
+      `已登上${color}货运机车 · 随车席位 · [C] 司机视野 · [F] 下车${foxHint}`,
       3.4
     );
   },
@@ -947,7 +986,9 @@ function pickNearestBoat() {
     if (!b) continue;
     b.getWorldPosition(_boatPick);
     const berth=b.userData.frontHarborBerth;
-    const d = berth&&_boatPick.distanceTo(berth.position)<1
+    const portEntry=b.userData.portNavigation?.atBerth() ? b.userData.boardingRoute?.[0] : null;
+    const d = portEntry ? Math.min(player.position.distanceTo(_boatPick),player.position.distanceTo(portEntry)+3.6)
+      : berth&&_boatPick.distanceTo(berth.position)<1
       ? Math.min(player.position.distanceTo(_boatPick),player.position.distanceTo(berth.exit)+3.6)
       : player.position.distanceTo(_boatPick);
     if (d < bestD) {
@@ -1365,16 +1406,38 @@ window.addEventListener("keydown", (e) => {
   showToast(on ? "已进入飞行器驾驶舱 · [V] 退出" : "已退出飞行器驾驶舱", 2.4);
 });
 
-// [Q] 召唤航空艇飞到玩家正上方（idle 状态可用；面板编辑时 Q 归面板换层）
+// [H] 切换信使特写镜头（纯镜头推拉，无弹窗菜单干扰）
+window.addEventListener("keydown", (e) => {
+  if (e.repeat || e.code !== "KeyH") return;
+  if (document.activeElement && ["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+  const isClose = cameraRig.isCloseup?.() ?? false;
+  cameraRig.setCloseup?.(!isClose);
+  showToast(!isClose ? "信使特写视角 (按 H 还原)" : "已恢复常规跟随视角", 1.4);
+});
+
+// [Q] 召唤航空艇飞到玩家面前（idle 状态可用；面板编辑时 Q 归面板换层）
 window.addEventListener("keydown", (e) => {
   if (e.repeat || e.code !== "KeyQ") return;
   // 圣城/水晶城编辑面板打开时 Q 归面板使用（换层）
   if (citadelEditorPanel?.isOpen?.()) return;
   if (crystalCityEditorPanel?.isOpen?.()) return;
-  if (!gameStarted) return;
+  if (!gameStarted) {
+    const startBtn = document.getElementById("start-btn");
+    if (startBtn) startBtn.click();
+  }
+  // 若玩家正在驾驶其它载具，先退出其它载具并解除骑乘状态
+  if (isPlayerPilotingVehicle()) {
+    scoutAircraftRide?.forceExit?.();
+    bubblePodRide?.forceExit?.();
+    if (aircraftRide?.isRiding?.()) aircraftRide.toggle();
+    boatRide?.forceExit?.();
+    tramRide?.forceExit?.();
+    player.riding = false;
+  }
   // 若飞艇状态卡在非 idle（异常未退出/刷新残留），先强制复位再召唤，避免 Q 失效
   if (airshipRide.getState?.() !== "idle") {
     airshipRide.forceExit?.();
+    player.riding = false;
   }
   const ok = airshipRide.summon?.();
   if (ok) {
@@ -1401,6 +1464,8 @@ const elderMusic = createElderMusicInteraction({
   elHint: document.getElementById("elder-hint"),
   isGameStarted: () => gameStarted,
   isBusyRiding: isPlayerPilotingVehicle,
+  // 主线对暗号的 E 优先：红狐就在八音盒旁，虎/狐章节靠近时八音盒让位
+  shouldYieldKeyE: rescueWantsCodePhraseE,
 });
 // 双保险：按名称在场景里再绑一次（避免 landmarks 路径漏引用）
 {
@@ -1510,6 +1575,7 @@ const foxNpc = createFoxNpc({
   getFoxTramSeatLocal: () => tramRide.getFoxSeatLocal?.() ?? null,
 });
 
+let raidBeatActive = false;
 const rescueCampaign = createRescueCampaign({
   scene, player, camera, messenger, worldLandmarks, fox: foxAli,
   platforms, hills, colliders: assetColliders,
@@ -1539,6 +1605,30 @@ elStartBtn.addEventListener("click", () => {
 
 // ---------- 主循环 ----------
 const timer = new Timer();
+// Explicit review URL only: start at the actual new stairs, without altering chapter saves.
+if(new URLSearchParams(location.search).get('gateReview')==='1'){
+  const seat=messenger?.landmarks?.abandonedGate?.userData?.seatRoot;
+  if(seat){
+    seat.updateWorldMatrix(true,false);
+    player.position.copy(seat.localToWorld(new THREE.Vector3(-23,-3.72,-36.8)));
+    player.velocity.set(0,0,0);player.onGround=true;player.groundR=player.position.length();
+    player.checkpoint.copy(player.position);
+    (player.forward??=new THREE.Vector3()).set(0,0,1).transformDirection(seat.matrixWorld);
+    (player.facing??=new THREE.Vector3()).copy(player.forward);
+  }
+}
+if(new URLSearchParams(location.search).get('junctionReview')==='1'){
+ const city=messenger?.landmarks?.canalJunctionCitadel;
+ if(city?.userData.junctionTarget){city.updateWorldMatrix(true,false);player.position.copy(city.localToWorld(new THREE.Vector3(0,.67,12)));player.velocity.set(0,0,0);player.onGround=true;player.groundR=player.position.length();player.checkpoint.copy(player.position);(player.forward??=new THREE.Vector3()).set(0,0,-1).transformDirection(city.matrixWorld);(player.facing??=new THREE.Vector3()).copy(player.forward);}
+}
+if(new URLSearchParams(location.search).get('highlandReview')==='1'){
+ const gate=scene.getObjectByName('highland-gate');
+ if(gate?.userData.toRailWorld){const start=gate.userData.toRailWorld(-3.15,.05,-32),ground=gate.userData.sampleGroundRadius(start);if(ground!=null)start.normalize().multiplyScalar(ground);player.position.copy(start);player.velocity.set(0,0,0);player.onGround=true;player.groundR=start.length();player.checkpoint.copy(start);(player.forward??=new THREE.Vector3()).copy(gate.userData.toRailWorld(-3.15,.05,-30)).sub(start).normalize();(player.facing??=new THREE.Vector3()).copy(player.forward);}
+}
+if(entryParams.get('baseReview')==='1'){
+ const base=entryBookshop?.userData.steampunkRobots;
+ if(base){base.updateWorldMatrix(true,false);const start=base.localToWorld(new THREE.Vector3(0,0,46)).setLength(PLANET_RADIUS+.97);player.position.copy(start);player.velocity.set(0,0,0);player.onGround=true;player.groundR=start.length();player.checkpoint.copy(start);player.forward.copy(base.localToWorld(new THREE.Vector3(0,0,0))).sub(start);const up=start.clone().normalize();player.forward.addScaledVector(up,-player.forward.dot(up)).normalize();player.facing.copy(player.forward);cameraRig.setDist(19);}
+}
 cameraRig.snapToPlayer();
 playerGroup.position.copy(player.position);
 
@@ -1592,6 +1682,15 @@ function refreshSwampGroundZone() {
   });
 }
 let citadelPlayerGround=null,citadelPlayerWalls=null;
+const baseCameraOccluders=entryBookshop?.userData.steampunkRobots?.userData.cameraOccludersNear;
+let robotOperations=null;
+const robotGreeting=createRobotGreeting({player,isStarted:()=>gameStarted,toast:showToast,getModels:()=>[...(entryBookshop?.userData.steampunkRobots?.userData.models||[]),...(robotOperations?[...robotOperations.models.values()].filter(m=>{const u=robotOperations.logistics.get(m.userData.robotId);return u&&['ready','deployed','repair'].includes(u.status);}):[])]});
+const bookshopAtmosphere=createBookshopAtmosphere({root:entryBookshop?.userData.steampunkRobots,scene,skyMat});
+if(baseCameraOccluders)cameraRig.setOccluderMeshes(baseCameraOccluders);
+const highlandGateRuntime=scene.getObjectByName('highland-gate');
+const gatePlayerGround=createGatePlayerGround(messenger?.landmarks?.abandonedGate?.userData?.seatRoot);
+const gatePlayerWalls=createGatePlayerWalls(messenger?.landmarks?.abandonedGate?.userData?.seatRoot);
+const junctionPlayerSupport=createJunctionPlayerSupport(messenger?.landmarks?.canalJunctionCitadel);
 const citadelPreviousFoot=new THREE.Vector3();
 function refreshCitadelPlayerGround(){
   if(citadelPlayerGround)return;
@@ -1599,10 +1698,11 @@ function refreshCitadelPlayerGround(){
   if(city){citadelPlayerGround=createCitadelPlayerGround(city);citadelPlayerWalls=createCitadelPlayerWalls(city);
     // Same authored walls drive the camera pull-in, so entering the gate or the tower
     // no longer leaves the camera stranded outside the stone.
-    cameraRig.setOccluderMeshes(createCitadelCameraOccluders(city));}
+    const cityOccluders=createCitadelCameraOccluders(city);
+    cameraRig.setOccluderMeshes((position,reach)=>[...cityOccluders(position,reach),...(baseCameraOccluders?.(position,reach)||[])]);}
 }
 function samplePlayerLocalGround(position){
-  return citadelPlayerGround?.(position) ?? sampleSwampGround(position);
+  return highlandGateRuntime?.userData.sampleGroundRadius?.(position) ?? messenger?.landmarks?.moebius?.v7Shores?.userData.sampleGroundRadius(position) ?? junctionPlayerSupport.ground(position) ?? gatePlayerGround(position) ?? citadelPlayerGround?.(position) ?? sampleSwampGround(position);
 }
 function sampleSwampGround(position) {
   return swampGroundZone?.userData?.sampleGroundRadius(position) ?? null;
@@ -1610,8 +1710,13 @@ function sampleSwampGround(position) {
 
 let citadelBgmCity=null;
 const citadelBgmPoint=new THREE.Vector3();
+const saihojiRuntime=sceneHandles.find(handle=>handle.id==='saihoji');
+const saihojiBgmPoint=new THREE.Vector3();
+let kunRollWasActive=false;
+let kunRollWasPending=false;
 function animate() {
   requestAnimationFrame(animate);
+  renderer.info.reset();
   timer.update();
   const dt = Math.min(timer.getDelta(), 0.05);
   const t = performance.now() * 0.001;
@@ -1619,20 +1724,12 @@ function animate() {
   updateToast(dt);
   dayNight.update(dt);
   // K4 局部灯桥接：先于导演合成，闪电 override 当帧生效（关时 no-op）
+  messenger?.landmarks?.abandonedGate?.userData.seatRoot?.userData.gateLighting?.userData.update(P.timeOfDay);
   localLights.update(dt);
   // V5 光照导演：开关开时由它提交全局灯/雾/天空/exposure（关时 no-op）
   lightingDirector.update(dt, { timeOfDay: dayNight.getPhase?.() ?? P.timeOfDay, weather: P.weather | 0 });
-  // S16 背光高光：圣城山体反向轮廓层随太阳方向 + 相机位置驱动
-  {
-    const backlit = messenger?.landmarks?.odysseyCitadel?.userData?.highlandBacklit;
-    if (backlit?.update) {
-      const sunState = lightingDirector.getState?.();
-      const sunDir = sunState?.sunDirection;
-      if (sunDir && camera?.position) {
-        backlit.update({ x: sunDir[0], y: sunDir[1], z: sunDir[2] }, camera.position);
-      }
-    }
-  }
+  // Mountain ridges are fixed geometry; their day/night colour is updated by
+  // the citadel, independently of the player and camera.
   // K3 体素 AO：dirty 分帧调度（任一切片 ≤4ms；未开启时 voxelAo 为 null）
   voxelAo?.update(dt);
   // V6-G8 调试叠图：节流重建动态层；未启用时内部直接返回（零开销）
@@ -1654,6 +1751,8 @@ function animate() {
     });
   }
   updateMoebiusBarrier(dt);
+  bookshopAtmosphere.update(camera.position,P.timeOfDay);
+  if(!robotOperations&&entryBookshop?.userData.steampunkRobots&&messenger?.landmarks?.tramSystem){robotOperations=createRobotOperations({scene,base:entryBookshop.userData.steampunkRobots,tramSystem:messenger.landmarks.tramSystem,camera,cameraRig,colliders:assetColliders,getFleet:()=>messenger.landmarks.aircraftSquad,getAssault:()=>messenger.vanguardAssault||messenger.combatPack?.vanguardAssault});}
   // 季相天气偏置（E5）：按玩家当前所处季相带温和偏置天气（冬雪/春雨/夏秋晴），3 秒滞后防抖
   if (player?.position) {
     const season = seasonAt(player.position);
@@ -1700,6 +1799,9 @@ function animate() {
       samplePlayerLocalGround
     );
     citadelPlayerWalls?.(citadelPreviousFoot,player.position,player.velocity);
+    gatePlayerWalls(citadelPreviousFoot,player.position,player.velocity);
+    highlandGateRuntime?.userData.resolveWalls?.(citadelPreviousFoot,player.position,player.velocity);
+    junctionPlayerSupport.walls(citadelPreviousFoot,player.position,player.velocity);
     resolveAssetColliders(player.position, assetColliders);
     }
   }
@@ -1732,13 +1834,31 @@ function animate() {
     setCanyonApproachBgm(wantCanyonBgm, { fade: wantCanyonBgm ? 1.4 : 1.8 });
   }
 
-  const bgmWhale = scene.getObjectByName("leviathanGroup");
+  const bgmWhale = saihojiRuntime?.group;
   if(!citadelBgmCity?.parent)citadelBgmCity=scene.getObjectByName('highland-west-city');
-  const bgmCityCenter=citadelBgmCity?citadelBgmCity.localToWorld(citadelBgmPoint.set(60,4,71.5)):null;
-  updateBgmListenerContext({listener:player.position,saihoji:bgmWhale?.getWorldPosition(new THREE.Vector3()) || null,newCity:bgmCityCenter,gameStarted});
+  const bgmCityCenter=citadelBgmCity?citadelBgmCity.localToWorld(citadelBgmPoint.fromArray(citadelBgmCity.userData.plazaAnchor || [60,4,71.5])):null;
+  updateBgmListenerContext({listener:player.position,saihoji:bgmWhale?.getWorldPosition(saihojiBgmPoint) || null,newCity:bgmCityCenter,gameStarted});
+
+  setSfxListener(player.position,camera);
+  updateWorldSfx(dt);
 
   // 场景模块自更新（湖、云、平台脉动等）
   updateScenes(sceneHandles, dt, t, { player, gameStarted, keys });
+  // Trains move in updateScenes. Seat and freight poses must use this frame's
+  // transforms before player visuals and the camera are synchronized.
+  if (tramRide.isRiding()) tramRide.update(0);
+  robotOperations?.update(dt);
+  robotGreeting.update();
+  const kunRollActive=bgmWhale?.userData?.victoryRoll?.active===true;
+  const kunRollPending=bgmWhale?.userData?.victoryRoll?.pending===true;
+  if(kunRollPending&&!kunRollWasPending&&gameStarted&&player.position.distanceTo(saihojiBgmPoint)<140){
+    showToast("鲲已脱困，等待岛上人员与战船撤离后，它将腾空翻身。",6);
+  }
+  if(kunRollActive&&!kunRollWasActive&&gameStarted&&player.position.distanceTo(saihojiBgmPoint)<140){
+    showToast("鲲已脱困，正在腾空翻身！苔庭与松林会随它一同翻转。",6);
+  }
+  kunRollWasActive=kunRollActive;
+  kunRollWasPending=kunRollPending;
   originalWorldRomanArmor.update();
   // 故事板时间线（无故事板时内部直接返回）
   storyEngine.update(dt);
@@ -1759,11 +1879,39 @@ function animate() {
   const cockpitView =
     scoutAircraftRide?.isRiding?.() || aircraftRide.isRiding?.() || bubblePodRide.isRiding?.();
   if (!cockpitView) cameraRig.update(dt);
+  robotOperations?.updateCamera();
   quest.updateInteraction(dt);
   elderMusic.update(dt, t);
   // 阿狸在任务气泡之后更新，避免被 hideBubble 冲掉
   foxNpc.update(dt, t);
   rescueCampaign.update(dt);
+  // ---------- 书店镇袭击战（主人 2026-09-18）----------
+  // 侦察机队巡回至书店镇/古堡时：古堡驻军开拔增援，交战期播放
+  // 《The Best Is Yet To Come》（siege 通道独占，撤离后回落）。
+  {
+    const squad = messenger?.landmarks?.scoutDefense;
+    const zone = squad?.getZone?.();
+    const raidZone = zone === "bookshop" || zone === "citadel";
+    if (raidZone && !raidBeatActive) {
+      raidBeatActive = true;
+      setSiegeAssaultBgm(true, { resume: true });
+      const dir =
+        zone === "bookshop" && messenger?.landmarks?.bookshop
+          ? messenger.landmarks.bookshop.position.clone().normalize()
+          : null;
+      if (dir) {
+        messenger?.landmarks?.saihojiPhalanx?.userData?.marchGarrisonTo?.(dir);
+        const assault = messenger?.vanguardAssault || messenger?.combatPack?.vanguardAssault || null;
+        if (assault && typeof assault.begin === "function") {
+          assault.begin(dir);
+        }
+      }
+      showToast("警报：莫比斯舰队出现在书店镇上空，运输艇投送重甲兵，古堡战船登陆增援！", 4);
+    } else if (!raidZone && raidBeatActive) {
+      raidBeatActive = false;
+      setSiegeAssaultBgm(false, { fade: 0.6 });
+    }
+  }
   quest.updateCompass();
   quest.animateMarkers(t);
   minimap?.update();
@@ -1936,6 +2084,7 @@ window.__tm = {
   camera, // 调试/验收截图用
   renderer, // 性能探针读取 draw calls / triangles
   P,
+  dayNight, // Shared clock exposed for reproducible day/dusk/night scene checks.
   scene,
   planet,
   perfProbe, // 性能探针：__tm.perfProbe.snapshot() / .capture()
@@ -1957,7 +2106,10 @@ window.__tm = {
   citadelEditorPanel, // 圣城搭建面板（验收/调试用）
   storyEngine, // 故事板引擎（验收/调试用）
   storyboardPanel,
+  get robotOperations(){return robotOperations;},
   tramRide,
+  robotGreeting,
+  boatRide, // Actual boarding controller, exposed alongside other ride diagnostics.
   bgm: { snapshot:getBgmOwnershipSnapshot },
   airshipRide,
   scoutAircraftRide,

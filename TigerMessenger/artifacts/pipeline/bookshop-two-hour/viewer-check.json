@@ -1,0 +1,34 @@
+{
+  "models": [
+    {
+      "name": "蝗虫",
+      "stats": {
+        "sourceParts": 288,
+        "meshes": 25,
+        "triangles": 26172
+      },
+      "visible": 1
+    },
+    {
+      "name": "蚂蚁",
+      "stats": {
+        "sourceParts": 230,
+        "meshes": 10,
+        "triangles": 85536
+      },
+      "visible": 1
+    },
+    {
+      "name": "甲壳虫",
+      "stats": {
+        "sourceParts": 344,
+        "meshes": 22,
+        "triangles": 48986
+      },
+      "visible": 1
+    }
+  ],
+  "rotationChanged": true,
+  "mobileOverflow": false,
+  "errors": []
+}

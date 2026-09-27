@@ -1,0 +1,1609 @@
+{
+ "errors": [],
+ "rail": [
+  {
+   "t": 0.63,
+   "local": [
+    81.3,
+    -44,
+    -9
+   ],
+   "alt": 1.25,
+   "ground": 6.5,
+   "over": "citadel-backdrop-ridge-mid"
+  },
+  {
+   "t": 0.6311111111111111,
+   "local": [
+    79.9,
+    -42.8,
+    -8.6
+   ],
+   "alt": 1.19,
+   "ground": 8.97,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6322222222222222,
+   "local": [
+    78.6,
+    -41.6,
+    -8.1
+   ],
+   "alt": 1.12,
+   "ground": 10.44,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6333333333333333,
+   "local": [
+    77.2,
+    -40.5,
+    -7.7
+   ],
+   "alt": 1.05,
+   "ground": 9.86,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6344444444444445,
+   "local": [
+    75.8,
+    -39.4,
+    -7.2
+   ],
+   "alt": 0.97,
+   "ground": 7.42,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6355555555555555,
+   "local": [
+    74.4,
+    -38.3,
+    -6.7
+   ],
+   "alt": 0.89,
+   "ground": -0.01,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6366666666666667,
+   "local": [
+    73.1,
+    -37.2,
+    -6.2
+   ],
+   "alt": 0.81,
+   "ground": 0.64,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6377777777777778,
+   "local": [
+    71.7,
+    -36.1,
+    -5.7
+   ],
+   "alt": 0.72,
+   "ground": 2.03,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6388888888888888,
+   "local": [
+    70.2,
+    -35,
+    -5.2
+   ],
+   "alt": 0.63,
+   "ground": 2.97,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.64,
+   "local": [
+    68.8,
+    -34,
+    -4.7
+   ],
+   "alt": 0.55,
+   "ground": 3.77,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6411111111111111,
+   "local": [
+    67.4,
+    -33,
+    -4.1
+   ],
+   "alt": 0.47,
+   "ground": -0.07,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6422222222222222,
+   "local": [
+    66,
+    -31.9,
+    -3.6
+   ],
+   "alt": 0.4,
+   "ground": 0.06,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6433333333333333,
+   "local": [
+    64.5,
+    -30.9,
+    -3.1
+   ],
+   "alt": 0.34,
+   "ground": -0.43,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6444444444444445,
+   "local": [
+    63.1,
+    -29.9,
+    -2.5
+   ],
+   "alt": 0.31,
+   "ground": -0.36,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6455555555555555,
+   "local": [
+    61.6,
+    -28.9,
+    -2
+   ],
+   "alt": 0.3,
+   "ground": -0.28,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6466666666666666,
+   "local": [
+    60.2,
+    -27.9,
+    -1.5
+   ],
+   "alt": 0.3,
+   "ground": -0.18,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6477777777777778,
+   "local": [
+    58.7,
+    -26.9,
+    -1
+   ],
+   "alt": 0.3,
+   "ground": -0.05,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6488888888888888,
+   "local": [
+    57.2,
+    -26,
+    -0.6
+   ],
+   "alt": 0.3,
+   "ground": -0.08,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.65,
+   "local": [
+    55.7,
+    -25.1,
+    -0.1
+   ],
+   "alt": 0.3,
+   "ground": -0.19,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6511111111111111,
+   "local": [
+    54.2,
+    -24.2,
+    0.3
+   ],
+   "alt": 0.3,
+   "ground": -0.28,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6522222222222223,
+   "local": [
+    52.6,
+    -23.3,
+    0.7
+   ],
+   "alt": 0.3,
+   "ground": -0.35,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6533333333333333,
+   "local": [
+    51,
+    -22.4,
+    1.1
+   ],
+   "alt": 0.3,
+   "ground": -0.4,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6544444444444445,
+   "local": [
+    49.4,
+    -21.5,
+    1.5
+   ],
+   "alt": 0.32,
+   "ground": -0.43,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6555555555555556,
+   "local": [
+    47.7,
+    -20.7,
+    1.8
+   ],
+   "alt": 0.36,
+   "ground": -0.43,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6566666666666666,
+   "local": [
+    46.2,
+    -19.8,
+    2.1
+   ],
+   "alt": 0.43,
+   "ground": -0.41,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6577777777777778,
+   "local": [
+    44.6,
+    -19,
+    2.4
+   ],
+   "alt": 0.49,
+   "ground": -0.38,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6588888888888889,
+   "local": [
+    42.9,
+    -18.3,
+    2.6
+   ],
+   "alt": 0.55,
+   "ground": -0.28,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.66,
+   "local": [
+    41.3,
+    -17.5,
+    2.9
+   ],
+   "alt": 0.6,
+   "ground": -0.24,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6611111111111111,
+   "local": [
+    39.6,
+    -16.8,
+    3.2
+   ],
+   "alt": 0.65,
+   "ground": -0.23,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6622222222222223,
+   "local": [
+    37.9,
+    -16.1,
+    3.4
+   ],
+   "alt": 0.68,
+   "ground": 0.09,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6633333333333333,
+   "local": [
+    36.2,
+    -15.4,
+    3.7
+   ],
+   "alt": 0.7,
+   "ground": 0.46,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6644444444444444,
+   "local": [
+    34.5,
+    -14.8,
+    3.9
+   ],
+   "alt": 0.71,
+   "ground": 1.56,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6655555555555556,
+   "local": [
+    32.8,
+    -14.2,
+    4.1
+   ],
+   "alt": 0.71,
+   "ground": 3.73,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6666666666666666,
+   "local": [
+    31.1,
+    -13.6,
+    4.4
+   ],
+   "alt": 0.71,
+   "ground": 5.93,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6677777777777778,
+   "local": [
+    29.3,
+    -13.1,
+    4.6
+   ],
+   "alt": 0.69,
+   "ground": 8.09,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6688888888888889,
+   "local": [
+    27.6,
+    -12.6,
+    4.8
+   ],
+   "alt": 0.67,
+   "ground": 10.25,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.67,
+   "local": [
+    25.8,
+    -12.1,
+    4.9
+   ],
+   "alt": 0.65,
+   "ground": 12.5,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6711111111111111,
+   "local": [
+    24,
+    -11.7,
+    5.1
+   ],
+   "alt": 0.62,
+   "ground": 14.79,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6722222222222223,
+   "local": [
+    22.2,
+    -11.3,
+    5.2
+   ],
+   "alt": 0.6,
+   "ground": 17.4,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6733333333333333,
+   "local": [
+    20.4,
+    -10.9,
+    5.3
+   ],
+   "alt": 0.57,
+   "ground": 20.02,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6744444444444444,
+   "local": [
+    18.6,
+    -10.5,
+    5.4
+   ],
+   "alt": 0.56,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6755555555555556,
+   "local": [
+    16.8,
+    -10.2,
+    5.4
+   ],
+   "alt": 0.54,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6766666666666666,
+   "local": [
+    15,
+    -9.9,
+    5.5
+   ],
+   "alt": 0.53,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6777777777777778,
+   "local": [
+    13.2,
+    -9.6,
+    5.5
+   ],
+   "alt": 0.52,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6788888888888889,
+   "local": [
+    11.4,
+    -9.3,
+    5.5
+   ],
+   "alt": 0.52,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.68,
+   "local": [
+    9.6,
+    -9.1,
+    5.4
+   ],
+   "alt": 0.51,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6811111111111111,
+   "local": [
+    7.7,
+    -8.9,
+    5.4
+   ],
+   "alt": 0.5,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6822222222222222,
+   "local": [
+    5.9,
+    -8.7,
+    5.3
+   ],
+   "alt": 0.49,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6833333333333333,
+   "local": [
+    4.1,
+    -8.6,
+    5.2
+   ],
+   "alt": 0.47,
+   "ground": -3.7,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6844444444444444,
+   "local": [
+    2.2,
+    -8.5,
+    5
+   ],
+   "alt": 0.46,
+   "ground": -3.75,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6855555555555556,
+   "local": [
+    0.4,
+    -8.4,
+    4.9
+   ],
+   "alt": 0.44,
+   "ground": -3.77,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6866666666666666,
+   "local": [
+    -1.4,
+    -8.4,
+    4.7
+   ],
+   "alt": 0.43,
+   "ground": -1.11,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6877777777777778,
+   "local": [
+    -3.2,
+    -8.4,
+    4.6
+   ],
+   "alt": 0.41,
+   "ground": 10.66,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6888888888888889,
+   "local": [
+    -5.1,
+    -8.4,
+    4.4
+   ],
+   "alt": 0.4,
+   "ground": 11.3,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.69,
+   "local": [
+    -6.9,
+    -8.4,
+    4.2
+   ],
+   "alt": 0.38,
+   "ground": 11.94,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6911111111111111,
+   "local": [
+    -8.7,
+    -8.5,
+    4
+   ],
+   "alt": 0.37,
+   "ground": 12.58,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6922222222222222,
+   "local": [
+    -10.6,
+    -8.6,
+    3.8
+   ],
+   "alt": 0.35,
+   "ground": 13.23,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6933333333333334,
+   "local": [
+    -12.4,
+    -8.7,
+    3.5
+   ],
+   "alt": 0.34,
+   "ground": 15.26,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6944444444444444,
+   "local": [
+    -14.2,
+    -8.8,
+    3.3
+   ],
+   "alt": 0.32,
+   "ground": 17.28,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6955555555555556,
+   "local": [
+    -16,
+    -9,
+    3.1
+   ],
+   "alt": 0.31,
+   "ground": 17.87,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6966666666666667,
+   "local": [
+    -17.8,
+    -9.1,
+    2.8
+   ],
+   "alt": 0.3,
+   "ground": 18.48,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6977777777777778,
+   "local": [
+    -19.6,
+    -9.3,
+    2.6
+   ],
+   "alt": 0.3,
+   "ground": 19.34,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6988888888888889,
+   "local": [
+    -21.4,
+    -9.5,
+    2.4
+   ],
+   "alt": 0.3,
+   "ground": 22.56,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7,
+   "local": [
+    -23.2,
+    -9.7,
+    2.1
+   ],
+   "alt": 0.3,
+   "ground": 28.72,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7011111111111111,
+   "local": [
+    -25.1,
+    -10,
+    1.9
+   ],
+   "alt": 0.3,
+   "ground": 24.54,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7022222222222222,
+   "local": [
+    -26.9,
+    -10.3,
+    1.7
+   ],
+   "alt": 0.3,
+   "ground": 19.53,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7033333333333334,
+   "local": [
+    -28.7,
+    -10.6,
+    1.5
+   ],
+   "alt": 0.3,
+   "ground": 16.75,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7044444444444444,
+   "local": [
+    -30.5,
+    -10.9,
+    1.3
+   ],
+   "alt": 0.3,
+   "ground": 17.33,
+   "over": "highland-town-foundation-platform"
+  },
+  {
+   "t": 0.7055555555555556,
+   "local": [
+    -32.3,
+    -11.2,
+    1.1
+   ],
+   "alt": 0.3,
+   "ground": 17.73,
+   "over": "highland-town-foundation-platform"
+  },
+  {
+   "t": 0.7066666666666667,
+   "local": [
+    -34.1,
+    -11.6,
+    0.8
+   ],
+   "alt": 0.3,
+   "ground": 27.5,
+   "over": null
+  },
+  {
+   "t": 0.7077777777777777,
+   "local": [
+    -35.8,
+    -11.9,
+    0.6
+   ],
+   "alt": 0.3,
+   "ground": 23.75,
+   "over": null
+  },
+  {
+   "t": 0.7088888888888889,
+   "local": [
+    -37.6,
+    -12.3,
+    0.4
+   ],
+   "alt": 0.3,
+   "ground": 27.94,
+   "over": null
+  },
+  {
+   "t": 0.71,
+   "local": [
+    -39.4,
+    -12.8,
+    0.2
+   ],
+   "alt": 0.3,
+   "ground": 28.27,
+   "over": null
+  },
+  {
+   "t": 0.7111111111111111,
+   "local": [
+    -41.2,
+    -13.2,
+    -0.1
+   ],
+   "alt": 0.3,
+   "ground": 28.86,
+   "over": null
+  },
+  {
+   "t": 0.7122222222222222,
+   "local": [
+    -42.9,
+    -13.7,
+    -0.4
+   ],
+   "alt": 0.3,
+   "ground": 29.48,
+   "over": null
+  },
+  {
+   "t": 0.7133333333333334,
+   "local": [
+    -44.6,
+    -14.2,
+    -0.7
+   ],
+   "alt": 0.3,
+   "ground": 33.12,
+   "over": null
+  },
+  {
+   "t": 0.7144444444444444,
+   "local": [
+    -46.4,
+    -14.8,
+    -1
+   ],
+   "alt": 0.3,
+   "ground": 37.38,
+   "over": null
+  },
+  {
+   "t": 0.7155555555555555,
+   "local": [
+    -48.1,
+    -15.3,
+    -1.3
+   ],
+   "alt": 0.3,
+   "ground": 38.16,
+   "over": null
+  },
+  {
+   "t": 0.7166666666666667,
+   "local": [
+    -49.8,
+    -15.9,
+    -1.7
+   ],
+   "alt": 0.3,
+   "ground": 38.99,
+   "over": null
+  },
+  {
+   "t": 0.7177777777777777,
+   "local": [
+    -51.5,
+    -16.6,
+    -2.2
+   ],
+   "alt": 0.3,
+   "ground": 39.88,
+   "over": null
+  },
+  {
+   "t": 0.7188888888888889,
+   "local": [
+    -53.1,
+    -17.3,
+    -2.6
+   ],
+   "alt": 0.3,
+   "ground": 38.5,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.72,
+   "local": [
+    -54.7,
+    -18,
+    -3.2
+   ],
+   "alt": 0.3,
+   "ground": 39.5,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7211111111111111,
+   "local": [
+    -56.3,
+    -18.7,
+    -3.8
+   ],
+   "alt": 0.3,
+   "ground": 40.56,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7222222222222222,
+   "local": [
+    -57.8,
+    -19.5,
+    -4.5
+   ],
+   "alt": 0.31,
+   "ground": 40.9,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7233333333333334,
+   "local": [
+    -59.3,
+    -20.3,
+    -5.2
+   ],
+   "alt": 0.33,
+   "ground": 60.58,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7244444444444444,
+   "local": [
+    -60.7,
+    -21.1,
+    -6
+   ],
+   "alt": 0.34,
+   "ground": 60.12,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7255555555555555,
+   "local": [
+    -62.1,
+    -22,
+    -6.8
+   ],
+   "alt": 0.35,
+   "ground": 58.61,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7266666666666667,
+   "local": [
+    -63.4,
+    -22.9,
+    -7.7
+   ],
+   "alt": 0.35,
+   "ground": 57.21,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7277777777777777,
+   "local": [
+    -64.7,
+    -23.9,
+    -8.7
+   ],
+   "alt": 0.35,
+   "ground": 56.64,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7288888888888889,
+   "local": [
+    -65.9,
+    -24.8,
+    -9.7
+   ],
+   "alt": 0.34,
+   "ground": 55.89,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.73,
+   "local": [
+    -67,
+    -25.8,
+    -10.7
+   ],
+   "alt": 0.33,
+   "ground": 55.11,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7311111111111112,
+   "local": [
+    -68.1,
+    -26.9,
+    -11.9
+   ],
+   "alt": 0.32,
+   "ground": 54.06,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7322222222222222,
+   "local": [
+    -69,
+    -27.9,
+    -13.1
+   ],
+   "alt": 0.31,
+   "ground": 53.26,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7333333333333333,
+   "local": [
+    -69.8,
+    -28.9,
+    -14.3
+   ],
+   "alt": 0.3,
+   "ground": 52.36,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7344444444444445,
+   "local": [
+    -70.5,
+    -30,
+    -15.7
+   ],
+   "alt": 0.3,
+   "ground": 52.51,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7355555555555555,
+   "local": [
+    -71,
+    -31,
+    -17.1
+   ],
+   "alt": 0.3,
+   "ground": 51.39,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7366666666666667,
+   "local": [
+    -71.4,
+    -32,
+    -18.6
+   ],
+   "alt": 0.3,
+   "ground": 50.67,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7377777777777778,
+   "local": [
+    -71.6,
+    -33,
+    -20.2
+   ],
+   "alt": 0.3,
+   "ground": 50.25,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7388888888888889,
+   "local": [
+    -71.7,
+    -34,
+    -21.7
+   ],
+   "alt": 0.3,
+   "ground": 49.44,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.74,
+   "local": [
+    -71.7,
+    -35,
+    -23.3
+   ],
+   "alt": 0.3,
+   "ground": 49.58,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7411111111111112,
+   "local": [
+    -71.6,
+    -35.9,
+    -24.9
+   ],
+   "alt": 0.3,
+   "ground": 49.67,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7422222222222222,
+   "local": [
+    -71.3,
+    -36.8,
+    -26.5
+   ],
+   "alt": 0.3,
+   "ground": 47.05,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7433333333333333,
+   "local": [
+    -71,
+    -37.7,
+    -28.1
+   ],
+   "alt": 0.3,
+   "ground": 45.41,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7444444444444445,
+   "local": [
+    -70.6,
+    -38.6,
+    -29.6
+   ],
+   "alt": 0.3,
+   "ground": 45.68,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7455555555555555,
+   "local": [
+    -70.1,
+    -39.4,
+    -31.2
+   ],
+   "alt": 0.3,
+   "ground": 45.56,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7466666666666667,
+   "local": [
+    -69.5,
+    -40.2,
+    -32.7
+   ],
+   "alt": 0.3,
+   "ground": 46.19,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7477777777777778,
+   "local": [
+    -68.8,
+    -41,
+    -34.2
+   ],
+   "alt": 0.3,
+   "ground": 19.12,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.7488888888888889,
+   "local": [
+    -68,
+    -41.8,
+    -35.7
+   ],
+   "alt": 0.3,
+   "ground": -0.38,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.75,
+   "local": [
+    -67.2,
+    -42.5,
+    -37.2
+   ],
+   "alt": 0.3,
+   "ground": -0.34,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7511111111111111,
+   "local": [
+    -66.2,
+    -43.2,
+    -38.6
+   ],
+   "alt": 0.3,
+   "ground": -0.28,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7522222222222222,
+   "local": [
+    -65.2,
+    -43.8,
+    -40
+   ],
+   "alt": 0.3,
+   "ground": -0.19,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7533333333333333,
+   "local": [
+    -64.1,
+    -44.4,
+    -41.4
+   ],
+   "alt": 0.3,
+   "ground": -0.24,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.7544444444444445,
+   "local": [
+    -62.9,
+    -44.9,
+    -42.7
+   ],
+   "alt": 0.3,
+   "ground": -0.28,
+   "over": "planet-surface"
+  }
+ ],
+ "minDeckAboveGround": -60.25,
+ "buried": [
+  {
+   "t": 0.63,
+   "local": [
+    81.3,
+    -44,
+    -9
+   ],
+   "alt": 1.25,
+   "ground": 6.5,
+   "over": "citadel-backdrop-ridge-mid"
+  },
+  {
+   "t": 0.6311111111111111,
+   "local": [
+    79.9,
+    -42.8,
+    -8.6
+   ],
+   "alt": 1.19,
+   "ground": 8.97,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6322222222222222,
+   "local": [
+    78.6,
+    -41.6,
+    -8.1
+   ],
+   "alt": 1.12,
+   "ground": 10.44,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6333333333333333,
+   "local": [
+    77.2,
+    -40.5,
+    -7.7
+   ],
+   "alt": 1.05,
+   "ground": 9.86,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6344444444444445,
+   "local": [
+    75.8,
+    -39.4,
+    -7.2
+   ],
+   "alt": 0.97,
+   "ground": 7.42,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6366666666666667,
+   "local": [
+    73.1,
+    -37.2,
+    -6.2
+   ],
+   "alt": 0.81,
+   "ground": 0.64,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6377777777777778,
+   "local": [
+    71.7,
+    -36.1,
+    -5.7
+   ],
+   "alt": 0.72,
+   "ground": 2.03,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6388888888888888,
+   "local": [
+    70.2,
+    -35,
+    -5.2
+   ],
+   "alt": 0.63,
+   "ground": 2.97,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.64,
+   "local": [
+    68.8,
+    -34,
+    -4.7
+   ],
+   "alt": 0.55,
+   "ground": 3.77,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6422222222222222,
+   "local": [
+    66,
+    -31.9,
+    -3.6
+   ],
+   "alt": 0.4,
+   "ground": 0.06,
+   "over": "citadel-backdrop-ridge-near"
+  },
+  {
+   "t": 0.6477777777777778,
+   "local": [
+    58.7,
+    -26.9,
+    -1
+   ],
+   "alt": 0.3,
+   "ground": -0.05,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6488888888888888,
+   "local": [
+    57.2,
+    -26,
+    -0.6
+   ],
+   "alt": 0.3,
+   "ground": -0.08,
+   "over": "planet-surface"
+  },
+  {
+   "t": 0.6633333333333333,
+   "local": [
+    36.2,
+    -15.4,
+    3.7
+   ],
+   "alt": 0.7,
+   "ground": 0.46,
+   "over": "citadel-moat-bed"
+  },
+  {
+   "t": 0.6644444444444444,
+   "local": [
+    34.5,
+    -14.8,
+    3.9
+   ],
+   "alt": 0.71,
+   "ground": 1.56,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6655555555555556,
+   "local": [
+    32.8,
+    -14.2,
+    4.1
+   ],
+   "alt": 0.71,
+   "ground": 3.73,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6666666666666666,
+   "local": [
+    31.1,
+    -13.6,
+    4.4
+   ],
+   "alt": 0.71,
+   "ground": 5.93,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6677777777777778,
+   "local": [
+    29.3,
+    -13.1,
+    4.6
+   ],
+   "alt": 0.69,
+   "ground": 8.09,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6688888888888889,
+   "local": [
+    27.6,
+    -12.6,
+    4.8
+   ],
+   "alt": 0.67,
+   "ground": 10.25,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.67,
+   "local": [
+    25.8,
+    -12.1,
+    4.9
+   ],
+   "alt": 0.65,
+   "ground": 12.5,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6711111111111111,
+   "local": [
+    24,
+    -11.7,
+    5.1
+   ],
+   "alt": 0.62,
+   "ground": 14.79,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6722222222222223,
+   "local": [
+    22.2,
+    -11.3,
+    5.2
+   ],
+   "alt": 0.6,
+   "ground": 17.4,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6733333333333333,
+   "local": [
+    20.4,
+    -10.9,
+    5.3
+   ],
+   "alt": 0.57,
+   "ground": 20.02,
+   "over": "citadel-oskar-grid-mountain-surface"
+  },
+  {
+   "t": 0.6744444444444444,
+   "local": [
+    18.6,
+    -10.5,
+    5.4
+   ],
+   "alt": 0.56,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6755555555555556,
+   "local": [
+    16.8,
+    -10.2,
+    5.4
+   ],
+   "alt": 0.54,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6766666666666666,
+   "local": [
+    15,
+    -9.9,
+    5.5
+   ],
+   "alt": 0.53,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6777777777777778,
+   "local": [
+    13.2,
+    -9.6,
+    5.5
+   ],
+   "alt": 0.52,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6788888888888889,
+   "local": [
+    11.4,
+    -9.3,
+    5.5
+   ],
+   "alt": 0.52,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.68,
+   "local": [
+    9.6,
+    -9.1,
+    5.4
+   ],
+   "alt": 0.51,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6811111111111111,
+   "local": [
+    7.7,
+    -8.9,
+    5.4
+   ],
+   "alt": 0.5,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  },
+  {
+   "t": 0.6822222222222222,
+   "local": [
+    5.9,
+    -8.7,
+    5.3
+   ],
+   "alt": 0.49,
+   "ground": 0.57,
+   "over": "citadel-harbor-gold-streaks"
+  }
+ ],
+ "cams": {
+  "plan": {
+   "pos": [
+    0,
+    330,
+    40
+   ],
+   "look": [
+    0,
+    0,
+    40
+   ],
+   "fov": 55
+  },
+  "target": {
+   "pos": [
+    -20,
+    70,
+    215
+   ],
+   "look": [
+    -5,
+    5,
+    40
+   ],
+   "fov": 52
+  }
+ }
+}

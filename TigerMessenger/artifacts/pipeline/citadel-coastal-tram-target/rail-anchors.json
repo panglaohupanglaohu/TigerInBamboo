@@ -1,0 +1,205 @@
+{
+  "castleMatrix": [
+    -0.5771265090244172,
+    0.12463062405961449,
+    0.807088718870361,
+    0,
+    0.6354855835814281,
+    0.689249750214348,
+    0.3479839865419536,
+    0,
+    -0.5129162364767383,
+    0.7137240288626759,
+    -0.4769852670498,
+    0,
+    124.43456408079132,
+    72.61606956254715,
+    90.15650671642375,
+    1
+  ],
+  "rows": [
+    {
+      "name": "old-harbor-scene",
+      "matrix": [
+        -0.5448966095771355,
+        0.7666516805782896,
+        -0.33960695743436564,
+        0,
+        0.7930174970389471,
+        0.6027618918765686,
+        0.08832525738124605,
+        0,
+        0.2724168391664258,
+        -0.22118612607454405,
+        -0.9364111080987396,
+        0,
+        127.38724891735129,
+        96.82532787117425,
+        14.18822609806972,
+        1
+      ],
+      "world": [
+        127.38724891735129,
+        96.82532787117425,
+        14.18822609806972
+      ],
+      "local": [
+        -59.99999999999999,
+        -7.873131251723434,
+        51.999999999999986
+      ],
+      "keys": [
+        "kind",
+        "collideRadius",
+        "combatZone",
+        "oldHarborGiantTreeCount",
+        "oldHarborGiantTrees",
+        "oldHarborOceanGrade",
+        "compositionPlacement"
+      ]
+    },
+    {
+      "name": "highland-west-city",
+      "matrix": [
+        -0.7562643362509436,
+        0.46479530095647215,
+        0.4604667001246698,
+        0,
+        0.6354855835814281,
+        0.689249750214348,
+        0.3479839865419536,
+        0,
+        -0.1556352362901534,
+        0.5557878282566481,
+        -0.8166257179312117,
+        0,
+        139.64782067031177,
+        57.01783484096673,
+        93.2695066979274,
+        1
+      ],
+      "world": [
+        139.64782067031177,
+        57.01783484096673,
+        93.2695066979274
+      ],
+      "local": [
+        -8.211524227066334,
+        0,
+        -20.42081637058737
+      ],
+      "keys": [
+        "sourceId",
+        "designRole",
+        "layoutVersion",
+        "compactAscent",
+        "upperRouteStatus",
+        "harborRoute",
+        "harborAnchor",
+        "harborStatus",
+        "statueAnchor",
+        "plazaLayout",
+        "plazaAnchor",
+        "horseReservation",
+        "processionalEntry",
+        "horsePlazaExit",
+        "artStatus",
+        "districts",
+        "connectedToMainGate",
+        "walkRoute",
+        "plazaToKeepRoute",
+        "targetCastleSilhouette",
+        "harborOceanAlignment",
+        "boardingRoute",
+        "boardingAnchor",
+        "oceanSurfaceHeight",
+        "legacyNavonaRetired",
+        "frontHarborRoute",
+        "frontHarborAnchor",
+        "frontHarborApproach",
+        "compactMountain",
+        "compactFoundations",
+        "harborToKeepRoute"
+      ]
+    },
+    {
+      "name": "west-city-plaza-deck",
+      "matrix": [
+        -0.7562643362509436,
+        0.46479530095647215,
+        0.4604667001246698,
+        0,
+        0.6354855835814281,
+        0.689249750214348,
+        0.3479839865419536,
+        0,
+        -0.1556352362901534,
+        0.5557878282566481,
+        -0.8166257179312117,
+        0,
+        79.23995192096265,
+        132.40542897526302,
+        65.47354172449954,
+        1
+      ],
+      "world": [
+        79.23995192096265,
+        132.40542897526302,
+        65.47354172449954
+      ],
+      "local": [
+        13.613251324991674,
+        3.900000000000033,
+        77.62756350946108
+      ],
+      "keys": [
+        "sourceId",
+        "westCityWalkable",
+        "isCitadelTerrain"
+      ]
+    },
+    {
+      "name": "citadel-front-harbor",
+      "matrix": [
+        -0.7562643362509436,
+        0.46479530095647215,
+        0.4604667001246698,
+        0,
+        0.6354855835814281,
+        0.689249750214348,
+        0.3479839865419536,
+        0,
+        -0.1556352362901534,
+        0.5557878282566481,
+        -0.8166257179312117,
+        0,
+        139.64782067031177,
+        57.01783484096673,
+        93.2695066979274,
+        1
+      ],
+      "world": [
+        139.64782067031177,
+        57.01783484096673,
+        93.2695066979274
+      ],
+      "local": [
+        -8.211524227066334,
+        0,
+        -20.42081637058737
+      ],
+      "keys": [
+        "integratedCandidate",
+        "waterPlanVersion",
+        "eastTerraces",
+        "finish",
+        "cargoStaging",
+        "landingSupport",
+        "entryCutTriangles",
+        "layout",
+        "frontHarborApproach",
+        "residentBoat"
+      ]
+    }
+  ]
+}

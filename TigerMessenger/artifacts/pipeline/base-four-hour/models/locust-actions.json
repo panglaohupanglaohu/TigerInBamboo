@@ -1,0 +1,42 @@
+{
+  "kind": "locust",
+  "rigVersion": 2,
+  "sourceModelVersion": 4,
+  "bytes": 3112964,
+  "nodes": 130,
+  "joints": 12,
+  "clips": [
+    {
+      "name": "idle",
+      "duration": 1,
+      "frames": 31
+    },
+    {
+      "name": "move",
+      "duration": 1.2566370614359172,
+      "frames": 39
+    },
+    {
+      "name": "attack",
+      "duration": 2.4,
+      "frames": 73
+    },
+    {
+      "name": "transport",
+      "duration": 1,
+      "frames": 31
+    },
+    {
+      "name": "disabled",
+      "duration": 1,
+      "frames": 31
+    }
+  ],
+  "limitations": [
+    "Rigid articulated nodes, not a skinned humanoid skeleton.",
+    "Procedural patina, outline effects and gameplay logic remain authoritative in the native Three.js model.",
+    "Movement clips are in place; navigation and projectile effects are not baked into the mesh.",
+    "Beetle rolling wheel phase is continuous within the move clip; continuous looping requires an engine animation controller."
+  ],
+  "sha256": "3e27d949d06bc888f80ee35f3e39aa61e29b9bdf659154419a65f87f527b7833"
+}

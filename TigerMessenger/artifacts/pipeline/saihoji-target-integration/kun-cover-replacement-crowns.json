@@ -1,0 +1,48 @@
+{
+  "scope": "actual Web crown ray at candidate points; not foliage volume clearance",
+  "rows": [
+    {
+      "id": "pine-3011-cover-15",
+      "canopyClearanceWorld": null,
+      "passed": false,
+      "leafMeshes": 75,
+      "nearestCover": 1.1188950435618983
+    },
+    {
+      "id": "pine-3011-cover-17",
+      "canopyClearanceWorld": null,
+      "passed": false,
+      "leafMeshes": 75,
+      "nearestCover": 1.5270422010953968
+    },
+    {
+      "id": "pine-3011-cover-20",
+      "canopyClearanceWorld": null,
+      "passed": false,
+      "leafMeshes": 75,
+      "nearestCover": 2.850784938566816
+    },
+    {
+      "id": "pine-3011-cover-15-original",
+      "canopyClearanceWorld": 3.0993264724818506,
+      "passed": true,
+      "leafMeshes": 75,
+      "nearestCover": 0
+    },
+    {
+      "id": "pine-3011-cover-17-original",
+      "canopyClearanceWorld": 1.6442867395411755,
+      "passed": true,
+      "leafMeshes": 75,
+      "nearestCover": 0
+    },
+    {
+      "id": "pine-3011-cover-20-original",
+      "canopyClearanceWorld": 2.985174915863821,
+      "passed": true,
+      "leafMeshes": 75,
+      "nearestCover": 0
+    }
+  ],
+  "passed": false
+}

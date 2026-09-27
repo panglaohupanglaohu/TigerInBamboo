@@ -1,0 +1,100 @@
+{
+  "stages": [
+    {
+      "stats": {
+        "shots": 6,
+        "cracks": 0,
+        "impacts": 0,
+        "confirmed": 0,
+        "reflected": 0,
+        "rejected": 0
+      },
+      "budget": {
+        "ready": true,
+        "oneShots": [],
+        "foreground": 0,
+        "engines": [],
+        "suction": false,
+        "weather": {
+          "rain": 0,
+          "snow": 0,
+          "wind": 0.8
+        },
+        "caps": {
+          "FOREGROUND_CAP": 6,
+          "ONESHOT_CAP": 8,
+          "ENGINE_SLOTS": 2
+        }
+      }
+    },
+    {
+      "stats": {
+        "shots": 7,
+        "cracks": 0,
+        "impacts": 0,
+        "confirmed": 0,
+        "reflected": 0,
+        "rejected": 0
+      },
+      "budget": {
+        "ready": true,
+        "oneShots": [],
+        "foreground": 0,
+        "engines": [],
+        "suction": false,
+        "weather": {
+          "rain": 0,
+          "snow": 0,
+          "wind": 0.8
+        },
+        "caps": {
+          "FOREGROUND_CAP": 6,
+          "ONESHOT_CAP": 8,
+          "ENGINE_SLOTS": 2
+        }
+      }
+    },
+    {
+      "stats": {
+        "shots": 12,
+        "cracks": 0,
+        "impacts": 0,
+        "confirmed": 0,
+        "reflected": 0,
+        "rejected": 0
+      },
+      "budget": {
+        "ready": true,
+        "oneShots": [],
+        "foreground": 0,
+        "engines": [],
+        "suction": false,
+        "weather": {
+          "rain": 0,
+          "snow": 0,
+          "wind": 0.8
+        },
+        "caps": {
+          "FOREGROUND_CAP": 6,
+          "ONESHOT_CAP": 8,
+          "ENGINE_SLOTS": 2
+        }
+      }
+    }
+  ],
+  "result": {
+    "stats": {
+      "shots": 14,
+      "cracks": 1,
+      "impacts": 0,
+      "confirmed": 2,
+      "reflected": 1,
+      "rejected": 1
+    },
+    "far": true,
+    "mute": true,
+    "pcmPeak": 0.4332183301448822,
+    "context": "running"
+  },
+  "errors": []
+}

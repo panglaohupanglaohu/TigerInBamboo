@@ -44,7 +44,7 @@ export function createPlayer(scene) {
   playerGroup.add(messengerMesh);
 
   const holdAura = new THREE.PointLight(0x72d7e7, 0, 4, 2);
-  holdAura.position.set(0, 0.75, 0); // 智能体工作核心高度（缩放后）
+  holdAura.position.set(0, 1.25, 0); // 与统一后的信使胸前高度对齐
   playerGroup.add(holdAura);
   // K4：持信光环迁入 registry（玩家相关，优先级高于场景氛围灯）
   registerLocalLight(holdAura, {
@@ -74,10 +74,32 @@ export function syncPlayerVisual(player, playerGroup) {
     _fwd.set(0, 0, 1).addScaledVector(up, -up.z);
     if (_fwd.lengthSq() < 1e-6) _fwd.set(1, 0, 0).addScaledVector(up, -up.x);
   }
+  // 地形法线与坡度姿态平衡（Discourse 40503 & 人体坡道动力学）
+  // 腾空跳跃时姿态平滑回正至星球垂线；在地面时严格对齐地形地表法线
+  if (player.onGround === false) {
+    _up.lerp(player.position.clone().normalize(), 0.15);
+  }
   _fwd.normalize();
   _right.crossVectors(up, _fwd).normalize();
+
+  // 上下坡平衡倾角：上坡重心前倾（避免后仰），下坡微向后制动
+  const speed = player.velocity ? player.velocity.length() : 0;
+  if (player.onGround && speed > 0.5) {
+    const slopePitch = _fwd.dot(player.position.clone().normalize());
+    if (slopePitch > 0.05) {
+      _fwd.addScaledVector(up, -slopePitch * 0.18).normalize();
+    }
+  }
+
   // makeBasis(x,y,z) = columns; 信使默认面朝 +Z → 用 forward 作 Z
   _basis.makeBasis(_right, up, _fwd);
   _quat.setFromRotationMatrix(_basis);
-  playerGroup.quaternion.copy(_quat);
+
+  if (!playerGroup.userData._quatInit) {
+    playerGroup.quaternion.copy(_quat);
+    playerGroup.userData._quatInit = true;
+  } else {
+    // 平滑球面四元数插值，避免阶梯与微小地表几何导致瞬时抽搐
+    playerGroup.quaternion.slerp(_quat, 0.35);
+  }
 }

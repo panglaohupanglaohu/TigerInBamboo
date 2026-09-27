@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "b636cd7396e276259c8e01219e87ea983b32823a7cafdaaa9e995b00f3771b37",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.85
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.54,
+      "probabilities": {
+        "review": 0.05,
+        "lighting": 0,
+        "geometry": 0.32,
+        "navigation": 0.63,
+        "dressing": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.93
+    }
+  },
+  "usage": {
+    "input_tokens": 611,
+    "output_tokens": 91,
+    "cost_usd": 0.000257,
+    "credits_remaining_usd": 4.995874
+  },
+  "elapsed_ms": 1445,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full boarding and new rock collision",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

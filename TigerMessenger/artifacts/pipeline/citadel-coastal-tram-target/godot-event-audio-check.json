@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "name": "regional starts within 30",
+      "passed": true
+    },
+    {
+      "name": "real scene signal switches to original siege track",
+      "passed": true
+    },
+    {
+      "name": "infiltration takes over without siege overlap",
+      "passed": true
+    },
+    {
+      "name": "ending infiltration restores still active siege",
+      "passed": true
+    },
+    {
+      "name": "leaving event range silences all",
+      "passed": true
+    },
+    {
+      "name": "returning resumes active event",
+      "passed": true
+    },
+    {
+      "name": "reset restores regional only",
+      "passed": true
+    },
+    {
+      "name": "30m boundary excludes regional music",
+      "passed": true
+    },
+    {
+      "name": "mute silences regional",
+      "passed": true
+    },
+    {
+      "name": "deleted event source releases ownership",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Actual original_world signal/controller wiring and imported audio streams. No complete Godot siege gameplay trigger exists yet."
+}

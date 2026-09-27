@@ -1,0 +1,217 @@
+{
+  "rays": [
+    {
+      "uv": [
+        0.14,
+        0.18
+      ],
+      "hits": [
+        {
+          "name": "sky-background",
+          "parents": [
+            "sky-background",
+            ""
+          ],
+          "distance": 2024.5801849047682,
+          "cityPoint": [
+            -1805.5754290223313,
+            269.71337207922545,
+            -572.5034806008375
+          ]
+        }
+      ]
+    },
+    {
+      "uv": [
+        0.18,
+        0.26
+      ],
+      "hits": [
+        {
+          "name": "sky-background",
+          "parents": [
+            "sky-background",
+            ""
+          ],
+          "distance": 2035.4767413324032,
+          "cityPoint": [
+            -1796.838670602886,
+            138.2522712604995,
+            -662.3766617147605
+          ]
+        }
+      ]
+    },
+    {
+      "uv": [
+        0.21,
+        0.34
+      ],
+      "hits": [
+        {
+          "name": "sky-background",
+          "parents": [
+            "sky-background",
+            ""
+          ],
+          "distance": 2048.7882754995467,
+          "cityPoint": [
+            -1786.1146823345666,
+            -6.771706143316948,
+            -731.2200226055988
+          ]
+        }
+      ]
+    },
+    {
+      "uv": [
+        0.26,
+        0.44
+      ],
+      "hits": [
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parents": [
+            "citadel-oskar-grid-mountain-surface",
+            "citadel-continuous-mountain-terrain-system",
+            "castleContainer",
+            ""
+          ],
+          "distance": 124.98562548974533,
+          "cityPoint": [
+            -11.086358486242638,
+            15.80795337099255,
+            12.503933924926429
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parents": [
+            "citadel-oskar-grid-mountain-surface",
+            "citadel-continuous-mountain-terrain-system",
+            "castleContainer",
+            ""
+          ],
+          "distance": 131.6913134151896,
+          "cityPoint": [
+            -17.046327481588342,
+            15.04652632412558,
+            9.526477127546066
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parents": [
+            "citadel-oskar-grid-mountain-surface",
+            "citadel-continuous-mountain-terrain-system",
+            "castleContainer",
+            ""
+          ],
+          "distance": 135.49918088719943,
+          "cityPoint": [
+            -20.430733723556486,
+            14.614145140224736,
+            7.83570937722488
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parents": [
+            "citadel-oskar-grid-mountain-surface",
+            "citadel-continuous-mountain-terrain-system",
+            "castleContainer",
+            ""
+          ],
+          "distance": 173.54718081655855,
+          "cityPoint": [
+            -54.24753260163311,
+            10.293816406243707,
+            -9.058347918006632
+          ]
+        },
+        {
+          "name": "sky-background",
+          "parents": [
+            "sky-background",
+            ""
+          ],
+          "distance": 2066.1554416148206,
+          "cityPoint": [
+            -1736.3846496440228,
+            -204.61077428124662,
+            -849.4134902308164
+          ]
+        }
+      ]
+    },
+    {
+      "uv": [
+        0.17,
+        0.6
+      ],
+      "hits": [
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parents": [
+            "citadel-oskar-grid-mountain-surface",
+            "citadel-continuous-mountain-terrain-system",
+            "castleContainer",
+            ""
+          ],
+          "distance": 101.60621098862245,
+          "cityPoint": [
+            6.835243514663034,
+            4.619277570142543,
+            36.37771055994129
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parents": [
+            "citadel-oskar-grid-mountain-surface",
+            "citadel-continuous-mountain-terrain-system",
+            "castleContainer",
+            ""
+          ],
+          "distance": 192.02333920775553,
+          "cityPoint": [
+            -76.07002035333306,
+            -17.96646804428275,
+            8.237731998940788
+          ]
+        },
+        {
+          "name": "sky-background",
+          "parents": [
+            "sky-background",
+            ""
+          ],
+          "distance": 2095.354964425228,
+          "cityPoint": [
+            -1821.2726575630077,
+            -493.40917180796885,
+            -584.1247128498684
+          ]
+        }
+      ]
+    }
+  ],
+  "forests": [
+    {
+      "name": "citadel-mountain-cypress-groves",
+      "groups": 1,
+      "meshes": 4,
+      "vertices": 14880,
+      "instances": 4,
+      "trees": 31
+    },
+    {
+      "name": "highland-canopy-groves",
+      "groups": 1,
+      "meshes": 0,
+      "vertices": 0,
+      "instances": 0,
+      "trees": null
+    }
+  ]
+}

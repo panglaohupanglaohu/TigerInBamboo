@@ -1,0 +1,112 @@
+{
+  "status": "authored; pending in-scene visual review",
+  "reference": "assets/concepts/gate-of-sighs/target-v2.png",
+  "source": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_blue.blend",
+  "sha256": "a1ed75c7a07208edb9425a4408b7e9a69459c049e2380a891efaea2d0519096e",
+  "sourceNodes": {
+    "n7": "reference inspected; final face authored as closed faceted rings",
+    "n9": "Achilles helmet from optimized solid soldier"
+  },
+  "authored": [
+    "Odysseus pleated teal robe, dark mantle, hair and beard",
+    "Achilles muscle cuirass, red crest, pteruges, greaves and convex round shield",
+    "Odysseus hand-held paper with ink marks"
+  ],
+  "axes": "Y up, feet Y=0, forward -Z; local actor exports",
+  "poses": "named armL/armR nodes are rigid articulated pivots; no skinning or baked clips",
+  "palette": {
+    "skin": [
+      0.5400000214576721,
+      0.30000001192092896,
+      0.1599999964237213
+    ],
+    "cloth": [
+      0.04500000178813934,
+      0.2199999988079071,
+      0.23999999463558197
+    ],
+    "clothDark": [
+      0.023000000044703484,
+      0.10000000149011612,
+      0.12999999523162842
+    ],
+    "hair": [
+      0.02500000037252903,
+      0.017999999225139618,
+      0.013000000268220901
+    ],
+    "bronze": [
+      0.4000000059604645,
+      0.23000000417232513,
+      0.07500000298023224
+    ],
+    "gold": [
+      0.6499999761581421,
+      0.4300000071525574,
+      0.1599999964237213
+    ],
+    "red": [
+      0.28999999165534973,
+      0.02199999988079071,
+      0.017999999225139618
+    ],
+    "leather": [
+      0.07500000298023224,
+      0.03700000047683716,
+      0.02199999988079071
+    ],
+    "paper": [
+      0.7799999713897705,
+      0.6899999976158142,
+      0.49000000953674316
+    ],
+    "ink": [
+      0.11999999731779099,
+      0.07500000298023224,
+      0.03500000014901161
+    ]
+  },
+  "actors": [
+    {
+      "name": "odysseus",
+      "bounds": [
+        [
+          -0.3183155059814453,
+          0.3183155059814453
+        ],
+        [
+          -6.266325680570617e-09,
+          1.659999966621399
+        ],
+        [
+          -0.3269999921321869,
+          0.17499999701976776
+        ]
+      ],
+      "triangles": 1572
+    },
+    {
+      "name": "achilles",
+      "bounds": [
+        [
+          -0.5850000381469727,
+          0.31868812441825867
+        ],
+        [
+          -6.266325680570617e-09,
+          1.75
+        ],
+        [
+          -0.242000013589859,
+          0.13888207077980042
+        ]
+      ],
+      "triangles": 1740
+    }
+  ],
+  "limitations": [
+    "Reference interpretation, not claimed exact concept match",
+    "Rigid joints; no facial animation",
+    "Faceted hero face newly authored; current courierCodrops/head-38 not modified"
+  ]
+}

@@ -28,3 +28,21 @@ export function shapeWestCoastalSlope(castle,radius){
  if(meshes[0])meshes[0].userData.westCoastalSlope=report;
  return report;
 }
+
+/** Broad unoccupied western shore retreats below the railway; no tunnel cut. */
+export function openWesternRailCoast(castle,radius){
+ castle.updateWorldMatrix(true,true);const invCastle=castle.matrixWorld.clone().invert();
+ for(const name of ['citadel-oskar-grid-mountain-surface','backlit-highlight-citadel-oskar-grid-mountain-surface']){
+  const mesh=castle.getObjectByName(name);if(!mesh?.geometry)continue;
+  const a=mesh.geometry.attributes.position,inv=mesh.matrixWorld.clone().invert();
+  const smooth=t=>{t=THREE.MathUtils.clamp(t,0,1);return t*t*(3-2*t);};
+  for(let i=0;i<a.count;i++){
+   const world=new THREE.Vector3().fromBufferAttribute(a,i).applyMatrix4(mesh.matrixWorld),local=world.clone().applyMatrix4(invCastle);
+   const weight=smooth((-82-local.x)/22)*smooth((85-local.z)/20);
+   if(weight<=0)continue;
+   const r=world.length(),sea=radius+officialOceanLevelAt(world)-1;
+   world.setLength(r+(Math.min(r,sea)-r)*weight).applyMatrix4(inv);a.setXYZ(i,world.x,world.y,world.z);
+  }
+  a.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.geometry.computeBoundingBox();mesh.geometry.computeBoundingSphere();
+ }
+}

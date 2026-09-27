@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "engine": "Godot 4.7.2",
+  "tests": {
+    "test_gate_pact.gd": {
+      "passed": true,
+      "failures": []
+    },
+    "test_gate_pact_chapter.gd": {
+      "passed": true,
+      "failures": []
+    },
+    "test_gate_target_adapter.gd": {
+      "passed": true,
+      "failures": []
+    }
+  },
+  "scope": "Native chapter fixture starts with bookshop letter; not complete campaign migration. Headless behavior and geometry checks, not manual visual playthrough.",
+  "dressing": "gate-dressing-v1.glb imported; adapter lifecycle verified"
+}

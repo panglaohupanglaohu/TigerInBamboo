@@ -1,3 +1,14 @@
+import {placeBookshopTown} from '../world/bookshopTownSite.js';
+import {removeRequestedGateMountains} from '../world/gateMeetingConnection.js';
+import {installBookshopRobots} from '../world/bookshopRobotBase.js';
+import {relocateCrystalCore} from '../world/crystalCorePlacement.js';
+import {installHighlandGate} from '../world/citadel/highlandGate.js';
+import {finishCrystalV9Scene} from '../world/crystalV9.js';
+import {citadelCoastalTramEnabled} from "../world/citadel/coastalTramRoute.js";
+import {crystalV7Round} from '../world/crystalV7Layout.js';
+import {shapeCrystalV7Cove} from '../world/crystalV7Runtime.js';
+import shoreStones from "../world/saihojiShoreStonesData.js";
+import {applyFrontHarborCoast} from "../world/citadel/frontHarborCoast.js";
 import {alignReleasedLighting} from "../world/citadel/releasedLighting.js";
 import {buildTerracePlanting} from "../world/citadel/terracePlanting.js";
 import {groundCitadelShrubs} from "../world/citadel/shrubGrounding.js";
@@ -14,6 +25,8 @@ import {buildPlazaRetainingWall} from '../world/citadel/plazaRetainingWall.js';
 import {adaptCitadelMountainForest} from '../world/citadel/mountainForest.js';
 import {buildOldShoreArcades} from '../world/citadel/oldShoreArcades.js';
 import {buildOldCitySupport} from '../world/citadel/oldCitySupport.js';
+import {buildOldTownPlinth} from '../world/citadel/oldTownPlinth.js';
+import {applyOldTownPalace} from '../world/citadel/holyCityStyleV2.js';
 import {applyOldCityCoastalSlope} from '../world/citadel/oldCityCoastalSlope.js';
 import {buildCitadelShorePlanting} from '../world/citadel/shorePlanting.js';
 import {applyCitadelTierLighting} from '../world/citadel/tierLighting.js';
@@ -22,7 +35,7 @@ import {conformWestMassifToOcean} from '../world/citadel/westMassifBlender.js';
 import {buildFrontHarborApproach} from '../world/citadel/frontHarborApproach.js';
 import {applyFrontStrataBlender} from '../world/citadel/frontStrataBlender.js';
 import {shapeFrontCoastalSlope} from '../world/citadel/frontCoastalSlope.js';
-import {shapeWestCoastalSlope} from '../world/citadel/westCoastalSlope.js';
+import {shapeWestCoastalSlope,openWesternRailCoast} from '../world/citadel/westCoastalSlope.js';
 import {alignCitadelPerimeterToOcean} from '../world/citadel/perimeterOceanAlignment.js';
 import {groundCitadelCanopies} from '../world/citadel/canopyGrounding.js';
 // =====================================================================
@@ -31,6 +44,7 @@ import {groundCitadelCanopies} from '../world/citadel/canopyGrounding.js';
 // =====================================================================
 import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
+import { buildCrystalMotherPort } from "../world/crystalMotherPort.js";
 import { buildWorld } from "../world/platforms.js";
 import { buildHills, groundLiftAt } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets, decorateCorridorForests } from "../world/nature.js?v=bookshop-clearance-20260908";
@@ -161,6 +175,8 @@ export const messengerIslandScene = {
       highlandIslandLift: planetFeatures.highlandIslandLift || 0,
     });
 
+    installHighlandGate({scene,tramSystem});
+
     // 云贴地重投影（方案 A）· 阶段 0：可见地形清单。createPlanetV8Runtime 已挪到
     // harbor / moebius / citadel 构建之后，保证云采样时这些 group 已在场景中。
     // 清单经 collectStaticTerrainMeshes 收集为静态 mesh：排除飞鸟群/气泡艇等瞬态
@@ -191,41 +207,53 @@ export const messengerIslandScene = {
     });
     const coastalCity=citadelPack?.odysseyCitadel?.getObjectByName('highland-west-city');
     const worldOcean=scene.getObjectByName('planet-v8-curved-ocean');
-    if(worldOcean?.userData.officialOcean && coastalCity){
-      refineCitadelOceanCoast(worldOcean,coastalCity,R);
-      shapeWestCoastalSlope(citadelPack.odysseyCitadel,R);
-      shapeFrontCoastalSlope(citadelPack.odysseyCitadel,R);
-      alignCitadelPerimeterToOcean(citadelPack.odysseyCitadel,R);
-      applyFrontStrataBlender(citadelPack.odysseyCitadel);
-      buildFrontHarborApproach(citadelPack.odysseyCitadel,R);
-      buildOldShoreApproach(citadelPack.odysseyCitadel,harbor,R);
-      applyCitadelTierLighting(citadelPack.odysseyCitadel);
-      sealCitadelCoastalCliffs(citadelPack.odysseyCitadel,R);
-      applyOldCityCoastalSlope(citadelPack.odysseyCitadel);
-      compactNewCityTerrain(citadelPack.odysseyCitadel);
-      conformNewCityBackdropToOcean(coastalCity,R);
-      buildTargetHillside(citadelPack.odysseyCitadel,coastalCity);
-      conformWestMassifToOcean(citadelPack.odysseyCitadel,R);
-      buildOldCitySupport(citadelPack.odysseyCitadel);
-      buildOldShoreArcades(citadelPack.odysseyCitadel);
-      buildCitadelShorePlanting(citadelPack.odysseyCitadel,R);
-      buildPlazaRetainingWall(citadelPack.odysseyCitadel,R);
-      buildNewCityRockShoulder(citadelPack.odysseyCitadel);
-      buildUpperRockTerraces(citadelPack.odysseyCitadel);
-      buildRetainingPlanting(citadelPack.odysseyCitadel,R);
-      buildIntegratedFrontGate(citadelPack.odysseyCitadel,R);
-      loadMasterTerrainCandidate(citadelPack.odysseyCitadel);
-      applyCitadelHarborSeabed(scene,citadelPack.odysseyCitadel,R);
-      applyOldCityParcelCandidate(citadelPack.odysseyCitadel,buildCitadelTownAssembly);
-      alignReleasedLighting(citadelPack.odysseyCitadel,R);
-      buildTerracePlanting(citadelPack.odysseyCitadel,R);
-      groundCitadelShrubs(citadelPack.odysseyCitadel,R);
-      // Plant against final released terrain and final harbor reservations.
-      groundCitadelCanopies(citadelPack.odysseyCitadel,R);
-      adaptCitadelMountainForest(citadelPack.odysseyCitadel,R);
+    if (worldOcean?.userData.officialOcean && coastalCity){
+      // 2026-09-18 主人报告启动炸掉：烘焙候选模块的指纹校验 throw 会炸掉整个启动。
+      // 圣城塑形链改为单步容错：单步失败告警跳过，链条继续——游戏必须能启动，
+      // 烘焙资产失配的模块单独告警，事后重跑 Blender 烘焙即可恢复。
+      var citadelSteps = [
+        ['refineCitadelOceanCoast', function(){ refineCitadelOceanCoast(worldOcean,coastalCity,R); }],
+        ['shapeWestCoastalSlope', function(){ shapeWestCoastalSlope(citadelPack.odysseyCitadel,R); }],
+        ['shapeFrontCoastalSlope', function(){ shapeFrontCoastalSlope(citadelPack.odysseyCitadel,R); }],
+        ['alignCitadelPerimeterToOcean', function(){ alignCitadelPerimeterToOcean(citadelPack.odysseyCitadel,R); }],
+        ['applyFrontStrataBlender', function(){ applyFrontStrataBlender(citadelPack.odysseyCitadel); }],
+        ['buildFrontHarborApproach', function(){ buildFrontHarborApproach(citadelPack.odysseyCitadel,R); }],
+        ['buildOldShoreApproach', function(){ buildOldShoreApproach(citadelPack.odysseyCitadel,harbor,R); }],
+        ['applyCitadelTierLighting', function(){ applyCitadelTierLighting(citadelPack.odysseyCitadel); }],
+        ['sealCitadelCoastalCliffs', function(){ sealCitadelCoastalCliffs(citadelPack.odysseyCitadel,R); }],
+        ['applyOldCityCoastalSlope', function(){ applyOldCityCoastalSlope(citadelPack.odysseyCitadel); }],
+        ['compactNewCityTerrain', function(){ compactNewCityTerrain(citadelPack.odysseyCitadel); }],
+        ['conformNewCityBackdropToOcean', function(){ conformNewCityBackdropToOcean(coastalCity,R,citadelCoastalTramEnabled() ? tramSystem.curve : null); }],
+        ['buildTargetHillside', function(){ buildTargetHillside(citadelPack.odysseyCitadel,coastalCity); }],
+        ['conformWestMassifToOcean', function(){ conformWestMassifToOcean(citadelPack.odysseyCitadel,R); }],
+        ['openWesternRailCoast', function(){if(citadelCoastalTramEnabled())openWesternRailCoast(citadelPack.odysseyCitadel,R);}],
+        ['buildOldCitySupport', function(){ buildOldCitySupport(citadelPack.odysseyCitadel); }],
+        ['buildOldTownPlinth', function(){ buildOldTownPlinth(citadelPack.odysseyCitadel, R); }],
+        ['applyOldTownPalace', function(){ applyOldTownPalace(citadelPack.odysseyCitadel.getObjectByName('castleContainer') || citadelPack.odysseyCitadel); }],
+        ['buildOldShoreArcades', function(){ buildOldShoreArcades(citadelPack.odysseyCitadel); }],
+        ['buildCitadelShorePlanting', function(){ buildCitadelShorePlanting(citadelPack.odysseyCitadel,R); }],
+        ['buildPlazaRetainingWall', function(){ buildPlazaRetainingWall(citadelPack.odysseyCitadel,R); }],
+        ['buildNewCityRockShoulder', function(){ buildNewCityRockShoulder(citadelPack.odysseyCitadel); }],
+        ['buildUpperRockTerraces', function(){ buildUpperRockTerraces(citadelPack.odysseyCitadel); }],
+        ['buildRetainingPlanting', function(){ buildRetainingPlanting(citadelPack.odysseyCitadel,R); }],
+        ['buildIntegratedFrontGate', function(){ buildIntegratedFrontGate(citadelPack.odysseyCitadel,R); }],
+        ['loadMasterTerrainCandidate', function(){ loadMasterTerrainCandidate(citadelPack.odysseyCitadel); }],
+        ['applyCitadelHarborSeabed', function(){ applyCitadelHarborSeabed(scene,citadelPack.odysseyCitadel,R); }],
+        ['applyOldCityParcelCandidate', function(){ applyOldCityParcelCandidate(citadelPack.odysseyCitadel,buildCitadelTownAssembly); }],
+        ['alignReleasedLighting', function(){ alignReleasedLighting(citadelPack.odysseyCitadel,R); }],
+        ['buildTerracePlanting', function(){ buildTerracePlanting(citadelPack.odysseyCitadel,R); }],
+        ['groundCitadelShrubs', function(){ groundCitadelShrubs(citadelPack.odysseyCitadel,R); }],
+        ['groundCitadelCanopies', function(){ groundCitadelCanopies(citadelPack.odysseyCitadel,R); }],
+        ['adaptCitadelMountainForest', function(){ adaptCitadelMountainForest(citadelPack.odysseyCitadel,R); }],
+      ];
+      for (var si = 0; si < citadelSteps.length; si++) {
+        try { citadelSteps[si][1](); }
+        catch (e) { console.warn('[citadel] ' + citadelSteps[si][0] + ' 跳过: ' + (e && e.message || e)); }
+      }
     }
 
     if (worldOcean?.userData.officialOcean) conformCampShallowsToOcean(camp.group, worldOcean, R);
+    if (worldOcean?.userData.officialOcean && coastalCity) applyFrontHarborCoast(scene,citadelPack.odysseyCitadel);
 
     // 三重门编译锚点保留给门侧巡检逻辑，侦察队实际以门的 seatRoot
     // 读取最新姿态，保证开发者菜单搬迁叹息之门后仍能正确赶赴目标。
@@ -236,16 +264,19 @@ export const messengerIslandScene = {
     };
     const tripleGateSample = planetV8.compiler?.surface?.sample?.(tripleGateLandmark.direction) || null;
 
-    const bookshopX = 11.5 * WORLD_SCALE;
-    const bookshopZ = 5.5 * WORLD_SCALE;
+    // 2026-09-18 主人：书店从右侧山坡挪到月亮（月亮湖）左侧、发信人与月亮之间
+    // 的岛面平地上（旧位 11.5/5.5 在走廊尽头山坡边缘）。
+    const bookshopX = -3.3 * WORLD_SCALE;
+    const bookshopZ = 5.8 * WORLD_SCALE;
     const bookshop = createCatalogObject("bookshop", {
       signLine1: "HARD TO FIND",
       signLine2: "BOOKSHOP",
     });
     bookshop.userData.mapUid = "world-bookshop";
     placeObjectOnSphere(bookshop, bookshopX, bookshopZ, groundLiftAt(bookshopX, bookshopZ), R);
-    bookshop.rotateY(-0.5);
-    bookshop.add(createBookshopHydrangeas({ layout: bookshop.userData.blenderArt ? "blender-v3" : "original" }));
+    // Approved old-town target: place the original small tourist shop on the independent base waterfront.
+    placeBookshopTown(bookshop,R);
+    bookshop.add(createBookshopHydrangeas({ layout: bookshop.userData.blenderArt ? 'blender-v3' : 'original' }));
     scene.add(bookshop);
 
     const skyPack = placeMoebiusSwampAndSky({
@@ -277,6 +308,7 @@ export const messengerIslandScene = {
       odysseyCitadel: citadelPack.odysseyCitadel,
       citadelRange: citadelPack.citadelRange,
       citySeaLake: moebiusPack.citySeaLake,
+
       canyonDir: moebiusPack.canyonDir,
       harbor,
       harborBuilt,
@@ -302,12 +334,15 @@ export const messengerIslandScene = {
         const x = bookshopX + Math.cos(a) * d;
         const z = bookshopZ + Math.sin(a) * d;
         const tuft = createGrassTuft();
-        placeObjectOnSphere(tuft, x, z, groundLiftAt(x, z) + 0.01, R);
+        tuft.position.copy(bookshop.localToWorld(new THREE.Vector3(Math.cos(a)*d,0.01,Math.sin(a)*d)));
+        tuft.quaternion.copy(bookshop.quaternion);
         tuft.rotateY(rnd() * Math.PI * 2);
         scene.add(tuft);
       }
     }
 
+    const crystalMotherPort = new URLSearchParams(location.search).get("crystalMotherPort") !== "0"
+      ? buildCrystalMotherPort({scene, platforms, city: moebiusPack.moebius, boats: traffic.canalBoats?.boats}) : null;
     const mossAvoidCommon = tramSystem.curve.getPoints(60).map((p) => ({
       position: p,
       radius: 1.2,
@@ -344,49 +379,23 @@ export const messengerIslandScene = {
     });
     scene.add(mossSaihoji);
     {
-      // 湖沼坑口缘碎石 → 苔庭（主人验收 2026-08-29）：这组石头整体迁来，
-      // 沿苔庭椭圆边线散布成一组（同色同形，确定性散布）。
-      const srand = (function () {
-        let state = 20260829 >>> 0;
-        return function () {
-          state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
-          return state / 4294967296;
-        };
-      })();
-      // 同上：中枢方向只有一个来源 SAIHOJI_HUB，禁止再手抄经纬度
-      const mossDir = latLonToDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3());
-      const surfaceR = R + 0.62 + 0.18;
-      const upT = mossDir.clone();
-      const rightT = new THREE.Vector3().crossVectors(upT, new THREE.Vector3(0, 0, 1)).normalize();
-      if (rightT.lengthSq() < 1e-6) rightT.set(1, 0, 0);
-      const fwdT = new THREE.Vector3().crossVectors(rightT, upT).normalize();
-      const screeMat = new THREE.MeshStandardMaterial({ color: 0x2c5f56, roughness: 1, flatShading: true });
+      // Sparse gray shore stones, sampled from the actual terrain/sea intersection.
       const screeGroup = new THREE.Group();
-      screeGroup.name = "saihoji-scree-rocks";
+      screeGroup.name = "saihoji-shore-stones";
       screeGroup.userData.presentationOnly = true;
-      for (let i = 0; i < 18; i++) {
-        const angle = (i / 18) * Math.PI * 2 + srand() * 0.3;
-        const ox = Math.cos(angle) * (7.6 + srand() * 1.4);
-        const oz = Math.sin(angle) * (4.6 + srand() * 1.0);
-        const rock = new THREE.Mesh(
-          new THREE.IcosahedronGeometry(0.9 + srand() * 1.1, 0),
-          screeMat
-        );
-        rock.position
-          .copy(mossDir)
-          .multiplyScalar(surfaceR)
-          .addScaledVector(rightT, ox)
-          .addScaledVector(fwdT, oz);
-        rock.scale.set(1.3, 0.3 + srand() * 0.3, 1.1);
-        rock.rotation.y = srand() * Math.PI;
+      for (const row of shoreStones.rocks) {
+        const rock = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 0),
+          new THREE.MeshStandardMaterial({ color: `#${row.color}`, roughness: 1, flatShading: true }));
+        rock.position.fromArray(row.position);
+        rock.scale.fromArray(row.scale);
+        rock.rotation.y = row.yaw;
         rock.castShadow = true;
         screeGroup.add(rock);
       }
-      // 性能：碎石组合并（18 网格 → 按材质归并的个位数 draw）
       mergeStaticGroup(screeGroup);
-      scene.add(screeGroup);
+      mossSaihoji.add(screeGroup);
     }
-    const mossSwamp = buildImpastoMossyGround({
+    const mossSwamp = crystalV7Round()>=3 ? new THREE.Group() : buildImpastoMossyGround({
       dir: skyPack.moebiusSwamp
         ? skyPack.moebiusSwamp.position.clone().normalize()
         : moebiusPack.grandDir.clone(),
@@ -414,6 +423,10 @@ export const messengerIslandScene = {
       flock: moebiusPack.flock,
       canyonDir: moebiusPack.canyonDir,
     });
+    if(crystalV7Round()>=3)shapeCrystalV7Cove(gatePack.abandonedGate,skyPack.moebiusSwamp);
+    finishCrystalV9Scene({scene,city:moebiusPack.moebius,swamp:skyPack.moebiusSwamp,gate:gatePack.abandonedGate});
+    if(crystalV7Round()>=3)relocateCrystalCore({scene,pack:moebiusPack,swamp:skyPack.moebiusSwamp,port:crystalMotherPort});
+    if(crystalV7Round()>=3)removeRequestedGateMountains(gatePack.abandonedGate);
     // 舰队分队的两个后期绑定：combatPack 在下面才创建，先留个引用槽。
     // 侦察机每帧才去读它，所以「创建顺序」和「使用顺序」可以错开——
     // 硬要把 scoutDefense 挪到 combatPack 之后会打乱废弃之门那一块的装配顺序。
@@ -459,7 +472,21 @@ export const messengerIslandScene = {
       // 水晶城留 2 架守原岗——两条故事线都保住。
       fleetCount: 3,
       getFleetAnchor: fleetAnchorDir,
-      getFleetTargets: () => combatPackRef?.vanguardAssault?.tourTargets?.() || [],
+      getFleetTargets: () => {
+        var base = combatPackRef?.vanguardAssault?.tourTargets?.() || [];
+        // 2026-09-18 书店镇袭击战：驻军分遣队进入侦察机队打击池
+        var g = combatPackRef?.saihojiPhalanx?.userData?.garrisonTargets?.() || [];
+        return base.concat(g);
+      },
+      // 2026-09-18 袭击巡回区：书店镇（月亮左前平地）与高山古堡前港
+      getRaidZones: () => {
+        var zones = [];
+        var shop = bookshop;
+        if (shop) zones.push({ name: 'bookshop', obj: shop });
+        var cit = combatPack?.odysseyCitadel;
+        if (cit) zones.push({ name: 'citadel', obj: cit });
+        return zones;
+      },
       // 分工制：曳光只标记，标出来的东西推进舰队的优先打击名单，
       // 由泡机（麻醉）/ 重甲兵（射击格斗）/ 登陆艇（撞飞）各打各的。
       onDesignate: (object) => {
@@ -480,12 +507,15 @@ export const messengerIslandScene = {
         ? [tramSystem.curve, ...Object.values(tramSystem.curves || {})]
         : null,
       acceptTree: bookshopPlanting.accepts,
+      hills, // 真实网格表面采样：解析高度场在弦面之上，按场种树会悬空
     });
     bookshop.userData.plantingClearance = bookshopPlanting.report;
     colliders.push(...corridorForest.colliders);
 
     settleBuriedAssets(scene, colliders);
-    if (bookshop.userData.blenderArt) fitBookshopPath(bookshop, hills.sampleRadius);
+    placeBookshopTown(bookshop,R); // preserve the moved original shop after legacy settling
+    if(bookshop.userData.blenderArt)fitBookshopPath(bookshop,()=>R+.9);
+    const bookshopFactoryBase=installBookshopRobots({scene,bookshop,colliders,platforms,R});
 
     // eslint-disable-next-line prefer-const
     const combatPack = loadCitadelCombat({
@@ -520,6 +550,7 @@ export const messengerIslandScene = {
       gateHaulers: gatePack.gateHaulers, // 叹息之门重型运输艇 ×3
       bubblePods: moebiusPack.bubblePods,
       citySeaLake: moebiusPack.citySeaLake,
+      crystalMotherPort,
       citadelRange: citadelPack.citadelRange,
       odysseyCitadel: citadelPack.odysseyCitadel,
       canalJunctionCitadel: traffic.canalJunctionCitadel,
@@ -565,6 +596,7 @@ export const messengerIslandScene = {
       canalJunctionBox: traffic.canalJunctionBox,
       canalJunctionCitadel: traffic.canalJunctionCitadel,
       harborBuilt,
+      bookshopFactoryBase,
       canalLakeLink: traffic.canalLakeLink,
       bubblePods: moebiusPack.bubblePods,
       citySeaLake: moebiusPack.citySeaLake,

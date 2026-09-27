@@ -29,12 +29,17 @@ func _index(n:Node)->void:
     if n is Node3D and (extras.get("candidateHidden",false) or not extras.get("three_visible",true)):n.visible=false
     if n is Node3D and not id.is_empty():nodes[id]=n
     for child in n.get_children():_index(child)
+func _local_grip(key:String)->Vector3:
+    var p:Array=anchors[key].point
+    # Match Web romanShipCarryPose: grasp 9cm below the spear's model origin.
+    # The shaft moves through the closed hand; arm length and weapon size stay intact.
+    return Vector3(0,-0.09,0) if role=="spear" and key=="weaponGrip" else Vector3(p[0],p[1],p[2])
 func _point(key:String)->Vector3:
     var a:Dictionary=anchors[key];var p:Array=a.point
-    return nodes[a.nodeId].to_global(Vector3(p[0],p[1],p[2]))
+    return nodes[a.nodeId].to_global(_local_grip(key))
 func _grip(hand:String,equipment:String)->void:
     var a:Dictionary=anchors[equipment];var n:Node3D=nodes[a.nodeId];var p:Array=a.point
-    n.position=n.get_parent().to_local(_point(hand))-n.basis*Vector3(p[0],p[1],p[2])
+    n.position=n.get_parent().to_local(_point(hand))-n.basis*_local_grip(equipment)
 func set_enabled(value:bool)->void:
     if value==active:return
     if not value:
@@ -47,13 +52,17 @@ func update()->void:
     for id in saved:
         if nodes[id].get_parent()!=saved[id].parent:set_enabled(false);return
     nodes.n2.rotation=Vector3.ZERO
-    nodes.n17.rotation=Vector3(0,0,1.2 if role=="longbow" else 0.22)
+    # A resting bow travels beside the torso, below lintels; the shot pose
+    # is restored when carry is disabled. Hand/grip alignment stays explicit.
+    nodes.n17.rotation=Vector3(0,0,0.65 if role=="longbow" else 0.22)
     nodes.n20.rotation=Vector3(0,0,0.22)
     nodes.n17.position.z=saved.n17.transform.origin.z if role=="longbow" else 0.02
     nodes.n20.position.z=-0.02
     nodes.n23.rotation=Vector3(0,0,0.04);nodes.n26.rotation=Vector3(0,0,-0.04)
     var weapon:Node3D=nodes[anchors.weaponGrip.nodeId]
-    weapon.rotation=Vector3(0,0,-0.28) if role=="spear" else Vector3.ZERO
+    # Upright carry matches the Web pose. The corrected grip clears risers;
+    # overhead room is provided by the revised stair/gallery architecture.
+    weapon.rotation=Vector3.ZERO
     if role!="longbow":
         nodes[anchors.shieldGrip.nodeId].rotation=Vector3(0,-PI*0.5,0)
         _grip("handL","shieldGrip")

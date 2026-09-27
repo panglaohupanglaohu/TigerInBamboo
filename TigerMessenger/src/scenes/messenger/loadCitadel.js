@@ -1,4 +1,5 @@
 import {oldHarborGradeEnabled,placeOldHarborAtOcean} from '../../world/citadel/oldHarborOceanGrade.js';
+import {citadelCoastalTramEnabled} from "../../world/citadel/coastalTramRoute.js";
 import {commonSurfaceFrameEnabled,applyCitadelCommonSurfaceFrame} from '../../world/citadel/commonSurfaceFrame.js';
 import {buildCitadelHarborSeabed} from '../../world/citadel/harborSeabed.js';
 import {applyCliffBlenderRefinement} from '../../world/citadel/cliffBlenderRefinement.js';
@@ -109,6 +110,9 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   buildCitadelHarborSeabed(scene,odysseyCitadel);
   applyCliffBlenderRefinement(odysseyCitadel);
   snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborColliders, camp, R });
+  if (tramSystem?.curve && !citadelCoastalTramEnabled()) {
+    carveCitadelMountainForTram(odysseyCitadel, tramSystem.curve, R);
+  }
 
   // 纳沃纳广场落在城堡→旧港连线的 70% 处，门洞朗港（广场局部 +X）。
   // 它是 saihojiPhalanx 的集结点；不摆就回落到城堡侧后方，整个故事场景被城堡遮住。
@@ -458,3 +462,57 @@ export function tickTacticalGraph(pack, dt) {
   }
   if (changed.length) tacticalGraphView?.rebuild();
 }
+
+/**
+ * 2026-09-18 涵洞山体开凿：当有轨电车穿行高山古堡山体时，
+ * 将涵洞净空走廊内侵入车道空间的网格顶点压低至轨面净空以下，
+ * 确保涵洞拱券内部空间完全开敞通透、不穿模山石。
+ */
+export function carveCitadelMountainForTram(castle, tramCurve, R) {
+  if (!castle || !tramCurve) return;
+  const CORRIDOR_R = 2.4;
+  const CLEARANCE_BELOW_TRACK = 0.20;
+  const trackPts = tramCurve.getPoints(720);
+  const pWorld = new THREE.Vector3();
+  const dirWorld = new THREE.Vector3();
+
+  for (const name of ["citadel-oskar-grid-mountain-surface", "backlit-highlight-citadel-oskar-grid-mountain-surface"]) {
+    const mesh = castle.getObjectByName(name);
+    if (!mesh?.geometry?.attributes.position) continue;
+    const invMatrix = mesh.matrixWorld.clone().invert();
+    const pos = mesh.geometry.attributes.position;
+    let changed = 0;
+
+    for (let i = 0; i < pos.count; i++) {
+      pWorld.set(pos.getX(i), pos.getY(i), pos.getZ(i)).applyMatrix4(mesh.matrixWorld);
+      let minD = Infinity;
+      let nearestPt = null;
+      for (const tp of trackPts) {
+        const d = tp.distanceTo(pWorld);
+        if (d < minD) {
+          minD = d;
+          nearestPt = tp;
+        }
+      }
+
+      if (minD < CORRIDOR_R && nearestPt) {
+        const trackR = nearestPt.length();
+        const targetR = trackR - CLEARANCE_BELOW_TRACK;
+        const currentR = pWorld.length();
+        if (currentR > targetR) {
+          dirWorld.copy(pWorld).normalize().multiplyScalar(targetR);
+          dirWorld.applyMatrix4(invMatrix);
+          pos.setXYZ(i, dirWorld.x, dirWorld.y, dirWorld.z);
+          changed++;
+        }
+      }
+    }
+    if (changed > 0) {
+      pos.needsUpdate = true;
+      mesh.geometry.computeVertexNormals();
+      mesh.geometry.computeBoundingBox();
+      mesh.geometry.computeBoundingSphere();
+    }
+  }
+}
+

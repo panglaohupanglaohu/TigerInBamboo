@@ -1,0 +1,82 @@
+{
+  "fps": 24,
+  "units": "metres",
+  "rounds": {
+    "1": {
+      "walk": {
+        "maxFootIK": 0.0008656769510884884,
+        "maxHandIK": 0,
+        "minContactSoleY": -1.6653345369377348e-16,
+        "maxContactSoleY": 0.0008044417635223039,
+        "maxPalmGap": 0,
+        "limbWallVertices": 0,
+        "finite": true
+      },
+      "run": {
+        "maxFootIK": 2.7755575615628914e-16,
+        "maxHandIK": 0,
+        "minContactSoleY": -5.551115123125783e-17,
+        "maxContactSoleY": 2.914335439641036e-16,
+        "maxPalmGap": 0,
+        "limbWallVertices": 0,
+        "finite": true
+      },
+      "jump": {
+        "maxFootIK": 3.510833468576701e-16,
+        "maxHandIK": 0,
+        "minContactSoleY": -1.8041124150158794e-16,
+        "maxContactSoleY": 2.3592239273284576e-16,
+        "maxPalmGap": 0,
+        "limbWallVertices": 0,
+        "finite": true
+      },
+      "vault": {
+        "maxFootIK": 3.1401849173675503e-16,
+        "maxHandIK": 2.7894008272968645e-16,
+        "minContactSoleY": -1.1102230246251565e-16,
+        "maxContactSoleY": 1.8041124150158794e-16,
+        "maxPalmGap": 4.440892098500626e-16,
+        "limbWallVertices": 12,
+        "finite": true
+      }
+    },
+    "2": {
+      "walk": {
+        "maxFootIK": 2.2887833992611187e-16,
+        "maxHandIK": 0,
+        "minContactSoleY": -1.6653345369377348e-16,
+        "maxContactSoleY": 2.220446049250313e-16,
+        "maxPalmGap": 0,
+        "limbWallVertices": 0,
+        "finite": true
+      },
+      "run": {
+        "maxFootIK": 3.1401849173675503e-16,
+        "maxHandIK": 0,
+        "minContactSoleY": -1.5265566588595902e-16,
+        "maxContactSoleY": 8.326672684688674e-17,
+        "maxPalmGap": 0,
+        "limbWallVertices": 0,
+        "finite": true
+      },
+      "jump": {
+        "maxFootIK": 3.510833468576701e-16,
+        "maxHandIK": 0,
+        "minContactSoleY": -1.8041124150158794e-16,
+        "maxContactSoleY": 2.3592239273284576e-16,
+        "maxPalmGap": 0,
+        "limbWallVertices": 0,
+        "finite": true
+      },
+      "vault": {
+        "maxFootIK": 3.1401849173675503e-16,
+        "maxHandIK": 3.3306690738754696e-16,
+        "minContactSoleY": -1.1102230246251565e-16,
+        "maxContactSoleY": 1.8041124150158794e-16,
+        "maxPalmGap": 4.440892098500626e-16,
+        "limbWallVertices": 0,
+        "finite": true
+      }
+    }
+  }
+}

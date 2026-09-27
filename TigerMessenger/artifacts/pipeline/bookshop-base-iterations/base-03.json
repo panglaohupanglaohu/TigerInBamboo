@@ -1,0 +1,17 @@
+{
+  "revision": 3,
+  "triangles": 28936,
+  "finite": true,
+  "circle": {
+    "center": [
+      0,
+      32
+    ],
+    "plazaRadius": 32,
+    "promenadeRadius": 39.5,
+    "shoreRadius": 40,
+    "seawardArc": "continuous semicircle; no chord"
+  },
+  "change": "Central eight-point compass and directional markers",
+  "errors": []
+}

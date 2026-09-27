@@ -1,0 +1,46 @@
+{
+  "task": "Tiger drinking iteration d15",
+  "target": "Accepted adult tiger V1, natural supported drinking pose. This is incremental progress, not art acceptance.",
+  "visual_observations": {
+    "source": "Assistant inspected current real-game drink/side PNG",
+    "image_sha256": "2fed6c49b3cae8694ba507d1294fc27d8fd1d453068619f4676cc2b9cf459f90",
+    "completed": [
+      "Paw shading and subtle toe grooves restore rounded volume instead of flat ivory discs; stance and water access preserved."
+    ],
+    "remaining": [
+      "Still stylized geometry; full walking-return cycle not yet checked for this intermediate version."
+    ]
+  },
+  "checks": [
+    {
+      "name": "Actual route reached drink",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "All mesh coordinates finite",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Four paws sampled tread support",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No page or console errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Water, not stone, below mouth",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text only; JEV did not see images",
+    "Do not mistake finite geometry for natural anatomy",
+    "Preserve actor identity, original roam and greeting"
+  ]
+}

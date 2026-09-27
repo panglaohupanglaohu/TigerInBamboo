@@ -1,0 +1,95 @@
+import {highlandStoneTexture,stoneProjectionUV} from './highlandStoneTexture.js';
+import * as THREE from 'three';
+import {createCitadelPlayerWalls} from './playerWalls.js';
+import data from '../../../assets/models/optimized/gate-of-sighs/gateTargetData.js';
+import {citadelCoastalFrame,citadelCoastalTramEnabled} from './coastalTramRoute.js';
+
+export const HIGHLAND_GATE_ROUND=24;
+export function installHighlandGate({scene,tramSystem}){
+ if(!citadelCoastalTramEnabled())return null;
+ const round=Number(new URLSearchParams(location.search).get('highlandGate')??HIGHLAND_GATE_ROUND);if(round<=0)return null;
+ const cv=tramSystem.curve,target=new THREE.Vector3(-94,0,80).applyMatrix4(citadelCoastalFrame()).normalize();
+ let u=0,best=Infinity;for(let i=0;i<12000;i++){const d=cv.getPointAt(i/12000).normalize().distanceToSquared(target);if(d<best){best=d;u=i/12000;}}
+ const origin=cv.getPointAt(u),up=origin.clone().normalize(),z=cv.getTangentAt(u).normalize(),x=new THREE.Vector3().crossVectors(up,z).normalize();z.crossVectors(x,up).normalize();
+ const root=new THREE.Group();root.name='highland-gate';root.position.copy(origin);root.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(x,up,z));root.userData={round,railU:u,source:data.source,displayName:'高山之门'};
+ for(const p of data.parts){
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p.positions,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(p.normals,3));if(round>=4)g.scale(.82,.74,.84);
+ if(round>=24){const pos=g.attributes.position,nor=g.attributes.normal,keepP=[],keepN=[];for(let i=0;i<pos.count;i+=3){let exterior=true;for(let j=0;j<3;j++)exterior&&=pos.getX(i+j)<-11&&pos.getZ(i+j)<-12.5&&pos.getY(i+j)<8;if(exterior)continue;for(let j=0;j<3;j++){keepP.push(pos.getX(i+j),pos.getY(i+j),pos.getZ(i+j));keepN.push(nor.getX(i+j),nor.getY(i+j),nor.getZ(i+j));}}g.setAttribute('position',new THREE.Float32BufferAttribute(keepP,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(keepN,3));}
+ g.computeBoundingBox();g.computeBoundingSphere();
+ const m=new THREE.MeshStandardMaterial({color:new THREE.Color(...p.color),roughness:.96,side:p.name.includes('cloth')?THREE.DoubleSide:THREE.FrontSide});
+ if(round>=3){const palette={stone:0xe4d7b9,brick:0xd5c6a7,edge:0xf1e5ca,cloth:0x245783,gold:0xaf8e4e,dark:0x5c6466,rock:0x7d898c,wood:0x806843,leaf:0x426040};const key=p.name.split('_')[1].split('.')[0];m.color.setHex(palette[key]??0xd5c6a7);m.emissive.copy(m.color).multiplyScalar(.16);}
+ const mesh=new THREE.Mesh(g,m);mesh.name='highland-'+p.name;mesh.userData.citadelSolidExterior=p.solid;mesh.userData.highlandGateWalkable=p.walkable;root.add(mesh);
+ }
+ const add=(name,geometry,color,position=[0,0,0])=>{geometry.translate(...position);const mesh=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color,roughness:.95,flatShading:true,emissive:color,emissiveIntensity:.12}));mesh.name=name;root.add(mesh);return mesh;};
+ if(round>=5){for(const side of[-1,1]){
+ const pos=[],indices=[],N=24,levels=[[-19,17],[-11,15],[-4,12],[1.1,9],[2.1,7]];
+ levels.forEach(([y,r],j)=>{for(let i=0;i<N;i++){const a=i/N*Math.PI*2,rr=r*(1+.09*Math.sin(i*2.7+side)+.06*Math.cos(i*1.9+j));pos.push(side*15.5+Math.cos(a)*rr,y+.35*Math.sin(i*2+j),Math.sin(a)*rr*1.3);}});
+ for(let j=0;j<levels.length-1;j++)for(let i=0;i<N;i++){const a=j*N+i,b=j*N+(i+1)%N,c=a+N,d=b+N;indices.push(a,c,b,b,c,d);}for(let i=1;i<N-1;i++)indices.push(4*N,4*N+i+1,4*N+i);
+ const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setIndex(indices);geo.computeVertexNormals();add('highland-gate-rock-foundation-'+side,geo,0x849393);
+ }}
+ if(round>=6){for(const side of[-1,1])for(let i=0;i<17;i++){
+ const a=i*2.399,x=side*16+Math.cos(a)*(10+i%3),z=Math.sin(a)*(12+i%4),y=-5-(i%4)*2.2;
+ if(Math.abs(x)<7)continue;
+ const geo=new THREE.IcosahedronGeometry(1,1);geo.scale(2+i%3,3.5+i%4,2.8+i%3);geo.rotateY(i*.73);add('highland-foot-rock-'+side+'-'+i,geo,i%3===0?0xa4aaa0:0x788a90,[x,y,z]);
+ }}
+ if(round>=8){const originals=root.children.filter(o=>o.name.includes('Gate_stone'));const ray=new THREE.Raycaster();
+ for(const side of[-1,1])for(const facing of[-1,1]){
+ const shape=new THREE.Shape();shape.moveTo(-.78,0);shape.lineTo(.78,0);shape.lineTo(.78,3.8);shape.absarc(0,3.8,.78,0,Math.PI,false);shape.lineTo(-.78,0);
+ const geo=new THREE.ShapeGeometry(shape,12),p=geo.attributes.position;
+ for(let i=0;i<p.count;i++){const x=side*12.7+p.getX(i),y=20+p.getY(i);ray.set(new THREE.Vector3(x,y,facing*45),new THREE.Vector3(0,0,-facing));const hit=ray.intersectObjects(originals,false)[0];p.setXYZ(i,x,y,hit?hit.point.z+facing*.035:facing*8.5);}
+ geo.computeVertexNormals();const niche=add('highland-arched-niche-'+side+'-'+facing,geo,0x56666e);niche.material.side=THREE.DoubleSide;
+ }}
+ if(round>=9){const rock=root.children.filter(o=>/rock-foundation|foot-rock/.test(o.name)),ray=new THREE.Raycaster();
+ for(const side of[-1,1])for(let i=0;i<6;i++){const x=side*(22.5+(i%2)*2.2),z=-12+i*4.8;ray.set(new THREE.Vector3(x,30,z),new THREE.Vector3(0,-1,0));const hit=ray.intersectObjects(rock,false)[0];if(!hit)continue;const y=hit.point.y,h=5.5+(i%3)*1.1;
+ add('highland-cypress-trunk-'+side+'-'+i,new THREE.CylinderGeometry(.12,.22,h*.65,6),0x75664c,[x,y+h*.325,z]);
+ const profile=[[0,0],[.4,.12],[.8,.32],[.75,.6],[.48,.85],[0,1]].map(([r,t])=>new THREE.Vector2(r,h*t));add('highland-cypress-'+side+'-'+i,new THREE.LatheGeometry(profile,9),i%2?0x344b40:0x3e5944,[x,y+.6,z]);
+ }}
+ if(round>=10){for(let z=-36;z<36;z+=1.5){const m=add('highland-pedestrian-deck',new THREE.BoxGeometry(1.8,.4,1.52),0xdccfb4,[-3.15,-.25,z+.75]);m.userData.highlandGateWalkable=true;}}
+ if(round>=11){for(let z=-35;z<=35;z+=2){if(Math.abs(z)<14)continue;for(const x of[-4.12,-2.2]){if(round>=12&&x===-4.12&&z>=-35&&z<=-29)continue;add('highland-walk-parapet-cap',new THREE.BoxGeometry(.18,.14,2.03),0xe9dcc0,[x,.94,z]);add('highland-walk-baluster',new THREE.BoxGeometry(.22,.85,.22),0xcabfa6,[x,.45,z]);}}}
+ if(round>=12){const dx=-14.85,dz=13,angle=Math.atan2(dx,dz),length=Math.hypot(dx,dz);for(let i=0;i<20;i++){const t=(i+.5)/20,y=t*2.42-.05;const geo=new THREE.BoxGeometry(2,.38,length/20+.07);geo.rotateY(angle);const m=add('highland-terrace-steps',geo,0xdccfb4,[-3.15+dx*t,y-.19,-32+dz*t]);m.userData.highlandGateWalkable=true;}}
+ if(round>=13){const dx=-14.85,dz=13,angle=Math.atan2(dx,dz),len=Math.hypot(dx,dz),nx=dz/len,nz=-dx/len;
+ for(let i=1;i<20;i++){const t=(i+.5)/20,y=t*2.42-.05,x=-3.15+dx*t,z=-32+dz*t;
+ for(const side of[-1,1]){const rail=new THREE.BoxGeometry(.16,.15,len/20+.07);rail.rotateY(angle);add('highland-stair-handrail',rail,0xe9dcc0,[x+nx*side,y+1,z+nz*side]);if(i%3===0)add('highland-stair-post',new THREE.BoxGeometry(.2,1,.2),0xc6b798,[x+nx*side,y+.5,z+nz*side]);}
+ if(i%5===0)add('highland-stair-pier',new THREE.BoxGeometry(1.5,y+10,1.5),0xc5bca6,[x,(y-10)/2-.3,z]);
+ }}
+ if(round>=14){const rock=root.children.filter(o=>/rock-foundation|foot-rock/.test(o.name)),ray=new THREE.Raycaster();for(let i=0;i<100;i++){const side=i%2?1:-1,x=side*(9+((i*7.13)%22)),z=-19+(i*5.37)%38;ray.set(new THREE.Vector3(x,4,z),new THREE.Vector3(0,-1,0));const hit=ray.intersectObjects(rock,false)[0];if(!hit||hit.point.y< -8)continue;const geo=new THREE.IcosahedronGeometry(1,1);geo.scale(.7+(i%3)*.2,.35+(i%4)*.12,.65+(i%5)*.14);add('highland-rock-shrub-'+i,geo,[0x68734b,0x506342,0x7e8151][i%3],[x,hit.point.y+.22,z]);}}
+ if(round>=15){const stone=root.children.filter(o=>(o.name.includes('Gate_stone')||(round>=16&&o.name.includes('Gate_brick')))),ray=new THREE.Raycaster();for(const side of[-1,1])for(let row=0;row<23;row++)for(let j=0;j<7;j++){
+ const y=1+row*1.28,z=-7.5+j*2.4+(row%2)*1.2;if(z>8)continue;ray.set(new THREE.Vector3(side*42,y,z),new THREE.Vector3(-side,0,0));const hit=ray.intersectObjects(stone,false)[0];if(!hit||Math.abs(hit.point.x)<7)continue;
+ const ashlar=add('highland-side-ashlar',new THREE.BoxGeometry(.07,1.22,2.32),[0xdaceb0,0xe2d8bd,0xd5c9ad][(row+j)%3],[hit.point.x+side*.04,y,z]);
+ if(round>=16){let valid=true;const a=ashlar.geometry.attributes.position;for(let i=0;i<a.count;i++){ray.set(new THREE.Vector3(side*42,a.getY(i),a.getZ(i)),new THREE.Vector3(-side,0,0));const h=ray.intersectObjects(stone,false)[0];if(round>=17&&(!h||Math.abs(h.point.x-hit.point.x)>1||h.point.x*side<7)){valid=false;continue;}if(h)a.setX(i,h.point.x+side*(.01+Math.abs(a.getX(i)-hit.point.x)));}if(!valid){root.remove(ashlar);ashlar.geometry.dispose();ashlar.material.dispose();}else ashlar.geometry.computeVertexNormals();}
+ }}
+ if(round>=18){const stone=root.children.filter(o=>o.name.includes('Gate_stone')),ray=new THREE.Raycaster();for(const side of[-1,1])for(const facing of[-1,1]){
+ const xy=[[-.92,20],[-.92,21],[-.92,22],[-.92,23.8]];for(let i=1;i<=12;i++){const a=Math.PI-i/12*Math.PI;xy.push([Math.cos(a)*.92,23.8+Math.sin(a)*.92]);}xy.push([.92,22],[.92,21],[.92,20]);
+ const points=xy.map(([dx,y])=>{const x=side*12.7+dx;ray.set(new THREE.Vector3(x,y,facing*45),new THREE.Vector3(0,0,-facing));const hit=ray.intersectObjects(stone,false)[0];return new THREE.Vector3(x,y,(hit?.point.z??facing*8.5)+facing*.16);});
+ add('highland-niche-carved-surround',new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),48,.13,6,false),0xe9dfc8);
+ }}
+ if(round>=19){for(const side of[-1,1]){
+ add('highland-crown-stone-plinth',new THREE.BoxGeometry(3,.42,3),0xd7c9a7,[side*12.7,31.2,0]);
+ const profile=[[0,0],[.65,0],[.75,.18],[1.4,.62],[1.48,.79],[1.3,.79],[.62,.28],[0,.24]].map(v=>new THREE.Vector2(...v));const bowl=add('highland-bronze-crown-bowl',new THREE.LatheGeometry(profile,32),0xa18a55,[side*12.7,31.45,0]);bowl.material.metalness=.35;bowl.material.roughness=.6;
+ }}
+ if(round>=20){const stone=root.children.filter(o=>/Gate_(stone|brick)/.test(o.name)),ray=new THREE.Raycaster();for(const side of[-1,1])for(let vine=0;vine<3;vine++){
+ const pts=[];for(let i=0;i<20;i++){const y=2+i*.8,z=-7+vine*5+Math.sin(i*.65+vine)*.5;ray.set(new THREE.Vector3(side*42,y,z),new THREE.Vector3(-side,0,0));const hit=ray.intersectObjects(stone,false)[0];if(!hit||hit.point.x*side<7)continue;const x=hit.point.x+side*.12;pts.push(new THREE.Vector3(x,y,z));if(round<22){const geo=new THREE.IcosahedronGeometry(1,0);geo.scale(.3,.5,.55);add('highland-wall-ivy',geo,i%2?0x65774a:0x536a43,[x+side*.12,y,z]);}
+ else if((i+vine)%5<3){for(let leaf=0;leaf<3;leaf++){const geo=new THREE.IcosahedronGeometry(1,1);geo.scale(.16+.08*(leaf%2),.22,.3+leaf*.12);geo.rotateX(i*.71+leaf);add('highland-wall-ivy-cluster',geo,[0x65774a,0x7c8050,0x4b6343][(i+leaf)%3],[x+side*(.16+leaf*.07),y+Math.sin(leaf*2+i)*.28,z+Math.sin(i*1.7+leaf)*.7]);}}}
+ if(pts.length>2)add('highland-vine-stem',new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),32,.035,4,false),0x706b44);
+ }}
+ if(round>=21){const texture=highlandStoneTexture();for(const mesh of root.children){if(!/Gate_(stone|brick|edge)|side-ashlar|niche-carved|stone-plinth/.test(mesh.name))continue;stoneProjectionUV(mesh.geometry);mesh.material.map=texture;mesh.material.color.lerp(new THREE.Color(0xf0ece2),.35);mesh.material.emissive.copy(mesh.material.color).multiplyScalar(.12);mesh.material.needsUpdate=true;}}
+ if(round>=23){for(const z of[-17,-14.7]){
+ add('highland-terrace-bench-seat',new THREE.BoxGeometry(2,.18,.65),0x897450,[-21,2.9,z]);for(const x of[-21.75,-20.25])add('highland-bench-stone-leg',new THREE.BoxGeometry(.3,.55,.5),0xcbbd9f,[x,2.65,z]);
+ }for(const z of[-19,-13]){add('highland-terrace-planter',new THREE.CylinderGeometry(.65,.48,.65,12),0xc9b18c,[-15.4,2.68,z]);const geo=new THREE.IcosahedronGeometry(.85,1);geo.scale(1,.7,1);add('highland-terrace-planter-leaves',geo,0x637248,[-15.4,3.2,z]);}}
+ if(round>=24){const landing=add('highland-terrace-rebuilt-deck',new THREE.BoxGeometry(8,.5,6),0xe1d4b9,[-18.1,2.12,-18.4]);landing.userData.highlandGateWalkable=true;for(const x of[-21.3,-14.9])for(const z of[-20.4,-16.4])add('highland-terrace-foundation',new THREE.BoxGeometry(1.1,10.2,1.1),0xcbbda1,[x,-3.2,z]);}
+ scene.add(root);root.updateMatrixWorld(true);
+ if(round>=2){
+ const inverse=root.matrixWorld.clone().invert(),len=cv.getLength();
+ for(const mesh of root.children){const pos=mesh.geometry.attributes.position;for(let i=0;i<pos.count;i++){
+ const a=pos.getX(i),h=pos.getY(i),d=pos.getZ(i),t=(u+d/len+1)%1,w=cv.getPointAt(t),normal=w.clone().normalize(),tangent=cv.getTangentAt(t),side=new THREE.Vector3().crossVectors(normal,tangent).normalize();
+ w.addScaledVector(side,a).addScaledVector(normal,h).applyMatrix4(inverse);pos.setXYZ(i,w.x,w.y,w.z);
+ }pos.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.geometry.computeBoundingSphere();mesh.geometry.computeBoundingBox();}
+ }
+ if(round>=7){for(const mesh of [...root.children]){if(!/Gate_(stone|edge|brick)|rock-foundation|foot-rock/.test(mesh.name))continue;const edge=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry,28),new THREE.LineBasicMaterial({color:0x5e635b,transparent:true,opacity:.24}));edge.name='highland-ink-'+mesh.name;edge.userData.isOutline=true;root.add(edge);}}
+ root.updateMatrixWorld(true);
+ root.userData.toRailWorld=(x,h,d)=>{const t=(u+d/cv.getLength()+1)%1,w=cv.getPointAt(t),normal=w.clone().normalize(),side=new THREE.Vector3().crossVectors(normal,cv.getTangentAt(t)).normalize();return w.addScaledVector(side,x).addScaledVector(normal,h);};
+ const surfaces=root.children.filter(o=>o.isMesh&&o.userData.highlandGateWalkable),groundRay=new THREE.Raycaster(),local=new THREE.Vector3();
+ root.userData.sampleGroundRadius=position=>{local.copy(position);root.worldToLocal(local);if(Math.abs(local.x)>42||Math.abs(local.z)>48||local.y>8)return null;const up=position.clone().normalize();groundRay.set(position.clone().addScaledVector(up,.6),up.clone().negate());groundRay.far=3;for(const hit of groundRay.intersectObjects(surfaces,false)){if(hit.face.normal.clone().transformDirection(hit.object.matrixWorld).dot(up)>.5)return hit.point.length();}return null;};
+ root.userData.resolveWalls=createCitadelPlayerWalls(root);
+ return root;
+}

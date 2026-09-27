@@ -1,0 +1,29 @@
+{
+  "task": "Bookshop robot quality and revised environment target triage",
+  "target": "Three faithful reference robots score at least 8/10; three bookstores around a plaza in pale stone retrofuturist old town",
+  "visual_observations": {
+    "source": "Assistant inspected latest model front renders and newly generated target-oldtown-v2.png; text only",
+    "completed": [
+      "New target has three separate bookshops and robot courts, open compass plaza, pale stone, slate roofs, clocktower, hovering airship and amber book-filled windows"
+    ],
+    "remaining": [
+      "Oversized flat torso and box shoulders",
+      "Insufficient layered armor and joint engineering",
+      "Shoulder armor has visibly broken thin edges",
+      "UV stretching resembles wood rather than weathered copper",
+      "Oval balloon wheel-leg guards",
+      "Coarse shell seams and simplistic chassis"
+    ]
+  },
+  "checks": [],
+  "constraints": [
+    "Do not present generated target art as actual model screenshots",
+    "No robot passes 8/10; prioritize model geometry before presentation"
+  ],
+  "evidence_revision": {
+    "model-0-front.png": "453032e85c4299d5e0ef022b9277a1b182ab52182ad059ea0542dac6d4704448",
+    "model-1-front.png": "4b6b4c533aec65218fe4bb2f539a775e03cec84afe8c23291cf8ecc330b5f212",
+    "model-2-front.png": "6f692db92d1cc7b7ce06ba0390d08e7305371a64cd26deea8a9053b305975730",
+    "target-oldtown-v2.png": "d886f92a6f8dda67e5b884c0e0c53c3b9164b408218c42639811575f916bded3"
+  }
+}

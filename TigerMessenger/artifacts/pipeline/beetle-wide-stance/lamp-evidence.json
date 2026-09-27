@@ -1,0 +1,25 @@
+{
+  "task": "Beetle cabin four forward lamps",
+  "target": "Reference robot has a 2x2 cluster of four small lamps beside the main optical eye.",
+  "visual_observations": {
+    "source": "Assistant inspected original robot reference and fresh four-front-lamps.png, same camera as before-front-lamps.png",
+    "image_sha256": "832bf3d45f2c70ea30e764eb0f47b6336d952d711da6561c7fdec2179fd00025",
+    "completed": [
+      "Four separate glass lenses in 2x2 recessed dark mounting plate beside large eye",
+      "Removed four unrelated floating leg sensor rings"
+    ],
+    "remaining": [
+      "Overall robot surface and leg silhouette still require further reference refinement; no global 8/10 acceptance"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Actual game loads without page errors; E for three robots and red blue freight F boarding",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Do not claim whole-model acceptance or updated old downloadable GLB files."
+  ]
+}

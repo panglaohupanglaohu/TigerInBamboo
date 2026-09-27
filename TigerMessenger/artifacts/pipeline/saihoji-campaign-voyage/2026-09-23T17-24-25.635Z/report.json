@@ -1,0 +1,232 @@
+{
+  "passed": true,
+  "sourceStable": true,
+  "sourceBefore": {
+    "src/world/saihojiPhalanx.js": "f3a5c4636c0a2e3c4101a463f3c63d2db5b4dfd880243b595ee90b9caa086c8d",
+    "src/world/saihojiAmbush.js": "3274e8cf63c0a1a29261fa92f7c3ca2fc51700b18bbb6dde089134c7512d90f5",
+    "src/scenes/saihojiGarden.js": "8ff607c18ace90e4fea274bc72b879885911c6b947b9a911e3dd0c412f64c85f",
+    "src/scenes/messenger/loadCitadel.js": "22fd684ceeb500f00862d48c8b5f63330354b9d814a0278783af252b58bcd4f7",
+    "src/story/rescueCampaign.js": "4d3b21ec07acae0a580143f84155c15e4e9417dfe1f5cfed824088e747a33b0f"
+  },
+  "sourceAfter": {
+    "src/world/saihojiPhalanx.js": "f3a5c4636c0a2e3c4101a463f3c63d2db5b4dfd880243b595ee90b9caa086c8d",
+    "src/world/saihojiAmbush.js": "3274e8cf63c0a1a29261fa92f7c3ca2fc51700b18bbb6dde089134c7512d90f5",
+    "src/scenes/saihojiGarden.js": "8ff607c18ace90e4fea274bc72b879885911c6b947b9a911e3dd0c412f64c85f",
+    "src/scenes/messenger/loadCitadel.js": "22fd684ceeb500f00862d48c8b5f63330354b9d814a0278783af252b58bcd4f7",
+    "src/story/rescueCampaign.js": "4d3b21ec07acae0a580143f84155c15e4e9417dfe1f5cfed824088e747a33b0f"
+  },
+  "cases": [
+    {
+      "passed": true,
+      "checks": [
+        {
+          "name": "full story has live voyage even with optional V3 flag",
+          "passed": true,
+          "detail": {
+            "flag": true
+          }
+        },
+        {
+          "name": "new game cannot launch before pact",
+          "passed": true
+        },
+        {
+          "name": "real R letter and pact authorize chapter 2",
+          "passed": true
+        },
+        {
+          "name": "original scheduled voyage brings 50 visible blue troops to cover",
+          "passed": true,
+          "detail": {
+            "concealedFrame": 1752,
+            "seconds": 29.216666666666665,
+            "campaign": {
+              "managed": true,
+              "chapter": 2,
+              "launchAllowed": true,
+              "discoveryAllowed": false,
+              "phase": "concealment",
+              "shipCount": 2,
+              "waitingReason": "awaiting-signal"
+            }
+          }
+        },
+        {
+          "name": "chapter 2 blocks actual nearby fleet revelation until signal",
+          "passed": true,
+          "detail": {
+            "maxLift": 0,
+            "gate": {
+              "blocked": true,
+              "reason": "allies-landing"
+            }
+          }
+        },
+        {
+          "name": "repeated campaign sync never respawns completed voyage",
+          "passed": true
+        },
+        {
+          "name": "actual campaign panel explains hidden troops and R signal",
+          "passed": true,
+          "detail": {
+            "panel": "盟军已在松林下埋伏。靠近苔庭信号点，按 R 送出诱敌信号。"
+          }
+        },
+        {
+          "name": "real nearby R signal advances chapter 3",
+          "passed": true
+        },
+        {
+          "name": "signal still requires actual fleet lock and whale rise",
+          "passed": true,
+          "detail": {
+            "discovered": 156,
+            "attack": 157,
+            "lift": 0.4397282434073719
+          }
+        },
+        {
+          "name": "later synchronization preserves an active battle",
+          "passed": true
+        },
+        {
+          "name": "pact signal does not start heavy assault",
+          "passed": true
+        }
+      ],
+      "events": [
+        {
+          "from": "landing",
+          "to": "concealed",
+          "seconds": 29.199999999999623
+        },
+        {
+          "from": "concealed",
+          "to": "discovered",
+          "seconds": 36.81666666666586,
+          "evidence": {
+            "detected": true,
+            "source": "saihojiGarden.whaleLock+actualLift",
+            "fleetMembers": 5,
+            "whaleLockActive": true,
+            "whaleRisen": true,
+            "seconds": 36.81666666666586
+          }
+        },
+        {
+          "from": "discovered",
+          "to": "ambush",
+          "seconds": 36.833333333332526
+        }
+      ],
+      "scope": "Fresh actual 8931 page with world RAF held; real R chapter interaction and original garden/battle updates. No reset/debug/spawn/phase writes. Player positions and fleet proximity diagnostic; concurrent night flag injected. Does not validate full original post-ambush terrain transition.",
+      "scenario": "new-game",
+      "errors": []
+    },
+    {
+      "passed": true,
+      "checks": [
+        {
+          "name": "full story has live voyage even with optional V3 flag",
+          "passed": true,
+          "detail": {
+            "flag": true
+          }
+        },
+        {
+          "name": "old chapter 2 restores without replaying prior chapters",
+          "passed": true
+        },
+        {
+          "name": "original scheduled voyage brings 50 visible blue troops to cover",
+          "passed": true,
+          "detail": {
+            "concealedFrame": 1751,
+            "seconds": 29.2,
+            "campaign": {
+              "managed": true,
+              "chapter": 2,
+              "launchAllowed": true,
+              "discoveryAllowed": false,
+              "phase": "concealment",
+              "shipCount": 2,
+              "waitingReason": "awaiting-signal"
+            }
+          }
+        },
+        {
+          "name": "chapter 2 blocks actual nearby fleet revelation until signal",
+          "passed": true,
+          "detail": {
+            "maxLift": 0,
+            "gate": {
+              "blocked": true,
+              "reason": "allies-landing"
+            }
+          }
+        },
+        {
+          "name": "repeated campaign sync never respawns completed voyage",
+          "passed": true
+        },
+        {
+          "name": "actual campaign panel explains hidden troops and R signal",
+          "passed": true,
+          "detail": {
+            "panel": "盟军已在松林下埋伏。靠近苔庭信号点，按 R 送出诱敌信号。"
+          }
+        },
+        {
+          "name": "real nearby R signal advances chapter 3",
+          "passed": true
+        },
+        {
+          "name": "signal still requires actual fleet lock and whale rise",
+          "passed": true,
+          "detail": {
+            "discovered": 154,
+            "attack": 155,
+            "lift": 0.4356044818806387
+          }
+        },
+        {
+          "name": "later synchronization preserves an active battle",
+          "passed": true
+        },
+        {
+          "name": "pact signal does not start heavy assault",
+          "passed": true
+        }
+      ],
+      "events": [
+        {
+          "from": "landing",
+          "to": "concealed",
+          "seconds": 29.183333333332957
+        },
+        {
+          "from": "concealed",
+          "to": "discovered",
+          "seconds": 36.76666666666586,
+          "evidence": {
+            "detected": true,
+            "source": "saihojiGarden.whaleLock+actualLift",
+            "fleetMembers": 5,
+            "whaleLockActive": true,
+            "whaleRisen": true,
+            "seconds": 36.76666666666586
+          }
+        },
+        {
+          "from": "discovered",
+          "to": "ambush",
+          "seconds": 36.78333333333253
+        }
+      ],
+      "scope": "Fresh actual 8931 page with world RAF held; real R chapter interaction and original garden/battle updates. No reset/debug/spawn/phase writes. Player positions and fleet proximity diagnostic; concurrent night flag injected. Does not validate full original post-ambush terrain transition.",
+      "scenario": "restored-chapter2",
+      "errors": []
+    }
+  ]
+}

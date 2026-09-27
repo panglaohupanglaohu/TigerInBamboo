@@ -3,7 +3,7 @@ func _initialize() -> void: call_deferred("run")
 func run() -> void:
     var world = load("res://scenes/saihoji_battle_world.tscn").instantiate()
     root.add_child(world)
-    await physics_frame
+    while not world.ready_for_battle and world.load_error.is_empty(): await physics_frame
     world.set_physics_process(false)
     world.music.set_muted(true)
     if OS.has_environment("SAIHOJI_BATTLE_SEED"):world.battle_seed=int(OS.get_environment("SAIHOJI_BATTLE_SEED"))
@@ -13,7 +13,7 @@ func run() -> void:
     var held_before_signal := false
     var signal_sent := false
     var covered_low_stance := false
-    for i in range(60 * 720):
+    for i in range(60 * 900):
         world._physics_process(1.0/60.0)
         if world.director.phase == "concealment" and world.director.snapshot().formation and not signal_sent:
             ready_wait += 1.0/60.0
@@ -23,10 +23,12 @@ func run() -> void:
                 signal_sent = world.director.request_ambush_signal()
         if i % 600 == 0: snapshots.append(world.evidence().state)
         if i % 120 == 0: await physics_frame
-        if not world.director.running: break
+        if not world.director.running and world.victory_roll_time<0.0: break
     var report:Dictionary = world.evidence()
     report.snapshots = snapshots
     report.seed=world.battle_seed
+    report.simulated_seconds=world.elapsed
+    report.withdrawal_progress={"ships":world.ships.map(func(s):return {"id":s.id,"state":s.state,"route_u":s.u}),"craft_fleet_distances":world.crafts.map(func(c):return c.node.position.distance_to(world.fleet_center))}
     report.test_scope = "manual fixed-step native movement and swept contacts; messenger signal after ten seconds of actual readiness; no injected hit/landing events"
     var types:Array=report.events.map(func(e):return e.type)
     var units:Dictionary={}
@@ -57,8 +59,13 @@ func run() -> void:
         "deployment_requires_distinct_hits":types.count("assault_requested")<=types.count("fleet_hit"),
         "candidate_kun_mouth_integrated":report.kun_candidate_active,
     }
+    checks["victory_roll_once"]=world.events.filter(func(e):return e.type=="victory_roll_started").size()==1
+    checks["victory_roll_completed_once"]=world.events.filter(func(e):return e.type=="victory_roll_completed").size()==1
+    checks["victory_roll_restored"]=world.victory_roll_time<0.0 and world.kun.transform.is_equal_approx(world.victory_roll_start)
     report.checks=checks
     report.victory_observed=report.state.phase=="complete"
+    report.crowd_pending=world.troops.filter(func(t):return t.state in ["boarding","boarding_queue","landing","landing_queue"]).map(func(t):return {"id":t.id,"state":t.state,"wait":t.get("crowd_wait",0.0),"position":str(t.node.position),"target":str(t.walk_path[t.path_index]) if t.has("walk_path") else "queued"})
+    checks["complete_victory_with_all_survivors_returned"]=report.victory_observed
     report.full_visual_gameplay_accepted=false
     report.passed=checks.values().all(func(value):return value)
     FileAccess.open(OS.get_environment("SAIHOJI_WORLD_REPORT"),FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

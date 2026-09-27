@@ -1,0 +1,1981 @@
+[
+  {
+    "robot": "locust",
+    "actions": [
+      {
+        "name": "attack",
+        "range": [
+          0.0,
+          57.60000228881836
+        ],
+        "slots": 12
+      },
+      {
+        "name": "disabled",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 12
+      },
+      {
+        "name": "idle",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 12
+      },
+      {
+        "name": "move",
+        "range": [
+          0.0,
+          30.159290313720703
+        ],
+        "slots": 12
+      },
+      {
+        "name": "transport",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 12
+      }
+    ],
+    "objects": [
+      {
+        "name": "armor-joint-body",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-ankle",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-elbow",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-hip",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-knee",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-shoulder",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-ankle",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-elbow",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-hip",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-knee",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-shoulder",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "bookshop-robot-locust-articulated",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.001",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.002",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.003",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.004",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.005",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.006",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.007",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.008",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.009",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "joint-body",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-ankle",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-elbow",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-hip",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-knee",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-shoulder",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-ankle",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-elbow",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-hip",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-knee",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-shoulder",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "Mesh",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.001",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.002",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.003",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.004",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.005",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.006",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.007",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.008",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.009",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.010",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.011",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.012",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.013",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.014",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.015",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.016",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.017",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.018",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.019",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.020",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.021",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.022",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.023",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.024",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.025",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.026",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.027",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.028",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.029",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.030",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.031",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.032",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.033",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.034",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.035",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.036",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.037",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.038",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.039",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.040",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.041",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.042",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.043",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.044",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.045",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.046",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.047",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.048",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.049",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.050",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.051",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.052",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.053",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.054",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.055",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.056",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.057",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.058",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.059",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.060",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.061",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.062",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.063",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.064",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.065",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.066",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.067",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.068",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.069",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.070",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.071",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.072",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.073",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.074",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.075",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.076",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.077",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.078",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.079",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.080",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.081",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.082",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "robot-muzzle",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.001",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.002",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.003",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.004",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.005",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.006",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.007",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.008",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.009",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.010",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.011",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-rifle",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      }
+    ],
+    "meshes": 83
+  },
+  {
+    "robot": "ant",
+    "actions": [
+      {
+        "name": "attack",
+        "range": [
+          0.0,
+          57.60000228881836
+        ],
+        "slots": 13
+      },
+      {
+        "name": "disabled",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 13
+      },
+      {
+        "name": "idle",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 13
+      },
+      {
+        "name": "move",
+        "range": [
+          0.0,
+          39.68327331542969
+        ],
+        "slots": 13
+      },
+      {
+        "name": "transport",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 13
+      }
+    ],
+    "objects": [
+      {
+        "name": "armor-joint-body",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-ankle",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-elbow",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-hip",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-knee",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-shoulder",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-ankle",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-elbow",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-hip",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-knee",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-shoulder",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "bookshop-robot-ant-articulated",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.001",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.002",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.003",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.004",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.005",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.006",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "joint-body",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-ankle",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-elbow",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-hip",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-knee",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-shoulder",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-ankle",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-elbow",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-hip",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-knee",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-shoulder",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "Mesh",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.001",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.002",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.003",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.004",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.005",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.006",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.007",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.008",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.009",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.010",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.011",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.012",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.013",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.014",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.015",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.016",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.017",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.018",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.019",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.020",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.021",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.022",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.023",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.024",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.025",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.026",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.027",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.028",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.029",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.030",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.031",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.032",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.033",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.034",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.035",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.036",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.037",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.038",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.039",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.040",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.041",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.042",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.043",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "robot-cup",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "robot-forearm--1",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-forearm-1",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-hand--1",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-hand-1",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-muzzle",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.001",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.002",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.003",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.004",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-pressure-cannon",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      }
+    ],
+    "meshes": 44
+  },
+  {
+    "robot": "beetle",
+    "actions": [
+      {
+        "name": "attack",
+        "range": [
+          0.0,
+          57.60000228881836
+        ],
+        "slots": 10
+      },
+      {
+        "name": "disabled",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 10
+      },
+      {
+        "name": "idle",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 10
+      },
+      {
+        "name": "move",
+        "range": [
+          0.0,
+          30.159290313720703
+        ],
+        "slots": 10
+      },
+      {
+        "name": "transport",
+        "range": [
+          0.0,
+          24.0
+        ],
+        "slots": 10
+      }
+    ],
+    "objects": [
+      {
+        "name": "armor-joint-body",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-front",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-front-wheel",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-rear",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-left-rear-wheel",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-front",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-front-wheel",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-rear",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-right-rear-wheel",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "armor-joint-turret",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "bookshop-robot-beetle-articulated",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.001",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.002",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.003",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.004",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.005",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.006",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.007",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.008",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.009",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.010",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.011",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.012",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.013",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.014",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.015",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.016",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.017",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.018",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "Group.019",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "joint-body",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-front",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-front-wheel",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-rear",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-left-rear-wheel",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-front",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-front-wheel",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-rear",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-right-rear-wheel",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "joint-turret",
+        "type": "EMPTY",
+        "tracks": [
+          "disabled",
+          "transport",
+          "attack",
+          "move",
+          "idle"
+        ]
+      },
+      {
+        "name": "Mesh",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.001",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.002",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.003",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.004",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.005",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.006",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.007",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.008",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.009",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.010",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.011",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.012",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.013",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.014",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.015",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.016",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.017",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.018",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.019",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.020",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.021",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.022",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.023",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.024",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.025",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.026",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.027",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.028",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.029",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.030",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.031",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.032",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.033",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.034",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.035",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.036",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.037",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.038",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.039",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.040",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.041",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.042",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.043",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.044",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.045",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.046",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.047",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.048",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.049",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.050",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.051",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.052",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.053",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.054",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "Mesh.055",
+        "type": "MESH",
+        "tracks": []
+      },
+      {
+        "name": "robot-muzzle",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.001",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.002",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.003",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.004",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.005",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.006",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.007",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.008",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-panel-seams.009",
+        "type": "EMPTY",
+        "tracks": []
+      },
+      {
+        "name": "robot-turret",
+        "type": "EMPTY",
+        "tracks": []
+      }
+    ],
+    "meshes": 56
+  }
+]

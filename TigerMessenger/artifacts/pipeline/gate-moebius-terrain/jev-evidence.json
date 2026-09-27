@@ -1,0 +1,38 @@
+{
+  "asset": "Gate of Sighs continuous canyon refinement",
+  "visual_observations": {
+    "source": "Astra reviewed final actual game overview and detail against approved Moebius target",
+    "sha256": "53431170fcce3b534b48cf82255ebe3bf65eba1a2dd3b4de6e27b340c3f5d85c",
+    "changes": [
+      "Existing shoulders subdivided and recessed, no separate pillar candidate",
+      "Fine broken creases instead of broad uniform blue planes"
+    ],
+    "remaining": [
+      "Large-scale shoulder silhouette still a slope, target has steeper natural cliffs",
+      "Bird flocks obscure architecture",
+      "Distant crystal-city relation not addressed"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Gate and canyon 2880 train-clearance rays",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Original walking solver 15.8 seconds",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full manual story/boarding regression",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No Blender/Godot synchronization claimed",
+    "No terrain raises into rail",
+    "Protected original approach strip"
+  ]
+}

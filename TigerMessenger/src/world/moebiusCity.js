@@ -571,11 +571,11 @@ export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
   // ---------- 2b. 金鳞花厅塔（高地环带，布局驱动） ----------
   const corridorTowers = [];
   for (const [siteIndex, site] of tracksideGoldSites.entries()) {
-    if (trackCurve && !trackClear(site.dir, 0.15)) continue;
+    if (!options.v7 && trackCurve && !trackClear(site.dir, 0.15)) continue;
     const scaleMul = site.scale ?? 0.45;
     const scale = scaleMul * CITY_BUILDING_SCALE;
     const tower = createDetailedMoebiusTower({
-      stages: siteIndex === 0 ? 3 : 2,
+      stages: options.v7 || siteIndex === 0 ? 3 : 2,
       balcony: true,
       goldScales: true,
       seed: site.seed,
@@ -1181,6 +1181,12 @@ function createMoebiusHallBirdFlocks(parent, crystals, rnd) {
     flocks,
     update,
     migratePatrolHome,
+    rotateCoreHomes(q) {
+      const homes=halls.slice(0,9).map(p=>p.clone());
+      for(const flock of flocks)for(const p of flock.path)
+        if(homes.some(h=>h.distanceToSquared(p)<1e-8))p.applyQuaternion(q);
+      halls.slice(0,9).forEach(p=>p.applyQuaternion(q));
+    },
   };
 }
 

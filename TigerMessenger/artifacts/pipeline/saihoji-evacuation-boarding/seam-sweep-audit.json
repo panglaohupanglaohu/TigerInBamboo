@@ -1,0 +1,4860 @@
+{
+  "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+  "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+  "seam": {
+    "position": [
+      1.94,
+      0.66,
+      0.68
+    ],
+    "size": {
+      "width": 0.44,
+      "height": 0.045,
+      "depth": 0.42,
+      "widthSegments": 1,
+      "heightSegments": 1,
+      "depthSegments": 1
+    }
+  },
+  "sampling": {
+    "poses": 123,
+    "progressStep": 0.025,
+    "pitches": [
+      null,
+      -0.4363323129985824,
+      0.4363323129985824
+    ],
+    "dynamicMeshNodes": 554
+  },
+  "method": "Production V11 pose interpolation and candidate mesh; exact source primitive triangles transformed to seam local frame, clipped against box interior (10 micrometre inset), contact box (+1 micrometre), plus closed-mesh center containment. Area/inset measured in unscaled model units; world scale 1.7 multiplies lengths.",
+  "scope": "Discrete 2.5% sweep samples, including deployed pitch extremes. Not a continuous collision proof; existing ship-vs-ship contacts excluded. No browser, runtime scene or asset modification.",
+  "passed": false,
+  "intermediatePenetrations": 192,
+  "nominalPenetrations": 64,
+  "rows": [
+    {
+      "pitch": null,
+      "progress": 0.15,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 8,
+      "touchTriangles": 0,
+      "intersectionArea": 0.000363304382423752,
+      "maxSurfaceInset": 0.0011992473468540044,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.3141592272274438,
+          -0.052442351340514254,
+          -0.08361498513133181
+        ],
+        "max": [
+          -0.18695402263841587,
+          -0.021300541002856027,
+          0.04898526171800743
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.175,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 15,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0011799478484762458,
+      "maxSurfaceInset": 0.006896601981990047,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.3031454563783802,
+          -0.049486578653126306,
+          -0.07204969742150168
+        ],
+        "max": [
+          -0.1791712246061038,
+          -0.015603182007553201,
+          0.09614064618141048
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.2,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0021858414614935578,
+      "maxSurfaceInset": 0.013221042679620928,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.289487994890312,
+          -0.04620450784354118,
+          -0.05937720347997123
+        ],
+        "max": [
+          -0.17043549661101198,
+          -0.00927887253825594,
+          0.14811511499371288
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.2,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0006149842786202276,
+      "maxSurfaceInset": 0.0019341370274736508,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.18861710413532098,
+          -0.2608466604092943,
+          -0.06409127686778937
+        ],
+        "max": [
+          -0.153482945505616,
+          -0.020515945091955173,
+          -0.03142346433030141
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.225,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 25,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003702679268605902,
+      "maxSurfaceInset": 0.020382256636697807,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2721952958387264,
+          -0.04249257006956357,
+          -0.04521061382022315
+        ],
+        "max": [
+          -0.1604139129343216,
+          -0.0021174899438145094,
+          0.20652304770314153
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.225,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0014172160909463722,
+      "maxSurfaceInset": 0.009126496784069474,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.17954765993829105,
+          -0.2537178126338177,
+          -0.050717663283961184
+        ],
+        "max": [
+          -0.1428235753758069,
+          -0.013311291839108355,
+          -0.01688349516848311
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.25,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005569947067500512,
+      "maxSurfaceInset": 0.022364320427326057,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2515892152761685,
+          -0.03852163021580106,
+          -0.030307204947180894
+        ],
+        "max": [
+          -0.14956460718667242,
+          0.0055431234167070825,
+          0.26831063664775057
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.25,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0022036455597250547,
+      "maxSurfaceInset": 0.016820384828744525,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.16968238609207423,
+          -0.24608916776135756,
+          -0.03671114788571569
+        ],
+        "max": [
+          -0.13133567828160816,
+          -0.005604288505714733,
+          -0.0016279029029990025
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.275,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.006493492848932974,
+      "maxSurfaceInset": 0.021690449127380718,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2273751071120182,
+          -0.03430674483684964,
+          -0.014785727478039135
+        ],
+        "max": [
+          -0.13792058397188622,
+          0.013672619109855448,
+          0.33298483884139846
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.275,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0030383713246949795,
+      "maxSurfaceInset": 0.022378530780492806,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.15904142492258017,
+          -0.23799019242972425,
+          -0.022192289120345553
+        ],
+        "max": [
+          -0.11906681158171556,
+          0.002574532661994991,
+          0.014213032244023382
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.3,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.007519334537163094,
+      "maxSurfaceInset": 0.022266459536529302,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1992876502013745,
+          -0.029863403035692106,
+          0.0012349862148386126
+        ],
+        "max": [
+          -0.12552081344224486,
+          0.02224051344020548,
+          0.40002324103178877
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.3,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003918330389075262,
+      "maxSurfaceInset": 0.01602982551690292,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.14765046100824725,
+          -0.22945052512901234,
+          -0.007280634769393068
+        ],
+        "max": [
+          -0.10607115288202255,
+          0.011194508573762502,
+          0.03050908725036534
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.325,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005391493344001555,
+      "maxSurfaceInset": 0.016205332777536448,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1665051657688683,
+          -0.02514271413270803,
+          0.017939395875614994
+        ],
+        "max": [
+          -0.11217264110895009,
+          0.031357466617106096,
+          0.4700823305865257
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.325,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004854853225576956,
+      "maxSurfaceInset": 0.019439284501969006,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.13531976992107217,
+          -0.22036164644821918,
+          0.008167005662888912
+        ],
+        "max": [
+          -0.09217138975579654,
+          0.020367253892623144,
+          0.04743783607865598
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.35,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0035694258597241363,
+      "maxSurfaceInset": 0.007475071853360344,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1295891732166672,
+          -0.0202596379427439,
+          0.034787885694296916
+        ],
+        "max": [
+          -0.09825073782334459,
+          0.040785658302943915,
+          0.5408648494530988
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.35,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004618825703285513,
+      "maxSurfaceInset": 0.022500000894069668,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.1223850239666672,
+          -0.21095799241554136,
+          0.02365871712694002
+        ],
+        "max": [
+          -0.07776921900368547,
+          0.029853282049236776,
+          0.06444171580546508
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.375,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 4,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0000962597137050788,
+      "maxSurfaceInset": 0.0002660173689461205,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.0884675498692797,
+          -0.015229494817064738,
+          0.05167416539719466
+        ],
+        "max": [
+          -0.08381618484065867,
+          0.05049464544639252,
+          0.6118077651036296
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.375,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004619513996484667,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.10889477444676156,
+          -0.20126934756635087,
+          0.03909424699323434
+        ],
+        "max": [
+          -0.0629408702404529,
+          0.039621962685990525,
+          0.08140595051239623
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.4,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004620302629634955,
+      "maxSurfaceInset": 0.022500000894069668,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.09490398010794393,
+          -0.19132594500996677,
+          0.054379824054373145
+        ],
+        "max": [
+          -0.04776802462576695,
+          0.04964232584753278,
+          0.09822187121188453
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.425,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0046212010659152924,
+      "maxSurfaceInset": 0.022500000894069668,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.08036941006056264,
+          -0.1811170445341559,
+          0.0695193015465869
+        ],
+        "max": [
+          -0.032243205898405576,
+          0.05992813060397739,
+          0.11490966072418508
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.45,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004622200766804913,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.06554639490563312,
+          -0.1707786554103257,
+          0.0842500264221335
+        ],
+        "max": [
+          -0.01664590121245786,
+          0.07033891600802458,
+          0.13114957984468203
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.475,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004623301706347088,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.050508641821857186,
+          -0.16034126404633664,
+          0.09851345504997769
+        ],
+        "max": [
+          -0.0010662430119468304,
+          0.08084372576472855,
+          0.14686735440631535
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.5,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004624502871574268,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.0353326931384106,
+          -0.14983592940304818,
+          0.11226037721163852
+        ],
+        "max": [
+          0.014405891053851608,
+          0.09141117124946824,
+          0.1619989597143302
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.525,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004625798249833066,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.02012148334107155,
+          -0.13934664599650856,
+          0.12541239667347076
+        ],
+        "max": [
+          0.029637032566327874,
+          0.10196017727485382,
+          0.17646673260464035
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.55,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004627179209227077,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.005017931255533639,
+          -0.12891384331053574,
+          0.13790813834530835
+        ],
+        "max": [
+          0.04450097427334267,
+          0.1124466785783443,
+          0.19017199809840235
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.575,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004628639731641932,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.009899447114347176,
+          -0.11856888835976946,
+          0.14973587618715373
+        ],
+        "max": [
+          0.05892287522987519,
+          0.12283927579191405,
+          0.20309300728894136
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.6,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004630172743855218,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.024555043870102704,
+          -0.10834370190913578,
+          0.16089159619591362
+        ],
+        "max": [
+          0.07283449647822487,
+          0.13310615376056134,
+          0.21521794074843717
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.625,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 4,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0003612158573138408,
+      "maxSurfaceInset": 0.000860366992581324,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2601050326820896,
+          -0.09840024856421625,
+          0.009069164601046936
+        ],
+        "max": [
+          -0.21281428460412818,
+          0.14308796451967443,
+          0.06423650753528627
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.625,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0038255402820890007,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.03872110968675777,
+          -0.09841366935731077,
+          0.17125098106924788
+        ],
+        "max": [
+          0.08601185776471923,
+          0.1430745437265799,
+          0.22641832400348724
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.65,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 5,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0011505994885283527,
+      "maxSurfaceInset": 0.005790521012684013,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2547846764210132,
+          -0.08871051256447622,
+          0.03517025426815916
+        ],
+        "max": [
+          -0.20868847366413779,
+          0.15281006790018997,
+          0.09103981606803098
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.65,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 11,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0026790378272222594,
+      "maxSurfaceInset": 0.020031956518884036,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.052400219887428816,
+          -0.08872708665715108,
+          0.18090098191511722
+        ],
+        "max": [
+          0.09849642264430425,
+          0.1527934938075151,
+          0.236770543714989
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.675,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 7,
+      "touchTriangles": 0,
+      "intersectionArea": 0.001816645918178113,
+      "maxSurfaceInset": 0.010906493249830868,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24890249468046524,
+          -0.07930488347906976,
+          0.06051784762141809
+        ],
+        "max": [
+          -0.20418333882519055,
+          0.16224246530256098,
+          0.11695242996392707
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.675,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 9,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0018677862261594548,
+      "maxSurfaceInset": 0.011442908037665595,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.06553353460825768,
+          -0.07931612854517382,
+          0.18986230042836794
+        ],
+        "max": [
+          0.11025269046353241,
+          0.16223122023645692,
+          0.2462968827708769
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.7,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 9,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0023780502654372326,
+      "maxSurfaceInset": 0.016296328588954995,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24254764618730557,
+          -0.07021336955631031,
+          0.08499971331797082
+        ],
+        "max": [
+          -0.19936245077259412,
+          0.17135564263401704,
+          0.14186622175749655
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.7,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 6,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0009614619801958177,
+      "maxSurfaceInset": 0.003607921555674326,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.07806914089222555,
+          -0.07021337014640307,
+          0.1981583630263881
+        ],
+        "max": [
+          0.121254336306937,
+          0.17135564204392428,
+          0.2550248714659138
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.725,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 10,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0029318358895545804,
+      "maxSurfaceInset": 0.022061284317008545,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.23597647399815394,
+          -0.061672702482694505,
+          0.10792462906493239
+        ],
+        "max": [
+          -0.19442671224987204,
+          0.17991496998072398,
+          0.1650947344564354
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.75,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003669683818780796,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.22921931909757573,
+          -0.05357197547098458,
+          0.12961531660136733
+        ],
+        "max": [
+          -0.18937732357896955,
+          0.18802977982045543,
+          0.18697199570784823
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.775,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004641485283143133,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.22239231874014223,
+          -0.04594106716363089,
+          0.14998156538366636
+        ],
+        "max": [
+          -0.18429688717580747,
+          0.19567084082211528,
+          0.2074211944056713
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.775,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.02927026894661727,
+      "maxSurfaceInset": 0.006718041887704092,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24024187074047834,
+          -0.06839013762926541,
+          0.06298912729748354
+        ],
+        "max": [
+          0.18163904932704902,
+          -0.015364759715716797,
+          0.2898559507352053
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.8,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004642993052519049,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.21561249006044567,
+          -0.038809708110225966,
+          0.16893972793089226
+        ],
+        "max": [
+          -0.17926899843304647,
+          0.20280910374290437,
+          0.22637348444936647
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.8,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.043018142099381235,
+      "maxSurfaceInset": 0.014170378637903394,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2330400598010902,
+          -0.061348635671417476,
+          0.08192274956173459
+        ],
+        "max": [
+          0.18590540803484942,
+          -0.007900358687271892,
+          0.2942254469518645
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.825,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 10,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0028129693987672807,
+      "maxSurfaceInset": 0.020527507842907577,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.209308092124184,
+          -0.03251382688623661,
+          0.18558983302729093
+        ],
+        "max": [
+          -0.17461324919257704,
+          0.20911016159327334,
+          0.24295098032937146
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.825,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0021338272551230373,
+      "maxSurfaceInset": 0.006338195496021007,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.3664254638712592,
+          -0.22859509156778393,
+          0.09376493345801606
+        ],
+        "max": [
+          -0.15937214271475453,
+          -0.015501665814828786,
+          1.4361407029174122
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.825,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0021302189284821914,
+      "maxSurfaceInset": 0.006332814790797628,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.029211590503214646,
+          -0.2286004722730073,
+          0.13720229438061404
+        ],
+        "max": [
+          0.17784173065329,
+          -0.015507046520052165,
+          1.4795780638400102
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.825,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04282659605963969,
+      "maxSurfaceInset": 0.020744288751029884,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.22639236499780102,
+          -0.05514385981716842,
+          0.09866683937589901
+        ],
+        "max": [
+          0.18940281977486295,
+          -0.001309472093759964,
+          0.29784007614298436
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.85,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 17,
+      "touchTriangles": 0,
+      "intersectionArea": 0.001556422063260267,
+      "maxSurfaceInset": 0.005355929398454307,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2033813695234394,
+          -0.02684348185163485,
+          0.20052578596063872
+        ],
+        "max": [
+          -0.17024350504358335,
+          0.2147832649157758,
+          0.25776447493429655
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.85,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004232336690545605,
+      "maxSurfaceInset": 0.012267756660656312,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.322465750091681,
+          -0.22588905388202235,
+          0.10836153061556075
+        ],
+        "max": [
+          -0.15788617804266858,
+          -0.009557638795157766,
+          1.454224575817958
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.85,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0030751814455965295,
+      "maxSurfaceInset": 0.012262554957235647,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.01595757394892415,
+          -0.22589425558544302,
+          0.14106718829628906
+        ],
+        "max": [
+          0.18053714599793658,
+          -0.009562840498578432,
+          1.4869302334986862
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.85,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 19,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04230108937530905,
+      "maxSurfaceInset": 0.02230457808012224,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.22017089708995255,
+          -0.04955019281732127,
+          0.11378034706551074
+        ],
+        "max": [
+          0.19233992725076157,
+          0.004625813375410084,
+          0.3009111074967572
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.875,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004836845173405847,
+      "maxSurfaceInset": 0.017511797533795864,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.28332854752945646,
+          -0.2234954075703,
+          0.12129426980944735
+        ],
+        "max": [
+          -0.15645184845732715,
+          -0.004300848157390472,
+          1.4691027028364387
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.875,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003704627899813199,
+      "maxSurfaceInset": 0.017509249404848576,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.0558800732828639,
+          -0.2234979556992473,
+          0.1444786515899753
+        ],
+        "max": [
+          0.18275677235499324,
+          -0.00430339628633776,
+          1.4922870846169665
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.875,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.041611744570648916,
+      "maxSurfaceInset": 0.018336259475264433,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2144873364834641,
+          -0.04460030555157249,
+          0.12716627649067402
+        ],
+        "max": [
+          0.19476838600291727,
+          0.009874709595262071,
+          0.30348583542267704
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.9,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0050868954691202575,
+      "maxSurfaceInset": 0.022039095170264075,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24937525436496996,
+          -0.22142831325518658,
+          0.1324720183848458
+        ],
+        "max": [
+          -0.15512290643655616,
+          0.00023745057340346376,
+          1.4810984204787019
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.9,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004201952171226672,
+      "maxSurfaceInset": 0.022039095270181816,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.0902959402165219,
+          -0.22142831315526884,
+          0.14742116805909977
+        ],
+        "max": [
+          0.1845482881449357,
+          0.0002374506733212045,
+          1.4960475701529559
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.9,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 27,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04124994135525107,
+      "maxSurfaceInset": 0.022153923121931412,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20944682025593914,
+          -0.040326544877593476,
+          0.13873184115772383
+        ],
+        "max": [
+          0.19673651351897598,
+          0.014406129927334716,
+          0.3056048079175895
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.925,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00513519791464528,
+      "maxSurfaceInset": 0.022124721544430122,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2241311807816287,
+          -0.21989450702220595,
+          0.14076062381467114
+        ],
+        "max": [
+          -0.15408447427356048,
+          0.0036021510649798805,
+          1.4894780010741795
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.925,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004543352664797646,
+      "maxSurfaceInset": 0.022352516282602455,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.11575385568007475,
+          -0.2198959059368644,
+          0.1496014585359381
+        ],
+        "max": [
+          0.18580056218814295,
+          0.0036007521503214346,
+          1.4983188357954464
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.925,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04681903734225918,
+      "maxSurfaceInset": 0.02076420529268376,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20563314801919055,
+          -0.0371615109625707,
+          0.14730556753183116
+        ],
+        "max": [
+          0.19811780860004782,
+          0.017765823087080298,
+          0.3071146181114061
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.95,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005094775410028937,
+      "maxSurfaceInset": 0.02234112912874324,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20521623026488192,
+          -0.21874834357168982,
+          0.14695950076879372
+        ],
+        "max": [
+          -0.15327774635448585,
+          0.006116576114646777,
+          1.495458431768455
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.95,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00478398536385847,
+      "maxSurfaceInset": 0.022341849281654655,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.13475692437327866,
+          -0.21874906372460123,
+          0.15123193980950933
+        ],
+        "max": [
+          0.18669540828367473,
+          0.006115855961735361,
+          1.4997308708091706
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.95,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.05344920073033866,
+      "maxSurfaceInset": 0.021253480678313508,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20273911294610342,
+          -0.03479433367234474,
+          0.15371623788431715
+        ],
+        "max": [
+          0.19910762328719406,
+          0.020276423584813956,
+          0.30821045209651227
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.975,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005033449650869947,
+      "maxSurfaceInset": 0.021424494622240817,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.19291603945081034,
+          -0.21800402592749504,
+          0.1509856757332404
+        ],
+        "max": [
+          -0.1527400253814656,
+          0.007749202906199543,
+          1.4992115379171314
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.975,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00493357522321104,
+      "maxSurfaceInset": 0.021424558420649484,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.14708145574180023,
+          -0.2180040897259037,
+          0.1522911608775832
+        ],
+        "max": [
+          0.18725746981114497,
+          0.0077491391077908756,
+          1.5005170230614742
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 0.975,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.05595884414576948,
+      "maxSurfaceInset": 0.020578244363308865,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2008403216679883,
+          -0.03325705104318096,
+          0.15787929493716463
+        ],
+        "max": [
+          0.19973073274246658,
+          0.021906551105782178,
+          0.308907235001097
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 1,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004997717731528382,
+      "maxSurfaceInset": 0.020707564363242503,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.1874999446421861,
+          -0.21767632647645174,
+          0.1527573860047956
+        ],
+        "max": [
+          -0.1524999444931745,
+          0.008467663345078313,
+          1.500830371859906
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 1,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004997717731528382,
+      "maxSurfaceInset": 0.020707564363242503,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.15250005893409257,
+          -0.21767632647645174,
+          0.1527573860047956
+        ],
+        "max": [
+          0.1875000590831042,
+          0.008467663345078313,
+          1.500830371859906
+        ]
+      }
+    },
+    {
+      "pitch": null,
+      "progress": 1,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.055026570214992444,
+      "maxSurfaceInset": 0.021296502623925313,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.1999999457597732,
+          -0.03258078421534949,
+          0.15971106473446053
+        ],
+        "max": [
+          0.20000006020069128,
+          0.022623919159716288,
+          0.3092101847315333
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.15,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 8,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0003633043824230802,
+      "maxSurfaceInset": 0.0011992473468595,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.3141592272275626,
+          -0.052442351340435206,
+          -0.08361498513141855
+        ],
+        "max": [
+          -0.18695402263855632,
+          -0.021300541002850473,
+          0.0489852617169573
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.175,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 15,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0011799478484704241,
+      "maxSurfaceInset": 0.006896601981999758,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.3031454563786058,
+          -0.04948657865297586,
+          -0.07204969742166854
+        ],
+        "max": [
+          -0.17917122460637191,
+          -0.015603182007543338,
+          0.09614064617940242
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.2,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.002185841461507174,
+      "maxSurfaceInset": 0.013221042679607872,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2894879948899813,
+          -0.046204507843760095,
+          -0.059377203479725874
+        ],
+        "max": [
+          -0.17043549661061996,
+          -0.009278872538269284,
+          0.14811511499664898
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.2,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0006149842786190602,
+      "maxSurfaceInset": 0.0019341370274623126,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.18861710413499294,
+          -0.26084666040930865,
+          -0.06409127686758416
+        ],
+        "max": [
+          -0.153482945505178,
+          -0.020515945091965915,
+          -0.03142346433002234
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.225,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 25,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0037026792685800145,
+      "maxSurfaceInset": 0.02038225663671308,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2721952958391682,
+          -0.04249257006927315,
+          -0.045210613820552886
+        ],
+        "max": [
+          -0.16041391293484508,
+          -0.0021174899437987373,
+          0.20652304769922045
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.225,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0014172160909465762,
+      "maxSurfaceInset": 0.00912649678408263,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.17954765993872923,
+          -0.253717812633801,
+          -0.050717663284235034
+        ],
+        "max": [
+          -0.14282357537639145,
+          -0.013311291839095934,
+          -0.01688349516885786
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.25,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005569947067528306,
+      "maxSurfaceInset": 0.022364320427346242,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.251589215275885,
+          -0.038521630215986334,
+          -0.030307204946967925
+        ],
+        "max": [
+          -0.1495646071863359,
+          0.005543123416698291,
+          0.26831063665026744
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.25,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0022036455597256505,
+      "maxSurfaceInset": 0.016820384828737503,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.16968238609179287,
+          -0.2460891677613665,
+          -0.03671114788554002
+        ],
+        "max": [
+          -0.13133567828123316,
+          -0.005604288505721339,
+          -0.0016279029027570016
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.275,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0064934928490085675,
+      "maxSurfaceInset": 0.021690449127396275,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2273751071112937,
+          -0.03430674483731874,
+          -0.014785727477491545
+        ],
+        "max": [
+          -0.13792058397102802,
+          0.013672619109837608,
+          0.3329848388478224
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.275,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0030383713246989147,
+      "maxSurfaceInset": 0.02237853078048163,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.15904142492186168,
+          -0.23799019242974145,
+          -0.022192289119897193
+        ],
+        "max": [
+          -0.11906681158075895,
+          0.0025745326619826675,
+          0.014213032244645277
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.3,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.007519334537055073,
+      "maxSurfaceInset": 0.02226645953647474,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1992876502023353,
+          -0.029863403035075585,
+          0.0012349862141073364
+        ],
+        "max": [
+          -0.12552081344338206,
+          0.022240513440222452,
+          0.4000232410232748
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.3,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003918330389066113,
+      "maxSurfaceInset": 0.01602982551688424,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.14765046100919998,
+          -0.22945052512899772,
+          -0.007280634769987058
+        ],
+        "max": [
+          -0.10607115288328939,
+          0.011194508573772285,
+          0.03050908724953536
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.325,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00539149334389649,
+      "maxSurfaceInset": 0.016205332777452165,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1665051657700645,
+          -0.02514271413194854,
+          0.017939395874698227
+        ],
+        "max": [
+          -0.11217264111036562,
+          0.03135746661711732,
+          0.4700823305759357
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.325,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004854853225559547,
+      "maxSurfaceInset": 0.019439284501967555,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.13531976992225825,
+          -0.22036164644821282,
+          0.008167005662150263
+        ],
+        "max": [
+          -0.09217138975737094,
+          0.020367253892625656,
+          0.047437836077616057
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.35,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0035694258596905134,
+      "maxSurfaceInset": 0.007475071853323741,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1295891732171852,
+          -0.020259637942418987,
+          0.034787885693897236
+        ],
+        "max": [
+          -0.09825073782395721,
+          0.04078565830294385,
+          0.5408648494485184
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.35,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00461882570327811,
+      "maxSurfaceInset": 0.022500000894069668,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.12238502396718068,
+          -0.2109579924155446,
+          0.02365871712662066
+        ],
+        "max": [
+          -0.0777692190043657,
+          0.029853282049232904,
+          0.06444171580501196
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.375,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 4,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00009625971370582789,
+      "maxSurfaceInset": 0.00026601736894776157,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.0884675498692509,
+          -0.015229494817082377,
+          0.05167416539721659
+        ],
+        "max": [
+          -0.08381618484062492,
+          0.05049464544639284,
+          0.6118077651038811
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.375,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0046195139964851206,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.10889477444673323,
+          -0.20126934756635032,
+          0.03909424699325188
+        ],
+        "max": [
+          -0.0629408702404155,
+          0.03962196268599108,
+          0.08140595051242132
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.4,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004620302629684166,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.09490398010514581,
+          -0.19132594500987127,
+          0.054379824056106335
+        ],
+        "max": [
+          -0.04776802462207827,
+          0.04964232584761934,
+          0.09822187121438461
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.425,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004621201065940873,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.08036941005922564,
+          -0.18111704453408717,
+          0.06951930154741297
+        ],
+        "max": [
+          -0.0322432058966486,
+          0.05992813060403858,
+          0.11490966072538651
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.45,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004622200766819031,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.0655463949049488,
+          -0.17077865541027706,
+          0.08425002642255525
+        ],
+        "max": [
+          -0.01664590121156166,
+          0.07033891600806766,
+          0.13114957984530057
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.475,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004623301706357474,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.05050864182138627,
+          -0.1603412640462925,
+          0.09851345505026729
+        ],
+        "max": [
+          -0.0010662430113323879,
+          0.08084372576476768,
+          0.14686735440674362
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.5,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004624502871578604,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.03533269313822498,
+          -0.1498359294030313,
+          0.11226037721175212
+        ],
+        "max": [
+          0.014405891054092755,
+          0.09141117124949331,
+          0.1619989597144997
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.525,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004625798249847741,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.020121483340475914,
+          -0.13934664599641916,
+          0.12541239667383486
+        ],
+        "max": [
+          0.029637032567098258,
+          0.10196017727493406,
+          0.17646673260518797
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.55,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00462717920923217,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.00501793125533638,
+          -0.1289138433104992,
+          0.1379081383454287
+        ],
+        "max": [
+          0.0445009742735966,
+          0.11244667857837747,
+          0.19017199809858487
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.575,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004628639731641265,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.009899447114322248,
+          -0.11856888835977512,
+          0.14973587618713854
+        ],
+        "max": [
+          0.05892287522984327,
+          0.12283927579190883,
+          0.20309300728891813
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.6,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004630172743855987,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.02455504387013046,
+          -0.1083437019091281,
+          0.1608915961959305
+        ],
+        "max": [
+          0.07283449647826018,
+          0.13310615376056856,
+          0.21521794074846315
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.625,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 4,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00036121585727665333,
+      "maxSurfaceInset": 0.0008603669924729385,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.26010503268230534,
+          -0.0984002485642841,
+          0.0090691646011435
+        ],
+        "max": [
+          -0.21281428460430107,
+          0.14308796451960393,
+          0.06423650753543707
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.625,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0038255402820735348,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.03872110968691887,
+          -0.09841366935725705,
+          0.17125098106934578
+        ],
+        "max": [
+          0.08601185776492316,
+          0.14307454372663098,
+          0.22641832400363937
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.65,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 5,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0011505994885224143,
+      "maxSurfaceInset": 0.0057905210126444895,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2547846764210602,
+          -0.08871051256449335,
+          0.035170254268180476
+        ],
+        "max": [
+          -0.20868847366417562,
+          0.15281006790017249,
+          0.09103981606806451
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.65,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 11,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0026790378272202268,
+      "maxSurfaceInset": 0.02003195651886125,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.05240021988746421,
+          -0.08872708665713679,
+          0.18090098191513876
+        ],
+        "max": [
+          0.0984964226443488,
+          0.15279349380752905,
+          0.23677054371502276
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.675,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 7,
+      "touchTriangles": 0,
+      "intersectionArea": 0.001816645918180332,
+      "maxSurfaceInset": 0.010906493249855098,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24890249468043651,
+          -0.07930488347905745,
+          0.06051784762140478
+        ],
+        "max": [
+          -0.20418333882516732,
+          0.1622424653025733,
+          0.11695242996390598
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.675,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 9,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0018677862261606683,
+      "maxSurfaceInset": 0.011442908037679667,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.06553353460823558,
+          -0.0793161285451846,
+          0.1898623004283544
+        ],
+        "max": [
+          0.11025269046350478,
+          0.16223122023644615,
+          0.2462968827708556
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.7,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 9,
+      "touchTriangles": 0,
+      "intersectionArea": 0.002378050265422456,
+      "maxSurfaceInset": 0.016296328588790127,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24254764618750083,
+          -0.0702133695564097,
+          0.08499971331806361
+        ],
+        "max": [
+          -0.1993624507727528,
+          0.17135564263392059,
+          0.14186622175764468
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.7,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 6,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0009614619801793791,
+      "maxSurfaceInset": 0.003607921555578819,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.07806914089237602,
+          -0.07021337014631282,
+          0.198158363026482
+        ],
+        "max": [
+          0.12125433630712404,
+          0.17135564204401746,
+          0.25502487146606306
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.725,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 10,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0029318358895510954,
+      "maxSurfaceInset": 0.02206128431697077,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.23597647399819843,
+          -0.06167270248272154,
+          0.10792462906495427
+        ],
+        "max": [
+          -0.19442671224990837,
+          0.17991496998069884,
+          0.1650947344564706
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.75,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003669683818777594,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2292193190975911,
+          -0.053571975470996056,
+          0.1296153166013754
+        ],
+        "max": [
+          -0.18937732357898215,
+          0.1880297798204454,
+          0.18697199570786124
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.775,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004641485283143313,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2223923187401488,
+          -0.045941067163636815,
+          0.14998156538367008
+        ],
+        "max": [
+          -0.18429688717581288,
+          0.19567084082211056,
+          0.20742119440567736
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.775,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.02927026894661784,
+      "maxSurfaceInset": 0.006718041887697316,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24024187074048528,
+          -0.06839013762925918,
+          0.0629891272974835
+        ],
+        "max": [
+          0.18163904932705596,
+          -0.015364759715723694,
+          0.28985595073521175
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.8,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004642993052519014,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.21561249006044444,
+          -0.03880970811022463,
+          0.1689397279308914
+        ],
+        "max": [
+          -0.17926899843304547,
+          0.20280910374290526,
+          0.22637348444936511
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.8,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04301814209938109,
+      "maxSurfaceInset": 0.014170378637901618,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.23304005980108888,
+          -0.06134863567141904,
+          0.08192274956173451
+        ],
+        "max": [
+          0.18590540803484812,
+          -0.007900358687270327,
+          0.29422544695186303
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.825,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 10,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0028677997523655985,
+      "maxSurfaceInset": 0.021165061883879788,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20930809212418447,
+          -0.030385515284354084,
+          0.18579835719850035
+        ],
+        "max": [
+          -0.17461324919257745,
+          0.2112201111499653,
+          0.23751491648578849
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.825,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0024439636858586563,
+      "maxSurfaceInset": 0.006005836776512369,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.3664254638712597,
+          -0.1974553301290903,
+          0.09521092821538524
+        ],
+        "max": [
+          -0.15937214271475492,
+          -0.015957457438501882,
+          1.4392081693089163
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.825,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.002392322423973866,
+      "maxSurfaceInset": 0.007038724662778356,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.029211590503214258,
+          -0.19642244224282432,
+          0.1386360073228139
+        ],
+        "max": [
+          0.1778417306532905,
+          -0.014924569552235895,
+          1.482633248416345
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.825,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04308322551509643,
+      "maxSurfaceInset": 0.02152853443490089,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.22639236499780158,
+          -0.05230046168314283,
+          0.09913074552021005
+        ],
+        "max": [
+          0.1894028197748635,
+          -0.0006137190968709197,
+          0.2977282820379997
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.85,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.001605768605180797,
+      "maxSurfaceInset": 0.008405443557135045,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20338136952343963,
+          -0.018542443425021246,
+          0.20111043649399785
+        ],
+        "max": [
+          -0.17024350504358357,
+          0.2223318735603262,
+          0.23770212608954477
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.85,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004717996934181028,
+      "maxSurfaceInset": 0.011488298181408195,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.322465750091681,
+          -0.11132132152849247,
+          0.11367411645732983
+        ],
+        "max": [
+          -0.15788617804266855,
+          -0.010804920845697986,
+          1.4620220798931514
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.85,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003603704156681118,
+      "maxSurfaceInset": 0.014322539262491517,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.015957573948924136,
+          -0.10848708044740915,
+          0.14625673680746454
+        ],
+        "max": [
+          0.1805371459979366,
+          -0.007970679764614665,
+          1.494604700243286
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.85,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0433173882451628,
+      "maxSurfaceInset": 0.020836504279581565,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.22017089708995266,
+          -0.03855643689642919,
+          0.11551187571254032
+        ],
+        "max": [
+          0.19233992725076168,
+          0.0065758062694293365,
+          0.30008318180656
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.875,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0055684638875053705,
+      "maxSurfaceInset": 0.019590993768341804,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2833285475294565,
+          -0.07139411466075407,
+          0.12812826578604763
+        ],
+        "max": [
+          -0.15645184845732713,
+          0.0759749283617962,
+          1.4788691071115643
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.875,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004568643457536882,
+      "maxSurfaceInset": 0.02219774673652271,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.05588007328286389,
+          -0.06733658884303328,
+          0.15095483033870805
+        ],
+        "max": [
+          0.18275677235499327,
+          0.08003245417951699,
+          1.5016956716642247
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.875,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 26,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04404091216098571,
+      "maxSurfaceInset": 0.02127531277013839,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.21448733648346407,
+          -0.03000137715650286,
+          0.1283895295399975
+        ],
+        "max": [
+          0.19476838600291724,
+          0.02157556830794771,
+          0.3029738656970786
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.9,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.006056811517521696,
+      "maxSurfaceInset": 0.021758950262384585,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24937525436496996,
+          -0.06620642310479133,
+          0.13909864046289755
+        ],
+        "max": [
+          -0.15512290643655616,
+          0.21512526539395185,
+          1.482219222654937
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.9,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005304162742562518,
+      "maxSurfaceInset": 0.0216190954792073,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.0902959402165219,
+          -0.0621014947460892,
+          0.15347315399042838
+        ],
+        "max": [
+          0.1845482881449357,
+          0.21923019375265398,
+          1.496593736182468
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.9,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.058316689829352016,
+      "maxSurfaceInset": 0.022264936956517226,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20944682025593916,
+          -0.025077658962770602,
+          0.13820877002651755
+        ],
+        "max": [
+          0.196736513518976,
+          0.04069774012251594,
+          0.3052000799577921
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.925,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0062975660948269,
+      "maxSurfaceInset": 0.021642173006315085,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2241311807816287,
+          -0.061106395601472574,
+          0.14706252963394528
+        ],
+        "max": [
+          -0.15408447427356048,
+          0.35188697275002423,
+          1.4681709421039737
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.925,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005808236890187389,
+      "maxSurfaceInset": 0.021935085486096823,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.11575385568007475,
+          -0.057825941653495305,
+          0.15527221796060642
+        ],
+        "max": [
+          0.18580056218814295,
+          0.3551674266980015,
+          1.476380630430635
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.925,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04446626031850204,
+      "maxSurfaceInset": 0.019929984029908226,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20563314801919055,
+          -0.0206285990760839,
+          0.1449313828808178
+        ],
+        "max": [
+          0.19811780860004782,
+          0.057769375766482514,
+          0.30540546185742207
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.95,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.006135966071449297,
+      "maxSurfaceInset": 0.02183839690071246,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20521623026488192,
+          -0.056241733669482874,
+          0.15285389020336537
+        ],
+        "max": [
+          -0.15327774635448585,
+          0.46833554505892455,
+          1.4434469826147929
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.95,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005832396899609486,
+      "maxSurfaceInset": 0.02136027898039447,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.13475692437327866,
+          -0.05430971219878683,
+          0.15666453698731453
+        ],
+        "max": [
+          0.18669540828367473,
+          0.4702675665296206,
+          1.447257629398742
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.95,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 29,
+      "touchTriangles": 0,
+      "intersectionArea": 0.03798376409348129,
+      "maxSurfaceInset": 0.02218229010747543,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20273911294610342,
+          -0.016647718826480445,
+          0.1496150517066235
+        ],
+        "max": [
+          0.19910762328719406,
+          0.07142450386079571,
+          0.30426154926199267
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.975,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00574903501328738,
+      "maxSurfaceInset": 0.020946513250898857,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.19291603945081034,
+          -0.0525041150060892,
+          0.15650524585049896
+        ],
+        "max": [
+          -0.1527400253814656,
+          0.5485905142769505,
+          1.4193287595340842
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.975,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005650185788598812,
+      "maxSurfaceInset": 0.020283869709035895,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.14708145574180023,
+          -0.05184147146422624,
+          0.15763005472430724
+        ],
+        "max": [
+          0.18725746981114497,
+          0.5492531578188135,
+          1.4204535684078925
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 0.975,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 27,
+      "touchTriangles": 0,
+      "intersectionArea": 0.035201368619422205,
+      "maxSurfaceInset": 0.022153562281056652,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2008403216679883,
+          -0.01371088863984278,
+          0.15247996158821275
+        ],
+        "max": [
+          0.19973073274246658,
+          0.08043844592431888,
+          0.3027850986289896
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 1,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005573075399684808,
+      "maxSurfaceInset": 0.019859537783602832,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.1874999446421861,
+          -0.05083168988790876,
+          0.15809816997342185
+        ],
+        "max": [
+          -0.1524999444931745,
+          0.5786132034884731,
+          1.4090838632307918
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 1,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005573075399684808,
+      "maxSurfaceInset": 0.019859537783602832,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.15250005893409257,
+          -0.05083168988790876,
+          0.15809816997342185
+        ],
+        "max": [
+          0.1875000590831042,
+          0.5786132034884731,
+          1.4090838632307918
+        ]
+      }
+    },
+    {
+      "pitch": -0.4363323129985824,
+      "progress": 1,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 27,
+      "touchTriangles": 0,
+      "intersectionArea": 0.034313443397267725,
+      "maxSurfaceInset": 0.02218633105991313,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.1999999457597732,
+          -0.012374638210155865,
+          0.15378284192815106
+        ],
+        "max": [
+          0.20000006020069128,
+          0.08376734446190595,
+          0.3021632704722359
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.15,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 8,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0003633043824230802,
+      "maxSurfaceInset": 0.0011992473468595,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.3141592272275626,
+          -0.052442351340435206,
+          -0.08361498513141855
+        ],
+        "max": [
+          -0.18695402263855632,
+          -0.021300541002850473,
+          0.0489852617169573
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.175,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 15,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0011799478484704241,
+      "maxSurfaceInset": 0.006896601981999758,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.3031454563786058,
+          -0.04948657865297586,
+          -0.07204969742166854
+        ],
+        "max": [
+          -0.17917122460637191,
+          -0.015603182007543338,
+          0.09614064617940242
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.2,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.002185841461507174,
+      "maxSurfaceInset": 0.013221042679607872,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2894879948899813,
+          -0.046204507843760095,
+          -0.059377203479725874
+        ],
+        "max": [
+          -0.17043549661061996,
+          -0.009278872538269284,
+          0.14811511499664898
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.2,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0006149842786190602,
+      "maxSurfaceInset": 0.0019341370274623126,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.18861710413499294,
+          -0.26084666040930865,
+          -0.06409127686758416
+        ],
+        "max": [
+          -0.153482945505178,
+          -0.020515945091965915,
+          -0.03142346433002234
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.225,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 25,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0037026792685800145,
+      "maxSurfaceInset": 0.02038225663671308,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2721952958391682,
+          -0.04249257006927315,
+          -0.045210613820552886
+        ],
+        "max": [
+          -0.16041391293484508,
+          -0.0021174899437987373,
+          0.20652304769922045
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.225,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0014172160909465762,
+      "maxSurfaceInset": 0.00912649678408263,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.17954765993872923,
+          -0.253717812633801,
+          -0.050717663284235034
+        ],
+        "max": [
+          -0.14282357537639145,
+          -0.013311291839095934,
+          -0.01688349516885786
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.25,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.005569947067528306,
+      "maxSurfaceInset": 0.022364320427346242,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.251589215275885,
+          -0.038521630215986334,
+          -0.030307204946967925
+        ],
+        "max": [
+          -0.1495646071863359,
+          0.005543123416698291,
+          0.26831063665026744
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.25,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0022036455597256505,
+      "maxSurfaceInset": 0.016820384828737503,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.16968238609179287,
+          -0.2460891677613665,
+          -0.03671114788554002
+        ],
+        "max": [
+          -0.13133567828123316,
+          -0.005604288505721339,
+          -0.0016279029027570016
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.275,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0064934928490085675,
+      "maxSurfaceInset": 0.021690449127396275,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.2273751071112937,
+          -0.03430674483731874,
+          -0.014785727477491545
+        ],
+        "max": [
+          -0.13792058397102802,
+          0.013672619109837608,
+          0.3329848388478224
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.275,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0030383713246989147,
+      "maxSurfaceInset": 0.02237853078048163,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.15904142492186168,
+          -0.23799019242974145,
+          -0.022192289119897193
+        ],
+        "max": [
+          -0.11906681158075895,
+          0.0025745326619826675,
+          0.014213032244645277
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.3,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 28,
+      "touchTriangles": 0,
+      "intersectionArea": 0.007519334537055073,
+      "maxSurfaceInset": 0.02226645953647474,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1992876502023353,
+          -0.029863403035075585,
+          0.0012349862141073364
+        ],
+        "max": [
+          -0.12552081344338206,
+          0.022240513440222452,
+          0.4000232410232748
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.3,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003918330389066113,
+      "maxSurfaceInset": 0.01602982551688424,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.14765046100919998,
+          -0.22945052512899772,
+          -0.007280634769987058
+        ],
+        "max": [
+          -0.10607115288328939,
+          0.011194508573772285,
+          0.03050908724953536
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.325,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 20,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00539149334389649,
+      "maxSurfaceInset": 0.016205332777452165,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1665051657700645,
+          -0.02514271413194854,
+          0.017939395874698227
+        ],
+        "max": [
+          -0.11217264111036562,
+          0.03135746661711732,
+          0.4700823305759357
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.325,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004854853225559547,
+      "maxSurfaceInset": 0.019439284501967555,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.13531976992225825,
+          -0.22036164644821282,
+          0.008167005662150263
+        ],
+        "max": [
+          -0.09217138975737094,
+          0.020367253892625656,
+          0.047437836077616057
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.35,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0035694258596905134,
+      "maxSurfaceInset": 0.007475071853323741,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.1295891732171852,
+          -0.020259637942418987,
+          0.034787885693897236
+        ],
+        "max": [
+          -0.09825073782395721,
+          0.04078565830294385,
+          0.5408648494485184
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.35,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00461882570327811,
+      "maxSurfaceInset": 0.022500000894069668,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.12238502396718068,
+          -0.2109579924155446,
+          0.02365871712662066
+        ],
+        "max": [
+          -0.0777692190043657,
+          0.029853282049232904,
+          0.06444171580501196
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.375,
+      "node": "add:boarding-rope-0.17",
+      "name": "Board hand rope.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 4,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00009625971370582789,
+      "maxSurfaceInset": 0.00026601736894776157,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -1.0884675498692509,
+          -0.015229494817082377,
+          0.05167416539721659
+        ],
+        "max": [
+          -0.08381618484062492,
+          0.05049464544639284,
+          0.6118077651038811
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.375,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0046195139964851206,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.10889477444673323,
+          -0.20126934756635032,
+          0.03909424699325188
+        ],
+        "max": [
+          -0.0629408702404155,
+          0.03962196268599108,
+          0.08140595051242132
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.4,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004620302629684166,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.09490398010514581,
+          -0.19132594500987127,
+          0.054379824056106335
+        ],
+        "max": [
+          -0.04776802462207827,
+          0.04964232584761934,
+          0.09822187121438461
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.425,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004621201065940873,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.08036941005922564,
+          -0.18111704453408717,
+          0.06951930154741297
+        ],
+        "max": [
+          -0.0322432058966486,
+          0.05992813060403858,
+          0.11490966072538651
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.45,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004622200766819031,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.0655463949049488,
+          -0.17077865541027706,
+          0.08425002642255525
+        ],
+        "max": [
+          -0.01664590121156166,
+          0.07033891600806766,
+          0.13114957984530057
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.475,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004623301706357474,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.05050864182138627,
+          -0.1603412640462925,
+          0.09851345505026729
+        ],
+        "max": [
+          -0.0010662430113323879,
+          0.08084372576476768,
+          0.14686735440674362
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.5,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004624502871578604,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.03533269313822498,
+          -0.1498359294030313,
+          0.11226037721175212
+        ],
+        "max": [
+          0.014405891054092755,
+          0.09141117124949331,
+          0.1619989597144997
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.525,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004625798249847741,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.020121483340475914,
+          -0.13934664599641916,
+          0.12541239667383486
+        ],
+        "max": [
+          0.029637032567098258,
+          0.10196017727493406,
+          0.17646673260518797
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.55,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00462717920923217,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.00501793125533638,
+          -0.1289138433104992,
+          0.1379081383454287
+        ],
+        "max": [
+          0.0445009742735966,
+          0.11244667857837747,
+          0.19017199809858487
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.575,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004628639731641265,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.009899447114322248,
+          -0.11856888835977512,
+          0.14973587618713854
+        ],
+        "max": [
+          0.05892287522984327,
+          0.12283927579190883,
+          0.20309300728891813
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.6,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004630172743855987,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.02455504387013046,
+          -0.1083437019091281,
+          0.1608915961959305
+        ],
+        "max": [
+          0.07283449647826018,
+          0.13310615376056856,
+          0.21521794074846315
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.625,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 4,
+      "touchTriangles": 0,
+      "intersectionArea": 0.00036121585727665333,
+      "maxSurfaceInset": 0.0008603669924729385,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.26010503268230534,
+          -0.0984002485642841,
+          0.0090691646011435
+        ],
+        "max": [
+          -0.21281428460430107,
+          0.14308796451960393,
+          0.06423650753543707
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.625,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0038255402820735348,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.03872110968691887,
+          -0.09841366935725705,
+          0.17125098106934578
+        ],
+        "max": [
+          0.08601185776492316,
+          0.14307454372663098,
+          0.22641832400363937
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.65,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 5,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0011505994885224143,
+      "maxSurfaceInset": 0.0057905210126444895,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2547846764210602,
+          -0.08871051256449335,
+          0.035170254268180476
+        ],
+        "max": [
+          -0.20868847366417562,
+          0.15281006790017249,
+          0.09103981606806451
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.65,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 11,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0026790378272202268,
+      "maxSurfaceInset": 0.02003195651886125,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.05240021988746421,
+          -0.08872708665713679,
+          0.18090098191513876
+        ],
+        "max": [
+          0.0984964226443488,
+          0.15279349380752905,
+          0.23677054371502276
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.675,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 7,
+      "touchTriangles": 0,
+      "intersectionArea": 0.001816645918180332,
+      "maxSurfaceInset": 0.010906493249855098,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24890249468043651,
+          -0.07930488347905745,
+          0.06051784762140478
+        ],
+        "max": [
+          -0.20418333882516732,
+          0.1622424653025733,
+          0.11695242996390598
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.675,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 9,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0018677862261606683,
+      "maxSurfaceInset": 0.011442908037679667,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.06553353460823558,
+          -0.0793161285451846,
+          0.1898623004283544
+        ],
+        "max": [
+          0.11025269046350478,
+          0.16223122023644615,
+          0.2462968827708556
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.7,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 9,
+      "touchTriangles": 0,
+      "intersectionArea": 0.002378050265422456,
+      "maxSurfaceInset": 0.016296328588790127,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24254764618750083,
+          -0.0702133695564097,
+          0.08499971331806361
+        ],
+        "max": [
+          -0.1993624507727528,
+          0.17135564263392059,
+          0.14186622175764468
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.7,
+      "node": "add:boarding-post-0.17-0.1",
+      "name": "Board rail post.002",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 6,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0009614619801793791,
+      "maxSurfaceInset": 0.003607921555578819,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.07806914089237602,
+          -0.07021337014631282,
+          0.198158363026482
+        ],
+        "max": [
+          0.12125433630712404,
+          0.17135564204401746,
+          0.25502487146606306
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.725,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 10,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0029318358895510954,
+      "maxSurfaceInset": 0.02206128431697077,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.23597647399819843,
+          -0.06167270248272154,
+          0.10792462906495427
+        ],
+        "max": [
+          -0.19442671224990837,
+          0.17991496998069884,
+          0.1650947344564706
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.75,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 14,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003669683818777594,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2292193190975911,
+          -0.053571975470996056,
+          0.1296153166013754
+        ],
+        "max": [
+          -0.18937732357898215,
+          0.1880297798204454,
+          0.18697199570786124
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.775,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004641485283143313,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2223923187401488,
+          -0.045941067163636815,
+          0.14998156538367008
+        ],
+        "max": [
+          -0.18429688717581288,
+          0.19567084082211056,
+          0.20742119440567736
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.775,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.02927026894661784,
+      "maxSurfaceInset": 0.006718041887697316,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24024187074048528,
+          -0.06839013762925918,
+          0.0629891272974835
+        ],
+        "max": [
+          0.18163904932705596,
+          -0.015364759715723694,
+          0.28985595073521175
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.8,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 16,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004642993052519014,
+      "maxSurfaceInset": 0.02250000089406967,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.21561249006044444,
+          -0.03880970811022463,
+          0.1689397279308914
+        ],
+        "max": [
+          -0.17926899843304547,
+          0.20280910374290526,
+          0.22637348444936511
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.8,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04301814209938109,
+      "maxSurfaceInset": 0.014170378637901618,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.23304005980108888,
+          -0.06134863567141904,
+          0.08192274956173451
+        ],
+        "max": [
+          0.18590540803484812,
+          -0.007900358687270327,
+          0.29422544695186303
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.825,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 10,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0027804535530596463,
+      "maxSurfaceInset": 0.020147425212800107,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20930809212418447,
+          -0.03376924407155761,
+          0.1854556436837818
+        ],
+        "max": [
+          -0.17461324919257745,
+          0.20790034874513014,
+          0.24601191049887022
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.825,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.002015082341563019,
+      "maxSurfaceInset": 0.006565947436415365,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.3664254638712596,
+          -0.24630969695583754,
+          0.09295046978623267
+        ],
+        "max": [
+          -0.15937214271475494,
+          -0.015183163554711998,
+          1.4340621140836445
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.825,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 15,
+      "touchTriangles": 1,
+      "intersectionArea": 0.0017953122689058805,
+      "maxSurfaceInset": 0.005970167246793556,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.02921159050321423,
+          -0.24690547714545935,
+          0.1363837450350287
+        ],
+        "max": [
+          0.17784173065329048,
+          -0.015778943744333807,
+          1.4774953893324405
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.825,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.042689823691364814,
+      "maxSurfaceInset": 0.02029369181306643,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.22639236499780158,
+          -0.057442756965568664,
+          0.09840958118280665
+        ],
+        "max": [
+          0.1894028197748635,
+          -0.0010188726693636276,
+          0.2978594266048781
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.85,
+      "node": "add:boarding-post--0.17-0.1",
+      "name": "Board rail post",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 10,
+      "touchTriangles": 0,
+      "intersectionArea": 0.001416244803369378,
+      "maxSurfaceInset": 0.005146655464828287,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20338136952343963,
+          -0.03165715918940755,
+          0.1999660675276397
+        ],
+        "max": [
+          -0.17024350504358357,
+          0.20984916246721969,
+          0.26876182348229805
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.85,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003706450242512572,
+      "maxSurfaceInset": 0.012807642043912965,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.322465750091681,
+          -0.2905402650918964,
+          0.10542179450774125
+        ],
+        "max": [
+          -0.15788617804266855,
+          -0.00869686696968347,
+          1.445335136335932
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.85,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.002744599225624657,
+      "maxSurfaceInset": 0.011186564766087176,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.015957573948924136,
+          -0.2921613423697222,
+          0.1380872530204581
+        ],
+        "max": [
+          0.1805371459979366,
+          -0.010317944247509259,
+          1.4780005948486488
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.85,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0418407053981671,
+      "maxSurfaceInset": 0.02210513391763179,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.22017089708995266,
+          -0.057584480229173424,
+          0.11286028655711633
+        ],
+        "max": [
+          0.19233992725076168,
+          0.005350786650675704,
+          0.30081697029151255
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.875,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004419393274269259,
+      "maxSurfaceInset": 0.01808395268649593,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.28332854752945646,
+          -0.35438662135454696,
+          0.11538746511752995
+        ],
+        "max": [
+          -0.15645184845732718,
+          -0.003097050887870323,
+          1.447452413131056
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.875,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0032361594840464936,
+      "maxSurfaceInset": 0.01576477615548727,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.055880073282863915,
+          -0.3567057978855556,
+          0.13845555964777367
+        ],
+        "max": [
+          0.1827567723549932,
+          -0.005416227418878983,
+          1.4705205076612997
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.875,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04086376026300918,
+      "maxSurfaceInset": 0.02232454307397919,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.21448733648346407,
+          -0.06022379690903996,
+          0.12532670281135272
+        ],
+        "max": [
+          0.19476838600291724,
+          0.01072910321723692,
+          0.3028646788747822
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.9,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004618584884576057,
+      "maxSurfaceInset": 0.022228848229824905,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.24937525436496996,
+          -0.4275393266386446,
+          0.1231982565167824
+        ],
+        "max": [
+          -0.15512290643655616,
+          0.0013977497836114294,
+          1.4404136734188577
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.9,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.0036487022803634236,
+      "maxSurfaceInset": 0.019874244846170952,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.0902959402165219,
+          -0.4298939300222986,
+          0.13796080774917208
+        ],
+        "max": [
+          0.1845482881449357,
+          -0.0009568536000425232,
+          1.4551762246512474
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.9,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 27,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04013998213103292,
+      "maxSurfaceInset": 0.02200951808875876,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20944682025593916,
+          -0.06404346063472938,
+          0.13583543773090254
+        ],
+        "max": [
+          0.196736513518976,
+          0.014898038184961764,
+          0.3038938904604662
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.925,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004643066694610649,
+      "maxSurfaceInset": 0.022419459401661013,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2241311807816287,
+          -0.4999607678562259,
+          0.12814948847399732
+        ],
+        "max": [
+          -0.15408447427356048,
+          0.0044305002374503966,
+          1.4252011591606013
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.925,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.003973003043266299,
+      "maxSurfaceInset": 0.02209774047401586,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.11575385568007475,
+          -0.5018590364350177,
+          0.13678412436258536
+        ],
+        "max": [
+          0.18580056218814295,
+          0.0025322316586586235,
+          1.4338357950491893
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.925,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04082244942521006,
+      "maxSurfaceInset": 0.0208391182104429,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20563314801919055,
+          -0.06847579777536258,
+          0.14333386574142182
+        ],
+        "max": [
+          0.19811780860004782,
+          0.017541871540235426,
+          0.3038290070556702
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.95,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004617674455390601,
+      "maxSurfaceInset": 0.021716111830979934,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20521623026488192,
+          -0.5620558535183602,
+          0.13145359518172106
+        ],
+        "max": [
+          -0.15327774635448585,
+          0.006438831553669477,
+          1.4069414889607645
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.95,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004256607747280638,
+      "maxSurfaceInset": 0.022496954441232602,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.13475692437327866,
+          -0.5631833940069582,
+          0.135574564524221
+        ],
+        "max": [
+          0.18669540828367473,
+          0.0053112910650716105,
+          1.4110624583032645
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.95,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04162802622499151,
+      "maxSurfaceInset": 0.018915443677120846,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.20273911294610342,
+          -0.07232709593639718,
+          0.14877652948382022
+        ],
+        "max": [
+          0.19910762328719406,
+          0.0191608711805321,
+          0.30317855603083366
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.975,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004587623587829729,
+      "maxSurfaceInset": 0.022167873382095138,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.19291603945081034,
+          -0.6052133079945718,
+          0.1334387922842487
+        ],
+        "max": [
+          -0.1527400253814656,
+          0.007600439963068473,
+          1.391526816027818
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.975,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004469377968055797,
+      "maxSurfaceInset": 0.021778599544746702,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.14708145574180023,
+          -0.6056025818319203,
+          0.1346848891286897
+        ],
+        "max": [
+          0.18725746981114497,
+          0.007211166125720037,
+          1.392772912872259
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 0.975,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "intermediate-sweep-penetration",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.041833892998089116,
+      "maxSurfaceInset": 0.020326088398280737,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.2008403216679883,
+          -0.07495601841561673,
+          0.15223184573307774
+        ],
+        "max": [
+          0.19973073274246658,
+          0.02002001459274906,
+          0.3024414674006533
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 1,
+      "node": "add:boarding-beam--0.17",
+      "name": "Board side beam",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004574730770097653,
+      "maxSurfaceInset": 0.022395239393813937,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.1874999446421861,
+          -0.6213662129955926,
+          0.13443155358775638
+        ],
+        "max": [
+          -0.1524999444931745,
+          0.008078405352396845,
+          1.385417364492243
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 1,
+      "node": "add:boarding-beam-0.17",
+      "name": "Board side beam.001",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 18,
+      "touchTriangles": 0,
+      "intersectionArea": 0.004574730770097653,
+      "maxSurfaceInset": 0.022395239393813937,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          0.15250005893409257,
+          -0.6213662129955926,
+          0.13443155358775638
+        ],
+        "max": [
+          0.1875000590831042,
+          0.008078405352396845,
+          1.385417364492243
+        ]
+      }
+    },
+    {
+      "pitch": 0.4363323129985824,
+      "progress": 1,
+      "node": "add:boarding-plank-0",
+      "name": "Boarding plank 0",
+      "classification": "endpoint-volume-overlap",
+      "penetratingTriangles": 30,
+      "touchTriangles": 0,
+      "intersectionArea": 0.04189447939438268,
+      "maxSurfaceInset": 0.021123193785890802,
+      "containsSeamCenter": false,
+      "objectBoundsInSeamFrame": {
+        "min": [
+          -0.1999999457597732,
+          -0.0757673660093094,
+          0.1537828460821851
+        ],
+        "max": [
+          0.20000006020069128,
+          0.020374589928651335,
+          0.302163280895245
+        ]
+      }
+    }
+  ]
+}

@@ -85,9 +85,23 @@ elif round_no==3:
  for side in [-1,1]:
   bar('Mouth_seam_'+str(side),(0,1.580,.076),(side*.018,1.579,.074),.0012,'beard',head,n=6)
  bpy.context.view_layer.update()
+elif round_no in [4,5,6,7]:
+ if round_no==4:
+  for o in list(root.children_recursive):
+   if o.name.startswith(('Boot_wrap_','Boot_buckle_')):bpy.data.objects.remove(o,do_unlink=True)
+  for label in ['L','R']:
+   sole=bpy.data.objects['Boot_sole_'+label];sole.scale.z*=.70
+ exec((BASE/'tools/pipeline/courier_face_detail.py').read_text(),globals())
+ refine_face(round_no)
+ if round_no>=7:
+  exec((BASE/'tools/pipeline/courier_head_reference_detail.py').read_text(),globals())
+  refine_head_reference_details()
 OUT=DEST/f'round-{round_no}';OUT.mkdir(exist_ok=True)
+# Blender may suffix copied material names on subsequent rounds. Export actual names.
+M={m.name:m for m in bpy.data.materials}
 # Reuse the original export contract, including every named runtime joint.
 export=code.split('# Export only authored asset hierarchy.')[1].split('\n',1)[1].split('# Studio rendering')[0]
+export=export.replace('CI.to_3x3()@tri.normal','CI.to_3x3()@(me.vertices[vi].normal if me.polygons[tri.polygon_index].use_smooth else tri.normal)')
 exec(export,globals())
 scene=bpy.context.scene;scene.cycles.samples=16;scene.render.resolution_x=800;scene.render.resolution_y=1000
 scene.render.resolution_percentage=100
@@ -95,8 +109,12 @@ cam=scene.camera
 def capture(name,position,target,scale):
  cam.location=vec(position);cam.rotation_euler=(vec(target)-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=scale
  scene.render.filepath=str(REVIEW/f'round-{round_no}-{name}.png');bpy.ops.render.render(write_still=True)
-capture('body',(2.2,1.7,4.5),(0,.88,0),2.02)
-capture('face',(1,1.72,3),(0,1.62,0),.40)
+if '--skip-renders' not in sys.argv:
+ capture('body',(2.2,1.7,4.5),(0,.88,0),2.02)
+ capture('face',(1,1.72,3),(0,1.62,0),.40)
+ if round_no>=4:
+  capture('face-front',(0,1.65,3),(0,1.62,0),.36)
+  capture('face-side',(3,1.65,.7),(0,1.62,0),.36)
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'human-courier.blend'))
 assert hashlib.sha256(SOURCE.read_bytes()).hexdigest()==digest
 report={'round':round_no,'sourcePreserved':True,'sourceSHA256':digest,'shoulderWidthBefore':before,'shoulderWidthAfter':width(),'target':'../human-courier-v1/approved-target.png','status':'isolated model iteration, not integrated','joints':[o.name for o in root.children_recursive if o.type=='EMPTY']}

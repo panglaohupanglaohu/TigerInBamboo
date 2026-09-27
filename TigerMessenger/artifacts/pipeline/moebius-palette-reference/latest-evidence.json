@@ -1,0 +1,36 @@
+{
+  "task": "moebius-palette-reference final palette review",
+  "target": "User reference-driven regional palette",
+  "visual_observations": {
+    "source": "Assistant personally inspected latest actual 8931 screenshots",
+    "image_sha256": "6a3e69a42d9322dd069609160d0e371f424ce2d66c1c20c90763015f272e732b",
+    "completed": [
+      "Inspected actual game screenshot: both visible sails ivory with coral borders; blue hull, sand oars and lavender spars.",
+      "Scene-root wreck also recolored to avoid remaining dark red sail."
+    ],
+    "remaining": [
+      "Gate water line artifacts remain; no claim full gameplay regression"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Both animated ships retain 26 crew each",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Both oars change quaternion on update",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No browser errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text only triage; not image acceptance",
+    "Do not count palette edits as tiger modeling iterations"
+  ]
+}

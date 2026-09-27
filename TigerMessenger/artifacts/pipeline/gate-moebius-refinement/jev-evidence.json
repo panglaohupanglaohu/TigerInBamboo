@@ -1,0 +1,44 @@
+{
+  "asset": "Gate of Sighs Moebius V10",
+  "revision": 3,
+  "visual_observations": {
+    "source": "Astra inspected r03 overview and detail against user approved target v4",
+    "image_hashes": {
+      "r03-overview.png": "61243e9b7691c35894a08a5c01e4b218d22d560714aa3a94e8494a964e1d5c14",
+      "r03-detail.png": "dc1301065448164cb40969efa752ae349306104ca49c6ba83f164157019d5e9e"
+    },
+    "improved": [
+      "Arch engraved joints, double-sided bearings and rivets",
+      "Botanical fine branches, leaves, seals and return pipes",
+      "Blue stone and brass respond to light"
+    ],
+    "remaining": [
+      "Canyon surfaces too smooth",
+      "Missing target ink detail and natural rock layers",
+      "Large bird flocks obscure gate; story flock behavior untouched",
+      "Still a large overall target gap"
+    ]
+  },
+  "checks": [
+    {
+      "name": "2880 gate train clearance rays",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Original movement solver path 15.8 seconds",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Complete manual boarding and story regression",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Three arch depths and six ecological capsules unchanged",
+    "Do not mix holy city style",
+    "Rock candidate visually rejected and withdrawn"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "version": "highland-gate-r20",
+  "target": "Approved Highland Gate V1: ivory stepped twins, three rail portals, blue banners, natural cliffs, daylight holy civilization",
+  "visual_observation": {
+    "source": "Astra inspection of r20-near.png and target-v1.png",
+    "image_sha256": "e58fdbc10c6082a5b7121effc8c737b3305c2604b67bc0fc20af8a3b3c41a696",
+    "findings": [
+      "Ivory twin towers and blue banners present; bulky identity preserved",
+      "Masonry much too regular; rocks and vegetation remain stylized blocks",
+      "Sky is mint green and walls uniformly dull; target sky is pale blue with bright limestone",
+      "Three portals follow curved actual rail; stone corridor blocks oblique view but clearance measured separately"
+    ]
+  },
+  "checks": [
+    {
+      "name": "1944 dual-lane swept rays zero gate hits",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "195 walkway support and wall solver probes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full staircase traversal and real vehicle transit",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not alter Moebius Gate",
+    "Do not mix civilizations",
+    "Preserve original Blender data",
+    "Finish 30 actual model iterations, not screenshot counts"
+  ]
+}

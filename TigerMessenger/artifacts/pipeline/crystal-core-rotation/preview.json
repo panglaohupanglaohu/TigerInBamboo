@@ -1,0 +1,65 @@
+{
+  "objects": [
+    "moebius-grand-community-tower",
+    "moebius-trackside-gold-right",
+    "moebius-trackside-gold-left",
+    "moebius-swamp-placement",
+    "crystal-mother-port",
+    "v7-bank-rock-0",
+    "v7-bank-rock-1",
+    "v7-bank-rock-2",
+    "v7-swamp-outer-embankment",
+    "v7-continuous-swamp-promenade",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector"
+  ],
+  "scope": "Disposable browser rigid spherical rotation of core geometry; not gameplay relocation",
+  "trials": [
+    {
+      "deg": 0,
+      "local": {
+        "lx": 0.2799999999999999,
+        "lz": 0.08000000000000013
+      },
+      "nearest": {
+        "u": 0.2905,
+        "distance": 21.180911219582768
+      }
+    },
+    {
+      "deg": 15,
+      "local": {
+        "lx": 0.29116475496914074,
+        "lz": 0.004804733474419784
+      },
+      "nearest": {
+        "u": 0.29475,
+        "distance": 13.282904292235493
+      }
+    },
+    {
+      "deg": 30,
+      "local": {
+        "lx": 0.28248711305964286,
+        "lz": -0.07071796769724469
+      },
+      "nearest": {
+        "u": 0.29875,
+        "distance": 4.036630448201368
+      }
+    }
+  ],
+  "errors": []
+}

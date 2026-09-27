@@ -1,0 +1,98 @@
+[
+  {
+    "id": "left-gate-bastion",
+    "x": 49.1,
+    "z": 10,
+    "w": 9.4,
+    "d": 8,
+    "bottom": 16,
+    "top": 28,
+    "shaft": false,
+    "cap": false,
+    "bodySlenderness": 1.276595744680851
+  },
+  {
+    "id": "right-gate-bastion",
+    "x": 73,
+    "z": 9,
+    "w": 9.6,
+    "d": 8,
+    "bottom": 16,
+    "top": 29.6,
+    "shaft": false,
+    "cap": false,
+    "bodySlenderness": 1.416666666666667
+  },
+  {
+    "id": "left-outer-turret",
+    "x": 42.4,
+    "z": 6,
+    "w": 7.2,
+    "d": 8.4,
+    "bottom": 16,
+    "top": 22,
+    "shaft": false,
+    "cap": false,
+    "bodySlenderness": 0.8333333333333333
+  },
+  {
+    "id": "right-outer-turret",
+    "x": 81.2,
+    "z": 3,
+    "w": 7.4,
+    "d": 9.2,
+    "bottom": 16,
+    "top": 24.5,
+    "shaft": false,
+    "cap": false,
+    "bodySlenderness": 1.1486486486486487
+  },
+  {
+    "id": "left-blue-tower",
+    "x": 48.2,
+    "z": -3.5,
+    "w": 9.4,
+    "d": 8.6,
+    "bottom": 16,
+    "top": 31,
+    "shaft": false,
+    "cap": true,
+    "bodySlenderness": 1.5957446808510638
+  },
+  {
+    "id": "right-blue-tower",
+    "x": 72,
+    "z": -3.6,
+    "w": 11,
+    "d": 9.6,
+    "bottom": 16,
+    "top": 35.2,
+    "shaft": false,
+    "cap": true,
+    "bodySlenderness": 1.7454545454545458
+  },
+  {
+    "id": "central-stair-keep",
+    "x": 60,
+    "z": -4.4,
+    "w": 8.6,
+    "d": 10.8,
+    "bottom": 16,
+    "top": 42.3,
+    "shaft": true,
+    "cap": false,
+    "bodySlenderness": 3.0581395348837206
+  },
+  {
+    "id": "offset-high-keep",
+    "x": 63.8,
+    "z": -14.6,
+    "w": 13,
+    "d": 11.6,
+    "bottom": 16,
+    "top": 43.6,
+    "shaft": false,
+    "cap": true,
+    "bodySlenderness": 2.123076923076923
+  }
+]

@@ -26,6 +26,7 @@ import {
   TRANQ_HITS_AIRCRAFT,
 } from "../world/tranquilizer.js";
 import { setBubblePodCannonBgm } from "../audio/sfx.js";
+import { sfxBubbleCannon, sfxBubblePop, hintEngine } from "../audio/worldSfx.js";
 
 const BOARD_RANGE = 5.2;
 const FIRE_COOLDOWN = 0.09;
@@ -396,6 +397,7 @@ export function createBubblePodRide({
 
     // 炮口火焰：细长锥体沿射击方向，贴炮口、短促、不挡座舱视野
     spawnMuzzleFlame(_muzzle, _dir);
+    sfxBubbleCannon(_muzzle);
     setBubblePodCannonBgm(true);
     return true;
   }
@@ -450,6 +452,7 @@ export function createBubblePodRide({
    * @param {object} shot
    * @returns {boolean}
    */
+  const _engineTmp = new THREE.Vector3();
   function tryTranqHit(shot) {
     if (!shot?.group || shot.hit || shot.popping || shot.stuck) return false;
     const lm = getLandmarks?.() || null;
@@ -634,11 +637,12 @@ export function createBubblePodRide({
 
   function update(dt) {
     if (fireCd > 0) fireCd = Math.max(0, fireCd - dt);
+    if (riding && pod) hintEngine("ride-bubble-pod", "light", pod.getWorldPosition(_engineTmp), 0.6, true);
     for (let i = shots.length - 1; i >= 0; i--) {
       const shot = shots[i];
       // 飞行中检测命中 → 粘附（不再爆裂消失）
       if (!shot.dead && !shot.popping && !shot.stuck) {
-        tryTranqHit(shot);
+        if (tryTranqHit(shot)) sfxBubblePop(shot.group.position);
       }
       if (!updateBubbleShot(shot, dt, planetRadius)) shots.splice(i, 1);
     }

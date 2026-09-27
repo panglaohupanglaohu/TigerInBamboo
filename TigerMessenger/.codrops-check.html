@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>codrops-check</title>
+<style>body{margin:0;background:#4a5568;font:12px monospace;color:#fff}canvas{display:block}</style></head>
+<body>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+window.onerror = function (msg, src, line) { document.title = 'ERR ' + String(msg).slice(0, 80) + ' @' + (src||'').split('/').pop() + ':' + line; };
+import * as THREE from "three";
+import { buildHumanCourierCodrops } from "./src/assets/characters/courierCodrops.js?v=codrops-3";
+try {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x4a5568);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(innerWidth, innerHeight);
+  document.body.appendChild(renderer.domElement);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x556677, 1.5));
+  const sun = new THREE.DirectionalLight(0xfff2e0, 1.9); sun.position.set(2, 3, 4); scene.add(sun);
+  const rim = new THREE.DirectionalLight(0xd0e0ff, .7); rim.position.set(-3, 2, -2); scene.add(rim);
+  const courier = buildHumanCourierCodrops({});
+  courier.updateMatrixWorld(true);
+  scene.add(courier);
+  const camera = new THREE.PerspectiveCamera(35, innerWidth/innerHeight, 0.05, 50);
+  const ctr = new THREE.Box3().setFromObject(courier).getCenter(new THREE.Vector3());
+  camera.position.set(ctr.x + 0.9, ctr.y + 0.55, ctr.z + 1.35);
+  camera.lookAt(ctr);
+  const loop = () => { renderer.render(scene, camera); requestAnimationFrame(loop); };
+  loop();
+  document.title = 'OK bbox ' + JSON.stringify([+ (courier.userData.bodyBaseY||0).toFixed(2)]);
+} catch (e) {
+  document.title = 'THROW ' + String(e && e.message || e).slice(0, 120);
+}
+</script></body></html>

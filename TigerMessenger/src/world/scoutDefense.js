@@ -6,6 +6,7 @@
 // ============================================================================
 import * as THREE from "three";
 import { createTripleGateScoutAircraft } from "./planetV8/tripleGateScout.js";
+import { hintEngine } from "../audio/worldSfx.js";
 
 const DEFAULT_COUNT = 5;
 const ZONE_DWELL = 18;
@@ -119,6 +120,8 @@ export function createScoutDefenseSquad(options = {}) {
     getFleetAnchor = () => null,
     /** 战场上待指示的目标（由 vanguardAssault 提供） */
     getFleetTargets = () => [],
+    /** 2026-09-18 袭击巡回区（书店镇/古堡）：返回 [{name, obj}]，侦察队按序巡回 */
+    getRaidZones = () => [],
     /** 曳光弹指示回调：把目标推给舰队的优先打击名单 */
     onDesignate = () => {},
   } = options;
@@ -136,6 +139,8 @@ export function createScoutDefenseSquad(options = {}) {
   const units = [];
   const shots = [];
   const targets = [];
+  var raidZones = [];
+  var raidCursor = 0;
   /** 战场目标（舰队分队专用）。与 targets 分开：两支分队打的是两件事 */
   const fleetTargets = [];
   const nFleet = Math.max(0, Math.min(count | 0, fleetCount | 0));
@@ -206,7 +211,24 @@ export function createScoutDefenseSquad(options = {}) {
   }
 
   function homePosition(index, out = new THREE.Vector3()) {
-    const frame = zone === "gate" ? gateHomeFrame() : cityHomeFrame();
+    var frame;
+    if (zone === "gate") frame = gateHomeFrame();
+    else if (zone === "city") frame = cityHomeFrame();
+    else {
+      var rz = raidZones.find(function (z) { return z.name === zone; });
+      var anchor = rz && rz.obj;
+      if (!anchor) frame = cityHomeFrame();
+      else {
+        anchor.updateMatrixWorld(true);
+        var em = anchor.matrixWorld.elements;
+        frame = {
+          center: new THREE.Vector3(em[12], em[13], em[14]),
+          forward: new THREE.Vector3(em[8], em[9], em[10]).normalize(),
+          right: new THREE.Vector3(em[0], em[1], em[2]).normalize(),
+          up: new THREE.Vector3(em[4], em[5], em[6]).normalize(),
+        };
+      }
+    }
     const slot = HOME_SLOTS[index % HOME_SLOTS.length];
     out
       .copy(frame.center)
@@ -274,6 +296,7 @@ export function createScoutDefenseSquad(options = {}) {
    * 贴到艇边的归登陆艇撞）。这里只把目标推进优先打击名单。
    */
   function addFleetTargets(time) {
+    raidZones = getRaidZones?.() || [];
     const list = getFleetTargets?.() || [];
     for (const object of list) {
       if (!object?.parent || object.userData?.dead) continue;
@@ -323,10 +346,34 @@ export function createScoutDefenseSquad(options = {}) {
     return out;
   }
 
+  function addRaidTargets(time) {
+    raidZones = getRaidZones?.() || [];
+    const list = getFleetTargets?.() || [];
+    for (const object of list) {
+      if (!object?.parent || object.userData?.dead) continue;
+      const position = new THREE.Vector3();
+      object.getWorldPosition(position);
+      targets.push({
+        zone,
+        kind: "raid-target",
+        object,
+        position,
+        hit: (at) => {
+          object.userData.scoutHitTime = at;
+          object.userData.hitFlash = 0.35;
+          onHit(zone);
+          return true;
+        },
+      });
+    }
+  }
+
   function scan(time) {
+    raidZones = getRaidZones?.() || [];
     targets.length = 0;
     if (zone === "city") addCityTargets(getCityBirdFlocks?.(), time);
-    else addGateTargets(getGateBirdVortex?.(), time);
+    else if (zone === "gate") addGateTargets(getGateBirdVortex?.(), time);
+    else addRaidTargets(time);
     targetCursor = targets.length ? targetCursor % targets.length : 0;
     // 舰队分队自己的目标池
     fleetTargets.length = 0;
@@ -424,6 +471,7 @@ export function createScoutDefenseSquad(options = {}) {
       tracers.push({ bolt, line, flash, from });
     }
     shots.push({ tracers, to: _targetPos.clone(), t: 0, target, unit, time });
+    // 2026-09-24 用户要求去掉：巡逻机炮/命中爆炸的“砰砰”过于频繁，且听点未接入时全图可闻。
     return true;
   }
 
@@ -446,7 +494,9 @@ export function createScoutDefenseSquad(options = {}) {
 
       const hit = shot.target.hit(time);
       shot.target.pending = false;
-      if (hit) onHit(shot.target.zone);
+      if (hit) {
+        onHit(shot.target.zone);
+      }
       for (const tracer of shot.tracers) {
         root.remove(tracer.bolt, tracer.line, tracer.flash);
         tracer.line.geometry.dispose();
@@ -570,10 +620,13 @@ export function createScoutDefenseSquad(options = {}) {
         projectTangent(_forward, _up, unit.group.userData.forward);
         _right.crossVectors(_up, _forward).normalize();
         if (_right.lengthSq() < 1e-8) _right.copy(frame.right);
+        const isRaid = target.kind === "raid-target";
+        const alt = isRaid ? (7.5 + (unit.index % 3) * 3.0) : slot.up;
+        const attackDist = isRaid ? 35.0 : ATTACK_RANGE;
         _desired
           .addScaledVector(_forward, slot.forward)
           .addScaledVector(_right, slot.side)
-          .addScaledVector(_up, slot.up);
+          .addScaledVector(_up, alt);
         // 编队间隔约束：每架机都对邻机保留安全半径，追击时仍会共同收拢，
         // 但不会因为目标移动或换区转场而相互穿插。
         for (const other of units) {
@@ -587,7 +640,7 @@ export function createScoutDefenseSquad(options = {}) {
         moveUnit(unit, _desired, dt, SCOUT_SPEED + (unit.index % 2) * 0.8);
         if (
           unit.attackCd <= 0 &&
-          unit.group.position.distanceTo(target.position) <= ATTACK_RANGE
+          unit.group.position.distanceTo(target.position) <= attackDist
         ) {
           makeShot(unit, target, time);
         }
@@ -633,9 +686,15 @@ export function createScoutDefenseSquad(options = {}) {
     const delta = Math.min(0.05, Math.max(0, Number(dt) || 0));
     zoneT += delta;
     scanT -= delta;
-    if (zoneT >= ZONE_DWELL) {
+    const dwell = (zone === "bookshop" || zone === "citadel") ? 45 : ZONE_DWELL;
+    if (zoneT >= dwell) {
       zoneT = 0;
-      zone = zone === "city" ? "gate" : "city";
+      // 2026-09-18 袭击巡回：city → gate → [bookshop → citadel]* → city
+      zone = zone === "city" ? "gate" : zone === "gate" && raidZones.length
+        ? raidZones[raidCursor++ % raidZones.length].name
+        : zone === "raid" || (raidZones.length && zone !== "city" && zone !== "gate")
+          ? "city"
+          : "gate";
       targets.length = 0;
       scanT = 0;
     }
@@ -645,7 +704,13 @@ export function createScoutDefenseSquad(options = {}) {
     }
     tickShots(delta, time);
     updateUnits(delta, time);
+    // 侦察机引擎：只登记，管理器挑最近两架；玩家驾驶的那架由乘坐逻辑登记
+    for (const unit of units) {
+      if (unit.manual || unit.group.visible === false) continue;
+      hintEngine("scout-" + unit.index, "jet", unit.group.getWorldPosition(_engineTmp), 0.6);
+    }
   }
+  const _engineTmp = new THREE.Vector3();
 
   root.userData.members = units.map((unit) => unit.group);
   root.userData.units = units;

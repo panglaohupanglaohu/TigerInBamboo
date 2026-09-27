@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "b5ee17c7c86dd7217fdca1b43b7c1fb63befaa5978e22aa014dfc8abb50b7294",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.8
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.5,
+      "probabilities": {
+        "navigation": 0.26,
+        "geometry": 0.6,
+        "dressing": 0,
+        "lighting": 0,
+        "review": 0.14
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.97
+    }
+  },
+  "usage": {
+    "input_tokens": 780,
+    "output_tokens": 91,
+    "cost_usd": 0.000328,
+    "credits_remaining_usd": 4.997206
+  },
+  "elapsed_ms": 1531,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full manual story/boarding regression",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

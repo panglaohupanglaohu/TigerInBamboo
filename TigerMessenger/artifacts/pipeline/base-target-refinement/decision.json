@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "0eab060a67a429bd7e8804217bce65fb3ff3507365cfaa0b89b2e3005a5ea978",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.85
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.64,
+      "probabilities": {
+        "geometry": 0.15,
+        "lighting": 0,
+        "dressing": 0.02,
+        "navigation": 0.7,
+        "review": 0.13
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.97
+    }
+  },
+  "usage": {
+    "input_tokens": 1049,
+    "output_tokens": 91,
+    "cost_usd": 0.000441,
+    "credits_remaining_usd": 4.977914
+  },
+  "elapsed_ms": 4785,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full end-to-end war delivery at Saihoji",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

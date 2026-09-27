@@ -1,0 +1,64 @@
+{
+  "task": "Bookshop industrial base actual scene quality triage during authorized two-hour construction session",
+  "target": "Four shops: three large widely spaced steampunk bookshop factories around a large complete circular seafront plaza; original Hard to Find stays a small tourist shop. Reference-specific locust, ant and beetle robots. Working harbor cargo equipment. Sphere-conforming low land.",
+  "visual_observations": {
+    "source": "Assistant inspected current actual game screenshots and six neutral-light robot front/back renders; Jev receives text only",
+    "image_sha256": "f09631bab8716426b6b7f2da3cae9275d4538a6ec4e2eed07934f5a78cf9f9c2",
+    "completed": [
+      "Three factory compounds have separate multi-bay production halls, distinctive clock / steep-gable / glass-dome fronts",
+      "Original tourist shop is restored to human door scale and separate from cargo track",
+      "Waterfront geometry is circular, with the rear service road moved outside factory walls",
+      "Reference-specific olive biped, copper seated boiler robot with cup, and sage wheeled robot are present; malformed normals fixed",
+      "Hoist traverses ship-to-shore, steam flywheel/piston and machining slide visibly move",
+      "Factory entrance ironwork and interior bookshelves inspected",
+      "Three curved freight spurs join the common circular track",
+      "Latest real keyboard movement and three indoor camera checks passed",
+      "Robot GLBs imported into a separate background Blender process with matching triangles and finite vertices"
+    ],
+    "remaining": [
+      "Factory sculpted stone details, scenic density and surface nuance still simpler than painted target",
+      "Robot visual self-scores are subjective, static asset scores; no animation rig, production orders or combat AI implemented",
+      "Procedural patina is not baked into portable GLB; action targets are concepts, not implemented animation"
+    ],
+    "final_harbor_review": {
+      "image_sha256": "da66a1eaeccb9091c967d97c5575d468ac411b24550caf09f2c6011e7979d075",
+      "observed": "Ship has visible freeboard, brass portholes and rub rails outside the hull bevel. Stayed cantilever crane and inland counterweight present."
+    }
+  },
+  "checks": [
+    {
+      "name": "three public shop and three workshop routes ground support",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "perimeter and dock route final clearances",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current actual scene finite geometry and normalized normals",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "latest hands-on camera and movement check",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Do not replace original Hard to Find",
+    "Do not claim illustrated target fidelity or combat/production gameplay complete",
+    "Robot quality scores must be based on actual meshes, not concept images",
+    "Do not count generated screenshots as independent manual art iterations"
+  ],
+  "evidence_revision": {
+    "live-report.json": "6251103e3be6501a89c4568795a02b88bd1e8a1ea8e20dfb2d52ff5455159c79",
+    "route-check.json": "97423d739b957bb4efb3376f8edc67dd2391ac571b40466df5f4904d89d012bc",
+    "playtest.json": "fc28097786269d8f646f428eaf0f164dd89d227c4740d24f76251ff4953ba795",
+    "viewer-check.json": "becf9d3c26204f1514cdb5c629443b47bba886cb2f2dd8cdaca54e740f7dab50",
+    "delivery-check.json": "297263b65a8b55090c06a29703b20104c35bfeee0a2285787c467167937d7597",
+    "robot-scores.json": "92007e7b309dc3e5dc0225843fc2f5400189065848bb4a83b4b8d9cc6a7892a0"
+  }
+}

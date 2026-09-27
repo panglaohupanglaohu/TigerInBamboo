@@ -1,0 +1,304 @@
+{
+  "passed": false,
+  "tramRetreat": {
+    "count": 15,
+    "finished": 13,
+    "tramDebug": {
+      "drop": {
+        "cars": 2,
+        "at": 18.70040000000596,
+        "nextTramDrop": 3,
+        "distance": 10.050734638771655,
+        "landing": [
+          -82.58774134711857,
+          84.27872911070483,
+          -108.05721076663912
+        ]
+      },
+      "world": [
+        -91.75366516245313,
+        84.30908502491283,
+        -103.93384006914421
+      ],
+      "hub": [
+        -0.4276262621493631,
+        0.5269317814057052,
+        -0.7344921222618893
+      ],
+      "stage": "ambush",
+      "phase": "fight"
+    },
+    "tramNames": [
+      "heritage-tram-red-11",
+      "heritage-tram-blue-12"
+    ],
+    "drums": false,
+    "patientUid": 79,
+    "preserved": true,
+    "posePreserved": true,
+    "maxPatientStep": 0.16367596363793083,
+    "maxStepFrame": {
+      "time": 54.4000000000005,
+      "phase": "return",
+      "groundPulse": null,
+      "before": [
+        -78.37554195711701,
+        84.87418556516572,
+        -112.766580230952
+      ],
+      "after": [
+        -78.49915347665811,
+        84.84679523928686,
+        -112.66285085537403
+      ],
+      "retreat": {
+        "target": {
+          "x": -91.0838374658592,
+          "y": 81.62398929902416,
+          "z": -102.82816136270748
+        },
+        "finished": false,
+        "blocked": null,
+        "escortedBy": 80
+      }
+    },
+    "blockedWithOccupant": true,
+    "retreat": {
+      "target": {
+        "x": -91.0838374658592,
+        "y": 81.62398929902416,
+        "z": -102.82816136270748
+      },
+      "finished": false,
+      "blocked": "escort-support-discontinuity",
+      "escortedBy": 80
+    },
+    "units": [
+      {
+        "uid": 79,
+        "retreat": {
+          "finished": false,
+          "blocked": "escort-support-discontinuity",
+          "position": [
+            -78.62272381239978,
+            84.81941390725427,
+            -112.5591558093475
+          ]
+        }
+      },
+      {
+        "uid": 80,
+        "retreat": {
+          "finished": false,
+          "blocked": "escort-support-discontinuity",
+          "position": [
+            -78.49618693639694,
+            84.87540905043934,
+            -112.63600881366962
+          ]
+        }
+      },
+      {
+        "uid": 81,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -90.5869713784359,
+            83.03702138148756,
+            -102.1226356976167
+          ]
+        }
+      },
+      {
+        "uid": 82,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -89.83004038398424,
+            83.73796290289545,
+            -102.2288290515281
+          ]
+        }
+      },
+      {
+        "uid": 83,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -90.24799373510876,
+            84.35083936203584,
+            -101.37471668927452
+          ]
+        }
+      },
+      {
+        "uid": 84,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -90.49757656794691,
+            84.25191413196569,
+            -101.2345338440371
+          ]
+        }
+      },
+      {
+        "uid": 85,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -90.84115875985106,
+            83.27680032858117,
+            -101.70896215278567
+          ]
+        }
+      },
+      {
+        "uid": 86,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -89.97289902827394,
+            83.34357469580071,
+            -102.41729494160893
+          ]
+        }
+      },
+      {
+        "uid": 87,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -90.36415395132572,
+            82.31919829117322,
+            -102.88908743534658
+          ]
+        }
+      },
+      {
+        "uid": 88,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -89.42805403495157,
+            82.43973819436803,
+            -103.6141261753996
+          ]
+        }
+      },
+      {
+        "uid": 89,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -89.25970176804391,
+            82.70964351923989,
+            -103.54705169962213
+          ]
+        }
+      },
+      {
+        "uid": 90,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -89.59625336622325,
+            83.39019825322289,
+            -102.71051319400172
+          ]
+        }
+      },
+      {
+        "uid": 91,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -90.48168114226742,
+            82.67698409460003,
+            -102.50139324878317
+          ]
+        }
+      },
+      {
+        "uid": 92,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -90.75973297840649,
+            83.3929126905149,
+            -101.6880004444269
+          ]
+        }
+      },
+      {
+        "uid": 93,
+        "retreat": {
+          "finished": true,
+          "blocked": null,
+          "position": [
+            -91.66359020485666,
+            82.67416411001366,
+            -101.46710387053089
+          ]
+        }
+      }
+    ]
+  },
+  "reachedFight": true,
+  "waveCount": 2,
+  "blockedWithAshore": true,
+  "started": {
+    "time": 54.0000000000005,
+    "phase": "return",
+    "departure": {
+      "cleared": true,
+      "waves": 3,
+      "ashore": 0,
+      "onIsland": 0,
+      "boatsClear": true,
+      "boatClearRadius": 17.63927707004706,
+      "reason": "clear",
+      "source": "actual-embark-plus-local-actors-and-vessel-clearance"
+    }
+  },
+  "completed": {
+    "time": 66.00000000000053,
+    "count": 1
+  },
+  "last": {
+    "phase": "siege",
+    "departure": {
+      "cleared": true,
+      "waves": 5,
+      "ashore": 109,
+      "onIsland": 0,
+      "boatsClear": true,
+      "boatClearRadius": 17.63927707004706,
+      "reason": "clear",
+      "source": "actual-embark-plus-local-actors-and-vessel-clearance"
+    },
+    "roll": {
+      "active": false,
+      "completed": 1,
+      "reason": "completed",
+      "pending": false
+    }
+  },
+  "scope": "Tram car, injured actor and escort positions are diagnostic injections, injured flag injected. Actual 8931 game scene and original two waves + actual embark ownership. Restored chapter3 save, held RAF, manually stepped production garden/battle, fixed nearby fleet and injected 600 hit counter. No phase/embark/clearance writes. Not a natural full combat playthrough. Overall acceptance remains false: 13 reached original home directions but dry-ground home was not validated; injured actor and escort stopped on support discontinuity after leaving the island.",
+  "sourceHash": "9781594459dfb283af808dde2679341f8e35a12c6971db4b852bc2959f58b54b",
+  "variant": "default-incremental-safe-withdrawal",
+  "rollSafetyPassed": true,
+  "allReturnedToDryGround": false
+}

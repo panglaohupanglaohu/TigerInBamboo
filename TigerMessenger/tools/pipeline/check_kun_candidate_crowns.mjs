@@ -1,0 +1,9 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import {readFile,writeFile} from 'node:fs/promises';
+const base='TigerMessenger/artifacts/pipeline/saihoji-target-integration/';
+const input=JSON.parse(await readFile(base+'kun-cover-replacement-candidates.json','utf8'));
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+try{const page=await browser.newPage();await page.goto('http://localhost:8931/TigerMessenger/artifacts/pipeline/kun-roll-model/');await page.waitForFunction(()=>window.rollReview?.kun,null,{timeout:120000});
+const rows=await page.evaluate(async input=>{const T=await import('three');const {kun,pose}=rollReview;pose(0);const island=kun.getObjectByName('leviathan-island'),leaf=[];kun.traverse(n=>{if(n.isMesh&&['n10','n11','n12'].includes(n.userData.sourceNodeId)&&n.visible)leaf.push(n)});const ray=new T.Raycaster(),up=new T.Vector3(0,1,0).transformDirection(island.matrixWorld);return [...input.accepted,...input.accepted.map(r=>({...r,id:r.id+"-original",candidate:r.original}))].map(row=>{const origin=island.localToWorld(new T.Vector3(...row.candidate));ray.layers.enableAll();ray.set(origin.clone().addScaledVector(up,15),up.clone().negate());ray.far=15;const hits=ray.intersectObjects(leaf,false);const roof=hits.length?Math.min(...hits.map(h=>h.point.clone().sub(origin).dot(up))):null;return {id:row.id,canopyClearanceWorld:roof,passed:roof!==null&&roof>=1.22,leafMeshes:leaf.length,nearestCover:Math.min(...kun.userData.saihojiCoverPoints.map(p=>p.localPoint.distanceTo(new T.Vector3(...row.candidate))))}})},input);
+await writeFile(base+'kun-cover-replacement-crowns.json',JSON.stringify({scope:'actual Web crown ray at candidate points; not foliage volume clearance',rows,passed:rows.every(r=>r.passed)},null,2));console.log(rows);
+}finally{await browser.close()}

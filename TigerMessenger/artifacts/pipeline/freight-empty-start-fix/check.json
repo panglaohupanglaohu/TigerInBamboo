@@ -1,0 +1,92 @@
+{
+  "initial": {
+    "time": 0.052199999988079074,
+    "trains": [
+      {
+        "id": "red",
+        "progress": 0.5032480780924455,
+        "lastStop": "locust",
+        "status": "等待同型三台齐备",
+        "slots": []
+      },
+      {
+        "id": "blue",
+        "progress": 0.5463909150626536,
+        "lastStop": "beetle",
+        "status": "等待同型三台齐备",
+        "slots": []
+      }
+    ]
+  },
+  "restored": {
+    "time": 0.15389999997615816,
+    "trains": [
+      {
+        "id": "red",
+        "progress": 0.503252005556722,
+        "lastStop": "locust",
+        "status": "等待同型三台齐备",
+        "slots": []
+      },
+      {
+        "id": "blue",
+        "progress": 0.5463947503592428,
+        "lastStop": "beetle",
+        "status": "等待同型三台齐备",
+        "slots": []
+      }
+    ]
+  },
+  "realTime": {
+    "time": 11.77190000003577,
+    "trains": [
+      {
+        "id": "red",
+        "progress": 0.503252005556722,
+        "lastStop": "locust",
+        "status": "等待同型三台齐备",
+        "slots": []
+      },
+      {
+        "id": "blue",
+        "progress": 0.5463947503592428,
+        "lastStop": "beetle",
+        "status": "等待同型三台齐备",
+        "slots": []
+      }
+    ]
+  },
+  "mixed": {
+    "red": {
+      "time": 707.8198000000715,
+      "kinds": [
+        "locust",
+        "locust",
+        "locust",
+        "ant",
+        "ant",
+        "ant",
+        "beetle",
+        "beetle",
+        "beetle"
+      ],
+      "visible": true
+    },
+    "blue": {
+      "time": 707.8198000000715,
+      "kinds": [
+        "beetle",
+        "beetle",
+        "beetle",
+        "ant",
+        "ant",
+        "ant",
+        "locust",
+        "locust",
+        "locust"
+      ],
+      "visible": true
+    }
+  },
+  "errors": []
+}

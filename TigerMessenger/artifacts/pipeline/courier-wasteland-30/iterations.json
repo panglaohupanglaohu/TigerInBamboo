@@ -1,0 +1,706 @@
+[
+  {
+    "round": 1,
+    "change": "建立荒途邮差独立原型，完整关节与邮包结构",
+    "sourceHash": "87e158aec6f98df8aaf1cf28fe9145f55fec11faaaf46f0d0a9ca2ad919388fc",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24506,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/01.png"
+  },
+  {
+    "round": 2,
+    "change": "收紧脸部比例与下颌，消除圆鼓卡通嘴",
+    "sourceHash": "4fecf0fbe9f320c07efa49633656d97c1ce2f8774e308b424b00ed32c80ce623",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24506,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/02.png"
+  },
+  {
+    "round": 3,
+    "change": "压低护目镜鼻梁与细化镜圈",
+    "sourceHash": "dcaf035ddeafabbe03327fc5f81167b7075454405b2e4567e0c0e330015fa06e",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24506,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/03.png"
+  },
+  {
+    "round": 4,
+    "change": "降低锈橙饱和度，接近目标图旧漆",
+    "sourceHash": "454fad3937e551b7313430c01fac0c5ecad20bba07f1e4baa14e82d8a424bae9",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24506,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/04.png"
+  },
+  {
+    "round": 5,
+    "change": "缩短硬领片、贴合颈部，减少空洞",
+    "sourceHash": "ad6f4e8e8d5087d8fcc85da790d639e7d381efe75a7cc8afda0e81035e054c8e",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24506,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/05.png"
+  },
+  {
+    "round": 6,
+    "change": "重画随机斜向油彩斑块，去掉横向木纹感",
+    "sourceHash": "4a603f653d95f9ace48ab228d026577a2aaa09c65558b9e51187ebeba7b9daa1",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24506,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/06.png"
+  },
+  {
+    "round": 7,
+    "change": "上臂加入收口的立体褶皱袖筒",
+    "sourceHash": "d390043b33a0170ad3f08e3678f4b324cc4627572a1ad6efe38097da456cd580",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24698,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/07.png"
+  },
+  {
+    "round": 8,
+    "change": "弧形短外套包裹躯干，打破盒状胸甲",
+    "sourceHash": "85a9c86c4bb8c15443397e6d047fbdd4b7a9383644e6b5641e32ae6abdc2a9a2",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24826,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/08.png"
+  },
+  {
+    "round": 9,
+    "change": "肩甲改为薄削边，减少大方块",
+    "sourceHash": "7bcdfb2e42f7945247613c1293ddbf51becc8265fdd93e03ebbd3d24afc02ef7",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24826,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/09.png"
+  },
+  {
+    "round": 10,
+    "change": "脸部压低嘴唇并削减外凸下颌",
+    "sourceHash": "ac9cdbfd6320efe6526ccd22b8413439cb92e90200498153a360a3aa09e30412",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24826,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/10.png"
+  },
+  {
+    "round": 11,
+    "change": "修正外套曲面正反面，检查胸背包覆",
+    "sourceHash": "45ddf5751d891b30a06014b8521a93733133437b0d1f74c979cacd4638fe39d1",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24826,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/11.png"
+  },
+  {
+    "round": 12,
+    "change": "外套门襟变为窄叠片，露出自然曲面",
+    "sourceHash": "903f385c21d78cc0435c924c71ed8dc725b74f016a8a923d59c600a5016a6ae8",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24826,
+      "size": [
+        0.7916413221571583,
+        1.6436562036077402,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/12.png"
+  },
+  {
+    "round": 13,
+    "change": "肩袖片增加错落与倾斜，削弱整齐装甲感",
+    "sourceHash": "3083b9bdb1716198281342bc9375f874ab806c10fbd430569601ebc62be33096",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24826,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/13.png"
+  },
+  {
+    "round": 14,
+    "change": "破损衣摆增加侧向碎片与布层",
+    "sourceHash": "536aa8cd9919e717ac19d7b8ed850597edec33457b6cbaacc225d4b2a57e51a7",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24898,
+      "size": [
+        0.7916413221571583,
+        1.6436562036077402,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/14.png"
+  },
+  {
+    "round": 15,
+    "change": "替换方形脚趾为斜面磨损鞋头",
+    "sourceHash": "caaabc94dbde784f7616d5325649a9f99430f25c246027cb54072f96965f8e2c",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24930,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/15.png"
+  },
+  {
+    "round": 16,
+    "change": "降低油彩底纹对比，保留大色块而非迷彩",
+    "sourceHash": "e05ae65d0f5cb4a292a8d6d2be4562d42517283879d49cbd83e6514efc4fed74",
+    "stats": {
+      "meshes": 93,
+      "triangles": 24930,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/16.png"
+  },
+  {
+    "round": 17,
+    "change": "头盔加入磨损缺口与深色露底碎漆",
+    "sourceHash": "e96175ec0a5565f94755ea609e86ebc945f066b130eb2a0e0540adc4d95bd16f",
+    "stats": {
+      "meshes": 93,
+      "triangles": 25126,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/17.png"
+  },
+  {
+    "round": 18,
+    "change": "护目镜压扁贴脸，避免玩具式大圆眼",
+    "sourceHash": "7a21d470b6d7e7423368e7da66fa1cefb30267aecccb5d08c734048ed9fb68a5",
+    "stats": {
+      "meshes": 93,
+      "triangles": 25126,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/18.png"
+  },
+  {
+    "round": 19,
+    "change": "头盔裙边增加分片磨损与金属包边",
+    "sourceHash": "2b78ea5afdcda3e58de38a14ac1dc1f637f404a6d392817ed8c5d15024d5c1ad",
+    "stats": {
+      "meshes": 93,
+      "triangles": 25198,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/19.png"
+  },
+  {
+    "round": 20,
+    "change": "邮包鼓起的皮革侧边与垂坠包盖",
+    "sourceHash": "607127320d8f8e679655c355bfce2250b59c9aeea3cbda54d78769e184d1553d",
+    "stats": {
+      "meshes": 93,
+      "triangles": 25718,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/20.png"
+  },
+  {
+    "round": 21,
+    "change": "邮包背带改扁平皮革带，不再像管道",
+    "sourceHash": "f1e62e3931ccf09c8a0e9a744627c3a826ff52a54f7a962d551b984efdc27914",
+    "stats": {
+      "meshes": 93,
+      "triangles": 25646,
+      "size": [
+        0.7916510486994435,
+        1.6436572987080924,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/21.png"
+  },
+  {
+    "round": 22,
+    "change": "手指分节关节与掌心握信夹持",
+    "sourceHash": "02fac36ad040eee3ef2e672c04c0ca040438b3625966d63dc1d39a045c182b3a",
+    "stats": {
+      "meshes": 93,
+      "triangles": 26030,
+      "size": [
+        0.7916510486994435,
+        1.6436572987080924,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/22.png"
+  },
+  {
+    "round": 23,
+    "change": "增加外套翻折领与薄损边",
+    "sourceHash": "8700c6a1e3bc6180bc871edac3718f9b7a75dbacabb2f1be943620f661efa403",
+    "stats": {
+      "meshes": 93,
+      "triangles": 26058,
+      "size": [
+        0.78991014360002,
+        1.6434728549836028,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/23.png"
+  },
+  {
+    "round": 24,
+    "change": "机械小腿增加外侧铰链与分段护片",
+    "sourceHash": "2f22664361a615a2f84604b0c5e90510e6b025033bbb69eb70888ed6934faed4",
+    "stats": {
+      "meshes": 93,
+      "triangles": 26498,
+      "size": [
+        0.7916510486994435,
+        1.6436572987080924,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/24.png"
+  },
+  {
+    "round": 25,
+    "change": "统一皮带与铜扣暗部，避免浅黄积木感",
+    "sourceHash": "cb25837b5060b91f3ea933b3ac93b6b54ac1b26c0f3774635a72b277df6a5159",
+    "stats": {
+      "meshes": 93,
+      "triangles": 26498,
+      "size": [
+        0.7916510486994435,
+        1.6436572987080924,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/25.png"
+  },
+  {
+    "round": 26,
+    "change": "防风镜移至帽冠，整张脸露出",
+    "sourceHash": "019f53bed2eb049e23091e663040f36888ac4e6ee64003e60effaca0fcda5d12",
+    "stats": {
+      "meshes": 93,
+      "triangles": 26498,
+      "size": [
+        0.7916510486994435,
+        1.6436572987080924,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/26.png"
+  },
+  {
+    "round": 27,
+    "change": "镜桥与皮带贴合帽冠，缩小镜片避免压眼",
+    "sourceHash": "5ebfa003ead67fb9da5ac14497737da735a3529559f486f6f7e0da146b7cfca7",
+    "stats": {
+      "meshes": 93,
+      "triangles": 26498,
+      "size": [
+        0.7916413221571583,
+        1.6436562036077402,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/27.png"
+  },
+  {
+    "round": 28,
+    "change": "重塑俊秀面部：收窄鼻翼与下颌、增加眉眼",
+    "sourceHash": "ddb73e77cedf99cb375808556af37ae6e0682341c2d6e58018bd518180d6d5c7",
+    "stats": {
+      "meshes": 95,
+      "triangles": 29714,
+      "size": [
+        0.7916413221571583,
+        1.6436562036077402,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/28.png"
+  },
+  {
+    "round": 29,
+    "change": "帽冠改为不对称软皮折顶，突出帽子轮廓",
+    "sourceHash": "bf8f59b17a923a832e1d9a8ca9214e2d9eebb086902d5e281bd986ff93ef49a7",
+    "stats": {
+      "meshes": 95,
+      "triangles": 29714,
+      "size": [
+        0.78991014360002,
+        1.6377805452150265,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/29.png"
+  },
+  {
+    "round": 30,
+    "change": "帽檐加宽并做侧边上翘与前端折角",
+    "sourceHash": "705c8fbf1bd713b4234b9fb330b5a48683e39ad9e4752f2f99eaa9cd54ae7d6b",
+    "stats": {
+      "meshes": 95,
+      "triangles": 29746,
+      "size": [
+        0.78991014360002,
+        1.6377805452150265,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/30.png"
+  },
+  {
+    "round": 31,
+    "change": "增设环绕帽冠的旧皮革束带",
+    "sourceHash": "769c0ecfd8df4585fa02f0054c3be5b8c8bcc6bcd639b925955c718a1014f909",
+    "stats": {
+      "meshes": 95,
+      "triangles": 30898,
+      "size": [
+        0.78991014360002,
+        1.6377805452150265,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/31.png"
+  },
+  {
+    "round": 32,
+    "change": "帽冠分片缝合线和细针脚",
+    "sourceHash": "f01eb1df7c2abf33fefbc7506f5d8d9548ca5c28ef74224acf0280ca24d3f067",
+    "stats": {
+      "meshes": 96,
+      "triangles": 32050,
+      "size": [
+        0.78991014360002,
+        1.6377805452150265,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/32.png"
+  },
+  {
+    "round": 33,
+    "change": "帽侧增加镜带铜扣与卷边耳护",
+    "sourceHash": "88debccf90399643fc345df162aba920392cb9e7862444e482764c3bd450befa",
+    "stats": {
+      "meshes": 96,
+      "triangles": 32578,
+      "size": [
+        0.78991014360002,
+        1.6377805452150265,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/33.png"
+  },
+  {
+    "round": 34,
+    "change": "帽檐边缘加薄皮革滚边，保留破损橙色层次",
+    "sourceHash": "eade1cd0baf772940a0a67acd02582ce00cca536ec7cd45a9f618e5f2632db72",
+    "stats": {
+      "meshes": 96,
+      "triangles": 32818,
+      "size": [
+        0.78991014360002,
+        1.6377805452150265,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/34.png"
+  },
+  {
+    "round": 35,
+    "change": "细化下唇、鼻梁与眉弓，避免面部玩偶圆球感",
+    "sourceHash": "83dc3a4c21317eb7bc4bc21b7f722458c17c4020738fc7d8aabced302bd4605d",
+    "stats": {
+      "meshes": 96,
+      "triangles": 33858,
+      "size": [
+        0.78991014360002,
+        1.6377805452150265,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/35.png"
+  },
+  {
+    "round": 36,
+    "change": "纠正面部球块：连续下颌面、薄眼睑、自然鼻梁",
+    "sourceHash": "d10c891e5fd81c0b05510f7f66a08e857e1159c8a46784761a31226eb1d1d785",
+    "stats": {
+      "meshes": 96,
+      "triangles": 31458,
+      "size": [
+        0.78991014360002,
+        1.6377805452150265,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/36.png"
+  },
+  {
+    "round": 37,
+    "change": "抬高帽子佩戴位置，帽檐下完整露出眉眼",
+    "sourceHash": "e9865aab9941b82f274a886b2ea66b9ae9f3918d1ee2d53cd6ec555fc7b21f1d",
+    "stats": {
+      "meshes": 155,
+      "triangles": 31458,
+      "size": [
+        0.7916510486994435,
+        1.6860176181985553,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/37.png"
+  },
+  {
+    "round": 38,
+    "change": "帽檐铆钉随帽移动并合并静态帽面网格",
+    "sourceHash": "c08d88477e21b262ef7b11c3f91bf107f184d2ff32e119d824f3d2c2593c4bbb",
+    "stats": {
+      "meshes": 97,
+      "triangles": 31458,
+      "size": [
+        0.78991014360002,
+        1.685833176793974,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/38.png"
+  },
+  {
+    "round": 39,
+    "change": "按新局部参考重塑连续鼻梁、薄唇、下颌和收窄脸型",
+    "sourceHash": "57962fe2e8cb17385bf8db66d73b29da90b66430bebe404043d193f0e8ce0512",
+    "stats": {
+      "meshes": 97,
+      "triangles": 34246,
+      "size": [
+        0.78991014360002,
+        1.685833176793974,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/39.png"
+  },
+  {
+    "round": 40,
+    "change": "依用户纠正改成软质太阳帽加风镜，去掉盔甲帽附件",
+    "sourceHash": "0893a482c9328d5a50fc275fb156298d551ad8d33648655797ad875663e2954e",
+    "stats": {
+      "meshes": 94,
+      "triangles": 32116,
+      "size": [
+        0.78991014360002,
+        1.6604751015767771,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/40.png"
+  },
+  {
+    "round": 41,
+    "change": "依最新参考压低太阳帽帽檐遮住双眼，仅露鼻唇下颌",
+    "sourceHash": "ab675a7b2c36f021e866b866c8629608c8ce33beb3146d5299a21f0b3da41b3e",
+    "stats": {
+      "meshes": 94,
+      "triangles": 32116,
+      "size": [
+        0.78991014360002,
+        1.5975698384188823,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/41.png"
+  },
+  {
+    "round": 42,
+    "change": "闭合软帽侧缝并压平帽顶接缝",
+    "sourceHash": "22245f3db7574269c8f175372f0293581e0ae8099c27b110959c51fc89535d75",
+    "stats": {
+      "meshes": 94,
+      "triangles": 32116,
+      "size": [
+        0.78991014360002,
+        1.590580376607917,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/42.png"
+  },
+  {
+    "round": 43,
+    "change": "重构溜肩翻领夹克、单肩护甲与圆顶宽檐草帽",
+    "sourceHash": "f18211e6f206fb3c76ee1b3ebf1c961dd173226d45df077f5f6993fd2025d51c",
+    "stats": {
+      "meshes": 87,
+      "triangles": 36087,
+      "size": [
+        0.7240521181899776,
+        1.5617487782884116,
+        0.37315857441801775
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/43.png"
+  },
+  {
+    "round": 44,
+    "change": "收短颈部、贴合肩带、将单肩甲改成薄护片",
+    "sourceHash": "f9fb56442dc34f2ff255d8138e82f96870370e193562a6ec84dceb01e73cfc13",
+    "stats": {
+      "meshes": 87,
+      "triangles": 35287,
+      "size": [
+        0.7240521181899776,
+        1.5180645677620959,
+        0.3511953490345102
+      ]
+    },
+    "errors": [],
+    "screenshot": "rounds/44.png"
+  }
+]

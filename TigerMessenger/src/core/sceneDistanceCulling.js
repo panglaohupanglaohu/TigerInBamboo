@@ -12,8 +12,8 @@ import * as THREE from "three";
 
 export const DISTANCE_CULLING_SCHEMA_VERSION = 2;
 
-const DEFAULT_EXCLUDED = /boat|ship|soldier|warship|player|agent|bird|whale|pod|tram|bubble|cloud|sky|sun|moon|ocean|water|sea|planet|lantern-light|volume-shell|window-spark|canopy-groves|slope-grass|hero-cloud/i;
-const DYNAMIC_RE = /messenger|agent|soldier|npc|fox|tiger|boat|ship|tram|pod|whale|bird|aircraft|airship/i;
+const DEFAULT_EXCLUDED = /robot-unit|bookshop-robot-|robot-live|freight|boat|ship|soldier|warship|player|agent|bird|whale|pod|tram|bubble|cloud|sky|sun|moon|ocean|water|sea|planet|lantern-light|volume-shell|window-spark|canopy-groves|slope-grass|hero-cloud|glider|escort/i;
+const DYNAMIC_RE = /robot-unit|bookshop-robot-|robot-live|freight|messenger|agent|soldier|npc|fox|tiger|boat|ship|tram|pod|whale|bird|aircraft|airship|glider|escort/i;
 
 export function createSceneDistanceCulling(THREE_, {
   scene,
@@ -36,16 +36,18 @@ export function createSceneDistanceCulling(THREE_, {
   const _center = new THREE_.Vector3();
   const _scale = new THREE_.Vector3();
 
+  // 深度 6：长翼鸟的翅膀嵌套达 5 层（mesh→outer→inner→model→bird→root），
+  // 走不到 4 层就会漏排除——外翼会被距离剔除单独藏掉（2026-09-18 主人报告）。
   const matchesUpChain = (object, regex) => {
     let node = object;
-    for (let depth = 0; node && depth < 4; depth++) {
+    for (let depth = 0; node && depth < 6; depth++) {
       if (regex.test(node.name || "")) return true;
       node = node.parent;
     }
     return false;
   };
 
-  const isExcluded = (object) => matchesUpChain(object, excluded);
+  const isExcluded = (object) => object.userData.noDistanceCulling === true || matchesUpChain(object, excluded);
 
   const collect = () => {
     entries = [];
@@ -55,8 +57,11 @@ export function createSceneDistanceCulling(THREE_, {
       if (isExcluded(object)) return;
       const geometry = object.geometry;
       if (!geometry?.attributes?.position) return;
-      if (!geometry.boundingSphere) geometry.computeBoundingSphere();
-      const sphere = geometry.boundingSphere;
+      // An instanced forest spans all instance matrices, not just one tree
+      // at its group's origin. Treat the full stand as the culling unit.
+      if (object.isInstancedMesh) object.computeBoundingSphere();
+      else if (!geometry.boundingSphere) geometry.computeBoundingSphere();
+      const sphere = object.isInstancedMesh ? object.boundingSphere : geometry.boundingSphere;
       if (!sphere || !Number.isFinite(sphere.radius)) return;
       if (sphere.radius > maxObjectRadius) return; // 巨物（星球壳/海壳/山体）不参与
 
@@ -116,6 +121,9 @@ export function createSceneDistanceCulling(THREE_, {
   };
 
   const recollect = () => {
+    // Restore only meshes hidden by this culler before rebuilding its registry.
+    // Otherwise collect() drops invisible entries permanently after a camera jump.
+    if(entries)for(const entry of entries)entry.mesh.visible=entry.wasVisible;
     entries = collect();
   };
 

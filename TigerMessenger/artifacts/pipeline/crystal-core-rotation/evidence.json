@@ -1,0 +1,31 @@
+{
+  "task": "Evaluate counterclockwise rigid rotation of mother tower, two surrounding towers and swamp",
+  "visual_observations": {
+    "source": "Assistant inspected 0,15,30-degree overhead views and blue-tram views",
+    "image_sha256": "9af697b5b6e832dc04234ee20aaeaa177abdcc821cebcb6182395db897c277f5",
+    "completed": [
+      "Rigid rotation of core geometry previewed in disposable browser"
+    ],
+    "remaining": [
+      "15 and30 degree placements remain obscured by viaduct and canopy",
+      "30 degree swamp center only4 units from track surface projection",
+      "Preview has not migrated water masks or navigation"
+    ]
+  },
+  "checks": [
+    {
+      "name": "No preview page errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Clear scenic view from train",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "Text-only triage",
+    "Reject automatic adoption; retain current live scene"
+  ]
+}

@@ -1,0 +1,496 @@
+import bpy
+import bmesh
+import math
+from math import pi, sin, cos
+from mathutils import Vector, Matrix, Euler
+import sys
+from pathlib import Path
+
+BASE = Path(__file__).resolve().parents[2]
+source_blend = BASE / 'assets/models/optimized/human-courier-production-v2/head-round1/courier.blend'
+print(f"Loading source blend: {source_blend}")
+bpy.ops.wm.open_mainfile(filepath=str(source_blend))
+
+scene = bpy.context.scene
+head = bpy.data.objects.get('head')
+assert head, "Head object must exist"
+
+# 1. Clean out all legacy and round 1/2 test objects around head/neck/collar
+to_delete = []
+for o in bpy.data.objects:
+    name = o.name
+    if any(name.startswith(p) for p in [
+        'Target', 'Anatomy_', 'Hair_target', 'Folded_linen', 'Linen_neck',
+        'Sun_brooch', 'Brooch_ray', 'Fox_clasp', 'Vest_lapel', 'Cloak_gold_hem'
+    ]):
+        to_delete.append(o)
+    elif name in ['Neck', 'Cloak_folds']:
+        o.hide_render = True
+
+for o in to_delete:
+    bpy.data.objects.remove(o, do_unlink=True)
+
+print(f"Purged {len(to_delete)} legacy / interfering objects.")
+
+# 2. Material Palette (8 colors + nuances matching media_1789766326409.png)
+PALETTE = {
+    'skin_highlight': (0.784, 0.620, 0.463, 1.0), # #c89e76 - Forehead, cheek highlight, nose dorsum
+    'skin_mid':       (0.655, 0.478, 0.337, 1.0), # #a77a56 - Main facial skin midtone
+    'skin_shadow':    (0.525, 0.357, 0.239, 1.0), # #865b3d - Orbital recess, subnasal, cheek hollow
+    'skin_deep':      (0.380, 0.240, 0.160, 1.0), # #613d29 - Upper eye crease shadow
+    'beard_dark':     (0.220, 0.180, 0.169, 1.0), # #382e2b - Boxed beard, mustache, eyebrows
+    'hair_base':      (0.169, 0.133, 0.125, 1.0), # #2b2220 - Signature dark hair
+    'hair_highlight': (0.240, 0.190, 0.175, 1.0), # #3d302c - Hair lock facet highlights
+    'shirt_ivory':    (0.863, 0.820, 0.745, 1.0), # #dcd1be - Crisp linen shirt
+    'cape_wine':      (0.380, 0.080, 0.100, 1.0), # #611419 - Rich wine-red cowl
+    'cape_wine_hi':   (0.480, 0.120, 0.140, 1.0), # #7a1e24 - Wine cape fold highlight
+    'tunic_teal':     (0.150, 0.290, 0.290, 1.0), # #264a4a - Teal lining fold
+    'clasp_gold':     (0.680, 0.520, 0.220, 1.0), # #ad8538 - Antique gold brooch
+    'iris_amber':     (0.612, 0.396, 0.188, 1.0), # #9c6530 - Heroic amber iris
+    'sclera_white':   (0.920, 0.890, 0.840, 1.0), # #eae3d6 - Sclera
+    'pupil_black':    (0.080, 0.060, 0.050, 1.0), # #140f0d - Dark pupil
+}
+
+def get_or_create_material(name, color_rgba, roughness=0.88, metallic=0.0):
+    mat = bpy.data.materials.get(name)
+    if not mat:
+        mat = bpy.data.materials.new(name=name)
+        mat.use_nodes = True
+    bsdf = mat.node_tree.nodes.get('Principled BSDF')
+    if bsdf:
+        bsdf.inputs['Base Color'].default_value = color_rgba
+        bsdf.inputs['Roughness'].default_value = roughness
+        if 'Metallic' in bsdf.inputs:
+            bsdf.inputs['Metallic'].default_value = metallic
+    return mat
+
+MATS = {k: get_or_create_material(k, PALETTE[k], 
+                                  roughness=0.28 if 'gold' in k else 0.88,
+                                  metallic=0.80 if 'gold' in k else 0.0) 
+        for k in PALETTE}
+
+MAT_ORDER = list(PALETTE.keys())
+MAT_INDEX_MAP = {k: i for i, k in enumerate(MAT_ORDER)}
+
+def create_poly_object(name, verts, faces, face_materials, parent=head):
+    me = bpy.data.meshes.new(name)
+    for m_key in MAT_ORDER:
+        me.materials.append(MATS[m_key])
+        
+    bm = bmesh.new()
+    bm_verts = [bm.verts.new(v) for v in verts]
+    
+    for f_indices, m_key in zip(faces, face_materials):
+        try:
+            face_verts = [bm_verts[i] for i in f_indices]
+            f = bm.faces.new(face_verts)
+            f.material_index = MAT_INDEX_MAP[m_key]
+        except Exception as e:
+            pass
+            
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(me)
+    bm.free()
+    
+    for poly in me.polygons:
+        poly.use_smooth = False
+        
+    obj = bpy.data.objects.new(name, me)
+    scene.collection.objects.link(obj)
+    if parent:
+        obj.parent = parent
+    return obj
+
+# -------------------------------------------------------------------------
+# 3. Target Face & Head Construction (Round 3)
+# -------------------------------------------------------------------------
+V_map = {}
+def add_v(name, pos):
+    V_map[name] = Vector(pos)
+
+# Centerline vertices (X = 0)
+add_v('crown_front',   (0.000, -0.040,  0.155))
+add_v('forehead_hi',    (0.000, -0.068,  0.138))
+add_v('forehead_mid',   (0.000, -0.078,  0.112))
+add_v('glabella',       (0.000, -0.084,  0.086)) # between brows
+add_v('sellion',        (0.000, -0.086,  0.072)) # nose root
+add_v('rhinion',        (0.000, -0.100,  0.048)) # straight Roman bridge
+add_v('supratip',       (0.000, -0.112,  0.028))
+add_v('nasal_tip',      (0.000, -0.120,  0.018)) # sharp triangular tip
+add_v('infratip',       (0.000, -0.108,  0.010))
+add_v('subnasale',      (0.000, -0.092,  0.005)) # nose base
+add_v('philtrum',       (0.000, -0.088, -0.008))
+add_v('upper_lip',      (0.000, -0.092, -0.016))
+add_v('mouth_center',   (0.000, -0.086, -0.024))
+add_v('lower_lip',      (0.000, -0.088, -0.032))
+add_v('chin_groove',    (0.000, -0.080, -0.045)) # soul patch indent
+add_v('chin_apex',      (0.000, -0.086, -0.062)) # strong chin
+add_v('chin_base',      (0.000, -0.072, -0.078))
+add_v('throat',         (0.000, -0.025, -0.090))
+
+# Cranium rear centerline
+add_v('crown_mid',      (0.000,  0.025,  0.165))
+add_v('crown_rear',     (0.000,  0.075,  0.145))
+add_v('occiput_hi',     (0.000,  0.098,  0.105))
+add_v('occiput_mid',    (0.000,  0.095,  0.045))
+add_v('occiput_lo',     (0.000,  0.078, -0.015))
+add_v('nape',           (0.000,  0.052, -0.070))
+
+# Bilateral vertices (s = 1 for left / +X, s = -1 for right / -X)
+for s in [-1, 1]:
+    # Cranium lateral
+    add_v(f'parietal_hi_{s}',   (s * 0.062,  0.022,  0.158))
+    add_v(f'parietal_mid_{s}',  (s * 0.080,  0.048,  0.112))
+    add_v(f'occiput_lat_{s}',   (s * 0.068,  0.078,  0.052))
+    
+    # Forehead & Temples
+    add_v(f'forehead_lat_hi_{s}', (s * 0.048, -0.058, 0.138))
+    add_v(f'forehead_lat_lo_{s}', (s * 0.058, -0.068, 0.112))
+    add_v(f'temple_hi_{s}',       (s * 0.068, -0.038, 0.135))
+    add_v(f'temple_lo_{s}',       (s * 0.075, -0.032, 0.092))
+    
+    # Eyebrows (angular, masculine, heroically slanting down toward glabella)
+    add_v(f'brow_in_{s}',         (s * 0.015, -0.088, 0.088))
+    add_v(f'brow_arch_{s}',       (s * 0.045, -0.084, 0.092))
+    add_v(f'brow_tail_{s}',       (s * 0.070, -0.062, 0.080))
+    
+    # Eye Socket Roof & Upper Eyelid
+    add_v(f'orbit_roof_in_{s}',   (s * 0.018, -0.084, 0.082))
+    add_v(f'orbit_roof_mid_{s}',  (s * 0.042, -0.080, 0.084))
+    add_v(f'orbit_roof_out_{s}',  (s * 0.065, -0.060, 0.074))
+    
+    # Eye Contour (Almond shape)
+    add_v(f'eye_in_{s}',          (s * 0.020, -0.080, 0.068))
+    add_v(f'eye_top_{s}',         (s * 0.038, -0.076, 0.074))
+    add_v(f'eye_out_{s}',         (s * 0.058, -0.058, 0.066))
+    add_v(f'eye_bot_{s}',         (s * 0.038, -0.074, 0.060))
+    add_v(f'eye_pupil_{s}',       (s * 0.038, -0.075, 0.067))
+    
+    # Eye Socket Floor & Lower Eyelid
+    add_v(f'orbit_fl_in_{s}',     (s * 0.022, -0.076, 0.052))
+    add_v(f'orbit_fl_mid_{s}',    (s * 0.042, -0.070, 0.048))
+    add_v(f'orbit_fl_out_{s}',    (s * 0.068, -0.052, 0.052))
+    
+    # Nose Bridges & Wings
+    add_v(f'nose_slope_hi_{s}',   (s * 0.012, -0.092, 0.065))
+    add_v(f'nose_slope_mid_{s}',  (s * 0.014, -0.100, 0.042))
+    add_v(f'nose_slope_lo_{s}',   (s * 0.016, -0.106, 0.025))
+    add_v(f'ala_crest_{s}',       (s * 0.024, -0.098, 0.016))
+    add_v(f'ala_base_{s}',        (s * 0.025, -0.088, 0.005))
+    
+    # Cheeks & Zygoma (High, chiseled)
+    add_v(f'zygoma_apex_{s}',     (s * 0.082, -0.038, 0.055))
+    add_v(f'cheek_ant_{s}',       (s * 0.052, -0.064, 0.032))
+    add_v(f'cheek_hollow_{s}',    (s * 0.065, -0.042, 0.005))
+    
+    # Mouth & Lips Lateral
+    add_v(f'upper_lip_peak_{s}',  (s * 0.014, -0.090, -0.015))
+    add_v(f'mouth_corner_{s}',    (s * 0.030, -0.076, -0.024))
+    add_v(f'lower_lip_lat_{s}',   (s * 0.018, -0.084, -0.032))
+    
+    # Chin, Jawline & Beard
+    add_v(f'chin_lat_apex_{s}',   (s * 0.024, -0.082, -0.062))
+    add_v(f'chin_lat_base_{s}',   (s * 0.024, -0.070, -0.076))
+    add_v(f'jaw_body_{s}',        (s * 0.052, -0.046, -0.055))
+    add_v(f'jaw_angle_{s}',       (s * 0.072,  0.005, -0.035))
+    
+    # Ear
+    add_v(f'ear_top_{s}',         (s * 0.078,  0.005,  0.075))
+    add_v(f'ear_helix_{s}',       (s * 0.088,  0.020,  0.045))
+    add_v(f'ear_lobe_{s}',        (s * 0.078,  0.012,  0.005))
+    
+    # Neck
+    add_v(f'mastoid_{s}',         (s * 0.068,  0.035, -0.015))
+    add_v(f'neck_scm_{s}',        (s * 0.048, -0.005, -0.085))
+    add_v(f'neck_lat_{s}',        (s * 0.052,  0.025, -0.088))
+
+vert_list = []
+vert_index = {}
+for k, v in V_map.items():
+    vert_index[k] = len(vert_list)
+    vert_list.append(v)
+
+faces_list = []
+faces_mat = []
+
+def add_facet(names, mat_key):
+    faces_list.append([vert_index[n] for n in names])
+    faces_mat.append(mat_key)
+
+for s in [-1, 1]:
+    # Forehead planes
+    add_facet(['crown_front', f'forehead_lat_hi_{s}', 'forehead_hi'], 'skin_highlight') if s==1 else add_facet(['crown_front', 'forehead_hi', f'forehead_lat_hi_{s}'], 'skin_highlight')
+    add_facet(['forehead_hi', f'forehead_lat_hi_{s}', f'forehead_lat_lo_{s}', 'forehead_mid'], 'skin_mid') if s==1 else add_facet(['forehead_hi', 'forehead_mid', f'forehead_lat_lo_{s}', f'forehead_lat_hi_{s}'], 'skin_mid')
+    add_facet(['forehead_mid', f'forehead_lat_lo_{s}', f'brow_arch_{s}', 'glabella'], 'skin_mid') if s==1 else add_facet(['forehead_mid', 'glabella', f'brow_arch_{s}', f'forehead_lat_lo_{s}'], 'skin_mid')
+    add_facet([f'forehead_lat_hi_{s}', f'temple_hi_{s}', f'temple_lo_{s}', f'forehead_lat_lo_{s}'], 'skin_mid') if s==1 else add_facet([f'forehead_lat_hi_{s}', f'forehead_lat_lo_{s}', f'temple_lo_{s}', f'temple_hi_{s}'], 'skin_mid')
+    add_facet([f'forehead_lat_lo_{s}', f'temple_lo_{s}', f'brow_tail_{s}', f'brow_arch_{s}'], 'skin_mid') if s==1 else add_facet([f'forehead_lat_lo_{s}', f'brow_arch_{s}', f'brow_tail_{s}', f'temple_lo_{s}'], 'skin_mid')
+
+    # Eyebrows
+    add_facet(['glabella', f'brow_in_{s}', f'orbit_roof_in_{s}'], 'beard_dark') if s==1 else add_facet(['glabella', f'orbit_roof_in_{s}', f'brow_in_{s}'], 'beard_dark')
+    add_facet([f'brow_in_{s}', f'brow_arch_{s}', f'orbit_roof_mid_{s}', f'orbit_roof_in_{s}'], 'beard_dark') if s==1 else add_facet([f'brow_in_{s}', f'orbit_roof_in_{s}', f'orbit_roof_mid_{s}', f'brow_arch_{s}'], 'beard_dark')
+    add_facet([f'brow_arch_{s}', f'brow_tail_{s}', f'orbit_roof_out_{s}', f'orbit_roof_mid_{s}'], 'beard_dark') if s==1 else add_facet([f'brow_arch_{s}', f'orbit_roof_mid_{s}', f'orbit_roof_out_{s}', f'brow_tail_{s}'], 'beard_dark')
+
+    # Upper eyelid / orbital shadow
+    add_facet([f'orbit_roof_in_{s}', f'orbit_roof_mid_{s}', f'eye_top_{s}', f'eye_in_{s}'], 'skin_deep') if s==1 else add_facet([f'orbit_roof_in_{s}', f'eye_in_{s}', f'eye_top_{s}', f'orbit_roof_mid_{s}'], 'skin_deep')
+    add_facet([f'orbit_roof_mid_{s}', f'orbit_roof_out_{s}', f'eye_out_{s}', f'eye_top_{s}'], 'skin_deep') if s==1 else add_facet([f'orbit_roof_mid_{s}', f'eye_top_{s}', f'eye_out_{s}', f'orbit_roof_out_{s}'], 'skin_deep')
+
+    # Almond Eyes: Sclera + Amber Iris + Dark Pupil
+    add_facet([f'eye_in_{s}', f'eye_top_{s}', f'eye_pupil_{s}'], 'sclera_white') if s==1 else add_facet([f'eye_in_{s}', f'eye_pupil_{s}', f'eye_top_{s}'], 'sclera_white')
+    add_facet([f'eye_in_{s}', f'eye_pupil_{s}', f'eye_bot_{s}'], 'sclera_white') if s==1 else add_facet([f'eye_in_{s}', f'eye_bot_{s}', f'eye_pupil_{s}'], 'sclera_white')
+    add_facet([f'eye_top_{s}', f'eye_out_{s}', f'eye_pupil_{s}'], 'iris_amber') if s==1 else add_facet([f'eye_top_{s}', f'eye_pupil_{s}', f'eye_out_{s}'], 'iris_amber')
+    add_facet([f'eye_pupil_{s}', f'eye_out_{s}', f'eye_bot_{s}'], 'sclera_white') if s==1 else add_facet([f'eye_pupil_{s}', f'eye_bot_{s}', f'eye_out_{s}'], 'sclera_white')
+
+    # Lower eyelid & orbital floor
+    add_facet([f'eye_in_{s}', f'eye_bot_{s}', f'orbit_fl_in_{s}'], 'skin_shadow') if s==1 else add_facet([f'eye_in_{s}', f'orbit_fl_in_{s}', f'eye_bot_{s}'], 'skin_shadow')
+    add_facet([f'eye_bot_{s}', f'eye_out_{s}', f'orbit_fl_out_{s}', f'orbit_fl_mid_{s}'], 'skin_shadow') if s==1 else add_facet([f'eye_bot_{s}', f'orbit_fl_mid_{s}', f'orbit_fl_out_{s}', f'eye_out_{s}'], 'skin_shadow')
+    add_facet([f'orbit_fl_in_{s}', f'eye_bot_{s}', f'orbit_fl_mid_{s}'], 'skin_mid') if s==1 else add_facet([f'orbit_fl_in_{s}', f'orbit_fl_mid_{s}', f'eye_bot_{s}'], 'skin_mid')
+
+    # Glabella & Nose Root
+    add_facet(['glabella', 'sellion', f'orbit_roof_in_{s}'], 'skin_shadow') if s==1 else add_facet(['glabella', f'orbit_roof_in_{s}', 'sellion'], 'skin_shadow')
+    add_facet(['sellion', f'nose_slope_hi_{s}', f'eye_in_{s}', f'orbit_roof_in_{s}'], 'skin_mid') if s==1 else add_facet(['sellion', f'orbit_roof_in_{s}', f'eye_in_{s}', f'nose_slope_hi_{s}'], 'skin_mid')
+    add_facet(['sellion', 'rhinion', f'nose_slope_mid_{s}', f'nose_slope_hi_{s}'], 'skin_highlight') if s==1 else add_facet(['sellion', f'nose_slope_hi_{s}', f'nose_slope_mid_{s}', 'rhinion'], 'skin_highlight')
+    add_facet(['rhinion', 'supratip', f'nose_slope_lo_{s}', f'nose_slope_mid_{s}'], 'skin_highlight') if s==1 else add_facet(['rhinion', f'nose_slope_mid_{s}', f'nose_slope_lo_{s}', 'supratip'], 'skin_highlight')
+    add_facet(['supratip', 'nasal_tip', f'ala_crest_{s}', f'nose_slope_lo_{s}'], 'skin_highlight') if s==1 else add_facet(['supratip', f'nose_slope_lo_{s}', f'ala_crest_{s}', 'nasal_tip'], 'skin_highlight')
+
+    # Subnasal Tip & Alar wings
+    add_facet(['nasal_tip', 'infratip', f'ala_crest_{s}'], 'skin_shadow') if s==1 else add_facet(['nasal_tip', f'ala_crest_{s}', 'infratip'], 'skin_shadow')
+    add_facet(['infratip', 'subnasale', f'ala_base_{s}', f'ala_crest_{s}'], 'skin_shadow') if s==1 else add_facet(['infratip', f'ala_crest_{s}', f'ala_base_{s}', 'subnasale'], 'skin_shadow')
+
+    # Cheeks & Zygomatic Arch
+    add_facet([f'nose_slope_hi_{s}', f'nose_slope_mid_{s}', f'orbit_fl_in_{s}', f'eye_in_{s}'], 'skin_mid') if s==1 else add_facet([f'nose_slope_hi_{s}', f'eye_in_{s}', f'orbit_fl_in_{s}', f'nose_slope_mid_{s}'], 'skin_mid')
+    add_facet([f'nose_slope_mid_{s}', f'nose_slope_lo_{s}', f'cheek_ant_{s}', f'orbit_fl_in_{s}'], 'skin_highlight') if s==1 else add_facet([f'nose_slope_mid_{s}', f'orbit_fl_in_{s}', f'cheek_ant_{s}', f'nose_slope_lo_{s}'], 'skin_highlight')
+    add_facet([f'nose_slope_lo_{s}', f'ala_crest_{s}', f'cheek_ant_{s}'], 'skin_highlight') if s==1 else add_facet([f'nose_slope_lo_{s}', f'cheek_ant_{s}', f'ala_crest_{s}'], 'skin_highlight')
+    add_facet([f'orbit_fl_in_{s}', f'cheek_ant_{s}', f'orbit_fl_mid_{s}'], 'skin_highlight') if s==1 else add_facet([f'orbit_fl_in_{s}', f'orbit_fl_mid_{s}', f'cheek_ant_{s}'], 'skin_highlight')
+    add_facet([f'orbit_fl_mid_{s}', f'cheek_ant_{s}', f'zygoma_apex_{s}', f'orbit_fl_out_{s}'], 'skin_highlight') if s==1 else add_facet([f'orbit_fl_mid_{s}', f'orbit_fl_out_{s}', f'zygoma_apex_{s}', f'cheek_ant_{s}'], 'skin_highlight')
+    add_facet([f'brow_tail_{s}', f'orbit_roof_out_{s}', f'eye_out_{s}', f'temple_lo_{s}'], 'skin_mid') if s==1 else add_facet([f'brow_tail_{s}', f'temple_lo_{s}', f'eye_out_{s}', f'orbit_roof_out_{s}'], 'skin_mid')
+    add_facet([f'temple_lo_{s}', f'eye_out_{s}', f'orbit_fl_out_{s}', f'zygoma_apex_{s}'], 'skin_mid') if s==1 else add_facet([f'temple_lo_{s}', f'zygoma_apex_{s}', f'orbit_fl_out_{s}', f'eye_out_{s}'], 'skin_mid')
+
+    # Mustache & Philtrum
+    add_facet(['subnasale', f'ala_base_{s}', f'mouth_corner_{s}', f'upper_lip_peak_{s}', 'philtrum'], 'beard_dark') if s==1 else add_facet(['subnasale', 'philtrum', f'upper_lip_peak_{s}', f'mouth_corner_{s}', f'ala_base_{s}'], 'beard_dark')
+    add_facet(['philtrum', f'upper_lip_peak_{s}', 'upper_lip'], 'beard_dark') if s==1 else add_facet(['philtrum', 'upper_lip', f'upper_lip_peak_{s}'], 'beard_dark')
+
+    # Lips
+    add_facet(['upper_lip', f'upper_lip_peak_{s}', f'mouth_corner_{s}', 'mouth_center'], 'skin_shadow') if s==1 else add_facet(['upper_lip', 'mouth_center', f'mouth_corner_{s}', f'upper_lip_peak_{s}'], 'skin_shadow')
+    add_facet(['mouth_center', f'mouth_corner_{s}', f'lower_lip_lat_{s}', 'lower_lip'], 'skin_highlight') if s==1 else add_facet(['mouth_center', 'lower_lip', f'lower_lip_lat_{s}', f'mouth_corner_{s}'], 'skin_highlight')
+
+    # Soul patch & Chin
+    add_facet(['lower_lip', f'lower_lip_lat_{s}', 'chin_groove'], 'skin_mid') if s==1 else add_facet(['lower_lip', 'chin_groove', f'lower_lip_lat_{s}'], 'skin_mid')
+    add_facet(['chin_groove', f'lower_lip_lat_{s}', f'chin_lat_apex_{s}', 'chin_apex'], 'beard_dark') if s==1 else add_facet(['chin_groove', 'chin_apex', f'chin_lat_apex_{s}', f'lower_lip_lat_{s}'], 'beard_dark')
+    add_facet(['chin_apex', f'chin_lat_apex_{s}', f'chin_lat_base_{s}', 'chin_base'], 'beard_dark') if s==1 else add_facet(['chin_apex', 'chin_base', f'chin_lat_base_{s}', f'chin_lat_apex_{s}'], 'beard_dark')
+
+    # Boxed Jaw Beard & Cheeks
+    add_facet([f'ala_base_{s}', f'cheek_ant_{s}', f'cheek_hollow_{s}', f'mouth_corner_{s}'], 'skin_mid') if s==1 else add_facet([f'ala_base_{s}', f'mouth_corner_{s}', f'cheek_hollow_{s}', f'cheek_ant_{s}'], 'skin_mid')
+    add_facet([f'zygoma_apex_{s}', f'ear_top_{s}', f'ear_lobe_{s}', f'cheek_hollow_{s}'], 'beard_dark') if s==1 else add_facet([f'zygoma_apex_{s}', f'cheek_hollow_{s}', f'ear_lobe_{s}', f'ear_top_{s}'], 'beard_dark')
+    add_facet([f'mouth_corner_{s}', f'cheek_hollow_{s}', f'jaw_body_{s}', f'chin_lat_apex_{s}'], 'beard_dark') if s==1 else add_facet([f'mouth_corner_{s}', f'chin_lat_apex_{s}', f'jaw_body_{s}', f'cheek_hollow_{s}'], 'beard_dark')
+    add_facet([f'chin_lat_apex_{s}', f'jaw_body_{s}', f'chin_lat_base_{s}'], 'beard_dark') if s==1 else add_facet([f'chin_lat_apex_{s}', f'chin_lat_base_{s}', f'jaw_body_{s}'], 'beard_dark')
+    add_facet([f'chin_lat_base_{s}', f'jaw_body_{s}', f'jaw_angle_{s}'], 'beard_dark') if s==1 else add_facet([f'chin_lat_base_{s}', f'jaw_angle_{s}', f'jaw_body_{s}'], 'beard_dark')
+    add_facet([f'cheek_hollow_{s}', f'ear_lobe_{s}', f'jaw_angle_{s}', f'jaw_body_{s}'], 'beard_dark') if s==1 else add_facet([f'cheek_hollow_{s}', f'jaw_body_{s}', f'jaw_angle_{s}', f'ear_lobe_{s}'], 'beard_dark')
+
+    # Ears
+    add_facet([f'ear_top_{s}', f'ear_helix_{s}', f'ear_lobe_{s}'], 'skin_mid') if s==1 else add_facet([f'ear_top_{s}', f'ear_lobe_{s}', f'ear_helix_{s}'], 'skin_mid')
+
+    # Neck Connection
+    add_facet(['chin_base', f'jaw_angle_{s}', 'throat'], 'skin_shadow') if s==1 else add_facet(['chin_base', 'throat', f'jaw_angle_{s}'], 'skin_shadow')
+    add_facet([f'jaw_angle_{s}', f'neck_scm_{s}', 'throat'], 'skin_shadow') if s==1 else add_facet([f'jaw_angle_{s}', 'throat', f'neck_scm_{s}'], 'skin_shadow')
+    add_facet([f'jaw_angle_{s}', f'ear_lobe_{s}', f'mastoid_{s}', f'neck_scm_{s}'], 'skin_shadow') if s==1 else add_facet([f'jaw_angle_{s}', f'neck_scm_{s}', f'mastoid_{s}', f'ear_lobe_{s}'], 'skin_shadow')
+    add_facet([f'mastoid_{s}', f'neck_lat_{s}', f'neck_scm_{s}'], 'skin_shadow') if s==1 else add_facet([f'mastoid_{s}', f'neck_scm_{s}', f'neck_lat_{s}'], 'skin_shadow')
+    add_facet([f'mastoid_{s}', 'nape', f'neck_lat_{s}'], 'skin_shadow') if s==1 else add_facet([f'mastoid_{s}', f'neck_lat_{s}', 'nape'], 'skin_shadow')
+
+    # Cranium (Back of Head)
+    add_facet(['crown_front', 'crown_mid', f'parietal_hi_{s}', f'forehead_lat_hi_{s}'], 'hair_base') if s==1 else add_facet(['crown_front', f'forehead_lat_hi_{s}', f'parietal_hi_{s}', 'crown_mid'], 'hair_base')
+    add_facet([f'forehead_lat_hi_{s}', f'parietal_hi_{s}', f'temple_hi_{s}'], 'hair_base') if s==1 else add_facet([f'forehead_lat_hi_{s}', f'temple_hi_{s}', f'parietal_hi_{s}'], 'hair_base')
+    add_facet([f'temple_hi_{s}', f'parietal_hi_{s}', f'parietal_mid_{s}', f'temple_lo_{s}'], 'hair_base') if s==1 else add_facet([f'temple_hi_{s}', f'temple_lo_{s}', f'parietal_mid_{s}', f'parietal_hi_{s}'], 'hair_base')
+    add_facet([f'temple_lo_{s}', f'parietal_mid_{s}', f'ear_top_{s}'], 'hair_base') if s==1 else add_facet([f'temple_lo_{s}', f'ear_top_{s}', f'parietal_mid_{s}'], 'hair_base')
+    add_facet(['crown_mid', 'crown_rear', f'parietal_mid_{s}', f'parietal_hi_{s}'], 'hair_base') if s==1 else add_facet(['crown_mid', f'parietal_hi_{s}', f'parietal_mid_{s}', 'crown_rear'], 'hair_base')
+    add_facet(['crown_rear', 'occiput_hi', f'occiput_lat_{s}', f'parietal_mid_{s}'], 'hair_base') if s==1 else add_facet(['crown_rear', f'parietal_mid_{s}', f'occiput_lat_{s}', 'occiput_hi'], 'hair_base')
+    add_facet([f'parietal_mid_{s}', f'occiput_lat_{s}', f'mastoid_{s}', f'ear_top_{s}'], 'hair_base') if s==1 else add_facet([f'parietal_mid_{s}', f'ear_top_{s}', f'mastoid_{s}', f'occiput_lat_{s}'], 'hair_base')
+    add_facet(['occiput_hi', 'occiput_mid', f'mastoid_{s}', f'occiput_lat_{s}'], 'hair_base') if s==1 else add_facet(['occiput_hi', f'occiput_lat_{s}', f'mastoid_{s}', 'occiput_mid'], 'hair_base')
+    add_facet(['occiput_mid', 'occiput_lo', 'nape', f'mastoid_{s}'], 'hair_base') if s==1 else add_facet(['occiput_mid', f'mastoid_{s}', 'nape', 'occiput_lo'], 'hair_base')
+
+create_poly_object("TargetLowPolyHeadUnified_R3", vert_list, faces_list, faces_mat, parent=head)
+print(f"Unified Head R3 created: {len(vert_list)} verts, {len(faces_list)} faces.")
+
+# -------------------------------------------------------------------------
+# 4. Signature Wavy Locks & Half-Bun (Round 3)
+# -------------------------------------------------------------------------
+# Wavy Center-Parted Bangs (Arching across forehead, framing the eyes)
+bangs_v = [
+    Vector(( 0.000, -0.060, 0.160)), # 0
+    Vector(( 0.025, -0.075, 0.145)), # 1
+    Vector(( 0.048, -0.082, 0.125)), # 2
+    Vector(( 0.065, -0.076, 0.100)), # 3
+    Vector(( 0.015, -0.085, 0.120)), # 4
+    Vector(( 0.038, -0.090, 0.105)), # 5
+    Vector((-0.025, -0.075, 0.145)), # 6
+    Vector((-0.048, -0.082, 0.125)), # 7
+    Vector((-0.065, -0.076, 0.100)), # 8
+    Vector((-0.015, -0.085, 0.120)), # 9
+    Vector((-0.038, -0.090, 0.105)), # 10
+]
+bangs_f = [
+    [0, 1, 4], [1, 2, 5, 4], [2, 3, 5],
+    [0, 9, 6], [6, 9, 10, 7], [7, 10, 8]
+]
+bangs_m = ['hair_base', 'hair_highlight', 'hair_base',
+           'hair_base', 'hair_highlight', 'hair_base']
+create_poly_object("TargetLowPolyBangs_R3", bangs_v, bangs_f, bangs_m, parent=head)
+
+# Cascading Wavy Side Locks (Bilateral, flowing past cheeks down to collar)
+for s in [-1, 1]:
+    sidelock_v = [
+        Vector((s * 0.072, -0.045, 0.110)), # 0
+        Vector((s * 0.082, -0.050, 0.100)), # 1
+        Vector((s * 0.095, -0.055, 0.065)), # 2
+        Vector((s * 0.102, -0.042, 0.055)), # 3
+        Vector((s * 0.088, -0.062, 0.035)), # 4
+        Vector((s * 0.085, -0.055, 0.005)), # 5
+        Vector((s * 0.092, -0.035, -0.005)),# 6
+        Vector((s * 0.078, -0.060, -0.035)),# 7
+        Vector((s * 0.085, -0.040, -0.045)),# 8
+        Vector((s * 0.068, -0.052, -0.075)),# 9
+    ]
+    sidelock_f = [
+        [0, 1, 3, 2] if s==1 else [0, 2, 3, 1],
+        [2, 3, 6, 4] if s==1 else [2, 4, 6, 3],
+        [4, 6, 5]    if s==1 else [4, 5, 6],
+        [5, 6, 8, 7] if s==1 else [5, 7, 8, 6],
+        [7, 8, 9]    if s==1 else [7, 9, 8],
+    ]
+    sidelock_m = ['hair_base', 'hair_highlight', 'hair_base', 'hair_highlight', 'hair_base']
+    create_poly_object(f"TargetLowPolySideLock_{s}_R3", sidelock_v, sidelock_f, sidelock_m, parent=head)
+
+# Half-Up Top Knot Bun (Faceted clustered bun at rear cranium)
+bun_v = [
+    Vector(( 0.000,  0.088, 0.145)), # 0
+    Vector((-0.032,  0.102, 0.155)), # 1
+    Vector(( 0.032,  0.102, 0.155)), # 2
+    Vector((-0.032,  0.102, 0.125)), # 3
+    Vector(( 0.032,  0.102, 0.125)), # 4
+    Vector(( 0.000,  0.142, 0.158)), # 5
+    Vector((-0.040,  0.132, 0.140)), # 6
+    Vector(( 0.040,  0.132, 0.140)), # 7
+    Vector(( 0.000,  0.138, 0.120)), # 8
+    Vector(( 0.000,  0.155, 0.138)), # 9
+]
+bun_f = [
+    [0, 1, 6, 5], [0, 5, 7, 2],
+    [1, 3, 6],    [2, 7, 4],
+    [3, 8, 6],    [4, 7, 8],
+    [5, 6, 9],    [5, 9, 7],
+    [6, 8, 9],    [7, 9, 8],
+]
+bun_m = ['hair_base', 'hair_highlight', 'hair_base', 'hair_base',
+         'hair_base', 'hair_base', 'hair_highlight', 'hair_base',
+         'hair_base', 'hair_highlight']
+create_poly_object("TargetLowPolyBun_R3", bun_v, bun_f, bun_m, parent=head)
+
+# Shoulder-Length Flowing Back Hair (Resting over cloak)
+back_hair_v = [
+    Vector((-0.065, 0.075, 0.050)), # 0
+    Vector(( 0.000, 0.092, 0.045)), # 1
+    Vector(( 0.065, 0.075, 0.050)), # 2
+    Vector((-0.088, 0.082, -0.010)), # 3
+    Vector((-0.040, 0.095, -0.015)), # 4
+    Vector(( 0.040, 0.095, -0.015)), # 5
+    Vector(( 0.088, 0.082, -0.010)), # 6
+    Vector((-0.095, 0.078, -0.075)), # 7
+    Vector((-0.045, 0.090, -0.080)), # 8
+    Vector(( 0.045, 0.090, -0.080)), # 9
+    Vector(( 0.095, 0.078, -0.075)), # 10
+]
+back_hair_f = [
+    [0, 1, 4, 3], [1, 2, 6, 5], [1, 5, 4],
+    [3, 4, 8, 7], [4, 5, 9, 8], [5, 6, 10, 9]
+]
+back_hair_m = ['hair_base', 'hair_base', 'hair_highlight',
+               'hair_base', 'hair_highlight', 'hair_base']
+create_poly_object("TargetLowPolyBackHair_R3", back_hair_v, back_hair_f, back_hair_m, parent=head)
+
+# -------------------------------------------------------------------------
+# 5. Crisp Standing Linen Shirt Collar (Round 3)
+# -------------------------------------------------------------------------
+shirt_v = [
+    Vector((-0.038, -0.065, -0.045)), # 0
+    Vector(( 0.038, -0.065, -0.045)), # 1
+    Vector((-0.055, -0.020, -0.050)), # 2
+    Vector(( 0.055, -0.020, -0.050)), # 3
+    Vector((-0.045,  0.035, -0.055)), # 4
+    Vector(( 0.045,  0.035, -0.055)), # 5
+    Vector(( 0.000, -0.060, -0.095)), # 6
+    Vector((-0.060, -0.025, -0.090)), # 7
+    Vector(( 0.060, -0.025, -0.090)), # 8
+]
+shirt_f = [
+    [0, 6, 7, 2], [1, 3, 8, 6],
+    [2, 7, 4],    [3, 5, 8],
+    [0, 2, 6],    [1, 6, 3],
+]
+shirt_m = ['shirt_ivory'] * len(shirt_f)
+create_poly_object("TargetLowPolyShirt_R3", shirt_v, shirt_f, shirt_m, parent=head)
+
+# -------------------------------------------------------------------------
+# 6. Wine-Red Cowl Cloak, Teal Lining & Golden Brooch (Round 3)
+# -------------------------------------------------------------------------
+cowl_v = [
+    Vector(( 0.000, -0.115, -0.075)), # 0
+    Vector((-0.095, -0.088, -0.060)), # 1
+    Vector(( 0.095, -0.088, -0.060)), # 2
+    Vector((-0.135, -0.025, -0.065)), # 3
+    Vector(( 0.135, -0.025, -0.065)), # 4
+    Vector((-0.115,  0.065, -0.075)), # 5
+    Vector(( 0.115,  0.065, -0.075)), # 6
+    Vector(( 0.000,  0.085, -0.085)), # 7
+    Vector(( 0.000, -0.155, -0.135)), # 8
+    Vector((-0.125, -0.125, -0.120)), # 9
+    Vector(( 0.125, -0.125, -0.120)), # 10
+    Vector((-0.175, -0.035, -0.125)), # 11
+    Vector(( 0.175, -0.035, -0.125)), # 12
+    Vector((-0.145,  0.085, -0.130)), # 13
+    Vector(( 0.145,  0.085, -0.130)), # 14
+    Vector(( 0.000,  0.105, -0.140)), # 15
+]
+cowl_f = [
+    [0, 1, 9, 8],   [0, 8, 10, 2],
+    [1, 3, 11, 9],  [2, 10, 12, 4],
+    [3, 5, 13, 11], [4, 12, 14, 6],
+    [5, 7, 15, 13], [6, 14, 15, 7],
+]
+cowl_m = ['cape_wine_hi', 'cape_wine', 'cape_wine_hi', 'cape_wine',
+          'cape_wine',    'cape_wine', 'cape_wine',    'cape_wine']
+create_poly_object("TargetLowPolyCowl_R3", cowl_v, cowl_f, cowl_m, parent=head)
+
+# Teal Lining Band along the fold
+teal_v = [
+    Vector(( 0.000, -0.110, -0.072)), # 0
+    Vector((-0.090, -0.084, -0.058)), # 1
+    Vector(( 0.090, -0.084, -0.058)), # 2
+    Vector(( 0.000, -0.118, -0.076)), # 3
+    Vector((-0.098, -0.090, -0.062)), # 4
+    Vector(( 0.098, -0.090, -0.062)), # 5
+]
+teal_f = [[0, 1, 4, 3], [0, 3, 5, 2]]
+teal_m = ['tunic_teal', 'tunic_teal']
+create_poly_object("TargetLowPolyTealLining_R3", teal_v, teal_f, teal_m, parent=head)
+
+# Antique Gold Diamond Brooch
+brooch_v = [
+    Vector((-0.090, -0.092, -0.050)), # 0
+    Vector((-0.112, -0.086, -0.068)), # 1
+    Vector((-0.068, -0.086, -0.068)), # 2
+    Vector((-0.090, -0.080, -0.086)), # 3
+    Vector((-0.090, -0.102, -0.068)), # 4
+]
+brooch_f = [
+    [0, 1, 4], [0, 4, 2],
+    [1, 3, 4], [2, 4, 3]
+]
+brooch_m = ['clasp_gold'] * 4
+create_poly_object("TargetLowPolyBrooch_R3", brooch_v, brooch_f, brooch_m, parent=head)
+
+# -------------------------------------------------------------------------
+# Save Round 3 .blend file
+# -------------------------------------------------------------------------
+round3_blend = BASE / 'assets/models/optimized/human-courier-production-v2/head-round3/courier.blend'
+round3_blend.parent.mkdir(parents=True, exist_ok=True)
+bpy.ops.wm.save_as_mainfile(filepath=str(round3_blend))
+print(f"Round 3 courier successfully built and saved to: {round3_blend}")

@@ -3,7 +3,7 @@
 # 端口：8931 主后端(前端静态页同服) 7863 识别/深度/特征 7862 图生3D
 set -u
 cd "$(dirname "$0")"
-ROOT="$PWD"
+ROOT="$(pwd -P)"
 OUT="$ROOT/tools/out"
 mkdir -p "$OUT"
 
@@ -17,6 +17,19 @@ export LLM_BASE_URL="${LLM_BASE_URL:-https://models.sjtu.edu.cn/api/v1}"
 export LLM_MODEL="${LLM_MODEL:-glm-5.1}"
 
 PORTS="8931 7862 7863 7864"
+
+# Validate before stopping existing services. Copied venv symlinks may still
+# point at the other computer's Homebrew interpreter.
+PY_MAIN="${PY_MAIN:-$ROOT/.venv/bin/python}"
+PY_IMG="${PY_IMG:-$ROOT/.venv-img2mesh/bin/python}"
+for py in "$PY_MAIN" "$PY_IMG"; do
+  if [ ! -x "$py" ] || ! "$py" -c 'import sys; assert sys.version_info >= (3, 10)' >/dev/null 2>&1; then
+    echo "Python 环境不可用：$py"
+    echo "复制的虚拟环境可能仍引用原设备解释器。先运行："
+    echo "  bash \"$ROOT/tools/repair_python_envs.sh\""
+    exit 1
+  fi
+done
 
 echo "== 清理旧进程 =="
 # 先按启动命令的模式杀（覆盖 --reload 产生的父子进程树）
@@ -50,8 +63,6 @@ for port in $PORTS; do
   fi
 done
 
-PY_MAIN="$ROOT/.venv/bin/python"
-PY_IMG="$ROOT/.venv-img2mesh/bin/python"
 export HF_HUB_OFFLINE=1
 export TOKENIZERS_PARALLELISM=false
 
@@ -91,11 +102,16 @@ echo "  塑形      :7864  pid $PID_SCULPT  日志 tools/out/sculpt_worker.log"
 
 echo "== 等待就绪 =="
 wait_health() {
-  local name="$1" url="$2" log="$3" i
+  local name="$1" url="$2" log="$3" i response
   for i in $(seq 1 40); do
-    if curl -s -m 2 "$url" | grep -q '"status":"ok"'; then
+    response=$(curl -s -m 2 "$url" || true)
+    if echo "$response" | grep -q '"status":"ok"'; then
       echo "  $name 就绪"
       return 0
+    fi
+    if echo "$response" | grep -q '"status":"unavailable"'; then
+      echo "  $name 已启动，但模型能力不可用：$response"
+      return 1
     fi
     sleep 1
   done

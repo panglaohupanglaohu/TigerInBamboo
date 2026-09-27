@@ -1,0 +1,56 @@
+{
+  "generation": "built-in image_gen",
+  "reference": "human-courier-v1/approved-target.png",
+  "status": "2D construction references; not accepted animation",
+  "images": [
+    {
+      "id": "walk",
+      "label": "行走 · 8个关键姿势",
+      "file": "walk.png",
+      "bytes": 2542910,
+      "sha256": "9828e0949b46a0dd7bd18e756e70cf0686ce23dea9731348ca00a1dcb16e4ae7"
+    },
+    {
+      "id": "run",
+      "label": "奔跑 · 8个关键姿势",
+      "file": "run.png",
+      "bytes": 2763664,
+      "sha256": "8bb71b7836b2a8413a01302395866ffef37afb3bfd9a61198845e165b3b15eab"
+    },
+    {
+      "id": "jump",
+      "label": "跳跃 · 8个关键姿势",
+      "file": "jump.png",
+      "bytes": 2532373,
+      "sha256": "bef2f0d34373aa7438b05deb2588459c312f16d18a15b27ae07fc94a69a1bf31"
+    },
+    {
+      "id": "stealth",
+      "label": "潜行 · 8个关键姿势",
+      "file": "stealth.png",
+      "bytes": 2455462,
+      "sha256": "99c137b5b67bdb39b0cd992a83a52c45a5d56d1e1ce52958ec709c43975b9d6f"
+    },
+    {
+      "id": "wall-vault",
+      "label": "翻墙 · 8个关键姿势",
+      "file": "wall-vault.png",
+      "bytes": 2725865,
+      "sha256": "a5f2595b7e6c9bb77062a6f23b547343347cc653d0aa626bbd3cb2129cd4fa29"
+    },
+    {
+      "id": "head-views",
+      "label": "头部六视图 · 含顶视与左右侧视",
+      "file": "head-views.png",
+      "bytes": 2760512,
+      "sha256": "9c1ed4479ad295d7a12b01923d85d31a324fd776f76eb94a2faccb19c9c68782"
+    },
+    {
+      "id": "face-details",
+      "label": "五官与面部结构明细",
+      "file": "face-details.png",
+      "bytes": 2987650,
+      "sha256": "1dd3f8859a22911066f822fd42f193c94769d9b58c46cd4217148f2445415db8"
+    }
+  ]
+}

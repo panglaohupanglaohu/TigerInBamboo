@@ -1,0 +1,1103 @@
+{
+  "scope": "Existing save, real RAF and unchanged combat logic; camera-only observer, not a fresh full playthrough",
+  "started": "2026-09-20T10:45:56.185Z",
+  "events": [
+    {
+      "at": "2026-09-20T10:46:09.828Z",
+      "phase": "atCastle",
+      "ambush": "landing",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 0,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": null,
+        "frameMs": 0,
+        "samples": 0,
+        "windowFull": false,
+        "hitches": 0,
+        "worstMs": 0,
+        "calls": 1678,
+        "triangles": 1148990,
+        "programs": 43,
+        "geometries": 742,
+        "textures": 12,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:11.888Z",
+      "phase": "concealment",
+      "ambush": "landing",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 0,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 16,
+        "frameMs": 62.46,
+        "samples": 33,
+        "windowFull": false,
+        "hitches": 1,
+        "worstMs": 490.1,
+        "calls": 1922,
+        "triangles": 1437122,
+        "programs": 78,
+        "geometries": 793,
+        "textures": 12,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:20.388Z",
+      "phase": "concealment",
+      "ambush": "concealed",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 0,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 16.2,
+        "frameMs": 61.73,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 2,
+        "worstMs": 490.1,
+        "calls": 2006,
+        "triangles": 1438810,
+        "programs": 113,
+        "geometries": 853,
+        "textures": 13,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:23.477Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 0,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 16.5,
+        "frameMs": 60.65,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 2,
+        "worstMs": 490.1,
+        "calls": 2096,
+        "triangles": 1442398,
+        "programs": 115,
+        "geometries": 933,
+        "textures": 16,
+        "bootMs": 13636
+      }
+    }
+  ],
+  "samples": [
+    {
+      "at": "2026-09-20T10:46:26.033Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 15,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": null,
+        "frameMs": 0,
+        "samples": 0,
+        "windowFull": false,
+        "hitches": 0,
+        "worstMs": 0,
+        "calls": 5584,
+        "triangles": 1537895,
+        "programs": 122,
+        "geometries": 2875,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:27.089Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 18,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 11.3,
+        "frameMs": 88.28,
+        "samples": 11,
+        "windowFull": false,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5797,
+        "triangles": 1557826,
+        "programs": 121,
+        "geometries": 3006,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:28.128Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 30,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.4,
+        "frameMs": 80.39,
+        "samples": 25,
+        "windowFull": false,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5853,
+        "triangles": 1558463,
+        "programs": 121,
+        "geometries": 3089,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:29.134Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 30,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 13.3,
+        "frameMs": 75.43,
+        "samples": 40,
+        "windowFull": false,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5788,
+        "triangles": 1551371,
+        "programs": 121,
+        "geometries": 3091,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:30.135Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 46,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 13.4,
+        "frameMs": 74.38,
+        "samples": 54,
+        "windowFull": false,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5299,
+        "triangles": 1531069,
+        "programs": 121,
+        "geometries": 3180,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:31.158Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 47,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 13.5,
+        "frameMs": 73.84,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5192,
+        "triangles": 1526617,
+        "programs": 122,
+        "geometries": 3181,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:32.183Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 61,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 14.1,
+        "frameMs": 71.02,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5130,
+        "triangles": 1527295,
+        "programs": 123,
+        "geometries": 3189,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:33.223Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 82,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 14,
+        "frameMs": 71.46,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5139,
+        "triangles": 1528285,
+        "programs": 122,
+        "geometries": 3183,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:34.252Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 82,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 14,
+        "frameMs": 71.25,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5150,
+        "triangles": 1533467,
+        "programs": 123,
+        "geometries": 3187,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:35.298Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 98,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 14.5,
+        "frameMs": 68.98,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 4930,
+        "triangles": 1520121,
+        "programs": 123,
+        "geometries": 3205,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:36.307Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 98,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 13.9,
+        "frameMs": 72.01,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 4775,
+        "triangles": 1504301,
+        "programs": 123,
+        "geometries": 3215,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:37.355Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 111,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 13.6,
+        "frameMs": 73.37,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5003,
+        "triangles": 1520887,
+        "programs": 123,
+        "geometries": 3242,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:38.374Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 124,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 13.2,
+        "frameMs": 75.51,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 5023,
+        "triangles": 1518173,
+        "programs": 123,
+        "geometries": 3240,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:39.402Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 128,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.8,
+        "frameMs": 77.84,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 4882,
+        "triangles": 1511837,
+        "programs": 124,
+        "geometries": 3243,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:40.457Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 142,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.7,
+        "frameMs": 78.79,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 4824,
+        "triangles": 1504829,
+        "programs": 124,
+        "geometries": 3266,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:41.554Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 142,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.3,
+        "frameMs": 81.32,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 1,
+        "worstMs": 101.4,
+        "calls": 4897,
+        "triangles": 1512613,
+        "programs": 124,
+        "geometries": 3263,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:42.645Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 154,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.1,
+        "frameMs": 82.68,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 2,
+        "worstMs": 107.1,
+        "calls": 5209,
+        "triangles": 1525689,
+        "programs": 124,
+        "geometries": 3263,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:45.169Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 154,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 9,
+        "frameMs": 110.53,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 4,
+        "worstMs": 1674.1,
+        "calls": 5721,
+        "triangles": 1540539,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:46.166Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 159,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 8.9,
+        "frameMs": 112.7,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 6,
+        "worstMs": 1674.1,
+        "calls": 5978,
+        "triangles": 1546779,
+        "programs": 124,
+        "geometries": 3270,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:47.186Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 160,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 8.7,
+        "frameMs": 115.01,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 8,
+        "worstMs": 1674.1,
+        "calls": 6031,
+        "triangles": 1555861,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:48.246Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 174,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 8.7,
+        "frameMs": 114.53,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 10,
+        "worstMs": 1674.1,
+        "calls": 6114,
+        "triangles": 1557081,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:49.299Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 177,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 8.7,
+        "frameMs": 114.32,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 10,
+        "worstMs": 1674.1,
+        "calls": 6092,
+        "triangles": 1556035,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:50.314Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 189,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 11.9,
+        "frameMs": 84.2,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 10,
+        "worstMs": 1674.1,
+        "calls": 6046,
+        "triangles": 1556053,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:51.351Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 189,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.3,
+        "frameMs": 81.53,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 10,
+        "worstMs": 1674.1,
+        "calls": 6079,
+        "triangles": 1555967,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:52.363Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 201,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.4,
+        "frameMs": 80.65,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 10,
+        "worstMs": 1674.1,
+        "calls": 6539,
+        "triangles": 1571789,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:55.965Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 201,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.4,
+        "frameMs": 80.54,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 10,
+        "worstMs": 1674.1,
+        "calls": 6652,
+        "triangles": 1575767,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    },
+    {
+      "at": "2026-09-20T10:46:59.514Z",
+      "phase": "fight",
+      "ambush": "ambush",
+      "departure": {
+        "cleared": false,
+        "reason": "awaiting-rescue-and-return"
+      },
+      "roll": {
+        "active": false,
+        "completed": 0,
+        "reason": "awaiting-rescue",
+        "pending": false
+      },
+      "hits": 201,
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)",
+      "viewport": [
+        1100,
+        850
+      ],
+      "perf": {
+        "fps": 12.4,
+        "frameMs": 80.78,
+        "samples": 60,
+        "windowFull": true,
+        "hitches": 10,
+        "worstMs": 1674.1,
+        "calls": 6863,
+        "triangles": 1589357,
+        "programs": 124,
+        "geometries": 3264,
+        "textures": 20,
+        "bootMs": 13636
+      }
+    }
+  ],
+  "errors": [],
+  "cameraOnlyOverride": true,
+  "sampleStarted": "2026-09-20T10:46:26.025Z",
+  "measurement": {
+    "frames": 320,
+    "meanMs": 104.6365625,
+    "fps": 9.556888874288086,
+    "p95Ms": 100,
+    "scope": "Visible normal Chrome, real RAF; observation page shares main thread with game"
+  }
+}

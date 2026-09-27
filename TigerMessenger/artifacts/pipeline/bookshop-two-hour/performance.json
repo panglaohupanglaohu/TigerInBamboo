@@ -1,0 +1,20 @@
+{
+  "environment": "Headless installed Chrome, Metal, 1400×1000, full original world, single test browser",
+  "entry": {
+    "medianMs": 33.29999999999927,
+    "p95Ms": 33.400000000001455,
+    "medianDrawCalls": 5354,
+    "medianTriangles": 3133146
+  },
+  "withoutBase": {
+    "medianMs": 33.29999999999927,
+    "p95Ms": 33.400000000001455,
+    "medianDrawCalls": 4867,
+    "medianTriangles": 2128982
+  },
+  "base": {
+    "meshes": 742,
+    "triangles": 1013344
+  },
+  "limitation": "Diagnostic measurements on this host, not a 60 FPS guarantee; unrelated world rendering remains active."
+}

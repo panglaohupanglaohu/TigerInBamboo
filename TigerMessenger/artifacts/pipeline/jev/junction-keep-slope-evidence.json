@@ -1,0 +1,37 @@
+{
+  "task": "Junction keep facade and background canyon closure",
+  "image_sha256": "dc96e47715f8edc733481ca1cb049fddb2f6e2cc5f95be47e18263fa8411056a",
+  "observations": [
+    "Inspected real overview and front view. Canyon formerly had open underside and abrupt clearance transition. Current closed grid terrain reads as continuous rock mass rather than narrow open strips.",
+    "Keep gained tapered buttresses, arch frame, quoins, blue standards. Entry no longer contains overlapping legacy arch/support decor. Six WFC roof setbacks retained.",
+    "Still simplified compared with reference: repeated rectangular windows, sparse planting, empty quay and missing boats; lighting and materials need later pass."
+  ],
+  "checks": [
+    {
+      "name": "closed terrain topology",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "5040 tram clearance rays",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "gate approach walk",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "junction dock to keep walk",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Godot gate and junction adapters",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "scope": "Text triage, not direct image inspection or visual approval"
+}

@@ -259,6 +259,7 @@ function buildGondola() {
   knot.position.y = 0.12;
   knot.rotation.x = Math.PI / 2;
   rope.add(knot);
+  rope.userData.boardingKnot = knot;
   gondola.userData.rope = rope;
 
   return gondola;

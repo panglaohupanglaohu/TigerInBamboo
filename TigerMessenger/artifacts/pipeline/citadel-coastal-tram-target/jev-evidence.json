@@ -1,0 +1,46 @@
+{
+  "task": "Holy city open coastal tram candidate triage",
+  "target": "No mountain tunnels; old and new city sightseeing; retain original pedestrian bridge; stations and harbor access.",
+  "visual_observations": {
+    "source": "Astra inspected rail-candidate.png actual Web screenshot",
+    "image_sha256": "ac7e1324b66f6af42551d18c1fed527d3590319b975a03a8c417c6a07b9448a3",
+    "completed": [
+      "Old-city rear peak silhouette lowered",
+      "Track now curves round outside west massif; east approach moved off mountain",
+      "Original pedestrian bridge retained"
+    ],
+    "remaining": [
+      "Route still bows too far out from city relative to target",
+      "Stations and pedestrian links not built",
+      "Original bridge has not been adapted for rail; 3.5 width insufficient",
+      "Sea seams and structures visible in foreground remain",
+      "Western shore newly lowered; needs visual coast finishing. Early clearance reports invalid due to rain/terrain substring bug."
+    ]
+  },
+  "checks": [
+    {
+      "name": "1099 samples; terrain exclusion corrected; double-sided rays include ground",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Boat navigation and boarding clearance",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Default route and Godot release",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No tunnels or narrow mountain carving",
+    "Do not claim sample clearance is full playtest",
+    "Retain original bridge pedestrians",
+    "Candidate only until navigation and architecture fit"
+  ],
+  "evidence_revision": {
+    "rail-clearance.json": "15036e550fa38ec4caf9e4b5ec1af64c05785a232fb7c13cfabe4e6bc0f80720"
+  }
+}

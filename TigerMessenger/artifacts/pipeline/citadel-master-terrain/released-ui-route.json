@@ -1,0 +1,36 @@
+{
+  "actual_button_handler": {
+    "blocked": {},
+    "completed_steps": 2,
+    "geometry_queries": 16380,
+    "max_plant_adjustment": 0.00296476423740387,
+    "phase": "hop",
+    "point": 2,
+    "role": "spear",
+    "route_points": 293,
+    "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+    "source": "res://data/common-frame-citadel-placement-r05-full-route.json",
+    "step_clearance": 0.01,
+    "surface_following": true
+  },
+  "passed": true,
+  "reset_clears_actor": true,
+  "routes": [
+    {
+      "kind": "[false, false, false]",
+      "source": "res://data/common-frame-citadel-placement-r05-full-route.json",
+      "valid": true
+    },
+    {
+      "kind": "[true, false, false]",
+      "source": "res://data/common-frame-citadel-placement-r04-front-route.json",
+      "valid": true
+    },
+    {
+      "kind": "[false, false, true]",
+      "source": "res://data/citadel-placement-r03-plaza.json",
+      "valid": true
+    }
+  ],
+  "scope": "Actual released UI handler, initial movement and reset; full route separately audited, no siege claim."
+}

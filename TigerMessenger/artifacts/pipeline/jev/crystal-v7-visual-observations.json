@@ -1,0 +1,22 @@
+{
+  "observer": "Astra; inspected new in-game capture after spatial and warm-cliff iteration, 2026-09-24",
+  "sources": [
+    {
+      "path": "assets/concepts/moebius-crystal-city/target-v7-swamp-enclosure.png",
+      "sha256": "5f02e7aa44b757395376a8a448a5096782e911bc1519c81612cc01c7e078df16"
+    },
+    {
+      "path": "artifacts/pipeline/crystal-v7-live/baseline.png",
+      "sha256": "6fa9aa27ca52f79e8b0b6011d53af5b89182b38bd75960b460c87f64a9f9f120"
+    }
+  ],
+  "observations": [
+    "Square moss patch removed from default scene; original swamp water and flowers now visible.",
+    "Three towers now closer; side tower moved out from behind rail supports. Railway remains visually dominant on right.",
+    "Overlapping canyon shoulders locally regraded; stone palette now pale cream/ochre with height bands. Large planar shapes and stretched diagonal facets remain visible; not target-quality rock formations.",
+    "Continuous cream promenade now outlines original swamp; actual bridge ground samples passed.",
+    "Tower bodies remain narrow segmented columns, tree crowns sparse; target crystalline cluster volume and harbor articulation remain insufficient.",
+    "Dark ocean and turquoise sky still differ strongly from bright target; no full manual route/story regression claimed."
+  ],
+  "comparison_limit": "Different projection; qualitative observations only, no percentage similarity."
+}

@@ -33,6 +33,7 @@ var root_support=preload("res://scripts/saihoji_root_support.gd").new()
 var pine_visual=preload("res://scripts/saihoji_pine_adapter.gd").new()
 var concealment_visual=preload("res://scripts/saihoji_concealment_adapter.gd").new()
 var concealment_result:Dictionary={}
+var target_garden=preload("res://scripts/saihoji_target_garden.gd").new()
 var pine_cover=preload("res://scripts/saihoji_pine_cover.gd").new()
 const ConcealPose=preload("res://scripts/roman_concealment_pose.gd")
 var socco_transport=preload("res://scripts/saihoji_socco_transport.gd").new()
@@ -82,7 +83,7 @@ var kun_counter_return := false
 var swallow_geometry:Dictionary={}
 var yaw := 0.2
 var pitch := 0.42
-var distance := 88.0
+var distance := 64.0
 var dragging := false
 var camera_focus := "battle"
 var ready_for_battle := false
@@ -101,18 +102,26 @@ var initial_load_error := ""
 var outcome_message := ""
 var beam: MeshInstance3D
 var battle_started := false
+var victory_roll_time := -1.0
+var victory_roll_start := Transform3D.IDENTITY
+var roll_tail_nodes:Array[Node3D]=[]
+var roll_tail_bases:Array[Basis]=[]
 var reinforcement_count := 0
 var reinforcement_wait := 20.0
 
 func _ready() -> void:
     model = load(WORLD).instantiate(); add_child(model)
     _index(model)
+    preload("res://scripts/gate_target_adapter.gd").new().bind(model)
     kun = source_nodes.get("leviathanGroup[156]")
     fleet = source_nodes.get("moebius-aircraft-squad[78]")
     garden = source_nodes.get("leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]")
     if not kun or not fleet or not garden:
         load_error = "原世界鲲/舰队/苔庭六景身份缺失"; push_error(load_error); return
     kun_original = kun.transform
+    for path in ["leviathanGroup[156]/leviathan-tail-root[40]", "leviathanGroup[156]/leviathan-tail-root[40]/leviathan-flukes[1]"]:
+        var part:Node3D=source_nodes.get(path)
+        if part:roll_tail_nodes.append(part);roll_tail_bases.append(part.basis)
     garden_island = source_nodes.get("leviathanGroup[156]/leviathan-island[39]")
     garden_island_original = garden_island.transform
     hub = kun.position.normalized(); east = Vector3.UP.cross(hub).normalized(); north = hub.cross(east).normalized()
@@ -131,6 +140,7 @@ func _ready() -> void:
                 child.set_meta("forward_plus_z",true);escort_pods.append(child);escort_original.append(child.global_transform)
     original_surface_result = original_surface_visual.apply(model)
     _adapt_world()
+    preload("res://scripts/saihoji_shore_stones.gd").apply(source_nodes)
     original_instances_result=original_instances.apply(model,JSON.parse_string(FileAccess.get_file_as_string("res://assets/world-source/original-instance-map.json")))
     pine_visual.apply(source_nodes)
     if pine_visual.report.count!=25:load_error="原六庭古松候选映射未完整接入"
@@ -143,13 +153,16 @@ func _ready() -> void:
     if not bool(concealment_result.get("applied",false)):
         load_error="苔庭五区外围隐蔽环境未接入：%s" % str(concealment_result.get("reason","unknown"))
     garden_island.position.y=maxf(6.08,(root_support.dry_plate_radius-kun.position.length())/0.5)
+    var target_result:Dictionary=target_garden.apply(garden_island,pine_visual.entries)
+    if not target_result.get("applied",false):load_error="苔庭认可目标布局未接入：%s" % str(target_result.get("reason","unknown"))
     add_child(director); director.event_emitted.connect(_on_event)
     add_child(music)
     _load_prefabs()
     _setup_view()
     _terrain_collision()
     await get_tree().physics_frame
-    landing_planner.build(get_world_3d(),landing,30.0,1.0)
+    pine_cover.build(concealment_visual.node,kun,[])
+    landing_planner.build(get_world_3d(),landing,30.0,0.6,pine_cover.blocks_body)
     if landing_planner.available.is_empty():load_error="苔庭现有地面没有足够的连通干燥站位"
     pine_cover.build(concealment_visual.node,kun,landing_planner.available)
     initial_load_error=load_error
@@ -214,7 +227,9 @@ func _terrain_collision() -> void:
     terrain_body = StaticBody3D.new(); terrain_body.name = "OriginalSaihojiTerrainCollision"; add_child(terrain_body)
     for node in model.find_children("*", "MeshInstance3D", true, false):
         var path := str(node.get_meta("extras", {}).get("sourcePath", ""))
-        if path.begins_with("leviathanGroup["): continue
+        # New shared meshes have no archived sourcePath extras. Test the
+        # real parent chain so moving Kun ground is never baked into the shore.
+        if kun.is_ancestor_of(node) or path.begins_with("leviathanGroup["): continue
         var name_l := path.get_file().get_slice("[",0).to_lower() if not path.is_empty() else str(node.name).to_lower()
         var parent_name:=str(node.get_parent().name)
         var parent_source:=str(node.get_parent().get_meta("extras",{}).get("sourcePath","")).get_file()
@@ -235,9 +250,19 @@ func _ground(direction: Vector3) -> Vector3:
 
 func _setup_view() -> void:
     var env := WorldEnvironment.new(); env.environment = Environment.new(); env.environment.background_mode = Environment.BG_COLOR
-    env.environment.background_color = Color("91b6ce"); env.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-    env.environment.ambient_light_color = Color("d8e5ea"); env.environment.ambient_light_energy = 0.8; add_child(env)
-    var sun := DirectionalLight3D.new(); sun.rotation_degrees = Vector3(-45,-30,0); sun.light_energy = 1.2; add_child(sun)
+    env.name="SaihojiTargetAtmosphere"
+    env.environment.background_color = Color("b9cdd1"); env.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+    env.environment.ambient_light_color = Color("bacbd7"); env.environment.ambient_light_energy = 0.4
+    env.environment.tonemap_mode=Environment.TONE_MAPPER_LINEAR;add_child(env)
+    # Orient the art light in this planet patch's frame, not global Y-up.
+    var sun := DirectionalLight3D.new();sun.name="SaihojiWarmKey"
+    sun.light_color=Color("ffe3b9");sun.light_energy=1.1
+    sun.shadow_enabled=true;sun.directional_shadow_max_distance=110.0
+    sun.shadow_bias=0.04;sun.shadow_normal_bias=0.8;add_child(sun)
+    sun.position=hub*200.0-east*28.0-north*22.0;sun.look_at(hub*166.0,hub)
+    var fill:=DirectionalLight3D.new();fill.name="SaihojiCoolSeaFill"
+    fill.light_color=Color("aacbdd");fill.light_energy=0.2;fill.shadow_enabled=false;add_child(fill)
+    fill.position=hub*177.0+east*35.0+north*18.0;fill.look_at(hub*166.0,hub)
     camera = Camera3D.new(); camera.far = 1400; camera.near = 0.1; camera.fov = 55; add_child(camera); camera.current = true; _camera()
     var layer := CanvasLayer.new(); add_child(layer)
     var panel := HBoxContainer.new(); panel.position = Vector2(16,16); layer.add_child(panel)
@@ -247,8 +272,8 @@ func _setup_view() -> void:
     var reset_button := Button.new(); reset_button.text = "结束并复位"; reset_button.pressed.connect(reset_battle); panel.add_child(reset_button)
     var mute:=CheckButton.new();mute.text="本场静音";mute.toggled.connect(func(value:bool):music.set_muted(value));panel.add_child(mute)
     var back:=Button.new();back.text="返回球形原世界";back.pressed.connect(func():reset_battle();get_tree().change_scene_to_file("res://scenes/original_world.tscn"));panel.add_child(back)
-    var close := Button.new(); close.text = "近看阵列"; close.pressed.connect(func(): camera_focus="defenders";distance=18;pitch=0.38;_camera()); panel.add_child(close)
-    var wide := Button.new(); wide.text = "看完整战场"; wide.pressed.connect(func(): camera_focus="battle";distance=88;_camera()); panel.add_child(wide)
+    var close := Button.new(); close.text = "近看阵列"; close.pressed.connect(func(): camera_focus="defenders";distance=22;pitch=0.12;yaw=4.0;_camera()); panel.add_child(close)
+    var wide := Button.new(); wide.text = "看完整战场"; wide.pressed.connect(func(): camera_focus="battle";distance=64;pitch=0.42;yaw=0.2;_camera()); panel.add_child(wide)
     var watch_kun:=Button.new();watch_kun.text="看鲲反抗";watch_kun.pressed.connect(func():camera_focus="kun";distance=35;pitch=0.3;_camera());panel.add_child(watch_kun)
     status = Label.new(); status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; status.custom_minimum_size.x = 310; status.position=Vector2(16,62); layer.add_child(status)
     beam = _line(Color(0.6,0.95,0.85,0.18), 1.3); beam.visible = false; add_child(beam)
@@ -271,6 +296,8 @@ func begin_battle() -> void:
     battle_started = director.start()
 
 func reset_battle() -> void:
+    victory_roll_time = -1.0
+    _pose_roll_tail(0.0)
     director.reset(); music.reset(); battle_started = false
     load_error=initial_load_error;outcome_message=""
     for rows in [troops, heavies, ships, crafts, projectiles]:
@@ -318,12 +345,18 @@ func _on_event(event: Dictionary) -> void:
         "round_completed":
             music.end_battle(); music.set_fleet_active(false)
             kun.basis=kun_original.basis
+            victory_roll_start=kun.transform
+            victory_roll_time=0.0
+            events.append({"type":"victory_roll_started","time":elapsed})
         "cleanup_requested":
             music.reset()
             if event.get("reason","")=="anti_air_exhausted":outcome_message="防空力量耗尽，鲲仍受吸取。可重新开始。"
             elif event.get("reason","")=="defenders_defeated":outcome_message="蓝盔守卫已倒下。可重新开始。"
 
 func _physics_process(delta: float) -> void:
+    if victory_roll_time>=0.0:
+        _update_victory_roll(delta)
+        return
     if not ready_for_battle or not director.running: return
     elapsed += delta
     _patrol(delta)
@@ -445,12 +478,21 @@ func _ships(delta: float) -> void:
             if ship.u >= 1.0:
                 ship.state = "docked"
                 for tr in troops:
-                    if tr.ship == ship.id: tr.state = "landing"
+                    if tr.ship == ship.id: tr.state = "landing_queue"
                 if ship.index<2:director.report_landing(ship.id)
                 else:events.append({"type":"reinforcement_landed","ship_id":ship.id,"time":elapsed})
         elif ship.state == "docked" and returning and return_hold <= 0.0:
             for tr in troops:
-                if tr.ship == ship.id and tr.state not in ["down","aboard"]: tr.state = "boarding"
+                if tr.ship == ship.id and tr.state not in ["down","aboard","boarding","boarding_queue"]:
+                    tr.state = "boarding_queue"
+                    var exit_path: Array[Vector3] = _landing_path(tr,ship)
+                    exit_path.reverse()
+                    tr.return_path=exit_path
+                    var distance:=0.0
+                    var previous:Vector3=tr.node.position
+                    for point in exit_path:
+                        distance+=previous.distance_to(point);previous=point
+                    tr.boarding_priority=distance
             if troops.filter(func(t): return t.ship == ship.id).all(func(t): return t.state in ["aboard","down"]): ship.state = "back"
         elif ship.state == "back":
             ship.u = maxf(0.0,ship.u-delta/34.0)
@@ -473,22 +515,96 @@ func _orient(node: Node3D, pos: Vector3, target: Vector3, size: float = 1.0) -> 
     var facing := Basis(up.cross(front).normalized(),up,front) if node.get_meta("forward_plus_z",false) else Basis(front,up,side)
     node.transform = Transform3D(facing.scaled(Vector3.ONE*size),pos)
 
+func _landing_path(tr: Dictionary, ship: Dictionary) -> Array[Vector3]:
+    var deck: Vector3 = ship.node.global_position + ship.node.global_basis.y.normalized()*0.65
+    var path: Array[Vector3] = landing_planner.route(deck,tr.slot)
+    if path.is_empty(): return path
+    var bank: Vector3 = path[0]
+    if deck.distance_to(bank)>8.0:
+        load_error="战船跳板无法连接干地"; return []
+    if not ship.has("gangway"):
+        var ramp := MeshInstance3D.new(); ramp.name="TraditionalShipLandingGangway"
+        var box := BoxMesh.new(); box.size=Vector3(1.4,0.12,deck.distance_to(bank))
+        ramp.mesh=box
+        var mat := StandardMaterial3D.new(); mat.albedo_color=Color("806343");mat.roughness=1.0
+        ramp.material_override=mat;ship.node.add_child(ramp)
+        var forward := (bank-deck).normalized()
+        var side := deck.normalized().cross(forward).normalized()
+        var ramp_up := forward.cross(side).normalized()
+        ramp.global_transform=Transform3D(Basis(side,ramp_up,forward),(deck+bank)*0.5-ramp_up*0.12)
+        var body:=StaticBody3D.new();ramp.add_child(body)
+        var shape:=CollisionShape3D.new();shape.shape=box.create_trimesh_shape();body.add_child(shape)
+        ship.gangway=ramp
+    for i in path.size():path[i]+=path[i].normalized()*(float(foot_offsets[tr.role])-0.22)
+    path[0]=bank
+    path.push_front(deck)
+    path.append(tr.slot)
+    return path
+
+func _crowd_step_clear(tr: Dictionary, start: Vector3, finish: Vector3) -> bool:
+    var segment := finish-start
+    for other in troops:
+        if other==tr or other.state not in ["landing","boarding"]:continue
+        var center:Vector3=other.node.position
+        # A closing-distance test permits clearing an already crowded start;
+        # it never resolves congestion by teleporting or moving off the path.
+        var before:=start.distance_squared_to(center)
+        var t:=clampf((center-start).dot(segment)/maxf(segment.length_squared(),0.000001),0.0,1.0)
+        var clearance:float=(start+segment*t).distance_squared_to(center)
+        if clearance<0.65*0.65 and (before>=0.65*0.65 or finish.distance_squared_to(center)<before-0.000001):return false
+    return true
+
 func _soldiers(delta: float) -> void:
     for tr in troops:
         var actor: Node3D = tr.node
         if tr.state == "down": continue
         var ship = ships.filter(func(s):return s.id==tr.ship)[0]
-        var onboard: bool = tr.state == "aboard"
+        var onboard: bool = tr.state in ["aboard","landing_queue"]
         warship_visual.set_crew_embarked(ship.visual,int(tr.index),onboard,str(tr.id))
         actor.visible = not onboard
-        if tr.state == "aboard":
+        if tr.state == "boarding_queue":
+            # The original boats share a berth. Only one returning passenger
+            # reserves this converging route at a time; everyone else keeps
+            # their actual visible position until the route is released.
+            if not troops.any(func(other):return other.state=="boarding"):
+                var first:=true
+                for other in troops:
+                    if other.state=="boarding_queue" and float(other.get("boarding_priority",INF))<float(tr.get("boarding_priority",INF)):
+                        first=false;break
+                if first:tr.state="boarding"
+        if tr.state == "landing_queue":
+            # A single physical gangway: passengers remain visible aboard until
+            # there is room to enter it. No sideward displacement over water.
+            var entrance: Vector3 = ship.node.global_position + ship.node.global_basis.y.normalized()*0.65
+            var free := true
+            for other in troops:
+                if other != tr and other.state in ["landing","boarding"] and other.node.position.distance_to(entrance)<0.9:
+                    free=false;break
+            if free:
+                tr.state="landing"
+                actor.position=entrance
+                actor.visible=true
+                warship_visual.set_crew_embarked(ship.visual,int(tr.index),false,str(tr.id))
+        if tr.state in ["aboard","landing_queue"]:
             var deck: Vector3 = ship.node.global_position + ship.node.global_basis.y.normalized()*0.65 + ship.node.global_basis.x.normalized()*((tr.index%5-2)*0.45) + ship.node.global_basis.z.normalized()*((int(tr.index/5)-2)*0.28)
             _orient(actor,deck,fleet_center)
         elif tr.state in ["landing","boarding"]:
-            var target: Vector3 = tr.slot if tr.state=="landing" else ship.node.global_position+landing*0.6
+            if tr.get("path_state","")!=tr.state:
+                var path: Array[Vector3] = tr.return_path if tr.state=="boarding" and tr.has("return_path") else _landing_path(tr,ship)
+                if path.is_empty():director.stop("landing_route_unavailable");continue
+                tr.walk_path=path;tr.path_index=0;tr.path_state=tr.state
+            var target: Vector3 = tr.walk_path[tr.path_index]
             var next: Vector3 = actor.position.move_toward(target,delta*2.6)
+            # Stop on the already validated dry route, rather than repelling
+            # actors sideways into a pool. Same-direction branches merge FIFO.
+            if not _crowd_step_clear(tr,actor.position,next):
+                tr.crowd_wait=float(tr.get("crowd_wait",0.0))+delta
+                continue
+            tr.crowd_wait=0.0
             _orient(actor,next,target)
-            if next.distance_to(target)<0.08: tr.state = "formed" if tr.state=="landing" else "aboard"
+            if next.distance_to(target)<0.08:
+                tr.path_index+=1
+                if tr.path_index>=tr.walk_path.size():tr.state = "formed" if tr.state=="landing" else "aboard"
         elif tr.state == "formed":
             if director.phase in ["sail_out", "concealment"] or float(tr.conceal_weight)>0.0:
                 _orient(actor,actor.position.move_toward(tr.slot,delta*2.6),fleet_center)
@@ -637,6 +753,12 @@ func _assault(delta:float)->void:
     if heavies.is_empty():return
     assault_t+=delta
     var stage:String=director.assault_phase
+    # The rescue can finish while passengers are still leaving a carrier.
+    # Withdrawal must cancel insertion too; otherwise ramp_clear passengers
+    # prevent combat from starting and the whole round waits forever.
+    if returning and stage in ["approach","insert","combat"]:
+        director.report_assault_stage("withdraw")
+        stage=director.assault_phase
     if stage == "combat":
         combat_elapsed += delta
         var alive_defenders := troops.filter(func(t):return t.state!="down").size()
@@ -705,7 +827,6 @@ func _assault(delta:float)->void:
                 if fired:
                     enemy.bolt_shots+=1
                     _fire(enemy,foe.node,"bolt",30.0)
-        if returning and director.assault_phase=="combat":director.report_assault_stage("withdraw")
         if director.assault_phase in ["withdraw","extract"]:
             enemy.state="extracting"
             enemy.node.position=enemy.node.position.move_toward(boarding,delta*5.0)
@@ -1158,3 +1279,38 @@ func _charge_bolt(enemy:Dictionary,delta:float,want:bool)->bool:
                 if remain<need:enemy.bolt_t+=remain;enemy.bolt_charge=maxf(0.0,1.0-enemy.bolt_t/0.85);break
                 remain-=need;enemy.bolt_t=0.0;enemy.bolt_charge=0.0;enemy.bolt_phase="idle"
     return fired
+
+## Explicit model review pose only. Never interrupt or inject a live battle.
+func preview_kun_roll(angle:float)->bool:
+    if director.running:return false
+    kun.position=hub*184.0
+    kun.basis=kun_original.basis*Basis(Vector3.RIGHT,angle)
+    _pose_roll_tail(angle/TAU)
+    garden_island.position.y=6.08
+    return true
+
+func _update_victory_roll(delta:float)->void:
+    victory_roll_time=minf(12.0,victory_roll_time+maxf(delta,0.0))
+    var t:=victory_roll_time
+    if status:status.text="鲲已脱离吸取 · 友军已撤离\n腾空翻身：%s" % ("升空" if t<3.0 else ("整体翻转" if t<9.0 else "回落"))
+    var lift:=smoothstep(0.0,3.0,t) if t<3.0 else (1.0-smoothstep(9.0,12.0,t) if t>9.0 else 1.0)
+    var turn:=smoothstep(3.0,9.0,t)
+    kun.position=victory_roll_start.origin.lerp(hub*184.0,lift)
+    kun.basis=kun_original.basis*Basis(Vector3.RIGHT,turn*TAU)
+    _pose_roll_tail(turn)
+    # At either endpoint the old ground compensation is restored; in the air the
+    # whole garden sits on the back instead of being pinned to planet altitude.
+    garden_island.position.y=maxf(6.08,(root_support.dry_plate_radius-kun.position.length())/0.5) if t<3.0 or t>=9.0 else 6.08
+    if camera_focus!="battle":_camera()
+    if t>=12.0:
+        kun.transform=victory_roll_start
+        victory_roll_time=-1.0
+        events.append({"type":"victory_roll_completed","time":elapsed})
+        _update_status()
+
+func _pose_roll_tail(progress:float)->void:
+    var p:=clampf(progress,0.0,1.0)
+    var envelope:=pow(sin(PI*p),2.0)
+    if roll_tail_nodes.size()!=2:return
+    roll_tail_nodes[0].basis=roll_tail_bases[0]*Basis(Vector3.BACK,0.12*envelope*sin(4.0*PI*p))*Basis(Vector3.RIGHT,-0.10*envelope)
+    roll_tail_nodes[1].basis=roll_tail_bases[1]*Basis(Vector3.BACK,0.08*envelope*sin(4.0*PI*p-0.55))

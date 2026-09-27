@@ -1,0 +1,17 @@
+{
+  "radius": 160,
+  "source": "assembled default Web world; no saved browser edits copied",
+  "nodes": 3490,
+  "meshes": 3473,
+  "instances": 0,
+  "materials": 49,
+  "textures": 6,
+  "bytes": 16999000,
+  "landmarks": {},
+  "warnings": [],
+  "limitations": [
+    "Static visible-state capture; source animations, physics, quests and shader logic still require native migration",
+    "Hidden states and non-mesh line/point effects excluded from this world overview; separate asset archives retain them"
+  ],
+  "errors": []
+}

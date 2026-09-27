@@ -19,6 +19,7 @@ import * as THREE from "three";
 import { facet } from "../assets/lowPoly.js";
 import { addOutline, toonMat } from "../assets/toon.js";
 import { bindVanguardOptimization } from "../assets/battleOptimization.js";
+import { sfxLaserSwing, sfxBoltCharge, sfxBoltFire, sfxBoltHit } from "../audio/worldSfx.js";
 
 /**
  * 苔庭之战伤害口径（用户 2026-09-04 裁定）。
@@ -684,6 +685,7 @@ export function updateVanguardCombat(squadRoot, dt, t, opts = {}) {
       tr.userData._swingT = 0;
       tr.userData._swingAnim = 0; // 启动劈砍动画
       stats.blade++;
+      sfxLaserSwing(_vtA);
       const vs = bladeVsShield(best);
       if (vs.shieldBroken) {
         best.userData.shieldBroken = true; // 记账：调用方摘盾网格 + 记事件
@@ -708,7 +710,9 @@ export function updateVanguardCombat(squadRoot, dt, t, opts = {}) {
 
     // 闪电炮：充电—放电（充电时举枪瞄准，枪口辉光随 charge 变亮）
     const wantFire = dist > bladeRange && dist <= boltRange;
+    const prevBoltPhase = tr.userData.boltPhase;
     const bolt = updateBoltCharge(tr, dt, wantFire);
+    if (bolt.phase === "charging" && prevBoltPhase !== "charging") sfxBoltCharge(_vtA);
     const gun = tr.userData.parts?.gun;
     if (gun) {
       const k = 1 + bolt.charge * 0.32 + (bolt.phase === "discharge" ? 0.38 : 0);
@@ -742,6 +746,7 @@ export function updateVanguardCombat(squadRoot, dt, t, opts = {}) {
       }
       // 主人 2026-09-05：闪电改为**光圈**弹丸——可见的青色光环从枪口飞向目标
       vanguardMuzzleWorld(tr, _vtG);
+      sfxBoltFire(_vtG);
       fireBoltRing(squadRoot, _vtG.clone(), to.clone(), best, hit, tr);
     }
   }
@@ -879,6 +884,7 @@ function advanceBoltRings(squadRoot, dt, stats, onWound) {
     // 命中 / 超时（30 m/s 慢速弹丸：150m 飞行 ~5s，超时窗同步放宽）
     const arrived = dist < 1.3 || s.t > 7;
     if (arrived) {
+      if (s.t <= 7) sfxBoltHit(s.ring.position, !(s.hit && alive));
       if (s.hit && s.t <= 7 && alive && vanguardStrikeLands(s.target, "bolt")) {
         stats.wounds++;
         onWound?.(s.target, "bolt", s.trooper);

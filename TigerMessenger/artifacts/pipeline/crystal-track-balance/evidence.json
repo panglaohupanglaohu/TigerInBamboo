@@ -1,0 +1,30 @@
+{
+  "task": "Balance crystal clusters along blue tram",
+  "visual_observations": {
+    "source": "Assistant reviewed 8931 side-window captures",
+    "image_sha256": "03c6e7b94dd9f16095d34fefecffbaa94f349183791d72731c65e1f48830b687",
+    "completed": [
+      "Blue actual direction used, left3/right9 now left6/right6",
+      "Three satellite clusters relocated with foundations, mother and harbour retained"
+    ],
+    "remaining": [
+      "Guardrails and terrain obscure towers at some viewpoints",
+      "Side counts classify each tower at nearest track point, not simultaneous visible counts"
+    ]
+  },
+  "checks": [
+    {
+      "name": "2700 swept line samples for moved geometry",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "12 clusters preserved, runtime errors none",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text only triage; no full gameplay acceptance"
+  ]
+}

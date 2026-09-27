@@ -5,6 +5,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { updateWarshipOars, applyBoatOarWobble } from "../assets/harbor.js";
+import {CAMERA_HEIGHT,CAMERA_LOOK_Y} from '../core/constants.js';
 
 const BOARD_RANGE = 5.2;
 const SPEED = 6.5;
@@ -51,12 +52,51 @@ export function createBoatRide({
   let boat = null;
   let surfaceRadius = 0;
   let prevCamDist = 0;
+  let prevFollowProfile = null;
   let crossing = null;
   let deckPosition = null;
+  let refreshSailingView=false;
+
+  function unobstructedBoatView(target) {
+    const meshes=[];target.traverse(n=>{if(n.isMesh){if(n.isInstancedMesh)n.computeBoundingSphere();meshes.push(n);}});
+    target.updateWorldMatrix(true,true);
+    if(target.userData.portNavigation){
+      // A berth camera must account for the actual neighboring pillars and quay,
+      // not only the sail of the boarded ship.
+      scene.updateMatrixWorld(true);
+      const near=new THREE.Sphere(player.position,CAMERA_DIST+12),box=new THREE.Box3();
+      scene.traverseVisible(n=>{
+        if(!n.isMesh||n.userData.isOutline)return;
+        for(let p=n;p;p=p.parent){if(p===target||p===playerGroup||/ocean|water|sky|cloud|planet|reflection/i.test(p.name))return;}
+        const materials=Array.isArray(n.material)?n.material:[n.material];
+        if(materials.every(m=>m.transparent&&m.opacity<.99))return;
+        if(box.setFromObject(n).intersectsSphere(near))meshes.push(n);
+      });
+    }
+    const up=player.position.clone().normalize(),back=_fwd.clone().negate().projectOnPlane(up).normalize();
+    const right=new THREE.Vector3().crossVectors(up,back).normalize(),ray=new THREE.Raycaster();ray.layers.enableAll();
+    let best={yaw:0,height:1},score=-Infinity;const candidates=[];
+    for(const height of [1,3,5])for(let i=0;i<16;i++) {
+      const yaw=i*Math.PI/8,direction=back.clone().multiplyScalar(Math.cos(yaw)).addScaledVector(right,Math.sin(yaw));
+      const eye=player.position.clone().addScaledVector(direction,CAMERA_DIST).addScaledVector(up,CAMERA_HEIGHT*(.45+.55*CAMERA_DIST/7.5)+height);
+      let clear=0;
+      for(const h of [.25,.6,CAMERA_LOOK_Y]) {
+        const point=player.position.clone().addScaledVector(up,h),delta=eye.clone().sub(point),length=delta.length();
+        // Test from the camera, matching the rendered front faces of the sail.
+        ray.set(eye,delta.divideScalar(-length));ray.near=.08;ray.far=length-.08;
+        const hit=ray.intersectObjects(meshes,false)[0];clear+=hit?0:1;
+      }
+      const value=clear*100-height*.1-Math.abs(Math.sin(yaw))*.01;
+      candidates.push({yaw,height,clear,eye:eye.toArray(),target:player.position.toArray()});
+      if(value>score){score=value;best={yaw,height};}
+    }
+    target.userData.boardingCameraAudit={best,candidates};return best;
+  }
 
   // The berth supplies a measured world-space route, ordered quay -> deck.
   // Keep this opt-in until the actual quay connector has been installed.
   function beginCrossing(target, leaving = false) {
+    if(target?.userData.portNavigation && !target.userData.portNavigation.atBerth())return false;
     const route = target?.userData.boardingRoute;
     const gate = target?.userData.boardingGate;
     if (!route || !gate || crossing) return false;
@@ -122,6 +162,7 @@ export function createBoatRide({
   }
 
   function boatLabel(target) {
+    if (target?.userData?.crystalMotherPortResident) return "母塔接驳船";
     if (target?.userData?.oceanPatrol || target?.userData?.kind === "ocean-warship") return "海面战船";
     if (target?.userData?.canalPatrol) return "运河战船";
     if (target?.name === "fisher-boat") return "古战船";
@@ -173,8 +214,12 @@ export function createBoatRide({
     player.riding = true;
     player.velocity.set(0, 0, 0);
     prevCamDist = cameraRig?.getDist?.() ?? 0;
+    prevFollowProfile = cameraRig?.getFollowProfile?.() ?? null;
     cameraRig?.setDist?.(CAMERA_DIST);
+    // Look diagonally across the bow-side aisle, not through the central sail.
+    if(deckPoint)cameraRig?.setFollowProfile?.(unobstructedBoatView(boat));
     deckPosition = deckPoint ? boat.worldToLocal(deckPoint.clone()) : null;
+    refreshSailingView=!!deckPoint;
     if (playerGroup) playerGroup.visible = !!deckPosition;
     if (deckPosition) player.position.copy(deckPoint);
     else {
@@ -184,7 +229,7 @@ export function createBoatRide({
     player.forward.copy(_fwd);
     player.facing.copy(_fwd);
     setHint("[<kbd>WASD</kbd>] 驾驶 · [<kbd>F</kbd>] 下船");
-    toast(`已登上${boatLabel(boat)} · WASD 驾驶 · F 下船`, 3.2);
+    toast(boat.userData.portNavigation ? "已登上母塔接驳船 · S 离港 / W 返港 · 靠泊后 F 下船" : `已登上${boatLabel(boat)} · WASD 驾驶 · F 下船`, 3.2);
     return true;
   }
 
@@ -219,6 +264,7 @@ export function createBoatRide({
     player.riding = false;
     if (playerGroup) playerGroup.visible = true;
     if (prevCamDist) cameraRig?.setDist?.(prevCamDist);
+    cameraRig?.setFollowProfile?.(prevFollowProfile);
     setHint(null);
     onDismount(left);
     toast(`已离开${boatLabel(left)}`, 1.8);
@@ -229,7 +275,8 @@ export function createBoatRide({
     if (crossing) {e.preventDefault();return;}
     if (riding) {
       e.preventDefault();
-      if (boat.userData.boardingRoute) beginCrossing(boat,true);
+      if (boat.userData.portNavigation && !boat.userData.portNavigation.atBerth()) toast("驶回母塔码头后再下船", 2);
+      else if (boat.userData.boardingRoute) beginCrossing(boat,true);
       else dismount();
       return;
     }
@@ -266,6 +313,11 @@ export function createBoatRide({
     const boardingLocked=boat.userData.boardingGate?.snapshot().canSail===false;
     const turn = boardingLocked?0:(k.KeyA ? 1 : 0) - (k.KeyD ? 1 : 0);
     const thrust = boardingLocked?0:(k.KeyW ? 1 : 0) - (k.KeyS ? 1 : 0);
+    const portNavigation=boat.userData.portNavigation;
+    if (portNavigation) {
+      if(!boardingLocked) portNavigation.step(dt,thrust);
+      _fwd.set(1,0,0).applyQuaternion(boat.quaternion);
+    } else {
     if (turn) _fwd.applyAxisAngle(_up, turn * TURN_SPEED * dt);
     projectTangent(_fwd, _up);
 
@@ -275,11 +327,12 @@ export function createBoatRide({
       boat.position.copy(_next);
     }
     if(!boardingLocked)orientBoat();
+    }
     // 有前进/后退推力时双侧船桨划水；仅转向时轻划
     const row = thrust ? 1 : turn ? 0.35 : 0;
     updateWarshipOars(boat, dt, row);
     // 部分桨手麻醉 → 航向歪扭
-    if(!boardingLocked)applyBoatOarWobble(boat, dt);
+    if(!boardingLocked && !portNavigation)applyBoatOarWobble(boat, dt);
 
     _up.copy(boat.position).normalize();
     if (deckPosition) player.position.copy(boat.localToWorld(deckPosition.clone()));
@@ -291,7 +344,10 @@ export function createBoatRide({
     player.riding = true;
     player.forward.copy(_fwd);
     player.facing.copy(_fwd);
-    setHint(boardingLocked?"跳板尚未收起，船舶保持停靠":"[<kbd>WASD</kbd>] 驾驶 · [<kbd>F</kbd>] 下船");
+    if(deckPosition&&!boardingLocked&&refreshSailingView){
+      cameraRig?.setFollowProfile?.(unobstructedBoatView(boat));refreshSailingView=false;
+    }
+    setHint(boardingLocked?"跳板尚未收起，船舶保持停靠":portNavigation?"[<kbd>S</kbd>] 倒船离港 · [<kbd>W</kbd>] 返港 · [<kbd>F</kbd>] 靠泊后下船":"[<kbd>WASD</kbd>] 驾驶 · [<kbd>F</kbd>] 下船");
     return true;
   }
 

@@ -2,6 +2,27 @@ extends RefCounted
 ## Verified original root/seed matching, LOD0 only. Original geometry stays recoverable.
 var entries:Array=[]
 var report:Dictionary={}
+var palette_materials: Array[StandardMaterial3D] = []
+const TARGET_PALETTE = ["766958","504a3e","253e2b","446439","72934d"]
+func _target_palette(ids: Dictionary) -> void:
+    if palette_materials.is_empty():
+        for index in range(5):
+            var material := StandardMaterial3D.new()
+            material.resource_name="SaihojiPine_TargetPalette_m%d" % index
+            material.albedo_color=Color(TARGET_PALETTE[index])
+            material.roughness=1.0;material.metallic=0.0
+            material.specular_mode=BaseMaterial3D.SPECULAR_DISABLED
+            material.cull_mode=BaseMaterial3D.CULL_DISABLED
+            palette_materials.append(material)
+    for index in range(5):
+        var node: MeshInstance3D = ids.get("n%d" % (8+index))
+        if is_instance_valid(node):node.material_override=palette_materials[index]
+
+func apply_palette(root: Node3D) -> void:
+    for node in root.find_children("*","MeshInstance3D",true,false):
+        var id: String = str(node.name).get_slice(".",0).get_slice("_",0)
+        if id in ["n8","n9","n10","n11","n12"]:_target_palette({id:node})
+
 func _index(node:Node, ids:Dictionary)->void:
     var ex:Dictionary=node.get_meta("extras",{})
     var id:String=str(ex.get("three_node_id",""))
@@ -21,6 +42,7 @@ func apply(source_nodes:Dictionary)->Dictionary:
         var ids:Dictionary={};_index(candidate,ids)
         if ids.size()!=17 or not ids.has("n0"):
             report.errors.append("candidate IDs: "+str(row.seed));candidate.free();continue
+        _target_palette(ids)
         candidate.transform=Transform3D.IDENTITY
         ids.n0.transform=Transform3D.IDENTITY
         staged.append({"anchor":anchor,"candidate":candidate,"original":anchor.transform,"parent":anchor.get_parent(),"row":row,"ids":ids,"hidden":[]})

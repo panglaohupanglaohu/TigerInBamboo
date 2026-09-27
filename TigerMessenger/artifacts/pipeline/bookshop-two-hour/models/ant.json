@@ -1,0 +1,64 @@
+{
+  "name": "ant",
+  "version": 4,
+  "sha256": "5628a74c20ad90d564c7adca81f675633042d36539a59d8699f4058ee3ab48d8",
+  "stats": {
+    "sourceParts": 230,
+    "meshes": 10,
+    "triangles": 85536
+  },
+  "radius": 160,
+  "source": "assembled default Web world; no saved browser edits copied",
+  "nodes": 24,
+  "meshes": 10,
+  "instances": 0,
+  "materials": 10,
+  "textures": 4,
+  "bytes": 9271592,
+  "landmarks": {
+    "robot": {
+      "node": 0,
+      "name": "bookshop-robot-ant",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "center": [
+        0,
+        1.5233142506331205,
+        0.0625
+      ],
+      "size": [
+        2.9328315258026123,
+        3.1176676489412785,
+        2.3550000190734863
+      ]
+    }
+  },
+  "warnings": [],
+  "limitations": [
+    "Static visible-state capture; source animations, physics, quests and shader logic still require native migration",
+    "Hidden states and non-mesh line/point effects excluded from this world overview; separate asset archives retain them",
+    "Procedural metal patina and line-based armor edge wear are preserved in the authoritative Three.js model, not baked into this portable GLB.",
+    "Static model; locomotion/combat rig is not implemented."
+  ]
+}

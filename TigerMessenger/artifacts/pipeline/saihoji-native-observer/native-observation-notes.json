@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-20",
+  "gpu": "ANGLE Metal Renderer: Apple M2",
+  "viewport": [
+    1100,
+    850
+  ],
+  "scope": "Normal Chrome UI, existing chapter5 save, camera-only override, no hit/phase/actor injection. Not full new-game playthrough.",
+  "measurementFile": "native-before.json",
+  "observations": [
+    {
+      "at": "2026-09-20T10:47:07.799Z",
+      "hits": 214,
+      "phase": "fight",
+      "calls": 6921
+    },
+    {
+      "at": "2026-09-20T10:49:04.152Z",
+      "hits": 257,
+      "phase": "fight",
+      "calls": 8869
+    },
+    {
+      "at": "2026-09-20T10:53:31.655Z",
+      "hits": 431,
+      "phase": "fight",
+      "calls": 6583
+    },
+    {
+      "at": "2026-09-20T10:56:03.253Z",
+      "hits": 435,
+      "phase": "fight",
+      "calls": 5987
+    }
+  ],
+  "readOnlyConsoleAt": "2026-09-20T10:57:06Z",
+  "roster": {
+    "deadVisibleAshore": 104,
+    "aliveVisibleAshore": 54,
+    "aliveHiddenAboard": 18
+  },
+  "boundary": "Roster includes all phalanx factions, not only blue island army. Source fixes were being developed while this earlier loaded page ran. Mac locked before further UI observation; no final native FPS or natural victory claimed.",
+  "followupFixes": [
+    "stuck arrow trails disabled",
+    "duplicate bookshop reinforcement reuses managed task",
+    "all-phase corpse presentation preserving downed patients",
+    "animated warship bounds"
+  ]
+}

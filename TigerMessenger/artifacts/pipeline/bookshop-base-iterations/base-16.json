@@ -1,0 +1,17 @@
+{
+  "revision": 16,
+  "triangles": 64484,
+  "finite": true,
+  "circle": {
+    "center": [
+      0,
+      32
+    ],
+    "plazaRadius": 32,
+    "promenadeRadius": 39.5,
+    "shoreRadius": 40,
+    "seawardArc": "continuous semicircle; no chord"
+  },
+  "change": "Dockside spare-parts crates and trolleys",
+  "errors": []
+}

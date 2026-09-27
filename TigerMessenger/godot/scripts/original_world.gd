@@ -1,5 +1,8 @@
 extends Node3D
 ## Original assembled world overview. Source geometry/layout, native behaviors pending.
+signal citadel_music_event(key:String,active:bool,source:Node3D)
+signal citadel_music_reset
+var citadel_audio:Node
 var camera: Camera3D
 var model: Node3D
 var manifest: Dictionary
@@ -21,6 +24,7 @@ var tiger_adapter = preload("res://scripts/tiger_world_adapter.gd").new()
 var tiger_toggle: CheckButton
 var bookshop_adapter = preload("res://scripts/bookshop_world_adapter.gd").new()
 var castle_adapter = preload("res://scripts/castle_world_adapter.gd").new()
+var tram_sync:Dictionary={}
 var castle_toggle: CheckButton
 var window_lights=preload("res://scripts/citadel_window_lights.gd").new()
 var old_harbor_grade_adapter=preload("res://scripts/old_harbor_grade_adapter.gd").new()
@@ -50,11 +54,24 @@ func _ready() -> void:
 					adapted.vertex_color_use_as_albedo=true
 					adapted.vertex_color_is_srgb=false
 					node.set_surface_override_material(surface,adapted)
+	var shore_sources:Dictionary={}
+	for source in model.find_children("*","Node3D",true,false):
+		var path:String=str(source.get_meta("extras",{}).get("sourcePath",""))
+		if not path.is_empty():shore_sources[path]=source
+	preload("res://scripts/saihoji_shore_stones.gd").apply(shore_sources)
 	set_scout_candidate_preview(scout_candidate_preview)
 	if tiger_adapter.bind(model): tiger_adapter.set_enabled(true)
 	if bookshop_adapter.bind(model): bookshop_adapter.set_enabled(true)
 	if castle_adapter.bind(model): castle_adapter.set_enabled(true)
+	tram_sync=preload("res://scripts/tram_coastal_sync.gd").apply(model)
+	preload("res://scripts/canal_junction_target_adapter.gd").new().bind(model)
+	preload("res://scripts/gate_target_adapter.gd").new().bind(model)
 	ocean_adapter.bind(model)
+	preload("res://scripts/crystal_lake_surface_adapter.gd").new().bind(model)
+	var crystal_port=preload("res://scripts/crystal_mother_port.gd").new()
+	crystal_port.name="CrystalMotherPort"
+	model.add_child(crystal_port)
+	crystal_port.build()
 	seabed_adapter.bind(model)
 	camp_shallows_adapter.bind(model)
 	west_massif_adapter.bind(model)
@@ -84,6 +101,9 @@ func _ready() -> void:
 			var elder_audio=preload("res://scripts/citadel_elder_audio.gd").new()
 			elder_audio.name="CitadelElderRegionAudio";add_child(elder_audio)
 			elder_audio.bind(hosts[0],camera)
+			citadel_audio=elder_audio
+			citadel_music_event.connect(elder_audio.set_event)
+			citadel_music_reset.connect(elder_audio.reset_events)
 	camera.current = true
 	if is_instance_valid(castle_adapter.candidate) and is_instance_valid(castle_adapter.west_city):
 		window_lights.bind(castle_adapter.candidate,castle_adapter.west_city)

@@ -71,7 +71,8 @@ export function buildFrontHarborApproach(castle,radius){
  const floorAt=(x,z)=>x>=27.5&&x<=47.5&&z>=80&&z<=95.5?dockY-1.8:null;
  castle.updateWorldMatrix(true,true);const cuts=[];
  for(const name of ['citadel-oskar-grid-mountain-surface','backlit-highlight-citadel-oskar-grid-mountain-surface']){
-  const m=castle.getObjectByName(name),g=m.geometry,a=g.attributes.position,toCity=city.matrixWorld.clone().invert().multiply(m.matrixWorld),inv=toCity.clone().invert();let changed=0;
+  const m=castle.getObjectByName(name);if(!m?.geometry)continue;
+  const g=m.geometry,a=g.attributes.position,toCity=city.matrixWorld.clone().invert().multiply(m.matrixWorld),inv=toCity.clone().invert();let changed=0;
   for(let i=0;i<a.count;i++){if(g.attributes.shoreBoundaryBottom?.getX(i)>.5)continue;const p=new THREE.Vector3().fromBufferAttribute(a,i).applyMatrix4(toCity),floor=floorAt(p.x,p.z);if(floor!==null&&p.y>floor){p.y=floor;p.applyMatrix4(inv);a.setXYZ(i,p.x,p.y,p.z);changed++;}}
   a.needsUpdate=true;g.computeVertexNormals();g.computeBoundingBox();g.computeBoundingSphere();cuts.push({name,changed});
  }

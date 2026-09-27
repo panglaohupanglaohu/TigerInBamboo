@@ -1,0 +1,356 @@
+{
+  "label": "after-index",
+  "setup": {
+    "stage": "ambush",
+    "clock": 32.100000000000186,
+    "scope": "Real 8931 scene and running game loop, diagnostic campaign/fleet placement; software GPU timings are not hardware FPS."
+  },
+  "frames": 60,
+  "frameMs": 359.8666666666667,
+  "calls": 4788.683333333333,
+  "triangles": 1506113.7666666666,
+  "rows": [
+    {
+      "path": "saihoji-phalanx-battle/saihoji-cohort-1",
+      "draws": 60114
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-cohort-0",
+      "draws": 60006
+    },
+    {
+      "path": "christchurch-tram-system/Mesh",
+      "draws": 31740
+    },
+    {
+      "path": "leviathanGroup/leviathan-island",
+      "draws": 21240
+    },
+    {
+      "path": "cyber-megalithic-twin-gates/gate-seat-root",
+      "draws": 20616
+    },
+    {
+      "path": "mossyGround/Mesh",
+      "draws": 11160
+    },
+    {
+      "path": "flock-root/flock-bird",
+      "draws": 6480
+    },
+    {
+      "path": "Group/Courier",
+      "draws": 5940
+    },
+    {
+      "path": "crystal-scout-defense-squad/triple-gate-scout-aircraft",
+      "draws": 4800
+    },
+    {
+      "path": "ocean-warship-1/blender-v6-render",
+      "draws": 4200
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-troopship-0",
+      "draws": 4200
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-troopship-1",
+      "draws": 4200
+    },
+    {
+      "path": "old-harbor-scene/fisher-boat",
+      "draws": 3540
+    },
+    {
+      "path": "swamp-shipwreck/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "ocean-warship-0/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "ocean-warship-2/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "leviathanGroup/leviathan-barnacle",
+      "draws": 2400
+    },
+    {
+      "path": "leviathanGroup/leviathan-rain",
+      "draws": 1163
+    },
+    {
+      "path": "saihoji-phalanx-battle/phalanx-javelin",
+      "draws": 1135
+    },
+    {
+      "path": "mossyGround/saihoji-shore-stones",
+      "draws": 480
+    },
+    {
+      "path": "boat-wake-ring",
+      "draws": 440
+    },
+    {
+      "path": "leviathanGroup/leviathan-pectoral-L",
+      "draws": 420
+    },
+    {
+      "path": "leviathanGroup/leviathan-pectoral-R",
+      "draws": 420
+    },
+    {
+      "path": "leviathanGroup/leviathan-eye-root-L",
+      "draws": 416
+    },
+    {
+      "path": "leviathanGroup/leviathan-eye-root-R",
+      "draws": 416
+    }
+  ],
+  "perf": {
+    "fps": 2.8,
+    "frameMs": 360.08,
+    "samples": 60,
+    "windowFull": true,
+    "hitches": 55,
+    "worstMs": 838.3,
+    "calls": 4757,
+    "triangles": 1505554,
+    "programs": 84,
+    "geometries": 2346,
+    "textures": 15,
+    "bootMs": 30145
+  },
+  "phase": "fight",
+  "culling": {
+    "meshes": 4012,
+    "before": {
+      "calls": 7581,
+      "triangles": 1698202
+    },
+    "after": {
+      "calls": 4755,
+      "triangles": 1505626
+    },
+    "changedPixels": 0,
+    "maxChannelDelta": 0,
+    "scope": "Same frozen production frame, raw scene render (no postprocessing), culling only"
+  },
+  "cpu": [
+    {
+      "name": "uniformMatrix4fv",
+      "url": "",
+      "line": 0,
+      "ms": 4695.609
+    },
+    {
+      "name": "vertexAttribPointer",
+      "url": "",
+      "line": 0,
+      "ms": 2929.996
+    },
+    {
+      "name": "bufferSubData",
+      "url": "",
+      "line": 0,
+      "ms": 2891.128
+    },
+    {
+      "name": "bindBuffer",
+      "url": "",
+      "line": 0,
+      "ms": 1959.457
+    },
+    {
+      "name": "(program)",
+      "url": "",
+      "line": 0,
+      "ms": 1089.954
+    },
+    {
+      "name": "uniform3f",
+      "url": "",
+      "line": 0,
+      "ms": 630.024
+    },
+    {
+      "name": "uniformMatrix3fv",
+      "url": "",
+      "line": 0,
+      "ms": 539.841
+    },
+    {
+      "name": "bindVertexArray",
+      "url": "",
+      "line": 0,
+      "ms": 368.583
+    },
+    {
+      "name": "(idle)",
+      "url": "",
+      "line": 0,
+      "ms": 361.595
+    },
+    {
+      "name": "bindVertexArray",
+      "url": "",
+      "line": 0,
+      "ms": 352.168
+    },
+    {
+      "name": "drawElementsInstanced",
+      "url": "",
+      "line": 0,
+      "ms": 350.076
+    },
+    {
+      "name": "drawArraysInstanced",
+      "url": "",
+      "line": 0,
+      "ms": 309.462
+    },
+    {
+      "name": "useProgram",
+      "url": "",
+      "line": 0,
+      "ms": 304.352
+    },
+    {
+      "name": "bindTexture",
+      "url": "",
+      "line": 0,
+      "ms": 295.909
+    },
+    {
+      "name": "vertexAttribPointer",
+      "url": "",
+      "line": 0,
+      "ms": 288.702
+    },
+    {
+      "name": "drawElements",
+      "url": "",
+      "line": 0,
+      "ms": 277.613
+    },
+    {
+      "name": "bindBuffer",
+      "url": "",
+      "line": 0,
+      "ms": 276.384
+    },
+    {
+      "name": "frontFace",
+      "url": "",
+      "line": 0,
+      "ms": 269.94
+    },
+    {
+      "name": "drawElements",
+      "url": "",
+      "line": 0,
+      "ms": 267.876
+    },
+    {
+      "name": "bufferSubData",
+      "url": "",
+      "line": 0,
+      "ms": 266.92
+    },
+    {
+      "name": "toArray",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 6859,
+      "ms": 143.134
+    },
+    {
+      "name": "bindBuffer",
+      "url": "",
+      "line": 0,
+      "ms": 124.847
+    },
+    {
+      "name": "WebGLRenderer.renderBufferDirect",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.module.js",
+      "line": 15422,
+      "ms": 74.971
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7841,
+      "ms": 68.582
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7841,
+      "ms": 66.282
+    },
+    {
+      "name": "uniform4fv",
+      "url": "",
+      "line": 0,
+      "ms": 62.485
+    },
+    {
+      "name": "projectObject",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.module.js",
+      "line": 15997,
+      "ms": 62.211
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 57.597
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 56.624
+    },
+    {
+      "name": "traverse",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7789,
+      "ms": 56.592
+    },
+    {
+      "name": "uniformMatrix4fv",
+      "url": "",
+      "line": 0,
+      "ms": 54.299
+    },
+    {
+      "name": "sort",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.module.js",
+      "line": 7600,
+      "ms": 48.765
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 45.346
+    },
+    {
+      "name": "toArray",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 6859,
+      "ms": 43.59
+    },
+    {
+      "name": "renderObject",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.module.js",
+      "line": 8678,
+      "ms": 42.125
+    }
+  ],
+  "errors": []
+}

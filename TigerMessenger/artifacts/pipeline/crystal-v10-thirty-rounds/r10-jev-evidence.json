@@ -1,0 +1,43 @@
+{
+  "task": "Select next V10 batch work category from Astra visual observations; target approved V10 blue mechanical crystal civilization.",
+  "visual_observations": [
+    {
+      "path": "TigerMessenger/artifacts/pipeline/crystal-v10-thirty-rounds/r10.png",
+      "sha256": "dff649ae37a2829221c41f65dd261820f56d97613167dc616277771429852ef6",
+      "observation": "三座冰蓝透明晶簇；深蓝天空；降低树冠后水面清楚。仍为很小孤立圆台，缺少目标的自然群岛、山峰、复杂连接和港湾；母塔仍过于规则。"
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/crystal-v10-thirty-rounds/r10-detail.png",
+      "sha256": "472753c2b3f703a06b1681763bfe423584613850a2ff20b59240eed9bf319157",
+      "observation": "圆形玻璃舱、植物、铜框和弯曲支撑可见。细节仍简陋，机械密度与建筑体量层次不足，花冠过于简单。"
+    }
+  ],
+  "checks": [
+    {
+      "name": "3 towers and live swamp updates, 11 bridge supports, no page errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Gate assembly 2880 rail envelope rays",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Gate original movement solver approach and stairs after anchor fix",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Complete city shore walking and current real boarding regression",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not hide objects for screenshots",
+    "No holy-city style or global palette changes",
+    "Preserve story and transport anchors",
+    "No final art acceptance yet"
+  ]
+}

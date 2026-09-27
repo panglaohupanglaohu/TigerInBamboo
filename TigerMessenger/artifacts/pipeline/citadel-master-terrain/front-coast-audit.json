@@ -1,0 +1,57 @@
+{
+  "npcClearance": [
+    {
+      "key": "elder",
+      "world": [
+        -69.7,
+        142.01,
+        27.71
+      ],
+      "basinDistance": 3.0760002200283947,
+      "localY": -97.50708301623698
+    },
+    {
+      "key": "foxAli",
+      "world": [
+        -34.08348867524041,
+        154.3511612693918,
+        28.53501377461987
+      ],
+      "basinDistance": 2.4893608674122873,
+      "localY": -66.21132631191777
+    }
+  ],
+  "status": {
+    "status": "ready",
+    "source": "assets/models/optimized/citadel-front-coast/front-coast-r03.blend",
+    "parts": 14,
+    "basin": {
+      "center": [
+        60,
+        125
+      ],
+      "radii": [
+        35,
+        27
+      ],
+      "inner": 0.72,
+      "seabedRadius": 157.8
+    }
+  },
+  "support": {
+    "water": 160.4977360198518,
+    "ground": 157.79959484164164,
+    "object": "camp-flat-patch",
+    "seabed": 155.1200798021213
+  },
+  "depth": 2.6981411782101645,
+  "hills": {
+    "indexSame": true,
+    "colorsSame": true,
+    "changed": 216,
+    "outsideChanged": 0
+  },
+  "scope": "Actual new-port coast and original hills grid/color preservation; boat route and NPC whole-world traversal require separate validation.",
+  "errors": [],
+  "passed": true
+}

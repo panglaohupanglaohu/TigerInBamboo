@@ -34,7 +34,8 @@ try {
   const hub=saihoujiHubDir(),cover=whale?.userData.saihojiCoverPoints||[];
   check('actual garden has at least 50 anchored cover slots',cover.length>=50&&cover.every(p=>p.anchor&&p.localPoint),{count:cover.length});
   if(cover.length<50)return {checks,passed:false,blocked:'actual-cover-provider-not-ready'};
-  battle.reset();const assault=messenger.vanguardAssault,initialAssaultPhase=assault.phase();
+  // Explicit completed-story precondition; fresh browser storage begins before the pact.
+  battle.reset();battle.setCampaignProgress({chapter:2,started:true});const assault=messenger.vanguardAssault,initialAssaultPhase=assault.phase();
   const far=hub.clone().applyAxisAngle(new T.Vector3(0,1,0),1.6).multiplyScalar(185),near=hub.clone().multiplyScalar(185);
   fleet.userData._patrolCenter=near.clone();
   const ambush=battle.root.userData.saihojiAmbush;
@@ -63,6 +64,7 @@ try {
   check('actual ten-second hidden wait fires no arrows and no heavy deployment',ambush.state.stage==='concealed'&&(battle.root.userData.arrowsFired||0)===beforeShots&&assault.phase()===initialAssaultPhase,{stage:ambush.state.stage,arrows: battle.root.userData.arrowsFired||0,assaultPhase:assault.phase()});
   // Diagnostic fleet positioning only: garden must physically raise whale and
   // set its real lock. No discovery flag, whale lift or battle phase is written.
+  battle.setCampaignProgress({chapter:3,started:true});
   fleet.userData._patrolCenter.copy(near);
   const members=(fleet.userData.members||[]).filter(m=>m.parent);
   members.forEach((m,i)=>{const p=near.clone().add(new T.Vector3((i-1)*3,0,0));m.parent.worldToLocal(p);m.position.copy(p);});

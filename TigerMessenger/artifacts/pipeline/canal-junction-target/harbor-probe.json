@@ -1,0 +1,3039 @@
+{
+  "stats": {
+    "envelope": 7,
+    "minimumDepth": 1.5,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 7,
+    "obstacleMeshes": 1649
+  },
+  "snapshotCurrent": true,
+  "cityMatrix": [
+    0.9084787455290392,
+    -0.08088380399918296,
+    0.4100294857356054,
+    0,
+    0.3927368378574174,
+    0.5007108878138331,
+    -0.7713924960838288,
+    0,
+    -0.14291306837283957,
+    0.8618273708088557,
+    0.4866512486503609,
+    0,
+    62.830039320429634,
+    80.10372783245701,
+    -123.40737152349092,
+    1
+  ],
+  "visibleTargetMeshes": [
+    {
+      "name": "junction-00",
+      "included": true
+    },
+    {
+      "name": "junction-01",
+      "included": true
+    },
+    {
+      "name": "junction-02",
+      "included": true
+    },
+    {
+      "name": "junction-03",
+      "included": true
+    },
+    {
+      "name": "junction-04",
+      "included": true
+    },
+    {
+      "name": "junction-05",
+      "included": true
+    },
+    {
+      "name": "junction-06",
+      "included": true
+    },
+    {
+      "name": "junction-07",
+      "included": true
+    },
+    {
+      "name": "junction-08",
+      "included": true
+    },
+    {
+      "name": "junction-09",
+      "included": true
+    },
+    {
+      "name": "junction-10",
+      "included": true
+    },
+    {
+      "name": "junction-11",
+      "included": true
+    },
+    {
+      "name": "junction-12",
+      "included": true
+    },
+    {
+      "name": "junction-13",
+      "included": true
+    },
+    {
+      "name": "junction-14",
+      "included": true
+    },
+    {
+      "name": "junction-15",
+      "included": true
+    },
+    {
+      "name": "junction-16",
+      "included": true
+    },
+    {
+      "name": "junction-17",
+      "included": true
+    },
+    {
+      "name": "junction-18",
+      "included": true
+    },
+    {
+      "name": "junction-20",
+      "included": true
+    },
+    {
+      "name": "junction-21",
+      "included": true
+    },
+    {
+      "name": "junction-22",
+      "included": true
+    },
+    {
+      "name": "junction-23",
+      "included": true
+    },
+    {
+      "name": "junction-24",
+      "included": true
+    }
+  ],
+  "targetFullyIncluded": true,
+  "samples": [
+    {
+      "tag": "original-campaign-junction",
+      "direction": [
+        0.3927368378574174,
+        0.5007108878138331,
+        -0.7713924960838288
+      ],
+      "localAtWater": [
+        -1.5777218104420236e-30,
+        0.40818875839516977,
+        1.4210854715202002e-14
+      ],
+      "surface": {
+        "water": 160.3881887583952,
+        "ground": 163.33000014305117,
+        "object": "junction-02",
+        "seabed": 159.22898236356184
+      },
+      "seabedDepth": 1.1592063948333475,
+      "effectiveDepth": -2.9418113846559777,
+      "blocker": "junction-02",
+      "depthPass": false,
+      "turnClear": false
+    },
+    {
+      "tag": "ring-16-0",
+      "direction": [
+        0.30211501351089093,
+        0.49822595491782545,
+        -0.8127099214710837
+      ],
+      "localAtWater": [
+        -15.896093808958732,
+        -0.3205242786223437,
+        -1.4918724788117785
+      ],
+      "surface": {
+        "water": 160.45578727332162,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 159.4242059169754
+      },
+      "seabedDepth": 1.0315813563462086,
+      "effectiveDepth": -0.9753648047824584,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-1",
+      "direction": [
+        0.2992858742166003,
+        0.5205185233359003,
+        -0.7996802063066331
+      ],
+      "localAtWater": [
+        -15.733056584667167,
+        -0.3967601517749415,
+        2.6718972488144246
+      ],
+      "surface": {
+        "water": 160.37917116901647,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 159.23630518219562
+      },
+      "seabedDepth": 1.1428659868208513,
+      "effectiveDepth": -1.0519809090876038,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-2",
+      "direction": [
+        0.3026924371994628,
+        0.5412918900564943,
+        -0.784461839875795
+      ],
+      "localAtWater": [
+        -14.503589786449403,
+        -0.41698114039610346,
+        6.652026246363114
+      ],
+      "surface": {
+        "water": 160.35884932695862,
+        "ground": 161.4311520781041,
+        "object": "junction-00",
+        "seabed": 159.19073103080368
+      },
+      "seabedDepth": 1.168118296154944,
+      "effectiveDepth": -1.072302751145486,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-3",
+      "direction": [
+        0.31210255082180816,
+        0.559130384467211,
+        -0.7680919287012913
+      ],
+      "localAtWater": [
+        -12.289218978581268,
+        -0.3975273197241904,
+        10.180410245367703
+      ],
+      "surface": {
+        "water": 160.37840017476944,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 159.21234838039484
+      },
+      "seabedDepth": 1.1660517943745958,
+      "effectiveDepth": -1.052751903334638,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-4",
+      "direction": [
+        0.3268749313912213,
+        0.5728183426534657,
+        -0.7516860551771073
+      ],
+      "localAtWater": [
+        -9.233371183151064,
+        -0.43586535417207983,
+        13.01107857147192
+      ],
+      "surface": {
+        "water": 160.33987092699348,
+        "ground": 161.4311520781041,
+        "object": "junction-00",
+        "seabed": 158.79840558735762
+      },
+      "seabedDepth": 1.541465339635863,
+      "effectiveDepth": -1.0912811511106213,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-5",
+      "direction": [
+        0.34600286558441,
+        0.5814229528852856,
+        -0.7363622524719281
+      ],
+      "localAtWater": [
+        -5.553355936723612,
+        -0.37495954761837424,
+        14.963219146230529
+      ],
+      "surface": {
+        "water": 160.40108050504037,
+        "ground": 160.7953598796097,
+        "object": "junction-00",
+        "seabed": 158.4899316623833
+      },
+      "seabedDepth": 1.9111488426570702,
+      "effectiveDepth": -0.39427937456932227,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-6",
+      "direction": [
+        0.36818281629651434,
+        0.5843578251951631,
+        -0.7231648124163303
+      ],
+      "localAtWater": [
+        -1.4905920909293684,
+        -0.45755077447194026,
+        15.882451110819474
+      ],
+      "surface": {
+        "water": 160.31807734931297,
+        "ground": null,
+        "object": null,
+        "seabed": 158.34166304042023
+      },
+      "seabedDepth": 1.9764143088927426,
+      "effectiveDepth": 1.9764143088927426,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-16-7",
+      "direction": [
+        0.3919032565406061,
+        0.5814229528852857,
+        -0.7129931187403024
+      ],
+      "localAtWater": [
+        2.671250042323706,
+        -0.43541557113471185,
+        15.729245608648199
+      ],
+      "surface": {
+        "water": 160.3403229533517,
+        "ground": null,
+        "object": null,
+        "seabed": 158.38664671761143
+      },
+      "seabedDepth": 1.9536762357402608,
+      "effectiveDepth": 1.9536762357402608,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-16-8",
+      "direction": [
+        0.415547677513931,
+        0.5728183426534658,
+        -0.7065403555583466
+      ],
+      "localAtWater": [
+        6.653367012387896,
+        -0.3848200113545488,
+        14.506513094281132
+      ],
+      "surface": {
+        "water": 160.39117086162884,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 158.54065222943828
+      },
+      "seabedDepth": 1.850518632190557,
+      "effectiveDepth": -1.0399812164752404,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-9",
+      "direction": [
+        0.4375047510014105,
+        0.559130384467211,
+        -0.7042462680176179
+      ],
+      "localAtWater": [
+        10.180695857706965,
+        -0.39305021887781777,
+        12.289563753742136
+      ],
+      "surface": {
+        "water": 160.38289960543437,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 158.56469073569414
+      },
+      "seabedDepth": 1.818208869740232,
+      "effectiveDepth": -1.0482524726697022,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-10",
+      "direction": [
+        0.4562781387306522,
+        0.5412918900564943,
+        -0.7062671943928585
+      ],
+      "localAtWater": [
+        13.010030080999606,
+        -0.4487221288178205,
+        9.232627117110745
+      ],
+      "surface": {
+        "water": 160.32695002838565,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 158.54161250079767
+      },
+      "seabedDepth": 1.7853375275879841,
+      "effectiveDepth": -1.104202049718424,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-11",
+      "direction": [
+        0.47058846535239857,
+        0.5205185233359003,
+        -0.712465411891334
+      ],
+      "localAtWater": [
+        14.956163488099428,
+        -0.4502186606761427,
+        5.550737343719867
+      ],
+      "surface": {
+        "water": 160.3254460324817,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 158.65633266242608
+      },
+      "seabedDepth": 1.6691133700556122,
+      "effectiveDepth": -1.1057060456223837,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-12",
+      "direction": [
+        0.4794605057563104,
+        0.49822595491782545,
+        -0.7224185222335623
+      ],
+      "localAtWater": [
+        15.88998933494129,
+        -0.38183727368198106,
+        1.4912995646799274
+      ],
+      "surface": {
+        "water": 160.39416847589084,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 159.06077760991909
+      },
+      "seabedDepth": 1.3333908659717508,
+      "effectiveDepth": -1.0369836022132404,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-13",
+      "direction": [
+        0.48228964505060107,
+        0.47593338649975087,
+        -0.7354482373980129
+      ],
+      "localAtWater": [
+        15.726130453566753,
+        -0.46701315281578104,
+        -2.6707210049909307
+      ],
+      "surface": {
+        "water": 160.3085677767694,
+        "ground": 161.4311520781041,
+        "object": "junction-00",
+        "seabed": 159.63249504442177
+      },
+      "seabedDepth": 0.6760727323476203,
+      "effectiveDepth": -1.1225843013347117,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-14",
+      "direction": [
+        0.4788830820677385,
+        0.45516001977915665,
+        -0.7506666038288511
+      ],
+      "localAtWater": [
+        14.500171979713201,
+        -0.45458255968159733,
+        -6.650458679957239
+      ],
+      "surface": {
+        "water": 160.32106036825894,
+        "ground": 179.02353715907975,
+        "object": "junction-20",
+        "seabed": 159.6360352585964
+      },
+      "seabedDepth": 0.685025109662547,
+      "effectiveDepth": -18.70247679082081,
+      "blocker": "junction-20",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-15",
+      "direction": [
+        0.4694729684453932,
+        0.43732152536844016,
+        -0.7670365150033548
+      ],
+      "localAtWater": [
+        12.288536250089123,
+        -0.4063929360936811,
+        -10.179844671904618
+      ],
+      "surface": {
+        "water": 160.36949034058765,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 159.6412099601257
+      },
+      "seabedDepth": 0.7282803804619391,
+      "effectiveDepth": -1.061661737516431,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-16",
+      "direction": [
+        0.45470058787598017,
+        0.4236335671821854,
+        -0.7834423885275387
+      ],
+      "localAtWater": [
+        9.237574515220274,
+        -0.3632356543251376,
+        -13.017001639301576
+      ],
+      "surface": {
+        "water": 160.4128628719796,
+        "ground": 161.43115207810408,
+        "object": "junction-00",
+        "seabed": 159.78960330282192
+      },
+      "seabedDepth": 0.6232595691576819,
+      "effectiveDepth": -1.0182892061244786,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-17",
+      "direction": [
+        0.4355726536827913,
+        0.4150289569503654,
+        -0.7987661912327179
+      ],
+      "localAtWater": [
+        5.55029603221422,
+        -0.4629020797677299,
+        -14.95497439796258
+      ],
+      "surface": {
+        "water": 160.31269935404964,
+        "ground": null,
+        "object": null,
+        "seabed": 159.6518018793503
+      },
+      "seabedDepth": 0.6608974746993397,
+      "effectiveDepth": 0.6608974746993397,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-18",
+      "direction": [
+        0.41339270297068703,
+        0.4120940846404879,
+        -0.8119636312883155
+      ],
+      "localAtWater": [
+        1.4903571278173686,
+        -0.482696413800511,
+        -15.879947548535746
+      ],
+      "surface": {
+        "water": 160.2928062945464,
+        "ground": null,
+        "object": null,
+        "seabed": 159.5591823652867
+      },
+      "seabedDepth": 0.7336239292597213,
+      "effectiveDepth": 0.7336239292597213,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-19",
+      "direction": [
+        0.3896722627265954,
+        0.41502895695036535,
+        -0.8221353249643436
+      ],
+      "localAtWater": [
+        -2.671923754626576,
+        -0.39517705070986153,
+        -15.733212660071203
+      ],
+      "surface": {
+        "water": 160.38076216589647,
+        "ground": null,
+        "object": null,
+        "seabed": 159.5567923699984
+      },
+      "seabedDepth": 0.8239697958980798,
+      "effectiveDepth": 0.8239697958980798,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-20",
+      "direction": [
+        0.3660278417532704,
+        0.42363356718218537,
+        -0.8285880881462995
+      ],
+      "localAtWater": [
+        -6.651057213550885,
+        -0.44022545651395717,
+        -14.501476978430013
+      ],
+      "surface": {
+        "water": 160.33548907837036,
+        "ground": null,
+        "object": null,
+        "seabed": 159.6447874365996
+      },
+      "seabedDepth": 0.6907016417707723,
+      "effectiveDepth": 0.6907016417707723,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-21",
+      "direction": [
+        0.3440707682657909,
+        0.43732152536844,
+        -0.8308821756870279
+      ],
+      "localAtWater": [
+        -10.17849428162522,
+        -0.4275609062125625,
+        -12.286906134853105
+      ],
+      "surface": {
+        "water": 160.34821679390302,
+        "ground": 161.4311520781041,
+        "object": "junction-00",
+        "seabed": 159.81584529639505
+      },
+      "seabedDepth": 0.5323714975079668,
+      "effectiveDepth": -1.0829352842010849,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-22",
+      "direction": [
+        0.3252973805365493,
+        0.4551600197791567,
+        -0.8288612493117876
+      ],
+      "localAtWater": [
+        -13.011338165524556,
+        -0.43268216622510636,
+        -9.233555405253163
+      ],
+      "surface": {
+        "water": 160.34306999128805,
+        "ground": 181.6659780404842,
+        "object": "junction-20",
+        "seabed": 159.7477176711244
+      },
+      "seabedDepth": 0.5953523201636415,
+      "effectiveDepth": -21.322908049196144,
+      "blocker": "junction-20",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-16-23",
+      "direction": [
+        0.3109870539148028,
+        0.4759333864997508,
+        -0.822663031813312
+      ],
+      "localAtWater": [
+        -14.959255935213626,
+        -0.4172331017577733,
+        -5.551885055276628
+      ],
+      "surface": {
+        "water": 160.358596108924,
+        "ground": 161.4311520781041,
+        "object": "junction-00",
+        "seabed": 159.74257024788818
+      },
+      "seabedDepth": 0.6160258610358085,
+      "effectiveDepth": -1.0725559691801152,
+      "blocker": "junction-00",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-0",
+      "direction": [
+        0.2561981311268513,
+        0.49517119923605935,
+        -0.8301614307194904
+      ],
+      "localAtWater": [
+        -23.683566933660444,
+        -1.3957203111407068,
+        -2.2227386257944346
+      ],
+      "surface": {
+        "water": 160.35842875924587,
+        "ground": null,
+        "object": null,
+        "seabed": 159.45659409831202
+      },
+      "seabedDepth": 0.9018346609338437,
+      "effectiveDepth": 0.9018346609338437,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-1",
+      "direction": [
+        0.2519804414922632,
+        0.5284050293747881,
+        -0.810736690940279
+      ],
+      "localAtWater": [
+        -23.444033663866676,
+        -1.448616219736948,
+        3.9814290828042047
+      ],
+      "surface": {
+        "water": 160.30494108186113,
+        "ground": null,
+        "object": null,
+        "seabed": 159.30370694492882
+      },
+      "seabedDepth": 1.001234136932311,
+      "effectiveDepth": 1.001234136932311,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-2",
+      "direction": [
+        0.2570589561526709,
+        0.5593740289110635,
+        -0.7880491030649701
+      ],
+      "localAtWater": [
+        -21.624835920218576,
+        -1.3744799147827962,
+        9.918163587954432
+      ],
+      "surface": {
+        "water": 160.37990678085595,
+        "ground": null,
+        "object": null,
+        "seabed": 159.23483192078524
+      },
+      "seabedDepth": 1.1450748600707072,
+      "effectiveDepth": 1.1450748600707072,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-3",
+      "direction": [
+        0.2710875827266101,
+        0.58596771170518,
+        -0.7636447887142545
+      ],
+      "localAtWater": [
+        -18.32124183008856,
+        -1.372194849018996,
+        15.177348402691216
+      ],
+      "surface": {
+        "water": 160.38221741061201,
+        "ground": null,
+        "object": null,
+        "seabed": 158.54783959081342
+      },
+      "seabedDepth": 1.8343778197985898,
+      "effectiveDepth": 1.8343778197985898,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-4",
+      "direction": [
+        0.2931102934964683,
+        0.6063737622228574,
+        -0.7391868615810969
+      ],
+      "localAtWater": [
+        -13.770136807727951,
+        -1.3564942139026641,
+        19.40399973004476
+      ],
+      "surface": {
+        "water": 160.39809369534035,
+        "ground": null,
+        "object": null,
+        "seabed": 158.19778558093913
+      },
+      "seabedDepth": 2.200308114401224,
+      "effectiveDepth": 2.200308114401224,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-5",
+      "direction": [
+        0.32162627711753,
+        0.6192015418439087,
+        -0.7163420889809867
+      ],
+      "localAtWater": [
+        -8.278577170474314,
+        -1.3608804097337668,
+        22.30618131310922
+      ],
+      "surface": {
+        "water": 160.39365842929072,
+        "ground": null,
+        "object": null,
+        "seabed": 157.92286081445673
+      },
+      "seabedDepth": 2.470797614833998,
+      "effectiveDepth": 2.470797614833998,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-6",
+      "direction": [
+        0.354692216430911,
+        0.6235768585860677,
+        -0.6966673044138494
+      ],
+      "localAtWater": [
+        -2.2225003896812296,
+        -1.4127175873715885,
+        23.681028497126313
+      ],
+      "surface": {
+        "water": 160.3412413273332,
+        "ground": null,
+        "object": null,
+        "seabed": 157.81858828395144
+      },
+      "seabedDepth": 2.5226530433817516,
+      "effectiveDepth": 2.5226530433817516,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-7",
+      "direction": [
+        0.3900547223164526,
+        0.6192015418439087,
+        -0.6815033119338167
+      ],
+      "localAtWater": [
+        3.9845165641046165,
+        -1.3256797884273226,
+        23.462213823311544
+      ],
+      "surface": {
+        "water": 160.42925285476045,
+        "ground": null,
+        "object": null,
+        "seabed": 157.97232254737588
+      },
+      "seabedDepth": 2.4569303073845674,
+      "effectiveDepth": 2.4569303073845674,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-8",
+      "direction": [
+        0.4253038984373593,
+        0.6063737622228574,
+        -0.6718835125687205
+      ],
+      "localAtWater": [
+        9.918575138066295,
+        -1.3678986440710332,
+        21.625733233875835
+      ],
+      "surface": {
+        "water": 160.3865616790126,
+        "ground": null,
+        "object": null,
+        "seabed": 157.92460253225389
+      },
+      "seabedDepth": 2.4619591467587156,
+      "effectiveDepth": 2.4619591467587156,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-9",
+      "direction": [
+        0.458037571693009,
+        0.58596771170518,
+        -0.6684634797478217
+      ],
+      "localAtWater": [
+        15.176592719309639,
+        -1.3800919651262973,
+        18.32032961158945
+      ],
+      "surface": {
+        "water": 160.37423194614365,
+        "ground": null,
+        "object": null,
+        "seabed": 158.0142039437411
+      },
+      "seabedDepth": 2.3600280024025437,
+      "effectiveDepth": 2.3600280024025437,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-10",
+      "direction": [
+        0.4860249963459824,
+        0.5593740289110635,
+        -0.6714762830559934
+      ],
+      "localAtWater": [
+        19.406277956872678,
+        -1.3378702017687942,
+        13.771753561775348
+      ],
+      "surface": {
+        "water": 160.41692606213508,
+        "ground": null,
+        "object": null,
+        "seabed": 158.23049129464673
+      },
+      "seabedDepth": 2.1864347674883504,
+      "effectiveDepth": 2.1864347674883504,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-11",
+      "direction": [
+        0.5073588756575848,
+        0.5284050293747882,
+        -0.6807166049266764
+      ],
+      "localAtWater": [
+        22.295282698635994,
+        -1.4383803909376809,
+        8.274532326594432
+      ],
+      "surface": {
+        "water": 160.31529142318448,
+        "ground": 154.10356132638898,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 158.59528579341284
+      },
+      "seabedDepth": 1.7200056297716344,
+      "effectiveDepth": 1.7200056297716344,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-24-12",
+      "direction": [
+        0.5205853410086333,
+        0.49517119923605935,
+        -0.6955547326947376
+      ],
+      "localAtWater": [
+        23.684535651028952,
+        -1.389233815819324,
+        2.2228295413866306
+      ],
+      "surface": {
+        "water": 160.36498782171995,
+        "ground": 156.47259258884947,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 159.2911687663679
+      },
+      "seabedDepth": 1.073819055352061,
+      "effectiveDepth": 1.073819055352061,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-13",
+      "direction": [
+        0.5248030306432214,
+        0.4619373690973307,
+        -0.7149794724739491
+      ],
+      "localAtWater": [
+        23.44802887516309,
+        -1.4216001189927852,
+        -3.98210757741289
+      ],
+      "surface": {
+        "water": 160.33225942309292,
+        "ground": 158.4123873412283,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 159.77518929680303
+      },
+      "seabedDepth": 0.5570701262898865,
+      "effectiveDepth": 0.5570701262898865,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-14",
+      "direction": [
+        0.5197245159828137,
+        0.4309683695610551,
+        -0.737667060349258
+      ],
+      "localAtWater": [
+        21.631646588679956,
+        -1.3245276461306332,
+        -9.921287279814685
+      ],
+      "surface": {
+        "water": 160.43041788655782,
+        "ground": null,
+        "object": null,
+        "seabed": 159.56899325783547
+      },
+      "seabedDepth": 0.8614246287223466,
+      "effectiveDepth": 0.8614246287223466,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-15",
+      "direction": [
+        0.5056958894088746,
+        0.40437468676693855,
+        -0.7620713746999737
+      ],
+      "localAtWater": [
+        18.313758656780443,
+        -1.4369770130761879,
+        -15.171149328987113
+      ],
+      "surface": {
+        "water": 160.3167105012247,
+        "ground": null,
+        "object": null,
+        "seabed": 159.57670123956453
+      },
+      "seabedDepth": 0.7400092616601626,
+      "effectiveDepth": 0.7400092616601626,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-16",
+      "direction": [
+        0.48367317863901627,
+        0.38396863624926125,
+        -0.7865293018331312
+      ],
+      "localAtWater": [
+        13.768698149051836,
+        -1.3730666769089055,
+        -19.40197246387065
+      ],
+      "surface": {
+        "water": 160.38133582921665,
+        "ground": null,
+        "object": null,
+        "seabed": 159.79784857924304
+      },
+      "seabedDepth": 0.583487249973615,
+      "effectiveDepth": 0.583487249973615,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-17",
+      "direction": [
+        0.4551571950179545,
+        0.37114085662820984,
+        -0.8093740744332415
+      ],
+      "localAtWater": [
+        8.278235479059141,
+        -1.3674272825029163,
+        -22.30526064395282
+      ],
+      "surface": {
+        "water": 160.38703831390094,
+        "ground": null,
+        "object": null,
+        "seabed": 159.81975834559125
+      },
+      "seabedDepth": 0.5672799683096912,
+      "effectiveDepth": 0.5672799683096912,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-18",
+      "direction": [
+        0.4220912557045736,
+        0.366765539886051,
+        -0.8290488590003787
+      ],
+      "localAtWater": [
+        2.222014645730944,
+        -1.4473736434530338,
+        -23.675852832643827
+      ],
+      "surface": {
+        "water": 160.30619755936883,
+        "ground": null,
+        "object": null,
+        "seabed": 159.60003536599768
+      },
+      "seabedDepth": 0.7061621933711422,
+      "effectiveDepth": 0.7061621933711422,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-19",
+      "direction": [
+        0.38672874981903205,
+        0.37114085662820984,
+        -0.8442128514804114
+      ],
+      "localAtWater": [
+        -3.9840133330466116,
+        -1.3457172961480524,
+        -23.459250624515562
+      ],
+      "surface": {
+        "water": 160.4089911790089,
+        "ground": null,
+        "object": null,
+        "seabed": 159.67197170555954
+      },
+      "seabedDepth": 0.7370194734493509,
+      "effectiveDepth": 0.7370194734493509,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-20",
+      "direction": [
+        0.3514795736981252,
+        0.38396863624926125,
+        -0.8538326508455076
+      ],
+      "localAtWater": [
+        -9.91721777399514,
+        -1.389604823097386,
+        -21.622773736881975
+      ],
+      "surface": {
+        "water": 160.36461266382736,
+        "ground": null,
+        "object": null,
+        "seabed": 159.97034482587168
+      },
+      "seabedDepth": 0.394267837955681,
+      "effectiveDepth": 0.394267837955681,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-21",
+      "direction": [
+        0.3187459004424754,
+        0.40437468676693855,
+        -0.8572526836664063
+      ],
+      "localAtWater": [
+        -15.177479244356178,
+        -1.3708275147024551,
+        -18.321399774791544
+      ],
+      "surface": {
+        "water": 160.38360004187297,
+        "ground": null,
+        "object": null,
+        "seabed": 159.6305444442167
+      },
+      "seabedDepth": 0.753055597656271,
+      "effectiveDepth": 0.753055597656271,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-22",
+      "direction": [
+        0.2907584757895023,
+        0.43096836956105505,
+        -0.8542398803582347
+      ],
+      "localAtWater": [
+        -19.398765627343415,
+        -1.3992818727193423,
+        -13.76642240290083
+      ],
+      "surface": {
+        "water": 160.35482735297913,
+        "ground": null,
+        "object": null,
+        "seabed": 159.52923604743538
+      },
+      "seabedDepth": 0.8255913055437532,
+      "effectiveDepth": 0.8255913055437532,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-24-23",
+      "direction": [
+        0.2694245964778998,
+        0.46193736909733063,
+        -0.8449995584875517
+      ],
+      "localAtWater": [
+        -22.293772628138633,
+        -1.4491184930560337,
+        -8.27397188843738
+      ],
+      "surface": {
+        "water": 160.30443318939908,
+        "ground": null,
+        "object": null,
+        "seabed": 159.67242309553978
+      },
+      "seabedDepth": 0.632010093859293,
+      "effectiveDepth": 0.632010093859293,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-0",
+      "direction": [
+        0.16487505866682,
+        0.4857609125537008,
+        -0.8584011596361043
+      ],
+      "localAtWater": [
+        -38.72470175045366,
+        -4.4005059872089305,
+        -3.6343719083449813
+      ],
+      "surface": {
+        "water": 160.367671748722,
+        "ground": null,
+        "object": null,
+        "seabed": 159.58980852088652
+      },
+      "seabedDepth": 0.7778632278354678,
+      "effectiveDepth": 0.7778632278354678,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-1",
+      "direction": [
+        0.1579791649876014,
+        0.5400979973193661,
+        -0.8266418430743934
+      ],
+      "localAtWater": [
+        -38.34650300240684,
+        -4.397792485725631,
+        6.512270220500959
+      ],
+      "surface": {
+        "water": 160.3704687620298,
+        "ground": null,
+        "object": null,
+        "seabed": 159.49949525856297
+      },
+      "seabedDepth": 0.8709735034668142,
+      "effectiveDepth": 0.8709735034668142,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-2",
+      "direction": [
+        0.16628250169102501,
+        0.5907320995545297,
+        -0.7895477922122711
+      ],
+      "localAtWater": [
+        -35.345043292761794,
+        -4.438871422696792,
+        16.21089393206362
+      ],
+      "surface": {
+        "water": 160.32812556299967,
+        "ground": null,
+        "object": null,
+        "seabed": 158.88756062559355
+      },
+      "seabedDepth": 1.4405649374061227,
+      "effectiveDepth": 1.4405649374061227,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-3",
+      "direction": [
+        0.18921921010266518,
+        0.6342125888686754,
+        -0.7496469053151731
+      ],
+      "localAtWater": [
+        -29.951576254193764,
+        -4.404723567978152,
+        24.81193754416342
+      ],
+      "surface": {
+        "water": 160.36332436597297,
+        "ground": null,
+        "object": null,
+        "seabed": 158.55391488885044
+      },
+      "seabedDepth": 1.8094094771225286,
+      "effectiveDepth": 1.8094094771225286,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-40-4",
+      "direction": [
+        0.2252261914489714,
+        0.6675763417699501,
+        -0.7096583618858036
+      ],
+      "localAtWater": [
+        -22.510001438054076,
+        -4.399177824710051,
+        31.719660300119898
+      ],
+      "surface": {
+        "water": 160.3690407872897,
+        "ground": null,
+        "object": null,
+        "seabed": 157.89181511814462
+      },
+      "seabedDepth": 2.4772256691450707,
+      "effectiveDepth": 2.4772256691450707,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-40-5",
+      "direction": [
+        0.2718496294555432,
+        0.6885496736343407,
+        -0.6723073150746813
+      ],
+      "localAtWater": [
+        -13.530886042661628,
+        -4.427383614333593,
+        36.45824532156132
+      ],
+      "surface": {
+        "water": 160.33996692482177,
+        "ground": null,
+        "object": null,
+        "seabed": 157.74273737631484
+      },
+      "seabedDepth": 2.597229548506931,
+      "effectiveDepth": 2.597229548506931,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-40-6",
+      "direction": [
+        0.3259122138711069,
+        0.6957032865553586,
+        -0.6401391769964612
+      ],
+      "localAtWater": [
+        -3.634194366171812,
+        -4.4081061784281985,
+        38.72281001568436
+      ],
+      "surface": {
+        "water": 160.359837650929,
+        "ground": null,
+        "object": null,
+        "seabed": 157.62292792703533
+      },
+      "seabedDepth": 2.7369097238936604,
+      "effectiveDepth": 2.7369097238936604,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-40-7",
+      "direction": [
+        0.3837296689103868,
+        0.6885496736343407,
+        -0.615346153100812
+      ],
+      "localAtWater": [
+        6.511068878879719,
+        -4.426493288223213,
+        38.339429086779035
+      ],
+      "surface": {
+        "water": 160.34088465197036,
+        "ground": null,
+        "object": null,
+        "seabed": 157.6124048804442
+      },
+      "seabedDepth": 2.7284797715261675,
+      "effectiveDepth": 2.7284797715261675,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-40-8",
+      "direction": [
+        0.44136183056031814,
+        0.6675763417699502,
+        -0.599617846993813
+      ],
+      "localAtWater": [
+        16.216773766093098,
+        -4.3824552852139504,
+        35.35786325131539
+      ],
+      "surface": {
+        "water": 160.38627798645746,
+        "ground": null,
+        "object": null,
+        "seabed": 157.61560058607458
+      },
+      "seabedDepth": 2.77067740038288,
+      "effectiveDepth": 2.77067740038288,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-40-9",
+      "direction": [
+        0.49488116224610856,
+        0.6342125888686754,
+        -0.5940261167444015
+      ],
+      "localAtWater": [
+        24.8175939007778,
+        -4.369257202551722,
+        29.95840428993887
+      ],
+      "surface": {
+        "water": 160.3998822586755,
+        "ground": null,
+        "object": null,
+        "seabed": 158.3568270219018
+      },
+      "seabedDepth": 2.0430552367736823,
+      "effectiveDepth": 2.0430552367736823,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-40-10",
+      "direction": [
+        0.5406404099582487,
+        0.5907320995545297,
+        -0.5989520295283038
+      ],
+      "localAtWater": [
+        31.710983148962598,
+        -4.441738126378539,
+        22.503843658204566
+      ],
+      "surface": {
+        "water": 160.3251706324804,
+        "ground": 153.20128054949373,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 158.94338188960378
+      },
+      "seabedDepth": 1.3817887428766085,
+      "effectiveDepth": 1.3817887428766085,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-11",
+      "direction": [
+        0.5755211565858884,
+        0.5400979973193661,
+        -0.6140598925297527
+      ],
+      "localAtWater": [
+        36.455612284768115,
+        -4.438617719502673,
+        13.529908833789378
+      ],
+      "surface": {
+        "water": 160.32838707426643,
+        "ground": 157.06301024951955,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 159.62419945962984
+      },
+      "seabedDepth": 0.7041876146365951,
+      "effectiveDepth": 0.7041876146365951,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-12",
+      "direction": [
+        0.5971463368895136,
+        0.4857609125537008,
+        -0.6383201298521233
+      ],
+      "localAtWater": [
+        38.71424355203818,
+        -4.442522610816553,
+        3.6333903905846014
+      ],
+      "surface": {
+        "water": 160.3243620044305,
+        "ground": 160.1024686857731,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 159.6978372867186
+      },
+      "seabedDepth": 0.6265247177119022,
+      "effectiveDepth": 0.2218933186574077,
+      "blocker": "citadel-oskar-grid-mountain-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-13",
+      "direction": [
+        0.6040422305687322,
+        0.4314238277880355,
+        -0.670079446413834
+      ],
+      "localAtWater": [
+        38.336133770025796,
+        -4.4398632858706435,
+        -6.5105092452370315
+      ],
+      "surface": {
+        "water": 160.3271031738417,
+        "ground": null,
+        "object": null,
+        "seabed": 159.54173601139868
+      },
+      "seabedDepth": 0.7853671624430092,
+      "effectiveDepth": 0.7853671624430092,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-14",
+      "direction": [
+        0.5957388938653085,
+        0.3807897255528719,
+        -0.7071734972759566
+      ],
+      "localAtWater": [
+        35.37808973710963,
+        -4.293445621212953,
+        -16.22605058075458
+      ],
+      "surface": {
+        "water": 160.47802704805167,
+        "ground": null,
+        "object": null,
+        "seabed": 159.71308947109657
+      },
+      "seabedDepth": 0.7649375769551057,
+      "effectiveDepth": 0.7649375769551057,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-15",
+      "direction": [
+        0.5728021854536685,
+        0.3373092362387263,
+        -0.7470743841730545
+      ],
+      "localAtWater": [
+        29.93971710175036,
+        -4.466322693979976,
+        -24.802113401779202
+      ],
+      "surface": {
+        "water": 160.29982944023516,
+        "ground": null,
+        "object": null,
+        "seabed": 159.8037918392007
+      },
+      "seabedDepth": 0.49603760103445893,
+      "effectiveDepth": 0.49603760103445893,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-16",
+      "direction": [
+        0.5367952041073621,
+        0.3039454833374515,
+        -0.7870629276024239
+      ],
+      "localAtWater": [
+        22.509152804235462,
+        -4.405043268459309,
+        -31.718464459394568
+      ],
+      "surface": {
+        "water": 160.3629948262599,
+        "ground": null,
+        "object": null,
+        "seabed": 159.6031052116392
+      },
+      "seabedDepth": 0.7598896146207039,
+      "effectiveDepth": 0.7598896146207039,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-17",
+      "direction": [
+        0.4901717661007903,
+        0.2829721514730609,
+        -0.8244139744135464
+      ],
+      "localAtWater": [
+        13.53160303126564,
+        -4.419141031185433,
+        -36.46017720882548
+      ],
+      "surface": {
+        "water": 160.34846318505873,
+        "ground": null,
+        "object": null,
+        "seabed": 159.83187652533957
+      },
+      "seabedDepth": 0.5165866597191666,
+      "effectiveDepth": 0.5165866597191666,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-18",
+      "direction": [
+        0.4361091816852267,
+        0.275818538552043,
+        -0.8565821124917664
+      ],
+      "localAtWater": [
+        3.6327899721204133,
+        -4.468225209012729,
+        -38.70784601580968
+      ],
+      "surface": {
+        "water": 160.2978683726266,
+        "ground": null,
+        "object": null,
+        "seabed": 159.59241601151578
+      },
+      "seabedDepth": 0.7054523611108152,
+      "effectiveDepth": 0.7054523611108152,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-19",
+      "direction": [
+        0.37829172664594685,
+        0.2829721514730609,
+        -0.8813751363874156
+      ],
+      "localAtWater": [
+        -6.509023339202351,
+        -4.4753625101355965,
+        -38.32738424055447
+      ],
+      "surface": {
+        "water": 160.29051141102374,
+        "ground": null,
+        "object": null,
+        "seabed": 159.83257308945306
+      },
+      "seabedDepth": 0.4579383215706798,
+      "effectiveDepth": 0.4579383215706798,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-20",
+      "direction": [
+        0.3206595649960153,
+        0.3039454833374515,
+        -0.8971034424944146
+      ],
+      "localAtWater": [
+        -16.217759574951266,
+        -4.37299659508858,
+        -35.36001263659395
+      ],
+      "surface": {
+        "water": 160.39602778107417,
+        "ground": null,
+        "object": null,
+        "seabed": 159.61504880573665
+      },
+      "seabedDepth": 0.7809789753375185,
+      "effectiveDepth": 0.7809789753375185,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-21",
+      "direction": [
+        0.2671402333102251,
+        0.33730923623872616,
+        -0.9026951727438259
+      ],
+      "localAtWater": [
+        -24.805540181463947,
+        -4.44483617380078,
+        -29.943853717556827
+      ],
+      "surface": {
+        "water": 160.32197723829165,
+        "ground": null,
+        "object": null,
+        "seabed": 159.61445887753368
+      },
+      "seabedDepth": 0.7075183607579731,
+      "effectiveDepth": 0.7075183607579731,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-22",
+      "direction": [
+        0.221380985598085,
+        0.3807897255528718,
+        -0.8977692599599237
+      ],
+      "localAtWater": [
+        -31.724989358879807,
+        -4.373039482261163,
+        -22.51378322888079
+      ],
+      "surface": {
+        "water": 160.39598357398856,
+        "ground": null,
+        "object": null,
+        "seabed": 159.82929178219086
+      },
+      "seabedDepth": 0.5666917917976946,
+      "effectiveDepth": 0.5666917917976946,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-40-23",
+      "direction": [
+        0.1865002389704451,
+        0.43142382778803545,
+        -0.8826613969584749
+      ],
+      "localAtWater": [
+        -36.455805368851586,
+        -4.437793907657095,
+        -13.529980493813241
+      ],
+      "surface": {
+        "water": 160.32923624008018,
+        "ground": null,
+        "object": null,
+        "seabed": 159.5387662752437
+      },
+      "seabedDepth": 0.7904699648364897,
+      "effectiveDepth": 0.7904699648364897,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-0",
+      "direction": [
+        0.03368217255187005,
+        0.46489838820760804,
+        -0.8847231204699887
+      ],
+      "localAtWater": [
+        -59.27386429134161,
+        -11.14415689176775,
+        -5.562941934781449
+      ],
+      "surface": {
+        "water": 160.301108869329,
+        "ground": null,
+        "object": null,
+        "seabed": 159.72013297395924
+      },
+      "seabedDepth": 0.580975895369761,
+      "effectiveDepth": 0.580975895369761,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-1",
+      "direction": [
+        0.023122607880876594,
+        0.5481038416712286,
+        -0.8360906193410065
+      ],
+      "localAtWater": [
+        -58.71750310564199,
+        -11.08443525435925,
+        9.971815340581237
+      ],
+      "surface": {
+        "water": 160.36543104132832,
+        "ground": null,
+        "object": null,
+        "seabed": 159.7720519700302
+      },
+      "seabedDepth": 0.5933790712981306,
+      "effectiveDepth": 0.5933790712981306,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-2",
+      "direction": [
+        0.03583736610997541,
+        0.6256389809848164,
+        -0.7792891303377584
+      ],
+      "localAtWater": [
+        -54.124707950106476,
+        -11.115099610266299,
+        24.824128588994526
+      ],
+      "surface": {
+        "water": 160.33240451927554,
+        "ground": null,
+        "object": null,
+        "seabed": 159.72576849565579
+      },
+      "seabedDepth": 0.6066360236197568,
+      "effectiveDepth": 0.6066360236197568,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-3",
+      "direction": [
+        0.07095995747798496,
+        0.6922199145370271,
+        -0.7181895810669168
+      ],
+      "localAtWater": [
+        -45.87177976325216,
+        -11.062236112332783,
+        38.000261651206685
+      ],
+      "surface": {
+        "water": 160.3893402490062,
+        "ground": null,
+        "object": null,
+        "seabed": 159.73443419838011
+      },
+      "seabedDepth": 0.6549060506260957,
+      "effectiveDepth": 0.6549060506260957,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-4",
+      "direction": [
+        0.12609683542600184,
+        0.743309261736472,
+        -0.6569558048395101
+      ],
+      "localAtWater": [
+        -34.47707595089212,
+        -11.046984674540596,
+        48.5828994864014
+      ],
+      "surface": {
+        "water": 160.40576655021758,
+        "ground": null,
+        "object": null,
+        "seabed": 158.90690831184125
+      },
+      "seabedDepth": 1.4988582383763287,
+      "effectiveDepth": 1.4988582383763287,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-5",
+      "direction": [
+        0.1974905128398678,
+        0.7754253680006477,
+        -0.5997607823118364
+      ],
+      "localAtWater": [
+        -20.722100366026652,
+        -11.090224841391802,
+        55.834585875649374
+      ],
+      "surface": {
+        "water": 160.35919546526122,
+        "ground": null,
+        "object": null,
+        "seabed": 158.2676405719821
+      },
+      "seabedDepth": 2.091554893279124,
+      "effectiveDepth": 2.091554893279124,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-64-6",
+      "direction": [
+        0.28027562858745825,
+        0.786379573762025,
+        -0.5505022597499132
+      ],
+      "localAtWater": [
+        -5.5661419833513825,
+        -11.058539976747824,
+        59.30796122186554
+      ],
+      "surface": {
+        "water": 160.3933211088611,
+        "ground": null,
+        "object": null,
+        "seabed": 158.51567283825705
+      },
+      "seabedDepth": 1.8776482706040554,
+      "effectiveDepth": 1.8776482706040554,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-64-7",
+      "direction": [
+        0.36881051383944713,
+        0.7754253680006477,
+        -0.5125371240627776
+      ],
+      "localAtWater": [
+        9.97299702509477,
+        -11.066790765669026,
+        58.72446127341036
+      ],
+      "surface": {
+        "water": 160.3844347372352,
+        "ground": null,
+        "object": null,
+        "seabed": 158.88458849821777
+      },
+      "seabedDepth": 1.4998462390174438,
+      "effectiveDepth": 1.4998462390174438,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-8",
+      "direction": [
+        0.4570616624767273,
+        0.743309261736472,
+        -0.48845263650715515
+      ],
+      "localAtWater": [
+        24.8314810623702,
+        -11.071008426450362,
+        54.14073874340269
+      ],
+      "surface": {
+        "water": 160.3798921775536,
+        "ground": null,
+        "object": null,
+        "seabed": 158.86786036329465
+      },
+      "seabedDepth": 1.5120318142589326,
+      "effectiveDepth": 1.5120318142589326,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "ring-64-9",
+      "direction": [
+        0.5390149045615867,
+        0.692219914537027,
+        -0.4798901151084636
+      ],
+      "localAtWater": [
+        37.99179579486603,
+        -11.095412631147752,
+        45.86156025736743
+      ],
+      "surface": {
+        "water": 160.3536080446971,
+        "ground": 148.4701638925747,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 159.40663871704118
+      },
+      "seabedDepth": 0.9469693276559212,
+      "effectiveDepth": 0.9469693276559212,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-10",
+      "direction": [
+        0.6090852620800783,
+        0.6256389809848164,
+        -0.48743308154978826
+      ],
+      "localAtWater": [
+        48.56670205986052,
+        -11.096638598055762,
+        34.465581373356365
+      ],
+      "surface": {
+        "water": 160.35228763792756,
+        "ground": 155.19714448324487,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 159.8079874889695
+      },
+      "seabedDepth": 0.5443001489580581,
+      "effectiveDepth": 0.5443001489580581,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-11",
+      "direction": [
+        0.6624975559640578,
+        0.5481038416712286,
+        -0.5105674951334944
+      ],
+      "localAtWater": [
+        55.831773278756245,
+        -11.097724976164187,
+        20.72105651633757
+      ],
+      "surface": {
+        "water": 160.35111757289621,
+        "ground": 160.54481682935042,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 159.9205046759702
+      },
+      "seabedDepth": 0.43061289692602145,
+      "effectiveDepth": -0.1936992564542095,
+      "blocker": "citadel-oskar-grid-mountain-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-12",
+      "direction": [
+        0.695611826653321,
+        0.464898388207608,
+        -0.5477167838052784
+      ],
+      "localAtWater": [
+        59.276762639674736,
+        -11.136879179694489,
+        5.563213949162133
+      ],
+      "surface": {
+        "water": 160.30894720511566,
+        "ground": 160.14456064750053,
+        "object": "citadel-oskar-grid-mountain-surface",
+        "seabed": 159.8515997731697
+      },
+      "seabedDepth": 0.45734743194594785,
+      "effectiveDepth": 0.16438655761513132,
+      "blocker": "citadel-oskar-grid-mountain-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-13",
+      "direction": [
+        0.7061713913243144,
+        0.38169293474398763,
+        -0.5963492849342605
+      ],
+      "localAtWater": [
+        58.75800501046477,
+        -10.981730716991393,
+        -9.97869365615103
+      ],
+      "surface": {
+        "water": 160.47604721336162,
+        "ground": null,
+        "object": null,
+        "seabed": 159.7173793961338
+      },
+      "seabedDepth": 0.7586678172278312,
+      "effectiveDepth": 0.7586678172278312,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-14",
+      "direction": [
+        0.6934566330952155,
+        0.3041577954303994,
+        -0.6531507739375088
+      ],
+      "localAtWater": [
+        54.1156304088405,
+        -11.14006653068995,
+        -24.819965202988527
+      ],
+      "surface": {
+        "water": 160.30551432303395,
+        "ground": null,
+        "object": null,
+        "seabed": 159.68587057364948
+      },
+      "seabedDepth": 0.6196437493844655,
+      "effectiveDepth": 0.6196437493844655,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-15",
+      "direction": [
+        0.6583340417272062,
+        0.23757686187818897,
+        -0.7142503232083505
+      ],
+      "localAtWater": [
+        45.84039400580542,
+        -11.1641265739851,
+        -37.97426163548342
+      ],
+      "surface": {
+        "water": 160.27960086335167,
+        "ground": null,
+        "object": null,
+        "seabed": 159.53328401208626
+      },
+      "seabedDepth": 0.7463168512654192,
+      "effectiveDepth": 0.7463168512654192,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-16",
+      "direction": [
+        0.6031971637791894,
+        0.186487514678744,
+        -0.7754840994357569
+      ],
+      "localAtWater": [
+        34.457653587003065,
+        -11.130884806410052,
+        -48.55553072827475
+      ],
+      "surface": {
+        "water": 160.3154033427261,
+        "ground": null,
+        "object": null,
+        "seabed": 159.87359626744438
+      },
+      "seabedDepth": 0.44180707528173,
+      "effectiveDepth": 0.44180707528173,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-17",
+      "direction": [
+        0.5318034863653233,
+        0.15437140841456837,
+        -0.8326791219634307
+      ],
+      "localAtWater": [
+        20.71074163497,
+        -11.171838137498042,
+        -55.80398038521065
+      ],
+      "surface": {
+        "water": 160.2712952552641,
+        "ground": null,
+        "object": null,
+        "seabed": 159.51095334272566
+      },
+      "seabedDepth": 0.7603419125384505,
+      "effectiveDepth": 0.7603419125384505,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-18",
+      "direction": [
+        0.44901837061773286,
+        0.1434172026531909,
+        -0.8819376445253541
+      ],
+      "localAtWater": [
+        5.562989810468707,
+        -11.142875983508048,
+        -59.27437441296804
+      ],
+      "surface": {
+        "water": 160.30248844974525,
+        "ground": null,
+        "object": null,
+        "seabed": 159.48593188303818
+      },
+      "seabedDepth": 0.816556566707078,
+      "effectiveDepth": 0.816556566707078,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-19",
+      "direction": [
+        0.360483485365744,
+        0.15437140841456834,
+        -0.9199027802124896
+      ],
+      "localAtWater": [
+        -9.967750524085233,
+        -11.145129634177152,
+        -58.69356805800281
+      ],
+      "surface": {
+        "water": 160.3000611936911,
+        "ground": null,
+        "object": null,
+        "seabed": 159.64432414443797
+      },
+      "seabedDepth": 0.6557370492531334,
+      "effectiveDepth": 0.6557370492531334,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-20",
+      "direction": [
+        0.27223233672846375,
+        0.18648751467874394,
+        -0.9439872677681123
+      ],
+      "localAtWater": [
+        -24.82829819620708,
+        -11.090095382619978,
+        -54.133799055634576
+      ],
+      "surface": {
+        "water": 160.35933489662563,
+        "ground": null,
+        "object": null,
+        "seabed": 159.77205650608104
+      },
+      "seabedDepth": 0.5872783905445829,
+      "effectiveDepth": 0.5872783905445829,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-21",
+      "direction": [
+        0.19027909464360443,
+        0.23757686187818888,
+        -0.9525497891668037
+      ],
+      "localAtWater": [
+        -37.98203561991283,
+        -11.13366140539361,
+        -45.84977832281097
+      ],
+      "surface": {
+        "water": 160.31241285410016,
+        "ground": null,
+        "object": null,
+        "seabed": 159.48734873095435
+      },
+      "seabedDepth": 0.8250641231458076,
+      "effectiveDepth": 0.8250641231458076,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-22",
+      "direction": [
+        0.12020873712511286,
+        0.30415779543039934,
+        -0.9450068227254789
+      ],
+      "localAtWater": [
+        -48.548800003138545,
+        -11.151518140370342,
+        -34.452877097246805
+      ],
+      "surface": {
+        "water": 160.29318056194674,
+        "ground": null,
+        "object": null,
+        "seabed": 159.86296979072577
+      },
+      "seabedDepth": 0.4302107712209704,
+      "effectiveDepth": 0.4302107712209704,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "ring-64-23",
+      "direction": [
+        0.06679644324113325,
+        0.3816929347439875,
+        -0.9218724091417727
+      ],
+      "localAtWater": [
+        -55.85555112032602,
+        -11.034318443643912,
+        -20.729881276327582
+      ],
+      "surface": {
+        "water": 160.41940849839037,
+        "ground": null,
+        "object": null,
+        "seabed": 159.6964214403135
+      },
+      "seabedDepth": 0.7229870580768818,
+      "effectiveDepth": 0.7229870580768818,
+      "blocker": "planet-surface",
+      "depthPass": false
+    },
+    {
+      "tag": "outlet-x-11-z20",
+      "direction": [
+        0.30927272953636864,
+        0.6078584227125724,
+        -0.7313402195302183
+      ],
+      "localAtWater": [
+        -10.91819082971088,
+        -1.1898028238957181,
+        19.8512560540198
+      ],
+      "surface": {
+        "water": 160.39827298678225,
+        "ground": null,
+        "object": null,
+        "seabed": 158.17542950809113
+      },
+      "seabedDepth": 2.222843478691118,
+      "effectiveDepth": 2.222843478691118,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x-11-z24",
+      "direction": [
+        0.3047102033142455,
+        0.6270812005882699,
+        -0.7168827378762621
+      ],
+      "localAtWater": [
+        -10.877176951203587,
+        -1.7862937587680392,
+        23.732022438989667
+      ],
+      "surface": {
+        "water": 160.33331083031277,
+        "ground": null,
+        "object": null,
+        "seabed": 157.9187086177006
+      },
+      "seabedDepth": 2.4146022126121807,
+      "effectiveDepth": 2.4146022126121807,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x-11-z28",
+      "direction": [
+        0.3000002155315547,
+        0.6457924370608903,
+        -0.702105404420146
+      ],
+      "localAtWater": [
+        -10.835354725088095,
+        -2.394541007309755,
+        27.580902936587883
+      ],
+      "surface": {
+        "water": 160.3473978733451,
+        "ground": null,
+        "object": null,
+        "seabed": 157.74285739300308
+      },
+      "seabedDepth": 2.604540480342024,
+      "effectiveDepth": 2.604540480342024,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x-11-z32",
+      "direction": [
+        0.29515488263043743,
+        0.6639696140445988,
+        -0.6870429003234656
+      ],
+      "localAtWater": [
+        -10.789799777875906,
+        -3.0570755941284062,
+        31.388508444729915
+      ],
+      "surface": {
+        "water": 160.3947082846639,
+        "ground": null,
+        "object": null,
+        "seabed": 157.65066616790293
+      },
+      "seabedDepth": 2.7440421167609657,
+      "effectiveDepth": 2.7440421167609657,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x-11-z36",
+      "direction": [
+        0.2901867174874672,
+        0.6815935682101684,
+        -0.6717305090349698
+      ],
+      "localAtWater": [
+        -10.731863084888396,
+        -3.8996857890504373,
+        35.122461005089306
+      ],
+      "surface": {
+        "water": 160.34283469028338,
+        "ground": null,
+        "object": null,
+        "seabed": 157.64966056790223
+      },
+      "seabedDepth": 2.6931741223811514,
+      "effectiveDepth": 2.6931741223811514,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x-11-z40",
+      "direction": [
+        0.2851084990889686,
+        0.6986485201399926,
+        -0.6562037709838568
+      ],
+      "localAtWater": [
+        -10.67454526439446,
+        -4.733295327470415,
+        38.816528234161694
+      ],
+      "surface": {
+        "water": 160.38144559903026,
+        "ground": null,
+        "object": null,
+        "seabed": 157.73711266806637
+      },
+      "seabedDepth": 2.644332930963884,
+      "effectiveDepth": 2.644332930963884,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x-11-z44",
+      "direction": [
+        0.2799331447719657,
+        0.7151220542758373,
+        -0.6404981513996619
+      ],
+      "localAtWater": [
+        -10.610179410914892,
+        -5.669408894712404,
+        42.440717643659546
+      ],
+      "surface": {
+        "water": 160.3918606055304,
+        "ground": null,
+        "object": null,
+        "seabed": 157.81668708525623
+      },
+      "seabedDepth": 2.575173520274177,
+      "effectiveDepth": 2.575173520274177,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x-11-z48",
+      "direction": [
+        0.27467358748964504,
+        0.7310050532671775,
+        -0.6246487272326898
+      ],
+      "localAtWater": [
+        -10.538207569636775,
+        -6.716141182682605,
+        45.984905758415024
+      ],
+      "surface": {
+        "water": 160.36045583611212,
+        "ground": null,
+        "object": null,
+        "seabed": 157.82994405913567
+      },
+      "seabedDepth": 2.5305117769764536,
+      "effectiveDepth": 2.5305117769764536,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x11-z20",
+      "direction": [
+        0.432951671007762,
+        0.596847022269766,
+        -0.6755194168780793
+      ],
+      "localAtWater": [
+        10.914238524558463,
+        -1.2472837128306367,
+        19.84407004465175
+      ],
+      "surface": {
+        "water": 160.34020998617595,
+        "ground": null,
+        "object": null,
+        "seabed": 158.0229580542665
+      },
+      "seabedDepth": 2.3172519319094533,
+      "effectiveDepth": 2.3172519319094533,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x11-z24",
+      "direction": [
+        0.4279744709870438,
+        0.6161067194398491,
+        -0.6612490925849558
+      ],
+      "localAtWater": [
+        10.879502823084835,
+        -1.7524671238988674,
+        23.737097068548756
+      ],
+      "surface": {
+        "water": 160.36759497784107,
+        "ground": null,
+        "object": null,
+        "seabed": 157.81570386998388
+      },
+      "seabedDepth": 2.5518911078571875,
+      "effectiveDepth": 2.5518911078571875,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x11-z28",
+      "direction": [
+        0.4227797504484293,
+        0.6348611127055316,
+        -0.6466905366441187
+      ],
+      "localAtWater": [
+        10.834146780601152,
+        -2.412108912675251,
+        27.577828168802952
+      ],
+      "surface": {
+        "water": 160.3295220621538,
+        "ground": null,
+        "object": null,
+        "seabed": 157.7038635903153
+      },
+      "seabedDepth": 2.6256584718385056,
+      "effectiveDepth": 2.6256584718385056,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x11-z32",
+      "direction": [
+        0.41738215398551687,
+        0.6530874588942521,
+        -0.6318772891704993
+      ],
+      "localAtWater": [
+        10.789167317964015,
+        -3.0662738611016493,
+        31.386668561349836
+      ],
+      "surface": {
+        "water": 160.38530651399537,
+        "ground": null,
+        "object": null,
+        "seabed": 157.5692356062397
+      },
+      "seabedDepth": 2.8160709077556874,
+      "effectiveDepth": 2.8160709077556874,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x11-z36",
+      "direction": [
+        0.41179700997582414,
+        0.6707663440067186,
+        -0.6168433628749128
+      ],
+      "localAtWater": [
+        10.734058627028908,
+        -3.8677546225376602,
+        35.12964641573099
+      ],
+      "surface": {
+        "water": 160.37563789022255,
+        "ground": null,
+        "object": null,
+        "seabed": 157.52415975111694
+      },
+      "seabedDepth": 2.851478139105609,
+      "effectiveDepth": 2.851478139105609,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x11-z40",
+      "direction": [
+        0.4060401624078665,
+        0.6878817157416302,
+        -0.60162291483964
+      ],
+      "localAtWater": [
+        10.673495354619973,
+        -4.748564833445158,
+        38.81271038043628
+      ],
+      "surface": {
+        "water": 160.3656710584564,
+        "ground": null,
+        "object": null,
+        "seabed": 157.5679152427254
+      },
+      "seabedDepth": 2.7977558157309943,
+      "effectiveDepth": 2.7977558157309943,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x11-z44",
+      "direction": [
+        0.4001278035866366,
+        0.7044208669633557,
+        -0.5862499321821096
+      ],
+      "localAtWater": [
+        10.613611665157336,
+        -5.619491437102852,
+        42.4544466606293
+      ],
+      "surface": {
+        "water": 160.44374527427124,
+        "ground": null,
+        "object": null,
+        "seabed": 157.69763333736952
+      },
+      "seabedDepth": 2.7461119369017126,
+      "effectiveDepth": 2.7461119369017126,
+      "blocker": "planet-surface",
+      "depthPass": true
+    },
+    {
+      "tag": "outlet-x11-z48",
+      "direction": [
+        0.39407631109842023,
+        0.7203743736383253,
+        -0.5707579371644792
+      ],
+      "localAtWater": [
+        10.541403643280788,
+        -6.66965864981276,
+        45.99885226158889
+      ],
+      "surface": {
+        "water": 160.40909065593817,
+        "ground": null,
+        "object": null,
+        "seabed": 157.8500150469532
+      },
+      "seabedDepth": 2.5590756089849833,
+      "effectiveDepth": 2.5590756089849833,
+      "blocker": "planet-surface",
+      "depthPass": true
+    }
+  ],
+  "quays": [
+    {
+      "tag": "authored-quay--11",
+      "direction": [
+        0.31389538826257196,
+        0.588312352799237,
+        -0.745223631382765
+      ],
+      "localAtWater": [
+        -10.898743937931506,
+        -0.8286146590966439,
+        15.951797945517924
+      ],
+      "surface": {
+        "water": 160.31969914220755,
+        "ground": 161.8091681340328,
+        "object": "junction-00",
+        "seabed": 158.52536435794494
+      },
+      "seabedDepth": 1.7943347842626167,
+      "effectiveDepth": -1.4894689918252482,
+      "blocker": "junction-00",
+      "depthPass": false,
+      "authoredLocal": [
+        -11,
+        0.65,
+        16.1
+      ],
+      "authoredWorld": [
+        50.79115166341481,
+        95.1943324235496,
+        -120.58401588576626
+      ],
+      "topAboveWater": 1.4894690158421326
+    },
+    {
+      "tag": "authored-quay-11",
+      "direction": [
+        0.43741454746198577,
+        0.577315178113536,
+        -0.6894749442788781
+      ],
+      "localAtWater": [
+        10.898499767191353,
+        -0.8321802178230371,
+        15.951440568343713
+      ],
+      "surface": {
+        "water": 160.31610740908462,
+        "ground": 161.8091681340328,
+        "object": "junction-00",
+        "seabed": 158.27890875030863
+      },
+      "seabedDepth": 2.037198658775992,
+      "effectiveDepth": -1.4930607249481795,
+      "blocker": "junction-00",
+      "depthPass": false,
+      "authoredLocal": [
+        11,
+        0.65,
+        16.1
+      ],
+      "authoredWorld": [
+        70.77768406505366,
+        93.41488873556757,
+        -111.56336719958294
+      ],
+      "topAboveWater": 1.493060748965064
+    }
+  ],
+  "berth": {
+    "found": true,
+    "searchRadius": 24,
+    "elapsedMs": 2644.2999999821186,
+    "direction": [
+      0.33339348171173255,
+      0.6218255727568195,
+      -0.7086478274981036
+    ],
+    "offsetMetres": 23.822391617519457,
+    "sample": {
+      "tag": "actual-berth-result",
+      "direction": [
+        0.33339348171173255,
+        0.6218255727568195,
+        -0.7086478274981036
+      ],
+      "localAtWater": [
+        -6.092990779258798,
+        -1.3337402412668382,
+        23.0036902998446
+      ],
+      "surface": {
+        "water": 160.4211022262431,
+        "ground": null,
+        "object": null,
+        "seabed": 157.84667146388466
+      },
+      "seabedDepth": 2.574430762358446,
+      "effectiveDepth": 2.574430762358446,
+      "blocker": "planet-surface",
+      "depthPass": true,
+      "turnClear": true
+    }
+  },
+  "docks": [
+    {
+      "quay": "authored-quay--11",
+      "searchRadius": 2,
+      "valid": true,
+      "elapsedMs": 3631.800000011921,
+      "attempts": 10,
+      "quaternion": [
+        -0.17308713759527125,
+        0.6347860051236756,
+        -0.4060744562335817,
+        0.6341853881104497
+      ],
+      "direction": [
+        0.2953063880316792,
+        0.6102887575873532,
+        -0.7350794307761359
+      ],
+      "position": [
+        47.29396364199022,
+        97.73907874067177,
+        -117.7245778691791
+      ],
+      "shorePoint": [
+        50.791725874299594,
+        95.19229723744833,
+        -120.5854748560547
+      ],
+      "shoreObject": "junction-00",
+      "angle": -0.19861298987087175,
+      "entry": [
+        0.25280434362238335,
+        0.6871985948683146,
+        -0.6810639140761092
+      ],
+      "triangleCount": 82474
+    },
+    {
+      "quay": "authored-quay-11",
+      "searchRadius": 2,
+      "valid": true,
+      "elapsedMs": 2924.7999999821186,
+      "attempts": 43,
+      "quaternion": [
+        -0.05112340714294298,
+        0.7002107484130756,
+        -0.441016273515031,
+        0.5591028094579858
+      ],
+      "direction": [
+        0.4215525567239176,
+        0.6057820874740245,
+        -0.6747751510059787
+      ],
+      "position": [
+        67.50599885519333,
+        97.00789202021207,
+        -108.05620757070848
+      ],
+      "shorePoint": [
+        70.00875032073175,
+        94.06953740712578,
+        -111.53039661839856
+      ],
+      "shoreObject": "junction-00",
+      "angle": -0.2154026557430231,
+      "entry": [
+        0.4051955426223621,
+        0.6827216047072456,
+        -0.6080360044478724
+      ],
+      "triangleCount": 82474
+    }
+  ],
+  "routes": [
+    {
+      "quay": "authored-quay--11",
+      "passed": true,
+      "outletClear": true,
+      "length": 17.078749176871145,
+      "points": [
+        [
+          0.34634230708123226,
+          0.6948057740473903,
+          -0.6303109888587191
+        ],
+        [
+          0.3279166085056776,
+          0.6939155827602733,
+          -0.6410552720854923
+        ],
+        [
+          0.30934146572960075,
+          0.6927091474745127,
+          -0.651507401788649
+        ],
+        [
+          0.29062534415941843,
+          0.6911870180090324,
+          -0.661662614531002
+        ],
+        [
+          0.2717767734510015,
+          0.6893498880567259,
+          -0.6715162821918337
+        ],
+        [
+          0.25280434362238335,
+          0.6871985948683146,
+          -0.6810639140761092
+        ]
+      ],
+      "failure": null
+    },
+    {
+      "quay": "authored-quay-11",
+      "passed": true,
+      "outletClear": true,
+      "length": 10.254129069934582,
+      "points": [
+        [
+          0.34634230708123226,
+          0.6948057740473903,
+          -0.6303109888587191
+        ],
+        [
+          0.36613012058309286,
+          0.6910924852004573,
+          -0.6231692480388178
+        ],
+        [
+          0.3857508504070139,
+          0.6870638159252772,
+          -0.6157431235965714
+        ],
+        [
+          0.405195542622361,
+          0.6827216047072459,
+          -0.6080360044478728
+        ]
+      ],
+      "failure": null
+    }
+  ],
+  "candidate": true,
+  "currentFactoryShip": {
+    "scale": 1.7,
+    "boardingContract": {
+      "rootPoint": [
+        1.94,
+        0.664,
+        0.84
+      ],
+      "length": 1.35,
+      "width": 0.34,
+      "deployedPitch": 0.12,
+      "clearanceValidated": false,
+      "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.assembly.json"
+    },
+    "currentPoseBounds": {
+      "min": [
+        -4.419999837875366,
+        -0.5202933435275751,
+        -4.016249918937683
+      ],
+      "max": [
+        6.188000178337097,
+        6.612999773025512,
+        4.016249918937683
+      ],
+      "size": [
+        10.608000016212463,
+        7.133293116553087,
+        8.032499837875365
+      ]
+    },
+    "dynamicDraftRemeasured": false
+  },
+  "elapsedMs": 9650,
+  "routeTested": true,
+  "physicalBoardingValidated": false,
+  "scope": "Fresh frozen production scene. Actual surface/bed, authored quay/outlet samples and bounded berth search. Optional current-pose real-mesh docks only. Candidate flag enables the isolated harbor-bed change; default leaves bed unchanged. Local outlet-to-dock-entry routes tested when dock succeeds. No ship movement, no saves modified, no full sailing/boarding claim.",
+  "createdAt": "2026-09-21T11:57:31.137Z",
+  "hashes": {
+    "src/world/warshipWaterRoutes.js": "cf3a09c306931aaaacd6cc633cd1c50bc866156ea986dd0bfbd1b910fd64359f",
+    "src/world/warshipClearance.js": "807fd628c25bcfbab3b5f621600b0b75150c7c23b5c8f56feb7fb549eb753b58",
+    "src/world/canalJunctionTarget.js": "f3cd4997126c618cb1c8d55847f785376181435dab6bb8637af87904c6bb91d3",
+    "src/world/junctionHarbor.js": "6155b2a58c7a64a5a54613ddb13317a18a9aacbb1a0fa8f83c7e4f7d95aecc09",
+    "assets/models/optimized/canal-junction/junctionTargetData.js": "e77964ac9d853088e5397d2bd5a8946a9e981c85b5feb02a1f33569cfa3cdba0"
+  },
+  "historicalEnvelope": {
+    "invalidVertices": 0,
+    "invalidExamples": [],
+    "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+    "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+    "boatScale": 1.7,
+    "waterlineRootOffset": 0.25,
+    "minimumLocalY": -1.0786825083493212,
+    "requiredGeometricDraft": 1.3286825083493212,
+    "maxHorizontalRadius": 6.188000178337097,
+    "samples": 121,
+    "verticesInspected": 24161522,
+    "scope": "Actual rendered vertices for saved rowing cycle 60..119.5 with 119→60 wrap at half-frame steps and resting frame180; full 26 crew. Conservative flat-water vertical draft, no waves, roll, grounding or collision certificate."
+  },
+  "pageErrors": []
+}

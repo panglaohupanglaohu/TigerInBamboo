@@ -1,0 +1,122 @@
+{
+  "result": {
+    "listenerBefore": {
+      "has": true,
+      "x": -64.27709671332683,
+      "y": -52.50391183611534,
+      "z": 137.8426787319916,
+      "rx": -0.90630778703665,
+      "ry": 6.106226635438361e-16,
+      "rz": -0.42261826174069905
+    },
+    "playerAfter": [
+      63.917560435875,
+      52.21022929632348,
+      -137.07165069682205
+    ],
+    "near": {
+      "ready": true,
+      "listener": {
+        "has": true,
+        "x": -64.27709671332683,
+        "y": -52.50391183611534,
+        "z": 137.8426787319916,
+        "rx": -0.90630778703665,
+        "ry": 8.604228440844965e-16,
+        "rz": -0.42261826174069916
+      },
+      "robotSamples": {
+        "loaded": {
+          "beetle": 3,
+          "locust": 2,
+          "ant": 2
+        },
+        "error": null
+      },
+      "oneShots": [
+        {
+          "id": "robot-ant",
+          "cat": "weapon",
+          "gain": 0.6499999761581421,
+          "maxDistance": 140
+        }
+      ],
+      "foreground": 1,
+      "engines": [],
+      "suction": false,
+      "weather": {
+        "rain": 0,
+        "snow": 0,
+        "wind": 0.8
+      },
+      "caps": {
+        "FOREGROUND_CAP": 6,
+        "ONESHOT_CAP": 8,
+        "ENGINE_SLOTS": 2
+      }
+    },
+    "far": {
+      "ready": true,
+      "listener": {
+        "has": true,
+        "x": 63.917560435875,
+        "y": 52.21022929632348,
+        "z": -137.07165069682205,
+        "rx": -0.9063077870366505,
+        "ry": 1.3877787807814454e-16,
+        "rz": -0.42261826174069833
+      },
+      "robotSamples": {
+        "loaded": {
+          "beetle": 3,
+          "locust": 2,
+          "ant": 2
+        },
+        "error": null
+      },
+      "oneShots": [
+        {
+          "id": "robot-ant",
+          "cat": "weapon",
+          "gain": 0,
+          "maxDistance": 140
+        }
+      ],
+      "foreground": 1,
+      "engines": [],
+      "suction": false,
+      "weather": {
+        "rain": 0,
+        "snow": 0,
+        "wind": 0.8
+      },
+      "caps": {
+        "FOREGROUND_CAP": 6,
+        "ONESHOT_CAP": 8,
+        "ENGINE_SLOTS": 2
+      }
+    },
+    "rejected": true,
+    "stats": {
+      "shots": 1,
+      "cracks": 0,
+      "impacts": 0,
+      "confirmed": 0,
+      "reflected": 0,
+      "rejected": 0,
+      "sampled": 1,
+      "fallback": 0
+    },
+    "initialStats": {
+      "shots": 0,
+      "cracks": 0,
+      "impacts": 0,
+      "confirmed": 0,
+      "reflected": 0,
+      "rejected": 0,
+      "sampled": 0,
+      "fallback": 0
+    }
+  },
+  "errors": []
+}

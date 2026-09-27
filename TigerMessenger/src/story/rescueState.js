@@ -13,8 +13,11 @@ export function restoreRescueState(value) {
 }
 export function advanceRescue(state, { target, distance, riding = false }) {
   const chapter = RESCUE_CHAPTERS[state.chapter];
-  if (!chapter || chapter.target !== target || !Number.isFinite(distance) || distance > 9 || distance < 0) return false;
-  if (riding && !['tiger', 'citadel'].includes(target)) return false;
+  if (!chapter || chapter.target !== target || !Number.isFinite(distance) || distance < 0) return false;
+  // 2026-09-18 主人：乘飞艇/电车上也要能按 R/E 推进（虎虎对暗号、苔庭诱敌信号），
+  // 乘坐时互动距离放宽到 60（飞艇悬停高度+护航半径）。
+  const maxDistance = riding ? 60 : 9;
+  if (distance > maxDistance) return false;
   Object.assign(state, restoreRescueState({ chapter: state.chapter + 1 }));
   return true;
 }

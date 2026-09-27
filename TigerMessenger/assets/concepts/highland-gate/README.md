@@ -1,0 +1,15 @@
+用户已认可本图，独立30轮Web迭代完成；实际改动、截图、失败修复与未完成项见 artifacts/pipeline/highland-gate-thirty-rounds/PROGRESS.md。
+
+# 高山之门 · 目标 V1
+
+用户要求把原粗壮叹息之门迁往高山圣城，改名高山之门，并让轨道穿过，先提供目标图。
+
+本次交付 target-v1.png，内置 imagegen 生成。造型参考原 gate-of-sighs/target-v3-front-back.png，文明及画风参考 citadel-style-v2/target-v2.png。
+
+设计：保留厚重阶梯双塔及纵深三拱，改暖白石与蓝旗，拟置于旧城外侧临海铁路入口；前桥轨道穿过三道门洞再向城内延伸，步行道独立在侧。底部为布局意向图，具体站位/线路曲率需后续在实际场地验证。
+
+目视：旧双塔轮廓与白石圣城一致；主图轨道穿门关系清晰。概念图不代表已迁移游戏模型或铁路工程验收。现莫比斯纤细叹息之门仍保留，不把其生态舱风格带到圣城。
+
+## Exact prompt
+
+Create a polished landscape game environment target illustration titled exactly 高山之门. Input 1 is the SHAPE identity to relocate: the older massive gate with two broad thick stepped square tapering towers, heavy stone plinths, three successive round arch walls along the depth of a single rail corridor. Preserve this recognizable massive twin-tower stepped silhouette, not a slender skeletal gate. Input 2 is the authoritative DESTINATION and ART STYLE: Highland Holy City, ivory limestone cliff palace old town, pale gold domed open arcades, terracotta-roof cathedral new town, turquoise inner bay, watercolor washes with fine confident architectural ink lines, sunny pale blue sky, weathered stone and cypress greenery. Relocate the massive gate to a rocky shoulder at the outer approach of the OLD TOWN, left side of the overall holy-city ensemble, on the existing coastal railway approach before it reaches the inner-bay bridge. Main image upper 75%: close three-quarter cinematic view from approaching tracks. Show a blue-and-cream tram riding on continuous steel rails that enter the central gateway and continue visibly through the successive nested arches and out the far side toward the holy city. The railway must pass THROUGH the gate opening front-to-back, never sideways across the facade or terminate at it. Masonry arcade viaduct approaches from foreground left, straight through gate, gently follows the cliff beyond. A separate pedestrian walkway with stone parapet beside the rails connects to a small gate terrace and hillside stairs; tiny travelers for scale. Gate masonry warm ivory limestone with pale ochre weathering, restrained blue cloth banners and aged bronze fixtures. Tall stout stepped twins retained, openings generous and clear, stone bases embedded firmly in jagged grey-blue rock with cypress and shrubs. Old domed palace uphill behind left, waterfall descending beside it, distant new town cathedral and terracotta houses across the bay on right. This belongs to the traditional holy-city civilization: no glass crystal towers, no sci-fi pipes, no green laboratory tubes, no cobalt night palette. Bottom 25% a small clean context panorama showing old town left, new town right, inner bay and preexisting bridge, with the stout gate situated on the outer left railway approach. Place small labels 高山之门, 旧城, 新城 in context inset. Keep broad calm architectural proportions, fine line detail, warm sun, natural varied masonry rather than low-poly toy render. The ONLY main title is 高山之门. This is a proposed concept target, not a claim of actual game relocation or engineering validation.

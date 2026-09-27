@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "probes": [
+    {
+      "depth_error": 0,
+      "hit": false,
+      "passed": true,
+      "x": -2.0,
+      "y": 1.5
+    },
+    {
+      "depth_error": 0,
+      "hit": false,
+      "passed": true,
+      "x": 0.0,
+      "y": 1.5
+    },
+    {
+      "depth_error": 0,
+      "hit": false,
+      "passed": true,
+      "x": 2.0,
+      "y": 1.5
+    },
+    {
+      "depth_error": 0,
+      "hit": false,
+      "passed": true,
+      "x": 0.0,
+      "y": 5.0
+    },
+    {
+      "depth_error": 0,
+      "hit": false,
+      "passed": true,
+      "x": 0.0,
+      "y": 6.8
+    },
+    {
+      "depth_error": 0,
+      "hit": false,
+      "passed": true,
+      "x": 0.0,
+      "y": 8.0
+    },
+    {
+      "depth_error": 0.00000262260437455808,
+      "hit": true,
+      "passed": true,
+      "x": -4.0,
+      "y": 5.0
+    },
+    {
+      "depth_error": 0.00000000000000177635683940025,
+      "hit": true,
+      "passed": true,
+      "x": 4.0,
+      "y": 5.0
+    },
+    {
+      "depth_error": 0.00000452995301225556,
+      "hit": true,
+      "passed": true,
+      "x": 0.0,
+      "y": 10.0
+    }
+  ],
+  "scope": "Released Godot portal triangle aperture probes against Web. Separate character route test covers traversal.",
+  "triangles": 960
+}

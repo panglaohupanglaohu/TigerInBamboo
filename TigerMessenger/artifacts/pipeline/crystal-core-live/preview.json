@@ -1,0 +1,608 @@
+{
+  "objects": [
+    "moebius-grand-community-tower",
+    "moebius-trackside-gold-right",
+    "moebius-trackside-gold-left",
+    "moebius-swamp-placement",
+    "crystal-mother-port",
+    "v7-bank-rock-0",
+    "v7-bank-rock-1",
+    "v7-bank-rock-2",
+    "v7-swamp-outer-embankment",
+    "v7-continuous-swamp-promenade",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "v7-garden-connector",
+    "",
+    "v7-garden-connector",
+    "v7-garden-connector"
+  ],
+  "scope": "Default live gameplay, no preview transformations applied",
+  "runtime": {
+    "placement": {
+      "degrees": 30,
+      "scope": "mother, two satellites, swamp, shores, port and navigation",
+      "swamp": {
+        "lx": 0.28248711305964286,
+        "lz": -0.07071796769724471
+      }
+    },
+    "port": true,
+    "boardingRoute": [
+      [
+        -51.221090368179844,
+        -118.42072350636292,
+        -48.11657793443429
+      ],
+      [
+        -50.958873655320374,
+        -119.15476026040531,
+        -46.38382508442593
+      ],
+      [
+        -50.58190885505797,
+        -119.9942847716776,
+        -44.142933267685066
+      ]
+    ],
+    "records": [
+      {
+        "center": [
+          -51.363500051856015,
+          -118.06674556584065,
+          -48.931942331264835
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -51.076181132125924,
+          -118.82637539675478,
+          -47.15900399100861
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -51.34529828479748,
+          -118.07302188602706,
+          -48.93735560022771
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -51.879803374370226,
+          -118.63601879216719,
+          -50.081837488637255
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -55.61312729992609,
+          -128.04610440797953,
+          -45.13076190420216
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -56.459611918703224,
+          -129.6632200627032,
+          -39.50829867149123
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -54.97774509487788,
+          -129.4349856561177,
+          -45.43456830979333
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -57.06910385088451,
+          -128.47862021279334,
+          -45.474363943843215
+        ],
+        "finite": true
+      },
+      {
+        "center": [
+          -51.925606900677124,
+          -118.55247544523948,
+          -50.25881925651736
+        ],
+        "finite": true
+      }
+    ]
+  },
+  "checks": {
+    "navigationMoves": true,
+    "berthReturnError": 7.105427357601002e-15,
+    "portPlatformFinite": true,
+    "waterMask": [
+      39.54819582835,
+      -9.90051547761426
+    ],
+    "towerCount": 12,
+    "placement": {
+      "degrees": 30,
+      "scope": "mother, two satellites, swamp, shores, port and navigation",
+      "swamp": {
+        "lx": 0.28248711305964286,
+        "lz": -0.07071796769724471
+      }
+    }
+  },
+  "hits": [
+    [
+      {
+        "name": "canyon-shoulder-1",
+        "parent": "gate-canyon-site-blender",
+        "point": [
+          4.8487876738895075,
+          -113.28872638243934,
+          -101.18291217781831
+        ]
+      },
+      {
+        "name": "crystal-city-illustrated-lake-surface",
+        "parent": "city-sea-lake",
+        "point": [
+          17.380318963788405,
+          -98.31615872779928,
+          -92.3414224638019
+        ]
+      },
+      {
+        "name": "",
+        "parent": "city-sea-lake",
+        "point": [
+          17.508327313828147,
+          -98.16321543324167,
+          -92.25110752271432
+        ]
+      },
+      {
+        "name": "planet-surface",
+        "parent": "",
+        "point": [
+          20.90705624173704,
+          -94.10244284003781,
+          -89.85317017877149
+        ]
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          22.056953540008564,
+          -92.72855526828221,
+          -89.04187226954964
+        ]
+      }
+    ],
+    [
+      {
+        "name": "canyon-shoulder--1",
+        "parent": "gate-canyon-site-blender",
+        "point": [
+          -45.08663839000404,
+          -63.32125561339947,
+          -134.70342810612016
+        ]
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          -39.99443520874688,
+          -48.88327379558035,
+          -130.9803065255382
+        ]
+      },
+      {
+        "name": "crystal-v10-lake",
+        "parent": "",
+        "point": [
+          -38.72094844738761,
+          -45.27254224162078,
+          -130.04920737748114
+        ]
+      },
+      {
+        "name": "planet-surface",
+        "parent": "",
+        "point": [
+          -37.85124338692772,
+          -42.80665755422203,
+          -129.41332982819995
+        ]
+      },
+      {
+        "name": "crystal-city-illustrated-lake-surface",
+        "parent": "city-sea-lake",
+        "point": [
+          -34.66145263959209,
+          -33.76260743026167,
+          -127.0811411180837
+        ]
+      }
+    ]
+  ],
+  "gate": {
+    "anchor": [
+      -25,
+      3.26,
+      -18.5
+    ],
+    "meshes": [
+      {
+        "name": "Gate_stone.016_solid",
+        "walk": false
+      },
+      {
+        "name": "Gate_brick.016_solid",
+        "walk": false
+      },
+      {
+        "name": "Gate_edge.016_solid",
+        "walk": false
+      },
+      {
+        "name": "Gate_cloth.016_detail",
+        "walk": false
+      },
+      {
+        "name": "Gate_gold.016_detail",
+        "walk": false
+      },
+      {
+        "name": "Gate_dark.016_solid",
+        "walk": false
+      },
+      {
+        "name": "Gate_rock.016_solid",
+        "walk": false
+      },
+      {
+        "name": "Gate_stone.016_walk",
+        "walk": true
+      },
+      {
+        "name": "Gate_edge.016_walk",
+        "walk": true
+      },
+      {
+        "name": "Gate_wood.016_detail",
+        "walk": false
+      },
+      {
+        "name": "Gate_leaf.016_detail",
+        "walk": false
+      },
+      {
+        "name": "gate-hero-meeting"
+      }
+    ],
+    "v10": [
+      {
+        "name": "v8-meeting-terrace-pier",
+        "position": [
+          -28,
+          -12.425,
+          -23
+        ]
+      },
+      {
+        "name": "v8-meeting-terrace-pier",
+        "position": [
+          -28,
+          -12.425,
+          -17
+        ]
+      },
+      {
+        "name": "v8-meeting-terrace-pier",
+        "position": [
+          -18,
+          -12.425,
+          -23
+        ]
+      },
+      {
+        "name": "v8-meeting-terrace-pier",
+        "position": [
+          -18,
+          -12.425,
+          -17
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -29.55,
+          3.79,
+          -24.4
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -29.55,
+          3.79,
+          -22.90833333333333
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -29.550000000000004,
+          3.79,
+          -21.416666666666668
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -29.55,
+          3.79,
+          -19.924999999999997
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -29.55,
+          3.79,
+          -18.433333333333334
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -29.549999999999997,
+          3.79,
+          -16.941666666666666
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -29.55,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-handrail",
+        "position": [
+          -29.55,
+          3.65,
+          -19.924999999999997
+        ]
+      },
+      {
+        "name": "v8-meeting-handrail",
+        "position": [
+          -29.55,
+          4.3,
+          -19.924999999999997
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -29.55,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -27.912499999999998,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -26.275000000000002,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -24.6375,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -23,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -21.3625,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -19.724999999999998,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -18.0875,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -16.45,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-handrail",
+        "position": [
+          -23,
+          3.65,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-handrail",
+        "position": [
+          -23,
+          4.3,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -16.45,
+          3.79,
+          -15.45
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -16.45,
+          3.79,
+          -16.941666666666666
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -16.45,
+          3.79,
+          -18.433333333333334
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -16.45,
+          3.79,
+          -19.924999999999997
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -16.45,
+          3.79,
+          -21.416666666666664
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -16.45,
+          3.79,
+          -22.90833333333333
+        ]
+      },
+      {
+        "name": "v8-meeting-baluster",
+        "position": [
+          -16.45,
+          3.79,
+          -24.4
+        ]
+      },
+      {
+        "name": "v8-meeting-handrail",
+        "position": [
+          -16.45,
+          3.65,
+          -19.924999999999997
+        ]
+      },
+      {
+        "name": "v8-meeting-handrail",
+        "position": [
+          -16.45,
+          4.3,
+          -19.924999999999997
+        ]
+      },
+      {
+        "name": "v8-meeting-glass-canopy",
+        "position": [
+          -24.5,
+          6.6,
+          -19.3
+        ]
+      },
+      {
+        "name": "v8-meeting-canopy-column",
+        "position": [
+          -20.859423525312735,
+          4.925,
+          -17.38969793004946
+        ]
+      },
+      {
+        "name": "v8-meeting-canopy-column",
+        "position": [
+          -28.140576474687265,
+          4.925,
+          -17.38969793004946
+        ]
+      },
+      {
+        "name": "v8-meeting-canopy-column",
+        "position": [
+          -28.140576474687265,
+          4.925,
+          -21.210302069950536
+        ]
+      },
+      {
+        "name": "v8-meeting-canopy-column",
+        "position": [
+          -20.859423525312735,
+          4.925,
+          -21.21030206995054
+        ]
+      }
+    ]
+  },
+  "errors": []
+}

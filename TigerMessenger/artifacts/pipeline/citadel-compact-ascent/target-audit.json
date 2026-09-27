@@ -1,0 +1,56 @@
+{
+  "camera": {
+    "eye": [
+      108,
+      42,
+      140
+    ],
+    "look": [
+      59,
+      14,
+      65
+    ],
+    "fov": 55
+  },
+  "probes": [
+    {
+      "screen": [
+        0.35,
+        0.85
+      ],
+      "name": "",
+      "parent": "integrated-harbor-stone-finish",
+      "point": [
+        61.8574981689453,
+        -2.380159168548971,
+        100.75344558519815
+      ]
+    },
+    {
+      "screen": [
+        0.3,
+        0.72
+      ],
+      "name": "",
+      "parent": "integrated-harbor-stone-finish",
+      "point": [
+        49.244902184535746,
+        2.223999977111845,
+        96.93902976827741
+      ]
+    },
+    {
+      "screen": [
+        0.4,
+        0.78
+      ],
+      "name": "integrated-stair-1",
+      "parent": "citadel-front-harbor",
+      "point": [
+        62.95526758408536,
+        -0.3020510843233808,
+        93.40000009536743
+      ]
+    }
+  ]
+}

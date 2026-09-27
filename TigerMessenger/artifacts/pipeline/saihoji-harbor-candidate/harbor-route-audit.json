@@ -1,0 +1,560 @@
+{
+  "physicalBoardingValidated": false,
+  "bed": {
+    "source": "local-conforming-harbor-bed-candidate",
+    "landing": [
+      -0.5195427402016569,
+      0.5237577109016703,
+      -0.6750949573021531
+    ],
+    "coreRadius": 48,
+    "outerRadius": 64,
+    "bedRadius": 157.8,
+    "seaRadius": 160.5,
+    "referenceRadius": 160,
+    "maxEdge": 2,
+    "maxIterations": 12,
+    "shorelineFade": 0.5,
+    "version": 1,
+    "originalVertices": 45765,
+    "vertices": 61058,
+    "originalTriangles": 15255,
+    "triangles": 42195,
+    "unchangedOriginalTriangles": 15103,
+    "loweredVertices": 14669,
+    "dryVerticesPreserved": 0,
+    "iterations": 5,
+    "maxLocalEdge": 1.9952771237332405,
+    "requiresStaticRaycastRebuild": true
+  },
+  "scope": "Isolated browser candidate with real cloned sea-bed geometry, not released. Actual 8931 authored scene. Actor coordinates are prior diagnostic 240-second snapshot inputs; actors are not moved, saves are not changed, no natural boarding claim. Search bounded to 24m and stops on first invalid berth. No deck/seat route claimed without valid shore berth.",
+  "priorSourceHash": "9781594459dfb283af808dde2679341f8e35a12c6971db4b852bc2959f58b54b",
+  "landDir": [
+    -0.5194641708415682,
+    0.5236834559767611,
+    -0.6752130131655624
+  ],
+  "contract": {
+    "rootPoint": [
+      1.94,
+      0.664,
+      0.84
+    ],
+    "length": 1.35,
+    "width": 0.34,
+    "deployedPitch": 0.12,
+    "clearanceValidated": false,
+    "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.assembly.json"
+  },
+  "scale": 1.7,
+  "units": [
+    {
+      "uid": 79,
+      "position": [
+        -78.62272381239978,
+        84.81941390725427,
+        -112.5591558093475
+      ],
+      "radialHeight": 161.3859635524849,
+      "water": 160.5,
+      "drySupport": [
+        -78.51554597079583,
+        84.70378878937638,
+        -112.40571610658176
+      ],
+      "priorBlocked": "escort-support-discontinuity",
+      "priorFinished": false
+    },
+    {
+      "uid": 80,
+      "position": [
+        -78.49618693639694,
+        84.87540905043934,
+        -112.63600881366962
+      ],
+      "radialHeight": 161.40742519012633,
+      "water": 160.5,
+      "drySupport": [
+        -78.3891958168393,
+        84.75972298476361,
+        -112.48248476166384
+      ],
+      "priorBlocked": "escort-support-discontinuity",
+      "priorFinished": false
+    },
+    {
+      "uid": 81,
+      "position": [
+        -90.5869713784359,
+        83.03702138148756,
+        -102.1226356976167
+      ],
+      "radialHeight": 159.78166047846457,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 82,
+      "position": [
+        -89.83004038398424,
+        83.73796290289545,
+        -102.2288290515281
+      ],
+      "radialHeight": 159.78803483290446,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 83,
+      "position": [
+        -90.24799373510876,
+        84.35083936203584,
+        -101.37471668927452
+      ],
+      "radialHeight": 159.8017448531864,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 84,
+      "position": [
+        -90.49757656794691,
+        84.25191413196569,
+        -101.2345338440371
+      ],
+      "radialHeight": 159.8018374180692,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 85,
+      "position": [
+        -90.84115875985106,
+        83.27680032858117,
+        -101.70896215278567
+      ],
+      "radialHeight": 159.7869036560745,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 86,
+      "position": [
+        -89.97289902827394,
+        83.34357469580071,
+        -102.41729494160893
+      ],
+      "radialHeight": 159.78290367177274,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 87,
+      "position": [
+        -90.36415395132572,
+        82.31919829117322,
+        -102.88908743534658
+      ],
+      "radialHeight": 159.77576487039198,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 88,
+      "position": [
+        -89.42805403495157,
+        82.43973819436803,
+        -103.6141261753996
+      ],
+      "radialHeight": 159.77976851005195,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 89,
+      "position": [
+        -89.25970176804391,
+        82.70964351923989,
+        -103.54705169962213
+      ],
+      "radialHeight": 159.7816366372685,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 90,
+      "position": [
+        -89.59625336622325,
+        83.39019825322289,
+        -102.71051319400172
+      ],
+      "radialHeight": 159.78380175271676,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 91,
+      "position": [
+        -90.48168114226742,
+        82.67698409460003,
+        -102.50139324878317
+      ],
+      "radialHeight": 159.77782680726193,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 92,
+      "position": [
+        -90.75973297840649,
+        83.3929126905149,
+        -101.6880004444269
+      ],
+      "radialHeight": 159.78784826045205,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    },
+    {
+      "uid": 93,
+      "position": [
+        -91.66359020485666,
+        82.67416411001366,
+        -101.46710387053089
+      ],
+      "radialHeight": 159.78987561296387,
+      "water": 160.5,
+      "drySupport": null,
+      "priorBlocked": null,
+      "priorFinished": true
+    }
+  ],
+  "docks": [
+    {
+      "index": 0,
+      "valid": true,
+      "searchRadius": 24,
+      "elapsedMs": 351,
+      "attempts": 5,
+      "position": [
+        -86.90839800071977,
+        80.76173427429097,
+        -107.57659739632194
+      ],
+      "shorePoint": [
+        -83.45234351030741,
+        84.13313364141212,
+        -108.4773951778176
+      ],
+      "shoreObject": "mossy-terrain",
+      "angle": 0.3095155541276558,
+      "routes": [
+        {
+          "uid": 79,
+          "valid": true,
+          "length": 7.867916483668235,
+          "startCorrection": 2.0097183471152322e-14
+        },
+        {
+          "uid": 80,
+          "valid": true,
+          "length": 9.911272101609525,
+          "startCorrection": 0
+        },
+        {
+          "uid": 81,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 82,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 83,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 84,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 85,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 86,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 87,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 88,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 89,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 90,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 91,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 92,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 93,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "valid": true,
+      "searchRadius": 24,
+      "elapsedMs": 406.90000000596046,
+      "attempts": 186,
+      "position": [
+        -80.92730096905551,
+        92.50408809078539,
+        -102.556318957065
+      ],
+      "shorePoint": [
+        -81.11199033132854,
+        89.2100000956682,
+        -106.24697168655675
+      ],
+      "shoreObject": "mossy-terrain",
+      "angle": 0.2530179414440044,
+      "routes": [
+        {
+          "uid": 79,
+          "valid": true,
+          "length": 10.502550709742046,
+          "startCorrection": 2.0097183471152322e-14
+        },
+        {
+          "uid": 80,
+          "valid": true,
+          "length": 10.554924987032757,
+          "startCorrection": 0
+        },
+        {
+          "uid": 81,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 82,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 83,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 84,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 85,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 86,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 87,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 88,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 89,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 90,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 91,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 92,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 93,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "valid": true,
+      "searchRadius": 24,
+      "elapsedMs": 483.3999999910593,
+      "attempts": 949,
+      "position": [
+        -79.73056536278338,
+        73.96864477240794,
+        -117.49767773553842
+      ],
+      "shorePoint": [
+        -76.36618811990687,
+        77.51657792701393,
+        -118.62532341350924
+      ],
+      "shoreObject": "mossy-terrain",
+      "angle": 0.14760582746866763,
+      "routes": [
+        {
+          "uid": 79,
+          "valid": true,
+          "length": 11.867577899899771,
+          "startCorrection": 2.0097183471152322e-14
+        },
+        {
+          "uid": 80,
+          "valid": true,
+          "length": 12.465805672110767,
+          "startCorrection": 0
+        },
+        {
+          "uid": 81,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 82,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 83,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 84,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 85,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 86,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 87,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 88,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 89,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 90,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 91,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 92,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        },
+        {
+          "uid": 93,
+          "valid": false,
+          "reason": "missing-dry-endpoint"
+        }
+      ]
+    }
+  ],
+  "uniqueBerths": 3,
+  "requiredBerths": 3,
+  "stats": {
+    "envelope": 7,
+    "minimumDepth": 1.5,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 7,
+    "obstacleMeshes": 1755
+  }
+}

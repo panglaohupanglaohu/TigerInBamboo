@@ -1,0 +1,101 @@
+{
+  "checks": {
+    "petals": [
+      [
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "Group"
+      ],
+      [
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "Group"
+      ],
+      [
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "Group"
+      ],
+      [
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "Group"
+      ],
+      [
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "BufferGeometry",
+        "Group"
+      ]
+    ],
+    "flowers": 5,
+    "hiddenVines": 16,
+    "update": "function",
+    "tiger": true,
+    "whales": 2,
+    "round": 20
+  },
+  "swampWorld": [
+    -73.43338630749703,
+    -98.50211625254295,
+    -75.48848169876267
+  ],
+  "scale": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "crystalCenters": [
+    [
+      -65.01133862199599,
+      -4.868679663269291,
+      -34.891812475205015
+    ],
+    [
+      69.26082186415255,
+      -24.40381201446457,
+      11.464484401784782
+    ],
+    [
+      -27.36586241322913,
+      -5.946735015747437,
+      60.17332449755289
+    ]
+  ],
+  "objects": [],
+  "errors": []
+}

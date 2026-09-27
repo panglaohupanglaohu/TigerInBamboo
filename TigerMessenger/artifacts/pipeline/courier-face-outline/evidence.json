@@ -1,0 +1,28 @@
+{
+  "task": "Courier face outline and soft low sun hat correction",
+  "target": "Latest user crop: slender straight nose, defined chin; soft sun hat plus goggles; brim low covering both eyes. Latest instruction supersedes earlier visible-eyes preference.",
+  "visual_observations": {
+    "source": "Assistant directly inspected target.png and freshly rendered after.png",
+    "image_sha256": "29c77fd2f498d8db49a4166d7bd33940cbc65c17adde17efda5e7358e60f127c",
+    "completed": [
+      "Thin continuous brim covers both eyes",
+      "Soft crown with raised goggles, no metal armor plates or ear guards",
+      "Continuous facial surface and angular nasal profile replace separate block nose"
+    ],
+    "remaining": [
+      "Whole character remains a procedural candidate; clothing still angular",
+      "Only this single crop defines face contour, not a complete multi-view face specification"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Actual candidate render no JavaScript errors round42",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Preserve original builder and accepted target",
+    "Do not claim game integration or >8 visual acceptance"
+  ]
+}

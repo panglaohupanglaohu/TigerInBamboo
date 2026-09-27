@@ -2,13 +2,13 @@ import * as THREE from 'three';
 
 // Short shore routes on the sphere. Snapshot the authored static obstacles once
 // per berth; moving combat targets and crowd steering are separate systems.
-export function createSoccoGroundRoutes(scene, terrain, craft) {
+export function createSoccoGroundRoutes(scene, terrain, craft, options = {}) {
   scene.updateMatrixWorld(true);
   const meshes=terrain.obstacleMeshes();
   const bounds=meshes.map(mesh=>({mesh,box:mesh.geometry.boundingBox.clone().applyMatrix4(mesh.matrixWorld),meshInverse:mesh.matrixWorld.clone().invert()}));
-  const craftInverse=craft.matrixWorld.clone().invert();
+  const craftInverse=craft?craft.matrixWorld.clone().invert():null;
   const hull=new THREE.Box3(new THREE.Vector3(-1.55,-2.1,-2.65),new THREE.Vector3(1.55,1.2,2.5));
-  const radius=.38,height=1.55;
+  const radius=options.radius??.38,height=options.height??1.55,footOffset=options.footOffset??.06;
   const clearanceCache=new Map(),groundCache=new Map();
   const key=p=>`${p.x.toFixed(5)},${p.y.toFixed(5)},${p.z.toFixed(5)}`;
   function clear(a,b){
@@ -28,7 +28,7 @@ export function createSoccoGroundRoutes(scene, terrain, craft) {
     const volume=new THREE.Box3(new THREE.Vector3(-radius,-.04,-length/2-radius),new THREE.Vector3(radius,height,length/2+radius));
     // Ground walkers may not take a shortcut through the carrier's hull.
     const worldBox=volume.clone().applyMatrix4(matrix);
-    if(volume.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(craftInverse,matrix)).intersectsBox(hull))return false;
+    if(craftInverse&&volume.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(craftInverse,matrix)).intersectsBox(hull))return false;
     for(const {mesh,box,meshInverse} of bounds){
       if(!worldBox.intersectsBox(box))continue;
       const transform=new THREE.Matrix4().multiplyMatrices(inverse,mesh.matrixWorld);
@@ -67,7 +67,7 @@ export function createSoccoGroundRoutes(scene, terrain, craft) {
     const k=key(point);
     if(!groundCache.has(k)){
       const hit=terrain.sample(point);
-      groundCache.set(k,hit?.addScaledVector(hit.clone().normalize(),.06)||null);
+      groundCache.set(k,hit?.addScaledVector(hit.clone().normalize(),footOffset)||null);
     }
     return groundCache.get(k)?.clone()||null;
   }

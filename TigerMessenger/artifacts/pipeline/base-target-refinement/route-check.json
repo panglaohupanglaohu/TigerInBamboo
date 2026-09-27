@@ -1,0 +1,115 @@
+{
+  "routes": [
+    {
+      "name": "plaza-to-dock",
+      "total": 255,
+      "grounded": 255,
+      "maxHorizontalPush": 2.8083870842154874e-14,
+      "worst": {
+        "x": -24.56,
+        "z": 31.88,
+        "nearest": [
+          {
+            "kind": "bookshop-factory-wall",
+            "factory": "locust",
+            "radius": 0.4,
+            "distance": 23.99556397568628
+          },
+          {
+            "kind": "bookshop-factory-wall",
+            "factory": "locust",
+            "radius": 0.4,
+            "distance": 23.99556397568628
+          }
+        ]
+      }
+    },
+    {
+      "name": "plaza-to-tourist",
+      "total": 102,
+      "grounded": 102,
+      "maxHorizontalPush": 2.925068219852461e-14,
+      "worst": {
+        "x": 12.9,
+        "z": 44.9,
+        "nearest": [
+          {
+            "radius": 3.2,
+            "distance": 28.509067091435274
+          },
+          {
+            "radius": 1.3,
+            "distance": 42.7527815993926
+          }
+        ]
+      }
+    },
+    {
+      "name": "perimeter-logistics",
+      "total": 3264,
+      "grounded": 3264,
+      "maxHorizontalPush": 4.329451746397449e-14,
+      "worst": {
+        "x": 85.9516136324395,
+        "z": -66.38877944473396,
+        "nearest": [
+          {
+            "kind": "bookshop-warehouse-wall",
+            "radius": 0.55,
+            "distance": 32.879609899413516
+          },
+          {
+            "kind": "bookshop-warehouse-pier",
+            "radius": 0.25,
+            "distance": 32.879609899413516
+          }
+        ]
+      }
+    }
+  ],
+  "movements": [
+    {
+      "name": "harbor-cargo-trolley",
+      "found": true,
+      "translation": 17.201653325260832,
+      "rotation": 0
+    },
+    {
+      "name": "ant-drive-wheel",
+      "found": true,
+      "translation": 0,
+      "rotation": 2.716814692820414
+    },
+    {
+      "name": "ant-reciprocating-piston",
+      "found": true,
+      "translation": 0.48869596523617165,
+      "rotation": 0
+    },
+    {
+      "name": "beetle-drive-wheel",
+      "found": true,
+      "translation": 0,
+      "rotation": 3.132741228718344
+    },
+    {
+      "name": "beetle-lathe-tool-slide",
+      "found": true,
+      "translation": 0.6821070568430755,
+      "rotation": 0
+    },
+    {
+      "name": "locust-assembly-fixture",
+      "found": true,
+      "translation": 0,
+      "rotation": 0.020023138676954905
+    },
+    {
+      "name": "bookshop-moving-steam-freight",
+      "found": true,
+      "translation": 8.76767918222694,
+      "rotation": 0.33436770229730767
+    }
+  ],
+  "shipMinimumClearanceFromGround": 1.587711653959289
+}

@@ -1,0 +1,83 @@
+[
+  {
+    "hits": [],
+    "uv": [
+      0.140000000596046,
+      0.180000007152557
+    ]
+  },
+  {
+    "hits": [],
+    "uv": [
+      0.180000007152557,
+      0.259999990463257
+    ]
+  },
+  {
+    "hits": [],
+    "uv": [
+      0.209999993443489,
+      0.340000003576279
+    ]
+  },
+  {
+    "hits": [
+      {
+        "class": "ShaderMaterial",
+        "distance": 124.990119934082,
+        "material": "",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/CitadelReleasedLayout/citadel-oskar-grid-mountain-surface",
+        "source": {
+          "behaviorKeys": [],
+          "sourceBlender": "assets/models/optimized/citadel-master-terrain/master-terrain-r09.blend",
+          "sourcePath": "citadel-oskar-grid-mountain-surface[0]",
+          "sourceType": "Mesh"
+        },
+        "vertex_colors": [
+          "(0.0235, 0.0784, 0.1608, 1.0)",
+          "(0.0196, 0.0667, 0.1412, 1.0)",
+          "(0.0196, 0.0667, 0.1412, 1.0)"
+        ],
+        "vertex_normals": [
+          "(0.935891, 0.337492, 0.101034)",
+          "(0.935891, 0.337492, 0.101034)",
+          "(0.935891, 0.337492, 0.101034)"
+        ]
+      }
+    ],
+    "uv": [
+      0.259999990463257,
+      0.439999997615814
+    ]
+  },
+  {
+    "hits": [
+      {
+        "class": "ShaderMaterial",
+        "distance": 101.61784362793,
+        "material": "",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/CitadelReleasedLayout/citadel-oskar-grid-mountain-surface",
+        "source": {
+          "behaviorKeys": [],
+          "sourceBlender": "assets/models/optimized/citadel-master-terrain/master-terrain-r09.blend",
+          "sourcePath": "citadel-oskar-grid-mountain-surface[0]",
+          "sourceType": "Mesh"
+        },
+        "vertex_colors": [
+          "(0.0157, 0.0471, 0.1098, 1.0)",
+          "(0.0157, 0.0471, 0.1098, 1.0)",
+          "(0.0157, 0.0471, 0.1098, 1.0)"
+        ],
+        "vertex_normals": [
+          "(-0.095617, 0.995225, 0.019624)",
+          "(-0.095617, 0.995225, 0.019624)",
+          "(-0.095617, 0.995225, 0.019624)"
+        ]
+      }
+    ],
+    "uv": [
+      0.170000001788139,
+      0.600000023841858
+    ]
+  }
+]

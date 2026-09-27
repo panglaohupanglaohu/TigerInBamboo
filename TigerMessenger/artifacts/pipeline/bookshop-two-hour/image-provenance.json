@@ -1,0 +1,41 @@
+{
+  "base-target-v2.png": {
+    "kind": "generated concept target",
+    "source": "Built-in image_gen",
+    "prompt": "base-target-prompt.txt",
+    "sha256": "47a82824c2e5141c6666f550e73e8aa20ae3a4f4132dd58732a9555dfce96b84"
+  },
+  "actions/locust-actions.png": {
+    "kind": "generated action concept sheet",
+    "poses": [
+      "idle",
+      "move",
+      "fire"
+    ],
+    "prompt": "action-prompts.json",
+    "implemented_animation": false,
+    "sha256": "00dcb8147d8db8a60540b5ef0281686f6c2953afc2951171e70c937609746d87"
+  },
+  "actions/ant-actions.png": {
+    "kind": "generated action concept sheet",
+    "poses": [
+      "idle",
+      "move",
+      "fire"
+    ],
+    "prompt": "action-prompts.json",
+    "implemented_animation": false,
+    "sha256": "94ad8726bb9bee5619b0d634d86a09ee4f220dd315bfb4c477a42f239ad31efb"
+  },
+  "actions/beetle-actions.png": {
+    "kind": "generated action concept sheet",
+    "poses": [
+      "idle",
+      "move",
+      "fire"
+    ],
+    "prompt": "action-prompts.json",
+    "implemented_animation": false,
+    "sha256": "1976ac44063a3505f8b9af11038262a6b8e85f44f183cbfc685625ff731b5091"
+  }
+}

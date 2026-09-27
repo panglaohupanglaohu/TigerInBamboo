@@ -1,0 +1,18 @@
+{
+  "current_layout_sha256": "d67c2c93d729b0db9f0e0dbef050791e2ef09f5045f26160bb74118f741a92bb",
+  "current_planet_radius": 160,
+  "current_checks": [
+    "tree-transform-sync.json",
+    "moving-support-report.json"
+  ],
+  "historical_pre_fix_only": [
+    "kun-cover-geometry-report.json",
+    "kun-exact-contacts.json",
+    "kun-cover-replacement-candidates.json",
+    "kun-cover-replacement-exact-contacts.json",
+    "kun-cover-replacement-72-contacts.json",
+    "kun-cover15-gladius-turn10-contacts.json",
+    "kun-dry-routes-report.json"
+  ],
+  "note": "Historical reports used the pre-fix radius161 Godot tree layout and are diagnostic evidence, not acceptance of the current layout. Do not promote old candidate positions."
+}

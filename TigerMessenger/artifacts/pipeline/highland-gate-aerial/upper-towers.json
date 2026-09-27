@@ -1,0 +1,61 @@
+{
+  "stairs": {
+    "samples": 81,
+    "unsupported": 0,
+    "blocked": 5,
+    "details": [
+      {
+        "i": 76,
+        "t": 0.95,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 77,
+        "t": 0.9625,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 78,
+        "t": 0.975,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 79,
+        "t": 0.9875,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      },
+      {
+        "i": 80,
+        "t": 1,
+        "hits": [
+          "highland-Gate_stone.016_solid"
+        ]
+      }
+    ]
+  },
+  "walking": {
+    "samples": 195,
+    "unsupported": 0,
+    "blocked": 0
+  },
+  "round": 30,
+  "railU": 0.6841666666666667,
+  "rays": 1944,
+  "hitCount": 0,
+  "hits": [],
+  "meshCount": 342,
+  "position": [
+    127.2117504058756,
+    109.01314370670208,
+    -22.01943748897003
+  ],
+  "errors": []
+}

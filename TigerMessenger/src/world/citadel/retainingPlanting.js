@@ -1,7 +1,7 @@
 import {citadelRevision} from "./layoutRelease.js";
 import * as THREE from 'three';
 import {buildCitadelCypress} from './citadelGarden.js';
-import {buildSlopeShrub} from '../highlandCitadelDesign.js';
+import {buildCitadelLeafyShrub as buildSlopeShrub} from './leafyShrub.js';
 import {createOceanHeightSampler} from './oceanSurface.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
 // Original Blender cypress family, grounded on the actual final cliff outside the plaza.

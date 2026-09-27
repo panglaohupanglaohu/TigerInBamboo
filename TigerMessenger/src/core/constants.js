@@ -1,7 +1,8 @@
 // =====================================================================
 //  常量与配置（全局共享；数值与拆分前单文件完全一致）
 // =====================================================================
-export const PLAYER_HEIGHT = 1.6;
+import { COURIER_HEIGHT } from "./characterScale.js";
+export const PLAYER_HEIGHT = COURIER_HEIGHT;
 export const PLAYER_RADIUS = 0.35;
 export const MOVE_SPEED = 7.2;
 export const SPRINT_MULT = 1.45; // Shift 疾跑倍率

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>合成音效试听</title>
+<style>
+:root{--bg:#f4f1ea;--card:#fffdf8;--ink:#23201b;--muted:#6f685c;--line:#e2dccf;--accent:#b5541c;--keep:#2f7d4f;--drop:#b33a2e;--chip:#efe9dc}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1a17;--card:#24221e;--ink:#ece6da;--muted:#a39b8c;--line:#3a3630;--accent:#e08a4f;--keep:#5fbf86;--drop:#e46b5c;--chip:#2e2b26}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,"PingFang SC","Helvetica Neue",sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:14px 16px}
+.wrap{max-width:980px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:13px;margin:0}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.stat{font-size:13px;color:var(--muted);margin-right:auto}
+.stat b{color:var(--ink)}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+main{padding:8px 16px 60px}
+h2{font-size:15px;margin:22px 0 8px;color:var(--muted);letter-spacing:.04em}
+.item{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.item.keep{border-left:4px solid var(--keep)}
+.item.drop{border-left:4px solid var(--drop);opacity:.72}
+.play{width:44px;height:44px;border-radius:50%;padding:0;font-size:16px}
+.play.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.name{font-weight:600}
+.where{color:var(--muted);font-size:13px}
+.warn{color:var(--drop);font-size:13px}
+.note{margin-top:6px;width:100%;font:inherit;font-size:13px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:4px 8px}
+.choice{display:flex;gap:6px}
+.choice button{padding:6px 10px;font-size:13px}
+.choice .k.sel{background:var(--keep);border-color:var(--keep);color:#fff}
+.choice .d.sel{background:var(--drop);border-color:var(--drop);color:#fff}
+#out{width:100%;min-height:120px;margin-top:10px;font:12px/1.5 ui-monospace,Menlo,monospace;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;display:none}
+@media (max-width:560px){.item{grid-template-columns:48px 1fr}.choice{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+ <h1>合成音效试听</h1>
+ <p class="sub">这里直接调用游戏里的原合成函数（src/audio/sfx.js、worldSfx.js），声音与游戏内一致。循环类点一次开、再点一次关。</p>
+ <div class="bar">
+  <span class="stat" id="stat"></span>
+  <button id="stopAll">全部停止</button>
+  <button id="reset">清空选择</button>
+  <button class="primary" id="export">生成结果</button>
+ </div>
+ <textarea id="out" readonly></textarea>
+</div></header>
+<main class="wrap" id="list"></main>
+<script type="module">
+import * as S from '../../src/audio/sfx.js';
+import * as W from '../../src/audio/worldSfx.js';
+
+const P={x:0,y:0,z:0};
+const loops={engineLight:false,engineHeavy:false,engineJet:false,suction:false,rain:false,snow:false,wind:false,tram:false,chimes:false};
+const tramAt={distanceTo:()=>0},tramFar={distanceTo:()=>1e6};
+
+const groups=[
+ ['人物动作',[
+  ['jump','跳跃','玩家起跳',()=>S.sfxJump()],
+  ['pickup','捡信','拾取信件',()=>S.sfxPickup()],
+  ['deliver','送达三连音','把信交到收件人手上',()=>S.sfxDeliver()],
+  ['win','胜利','任务完成',()=>S.sfxWin()],
+  ['whaleStep','鲲的脚步','鲲在地面行走',()=>S.sfxWhaleStep()],
+  ['phalanxAlarm','方阵警报','苔庭方阵发现飞行器（每轮一次）',()=>{S.rearmPhalanxAlarm();S.cuePhalanxAlarmOnce();}],
+ ]],
+ ['武器',[
+  ['bow','弓','放箭',()=>W.sfxBowRelease(P)],
+  ['spear','矛','投矛',()=>W.sfxSpearThrow(P)],
+  ['clash','兵刃相击','近战格挡',()=>W.sfxSwordClash(P)],
+  ['laser','激光','激光剑挥击',()=>W.sfxLaserSwing(P)],
+  ['boltCharge','蓄能弹 · 蓄力','能量弹蓄力',()=>W.sfxBoltCharge(P)],
+  ['boltFire','蓄能弹 · 发射','能量弹射出',()=>W.sfxBoltFire(P)],
+  ['boltHit','蓄能弹 · 命中','能量弹命中',()=>W.sfxBoltHit(P)],
+  ['boltMiss','蓄能弹 · 落空','能量弹打空',()=>W.sfxBoltHit(P,true)],
+  ['cannon','火炮','飞行器机炮',()=>W.sfxAircraftCannon(P)],
+  ['blast','爆炸','小型爆炸',()=>W.sfxSmallExplosion(P)],
+  ['bubbleGun','泡泡枪','气泡艇开炮',()=>W.sfxBubbleCannon(P)],
+  ['tranq','麻醉枪','麻醉射击',()=>W.sfxTranqShot(P)],
+  ['pop','泡泡破裂','气泡弹破裂',()=>W.sfxBubblePop(P)],
+ ]],
+ ['受击',[
+  ['hitShield','命中 · 木盾','打在盾上',()=>W.sfxImpact('shield',P)],
+  ['hitFlesh','命中 · 肉身','打在人身上',()=>W.sfxImpact('flesh',P)],
+  ['hitArmor','命中 · 护甲','打在金属甲上',()=>W.sfxImpact('armor',P)],
+  ['hitHull','命中 · 船体','打在船壳上',()=>W.sfxImpact('hull',P)],
+  ['hitStone','命中 · 石头','打在石面上',()=>W.sfxImpact('stone',P)],
+  ['hitGround','命中 · 地面','打在泥地上',()=>W.sfxImpact('ground',P)],
+  ['shieldBreak','盾牌碎裂','盾被打碎',()=>W.sfxShieldBreak(P)],
+  ['fall','倒地','人物倒下',()=>W.sfxBodyFall(P)],
+  ['landing','落地','船体着陆',()=>W.sfxHullLanding(P)],
+  ['ram','冲撞','重甲冲撞',()=>W.sfxHeavyRam(P)],
+ ]],
+ ['移动与载具',[
+  ['zip','滑索','沿绳索滑下',()=>W.sfxRopeZip(P)],
+  ['ramp','跳板放下','登陆艇放下跳板',()=>W.sfxRampOpen(P)],
+  ['tram','电车铃与车轮哐当','电车靠近时（循环）',null,'tram'],
+  ['engineLight','引擎 · 轻型','悬浮泡机、灯艇（循环）',null,'engineLight'],
+  ['engineHeavy','引擎 · 重型','运兵气垫艇、航空艇（循环）',null,'engineHeavy'],
+  ['engineJet','引擎 · 喷气','侦察机（循环）',null,'engineJet'],
+ ]],
+ ['鲸与巨物',[
+  ['scanLock','扫描锁定','巨物扫描锁定目标',()=>W.sfxScanLock(P)],
+  ['scanBurn','扫描灼烧','扫描光束灼烧',()=>W.sfxScanBurn(P)],
+  ['suckOn','吸取启动','舰队开始吸取',()=>W.sfxSuctionOnset(P)],
+  ['suction','舰队吸取','吸取持续（循环）',null,'suction'],
+  ['inhale','吸入','鲸张口吸入',()=>W.sfxWhaleInhale(P,1.4)],
+  ['gulp','吞咽','鲸吞下',()=>W.sfxWhaleGulp(P)],
+  ['expel','吐出','鲸吐出',()=>W.sfxWhaleExpel(P)],
+  ['pulse','脉冲','能量脉冲',()=>W.sfxEnergyPulse(P)],
+  ['groan','低吼','鲸的低吼',()=>W.sfxWhaleGroan(P,1)],
+ ]],
+ ['环境',[
+  ['chimes','默认风铃底声','野外默认环境（循环，几秒一声）',null,'chimes'],
+  ['rain','雨','天气 · 雨（循环）',null,'rain'],
+  ['snow','雪','天气 · 雪（循环）',null,'snow'],
+  ['wind','风','天气 · 大风（循环）',null,'wind'],
+  ['waterTrain','出水列车','列车从水中驶出',()=>S.sfxWaterTrain()],
+  ['thunder','雷声闪电','天气 · 雷暴',()=>S.sfxThunder(),null,'采样文件 music/纯音乐-雷声闪电.mp3 不在本机，可能听不到'],
+ ]],
+];
+
+const KEY='tm-sfx-audition-v1';
+let state={};try{state=JSON.parse(localStorage.getItem(KEY)||'{}')}catch{}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}};
+const all=groups.flatMap(([g,items])=>items.map(i=>({group:g,id:i[0],name:i[1],where:i[2],fn:i[3],loop:i[4],warn:i[5]})));
+
+function applyLoops(){
+ W.setWeatherAmbience({rain:loops.rain?1:0,snow:loops.snow?1:0,wind:loops.wind?14:0});
+ W.setFleetSuction(loops.suction?1:0,P);
+ S.updateTramSound(loops.tram?tramAt:tramFar,P);
+ if(loops.chimes)S.startAmbience();else S.pauseDefaultAmbience();
+}
+let last=performance.now();
+(function frame(t){
+ const dt=(t-last)/1000;last=t;
+ if(loops.engineLight)W.hintEngine('a-light','light',P,.8,true);
+ if(loops.engineHeavy)W.hintEngine('a-heavy','heavy',P,.8,true);
+ if(loops.engineJet)W.hintEngine('a-jet','jet',P,.8,true);
+ if(loops.suction)W.setFleetSuction(1,P);
+ if(loops.tram)S.updateTramSound(tramAt,P);
+ W.updateWorldSfx(dt);
+ requestAnimationFrame(frame);
+})(last);
+
+const list=document.getElementById('list');
+function render(){
+ list.innerHTML='';
+ for(const [g] of groups){
+  const h=document.createElement('h2');h.textContent=g;list.append(h);
+  for(const it of all.filter(i=>i.group===g)){
+   const s=state[it.id]||{};
+   const row=document.createElement('div');row.className='item'+(s.v?' '+s.v:'');
+   const on=it.loop&&loops[it.loop];
+   row.innerHTML=`<button class="play${on?' on':''}" title="${it.loop?'开 / 关':'播放'}">${it.loop?(on?'■':'∞'):'▶'}</button>
+    <div><div class="name">${it.name}</div><div class="where">${it.where}</div>${it.warn?`<div class="warn">${it.warn}</div>`:''}
+    <input class="note" placeholder="备注（可选）：比如太刺耳、换成什么感觉" value="${(s.note||'').replace(/"/g,'&quot;')}"></div>
+    <div class="choice"><button class="k${s.v==='keep'?' sel':''}">保留</button><button class="d${s.v==='drop'?' sel':''}">不要</button></div>`;
+   row.querySelector('.play').onclick=()=>{
+    S.ensureAudio();
+    if(it.loop){
+     if(it.loop==='tram'&&!loops.tram)S.startTramSound();
+     loops[it.loop]=!loops[it.loop];applyLoops();render();
+    }else it.fn();
+   };
+   const pick=v=>{state[it.id]={...s,v:s.v===v?undefined:v};save();render();};
+   row.querySelector('.k').onclick=()=>pick('keep');
+   row.querySelector('.d').onclick=()=>pick('drop');
+   row.querySelector('.note').onchange=e=>{state[it.id]={...(state[it.id]||{}),note:e.target.value.trim()};save();};
+   list.append(row);
+  }
+ }
+ const k=all.filter(i=>state[i.id]?.v==='keep').length,d=all.filter(i=>state[i.id]?.v==='drop').length;
+ document.getElementById('stat').innerHTML=`共 <b>${all.length}</b> 项 · 保留 <b>${k}</b> · 不要 <b>${d}</b> · 未定 <b>${all.length-k-d}</b>`;
+}
+render();
+
+document.getElementById('stopAll').onclick=()=>{for(const k in loops)loops[k]=false;applyLoops();render();};
+document.getElementById('reset').onclick=()=>{if(confirm('清空所有保留/不要和备注？')){state={};save();render();}};
+document.getElementById('export').onclick=async()=>{
+ const line=i=>`- ${i.group} / ${i.name}（${i.id}）${state[i.id]?.note?'：'+state[i.id].note:''}`;
+ const by=v=>all.filter(i=>state[i.id]?.v===v).map(line).join('\n')||'（无）';
+ const undecided=all.filter(i=>!state[i.id]?.v);
+ const text=`合成音效试听结果\n\n不要：\n${by('drop')}\n\n保留：\n${by('keep')}\n\n未定：\n${undecided.map(line).join('\n')||'（无）'}`;
+ const out=document.getElementById('out');out.style.display='block';out.value=text;out.select();
+ try{await navigator.clipboard.writeText(text);document.getElementById('export').textContent='已复制到剪贴板';setTimeout(()=>document.getElementById('export').textContent='生成结果',1800);}catch{}
+};
+</script>
+</body>
+</html>

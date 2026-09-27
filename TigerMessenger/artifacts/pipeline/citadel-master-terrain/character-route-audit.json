@@ -1,0 +1,51 @@
+{
+  "east_rock_colliders": 1,
+  "landing_support_colliders": 1,
+  "parapet_colliders": 4,
+  "passed": true,
+  "roles": {
+    "gladius": {
+      "blocked": {},
+      "completed_steps": 292,
+      "geometry_queries": 1346296,
+      "max_plant_adjustment": 0.00296476423740387,
+      "phase": "arrived",
+      "point": 292,
+      "role": "gladius",
+      "route_points": 293,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": true
+    },
+    "longbow": {
+      "blocked": {},
+      "completed_steps": 292,
+      "geometry_queries": 1557774,
+      "max_plant_adjustment": 0.00128425318747759,
+      "phase": "arrived",
+      "point": 292,
+      "role": "longbow",
+      "route_points": 293,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.01,
+      "surface_following": true
+    },
+    "spear": {
+      "blocked": {},
+      "completed_steps": 292,
+      "geometry_queries": 1263090,
+      "max_plant_adjustment": 0.00296476423740387,
+      "phase": "arrived",
+      "point": 292,
+      "role": "spear",
+      "route_points": 293,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.01,
+      "surface_following": true
+    }
+  },
+  "route_points": 293,
+  "route_source": "common-frame-citadel-placement-r05-full-route.json",
+  "scope": "Current full new-city route with original three weapon-bearing models and guarded rigid-leg clearance. Not natural patrol AI, combat actions or full gameplay.",
+  "upper_rock_colliders": 4
+}

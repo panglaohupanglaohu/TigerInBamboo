@@ -1,0 +1,5436 @@
+{
+  "report": [
+    {
+      "round": 0,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 0,
+          "pass": "baseline",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 0,
+          "pass": "baseline",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 1,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 1,
+          "pass": "旧城：去除石墙自发光",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 1,
+          "pass": "旧城：去除石墙自发光",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 2,
+          "pass": "旧城：暖灰石灰岩",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 2,
+          "pass": "旧城：暖灰石灰岩",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 3,
+          "pass": "旧城：粗糙石材",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 3,
+          "pass": "旧城：粗糙石材",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 4,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 4,
+          "pass": "旧城：大块石材色差",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 4,
+          "pass": "旧城：大块石材色差",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 5,
+          "pass": "旧城：错缝灰浆",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 5,
+          "pass": "旧城：错缝灰浆",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 6,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 6,
+          "pass": "旧城：矿物斑驳",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 6,
+          "pass": "旧城：矿物斑驳",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 7,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 7,
+          "pass": "旧城：竖向雨水痕",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 7,
+          "pass": "旧城：竖向雨水痕",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 8,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 8,
+          "pass": "旧城：墙脚湿痕",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 8,
+          "pass": "旧城：墙脚湿痕",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 9,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 9,
+          "pass": "旧城：细小风化孔",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 9,
+          "pass": "旧城：细小风化孔",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 10,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 10,
+          "pass": "旧城：补砌石块",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 10,
+          "pass": "旧城：补砌石块",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 11,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 11,
+          "pass": "新城：去除石墙自发光",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 11,
+          "pass": "新城：去除石墙自发光",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 12,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 12,
+          "pass": "新城：暖白旧石",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 12,
+          "pass": "新城：暖白旧石",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 13,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 13,
+          "pass": "新城：石材消光",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 13,
+          "pass": "新城：石材消光",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 14,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 14,
+          "pass": "新城：砌块色差",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 14,
+          "pass": "新城：砌块色差",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 15,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 15,
+          "pass": "新城：错缝灰浆",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 15,
+          "pass": "新城：错缝灰浆",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 16,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 16,
+          "pass": "新城：矿物斑驳",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 16,
+          "pass": "新城：矿物斑驳",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 17,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 17,
+          "pass": "新城：雨痕",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 17,
+          "pass": "新城：雨痕",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 18,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 18,
+          "pass": "新城：临水湿痕",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 18,
+          "pass": "新城：临水湿痕",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 19,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 19,
+          "pass": "新城：表面石孔",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 19,
+          "pass": "新城：表面石孔",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 20,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 20,
+          "pass": "新城：修补砌块",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 20,
+          "pass": "新城：修补砌块",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 21,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 21,
+          "pass": "高山之门：移除墙面自发光",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 21,
+          "pass": "高山之门：移除墙面自发光",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 22,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 22,
+          "pass": "高山之门：暖灰砂石",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 22,
+          "pass": "高山之门：暖灰砂石",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 23,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 23,
+          "pass": "高山之门：粗糙石面",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 23,
+          "pass": "高山之门：粗糙石面",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 24,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 24,
+          "pass": "高山之门：巨石色差",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 24,
+          "pass": "高山之门：巨石色差",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 25,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 25,
+          "pass": "高山之门：粗灰浆缝",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 25,
+          "pass": "高山之门：粗灰浆缝",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 26,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 26,
+          "pass": "高山之门：矿物沉积",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 26,
+          "pass": "高山之门：矿物沉积",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 27,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 27,
+          "pass": "高山之门：长雨痕",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 27,
+          "pass": "高山之门：长雨痕",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 28,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 28,
+          "pass": "高山之门：潮湿基脚",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 28,
+          "pass": "高山之门：潮湿基脚",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 29,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 29,
+          "pass": "高山之门：风化石孔",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 29,
+          "pass": "高山之门：风化石孔",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 30,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 30,
+          "pass": "高山之门：历代补石",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": false,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 30,
+          "pass": "高山之门：历代补石",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 31,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 31,
+          "pass": "旧城：石缝积灰",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": false,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 31,
+          "pass": "旧城：石缝积灰",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 32,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 32,
+          "pass": "新城：檐部积灰",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 32,
+          "pass": "新城：檐部积灰",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": false,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 33,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 33,
+          "pass": "高山之门：石缝深色沉积",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 33,
+          "pass": "高山之门：石缝深色沉积",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 34,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 34,
+          "pass": "旧城：基座厚重色层",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 34,
+          "pass": "旧城：基座厚重色层",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 35,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 35,
+          "pass": "新城：承重墙脚色层",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 35,
+          "pass": "新城：承重墙脚色层",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 36,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 36,
+          "pass": "高山之门：门柱基座色层",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 36,
+          "pass": "高山之门：门柱基座色层",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 37,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 37,
+          "pass": "旧城：穹顶陶土斑驳",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 37,
+          "pass": "旧城：穹顶陶土斑驳",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 38,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 38,
+          "pass": "新城：陶顶色差",
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 38,
+          "pass": "新城：陶顶色差",
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 39,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 39,
+          "pass": "高山之门：旧铜、常绿植被与岩石原色",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 39,
+          "pass": "高山之门：旧铜、常绿植被与岩石原色",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 40,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 40,
+          "pass": "旧城：窗洞压暗",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 40,
+          "pass": "旧城：窗洞压暗",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 41,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 41,
+          "pass": "新城：窗洞压暗",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 41,
+          "pass": "新城：窗洞压暗",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 42,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 42,
+          "pass": "高山之门：壁龛压暗",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 42,
+          "pass": "高山之门：壁龛压暗",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 43,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 43,
+          "pass": "旧城：灰缝凹凸",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 43,
+          "pass": "旧城：灰缝凹凸",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 44,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 44,
+          "pass": "新城：灰缝凹凸",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 44,
+          "pass": "新城：灰缝凹凸",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 45,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 45,
+          "pass": "高山之门：石块凹凸",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 0,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 45,
+          "pass": "高山之门：石块凹凸",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 46,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 46,
+          "pass": "旧城：城垛边缘石损",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 133,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 133,
+            "new": 0,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 46,
+          "pass": "旧城：城垛边缘石损",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 47,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 47,
+          "pass": "新城：石柱边缘石损",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 144,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 133,
+            "new": 11,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 47,
+          "pass": "新城：石柱边缘石损",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 0,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 0
+          }
+        }
+      ]
+    },
+    {
+      "round": 48,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 48,
+          "pass": "高山之门：压顶石损",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 144,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 133,
+            "new": 11,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 48,
+          "pass": "高山之门：压顶石损",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 2,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 2
+          }
+        }
+      ]
+    },
+    {
+      "round": 49,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 49,
+          "pass": "三处：磨损铺石",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 144,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 133,
+            "new": 11,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 49,
+          "pass": "三处：磨损铺石",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 2,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 2
+          }
+        }
+      ]
+    },
+    {
+      "round": 50,
+      "stats": [
+        {
+          "name": "castleContainer",
+          "round": 50,
+          "pass": "三处：远景纹理抗闪烁与色差平衡",
+          "semanticSurfaces": 0,
+          "relief": [
+            {
+              "name": "historic-old-stone-cornices",
+              "visible": true,
+              "parts": 142
+            },
+            {
+              "name": "historic-new-stone-cornices",
+              "visible": true,
+              "parts": 316
+            }
+          ],
+          "materials": 238,
+          "meshes": 1819,
+          "chipped": 144,
+          "districts": {
+            "old": 783,
+            "new": 1036,
+            "gate": 0
+          },
+          "roles": {
+            "old": {
+              "stone": 87,
+              "paving": 1,
+              "roof": 11,
+              "recess": 1,
+              "bronze": 3
+            },
+            "new": {
+              "stone": 76,
+              "paving": 13,
+              "roof": 34,
+              "recess": 8,
+              "bronze": 4
+            },
+            "gate": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            }
+          },
+          "chipsByDistrict": {
+            "old": 133,
+            "new": 11,
+            "gate": 0
+          }
+        },
+        {
+          "name": "highland-gate",
+          "round": 50,
+          "pass": "三处：远景纹理抗闪烁与色差平衡",
+          "semanticSurfaces": 15,
+          "relief": [
+            {
+              "name": "historic-gate-stone-cornices",
+              "visible": true,
+              "parts": 4
+            }
+          ],
+          "materials": 289,
+          "meshes": 289,
+          "chipped": 2,
+          "districts": {
+            "old": 0,
+            "new": 0,
+            "gate": 289
+          },
+          "roles": {
+            "old": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "new": {
+              "stone": 0,
+              "paving": 0,
+              "roof": 0,
+              "recess": 0,
+              "bronze": 0
+            },
+            "gate": {
+              "stone": 187,
+              "paving": 82,
+              "roof": 8,
+              "recess": 9,
+              "bronze": 3
+            }
+          },
+          "chipsByDistrict": {
+            "old": 0,
+            "new": 0,
+            "gate": 2
+          }
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "consoleErrors": []
+}

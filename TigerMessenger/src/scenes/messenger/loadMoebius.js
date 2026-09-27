@@ -1,3 +1,5 @@
+import {installCrystalV9Towers} from '../../world/crystalV9.js';
+import {finishCrystalV7Towers,installCrystalV7Shores} from '../../world/crystalV7Runtime.js';
 // =====================================================================
 //  水晶城 / 气泡艇 / 海湖 / 湖沼 / 航空器
 // =====================================================================
@@ -22,6 +24,7 @@ import { createMoebiusAircraftSquad } from "../../assets/moebiusAircraft.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../../assets/moebiusAirship.js";
 import { createFisherBoat } from "../../assets/harbor.js";
 import { AirshipEscortManager } from "../../world/airshipEscort.js";
+import {crystalV7Round,crystalV7Layout,crystalV7SwampDir} from '../../world/crystalV7Layout.js';
 
 export function loadMoebiusDistrict({ scene, R, tramSystem }) {
   const grandDir = latLonToDir(GRAND_CRYSTAL.lat, GRAND_CRYSTAL.lon, new THREE.Vector3());
@@ -31,9 +34,12 @@ export function loadMoebiusDistrict({ scene, R, tramSystem }) {
 
   const moebius = buildMoebiusCrystalMetropolis(scene, R, {
     trackCurve: tramSystem.curve,
-    layout: loadCrystalLayoutFromStorage() || undefined,
-    useStorage: true,
+    layout: crystalV7Round() ? crystalV7Layout() : loadCrystalLayoutFromStorage() || undefined,
+    useStorage: !crystalV7Round(),
+    v7: crystalV7Round(),
   });
+  if(crystalV7Round()>=3)finishCrystalV7Towers(moebius);
+  if(crystalV7Round()>=3)installCrystalV9Towers(moebius);
   const bubblePods = createBubblePodsAroundFlowerBuildings(scene, moebius.crystals, { count: 3 });
   const citySeaLake = createCitySeaLake(scene, R, {
     seed: 5521,
@@ -84,14 +90,15 @@ export function placeMoebiusSwampAndSky({ scene, R, moebius, grandDir, bubblePod
     const swampScale = 0.5;
     const swamp = createCatalogObject("moebiusSwamp", { seed: 7711, scale: swampScale });
     swamp.userData.mapUid = "world-swamp-crystal";
-    const swampDir = crystalCanyonSwampDir();
+    const swampDir = crystalV7Round() ? crystalV7SwampDir() : crystalCanyonSwampDir();
     // 主人验收 2026-08-28：湖沼碟整体下沉 4，坑口缘草地不再悬在水晶城
     // 天空里读成"空中草地"；湖沼本体留在峡谷原地（海面下剔除对其豁免）。
-    const lift = canyonOffsetDir(swampDir) - 4;
+    const lift = crystalV7Round() ? -WATER_CITY_WATER_DROP + 8.2 : canyonOffsetDir(swampDir) - 4;
     swamp.userData.canyonSwamp = true;
     placeMoebiusSwampOnSphere(swamp, swampDir, R, swampScale, lift);
     scene.add(swamp);
     moebiusSwamp = swamp;
+    if(crystalV7Round()>=3)moebius.v7Shores=installCrystalV7Shores(scene,moebius,swamp);
   }
 
   {
@@ -104,8 +111,8 @@ export function placeMoebiusSwampAndSky({ scene, R, moebius, grandDir, bubblePod
       up: shopUp,
       right: shopRight,
       front: shopFront,
-      radius: 4.5,
-      altitude: 3.2,
+      radius: bookshop.userData.townSite ? 14 : 4.5,
+      altitude: bookshop.userData.townSite ? 16 : 3.2,
       phase: 0.7,
       speed: 0.3,
     };

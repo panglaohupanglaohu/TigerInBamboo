@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import * as T from '../../vendor/three.module.js';
+import {createWarshipV6} from '../../src/assets/warshipV6.js';
+import {buildSaihojiBoardingRoute,createWarshipBoardingBodyCheck} from '../../src/world/saihojiBoardingRoute.js';
+import {writeFile} from 'node:fs/promises';
+const boat=createWarshipV6();boat.position.set(0,160,0);boat.scale.setScalar(1.7);
+const api=boat.userData.warshipV6;api.setBoarding(1);api.setBoardingPitch(0);api.update(0,false);boat.updateMatrixWorld(true);
+const foot=api.nodes.get('add:boarding-foot').getWorldPosition(new T.Vector3());
+const dock={valid:true,position:boat.position.clone(),quaternion:boat.quaternion.clone(),shorePoint:foot.clone()};
+const shore=new T.Mesh(new T.BoxGeometry(2,.2,2),new T.MeshBasicMaterial());shore.position.copy(foot).add(new T.Vector3(0,-.1,.8));shore.updateMatrixWorld(true);
+const run=extra=>buildSaihojiBoardingRoute({boat,dock,shoreSurfaces:[shore],...extra});
+assert.equal(buildSaihojiBoardingRoute({boat,dock:{valid:false}}).reason,'missing-verified-dock');
+assert.equal(run({shoreSurfaces:[]}).reason,'missing-real-shore-support');
+assert.equal(run({footHalfWidth:.4}).reason,'single-file-footprint-too-wide');
+const actual=run({clearSegment:()=>true});
+// A failed real mesh seam is evidence, not grounds for inventing a line over it.
+assert.ok(actual.valid||['missing-authored-aisle-support','missing-board-or-deck-support','unsupported-footprint-edge','support-seam-gap'].includes(actual.reason));
+const actor=new T.Group();actor.userData.uid='axis-fixture';const body=new T.Mesh(new T.BoxGeometry(.8,.9,.28),new T.MeshBasicMaterial());body.position.set(.25,.5,0);actor.add(body);actor.updateMatrixWorld(true);
+const bodyCheck=createWarshipBoardingBodyCheck(boat,actor);
+const a=boat.localToWorld(new T.Vector3(1.94,.683,1.7)),b=boat.localToWorld(new T.Vector3(1.94,.683,1.66));
+assert.equal(bodyCheck.clear(a,b),true,JSON.stringify(bodyCheck.diagnostics()));
+api.setBoarding(0);api.update(0,false);assert.equal(run().reason,'board-not-deployed-to-shore');
+const out={passed:true,checks:['missing-dock-rejected','missing-shore-rejected','parallel-pair-width-rejected','stowed-board-rejected','production-X-forward-body-axis'],actualAssetCandidate:{...actual,points:actual.points?.map(p=>p.toArray())},scope:'Real saved Blender V11 geometry, synthetic shore at its deployed foot; actor clearance callback stub solely isolates floor measurement, not a natural berth or actor navigation acceptance.'};
+await writeFile('TigerMessenger/artifacts/pipeline/saihoji-evacuation-boarding/boarding-support-node.json',JSON.stringify(out,null,2));console.log(JSON.stringify({passed:out.passed,checks:out.checks,assetCandidate:actual.reason??'supported',details:{leg:actual.leg,gap:actual.gap}}));

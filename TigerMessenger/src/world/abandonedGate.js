@@ -17,6 +17,9 @@ import { facet } from "../assets/lowPoly.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { canyonOffsetDir } from "./canyon.js";
 import { groundLiftAt, worldToFlatXZ } from "./hills.js";
+import {GATE_SITE_ANCHOR,GATE_SITE_ORIGIN,GATE_SITE_QUATERNION,installGateSite} from './gateSite.js';
+import {installGateDressing} from './gateDressing.js';
+import { installGateTarget } from './gateTarget.js';
 
 /* ---------------- 叹息之门·晚霞残垣色板 ----------------
  * 不复用运河交汇古堡的糖果色建筑板。叹息之门是峡谷入口的残垣断壁：
@@ -193,12 +196,14 @@ function measureFootFloat(seat, basisQ, groundRadiusAt) {
 
 /**
  * 在轨道上找门长范围内几乎不横移的落座点。
+ * 2026-09-18：检查窗口扩到塔基阶梯外缘（原 ±门深/2 漏掉了塔座沿轨 ±16.3
+ * 的延伸段，轨道在门外横偏 ~5 会撞进右塔阶梯基座——主人截屏报告）。
  */
 export function findGateSeatU(curve, planetRadius = PLANET_RADIUS) {
   if (!curve) return null;
   const L = curve.getLength();
   if (!(L > 1)) return null;
-  const half = GATE_DEPTH / 2;
+  const half = GATE_DEPTH / 2 + 6;
   const hx = FOOTPRINT_HALF_X;
   const dMax = GATE.passHalf - 1.503 - 0.3;
 
@@ -457,7 +462,15 @@ export function buildAbandonedGate({
     if (entryU < 0) return group;
   }
 
-  const autoU = Number.isFinite(anchorU) ? null : findGateSeatU(curve, planetRadius);
+  const targetSite = true; // Released canyon site fitted to the existing tram curve.
+  // Arc-length fractions change when a distant city reroutes its tram. Locate the
+  // authored gate site geometrically instead of moving the gate away from its stairs.
+  let siteU=GATE_SITE_ANCHOR;
+  if(targetSite&&!Number.isFinite(anchorU)){
+    const target=new THREE.Vector3(...GATE_SITE_ORIGIN).normalize(),sample=new THREE.Vector3();let best=Infinity;
+    for(let i=0;i<12000;i++){curve.getPointAt(i/12000,sample);const d=sample.normalize().distanceToSquared(target);if(d<best){best=d;siteU=i/12000;}}
+  }
+  const autoU = Number.isFinite(anchorU) ? null : targetSite ? siteU : findGateSeatU(curve, planetRadius);
   const gateU = Number.isFinite(anchorU)
     ? ((anchorU % 1) + 1) % 1
     : Number.isFinite(autoU)
@@ -528,9 +541,13 @@ export function buildAbandonedGate({
   // 沉降：整组沿径向埋脚
   const sink = measureFootFloat(seat, basisQ, groundRadiusAt) + BURY_MARGIN;
   seatRoot.position.copy(seat).addScaledVector(_up, -sink);
+  if(targetSite) seatRoot.position.copy(_p).addScaledVector(_up,-.8);
+  if(targetSite&&!Number.isFinite(anchorU))seatRoot.position.fromArray(GATE_SITE_ORIGIN);
   seatRoot.quaternion.copy(basisQ);
+  if(targetSite)seatRoot.quaternion.fromArray(GATE_SITE_QUATERNION);
 
   group.userData.sink = sink;
+  group.userData.targetSite = targetSite;
   group.userData.seatRoot = seatRoot;
   group.userData.kind = "cyber-megalithic-twin-gates";
   group.userData.arches = archZ.length;
@@ -558,6 +575,11 @@ export function buildAbandonedGate({
     deckWidthMultiple: +((GATE.passHalf * 2) / 3.35).toFixed(2),
   });
   group.userData.relocate = (u) => relocateAbandonedGate(group, curve, u, planetRadius);
+  const target = installGateTarget(seatRoot);
+  group.userData.meetingAnchor = target.userData.meetingAnchor;
+  if(targetSite)installGateSite(group,seatRoot);
+  installGateDressing(seatRoot);
+  group.userData.targetMetrics = {towerHeight:42,wallWidth:46,passageWidth:target.userData.passage.width,passageApex:target.userData.passage.apex,gateDepth:GATE_DEPTH};
   return group;
 }
 
@@ -592,6 +614,10 @@ export function relocateAbandonedGate(group, curve, u, planetRadius = PLANET_RAD
 
   seatRoot.position.copy(seat).addScaledVector(_up, -sink);
   seatRoot.quaternion.copy(basisQ);
+  if(group.userData.targetSite){
+    seatRoot.position.copy(_p).addScaledVector(_up,-.8);
+    seatRoot.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.PI));
+  }
   group.userData.sink = sink;
 
   const prev = group.userData.anchor || {};

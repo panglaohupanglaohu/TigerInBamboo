@@ -1,0 +1,342 @@
+{
+  "label": "after-ground",
+  "setup": {
+    "stage": "ambush",
+    "clock": 32.100000000000186,
+    "scope": "Real 8931 scene and running game loop, diagnostic campaign/fleet placement; software GPU timings are not hardware FPS."
+  },
+  "frames": 60,
+  "frameMs": 410.328333333383,
+  "calls": 7608.116666666667,
+  "triangles": 1698596.3666666667,
+  "rows": [
+    {
+      "path": "saihoji-phalanx-battle/citadel-red-garrison",
+      "draws": 65400
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-cohort-1",
+      "draws": 60114
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-cohort-0",
+      "draws": 60006
+    },
+    {
+      "path": "christchurch-tram-system/Mesh",
+      "draws": 31740
+    },
+    {
+      "path": "leviathanGroup/leviathan-island",
+      "draws": 21240
+    },
+    {
+      "path": "cyber-megalithic-twin-gates/gate-seat-root",
+      "draws": 20604
+    },
+    {
+      "path": "mossyGround/Mesh",
+      "draws": 11160
+    },
+    {
+      "path": "flock-root/flock-bird",
+      "draws": 6480
+    },
+    {
+      "path": "Group/Courier",
+      "draws": 5940
+    },
+    {
+      "path": "crystal-scout-defense-squad/triple-gate-scout-aircraft",
+      "draws": 4800
+    },
+    {
+      "path": "ocean-warship-1/blender-v6-render",
+      "draws": 4200
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-troopship-0",
+      "draws": 4200
+    },
+    {
+      "path": "saihoji-phalanx-battle/saihoji-troopship-1",
+      "draws": 4200
+    },
+    {
+      "path": "old-harbor-scene/fisher-boat",
+      "draws": 3540
+    },
+    {
+      "path": "swamp-shipwreck/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "ocean-warship-0/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "ocean-warship-2/blender-v6-render",
+      "draws": 3540
+    },
+    {
+      "path": "leviathanGroup/leviathan-barnacle",
+      "draws": 2400
+    },
+    {
+      "path": "leviathanGroup/leviathan-rain",
+      "draws": 1163
+    },
+    {
+      "path": "saihoji-phalanx-battle/phalanx-javelin",
+      "draws": 1140
+    },
+    {
+      "path": "citadel-trojan-horse/horse-tiedown-squad",
+      "draws": 1080
+    },
+    {
+      "path": "mossyGround/saihoji-shore-stones",
+      "draws": 480
+    },
+    {
+      "path": "boat-wake-ring",
+      "draws": 452
+    },
+    {
+      "path": "leviathanGroup/leviathan-pectoral-L",
+      "draws": 420
+    },
+    {
+      "path": "leviathanGroup/leviathan-pectoral-R",
+      "draws": 420
+    }
+  ],
+  "perf": {
+    "fps": 2.4,
+    "frameMs": 410.53,
+    "samples": 60,
+    "windowFull": true,
+    "hitches": 66,
+    "worstMs": 888,
+    "calls": 7583,
+    "triangles": 1697970,
+    "programs": 87,
+    "geometries": 2816,
+    "textures": 15,
+    "bootMs": 30451
+  },
+  "phase": "fight",
+  "cpu": [
+    {
+      "name": "uniformMatrix4fv",
+      "url": "",
+      "line": 0,
+      "ms": 6635.927
+    },
+    {
+      "name": "uniformMatrix4fv",
+      "url": "",
+      "line": 0,
+      "ms": 2938.966
+    },
+    {
+      "name": "checkGeometryIntersection",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 12054,
+      "ms": 1368.766
+    },
+    {
+      "name": "uniformMatrix3fv",
+      "url": "",
+      "line": 0,
+      "ms": 1359.049
+    },
+    {
+      "name": "_computeIntersections",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11886,
+      "ms": 1297.978
+    },
+    {
+      "name": "bindVertexArray",
+      "url": "",
+      "line": 0,
+      "ms": 1173.486
+    },
+    {
+      "name": "uniform3f",
+      "url": "",
+      "line": 0,
+      "ms": 1099.931
+    },
+    {
+      "name": "drawElements",
+      "url": "",
+      "line": 0,
+      "ms": 838.435
+    },
+    {
+      "name": "(program)",
+      "url": "",
+      "line": 0,
+      "ms": 765.528
+    },
+    {
+      "name": "drawArrays",
+      "url": "",
+      "line": 0,
+      "ms": 712.979
+    },
+    {
+      "name": "intersectTriangle",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 5888,
+      "ms": 449.458
+    },
+    {
+      "name": "checkGeometryIntersection",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 12054,
+      "ms": 425.283
+    },
+    {
+      "name": "_computeIntersections",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11886,
+      "ms": 399.118
+    },
+    {
+      "name": "getZ",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10243,
+      "ms": 385.558
+    },
+    {
+      "name": "getX",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10203,
+      "ms": 257.31
+    },
+    {
+      "name": "fromBufferAttribute",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 4675,
+      "ms": 228.764
+    },
+    {
+      "name": "getVertexPosition",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11796,
+      "ms": 160.808
+    },
+    {
+      "name": "toArray",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 6859,
+      "ms": 146.641
+    },
+    {
+      "name": "intersectTriangle",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 5888,
+      "ms": 145.908
+    },
+    {
+      "name": "getY",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10223,
+      "ms": 142.348
+    },
+    {
+      "name": "getZ",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10243,
+      "ms": 109.468
+    },
+    {
+      "name": "checkIntersection$1",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 12023,
+      "ms": 99.557
+    },
+    {
+      "name": "getX",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10203,
+      "ms": 97.982
+    },
+    {
+      "name": "WebGLRenderer.renderBufferDirect",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.module.js",
+      "line": 15422,
+      "ms": 85.29
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 65.754
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7841,
+      "ms": 65.627
+    },
+    {
+      "name": "fromBufferAttribute",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 4675,
+      "ms": 65.165
+    },
+    {
+      "name": "getVertexPosition",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11796,
+      "ms": 65
+    },
+    {
+      "name": "traverse",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7789,
+      "ms": 62.341
+    },
+    {
+      "name": "(garbage collector)",
+      "url": "",
+      "line": 0,
+      "ms": 61.569
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 61.141
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7841,
+      "ms": 60.234
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 59.305
+    },
+    {
+      "name": "getObjectByProperty",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 7712,
+      "ms": 58.73
+    },
+    {
+      "name": "sort",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.module.js",
+      "line": 7600,
+      "ms": 56.951
+    }
+  ],
+  "errors": []
+}

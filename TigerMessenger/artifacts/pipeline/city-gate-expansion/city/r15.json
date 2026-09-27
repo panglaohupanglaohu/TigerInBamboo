@@ -1,0 +1,577 @@
+{
+  "v10Round": 15,
+  "railHits": [],
+  "mossMeshes": 0,
+  "regradedVertices": 7487,
+  "waterChecks": [
+    {
+      "root": 146.48713453672175,
+      "water": 130.84277418702555
+    },
+    {
+      "root": 136.5855804237684,
+      "water": 114.08150568826127
+    },
+    {
+      "root": 145.04272328091125,
+      "water": 141.97035895089508
+    },
+    {
+      "root": 136.5797581726063,
+      "water": 101.87662971279846
+    },
+    {
+      "root": 153.8658621035019,
+      "water": 155.30781137881144
+    },
+    {
+      "root": 145.03172569538285,
+      "water": 141.10382955370332
+    }
+  ],
+  "groundChecks": [
+    {
+      "name": "v7-garden-connector",
+      "ground": 135.70502953181133,
+      "expected": 135.7131317724886,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.31513145705273,
+      "expected": 136.32338211344953,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.92525538239383,
+      "expected": 136.933643919702,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 137.53540086055014,
+      "expected": 137.54391703002176,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 138.14556746308173,
+      "expected": 138.15420128665318,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 138.75575477938028,
+      "expected": 138.76449653478386,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 139.36596241570487,
+      "expected": 139.37480262205625,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 139.97618999426984,
+      "expected": 139.9851193981232,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 140.58643715238946,
+      "expected": 140.59544671424905,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 141.19670354168275,
+      "expected": 141.20578442296156,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 141.80698882734072,
+      "expected": 141.81613237775588,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 142.41729268745766,
+      "expected": 142.42649043285303,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 143.02761481242686,
+      "expected": 143.03685844301253,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 143.63795490440083,
+      "expected": 143.64723626339975,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 144.24831267681458,
+      "expected": 144.25762374950696,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 144.85868785397057,
+      "expected": 144.86802075712575,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 145.4690801706824,
+      "expected": 145.4784271423692,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 146.07948937197358,
+      "expected": 146.08884276173967,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 135.43778878769737,
+      "expected": 135.4573278345991,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 135.55842937213953,
+      "expected": 135.57796944360757,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 135.67907309928248,
+      "expected": 135.69861384408452,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 135.7997199687908,
+      "expected": 135.81926103739633,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 135.92036997278112,
+      "expected": 135.939911016959,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.04102309586753,
+      "expected": 136.06056376828687,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.16167931526954,
+      "expected": 136.18121926910436,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.28233860098075,
+      "expected": 136.301877489518,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.40300091599593,
+      "expected": 136.422538392247,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 135.55450624803447,
+      "expected": 135.57074453909647,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 135.8952043776286,
+      "expected": 135.9114889160517,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.23591092542296,
+      "expected": 136.25223844864706,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.57662583692124,
+      "expected": 136.59299315546457,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 136.91734905962917,
+      "expected": 136.93375305293387,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 137.25808054237518,
+      "expected": 137.274518154738,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 137.5988202346686,
+      "expected": 137.6152884712561,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 137.93956808610116,
+      "expected": 137.9560640090481,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 138.28032404579835,
+      "expected": 138.29684477038845,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 138.62108806192427,
+      "expected": 138.63763075285203,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 138.96186008124604,
+      "expected": 138.97842194895895,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 139.30264004876022,
+      "expected": 139.31921834587988,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 139.6434279073848,
+      "expected": 139.6600199252062,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 139.98422359771854,
+      "expected": 140.0008266627864,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 140.32502705786902,
+      "expected": 140.34163852862983,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 140.66583822334906,
+      "expected": 140.6824554868782,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 141.00665702704174,
+      "expected": 141.02327749584424,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 141.34748339923144,
+      "expected": 141.36410450811547,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 141.68831726769915,
+      "expected": 141.70493647072135,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 142.0291585578784,
+      "expected": 142.0457733253597,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 142.37000719306812,
+      "expected": 142.38661500867926,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 142.71086309469746,
+      "expected": 142.727461452613,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 143.05172618263794,
+      "expected": 143.06831258475793,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 143.3925963755564,
+      "expected": 143.40916832879466,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 143.73347359130355,
+      "expected": 143.75002860494155,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 144.07435774733196,
+      "expected": 144.0908933304371,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 144.41524876113613,
+      "expected": 144.431762420044,
+      "ok": true
+    },
+    {
+      "name": "v7-garden-connector",
+      "ground": 144.9099496074698,
+      "expected": 144.77263578656854,
+      "ok": true
+    }
+  ],
+  "round": "15",
+  "camera": {
+    "position": [
+      -101.53589992705818,
+      -102.00509781016895,
+      -244.1537651701081
+    ],
+    "up": [
+      -0.5092467843793136,
+      -0.6830937326806029,
+      -0.5234984861217938
+    ],
+    "target": [
+      -84.63681556384194,
+      -113.53017837151621,
+      -87.00544839344214
+    ]
+  },
+  "towers": [
+    {
+      "prisms": 5,
+      "name": "moebius-grand-community-tower",
+      "position": [
+        -79.12612660443787,
+        -115.48221558162625,
+        -43.14388204272878
+      ],
+      "dir": [
+        -0.5401575152294507,
+        -0.7883437405397324,
+        -0.2945233530519594
+      ],
+      "root": 146.48713453672175,
+      "height": 60.72,
+      "radius": 6.8999999999999995,
+      "scale": [
+        5.4,
+        2.46,
+        5.4
+      ],
+      "quaternion": [
+        -0.45267778268623565,
+        0,
+        0.8302136443904904,
+        0.32531235717404544
+      ]
+    },
+    {
+      "prisms": 5,
+      "name": "moebius-trackside-gold-right",
+      "position": [
+        -51.46420230628186,
+        -79.34904810984321,
+        -98.5433164894382
+      ],
+      "dir": [
+        -0.3767908892476775,
+        -0.5809474753019758,
+        -0.7214767194582267
+      ],
+      "root": 136.5855804237684,
+      "height": 33.396,
+      "radius": 3.630000000000001,
+      "scale": [
+        2.97,
+        1.353,
+        2.97
+      ],
+      "quaternion": [
+        0.3150166429006156,
+        -0.45449737598774687,
+        0.8314073925258386,
+        0.05439115340995055
+      ]
+    },
+    {
+      "prisms": 5,
+      "name": "moebius-trackside-gold-left",
+      "position": [
+        -99.2099536360561,
+        -77.9841470814744,
+        -71.50698903079031
+      ],
+      "dir": [
+        -0.6840050392870202,
+        -0.5376632851166118,
+        -0.49300638745109104
+      ],
+      "root": 145.04272328091125,
+      "height": 33.396,
+      "radius": 3.630000000000001,
+      "scale": [
+        2.97,
+        1.353,
+        2.97
+      ],
+      "quaternion": [
+        0.663392346213105,
+        -0.47893065591629075,
+        0.5733604778358703,
+        0.04235309038648455
+      ]
+    },
+    {
+      "prisms": 5,
+      "name": "moebius-trackside-gold-left",
+      "position": [
+        -24.112601694350715,
+        -109.56937008123244,
+        -77.89201449454967
+      ],
+      "dir": [
+        -0.17654593928829318,
+        -0.802237253508395,
+        -0.5703042349519434
+      ],
+      "root": 136.5797581726063,
+      "height": 27.71868,
+      "radius": 3.0360000000000005,
+      "scale": [
+        2.4840000000000004,
+        1.1316,
+        2.4840000000000004
+      ],
+      "quaternion": [
+        0.8188711247979451,
+        0.07173187990620179,
+        -0.4801757050563321,
+        -0.3061632091726972
+      ]
+    },
+    {
+      "prisms": 5,
+      "name": "moebius-trackside-gold-left",
+      "position": [
+        -110.288000343912,
+        -99.11991635458361,
+        -41.067051061105985
+      ],
+      "dir": [
+        -0.7167801800617988,
+        -0.644196932311782,
+        -0.26690164081673395
+      ],
+      "root": 153.8658621035019,
+      "height": 38.73936,
+      "radius": 4.224,
+      "scale": [
+        3.456,
+        1.5743999999999998,
+        3.456
+      ],
+      "quaternion": [
+        0.8104060262502292,
+        -0.4192993816696494,
+        0.40662087842756406,
+        0.045711731268446854
+      ]
+    },
+    {
+      "prisms": 5,
+      "name": "moebius-trackside-gold-left",
+      "position": [
+        -59.10591426784398,
+        -130.87796602134452,
+        -20.28916870792996
+      ],
+      "dir": [
+        -0.40753782653036197,
+        -0.9024092169752834,
+        -0.13989469276911373
+      ],
+      "root": 145.03172569538285,
+      "height": 23.043239999999997,
+      "radius": 2.5080000000000005,
+      "scale": [
+        2.0520000000000005,
+        0.9348000000000001,
+        2.0520000000000005
+      ],
+      "quaternion": [
+        0.9689713375802899,
+        -0.21573014287715178,
+        0.11090155740793507,
+        -0.04749628371317111
+      ]
+    }
+  ],
+  "swamp": {
+    "position": [
+      -73.43338630749703,
+      -98.50211625254295,
+      -75.48848169876267
+    ],
+    "quaternion": [
+      -0.7953714504171608,
+      0.09848204578262641,
+      0.45708984040514766,
+      0.38568694600435627
+    ],
+    "scale": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "children": 1
+  },
+  "port": true,
+  "shoreMeshes": 388,
+  "walkMeshes": 156,
+  "swampUpdate": "function",
+  "errors": [],
+  "passed": true
+}

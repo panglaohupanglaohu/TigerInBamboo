@@ -115,8 +115,9 @@ export function createPerfProbe(renderer, { bootStartMs = 0, visible = null } = 
           hitches++;
           if (interval > worstMs) worstMs = interval;
         }
-        // 均值仍只收 <250ms 的帧，避免一次挂起把 frameMs 拉飞
-        if (interval > 0 && interval < 250) {
+        // Slow active frames belong in the average too; dropping >250ms frames
+        // would falsely report a healthy FPS during the worst battle stalls.
+        if (interval > 0 && interval < 2000 && !document.hidden) {
           frames.push(interval);
           if (frames.length > WINDOW) frames.shift();
         }

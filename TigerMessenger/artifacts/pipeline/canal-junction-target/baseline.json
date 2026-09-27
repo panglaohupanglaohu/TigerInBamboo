@@ -1,0 +1,4993 @@
+{
+  "renderer": {
+    "calls": 14788,
+    "triangles": 2065848,
+    "geometries": 4545,
+    "textures": 14
+  },
+  "origin": [
+    62.830039320429634,
+    80.10372783245701,
+    -123.40737152349092
+  ],
+  "quaternion": [
+    -0.4798741004328232,
+    -0.16246606848387843,
+    -0.13915963433004602,
+    0.8508585196719303
+  ],
+  "waterLift": 0.6,
+  "halfLength": 22,
+  "halfWidth": 18,
+  "bounds": {
+    "min": [
+      38.4117848997475,
+      61.236409870744076,
+      -156.23330548640882
+    ],
+    "max": [
+      90.65008076940552,
+      105.79809921305701,
+      -104.31190224040114
+    ]
+  },
+  "parts": [
+    {
+      "name": "contour-step-0",
+      "instanced": false,
+      "count": 1,
+      "vertices": 4
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 54
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 84
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 66
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 84
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 936
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 7164
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 876
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 8100
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 180
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1512
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 5040
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1860
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 912
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1176
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1872
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 120
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6600
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 9552
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1512
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 768
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 60
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 924
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1944
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 600
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 960
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1872
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1836
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1644
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 420
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1548
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1548
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1656
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1800
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1722
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 4896
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2568
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 744
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 3636
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1872
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 360
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 120
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1116
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 768
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 54
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 78
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 696
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1476
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2388
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 648
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1284
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 972
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 3060
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1248
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 900
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1584
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1584
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1764
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1908
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2340
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 5544
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2388
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 3408
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 708
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 4428
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 240
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 360
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1260
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 384
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 498
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 612
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 300
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 936
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1080
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 972
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 756
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 684
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 660
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1152
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 828
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2520
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 792
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 324
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1872
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 900
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 900
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 384
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 348
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 504
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 864
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 504
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 216
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1512
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 504
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 252
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1116
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 222
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 756
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 564
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 216
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 252
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 252
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1320
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 324
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1200
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 792
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 360
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 768
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 120
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 180
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 180
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 60
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 180
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 324
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 54
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 84
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 66
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 84
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 936
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 7164
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 876
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 8100
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 180
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1512
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 5040
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1860
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 912
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1176
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1872
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 120
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6600
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 9552
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1512
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 768
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 60
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 924
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1944
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 600
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 960
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1872
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1836
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1644
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 420
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1548
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1548
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1656
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1800
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1722
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 4896
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2568
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 744
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 3636
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1872
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 360
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 120
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1116
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 768
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 54
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 78
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 48
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 696
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1476
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2388
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 648
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1284
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 972
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 3060
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1248
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 900
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1584
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1584
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1764
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1908
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2340
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 5544
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2388
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 3408
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 708
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 4428
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 240
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 360
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1260
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 384
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 18
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 498
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 612
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 300
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 936
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1080
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 972
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 756
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 684
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 660
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1152
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 828
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 2520
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 792
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 324
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1872
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 900
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 900
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 384
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 348
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 36
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 504
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 864
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 504
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 216
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1512
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 504
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 252
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1116
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 42
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 222
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 756
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 564
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 72
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 216
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 252
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 288
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 252
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1320
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 324
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1200
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 792
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 360
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 768
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "town-window",
+      "instanced": false,
+      "count": 1,
+      "vertices": 24
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 30
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 120
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 180
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 180
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 144
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 60
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 180
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 432
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 324
+    },
+    {
+      "name": "",
+      "instanced": false,
+      "count": 1,
+      "vertices": 108
+    },
+    {
+      "name": "junction-00",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1308
+    },
+    {
+      "name": "junction-01",
+      "instanced": false,
+      "count": 1,
+      "vertices": 20160
+    },
+    {
+      "name": "junction-02",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "junction-03",
+      "instanced": false,
+      "count": 1,
+      "vertices": 696
+    },
+    {
+      "name": "junction-04",
+      "instanced": false,
+      "count": 1,
+      "vertices": 720
+    },
+    {
+      "name": "junction-05",
+      "instanced": false,
+      "count": 1,
+      "vertices": 13860
+    },
+    {
+      "name": "junction-06",
+      "instanced": false,
+      "count": 1,
+      "vertices": 21042
+    },
+    {
+      "name": "junction-07",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1176
+    },
+    {
+      "name": "junction-08",
+      "instanced": false,
+      "count": 1,
+      "vertices": 252
+    },
+    {
+      "name": "junction-09",
+      "instanced": false,
+      "count": 1,
+      "vertices": 252
+    },
+    {
+      "name": "junction-10",
+      "instanced": false,
+      "count": 1,
+      "vertices": 216
+    },
+    {
+      "name": "junction-11",
+      "instanced": false,
+      "count": 1,
+      "vertices": 912
+    },
+    {
+      "name": "junction-12",
+      "instanced": false,
+      "count": 1,
+      "vertices": 768
+    },
+    {
+      "name": "junction-13",
+      "instanced": false,
+      "count": 1,
+      "vertices": 31524
+    },
+    {
+      "name": "junction-14",
+      "instanced": false,
+      "count": 1,
+      "vertices": 780
+    },
+    {
+      "name": "junction-15",
+      "instanced": false,
+      "count": 1,
+      "vertices": 15120
+    },
+    {
+      "name": "junction-16",
+      "instanced": false,
+      "count": 1,
+      "vertices": 1512
+    },
+    {
+      "name": "junction-17",
+      "instanced": false,
+      "count": 1,
+      "vertices": 648
+    },
+    {
+      "name": "junction-18",
+      "instanced": false,
+      "count": 1,
+      "vertices": 576
+    },
+    {
+      "name": "junction-19",
+      "instanced": false,
+      "count": 1,
+      "vertices": 6
+    },
+    {
+      "name": "junction-20",
+      "instanced": false,
+      "count": 1,
+      "vertices": 12
+    }
+  ],
+  "scope": "Fresh browser default layout; no saved user layout replaced"
+}

@@ -1,6 +1,6 @@
 import {PLAZA_SHIFT,PLAZA_OFFSET_ENABLED,PLAZA_R03} from './newPlazaLayout.js';
 import newBaked from '../../../assets/models/optimized/citadel-plaza-retaining/plazaRetainingR02.js';
-import wideBaked from '../../../assets/models/optimized/citadel-plaza-retaining/plazaRetainingR03.js';
+import wideBaked from '../../../assets/models/optimized/citadel-plaza-retaining/plazaRetainingR04.js';
 import * as THREE from 'three';
 import oldBaked from '../../../assets/models/optimized/citadel-plaza-retaining/plazaRetainingR01.js';
 import {createOceanHeightSampler} from './oceanSurface.js';
@@ -47,5 +47,9 @@ export function buildPlazaRetainingWall(castle,radius=160){
  for(const top of [3.65,1.8]){const b=new THREE.Mesh(new THREE.BoxGeometry(35.5+PLAZA_SHIFT,.16,.74),trim);b.name='plaza-retaining-stringcourse';b.position.set(62.91+PLAZA_SHIFT/2,top,88.3);b.castShadow=true;b.receiveShadow=true;b.userData.citadelSolidExterior=true;root.add(b);}
  mergeStaticGroup(root,{mergedTag:'plaza-retaining',onSurface:m=>{m.name='plaza-retaining-solid';m.userData.citadelSolidExterior=true;}});
  if(baked){root.children.forEach((m,i)=>{const part=baked.parts[i],input=m.geometry.index?m.geometry.toNonIndexed():m.geometry;let digest=2166136261;for(const v of input.attributes.position.array)digest=Math.imul(digest^Math.round(v*1e4),16777619)>>>0;if(!part||digest!==part.sourceDigest)throw new Error('Retaining wall terrain changed: regenerate Blender asset');if(input!==m.geometry)input.dispose();const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(part.positions,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(part.normals,3));m.geometry.dispose();m.geometry=g;});root.userData.sourceBlender=baked.source;}
+ if(baked?.rockPart){
+  const part=baked.rockPart,g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(part.positions,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(part.normals,3));g.computeBoundingBox();g.computeBoundingSphere();
+  const rock=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x344b65,roughness:.98,flatShading:true}));rock.name='plaza-east-rock-footing';rock.castShadow=true;rock.receiveShadow=true;rock.userData.citadelSolidExterior=true;root.add(rock);
+ }
  root.userData.support={piers,bays,samples,top:3.86,source:'final Web cliff raycast',insidePlaza:false};return root;
 }
