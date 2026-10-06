@@ -1,0 +1,89 @@
+{
+  "input": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-five-hour-20261005/r12-overview-day-cloud-plants-turf-geometry.json",
+  "inputSHA256": "3afbb5c95b8d071daff9702c113f9ab8858dc703f58bfbca9b66cb1e0bbc8686",
+  "elapsedMs": 158.21083399999998,
+  "maxSupportGap": 7.71799223168447e-9,
+  "sourceUnchanged": true,
+  "regions": {
+    "left": {
+      "before": {
+        "area": 175.94926596979232,
+        "count": 673,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      },
+      "after": {
+        "area": 90.90913387315068,
+        "count": 618,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      }
+    },
+    "leftCore": {
+      "before": {
+        "area": 24.624441136728347,
+        "count": 182,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      },
+      "after": {
+        "area": 24.624441136728347,
+        "count": 182,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      }
+    },
+    "right": {
+      "before": {
+        "area": 172.56011972653167,
+        "count": 938,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      },
+      "after": {
+        "area": 172.56011972653167,
+        "count": 938,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      }
+    },
+    "leftTail": {
+      "before": {
+        "area": 148.78911129013625,
+        "count": 484,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      },
+      "after": {
+        "area": 48.55938338301955,
+        "count": 389,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      }
+    }
+  },
+  "stats": {
+    "method": "local castle-coordinate lower-slope window; area-weighted actual turf geometric slope, continuous field clipping on source triangles",
+    "steepThreshold": 0.85,
+    "window": {
+      "x": [
+        -36,
+        -28,
+        -2,
+        6
+      ],
+      "z": [
+        -18,
+        -12,
+        5,
+        13
+      ],
+      "fadeHeight": [
+        5,
+        9
+      ]
+    },
+    "beforeTriangles": 19932,
+    "afterTriangles": 20215,
+    "beforeArea": 5019.03412220995,
+    "afterArea": 4871.000011351504,
+    "unaffectedArea": 4778.7544239368335,
+    "affectedBeforeArea": 240.2796982731095,
+    "sharedSplitEdges": 278,
+    "maxSharedSplitEdges": 2500,
+    "maxLevels": 2,
+    "maxOutput": 120000
+  }
+}

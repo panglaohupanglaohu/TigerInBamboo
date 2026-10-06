@@ -1,0 +1,4 @@
+interface:
+  display_name: "Oskar 方法研究顾问"
+  short_description: "依据 Bad North 与 Townscaper 研究制定场景、地形及建筑方案"
+  default_prompt: "使用 $oskar-world-advisor 为当前场景提出有来源、保护通路且可视觉验收的方案。"

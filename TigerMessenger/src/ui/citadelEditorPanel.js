@@ -308,6 +308,7 @@ export function createCitadelEditorPanel({
   let applyFailure = null;
   let draftTargetId = getInstanceId() ?? null;
   const failedDrafts = new Map();
+  const targetDrafts = new Map();
   let latestDirty = false;
   let latestActiveColor = "0";
   let latestActiveBand = 0;
@@ -404,6 +405,9 @@ export function createCitadelEditorPanel({
       activeTerrace = 0;
       grid = terraceGrids[0] ?? grid;
     }
+    const regionMode=!!getCitadelTarget?.()?.userData?.junctionEditor;
+    for(const id of ['ce-canvas','ce-reset','ce-clear','ce-prev','ce-next','ce-hide','ce-drop','ce-export','ce-import']){const control=panel.querySelector('#'+id);if(control)control.style.display=regionMode?'none':'';}
+    if(regionMode&&hint)hint.textContent='11 组独立楼群 · 左键屋顶增层/侧面改色 · 右键删单元 · 原地基空位可重建 · Ctrl+Z 撤销 · 保存才写入存档';
     refreshPaletteSwatches();
     refreshLatestUnitEditor();
     const ctxEl = panel.querySelector("#ce-castle-context");
@@ -1468,7 +1472,14 @@ export function createCitadelEditorPanel({
       onLayerVisibility(0, activeLayer, hideAbove);
       return;
     }
-    activeTerrace = Math.min(CITADEL_TERRACE_COUNT - 1, Math.max(0, index));
+    // Imported/merged hit metadata may omit terraceIndex. Never let NaN
+    // become the active grid and then index the terrain controls with it.
+    const requested = Number(index);
+    if (index == null || !Number.isInteger(requested)) return false;
+    const count = Math.min(terraceGrids.length, terrain.terraces.length,
+      usesShelfBands() ? 3 : CITADEL_TERRACE_COUNT);
+    if (count < 1) return false;
+    activeTerrace = Math.min(count - 1, Math.max(0, requested));
     grid = terraceGrids[activeTerrace];
     drawTerraceTabs();
     refreshTerrainInputs();
@@ -1948,10 +1959,13 @@ export function createCitadelEditorPanel({
     terrainInputs.set(f.key, { input, val });
   }
   function refreshTerrainInputs() {
+    const terrace = terrain.terraces[activeTerrace];
     for (const f of TERRAIN_FIELDS) {
       const refs = terrainInputs.get(f.key);
       if (!refs) continue;
-      const value = terrain.terraces[activeTerrace][f.key];
+      const value = terrace?.[f.key];
+      refs.input.disabled = !Number.isFinite(value);
+      if (!Number.isFinite(value)) { refs.val.textContent = "—"; continue; }
       refs.input.value = String(value);
       refs.val.textContent = value.toFixed(f.key === "radius" ? 2 : 1);
     }
@@ -2024,7 +2038,9 @@ export function createCitadelEditorPanel({
     dirty = true;
     applyDirty();
   }
+  const junctionEditor=()=>getCitadelTarget?.()?.userData?.junctionEditor;
   function save() {
+    if(junctionEditor()){try{junctionEditor().save();dirty=false;applyDirty();toast("已保存交汇城堡模块",1.5);}catch(error){toast(String(error),2);}return;}
     if (applyFailure) {
       toast(`草稿尚未应用，${failedSceneStatus()}。请修改或撤销后再保存。`, 2.6);
       return;
@@ -2077,6 +2093,7 @@ export function createCitadelEditorPanel({
 
   /** 布局变更统一出口：回调上层即时重建 3D → 重画面板 → 标脏（保存才落盘） */
   function commit(shouldMarkDirty = true) {
+    if(junctionEditor())return {ok:false,error:"region editor requires region cell identity"};
     terraceGrids[activeTerrace] = grid;
     let stats;
     try {
@@ -2247,6 +2264,7 @@ export function createCitadelEditorPanel({
   panel.querySelector("#ce-next").onclick = () => stepLayer(1);
 
   function undo() {
+    if(junctionEditor()){if(junctionEditor().undo()){markDirty();statsEl.textContent=`交汇城堡模块 · 修订 ${junctionEditor().revision} · 未保存`;}return;}
     if (!undoStack.length) return;
     redoStack.push(JSON.stringify({
       activeTerrace,
@@ -2260,6 +2278,7 @@ export function createCitadelEditorPanel({
     commit();
   }
   function redo() {
+    if(junctionEditor()){if(junctionEditor().redo()){markDirty();statsEl.textContent=`交汇城堡模块 · 修订 ${junctionEditor().revision} · 未保存`;}return;}
     if (!redoStack.length) return;
     undoStack.push(JSON.stringify({
       activeTerrace,
@@ -2419,8 +2438,7 @@ export function createCitadelEditorPanel({
       pushUndo();
       setCell(grid, ix, iy, iz, activeChar);
     }
-    commit();
-    return true;
+    return commit()?.ok !== false;
   }
 
   /** 高山山谷的 3D Townscaper 点击入口：左键扩建/增层/改色，右键删除整个单元并挖洞。 */
@@ -2494,6 +2512,7 @@ export function createCitadelEditorPanel({
       applyFailed: !!applyFailure,
     }),
     applySceneEdit,
+    applyJunctionEdit(cell,mode){const result=junctionEditor()?.edit(cell,mode,activeChar);if(result?.ok){markDirty();statsEl.textContent=`交汇城堡模块 · 修订 ${result.revision} · 未保存`;}else if(result?.error){statsEl.textContent=result.error;toast(result.error,4);}return result;},
     applyHighlandAction,
     cellCenter,
     cellAtLocal,
@@ -2520,16 +2539,26 @@ export function createCitadelEditorPanel({
      * @param {(instanceId: string|null) => boolean} tryApply 返回是否已切换成功
      */
     switchTarget(tryApply) {
+      // Keep successful unsaved edits and history as well as failed drafts.
+      // Switching target never writes localStorage or rebuilds a city.
+      const outgoing = { terraceGrids, activeTerrace, activeLayer, activeChar, undoStack, redoStack, applyFailure, dirty, terrain, terrainObjects, terrainObjectSequence, terrainObjectTool, latestDirty, latestActiveColor, latestActiveBand, latestSelectedUnitId, latestUndoStack, latestRedoStack };
       if (!tryApply(getInstanceId())) return false;
+      targetDrafts.set(draftTargetId, outgoing);
       if (applyFailure) failedDrafts.set(draftTargetId, { terraceGrids, activeTerrace, activeLayer, undoStack, redoStack, applyFailure });
       draftTargetId = getInstanceId() ?? null;
-      const failedDraft = failedDrafts.get(draftTargetId);
+      const failedDraft = targetDrafts.get(draftTargetId) ?? failedDrafts.get(draftTargetId);
       terraceGrids = failedDraft?.terraceGrids ?? loadTerraceGrids();
       applyFailure = failedDraft?.applyFailure ?? null;
       undoStack = failedDraft?.undoStack ?? [];
       redoStack = failedDraft?.redoStack ?? [];
-      terrain = loadTerrain();
-      terrainObjects = loadTerrainObjects();
+      terrain = failedDraft?.terrain ?? loadTerrain();
+      terrainObjects = failedDraft?.terrainObjects ?? loadTerrainObjects();
+      terrainObjectSequence = failedDraft?.terrainObjectSequence ?? terrainObjects.length;
+      terrainObjectTool = failedDraft?.terrainObjectTool ?? null;
+      dirty = failedDraft?.dirty ?? false;activeChar = failedDraft?.activeChar ?? "0";
+      latestDirty = failedDraft?.latestDirty ?? false;latestActiveColor = failedDraft?.latestActiveColor ?? "0";
+      latestActiveBand = failedDraft?.latestActiveBand ?? 0;latestSelectedUnitId = failedDraft?.latestSelectedUnitId ?? null;
+      latestUndoStack = failedDraft?.latestUndoStack ?? [];latestRedoStack = failedDraft?.latestRedoStack ?? [];
       activeTerrace = failedDraft?.activeTerrace ?? 0;
       grid = terraceGrids[activeTerrace];
       activeLayer = failedDraft?.activeLayer ?? 0;
@@ -2547,7 +2576,8 @@ export function createCitadelEditorPanel({
       }
       draw();
       applyHideAbove();
-      markDirty();
+      applyDirty();
+      refreshTargetSelect();
       return true;
     },
     // 动态 getter：切换目标城堡（5↔12 层）后即时生效

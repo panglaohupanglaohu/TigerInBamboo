@@ -1,0 +1,236 @@
+{
+  "coverage": [
+    "Current target terrain factory with real source rail cut, new-city retreat, explicit old exterior cut; exact generated mesh triangles",
+    "Original r47 bridge reconstructed by same factory against new terrain",
+    "Production legacy planet sphere/canyon and ocean-bed material factory"
+  ],
+  "limitations": [
+    "No actual loaded V8/V9 terrain manifest snapshot available; do not claim every planet terrain compiled here matches current runtime.",
+    "Vehicle OBB sampled at one meter, static triangles; not continuous swept collision or loaded cargo.",
+    "Inside a closed terrain solid can require separate point inclusion; previous underbody vertical triangle audit retained.",
+    "No saved live ship trajectory/hull snapshot; boat route cannot be approved from a guessed straight line."
+  ],
+  "triangles": 76414,
+  "audits": {
+    "red-replacement": {
+      "samples": 291,
+      "length": 289.18484044395797,
+      "counts": {},
+      "hits": [],
+      "solidFailures": [],
+      "missingUnderbodyCount": 522,
+      "missingExamples": [
+        {
+          "i": 0,
+          "local": [
+            121.69731582412035,
+            -56.84393309404463,
+            64.41618273562291
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            119.4961725852678,
+            -54.187157932164624,
+            64.94212396928988
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            117.29502934641523,
+            -51.53038277028462,
+            65.46806520295681
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            121.78931212234824,
+            -57.22052912691804,
+            66.70356379463696
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            119.58816888349565,
+            -54.563753965038046,
+            67.22950502830393
+          ],
+          "direct": 0
+        }
+      ]
+    },
+    "red-retainedOld": {
+      "samples": 248,
+      "length": 246.91125575634982,
+      "counts": {},
+      "hits": [],
+      "solidFailures": [],
+      "missingUnderbodyCount": 1038,
+      "missingExamples": [
+        {
+          "i": 0,
+          "local": [
+            -90.86223603911996,
+            -13.955271292523118,
+            72.07162772205204
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -93.74468816715901,
+            -15.40502125430012,
+            70.74129138191441
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -96.62714029519803,
+            -16.854771216077122,
+            69.41095504177675
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -91.51921403627107,
+            -14.602510401917609,
+            74.20044463445424
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -94.4016661643101,
+            -16.05226036369464,
+            72.8701082943166
+          ],
+          "direct": 0
+        }
+      ]
+    },
+    "blue-replacement": {
+      "samples": 292,
+      "length": 290.7456576424674,
+      "counts": {},
+      "hits": [],
+      "solidFailures": [],
+      "missingUnderbodyCount": 642,
+      "missingExamples": [
+        {
+          "i": 0,
+          "local": [
+            121.86450410974547,
+            -57.50296306403456,
+            68.44477268686447
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            119.66338509061723,
+            -54.846156654940316,
+            68.97065743491073
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            117.46226607148898,
+            -52.189350245846086,
+            69.496542182957
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            121.91268357760134,
+            -57.91486851710532,
+            70.72740551686752
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            119.7115645584731,
+            -55.25806210801109,
+            71.25329026491379
+          ],
+          "direct": 0
+        }
+      ]
+    },
+    "blue-retainedOld": {
+      "samples": 258,
+      "length": 256.8574824546005,
+      "counts": {},
+      "hits": [],
+      "solidFailures": [],
+      "missingUnderbodyCount": 1113,
+      "missingExamples": [
+        {
+          "i": 0,
+          "local": [
+            -92.02120738937099,
+            -15.088495508640474,
+            75.82149458894843
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -94.90376636256268,
+            -16.538373049455625,
+            74.49152884400914
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -97.78632533575433,
+            -17.988250590270805,
+            73.16156309906984
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -92.65030675604162,
+            -15.784202722780659,
+            77.94343366890523
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -95.5328657292333,
+            -17.23408026359581,
+            76.61346792396591
+          ],
+          "direct": 0
+        }
+      ]
+    }
+  }
+}

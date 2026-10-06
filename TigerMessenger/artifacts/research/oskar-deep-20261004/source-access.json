@@ -1,0 +1,14 @@
+[
+  {
+    "url": "https://x.com/OskSta/media",
+    "error": "Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://x.com/OskSta/media\nCall log:\n  \u001b[2m- navigating to \"https://x.com/OskSta/media\", waiting until \"domcontentloaded\"\u001b[22m\n"
+  },
+  {
+    "url": "https://threadreaderapp.com/thread/1590669875869286400.html",
+    "error": "Error: page.goto: Navigation to \"https://threadreaderapp.com/thread/1590669875869286400.html\" is interrupted by another navigation to \"chrome-error://chromewebdata/\"\nCall log:\n  \u001b[2m- navigating to \"https://threadreaderapp.com/thread/1590669875869286400.html\", waiting until \"domcontentloaded\"\u001b[22m\n"
+  },
+  {
+    "url": "https://threadreaderapp.com/thread/1670790425232175108.html",
+    "error": "Error: page.goto: Navigation to \"https://threadreaderapp.com/thread/1670790425232175108.html\" is interrupted by another navigation to \"https://threadreaderapp.com/thread/1590669875869286400.html\"\nCall log:\n  \u001b[2m- navigating to \"https://threadreaderapp.com/thread/1670790425232175108.html\", waiting until \"domcontentloaded\"\u001b[22m\n"
+  }
+]

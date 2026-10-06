@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import * as T from '../../vendor/three.module.js';
+import {clipTurfTriangle,refineTurfTriangle,turfEdgeKey,supportedGrassBase} from '../../src/world/citadel/mountainTurfGeometry.js';
+import {addMountainGroundcover} from '../../src/world/citadel/mountainGroundcover.js';
+const v=(x,y,z)=>new T.Vector3(x,y,z),a=new T.Triangle(v(0,0,0),v(0,0,8),v(8,0,0)),b=new T.Triangle(v(8,0,0),v(0,0,8),v(8,0,8));
+const edges=new Set([turfEdgeKey(a.b,a.c)]),ra=refineTurfTriangle(a,edges),rb=refineTurfTriangle(b,edges);
+assert.equal(ra.length,4);assert.equal(rb.length,4);assert(ra.some(t=>[t.a,t.b,t.c].some(p=>p.equals(v(4,0,4)))));assert(rb.some(t=>[t.a,t.b,t.c].some(p=>p.equals(v(4,0,4)))));
+const cut=t=>clipTurfTriangle(t,[t.a,t.b,t.c].map(p=>p.x-2.5));const shared=ts=>ts.flatMap(cut).flatMap(t=>[t.a,t.b,t.c]).filter(p=>Math.abs(p.x+p.z-8)<1e-7).map(p=>p.toArray().map(x=>x.toFixed(7)).join(',')).sort();assert.deepEqual([...new Set(shared(ra))],[...new Set(shared(rb))]);
+const tilted=new T.Triangle(v(0,0,0),v(0,2,8),v(8,0,0)),center=tilted.getMidpoint(new T.Vector3()),ends=supportedGrassBase(tilted,center,v(0,0,1),.2,v(0,1,0));assert(ends);for(const p of ends){assert(tilted.containsPoint(p));assert(tilted.closestPointToPoint(p,new T.Vector3()).distanceTo(p)<1e-8);}assert.equal(supportedGrassBase(tilted,tilted.a,v(1,0,0),1,v(0,1,0)),null);
+globalThis.location={search:'?citadelTurfPass=1'};
+const root=new T.Group();root.position.y=175;const g=new T.PlaneGeometry(20,20,8,8);g.rotateX(-Math.PI/2);const source=new T.Mesh(g,new T.MeshBasicMaterial());source.name='citadel-oskar-grid-mountain-surface';root.add(source);root.updateMatrixWorld(true);const original=Array.from(g.attributes.position.array);
+const result=addMountainGroundcover(root,[source],{radius:160,rail:[],protectedBoxes:[]});assert(result.triangles>0);assert(result.grass.blades>0);assert.equal(result.offset,0);assert(result.refinement.sharedSplitEdges<=1200);for(const p of result.grass.baseEndpoints)assert(Math.abs(p[1]-175)<1e-7);assert.deepEqual(Array.from(g.attributes.position.array),original);
+const again=addMountainGroundcover(root,[source],{radius:160,rail:[],protectedBoxes:[]});assert.deepEqual(again,result);
+const protectedResult=addMountainGroundcover(root,[source],{radius:160,rail:[v(0,175,0)],protectedBoxes:[]});assert.equal(protectedResult.triangles,0);assert.equal(protectedResult.grass.blades,0);
+console.log(JSON.stringify({ok:true,triangles:result.triangles,blades:result.grass.blades,baseEndpoints:result.grass.baseEndpoints.length,tests:['shared refined edge contour matches','sloped full base support','out-of-face rejection','source geometry invariant','deterministic generation','rail margin unchanged','positive actual output'],candidate:'not visually accepted'}));

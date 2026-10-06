@@ -61,6 +61,7 @@ export function createDevPanel({
   onLakeHere,
   onLakeReset,
   onOpenShotHarness,
+  onOpenCityReview,
   cloudWallEnabled = false,
   onCloudWallToggle,
 }) {
@@ -154,6 +155,7 @@ export function createDevPanel({
   html += `<button type="button" id="dev-open-citadel" class="dev-action">🏰 打开古堡搭建</button>`;
   html += `<button type="button" id="dev-open-storyboard" class="dev-action">🎬 打开故事板工作台</button>`;
   html += `<button type="button" id="dev-open-shot-harness" class="dev-action">📸 打开 OskSta A/B 工作台</button>`;
+  if(onOpenCityReview)html += `<button type="button" id="dev-city-review" class="dev-action">圣城检查镜头（不移动信使）</button>`;
   html += `<p class="dev-hint">故事板已独立为并列面板（左上 🎬），支持分镜拖拽与 LLM 执行</p>`;
   // ---------- 三重门 / 云墙 ----------
   html += `<div class="dev-group">三重门 · 云墙</div>`;
@@ -206,6 +208,7 @@ export function createDevPanel({
     });
   }
   const shotBtn = panel.querySelector("#dev-open-shot-harness");
+  panel.querySelector('#dev-city-review')?.addEventListener('click',()=>{onOpenCityReview();panel.style.display='none';});
   if (shotBtn && onOpenShotHarness) {
     shotBtn.addEventListener("click", () => {
       onOpenShotHarness();

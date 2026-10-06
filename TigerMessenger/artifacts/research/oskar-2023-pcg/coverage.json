@@ -1,0 +1,120 @@
+{
+  "date": "2026-10-04",
+  "overall": "partial",
+  "runtime_changed": false,
+  "verified_720p": false,
+  "full_audiovisual_viewings": 0,
+  "new_transcripts_studied": 8,
+  "items": [
+    {
+      "video_id": "0bcZb-SsnrA",
+      "title": "EPC2018 · Bad North WFC",
+      "range": "00:00–37:22",
+      "status": "全部导出字幕已读；末尾问答仍有截断可能",
+      "notes": "EPC2018.md"
+    },
+    {
+      "video_id": "NpfoRAzfGDg",
+      "title": "Oskar 2023 · Landscapes of Hex and Square",
+      "range": "00:02–58:12",
+      "status": "全部导出字幕已读；自动翻译待音画校对",
+      "notes": "ADVISOR.md"
+    },
+    {
+      "video_id": "Y2CYNIjN-qk",
+      "title": "Townscaper and the Design of Cities",
+      "range": "00:11–06:37",
+      "status": "全部导出字幕已读；评论性来源",
+      "notes": "CITY_DESIGN.md"
+    },
+    {
+      "video_id": "1tgMl92DAqk",
+      "title": "EPC2024 · Paul Merrell · 图文法",
+      "range": "00:00–38:39",
+      "status": "全部导出字幕已读；不是贴图系统教程",
+      "notes": "EPC2024.md"
+    },
+    {
+      "video_id": "7U_TesN8d6E",
+      "title": "Destructible Worlds With WFC",
+      "range": "00:00–19:52",
+      "status": "全部导出字幕已读；固定幸存瓦片后重新求解",
+      "notes": "WFC_DESTRUCTIBLE.md"
+    },
+    {
+      "video_id": "RPjBi_ojS7o",
+      "title": "Polygonal Planet · 58秒短片",
+      "range": "未取得画面",
+      "status": "标题/频道/时长已核实；无字幕、截图超时",
+      "notes": "CITY_DESIGN.md"
+    },
+    {
+      "video_id": "6JcFbivo8dQ",
+      "title": "Konsoll2018 · Developing The Bad North Look",
+      "range": "00:00–55:29",
+      "status": "全部1282行导出字幕顺序读完；自动翻译待音画校对",
+      "notes": "BAD_NORTH_LOOK.md",
+      "evidence_type": "browser_export_transcript_auto_translated",
+      "remaining_gaps": [
+        "连续音画及720P未核验",
+        "与既有55:40时长相比末11秒未有字幕证据"
+      ]
+    },
+    {
+      "video_id": "1hqt8JkYRdI",
+      "title": "Organic Towns From Square Tiles",
+      "range": "04:25–31:29",
+      "status": "全部665行现有导出字幕顺序读完；开头04:25之前缺失",
+      "notes": "ORGANIC_TOWNS.md",
+      "evidence_type": "browser_export_transcript_auto_translated",
+      "remaining_gaps": [
+        "00:00–04:25未取得字幕",
+        "31:29之后未取得字幕；既有元数据31:57",
+        "连续音画及720P未核验"
+      ]
+    },
+    {
+      "video_id": "Uxeo9c-PX-w",
+      "title": "SGC2021 · Beyond Townscapers",
+      "range": "00:00–51:39",
+      "status": "此前镜像转写已读；未完整观看音画",
+      "notes": null
+    },
+    {
+      "video_id": "5xrRTOikBBg",
+      "title": "Konsoll2021 · The Story of Townscaper",
+      "range": "00:05–49:05",
+      "status": "全部1334行导出字幕顺序读完，含问答及致谢",
+      "notes": "STORY_TOWNSCAPER.md",
+      "evidence_type": "browser_export_transcript_auto_translated",
+      "remaining_gaps": [
+        "00:00–00:05无本次字幕证据",
+        "完整时长及49:05后是否有内容未独立核验",
+        "连续音画及720P未核验"
+      ]
+    }
+  ],
+  "scope_note": "本批八份导出字幕全部按现有文本阅读；不是八场从零秒起完整音画观看。研究产物不修改运行时；同期运行时实施另行验收。",
+  "source_code_study": {
+    "notes": "WFC_GITHUB.md",
+    "repositories": [
+      {
+        "name": "LingDong-/ndwfc",
+        "commit": "3479af8ee855455b0922b9b2f4c26d5378b0cbee"
+      },
+      {
+        "name": "mxgmn/WaveFunctionCollapse",
+        "commit": "de7d22e705e816b62b4d613199d0463820fcaef3"
+      }
+    ],
+    "executed_checks": "7 dependency-free Node cases for ndwfc",
+    "not_executed": [
+      "C# compilation/runtime",
+      "all examples",
+      "sphere integration",
+      "performance benchmark"
+    ],
+    "oskar_private_source": false
+  },
+  "project_lighting_boundary": "seaStackLighting is project-specific 2.5D final-surface self/contact approximation, not the author's shared voxel-volume GI; no inter-stack/dynamic caster integration is asserted."
+}

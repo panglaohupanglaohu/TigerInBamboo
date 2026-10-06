@@ -1,0 +1,98 @@
+{
+  "source": "https://x.com/OskSta/status/1795831296952041691",
+  "author": "Oskar Stålberg",
+  "published": "2024-05-29T14:55:20Z",
+  "textSource": "https://api.fxtwitter.com/status/1795831296952041691",
+  "textEvidence": "Public mirror of author post; original X browser page timed out.",
+  "mediaSource": "https://video.twimg.com/tweet_video/GOwRvTBWYAAWsQ-.mp4",
+  "durationSeconds": 17.94,
+  "resolution": [
+    640,
+    640
+  ],
+  "method": "AVFoundation AVURLAsset directly reading public media stream; 16 timed frame samples; no source video saved; not continuous playback",
+  "frames": [
+    {
+      "file": "frame-00.png",
+      "requestedSeconds": 0.0,
+      "actualSeconds": 0
+    },
+    {
+      "file": "frame-01.png",
+      "requestedSeconds": 1.12125,
+      "actualSeconds": 1.11
+    },
+    {
+      "file": "frame-02.png",
+      "requestedSeconds": 2.2425,
+      "actualSeconds": 2.22
+    },
+    {
+      "file": "frame-03.png",
+      "requestedSeconds": 3.3637500000000005,
+      "actualSeconds": 3.36
+    },
+    {
+      "file": "frame-04.png",
+      "requestedSeconds": 4.485,
+      "actualSeconds": 4.47
+    },
+    {
+      "file": "frame-05.png",
+      "requestedSeconds": 5.60625,
+      "actualSeconds": 5.58
+    },
+    {
+      "file": "frame-06.png",
+      "requestedSeconds": 6.727500000000001,
+      "actualSeconds": 6.72
+    },
+    {
+      "file": "frame-07.png",
+      "requestedSeconds": 7.848750000000001,
+      "actualSeconds": 7.83
+    },
+    {
+      "file": "frame-08.png",
+      "requestedSeconds": 8.97,
+      "actualSeconds": 8.97
+    },
+    {
+      "file": "frame-09.png",
+      "requestedSeconds": 10.09125,
+      "actualSeconds": 10.08
+    },
+    {
+      "file": "frame-10.png",
+      "requestedSeconds": 11.2125,
+      "actualSeconds": 11.19
+    },
+    {
+      "file": "frame-11.png",
+      "requestedSeconds": 12.33375,
+      "actualSeconds": 12.33
+    },
+    {
+      "file": "frame-12.png",
+      "requestedSeconds": 13.455000000000002,
+      "actualSeconds": 13.44
+    },
+    {
+      "file": "frame-13.png",
+      "requestedSeconds": 14.576250000000002,
+      "actualSeconds": 14.55
+    },
+    {
+      "file": "frame-14.png",
+      "requestedSeconds": 15.697500000000002,
+      "actualSeconds": 15.69
+    },
+    {
+      "file": "frame-15.png",
+      "requestedSeconds": 16.81875,
+      "actualSeconds": 16.8
+    }
+  ],
+  "coverageLimit": "No sampled frame shows an Add planet button, planet creation or a generation process. Does not establish absence between samples. Algorithm/source code not published in retrieved material.",
+  "status": "sampled-and-text-read"
+}

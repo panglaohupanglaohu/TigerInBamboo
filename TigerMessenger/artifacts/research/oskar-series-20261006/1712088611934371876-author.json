@@ -1,0 +1,135 @@
+{
+  "code": 200,
+  "message": "OK",
+  "tweet": {
+    "url": "https://x.com/OskSta/status/1712088611934371876",
+    "id": "1712088611934371876",
+    "text": "Another take on a palette authoring tool",
+    "raw_text": {
+      "text": "Another take on a palette authoring tool https://t.co/YWitV4eAKg",
+      "display_text_range": [
+        0,
+        40
+      ],
+      "facets": [
+        {
+          "type": "media",
+          "indices": [
+            41,
+            64
+          ],
+          "id": "1712088051034337280",
+          "display": "pic.x.com/YWitV4eAKg",
+          "original": "https://t.co/YWitV4eAKg",
+          "replacement": "https://x.com/OskSta/status/1712088611934371876/photo/1"
+        }
+      ]
+    },
+    "author": {
+      "screen_name": "OskSta",
+      "url": "https://x.com/OskSta",
+      "id": "767755917890842624",
+      "followers": 108099,
+      "following": 1407,
+      "likes": 81767,
+      "media_count": 545,
+      "name": "Oskar Stålberg",
+      "description": "Gamedev. Made @BadNorthGame and Townscaper. Both available on most platforms. Go buy em!",
+      "raw_description": {
+        "text": "Gamedev. Made @BadNorthGame and Townscaper. Both available on most platforms. Go buy em!",
+        "facets": []
+      },
+      "location": "Malmo, Sweden",
+      "banner_url": "https://pbs.twimg.com/profile_banners/767755917890842624/1532114530",
+      "avatar_url": "https://pbs.twimg.com/profile_images/767772432891510784/hDb4djkU_200x200.jpg",
+      "joined": "Mon Aug 22 16:10:49 +0000 2016",
+      "protected": false,
+      "website": {
+        "url": "http://oskarstalberg.com",
+        "display_url": "oskarstalberg.com"
+      },
+      "verification": {
+        "verified": false,
+        "verified_at": null,
+        "type": null
+      },
+      "avatar_color": null
+    },
+    "replies": 23,
+    "retweets": 220,
+    "likes": 2520,
+    "bookmarks": 321,
+    "quotes": 2,
+    "created_at": "Wed Oct 11 12:51:48 +0000 2023",
+    "created_timestamp": 1697028708,
+    "possibly_sensitive": false,
+    "views": 151492,
+    "is_note_tweet": false,
+    "community_note": null,
+    "lang": "en",
+    "replying_to": null,
+    "replying_to_status": null,
+    "media": {
+      "all": [
+        {
+          "id": "1712088051034337280",
+          "url": "https://video.twimg.com/tweet_video/F8KPAuoXsAAgEwY.mp4",
+          "thumbnail_url": "https://pbs.twimg.com/tweet_video_thumb/F8KPAuoXsAAgEwY.jpg",
+          "duration": 0,
+          "width": 640,
+          "height": 640,
+          "format": "video/mp4",
+          "type": "gif",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/tweet_video/F8KPAuoXsAAgEwY.mp4",
+              "bitrate": 0,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/tweet_video/F8KPAuoXsAAgEwY.mp4",
+              "bitrate": 0,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ],
+      "videos": [
+        {
+          "id": "1712088051034337280",
+          "url": "https://video.twimg.com/tweet_video/F8KPAuoXsAAgEwY.mp4",
+          "thumbnail_url": "https://pbs.twimg.com/tweet_video_thumb/F8KPAuoXsAAgEwY.jpg",
+          "duration": 0,
+          "width": 640,
+          "height": 640,
+          "format": "video/mp4",
+          "type": "gif",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/tweet_video/F8KPAuoXsAAgEwY.mp4",
+              "bitrate": 0,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/tweet_video/F8KPAuoXsAAgEwY.mp4",
+              "bitrate": 0,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ]
+    },
+    "twitter_card": "player",
+    "color": null,
+    "provider": "twitter",
+    "reposted_by": null
+  }
+}

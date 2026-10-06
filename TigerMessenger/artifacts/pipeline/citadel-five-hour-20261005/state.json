@@ -1,0 +1,339 @@
+{
+  "status": "timebox-delivered-with-known-gaps",
+  "startedAt": "2026-10-04T16:40:16Z",
+  "deadline": "2026-10-04T21:40:16Z",
+  "timezone": "Asia/Shanghai",
+  "durationHours": 5,
+  "latestRound": 23,
+  "goal": "Optimize Highland Citadel mountain landform, surface vegetation and coherent colour/shadow; protect city foundations, railways, harbour uphill routes and pedestrian bridges.",
+  "predecessor": "Twelve Apostles palette and dynamic surf iteration verified; known remaining geological and dusk limitations documented.",
+  "parallelTask": "All agents and production source frozen; browser live test tab closed after final rollback evidence.",
+  "nextAction": "Next separate iteration: shared 3D bay seam reconstruction per bay-seam-next-step.md; castle external approach support remains unresolved. No active five-hour continuation.",
+  "automationId": "automation",
+  "updatedAt": "2026-10-04T21:41:02.339943+00:00",
+  "baselineScore": 55,
+  "baselineEvidence": "r00-visual-review.md and four r00 PNGs",
+  "candidate": "Published r16 geometry/turf with r19 palette3. Default r22 and release-off r23 actual parity passed. Bay1 and turf6 rejected/default off.",
+  "baselineChecks": {
+    "file": "r00b-check.json",
+    "railProbes": 23049,
+    "railHits": 0,
+    "walkableHash": 4183750976,
+    "rootsCount": 80731,
+    "rootsAbove2mm": 50797,
+    "rootsNote": "Radial first-surface gap: ordinary 15mm legacy lift and some blade bases across cliff edges; deeply buried points may be occluded inner surfaces, not all visible defects."
+  },
+  "lightingIsolation": "Review iframe only: park red tram on positive-Y maximum, freeze tram update; wait18 simulationsec fade; weather0 locked, no persistence. Removes Moebius periodic colour override.",
+  "r02Checks": {
+    "file": "r02-check.json",
+    "comparison": "r02-comparison.json",
+    "walkableChanges": 0,
+    "railCurveChanges": 0,
+    "railHits": 0,
+    "rootCount": 36944,
+    "rootsAbove2mm": 0,
+    "architectureChanges": "40 cloud+18 animated waterfall meshes; no other changes"
+  },
+  "r04Checks": {
+    "file": "r04-check.json",
+    "comparison": "r04-comparison.json",
+    "score": 57,
+    "walkableChanges": 0,
+    "railCurveChanges": 0,
+    "railHits": 0,
+    "grassEndpoints": 74814,
+    "grassAbove2mm": 0,
+    "grassBelow2cm": 0,
+    "architectureChanges": "40 cloud+18 animated waterfall only",
+    "performance": "r04-performance.json: 66.6ms median rAF, no FPS success claim"
+  },
+  "r06Checks": {
+    "gpu": "r06[-off,-palette,-shadow]-bay-ridge-day-noCloud-plants.json: all shader sample-clean,GL[],errors[]",
+    "terrace": "r06-overview-day-cloud-plants-terrace-profile.json",
+    "coreTurf": 32,
+    "coreCount": 40,
+    "habitatPass": 34,
+    "slopeFieldPass": 39,
+    "wholeFaceProtectionReject": 0,
+    "lightDecision": "palette2,light off provisional; no full solar/canopy GI claim"
+  },
+  "r08Checks": {
+    "file": "r08-check.json",
+    "comparison": "r08-comparison.json",
+    "walkableChanges": 0,
+    "unclassifiedArchitectureChanges": 0,
+    "railHits": 0,
+    "railProbes": 23049,
+    "grassEndpoints": 74960,
+    "grassAbove2mm": 0,
+    "grassBelow2cm": 0,
+    "gpu": "sample-clean, GL[],pageErrors[]",
+    "visual": "modest relief reduction; large triangular creases and jagged turf still visible, not accepted as final"
+  },
+  "r09Checks": {
+    "comparison": "r09-comparison.json",
+    "walkableChanges": 0,
+    "unclassifiedArchitectureChanges": 0,
+    "railHits": 0,
+    "grassEndpoints": 74960,
+    "grassAbove2mm": 0,
+    "grassBelow2cm": 0,
+    "visual": "no clear main skyline improvement; score20/30 unchanged"
+  },
+  "r11Silhouette": {
+    "old": "r11-old-mountain-day-noCloud-plants.json",
+    "bay": "r11-bay-ridge-day-noCloud-plants.json",
+    "oldRays": 1012,
+    "oldVisiblePoints": 17,
+    "originalRayError": 0,
+    "note": "CPU geometry silhouette; shader/transparent foreground explicitly ambiguous, not GPU pixel mask"
+  },
+  "r11Checks": {
+    "comparison": "r11-comparison.json",
+    "walkableChanges": 0,
+    "railHits": 0,
+    "grassEndpoints": 50960,
+    "grassAbove2mm": 0,
+    "grassBelow2cm": 0,
+    "sourceTurfArea": 5019.034,
+    "sourceTurfTriangles": 19932
+  },
+  "r12Checks": {
+    "gpu": "r12-left-terrace-day-noCloud-plants.json",
+    "programs": 258,
+    "glErrors": [],
+    "pageErrors": [],
+    "visual": "normal4 modest improvement; no terrain position or topology change from normal3, silhouette unchanged"
+  },
+  "turf4Offline": {
+    "file": "turf4-actual-geometry-audit.json",
+    "source": "r12-overview-day-cloud-plants-turf-geometry.json",
+    "beforeArea": 5019.03,
+    "afterArea": 4138.91,
+    "leftCoreRetainedPercent": 84.87,
+    "afterTriangles": 95877,
+    "seconds": 13.35,
+    "boundaryProbes": 671139,
+    "limits": "actual exported mesh geometry audit, not actual integrated turf4 visual acceptance or complete world collision"
+  },
+  "r14Checks": {
+    "file": "r14-check.json",
+    "comparison": "r14-comparison.json",
+    "walkableChanges": 0,
+    "unclassifiedArchitectureChanges": 0,
+    "railHits": 0,
+    "railProbes": 23049,
+    "grassEndpoints": 50910,
+    "grassAbove2mm": 0,
+    "grassBelow2cm": 0,
+    "performance": "r14-performance.json: rAF median83.3/p95100ms at1250x518; not GPU timing or improvement",
+    "foldDiagnosis": "actual adjacent faces32405/31068 folded; origin pending source trace, no single-valued heightfield assumption"
+  },
+  "r15Checks": {
+    "detailSelected": 0.35,
+    "evidence": "r15-left-terrace-day-noCloud-plants.json",
+    "compiledLinkedPrograms": 258,
+    "glErrors": [],
+    "pageErrors": [],
+    "visual": "Clear reduction of busy short seams, no geometry-fix claim; giant folds more exposed",
+    "trace": "r15-overview-day-cloud-plants-rock-trace.json: original input folds exist, landform compresses two outer sheets .21495m to .00824m"
+  },
+  "r14Score": {
+    "total": 63,
+    "parts": [
+      22,
+      11,
+      9,
+      8,
+      6,
+      7
+    ],
+    "maxima": [
+      30,
+      20,
+      15,
+      15,
+      10,
+      10
+    ],
+    "reviewer": "bad_north_research",
+    "sameScaleAs": "r04 57/100"
+  },
+  "r16Checks": {
+    "file": "r16-check.json",
+    "comparison": "r16-comparison.json",
+    "walkableChanges": 0,
+    "unclassifiedArchitectureChanges": 0,
+    "railCurveChanges": 0,
+    "railProbes": 23049,
+    "railHits": 0,
+    "grassEndpoints": 48628,
+    "missing": 0,
+    "grassAbove2mm": 0,
+    "grassBelow2cm": 0,
+    "trees": 63,
+    "shrubs": 913,
+    "gpu": "sample-clean GL[] errors[]",
+    "vegetationSpecialtyScore": "16/25, not comparable to whole visual15-point subscale"
+  },
+  "r17Decision": {
+    "bayApplied": true,
+    "selected": false,
+    "reason": "Actual near and bay views show stronger vertical pleats and thin turf stripe; numeric overlap reduction does not justify accepting worse geometry",
+    "evidence": [
+      "r17-left-terrace-day-noCloud-plants.png",
+      "r17-bay-ridge-day-noCloud-plants.png"
+    ],
+    "retained": "r16"
+  },
+  "r18Decision": {
+    "selected": false,
+    "reason": "Rounder turf head but detached arrow-like remnant; no bay view gain",
+    "retainedTurf": 5,
+    "evidence": "r18-vegetation-review.md"
+  },
+  "castleActual": {
+    "evidence": "../junction-wfc-passage/browser-verification.json",
+    "cells": [
+      398,
+      397,
+      398,
+      397,
+      398
+    ],
+    "actualDeletedModule": "body.passage@r90",
+    "finalSnapshotIdentical": true,
+    "saveInvoked": false,
+    "gpu": "up to283 programs no failures,GL[],pageErrors[]",
+    "defaultOff": true,
+    "limitation": "1.428m clear height below1.66m player,1 inherited foundation2.7m lower"
+  },
+  "r19Decision": {
+    "palette": 3,
+    "selected": true,
+    "visual": "Modest paler daylight limestone, dusk weak",
+    "overallScore": 63,
+    "parts": [
+      22,
+      11,
+      9,
+      7,
+      7,
+      7
+    ],
+    "review": "r19-final-visual-review.md",
+    "paletteReview": "palette3-visual-verdict.md"
+  },
+  "release": {
+    "version": "citadel-mountain-20261005-r19",
+    "enabled": true,
+    "noQueryActive": true,
+    "evidence": "r20-left-terrace-day-noCloud-plants.json",
+    "fullDefaultParity": "pass"
+  },
+  "r20Checks": {
+    "file": "r20-check.json",
+    "comparison": "r20-comparison.json",
+    "defaultParity": "r20-default-parity.json",
+    "railHits": 0,
+    "railProbes": 23049,
+    "walkableChanges": 0,
+    "unclassifiedArchitectureChanges": 0,
+    "rootPoints": 49604,
+    "grassEndpoints": 48628,
+    "trees": 63,
+    "shrubs": 913,
+    "sampleMissing": 0,
+    "grassAbove2mm": 0,
+    "grassBelow2cm": 0,
+    "performance": "r20-performance.json: median50ms/p9566.6ms at1250x518 bay-day-noCloud; not compared across views"
+  },
+  "r21CloudMotion": {
+    "video": "r21-bay-ridge-day-cloud-plants-cloud-motion.webm",
+    "evidence": "r21-cloud-motion.json",
+    "durationMs": 10360.6,
+    "moved": 384,
+    "particles": 384,
+    "actualBrowserPlaybackVerified": true,
+    "decodedDimensions": [
+      1250,
+      518
+    ],
+    "pausedAfterViewing": true,
+    "gpu": "sample-clean before/after; GL[]; pageErrors[]",
+    "note": "Natural game motion includes respawn; not a wind-speed metric or full volumetric cloud implementation."
+  },
+  "castlePairActual": {
+    "evidence": "../junction-wfc-passage/pair-browser-verification.json",
+    "initialCells": 398,
+    "counts": [
+      398,
+      398,
+      397,
+      398,
+      397,
+      398
+    ],
+    "upperDeleteActual": true,
+    "lowerDeleteRejectedWithReason": true,
+    "finalExactRestore": true,
+    "saveInvoked": false,
+    "maxGpuPrograms": 282,
+    "GPUFailures": 0,
+    "playerClearHeight": 2.3,
+    "fullTraversalAccepted": false,
+    "reason": "left approach fixed foundation2.70m lower",
+    "defaultEnabled": false
+  },
+  "r22Checks": {
+    "at": "2026-10-04T21:25:45.532132+00:00",
+    "status": "pass",
+    "checks": {
+      "mainRock": true,
+      "railCurveProtection": true,
+      "walkable": true,
+      "rootsExactlyEqual": true,
+      "gpuClean": true,
+      "releaseActive": true,
+      "nightGpuClean": true,
+      "nightClock": true
+    },
+    "before": "r20-check.json",
+    "after": "r22-check.json",
+    "night": "r22-bay-ridge-night-cloud-plants.json",
+    "note": "Reload after final castle shared-source and UI metadata edits; default mountain geometry and root data exactly retained."
+  },
+  "r23Rollback": {
+    "at": "2026-10-04T21:34:55.818818+00:00",
+    "status": "pass",
+    "checks": {
+      "mainRock": true,
+      "walkable": true,
+      "railCurveProtection": true,
+      "rootItemsExactlyEqual": true,
+      "releaseOff": true,
+      "gpuClean": true,
+      "railClear": true
+    },
+    "before": "r00b-check.json",
+    "after": "r23-rollback-check.json",
+    "release": {
+      "releaseVersion": "citadel-mountain-20261005-r19",
+      "releaseEnabled": true,
+      "active": false,
+      "mode": "legacy-defaults",
+      "applied": [],
+      "resolved": {
+        "citadelMountainRelease": "0",
+        "autostart": "1",
+        "timeOfDay": "0.5"
+      }
+    },
+    "baselineRoots": 80731,
+    "rollbackRoots": 80731,
+    "scope": "Compare geometry/walkable/rail/root data only. Runtime remains current source, not archived-code restore."
+  },
+  "completedAt": "2026-10-04T21:41:02.339943+00:00",
+  "automationDeleted": true,
+  "visualTargetAchieved": false
+}

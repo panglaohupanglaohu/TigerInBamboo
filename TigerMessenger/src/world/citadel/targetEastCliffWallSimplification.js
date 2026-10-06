@@ -1,0 +1,30 @@
+import * as T from 'three';
+/** Geometry checksum is a provenance guard, not a cryptographic signature. */
+export function cliffWallGeometryEpoch(g){let h=2166136261;for(const a of[g.attributes.position?.array,g.index?.array]){if(!a)continue;const b=new Uint8Array(a.buffer,a.byteOffset,a.byteLength);for(const v of b)h=Math.imul(h^v,16777619)>>>0;}return{hash:h,vertices:g.attributes.position.count,triangles:(g.index?.count??g.attributes.position.count)/3};}
+/** Default-off exact coplanar retriangulation. Requires independently recorded
+ * builder wall face provenance. Does not infer editable faces from a bbox or
+ * slope. No vertex positions, boundary edges, source attributes or materials
+ * are changed; noncoplanar corrugations deliberately remain. */
+export function simplifyEastCliffWalls({enabled=false,geometry,provenance,faceFilter=()=>true,planeTolerance=1e-5}={}){
+ const report={version:'east-cliff-wall-simplification-1',enabled,built:false,accepted:false,positionChanged:false,shortCliffCreated:false,failures:[],clusters:[],limitations:['Coplanar retriangulation cannot shorten high walls or remove genuinely noncoplanar folds.','Raw builder geometry only; final refinement and live installation require separate validation.']};
+ if(!enabled)return{geometry:null,report};
+ if(!geometry?.index||geometry.groups.length||!geometry.attributes.position||!Number.isFinite(planeTolerance)||planeTolerance<=0){report.failures.push('indexed raw source required');return{geometry:null,report};}
+ const epoch=cliffWallGeometryEpoch(geometry);if(provenance?.kind!=='recorded-builder-new-cliff-faces'||JSON.stringify(epoch)!==JSON.stringify(provenance.geometryEpoch)||!provenance.builderSourceHash||!Array.isArray(provenance.faces)){report.failures.push('missing or mismatched builder face provenance');return{geometry:null,report};}
+ const p=geometry.attributes.position,idx=Array.from(geometry.index.array),V=i=>new T.Vector3().fromBufferAttribute(p,i),faces=new Map();
+ for(const f of provenance.faces){if(!Number.isInteger(f)||f<0||f*3+2>=idx.length){report.failures.push('invalid recorded face');return{geometry:null,report};}const ids=idx.slice(f*3,f*3+3),points=ids.map(V);if(!faceFilter({face:f,points}))continue;const n=points[1].clone().sub(points[0]).cross(points[2].clone().sub(points[0]));if(n.length()<1e-10)continue;n.normalize();faces.set(f,{f,ids,n,d:n.dot(points[0])});}
+ const edgeKey=(a,b)=>a<b?`${a},${b}`:`${b},${a}`,edgeMap=new Map();for(const face of faces.values())for(let j=0;j<3;j++){const k=edgeKey(face.ids[j],face.ids[(j+1)%3]);if(!edgeMap.has(k))edgeMap.set(k,[]);edgeMap.get(k).push(face.f);}
+ const seen=new Set(),removed=new Set(),added=[];
+ for(const seed of faces.values()){if(seen.has(seed.f))continue;const cluster=[],queue=[seed.f];seen.add(seed.f);for(let at=0;at<queue.length;at++){const a=faces.get(queue[at]);cluster.push(a);for(let j=0;j<3;j++)for(const f of edgeMap.get(edgeKey(a.ids[j],a.ids[(j+1)%3]))||[]){if(seen.has(f))continue;const b=faces.get(f);if(seed.n.dot(b.n)<1-1e-10||b.ids.some(i=>Math.abs(seed.n.dot(V(i))-seed.d)>planeTolerance))continue;seen.add(f);queue.push(f);}}
+  if(cluster.length<3)continue;const edges=new Map();for(const a of cluster)for(let j=0;j<3;j++){const from=a.ids[j],to=a.ids[(j+1)%3],k=edgeKey(from,to);if(!edges.has(k))edges.set(k,[]);edges.get(k).push([from,to]);}if([...edges.values()].some(e=>e.length>2))continue;
+  const boundary=[...edges.values()].filter(e=>e.length===1).map(e=>e[0]),next=new Map();let invalid=false;for(const[a,b]of boundary){if(next.has(a)){invalid=true;break;}next.set(a,b);}if(invalid||boundary.length<3)continue;const ring=[],start=boundary[0][0];let current=start;do{if(ring.includes(current)||!next.has(current)){invalid=true;break;}ring.push(current);current=next.get(current);}while(current!==start);if(invalid||ring.length!==boundary.length)continue;
+  const origin=V(ring[0]),u=V(ring[1]).sub(origin).normalize(),v=seed.n.clone().cross(u),flat=ring.map(i=>{const q=V(i).sub(origin);return new T.Vector2(q.dot(u),q.dot(v));});let triangles=T.ShapeUtils.triangulateShape(flat,[]).map(t=>t.map(i=>ring[i]));
+  // Earcut may omit collinear boundary vertices. Insert each into its actual
+  // triangle edge, retaining the exact source boundary segmentation.
+  const used=new Set(triangles.flat());for(const id of ring){if(used.has(id))continue;let done=false;const point=V(id);for(let ti=0;ti<triangles.length&&!done;ti++){const t=triangles[ti];for(let j=0;j<3;j++){const a=V(t[j]),b=V(t[(j+1)%3]),ab=b.sub(a),length=ab.lengthSq(),q=point.clone().sub(a),fraction=q.dot(ab)/length;if(fraction>1e-8&&fraction<1-1e-8&&q.addScaledVector(ab,-fraction).length()<planeTolerance){triangles.splice(ti,1,[t[j],id,t[(j+2)%3]],[id,t[(j+1)%3],t[(j+2)%3]]);done=true;break;}}}if(!done){invalid=true;break;}used.add(id);}
+  if(invalid||triangles.length>=cluster.length)continue;
+  const sourceArea=cluster.reduce((sum,a)=>sum+V(a.ids[1]).sub(V(a.ids[0])).cross(V(a.ids[2]).sub(V(a.ids[0]))).length()/2,0);let newArea=0;for(const t of triangles){const n=V(t[1]).sub(V(t[0])).cross(V(t[2]).sub(V(t[0])));if(n.dot(seed.n)<0)[t[1],t[2]]=[t[2],t[1]];newArea+=n.length()/2;if(n.length()<1e-10)invalid=true;}if(invalid||Math.abs(newArea-sourceArea)>Math.max(1e-6,sourceArea*1e-8))continue;
+  for(const a of cluster)removed.add(a.f);added.push(...triangles.flat());report.clusters.push({sourceFaces:cluster.map(a=>a.f),before:cluster.length,after:triangles.length,boundaryVertices:ring,area:sourceArea});
+ }
+ if(!removed.size){report.failures.push('no reducible coplanar recorded wall cluster');return{geometry:null,report};}
+ const out=geometry.clone(),outIndex=[];for(let f=0;f<idx.length/3;f++)if(!removed.has(f))outIndex.push(...idx.slice(f*3,f*3+3));outIndex.push(...added);out.setIndex(outIndex);out.clearGroups();report.built=true;report.selectedFaces=faces.size;report.removedFaces=removed.size;report.addedFaces=added.length/3;report.before=epoch;report.after=cliffWallGeometryEpoch(out);report.boundaryPreserved=true;return{geometry:out,report};
+}

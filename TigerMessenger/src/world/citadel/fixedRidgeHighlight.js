@@ -40,6 +40,9 @@ export function createFixedRidgeHighlight(castle) {
   return {
     get layer(){return lines;},
     update(phase){
+      // The approved natural limestone study uses real mineral/normal relief;
+      // gold edge strokes would highlight every newly fractured triangle.
+      if(castle.userData.mountainStudy?.round>=6){if(lines)lines.visible=false;return;}
       const mesh=castle.getObjectByName('citadel-oskar-grid-mountain-surface');if(!mesh?.geometry?.attributes.position)return;
       if(mesh!==source||mesh.geometry!==sourceGeometry||mesh.geometry.attributes.position.version!==version)rebuild(mesh);
       const night=nightWeightAt(phase);material.color.copy(gold).lerp(silver,night);

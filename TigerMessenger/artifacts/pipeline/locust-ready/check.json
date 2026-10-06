@@ -1,0 +1,158 @@
+{
+  "r": {
+    "readiness": [
+      {
+        "state": "idle",
+        "forwardDot": 0.9999999999999999,
+        "firing": false,
+        "weaponReady": true,
+        "transport": false,
+        "speed": 0,
+        "aim": 0,
+        "pitch": 0
+      },
+      {
+        "state": "move",
+        "forwardDot": 0.9999999999999999,
+        "firing": false,
+        "weaponReady": true,
+        "transport": false,
+        "speed": 2,
+        "aim": 0,
+        "pitch": 0
+      },
+      {
+        "state": "transport",
+        "forwardDot": 0.9999999999999999,
+        "firing": false,
+        "weaponReady": true,
+        "transport": true,
+        "speed": 0,
+        "aim": 0,
+        "pitch": 0
+      },
+      {
+        "state": "disabled",
+        "forwardDot": -9.540979117872439e-17,
+        "firing": false,
+        "weaponReady": false,
+        "transport": false,
+        "speed": 0,
+        "aim": 0,
+        "pitch": 0
+      }
+    ],
+    "results": [
+      {
+        "state": "aim",
+        "yaw": -1,
+        "height": 3,
+        "dot": 0.9999999999999998
+      },
+      {
+        "state": "aim",
+        "yaw": -1,
+        "height": 12,
+        "dot": 0.9999999999999998
+      },
+      {
+        "state": "aim",
+        "yaw": 0,
+        "height": 3,
+        "dot": 0.9999999999999997
+      },
+      {
+        "state": "aim",
+        "yaw": 0,
+        "height": 12,
+        "dot": 1.0000000000000002
+      },
+      {
+        "state": "aim",
+        "yaw": 1,
+        "height": 3,
+        "dot": 1
+      },
+      {
+        "state": "aim",
+        "yaw": 1,
+        "height": 12,
+        "dot": 1
+      },
+      {
+        "state": "move",
+        "yaw": -1,
+        "height": 3,
+        "dot": 0.9999999999999999
+      },
+      {
+        "state": "move",
+        "yaw": -1,
+        "height": 12,
+        "dot": 0.9999999999999998
+      },
+      {
+        "state": "move",
+        "yaw": 0,
+        "height": 3,
+        "dot": 1
+      },
+      {
+        "state": "move",
+        "yaw": 0,
+        "height": 12,
+        "dot": 1
+      },
+      {
+        "state": "move",
+        "yaw": 1,
+        "height": 3,
+        "dot": 1
+      },
+      {
+        "state": "move",
+        "yaw": 1,
+        "height": 12,
+        "dot": 0.9999999999999999
+      },
+      {
+        "state": "transport",
+        "yaw": -1,
+        "height": 3,
+        "dot": 1
+      },
+      {
+        "state": "transport",
+        "yaw": -1,
+        "height": 12,
+        "dot": 1.0000000000000002
+      },
+      {
+        "state": "transport",
+        "yaw": 0,
+        "height": 3,
+        "dot": 0.9999999999999999
+      },
+      {
+        "state": "transport",
+        "yaw": 0,
+        "height": 12,
+        "dot": 1.0000000000000002
+      },
+      {
+        "state": "transport",
+        "yaw": 1,
+        "height": 3,
+        "dot": 0.9999999999999998
+      },
+      {
+        "state": "transport",
+        "yaw": 1,
+        "height": 12,
+        "dot": 1.0000000000000002
+      }
+    ],
+    "minDot": 0.9999999999999997
+  },
+  "errors": []
+}

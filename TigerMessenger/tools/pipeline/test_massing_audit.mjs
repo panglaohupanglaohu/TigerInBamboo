@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {auditCityMassing} from './citadel_massing_audit.js';
+const castle=new THREE.Group();castle.rotation.set(.2,.7,-.3);castle.position.set(12,32,-20);
+const surface=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.MeshBasicMaterial());surface.rotation.x=-Math.PI/2;surface.name='citadel-oskar-grid-mountain-surface';castle.add(surface);
+const camera=new THREE.PerspectiveCamera(40,2,1,1000);castle.updateMatrixWorld(true);camera.position.copy(castle.localToWorld(new THREE.Vector3(0,35,70)));camera.up.set(0,1,0).transformDirection(castle.matrixWorld);camera.lookAt(castle.localToWorld(new THREE.Vector3(0,0,0)));camera.updateMatrixWorld(true);
+const row=(id,x,y,z,w=4,d=4,h=2)=>({id,position:[x,y,z],size:[w,h,d],role:'test',shape:'box'});
+const audit=placements=>auditCityMassing({castle,camera,group:castle,report:{previewOnly:true,variant:'fixture',placements}});
+const grounded=row('massing-old-ground',0,0,0);assert.equal(audit([grounded]).failures.length,0);
+assert.equal(audit([row('floating',0,2,0)]).failures.length,1);
+assert.equal(audit([row('buried',0,-1,0)]).failures.length,1);
+assert.equal(audit([row('over-edge',14,0,0)]).failures.length,1);
+const result=audit([grounded,row('massing-old-upper',0,2,0)]);assert.equal(result.failures.length,0);assert.ok(result.rows[1].samples.every(s=>s.proxySupport===grounded.id));assert.ok(result.screenBounds.old.widthFraction>0&&result.screenBounds.old.widthFraction<1);
+console.log(JSON.stringify({grounded:true,floatingRejected:true,buriedRejected:true,edgeRejected:true,stackSupport:true,rotatedCastle:true,projectedBounds:result.screenBounds.old}));

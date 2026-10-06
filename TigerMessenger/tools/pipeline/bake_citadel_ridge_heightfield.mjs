@@ -13,6 +13,8 @@ try {
   const data = await p.evaluate(([HALF, STEP]) => {
     const t = window.__tm, T = t.THREE, R = 160;
     const castle = t.scene.getObjectByName('castleContainer');
+    // Restore authored visibility so the current camera does not omit distant solids.
+    t.distanceCulling?.dispose();
     t.scene.updateMatrixWorld(true);
     const skip = /cloud|^sky|bird|ocean|water|sea-|tram|culvert|lamp|flag|banner|tree|cypress|pine|canopy|leaf|shrub|flower|planting|grass|soldier|trooper|boat|ship|warship|horse|statue|crate|volume|glow|light|mist|plinth/i;
     const mountain = /mountain|backdrop|ridge|range|cliff|massif|ravine|rock|crag|peak|slope|terrain|hills|outcrop|spur|skirt|gorge|highland-(?!town)|snow/i;

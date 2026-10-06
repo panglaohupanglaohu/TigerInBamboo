@@ -1,3 +1,5 @@
+import {bayLayoutEnabled,bayRotation} from './bayLayoutMath.js';
+import {rotateNewCityPoint} from './newCityOrientation.js';
 import * as THREE from 'three';
 import {toonMat, addOutline} from '../../assets/toon.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
@@ -14,7 +16,14 @@ export const COASTAL_TRAM_STATIONS = Object.freeze([
   {id: 'new-city', name: '新城站', x: -1, z: 44.2, length: 9, exit: {x: 9, z: 46, h: 7.6}},
   {id: 'old-town', name: '旧城站', x: -25, z: 33.5, length: 18, exit: {x: -31, z: 29.5, h: 1.2}, stairsTo: {x: -31, z: 29.5}},
 ]);
-const STATION_RADIUS = 20;
+function stationSpecs(R){
+ if(!bayLayoutEnabled())return COASTAL_TRAM_STATIONS;
+ const frame=citadelCoastalFrame(),q=bayRotation(frame,R),inv=frame.clone().invert();
+ const position=(p)=>{p=rotateNewCityPoint(p);p[0]-=52;return new THREE.Vector3(...p).applyMatrix4(frame).applyQuaternion(q);};
+ const site=position([60,0,105]).applyMatrix4(inv),exitWorld=position([60,4,83]);
+ return [{id:'new-city',name:'新城站',x:site.x,z:site.z,length:12,exitWorld,exit:{x:site.x,z:site.z,h:9}},COASTAL_TRAM_STATIONS[1]];
+}
+const STATION_RADIUS = 14;
 const PIER_SPACING = 9;
 const DECK_HALF = 4.1;   // matches the 3.35 m tram deck
 const _inv = new THREE.Matrix4();
@@ -50,7 +59,7 @@ function block(parent, geo, mat, f, along = 0, lateral = 0, radial = 0) {
  * @param {number} R planet radius
  * @param {(dir:THREE.Vector3,R:number)=>number} groundRadiusAt real ground/seabed radius
  */
-export function addCitadelCoastalTramStructures(group, curve, R, groundRadiusAt) {
+export function addCitadelCoastalTramStructures(group, curve, R, groundRadiusAt, {excludeProgress=()=>false}={}) {
   const stone = toonMat(0xd9ceb6, {flatShading: true});
   const stoneDark = toonMat(0xb9ad94, {flatShading: true});
   const cap = toonMat(0xefe6d2, {flatShading: true});
@@ -63,7 +72,7 @@ export function addCitadelCoastalTramStructures(group, curve, R, groundRadiusAt)
   const runs = []; let run = null;
   for (let i = 0; i <= N; i++) {
     const t = (i / N) % 1, p = curve.getPointAt(t);
-    if (inCitadelCoastalWindow(p)) { if (!run) runs.push(run = []); run.push(t); } else run = null;
+    if (!excludeProgress(t) && inCitadelCoastalWindow(p)) { if (!run) runs.push(run = []); run.push(t); } else run = null;
   }
   const clearance = (f) => f.p.length() - groundRadiusAt(f.up, R);
   const pierGeo = new THREE.BoxGeometry(DECK_HALF * 2 + .5, 1, 1.5);
@@ -132,13 +141,14 @@ export function addCitadelCoastalTramStructures(group, curve, R, groundRadiusAt)
   }
   // Stations: seaward platform slab, blue canopies, lamp posts.
   const frame = citadelCoastalFrame();
-  for (const st of COASTAL_TRAM_STATIONS) {
+  for (const st of stationSpecs(R)) {
     const target = new THREE.Vector3(st.x, 0, st.z).applyMatrix4(frame).normalize();
     let best = 0, bestD = Infinity;
     for (let i = 0; i < 2000; i++) { const d = curve.getPointAt(i / 2000).clone().normalize().distanceTo(target); if (d < bestD) { bestD = d; best = i / 2000; } }
+    if (excludeProgress(best)) continue;
     const g = new THREE.Group(); g.name = 'citadel-tram-station-' + st.id;
     const f0 = frameAt(curve, best);
-    const exitW = new THREE.Vector3(st.exit.x, 0, st.exit.z).applyMatrix4(frame).normalize().multiplyScalar(R + st.exit.h);
+    const exitW = st.exitWorld || new THREE.Vector3(st.exit.x, 0, st.exit.z).applyMatrix4(frame).normalize().multiplyScalar(R + st.exit.h);
     const land = exitW.clone().sub(f0.p).dot(f0.right) > 0 ? 1 : -1;   // platform faces the town exit
     for (let s = -st.length / 2; s <= st.length / 2; s += 1.5) {
       const f = frameAt(curve, (best + s / L + 1) % 1);
@@ -151,6 +161,13 @@ export function addCitadelCoastalTramStructures(group, curve, R, groundRadiusAt)
       const roof = block(g, new THREE.ConeGeometry(2.6, 1.1, 4), canopy, f, 0, land * (DECK_HALF + 1.9), 3.6);
       roof.rotateY(Math.PI / 4);
       block(g, globeGeo, lamp, f, 0, land * (DECK_HALF + 3.0), 3.0);
+    }
+    if(st.exitWorld){
+      // Connect the relocated coastal station to the real plaza edge. The
+      // walkway starts on the town-side platform, outside both running lanes.
+      const from=f0.p.clone().addScaledVector(f0.right,land*(DECK_HALF+2)).addScaledVector(f0.up,.15),to=exitW;
+      const direction=to.clone().sub(from),length=direction.length(),forward=direction.clone().normalize(),up=from.clone().add(to).normalize(),right=new THREE.Vector3().crossVectors(up,forward).normalize();up.crossVectors(forward,right).normalize();
+      const connector=new THREE.Mesh(new THREE.BoxGeometry(2.6,.35,length),cap);connector.name='citadel-new-station-pedestrian-link';connector.position.copy(from).lerp(to,.5).addScaledVector(up,-.175);connector.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(right,up,forward));connector.userData.highlandGateWalkable=true;g.add(connector);
     }
     if (st.stairsTo) {
       // Straight flight from the platform's town edge down to the exit square.
@@ -183,9 +200,9 @@ export function citadelTramAlight(tramWorld, R) {
   if (!tramWorld || !inCitadelCoastalWindow(tramWorld)) return null;
   const frame = citadelCoastalFrame(), inv = frame.clone().invert();
   const l = tramWorld.clone().applyMatrix4(inv);
-  for (const st of COASTAL_TRAM_STATIONS) {
+  for (const st of stationSpecs(R)) {
     if (Math.hypot(l.x - st.x, l.z - st.z) > STATION_RADIUS) continue;
-    const exit = new THREE.Vector3(st.exit.x, 0, st.exit.z).applyMatrix4(frame).normalize().multiplyScalar(R + st.exit.h);
+    const exit = st.exitWorld?.clone() || new THREE.Vector3(st.exit.x, 0, st.exit.z).applyMatrix4(frame).normalize().multiplyScalar(R + st.exit.h);
     return {exit, station: st};
   }
   return {blocked: true, stations: COASTAL_TRAM_STATIONS.map((st) => st.name)};

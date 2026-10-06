@@ -1,0 +1,3114 @@
+{
+  "input": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-five-hour-20261005/r12-overview-day-cloud-plants-turf-geometry.json",
+  "inputSHA256": "3afbb5c95b8d071daff9702c113f9ab8858dc703f58bfbca9b66cb1e0bbc8686",
+  "elapsedMs": 13568.309041999999,
+  "maxSupportGap": 1.0574527981903941e-11,
+  "sourceUnchanged": true,
+  "independentBoundary": {
+    "probes": 671139,
+    "minimum": 0.2499999900015148,
+    "threshold": 0.25,
+    "tolerance": 1e-7,
+    "method": "independently reconstructed shared-edge components and expanded-segment spatial bins; all output vertices/edge midpoints/centroids; continuous guarantee additionally provided by generation exact triangle-segment check"
+  },
+  "regions": {
+    "left": {
+      "before": {
+        "area": 175.94926596979232,
+        "count": 673,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      },
+      "after": {
+        "area": 121.61555430567847,
+        "count": 4907,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      }
+    },
+    "leftCore": {
+      "before": {
+        "area": 24.624441136728347,
+        "count": 182,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      },
+      "after": {
+        "area": 20.89801932305238,
+        "count": 1007,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      }
+    },
+    "right": {
+      "before": {
+        "area": 172.56011972653167,
+        "count": 938,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      },
+      "after": {
+        "area": 117.26399629231521,
+        "count": 5866,
+        "method": "exact world triangle area after castle-local rectangle polygon clipping"
+      }
+    }
+  },
+  "stats": {
+    "method": "same-edge-connected-component world 3D boundary distance, exact triangle-to-boundary certification; no terrain displacement",
+    "inset": 0.25,
+    "maxOutput": 180000,
+    "maxDepth": 8,
+    "components": 338,
+    "retainedSourceComponents": 132,
+    "removedSourceComponents": 206,
+    "nonmanifoldEdges": 0,
+    "beforeTriangles": 19932,
+    "afterTriangles": 95877,
+    "beforeArea": 5019.034122209954,
+    "afterArea": 4138.910023308316,
+    "tinyRejected": 55362,
+    "wholeInsideRejected": 690324,
+    "subdivisions": 349103,
+    "widthMeaning": "twice maximum distance among input triangle centroids, not exact minimum width or geodesic width",
+    "items": [
+      {
+        "id": 9463,
+        "sourceTriangles": 3038,
+        "boundarySegments": 506,
+        "beforeArea": 515.3710661426802,
+        "afterArea": 465.59860042909486,
+        "sampledMaximumInteriorWidth": 13.21687027152478,
+        "minRetainedBoundaryDistance": 0.24999999004377962
+      },
+      {
+        "id": 13131,
+        "sourceTriangles": 6051,
+        "boundarySegments": 1129,
+        "beforeArea": 1935.0257596649994,
+        "afterArea": 1778.5633425895617,
+        "sampledMaximumInteriorWidth": 26.877246639051958,
+        "minRetainedBoundaryDistance": 0.2499999900097685
+      },
+      {
+        "id": 2020,
+        "sourceTriangles": 72,
+        "boundarySegments": 34,
+        "beforeArea": 4.7414936616925845,
+        "afterArea": 2.13196861464517,
+        "sampledMaximumInteriorWidth": 1.1035786532713332,
+        "minRetainedBoundaryDistance": 0.24999999174668236
+      },
+      {
+        "id": 2024,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.000027415039622827095,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.0015916527874554672,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 2034,
+        "sourceTriangles": 10,
+        "boundarySegments": 12,
+        "beforeArea": 0.11156609261463456,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.05463617092428454,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 2589,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.27123502769879987,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10822156085890307,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 2588,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.040790671333156885,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.09671431728206367,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 2678,
+        "sourceTriangles": 5,
+        "boundarySegments": 7,
+        "beforeArea": 0.017577875434234353,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.010487558175122045,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11839,
+        "sourceTriangles": 1248,
+        "boundarySegments": 196,
+        "beforeArea": 253.43310842583992,
+        "afterArea": 223.52256030111613,
+        "sampledMaximumInteriorWidth": 12.145491312406289,
+        "minRetainedBoundaryDistance": 0.24999999000837092
+      },
+      {
+        "id": 3300,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.04948688833656333,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.049089460614453566,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4069,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.004675886225071406,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.006206566797197703,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 3305,
+        "sourceTriangles": 4,
+        "boundarySegments": 4,
+        "beforeArea": 0.03622275016254846,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.017870147046682584,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 3319,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.025279989479138672,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.03000284646728547,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 3582,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.3162846189184906,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.39145889258972927,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 3640,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.0152543626734728,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06371401727027765,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4196,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 0.16948230327052333,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.09304971785149652,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4220,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.026283782555452707,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.019488313103285696,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4317,
+        "sourceTriangles": 8,
+        "boundarySegments": 10,
+        "beforeArea": 0.8169703128112539,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.18226874037103763,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4312,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.025479340583475073,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.08095177926987589,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4602,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.07169189305002849,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.17352977700160432,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4623,
+        "sourceTriangles": 21,
+        "boundarySegments": 13,
+        "beforeArea": 0.720361026105526,
+        "afterArea": 0.004059508223641553,
+        "sampledMaximumInteriorWidth": 0.481281165067441,
+        "minRetainedBoundaryDistance": 0.2499999966506958
+      },
+      {
+        "id": 4667,
+        "sourceTriangles": 18,
+        "boundarySegments": 14,
+        "beforeArea": 0.582275905294785,
+        "afterArea": 0.0008405861979204843,
+        "sampledMaximumInteriorWidth": 0.4387568132319057,
+        "minRetainedBoundaryDistance": 0.24999999999998318
+      },
+      {
+        "id": 4688,
+        "sourceTriangles": 21,
+        "boundarySegments": 13,
+        "beforeArea": 0.7755322546674538,
+        "afterArea": 0.0011876805303429763,
+        "sampledMaximumInteriorWidth": 0.34831860766606715,
+        "minRetainedBoundaryDistance": 0.2499999999998713
+      },
+      {
+        "id": 4785,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.03000804358516692,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.05026406170100204,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4806,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 0.2197104041830277,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2366585977258238,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4808,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.045490394347687854,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.1485425486795788,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4877,
+        "sourceTriangles": 25,
+        "boundarySegments": 17,
+        "beforeArea": 0.7087317874721524,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.28980042823056446,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4886,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.02469563315347539,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.11241172857311661,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 7820,
+        "sourceTriangles": 131,
+        "boundarySegments": 47,
+        "beforeArea": 17.107818652079562,
+        "afterArea": 10.110295761922922,
+        "sampledMaximumInteriorWidth": 2.288900227907921,
+        "minRetainedBoundaryDistance": 0.24999999006916096
+      },
+      {
+        "id": 4884,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 0.33430454561096296,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.3199382142136583,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6783,
+        "sourceTriangles": 27,
+        "boundarySegments": 17,
+        "beforeArea": 2.5472406680553923,
+        "afterArea": 0.766578581444747,
+        "sampledMaximumInteriorWidth": 1.0208956748637064,
+        "minRetainedBoundaryDistance": 0.24999999999816425
+      },
+      {
+        "id": 4959,
+        "sourceTriangles": 17,
+        "boundarySegments": 17,
+        "beforeArea": 1.301362203181823,
+        "afterArea": 0.1398075793838919,
+        "sampledMaximumInteriorWidth": 0.5100223982763197,
+        "minRetainedBoundaryDistance": 0.24999999397995137
+      },
+      {
+        "id": 4951,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.0018331661887513511,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.01353886810521528,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 4981,
+        "sourceTriangles": 22,
+        "boundarySegments": 14,
+        "beforeArea": 1.7195810864156724,
+        "afterArea": 0.1334568486021368,
+        "sampledMaximumInteriorWidth": 0.5868323162938028,
+        "minRetainedBoundaryDistance": 0.24999999730307154
+      },
+      {
+        "id": 5177,
+        "sourceTriangles": 48,
+        "boundarySegments": 38,
+        "beforeArea": 1.2033419488208281,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.37810813420659634,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 5309,
+        "sourceTriangles": 32,
+        "boundarySegments": 22,
+        "beforeArea": 0.9427325410057631,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2814210033653312,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 5313,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.07754421567299474,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.1292946065917222,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6285,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.30272903715299315,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.1397320571216333,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6392,
+        "sourceTriangles": 29,
+        "boundarySegments": 13,
+        "beforeArea": 2.5730829706806992,
+        "afterArea": 0.6265410172103115,
+        "sampledMaximumInteriorWidth": 0.7702740018737291,
+        "minRetainedBoundaryDistance": 0.24999999419254407
+      },
+      {
+        "id": 6423,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.2782255145733177,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.23286005446983754,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6398,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.06498648767189341,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.11420893928664977,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6417,
+        "sourceTriangles": 19,
+        "boundarySegments": 17,
+        "beforeArea": 0.595292035221266,
+        "afterArea": 0.0035823152502084134,
+        "sampledMaximumInteriorWidth": 0.36598862459495796,
+        "minRetainedBoundaryDistance": 0.2499999999998507
+      },
+      {
+        "id": 6683,
+        "sourceTriangles": 204,
+        "boundarySegments": 62,
+        "beforeArea": 18.089767789118117,
+        "afterArea": 8.80070791414417,
+        "sampledMaximumInteriorWidth": 1.7834683822457558,
+        "minRetainedBoundaryDistance": 0.2499999900533502
+      },
+      {
+        "id": 6476,
+        "sourceTriangles": 14,
+        "boundarySegments": 14,
+        "beforeArea": 0.6567805926122694,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.24607918412821042,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6472,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.00001195534635927334,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.0010398696663999635,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6576,
+        "sourceTriangles": 28,
+        "boundarySegments": 22,
+        "beforeArea": 0.9249919062000567,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.18631248532716657,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6578,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 0.1729180160582946,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.13290642432477723,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6604,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.02814773900003951,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.05908085543406985,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6697,
+        "sourceTriangles": 14,
+        "boundarySegments": 12,
+        "beforeArea": 1.3761334673017809,
+        "afterArea": 0.27774338253053404,
+        "sampledMaximumInteriorWidth": 0.8624820021443063,
+        "minRetainedBoundaryDistance": 0.24999999999999856
+      },
+      {
+        "id": 7810,
+        "sourceTriangles": 18,
+        "boundarySegments": 14,
+        "beforeArea": 1.7903009989801375,
+        "afterArea": 0.5253110865814341,
+        "sampledMaximumInteriorWidth": 0.9688174393278055,
+        "minRetainedBoundaryDistance": 0.24999999999121264
+      },
+      {
+        "id": 6716,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.06680994754111061,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.050287864812288,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 6722,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.40565475108624355,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.1944921549872941,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 7824,
+        "sourceTriangles": 16,
+        "boundarySegments": 14,
+        "beforeArea": 3.9320672276267583,
+        "afterArea": 1.819708119411545,
+        "sampledMaximumInteriorWidth": 1.0749322068308524,
+        "minRetainedBoundaryDistance": 0.2499999999998184
+      },
+      {
+        "id": 7862,
+        "sourceTriangles": 78,
+        "boundarySegments": 30,
+        "beforeArea": 7.08112946570121,
+        "afterArea": 4.386152950573945,
+        "sampledMaximumInteriorWidth": 1.8539668559797897,
+        "minRetainedBoundaryDistance": 0.24999999015356653
+      },
+      {
+        "id": 7865,
+        "sourceTriangles": 9,
+        "boundarySegments": 9,
+        "beforeArea": 1.2841329968894337,
+        "afterArea": 0.09511835081073859,
+        "sampledMaximumInteriorWidth": 0.6185103645789735,
+        "minRetainedBoundaryDistance": 0.2499999999999746
+      },
+      {
+        "id": 7235,
+        "sourceTriangles": 5,
+        "boundarySegments": 7,
+        "beforeArea": 0.27430330260600133,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.19145847605626648,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 7293,
+        "sourceTriangles": 58,
+        "boundarySegments": 36,
+        "beforeArea": 1.9088491173189381,
+        "afterArea": 0.04397685926246596,
+        "sampledMaximumInteriorWidth": 0.4845310008336902,
+        "minRetainedBoundaryDistance": 0.2499999999993564
+      },
+      {
+        "id": 7590,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.24996244954122426,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.0913486882489169,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 7781,
+        "sourceTriangles": 40,
+        "boundarySegments": 24,
+        "beforeArea": 1.4492867199722208,
+        "afterArea": 0.000018151757345599536,
+        "sampledMaximumInteriorWidth": 0.45962708892617254,
+        "minRetainedBoundaryDistance": 0.24999999996686792
+      },
+      {
+        "id": 7808,
+        "sourceTriangles": 27,
+        "boundarySegments": 17,
+        "beforeArea": 3.5925974402795173,
+        "afterArea": 1.373754096398794,
+        "sampledMaximumInteriorWidth": 1.3741968522070438,
+        "minRetainedBoundaryDistance": 0.24999999999930095
+      },
+      {
+        "id": 8214,
+        "sourceTriangles": 6,
+        "boundarySegments": 6,
+        "beforeArea": 0.46308240380492177,
+        "afterArea": 0.00019952286862016916,
+        "sampledMaximumInteriorWidth": 0.22245795446433303,
+        "minRetainedBoundaryDistance": 0.24999999999998151
+      },
+      {
+        "id": 8476,
+        "sourceTriangles": 19,
+        "boundarySegments": 13,
+        "beforeArea": 1.294436772318352,
+        "afterArea": 0.11837222751618182,
+        "sampledMaximumInteriorWidth": 0.4451301035307511,
+        "minRetainedBoundaryDistance": 0.2499999999960688
+      },
+      {
+        "id": 8477,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.0022891200925359615,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.030023430945553632,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 8478,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.0015439915071838377,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.022834076605917717,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 8582,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.18998746907328082,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.08660014362373503,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11437,
+        "sourceTriangles": 53,
+        "boundarySegments": 29,
+        "beforeArea": 9.511557250337116,
+        "afterArea": 5.448068577845232,
+        "sampledMaximumInteriorWidth": 1.6749499044357796,
+        "minRetainedBoundaryDistance": 0.24999999465786923
+      },
+      {
+        "id": 8631,
+        "sourceTriangles": 6,
+        "boundarySegments": 6,
+        "beforeArea": 1.4734349618686053,
+        "afterArea": 0.3117131168387563,
+        "sampledMaximumInteriorWidth": 0.5143839773957126,
+        "minRetainedBoundaryDistance": 0.24999999999999065
+      },
+      {
+        "id": 8637,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.04683671648862693,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07837815692049406,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 8646,
+        "sourceTriangles": 9,
+        "boundarySegments": 9,
+        "beforeArea": 1.2567005981711756,
+        "afterArea": 0.22361673331590032,
+        "sampledMaximumInteriorWidth": 0.5724487745266003,
+        "minRetainedBoundaryDistance": 0.24999999999993888
+      },
+      {
+        "id": 11794,
+        "sourceTriangles": 829,
+        "boundarySegments": 97,
+        "beforeArea": 122.86314422848861,
+        "afterArea": 102.46838198705775,
+        "sampledMaximumInteriorWidth": 5.866232448786239,
+        "minRetainedBoundaryDistance": 0.24999999000151552
+      },
+      {
+        "id": 9322,
+        "sourceTriangles": 8,
+        "boundarySegments": 10,
+        "beforeArea": 0.15227684419416634,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.28652954595968133,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 9413,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.040089566187345445,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.02025795540432483,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 9513,
+        "sourceTriangles": 36,
+        "boundarySegments": 22,
+        "beforeArea": 1.4419732968528192,
+        "afterArea": 0.22563125754419436,
+        "sampledMaximumInteriorWidth": 0.8621863463546257,
+        "minRetainedBoundaryDistance": 0.24999999563277625
+      },
+      {
+        "id": 9515,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.0807493027430354,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07951517751250549,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 9503,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.919817057152948,
+        "afterArea": 0.11300068241915133,
+        "sampledMaximumInteriorWidth": 0.647847753081356,
+        "minRetainedBoundaryDistance": 0.2499999999994303
+      },
+      {
+        "id": 10545,
+        "sourceTriangles": 27,
+        "boundarySegments": 19,
+        "beforeArea": 4.046429462785535,
+        "afterArea": 1.820835864164407,
+        "sampledMaximumInteriorWidth": 1.384174619408705,
+        "minRetainedBoundaryDistance": 0.24999999184402463
+      },
+      {
+        "id": 10426,
+        "sourceTriangles": 28,
+        "boundarySegments": 18,
+        "beforeArea": 1.7282151187468078,
+        "afterArea": 0.026436382425124798,
+        "sampledMaximumInteriorWidth": 0.5237456705093184,
+        "minRetainedBoundaryDistance": 0.24999999198848952
+      },
+      {
+        "id": 10410,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.02832549555701612,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.09414891756701385,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11756,
+        "sourceTriangles": 106,
+        "boundarySegments": 20,
+        "beforeArea": 34.55835184426772,
+        "afterArea": 28.27481395578329,
+        "sampledMaximumInteriorWidth": 4.200794514747243,
+        "minRetainedBoundaryDistance": 0.24999999017850402
+      },
+      {
+        "id": 10838,
+        "sourceTriangles": 32,
+        "boundarySegments": 24,
+        "beforeArea": 3.7499666344168725,
+        "afterArea": 0.8906461211728873,
+        "sampledMaximumInteriorWidth": 0.9335130323907186,
+        "minRetainedBoundaryDistance": 0.24999999103401352
+      },
+      {
+        "id": 10949,
+        "sourceTriangles": 53,
+        "boundarySegments": 33,
+        "beforeArea": 6.326733246491301,
+        "afterArea": 2.4122642333259914,
+        "sampledMaximumInteriorWidth": 1.2133504154896486,
+        "minRetainedBoundaryDistance": 0.2499999905166404
+      },
+      {
+        "id": 10902,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.3180625241064942,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.27101469400247247,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11301,
+        "sourceTriangles": 10,
+        "boundarySegments": 12,
+        "beforeArea": 0.05267825717432716,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.022081301345541177,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11307,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.010351921626290417,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.01124830041515286,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11700,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.05162702226728172,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.09666495709181616,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11750,
+        "sourceTriangles": 8,
+        "boundarySegments": 10,
+        "beforeArea": 0.12492840216645315,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10972203127393886,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11796,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.025731352286848592,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06697254695119259,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11809,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.078604266405561,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.11259566339192335,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 11802,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.022424726075477425,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06983708829182447,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12916,
+        "sourceTriangles": 208,
+        "boundarySegments": 90,
+        "beforeArea": 38.85961475671863,
+        "afterArea": 24.4410677134868,
+        "sampledMaximumInteriorWidth": 2.7671622958384723,
+        "minRetainedBoundaryDistance": 0.249999990559052
+      },
+      {
+        "id": 11814,
+        "sourceTriangles": 5,
+        "boundarySegments": 7,
+        "beforeArea": 0.33314156549235185,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.22091256649617477,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12126,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.18500803125833953,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.27271415928486026,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12168,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.01387761953061068,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.029837272293906262,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12196,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.15154074139786772,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.12898273347326478,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12192,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.018246367244641924,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.04707901051233317,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12203,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 0.12104921622530881,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.12846391813990835,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12463,
+        "sourceTriangles": 8,
+        "boundarySegments": 10,
+        "beforeArea": 0.4888493088116539,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.13338626588969416,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12471,
+        "sourceTriangles": 9,
+        "boundarySegments": 11,
+        "beforeArea": 0.7383886014648353,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.22214813743509376,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12544,
+        "sourceTriangles": 10,
+        "boundarySegments": 12,
+        "beforeArea": 0.04126974349143907,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.02473750898239003,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12556,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.11990514842300962,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.13394708262879015,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12560,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.3065679082586561,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.23059493355141145,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12856,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 0.15736668774688267,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.22134843423116438,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 12897,
+        "sourceTriangles": 41,
+        "boundarySegments": 23,
+        "beforeArea": 25.04076383085575,
+        "afterArea": 18.70549991974623,
+        "sampledMaximumInteriorWidth": 3.010910503326481,
+        "minRetainedBoundaryDistance": 0.2499999908615335
+      },
+      {
+        "id": 13078,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 1.0319804845071556,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.27952557141661066,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13106,
+        "sourceTriangles": 28,
+        "boundarySegments": 18,
+        "beforeArea": 10.039238627782009,
+        "afterArea": 5.634217191890353,
+        "sampledMaximumInteriorWidth": 1.3756785824565276,
+        "minRetainedBoundaryDistance": 0.24999999327377892
+      },
+      {
+        "id": 13175,
+        "sourceTriangles": 43,
+        "boundarySegments": 27,
+        "beforeArea": 27.51897312942251,
+        "afterArea": 17.229508102107605,
+        "sampledMaximumInteriorWidth": 1.7763040862914206,
+        "minRetainedBoundaryDistance": 0.24999999132422185
+      },
+      {
+        "id": 13135,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.10595384986002877,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.13781298580674767,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13137,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.31749409917083043,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.17937735368114008,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13143,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 1.9177807337409507,
+        "afterArea": 0.2264424469451075,
+        "sampledMaximumInteriorWidth": 0.6545027941725757,
+        "minRetainedBoundaryDistance": 0.24999999999994915
+      },
+      {
+        "id": 13152,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 2.6403670981025567,
+        "afterArea": 0.7677101794241825,
+        "sampledMaximumInteriorWidth": 0.6443099648427838,
+        "minRetainedBoundaryDistance": 0.2499999999999861
+      },
+      {
+        "id": 13210,
+        "sourceTriangles": 5,
+        "boundarySegments": 7,
+        "beforeArea": 0.35795302160313586,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.17796618107196277,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13207,
+        "sourceTriangles": 28,
+        "boundarySegments": 16,
+        "beforeArea": 9.46609129108403,
+        "afterArea": 5.681785420277498,
+        "sampledMaximumInteriorWidth": 1.8786297232263842,
+        "minRetainedBoundaryDistance": 0.24999999082171198
+      },
+      {
+        "id": 13209,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.22527809611966448,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10728815374965857,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13322,
+        "sourceTriangles": 50,
+        "boundarySegments": 36,
+        "beforeArea": 4.388380972238649,
+        "afterArea": 1.3395745847842784,
+        "sampledMaximumInteriorWidth": 1.2298208967559765,
+        "minRetainedBoundaryDistance": 0.24999999999933903
+      },
+      {
+        "id": 13260,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.002026198507041307,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.005134906998574844,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13262,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.007565244374741502,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.014032217260925541,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14010,
+        "sourceTriangles": 333,
+        "boundarySegments": 99,
+        "beforeArea": 55.93798697330105,
+        "afterArea": 44.49643220203492,
+        "sampledMaximumInteriorWidth": 3.9900746596442835,
+        "minRetainedBoundaryDistance": 0.24999999017675725
+      },
+      {
+        "id": 14090,
+        "sourceTriangles": 154,
+        "boundarySegments": 70,
+        "beforeArea": 35.90100871318827,
+        "afterArea": 29.362424038744972,
+        "sampledMaximumInteriorWidth": 4.6972736239226025,
+        "minRetainedBoundaryDistance": 0.24999999011637591
+      },
+      {
+        "id": 13323,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.03152042315935054,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.03391372870824447,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13335,
+        "sourceTriangles": 12,
+        "boundarySegments": 10,
+        "beforeArea": 5.792970204845419,
+        "afterArea": 0.6062188729115884,
+        "sampledMaximumInteriorWidth": 0.4653128032134585,
+        "minRetainedBoundaryDistance": 0.24999999105910473
+      },
+      {
+        "id": 13336,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 1.4589653179655926,
+        "afterArea": 0.06957252431464044,
+        "sampledMaximumInteriorWidth": 0.4794238867733315,
+        "minRetainedBoundaryDistance": 0.24999999999998831
+      },
+      {
+        "id": 13337,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 1.4589646902843885,
+        "afterArea": 0.002310026428453598,
+        "sampledMaximumInteriorWidth": 0.36480052616622316,
+        "minRetainedBoundaryDistance": 0.2499999999999937
+      },
+      {
+        "id": 13338,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 1.410932371326271,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2934730184470921,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13452,
+        "sourceTriangles": 13,
+        "boundarySegments": 11,
+        "beforeArea": 0.5838376093110955,
+        "afterArea": 0.00006296530719738884,
+        "sampledMaximumInteriorWidth": 0.41448850544849886,
+        "minRetainedBoundaryDistance": 0.24999999999998174
+      },
+      {
+        "id": 13463,
+        "sourceTriangles": 11,
+        "boundarySegments": 13,
+        "beforeArea": 0.35622653900653867,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.20945913300145674,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13465,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.19170206963512743,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2157940384496055,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13480,
+        "sourceTriangles": 15,
+        "boundarySegments": 17,
+        "beforeArea": 0.7209214562758538,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2821854969876737,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13489,
+        "sourceTriangles": 9,
+        "boundarySegments": 9,
+        "beforeArea": 1.1123330197556829,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2953522241836866,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13495,
+        "sourceTriangles": 6,
+        "boundarySegments": 6,
+        "beforeArea": 3.4819839717939485,
+        "afterArea": 0.5438516578872403,
+        "sampledMaximumInteriorWidth": 0.502325833890055,
+        "minRetainedBoundaryDistance": 0.2499999999999861
+      },
+      {
+        "id": 13497,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 1.1206769590151942,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.29316855390357544,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13501,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.13715901626549706,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07049167445468332,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13505,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.11421588771384375,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10250007491897557,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13506,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.661433602906519,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2871449283030115,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13513,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 0.24544307683302607,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2971236704709625,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14104,
+        "sourceTriangles": 47,
+        "boundarySegments": 37,
+        "beforeArea": 10.898323226021457,
+        "afterArea": 4.811747052340807,
+        "sampledMaximumInteriorWidth": 1.4284176135788167,
+        "minRetainedBoundaryDistance": 0.24999999146100993
+      },
+      {
+        "id": 14727,
+        "sourceTriangles": 279,
+        "boundarySegments": 87,
+        "beforeArea": 45.872252446656454,
+        "afterArea": 35.56172343775243,
+        "sampledMaximumInteriorWidth": 3.938829606877954,
+        "minRetainedBoundaryDistance": 0.24999999094419162
+      },
+      {
+        "id": 13694,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 1.2409274754717414,
+        "afterArea": 0.016360970561359656,
+        "sampledMaximumInteriorWidth": 0.5692380308360723,
+        "minRetainedBoundaryDistance": 0.24999999999999842
+      },
+      {
+        "id": 14082,
+        "sourceTriangles": 27,
+        "boundarySegments": 19,
+        "beforeArea": 1.0676237529793584,
+        "afterArea": 0.00024931565522967863,
+        "sampledMaximumInteriorWidth": 0.45015547496123653,
+        "minRetainedBoundaryDistance": 0.25144358038333875
+      },
+      {
+        "id": 13964,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.018580203025738484,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.03850541964388131,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13981,
+        "sourceTriangles": 17,
+        "boundarySegments": 11,
+        "beforeArea": 12.991382341092129,
+        "afterArea": 6.165123554061971,
+        "sampledMaximumInteriorWidth": 1.222976642139433,
+        "minRetainedBoundaryDistance": 0.2499999901982547
+      },
+      {
+        "id": 14196,
+        "sourceTriangles": 8,
+        "boundarySegments": 10,
+        "beforeArea": 0.36094771061920367,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.11989842708237425,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13987,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.2800254256441071,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.05557826808111922,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 13991,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 3.7211989178010305,
+        "afterArea": 0.2101438561254031,
+        "sampledMaximumInteriorWidth": 0.5590235890809455,
+        "minRetainedBoundaryDistance": 0.24999999421859587
+      },
+      {
+        "id": 13992,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 1.4915233921354283,
+        "afterArea": 0.02670581338823446,
+        "sampledMaximumInteriorWidth": 0.4198415434262937,
+        "minRetainedBoundaryDistance": 0.24999999999998804
+      },
+      {
+        "id": 14404,
+        "sourceTriangles": 192,
+        "boundarySegments": 58,
+        "beforeArea": 22.535730840433672,
+        "afterArea": 15.386347910508869,
+        "sampledMaximumInteriorWidth": 3.7100469641768385,
+        "minRetainedBoundaryDistance": 0.24999999087888655
+      },
+      {
+        "id": 14013,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.06660907513296992,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10299620006297956,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14187,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 1.3422843967718059,
+        "afterArea": 0.039554962824356554,
+        "sampledMaximumInteriorWidth": 0.4861762621236459,
+        "minRetainedBoundaryDistance": 0.24999999999998845
+      },
+      {
+        "id": 14188,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 1.3514820275259627,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.31058465840166466,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14191,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 2.2554036492280294,
+        "afterArea": 0.4919935749682427,
+        "sampledMaximumInteriorWidth": 0.7388926935053242,
+        "minRetainedBoundaryDistance": 0.24999999999998632
+      },
+      {
+        "id": 14331,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.2313547767243011,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.24570082965480936,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14924,
+        "sourceTriangles": 88,
+        "boundarySegments": 34,
+        "beforeArea": 29.686591921067265,
+        "afterArea": 23.53921804382904,
+        "sampledMaximumInteriorWidth": 4.35221609061575,
+        "minRetainedBoundaryDistance": 0.24999999034639547
+      },
+      {
+        "id": 14365,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.07855633340065993,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.09105300401875784,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14366,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.028165593689572166,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10143633453557996,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14370,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.2893242400959335,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.19615316688623574,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14383,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 2.7488009041086174,
+        "afterArea": 0.36450399576640324,
+        "sampledMaximumInteriorWidth": 0.621902422244958,
+        "minRetainedBoundaryDistance": 0.24999999999999534
+      },
+      {
+        "id": 14379,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.9366941472411291,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.12869825260562728,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14386,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.10761144617753464,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07472379595289248,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14388,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 1.6842663961077242,
+        "afterArea": 0.12387616192528375,
+        "sampledMaximumInteriorWidth": 0.4732889510220623,
+        "minRetainedBoundaryDistance": 0.24999999999999364
+      },
+      {
+        "id": 14389,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 2.7794467414095654,
+        "afterArea": 0.2231500726079652,
+        "sampledMaximumInteriorWidth": 0.5055749688626885,
+        "minRetainedBoundaryDistance": 0.24999999999998931
+      },
+      {
+        "id": 14391,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 1.379197831868062,
+        "afterArea": 0.0008775937799347926,
+        "sampledMaximumInteriorWidth": 0.3509120973650016,
+        "minRetainedBoundaryDistance": 0.2500000000000044
+      },
+      {
+        "id": 14397,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.3618242533063099,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.24733857406059737,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14399,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.03160333783789638,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.04885888391378511,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14400,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.0756977101207831,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.11228897887780478,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14911,
+        "sourceTriangles": 77,
+        "boundarySegments": 35,
+        "beforeArea": 10.190479102965977,
+        "afterArea": 6.026944762194192,
+        "sampledMaximumInteriorWidth": 1.8616480105713564,
+        "minRetainedBoundaryDistance": 0.24999999050618457
+      },
+      {
+        "id": 14499,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.2953408587243517,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.08621668545214387,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14501,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.04287716139773957,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.13623233601085444,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14507,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.10648786000895662,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.05148337788621359,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14529,
+        "sourceTriangles": 22,
+        "boundarySegments": 16,
+        "beforeArea": 0.7542068975485348,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.24504259669354184,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14795,
+        "sourceTriangles": 29,
+        "boundarySegments": 23,
+        "beforeArea": 0.7226695762630444,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.25299849720816964,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14562,
+        "sourceTriangles": 18,
+        "boundarySegments": 14,
+        "beforeArea": 0.5095476041461517,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.19413816016268148,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14567,
+        "sourceTriangles": 5,
+        "boundarySegments": 5,
+        "beforeArea": 2.246191689548334,
+        "afterArea": 0.1507540708432097,
+        "sampledMaximumInteriorWidth": 0.6542820179274248,
+        "minRetainedBoundaryDistance": 0.24999999999998881
+      },
+      {
+        "id": 14570,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.7349755579913063,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.25380122482683837,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14571,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 2.349657914343094,
+        "afterArea": 0.0005324955829747809,
+        "sampledMaximumInteriorWidth": 0.3423416379676989,
+        "minRetainedBoundaryDistance": 0.2500000000000064
+      },
+      {
+        "id": 15392,
+        "sourceTriangles": 202,
+        "boundarySegments": 78,
+        "beforeArea": 44.22059518457517,
+        "afterArea": 28.880783033796842,
+        "sampledMaximumInteriorWidth": 3.2176011566848186,
+        "minRetainedBoundaryDistance": 0.24999999013855603
+      },
+      {
+        "id": 14631,
+        "sourceTriangles": 57,
+        "boundarySegments": 29,
+        "beforeArea": 9.090325242527443,
+        "afterArea": 5.2666803661732295,
+        "sampledMaximumInteriorWidth": 1.906163841812063,
+        "minRetainedBoundaryDistance": 0.2499999900154743
+      },
+      {
+        "id": 14629,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.007891713376212393,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.031959296647286195,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14751,
+        "sourceTriangles": 20,
+        "boundarySegments": 14,
+        "beforeArea": 0.6834306218202908,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.35404375983901026,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14733,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.08716068152670488,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07851912040769796,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15002,
+        "sourceTriangles": 36,
+        "boundarySegments": 22,
+        "beforeArea": 33.117434756516204,
+        "afterArea": 22.842856444035966,
+        "sampledMaximumInteriorWidth": 2.5109091606464378,
+        "minRetainedBoundaryDistance": 0.24999999095880077
+      },
+      {
+        "id": 14781,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.09128988977259814,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.08934192860599939,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14796,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 1.8871049567595264,
+        "afterArea": 0.12107803496421148,
+        "sampledMaximumInteriorWidth": 0.4924490549963323,
+        "minRetainedBoundaryDistance": 0.24999999999999428
+      },
+      {
+        "id": 14875,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 0.378409145588372,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.17082836636024076,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14881,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.06024472600463544,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.042683637889074005,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14882,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.001137185867276362,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.02450711183700587,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15278,
+        "sourceTriangles": 52,
+        "boundarySegments": 26,
+        "beforeArea": 50.88027333529924,
+        "afterArea": 36.712540875066544,
+        "sampledMaximumInteriorWidth": 3.444526703122705,
+        "minRetainedBoundaryDistance": 0.24999999084480581
+      },
+      {
+        "id": 14939,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.17049074708634637,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10113668183900071,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14951,
+        "sourceTriangles": 12,
+        "boundarySegments": 10,
+        "beforeArea": 0.5843797611881193,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.27938001966209874,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14972,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.12017809537871807,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06911250673098966,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14974,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.09204464914170996,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.19313125308667645,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 14997,
+        "sourceTriangles": 23,
+        "boundarySegments": 15,
+        "beforeArea": 1.0100571470027881,
+        "afterArea": 0.0018742073484005553,
+        "sampledMaximumInteriorWidth": 0.4945133835294671,
+        "minRetainedBoundaryDistance": 0.24999999999999573
+      },
+      {
+        "id": 15022,
+        "sourceTriangles": 20,
+        "boundarySegments": 10,
+        "beforeArea": 3.866789735833619,
+        "afterArea": 0.05796151783770064,
+        "sampledMaximumInteriorWidth": 0.517577813647224,
+        "minRetainedBoundaryDistance": 0.2499999939125839
+      },
+      {
+        "id": 15024,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 8.468108729200477,
+        "afterArea": 3.2257461938298775,
+        "sampledMaximumInteriorWidth": 0.8644555686607297,
+        "minRetainedBoundaryDistance": 0.24999999999999076
+      },
+      {
+        "id": 15355,
+        "sourceTriangles": 7,
+        "boundarySegments": 9,
+        "beforeArea": 1.107466993802866,
+        "afterArea": 0.022663962261696473,
+        "sampledMaximumInteriorWidth": 0.560736836671812,
+        "minRetainedBoundaryDistance": 0.24999999393605443
+      },
+      {
+        "id": 15879,
+        "sourceTriangles": 189,
+        "boundarySegments": 85,
+        "beforeArea": 53.44859362725822,
+        "afterArea": 36.91024159142671,
+        "sampledMaximumInteriorWidth": 3.3693172581998074,
+        "minRetainedBoundaryDistance": 0.2499999907813512
+      },
+      {
+        "id": 15213,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 2.1969073640980477,
+        "afterArea": 0.3790048726248406,
+        "sampledMaximumInteriorWidth": 0.4659767303741727,
+        "minRetainedBoundaryDistance": 0.24999999270368226
+      },
+      {
+        "id": 15470,
+        "sourceTriangles": 48,
+        "boundarySegments": 26,
+        "beforeArea": 48.43358125846063,
+        "afterArea": 34.3197543945574,
+        "sampledMaximumInteriorWidth": 3.517382570771303,
+        "minRetainedBoundaryDistance": 0.2499999916612983
+      },
+      {
+        "id": 15228,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.25727242606017425,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.18244591685638606,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15272,
+        "sourceTriangles": 10,
+        "boundarySegments": 12,
+        "beforeArea": 0.1063073785277864,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.04807135592445684,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15498,
+        "sourceTriangles": 26,
+        "boundarySegments": 14,
+        "beforeArea": 10.84542073446056,
+        "afterArea": 3.832159310713345,
+        "sampledMaximumInteriorWidth": 0.765055042700931,
+        "minRetainedBoundaryDistance": 0.24999999060790756
+      },
+      {
+        "id": 15320,
+        "sourceTriangles": 18,
+        "boundarySegments": 14,
+        "beforeArea": 0.3069386410798439,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07668534456409092,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15503,
+        "sourceTriangles": 11,
+        "boundarySegments": 7,
+        "beforeArea": 10.73321429297896,
+        "afterArea": 5.98675627566865,
+        "sampledMaximumInteriorWidth": 1.3494807708119332,
+        "minRetainedBoundaryDistance": 0.24999999223992414
+      },
+      {
+        "id": 15330,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.3908702965327985,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.1747369152020786,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15580,
+        "sourceTriangles": 70,
+        "boundarySegments": 26,
+        "beforeArea": 19.479876257679013,
+        "afterArea": 14.319194597522902,
+        "sampledMaximumInteriorWidth": 2.739098154810928,
+        "minRetainedBoundaryDistance": 0.24999999024169595
+      },
+      {
+        "id": 15474,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.03251647216699784,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.04676678338803962,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15497,
+        "sourceTriangles": 16,
+        "boundarySegments": 10,
+        "beforeArea": 0.4957683442936237,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.31535038400813936,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15491,
+        "sourceTriangles": 7,
+        "boundarySegments": 9,
+        "beforeArea": 0.03827657815389569,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.016131404550029375,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15514,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.030976998555870612,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.01505643678970653,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15518,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.1750643883749175,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06523824807291355,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15559,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.03606951046619416,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.058062695167310704,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15578,
+        "sourceTriangles": 19,
+        "boundarySegments": 17,
+        "beforeArea": 3.172951068219064,
+        "afterArea": 0.5306089347587348,
+        "sampledMaximumInteriorWidth": 0.6421026016658911,
+        "minRetainedBoundaryDistance": 0.24999999106302337
+      },
+      {
+        "id": 16354,
+        "sourceTriangles": 476,
+        "boundarySegments": 144,
+        "beforeArea": 267.95005058051623,
+        "afterArea": 223.1462229377876,
+        "sampledMaximumInteriorWidth": 7.163800482617303,
+        "minRetainedBoundaryDistance": 0.2499999900198552
+      },
+      {
+        "id": 15622,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 1.474522449881608,
+        "afterArea": 0.0001058666885588208,
+        "sampledMaximumInteriorWidth": 0.3468447116291602,
+        "minRetainedBoundaryDistance": 0.2499999999999952
+      },
+      {
+        "id": 15650,
+        "sourceTriangles": 12,
+        "boundarySegments": 10,
+        "beforeArea": 2.318718285937904,
+        "afterArea": 0.5206637732696806,
+        "sampledMaximumInteriorWidth": 0.5791104140420611,
+        "minRetainedBoundaryDistance": 0.249999994966559
+      },
+      {
+        "id": 15630,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.09807716891677186,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10468919704870247,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15632,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.0775157966089424,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.09511636320510124,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15634,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.001451205543396435,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.010460615524422217,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15644,
+        "sourceTriangles": 10,
+        "boundarySegments": 12,
+        "beforeArea": 0.5902139742602673,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.23823081379102345,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15656,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.15959855458594333,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.060141185309162765,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15663,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.34870310645169267,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.08645158641393091,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15750,
+        "sourceTriangles": 33,
+        "boundarySegments": 21,
+        "beforeArea": 3.8035972781687457,
+        "afterArea": 0.6672584727732996,
+        "sampledMaximumInteriorWidth": 0.8124373083952792,
+        "minRetainedBoundaryDistance": 0.24999999048892355
+      },
+      {
+        "id": 15728,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.07158062413503234,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07300238051841658,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15758,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 5.252190292490493,
+        "afterArea": 2.2627590466789593,
+        "sampledMaximumInteriorWidth": 0.7598124445881336,
+        "minRetainedBoundaryDistance": 0.24999999300726514
+      },
+      {
+        "id": 15762,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.11874745508452532,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06442842788686827,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15774,
+        "sourceTriangles": 12,
+        "boundarySegments": 14,
+        "beforeArea": 0.3196997079369695,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06861083940405655,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15881,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.03464112384744139,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.11718578993933981,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15883,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.01479885157184704,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.038479265272777355,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15887,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.08775893208836413,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.0932769709746037,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15895,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.05178687026506167,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.036630681868193855,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15897,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.033033703995277254,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.04970569534275897,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15899,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.16989373525889237,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.11795846127043212,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15979,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 0.45209554171540145,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.28058608240065414,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 15997,
+        "sourceTriangles": 18,
+        "boundarySegments": 12,
+        "beforeArea": 0.5447737325701028,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.24754735111769313,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16007,
+        "sourceTriangles": 10,
+        "boundarySegments": 12,
+        "beforeArea": 0.12293381337908574,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.051582381803958535,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16058,
+        "sourceTriangles": 17,
+        "boundarySegments": 11,
+        "beforeArea": 7.806351697440157,
+        "afterArea": 4.159201410655147,
+        "sampledMaximumInteriorWidth": 1.6463036621763825,
+        "minRetainedBoundaryDistance": 0.2499999999234903
+      },
+      {
+        "id": 16021,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.00206192660768674,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.00698976456015513,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16025,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.000006748320182642092,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.0004983896901242902,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16062,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.46611685135092107,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.09538726589347386,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16115,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 1.8285826796334168,
+        "afterArea": 0.14338928910542925,
+        "sampledMaximumInteriorWidth": 0.7733553827144389,
+        "minRetainedBoundaryDistance": 0.24999999999998881
+      },
+      {
+        "id": 16119,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.005646940489429829,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.011165777745059093,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16123,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.057746535121409384,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06615605695115974,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16127,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.06810978703172818,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07382825900791011,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16187,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 2.094117316956018,
+        "afterArea": 0.24537158874589776,
+        "sampledMaximumInteriorWidth": 0.5918204630277565,
+        "minRetainedBoundaryDistance": 0.24999999999998734
+      },
+      {
+        "id": 16189,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.7777462032009852,
+        "afterArea": 0.003765628248256132,
+        "sampledMaximumInteriorWidth": 0.5590134833114729,
+        "minRetainedBoundaryDistance": 0.24999999999999858
+      },
+      {
+        "id": 16191,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.1594072037247779,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.16706867711537818,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16215,
+        "sourceTriangles": 24,
+        "boundarySegments": 18,
+        "beforeArea": 0.8601213328226343,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.23840268895191175,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16358,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 1.193350833387096,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.22922055288402132,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16363,
+        "sourceTriangles": 5,
+        "boundarySegments": 5,
+        "beforeArea": 3.00389841804885,
+        "afterArea": 0.7906018525082025,
+        "sampledMaximumInteriorWidth": 0.944706768888611,
+        "minRetainedBoundaryDistance": 0.24999999999998732
+      },
+      {
+        "id": 16371,
+        "sourceTriangles": 8,
+        "boundarySegments": 10,
+        "beforeArea": 1.3133363589280558,
+        "afterArea": 0.07984149087056527,
+        "sampledMaximumInteriorWidth": 0.5501323700639504,
+        "minRetainedBoundaryDistance": 0.24999999999999498
+      },
+      {
+        "id": 16375,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.04828308538136314,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.04889883061520083,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16397,
+        "sourceTriangles": 22,
+        "boundarySegments": 14,
+        "beforeArea": 2.47496812001355,
+        "afterArea": 0.5997896272258835,
+        "sampledMaximumInteriorWidth": 0.70841387915357,
+        "minRetainedBoundaryDistance": 0.24999999188886465
+      },
+      {
+        "id": 16644,
+        "sourceTriangles": 143,
+        "boundarySegments": 41,
+        "beforeArea": 28.584368074761265,
+        "afterArea": 20.941113098246085,
+        "sampledMaximumInteriorWidth": 3.228430966539491,
+        "minRetainedBoundaryDistance": 0.24999999053827718
+      },
+      {
+        "id": 16436,
+        "sourceTriangles": 5,
+        "boundarySegments": 7,
+        "beforeArea": 0.016031615550615948,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.031013486723315338,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16435,
+        "sourceTriangles": 13,
+        "boundarySegments": 15,
+        "beforeArea": 0.9102659649596422,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.31884520783354814,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16569,
+        "sourceTriangles": 53,
+        "boundarySegments": 21,
+        "beforeArea": 10.150888646620238,
+        "afterArea": 5.685687251188831,
+        "sampledMaximumInteriorWidth": 1.6556522972014422,
+        "minRetainedBoundaryDistance": 0.24999999555668312
+      },
+      {
+        "id": 16536,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.002421209346582941,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.012427253544598834,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16619,
+        "sourceTriangles": 13,
+        "boundarySegments": 15,
+        "beforeArea": 0.6361918945473263,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.12789956246683962,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16620,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.20672870793194623,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.15881238277208462,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16616,
+        "sourceTriangles": 8,
+        "boundarySegments": 10,
+        "beforeArea": 0.41935755900590943,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.15367104453007605,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16670,
+        "sourceTriangles": 26,
+        "boundarySegments": 16,
+        "beforeArea": 7.819009277103581,
+        "afterArea": 4.45700784426889,
+        "sampledMaximumInteriorWidth": 1.7698757559422038,
+        "minRetainedBoundaryDistance": 0.24999999105339218
+      },
+      {
+        "id": 16676,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.19857300679587764,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06344272055751002,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16691,
+        "sourceTriangles": 15,
+        "boundarySegments": 15,
+        "beforeArea": 0.28527736291524736,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.08572327959129819,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16693,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.36245765773063376,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.19914562098457766,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16697,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.043056183047200776,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.07363799286370583,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16761,
+        "sourceTriangles": 58,
+        "boundarySegments": 24,
+        "beforeArea": 11.85364042485572,
+        "afterArea": 6.525311488757457,
+        "sampledMaximumInteriorWidth": 2.0982131799317205,
+        "minRetainedBoundaryDistance": 0.24999999017334001
+      },
+      {
+        "id": 16731,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.10388205591872365,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.05855913065899937,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16733,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.019944230594319334,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.022763530560248945,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16805,
+        "sourceTriangles": 44,
+        "boundarySegments": 22,
+        "beforeArea": 5.824860273751091,
+        "afterArea": 2.9791455441146697,
+        "sampledMaximumInteriorWidth": 1.3417392724118962,
+        "minRetainedBoundaryDistance": 0.24999999258166347
+      },
+      {
+        "id": 16853,
+        "sourceTriangles": 48,
+        "boundarySegments": 22,
+        "beforeArea": 11.730863536728181,
+        "afterArea": 6.544555299700781,
+        "sampledMaximumInteriorWidth": 1.5267343490803449,
+        "minRetainedBoundaryDistance": 0.24999999020275102
+      },
+      {
+        "id": 16869,
+        "sourceTriangles": 16,
+        "boundarySegments": 12,
+        "beforeArea": 1.5398412756348758,
+        "afterArea": 0.055039898053273424,
+        "sampledMaximumInteriorWidth": 0.4324508211344862,
+        "minRetainedBoundaryDistance": 0.24999999999920294
+      },
+      {
+        "id": 16870,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.012834008763810675,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.026818300108887357,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16872,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.020530596906357997,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.0255576647813379,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16876,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.10197754878307144,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.051100486704208074,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16907,
+        "sourceTriangles": 31,
+        "boundarySegments": 21,
+        "beforeArea": 5.564468233526519,
+        "afterArea": 2.685477302780118,
+        "sampledMaximumInteriorWidth": 1.3262831429213118,
+        "minRetainedBoundaryDistance": 0.24999999093063646
+      },
+      {
+        "id": 16909,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.013422079009105477,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.039923004915963275,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 16911,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.07939684375509459,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.060749243096863206,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17029,
+        "sourceTriangles": 82,
+        "boundarySegments": 58,
+        "beforeArea": 2.224403414214043,
+        "afterArea": 0.0013376907042967929,
+        "sampledMaximumInteriorWidth": 0.3187743751909975,
+        "minRetainedBoundaryDistance": 0.2499999999999177
+      },
+      {
+        "id": 16967,
+        "sourceTriangles": 18,
+        "boundarySegments": 12,
+        "beforeArea": 3.026993548792351,
+        "afterArea": 0.9997108097732302,
+        "sampledMaximumInteriorWidth": 0.8460933582907799,
+        "minRetainedBoundaryDistance": 0.24999999022213157
+      },
+      {
+        "id": 17003,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.02580508741918958,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.05824390839117256,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17019,
+        "sourceTriangles": 16,
+        "boundarySegments": 12,
+        "beforeArea": 0.47591247378531315,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.3066220417316347,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17031,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.1198062147756155,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.17904733935504719,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17034,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.17306248412872124,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.11372364314186623,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17037,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.1654191553391192,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10776978304380172,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17510,
+        "sourceTriangles": 301,
+        "boundarySegments": 101,
+        "beforeArea": 53.92888603964334,
+        "afterArea": 41.10868003020776,
+        "sampledMaximumInteriorWidth": 4.566009634839368,
+        "minRetainedBoundaryDistance": 0.24999999035878268
+      },
+      {
+        "id": 17104,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.0024089878432527385,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.00557917290094251,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17110,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.027640123189510396,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.02427469174700611,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17329,
+        "sourceTriangles": 37,
+        "boundarySegments": 21,
+        "beforeArea": 7.017418505850401,
+        "afterArea": 2.9745531168126234,
+        "sampledMaximumInteriorWidth": 1.370275579770333,
+        "minRetainedBoundaryDistance": 0.2499999902259306
+      },
+      {
+        "id": 17206,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 0.08588897389601342,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.12581569294418032,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17198,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.003438660954954365,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.012846285124799841,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17208,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.04660333796532995,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.04765040622465634,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17220,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.1264480526043909,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10065585875287093,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17218,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.00021638072966926252,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.003352829021647879,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17222,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.007733720414326756,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.027366033767429396,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17232,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 1.424512587120486,
+        "afterArea": 0.00010661341707041285,
+        "sampledMaximumInteriorWidth": 0.3436342693387622,
+        "minRetainedBoundaryDistance": 0.2499999999999989
+      },
+      {
+        "id": 17234,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.08064054011049615,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.06258398173056663,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17330,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.014144337856665296,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.021333483015556064,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17332,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.03737787422436426,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.03243961463070165,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17386,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.0002179142746361248,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.004385718995924346,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17396,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.11812236358227517,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.1255855500003513,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17420,
+        "sourceTriangles": 24,
+        "boundarySegments": 16,
+        "beforeArea": 3.6143210490675504,
+        "afterArea": 1.2528313804692293,
+        "sampledMaximumInteriorWidth": 0.9804157101710891,
+        "minRetainedBoundaryDistance": 0.24999999999794642
+      },
+      {
+        "id": 18530,
+        "sourceTriangles": 935,
+        "boundarySegments": 209,
+        "beforeArea": 315.8190484256774,
+        "afterArea": 282.86348778424417,
+        "sampledMaximumInteriorWidth": 9.563305601744995,
+        "minRetainedBoundaryDistance": 0.2499999908125267
+      },
+      {
+        "id": 17464,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.4897787550650808,
+        "afterArea": 0.002690564435604476,
+        "sampledMaximumInteriorWidth": 0.5307957886095405,
+        "minRetainedBoundaryDistance": 0.2500000000000023
+      },
+      {
+        "id": 17526,
+        "sourceTriangles": 16,
+        "boundarySegments": 16,
+        "beforeArea": 0.5904714491514244,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.2608397959843488,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 17652,
+        "sourceTriangles": 34,
+        "boundarySegments": 20,
+        "beforeArea": 3.42279416092683,
+        "afterArea": 1.4434209197368173,
+        "sampledMaximumInteriorWidth": 1.126789800671275,
+        "minRetainedBoundaryDistance": 0.24999999346999843
+      },
+      {
+        "id": 17791,
+        "sourceTriangles": 6,
+        "boundarySegments": 8,
+        "beforeArea": 0.05810042195914834,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.10151137590287677,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18276,
+        "sourceTriangles": 72,
+        "boundarySegments": 30,
+        "beforeArea": 12.583141621519477,
+        "afterArea": 8.779595764611202,
+        "sampledMaximumInteriorWidth": 2.8174086078136034,
+        "minRetainedBoundaryDistance": 0.2499999933678213
+      },
+      {
+        "id": 18545,
+        "sourceTriangles": 13,
+        "boundarySegments": 9,
+        "beforeArea": 0.2604013362571888,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.26110046979661694,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18547,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.16435192737906285,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.19535907907164504,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18947,
+        "sourceTriangles": 351,
+        "boundarySegments": 95,
+        "beforeArea": 264.7463355816095,
+        "afterArea": 243.4846168950679,
+        "sampledMaximumInteriorWidth": 11.158735569304502,
+        "minRetainedBoundaryDistance": 0.24999999010191837
+      },
+      {
+        "id": 18601,
+        "sourceTriangles": 3,
+        "boundarySegments": 5,
+        "beforeArea": 0.09914648431940425,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.21928746321692605,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18600,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.1275057116843539,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.1984798775776211,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18602,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.408199653238806,
+        "afterArea": 0.0004786925967737209,
+        "sampledMaximumInteriorWidth": 0.45663124076365885,
+        "minRetainedBoundaryDistance": 0.24999999999999015
+      },
+      {
+        "id": 18677,
+        "sourceTriangles": 18,
+        "boundarySegments": 14,
+        "beforeArea": 0.7046043661987043,
+        "afterArea": 0.00017372018946817215,
+        "sampledMaximumInteriorWidth": 0.47647787509401246,
+        "minRetainedBoundaryDistance": 0.24999999999998665
+      },
+      {
+        "id": 18743,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 0.7667032315076996,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.41592042009566527,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18751,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.017232431754395428,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.03671375217657956,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18837,
+        "sourceTriangles": 9,
+        "boundarySegments": 11,
+        "beforeArea": 1.2837860474340665,
+        "afterArea": 0.07574549555661075,
+        "sampledMaximumInteriorWidth": 0.5448278627517115,
+        "minRetainedBoundaryDistance": 0.2499999999999977
+      },
+      {
+        "id": 18831,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.1487454384720721,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.25378927367409554,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18903,
+        "sourceTriangles": 2,
+        "boundarySegments": 4,
+        "beforeArea": 0.4369814508591519,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.33381393128310743,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 18971,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 1.8337424934755517,
+        "afterArea": 0.47441010170047726,
+        "sampledMaximumInteriorWidth": 0.9170153766374675,
+        "minRetainedBoundaryDistance": 0.24999999999846104
+      },
+      {
+        "id": 18984,
+        "sourceTriangles": 17,
+        "boundarySegments": 11,
+        "beforeArea": 6.0998610558561595,
+        "afterArea": 3.538269085178255,
+        "sampledMaximumInteriorWidth": 2.030667341645758,
+        "minRetainedBoundaryDistance": 0.24999999999969025
+      },
+      {
+        "id": 18967,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 2.2156869205633076,
+        "afterArea": 0.4956200565286026,
+        "sampledMaximumInteriorWidth": 0.8729736864614042,
+        "minRetainedBoundaryDistance": 0.2499999999999196
+      },
+      {
+        "id": 19036,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.7772571256591252,
+        "afterArea": 0.00839526004872637,
+        "sampledMaximumInteriorWidth": 0.3962506275320504,
+        "minRetainedBoundaryDistance": 0.24999999999918113
+      },
+      {
+        "id": 19557,
+        "sourceTriangles": 258,
+        "boundarySegments": 86,
+        "beforeArea": 79.78402445406032,
+        "afterArea": 63.61105532695547,
+        "sampledMaximumInteriorWidth": 4.095247612118928,
+        "minRetainedBoundaryDistance": 0.24999999037553797
+      },
+      {
+        "id": 19092,
+        "sourceTriangles": 24,
+        "boundarySegments": 16,
+        "beforeArea": 9.062071729920945,
+        "afterArea": 5.543442439570963,
+        "sampledMaximumInteriorWidth": 1.9223276191240795,
+        "minRetainedBoundaryDistance": 0.2499999902152293
+      },
+      {
+        "id": 19019,
+        "sourceTriangles": 7,
+        "boundarySegments": 7,
+        "beforeArea": 0.1387525958563844,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.1027822785180971,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 19590,
+        "sourceTriangles": 217,
+        "boundarySegments": 71,
+        "beforeArea": 92.5670786277816,
+        "afterArea": 75.72766389581732,
+        "sampledMaximumInteriorWidth": 5.582968009687625,
+        "minRetainedBoundaryDistance": 0.24999999027568098
+      },
+      {
+        "id": 19030,
+        "sourceTriangles": 1,
+        "boundarySegments": 3,
+        "beforeArea": 0.202398675232477,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.3741706081987572,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 19034,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 0.42716652612996003,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.31901359891537523,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 19314,
+        "sourceTriangles": 26,
+        "boundarySegments": 22,
+        "beforeArea": 3.4681054440777945,
+        "afterArea": 0.6224143054489177,
+        "sampledMaximumInteriorWidth": 0.6241890430763622,
+        "minRetainedBoundaryDistance": 0.2499999999969263
+      },
+      {
+        "id": 19096,
+        "sourceTriangles": 4,
+        "boundarySegments": 6,
+        "beforeArea": 1.234255913106629,
+        "afterArea": 0.04720569177334007,
+        "sampledMaximumInteriorWidth": 0.29967825102626283,
+        "minRetainedBoundaryDistance": 0.2499999999999951
+      },
+      {
+        "id": 19210,
+        "sourceTriangles": 17,
+        "boundarySegments": 15,
+        "beforeArea": 0.8451337082703628,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.3655716360839657,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 19257,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 2.004848511672919,
+        "afterArea": 0.049961285530203285,
+        "sampledMaximumInteriorWidth": 0.574318861164659,
+        "minRetainedBoundaryDistance": 0.24999999999999598
+      },
+      {
+        "id": 19414,
+        "sourceTriangles": 10,
+        "boundarySegments": 10,
+        "beforeArea": 1.9522930308116118,
+        "afterArea": 0.6814295513355034,
+        "sampledMaximumInteriorWidth": 1.0147070985793454,
+        "minRetainedBoundaryDistance": 0.24999999999944855
+      },
+      {
+        "id": 19420,
+        "sourceTriangles": 6,
+        "boundarySegments": 6,
+        "beforeArea": 0.3218299072636772,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.21158304681909773,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 19434,
+        "sourceTriangles": 14,
+        "boundarySegments": 12,
+        "beforeArea": 0.6829125451944643,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.3716415194136788,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 19563,
+        "sourceTriangles": 6,
+        "boundarySegments": 6,
+        "beforeArea": 0.0890331818210419,
+        "afterArea": 0,
+        "sampledMaximumInteriorWidth": 0.13673912233475025,
+        "minRetainedBoundaryDistance": null
+      },
+      {
+        "id": 19901,
+        "sourceTriangles": 303,
+        "boundarySegments": 91,
+        "beforeArea": 59.79337872879758,
+        "afterArea": 43.944717444207576,
+        "sampledMaximumInteriorWidth": 4.360219763037149,
+        "minRetainedBoundaryDistance": 0.2499999904326366
+      },
+      {
+        "id": 19815,
+        "sourceTriangles": 8,
+        "boundarySegments": 8,
+        "beforeArea": 0.6916897558014556,
+        "afterArea": 0.040347001237841476,
+        "sampledMaximumInteriorWidth": 0.35079530807317355,
+        "minRetainedBoundaryDistance": 0.2499999999911531
+      },
+      {
+        "id": 19931,
+        "sourceTriangles": 30,
+        "boundarySegments": 24,
+        "beforeArea": 5.056276551935142,
+        "afterArea": 1.7296701829650416,
+        "sampledMaximumInteriorWidth": 1.0341392763927753,
+        "minRetainedBoundaryDistance": 0.2499999932584745
+      }
+    ]
+  }
+}

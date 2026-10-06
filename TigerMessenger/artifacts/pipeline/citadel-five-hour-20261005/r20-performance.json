@@ -1,0 +1,52 @@
+{
+  "at": "2026-10-04T20:52:11.679Z",
+  "url": "http://localhost:8931/TigerMessenger/?autostart=1&timeOfDay=0.5",
+  "view": "bay-ridge",
+  "clock": 0.5,
+  "hideClouds": true,
+  "hidePlants": false,
+  "camera": {
+    "position": [
+      83.69073324627077,
+      167.2640371868037,
+      57.5573890362525
+    ],
+    "quaternion": [
+      0.23148137324448848,
+      0.8237430819801473,
+      0.3283981838143252,
+      -0.40002292634066217
+    ],
+    "aspect": 2.413127413127413,
+    "zoom": 1,
+    "fov": 47
+  },
+  "performance": {
+    "durationMs": 10033.100000023842,
+    "samples": 196,
+    "viewport": {
+      "width": 1250,
+      "height": 518,
+      "cssWidth": 1250,
+      "cssHeight": 518,
+      "pixelRatio": 1
+    },
+    "rafMs": {
+      "median": 50,
+      "p95": 66.60000000003492,
+      "max": 100.09999999997672
+    },
+    "calls": {
+      "median": 3813,
+      "p95": 3825,
+      "max": 3825
+    },
+    "triangles": {
+      "median": 2773956,
+      "p95": 2774596,
+      "max": 2774596
+    },
+    "note": "rAF intervals and renderer counters, not GPU timing; browser scheduling affects result"
+  },
+  "errors": []
+}

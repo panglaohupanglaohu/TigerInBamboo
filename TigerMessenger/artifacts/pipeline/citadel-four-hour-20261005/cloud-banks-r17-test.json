@@ -1,0 +1,3847 @@
+{
+  "pass": true,
+  "fixture": "full frozen r17 asymmetric shoulder and actual compiled ocean triangle index",
+  "buildMs": 68.75020899999993,
+  "version": "citadel-cloud-banks-candidate-13",
+  "enabled": true,
+  "banks": [
+    {
+      "cluster": "old-rear",
+      "member": null,
+      "tier": 0,
+      "centreline": "rear sea band with variable 26.2–29.3m spine and thicker lobes; real terrain/sea swept audit",
+      "lobeCount": 5,
+      "lobes": [
+        {
+          "t": 0.125,
+          "weight": 0.47001586518069194,
+          "width": 0.12354745910154331
+        },
+        {
+          "t": 0.375,
+          "weight": 0.7681370161120022,
+          "width": 0.10618967548962109
+        },
+        {
+          "t": 0.625,
+          "weight": 1,
+          "width": 0.11072299442560388
+        },
+        {
+          "t": 0.875,
+          "weight": 0.5018000598671454,
+          "width": 0.1329795033862205
+        }
+      ],
+      "cumulus": [
+        {
+          "x": -11,
+          "along": 9,
+          "z": -1.395065860636841,
+          "y": 0.052118013432849324,
+          "width": 7.3860797221949035,
+          "height": 3.9945776012570593
+        },
+        {
+          "x": -5.5,
+          "along": 9.602218461950692,
+          "z": 0.26878028342193583,
+          "y": -0.37432332279869995,
+          "width": 5.556852670664791,
+          "height": 3.32711120628837
+        },
+        {
+          "x": 0,
+          "along": 9.989911659709389,
+          "z": 1.3364788803243033,
+          "y": 1.8999293181917074,
+          "width": 7.621017017222558,
+          "height": 4.695492291786318
+        },
+        {
+          "x": 5.5,
+          "along": 10.412659695510385,
+          "z": -0.5600972686293856,
+          "y": -0.36296615210006933,
+          "width": 6.4060404347606745,
+          "height": 3.3448874609316177
+        },
+        {
+          "x": 11,
+          "along": 9,
+          "z": -1.2143925158316244,
+          "y": 0.03536860083385057,
+          "width": 6.133708281077253,
+          "height": 3.968361404337475
+        }
+      ],
+      "bankScale": {
+        "width": 1.259872002471466,
+        "height": 1.204000749492699,
+        "length": 0.9399542865969521
+      },
+      "ringSteps": 20,
+      "shape": "v13 broad oblate ellipsoidal lobes; 65 sections; no duplicate whole-bank pointed taper",
+      "localSweptBounds": {
+        "min": [
+          -54.646479359346856,
+          30.53320503234864,
+          -70.49345782456346
+        ],
+        "max": [
+          -11.353520640653146,
+          40.00310134887696,
+          -52.31840893569045
+        ]
+      },
+      "anchor": [
+        169.3681102157421,
+        19.109757078876477,
+        89.66197091664415
+      ],
+      "local": [
+        -33,
+        -8.496682265403676,
+        -61
+      ],
+      "source": "citadel-oskar-grid-mountain-surface",
+      "faceIndex": 3076,
+      "path": [
+        {
+          "world": [
+            196.01031848561124,
+            31.2162564968379,
+            82.06315831679665
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2525
+        },
+        {
+          "world": [
+            195.76538131006026,
+            31.47527580513176,
+            82.62240107952483
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2525
+        },
+        {
+          "world": [
+            195.88176487345427,
+            32.126184773080176,
+            83.37949857634433
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2524
+        },
+        {
+          "world": [
+            195.77059772703228,
+            32.530291494126516,
+            84.0119921400644
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2529
+        },
+        {
+          "world": [
+            195.51075340834512,
+            32.773142466035594,
+            84.56307193697478
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2529
+        },
+        {
+          "world": [
+            195.6179242395674,
+            33.414059274425675,
+            85.31512465646037
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2533
+        },
+        {
+          "world": [
+            195.3480507019276,
+            33.64603252253338,
+            85.8607125780502
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2533
+        },
+        {
+          "world": [
+            195.0781771642878,
+            33.878005770641124,
+            86.40630049964003
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2533
+        },
+        {
+          "world": [
+            194.99179586998423,
+            34.30899530826561,
+            87.05236648711423
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2537
+        },
+        {
+          "world": [
+            194.68291627107232,
+            34.49866245426291,
+            87.57659517562077
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2537
+        },
+        {
+          "world": [
+            194.3740366721603,
+            34.688329600260175,
+            88.10082386412728
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2537
+        },
+        {
+          "world": [
+            194.09702392112777,
+            34.91255963408454,
+            88.6425024414277
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2541
+        },
+        {
+          "world": [
+            193.75906733856328,
+            35.07068978815428,
+            89.15080893602544
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 2541
+        },
+        {
+          "world": [
+            193.38370199826812,
+            35.1882462807786,
+            89.63863086105462
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3048
+        },
+        {
+          "world": [
+            193.0003645305105,
+            35.29715617778506,
+            90.12208734842905
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3052
+        },
+        {
+          "world": [
+            192.61702222608938,
+            35.406060828930435,
+            90.60554118730681
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3052
+        },
+        {
+          "world": [
+            192.23336929400207,
+            35.514628572289304,
+            91.08882493034544
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3057
+        },
+        {
+          "world": [
+            191.8492257712177,
+            35.622664219367564,
+            91.57184003203179
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3056
+        },
+        {
+          "world": [
+            191.4650939852953,
+            35.73071259628483,
+            92.05486156067748
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3056
+        },
+        {
+          "world": [
+            191.08030113615717,
+            35.83804398186809,
+            92.53752109934402
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3060
+        },
+        {
+          "world": [
+            190.69536748142633,
+            35.94522264924325,
+            93.02010353462262
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3060
+        },
+        {
+          "world": [
+            190.31043382669554,
+            36.05240131661844,
+            93.50268596990124
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3060
+        },
+        {
+          "world": [
+            189.89119465338194,
+            36.122372105915716,
+            93.966483130698
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3064
+        },
+        {
+          "world": [
+            189.28515359221757,
+            35.98973695439041,
+            94.32798990551697
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3064
+        },
+        {
+          "world": [
+            188.70811968961584,
+            35.88856306227092,
+            94.70538063889562
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3069
+        },
+        {
+          "world": [
+            188.030830786883,
+            35.67865226787796,
+            95.02787298351811
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3068
+        },
+        {
+          "world": [
+            186.37760061825696,
+            34.41023237253924,
+            94.81595205251229
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3068
+        },
+        {
+          "world": [
+            184.90243642576831,
+            33.3349434194993,
+            94.70153783109154
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3073
+        },
+        {
+          "world": [
+            183.1188818375245,
+            31.925173230795693,
+            94.41825287192512
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3072
+        },
+        {
+          "world": [
+            180.186331100313,
+            29.269198046834745,
+            93.50579193966144
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3072
+        },
+        {
+          "world": [
+            177.03186218128178,
+            26.372529674327737,
+            92.47181137644004
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3077
+        },
+        {
+          "world": [
+            173.4419654012724,
+            23.003594814319626,
+            91.19939594257896
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3076
+        },
+        {
+          "world": [
+            169.3681102157421,
+            19.109757078876477,
+            89.66197091664415
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3076
+        },
+        {
+          "world": [
+            164.68954463818162,
+            14.560048467008613,
+            87.79341401555948
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3081
+        },
+        {
+          "world": [
+            160.09449882484284,
+            10.100925665606098,
+            85.97059149659114
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3080
+        },
+        {
+          "world": [
+            155.4870036833174,
+            5.628300281981893,
+            84.14095188064357
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3085
+        },
+        {
+          "world": [
+            150.6498495176245,
+            0.9065859667885547,
+            82.18555384493021
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3085
+        },
+        {
+          "world": [
+            146.5264424362177,
+            -3.0409959175982237,
+            80.62099481829844
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3084
+        },
+        {
+          "world": [
+            143.16195615750217,
+            -6.165449807893538,
+            79.47201136601998
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3089
+        },
+        {
+          "world": [
+            139.9862899749259,
+            -9.085108802030874,
+            78.42642344542848
+          ],
+          "source": "citadel-oskar-grid-mountain-surface",
+          "faceIndex": 3089
+        },
+        {
+          "world": [
+            139.41082205454254,
+            -9.1845842246953,
+            78.80467169115559
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3088
+        },
+        {
+          "world": [
+            139.13646034952453,
+            -8.95747885766039,
+            79.34780194821786
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3093
+        },
+        {
+          "world": [
+            138.8620986445065,
+            -8.730373490625482,
+            79.89093220528012
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3093
+        },
+        {
+          "world": [
+            138.55891869663168,
+            -8.534524484401658,
+            80.41828195166909
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3097
+        },
+        {
+          "world": [
+            138.23646699583423,
+            -8.359577684665766,
+            80.93507872631025
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3097
+        },
+        {
+          "world": [
+            137.91401529503676,
+            -8.184630884929874,
+            81.45187550095139
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3097
+        },
+        {
+          "world": [
+            137.5915635942393,
+            -8.009684085194039,
+            81.96867227559252
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3101
+        },
+        {
+          "world": [
+            137.26911189344182,
+            -7.8347372854581465,
+            82.48546905023368
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3101
+        },
+        {
+          "world": [
+            136.94666019264434,
+            -7.659790485722283,
+            83.00226582487481
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3101
+        },
+        {
+          "world": [
+            136.6242084928739,
+            -7.484843684872516,
+            83.51906260007834
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3105
+        },
+        {
+          "world": [
+            136.30175690969418,
+            -7.309896757568012,
+            84.03585943912552
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3105
+        },
+        {
+          "world": [
+            135.97930532651455,
+            -7.1349498302634515,
+            84.55265627817272
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3628
+        },
+        {
+          "world": [
+            135.65685374333486,
+            -6.960002902958934,
+            85.0694531172199
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3628
+        },
+        {
+          "world": [
+            135.33440216015524,
+            -6.785055975654373,
+            85.5862499562671
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3628
+        },
+        {
+          "world": [
+            135.0119505769756,
+            -6.610109048349813,
+            86.1030467953143
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3632
+        },
+        {
+          "world": [
+            134.68949899379595,
+            -6.435162121045266,
+            86.6198436343615
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3632
+        },
+        {
+          "world": [
+            134.3670474106163,
+            -6.260215193740734,
+            87.13664047340869
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3632
+        },
+        {
+          "world": [
+            134.0445958274366,
+            -6.085268266436202,
+            87.65343731245588
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3636
+        },
+        {
+          "world": [
+            133.72214424425695,
+            -5.910321339131656,
+            88.17023415150307
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3636
+        },
+        {
+          "world": [
+            133.3996926610773,
+            -5.7353744118271095,
+            88.68703099055027
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3636
+        },
+        {
+          "world": [
+            133.07724107789764,
+            -5.560427484522592,
+            89.20382782959746
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3640
+        },
+        {
+          "world": [
+            132.754789494718,
+            -5.385480557218017,
+            89.72062466864466
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3640
+        },
+        {
+          "world": [
+            132.43233791153835,
+            -5.210533629913485,
+            90.23742150769185
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3645
+        },
+        {
+          "world": [
+            132.1098863283587,
+            -5.0355867026089385,
+            90.75421834673904
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3644
+        },
+        {
+          "world": [
+            131.78743474517904,
+            -4.860639775304406,
+            91.27101518578624
+          ],
+          "source": "actual-sea",
+          "faceIndex": 3644
+        }
+      ],
+      "sweptBounds": {
+        "min": [
+          177.22535484160693,
+          36.537573952112126,
+          81.63212636638335
+        ],
+        "max": [
+          217.5511292332909,
+          61.43229520307551,
+          128.53798777502803
+        ]
+      },
+      "drift": 7,
+      "speed": 0.7,
+      "period": 62.83185307179587,
+      "lift": 0.337444305419929,
+      "minimumSampledClearance": 2,
+      "supportSamples": 253,
+      "surfaceMisses": 0,
+      "clearanceMethod": "entire swept local AABB above maximum final-surface 2m-grid sample; plus sampled-face vertex maxima; not continuous full-world collision",
+      "triangles": 2596,
+      "motionStart": {
+        "time": 0,
+        "cycle": 0.19999999999999996,
+        "position": [
+          -26.358855307379052,
+          35.26815319061279,
+          -60.94105325164349
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          193.31701681915598,
+          50.14442070334478,
+          110.22330906027499
+        ],
+        "translation": [
+          6.641144692620948,
+          -7.391193894774689e-16,
+          0.4648801284834662
+        ],
+        "opacity": 1
+      },
+      "motionEnd": {
+        "time": 10,
+        "cycle": 0.35915494309189544,
+        "position": [
+          -27.596015539424826,
+          35.26815319061279,
+          -61.02765446788669
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          194.07543395489017,
+          49.92842328260167,
+          109.2661184978124
+        ],
+        "translation": [
+          5.403984460575173,
+          -6.014309098978134e-16,
+          0.378278912240262
+        ],
+        "opacity": 1
+      }
+    },
+    {
+      "cluster": "valley-rear",
+      "member": null,
+      "tier": 0,
+      "centreline": "rear sea band with variable 26.2–29.3m spine and thicker lobes; real terrain/sea swept audit",
+      "lobeCount": 3,
+      "lobes": [
+        {
+          "t": 0.125,
+          "weight": 0.8023196727515307,
+          "width": 0.1115951820443171
+        },
+        {
+          "t": 0.375,
+          "weight": 0.47699250958961903,
+          "width": 0.10581873529315294
+        },
+        {
+          "t": 0.625,
+          "weight": 1,
+          "width": 0.12227443179584824
+        },
+        {
+          "t": 0.875,
+          "weight": 0.7187728550931216,
+          "width": 0.1458329800771575
+        }
+      ],
+      "cumulus": [
+        {
+          "x": -11,
+          "along": 9,
+          "z": -1.2163484162547218,
+          "y": -0.24651728303790432,
+          "width": 5.380810936304505,
+          "height": 3.603219766933305
+        },
+        {
+          "x": 0,
+          "along": 9.41526016137734,
+          "z": 0.8216153091610178,
+          "y": 1.2879505282638501,
+          "width": 4.6834813133508035,
+          "height": 3.818227883947805
+        },
+        {
+          "x": 11,
+          "along": 9,
+          "z": 1.037258047982688,
+          "y": 0.4117664356138112,
+          "width": 6.235610672854967,
+          "height": 4.655786484859511
+        }
+      ],
+      "bankScale": {
+        "width": 1.0058202338116464,
+        "height": 1.2299661728766833,
+        "length": 0.849221512075588
+      },
+      "ringSteps": 20,
+      "shape": "v13 broad oblate ellipsoidal lobes; 65 sections; no duplicate whole-bank pointed taper",
+      "localSweptBounds": {
+        "min": [
+          -43.231047383028496,
+          18.083555221557617,
+          -80.59504321274706
+        ],
+        "max": [
+          -2.7689526169715055,
+          27.258907318115234,
+          -64.73493573012404
+        ]
+      },
+      "anchor": [
+        133.89262556517346,
+        -27.101646686698942,
+        83.82062236086692
+      ],
+      "local": [
+        -23,
+        -64.92473559110196,
+        -73
+      ],
+      "source": "actual-sea",
+      "faceIndex": null,
+      "path": [
+        {
+          "world": [
+            141.89618691624503,
+            -35.21068490645095,
+            66.01551897154474
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            141.6866068146744,
+            -34.91331719964282,
+            66.59412282738663
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            141.46350214735315,
+            -34.63061828124812,
+            67.16532079955824
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            141.2403974800319,
+            -34.347919362853446,
+            67.73651877172983
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            141.0172928127107,
+            -34.06522044445873,
+            68.30771674390147
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            140.79418814538948,
+            -33.782521526064016,
+            68.8789147160731
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            140.57108347806823,
+            -33.49982260766939,
+            69.45011268824469
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            140.34797881074707,
+            -33.217123689274615,
+            70.02131066041633
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            140.1248741434258,
+            -32.93442477087993,
+            70.59250863258794
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            139.90176947610456,
+            -32.65172585248524,
+            71.16370660475954
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            139.67866480878334,
+            -32.36902693409057,
+            71.73490457693117
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            139.45556014146212,
+            -32.08632801569584,
+            72.30610254910279
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            139.23245547414092,
+            -31.80362909730114,
+            72.8773005212744
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            139.00935080681964,
+            -31.520930178906468,
+            73.44849849344601
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            138.7810262257681,
+            -31.24389279608036,
+            74.01683810590622
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            138.53791667841273,
+            -30.982891236245564,
+            74.57708165505954
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            138.2948071310574,
+            -30.721889676410683,
+            75.1373252042129
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            138.05169758370198,
+            -30.4608881165759,
+            75.6975687533662
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            137.8085880363466,
+            -30.19988655674109,
+            76.25781230251954
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            137.5654784889913,
+            -29.938884996906225,
+            76.81805585167288
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            137.3223689416359,
+            -29.677883437071443,
+            77.3782994008262
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            137.07925939428054,
+            -29.41688187723662,
+            77.93854294997954
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            136.8361498469252,
+            -29.155880317401767,
+            78.49878649913288
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            136.5775150958108,
+            -28.911717444532314,
+            79.05052864017323
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            136.27919403705567,
+            -28.71059847121785,
+            79.58053905369565
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            135.98087297830054,
+            -28.509479497903385,
+            80.11054946721808
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            135.68255191954543,
+            -28.308360524588878,
+            80.64055988074051
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            135.38423086079027,
+            -28.1072415512744,
+            81.17057029426294
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            135.0859098020352,
+            -27.906122577959877,
+            81.7005807077854
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            134.78758874328003,
+            -27.70500360464544,
+            82.23059112130781
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            134.48926768452492,
+            -27.503884631330948,
+            82.76060153483027
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            134.1909466257698,
+            -27.30276565801644,
+            83.2906119483527
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            133.89262556517346,
+            -27.101646686698942,
+            83.82062236086692
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            133.59430444078774,
+            -26.900527784567615,
+            84.35063273845086
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            133.29598331640202,
+            -26.699408882436288,
+            84.8806431160348
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            132.99766219201626,
+            -26.498289980305003,
+            85.41065349361872
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            132.69934106763057,
+            -26.297171078173662,
+            85.94066387120267
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            132.4010199432448,
+            -26.09605217604239,
+            86.4706742487866
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            132.10269881885904,
+            -25.89493327391108,
+            87.00068462637051
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            131.80437769447332,
+            -25.69381437177975,
+            87.53069500395445
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            131.5060565700876,
+            -25.492695469648453,
+            88.06070538153838
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            131.20773544570187,
+            -25.29157656751714,
+            88.59071575912232
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            130.9094143213161,
+            -25.090457665385856,
+            89.12072613670624
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            130.61109319693037,
+            -24.889338763254543,
+            89.65073651429017
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            130.31277207254465,
+            -24.688219861123187,
+            90.18074689187412
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            130.0144509481589,
+            -24.487100958991903,
+            90.71075726945804
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            129.6850248052467,
+            -24.319718662070358,
+            91.22373492650834
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            129.33099348493323,
+            -24.17902322133557,
+            91.72323909502815
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            128.97696216461975,
+            -24.03832778060078,
+            92.22274326354797
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            128.62293084430635,
+            -23.89763233986595,
+            92.7222474320678
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            128.26889952399287,
+            -23.756936899131176,
+            93.22175160058762
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            127.91486820367945,
+            -23.61624145839636,
+            93.72125576910746
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            127.56083688336601,
+            -23.47554601766153,
+            94.22075993762729
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            127.20680556305255,
+            -23.334850576926726,
+            94.72026410614713
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            126.85277424273909,
+            -23.194155136191938,
+            95.21976827466695
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            126.49874292242562,
+            -23.053459695457178,
+            95.71927244318677
+          ],
+          "source": "actual-sea",
+          "faceIndex": 228
+        },
+        {
+          "world": [
+            126.14471160211218,
+            -22.91276425472236,
+            96.2187766117066
+          ],
+          "source": "actual-sea",
+          "faceIndex": 228
+        },
+        {
+          "world": [
+            125.79068028179876,
+            -22.772068813987545,
+            96.71828078022642
+          ],
+          "source": "actual-sea",
+          "faceIndex": 232
+        },
+        {
+          "world": [
+            125.43664896148526,
+            -22.631373373252757,
+            97.21778494874624
+          ],
+          "source": "actual-sea",
+          "faceIndex": 232
+        },
+        {
+          "world": [
+            125.08261764117185,
+            -22.490677932517926,
+            97.71728911726609
+          ],
+          "source": "actual-sea",
+          "faceIndex": 232
+        },
+        {
+          "world": [
+            124.7285863208584,
+            -22.34998249178315,
+            98.21679328578591
+          ],
+          "source": "actual-sea",
+          "faceIndex": 236
+        },
+        {
+          "world": [
+            124.37455500054492,
+            -22.209287051048364,
+            98.71629745430573
+          ],
+          "source": "actual-sea",
+          "faceIndex": 236
+        },
+        {
+          "world": [
+            124.0205236802315,
+            -22.06859161031352,
+            99.21580162282558
+          ],
+          "source": "actual-sea",
+          "faceIndex": 236
+        },
+        {
+          "world": [
+            123.66649235991802,
+            -21.92789616957876,
+            99.71530579134537
+          ],
+          "source": "actual-sea",
+          "faceIndex": 240
+        },
+        {
+          "world": [
+            123.31246103960456,
+            -21.787200728843942,
+            100.2148099598652
+          ],
+          "source": "actual-sea",
+          "faceIndex": 240
+        }
+      ],
+      "sweptBounds": {
+        "min": [
+          170.7280382847354,
+          22.169624119732205,
+          92.43561431216543
+        ],
+        "max": [
+          208.04549640663456,
+          44.85628919255896,
+          135.85002774323718
+        ]
+      },
+      "drift": 7,
+      "speed": 0.7,
+      "period": 62.83185307179587,
+      "lift": 0,
+      "minimumSampledClearance": 2.862190246582026,
+      "supportSamples": 198,
+      "surfaceMisses": 0,
+      "clearanceMethod": "entire swept local AABB above maximum final-surface 2m-grid sample; plus sampled-face vertex maxima; not continuous full-world collision",
+      "triangles": 2596,
+      "motionStart": {
+        "time": 0,
+        "cycle": 0.33699999999999997,
+        "position": [
+          -17.034655213071545,
+          22.671231269836426,
+          -72.24741533635056
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          185.72982817986014,
+          34.554453993712954,
+          118.75820679906678
+        ],
+        "translation": [
+          5.965344786928453,
+          -6.639069318631416e-16,
+          0.41757413508499164
+        ],
+        "opacity": 1
+      },
+      "motionEnd": {
+        "time": 10,
+        "cycle": 0.49615494309189545,
+        "position": [
+          -22.8313147888566,
+          22.671231269836426,
+          -72.65318150665551
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          189.28335814179832,
+          33.54240762747549,
+          114.2733327334215
+        ],
+        "translation": [
+          0.16868521114340215,
+          -1.8773647623235953e-17,
+          0.011807964780038148
+        ],
+        "opacity": 1
+      }
+    },
+    {
+      "cluster": "valley-rear",
+      "member": null,
+      "tier": 1,
+      "centreline": "rear sea band with variable 26.2–29.3m spine and thicker lobes; real terrain/sea swept audit",
+      "lobeCount": 5,
+      "lobes": [
+        {
+          "t": 0.125,
+          "weight": 0.768257587769382,
+          "width": 0.10760072633022592
+        },
+        {
+          "t": 0.375,
+          "weight": 0.6724017962312712,
+          "width": 0.10855492266887531
+        },
+        {
+          "t": 0.625,
+          "weight": 1,
+          "width": 0.1292256242067196
+        },
+        {
+          "t": 0.875,
+          "weight": 0.8249613502510956,
+          "width": 0.15060828327768894
+        }
+      ],
+      "cumulus": [
+        {
+          "x": -11,
+          "along": 9,
+          "z": 1.1798769361032742,
+          "y": 0.4673849880226743,
+          "width": 7.576657306310104,
+          "height": 4.738149520818737
+        },
+        {
+          "x": -5.5,
+          "along": 10.221664575126686,
+          "z": -0.8776870436695896,
+          "y": -0.46462710267206175,
+          "width": 5.854600769780353,
+          "height": 3.2499662689835396
+        },
+        {
+          "x": 0,
+          "along": 9.459939734694098,
+          "z": -0.9885644153581492,
+          "y": 1.6178412231383563,
+          "width": 6.364996805375127,
+          "height": 4.33969240292457
+        },
+        {
+          "x": 5.5,
+          "along": 10.574809516173534,
+          "z": 1.0931678936891724,
+          "y": 0.14335760481597765,
+          "width": 7.334327683735375,
+          "height": 4.220761249101422
+        },
+        {
+          "x": 11,
+          "along": 9,
+          "z": 0.7502827785859825,
+          "y": -0.4292632168710507,
+          "width": 5.394374652174758,
+          "height": 3.3064332859829086
+        }
+      ],
+      "bankScale": {
+        "width": 1.2258627292859554,
+        "height": 1.2282634088064437,
+        "length": 0.9278081176021269
+      },
+      "ringSteps": 20,
+      "shape": "v13 broad oblate ellipsoidal lobes; 65 sections; no duplicate whole-bank pointed taper",
+      "localSweptBounds": {
+        "min": [
+          -14.456998577791678,
+          19.715513229370117,
+          -87.15048602280565
+        ],
+        "max": [
+          28.456999531465996,
+          29.24605941772461,
+          -70.15441510024122
+        ]
+      },
+      "anchor": [
+        113.78295030100519,
+        -34.015356561416866,
+        107.67900724869
+      ],
+      "local": [
+        7,
+        -74.16708123047177,
+        -79
+      ],
+      "source": "actual-sea",
+      "faceIndex": null,
+      "path": [
+        {
+          "world": [
+            125.69476817533803,
+            -37.88548692546257,
+            92.01401642923668
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            125.35168307464376,
+            -37.732919178993,
+            92.51951461121496
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            125.00859797394949,
+            -37.58035143252343,
+            93.02501279319326
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            124.66551287325527,
+            -37.42778368605383,
+            93.53051097517155
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            124.32242777239419,
+            -37.275215939765175,
+            94.03600915705852
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            123.97934244123657,
+            -37.122648443256935,
+            94.54150721283796
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            123.63625711007901,
+            -36.970080946748624,
+            95.04700526861741
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            123.29317177892136,
+            -36.81751345024037,
+            95.55250332439684
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            122.95008644776382,
+            -36.66494595373203,
+            96.05800138017631
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            122.6070011166062,
+            -36.51237845722379,
+            96.56349943595572
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            122.26391578544865,
+            -36.359810960715464,
+            97.0689974917352
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            121.92083045429104,
+            -36.20724346420718,
+            97.57449554751464
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            121.57774512313343,
+            -36.05467596769893,
+            98.07999360329407
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            121.23465979197584,
+            -35.902108471190616,
+            98.58549165907354
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            120.89157446081828,
+            -35.749540974682304,
+            99.09098971485298
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            120.5484891296607,
+            -35.59697347817402,
+            99.59648777063244
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            120.20540379850306,
+            -35.44440598166577,
+            100.10198582641186
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            119.85988916055027,
+            -35.294473319282844,
+            100.60615362406277
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            119.45475990324728,
+            -35.20919886875842,
+            101.07767719903794
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            119.04963064594426,
+            -35.123924418234026,
+            101.54920077401307
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            118.64450138864129,
+            -35.03864996770963,
+            102.02072434898824
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            118.23937213133827,
+            -34.95337551718522,
+            102.49224792396339
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            117.83424287403525,
+            -34.86810106666084,
+            102.96377149893851
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            117.42911361673222,
+            -34.78282661613646,
+            103.43529507391366
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            117.02398435942922,
+            -34.69755216561205,
+            103.90681864888882
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            116.61885510212625,
+            -34.61227771508763,
+            104.37834222386398
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            116.21372584482324,
+            -34.527003264563234,
+            104.84986579883913
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            115.80859658752024,
+            -34.44172881403884,
+            105.32138937381427
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            115.40346733021724,
+            -34.356454363514416,
+            105.79291294878942
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            114.99833807291424,
+            -34.27117991299002,
+            106.26443652376457
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            114.59320881561126,
+            -34.18590546246561,
+            106.73596009873974
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            114.18807955830823,
+            -34.10063101194122,
+            107.20748367371488
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            113.78295030100519,
+            -34.015356561416866,
+            107.67900724869
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            113.37782104370223,
+            -33.93008211089244,
+            108.15053082366518
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            112.97269181700429,
+            -33.844807627173665,
+            108.62205441539928
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            112.5675626173061,
+            -33.75953311417091,
+            109.09357802191812
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            112.16243341760787,
+            -33.67425860116816,
+            109.56510162843692
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            111.7573042179097,
+            -33.588984088165375,
+            110.03662523495575
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            111.35217501821154,
+            -33.50370957516256,
+            110.5081488414746
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            110.94461116853384,
+            -33.4210756915204,
+            110.97833926400374
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            110.47406476912217,
+            -33.40675288808772,
+            111.41404122714803
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            110.00351836971055,
+            -33.39243008465496,
+            111.84974319029237
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            109.53297197029886,
+            -33.37810728122227,
+            112.28544515343667
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            109.06242557088726,
+            -33.363784477789494,
+            112.721147116581
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            108.59187917147557,
+            -33.34946167435683,
+            113.15684907972529
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            108.12133277206388,
+            -33.33513887092417,
+            113.59255104286957
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            107.65078637265225,
+            -33.32081606749142,
+            114.0282530060139
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            107.18023997324059,
+            -33.306493264058716,
+            114.46395496915821
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            106.70969357382899,
+            -33.292170460625954,
+            114.89965693230253
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            106.23914717441724,
+            -33.27784765719332,
+            115.3353588954468
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            105.76860077500561,
+            -33.2635248537606,
+            115.77106085859111
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            105.29805437559398,
+            -33.24920205032788,
+            116.20676282173542
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            104.82750797618229,
+            -33.234879246895176,
+            116.64246478487972
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            104.35696157677063,
+            -33.22055644346247,
+            117.07816674802403
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            103.88641517735897,
+            -33.20623364002975,
+            117.51386871116833
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            103.41586877794731,
+            -33.19191083659706,
+            117.94957067431264
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            102.94532237853569,
+            -33.17758803316431,
+            118.38527263745696
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            102.47477594132752,
+            -33.1632652707258,
+            118.82097457990439
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            102.00422946894011,
+            -33.14894254644284,
+            119.25667650308807
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            101.53368299655264,
+            -33.13461982215992,
+            119.69237842627173
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            101.06313652416522,
+            -33.120297097877,
+            120.12808034945542
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            100.54419912231876,
+            -33.15845933454989,
+            120.53728400268508
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            100.00296808751341,
+            -33.220801318718685,
+            120.9342799403159
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            99.46173705270812,
+            -33.28314330288745,
+            121.33127587794674
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            98.9205060179028,
+            -33.345485287056206,
+            121.72827181557757
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        }
+      ],
+      "sweptBounds": {
+        "min": [
+          156.5235382795031,
+          22.201801374921864,
+          118.81173156715116
+        ],
+        "max": [
+          196.0644296354291,
+          46.249630533589865,
+          164.87048820709958
+        ]
+      },
+      "drift": 7,
+      "speed": 0.7,
+      "period": 62.83185307179587,
+      "lift": 0,
+      "minimumSampledClearance": 79.86574546498356,
+      "supportSamples": 230,
+      "surfaceMisses": 0,
+      "clearanceMethod": "entire swept local AABB above maximum final-surface 2m-grid sample; plus sampled-face vertex maxima; not continuous full-world collision",
+      "triangles": 2596,
+      "motionStart": {
+        "time": 0,
+        "cycle": 0.474,
+        "position": [
+          8.13568161455171,
+          24.480786323547363,
+          -78.57295288188342
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          175.59777661644245,
+          34.42399600737987,
+          142.71978609965572
+        ],
+        "translation": [
+          1.1356811377145526,
+          -1.2639446782138758e-16,
+          0.07949767964001866
+        ],
+        "opacity": 1
+      },
+      "motionEnd": {
+        "time": 10,
+        "cycle": 0.6331549430918955,
+        "position": [
+          1.8159254354275243,
+          24.480786323547363,
+          -79.01533581442212
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          179.47198082682516,
+          33.32062152195942,
+          137.83019232268856
+        ],
+        "translation": [
+          -5.184075041409634,
+          5.769563165623336e-16,
+          -0.36288525289867435
+        ],
+        "opacity": 1
+      }
+    },
+    {
+      "cluster": "new-rear",
+      "member": null,
+      "tier": 0,
+      "centreline": "rear sea band with variable 26.2–29.3m spine and thicker lobes; real terrain/sea swept audit",
+      "lobeCount": 5,
+      "lobes": [
+        {
+          "t": 0.125,
+          "weight": 0.8275929665672874,
+          "width": 0.11705575500526237
+        },
+        {
+          "t": 0.375,
+          "weight": 0.5097963113685673,
+          "width": 0.10500881360084126
+        },
+        {
+          "t": 0.625,
+          "weight": 1,
+          "width": 0.1159386537190457
+        },
+        {
+          "t": 0.875,
+          "weight": 0.7778965776432949,
+          "width": 0.13979643076073875
+        }
+      ],
+      "cumulus": [
+        {
+          "x": -11,
+          "along": 9,
+          "z": 1.291545797551647,
+          "y": -0.472762527807348,
+          "width": 5.95750527470503,
+          "height": 3.0406860598854637
+        },
+        {
+          "x": -5.5,
+          "along": 9.472764763163086,
+          "z": -0.6778294590972996,
+          "y": 0.23866382248876122,
+          "width": 6.575531237835919,
+          "height": 4.107765874486975
+        },
+        {
+          "x": 0,
+          "along": 10.582230299800345,
+          "z": -1.1437969349126005,
+          "y": 1.5207841221468206,
+          "width": 7.480825756700205,
+          "height": 3.930956217754687
+        },
+        {
+          "x": 5.5,
+          "along": 9.668569308695975,
+          "z": 0.9271468854133863,
+          "y": -0.4167947277052244,
+          "width": 5.527682815720395,
+          "height": 3.124633062595963
+        },
+        {
+          "x": 11,
+          "along": 9,
+          "z": 0.9417034791315672,
+          "y": 0.49389950361429347,
+          "width": 7.502858957320623,
+          "height": 4.490597973947113
+        }
+      ],
+      "bankScale": {
+        "width": 1.256264812312616,
+        "height": 1.153781591411257,
+        "length": 0.9386660043973628
+      },
+      "ringSteps": 20,
+      "shape": "v13 broad oblate ellipsoidal lobes; 65 sections; no duplicate whole-bank pointed taper",
+      "localSweptBounds": {
+        "min": [
+          30.373616465848457,
+          22.00168228149414,
+          -75.69034960923143
+        ],
+        "max": [
+          73.62638353415154,
+          30.92838478088379,
+          -57.51766201796584
+        ]
+      },
+      "anchor": [
+        80.02893654731102,
+        -21.608377868390903,
+        137.38252536144026
+      ],
+      "local": [
+        52,
+        -76.7294147466748,
+        -67
+      ],
+      "source": "actual-sea",
+      "faceIndex": 1309,
+      "path": [
+        {
+          "world": [
+            98.34224557119877,
+            -18.53542991590905,
+            125.22291132407048
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1260
+        },
+        {
+          "world": [
+            97.80997160191981,
+            -18.588057037402393,
+            125.62481203916614
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1260
+        },
+        {
+          "world": [
+            97.27769763264092,
+            -18.640684158895667,
+            126.02671275426184
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1265
+        },
+        {
+          "world": [
+            96.74542366336199,
+            -18.693311280388997,
+            126.42861346935751
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1264
+        },
+        {
+          "world": [
+            96.21314969408309,
+            -18.7459384018823,
+            126.83051418445322
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1264
+        },
+        {
+          "world": [
+            95.68087572480417,
+            -18.79856552337563,
+            127.23241489954891
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1269
+        },
+        {
+          "world": [
+            95.14860175552522,
+            -18.851192644868974,
+            127.63431561464458
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1268
+        },
+        {
+          "world": [
+            94.61632778624634,
+            -18.903819766362233,
+            128.03621632974028
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1268
+        },
+        {
+          "world": [
+            94.0840538169674,
+            -18.956446887855577,
+            128.43811704483596
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1272
+        },
+        {
+          "world": [
+            93.5517798476885,
+            -19.009074009348893,
+            128.84001775993164
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1272
+        },
+        {
+          "world": [
+            93.01950587840955,
+            -19.061701130842238,
+            129.24191847502735
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1277
+        },
+        {
+          "world": [
+            92.48723190913063,
+            -19.114328252335554,
+            129.64381919012303
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1276
+        },
+        {
+          "world": [
+            91.95495793985168,
+            -19.1669553738289,
+            130.0457199052187
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1276
+        },
+        {
+          "world": [
+            91.42268397057279,
+            -19.21958249532217,
+            130.4476206203144
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1281
+        },
+        {
+          "world": [
+            90.83184022684111,
+            -19.335734586468106,
+            130.81744925677998
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1280
+        },
+        {
+          "world": [
+            90.23440803876468,
+            -19.459032525979808,
+            131.18367014322345
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1280
+        },
+        {
+          "world": [
+            89.6369760047034,
+            -19.58233029844618,
+            131.5498911140037
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1285
+        },
+        {
+          "world": [
+            89.03954447589233,
+            -19.70562752291653,
+            131.9161123614527
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1284
+        },
+        {
+          "world": [
+            88.44211294708126,
+            -19.82892474738685,
+            132.28233360890167
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1289
+        },
+        {
+          "world": [
+            87.84468141827017,
+            -19.952221971857213,
+            132.64855485635064
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1289
+        },
+        {
+          "world": [
+            87.24724988945911,
+            -20.075519196327548,
+            133.01477610379965
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1288
+        },
+        {
+          "world": [
+            86.64981836064797,
+            -20.198816420797954,
+            133.38099735124857
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1293
+        },
+        {
+          "world": [
+            86.05238683183694,
+            -20.322113645268246,
+            133.74721859869757
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1293
+        },
+        {
+          "world": [
+            85.45495530302586,
+            -20.445410869738595,
+            134.11343984614655
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1292
+        },
+        {
+          "world": [
+            84.85752377421478,
+            -20.568708094208944,
+            134.47966109359552
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1297
+        },
+        {
+          "world": [
+            84.26009224540368,
+            -20.69200531867932,
+            134.8458823410445
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1297
+        },
+        {
+          "world": [
+            83.66266071659264,
+            -20.815302543149627,
+            135.2121035884935
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1301
+        },
+        {
+          "world": [
+            83.06522918778157,
+            -20.93859976761999,
+            135.57832483594245
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1301
+        },
+        {
+          "world": [
+            82.4586752164968,
+            -21.071791223145723,
+            135.93955074757108
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1301
+        },
+        {
+          "world": [
+            81.85124053468559,
+            -21.20593790019977,
+            136.30029439309027
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1305
+        },
+        {
+          "world": [
+            81.24380585287432,
+            -21.34008457725392,
+            136.66103803860943
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1305
+        },
+        {
+          "world": [
+            80.63637117106308,
+            -21.474231254307995,
+            137.0217816841286
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1305
+        },
+        {
+          "world": [
+            80.02893654731102,
+            -21.608377868390903,
+            137.38252536144026
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1309
+        },
+        {
+          "world": [
+            79.41121818710937,
+            -21.753678256787936,
+            137.73763779282166
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1309
+        },
+        {
+          "world": [
+            78.72359722061202,
+            -21.974795241459447,
+            138.0544724280785
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1788
+        },
+        {
+          "world": [
+            78.03597625411463,
+            -22.195912226131014,
+            138.37130706333528
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1792
+        },
+        {
+          "world": [
+            77.34835528761722,
+            -22.417029210802596,
+            138.68814169859206
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1792
+        },
+        {
+          "world": [
+            76.66073432111983,
+            -22.63814619547415,
+            139.00497633384884
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1797
+        },
+        {
+          "world": [
+            75.97311335462248,
+            -22.85926318014566,
+            139.32181096910566
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1796
+        },
+        {
+          "world": [
+            75.2854923881251,
+            -23.0803801648172,
+            139.63864560436247
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1796
+        },
+        {
+          "world": [
+            74.5978714216277,
+            -23.30149714948878,
+            139.95548023961925
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1800
+        },
+        {
+          "world": [
+            73.91025045513032,
+            -23.522614134160335,
+            140.27231487487603
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1800
+        },
+        {
+          "world": [
+            73.22262948863292,
+            -23.74373111883189,
+            140.58914951013284
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1800
+        },
+        {
+          "world": [
+            72.53500852213556,
+            -23.964848103503428,
+            140.90598414538965
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1804
+        },
+        {
+          "world": [
+            71.84738755563822,
+            -24.18596508817494,
+            141.22281878064646
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1804
+        },
+        {
+          "world": [
+            71.15976658914079,
+            -24.40708207284655,
+            141.53965341590325
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1809
+        },
+        {
+          "world": [
+            70.47214559331243,
+            -24.628199089330565,
+            141.85648803509875
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1808
+        },
+        {
+          "world": [
+            69.78452459447755,
+            -24.849316109075488,
+            142.17332265264793
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1808
+        },
+        {
+          "world": [
+            69.09690359564259,
+            -25.070433128820454,
+            142.49015727019707
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1813
+        },
+        {
+          "world": [
+            68.40928259680771,
+            -25.29155014856535,
+            142.80699188774628
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1812
+        },
+        {
+          "world": [
+            67.72166159797278,
+            -25.512667168310315,
+            143.12382650529543
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1812
+        },
+        {
+          "world": [
+            67.03404059913785,
+            -25.73378418805528,
+            143.44066112284457
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1817
+        },
+        {
+          "world": [
+            66.2696829066345,
+            -26.038130077675078,
+            143.715475683186
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1816
+        },
+        {
+          "world": [
+            65.4889976926289,
+            -26.360184850718525,
+            143.98134949621624
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1816
+        },
+        {
+          "world": [
+            64.70831247862336,
+            -26.682239623761888,
+            144.2472233092465
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1821
+        },
+        {
+          "world": [
+            63.92762726461779,
+            -27.004294396805292,
+            144.51309712227675
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1820
+        },
+        {
+          "world": [
+            63.146942050612175,
+            -27.32634916984874,
+            144.77897093530697
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1825
+        },
+        {
+          "world": [
+            62.36625683660668,
+            -27.648403942892074,
+            145.04484474833725
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1825
+        },
+        {
+          "world": [
+            61.58557004443227,
+            -27.97046042762257,
+            145.31071769718193
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1824
+        },
+        {
+          "world": [
+            60.80488307294231,
+            -28.2925171068393,
+            145.57659054783562
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1829
+        },
+        {
+          "world": [
+            60.024196101452304,
+            -28.614573786056127,
+            145.8424633984893
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1829
+        },
+        {
+          "world": [
+            59.24350912996226,
+            -28.93663046527294,
+            146.10833624914295
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1828
+        },
+        {
+          "world": [
+            58.462822158472335,
+            -29.25868714448964,
+            146.37420909979667
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1833
+        },
+        {
+          "world": [
+            57.68213518698229,
+            -29.580743823706456,
+            146.64008195045034
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1833
+        },
+        {
+          "world": [
+            56.901448215492366,
+            -29.902800502923157,
+            146.90595480110403
+          ],
+          "source": "actual-sea",
+          "faceIndex": 1837
+        }
+      ],
+      "sweptBounds": {
+        "min": [
+          125.42632101725816,
+          37.544185085323384,
+          149.76202040596846
+        ],
+        "max": [
+          165.38249675429608,
+          62.05781570819409,
+          196.44529453286736
+        ]
+      },
+      "drift": 7,
+      "speed": 0.7,
+      "period": 62.83185307179587,
+      "lift": 0,
+      "minimumSampledClearance": 3.4500179290771484,
+      "supportSamples": 253,
+      "surfaceMisses": 0,
+      "clearanceMethod": "entire swept local AABB above maximum final-surface 2m-grid sample; plus sampled-face vertex maxima; not continuous full-world collision",
+      "triangles": 2596,
+      "motionStart": {
+        "time": 0,
+        "cycle": 0.611,
+        "position": [
+          47.51520574657238,
+          26.465033531188965,
+          -66.91794141133856
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          148.1537252022394,
+          49.01799431055273,
+          169.63377327594628
+        ],
+        "translation": [
+          -4.48479425342762,
+          4.991305782282675e-16,
+          -0.31393559773993335
+        ],
+        "opacity": 1
+      },
+      "motionEnd": {
+        "time": 10,
+        "cycle": 0.7701549430918955,
+        "position": [
+          45.0730048958939,
+          26.465033531188965,
+          -67.08889547088606
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          149.65086916636147,
+          48.59160727432308,
+          167.74424308789457
+        ],
+        "translation": [
+          -6.9269951041060995,
+          7.709328179446338e-16,
+          -0.4848896572874269
+        ],
+        "opacity": 1
+      }
+    },
+    {
+      "cluster": "old-rear",
+      "member": null,
+      "tier": 1,
+      "centreline": "rear sea band with variable 26.2–29.3m spine and thicker lobes; real terrain/sea swept audit",
+      "lobeCount": 4,
+      "lobes": [
+        {
+          "t": 0.16666666666666666,
+          "weight": 0.6198759739454948,
+          "width": 0.15304378174311872
+        },
+        {
+          "t": 0.5,
+          "weight": 1,
+          "width": 0.13429293354576943
+        },
+        {
+          "t": 0.8333333333333334,
+          "weight": 0.47703670418978833,
+          "width": 0.1115951820443171
+        }
+      ],
+      "cumulus": [
+        {
+          "x": -11,
+          "along": 9,
+          "z": 0.47264603529611454,
+          "y": 0.09012490013636748,
+          "width": 6.62406817597237,
+          "height": 3.704309602030933
+        },
+        {
+          "x": -3.666666666666667,
+          "along": 9.637861754662534,
+          "z": 1.258441326694258,
+          "y": -0.3986573745293047,
+          "width": 4.930609329604908,
+          "height": 3.0052696162560215
+        },
+        {
+          "x": 3.666666666666666,
+          "along": 9.943904412489298,
+          "z": -0.7469529014577976,
+          "y": 1.8978099851277963,
+          "width": 6.729036438153039,
+          "height": 4.28736711206029
+        },
+        {
+          "x": 11,
+          "along": 9,
+          "z": -1.0956253850821907,
+          "y": -0.3355065346045309,
+          "width": 5.770197589115692,
+          "height": 3.09558582560073
+        }
+      ],
+      "bankScale": {
+        "width": 1.11991133379701,
+        "height": 1.100127999421633,
+        "length": 0.8899683334989321
+      },
+      "ringSteps": 20,
+      "shape": "v13 broad oblate ellipsoidal lobes; 65 sections; no duplicate whole-bank pointed taper",
+      "localSweptBounds": {
+        "min": [
+          -83.86670183249139,
+          30.538822174072273,
+          -82.66898730454393
+        ],
+        "max": [
+          -42.13330198220588,
+          39.84074020385743,
+          -67.75255963149122
+        ]
+      },
+      "anchor": [
+        146.405094883265,
+        -46.09400792903217,
+        46.13989195523976
+      ],
+      "local": [
+        -63,
+        -83.17601274907145,
+        -75
+      ],
+      "source": "actual-sea",
+      "faceIndex": null,
+      "path": [
+        {
+          "world": [
+            145.00694015683175,
+            -64.40017827172886,
+            23.186526000231083
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.2639514092321,
+            -63.596744050611704,
+            24.02062946713538
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.5209626616325,
+            -62.79330982949452,
+            24.854732934039703
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.7779739140329,
+            -61.989875608377275,
+            25.688836400944083
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.9121756089488,
+            -61.3196410364844,
+            26.455690884546414
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.9809032027651,
+            -60.72041988959171,
+            27.186692566284307
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.04963079658134,
+            -60.12119874269908,
+            27.91769424802215
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.11835839039762,
+            -59.52197759580645,
+            28.648695929759995
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.18708598421398,
+            -58.9227564489137,
+            29.379697611497917
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.25581357803026,
+            -58.32353530202104,
+            30.11069929323576
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.32454116796316,
+            -57.72431415934034,
+            30.841700972847157
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.39326873899455,
+            -57.12509303716024,
+            31.572702642108283
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.4619963100259,
+            -56.52587191498023,
+            32.30370431136941
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.53072388105733,
+            -55.9266507928001,
+            33.03470598063055
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.59945145208872,
+            -55.32742967062002,
+            33.76570764989169
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.66817902312008,
+            -54.72820854843998,
+            34.4967093191528
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.73690659415146,
+            -54.12898742625987,
+            35.22771098841395
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.80563416518288,
+            -53.529766304079786,
+            35.95871265767509
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.8743617362142,
+            -52.93054518189976,
+            36.689714326936205
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.9430893072456,
+            -52.33132405971966,
+            37.42071599619736
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            147.01181687827696,
+            -51.73210293753962,
+            38.15171766545848
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            147.03691432747596,
+            -51.18020318873408,
+            38.858828023695715
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            147.03182080257116,
+            -50.661048669556735,
+            39.549406180734906
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.96914821064055,
+            -50.20434459550427,
+            40.2084547581854
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.90647561870992,
+            -49.747640521451814,
+            40.86750333563588
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.84380302677928,
+            -49.2909364473994,
+            41.526551913086344
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.78113043484868,
+            -48.834232373346936,
+            42.18560049053683
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.71845784291804,
+            -48.37752829929451,
+            42.84464906798731
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.6557852509875,
+            -47.92082422524197,
+            43.503697645437825
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.59311265905689,
+            -47.464120151189476,
+            44.16274622288834
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.5304400671262,
+            -47.00741607713714,
+            44.821794800338765
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.46776747519564,
+            -46.55071200308461,
+            45.48084337778929
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.405094883265,
+            -46.09400792903217,
+            46.13989195523976
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.3424222913344,
+            -45.637303854979706,
+            46.798940532690246
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.27974969940382,
+            -45.180599780927196,
+            47.45798911014076
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.2170771074732,
+            -44.7238957068748,
+            48.11703768759122
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.15440451554252,
+            -44.267191632822374,
+            48.776086265041705
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.09173192361195,
+            -43.810487558769864,
+            49.43513484249221
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            146.02905933168137,
+            -43.35378348471738,
+            50.094183419942695
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.96638673975073,
+            -42.89707941066493,
+            50.75323199739318
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.90371414782012,
+            -42.440375336612476,
+            51.41228057484367
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.8410415558895,
+            -41.983671262560065,
+            52.07132915229414
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.7772763263229,
+            -41.52815226687463,
+            52.72977941499095
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.64538870378988,
+            -41.14651904224243,
+            53.35092670419833
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.4828973168465,
+            -40.79807876096007,
+            53.95531575337976
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.3204059230103,
+            -40.44963848715369,
+            54.559704798786754
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            145.1579145256882,
+            -40.10119821712814,
+            55.16409384228489
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            144.99542312836607,
+            -39.752757947102594,
+            55.768482885783044
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            144.8329317310439,
+            -39.404317677077074,
+            56.37287192928117
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            144.67044033372184,
+            -39.05587740705148,
+            56.97726097277935
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            144.50794893639969,
+            -38.70743713702599,
+            57.58165001627748
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            144.34545753907761,
+            -38.3589968670004,
+            58.186039059775645
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            144.1829661417555,
+            -38.010556596974865,
+            58.790428103273776
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            144.02047474443336,
+            -37.66211632694933,
+            59.39481714677191
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            143.85798334711126,
+            -37.31367605692377,
+            59.99920619027008
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            143.69549194978913,
+            -36.96523578689826,
+            60.603595233768225
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            143.53300055246703,
+            -36.616795516872685,
+            61.20798427726638
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            143.37050915514496,
+            -36.26835524684708,
+            61.81237332076456
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            143.20801775782277,
+            -35.919914976821616,
+            62.41676236426267
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            143.0455263605007,
+            -35.57147470679601,
+            63.02115140776083
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            142.8830349631786,
+            -35.22303443677045,
+            63.625540451259
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            142.72054356585647,
+            -34.87459416674491,
+            64.22992949475713
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            142.5580521685344,
+            -34.526153896719336,
+            64.8343185382553
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            142.39556077121233,
+            -34.17771362669373,
+            65.43870758175348
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        },
+        {
+          "world": [
+            142.23306937389015,
+            -33.82927335666824,
+            66.04309662525161
+          ],
+          "source": "actual-sea",
+          "faceIndex": null
+        }
+      ],
+      "sweptBounds": {
+        "min": [
+          202.9091786964834,
+          24.209743049665335,
+          65.41263161211953
+        ],
+        "max": [
+          240.5567428131231,
+          46.468560250729496,
+          109.44702258694218
+        ]
+      },
+      "drift": 7,
+      "speed": 0.7,
+      "period": 62.83185307179587,
+      "lift": 1.9939117431640696,
+      "minimumSampledClearance": 2,
+      "supportSamples": 198,
+      "surfaceMisses": 0,
+      "clearanceMethod": "entire swept local AABB above maximum final-surface 2m-grid sample; plus sampled-face vertex maxima; not continuous full-world collision",
+      "triangles": 2596,
+      "motionStart": {
+        "time": 0,
+        "cycle": 0.748,
+        "position": [
+          -69.98236333590258,
+          35.189781188964844,
+          -75.69953876801635
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          226.01336228900712,
+          34.120092048863555,
+          82.02757580661401
+        ],
+        "translation": [
+          -6.982361428553948,
+          7.770947562576139e-16,
+          -0.48876529999877627
+        ],
+        "opacity": 1
+      },
+      "motionEnd": {
+        "time": 10,
+        "cycle": 0.9071549430918955,
+        "position": [
+          -66.84642491363985,
+          35.189781188964844,
+          -75.48002307845796
+        ],
+        "coordinateSpace": "castle-local",
+        "worldPosition": [
+          224.0909359335152,
+          34.66759963379286,
+          84.45385058048875
+        ],
+        "translation": [
+          -3.846423006291221,
+          4.280837047927761e-16,
+          -0.2692496104403854
+        ],
+        "opacity": 1
+      }
+    }
+  ],
+  "rejected": {
+    "unsupported": 5,
+    "height": 3,
+    "neighbour": 3,
+    "clearance": 0,
+    "cityFront": 0,
+    "envelope": 0
+  },
+  "method": "three rear horizon groups of compact tall connected cloud banks; actual sea/terrain sampled clearance and continuous bounded drift",
+  "clusteredComposition": false,
+  "compositionVersion": "cloud13",
+  "field": {
+    "nx": 31,
+    "nz": 22,
+    "step": 8,
+    "validCells": 666,
+    "samples": 682
+  },
+  "protectedStructureBoxes": 0,
+  "cityFrontExclusions": [
+    {
+      "name": "old-city-front",
+      "min": [
+        -82,
+        -100,
+        -18
+      ],
+      "max": [
+        -26,
+        140,
+        43
+      ]
+    },
+    {
+      "name": "new-city-front",
+      "min": [
+        40,
+        -100,
+        0
+      ],
+      "max": [
+        106,
+        140,
+        86
+      ]
+    }
+  ],
+  "summitCoreExclusions": [
+    {
+      "min": [
+        -80,
+        30,
+        -47
+      ],
+      "max": [
+        -66,
+        75,
+        -32
+      ]
+    }
+  ],
+  "composition": {
+    "clusters": [
+      {
+        "id": "old-rear",
+        "x": -48,
+        "z": -58,
+        "quota": 2,
+        "y": 32
+      },
+      {
+        "id": "valley-rear",
+        "x": -8,
+        "z": -76,
+        "quota": 2,
+        "y": 22
+      },
+      {
+        "id": "new-rear",
+        "x": 67,
+        "z": -60,
+        "quota": 2,
+        "y": 26
+      }
+    ],
+    "actualSeaMode": true,
+    "kind": "three rear-shoulder groups with depth/height tiers; foreground city exclusions retained"
+  },
+  "count": 5,
+  "triangles": 12980,
+  "drawCalls": 5,
+  "speed": 0.7,
+  "period": 62.83185307179587,
+  "drift": 7,
+  "clearance": 2,
+  "fadeMode": "opaque depth-writing continuous bounded mountain-wind oscillation; no alpha stipple or reset jump",
+  "time": 0,
+  "opacity": 1,
+  "shapeChecks": {
+    "normalLit": true,
+    "multiPeak": true,
+    "closedIndexedShell": true,
+    "internalTransparentLobes": false,
+    "variableBankThickness": true,
+    "variableLobeCount": true,
+    "smallEndCaps": true
+  }
+}

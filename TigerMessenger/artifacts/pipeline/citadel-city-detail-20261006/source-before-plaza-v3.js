@@ -1,0 +1,40 @@
+import * as T from 'three';
+const polygon=[[45,76],[49,69],[65,64],[81,67],[88,76],[83,87],[64,91],[49,87]];
+function clip(subject,a,b){const result=[],cross=p=>(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);for(let i=0;i<subject.length;i++){const p=subject[i],q=subject[(i+1)%subject.length],u=cross(p),v=cross(q);if(u>=-1e-9)result.push(p);if((u>=0)!==(v>=0)){const t=u/(u-v);result.push([p[0]+t*(q[0]-p[0]),p[1]+t*(q[1]-p[1])]);}}return result;}
+/** Ground-following paved candidate. Does not flatten or replace terrain. */
+export function createTargetNewCityPlaza({sampleSurface,castle=null,step=1.2,offset=.035}={}){
+ if(typeof sampleSurface!=='function'||!Number.isFinite(step)||step<=0||step>2)throw new TypeError('final surface sampler and step <=2 required');
+ const root=new T.Group();root.name='target-new-city-paved-plaza';root.userData.preserveCitadelMaterials=true;
+ const report={version:'target-plaza-2-vista-inlay',polygon,terrainMutation:false,offset,acceptedCells:0,rejectedCells:0,missing:0,samples:0,geometrySupport:'all clipped cell vertices on actual final terrain, finite interpolation',wfc:false};
+ const cache=new Map(),sample=(x,z)=>{const key=x.toFixed(7)+','+z.toFixed(7);if(cache.has(key))return cache.get(key);report.samples++;const hit=sampleSurface(x,z),y=typeof hit==='number'?hit:hit?.height;const value=Number.isFinite(y)?y:null;if(value===null)report.missing++;cache.set(key,value);return value;};
+ const positions=[],uvs=[];
+ for(let z=64;z<91;z+=step)for(let x=45;x<88;x+=step){let p=[[x,z],[Math.min(88,x+step),z],[Math.min(88,x+step),Math.min(91,z+step)],[x,Math.min(91,z+step)]];for(let j=0;j<polygon.length&&p.length;j++)p=clip(p,polygon[j],polygon[(j+1)%polygon.length]);if(p.length<3)continue;const ys=p.map(q=>sample(...q));if(ys.some(y=>y===null)||Math.max(...ys)-Math.min(...ys)>.45||Math.min(...ys)<2.25||Math.max(...ys)>3.35){report.rejectedCells++;continue;}for(let j=1;j<p.length-1;j++)for(const k of[0,j+1,j]){positions.push(p[k][0],ys[k]+offset,p[k][1]);uvs.push(p[k][0],p[k][1]);}report.acceptedCells++;}
+ const material=new T.MeshStandardMaterial({color:'#ddd2b3',roughness:.94});material.userData.preserveCitadelMaterial=true;
+ material.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
+ float plazaHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+ `).replace('#include <color_fragment>',`#include <color_fragment>
+ vec2 stoneUv=vUv*0.8; vec2 cellSpan=vec2(1.,1.7320508);
+ vec2 a=mod(stoneUv,cellSpan)-cellSpan*.5, b=mod(stoneUv-cellSpan*.5,cellSpan)-cellSpan*.5;
+ vec2 h=dot(a,a)<dot(b,b)?a:b; float edge=max(dot(abs(h),vec2(.8660254,.5)),abs(h.y));
+ float seam=smoothstep(.442,.473,edge);float tint=.96+.055*plazaHash(floor(stoneUv-h));
+ diffuseColor.rgb*=mix(vec3(tint),vec3(.81,.82,.80),seam*.46);
+ `);};material.defines={USE_UV:''};material.customProgramCacheKey=()=> 'target-plaza-hex-pavers-1';
+ const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));geo.computeVertexNormals();const mesh=new T.Mesh(geo,material);mesh.name='target-plaza-paving-surface';mesh.receiveShadow=true;mesh.userData.preserveCitadelMaterials=true;mesh.userData.targetWalkable=true;root.add(mesh);
+ const ringPositions=[],cx=56,cz=78;report.rings={radii:[[3.4,3.65],[5.45,5.72],[7.6,7.95]],clippedSegments:0,rejectedSegments:0};
+ for(let i=0;i<96;i++)for(const radii of report.rings.radii){const a=i*Math.PI/48,b=(i+1)*Math.PI/48;let pts=[[cx+Math.cos(a)*radii[0],cz+Math.sin(a)*radii[0]],[cx+Math.cos(a)*radii[1],cz+Math.sin(a)*radii[1]],[cx+Math.cos(b)*radii[1],cz+Math.sin(b)*radii[1]],[cx+Math.cos(b)*radii[0],cz+Math.sin(b)*radii[0]]];const before=JSON.stringify(pts);for(let j=0;j<polygon.length&&pts.length;j++)pts=clip(pts,polygon[j],polygon[(j+1)%polygon.length]);if(JSON.stringify(pts)!==before)report.rings.clippedSegments++;if(pts.length<3)continue;const ys=pts.map(p=>sample(...p)),center=pts.reduce((v,p)=>[v[0]+p[0]/pts.length,v[1]+p[1]/pts.length],[0,0]),middle=sample(...center);if(middle===null||middle<2.25||middle>3.35||ys.some(y=>y===null||y<2.25||y>3.35)||Math.max(...ys)-Math.min(...ys)>.45){report.rings.rejectedSegments++;continue;}for(let j=1;j<pts.length-1;j++)for(const k of[0,j+1,j])ringPositions.push(pts[k][0],ys[k]+offset+.005,pts[k][1]);}
+ const ringGeo=new T.BufferGeometry();ringGeo.setAttribute('position',new T.Float32BufferAttribute(ringPositions,3));ringGeo.computeVertexNormals();const ringMaterial=new T.MeshStandardMaterial({color:'#827a69',roughness:.95});ringMaterial.userData.preserveCitadelMaterial=true;const rings=new T.Mesh(ringGeo,ringMaterial);rings.name='target-plaza-statue-inlaid-rings';rings.receiveShadow=true;root.add(rings);
+ const saved=[],inst=[],hiddenKeys=new Set(),vistaKeys=new Set(),nearby=[],matrix=new T.Matrix4();
+ if(castle){castle.updateWorldMatrix(true,true);const canopy=castle.getObjectByName('citadel-mountain-canopy-candidate'),inv=castle.matrixWorld.clone().invert();canopy?.traverse(o=>{if(o.isInstancedMesh)inst.push(o);});const key=m=>m.elements.map(n=>n.toFixed(5)).join(',');
+  for(const m of inst.filter(m=>m.name!=='citadel-canopy-root-trunks'))for(let i=0;i<m.count;i++){m.getMatrixAt(i,matrix);const p=new T.Vector3().setFromMatrixPosition(inv.clone().multiply(m.matrixWorld).multiply(matrix));const within=polygon.every((a,j)=>{const b=polygon[(j+1)%polygon.length];return(b[0]-a[0])*(p.z-a[1])-(b[1]-a[1])*(p.x-a[0])>=0;});const y=within?sample(p.x,p.z):null;if(within&&y!==null&&y>=2.25&&y<=3.35&&Math.abs(p.y-y)<2)hiddenKeys.add(key(matrix));// Explicit foreground vista only: use actual crown bounds and supported root.
+ if(p.x>=35&&p.x<=95&&p.z>=75&&p.z<=115&&Math.abs(matrix.determinant())>1e-8){m.geometry.computeBoundingBox();const actualBox=m.geometry.boundingBox.clone().applyMatrix4(inv.clone().multiply(m.matrixWorld).multiply(matrix));nearby.push({mesh:m.name,index:i,root:p.toArray(),ground:sample(p.x,p.z),bounds:{min:actualBox.min.toArray(),max:actualBox.max.toArray()},signature:key(matrix)});}
+ const inVista=p.x>=49&&p.x<=76&&p.z>=84&&p.z<=98;
+ if(inVista){const ground=sample(p.x,p.z);m.geometry.computeBoundingBox();const crown=m.geometry.boundingBox.clone().applyMatrix4(inv.clone().multiply(m.matrixWorld).multiply(matrix));
+ if(ground!==null&&ground>=2.25&&ground<=3.35&&Math.abs(p.y-ground)<2&&crown.max.x>51&&crown.min.x<74&&crown.max.z>84&&crown.min.z<98){hiddenKeys.add(key(matrix));vistaKeys.add(key(matrix));}}
+}
+  for(const m of inst)for(let i=0;i<m.count;i++){m.getMatrixAt(i,matrix);if(hiddenKeys.has(key(matrix))){saved.push({mesh:m,index:i,matrix:matrix.clone()});m.setMatrixAt(i,new T.Matrix4().makeScale(0,0,0));}}
+  for(const m of inst){m.instanceMatrix.needsUpdate=true;m.computeBoundingBox();m.computeBoundingSphere();}
+ }
+ report.forest={hiddenTrees:hiddenKeys.size,vistaTrees:vistaKeys.size,vistaRootBounds:[49,76,84,98],nearby:nearby.map(r=>({...r,hidden:hiddenKeys.has(r.signature),reason:hiddenKeys.has(r.signature)?(vistaKeys.has(r.signature)?'vista':'plaza'):(r.root[0]<49||r.root[0]>76||r.root[2]<84||r.root[2]>98?'outside-vista':r.ground===null?'missing-ground':r.ground<2.25||r.ground>3.35?'ground-height':Math.abs(r.root[1]-r.ground)>=2?'root-gap':'crown-outside')})),hiddenInstances:saved.length,method:'same original tree crown/trunk instance signatures; reversible plaza clearing, no terrain/root relocation'};
+ report.triangles=(positions.length+ringPositions.length)/9;report.draws=2;report.accepted=report.acceptedCells>0&&report.missing===0;root.userData.targetPlazaReport=report;
+ let disposed=false;return{group:root,report,dispose(){if(disposed)return;disposed=true;root.removeFromParent();for(const e of saved)e.mesh.setMatrixAt(e.index,e.matrix);for(const m of inst){m.instanceMatrix.needsUpdate=true;m.computeBoundingBox();m.computeBoundingSphere();}geo.dispose();ringGeo.dispose();material.dispose();ringMaterial.dispose();}};
+}

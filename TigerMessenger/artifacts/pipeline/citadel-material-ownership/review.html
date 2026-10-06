@@ -1,0 +1,9 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>山城材质修复 · 柏树与雕像</title>
+<style>body{margin:32px auto;max-width:1200px;padding:0 20px;background:#18282e;color:#e3ede7;font:16px/1.7 system-ui}a{color:#a1d8cc}.pair{display:grid;grid-template-columns:1fr 2fr;gap:18px;margin:28px 0}figure{margin:0}img{width:100%;height:450px;object-fit:contain;background:#253b40}figcaption{color:#b7cbc4}h1{font-size:28px}code{color:#d9c99e}@media(max-width:650px){.pair{grid-template-columns:1fr}img{height:auto}}</style>
+<h1>柏树与广场雕像 · 材质修复</h1>
+<p>修正合并后的植物与雕像被城市统一石墙处理误覆盖的问题。柏树保留原绿叶/树皮，雕像与基座恢复原模型的暖白石雕；真正城墙继续使用砖纹。没有改几何、位置或道路。</p>
+<p><a href="live.html">打开实际场景近景检查</a> · <a href="status.json">验收记录</a> · <a href="after-test.txt">回归测试</a></p>
+<div class="pair"><figure><img src="user-before-tree.png" alt="用户截图：树冠被城墙砖纹覆盖"><figcaption>修复前：用户提供的截图</figcaption></figure><figure><img src="citadel-material-tree.png" alt="实际场景修复后的柏树"><figcaption>修复后：实际场景近景，拍摄角度不同</figcaption></figure></div>
+<div class="pair"><figure><img src="user-before-statue.png" alt="用户截图：雕像身上有砖缝"><figcaption>修复前：用户提供的截图</figcaption></figure><figure><img src="citadel-material-statue.png" alt="实际场景修复后的石雕"><figcaption>修复后：实际场景近景，拍摄角度不同</figcaption></figure></div>
+<p>测试使用真实植物和雕像工厂，并额外把柏树再次合并为匿名网格。完整材质处理顺序下，误改由16个降为0个，原材质身份、颜色、粗糙度、金属度和几何保持；建筑墙体的砖纹及城市配色仍在。</p>
+<p>旧页面已经创建的材质不会自动替换，需要刷新游戏页。<a href="citadel-material-tree.json">柏树实际材质/GPU记录</a> · <a href="citadel-material-statue.json">雕像实际材质/GPU记录</a></p></html>

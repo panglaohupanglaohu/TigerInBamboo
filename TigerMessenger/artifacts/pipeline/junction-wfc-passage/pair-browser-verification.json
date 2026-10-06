@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-04T21:16:33.661671+00:00",
+  "status": "pass",
+  "checks": {
+    "initial398": true,
+    "rejectionSameSnapshot": true,
+    "rejectionSameRevision": true,
+    "deleted397": true,
+    "pairRetired": true,
+    "undoRestored": true,
+    "redoExact": true,
+    "finalRestored": true,
+    "gpuClean": true
+  },
+  "actualPointerTargets": {
+    "rejectedLower": [
+      "left-mid-yellow",
+      0,
+      0,
+      1
+    ],
+    "deletedUpper": [
+      "left-mid-yellow",
+      0,
+      1,
+      1
+    ]
+  },
+  "counts": {
+    "before": 398,
+    "rejected": 398,
+    "deleted": 397,
+    "undo": 398,
+    "redo": 397,
+    "final": 398
+  },
+  "rejectionFeedback": "Error: 双层拱门拒绝删除：left-mid-yellow 0,1,1 上格仍占用，删除下半会失去承托；上格未被自动删除。",
+  "maxPrograms": 282,
+  "saved": false,
+  "defaultEnabled": false,
+  "fullTraversalAccepted": false,
+  "limit": "Actual UI editing and GPU verification; complete outside approach still fails fixed-foundation support. Undo/redo panel revision now verified3/4/5; final398 restored; Save not invoked.",
+  "uiRevisionFollowup": "pair-ui-revision-verification.json"
+}

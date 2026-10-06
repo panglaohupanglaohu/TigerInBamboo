@@ -1,0 +1,29 @@
+{
+  "pass": true,
+  "fixture": "rotated castle, final undulating terrain, protected building box and railway",
+  "count": 8,
+  "triangles": 7968,
+  "drawCalls": 8,
+  "buildMs": 16.728582999999993,
+  "pathSamples": 200,
+  "maxSupportError": 4.081757258616412e-14,
+  "maxMotion": 6.999996044099781,
+  "deterministic": true,
+  "absoluteTime": true,
+  "sourceUnchanged": true,
+  "sweptBoundsPassed": true,
+  "shaderGPU": "not tested; actual browser required",
+  "rejected": {
+    "unsupported": 0,
+    "height": 0,
+    "neighbour": 23,
+    "clearance": 8,
+    "cityFront": 2,
+    "envelope": 0
+  },
+  "clusters": {
+    "old-west-rear": 3,
+    "old-east-rear": 2,
+    "new-rear": 3
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "report": {
+    "bay": {
+      "version": 1,
+      "separationArc": 34,
+      "sharedMeshes": 12,
+      "sharedVertices": 10422,
+      "footbridgeMeshes": 13,
+      "rotation": [
+        0.029610261964884133,
+        -0.09529860078967871,
+        0.03588947600216732,
+        0.9943607768743647
+      ],
+      "target": "citadel-bay-layout/approved-target.png"
+    },
+    "city": [
+      80.92689445991667,
+      -4.107862881528916,
+      -19.013137501527567
+    ],
+    "children": [
+      {
+        "name": "highland-hero-cloud-impostors",
+        "pos": [
+          -52,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "highland-hero-cloud-blobs",
+        "pos": [
+          -52,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "citadel-ridge-flow-clouds",
+        "pos": [
+          -52,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "highland-light-volumes",
+        "pos": [
+          -52,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "citadel-continuous-mountain-terrain-system",
+        "pos": [
+          -52,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "odyssey-citadel-mountain-valley-assembly",
+        "pos": [
+          -52,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "citadel-terrain-objects",
+        "pos": [
+          -52,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "citadel-svarbova-ambient",
+        "pos": [
+          -52,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "citadel-svarbova-sun",
+        "pos": [
+          -42,
+          22,
+          12
+        ]
+      },
+      {
+        "name": "citadel-old-shore-approach",
+        "pos": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "holy-old-town-roof-domes",
+        "pos": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "citadel-shore-cypress-groves",
+        "pos": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "citadel-mountain-cypress-groves",
+        "pos": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "name": "citadel-target-hillside-houses",
+        "pos": [
+          -8.211524227066336,
+          0,
+          -20.420816370587374
+        ]
+      },
+      {
+        "name": "citadel-separated-bay-footbridge",
+        "pos": [
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "errors": []
+}

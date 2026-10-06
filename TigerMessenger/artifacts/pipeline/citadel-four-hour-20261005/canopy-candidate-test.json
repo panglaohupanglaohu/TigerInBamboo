@@ -1,0 +1,27 @@
+{
+  "pass": true,
+  "fixture": "rotated sphere-local castle; final undulating mesh; independent original Three.Raycaster every actual trunk bottom vertex",
+  "buildMs": 19.608916,
+  "accepted": 471,
+  "broadleaf": 458,
+  "cypress": 13,
+  "triangles": 116808,
+  "drawCalls": 5,
+  "roots": 9420,
+  "minGap": -0.23868895118530986,
+  "maxGap": -0.011646552266086019,
+  "protectedBoxes": 1,
+  "railSamples": 61,
+  "sourceUnchanged": true,
+  "defaultDisabled": true,
+  "deterministic": true,
+  "materialOwnership": true,
+  "rejected": {
+    "field": 672,
+    "surface": 0,
+    "slope": 0,
+    "height": 0,
+    "feet": 0,
+    "clearance": 177
+  }
+}

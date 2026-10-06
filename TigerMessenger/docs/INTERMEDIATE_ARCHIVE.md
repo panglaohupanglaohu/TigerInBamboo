@@ -43,3 +43,8 @@ python3 tools/maintenance/archive_intermediates.py --restore --apply
 ## 首批验证
 
 首轮检测到原服务拒绝外链，已全部恢复；加入仅针对固定归档对象目录的读取支持后重新执行。验证覆盖：SHA校验、恢复预览与实际恢复、重复归档候选归零、允许归档/拒绝其他外链/拒绝路径穿越、原URL的HTTP读取。实际数量与字节见外部 `last-run.json`，每次自动跟进更新。
+
+
+## 2026-10-04 weekly maintenance
+
+Protected target-named parent directories and approved images in addition to target filenames. Added active citadel-living-slopes, old-tower-crown, citadel-vegetation and citadel-landform-rebuild batches to PINNED; no existing protection removed. Archived 1135 files / 562561857 bytes. All 1701 manifest-backed links and original HTTP URL bytes verified. No entries over90 days; tracked assets retained. Evidence: artifacts/maintenance/2026-10-04/report.md.

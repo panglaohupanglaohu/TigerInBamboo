@@ -1,0 +1,90 @@
+{
+  "status": 200,
+  "checks": [
+    {
+      "view": "old-mountain",
+      "images": [
+        {
+          "src": "before-old-mountain.png",
+          "ok": true
+        },
+        {
+          "src": "r04-old-mountain.png",
+          "ok": true
+        },
+        {
+          "src": "final-dusk.png",
+          "ok": true
+        },
+        {
+          "src": "final-night.png",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "view": "overview",
+      "images": [
+        {
+          "src": "before-overview.png",
+          "ok": true
+        },
+        {
+          "src": "r04-overview.png",
+          "ok": true
+        },
+        {
+          "src": "final-dusk.png",
+          "ok": true
+        },
+        {
+          "src": "final-night.png",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "view": "new-mountain",
+      "images": [
+        {
+          "src": "before-new-mountain.png",
+          "ok": true
+        },
+        {
+          "src": "r04-new-mountain.png",
+          "ok": true
+        },
+        {
+          "src": "final-dusk.png",
+          "ok": true
+        },
+        {
+          "src": "final-night.png",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "view": "new-facade",
+      "images": [
+        {
+          "src": "before-new-facade.png",
+          "ok": true
+        },
+        {
+          "src": "r04-new-facade.png",
+          "ok": true
+        },
+        {
+          "src": "final-dusk.png",
+          "ok": true
+        },
+        {
+          "src": "final-night.png",
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,3354 @@
+{
+  "version": "actual-global-approach-support-audit-1",
+  "installed": false,
+  "accepted": false,
+  "surfaceEpoch": {
+    "position": 2638422502,
+    "index": null,
+    "vertices": 331512,
+    "indexCount": 0,
+    "triangles": 110504,
+    "indexed": false,
+    "positionType": "Float32Array",
+    "indexType": null,
+    "localBounds": {
+      "min": [
+        -91,
+        -159.79254150390625,
+        -72
+      ],
+      "max": [
+        195,
+        42.99868392944336,
+        107
+      ]
+    },
+    "castleBounds": {
+      "min": [
+        -142.99999999999997,
+        -159.79254150390628,
+        -72.00000000000001
+      ],
+      "max": [
+        142.99999999999997,
+        42.99868392944333,
+        107
+      ]
+    },
+    "sourceToCastle": [
+      1,
+      -5.551115123125783e-17,
+      5.551115123125783e-17,
+      0,
+      0,
+      1.0000000000000002,
+      -2.7755575615628914e-17,
+      0,
+      5.551115123125783e-17,
+      -5.551115123125783e-17,
+      1.0000000000000002,
+      0,
+      -52.000000000000014,
+      -2.842170943040401e-14,
+      -7.105427357601002e-15,
+      1.0000000000000002
+    ],
+    "refinement": {
+      "refined": 2669,
+      "sourceTriangles": 69220,
+      "triangles": 110504,
+      "maxOffset": 0.2193362385370818,
+      "reliefAmplitude": 0.22,
+      "reliefCandidate": true
+    },
+    "surfaceNormals": {
+      "version": 1,
+      "method": "constrained source-corner fans with affine normal transport",
+      "positionChanged": false,
+      "cornerFanConstraints": true,
+      "rawAffineNormals": true,
+      "mixedSubdivisionSoftEdges": 1540,
+      "cannotLinkPairs": 6944,
+      "constraintRejectedSoftJoins": 610,
+      "sourceFaces": 69220,
+      "softEdges": 100358,
+      "angleFallbackEdges": 100358,
+      "semanticEdges": 0,
+      "protectedFaces": 0,
+      "unmatchedEdges": 0,
+      "subdivisionMismatchEdges": 0,
+      "nonManifoldEdges": 0,
+      "sharpEdges": 3472,
+      "smoothedCorners": 203389,
+      "interpolatedVertices": 331512,
+      "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+      "creaseAngleDeg": 42,
+      "protectionBounds": "shore-and-geometric-feature-edges-only",
+      "pass": 4,
+      "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+      "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+      "reasonCounts": {
+        "shoreAttributeFaces": 0,
+        "callbackProtectedFaces": 0,
+        "openEdges": 0,
+        "nonManifoldEdges": 0,
+        "subdivisionMismatchEdges": 0,
+        "protectedFaceEdges": 0,
+        "mixedSemanticEdges": 0,
+        "semanticBoundaryEdges": 0,
+        "sharpAngleEdges": 3472,
+        "windingEdges": 0,
+        "crestFoldEdges": 0
+      }
+    }
+  },
+  "sourceFrame": [
+    -52,
+    0,
+    0
+  ],
+  "coverage": {
+    "enabled": true,
+    "entryCastleX": 120,
+    "centerWorld": [
+      -8.129311971257174,
+      92.93554399667954,
+      140.90860280491526
+    ],
+    "centerLocal": [
+      119.9999999999996,
+      -52.57632273430595,
+      58.28865944878038
+    ],
+    "boundaries": {
+      "center": {
+        "replacementU": 0.3692885254011872,
+        "world": [
+          -8.129311971257174,
+          92.93554399667954,
+          140.90860280491526
+        ],
+        "castleLocal": [
+          119.9999999999996,
+          -52.57632273430595,
+          58.28865944878038
+        ],
+        "fromSourceHeadMetres": 210.93525717159653,
+        "cityNewShoreLength": 162.3131521516999
+      },
+      "red": {
+        "replacementU": 0.3731562599258885,
+        "world": [
+          -6.701882053368469,
+          91.70473905159578,
+          141.80788232117612
+        ],
+        "castleLocal": [
+          119.74859471889536,
+          -52.20460872979247,
+          56.24910932309723
+        ],
+        "fromSourceHeadMetres": 212.02963851227628,
+        "cityNewShoreLength": 159.83431084307352
+      },
+      "blue": {
+        "replacementU": 0.3720290200460332,
+        "world": [
+          -9.564296604212194,
+          94.23222085402534,
+          140.11030990816303
+        ],
+        "castleLocal": [
+          120.3454801263322,
+          -52.872293725815396,
+          60.33092974741679
+        ],
+        "fromSourceHeadMetres": 215.8782540121206,
+        "cityNewShoreLength": 164.82692854138082
+      }
+    },
+    "globalParameterIntervals": {
+      "center": {
+        "globalApproach": [
+          0.5776235669399344,
+          0.6588167066637645
+        ],
+        "cityStructure": [
+          0.6588167066637645,
+          0.7974872619616616
+        ],
+        "sourceReplacement": [
+          0.5733088104954024,
+          0.799
+        ],
+        "cityStartOriginalSourceU": null
+      },
+      "red": {
+        "globalApproach": [
+          0.5751002594315404,
+          0.6576919782680112
+        ],
+        "cityStructure": [
+          0.6576919782680112,
+          0.7964330567236829
+        ],
+        "sourceReplacement": [
+          0.5706734626725924,
+          0.798
+        ],
+        "cityStartOriginalSourceU": null
+      },
+      "blue": {
+        "globalApproach": [
+          0.5778115826714982,
+          0.6599386402140367
+        ],
+        "cityStructure": [
+          0.6599386402140367,
+          0.7985660214848371
+        ],
+        "sourceReplacement": [
+          0.5736982280057619,
+          0.8
+        ],
+        "cityStartOriginalSourceU": null
+      }
+    },
+    "globalApproachSupportBuilt": false,
+    "hardFailures": [
+      {
+        "code": "GLOBAL_APPROACH_SUPPORT_UNBUILT"
+      }
+    ]
+  },
+  "routeReport": {
+    "version": "east-global-crossing-candidate-1",
+    "enabled": true,
+    "accepted": false,
+    "installed": false,
+    "parameters": {
+      "lateral": 0,
+      "radialLift": 0,
+      "startMetres": 10,
+      "endMetres": 300,
+      "fixedDirection": false,
+      "frontLoadedGrade": 0.0395,
+      "sourceExtensionMetres": 50,
+      "independentRadialProfiles": true,
+      "tailGrade": -0.004
+    },
+    "sourceIntervals": {
+      "center": [
+        0.5733088104954024,
+        0.799
+      ],
+      "red": [
+        0.5706734626725924,
+        0.798
+      ],
+      "blue": [
+        0.5736982280057619,
+        0.8
+      ]
+    },
+    "gradeProfile": {
+      "length": 369.51194052401235,
+      "r0": 161.14999965752742,
+      "r1": 168.65529745202647,
+      "plateauEnd": 197.4330286477285,
+      "peak": 0.0395
+    },
+    "audit": {
+      "center": {
+        "length": 571.1936403722292,
+        "addedLength": 3.7431403889985404,
+        "headLength": 373.24840932329647,
+        "originalTailStart": 0.6511674039325326,
+        "newTailStart": 0.6534533701741883,
+        "minRadius": 27.13574659149074,
+        "maxGrade": 0.03942061307905336,
+        "shapePass": true
+      },
+      "red": {
+        "length": 568.206033993338,
+        "addedLength": 3.800803711431854,
+        "headLength": 371.8639493553498,
+        "originalTailStart": 0.6521256818617356,
+        "newTailStart": 0.6544526582055089,
+        "minRadius": 25.943471019431815,
+        "maxGrade": 0.03941969469753879,
+        "shapePass": true
+      },
+      "blue": {
+        "length": 580.2726195537348,
+        "addedLength": 4.0274512137898455,
+        "headLength": 380.7051825535014,
+        "originalTailStart": 0.6536761643049434,
+        "newTailStart": 0.6560798661261789,
+        "minRadius": 27.250192777485058,
+        "maxGrade": 0.03941848933953259,
+        "shapePass": true
+      }
+    },
+    "splicePass": true,
+    "retainedCentralAndOldShoreGeometry": true,
+    "requires": [
+      "Use recomputed cityGalleryCoverage and ranges, never old global fractions.",
+      "Repeat actual final terrain/body/sea and structure checks.",
+      "Rebuild all tracks, vehicles, stations and interlocking from a single startup transaction."
+    ],
+    "terrainVerified": false,
+    "structureVerified": false,
+    "actorsVerified": false,
+    "cityGalleryCoverage": {
+      "enabled": true,
+      "entryCastleX": 120,
+      "centerWorld": [
+        -8.129311971257174,
+        92.93554399667954,
+        140.90860280491526
+      ],
+      "centerLocal": [
+        119.9999999999996,
+        -52.57632273430595,
+        58.28865944878038
+      ],
+      "boundaries": {
+        "center": {
+          "replacementU": 0.3692885254011872,
+          "world": [
+            -8.129311971257174,
+            92.93554399667954,
+            140.90860280491526
+          ],
+          "castleLocal": [
+            119.9999999999996,
+            -52.57632273430595,
+            58.28865944878038
+          ],
+          "fromSourceHeadMetres": 210.93525717159653,
+          "cityNewShoreLength": 162.3131521516999
+        },
+        "red": {
+          "replacementU": 0.3731562599258885,
+          "world": [
+            -6.701882053368469,
+            91.70473905159578,
+            141.80788232117612
+          ],
+          "castleLocal": [
+            119.74859471889536,
+            -52.20460872979247,
+            56.24910932309723
+          ],
+          "fromSourceHeadMetres": 212.02963851227628,
+          "cityNewShoreLength": 159.83431084307352
+        },
+        "blue": {
+          "replacementU": 0.3720290200460332,
+          "world": [
+            -9.564296604212194,
+            94.23222085402534,
+            140.11030990816303
+          ],
+          "castleLocal": [
+            120.3454801263322,
+            -52.872293725815396,
+            60.33092974741679
+          ],
+          "fromSourceHeadMetres": 215.8782540121206,
+          "cityNewShoreLength": 164.82692854138082
+        }
+      },
+      "globalParameterIntervals": {
+        "center": {
+          "globalApproach": [
+            0.5776235669399344,
+            0.6588167066637645
+          ],
+          "cityStructure": [
+            0.6588167066637645,
+            0.7974872619616616
+          ],
+          "sourceReplacement": [
+            0.5733088104954024,
+            0.799
+          ],
+          "cityStartOriginalSourceU": null
+        },
+        "red": {
+          "globalApproach": [
+            0.5751002594315404,
+            0.6576919782680112
+          ],
+          "cityStructure": [
+            0.6576919782680112,
+            0.7964330567236829
+          ],
+          "sourceReplacement": [
+            0.5706734626725924,
+            0.798
+          ],
+          "cityStartOriginalSourceU": null
+        },
+        "blue": {
+          "globalApproach": [
+            0.5778115826714982,
+            0.6599386402140367
+          ],
+          "cityStructure": [
+            0.6599386402140367,
+            0.7985660214848371
+          ],
+          "sourceReplacement": [
+            0.5736982280057619,
+            0.8
+          ],
+          "cityStartOriginalSourceU": null
+        }
+      },
+      "globalApproachSupportBuilt": false,
+      "hardFailures": [
+        {
+          "code": "GLOBAL_APPROACH_SUPPORT_UNBUILT"
+        }
+      ]
+    }
+  },
+  "vehicleMeasurement": {
+    "method": "Actual createFreightVehicle variants, addFreightMotion 32 wheel/rod phases, all three production transport robot factories scaled1.25 and bottom-seated on .65 flatcar deck; all transformed by production rotateY(-PI/2), positionY+.12. Steam particles excluded from solid geometry.",
+    "bodyLift": 0.12,
+    "trackAxes": "x right / y up / z travel",
+    "records": [
+      {
+        "wagon": -1,
+        "name": "red-freight-locomotive",
+        "vertices": 210816,
+        "box": {
+          "min": [
+            -1.4794999361038206,
+            -0.03600000321865082,
+            -3.0522499084472656
+          ],
+          "max": [
+            1.4794999361038212,
+            2.642000074386597,
+            3.0522499084472656
+          ]
+        },
+        "dynamicBox": {
+          "min": [
+            -1.077500000074506,
+            0.005709513573597141,
+            -2.380290486426403
+          ],
+          "max": [
+            1.077500000074506,
+            0.4162904864264029,
+            2.380290486426403
+          ]
+        }
+      },
+      {
+        "wagon": 0,
+        "name": "red-heavy-flatcar-1",
+        "vertices": 261120,
+        "box": {
+          "min": [
+            -1.7200000286102302,
+            -0.009999995231628422,
+            -3.490000009536743
+          ],
+          "max": [
+            1.7200000286102302,
+            0.8516506505012512,
+            3.490000009536743
+          ]
+        },
+        "dynamicBox": {
+          "min": [
+            -0.9819999996125703,
+            0.030505232405078242,
+            -2.6895034766322947
+          ],
+          "max": [
+            0.9819999996125703,
+            0.4294947675949217,
+            2.6895034766322947
+          ]
+        }
+      },
+      {
+        "wagon": 9,
+        "name": "red-freight-10",
+        "vertices": 172032,
+        "box": {
+          "min": [
+            -1.1749999523162848,
+            -0.03600000321865082,
+            -3.0522499084472656
+          ],
+          "max": [
+            1.1749999523162848,
+            2.134999866485596,
+            3.0522499084472656
+          ]
+        },
+        "dynamicBox": {
+          "min": [
+            -1.0339999996125702,
+            0.005709513573597141,
+            -2.380290486426403
+          ],
+          "max": [
+            1.0339999996125702,
+            0.4162904864264029,
+            2.380290486426403
+          ]
+        }
+      },
+      {
+        "wagon": 10,
+        "name": "red-freight-11",
+        "vertices": 148992,
+        "box": {
+          "min": [
+            -1.2500000000000007,
+            -0.03600000321865082,
+            -3.0522499084472656
+          ],
+          "max": [
+            1.2500000000000007,
+            2.2779999923706056,
+            3.0522499084472656
+          ]
+        },
+        "dynamicBox": {
+          "min": [
+            -1.0339999996125702,
+            0.005709513573597141,
+            -2.380290486426403
+          ],
+          "max": [
+            1.0339999996125702,
+            0.4162904864264029,
+            2.380290486426403
+          ]
+        }
+      },
+      {
+        "cargo": "locust",
+        "box": {
+          "min": [
+            -1.5185100162193284,
+            0.7699999999999999,
+            -2.2286976575855717
+          ],
+          "max": [
+            1.3093750178813937,
+            5.3512131535757295,
+            2.120530572012416
+          ]
+        }
+      },
+      {
+        "cargo": "ant",
+        "box": {
+          "min": [
+            -1.5499999642372133,
+            0.77,
+            -1.8330196663737297
+          ],
+          "max": [
+            1.393750011920929,
+            4.667084618359804,
+            1.9250000089406971
+          ]
+        }
+      },
+      {
+        "cargo": "beetle",
+        "box": {
+          "min": [
+            -1.7418749868869785,
+            0.77,
+            -2.0813213648186357
+          ],
+          "max": [
+            1.7418749868869785,
+            3.9743750047683717,
+            2.0813213648186357
+          ]
+        }
+      }
+    ],
+    "box": {
+      "min": [
+        -1.7418749868869785,
+        -0.03600000321865082,
+        -3.490000009536743
+      ],
+      "max": [
+        1.7418749868869785,
+        5.3512131535757295,
+        3.490000009536743
+      ]
+    },
+    "factoryDerivedWheelBottom": {
+      "locomotive": -0.036000000000000004,
+      "heavyFlatcar": -0.010000000000000009
+    },
+    "factoryDerivedNonWheelBogieBottom": {
+      "locomotive": 0.30200000000000005,
+      "heavyFlatcar": 0.26
+    },
+    "wheelExceptions": []
+  },
+  "report": {
+    "version": "global-approach-support-candidate-1",
+    "enabled": true,
+    "installed": false,
+    "accepted": false,
+    "built": true,
+    "finitePass": true,
+    "issues": [],
+    "externalConstraints": {
+      "globalRoads": "unknown",
+      "landmarks": "unknown",
+      "actors": "unknown"
+    },
+    "limitations": [
+      "Independent default-off CPU candidate, not installed.",
+      "Finite triangle/OBB poses do not certify continuous motion.",
+      "No engineering load-capacity, navigation, external actors, global-road or GPU acceptance."
+    ],
+    "dimensions": {
+      "length": 210.93525717159653,
+      "sampleStep": 0.5,
+      "pierSpacing": 8,
+      "maxPierHeight": 12,
+      "deckWidth": 8.8,
+      "cityDeckWidth": 11.6,
+      "deckThickness": 0.55,
+      "startDeckTop": -0.49,
+      "endDeckTop": -0.75,
+      "transitionLength": 30,
+      "waterReserve": 0.05
+    },
+    "vehicle": {
+      "min": [
+        -1.7418749868869785,
+        -0.03600000321865082,
+        -3.490000009536743
+      ],
+      "max": [
+        1.7418749868869785,
+        5.3512131535757295,
+        3.490000009536743
+      ],
+      "provenance": {
+        "method": "Actual createFreightVehicle variants, addFreightMotion 32 wheel/rod phases, all three production transport robot factories scaled1.25 and bottom-seated on .65 flatcar deck; all transformed by production rotateY(-PI/2), positionY+.12. Steam particles excluded from solid geometry.",
+        "bodyLift": 0.12,
+        "trackAxes": "x right / y up / z travel",
+        "records": [
+          {
+            "wagon": -1,
+            "name": "red-freight-locomotive",
+            "vertices": 210816,
+            "box": {
+              "min": [
+                -1.4794999361038206,
+                -0.03600000321865082,
+                -3.0522499084472656
+              ],
+              "max": [
+                1.4794999361038212,
+                2.642000074386597,
+                3.0522499084472656
+              ]
+            },
+            "dynamicBox": {
+              "min": [
+                -1.077500000074506,
+                0.005709513573597141,
+                -2.380290486426403
+              ],
+              "max": [
+                1.077500000074506,
+                0.4162904864264029,
+                2.380290486426403
+              ]
+            }
+          },
+          {
+            "wagon": 0,
+            "name": "red-heavy-flatcar-1",
+            "vertices": 261120,
+            "box": {
+              "min": [
+                -1.7200000286102302,
+                -0.009999995231628422,
+                -3.490000009536743
+              ],
+              "max": [
+                1.7200000286102302,
+                0.8516506505012512,
+                3.490000009536743
+              ]
+            },
+            "dynamicBox": {
+              "min": [
+                -0.9819999996125703,
+                0.030505232405078242,
+                -2.6895034766322947
+              ],
+              "max": [
+                0.9819999996125703,
+                0.4294947675949217,
+                2.6895034766322947
+              ]
+            }
+          },
+          {
+            "wagon": 9,
+            "name": "red-freight-10",
+            "vertices": 172032,
+            "box": {
+              "min": [
+                -1.1749999523162848,
+                -0.03600000321865082,
+                -3.0522499084472656
+              ],
+              "max": [
+                1.1749999523162848,
+                2.134999866485596,
+                3.0522499084472656
+              ]
+            },
+            "dynamicBox": {
+              "min": [
+                -1.0339999996125702,
+                0.005709513573597141,
+                -2.380290486426403
+              ],
+              "max": [
+                1.0339999996125702,
+                0.4162904864264029,
+                2.380290486426403
+              ]
+            }
+          },
+          {
+            "wagon": 10,
+            "name": "red-freight-11",
+            "vertices": 148992,
+            "box": {
+              "min": [
+                -1.2500000000000007,
+                -0.03600000321865082,
+                -3.0522499084472656
+              ],
+              "max": [
+                1.2500000000000007,
+                2.2779999923706056,
+                3.0522499084472656
+              ]
+            },
+            "dynamicBox": {
+              "min": [
+                -1.0339999996125702,
+                0.005709513573597141,
+                -2.380290486426403
+              ],
+              "max": [
+                1.0339999996125702,
+                0.4162904864264029,
+                2.380290486426403
+              ]
+            }
+          },
+          {
+            "cargo": "locust",
+            "box": {
+              "min": [
+                -1.5185100162193284,
+                0.7699999999999999,
+                -2.2286976575855717
+              ],
+              "max": [
+                1.3093750178813937,
+                5.3512131535757295,
+                2.120530572012416
+              ]
+            }
+          },
+          {
+            "cargo": "ant",
+            "box": {
+              "min": [
+                -1.5499999642372133,
+                0.77,
+                -1.8330196663737297
+              ],
+              "max": [
+                1.393750011920929,
+                4.667084618359804,
+                1.9250000089406971
+              ]
+            }
+          },
+          {
+            "cargo": "beetle",
+            "box": {
+              "min": [
+                -1.7418749868869785,
+                0.77,
+                -2.0813213648186357
+              ],
+              "max": [
+                1.7418749868869785,
+                3.9743750047683717,
+                2.0813213648186357
+              ]
+            }
+          }
+        ],
+        "box": {
+          "min": [
+            -1.7418749868869785,
+            -0.03600000321865082,
+            -3.490000009536743
+          ],
+          "max": [
+            1.7418749868869785,
+            5.3512131535757295,
+            3.490000009536743
+          ]
+        },
+        "factoryDerivedWheelBottom": {
+          "locomotive": -0.036000000000000004,
+          "heavyFlatcar": -0.010000000000000009
+        },
+        "factoryDerivedNonWheelBogieBottom": {
+          "locomotive": 0.30200000000000005,
+          "heavyFlatcar": 0.26
+        },
+        "wheelExceptions": []
+      },
+      "margin": {
+        "lateral": 0.6,
+        "bottom": 0.1,
+        "top": 0.35,
+        "longitudinal": 0.1
+      },
+      "wheelExceptions": []
+    },
+    "water": {
+      "samples": 3811,
+      "minActualWaveGap": 0.1949711988190188,
+      "minOfficialWaveGap": 0.09145695172279034,
+      "wet": [],
+      "submergedBridgeBodySamples": 189
+    },
+    "terrain": {
+      "samples": 3811,
+      "unknown": 0,
+      "deckTopBuried": []
+    },
+    "foundations": [
+      {
+        "s": 0,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -129.17039031977322,
+              -43.84423848816125,
+              83.2975498406397
+            ],
+            "foot": [
+              -128.91268553310513,
+              -43.7567658862883,
+              83.13136487163474
+            ],
+            "surface": [
+              -128.97733922068545,
+              -43.77871125387907,
+              83.1730578149654
+            ],
+            "height": 0.23887404578178478,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -129.63799179336013,
+              -43.60791735598893,
+              82.69298290109691
+            ],
+            "foot": [
+              -129.38419104185837,
+              -43.52254329208009,
+              82.53108945524906
+            ],
+            "surface": [
+              -129.4490787781205,
+              -43.544370373795815,
+              82.57247979453916
+            ],
+            "height": 0.23291059435509917,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -129.18903018685236,
+              -43.52384954169771,
+              83.43720469497443
+            ],
+            "foot": [
+              -128.92109930763678,
+              -43.433583493120004,
+              83.26416056281494
+            ],
+            "surface": [
+              -128.9857621866592,
+              -43.45536844973307,
+              83.30592331825443
+            ],
+            "height": 0.2514802969075193,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -129.65663166043927,
+              -43.287528409525386,
+              82.83263775543163
+            ],
+            "foot": [
+              -129.3925678687765,
+              -43.19936732792746,
+              82.66393754998118
+            ],
+            "surface": [
+              -129.4574647959799,
+              -43.221033998918614,
+              82.70539770202768
+            ],
+            "height": 0.2455177747756075,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          0.23291059435509917,
+          0.2514802969075193
+        ]
+      },
+      {
+        "s": 7.812416932281353,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -128.9823420085095,
+              -37.383229255038366,
+              86.72620756151817
+            ],
+            "foot": [
+              -128.62061997487478,
+              -37.27839058100441,
+              86.48298992660726
+            ],
+            "surface": [
+              -128.6851674156116,
+              -37.29709850440939,
+              86.52639086549343
+            ],
+            "height": 0.3683177390218786,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -129.44362628002224,
+              -36.9843395546223,
+              86.20842012660212
+            ],
+            "foot": [
+              -129.08360960035466,
+              -36.88147640478016,
+              85.96865189648298
+            ],
+            "surface": [
+              -129.14838788446673,
+              -36.89998470931563,
+              86.01179371576217
+            ],
+            "height": 0.3646140364504765,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -128.90944185634018,
+              -36.801824242063695,
+              87.10916157795045
+            ],
+            "foot": [
+              -128.54260612432964,
+              -36.697097823728846,
+              86.86127629823693
+            ],
+            "surface": [
+              -128.60711122868298,
+              -36.71551311960587,
+              86.90486492508072
+            ],
+            "height": 0.3749540513893662,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -129.37072612785292,
+              -36.40293454164763,
+              86.5913741430344
+            ],
+            "foot": [
+              -129.00557478246463,
+              -36.30018656363266,
+              86.34696833567965
+            ],
+            "surface": [
+              -129.0703107092437,
+              -36.31840225875601,
+              86.39029786643209
+            ],
+            "height": 0.3712503193281719,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          0.3646140364504765,
+          0.3749540513893662
+        ]
+      },
+      {
+        "s": 15.624833864562707,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -127.68989148656082,
+              -31.253110145125945,
+              91.20657652970407
+            ],
+            "foot": [
+              -127.42202534205917,
+              -31.187547789164963,
+              91.01524459478127
+            ],
+            "surface": [
+              -127.48587015701565,
+              -31.203174312226423,
+              91.06084778962747
+            ],
+            "height": 0.25564654505989126,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -128.12889658563353,
+              -30.7565080004441,
+              90.7586247098779
+            ],
+            "foot": [
+              -127.82633293123075,
+              -30.68387956372714,
+              90.54430723823377
+            ],
+            "surface": [
+              -127.89039724828712,
+              -30.699257786224905,
+              90.58968645762889
+            ],
+            "height": 0.297824871385475,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -127.53989798998687,
+              -30.726804466648026,
+              91.6430444939207
+            ],
+            "foot": [
+              -127.24092254415437,
+              -30.654775554839233,
+              91.42821744358722
+            ],
+            "surface": [
+              -127.30468127447256,
+              -30.670136254278418,
+              91.47403090471985
+            ],
+            "height": 0.29513350010640876,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -127.97890308905956,
+              -30.230202321966182,
+              91.19509267409454
+            ],
+            "foot": [
+              -127.64517816215269,
+              -30.151372360021135,
+              90.95728726318438
+            ],
+            "surface": [
+              -127.7091563564046,
+              -30.166484802070144,
+              91.0028767878099
+            ],
+            "height": 0.3372983383592552,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          0.25564654505989126,
+          0.3372983383592552
+        ]
+      },
+      {
+        "s": 23.43725079684406,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -125.61464807472767,
+              -25.676435770101527,
+              96.08040166280423
+            ],
+            "foot": [
+              -125.22955133818782,
+              -25.597719539370534,
+              95.78584804431404
+            ],
+            "surface": [
+              -125.29227325838599,
+              -25.610540300165788,
+              95.8338229212736
+            ],
+            "height": 0.41117977934744987,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -126.02781898803711,
+              -25.115809581203294,
+              95.6867164170603
+            ],
+            "foot": [
+              -125.60892561218316,
+              -25.032329232600475,
+              95.3686713061779
+            ],
+            "surface": [
+              -125.67185383692822,
+              -25.04487006146406,
+              95.4164496081763
+            ],
+            "height": 0.45253480777631927,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -125.39646911399042,
+              -25.19406203740983,
+              96.53834655370343
+            ],
+            "foot": [
+              -124.9852534079376,
+              -25.111442533987972,
+              96.22176599430054
+            ],
+            "surface": [
+              -125.047855529603,
+              -25.124020254461726,
+              96.2699611736308
+            ],
+            "height": 0.4454974689206723,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -125.80964002729986,
+              -24.633435848511596,
+              96.1446613079595
+            ],
+            "foot": [
+              -125.39023272050389,
+              -24.5513162034342,
+              95.82414712913163
+            ],
+            "surface": [
+              -125.45304111094197,
+              -24.56361404051782,
+              95.87214576758777
+            ],
+            "height": 0.4542054510496771,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          0.41117977934744987,
+          0.4542054510496771
+        ]
+      },
+      {
+        "s": 31.249667729125413,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -122.8807079023437,
+              -20.590907717965795,
+              101.16477647709024
+            ],
+            "foot": [
+              -122.11686759517447,
+              -20.462912318649874,
+              100.53592484319202
+            ],
+            "surface": [
+              -122.17811926178734,
+              -20.473176154497885,
+              100.58635188961387
+            ],
+            "height": 0.9176418267889954,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -123.26309981489108,
+              -19.97749587044407,
+              100.82199034764747
+            ],
+            "foot": [
+              -122.5190444139574,
+              -19.856905331005617,
+              100.2133966439056
+            ],
+            "surface": [
+              -122.58048668935129,
+              -19.866863402843784,
+              100.26365282362201
+            ],
+            "height": 0.888786258209143,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -122.60117713779614,
+              -20.153975892151028,
+              101.63483299631068
+            ],
+            "foot": [
+              -121.81270629754276,
+              -20.02436194653393,
+              100.98120059210025
+            ],
+            "surface": [
+              -121.87380806714839,
+              -20.034406251330573,
+              101.03185319017985
+            ],
+            "height": 0.9523378132482644,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -122.98356905034352,
+              -19.540564044629303,
+              101.2920468668679
+            ],
+            "foot": [
+              -122.21474101218224,
+              -19.418406803340858,
+              100.65882271932253
+            ],
+            "surface": [
+              -122.27603335762967,
+              -19.428145396966897,
+              100.70930448022426
+            ],
+            "height": 0.923489793120335,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          0.888786258209143,
+          0.9523378132482644
+        ]
+      },
+      {
+        "s": 39.06208466140677,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -119.45934100392267,
+              -16.17045863791537,
+              106.41598318420998
+            ],
+            "foot": [
+              -118.54444169821014,
+              -16.04661448092813,
+              105.6009786118279
+            ],
+            "surface": [
+              -118.6038745057171,
+              -16.054659525773097,
+              105.65392215388246
+            ],
+            "height": 1.151507437174801,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -119.78486219048526,
+              -15.489397228674584,
+              106.15104675043415
+            ],
+            "foot": [
+              -118.86777731401342,
+              -15.37080885545015,
+              105.3383437275624
+            ],
+            "surface": [
+              -118.92737207317572,
+              -15.37851506206534,
+              105.3911554597816
+            ],
+            "height": 1.1510946658572783,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -119.10799461977328,
+              -15.812564989595607,
+              106.90431488995671
+            ],
+            "foot": [
+              -118.1922653758985,
+              -15.690994407974555,
+              106.08241030031398
+            ],
+            "surface": [
+              -118.25151318192206,
+              -15.698860041060136,
+              106.13558763850946
+            ],
+            "height": 1.156473456601048,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -119.43351580633586,
+              -15.13150358035482,
+              106.63937845618088
+            ],
+            "foot": [
+              -118.48943725929219,
+              -15.011894542487322,
+              105.7964329162221
+            ],
+            "surface": [
+              -118.54884698909072,
+              -15.019421395674932,
+              105.8494784672736
+            ],
+            "height": 1.1912780216239431,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          1.1510946658572783,
+          1.1912780216239431
+        ]
+      },
+      {
+        "s": 46.87450159368812,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -115.31017113174045,
+              -12.57818774007508,
+              111.80406397633718
+            ],
+            "foot": [
+              -114.27080740939856,
+              -12.464812554681382,
+              110.7963030219749
+            ],
+            "surface": [
+              -114.32806707420448,
+              -12.471058515525893,
+              110.85182165631906
+            ],
+            "height": 1.3721408406627196,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -115.58889044211932,
+              -11.858115593667186,
+              111.5947516499217
+            ],
+            "foot": [
+              -114.5212252920997,
+              -11.74858519921632,
+              110.56397934294655
+            ],
+            "surface": [
+              -114.57862336077869,
+              -11.754473593253543,
+              110.61939403889974
+            ],
+            "height": 1.4080851214570533,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -114.90622520399873,
+              -12.280040752184906,
+              112.29185087763003
+            ],
+            "foot": [
+              -113.86817628457112,
+              -12.169104351561685,
+              111.2774198991769
+            ],
+            "surface": [
+              -113.92522557611639,
+              -12.17520121553764,
+              111.33317119139369
+            ],
+            "height": 1.3756519687595063,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -115.1849445143776,
+              -11.559968605777012,
+              112.08253855121455
+            ],
+            "foot": [
+              -114.11867970327573,
+              -11.452958199219546,
+              111.04499265231271
+            ],
+            "surface": [
+              -114.1758673749581,
+              -11.458697557710128,
+              111.10064002396373
+            ],
+            "height": 1.4116009408798729,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          1.3721408406627196,
+          1.4116009408798729
+        ]
+      },
+      {
+        "s": 54.686918525969475,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -110.67423343365691,
+              -9.419084099768376,
+              117.11408054272967
+            ],
+            "foot": [
+              -109.36660490009588,
+              -9.307796560232344,
+              115.73036449023726
+            ],
+            "surface": [
+              -109.42145859225684,
+              -9.312464959765073,
+              115.78840997672944
+            ],
+            "height": 1.8270782396546057,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -110.93937173725267,
+              -8.68982618298756,
+              116.91944095071698
+            ],
+            "foot": [
+              -109.63354820672882,
+              -8.587541670931888,
+              115.54322838723921
+            ],
+            "surface": [
+              -109.68853330991865,
+              -8.591848626901541,
+              115.60117740412025
+            ],
+            "height": 1.819894269202967,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -110.23939387453682,
+              -9.135637815112428,
+              117.58373228768436
+            ],
+            "foot": [
+              -108.90149117615739,
+              -9.024764614030005,
+              116.15669620571666
+            ],
+            "surface": [
+              -108.95612001264777,
+              -9.029291754890423,
+              116.21496450944466
+            ],
+            "height": 1.8792622275455884,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -110.50453217813258,
+              -8.406379898331611,
+              117.38909269567166
+            ],
+            "foot": [
+              -109.16832676327687,
+              -8.304731123226366,
+              115.96964013374318
+            ],
+            "surface": [
+              -109.22308698834374,
+              -8.308896882278567,
+              116.02781198434246
+            ],
+            "height": 1.8720816990421887,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          1.819894269202967,
+          1.8792622275455884
+        ]
+      },
+      {
+        "s": 62.499335458250826,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -105.75010760820365,
+              -6.275105842340711,
+              122.18506137803492
+            ],
+            "foot": [
+              -104.2348545399651,
+              -6.185192237558802,
+              120.43431810851582
+            ],
+            "surface": [
+              -104.28716893956846,
+              -6.188296521819257,
+              120.49476285198762
+            ],
+            "height": 2.237148746390184,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -106.01529313226061,
+              -5.545876800597448,
+              121.9903779362407
+            ],
+            "foot": [
+              -104.50093497549396,
+              -5.46665762833208,
+              120.24782628716567
+            ],
+            "surface": [
+              -104.55338056192812,
+              -5.4694011642173805,
+              120.30817472106764
+            ],
+            "height": 2.2299875657488446,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -105.29198628305056,
+              -5.989541131836511,
+              122.63068189770904
+            ],
+            "foot": [
+              -103.77113698443469,
+              -5.903027525711758,
+              120.85939052847266
+            ],
+            "surface": [
+              -103.82321588148992,
+              -5.905990036981841,
+              120.92004538819953
+            ],
+            "height": 2.2562235141091245,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -105.55717180710752,
+              -5.260312090093247,
+              122.43599845591483
+            ],
+            "foot": [
+              -104.03716541040643,
+              -5.184564437056496,
+              120.67293965419219
+            ],
+            "surface": [
+              -104.08937547195094,
+              -5.187166261387949,
+              120.73349822075107
+            ],
+            "height": 2.2490627924735014,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          2.2299875657488446,
+          2.2562235141091245
+        ]
+      },
+      {
+        "s": 70.31175239053218,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -100.57422040037477,
+              -3.110281674303554,
+              126.98558391026633
+            ],
+            "foot": [
+              -99.10787829233124,
+              -3.0649346960346526,
+              125.1341720070882
+            ],
+            "surface": [
+              -99.15753872142767,
+              -3.0664704566096965,
+              125.19687354790989
+            ],
+            "height": 2.2821899926740326,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -100.83957943803,
+              -2.3811546619924338,
+              126.79075480296213
+            ],
+            "foot": [
+              -99.3738255790456,
+              -2.3465433848123363,
+              124.94778759532724
+            ],
+            "surface": [
+              -99.42361703420042,
+              -2.3477191250943763,
+              125.01039293558154
+            ],
+            "height": 2.2750287565236214,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -100.09397627687119,
+              -2.823114470613848,
+              127.40617941543171
+            ],
+            "foot": [
+              -98.64348356665965,
+              -2.7822038472973034,
+              125.55989713799664
+            ],
+            "surface": [
+              -98.69289846876612,
+              -2.7835975767742385,
+              125.62279566713647
+            ],
+            "height": 2.2682676656309346,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -100.35933531452642,
+              -2.0939874583027276,
+              127.2113503081275
+            ],
+            "foot": [
+              -98.90943387712325,
+              -2.063735410337461,
+              125.373515102387
+            ],
+            "surface": [
+              -98.95897978302591,
+              -2.064769180691213,
+              125.43631744730453
+            ],
+            "height": 2.2611039293566426,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          2.2611039293566426,
+          2.2821899926740326
+        ]
+      },
+      {
+        "s": 78.12416932281354,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -95.15971319035884,
+              0.07023036217918868,
+              131.50477257112027
+            ],
+            "foot": [
+              -93.61329787258956,
+              0.06908906714786456,
+              129.36772331103114
+            ],
+            "surface": [
+              -93.66019670407121,
+              0.06912367971457278,
+              129.43253456319945
+            ],
+            "height": 2.557874367295258,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -95.4254647246893,
+              0.799134934001658,
+              131.30964633716565
+            ],
+            "foot": [
+              -93.86249573602791,
+              0.7860459422613078,
+              129.1589321045528
+            ],
+            "surface": [
+              -93.90952554138502,
+              0.7864397905963261,
+              129.22364719005503
+            ],
+            "height": 2.5786867230994814,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -94.6585689220214,
+              0.3585768315426985,
+              131.89937456797043
+            ],
+            "foot": [
+              -93.08366878092176,
+              0.35261094056185266,
+              129.70487336238833
+            ],
+            "surface": [
+              -93.13031271703122,
+              0.3527876328044175,
+              129.76986806989646
+            ],
+            "height": 2.6211444958743266,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -94.92432045635186,
+              1.0874814033651679,
+              131.7042483340158
+            ],
+            "foot": [
+              -93.332837633859,
+              1.0692489001993235,
+              129.49612034463186
+            ],
+            "surface": [
+              -93.37961252163748,
+              1.0697847673022856,
+              129.56101890177882
+            ],
+            "height": 2.641944014112402,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          2.557874367295258,
+          2.641944014112402
+        ]
+      },
+      {
+        "s": 85.93658625509488,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -89.52012291047308,
+              3.261024417046887,
+              135.73226412425765
+            ],
+            "foot": [
+              -87.77404076231247,
+              3.197418421722063,
+              133.08481821364603
+            ],
+            "surface": [
+              -87.81807763005986,
+              3.199022589548308,
+              133.15158782443257
+            ],
+            "height": 3.092036954447499,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -89.78629038360214,
+              3.9897009018304503,
+              135.53685312975745
+            ],
+            "foot": [
+              -88.02358981847743,
+              3.911374377766598,
+              132.8759693067781
+            ],
+            "surface": [
+              -88.06775761971141,
+              3.913336997178339,
+              132.94264279070688
+            ],
+            "height": 3.1127341019972192,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -88.99925631914311,
+              3.5499063922471845,
+              136.10002110711548
+            ],
+            "foot": [
+              -87.24694945261271,
+              3.480012264993259,
+              133.42034701337104
+            ],
+            "surface": [
+              -87.29072268821602,
+              3.481758244626171,
+              133.48728620517926
+            ],
+            "height": 3.1225174148159316,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -89.26542379227217,
+              4.278582877030748,
+              135.90461011261527
+            ],
+            "foot": [
+              -87.49652006342626,
+              4.193797515758411,
+              133.21149377055897
+            ],
+            "surface": [
+              -87.54042421036516,
+              4.195901886334868,
+              133.27833685177194
+            ],
+            "height": 3.143210292745699,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          3.092036954447499,
+          3.143210292745699
+        ]
+      },
+      {
+        "s": 93.74900318737625,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -83.8316072519877,
+              7.011275687663596,
+              139.53442341491908
+            ],
+            "foot": [
+              -82.1032561792288,
+              6.866724649535975,
+              136.65765081921944
+            ],
+            "surface": [
+              -82.14441776387773,
+              6.870167208102785,
+              136.72616266301088
+            ],
+            "height": 3.2791536137394885,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -84.21928179380036,
+              7.657841974631855,
+              139.26672865182795
+            ],
+            "foot": [
+              -82.4705329708929,
+              7.498832756624789,
+              136.37496179496566
+            ],
+            "surface": [
+              -82.5118849049696,
+              7.5025927812861255,
+              136.44334219978066
+            ],
+            "height": 3.3031526615685842,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -83.35077916678115,
+              7.423184739432139,
+              139.83297874571676
+            ],
+            "foot": [
+              -81.63169712136546,
+              7.270084027801992,
+              136.948970155494
+            ],
+            "surface": [
+              -81.67261570823558,
+              7.273728219645784,
+              137.0176169989346
+            ],
+            "height": 3.2809802818896197,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -83.73845370859381,
+              8.069751026400397,
+              139.56528398262563
+            ],
+            "foot": [
+              -81.99904193715248,
+              7.902126484672313,
+              136.66623955210954
+            ],
+            "surface": [
+              -82.04015084131268,
+              7.906088089011167,
+              136.73475497876524
+            ],
+            "height": 3.3049829996211892,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          3.2791536137394885,
+          3.3049829996211892
+        ]
+      },
+      {
+        "s": 101.56142011965758,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -78.84582712498339,
+              12.305592760566475,
+              142.4002951623759
+            ],
+            "foot": [
+              -77.10003030609441,
+              12.033123493906542,
+              139.24728134581395
+            ],
+            "surface": [
+              -77.13867173780534,
+              12.039154323180057,
+              139.3170700902761
+            ],
+            "height": 3.5343522464679045,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -79.36392733933393,
+              12.816018315672872,
+              142.06707163291819
+            ],
+            "foot": [
+              -77.62792657585351,
+              12.53568166492146,
+              138.95950686025176
+            ],
+            "surface": [
+              -77.6668219225119,
+              12.541962647880343,
+              139.02913229570026
+            ],
+            "height": 3.4906086462781722,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -78.44711883364782,
+              12.843532567475984,
+              142.60438451183447
+            ],
+            "foot": [
+              -76.69460734433852,
+              12.55660758256289,
+              139.4185973726938
+            ],
+            "surface": [
+              -76.73304689614145,
+              12.562900989418367,
+              139.4884743638092
+            ],
+            "height": 3.567308893285929,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -78.96521904799836,
+              13.353958122582382,
+              142.27116098237676
+            ],
+            "foot": [
+              -77.22228554245177,
+              13.05920732819318,
+              139.13092815153422
+            ],
+            "surface": [
+              -77.26097896642139,
+              13.065750846586962,
+              139.20064186115104
+            ],
+            "height": 3.5235756503022473,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          3.4906086462781722,
+          3.567308893285929
+        ]
+      },
+      {
+        "s": 109.37383705193895,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -74.57795893447016,
+              18.477559722031476,
+              144.36753585678346
+            ],
+            "foot": [
+              -72.74051686586935,
+              18.022312004831583,
+              140.81062725384663
+            ],
+            "surface": [
+              -72.7769987219283,
+              18.031350810448295,
+              140.88124859744414
+            ],
+            "height": 3.9492732159938955,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -75.12072424749414,
+              18.954348959976794,
+              144.02391129776956
+            ],
+            "foot": [
+              -73.26882459236445,
+              18.48708040454404,
+              140.47338866457403
+            ],
+            "surface": [
+              -73.30557195697722,
+              18.496352444706154,
+              140.5438419147847
+            ],
+            "height": 3.9516353015122023,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -74.18788242104057,
+              19.036509600262985,
+              144.52695777276617
+            ],
+            "foot": [
+              -72.33675517614277,
+              18.56151287008525,
+              140.92073826056884
+            ],
+            "surface": [
+              -72.37304011469834,
+              18.570823535905816,
+              140.9914257045458
+            ],
+            "height": 4.00131267371604,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -74.73064773406455,
+              19.513298838208303,
+              144.18333321375226
+            ],
+            "foot": [
+              -72.86489879698972,
+              19.026123660819664,
+              140.5836066110235
+            ],
+            "surface": [
+              -72.9014491994646,
+              19.0356675219767,
+              140.65412598987172
+            ],
+            "height": 4.003673635839764,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          3.9492732159938955,
+          4.003673635839764
+        ]
+      },
+      {
+        "s": 117.18625398422029,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -70.1891675599335,
+              24.641537094511477,
+              145.9830394113475
+            ],
+            "foot": [
+              -68.28615398108953,
+              23.9734399888662,
+              142.02505392813896
+            ],
+            "surface": [
+              -68.32042525244773,
+              23.98547171447013,
+              142.0963330803399
+            ],
+            "height": 4.362236318469082,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -70.73221219384878,
+              25.11794882654798,
+              145.63933257819784
+            ],
+            "foot": [
+              -68.81346134661945,
+              24.4365748938408,
+              141.6885782598049
+            ],
+            "surface": [
+              -68.84799777043145,
+              24.44883923704534,
+              141.7596895902385
+            ],
+            "height": 4.364584900102219,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -69.7839841951102,
+              25.197307174614558,
+              146.11321644055263
+            ],
+            "foot": [
+              -67.88383877485771,
+              24.511210667188532,
+              142.13470529275654
+            ],
+            "surface": [
+              -67.91790649168095,
+              24.523511694930555,
+              142.2060360391913
+            ],
+            "height": 4.382043476788019,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -70.32702882902548,
+              25.67371890665106,
+              145.76950960740297
+            ],
+            "foot": [
+              -68.41108902130534,
+              24.974282276318565,
+              141.79826823891506
+            ],
+            "surface": [
+              -68.44542184610464,
+              24.986815882640983,
+              141.8694311917336
+            ],
+            "height": 4.384391890666327,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          4.362236318469082,
+          4.384391890666327
+        ]
+      },
+      {
+        "s": 124.99867091650165,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -65.63794830647855,
+              30.76426838491281,
+              147.27403472710625
+            ],
+            "foot": [
+              -63.838650830779955,
+              29.92094418184317,
+              143.236891492782
+            ],
+            "surface": [
+              -63.870640559007,
+              29.93593765147665,
+              143.30866790364456
+            ],
+            "height": 4.419688057186675,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -66.18128074560009,
+              31.240307150901415,
+              146.93026597652778
+            ],
+            "foot": [
+              -64.3661346826348,
+              30.38348298715093,
+              142.9004271639045
+            ],
+            "surface": [
+              -64.3983892128173,
+              30.398708462067063,
+              142.97203603344093
+            ],
+            "height": 4.422055500902896,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -65.21858766689591,
+              31.315627596672172,
+              147.37473067328557
+            ],
+            "foot": [
+              -63.43598432161974,
+              30.4596853797329,
+              143.3465740187875
+            ],
+            "surface": [
+              -63.467764347346304,
+              30.47494500871703,
+              143.41838748331946
+            ],
+            "height": 4.407355323406641,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -65.76192010601746,
+              31.791666362660777,
+              147.0309619227071
+            ],
+            "foot": [
+              -63.96351737432709,
+              30.922254101896115,
+              143.0100804895224
+            ],
+            "surface": [
+              -63.99556215768658,
+              30.93774569732986,
+              143.08172644077132
+            ],
+            "height": 4.409723550982686,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          4.407355323406641,
+          4.422055500902896
+        ]
+      },
+      {
+        "s": 132.81108784878302,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -60.9347068457413,
+              36.8322232596061,
+              148.23823489477851
+            ],
+            "foot": [
+              -59.18593188028697,
+              35.775169352356095,
+              143.98392191739123
+            ],
+            "surface": [
+              -59.21557455847737,
+              35.7930869857975,
+              144.05603481527754
+            ],
+            "height": 4.6396139410123425,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -61.47833486285673,
+              37.307894389386995,
+              147.89442454691195
+            ],
+            "foot": [
+              -59.71590993876715,
+              36.23837350721223,
+              143.65467373816247
+            ],
+            "surface": [
+              -59.745817073639145,
+              36.25652253860325,
+              143.72661938391894
+            ],
+            "height": 4.634393221905858,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -60.50212488249544,
+              37.37795707356769,
+              148.30928029838273
+            ],
+            "foot": [
+              -58.743314242400174,
+              36.291371292759266,
+              143.99789552106662
+            ],
+            "surface": [
+              -58.772741568378635,
+              36.30955137039041,
+              144.07003093028487
+            ],
+            "height": 4.701435163718144,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -61.04575289961086,
+              37.853628203348585,
+              147.96546995051617
+            ],
+            "foot": [
+              -59.28232856239661,
+              36.76015312842537,
+              143.6912019075423
+            ],
+            "surface": [
+              -59.31202030088788,
+              36.77856456535872,
+              143.76317009256468
+            ],
+            "height": 4.671286187522856,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          4.634393221905858,
+          4.701435163718144
+        ]
+      },
+      {
+        "s": 140.62350478106436,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -56.09012901086435,
+              42.8320666997597,
+              148.8740898898987
+            ],
+            "foot": [
+              -54.3208537830762,
+              41.48099627251612,
+              144.17809000637766
+            ],
+            "surface": [
+              -54.34808945144536,
+              41.501794227250265,
+              144.25037875686735
+            ],
+            "height": 5.1169357353219835,
+            "bearing": "pier",
+            "object": "east-final-refined-artifact"
+          },
+          {
+            "top": [
+              -56.63405965859976,
+              43.30737629171066,
+              148.53025818360396
+            ],
+            "foot": [
+              -54.84249478917034,
+              41.93738843600856,
+              143.8316440596451
+            ],
+            "surface": [
+              -54.86999457379308,
+              41.95841718668929,
+              143.90376585586864
+            ],
+            "height": 5.131865893517469,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -55.64530570057767,
+              43.370979678509805,
+              148.91538182567666
+            ],
+            "foot": [
+              -53.87432447272219,
+              41.99064417891448,
+              144.17596414377385
+            ],
+            "surface": [
+              -53.90133964538191,
+              42.01170030376966,
+              144.24826089371635
+            ],
+            "height": 5.164404691134413,
+            "bearing": "pier",
+            "object": "east-final-refined-artifact"
+          },
+          {
+            "top": [
+              -56.18923634831308,
+              43.846289270460765,
+              148.57155011938193
+            ],
+            "foot": [
+              -54.40359550454639,
+              42.452895623257504,
+              143.85008662643915
+            ],
+            "surface": [
+              -54.43087474944326,
+              42.47418250559585,
+              143.92221644993936
+            ],
+            "height": 5.156628361282244,
+            "bearing": "pier",
+            "object": "east-final-refined-artifact"
+          }
+        ],
+        "heightRange": [
+          5.1169357353219835,
+          5.164404691134413
+        ]
+      },
+      {
+        "s": 148.43592171334572,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -51.11515488845751,
+              48.750686392480056,
+              149.18078328161747
+            ],
+            "foot": [
+              -49.416338541491086,
+              47.130453349068475,
+              144.2227477666102
+            ],
+            "surface": [
+              -49.44111286956043,
+              47.154081674189044,
+              144.29505222650522
+            ],
+            "height": 5.405731333537614,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -51.65939449240014,
+              49.225641290679285,
+              148.83695033064137
+            ],
+            "foot": [
+              -49.93708833811804,
+              47.584475617398056,
+              143.8747784341675
+            ],
+            "surface": [
+              -49.96212644647966,
+              47.60833414212365,
+              143.94691624621908
+            ],
+            "height": 5.422991294413414,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -50.659091844030996,
+              49.28160466345751,
+              149.1922849793501
+            ],
+            "foot": [
+              -48.96037118658022,
+              47.62907444969288,
+              144.18951040915087
+            ],
+            "surface": [
+              -48.98492038839062,
+              47.652956126493336,
+              144.26180841883075
+            ],
+            "height": 5.4557259126231,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -51.203331447973625,
+              49.756559561656736,
+              148.848452028374
+            ],
+            "foot": [
+              -49.481010155486594,
+              48.08290318910188,
+              143.84165166924726
+            ],
+            "surface": [
+              -49.50582309372385,
+              48.10701502722624,
+              143.91378305879647
+            ],
+            "height": 5.472978131066181,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          5.405731333537614,
+          5.472978131066181
+        ]
+      },
+      {
+        "s": 156.2483386456271,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -46.02095224989244,
+              54.5752198237662,
+              149.15822743637648
+            ],
+            "foot": [
+              -44.38477662588313,
+              52.634915679998606,
+              143.85522860821968
+            ],
+            "surface": [
+              -44.407040981086254,
+              52.66131848176697,
+              143.9273894739723
+            ],
+            "height": 5.799085593385787,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -46.56550640343688,
+              55.049827593858275,
+              148.81441318648893
+            ],
+            "foot": [
+              -44.905125660261206,
+              53.08692241550426,
+              143.50815529204888
+            ],
+            "surface": [
+              -44.92765346388313,
+              53.113554826514914,
+              143.58014982481166
+            ],
+            "height": 5.816289832922488,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -45.55467030362838,
+              55.09699346211648,
+              149.13996772907035
+            ],
+            "foot": [
+              -43.930287733760466,
+              53.13235196135557,
+              143.82195395715488
+            ],
+            "surface": [
+              -43.9523228506158,
+              53.15900276754566,
+              143.89409401644645
+            ],
+            "height": 5.817432105423964,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -46.09922445717282,
+              55.57160123220856,
+              148.7961534791828
+            ],
+            "foot": [
+              -44.45062913048702,
+              53.584255823112194,
+              143.47492202370586
+            ],
+            "surface": [
+              -44.472927652045485,
+              53.61113620044405,
+              143.54689577760826
+            ],
+            "height": 5.834635451909443,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          5.799085593385787,
+          5.834635451909443
+        ]
+      },
+      {
+        "s": 164.06075557790842,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -40.81889000455195,
+              60.29308023271306,
+              148.80705713313233
+            ],
+            "foot": [
+              -39.35943813009346,
+              58.13734182452272,
+              143.48656119506578
+            ],
+            "surface": [
+              -39.37914963296821,
+              58.16645744290926,
+              143.5584203449382
+            ],
+            "height": 5.84324952077743,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -41.36376356545164,
+              60.76734913655326,
+              148.46328132030845
+            ],
+            "foot": [
+              -39.880524318031476,
+              58.58832794912194,
+              143.1396224780317
+            ],
+            "surface": [
+              -39.9004989411616,
+              58.617672592669635,
+              143.2113156180513
+            ],
+            "height": 5.860494547536728,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -40.34342679550729,
+              60.804585567749704,
+              148.75912980195284
+            ],
+            "foot": [
+              -38.90443433895899,
+              58.63577277950926,
+              143.4531039476608
+            ],
+            "surface": [
+              -38.92391301415721,
+              58.66513054276621,
+              143.52492805885663
+            ],
+            "height": 5.830021875327855,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -40.88830035640698,
+              61.2788544715899,
+              148.41535398912896
+            ],
+            "foot": [
+              -39.42561598887617,
+              59.08674519547653,
+              143.10613799606475
+            ],
+            "surface": [
+              -39.4453577407627,
+              59.11633194597299,
+              143.1777961248954
+            ],
+            "height": 5.847272821327714,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          5.830021875327855,
+          5.860494547536728
+        ]
+      },
+      {
+        "s": 171.87317251018976,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -35.5205111467087,
+              65.89198203367863,
+              148.12862159256846
+            ],
+            "foot": [
+              -34.16473076344376,
+              63.37695469393311,
+              142.47470860337185
+            ],
+            "surface": [
+              -34.18185232931563,
+              63.40871588977171,
+              142.54610943264572
+            ],
+            "height": 6.254842938599165,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -36.06570823528139,
+              66.36592100286265,
+              147.7849037022854
+            ],
+            "foot": [
+              -34.69045773886755,
+              63.83526874979352,
+              142.14959880675534
+            ],
+            "surface": [
+              -34.70784210016561,
+              63.86725839328162,
+              142.22083395743084
+            ],
+            "height": 6.248678852607033,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -35.03691871567521,
+              66.39212389118381,
+              148.05118463099066
+            ],
+            "foot": [
+              -33.687510150059786,
+              63.83510392618095,
+              142.3491553426335
+            ],
+            "surface": [
+              -33.70439582478366,
+              63.867100912484204,
+              142.42050705499298
+            ],
+            "height": 6.313152006926028,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -35.582115804247906,
+              66.86606286036783,
+              147.7074667407076
+            ],
+            "foot": [
+              -34.21303014518615,
+              64.29327128598025,
+              142.02415730617136
+            ],
+            "surface": [
+              -34.23017857191664,
+              64.32549668218843,
+              142.0953433673062
+            ],
+            "height": 6.306991322663338,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          6.248678852607033,
+          6.313152006926028
+        ]
+      },
+      {
+        "s": 179.6855894424711,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -30.13750629441778,
+              71.35996463928532,
+              147.12497518880886
+            ],
+            "foot": [
+              -28.90107404666777,
+              68.43232488646822,
+              141.0889726743421
+            ],
+            "surface": [
+              -28.915574414245008,
+              68.46665903832073,
+              141.15976042297626
+            ],
+            "height": 6.741522233358199,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -30.68303029342825,
+              71.83358324759021,
+              146.78133441653213
+            ],
+            "foot": [
+              -29.42535187810302,
+              68.88916914370323,
+              140.76485839369795
+            ],
+            "surface": [
+              -29.44011471923831,
+              68.9237311725355,
+              140.835480802922
+            ],
+            "height": 6.735373294609938,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -29.64684864129556,
+              71.84767845224383,
+              147.01824982124302
+            ],
+            "foot": [
+              -28.425941961602252,
+              68.88887120752992,
+              140.96379305872713
+            ],
+            "surface": [
+              -28.44020390232341,
+              68.92343431888912,
+              141.0345177954183
+            ],
+            "height": 6.768474291480232,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -30.19237264030603,
+              72.32129706054872,
+              146.6746090489663
+            ],
+            "foot": [
+              -28.95011656502163,
+              69.34565908349293,
+              140.63972645289633
+            ],
+            "surface": [
+              -28.964640936027706,
+              69.3804500342626,
+              140.71028587743638
+            ],
+            "height": 6.762326320442893,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          6.735373294609938,
+          6.768474291480232
+        ]
+      },
+      {
+        "s": 187.4980063747525,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -24.68168681368682,
+              76.68541566236883,
+              145.7988666009995
+            ],
+            "foot": [
+              -23.650016003261026,
+              73.48003891800612,
+              139.7046139674232
+            ],
+            "surface": [
+              -23.661869750101367,
+              73.51686822835552,
+              139.77463603955073
+            ],
+            "height": 6.882664712323693,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -25.227540369828272,
+              77.15872409723653,
+              145.45532181391806
+            ],
+            "foot": [
+              -24.173983265634728,
+              73.93640750467739,
+              139.38079035372502
+            ],
+            "surface": [
+              -24.186099166756307,
+              73.97346412843558,
+              139.45064743336377
+            ],
+            "height": 6.876524941043032,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -24.185037487330437,
+              77.15966952115198,
+              145.6631362651897
+            ],
+            "foot": [
+              -23.17490790082891,
+              73.93696353573326,
+              139.57926545534906
+            ],
+            "surface": [
+              -23.186521213599917,
+              73.97401451718929,
+              139.64921083217718
+            ],
+            "height": 6.878425086239742,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -24.73089104347189,
+              77.63297795601969,
+              145.31959147810826
+            ],
+            "foot": [
+              -23.698874562760523,
+              74.39336509466007,
+              139.25542609433657
+            ],
+            "surface": [
+              -23.710749986685087,
+              74.43064335212898,
+              139.32520650581927
+            ],
+            "height": 6.872283891620172,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          6.872283891620172,
+          6.882664712323693
+        ]
+      },
+      {
+        "s": 210.93525717159653,
+        "seated": true,
+        "footingSamples": [
+          {
+            "top": [
+              -8.00724956414479,
+              91.64144196804125,
+              139.86490710776778
+            ],
+            "foot": [
+              -7.634335395347319,
+              87.37351052851909,
+              133.35110918499765
+            ],
+            "surface": [
+              -7.638161921696252,
+              87.41730439175961,
+              133.41794820981528
+            ],
+            "height": 7.716400908652401,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -8.55410056197814,
+              92.11388653923902,
+              139.52175974392182
+            ],
+            "foot": [
+              -8.15672671398567,
+              87.83481017318161,
+              133.04038883339533
+            ],
+            "surface": [
+              -8.160814570986954,
+              87.87882980952756,
+              133.10706387401103
+            ],
+            "height": 7.696668271273924,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -7.752810254047875,
+              91.85262671819991,
+              139.75018292209697
+            ],
+            "foot": [
+              -7.391928600901376,
+              87.57702513764976,
+              133.24502216260078
+            ],
+            "surface": [
+              -7.395633359108809,
+              87.6209178374009,
+              133.31180319040942
+            ],
+            "height": 7.712824965958752,
+            "bearing": "pier",
+            "object": "planet-surface"
+          },
+          {
+            "top": [
+              -8.299661251881226,
+              92.32507128939768,
+              139.407035558251
+            ],
+            "foot": [
+              -7.9143028666605595,
+              88.03836134935035,
+              132.93428101071436
+            ],
+            "surface": [
+              -7.918268943106938,
+              88.08247981148253,
+              133.00089806211048
+            ],
+            "height": 7.693090416804429,
+            "bearing": "pier",
+            "object": "planet-surface"
+          }
+        ],
+        "heightRange": [
+          7.693090416804429,
+          7.716400908652401
+        ]
+      }
+    ],
+    "omittedStations": [
+      {
+        "s": 195.31042330703383,
+        "reason": "retained-global-return-underpass"
+      },
+      {
+        "s": 203.12284023931517,
+        "reason": "retained-global-return-underpass"
+      }
+    ],
+    "structuralOpenings": [
+      {
+        "id": "retained-global-return-underpass",
+        "start": 187.4980063747525,
+        "end": 210.93525717159653,
+        "span": 23.43725079684404,
+        "maxSpan": 28,
+        "bearings": [
+          187.4980063747525,
+          210.93525717159653
+        ],
+        "upperEdgeGirders": 2,
+        "girderWidth": 0.32,
+        "girderDepth": 0.5,
+        "lowerDeckBottomUnchanged": true,
+        "engineeringCapacityVerified": false
+      }
+    ],
+    "sourceConnection": {
+      "provided": true,
+      "verified": true,
+      "mode": "bearing against exact underside of retained last global deck bay",
+      "gap": 0.40508664078404083,
+      "sourceGlobalInterval": [
+        0.5772695772695773,
+        0.5775005775005775
+      ],
+      "bottomSections": [
+        [
+          [
+            -127.84545944042526,
+            -45.98673025325083,
+            86.30986397721708
+          ],
+          [
+            -132.59818651134833,
+            -43.741348318185324,
+            80.08151384616338
+          ]
+        ],
+        [
+          [
+            -127.88040707599387,
+            -45.49085905213138,
+            86.52061595518352
+          ],
+          [
+            -132.6408327881936,
+            -43.13656774023685,
+            80.3385322079858
+          ]
+        ]
+      ],
+      "sourceTopOfRunningDeckUnchanged": true
+    },
+    "vehicleClearance": {
+      "poses": 10395,
+      "triangleTests": 187527,
+      "collisions": [],
+      "pass": true,
+      "scope": "caller full vehicle curves"
+    },
+    "ends": [
+      {
+        "s": 0,
+        "railWorld": [
+          -130.47291943054466,
+          -44.08705956228111,
+          83.68076758756199
+        ],
+        "deckTop": -0.49,
+        "width": 8.8,
+        "section": [
+          [
+            -127.50438639911265,
+            -45.252825028849344,
+            86.75141939430497
+          ],
+          [
+            -132.6480026085688,
+            -42.653292574953866,
+            80.10118305933429
+          ],
+          [
+            -127.05908290995515,
+            -45.10241601209683,
+            86.46579388734928
+          ],
+          [
+            -132.20269911941128,
+            -42.502883558201354,
+            79.81555755237859
+          ]
+        ]
+      },
+      {
+        "s": 210.93525717159656,
+        "railWorld": [
+          -8.129311971257174,
+          92.93554399667954,
+          140.90860280491526
+        ],
+        "deckTop": -0.75,
+        "width": 11.6,
+        "section": [
+          [
+            -4.1157136523328175,
+            89.10840867533081,
+            142.7650951335858
+          ],
+          [
+            -12.04505312091638,
+            95.95885495769845,
+            137.78945835781948
+          ],
+          [
+            -4.07983269026893,
+            88.81367307654321,
+            142.3021226901632
+          ],
+          [
+            -12.009172158852493,
+            95.66411935891085,
+            137.3264859143969
+          ]
+        ]
+      }
+    ],
+    "supportScope": {
+      "center": [
+        0,
+        1
+      ],
+      "upperWalkway": false,
+      "cityEndSharedSection": true,
+      "sourceEndRequiresExistingDeckTransition": false,
+      "globalApproachSupportBuilt": true
+    },
+    "performance": {
+      "meshes": 8,
+      "materials": 1,
+      "triangles": 5148
+    }
+  }
+}

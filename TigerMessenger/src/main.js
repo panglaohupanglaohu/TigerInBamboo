@@ -1,9 +1,15 @@
-import {setSfxListener,updateWorldSfx} from './audio/worldSfx.js';
+import {createTargetEastCrossingStartupSupport} from './world/citadel/targetEastCrossingStartupSupport.js';
+import {installTargetCityRuntime} from './world/citadel/targetCityRuntime.js';
+import {installTargetCityPresentation} from './ui/targetCityPresentation.js';
+import {targetCityRuntimeEnabled} from './world/citadel/targetCityRelease.js';
+import {nearestCitadelTarget,isCitadelClick} from './ui/citadelTargetPicking.js';
+import {setSfxListener,updateWorldSfx,hintEngine} from './audio/worldSfx.js';
 import {createRobotGreeting} from './gameplay/robotGreeting.js';
 import {createRobotOperations} from './gameplay/robotOps/runtime.js';
 import {createJunctionPlayerSupport} from './world/canalJunctionTarget.js';
 import {createCitadelPlayerWalls,createCitadelCameraOccluders} from './world/citadel/playerWalls.js';
 import {createCitadelPlayerGround} from './world/citadel/playerGround.js';
+import {createTargetCityPlayerNavigation} from './world/citadel/targetCityPlayerNavigation.js';
 import {createGatePlayerGround,createGatePlayerWalls} from './world/gateTarget.js';
 import { bindOriginalWorldRomanArmor } from "./world/romanWorldArmor.js";
 // =====================================================================
@@ -136,6 +142,8 @@ import {
 
 // ---------- 舞台 ----------
 const { scene, camera, renderer } = createStage();
+let targetCityRuntime=null;
+let targetCityInspection=null;
 // Include the scene and every post-processing pass in frame diagnostics.
 renderer.info.autoReset = false;
 // 性能探针（F10 显隐 / F9 截图）。performance.now() 以页面导航为起点，
@@ -192,6 +200,20 @@ const planet = createPlanet(scene);
 // ---------- 按 URL 加载场景模块 ----------
 // 例：?scene=messenger  |  ?scene=saihoji  |  ?scene=messenger,saihoji
 const sceneIds = resolveSceneIdsFromUrl(location.search);
+// Opt-in joint startup for actual scene verification. The normal homepage
+// remains on its previously installed release until this candidate is checked.
+let citadelEastGlobalCrossing=null;
+if(new URLSearchParams(location.search).get('citadelEastCrossing')==='1'){
+  if(!targetCityRuntimeEnabled())throw new Error('East crossing requires the normal target-city runtime');
+  const base=new URL('../artifacts/pipeline/citadel-east-shore-route-20261006/',import.meta.url);
+  const [artifactResponse,auditResponse]=await Promise.all([
+    fetch(new URL('remesh-final-surface-geometry.json',base)),
+    fetch(new URL('remesh-expanded-shift-audit.json',base)),
+  ]);
+  if(!artifactResponse.ok||!auditResponse.ok)throw new Error('Audited east crossing startup data unavailable');
+  const [terrainArtifact,audit]=await Promise.all([artifactResponse.json(),auditResponse.json()]);
+  citadelEastGlobalCrossing={enabled:true,terrainArtifact,candidateInput:audit.candidateInput};
+}
 const sceneHandles = loadScenes(sceneIds, {
   scene,
   planetRadius: PLANET_RADIUS,
@@ -199,6 +221,7 @@ const sceneHandles = loadScenes(sceneIds, {
   options: {
     // 苔海六景密度；石组位置与数量由庭园构图固定。
     saihoji: { seed: 884, mossCount: 132 },
+    citadelEastGlobalCrossing,
   },
 });
 
@@ -611,6 +634,11 @@ const devPanel = createDevPanel({
   onOpenCitadel: () => citadelEditorPanel?.open(),
   onOpenStoryboard: () => storyboardPanel.setOpen(true),
   onOpenShotHarness: () => shotHarnessPanel?.setOpen(true),
+  onOpenCityReview:()=>{
+    if(!targetCityRuntime?.report.installed)return;
+    targetCityInspection??=installTargetCityPresentation({THREE,castle:targetCityRuntime.root.parent,camera,cameraRig,renderer,runtime:targetCityRuntime,scene,tramSystem:messenger?.landmarks?.tramSystem});
+    targetCityInspection.open();
+  },
   cloudWallEnabled: isCloudWallEnabled(),
   onCloudWallToggle: (on) => {
     const enabled = setCloudWallEnabled(on);
@@ -887,11 +915,12 @@ const tramRide = createTramRide({
 // 圣城净空区：飞临上空时 hover 下限自动抬到建筑顶端之上（缓存，圣城重建后失效重算）
 let citadelObstacle = null;
 function getCitadelObstacle() {
-  if (citadelObstacle) return citadelObstacle;
   const c = getCitadelTarget();
+  const junctionRevision=c?.userData?.junctionEditor?.revision;
+  if (citadelObstacle && citadelObstacle.junctionRevision===junctionRevision) return citadelObstacle;
   if (!c) return null;
   // 只取建筑本体（断崖+规则小镇），不含外围台地/石阶，净空区才贴建筑
-  const body = c.userData.mainCastle || c;
+  const body = c.userData.junctionTarget || c.userData.mainCastle || c;
   const box = new THREE.Box3().setFromObject(body);
   const sphere = box.getBoundingSphere(new THREE.Sphere());
   let topRadial = 0;
@@ -900,6 +929,7 @@ function getCitadelObstacle() {
       for (const z of [box.min.z, box.max.z])
         topRadial = Math.max(topRadial, Math.hypot(x, y, z));
   citadelObstacle = {
+    junctionRevision,
     dir: sphere.center.clone().normalize(),
     topRadial,
     angularRadius: Math.atan2(sphere.radius, sphere.center.length()) * 1.15,
@@ -1024,6 +1054,7 @@ const boatRide = createBoatRide({
 // 面板编辑（2D 平面图 / 场景 3D 直编辑）→ rebuildCitadelTown 即时重建场景圣城
 // → v2 布局写 localStorage。每座台地拥有五个 town-terrace-T-level-N 组。
 function applyTownLayerVisibility(activeTerrace, activeLayer, hideAbove) {
+  if(getCitadelTarget()?.userData?.junctionEditor)return;
   const layers = getCitadelTarget()?.userData?.layers;
   if (!layers) return;
   for (const layer of layers) {
@@ -1334,12 +1365,32 @@ function citadelViewAction(action) {
 
 // 场景 3D 直编辑：面板打开（已开局）时，点块顶面叠块 / 侧面改色 /
 // 当前层空地加块 / 右键删块，悬停出幽灵块（townscaper.html 同款交互）。
+// Selection and editing share the same nearest-visible-instance decision.
+function selectCitadelAtPointer(e, { waterFallback = false } = {}) {
+  const ray = new THREE.Raycaster();ray.layers.enable(1);
+  const rect = renderer.domElement.getBoundingClientRect();
+  ray.setFromCamera(new THREE.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),camera);
+  let selected=nearestCitadelTarget(ray,citadelTargets)?.target;
+  if(!selected&&waterFallback){
+    const steps=scene.getObjectByName('citadel-pilgrimage-water-steps');
+    if(steps)selected=nearestCitadelTarget(ray,[{...citadelTargets[0],pick:()=>[steps]}])?.target;
+  }
+  if(!selected)return null;
+  if((selected.id??null)!==citadelTargetId){
+    citadelEditorPanel.switchTarget(()=>{
+      citadelTargetId=selected.id??null;citadelSupportCache.clear();citadelObstacle=null;return true;
+    });
+  }
+  return selected;
+}
+
 let citadelSceneEdit = citadelEditorPanel
   ? createCitadelSceneEdit({
       dom: renderer.domElement,
       camera,
       scene,
       getCitadel: () => getCitadelTarget(),
+      selectTargetAt: (e) => selectCitadelAtPointer(e),
       panel: citadelEditorPanel,
       canEdit: () => gameStarted, // 已开局即可编辑（不再要求航空艇）
       isUiEvent: isCitadelUiEvent,
@@ -1348,53 +1399,19 @@ let citadelSceneEdit = citadelEditorPanel
   : null;
 
 {
-  const citadelPickRay = new THREE.Raycaster();
-  citadelPickRay.layers.enable(1);
-  const citadelPickNdc = new THREE.Vector2();
-  renderer.domElement.addEventListener("pointerdown", (e) => {
-    if (!citadelEditorPanel || e.button !== 0) return;
-    // 已开局即可点选圣城/运河古堡弹搭建菜单（不再要求乘坐航空艇）
-    if (!gameStarted) return;
-    if (isCitadelUiEvent(e)) return;
-    // 面板已打开时左键归 3D 直编辑，不再重复弹面板
-    if (citadelEditorPanel.isOpen()) return;
-    if (crystalCityEditorPanel?.isOpen?.()) return;
-    const rect = renderer.domElement.getBoundingClientRect();
-    citadelPickNdc.set(
-      ((e.clientX - rect.left) / rect.width) * 2 - 1,
-      -((e.clientY - rect.top) / rect.height) * 2 + 1
-    );
-    citadelPickRay.setFromCamera(citadelPickNdc, camera);
-    // 遍历全部城堡实例：命中哪个就自动切到哪个目标（高山圣城 ⇄ 运河交汇古堡）。
-    // 运河古堡的堤岸高亮方框也是命中对象：点高亮框即可开面板构建。
-    let hit = null;
-    for (const t of citadelTargets) {
-      const objs = t.pick ? t.pick() : [t.get()];
-      for (const o of objs) {
-        if (o && citadelPickRay.intersectObject(o, true).length) {
-          hit = t;
-          break;
-        }
-      }
-      if (hit) break;
-    }
-    // 梯湖/瀑布水系挂在场景根而非圣城容器：点湖面也应能开面板（仅高山实例）
-    if (!hit) {
-      const waterSteps = scene.getObjectByName("citadel-pilgrimage-water-steps");
-      if (!waterSteps || !citadelPickRay.intersectObject(waterSteps, true).length) return;
-      hit = citadelTargets[0];
-    }
-    if (!hit) return;
-    if ((hit.id ?? null) !== citadelTargetId) {
-      // 点选命中非当前目标：自动切换（含存档键与 3D 目标），再打开面板
-      citadelTargetId = hit.id ?? null;
-      citadelSupportCache.clear();
-      citadelObstacle = null;
-      citadelEditorPanel.switchTarget?.(() => true);
-    }
-    showToast(`已选中「${hit.name}」· 搭建面板已打开`, 2.2);
-    citadelEditorPanel.open();
+  let pendingCitadelClick=null;
+  renderer.domElement.addEventListener('pointerdown',e=>{
+    pendingCitadelClick=null;
+    if(!citadelEditorPanel||e.button!==0||!gameStarted||isCitadelUiEvent(e)||citadelEditorPanel.isOpen()||crystalCityEditorPanel?.isOpen?.())return;
+    pendingCitadelClick={button:e.button,x:e.clientX,y:e.clientY};
   });
+  renderer.domElement.addEventListener('pointerup',e=>{
+    const down=pendingCitadelClick;pendingCitadelClick=null;
+    if(!isCitadelClick(down,e)||!gameStarted||isCitadelUiEvent(e)||citadelEditorPanel.isOpen())return;
+    const selected=selectCitadelAtPointer(e,{waterFallback:true});if(!selected)return;
+    showToast(`已选中「${selected.name}」· 搭建面板已打开`,2.2);citadelEditorPanel.open();
+  });
+  renderer.domElement.addEventListener('pointercancel',()=>{pendingCitadelClick=null;});
 }
 
 // [V] 进入/退出飞行器驾驶舱
@@ -1482,8 +1499,8 @@ const elderMusic = createElderMusicInteraction({
   if (found) elderMusic.setElder?.(found);
 }
 
-// ---------- 莫比斯结界：电车跨赤道时 2s 平滑过渡天空 ----------
-// 北半球保持昼夜循环本色；电车入南（y<0）环境光/天色渐变为莫比斯粉紫
+// ---------- 莫比斯结界：信使跨赤道时 2s 平滑过渡天空 ----------
+// 搭乘时 player.position 随车更新；远处无人列车不能改变当前城市的光色。
 const MOEBIUS_SKY = new THREE.Color(0xebb9b6); // 莫比斯黄昏粉紫
 const MOEBIUS_SUN = new THREE.Color(0xf0c294); // 暖橙日光
 let moebiusFactor = 0;
@@ -1528,15 +1545,17 @@ function isFacingCloudWall(p, cam, cloudWall) {
 }
 
 function updateMoebiusBarrier(dt) {
-  const tramSystem = messenger?.landmarks?.tramSystem;
-  const tram = tramSystem?.tram;
-  const target = tram && tram.position.y < 0 ? 1 : 0;
+  const observer = targetCityInspection?.active ? camera.position : player?.position;
+  const target = Number.isFinite(observer?.y) && observer.y < 0 ? 1 : 0;
   moebiusFactor += (target - moebiusFactor) * Math.min(1, dt / 2); // 2 秒时间常数
   if (lightingDirector.isEnabled()) {
     // V5：结界染色作为 override 交给导演合成，不直接改灯/天空
     lightingDirector.setMoebiusFactor(moebiusFactor);
     return;
   }
+  // DayNight resets sun/sky, but only ambient intensity. Restore its base
+  // colour as well so the last southern tint cannot persist after returning.
+  ambient.color.setHex(0xffffff);
   if (moebiusFactor < 0.001) return;
   const cur = dayNight.getCurrent();
   if (!cur) return;
@@ -1551,7 +1570,7 @@ function updateMoebiusBarrier(dt) {
     skyMat.uniforms.botColor.value.copy(cur.skyBot).lerp(MOEBIUS_SUN, f);
   }
   sun.color.copy(cur.sunColor).lerp(MOEBIUS_SUN, f);
-  ambient.color.setHex(0xf3fff7).lerp(MOEBIUS_SKY, f);
+  ambient.color.lerp(MOEBIUS_SKY, f);
 }
 
 // ---------- 阿狸（E 站立跟随 · 球面 lerp 尾随 · 对话 · 随电车卧姿） ----------
@@ -1681,7 +1700,7 @@ function refreshSwampGroundZone() {
     if (!swampGroundZone && typeof node.userData?.sampleGroundRadius === "function") swampGroundZone = node;
   });
 }
-let citadelPlayerGround=null,citadelPlayerWalls=null;
+let citadelPlayerGround=null,citadelPlayerWalls=null,targetCityPlayerNavigation=null;
 const baseCameraOccluders=entryBookshop?.userData.steampunkRobots?.userData.cameraOccludersNear;
 let robotOperations=null;
 const robotGreeting=createRobotGreeting({player,isStarted:()=>gameStarted,toast:showToast,getModels:()=>[...(entryBookshop?.userData.steampunkRobots?.userData.models||[]),...(robotOperations?[...robotOperations.models.values()].filter(m=>{const u=robotOperations.logistics.get(m.userData.robotId);return u&&['ready','deployed','repair'].includes(u.status);}):[])]});
@@ -1693,6 +1712,21 @@ const gatePlayerWalls=createGatePlayerWalls(messenger?.landmarks?.abandonedGate?
 const junctionPlayerSupport=createJunctionPlayerSupport(messenger?.landmarks?.canalJunctionCitadel);
 const citadelPreviousFoot=new THREE.Vector3();
 function refreshCitadelPlayerGround(){
+  if(targetCityRuntime?.report.installed){
+    if(!targetCityPlayerNavigation){
+      const castle=targetCityRuntime.root.parent;
+      targetCityPlayerNavigation=createTargetCityPlayerNavigation({runtime:targetCityRuntime,castle,
+        finalTerrain:[castle.getObjectByName('citadel-oskar-grid-mountain-surface')],
+        legacyCitadelPosition:messenger?.landmarks?.odysseyCitadel?.position,
+        legacyColliders:messenger?.colliders||[]});
+      citadelPlayerGround=targetCityPlayerNavigation.ground;citadelPlayerWalls=targetCityPlayerNavigation.walls;
+      targetCityRuntime.report.navigation.installedIntoPlayer=true;
+      targetCityRuntime.report.navigation.adapter=targetCityPlayerNavigation.report;
+      cameraRig.setOccluderMeshes((position,reach)=>[...targetCityPlayerNavigation.cameraOccluders(position,reach),...(baseCameraOccluders?.(position,reach)||[])]);
+    }
+    return;
+  }
+  if(targetCityPlayerNavigation){targetCityPlayerNavigation.dispose();targetCityPlayerNavigation=null;citadelPlayerGround=null;citadelPlayerWalls=null;cameraRig.setOccluderMeshes(baseCameraOccluders||(()=>[]));if(targetCityRuntime)targetCityRuntime.report.navigation.installedIntoPlayer=false;}
   if(citadelPlayerGround)return;
   const city=scene.getObjectByName('highland-west-city');
   if(city){citadelPlayerGround=createCitadelPlayerGround(city);citadelPlayerWalls=createCitadelPlayerWalls(city);
@@ -1702,7 +1736,7 @@ function refreshCitadelPlayerGround(){
     cameraRig.setOccluderMeshes((position,reach)=>[...cityOccluders(position,reach),...(baseCameraOccluders?.(position,reach)||[])]);}
 }
 function samplePlayerLocalGround(position){
-  return highlandGateRuntime?.userData.sampleGroundRadius?.(position) ?? messenger?.landmarks?.moebius?.v7Shores?.userData.sampleGroundRadius(position) ?? junctionPlayerSupport.ground(position) ?? gatePlayerGround(position) ?? citadelPlayerGround?.(position) ?? sampleSwampGround(position);
+  return targetCityPlayerNavigation?.ground(position) ?? highlandGateRuntime?.userData.sampleGroundRadius?.(position) ?? messenger?.landmarks?.moebius?.v7Shores?.userData.sampleGroundRadius(position) ?? junctionPlayerSupport.ground(position) ?? gatePlayerGround(position) ?? (targetCityPlayerNavigation ? null : citadelPlayerGround?.(position)) ?? sampleSwampGround(position);
 }
 function sampleSwampGround(position) {
   return swampGroundZone?.userData?.sampleGroundRadius(position) ?? null;
@@ -1723,6 +1757,7 @@ function animate() {
 
   updateToast(dt);
   dayNight.update(dt);
+  targetCityRuntime?.update(performance.now()/1000);
   // K4 局部灯桥接：先于导演合成，闪电 override 当帧生效（关时 no-op）
   messenger?.landmarks?.abandonedGate?.userData.seatRoot?.userData.gateLighting?.userData.update(P.timeOfDay);
   localLights.update(dt);
@@ -1792,7 +1827,7 @@ function animate() {
       player.position,
       player.velocity,
       physicsDt,
-      platforms,
+      targetCityPlayerNavigation?.platformsForPhysics(platforms) ?? platforms,
       player,
       () => showToast("掉下去了… 已回到检查点"),
       hills,
@@ -1802,7 +1837,7 @@ function animate() {
     gatePlayerWalls(citadelPreviousFoot,player.position,player.velocity);
     highlandGateRuntime?.userData.resolveWalls?.(citadelPreviousFoot,player.position,player.velocity);
     junctionPlayerSupport.walls(citadelPreviousFoot,player.position,player.velocity);
-    resolveAssetColliders(player.position, assetColliders);
+    resolveAssetColliders(player.position, targetCityPlayerNavigation?.collidersForPhysics(assetColliders) ?? assetColliders);
     }
   }
   footsteps.update(dt, player, gameStarted && !riding);
@@ -1839,6 +1874,9 @@ function animate() {
   const bgmCityCenter=citadelBgmCity?citadelBgmCity.localToWorld(citadelBgmPoint.fromArray(citadelBgmCity.userData.plazaAnchor || [60,4,71.5])):null;
   updateBgmListenerContext({listener:player.position,saihoji:bgmWhale?.getWorldPosition(saihojiBgmPoint) || null,newCity:bgmCityCenter,gameStarted});
 
+  // 玩家驾驶的飞行器：引擎声居中（泡艇/航空艇由各自乘坐模块登记）
+  if (scoutAircraftRide?.isRiding?.()) hintEngine("ride-scout", "jet", player.position, 0.7, true);
+  else if (aircraftRide.isRiding?.()) hintEngine("ride-aircraft", "light", player.position, 0.6, true);
   setSfxListener(player.position,camera);
   updateWorldSfx(dt);
 
@@ -1878,7 +1916,7 @@ function animate() {
   // 驾驶舱第一人称（飞行器 / 气泡艇）由各自 update 写相机，跳过第三人称跟随
   const cockpitView =
     scoutAircraftRide?.isRiding?.() || aircraftRide.isRiding?.() || bubblePodRide.isRiding?.();
-  if (!cockpitView) cameraRig.update(dt);
+  if (!cockpitView&&!targetCityInspection?.active) cameraRig.update(dt);
   robotOperations?.updateCamera();
   quest.updateInteraction(dt);
   elderMusic.update(dt, t);
@@ -2005,6 +2043,22 @@ function animate() {
   perfProbe?.update(dt);
 }
 
+if(targetCityRuntimeEnabled()&&messenger?.landmarks?.citadelRange){
+ const castle=scene.getObjectByName('castleContainer');
+ const tramSystem=messenger.landmarks.tramSystem;
+ const cliffTransitRelease=tramSystem?.citadelTransitRelease??null;
+ targetCityRuntime=installTargetCityRuntime({castle,sceneRoot:scene,citadelRange:messenger.landmarks.citadelRange,renderer,distanceCulling,candidateOptions:{includeFrontRail:false,newCityStreetInfill:true,newCityFoundationRefinement:true,newCityWindowBatching:true,newCitySecondaryClusters:true,cliffTransitRelease,cloudRailCurves:tramSystem?.crossingBundle?tramSystem.curves:null,cliffTransitStructureOptions:tramSystem?.crossingBundle?.structureOptions??{newCityTransitLinks:true}}});
+ if(tramSystem?.crossingBundle){
+  const support=createTargetEastCrossingStartupSupport({enabled:true,scene,castle,tramSystem,runtime:targetCityRuntime,planet,hills:messenger.hills,ocean:scene.getObjectByName('planet-v8-curved-ocean'),radius:PLANET_RADIUS});
+  try{support.commit();support.finalize();targetCityRuntime.report.tram.startupSupport=support.report;}
+  catch(error){support.dispose();throw error;}
+ }
+ if(cliffTransitRelease){
+  Object.assign(targetCityRuntime.report.tram,{routeIntegrated:true,geometryAndVehiclesShareRoute:true,releaseVersion:cliffTransitRelease.version,continuousRouteVerified:false});
+  cliffTransitRelease.report.installed=true;
+ }
+ console.info('[citadel] default city installed',JSON.stringify({oldCity:targetCityRuntime.report.cityDetail.oldCity.geometry.version,newCity:targetCityRuntime.report.cityDetail.newCityStairs.authored.revision,rock:targetCityRuntime.report.cityDetail.rockAppearance.version,landmarks:targetCityRuntime.report.landmarkIntegration.ok,spawn:'bookshop-unchanged'}));
+}
 animate();
 
 // 性能探针快捷键：F9 下载截图 / F10 显隐 HUD
@@ -2075,6 +2129,8 @@ function fleetSelfCheck() {
 }
 
 window.__tm = {
+  targetCityRuntime,
+  get targetCityPlayerNavigation(){return targetCityPlayerNavigation;},
   THREE, // 控制台调试用：new __tm.THREE.Raycaster() 等
   fleet: fleetSelfCheck, // 舰队自检：__tm.fleet()——见上方读法
   player,

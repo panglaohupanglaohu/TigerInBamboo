@@ -1,0 +1,69 @@
+{
+  "durationSeconds" : 69.75,
+  "frames" : [
+    {
+      "actualSeconds" : 0,
+      "file" : "frame-00.png",
+      "requestedSeconds" : 0
+    },
+    {
+      "actualSeconds" : 6.333333333333333,
+      "file" : "frame-01.png",
+      "requestedSeconds" : 6.3409090909090908
+    },
+    {
+      "actualSeconds" : 12.666666666666666,
+      "file" : "frame-02.png",
+      "requestedSeconds" : 12.681818181818182
+    },
+    {
+      "actualSeconds" : 19,
+      "file" : "frame-03.png",
+      "requestedSeconds" : 19.022727272727273
+    },
+    {
+      "actualSeconds" : 25.333333333333332,
+      "file" : "frame-04.png",
+      "requestedSeconds" : 25.363636363636363
+    },
+    {
+      "actualSeconds" : 31.666666666666668,
+      "file" : "frame-05.png",
+      "requestedSeconds" : 31.704545454545453
+    },
+    {
+      "actualSeconds" : 38.041666666666664,
+      "file" : "frame-06.png",
+      "requestedSeconds" : 38.045454545454547
+    },
+    {
+      "actualSeconds" : 44.375,
+      "file" : "frame-07.png",
+      "requestedSeconds" : 44.386363636363633
+    },
+    {
+      "actualSeconds" : 50.708333333333336,
+      "file" : "frame-08.png",
+      "requestedSeconds" : 50.727272727272727
+    },
+    {
+      "actualSeconds" : 57.041666666666664,
+      "file" : "frame-09.png",
+      "requestedSeconds" : 57.06818181818182
+    },
+    {
+      "actualSeconds" : 63.375,
+      "file" : "frame-10.png",
+      "requestedSeconds" : 63.409090909090907
+    },
+    {
+      "actualSeconds" : 69.708333333333329,
+      "file" : "frame-11.png",
+      "requestedSeconds" : 69.709999999999994
+    }
+  ],
+  "id" : "1534809424619089921",
+  "method" : "AVFoundation public stream; source video not saved",
+  "source" : "https:\/\/video.twimg.com\/ext_tw_video\/1534809282973147136\/pu\/vid\/1280x720\/9gnvoPxMenBscH4z.mp4?tag=12",
+  "status" : "sampled-not-continuous"
+}

@@ -1,0 +1,9 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>十二门徒 · 动态碎波</title>
+<style>body{max-width:1100px;margin:32px auto;padding:0 20px;background:#142a34;color:#e2e8df;font:17px system-ui}video{width:100%;border-radius:8px}a{color:#b7dbd6}button{padding:9px;margin:5px;background:#355465;color:white;border:1px solid #719798}</style>
+<h1>十二门徒 · 碎波开始流动</h1><p>实际游戏连续录制，13秒。浪前靠岸 → 分段碎开 → 回退淡出，两道错开的波列贴合球面海水。</p>
+<video id="video" controls loop muted src="dynamic-surf.webm"></video>
+<p><button data-time="1">1 秒</button><button data-time="4">4 秒</button><button data-time="7">7 秒</button><button id="frame">保存当前帧</button><span id="status"></span></p>
+<p>修复了主场景更新状态漏接海洋运行时导致 uTime 恒为0的问题。现在海面与岸线使用同一个动画时钟，岸线不再只有固定白边。</p>
+<p>8个倾斜球面岩柱的贴水与范围检查通过；13秒实景采样26次，GL错误0。风格化碎波表现，不是流体物理模拟。</p>
+<p><a href="live.html">打开实际场景</a> · <a href="../twelve-apostles-colour-20261005/review.html">配色对照</a> · <a href="after-clock.json">动态采样证据</a></p>
+<script>const v=document.querySelector('video'),s=document.querySelector('#status');document.querySelectorAll('[data-time]').forEach(b=>b.onclick=()=>{v.pause();v.currentTime=+b.dataset.time;});v.onseeked=()=>s.textContent='录像时间 '+v.currentTime.toFixed(2)+' 秒';document.querySelector('#frame').onclick=()=>{const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);const a=document.createElement('a');a.href=c.toDataURL();a.download='surf-frame-'+v.currentTime.toFixed(0)+'.png';a.click();};</script></html>

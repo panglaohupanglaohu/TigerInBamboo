@@ -1,3 +1,4 @@
+import {targetCityParams} from './citadel/targetCityRelease.js';
 // =====================================================================
 //  环境：青绿二次元天空 + 暖日照 + 苔海反光
 // =====================================================================
@@ -44,6 +45,7 @@ export function setupEnvironment(scene) {
         botColor: { value: new THREE.Color(0xa8e1d4) },
         cloudColor: { value: new THREE.Color(0xc2eee0) },
         holyDayBlend: { value: 0 },
+        citadelTargetStyle: { value: targetCityParams().get('citadelTargetAtmosphere')==='1'?1:0 },
         citadelBlend: { value: 0 },
         citadelUp: { value: new THREE.Vector3(0,1,0) },
         moebiusV10Blend: { value: 0 },
@@ -73,6 +75,7 @@ export function setupEnvironment(scene) {
         uniform vec3 botColor;
         uniform vec3 cloudColor;
         uniform float holyDayBlend;
+        uniform float citadelTargetStyle;
         uniform float citadelBlend;
         uniform vec3 citadelUp;
         uniform float moebiusV10Blend;
@@ -109,6 +112,8 @@ export function setupEnvironment(scene) {
           vec3 holySky=mix(vec3(.72,.84,.88),vec3(.29,.59,.80),smoothstep(-.12,.72,localH));
           float holyCloud=smoothstep(.68,.91,sin(lon*4.+localH*16.)*.28+sin(lon*8.-localH*23.)*.15+.5)*(1.-smoothstep(.5,.8,localH));
           holySky=mix(holySky,vec3(.94,.94,.89),holyCloud*.8);
+          vec3 targetSky=mix(vec3(.56,.83,.97),vec3(.37,.69,.91),smoothstep(-.10,.55,localH));
+          holySky=mix(holySky,targetSky,citadelTargetStyle);
           col=mix(col,holySky,holyDayBlend);
           // ---- 霞光：地平线暖带 + 日侧光晕 + 云缘镶金 + 天顶紫晕 ----
           if (glowAmount > 0.001) {
@@ -141,6 +146,7 @@ export function setupEnvironment(scene) {
     sky.rotation.y = Math.PI / 2;
     sky.frustumCulled=false;
     const anchor=new THREE.Vector3();
+    const targetFog=new THREE.Color(0xb5d9e6),legacyFogDensity=scene.fog?.density;
     const _east=new THREE.Vector3(),_worldY=new THREE.Vector3(0,1,0);
     sky.onBeforeRender=(_r,_s,camera)=>{
       // 霞光时段：朝霞 t≈0.285、暮云 t≈0.765（与 dayNight 关键帧对齐），余晖到 0.8
@@ -165,15 +171,25 @@ export function setupEnvironment(scene) {
       const city=scene.getObjectByName('highland-west-city');
       if(!city)return;
       city.localToWorld(anchor.set(35,15,20));
-      const near=1-THREE.MathUtils.smoothstep(camera.position.distanceTo(anchor),170,320);
+      const targetStyle=U.citadelTargetStyle.value>0;
+      // Include the city overview camera in the local noon palette; otherwise
+      // legacy turquoise bleeds into the target sky at the review distance.
+      const distance=camera.position.distanceTo(anchor);
+      const near=1-THREE.MathUtils.smoothstep(distance,170,320);
+      const targetNear=targetStyle?1-THREE.MathUtils.smoothstep(distance,300,450):near;
       const dusk=1-THREE.MathUtils.smoothstep(Math.abs((P.timeOfDay??.5)-.85),.025,.14);
       skyMat.uniforms.citadelBlend.value=near*dusk*(1-glow);
       const highland=scene.getObjectByName('highland-gate');
       const gateNear=highland?1-THREE.MathUtils.smoothstep(camera.position.distanceTo(highland.position),140,230):0;
       // 圣城白天天色只在正午前后生效，朝霞暮云时让位给昼夜本色与霞光
       const holyNoon=1-THREE.MathUtils.smoothstep(Math.abs(tod-.5),.12,.2);
-      skyMat.uniforms.holyDayBlend.value=highland?.userData.round>=21?Math.max(near,gateNear)*holyNoon*(1-glow):0;
+      skyMat.uniforms.holyDayBlend.value=(highland?.userData.round>=21||skyMat.uniforms.citadelTargetStyle.value>0)?Math.max(targetNear,gateNear)*holyNoon*(1-glow):0;
       skyMat.uniforms.citadelUp.value.set(0,1,0).transformDirection(city.matrixWorld);
+      if(U.citadelTargetStyle.value>0&&scene.fog&&Number.isFinite(legacyFogDensity)){
+        const weight=U.holyDayBlend.value;
+        scene.fog.density=THREE.MathUtils.lerp(legacyFogDensity,.00075,weight);
+        scene.fog.color.lerp(targetFog,weight);
+      }
     };
     scene.add(sky);
   }

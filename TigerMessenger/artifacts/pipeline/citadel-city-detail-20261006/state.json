@@ -1,0 +1,643 @@
+{
+  "status": "in-progress",
+  "target": "../citadel-rail-cliffs-20261006/target-v11-smooth-east-connection.png",
+  "terrain": "Retreated new eastern slope and two-shore exterior cliff cut; old-shore stepped rock link integrated into final remesh; gameplay/GPU pending",
+  "terrainSourceSha256": "39ebba86711953921c3b4086319d62745960a3f2ad27e15d20d4ec4457bdd39c",
+  "requirements": {
+    "finalScore": ">=90",
+    "independentReview": true,
+    "conceptIsNotRuntime": true,
+    "noVideoRecording": true
+  },
+  "rubric": {
+    "全景布局与两城呼应": 25,
+    "建筑轮廓与结构细节": 25,
+    "材质与配色": 20,
+    "植被云水环境协调": 15,
+    "地标与连接关系": 10,
+    "轮廓边缘与画面完整性": 5
+  },
+  "hardGates": [
+    "保留旧城及新城城基承托；用户授权新城外突体收缩须实机核验",
+    "雕塑木马身份与功能保留",
+    "建筑实际承托及入口净空",
+    "桥轨通路连通与碰撞",
+    "无应用/Shader/WebGL错误",
+    "编辑增删/撤销及保存不丢失",
+    "对应机位全景和两城近景真实截图"
+  ],
+  "tasks": [
+    {
+      "id": "old-tower",
+      "name": "旧城高塔与入口",
+      "status": "integrated-candidate-not-accepted",
+      "owner": "主线程",
+      "deliverable": "塔冠、真实门洞、主街与朝湾轴线",
+      "stages": {
+        "model": "candidate-built",
+        "material": "candidate-built",
+        "lighting": "gpu-sampled",
+        "colour": "candidate-built",
+        "integration": "review-harness",
+        "review": "r47-internal-whole-scene66-not-individual-score"
+      },
+      "score": null
+    },
+    {
+      "id": "old-neighbourhood",
+      "name": "旧城分层街区",
+      "status": "integrated-candidate-not-accepted",
+      "owner": "主线程",
+      "deliverable": "彩墙橙顶、小白窗、共墙、连贯拱廊",
+      "stages": {
+        "model": "candidate-built",
+        "material": "candidate-built",
+        "lighting": "gpu-sampled",
+        "colour": "candidate-built",
+        "integration": "r38 local roof WFC, candidate only",
+        "review": "r47-internal-whole-scene66-not-individual-score"
+      },
+      "score": null
+    },
+    {
+      "id": "old-waterfall",
+      "name": "旧城瀑布与水口",
+      "status": "integrated-candidate-not-accepted",
+      "owner": "old_city_waterfall",
+      "deliverable": "三孔水口、动态青白水幕与落水泡沫",
+      "stages": {
+        "model": "candidate-built",
+        "material": "candidate-built",
+        "lighting": "gpu-sampled",
+        "colour": "candidate-built",
+        "integration": "review-harness",
+        "review": "r47-internal-whole-scene66-not-individual-score"
+      },
+      "score": null
+    },
+    {
+      "id": "new-main",
+      "name": "新城蓝穹顶主建筑",
+      "status": "integrated-candidate-not-accepted",
+      "owner": "new_city_main",
+      "deliverable": "主厅、蓝穹顶、侧翼、门洞和橙顶",
+      "stages": {
+        "model": "candidate-built",
+        "material": "candidate-built",
+        "lighting": "gpu-sampled",
+        "colour": "candidate-built",
+        "integration": "review-harness",
+        "review": "r47-internal-whole-scene66-not-individual-score"
+      },
+      "score": null
+    },
+    {
+      "id": "new-stairs",
+      "name": "新城阶梯与两侧街区",
+      "status": "integrated-candidate-not-accepted",
+      "owner": "new_city_main",
+      "deliverable": "完整阶梯、沿坡房组、入口与广场连通",
+      "stages": {
+        "model": "polygon-treads-and-platforms-built",
+        "material": "candidate-built",
+        "lighting": "r32-gpu",
+        "colour": "candidate-built",
+        "integration": "r32-shared-corners-and-openings-gpu",
+        "review": "r47-internal-whole-scene66-not-individual-score"
+      },
+      "score": null
+    },
+    {
+      "id": "new-plaza",
+      "name": "新城雕塑木马广场",
+      "status": "integrated-candidate-not-accepted",
+      "owner": "oskar_world_advisor + 主线程",
+      "deliverable": "原雕塑木马身份功能、基座、环形铺装",
+      "stages": {
+        "model": "candidate-built",
+        "material": "ground-following3rings",
+        "lighting": "r47-gpu",
+        "colour": "warm paving dark inlay",
+        "integration": "plaza3 awaiting-r48",
+        "review": "r47-internal-whole-scene66-not-individual-score"
+      },
+      "score": null
+    },
+    {
+      "id": "bay-bridge",
+      "name": "两城廊桥",
+      "status": "integrated-candidate-not-accepted",
+      "owner": "new_city_main",
+      "deliverable": "对向入口衔接、桥拱、栏杆、通行净空",
+      "stages": {
+        "model": "candidate-built",
+        "material": "candidate-built",
+        "lighting": "r32-gpu",
+        "colour": "candidate-built",
+        "integration": "r32-shared-corners-and-openings-gpu",
+        "review": "r47-internal-whole-scene66-not-individual-score"
+      },
+      "score": null
+    },
+    {
+      "id": "rail-integration",
+      "name": "铁路与最终集成",
+      "status": "integrated-candidate-not-accepted",
+      "owner": "主线程",
+      "deliverable": "轨道承托、通路连通、统一材质光照、编辑事务",
+      "stages": {
+        "model": "pending",
+        "material": "pending",
+        "lighting": "pending",
+        "colour": "pending",
+        "integration": "static candidate only, production tram pending",
+        "review": "r47-internal-whole-scene66-not-individual-score"
+      },
+      "score": null
+    }
+  ],
+  "finalScore": null,
+  "accepted": false,
+  "activeWindow": {
+    "startedAt": "2026-10-06T10:10:03+08:00",
+    "deadline": "2026-10-06T12:10:03+08:00",
+    "acceptanceScore": 90,
+    "accepted": false
+  },
+  "lastValidation": {
+    "gpu": "r47 sample-clean/glErrors[]; one harness duplicate-evidence label refusal, not app or shader failure",
+    "independentReview": {
+      "round": "r47",
+      "score": 66,
+      "file": "r47-independent-review.json",
+      "kind": "internal second-agent review; reviewer worked on local stair module, not external blind review"
+    },
+    "editor": "r38 actual WFC solve, contradiction rollback, delete/recompute; r32 real pointer delete, undo/redo, colour/JSON. Candidate only, no production save. v8 CPU35 tests pass.",
+    "horse": "r46 actual8 soldiers out,7targets; 8returned observed. Returning JSON preserved; completed idle saved r47-horse-idle-after-return. No production navigation claim.",
+    "playerSupport": "r44 actual finite152queries0fail P95.2ms; next r48 includes bridge/rail promenade/waterfront floors, not actual player trajectory."
+  },
+  "evidence": [
+    "../citadel-four-hour-20261005/r23-two-city-models-target-front-plants-terrain.png",
+    "../citadel-four-hour-20261005/r23-two-city-models-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r24-surface-route-target-front-plants-terrain.png",
+    "../citadel-four-hour-20261005/r24-surface-route-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r27-pastel-walls-target-front-plants-terrain.png",
+    "../citadel-four-hour-20261005/r27-pastel-walls-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r28-water-bridge-target-front-plants-terrain.png",
+    "../citadel-four-hour-20261005/r28-water-bridge-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r29-clouds-landmark-audit-target-front-plants-terrain.png",
+    "../citadel-four-hour-20261005/r29-clouds-landmark-audit-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r30-sun-rock-target-front-plants-terrain.png",
+    "../citadel-four-hour-20261005/r30-sun-rock-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r32-plaza-original-landmarks-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r32-right-click-delete-old-city-detail-plants-terrain.json",
+    "../citadel-four-hour-20261005/r32-horse-night-new-plaza-detail-plants-terrain.json",
+    "../citadel-four-hour-20261005/r32-original-plaza-detail-new-plaza-detail-plants-terrain.json",
+    "../citadel-four-hour-20261005/r32-plaza-original-landmarks-old-city-detail-plants-terrain.json",
+    "../citadel-four-hour-20261005/r32-horse-day-return-new-plaza-detail-plants-terrain.json",
+    "../citadel-four-hour-20261005/r44-integrated-landings-clouds-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r47-arches-clouds-target-front-plants-terrain.json",
+    "../citadel-four-hour-20261005/r47-arches-clouds-old-city-detail-plants-terrain.json",
+    "../citadel-four-hour-20261005/r47-arches-clouds-new-city-detail-plants-terrain.json",
+    "../citadel-four-hour-20261005/r46-landmark-night-new-plaza-detail-plants-terrain.json",
+    "../citadel-four-hour-20261005/r47-horse-idle-after-return-new-city-detail-plants-terrain.json"
+  ],
+  "knownFailures": [
+    "No new GPU render or current visual score; r47 internal66 is historical only",
+    "Browser game tab crashed and manual restoration pending",
+    "Eight outer walkway junction observations retain 6.7–7.9cm positive stair lips",
+    "Full runtime player/ship/editor and boarding verification pending",
+    "Historical visual gaps must be re-evaluated on new scene: old street density/new city masses/cloud banks"
+  ],
+  "latestRound": "r47",
+  "surfaceRoute": {
+    "length": 62.74234827019424,
+    "treads": 85,
+    "surfaceProbesPerTread": 15,
+    "terrainChanged": false,
+    "continuousCollisionProof": false,
+    "turnPlatforms": 3
+  },
+  "waterfallSurface": {
+    "errorSampleMax": 0.002234684186490199,
+    "missingSamples": 0,
+    "perFrameRayQueries": 0,
+    "gpu": "sample-clean-r24"
+  },
+  "latestActualEvidence": {
+    "round": "r47",
+    "status": "GPU sample-clean; complete visible original actors; save-label refusal recorded separately",
+    "screenshot": "../citadel-four-hour-20261005/r47-arches-clouds-target-front-plants-terrain.png",
+    "independentVisualScore": 66,
+    "accepted": false
+  },
+  "lastUpdated": "2026-10-06T18:32:00+08:00",
+  "currentOwners": {
+    "root": "new default-off terrain transaction and integration coordination; no production swap",
+    "new_city_main": "new default-off global approach bridge/deck-water/actual vehicle geometry candidate, own scripts/tests; no main/tram",
+    "oskar_world_advisor": "new default-off vegetation/turf refresh and joint placement candidate, own scripts/tests; no production"
+  },
+  "updatedAt": "2026-10-06T18:32:00+08:00",
+  "currentIteration": {
+    "round": "east-final-terrain-consumers-and-global-approach",
+    "status": "candidate-building-production-unchanged",
+    "visualScore": null,
+    "actualPlayerWalked": false,
+    "latestDiagnosticGpu": "../citadel-east-remesh-gpu-20261006/candidate-cliff.png",
+    "diagnosticReverted": true,
+    "terrainTransactionTests": 5,
+    "terrainTransactionProductionInstalled": false,
+    "browserNote": "background tab11 previously restored daySpeed .4/player; user page untouched"
+  },
+  "remainingHardGates": [
+    "r48 startup/GPU and actor migration",
+    "expanded external route audit",
+    "actual player continuous navigation/jump/camera",
+    "production tram route/boarding",
+    "full dynamic ship route clearance",
+    "independent visual strictly>95"
+  ],
+  "targetInterpretation": {
+    "master": "../citadel-architecture-target-20261005/target-v3-landmarks.png upper panorama ONLY",
+    "obsolete": "original lower two closeups no longer valid for acceptance",
+    "detailSheet": "../citadel-architecture-target-20261005/target-v5-street-cameras.png",
+    "rule": "Original upper panorama remains master. Lower panels show different pedestrian cameras: old street toward central highest tower; new plaza obliquely toward gate, statue left of horse and both right of stair foot. Generated view is conceptual, not proven exact multi-view reconstruction.",
+    "kind": "imagegen concept reference; not gameplay evidence",
+    "rejected": "v4 same-camera enlarged closeups rejected by user"
+  },
+  "reviewAppointment": {
+    "recordedAt": "2026-10-06T08:08:34+08:00",
+    "dueAt": "2026-10-06T10:08:34+08:00",
+    "basis": "first tool clock recorded after user requested review in two hours; do not defer for later integration",
+    "scope": "v5 approved target, two-city massing and actual default system"
+  },
+  "defaultGameIntegration": {
+    "at": "2026-10-06T08:45:00+08:00",
+    "url": "http://localhost:8931/TigerMessenger/",
+    "verification": "Actual CUA browser DOM, console and screenshot inspected",
+    "startupErrorLogs": [],
+    "installed": {
+      "oldCity": "target-old-city-10-tower-centred-terraces",
+      "newCity": "target-new-city-stairs-5-stepped-flanks",
+      "rock": "target-continuous-rock-4",
+      "landmarks": true,
+      "spawn": "bookshop-unchanged"
+    },
+    "visibleEntry": "家书 · 小星球信使；从书店镇出发；开始送信",
+    "automaticCitadelCamera": false,
+    "differentEntryNeeded": false,
+    "limitations": [
+      "latest holy palette guard passed CPU47; visual late-callback colours still require city closeup",
+      "player continuous navigation not yet completed",
+      "original global railway retained; no new tram route integration",
+      "no new visual score; r47 66 is historical only"
+    ],
+    "navigation": "adapter connected in main; root re-ran 21 CPU tests pass; real continuous traversal pending"
+  },
+  "learningStatus": "../../research/oskar-learning-status-20261006/review.html",
+  "railCliffCorrection": {
+    "status": "in-progress",
+    "reference": "https://x.com/i/status/1482011744843223042",
+    "concept": "../citadel-rail-cliffs-20261006/target-v1.png",
+    "rule": "mountain foot retreats to a steep cliff; preserve grass caps and supported city; minimize changes to existing global tram route",
+    "measurement": "../citadel-live-tram-clearance-20261006/REVIEW.md",
+    "caution": "Two route branches have near-identical XZ and about 11.4m different Y. Do not apply a 2D nearest-route cap across branches."
+  },
+  "latestTransport": {
+    "concept": "../citadel-rail-cliffs-20261006/target-v6-original-layout-rail.png",
+    "requirements": [
+      "cliff railway below pedestrian promenade",
+      "central bridge railway directly below pedestrians",
+      "waterfall seaward of sheltered rail",
+      "remove foreground outer-loop design, preserve other global routes"
+    ],
+    "implementation": "geometry factories and startup composition implemented; full approved route and runtime/GPU integration pending",
+    "overheadConcept": "../citadel-rail-cliffs-20261006/target-v11-smooth-east-connection.png",
+    "overheadLimitations": "Illustrated high-angle view, not an orthographic measured model; hidden rail line and actual junction/grade/headroom still require geometry verification.",
+    "oldCityNoTunnel": {
+      "required": true,
+      "alignment": "outside cliff face including west connection; no bore through mountain",
+      "structure": "open seaward colonnade carrying upper pedestrian deck",
+      "waterfall": "outboard water curtain; rail behind curtain but outside rock",
+      "status": "design correction recorded; runtime railway pending"
+    },
+    "offlineSplice": {
+      "version": "citadel-rail-splice-1",
+      "cpuTestsPassed": 9,
+      "installed": false
+    },
+    "centralPlan": {
+      "status": "failed-diagnostic",
+      "mode": "radial",
+      "grade": 2.3e-05,
+      "minSampledRadius": 31.768,
+      "cpuTestsPassed": 7,
+      "obstacles": [
+        "existing pier/arch triangles",
+        "bank terrain",
+        "wider lower deck needs structural rebuild"
+      ],
+      "installed": false
+    },
+    "newCityCoastContinuity": "Entire seaward outer edge below statue/horse plaza must connect central bridge to east railway; no inland shortcut or plaza cut. Pending geometry.",
+    "conceptCorrection": "Both cliffs continuous, new-city route wraps seaward plaza edge. Concept only, no claimed runtime route acceptance.",
+    "newCityJunction": "No right-angle corner; long coast-hugging tangent-continuous transition to external railway; validate physical curvature and grade, not only drawn line.",
+    "startup": {
+      "module": "citadelRailStartup",
+      "productionSourceAPI": "createChristchurchTramSourceCurves",
+      "tests": 4,
+      "referenceMaxWorldError": 7.5e-12,
+      "defaultEnabled": false,
+      "note": "All track/vehicle/stop/interlocking creation will consume one composed curve family; rejected lane preserves all source references."
+    },
+    "geometry": {
+      "doubleDeck": "v2; 8 CPU tests, existing bank terrain unresolved",
+      "shoreGallery": "v1; 7 CPU tests, only measured east subsegment cleared",
+      "waterfall": "v2 outboardReach horizontal channels plus moved curtain/foam; 8 CPU tests; not set to new route yet",
+      "coastalCliffCut": "v1 explicit seaward toe polygons; protects city cores and reports conflicts; 3 CPU tests; cuts not authored yet"
+    }
+  },
+  "latestPalette": {
+    "architecture": "colour-1, actual GPU shown 12:31; visual target not accepted",
+    "rock": "rock5 actual GPU shader matched 12:31; visual target not accepted",
+    "authoritativeReference": "exec-619c6b01-8d79-4ceb-833a-88da7eaf51c8.png"
+  },
+  "latestTerrainRetreat": {
+    "report": "../citadel-new-city-retreat-20261006/REPORT.md",
+    "status": "GPU rendered; remaining terrain mismatch visible"
+  },
+  "firstPlayableWindow": {
+    "start": "2026-10-06T10:10:03+08:00",
+    "deadline": "2026-10-06T12:10:03+08:00",
+    "target": "../citadel-rail-cliffs-20261006/target-v11-smooth-east-connection.png",
+    "scoreThreshold": 90,
+    "accepted": false
+  },
+  "previousWindow": {
+    "deadline": "2026-10-06T10:08:34+08:00",
+    "accepted": false,
+    "report": "acceptance-20261006-1008.md"
+  },
+  "browserValidation": {
+    "status": "rendered-normal-homepage",
+    "tab": "browser1/tab11",
+    "daySpeedRestored": true,
+    "daySpeed": 0.4,
+    "newGPU": true,
+    "playerCameraRestored": true
+  },
+  "currentTransit": {
+    "version": "user-marked-transit-release-1",
+    "walking": "stacked-connected",
+    "sourceInstalled": true,
+    "gpuVerified": true,
+    "independentBridgeRemoved": true,
+    "score": null,
+    "cpu": "../citadel-rail-cliffs-20261006/integrated-production-marked-cpu.json",
+    "gpuScope": "loaded and rendered; continuous gameplay pending"
+  },
+  "buildingColourTarget": "../citadel-architecture-target-20261005/target-v5-street-cameras.png",
+  "previousActiveWindow": {
+    "startedAt": "2026-10-06T02:13:00+08:00",
+    "notBefore": "2026-10-06T07:13:00+08:00",
+    "note": "User requested continued work while sleeping; elapsed wall time is not continuous execution."
+  },
+  "previousIteration": {
+    "round": "cliff-transit-source-first-version",
+    "status": "default-source-integrated-cpu-checked-gpu-blocked",
+    "cpuEvidence": "../citadel-rail-cliffs-20261006/integrated-production-cpu.json",
+    "vehiclePoses": 42,
+    "sourceConstructorFailures": 0,
+    "loadedStructurePoses": 776,
+    "visualScore": null,
+    "actualPlayerWalked": false,
+    "browserNote": "tab9 crashed/data; user manual restoration requested; do not bypass URL restriction"
+  },
+  "latestUserDirection": {
+    "at": "2026-10-06T12:18:00+08:00",
+    "reference": "../citadel-rail-cliffs-20261006/target-v11-smooth-east-connection.png",
+    "walking": "continuous upper path on same lower railway structure, including central bridge",
+    "rail": "long exterior-cliff route with smooth global joins",
+    "centralForcedDoubleDeck": true,
+    "independentBridge": "temporary; remove after new upper path connects both cities and passes checks"
+  },
+  "latestActualGpu": {
+    "at": "2026-10-06T15:33:00+08:00",
+    "file": "../citadel-secondary-street-clusters-20261006/live-front.png",
+    "report": "../citadel-secondary-street-clusters-20261006/live-front.json",
+    "nearView": "../citadel-secondary-street-clusters-20261006/live-plaza.png",
+    "newStairs": "target-new-city-stairs-8-secondary-clusters",
+    "glError": 0,
+    "gpuFailures": [],
+    "score": null,
+    "scoreScope": "six secondary rooms/rock7 frame unscored",
+    "captureTimeOfDay": 0.49,
+    "captureDaySpeed": 0,
+    "daySpeedRestoredAfter": 0.4,
+    "playerMoved": false
+  },
+  "latestShortBridge": "Superseded: independent bridge removed by stacked-connected release; retained historical evidence only.",
+  "latestFrameReview": {
+    "at": "2026-10-06T18:32:00+08:00",
+    "score": 58,
+    "scope": "visible panorama only; complete score null",
+    "frame": "../citadel-east-joint-startup-20261006/live-front.png",
+    "report": "../citadel-east-joint-startup-20261006/VISIBLE_PANORAMA_REVIEW.md",
+    "independent": true,
+    "accepted": false
+  },
+  "acceptance1210": {
+    "met": false,
+    "snapshot": "../citadel-rail-cliffs-20261006/short-walk-live-1210.png",
+    "remaining": [
+      "new lower rail not installed",
+      "new shared upper walking connections incomplete",
+      "visual below90",
+      "continuous gameplay/boat/editor checks pending"
+    ]
+  },
+  "currentOptimizations": {
+    "visibility": "runtime2 references cached;10 CPUtests; production FPS not measured",
+    "oldCity": "v11 six street modules;47 CPUtests; actual GPU confirmed12:54, no new score",
+    "shoreContact": "advisor whole east candidate finite red/blue terrain0; remesh81440 closed and2949 actual supports preserved; actors/upper structure/GPU not tested, not installed",
+    "leftGeometry": "realGPU ray identifies highland-gate; protected existing landmark, not anonymous terrain to delete",
+    "clouds": "rear-cloud-clusters-1 eight clouds actual GPU, no new score",
+    "rock": "rock7 mineral planes actualGPU15:19,4CPU; subtle warm/cool change not terrain fix",
+    "newCityInfill": "stairs8 six connected secondary rooms liveGPU; some obscured behind parents, not proven large visual density gain",
+    "water": "v4 final wet mask and v3 fine waves GPU; no proven large visual shoreline gain",
+    "mainWindows": "34 windows batched into6 meshes, factory off/main on,17 combined CPU and GPU no errors; performance not isolated"
+  },
+  "gateTargetProposal": "target-v3-ancient-monument.png: user requested independent ancient monumental gate, supersedes tiny colourful v2 style; concept only not migrated",
+  "pendingLatestGpu": {
+    "completeLatestScreenshot": true,
+    "continuousGameplayVerified": false,
+    "frameAccepted": false,
+    "liveTransportReadout": "verified two actual motion frames; centreError0/shared curve true; not full loop collision acceptance"
+  },
+  "activeOwnership": {
+    "root": "main integration and actual joint startup GPU; default-off; macro shore/cliff visual correction pending",
+    "new_city_main": "targetOldCity.js + dedicated tests/report, default-off two-wing connected infill; no terrain/rail/main edits",
+    "oskar_world_advisor": "returned, idle; local raw reshape not installed"
+  },
+  "mainGateDiagnosis": {
+    "blockingGeometry": false,
+    "visibleSurface": "side wall and rear arch side through real opening at oblique camera",
+    "axialRayFailures": 0,
+    "groundFailures": 0,
+    "wallsFailures": 0,
+    "geometryChanged": false
+  },
+  "eastRemeshGpuAttempt": {
+    "status": "diagnostic-gpu-matched-and-reverted",
+    "at": "2026-10-06T16:06:55+08:00",
+    "artifact": "../citadel-east-shore-route-20261006/remesh-final-surface-geometry.json",
+    "sourceHash": 2638422502,
+    "candidate": "../citadel-east-remesh-gpu-20261006/candidate-cliff.png",
+    "overview": "../citadel-east-remesh-gpu-20261006/candidate-front.png",
+    "reverted": "../citadel-east-remesh-gpu-20261006/reverted-cliff.png",
+    "glError": 0,
+    "errors": [],
+    "productionInstalled": false,
+    "visualOnly": true,
+    "score": null,
+    "visibleIssues": [
+      "board-like deep cliff folds",
+      "old vegetation floating after cut",
+      "old route retained during preview"
+    ],
+    "daySpeedRestored": 0.4,
+    "playerMoved": false
+  },
+  "eastReleaseAdapter": {
+    "status": "default-off-cityGalleryScope-candidate",
+    "handoff": "../citadel-east-release-adapter-20261006/HANDOFF.md",
+    "tests": 19,
+    "productionReady": false,
+    "requiresExactRemesh": true,
+    "remaining": [
+      "global approach dry deck and support construction",
+      "real vegetation/turf transaction",
+      "real consumer/index binding",
+      "reproject plaza links",
+      "actual actors and dynamic/GPU validation"
+    ],
+    "structureFinitePass": true,
+    "structureOptions": {
+      "cityGalleryScope": true,
+      "newShorePierWidth": 1.05,
+      "newShoreMaxSpan": 18
+    },
+    "structureEvidence": "../citadel-east-structure-audit-20261006/final-refined-pier-105.json"
+  },
+  "eastApproachPreflight": {
+    "status": "actual-retained-global-return-branch-collision-found-next-grade-separation-candidate",
+    "productionInstalled": false,
+    "limitedCandidatePosesPassed": 631,
+    "fullGlobalPoses": 10379,
+    "fullGlobalCollisions": 80,
+    "realLocustRailTriangleIntersections": 42,
+    "realAntRailTriangleIntersections": 12,
+    "next": "source-side 50m extension grade separation; finite first pass only, full structure/city/terrain/water outstanding",
+    "latestFiniteEvidence": {
+      "globalLoadedPoses": 10395,
+      "globalAgainstNewSupportCollisions": 0,
+      "actualVehiclesAtPrevious80WorldPoses": "0 support/rail intersections",
+      "cityLoadedPoses": 1534,
+      "newShoreEntryHeightChange": 5.078,
+      "doubleTrackCentreOffsetMax": 0.5305,
+      "terrainSolidAudit": "pending",
+      "productionInstalled": false
+    }
+  },
+  "eastVegetationRefresh": {
+    "status": "actual-live-visual-applied-and-reverted",
+    "fixtureOnly": false,
+    "trees": 297,
+    "unchanged": 278,
+    "moved": 16,
+    "retired": 3,
+    "treeCountAfter": 294,
+    "hiddenInstanceSlotsUntouched": 308,
+    "unsupportedTurfFacesRemoved": 1798,
+    "tests": 9,
+    "metadataTransaction": true,
+    "productionInstalled": false,
+    "evidence": "../citadel-live-vegetation-20261006/REPORT.md",
+    "otherConsumerRefreshComplete": false
+  },
+  "eastCombinedPreview": {
+    "at": "2026-10-06T17:57:58+08:00",
+    "cliff": "../citadel-cloud-companion-refresh-20261006/combined-cliff.png",
+    "front": "../citadel-cloud-companion-refresh-20261006/combined-front.png",
+    "reverted": "../citadel-cloud-companion-refresh-20261006/combined-reverted.json",
+    "report": "../citadel-cloud-companion-refresh-20261006/REPORT.md",
+    "glError": 0,
+    "gpuFailures": [],
+    "score": null,
+    "productionInstalled": false,
+    "playerMoved": false,
+    "daySpeedRestored": 0.4,
+    "cloudsBefore": 8,
+    "cloudsAfter": 4,
+    "companionsBefore": {
+      "cypress": 24,
+      "shrub": 31
+    },
+    "companionsAfter": {
+      "cypress": 24,
+      "shrub": 35
+    },
+    "rollbackReportCaveat": "companion subreport stale copy in saved reverted JSON; source corrected after capture, pending reload"
+  },
+  "eastConsumerBindings": {
+    "status": "cloud/tree/companion actual visual transaction GPU, reverted; navigation and railway not jointly installed",
+    "report": "../citadel-east-terrain-transaction-20261006/CONSUMER_BINDINGS.md",
+    "newRootTests": 7,
+    "companionTests": 7,
+    "productionInvoked": false,
+    "newGpu": true,
+    "commitOrder": [
+      "foundations",
+      "clouds",
+      "vegetation",
+      "navigation"
+    ],
+    "startupHelperTests": 3
+  },
+  "cliffFormDiagnosis": {
+    "report": "../citadel-live-vegetation-20261006/CLIFF_FORM_DIAGNOSIS.md",
+    "cause": "35–40m one-step sea cut plus fragmented polygon edges/coarse vertex lowering outside exact patch",
+    "next": "source-tag new cliff faces and re-mesh narrow strips; local ledges only where actual support/rail corridor permits",
+    "implemented": false
+  },
+  "eastNativeStartup": {
+    "tramContract": "../citadel-global-crossing-startup-20261006/HANDOFF.md",
+    "factoryCpuTests": 11,
+    "defaultEnabled": false,
+    "mainIntegrated": true,
+    "startupTerrainHelper": true,
+    "strictHash": 2638422502,
+    "actualStartupVerified": true,
+    "actualStartupScope": "opt-in normal main; not full gameplay acceptance",
+    "evidence": "../citadel-east-joint-startup-20261006/REPORT.md"
+  },
+  "eastJointStartup": {
+    "at": "2026-10-06T18:32:00+08:00",
+    "enabledByDefault": false,
+    "actualGpu": true,
+    "front": "../citadel-east-joint-startup-20261006/live-front.png",
+    "cliff": "../citadel-east-joint-startup-20261006/live-cliff.png",
+    "report": "../citadel-east-joint-startup-20261006/REPORT.md",
+    "glError": 0,
+    "gpuFailures": [],
+    "errors": [],
+    "actualSupportFinalized": true,
+    "routeAndVehiclesUnified": true,
+    "continuousDynamicVerified": false,
+    "daySpeedRestored": 0.4,
+    "playerMoved": false,
+    "completeScore": null,
+    "visibleScore": 58,
+    "scoreReport": "../citadel-east-joint-startup-20261006/VISIBLE_PANORAMA_REVIEW.md"
+  }
+}

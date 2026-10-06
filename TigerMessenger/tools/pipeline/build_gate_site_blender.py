@@ -91,17 +91,20 @@ for k in range(140):
 # Continuous parapet coping outside the swept train envelope.
 for k in range(140):
  a=-140+k*2;b=a+2
+ if abs((a+b)/2)<26:continue # New dual-track gate galleries provide their own guards.
  if clearance((a+b)/2)<-.4:continue
  for side in [-1,1]:
   vs=[rp(ss,x,y) for ss in [a,b] for x,y in [(side*2.25,-.2),(side*2.48,-.2),(side*2.48,.28),(side*2.25,.28)]]
   mesh('bridge-edge-coping',vs,[(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)],'trim')
 # Low stone posts and dark handrails outside the train's lateral envelope.
 for ss in range(-140,141,5):
+ if abs(ss)<=26:continue
  for side in [-1,1]:
   vs=[rp(t,x,y) for t in [max(-140,ss-.13),min(140,ss+.13)] for x,y in [(side*2.26,.28),(side*2.48,.28),(side*2.48,1.20),(side*2.26,1.20)]]
   mesh('bridge-parapet-post',vs,[(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)],'trim')
 for k in range(140):
  a=-140+k*2;b=a+2
+ if abs((a+b)/2)<26:continue # New dual-track gate galleries provide their own guards.
  for side in [-1,1]:
   vs=[rp(ss,x,y) for ss in [a,b] for x,y in [(side*2.30,1.08),(side*2.43,1.08),(side*2.43,1.20),(side*2.30,1.20)]]
   mesh('bridge-handrail',vs,[(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)],'rock')

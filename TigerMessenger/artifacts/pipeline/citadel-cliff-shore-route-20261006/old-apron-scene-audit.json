@@ -1,0 +1,1104 @@
+{
+  "apron": {
+    "report": {
+      "version": "target-old-shore-landward-apron-1",
+      "accepted": false,
+      "installed": false,
+      "status": "built-field-needs-mesh-audit",
+      "maxGap": 15,
+      "railSetback": 2.4,
+      "bridgeExclusion": {
+        "maxChartX": -47
+      },
+      "eligibleStations": 14,
+      "rejections": {
+        "bridgeAndWaterfall": 11,
+        "missingSurface": 0,
+        "gapTooWide": 16,
+        "alreadyJoined": 0
+      },
+      "changedQueries": 59,
+      "maxRaise": 16.68953051731824,
+      "segments": 13
+    },
+    "stations": [
+      {
+        "i": 0,
+        "u": 0,
+        "center": [
+          -31.1171489583094,
+          6.108888725517145,
+          46.89588047705359
+        ],
+        "inward": [
+          -0.4732797252016756,
+          -0.8809121986401519
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 1,
+        "u": 0.025,
+        "center": [
+          -32.81349554527986,
+          5.935804255006075,
+          47.865556175359494
+        ],
+        "inward": [
+          -0.5177326684770792,
+          -0.8555424501400282
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 2,
+        "u": 0.05,
+        "center": [
+          -34.46148622120059,
+          5.750118044458531,
+          48.91327903460537
+        ],
+        "inward": [
+          -0.5539455856800153,
+          -0.8325528740600352
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 3,
+        "u": 0.075,
+        "center": [
+          -36.066101105295424,
+          5.550521105684054,
+          50.02395672202838
+        ],
+        "inward": [
+          -0.5832221894151645,
+          -0.8123126724197905
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 4,
+        "u": 0.1,
+        "center": [
+          -37.63268190012542,
+          5.335784902411432,
+          51.18502152501539
+        ],
+        "inward": [
+          -0.6067398373849068,
+          -0.794900477877663
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 5,
+        "u": 0.125,
+        "center": [
+          -39.16656809804744,
+          5.104771134755793,
+          52.3859750993347
+        ],
+        "inward": [
+          -0.6254490486471881,
+          -0.7802650110996439
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 6,
+        "u": 0.15,
+        "center": [
+          -40.67290386529943,
+          4.856432037751516,
+          53.617955413188135
+        ],
+        "inward": [
+          -0.6400933224659948,
+          -0.7682971681155957
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 7,
+        "u": 0.175,
+        "center": [
+          -42.15658948089866,
+          4.5897944213984365,
+          54.873397696464224
+        ],
+        "inward": [
+          -0.6512510476301476,
+          -0.7588623544231426
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 8,
+        "u": 0.2,
+        "center": [
+          -43.62222858746639,
+          4.303960239134056,
+          56.14570708427762
+        ],
+        "inward": [
+          -0.6593563150559739,
+          -0.751830599135076
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 9,
+        "u": 0.225,
+        "center": [
+          -45.074161083801975,
+          3.998087598239322,
+          57.429033856915744
+        ],
+        "inward": [
+          -0.6647344270055648,
+          -0.7470797424328834
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 10,
+        "u": 0.25,
+        "center": [
+          -46.51647618480927,
+          3.671387179538157,
+          58.71806440375805
+        ],
+        "inward": [
+          -0.6676145443747142,
+          -0.7445070987837138
+        ],
+        "enabled": false,
+        "reason": "bridgeAndWaterfall"
+      },
+      {
+        "i": 11,
+        "u": 0.275,
+        "center": [
+          -47.95304492423369,
+          3.323114026903567,
+          60.00786070422816
+        ],
+        "inward": [
+          -0.668149763771521,
+          -0.7440268094444317
+        ],
+        "enabled": false,
+        "edge": [
+          -52.73071391626059,
+          54.68762561703155
+        ],
+        "top": 7.954002110825085,
+        "vehicleProjection": 4.75059594582251,
+        "diagnosticDryLandDistance": 21.5,
+        "diagnosticDryLandHeight": -8.589572265934564,
+        "diagnosticLandDistance": 23.5,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 12,
+        "u": 0.3,
+        "center": [
+          -49.38755658539979,
+          2.9525620133186403,
+          61.29373084012384
+        ],
+        "inward": [
+          -0.6664270573570688,
+          -0.745570236277172
+        ],
+        "enabled": false,
+        "edge": [
+          -54.15208681799878,
+          55.96337713966589
+        ],
+        "top": 7.573282282606469,
+        "vehicleProjection": 4.749364930491067,
+        "diagnosticDryLandDistance": 25,
+        "diagnosticDryLandHeight": -11.52218270877543,
+        "diagnosticLandDistance": 26.5,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 13,
+        "u": 0.325,
+        "center": [
+          -50.82354088878279,
+          2.559059744434762,
+          62.57111101715917
+        ],
+        "inward": [
+          -0.6624776582656271,
+          -0.7490816726491784
+        ],
+        "enabled": false,
+        "edge": [
+          -55.55788502444239,
+          57.21785814924924
+        ],
+        "top": 7.168991873880541,
+        "vehicleProjection": 4.746420828823364,
+        "diagnosticDryLandDistance": 23,
+        "diagnosticDryLandHeight": -9.310294969545351,
+        "diagnosticLandDistance": 24,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 14,
+        "u": 0.35,
+        "center": [
+          -52.264383089733286,
+          2.1419733327071806,
+          63.835461215544605
+        ],
+        "inward": [
+          -0.6562796112433079,
+          -0.7545177743872791
+        ],
+        "enabled": false,
+        "edge": [
+          -56.951245563416244,
+          58.447024668196995
+        ],
+        "top": 6.740485185777628,
+        "vehicleProjection": 4.741563433311288,
+        "diagnosticDryLandDistance": 20.5,
+        "diagnosticDryLandHeight": -10.07926725435089,
+        "diagnosticLandDistance": 21.5,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 15,
+        "u": 0.375,
+        "center": [
+          -53.71335035399291,
+          1.7007054492268305,
+          65.08218939605574
+        ],
+        "inward": [
+          -0.6477641643025246,
+          -0.7618409200387257
+        ],
+        "enabled": false,
+        "edge": [
+          -58.33485792953624,
+          59.6467951934312
+        ],
+        "top": 6.287148984549075,
+        "vehicleProjection": 4.734552712590245,
+        "diagnosticDryLandDistance": 19,
+        "diagnosticDryLandHeight": -6.675608032995509,
+        "diagnosticLandDistance": 22,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 16,
+        "u": 0.4,
+        "center": [
+          -55.17358541369028,
+          1.2347040859370109,
+          66.30656407763492
+        ],
+        "inward": [
+          -0.6368182348212044,
+          -0.7710139660208533
+        ],
+        "enabled": false,
+        "edge": [
+          -59.710981237034034,
+          60.81300978243647
+        ],
+        "top": 5.80841596076857,
+        "vehicleProjection": 4.725103483598719,
+        "diagnosticDryLandDistance": 18,
+        "diagnosticDryLandHeight": -1.442562602018321,
+        "diagnosticLandDistance": 24,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 17,
+        "u": 0.425,
+        "center": [
+          -56.64809760025052,
+          0.7434734120490133,
+          67.50364304026121
+        ],
+        "inward": [
+          -0.6232869880953225,
+          -0.7819931780207939
+        ],
+        "enabled": false,
+        "edge": [
+          -61.08146328656288,
+          61.94141923552243
+        ],
+        "top": 5.303776622771834,
+        "vehicleProjection": 4.7128802156773775,
+        "diagnosticDryLandDistance": 17,
+        "diagnosticDryLandHeight": -3.786582737429268,
+        "diagnosticLandDistance": 26.5,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 18,
+        "u": 0.45,
+        "center": [
+          -58.13975556655965,
+          0.22658508730532384,
+          68.66822221284126
+        ],
+        "inward": [
+          -0.6069768380499669,
+          -0.794719521636951
+        ],
+        "enabled": false,
+        "edge": [
+          -62.44776894113612,
+          63.02770660560954
+        ],
+        "top": 4.772790022368638,
+        "vehicleProjection": 4.697492201542342,
+        "diagnosticDryLandDistance": 16.5,
+        "diagnosticDryLandHeight": 0.2504446158141723,
+        "diagnosticLandDistance": 28.5,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 19,
+        "u": 0.475,
+        "center": [
+          -59.651239658624185,
+          -0.3162980349766826,
+          69.79477423644715
+        ],
+        "inward": [
+          -0.5876599492715141,
+          -0.8091080175243609
+        ],
+        "enabled": false,
+        "edge": [
+          -63.810984803066525,
+          64.06751112893309
+        ],
+        "top": 4.21510809984798,
+        "vehicleProjection": 4.678490119326524,
+        "diagnosticDryLandDistance": 16,
+        "diagnosticDryLandHeight": 0.6092746325795828,
+        "diagnosticLandDistance": 30,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 20,
+        "u": 0.5,
+        "center": [
+          -61.18498835052479,
+          -0.8853944917181591,
+          70.8774111015699
+        ],
+        "inward": [
+          -0.5650812553021026,
+          -0.8250352567655517
+        ],
+        "enabled": false,
+        "edge": [
+          -65.17184298856942,
+          65.0564860414605
+        ],
+        "top": 3.630504083577903,
+        "vehicleProjection": 4.655365225153664,
+        "diagnosticDryLandDistance": 15.5,
+        "diagnosticDryLandHeight": -1.9074098708235123,
+        "diagnosticLandDistance": 31,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 21,
+        "u": 0.525,
+        "center": [
+          -62.74314161207197,
+          -1.4807764169526363,
+          71.9098767777287
+        ],
+        "inward": [
+          -0.5389692069658063,
+          -0.8423254679413711
+        ],
+        "enabled": false,
+        "edge": [
+          -66.53077625120424,
+          65.99038995257425
+        ],
+        "top": 3.0189009725777103,
+        "vehicleProjection": 4.627552947700345,
+        "diagnosticDryLandDistance": 15,
+        "diagnosticDryLandHeight": -8.701561689550177,
+        "diagnosticLandDistance": 30,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 22,
+        "u": 0.55,
+        "center": [
+          -64.32743682102645,
+          -2.1023257140959966,
+          72.885545887835
+        ],
+        "inward": [
+          -0.5090523727009835,
+          -0.860735546987284
+        ],
+        "enabled": false,
+        "edge": [
+          -67.88797520949902,
+          66.86517917957225
+        ],
+        "top": 2.3804160266402614,
+        "vehicleProjection": 4.59444414644546,
+        "diagnosticDryLandDistance": 15,
+        "diagnosticDryLandHeight": -6.15793936524315,
+        "diagnosticLandDistance": 16.5,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 23,
+        "u": 0.575,
+        "center": [
+          -65.9391037000793,
+          -2.7496924998993673,
+          73.79747062857103
+        ],
+        "inward": [
+          -0.475082599529643,
+          -0.8799412046404901
+        ],
+        "enabled": false,
+        "edge": [
+          -69.2434963232283,
+          67.67712181281219
+        ],
+        "top": 1.715402359659009,
+        "vehicleProjection": 4.555406547031041,
+        "diagnosticDryLandDistance": 14.5,
+        "diagnosticDryLandHeight": -11.528979306040322,
+        "diagnosticLandDistance": 16,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 24,
+        "u": 0.6,
+        "center": [
+          -67.57875521477544,
+          -3.422257257983971,
+          74.63847256792918
+        ],
+        "inward": [
+          -0.4368439634730904,
+          -0.8995372986025211
+        ],
+        "enabled": false,
+        "edge": [
+          -70.59725675519327,
+          68.42285566914545
+        ],
+        "top": 1.0244399398734172,
+        "vehicleProjection": 4.509793410945855,
+        "diagnosticDryLandDistance": 14.5,
+        "diagnosticDryLandHeight": -10.213253629318785,
+        "diagnosticLandDistance": 16,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 25,
+        "u": 0.625,
+        "center": [
+          -69.24624947619735,
+          -4.119340082430795,
+          75.40105603289759
+        ],
+        "inward": [
+          -0.39410531913398816,
+          -0.9190652846399419
+        ],
+        "enabled": false,
+        "edge": [
+          -71.94858479660965,
+          69.09912997438904
+        ],
+        "top": 0.3079486207886077,
+        "vehicleProjection": 4.456886190601155,
+        "diagnosticDryLandDistance": 14,
+        "diagnosticDryLandHeight": -13.192729515132417,
+        "diagnosticLandDistance": 15.5,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 26,
+        "u": 0.65,
+        "center": [
+          -70.94057852521428,
+          -4.839758310880312,
+          76.07792957916318
+        ],
+        "inward": [
+          -0.34703733187917557,
+          -0.9378513156583952
+        ],
+        "enabled": false,
+        "edge": [
+          -73.29919056103047,
+          69.70389659274063
+        ],
+        "top": -0.4325001501143503,
+        "vehicleProjection": 4.396421650214164,
+        "diagnosticDryLandDistance": 14,
+        "diagnosticDryLandHeight": -11.962849986619844,
+        "diagnosticLandDistance": 15.5,
+        "reason": "gapTooWide"
+      },
+      {
+        "i": 27,
+        "u": 0.675,
+        "center": [
+          -72.6597992470005,
+          -5.581782160767033,
+          76.66231913497039
+        ],
+        "inward": [
+          -0.2958471172269909,
+          -0.9552353025451263
+        ],
+        "enabled": true,
+        "edge": [
+          -74.66484861052712,
+          70.18838775670135
+        ],
+        "top": -1.1951281157846834,
+        "vehicleProjection": 4.377315872874371,
+        "width": 15
+      },
+      {
+        "i": 28,
+        "u": 0.7,
+        "center": [
+          -74.40100733405109,
+          -6.343328027232046,
+          77.1481195175363
+        ],
+        "inward": [
+          -0.24094391644038865,
+          -0.970539040497788
+        ],
+        "enabled": true,
+        "edge": [
+          -76.03666360986722,
+          70.55958100630345
+        ],
+        "top": -1.9777920643951172,
+        "vehicleProjection": 4.3885352740201045,
+        "width": 15
+      },
+      {
+        "i": 29,
+        "u": 0.725,
+        "center": [
+          -76.1603788457249,
+          -7.122001202674793,
+          77.5301995079284
+        ],
+        "inward": [
+          -0.18294681441604677,
+          -0.9831228118068569
+        ],
+        "enabled": true,
+        "edge": [
+          -77.40405015593166,
+          70.84693672821459
+        ],
+        "top": -2.7780276581152914,
+        "vehicleProjection": 4.3979938004193135,
+        "width": 15
+      },
+      {
+        "i": 30,
+        "u": 0.75,
+        "center": [
+          -77.93328686569487,
+          -7.915171928788025,
+          77.80468346605524
+        ],
+        "inward": [
+          -0.12266571090752106,
+          -0.9924480456767258
+        ],
+        "enabled": true,
+        "edge": [
+          -78.76804498153682,
+          71.05092926244808
+        ],
+        "top": -3.5931284877293015,
+        "vehicleProjection": 4.405146358066469,
+        "width": 15
+      },
+      {
+        "i": 31,
+        "u": 0.775,
+        "center": [
+          -79.71449993583036,
+          -8.720081695593818,
+          77.9691724161547
+        ],
+        "inward": [
+          -0.06105037337905466,
+          -0.9981346862574599
+        ],
+        "enabled": true,
+        "edge": [
+          -80.13022652518808,
+          71.17230769821006
+        ],
+        "top": -4.420338526121468,
+        "vehicleProjection": 4.409566696283969,
+        "width": 15
+      },
+      {
+        "i": 32,
+        "u": 0.8,
+        "center": [
+          -81.49841703282983,
+          -9.533968118288213,
+          78.02286699894736
+        ],
+        "inward": [
+          0.0008759702484454057,
+          -0.9999996163379884
+        ],
+        "enabled": true,
+        "edge": [
+          -81.49245080312892,
+          71.21187379170476
+        ],
+        "top": -5.256661563731625,
+        "vehicleProjection": 4.410995820362961,
+        "width": 14.5
+      },
+      {
+        "i": 33,
+        "u": 0.825,
+        "center": [
+          -83.27935905200093,
+          -10.35418753870101,
+          77.96657928143979
+        ],
+        "inward": [
+          0.062108329035145696,
+          -0.9980694141513714
+        ],
+        "enabled": true,
+        "edge": [
+          -82.85644073404421,
+          71.17035976637143
+        ],
+        "top": -6.099446138132718,
+        "vehicleProjection": 4.40936557989504,
+        "width": 14
+      },
+      {
+        "i": 34,
+        "u": 0.85,
+        "center": [
+          -85.05182753360204,
+          -11.178329050356977,
+          77.80262657049308
+        ],
+        "inward": [
+          0.12174519546715545,
+          -0.9925613872102139
+        ],
+        "enabled": true,
+        "edge": [
+          -84.22337703951749,
+          71.04845472421776
+        ],
+        "top": -6.946320633246129,
+        "vehicleProjection": 4.404790044532385,
+        "width": 13.5
+      },
+      {
+        "i": 35,
+        "u": 0.875,
+        "center": [
+          -86.81072720220057,
+          -12.004307001216826,
+          77.53463043574286
+        ],
+        "inward": [
+          0.17903041825966123,
+          -0.9838435390537312
+        ],
+        "enabled": true,
+        "edge": [
+          -85.59376206520473,
+          70.84692172721235
+        ],
+        "top": -7.795072767489669,
+        "vehicleProjection": 4.397532781444898,
+        "width": 13
+      },
+      {
+        "i": 36,
+        "u": 0.9,
+        "center": [
+          -88.55154740454574,
+          -12.83040819972788,
+          77.16725219102929
+        ],
+        "inward": [
+          0.233366136708738,
+          -0.9723889377392354
+        ],
+        "enabled": true,
+        "edge": [
+          -86.96746633175277,
+          70.56671051266028
+        ],
+        "top": -8.643691687297375,
+        "vehicleProjection": 4.387964591323916,
+        "width": 12.5
+      },
+      {
+        "i": 37,
+        "u": 0.925,
+        "center": [
+          -90.27045082604045,
+          -13.655306646591978,
+          76.70590403632151
+        ],
+        "inward": [
+          0.28442556066672753,
+          -0.9586981279002363
+        ],
+        "enabled": true,
+        "edge": [
+          -88.34304299033167,
+          70.20929283350702
+        ],
+        "top": -9.491190830750467,
+        "vehicleProjection": 4.3764930521388745,
+        "width": 11.5
+      },
+      {
+        "i": 38,
+        "u": 0.95,
+        "center": [
+          -91.96430936857355,
+          -14.47808241517708,
+          76.15645712808696
+        ],
+        "inward": [
+          0.33199659411730126,
+          -0.9432805847119466
+        ],
+        "enabled": true,
+        "edge": [
+          -89.71883706834429,
+          69.77654100290412
+        ],
+        "top": -10.33644856037216,
+        "vehicleProjection": 4.363540168836493,
+        "width": 11
+      },
+      {
+        "i": 39,
+        "u": 0.975,
+        "center": [
+          -93.630684076643,
+          -15.298161404680368,
+          75.52499451901666
+        ],
+        "inward": [
+          0.3760295544614707,
+          -0.9266076700370593
+        ],
+        "enabled": true,
+        "edge": [
+          -91.09267308488286,
+          69.2708572478882
+        ],
+        "top": -11.178837462677164,
+        "vehicleProjection": 4.349498707342146,
+        "width": 10
+      },
+      {
+        "i": 40,
+        "u": 1,
+        "center": [
+          -95.26778170336985,
+          -16.11526212641783,
+          74.81760537350259
+        ],
+        "inward": [
+          0.41643602607503505,
+          -0.9091650214272614
+        ],
+        "enabled": true,
+        "edge": [
+          -92.46317964885276,
+          68.69458544407281
+        ],
+        "top": -12.017620955481899,
+        "vehicleProjection": 4.334772879644545,
+        "width": 4.5
+      }
+    ]
+  },
+  "coverage": [
+    "Current target terrain factory with real source rail cut, new-city retreat, explicit old exterior cut; exact generated mesh triangles",
+    "Original r47 bridge reconstructed by same factory against new terrain",
+    "Production legacy planet sphere/canyon and ocean-bed material factory"
+  ],
+  "limitations": [
+    "No actual loaded V8/V9 terrain manifest snapshot available; do not claim every planet terrain compiled here matches current runtime.",
+    "Vehicle OBB sampled at one meter, static triangles; not continuous swept collision or loaded cargo.",
+    "Inside a closed terrain solid can require separate point inclusion; previous underbody vertical triangle audit retained.",
+    "No saved live ship trajectory/hull snapshot; boat route cannot be approved from a guessed straight line."
+  ],
+  "triangles": 76414,
+  "audits": {
+    "red-replacement": {
+      "samples": 291,
+      "length": 289.18484044395797,
+      "counts": {},
+      "hits": [],
+      "solidFailures": [],
+      "missingUnderbodyCount": 522,
+      "missingExamples": [
+        {
+          "i": 0,
+          "local": [
+            121.69731582412035,
+            -56.84393309404463,
+            64.41618273562291
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            119.4961725852678,
+            -54.187157932164624,
+            64.94212396928988
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            117.29502934641523,
+            -51.53038277028462,
+            65.46806520295681
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            121.78931212234824,
+            -57.22052912691804,
+            66.70356379463696
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            119.58816888349565,
+            -54.563753965038046,
+            67.22950502830393
+          ],
+          "direct": 0
+        }
+      ]
+    },
+    "red-retainedOld": {
+      "samples": 248,
+      "length": 246.91125575634982,
+      "counts": {},
+      "hits": [],
+      "solidFailures": [],
+      "missingUnderbodyCount": 1038,
+      "missingExamples": [
+        {
+          "i": 0,
+          "local": [
+            -90.86223603911996,
+            -13.955271292523118,
+            72.07162772205204
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -93.74468816715901,
+            -15.40502125430012,
+            70.74129138191441
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -96.62714029519803,
+            -16.854771216077122,
+            69.41095504177675
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -91.51921403627107,
+            -14.602510401917609,
+            74.20044463445424
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -94.4016661643101,
+            -16.05226036369464,
+            72.8701082943166
+          ],
+          "direct": 0
+        }
+      ]
+    },
+    "blue-replacement": {
+      "samples": 292,
+      "length": 290.7456576424674,
+      "counts": {},
+      "hits": [],
+      "solidFailures": [],
+      "missingUnderbodyCount": 642,
+      "missingExamples": [
+        {
+          "i": 0,
+          "local": [
+            121.86450410974547,
+            -57.50296306403456,
+            68.44477268686447
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            119.66338509061723,
+            -54.846156654940316,
+            68.97065743491073
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            117.46226607148898,
+            -52.189350245846086,
+            69.496542182957
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            121.91268357760134,
+            -57.91486851710532,
+            70.72740551686752
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            119.7115645584731,
+            -55.25806210801109,
+            71.25329026491379
+          ],
+          "direct": 0
+        }
+      ]
+    },
+    "blue-retainedOld": {
+      "samples": 258,
+      "length": 256.8574824546005,
+      "counts": {},
+      "hits": [],
+      "solidFailures": [],
+      "missingUnderbodyCount": 1113,
+      "missingExamples": [
+        {
+          "i": 0,
+          "local": [
+            -92.02120738937099,
+            -15.088495508640474,
+            75.82149458894843
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -94.90376636256268,
+            -16.538373049455625,
+            74.49152884400914
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -97.78632533575433,
+            -17.988250590270805,
+            73.16156309906984
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -92.65030675604162,
+            -15.784202722780659,
+            77.94343366890523
+          ],
+          "direct": 0
+        },
+        {
+          "i": 0,
+          "local": [
+            -95.5328657292333,
+            -17.23408026359581,
+            76.61346792396591
+          ],
+          "direct": 0
+        }
+      ]
+    }
+  }
+}

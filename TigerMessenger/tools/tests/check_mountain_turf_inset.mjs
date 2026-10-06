@@ -1,0 +1,5 @@
+import assert from 'node:assert/strict';
+import * as T from '../../vendor/three.module.js';
+import {insetMountainTurf} from '../../src/world/citadel/mountainTurfInset.js';
+const v=(x,z)=>new T.Vector3(x,0,z),rect=(x,z,w,h)=>[new T.Triangle(v(x,z),v(x+w,z),v(x+w,z+h)),new T.Triangle(v(x,z),v(x+w,z+h),v(x,z+h))];
+const source=[...rect(0,0,10,10),...rect(20,0,.4,8)],before=JSON.stringify(source),r=insetMountainTurf(source),main=r.stats.items.find(g=>g.beforeArea>50),tail=r.stats.items.find(g=>g.beforeArea<5);assert.equal(r.stats.components,2);assert.ok(main.afterArea>89&&main.afterArea<=90.25001);assert.equal(tail.afterArea,0);for(const {triangle}of r.output)for(const p of[triangle.a,triangle.b,triangle.c]){assert.equal(p.y,0);assert.ok(p.x>=.25-1e-8&&p.x<=9.75+1e-8&&p.z>=.25-1e-8&&p.z<=9.75+1e-8);}assert.equal(JSON.stringify(source),before);console.log(JSON.stringify({pass:true,mainAreaBefore:main.beforeArea,mainAreaAfter:main.afterArea,narrowComponentAreaAfter:tail.afterArea,triangles:r.output.length,sourceUnchanged:true},null,2));

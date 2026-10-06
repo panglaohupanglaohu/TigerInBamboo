@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-04T21:25:45.532132+00:00",
+  "status": "pass",
+  "checks": {
+    "mainRock": true,
+    "railCurveProtection": true,
+    "walkable": true,
+    "rootsExactlyEqual": true,
+    "gpuClean": true,
+    "releaseActive": true,
+    "nightGpuClean": true,
+    "nightClock": true
+  },
+  "before": "r20-check.json",
+  "after": "r22-check.json",
+  "night": "r22-bay-ridge-night-cloud-plants.json",
+  "note": "Reload after final castle shared-source and UI metadata edits; default mountain geometry and root data exactly retained."
+}

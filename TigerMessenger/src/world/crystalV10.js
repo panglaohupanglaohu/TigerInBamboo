@@ -24,14 +24,15 @@ export function finishCrystalV10Scene({city,gate,scene,swamp}){
  installGateMoebiusV10(gate);
  installGateTargetThirty(gate);
  installGateTargetGreenery(gate);
+ const stepped=new URLSearchParams(globalThis.location?.search||'').get('crystalCrown')!=='0';
  if(round>=3)for(const [index,r]of city.crystals.entries()){
   const group=r.group.userData.v9Root;
   // Broader clustered silhouettes while retaining root/harbour placement and habitat elevations.
   group.children.filter(o=>o.name==='v9-crystal-prism').forEach((o,i)=>{
    o.position.x*=1.38;o.position.z*=1.38;
-   o.scale.set(1.35,i===0?.88:1.03,1.35);
+   o.scale.set(1.35,stepped?[1.22,.98,1.03,.94,1.0][i]:(i===0?.88:1.03),1.35);
   });
-  r.h=60.72*(index===0?1:.55);
+  r.h=(stepped?84.18:60.72)*(index===0?1:.55);
  }
  if(round>=4)crystalInteriors(city);
  if(round>=5)roundHabitats(city);

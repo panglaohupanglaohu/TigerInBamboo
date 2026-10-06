@@ -1,0 +1,222 @@
+{
+  "code": 200,
+  "message": "OK",
+  "tweet": {
+    "url": "https://x.com/AllCityKitty/status/1723738415177363639",
+    "id": "1723738415177363639",
+    "text": "I was fighting with some weird unity thing for hours, but now it works fine again. The basic tile effects do their thing. Now on to the more complicated ones. 🏌️‍♀️⛳️\n\n#lowpoly #indiedev",
+    "raw_text": {
+      "text": "I was fighting with some weird unity thing for hours, but now it works fine again. The basic tile effects do their thing. Now on to the more complicated ones. 🏌️‍♀️⛳️\n\n#lowpoly #indiedev https://t.co/PpDOOW2fQP",
+      "display_text_range": [
+        0,
+        186
+      ],
+      "facets": [
+        {
+          "type": "hashtag",
+          "indices": [
+            168,
+            176
+          ],
+          "original": "lowpoly"
+        },
+        {
+          "type": "hashtag",
+          "indices": [
+            177,
+            186
+          ],
+          "original": "indiedev"
+        },
+        {
+          "type": "media",
+          "indices": [
+            187,
+            210
+          ],
+          "id": "1723738238450376704",
+          "display": "pic.x.com/PpDOOW2fQP",
+          "original": "https://t.co/PpDOOW2fQP",
+          "replacement": "https://x.com/AllCityKitty/status/1723738415177363639/video/1"
+        }
+      ]
+    },
+    "author": {
+      "screen_name": "AllCityKitty",
+      "url": "https://x.com/AllCityKitty",
+      "id": "1255471342696136705",
+      "followers": 3911,
+      "following": 740,
+      "likes": 9990,
+      "media_count": 580,
+      "name": "All City, Kitty!",
+      "description": "Hello. 🐱 Hobbyist gamedev log. But, just to be clear: Black Lives Matter! Trans rights are human rights! no NFT shit. He/Him http://allcitykitty.bsky.social",
+      "raw_description": {
+        "text": "Hello. 🐱 Hobbyist gamedev log. But, just to be clear: Black Lives Matter! Trans rights are human rights! no NFT shit. He/Him https://t.co/uLp8rnBpPk",
+        "facets": [
+          {
+            "type": "url",
+            "indices": [
+              125,
+              148
+            ],
+            "original": "https://t.co/uLp8rnBpPk",
+            "replacement": "http://allcitykitty.bsky.social",
+            "display": "allcitykitty.bsky.social"
+          }
+        ]
+      },
+      "location": "Berlin, Germany",
+      "banner_url": "https://pbs.twimg.com/profile_banners/1255471342696136705/1625143708",
+      "avatar_url": "https://pbs.twimg.com/profile_images/1455594010366681091/HSiM71MD_200x200.jpg",
+      "joined": "Wed Apr 29 12:17:58 +0000 2020",
+      "protected": false,
+      "website": null,
+      "verification": {
+        "verified": false,
+        "verified_at": null,
+        "type": null
+      },
+      "avatar_color": null
+    },
+    "replies": 5,
+    "retweets": 9,
+    "likes": 170,
+    "bookmarks": 15,
+    "quotes": 1,
+    "created_at": "Sun Nov 12 16:23:58 +0000 2023",
+    "created_timestamp": 1699806238,
+    "possibly_sensitive": false,
+    "views": 37702,
+    "is_note_tweet": false,
+    "community_note": null,
+    "lang": "en",
+    "replying_to": null,
+    "replying_to_status": null,
+    "media": {
+      "all": [
+        {
+          "id": "1723738238450376704",
+          "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/1280x716/w8ePtHX9iC6oF211.mp4?tag=12",
+          "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/1723738238450376704/pu/img/sxw3--PsGjoNJBOP.jpg",
+          "duration": 27.361,
+          "width": 1280,
+          "height": 716,
+          "format": "video/mp4",
+          "type": "video",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/pl/YAVZovEN3pBY-QUD.m3u8?tag=12",
+              "container": "m3u8"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/482x270/tyd_R2qyNtTRzsxX.mp4?tag=12",
+              "bitrate": 256000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/642x360/naUsq23GcgICXMPm.mp4?tag=12",
+              "bitrate": 832000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/1280x716/w8ePtHX9iC6oF211.mp4?tag=12",
+              "bitrate": 2176000,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/pl/YAVZovEN3pBY-QUD.m3u8?tag=12",
+              "bitrate": 0,
+              "content_type": "application/x-mpegURL"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/482x270/tyd_R2qyNtTRzsxX.mp4?tag=12",
+              "bitrate": 256000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/642x360/naUsq23GcgICXMPm.mp4?tag=12",
+              "bitrate": 832000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/1280x716/w8ePtHX9iC6oF211.mp4?tag=12",
+              "bitrate": 2176000,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ],
+      "videos": [
+        {
+          "id": "1723738238450376704",
+          "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/1280x716/w8ePtHX9iC6oF211.mp4?tag=12",
+          "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/1723738238450376704/pu/img/sxw3--PsGjoNJBOP.jpg",
+          "duration": 27.361,
+          "width": 1280,
+          "height": 716,
+          "format": "video/mp4",
+          "type": "video",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/pl/YAVZovEN3pBY-QUD.m3u8?tag=12",
+              "container": "m3u8"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/482x270/tyd_R2qyNtTRzsxX.mp4?tag=12",
+              "bitrate": 256000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/642x360/naUsq23GcgICXMPm.mp4?tag=12",
+              "bitrate": 832000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/1280x716/w8ePtHX9iC6oF211.mp4?tag=12",
+              "bitrate": 2176000,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/pl/YAVZovEN3pBY-QUD.m3u8?tag=12",
+              "bitrate": 0,
+              "content_type": "application/x-mpegURL"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/482x270/tyd_R2qyNtTRzsxX.mp4?tag=12",
+              "bitrate": 256000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/642x360/naUsq23GcgICXMPm.mp4?tag=12",
+              "bitrate": 832000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/1280x716/w8ePtHX9iC6oF211.mp4?tag=12",
+              "bitrate": 2176000,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ]
+    },
+    "source": "Twitter for iPhone",
+    "twitter_card": "player",
+    "color": null,
+    "provider": "twitter",
+    "reposted_by": null
+  }
+}

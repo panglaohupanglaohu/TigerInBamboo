@@ -1,0 +1,979 @@
+{
+  "time": "2026-09-28T07:07:13.087Z",
+  "frames": [
+    {
+      "name": "noon",
+      "time": 0.5,
+      "medianMs": 45.69999998807907,
+      "p95Ms": 53.5,
+      "render": {
+        "frame": 291,
+        "calls": 2778,
+        "triangles": 1550260,
+        "points": 0,
+        "lines": 182
+      }
+    },
+    {
+      "name": "dusk",
+      "time": 0.72,
+      "medianMs": 46.90000003576279,
+      "p95Ms": 56.10000002384186,
+      "render": {
+        "frame": 395,
+        "calls": 2774,
+        "triangles": 1550384,
+        "points": 0,
+        "lines": 182
+      }
+    },
+    {
+      "name": "night",
+      "time": 0.9,
+      "medianMs": 46.5,
+      "p95Ms": 54.59999996423721,
+      "render": {
+        "frame": 499,
+        "calls": 2779,
+        "triangles": 1550548,
+        "points": 0,
+        "lines": 182
+      }
+    }
+  ],
+  "planting": {
+    "checks": [
+      {
+        "gap": -0.08951298422715581,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13883551529374927,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.16568959491735313,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.08019508572704126,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08269381211638915,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09171129129350675,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.07795252414004494,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2052872970064925,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.05863056431044811,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.15330328492089507,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.17340126189697003,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.07448711935450092,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1695868619593739,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.17848289573322518,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.04932892653749832,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.09933077582044803,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.07777789513588118,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.0787580909804717,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.10043979354423982,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.0839173485732374,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.164842279462448,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08735736074541478,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13360618106688094,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1769027248758448,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.17869911592160292,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13707670038394326,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.18862376746702125,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.11802720185687576,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.19970602727559594,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.04684273481083778,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.25198268238949595,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2566201239672239,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.24804702142208157,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.07784798689243644,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08352532650835087,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1455954218927502,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.16518168048222037,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.19543846100617657,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20344082556081844,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.21749021085167897,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2059946171374918,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.12179332016012268,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09409959391695111,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1446682812606923,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2208470959686224,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1830284313731454,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1085808820738805,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.11943164722998745,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.11317990408997503,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.16745378010764966,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08821995819727135,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.11016780905225687,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20323356954725114,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.07631606919156297,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1950851564677123,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2155183950180799,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13241426127541445,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.22218266753318971,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.16813755161931,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20935872725289073,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.248304703662086,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.14827034318511778,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.18442355763042428,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.24520317533077218,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2044009849289239,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.25965864239148573,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1594567399687037,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.11061610257883103,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.19701728912485805,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1758045055054538,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.10121779078835402,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.14900082967284334,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.24013747835564914,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2322882107806663,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.11484005938629593,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.163055620096344,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20840465214698156,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.06412202320618121,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1854994088030537,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2028407679583495,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.05967213511834757,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.06161662083604824,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1237024905804276,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.09732555467186899,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.04838915899878771,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1445332919417126,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.13616224482098005,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.19838631621007607,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.16252139097991858,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.16505775084726793,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.17840951858647713,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.16425466751556428,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13932688752200306,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.15038034509700537,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09843761513241134,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20841116803072168,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.22531463813527353,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.14993097385465148,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.21190616885010627,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08893719668367339,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08848634987714377,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09043206610775201,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08889067243069348,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08875996169896894,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.03499999999996817,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.16451815961443117,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1701639006659832,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.20344609242545175,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.18646889495735763,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.055485362544885675,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1607687405237357,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.0823348433928004,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08367923468912863,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09532323347750093,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.200261477235955,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.21240149991498924,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.18062905432640264,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.18122751425624983,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.16775402802664985,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08693357465912754,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08003378633881653,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.10856401574079655,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08991573673424114,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.11970621414192806,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2127359214600233,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08794049598549236,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.058135187613260086,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09194215980286913,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.10021026744860251,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08297512402162965,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08998722681914728,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20175414361597177,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.18027623376187307,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.15125578153194397,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.14251099239075415,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.13617250780387735,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.08036896629928947,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.13657445023011405,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.22087902646737234,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.22924394513083257,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.21262232136965054,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.0890535469552276,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09263290466464014,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13831238468009133,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20560698296674218,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.4215165135722998,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.19523704468306846,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08740059887651341,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08980175684953906,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08536796902066612,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2226844086147537,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.22930960364348607,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20408904687653262,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.14699340535386796,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.059770917245089095,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.10079193612364179,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.12327154317259215,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13181550495514216,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.0780386008694336,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.23952731827006346,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1617450302250063,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1009295572609119,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20284461940048004,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13335045775599497,
+        "source": "citadel-backdrop-ridge-near"
+      },
+      {
+        "gap": -0.17482733701945108,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1370196481904884,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.15982752754365492,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.12180874946636777,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.239791019068349,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.17881639378256864,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.17056114913154374,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.18233191753421352,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.11680787431339468,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.10337360269457463,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1507008946354631,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1254661329476221,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.19715606938098063,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.15572114435215667,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.14288493447472206,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.32301861778643115,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.11683055255747377,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.11391900536446542,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.21464452362201314,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.18450078965597072,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2300658419596573,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.15998751798653643,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.15169321399673663,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.12019099974554592,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08670278318993496,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1945540879737564,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2209538875704311,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.23176301225524298,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09791251968533743,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08978561480790859,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.08484230768809198,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.304840418786938,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.18712104673798535,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20280765724135108,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.1866948803662467,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.1818632968325744,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.09450999205387234,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.2084451336848474,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.09584011073525289,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.2170896881316935,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.22064338497952463,
+        "source": "highland-ravine-wall-west"
+      },
+      {
+        "gap": -0.13764884730952076,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.16251066828647254,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.20045055369638476,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.14530972032463296,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.235184342493568,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.15197568746978618,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.08715262129183543,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.13411157517475658,
+        "source": "citadel-oskar-grid-mountain-surface"
+      },
+      {
+        "gap": -0.29663391791166305,
+        "source": "new-city-rock-shoulder"
+      },
+      {
+        "gap": -0.13208085201182485,
+        "source": "new-city-rock-shoulder"
+      }
+    ],
+    "materials": [
+      {
+        "name": "citadel-study-cypress",
+        "color": "304c3d",
+        "protected": true,
+        "instances": 99
+      },
+      {
+        "name": "citadel-study-cypress",
+        "color": "304c3d",
+        "protected": true,
+        "instances": 99
+      },
+      {
+        "name": "citadel-study-cypress",
+        "color": "546b48",
+        "protected": true,
+        "instances": 99
+      },
+      {
+        "name": "citadel-study-cypress",
+        "color": "5c5143",
+        "protected": true,
+        "instances": 99
+      },
+      {
+        "name": "citadel-study-understory",
+        "color": "304c3d",
+        "protected": true,
+        "instances": 116
+      },
+      {
+        "name": "citadel-study-understory",
+        "color": "304c3d",
+        "protected": true,
+        "instances": 116
+      },
+      {
+        "name": "citadel-study-understory",
+        "color": "546b48",
+        "protected": true,
+        "instances": 116
+      },
+      {
+        "name": "citadel-study-understory",
+        "color": "5c5143",
+        "protected": true,
+        "instances": 116
+      },
+      {
+        "name": "citadel-study-understory",
+        "color": "5c5143",
+        "protected": true,
+        "instances": 116
+      },
+      {
+        "name": "citadel-study-understory",
+        "color": "5c5143",
+        "protected": true,
+        "instances": 116
+      },
+      {
+        "name": "citadel-study-understory",
+        "color": "5c5143",
+        "protected": true,
+        "instances": 116
+      }
+    ],
+    "trees": 99,
+    "shrubs": 116
+  },
+  "errors": []
+}

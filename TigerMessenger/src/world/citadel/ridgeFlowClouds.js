@@ -1,46 +1,40 @@
 import * as THREE from 'three';
-import HF from '../../assets/citadelRidgeHeightfield.js';
+import {buildRidgeCloudField} from './ridgeCloudField.js';
+import {officialOceanLevelAt} from '../waterV8/officialOcean.js';
 
 // =====================================================================
-// Holy-city ridge-flow clouds (user 2026-09-25: "clouds slowly flowing along
-// the ridges"). Mist puffs are born on real ridge crests (baked heightfield of
-// the current mountain meshes), drift with a gentle west wind along the ridge
+// Project-authored holy-city terrain-flow clouds (user 2026-09-25: "clouds slowly flowing along
+// the ridges"). Mist puffs use a refreshed final-mesh cache, then drift with a gentle west wind along the ridge
 // and spill down the lee slope, hugging the ground, growing and fading. They
 // dissolve over built districts and open sea, so the cities stay clear.
 // One instanced draw call of soft camera-facing sprites, tinted by the sky.
 // =====================================================================
 
-const COUNT = 1000;
+const COUNT = 384;
 const WIND = new THREE.Vector2(0.94, 0.34).normalize().multiplyScalar(0.85); // m/s, castle-local x/z
 const SLOPE_PULL = 0.55;      // gentle lee-side spill per unit gradient
 const ALONG = 0.9;            // share of wind redirected along the contour (ridge-following)
 const MIN_SPEED = 0.35, MAX_SPEED = 1.5;
 
-function sampler() {
-  const {half, step, n, alt, cls} = HF;
-  const at = (ix, iz) => alt[Math.max(0, Math.min(n - 1, iz)) * n + Math.max(0, Math.min(n - 1, ix))];
-  const height = (x, z) => {
-    const fx = (x + half) / step, fz = (z + half) / step;
-    const ix = Math.floor(fx), iz = Math.floor(fz), u = fx - ix, v = fz - iz;
-    return (at(ix, iz) * (1 - u) + at(ix + 1, iz) * u) * (1 - v) + (at(ix, iz + 1) * (1 - u) + at(ix + 1, iz + 1) * u) * v;
-  };
-  const kind = (x, z) => {
-    const ix = Math.round((x + half) / step), iz = Math.round((z + half) / step);
-    if (ix < 0 || iz < 0 || ix >= n || iz >= n) return 0;
-    return cls[iz * n + ix];
-  };
-  const grad = (x, z) => [(height(x + 1.5, z) - height(x - 1.5, z)) / 3, (height(x, z + 1.5) - height(x, z - 1.5)) / 3];
-  // Crest cells: mountain, high enough, and a local maximum across x or across z.
-  const crests = [];
-  for (let iz = 2; iz < n - 2; iz++) for (let ix = 2; ix < n - 2; ix++) {
-    const i = iz * n + ix, a = alt[i];
-    if (cls[i] !== 1 || a < 18) continue;
-    const ridgeX = a >= at(ix - 2, iz) && a >= at(ix + 2, iz);
-    const ridgeZ = a >= at(ix, iz - 2) && a >= at(ix, iz + 2);
-    if (ridgeX || ridgeZ) crests.push({x: -half + ix * step, z: -half + iz * step, w: Math.pow(a, 1.6)});
-  }
-  let total = 0; for (const c of crests) total += c.w;
-  return {height, kind, grad, crests, total};
+export function ridgeCloudFrameMatrix(castle,mesh){
+ castle.updateWorldMatrix(true,false);mesh.updateWorldMatrix(true,false);
+ return mesh.matrixWorld.clone().invert().multiply(castle.matrixWorld);
+}
+
+export function refreshRidgeFlowClouds(castle,{surfaces=[],rail=[],protectedBoxes=[],radius=160,surfaceIndex=null}={}){
+ const mesh=castle.userData.ridgeFlowClouds;if(!mesh?.userData.refresh)return null;
+ castle.updateWorldMatrix(true,true);const inverse=castle.matrixWorld.clone().invert(),ray=new THREE.Raycaster();ray.layers.enableAll();
+ const down=new THREE.Vector3(0,-1,0).transformDirection(castle.matrixWorld),p=new THREE.Vector3();
+ const boxes=surfaces.map(o=>({o,box:new THREE.Box3().setFromObject(o)}));
+ const field=buildRidgeCloudField((x,z)=>{
+  p.set(x,160,z).applyMatrix4(castle.matrixWorld);ray.set(p,down);ray.far=360;
+  const hit=surfaceIndex?surfaceIndex.sample(ray.ray,ray.near,ray.far):ray.intersectObjects(boxes.filter(b=>ray.ray.intersectsBox(b.box)).map(b=>b.o),false)[0];if(!hit)return null;
+  const world=hit.point,local=world.clone().applyMatrix4(inverse),dry=world.length()-radius-officialOceanLevelAt(world)>2;
+  // Sprite extent and interpolation footprint are included, not just its centre.
+  const allowed=dry&&rail.every(q=>q.distanceToSquared(world)>32*32)&&protectedBoxes.every(b=>b.distanceToPoint(world)>22);
+  return {height:local.y,allowed};
+ });
+ mesh.userData.refresh(field);return field.stats;
 }
 
 export function puffTexture() {
@@ -61,16 +55,15 @@ export function puffTexture() {
   return tex;
 }
 
-export function mountRidgeFlowClouds(castle, {radius = HF.radius, timeOfDay = () => 0.5} = {}) {
+export function mountRidgeFlowClouds(castle, {radius = 160, timeOfDay = () => 0.5} = {}) {
   if (!castle || typeof document === 'undefined') return null;
   if (new URLSearchParams(globalThis.location?.search || '').get('citadelRidgeClouds') === '0') return null;
-  const S = sampler();
-  if (!S.crests.length) return null;
+  let S = null;
   // Planet centre in castle-local space: radial "up" at any local point.
   // (recomputed each frame: the castle is re-seated after load by the common frame)
   const centre = new THREE.Vector3();
   const _p = new THREE.Vector3();
-  const localPoint = (x, z, alt, out) => out.set(x, 0, z).sub(centre).normalize().multiplyScalar(radius + alt).add(centre);
+  const localPoint = (x,z,height,lift,out) => {out.set(x,height,z);return out.addScaledVector(out.clone().sub(centre).normalize(),lift);};
 
   const quad = new THREE.PlaneGeometry(1, 1);
   const geo = new THREE.InstancedBufferGeometry();
@@ -110,18 +103,19 @@ export function mountRidgeFlowClouds(castle, {radius = HF.radius, timeOfDay = ()
   mesh.name = 'citadel-ridge-flow-clouds';
   mesh.frustumCulled = false;
   mesh.renderOrder = 7;
-  castle.add(mesh);
+  castle.add(mesh);mesh.visible=false;
 
   // Particle state.
   const px = new Float32Array(COUNT), pz = new Float32Array(COUNT), age = new Float32Array(COUNT), life = new Float32Array(COUNT), size = new Float32Array(COUNT), base = new Float32Array(COUNT), clear = new Float32Array(COUNT);
   let seed = 0x5eed1234 >>> 0;
   const rnd = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
   const spawn = (i, prewarmAge = 0) => {
+    if(!S?.crests.length)return;
     let r = rnd() * S.total, c = S.crests[0];
     for (const k of S.crests) { r -= k.w; if (r <= 0) { c = k; break; } }
     px[i] = c.x + (rnd() - .5) * 3; pz[i] = c.z + (rnd() - .5) * 3;
     life[i] = 40 + rnd() * 30; age[i] = prewarmAge;
-    size[i] = 9 + rnd() * 9; base[i] = .22 + rnd() * .18; clear[i] = .4 + rnd() * 1.0;
+    size[i] = 5 + rnd() * 4; base[i] = .18 + rnd() * .12; clear[i] = .4 + rnd() * 1.0;
     iRot.array[i] = rnd() * Math.PI * 2;
   };
   const step = (i, dt) => {
@@ -138,32 +132,44 @@ export function mountRidgeFlowClouds(castle, {radius = HF.radius, timeOfDay = ()
     vx *= k; vz *= k;
     px[i] += vx * dt; pz[i] += vz * dt; age[i] += dt;
     const kd = S.kind(px[i], pz[i]);
-    if ((kd === 2 || S.height(px[i], pz[i]) < 2) && life[i] - age[i] > 3) life[i] = age[i] + 3;  // dissolve over cities / sea
+    if ((kd !== 1) && life[i] - age[i] > 3) life[i] = age[i] + 3;  // dissolve over cities / sea
     if (age[i] >= life[i]) spawn(i);
   };
-  for (let i = 0; i < COUNT; i++) spawn(i, 0);
-  // Pre-warm so the flow is already established when the player arrives.
-  for (let s = 0; s < 120; s++) for (let i = 0; i < COUNT; i++) step(i, .5);
+  mesh.userData.refresh=field=>{
+    S=field;mesh.visible=S.crests.length>0;
+    for(let i=0;i<COUNT;i++)spawn(i,0);
+    if(mesh.visible)for(let s=0;s<30;s++)for(let i=0;i<COUNT;i++)step(i,.5);
+    iRot.needsUpdate=true;
+    mesh.userData.stats={particles:COUNT,spawnCells:S.crests.length,...S.stats,spawnBounds:S.crests.length?{minX:Math.min(...S.crests.map(c=>c.x)),maxX:Math.max(...S.crests.map(c=>c.x)),minZ:Math.min(...S.crests.map(c=>c.z)),maxZ:Math.max(...S.crests.map(c=>c.z))}:null,source:'final rendered rock surfaces',method:'cached terrain field and wind advection; project shader'};
+  };
 
   const sky = () => castle.parent && (castle.userData._skyMesh ||= (() => { let r = null; let o = castle; while (o.parent) o = o.parent; o.traverse(m => { if (!r && m.name === 'sky-background') r = m; }); return r; })());
   let lastT = null;
   const update = (t) => {
+    if(!S?.crests.length)return;
     const time = Number(t) || 0;
     const dt = lastT == null ? 0 : Math.min(0.1, Math.max(0, time - lastT));
     lastT = time;
     castle.updateWorldMatrix(true, false);
     castle.worldToLocal(centre.set(0, 0, 0));
+    const cloudFromCastle=ridgeCloudFrameMatrix(castle,mesh);
+    let active=0,unsupported=0,alphaSum=0;
     for (let i = 0; i < COUNT; i++) {
       if (dt > 0) step(i, dt);
       const u = age[i] / life[i];
       const grow = size[i] * (0.75 + 0.6 * u);
-      const ground = Math.max(0, S.height(px[i], pz[i]));
-      localPoint(px[i], pz[i], ground + clear[i] + grow * 0.2, _p);
+      const sampled=S.height(px[i],pz[i]),allowed=Number.isFinite(sampled);
+      // Conservative cache-corner envelope, not an exact sub-cell surface.
+      const ground=allowed?S.clearanceHeight(px[i],pz[i]):0;
+      localPoint(px[i],pz[i],ground,clear[i]+grow*.25,_p);
+      _p.applyMatrix4(cloudFromCastle);
       iPos.array[i * 3] = _p.x; iPos.array[i * 3 + 1] = _p.y; iPos.array[i * 3 + 2] = _p.z;
       iSize.array[i] = grow;
       const fadeIn = Math.min(1, age[i] / 5), fadeOut = Math.min(1, (life[i] - age[i]) / 9);
-      iAlpha.array[i] = base[i] * fadeIn * fadeOut;
+      iAlpha.array[i] = allowed?base[i]*fadeIn*fadeOut:0;
+      if(!allowed)unsupported++;if(iAlpha.array[i]>.01)active++;alphaSum+=iAlpha.array[i];
     }
+    Object.assign(mesh.userData.stats,{active,unsupported,alphaSum});
     iPos.needsUpdate = iSize.needsUpdate = iAlpha.needsUpdate = true;
     // Tint follows the sky's cloud colour (dawn/dusk warmth); thinner at night.
     const skyMesh = sky();
@@ -175,7 +181,7 @@ export function mountRidgeFlowClouds(castle, {radius = HF.radius, timeOfDay = ()
   };
   update(0);
   mesh.userData.update = update;
-  mesh.userData.stats = {particles: COUNT, crestCells: S.crests.length};
+  mesh.userData.stats = {particles:COUNT,spawnCells:0,waitingForFinalSurface:true};
   castle.userData.ridgeFlowClouds = mesh;
   return mesh;
 }

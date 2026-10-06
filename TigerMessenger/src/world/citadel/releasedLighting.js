@@ -18,7 +18,13 @@ export function alignReleasedLighting(castle,radius=160){
   const shell=holder.getObjectByName('lamp-volume-shell');if(shell){shell.visible=false;shell.userData.retiredByLayout=true;}
   report.lamps.push({name:holder.name,visible:valid,castlePosition:castle.worldToLocal(holder.getWorldPosition(new THREE.Vector3())).toArray()});
  }
- const parcels=castle.getObjectByName('old-city-staggered-parcels'),supports=castle.userData.oldCityParcelCandidate.supports;
+ // Frozen parcel edits may be rejected after a terrain rebuild. Preserve
+ // the existing old-city anchors in that case, while still aligning the
+ // independent new-city lights below.
+ const parcels=castle.getObjectByName('old-city-staggered-parcels');
+ const candidateSupports=castle.userData.oldCityParcelCandidate?.supports;
+ const supports=parcels&&Array.isArray(candidateSupports)?candidateSupports:[];
+ report.oldCityAnchors=supports.length?'parcel-supports':'preserved-existing';
  old.children.filter(o=>o.isPointLight).forEach((light,i)=>{
   const support=supports[[0,3,6][i]];if(!support)return;
   const p=new THREE.Vector3(...support.placed);p.y+=3;

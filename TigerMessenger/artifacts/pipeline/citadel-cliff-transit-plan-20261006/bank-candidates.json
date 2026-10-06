@@ -1,0 +1,119 @@
+{
+  "accepted": false,
+  "installed": false,
+  "method": "finite constant-radius shore approach search, 1m centre arc samples and 9 underbody width/length probes",
+  "banks": {
+    "old": {
+      "examined": 49,
+      "failures": {
+        "soil": 49,
+        "sea": 0
+      },
+      "candidates": []
+    },
+    "new": {
+      "examined": 49,
+      "failures": {
+        "soil": 14,
+        "sea": 0
+      },
+      "candidates": [
+        {
+          "shore": "new",
+          "anchorLocal": [
+            36.81283137707631,
+            6.597135390370424,
+            43.5933320725201
+          ],
+          "attachLocal": [
+            38.51718002078987,
+            5.596868116226999,
+            37.65296696189446
+          ],
+          "attachIndex": 78,
+          "worldControls": [
+            [
+              85.02155983223228,
+              112.86475822876415,
+              101.3700479632354
+            ],
+            [
+              86.44918933271875,
+              108.14795697532337,
+              105.23099817159981
+            ]
+          ],
+          "length": 6.260453383469039,
+          "minimumTerrainGap": 13.06756970671113,
+          "globalConnected": false,
+          "bridgeStructureChecked": false
+        },
+        {
+          "shore": "new",
+          "anchorLocal": [
+            40.57178957635924,
+            5.503270632751621,
+            43.66800332297918
+          ],
+          "attachLocal": [
+            38.51718002078987,
+            5.596868116226999,
+            37.65296696189446
+          ],
+          "attachIndex": 78,
+          "worldControls": [
+            [
+              82.11873002849839,
+              112.63258818971562,
+              103.9875962151468
+            ],
+            [
+              86.44918933271875,
+              108.14795697532337,
+              105.23099817159981
+            ]
+          ],
+          "length": 6.356952362565032,
+          "minimumTerrainGap": 10.130488862457467,
+          "globalConnected": false,
+          "bridgeStructureChecked": false
+        },
+        {
+          "shore": "new",
+          "anchorLocal": [
+            32.98178622906886,
+            7.618601810962472,
+            43.52360300007643
+          ],
+          "attachLocal": [
+            38.51718002078987,
+            5.596868116226999,
+            37.65296696189446
+          ],
+          "attachIndex": 78,
+          "worldControls": [
+            [
+              87.91744990222634,
+              113.04157084189947,
+              98.66676834019259
+            ],
+            [
+              86.44918933271875,
+              108.14795697532337,
+              105.23099817159981
+            ]
+          ],
+          "length": 8.31819445881455,
+          "minimumTerrainGap": 12.612518434528493,
+          "globalConnected": false,
+          "bridgeStructureChecked": false
+        }
+      ]
+    }
+  },
+  "limits": [
+    "No global splice or foundation installed.",
+    "Actual old bridge pillar/arch collisions remain separately unresolved.",
+    "Terrain sampler semantics inherited; no tunnel excavated, every returned probe stays above sampled solid terrain."
+  ]
+}

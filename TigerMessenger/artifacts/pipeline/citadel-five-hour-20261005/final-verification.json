@@ -1,0 +1,146 @@
+{
+  "at": "2026-10-04T21:41:02.339943+00:00",
+  "status": "timebox-delivered-with-known-gaps",
+  "release": "citadel-mountain-20261005-r19",
+  "sourceSha256": {
+    "src/world/citadel/mountainCrags.js": "0701f27939ba7dc300285651214ebeb9e667e91c37057ef704ce8e9ccc6c2759",
+    "src/world/citadel/mountainForest.js": "3025eb07dcd9de33d9404a12745346ffcdb7f5ea0bf7221d70aa8c4b1cf88e6b",
+    "src/world/citadel/mountainGrass.js": "68b3e7b9949630ad040ef3870951b38ab3df2c95b9b771872970faa36c2b53c7",
+    "src/world/citadel/mountainGroundcover.js": "54a2c58c8e4cb6074c39cb25c3be98584fd7ce0beb53ccbe0bbe2c22953a7935",
+    "src/world/citadel/mountainHabitat.js": "d39067181c1f8f9d7383571d55289072e13574b3cda432de9d318e05e261f232",
+    "src/world/citadel/mountainLandform.js": "52fbca34cc12612c09f489ddd52f234c69c21607386323a1949ac5438aa3270e",
+    "src/world/citadel/mountainLightField.js": "f748de1ff2968e4d5a294c772b83f87f8c338767f9fd770eb781680aae62e75d",
+    "src/world/citadel/mountainPlanting.js": "e7e797597b531b6612e5c079089d3cd5a6a5762e5f3cdd7e0549f911447c1c41",
+    "src/world/citadel/mountainRailCoast.js": "33f205debddfe9d39b0fcc0ce78de533a3f8bf657909089750e0162a1b465309",
+    "src/world/citadel/mountainRelease.js": "62fcf692a20b607ff7f4a139a240a1ebd16efc2296f93535cb29a9371e137a78",
+    "src/world/citadel/mountainRockGeometry.js": "6713bc90cd73f3555cca15fa21cc1ce88c1549824f831f1843823e191f883a07",
+    "src/world/citadel/mountainRockNormals.js": "b65b2939b9afdd15a490d947cf71f47de15f8ea9fdf8ce36df874b79ff2637b8",
+    "src/world/citadel/mountainStudy.js": "7a75fe354f9c0bc27b13605e9a3ca55c6735bd7fdcfc082cafdc64c847bd98df",
+    "src/world/citadel/mountainSummits.js": "70d7721507de986b058db663a734f027a63e239887aa25a6e8dde48b3b2557b4",
+    "src/world/citadel/mountainSurfaceIndex.js": "08807cb736d44ce30efd8cff461f55f1cdede0b1e96df85f5b907e8146ff3b07",
+    "src/world/citadel/mountainTurfGeometry.js": "13998834fdf2b5339fca2c4cf03a3ee4379712165a08c6641a3f876f3292c57e",
+    "src/world/citadel/mountainTurfInset.js": "f0d1990130e589d2e3be687ea7ae76a14a0366ed16e11acdf89f8495b1a3660b",
+    "src/world/citadel/mountainTurfTail.js": "b783d13ce01fd0e60e22f01cb0466beb26de3cf5b0fef234638829a3842b31ca",
+    "src/world/citadel/mountainWoodland.js": "9e5f37a1dd0d539bd0ec0b8e124fb3d054929d24148d78fee763b56e08ec1ace",
+    "src/world/citadel/bayLayout.js": "306b2c42d8e3844ea7012d3426750b114cc6c66e3138acc6f79b8d3058736f8a",
+    "src/world/citadel/bayLayoutMath.js": "4a7b80e39dbccf69bdeb401c79cbbbdd87493a79efe417553fc6eaf752760a03",
+    "src/world/citadel/baySurfaceSampling.js": "9e99aa593607c207fc98b04ad18220c1cf96942b2e6b5423f82e3fdc53e00ca0"
+  },
+  "tests": [
+    {
+      "name": "shoulder",
+      "script": "tests/world/citadelEastShoulder.test.mjs",
+      "scriptSha256": "67e0c718f6b9ee348ed021220889f1ebae489708f4179c62d16f27233b11de5b",
+      "exitCode": 0,
+      "output": "final-test-shoulder.txt",
+      "outputSha256": "d0fad1e74360d0ea75d6e65b5f574e47a59ad82f725e9c70bacaad79bf700b9d"
+    },
+    {
+      "name": "normals",
+      "script": "tools/pipeline/test_mountain_rock_normals.mjs",
+      "scriptSha256": "84c906090e08b60500a1cee55d7489d2fc562f5d1acde4f9cc6425615a363281",
+      "exitCode": 0,
+      "output": "final-test-normals.txt",
+      "outputSha256": "d7df8ae60ce1057810e6c0c4d3a9b47732c26913c01e887059ef5e8640f51213"
+    },
+    {
+      "name": "relief",
+      "script": "tools/pipeline/test_mountain_rock_relief.mjs",
+      "scriptSha256": "4436de2f2b0d79b3697aba075e3bb34a54410c3815de684c9c8fe15956fe7587",
+      "exitCode": 0,
+      "output": "final-test-relief.txt",
+      "outputSha256": "91cf3cc436c78f29bd14afbf790e1b17b22a045cd234ec4809bb3bea9c428048"
+    },
+    {
+      "name": "light",
+      "script": "tools/pipeline/test_mountain_light_field.mjs",
+      "scriptSha256": "68b6daf94cd8966314fbff8ea45902742c1a1a586198387a3078c4e7d987c161",
+      "exitCode": 0,
+      "output": "final-test-light.txt",
+      "outputSha256": "3b2a504377c37f4c1c869f0ef50274cc16edac4f707c9a784396676ecf23f00e"
+    },
+    {
+      "name": "turf",
+      "script": "tools/tests/check_mountain_turf_pass5.mjs",
+      "scriptSha256": "6cf5b62ad12fb407d74fb0c55a535ac9028f2cbef5a6b929cff90cf914f9ca5c",
+      "exitCode": 0,
+      "output": "final-test-turf.txt",
+      "outputSha256": "d3c8ec8f5fd1a92e81c60d2458b958896913388e0c1f0ada57e6892f597a3066"
+    },
+    {
+      "name": "surface",
+      "script": "tools/tests/check_mountain_surface_index.mjs",
+      "scriptSha256": "98ec5c83685c1433b999a20115fcc1018e3e14b9b1bd4f004ce5260ddb878848",
+      "exitCode": 0,
+      "output": "final-test-surface.txt",
+      "outputSha256": "baa2735e82655a50294082c0093380db35766f72db4ea00f0d1d12498b41d6e5"
+    },
+    {
+      "name": "release",
+      "script": "tools/tests/check_mountain_release.mjs",
+      "scriptSha256": "62f2427c458a5023db2876bcfd6d981bb6d31a248b61ddc635c9e687cea2f70f",
+      "exitCode": 0,
+      "output": "final-test-release.txt",
+      "outputSha256": "279df1bce69c59ad6b99ab3a3697a7984a11336c52895bf55d928297253da5c0"
+    },
+    {
+      "name": "woodland",
+      "script": "tools/pipeline/test_mountain_woodland_candidate.mjs",
+      "scriptSha256": "729f899600d682a6e3ff91b650c1b6a525cd0f088d26e27dee357272213f3b47",
+      "exitCode": 0,
+      "output": "final-test-woodland.txt",
+      "outputSha256": "4eb79395d02e953cacc0d99149ed62119ade62da453aa66804ab144664d282cd"
+    }
+  ],
+  "actualBrowser": {
+    "defaultParity": "r20-default-parity.json",
+    "boundaryRootComparison": "r20-comparison.json",
+    "completeReport": "r20-check.json",
+    "dayGPU": "r20-left-terrace-day-noCloud-plants.json",
+    "duskGPU": "r20-bay-ridge-dusk-cloud-plants.json",
+    "railGPU": "r20-rail-back-coast-day-noCloud-plants.json",
+    "performance": "r20-performance.json",
+    "cloudMotion": "r21-cloud-motion.json",
+    "finalDefaultParity": "r22-final-default-parity.json",
+    "finalCompleteReport": "r22-check.json",
+    "finalBoundaryComparison": "r22-comparison.json",
+    "nightGPU": "r22-bay-ridge-night-cloud-plants.json",
+    "rollbackParity": "r23-rollback-parity.json"
+  },
+  "reviewInterface": {
+    "tested": "actual browser view switch and range Home/End",
+    "beforeAfterSourceChanged": true,
+    "sliderStyles": [
+      "--split: 0%;",
+      "--split: 100%;"
+    ],
+    "videoPlayback": "Observed real time7.47s playing, then paused at1.11s after loop; decoded1250x518",
+    "localLinks": "final-review-links.json",
+    "viewportOverrideReset": true,
+    "temporaryLiveTabClosed": true,
+    "deliverableTabRetained": true,
+    "screenshot": "final-review-page.png"
+  },
+  "limits": [
+    "Discrete root/rail sampling, not a capsule/navigation proof.",
+    "Review temporarily isolates Moebius tram lighting, no persistent world lighting change.",
+    "Castle experimental sources are tracked separately; no mountain-default publication of arches.",
+    "Known bay folds, remaining sharp turf edges and weak dusk contrast remain.",
+    "No Git commit or push performed."
+  ],
+  "metadataCorrection": "Stale woodland candidate label removed; all frozen-source r22 geometry/root/rail/walk parity passed, including actual night GPU.",
+  "sourceFreezeRecheckedAt": "2026-10-04T21:38:41Z",
+  "productionSourceDrift": [],
+  "reviewLinks": {
+    "mountain": 63,
+    "castle": 14,
+    "failures": 0,
+    "file": "final-review-links.json"
+  },
+  "deadline": "2026-10-04T21:40:16Z",
+  "automation": {
+    "id": "automation",
+    "deleted": true,
+    "weeklyMaintenancePreserved": "tigermessenger"
+  }
+}

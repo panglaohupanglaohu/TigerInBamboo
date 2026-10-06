@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import * as THREE from '../../vendor/three.module.js';
+import * as C from '../../src/world/seaStackLighting.js';
+const scene=new THREE.Scene(),sun=new THREE.DirectionalLight(0xffddaa,1.7);sun.name='actual-sun';sun.castShadow=true;sun.position.set(20,30,10);scene.add(sun);
+const rock=new THREE.Mesh(new THREE.BoxGeometry(10,20,10),C.createCoastalMaterial());scene.add(rock);rock.userData.seaStack={seaAnchor:[0,-5,0]};const before=rock.geometry.attributes.position.array.slice();
+const a=C.prepareSeaStackSurface(rock,scene);assert.equal(C.prepareSeaStackSurface(rock,scene),a);C.bindCoastalMesh(rock,rock);
+assert.deepEqual(before,rock.geometry.attributes.position.array);assert.equal(a.validCells,3136);
+const sample=C.sampleCoastalLighting(rock,new THREE.Vector3(0,10,0),new THREE.Vector3(0,1,0));assert(Math.abs(sample.heightLocal-10)<1e-5);assert.equal(sample.surfaceRevision,a.revision);assert.equal(sample.terrainVisibility,1);
+sun.position.set(0,-20,0);const night=C.sampleCoastalLighting(rock,new THREE.Vector3(0,10,0),new THREE.Vector3(0,1,0));assert.equal(night.diffuse,0);assert.equal(night.sunWorldDirection[1],-1);
+rock.rotation.z=Math.PI/2;rock.updateMatrixWorld();const point=rock.localToWorld(new THREE.Vector3(0,10,0));const rotated=C.sampleCoastalLighting(rock,point,new THREE.Vector3(-1,0,0));assert(Math.abs(rotated.heightLocal-10)<1e-5);assert.deepEqual(rotated.sunWorldDirection,night.sunWorldDirection);
+rock.geometry.attributes.position.setY(0,12);const b=C.prepareSeaStackSurface(rock,scene);assert.notEqual(a.revision,b.revision);
+console.log('PASS 7 checks: geometry immutable, idempotent field, surface height, revision binding, scene sun update, rotated rock chart, rebuild revision');
+// Local shrubs are light casters only; no vertex colours or rock field mutate.
+const island=new THREE.Mesh(new THREE.BoxGeometry(10,20,10),C.createCoastalMaterial());scene.add(island);island.userData.seaStack={seaAnchor:[0,-5,0]};C.prepareSeaStackSurface(island,scene);sun.position.set(0,50,0);
+const ground=new THREE.Vector3(0,10,0),up=new THREE.Vector3(0,1,0),away=new THREE.Vector3(4,10,0);
+const beforeCanopy=C.sampleCoastalLighting(island,ground,up);assert.equal(beforeCanopy.vegetationContactAO,1);assert.equal(beforeCanopy.vegetationVisibility,1);
+const shrub=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,1),C.createCoastalMaterial({kind:'scrub'}),1);shrub.name='sea-stack-terrace-shrubs';const transform=new THREE.Matrix4().compose(new THREE.Vector3(0,10.35,0),new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),.18),new THREE.Vector3(1.3,.6,1.2));shrub.setMatrixAt(0,transform);island.add(shrub);
+const unchanged=island.geometry.attributes.position.array.slice(),instanceBytes=shrub.instanceMatrix.array.slice();C.bindCoastalMesh(shrub,island);
+const under=C.sampleCoastalLighting(island,ground,up),outside=C.sampleCoastalLighting(island,away,up);assert(under.vegetationVisibility<outside.vegetationVisibility);assert(under.vegetationContactAO<outside.vegetationContactAO);assert(under.vegetationContactAO>=.8);assert.equal(outside.vegetationContactAO,1);assert.equal(under.heightLocal,beforeCanopy.heightLocal);
+const builds=island.userData.coastalSurface.vegetationShadowBuilds,version=under.vegetationShadowVersion,callback=shrub.onBeforeRender;C.bindCoastalMesh(shrub,island);C.bindCoastalMesh(shrub,island);assert.equal(shrub.onBeforeRender,callback);assert.equal(island.userData.coastalSurface.vegetationShadowBuilds,builds);assert.equal(island.userData.coastalSurface.vegetationShadowVersion,version);assert.deepEqual(island.geometry.attributes.position.array,unchanged);assert.deepEqual(shrub.instanceMatrix.array,instanceBytes);
+transform.setPosition(2,10.35,0);shrub.setMatrixAt(0,transform);C.bindCoastalMesh(shrub,island);assert.equal(island.userData.coastalSurface.vegetationShadowBuilds,builds+1);assert.notEqual(island.userData.coastalSurface.vegetationShadowVersion,version);assert.equal(C.sampleCoastalLighting(island,ground,up).vegetationContactAO,1);
+console.log(JSON.stringify({canopyTest:'PASS',before:beforeCanopy.vegetationContactAO,under:under.vegetationContactAO,outside:outside.vegetationContactAO,underSunVisibility:under.vegetationVisibility,repeatBindBuilds:builds,geometryUnchanged:true}));

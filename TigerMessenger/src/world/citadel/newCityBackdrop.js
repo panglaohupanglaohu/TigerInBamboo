@@ -43,6 +43,7 @@ function skylineScale(t, seed) {
  * ridges preserve the reference's craggy scale without separate rock objects. */
 function ridgeGeometry({halfSpan, base, peak, steps, seed}) {
   const rnd = lcg(seed);
+  const rebuild=new URLSearchParams(globalThis.location?.search||'').get('citadelLandform')!=='0';
   const rows = 20, depth = halfSpan * 0.82;
   const crest = [], points = [], positions = [], colors = [];
   for (let i = 0; i <= steps; i++) {
@@ -52,18 +53,21 @@ function ridgeGeometry({halfSpan, base, peak, steps, seed}) {
     const mass = .83 + .065 * Math.sin(t * 11.4 + seed) + .025 * Math.sin(t * 27 + seed * .3);
     const crags = .016 * Math.sin(t * 183 + seed) + .034 * rnd();
     const taper = .74 + .26 * Math.pow(Math.sin(t * Math.PI), .22);
-    crest.push((mass + crags) * taper * peak * skylineScale(t,seed));
+    const broadKnots=seed===11?[[0,.05],[.18,.48],[.34,.79],[.47,.70],[.59,.44],[.72,.53],[.86,.36],[1,.04]]:[[0,.04],[.17,.55],[.31,.90],[.43,.78],[.59,.42],[.73,.38],[.87,.32],[1,.04]];
+    let silhouette=skylineScale(t,seed);
+    if(rebuild)for(let k=1;k<broadKnots.length;k++)if(t<=broadKnots[k][0]){const a=broadKnots[k-1],b=broadKnots[k],u=(t-a[0])/(b[0]-a[0]);silhouette=a[1]+(b[1]-a[1])*u*u*(3-2*u);break;}
+    crest.push((mass + crags*(rebuild?.35:1)) * taper * peak * silhouette);
   }
   for (let row = 0; row <= rows; row++) {
     const t = row / rows;
     // Full low ridge: both slopes return to the shoreline, never an extruded wall.
-    const rise = Math.pow(Math.sin(Math.PI * t), 1.35);
+    const rise = rebuild?Math.pow(Math.sin(Math.PI*t),.85):Math.pow(Math.sin(Math.PI * t), 1.35);
     for (let col = 0; col <= steps; col++) {
       const edge = col === 0 || col === steps || row === 0;
       const x = -halfSpan + col / steps * halfSpan * 2 + (edge ? 0 : (rnd() - .5) * 2.4);
       const flute = (Math.sin(col * 1.17 + seed) * 3.3 + Math.sin(col * .44 + seed) * 1.8) * Math.sin(t * Math.PI);
       const ledge = row > 1 && row < 9 ? Math.sin(row * 1.9 + col * .21) * 1.7 : 0;
-      const rawY = base + crest[col] * rise + flute + ledge + (edge ? 0 : (rnd() - .5) * 1.8);
+      const rawY = base + crest[col] * rise + flute*(rebuild?.40:1) + ledge*(rebuild?.35:1) + (edge ? 0 : (rnd() - .5) * 1.8);
       // All four perimeter edges end below the sea, including the formerly
       // open, still elevated back row. Ease down over several rock rows.
       const smooth=u=>{u=THREE.MathUtils.clamp(u,0,1);return u*u*(3-2*u);};

@@ -49,7 +49,14 @@ export function installCrystalLakeV10({scene,city,swamp}){
  // Apply the regional ink treatment to the live ocean shader itself: no overlapping water sheets.
  const regionBody=material.fragmentShader.slice(material.fragmentShader.indexOf('  // Multi-direction waves'),material.fragmentShader.indexOf('  gl_FragColor='));
  const regionFunction=regionBody.replaceAll('time','uCrystalTime').replaceAll('towers','uCrystalTowers').replaceAll('eye','uCrystalEye').replace('vec3 color=','vec3 crystalColor=').replaceAll('color=mix(color','crystalColor=mix(crystalColor').replace('  color+=','  crystalColor+=');
- material.fragmentShader='void main(){discard;}';
+ // This mesh is only an onBeforeRender driver for the real ocean/lake.
+ // An all-discard shader has no active fragment output on ANGLE and causes
+ // INVALID_OPERATION if submitted to a colour attachment. Keep the callback
+ // but submit zero indices; also use a valid, non-writing fallback material.
+ geometry.setDrawRange(0,0);
+ material.fragmentShader='void main(){gl_FragColor=vec4(0.0);}';
+ material.colorWrite=false;
+ material.depthWrite=false;
  lake.onBeforeRender=(_r,_s,camera)=>{
   const cityLake=scene.getObjectByName('city-sea-lake');
   if(cityLake&&!cityLake.userData.v10WaterStyle){

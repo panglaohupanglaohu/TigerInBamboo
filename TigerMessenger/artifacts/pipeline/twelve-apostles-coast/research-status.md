@@ -1,0 +1,4 @@
+# Research scope
+The advisor researched official conference metadata, the WFC author repository, Parks Victoria and accessible author posts. Beyond Townscapers mirror transcript 00:00-51:03 was read without audiovisual verification. Public browser players subsequently returned no decoded frames; those captures are not video-study evidence. No complete conference video has been watched.
+
+The coastal design is this project's authored implementation informed by these sources and the user's blue-grey concept reference, not a reconstruction of Oskar's private engine. WFC chooses compatible profile vocabulary; connected-volume construction and isosurface extraction are separate modeling stages. Detailed evidence: ../../research/oskar-engine/conference-study.md and ../sea-stacks-bad-north/advisor-research.md.

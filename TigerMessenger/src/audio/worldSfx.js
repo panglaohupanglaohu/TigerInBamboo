@@ -789,12 +789,13 @@ function updateEngines(ctx, muted) {
     const jet = h.kind === "jet";
     slot.hSaw.frequency.setTargetAtTime(44 + th * 22, t, 0.3);
     slot.hLp.frequency.setTargetAtTime(180 + th * 160, t, 0.3);
-    slot.hG.gain.setTargetAtTime(heavy ? 0.22 : 0, t, LOOP_TAU);
-    slot.hNG.gain.setTargetAtTime(heavy ? 0.5 : jet ? 0.12 : 0, t, LOOP_TAU);
+    // User requested removal of the aircraft low-frequency drone.
+    slot.hG.gain.setTargetAtTime(0, t, LOOP_TAU);
+    slot.hNG.gain.setTargetAtTime(0, t, LOOP_TAU);
     const lf = jet ? 210 + th * 120 : 140 + th * 50;
     slot.l1.frequency.setTargetAtTime(lf, t, 0.3);
     slot.l2.frequency.setTargetAtTime(lf * 2.01, t, 0.3);
-    slot.lG.gain.setTargetAtTime(heavy ? 0.03 : jet ? 0.07 : 0.1, t, LOOP_TAU);
+    slot.lG.gain.setTargetAtTime(0, t, LOOP_TAU);
     slot.lBp.frequency.setTargetAtTime(jet ? 1800 + th * 1500 : 800 + th * 500, t, 0.3);
     slot.lNG.gain.setTargetAtTime(jet ? 0.22 : heavy ? 0.08 : 0.12, t, LOOP_TAU);
     if (slot.pan) slot.pan.pan.setTargetAtTime(Math.max(-1, Math.min(1, sp.pan)), t, 0.08);
@@ -841,22 +842,14 @@ function makeSuction(ctx) {
   const lfoG = ctx.createGain();
   lfoG.gain.value = 260;
   lfo.connect(lfoG).connect(bp.frequency);
-  const hum = ctx.createOscillator();
-  hum.frequency.value = 55;
-  const hum2 = ctx.createOscillator();
-  hum2.frequency.value = 82.6;
-  const hG = ctx.createGain();
-  hG.gain.value = 0.18;
-  hum.connect(hG);
-  hum2.connect(hG);
-  hG.connect(sum);
+  // The persistent 55/82.6 Hz suction hum was removed at user request.
   const whistle = ctx.createOscillator();
   whistle.frequency.value = 1320;
   const wG = ctx.createGain();
   wG.gain.value = 0.012;
   whistle.connect(wG).connect(sum);
   const t = ctx.currentTime;
-  for (const s of [n, lfo, hum, hum2, whistle]) s.start(t);
+  for (const s of [n, lfo, whistle]) s.start(t);
   return { out, pan, bp, whistle };
 }
 
@@ -952,7 +945,7 @@ function rainDrop(ctx, level) {
   g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
   let node = g;
   if (ctx.createStereoPanner) {
-    const p = ctx.createStereoPanner();panNode=p;
+    const p = ctx.createStereoPanner();
     p.pan.value = rnd() * 1.6 - 0.8;
     g.connect(p);
     node = p;
@@ -1093,3 +1086,22 @@ export function sfxRobotConfirmed(pos,disabled=false) {
 
 
 window.addEventListener('keydown',e=>{if(e.code==='KeyM'&&bus)bus.master.gain.setTargetAtTime(isMuted()?0:MASTER_GAIN,bus.ctx.currentTime,.012);});
+
+// ------------------------------------------------------- 航空艇烟雾弹 --
+/** 投弹：挂钩脱开的“咔嗒”+下坠破风。 */
+export function sfxBombRelease(pos) {
+  const v = voice({ id: "bombDrop", cat: "weapon", prio: 60, maxInst: 1, cd: 0.2, maxDist: 60, gain: 0.55, dur: 0.6 }, pos);
+  if (!v) return;
+  const { t0 } = v;
+  metalPartials(v, 1600, t0, 0.05, 0.12, [1, 1.7]);
+  chain(v, noise(v, "white", t0 + 0.03, 0.5), filt(v, "bandpass", 1800, 1.6, 500, t0 + 0.03, 0.5), env(v, 0.3, t0 + 0.03, 0.15, 0.35));
+}
+
+/** 烟雾弹触地：闷声“噗嗵”后一口气喷出烟团（非爆炸）。 */
+export function sfxSmokeBurst(pos) {
+  const v = voice({ id: "smokeBurst", cat: "impact", prio: 62, maxInst: 2, cd: 0.15, maxDist: 110, ref: 12, gain: 0.7, dur: 1.4 }, pos);
+  if (!v) return;
+  const { t0 } = v;
+  chain(v, osc(v, "sine", 110, 45, t0, 0.25), env(v, 0.6, t0, 0.003, 0.25));
+  chain(v, noise(v, "white", t0 + 0.02, 1.2), filt(v, "lowpass", 2600, 0.7, 350, t0 + 0.02, 1.2), env(v, 0.5, t0 + 0.02, 0.06, 1.1));
+}

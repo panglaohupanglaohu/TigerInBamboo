@@ -39,6 +39,7 @@ import {
 } from "./citadel/wfcTownWiring.js";
 import { resolveIncremental } from "./citadel/wfcIncremental.js";
 import { createFaceLayerGraph, createLegacyFaceLayout } from "./citadel/faceLayerGraph.js";
+import { makeTownPassageGeometry,makeTownPassagePairGeometry } from "./citadel/townPassageGeometry.js";
 import { assembleCornerBody } from "./citadel/cornerAssembly.js";
 import { cellCageCorners, cageMapUnit, faceCageFromGraph } from "./citadel/cageDeform.js";
 import { citadelColumnCenter } from "./citadel/gridMigration.js";
@@ -1529,6 +1530,8 @@ function makeGableRoofGeometry(cs, ch) {
  * @returns {{ levels: THREE.Group[], stats: object }}
  */
 export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
+  if(ctx.wfcPassageV1===true&&((ctx.cornerModulesV1??P.cornerModulesV1)===true||ctx.gridV6||dirty))
+    throw new Error("WFC passage candidate requires full regular-cell assembly without cornerModulesV1");
   // Explicit indoor circulation voids are not exterior courtyards or unsupported overhangs.
   const interiorVoids=new Set(spec.interiorVoids ?? []);
   const isInteriorVoid=(x,y,z)=>interiorVoids.has(`${x},${y},${z}`);
@@ -1629,12 +1632,13 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         };
       }
     } else {
-      selection = resolveTownSelection(grid, { cache, seed, graph: wfcGraph });
+      selection = resolveTownSelection(grid, { cache, seed, graph: wfcGraph,passagePair:ctx.wfcPassagePair===true });
     }
     wfcOracle = makeTownRoleOracle(selection);
     wfcReport = {
       enabled: true,
       ok: selection.ok === true,
+      pairCandidate:selection.pairCandidate,
       ms: selection.ms ?? 0,
       fromCache: selection.fromCache === true,
       unresolved: selection.unresolved?.length ?? 0,
@@ -1642,6 +1646,15 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       topology: wfcGraph ? "legacy-faces" : "legacy-grid",
       topologyHash: wfcGraph?.topologyHash ?? null,
     };
+  }
+  const passages=new Map();
+  if(ctx.wfcPassageV1===true){
+    if(!wfcOracle.enabled&&grid.size)throw new Error("WFC passage requires a successful solver assignment");
+    for(const key of grid.keys()){
+      const cell=key.split(",").map(Number),assignment=wfcOracle.passageAt(...cell);
+      if(assignment){if(cell[1]!==0&&!(assignment.pair&&assignment.half==="upper"&&cell[1]===1))throw new Error("Passage outside ground floor");passages.set(key,assignment);}
+    }
+    wfcReport.passage={enabled:true,selected:passages.size,consumed:[],scope:"fixed occupancy; solver-selected rotated arch solid",playerTraversable:false};
   }
   // V3 簇配色（C2）：同字符 4 连通簇 + 朝向近似；非 V3 的 shade 工厂忽略第五参
   const townClusters = computeTownClusters(grid);
@@ -1658,6 +1671,18 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   const cx = (ix) => citadelGridCellCenter(ix, 0, 0, cs, ch, cols).x;
   const cz = (iz) => citadelGridCellCenter(0, 0, iz, cs, ch, rows).z;
   const cy = (iy) => citadelGridCellCenter(0, iy, 0, cs, ch, cols).y;
+
+  // Legacy gate portico columns overhang their owning cell. Reject the
+  // decorative gate when either actual column footprint enters an adjacent
+  // passage's aperture; keep the occupied building cell itself untouched.
+  const gateBlocksPassage=(ix,iz)=>{
+    if(passages.has(`${ix},0,${iz}`))return true;
+    for(const [key,p]of passages){const [x,,z]=key.split(",").map(Number),hx=cs*(p.axis==="x"?.5:.33),hz=cs*(p.axis==="z"?.5:.33);
+      for(const offset of [-.82,.82]){const dx=Math.max(0,Math.abs(cx(ix)+offset-cx(x))-hx),dz=Math.max(0,Math.abs(cz(iz)+cs/2+.62-cz(z))-hz);
+        if(dx*dx+dz*dz<.17*.17)return true;
+      }
+    }return false;
+  };
 
   // 归属声明（C3）：层组内每个网格都必须能说出自己属于哪一格，否则增量重建
   // 摘不掉它（`o.isMesh && (userData.cell || userData.townModule)`），合并块也
@@ -1838,6 +1863,20 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     // G30 增量性能：dirty 模式下先 want() 跳过非 dirty 格，再算 expose（
     // 6 次邻域查询）——897/942 格直接 continue，统计语义不变。
     if (!want(ix, iy, iz)) { stats.cellCount++; continue; }
+    const passage=passages.get(key);
+    if(passage){
+      const geo=passage.pair?makeTownPassagePairGeometry(cs,ch,{axis:passage.axis,half:passage.half}):makeTownPassageGeometry(cs,ch,{axis:passage.axis});
+      if(colorful)applyPatchyWallColors(geo,ix,iz,iy);else applyVerticalVertexColors(geo,1,1);
+      applyWorldBrickUv(geo,cx(ix),cy(iy),cz(iz),cs,ch);
+      const clusterInfo={clusterId:townClusters.clusterOf.get(ix*32+iz),facing:townCellFacing(townClusters.baseChar,ix,iz)};
+      const cell=mesh(geo,ctx.materials.shade?.(char,ix,iz,iy,clusterInfo)??materials[char]??materials.W,"town-wfc-passage",0);
+      cell.position.set(cx(ix),cy(iy),cz(iz));cell.userData.cell={ix,iy,iz,char};
+      const metadata={...geo.userData.wfcPassage,...passage,cell:key};
+      if(passage.half==="upper")cell.userData.wfcPassageUpper=metadata;else cell.userData.wfcPassage=metadata;
+      if(passage.pair)cell.userData.wfcPassagePair={...metadata,pairId:`${ix},0,${iz}`,owners:[`${ix},0,${iz}`,`${ix},1,${iz}`]};
+      levelGroups[iy].add(cell);stats.cellCount++;
+      wfcReport.passage.consumed.push(metadata);continue;
+    }
     const expose = {
       px: at(ix + 1, iy, iz) === ".",
       nx: at(ix - 1, iy, iz) === ".",
@@ -2619,6 +2658,9 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     const [ix, iy, iz] = key.split(",").map(Number);
     if (!want(ix, iy, iz)) continue;
     ownCell(ix, iy, iz, char);
+    // This cell's body already has two real openings. Old door leaves,
+    // frontage plinths and decor must not seal those solver socket faces.
+    if(passages.has(key))continue;
     const isGate = char === CITADEL_GATE_CHAR;
     const module = townscaperModuleSelection(ix, iy, iz, char, 0, openMaskFor(ix, iy, iz));
     const house = houseByColumn.get(`${ix},${iz}`) ?? {
@@ -3011,7 +3053,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     }
 
     // 正门：深色门洞 + 棕色双开门 + 木门廊（朝 +z 前排）
-    if (isGate) {
+    if (isGate && !gateBlocksPassage(ix,iz)) {
       const gate = new THREE.Group();
       gate.name = "town-gate";
       // 正门也是圆拱门洞（与户门同一条拱形几何管线）

@@ -1,0 +1,76 @@
+{
+  "results": [
+    {
+      "round": 0,
+      "performance": {
+        "medianMs": 40.5,
+        "p95Ms": 43.10000002384186,
+        "render": {
+          "frame": 514,
+          "calls": 7311,
+          "triangles": 2598757,
+          "points": 0,
+          "lines": 41014
+        }
+      },
+      "errors": []
+    },
+    {
+      "round": 13,
+      "performance": {
+        "medianMs": 39.90000003576279,
+        "p95Ms": 43.5,
+        "render": {
+          "frame": 514,
+          "calls": 7308,
+          "triangles": 2820659,
+          "points": 0,
+          "lines": 40931
+        }
+      },
+      "errors": []
+    }
+  ],
+  "review": {
+    "status": 200,
+    "images": [
+      {
+        "src": "r00-old-mountain.png",
+        "ok": true
+      },
+      {
+        "src": "r10-old-mountain.png",
+        "ok": true
+      },
+      {
+        "src": "rail-old-shore.png",
+        "ok": true
+      },
+      {
+        "src": "rail-bay.png",
+        "ok": true
+      },
+      {
+        "src": "rail-back-coast.png",
+        "ok": true
+      },
+      {
+        "src": "final-noon.png",
+        "ok": true
+      },
+      {
+        "src": "final-dusk.png",
+        "ok": true
+      },
+      {
+        "src": "final-night.png",
+        "ok": true
+      },
+      {
+        "src": "approved-target.png",
+        "ok": true
+      }
+    ],
+    "errors": []
+  }
+}

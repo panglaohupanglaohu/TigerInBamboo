@@ -1,0 +1,630 @@
+{
+  "closed": true,
+  "platformsFlat": true,
+  "sideShouldersUnchanged": true,
+  "minConnectionClearance": 37.270067390425965,
+  "baySampling": {
+    "bounds": {
+      "x": [
+        -40,
+        45
+      ],
+      "z": [
+        0,
+        80
+      ]
+    },
+    "step": 1,
+    "before": 6072,
+    "after": 6072,
+    "waterAreaLoss": 0,
+    "rows": [
+      {
+        "z": 0,
+        "before": 55,
+        "after": 55
+      },
+      {
+        "z": 1,
+        "before": 62,
+        "after": 62
+      },
+      {
+        "z": 2,
+        "before": 66,
+        "after": 66
+      },
+      {
+        "z": 3,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 4,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 5,
+        "before": 67,
+        "after": 67
+      },
+      {
+        "z": 6,
+        "before": 67,
+        "after": 67
+      },
+      {
+        "z": 7,
+        "before": 67,
+        "after": 67
+      },
+      {
+        "z": 8,
+        "before": 67,
+        "after": 67
+      },
+      {
+        "z": 9,
+        "before": 67,
+        "after": 67
+      },
+      {
+        "z": 10,
+        "before": 67,
+        "after": 67
+      },
+      {
+        "z": 11,
+        "before": 67,
+        "after": 67
+      },
+      {
+        "z": 12,
+        "before": 67,
+        "after": 67
+      },
+      {
+        "z": 13,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 14,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 15,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 16,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 17,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 18,
+        "before": 69,
+        "after": 69
+      },
+      {
+        "z": 19,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 20,
+        "before": 68,
+        "after": 68
+      },
+      {
+        "z": 21,
+        "before": 69,
+        "after": 69
+      },
+      {
+        "z": 22,
+        "before": 69,
+        "after": 69
+      },
+      {
+        "z": 23,
+        "before": 69,
+        "after": 69
+      },
+      {
+        "z": 24,
+        "before": 69,
+        "after": 69
+      },
+      {
+        "z": 25,
+        "before": 70,
+        "after": 70
+      },
+      {
+        "z": 26,
+        "before": 70,
+        "after": 70
+      },
+      {
+        "z": 27,
+        "before": 71,
+        "after": 71
+      },
+      {
+        "z": 28,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 29,
+        "before": 73,
+        "after": 73
+      },
+      {
+        "z": 30,
+        "before": 74,
+        "after": 74
+      },
+      {
+        "z": 31,
+        "before": 74,
+        "after": 74
+      },
+      {
+        "z": 32,
+        "before": 75,
+        "after": 75
+      },
+      {
+        "z": 33,
+        "before": 76,
+        "after": 76
+      },
+      {
+        "z": 34,
+        "before": 77,
+        "after": 77
+      },
+      {
+        "z": 35,
+        "before": 79,
+        "after": 79
+      },
+      {
+        "z": 36,
+        "before": 81,
+        "after": 81
+      },
+      {
+        "z": 37,
+        "before": 82,
+        "after": 82
+      },
+      {
+        "z": 38,
+        "before": 84,
+        "after": 84
+      },
+      {
+        "z": 39,
+        "before": 84,
+        "after": 84
+      },
+      {
+        "z": 40,
+        "before": 84,
+        "after": 84
+      },
+      {
+        "z": 41,
+        "before": 84,
+        "after": 84
+      },
+      {
+        "z": 42,
+        "before": 84,
+        "after": 84
+      },
+      {
+        "z": 43,
+        "before": 84,
+        "after": 84
+      },
+      {
+        "z": 44,
+        "before": 85,
+        "after": 85
+      },
+      {
+        "z": 45,
+        "before": 85,
+        "after": 85
+      },
+      {
+        "z": 46,
+        "before": 85,
+        "after": 85
+      },
+      {
+        "z": 47,
+        "before": 85,
+        "after": 85
+      },
+      {
+        "z": 48,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 49,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 50,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 51,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 52,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 53,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 54,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 55,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 56,
+        "before": 86,
+        "after": 86
+      },
+      {
+        "z": 57,
+        "before": 85,
+        "after": 85
+      },
+      {
+        "z": 58,
+        "before": 83,
+        "after": 83
+      },
+      {
+        "z": 59,
+        "before": 82,
+        "after": 82
+      },
+      {
+        "z": 60,
+        "before": 80,
+        "after": 80
+      },
+      {
+        "z": 61,
+        "before": 79,
+        "after": 79
+      },
+      {
+        "z": 62,
+        "before": 78,
+        "after": 78
+      },
+      {
+        "z": 63,
+        "before": 77,
+        "after": 77
+      },
+      {
+        "z": 64,
+        "before": 76,
+        "after": 76
+      },
+      {
+        "z": 65,
+        "before": 75,
+        "after": 75
+      },
+      {
+        "z": 66,
+        "before": 75,
+        "after": 75
+      },
+      {
+        "z": 67,
+        "before": 74,
+        "after": 74
+      },
+      {
+        "z": 68,
+        "before": 74,
+        "after": 74
+      },
+      {
+        "z": 69,
+        "before": 73,
+        "after": 73
+      },
+      {
+        "z": 70,
+        "before": 73,
+        "after": 73
+      },
+      {
+        "z": 71,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 72,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 73,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 74,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 75,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 76,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 77,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 78,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 79,
+        "before": 72,
+        "after": 72
+      },
+      {
+        "z": 80,
+        "before": 72,
+        "after": 72
+      }
+    ]
+  },
+  "report": {
+    "revision": "target-terrain-r09-asymmetric-shoulder",
+    "aprons": true,
+    "saddle": true,
+    "valleyBenches": true,
+    "status": "terrain-only candidate; city and routes not rebuilt",
+    "defaultEnabled": false,
+    "mesh": {
+      "revision": "target-terrain-heightfield-1",
+      "grid": [
+        169,
+        106
+      ],
+      "stepActual": [
+        1.6923076923076923,
+        1.6886792452830188
+      ],
+      "validCells": 17030,
+      "invalidCells": 884,
+      "invalidSamples": 884,
+      "boundaryEdges": 550,
+      "components": 1,
+      "vertices": 34612,
+      "triangles": 69220,
+      "minArea": 1.4288777931360528,
+      "domainPolicy": "omit whole cells touching null; cap resulting boundary; no analytic sea-curve clipping",
+      "closed": true,
+      "empty": false,
+      "coordinateSpace": "caller chart",
+      "sceneMutation": false
+    },
+    "platforms": [
+      {
+        "id": "old-city-platform",
+        "center": [
+          -55,
+          9
+        ],
+        "radii": [
+          31,
+          30
+        ],
+        "height": 17
+      },
+      {
+        "id": "new-city-platform",
+        "center": [
+          74,
+          33
+        ],
+        "radii": [
+          29,
+          37
+        ],
+        "height": 12
+      },
+      {
+        "id": "new-city-plaza",
+        "center": [
+          62,
+          76
+        ],
+        "radii": [
+          30,
+          22
+        ],
+        "height": 3
+      }
+    ],
+    "ridges": [
+      {
+        "id": "old-main",
+        "a": [
+          -103,
+          -27,
+          31
+        ],
+        "b": [
+          -82,
+          -35,
+          43
+        ],
+        "width": 31
+      },
+      {
+        "id": "old-rear",
+        "a": [
+          -82,
+          -35,
+          43
+        ],
+        "b": [
+          -50,
+          -33,
+          31
+        ],
+        "width": 29
+      },
+      {
+        "id": "old-right-shoulder",
+        "a": [
+          -50,
+          -33,
+          31
+        ],
+        "b": [
+          -29,
+          -29,
+          33
+        ],
+        "width": 25
+      },
+      {
+        "id": "central-saddle",
+        "a": [
+          -29,
+          -34,
+          30
+        ],
+        "b": [
+          -3,
+          -41,
+          12
+        ],
+        "width": 13
+      },
+      {
+        "id": "bay-rear-join",
+        "a": [
+          -3,
+          -41,
+          12
+        ],
+        "b": [
+          32,
+          -37,
+          24
+        ],
+        "width": 15
+      },
+      {
+        "id": "new-rear",
+        "a": [
+          32,
+          -32,
+          24
+        ],
+        "b": [
+          77,
+          -29,
+          34
+        ],
+        "width": 27
+      },
+      {
+        "id": "new-east",
+        "a": [
+          77,
+          -29,
+          34
+        ],
+        "b": [
+          111,
+          -4,
+          26
+        ],
+        "width": 26
+      },
+      {
+        "id": "old-coastal-terraces",
+        "a": [
+          -107,
+          -4,
+          30
+        ],
+        "b": [
+          -91,
+          42,
+          23
+        ],
+        "width": 28
+      },
+      {
+        "id": "new-coastal-terraces",
+        "a": [
+          109,
+          -5,
+          26
+        ],
+        "b": [
+          111,
+          62,
+          19
+        ],
+        "width": 23
+      }
+    ],
+    "retired": [],
+    "oldSourceGeometryReplaced": true,
+    "worldSaveModified": false
+  }
+}

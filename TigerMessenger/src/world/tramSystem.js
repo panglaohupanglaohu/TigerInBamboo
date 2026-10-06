@@ -1,3 +1,9 @@
+import {raiseCitadelMountainCoastRail} from './citadel/mountainRailCoast.js';
+import {prepareCitadelRailStartup} from './citadel/citadelRailStartup.js';
+import {createTargetCliffTransitRelease} from './citadel/targetCliffTransitRelease.js';
+import {createTargetUserMarkedProductionRelease} from './citadel/targetUserMarkedProductionRelease.js';
+import {createTargetEastGlobalCrossingRelease} from './citadel/targetEastGlobalCrossingRelease.js';
+import {createTargetGlobalRailApproachSupport} from './citadel/targetGlobalRailApproachSupport.js';
 import {ROBOT_CARGO_SLOTS} from '../gameplay/robotOps/logistics.js';
 import {freightBoardDistance} from '../player/freightBoarding.js';
 import {bookshopTownPose} from './bookshopTownSite.js';
@@ -463,7 +469,7 @@ function sweepTrackRibbon(samples, width, topOffset, bottomOffset, lateral, mat)
  * 连续高架桥面 + 双侧梁：覆盖岛缘→跨洋→峡谷→水晶城 8 字→回岛的全程高架段。
  * 一整条扫掠带状几何（非箱体段拼接），随坡度倾斜，彻底消除段间台阶。
  */
-function addViaductDeck(group, curve, R, allSegments=false) {
+function addViaductDeck(group, curve, R, allSegments=false, excludeProgress=()=>false) {
   const deckMat = toonMat(0x66717c, { flatShading: true, side: THREE.DoubleSide });
   const girderMat = toonMat(0x39434d, { flatShading: true, side: THREE.DoubleSide });
   curve.arcLengthDivisions=8192; curve.updateArcLengths();
@@ -481,7 +487,7 @@ function addViaductDeck(group, curve, R, allSegments=false) {
       p: _p.clone(),
       right: _right.clone(),
       up: _up.clone(),
-      elevated: _p.length() - groundRadiusAt(_p, R) > 0.15,
+      elevated: !excludeProgress(t) && _p.length() - groundRadiusAt(_p, R) > 0.15,
     });
   }
   // 岛面贴地段是唯一非高架连续弧；旋转数组后取唯一的高架连续段
@@ -523,12 +529,13 @@ function addViaductDeck(group, curve, R, allSegments=false) {
  * 2026-09-18 涵洞系统（主人）：有轨电车穿行高山古堡山体与主岛丘陵时，
  * 为其建立完整的双向石券涵洞（含进出拱券门额、八字翼墙、连续拱顶涵身与内壁暖光照明）。
  */
-function addTramCulverts(group, curve, R) {
+function addTramCulverts(group, curve, R, excludeProgress=()=>false) {
   const N = 720;
   const flags = new Array(N).fill(false);
   const forced = new Array(N).fill(false);
   for (let i = 0; i < N; i++) {
     const t = i / N;
+    if (excludeProgress(t)) continue;
     curve.getPointAt(t, _p);
     const terrR = groundRadiusAt(_p, R);
     const trackR = _p.length();
@@ -546,7 +553,8 @@ function addTramCulverts(group, curve, R) {
     // 强制段（圣城新城隧道）按实测覆土定界，不再外扩，洞门贴崖脚、洞壳不伸出山体
     if (flags[i] && !forced[i]) {
       for (let d = -MARGIN; d <= MARGIN; d++) {
-        expanded[(i + d + N) % N] = true;
+        const j = (i + d + N) % N;
+        if (!excludeProgress(j / N)) expanded[j] = true;
       }
     }
   }
@@ -646,6 +654,7 @@ function addTramCulverts(group, curve, R) {
 
     const culvertGroup = new THREE.Group();
     culvertGroup.name = `tram-culvert-${runIdx}`;
+    culvertGroup.userData.sourceProgressInterval = [runStart / N, runEnd / N];
 
     // 1. 扫掠拱顶涵身 (Tunnel Vault Tube)
     const posArr = new Float32Array(samples.length * M * 3);
@@ -810,11 +819,9 @@ function buildMoebiusCitySCurve(R) {
  * 构建双线环形轨道 + 红蓝相向电车。
  * @returns {{ group, curve, curves, tram, trams, redTram, blueTram, update, waypointsFlat }}
  */
-export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {}) {
-  const group = new THREE.Group();
-  group.name = "christchurch-tram-system";
-
-  const loopFlat = buildSmoothLoopFlat(); // 仅作 waypointsFlat 展示用（行驶段见下方手工排布）
+// Geometry-only production route factory. Offline validation and live creation
+// share these controls, projection and smoothing; no sampled surrogate route.
+export function createChristchurchTramSourceCurves(R = PLANET_RADIUS) {
 
   // ---------- 南延：西海岸离岛 → 跨赤道 → 高架 S 型穿城 → 回北 ----------
   // 岛段用手工排布的西海岸平缓弧：池塘(0,9.1)与山丘(-6.2,1.6)之间只剩“针眼”，
@@ -961,13 +968,52 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
       if(ab.angleTo(bc)>step/24)projected[i].lerp(a.clone().add(c).multiplyScalar(.5),.42).setLength(b.length());
     }
   }
+  raiseCitadelMountainCoastRail(projected,R);
   // centripetal：间距不均时也不过冲/尖角
-  const curve = new THREE.CatmullRomCurve3(projected, true, "centripetal", 0.5);
-  curve.arcLengthDivisions=8192; curve.updateArcLengths();
+  const originalCurve = new THREE.CatmullRomCurve3(projected, true, "centripetal", 0.5);
+  originalCurve.arcLengthDivisions=8192; originalCurve.updateArcLengths();
+  return {center: originalCurve,
+    red: buildParallelCurve(originalCurve, -LANE_OFFSET, R),
+    blue: buildParallelCurve(originalCurve, LANE_OFFSET, R), gateDirection};
+}
+
+export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {}) {
+  const group = new THREE.Group();
+  group.name = "christchurch-tram-system";
+  const loopFlat = buildSmoothLoopFlat();
+  const sourceCurves = createChristchurchTramSourceCurves(R);
+  const {gateDirection} = sourceCurves;
+  // Compose all three routes BEFORE any consumers cache lengths or progress.
+  // The city rollout supplies the reviewed shore plan before consumers exist.
+  // Approved coast route: track and continuous pedestrian deck share one
+  // structure. Preserve the previous release as an explicit rollout rollback.
+  const crossingRequested = opts.citadelEastGlobalCrossing?.enabled === true;
+  if (crossingRequested && opts.citadelRailSplice) throw new Error('CROSSING_CONFLICTING_SPLICE');
+  const crossingBundle = crossingRequested ? createTargetEastGlobalCrossingRelease({
+    enabled: true, sourceCurves,
+    retainedRelease: createTargetUserMarkedProductionRelease({sourceCurves, radius:R}),
+    candidateInput: opts.citadelEastGlobalCrossing.candidateInput,
+    terrainArtifact: opts.citadelEastGlobalCrossing.terrainArtifact,
+  }) : null;
+  const transitRelease = crossingBundle?.release || (opts.citadelCliffTransit === true
+    ? (opts.citadelTransitVersion === 'inner'
+      ? createTargetCliffTransitRelease({sourceCurves})
+      : createTargetUserMarkedProductionRelease({sourceCurves,radius:R}))
+    : null);
+  const railStartup = crossingBundle?.startupPreview || prepareCitadelRailStartup(sourceCurves, transitRelease?.specs || opts.citadelRailSplice);
+  const crossingState = crossingBundle ? {status:'pending-final-surfaces-and-city-structure', active:false, support:null, sourceDeck:null, exclusionActive:false} : null;
+  if(crossingState){group.visible=false;group.userData.citadelEastGlobalCrossing=crossingState;}
+  const installedTransit = railStartup.splice && transitRelease ? transitRelease : null;
+  const replacementInterval = railStartup.splice?.lanes.center.report.replacementInterval;
+  const inReplacement = u => !!installedTransit && u >= replacementInterval[0] && u <= replacementInterval[1];
+  // The unchanged western approach is also an exposed cliff route. Its old
+  // analytical hill cover must not regenerate a bored tunnel after the cut.
+  const openCoastEnd = installedTransit ? railStartup.splice.lanes.center.mapOriginalProgress(installedTransit.report.retainedOldSourceIntervals.center[1]).progress : null;
+  const inOpenCitadelCoast = u => !!installedTransit && u >= replacementInterval[0] && u <= openCoastEnd;
+  const {center: curve, red: redCurve, blue: blueCurve} = railStartup.curves;
   const trackLen = curve.getLength();
-  // 中心线两侧各铺一条完整线路（每线 = 枕木 + 两根钢轨）。
-  const redCurve = buildParallelCurve(curve, -LANE_OFFSET, R);
-  const blueCurve = buildParallelCurve(curve, LANE_OFFSET, R);
+  group.userData.citadelRailStartup = railStartup.report;
+  railStartup.report.openCitadelCoastInterval = installedTransit ? [replacementInterval[0], openCoastEnd] : null;
   const sleeperMat = toonMat(SLEEPER);
   const railMat = toonMat(RAIL);
   const priorRailCompile=railMat.onBeforeCompile;
@@ -983,17 +1029,18 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
   railMat.customProgramCacheKey=()=> 'gate-warm-sand-rail-v1';
   addTrackLane(group, redCurve, R, sleeperMat, railMat);
   addTrackLane(group, blueCurve, R, sleeperMat, railMat);
-  addViaductDeck(group, curve, R, citadelCoastalTramEnabled());
-  addTramCulverts(group, curve, R);
+  function buildGenericSupports(parent,excludeProgress,excludeCoast){
+  const viaduct=addViaductDeck(parent, curve, R, citadelCoastalTramEnabled(), excludeProgress);
+  addTramCulverts(parent, curve, R, excludeCoast);
   const coastalCitadel = citadelCoastalTramEnabled();
   // 圣城临海段：石墩石拱桥、栏杆、路灯与两站（替代下方通用细立柱）
   if (coastalCitadel) {
-    addCitadelCoastalTramStructures(group, curve, R, groundRadiusAt);
+    addCitadelCoastalTramStructures(parent, curve, R, groundRadiusAt, {excludeProgress});
     // 圣城新城隧道：外壳/洞门换成与连拱桥同色的米白石，读作城墙基座而非深灰管道
     const cream = toonMat(0xd9ceb6, { flatShading: true, side: THREE.DoubleSide });
     const creamTrim = toonMat(0xb9ad94, { flatShading: true });
     const _c = new THREE.Vector3();
-    for (const culvert of group.children.filter((c) => /^tram-culvert-/.test(c.name))) {
+    for (const culvert of parent.children.filter((c) => /^tram-culvert-/.test(c.name))) {
       culvert.updateMatrixWorld(true);
       new THREE.Box3().setFromObject(culvert).getCenter(_c);
       if (!inCitadelTramTunnel(_c)) continue;
@@ -1011,6 +1058,7 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
     const clearanceSamples=Array.from({length:1200},(_,i)=>curve.getPointAt(i/1200));
     for (let i = 0; i < count; i++) {
       const t = i / count;
+      if (excludeProgress(t)) continue;
       curve.getPointAt(t, _p);
       _up.copy(_p).normalize();
       // The gate arcade supports this span; avoid duplicate generic columns in its openings.
@@ -1031,9 +1079,23 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
       pier.quaternion.copy(quatYToDir(_up, new THREE.Quaternion()));
       pier.castShadow = true;
       addOutline(pier, 0.012);
-      group.add(pier);
+      parent.add(pier);
     }
   }
+
+    if(parent!==group){
+      const buckets=new Map();
+      for(const mesh of [...parent.children])if(mesh.name==='tram-static-pier'){
+        const key=[mesh.position.x,mesh.position.y,mesh.position.z].map(v=>Math.floor(v/36)).join(':');
+        let bucket=buckets.get(key);if(!bucket){bucket=new THREE.Group();bucket.name='tram-static-sector';parent.add(bucket);buckets.set(key,bucket);}bucket.add(mesh);
+      }
+      for(const bucket of buckets.values())mergeStaticGroup(bucket);
+    }
+    return{root:parent,viaduct};
+  }
+  let genericSupports;
+  if(crossingBundle){const pending=new THREE.Group();pending.name='tram-crossing-provisional-supports';genericSupports=buildGenericSupports(pending,()=>false,()=>false);group.add(pending);}
+  else genericSupports=buildGenericSupports(group,inReplacement,inOpenCitadelCoast);
 
   // Spatial batches retain local frustum culling; rolling stock and collision routes are untouched.
   const staticBuckets=new Map();
@@ -1184,6 +1246,7 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
   }
 
   function update(dt, listenerPosition) {
+    if(disposed||crossingState&&!crossingState.active)return;
     let nearest = null;
     let nearestDistance = Infinity;
     const blocked=interlocking.update();
@@ -1278,6 +1341,7 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
   }
 
   function getNearestBoardable(position) {
+    if(disposed||crossingState&&!crossingState.active)return null;
     let nearest=null,best=Infinity;
     for(const service of services)for(const vehicle of [service.tram,...(service.wagons||[])]){
       const distance=freightBoardDistance(vehicle,position);
@@ -1289,6 +1353,7 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
 
   /** 两辆车都可搭乘；以最近车辆做距离判定。 */
   function isNearTram(position, radius = BOARDING_RADIUS) {
+    if(disposed||crossingState&&!crossingState.active)return false;
     if (!position) return false;
     getNearestTram(position).getWorldPosition(_tramWorld);
     return _tramWorld.distanceTo(position) <= radius;
@@ -1332,12 +1397,83 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
     return pick?.tram ?? null;
   }
 
+  const releaseOwnedTree=root=>{
+    const geometries=new Set(),materials=new Set();root.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of(Array.isArray(o.material)?o.material:[o.material]))if(m&&!m.userData?.shared)materials.add(m);});
+    root.removeFromParent();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());root.clear();
+  };
+  function verifySourceDeck(viaduct){
+    const expected=crossingBundle.expectedSourceDeckInterface.bottomSections.map(s=>s.map(p=>new THREE.Vector3(...p)));
+    const probes=[...expected.flat(),expected[0][0].clone().add(expected[0][1]).add(expected[1][0]).add(expected[1][1]).multiplyScalar(.25)];
+    const evidence={pass:false,tolerance:.00005,probeCount:probes.length,maxDistance:Infinity,meshUuid:null,faces:[],expectedSourceGlobalInterval:crossingBundle.expectedSourceDeckInterface.globalInterval};
+    if(!viaduct)return evidence;viaduct.updateMatrixWorld(true);
+    viaduct.traverse(mesh=>{
+      if(evidence.pass||!mesh.isMesh||mesh.userData.isOutline)return;
+      const p=mesh.geometry.attributes.position,index=mesh.geometry.index,distances=probes.map(()=>Infinity),faces=probes.map(()=>-1);
+      // Every probe must lie on this same real indexed underside bay. No
+      // success based only on the theoretical sample station formula.
+      for(let i=0;i<(index?.count??p.count);i+=3){const tri=new THREE.Triangle(...[0,1,2].map(j=>new THREE.Vector3().fromBufferAttribute(p,index?index.getX(i+j):i+j).applyMatrix4(mesh.matrixWorld)));
+        for(let k=0;k<probes.length;k++){const d=tri.closestPointToPoint(probes[k],new THREE.Vector3()).distanceTo(probes[k]);if(d<distances[k]){distances[k]=d;faces[k]=i/3;}}
+      }
+      const max=Math.max(...distances);if(max<evidence.maxDistance)Object.assign(evidence,{pass:max<=evidence.tolerance,maxDistance:max,meshUuid:mesh.uuid,meshName:mesh.name,faces,distances});
+    });return evidence;
+  }
+  function validateCrossingCityStructure(cityStructure){
+    const r=cityStructure?.userData?.cliffTransitStructureReport;
+    if(!cityStructure?.isGroup||cityStructure.name!=='citadel-target-cliff-transit-structure'||!r?.finitePass||r.releaseVersion!==installedTransit.version||r.walkwayHeight!==6.9||!r.vehicleClearance?.pass)throw new Error('CROSSING_CITY_STRUCTURE_UNVERIFIED');
+    for(const name of['newShore','central','oldShore'])if(Math.abs(r.galleries?.[name]?.length-installedTransit.segments.center[name].getLength())>1e-6||!Number.isFinite(r.galleries?.[name]?.length))throw new Error('CROSSING_CITY_STRUCTURE_ROUTE_MISMATCH');
+    cityStructure.updateWorldMatrix(true,true);const walkable=[];cityStructure.traverse(o=>{if(o.isMesh&&o.userData.targetWalkable)walkable.push(o);});
+    if(!walkable.length)throw new Error('CROSSING_CITY_STRUCTURE_EMPTY');
+    const evidence=[];
+    for(const name of['newShore','central','oldShore'])for(const f of[.05,.5,.95]){
+      const path=r.galleries[name].upperPath,p=new THREE.Vector3(...path[Math.floor((path.length-1)*f)]).applyMatrix4(installedTransit.castleMatrix),up=p.clone().normalize(),ray=new THREE.Raycaster(p.clone().addScaledVector(up,.2),up.clone().negate(),0,.4),hits=ray.intersectObjects(walkable,false),hit=hits.find(h=>h.point.distanceTo(p)<.08);
+      if(!hit)throw new Error('CROSSING_CITY_WALKABLE_GEOMETRY_MISMATCH');evidence.push({gallery:name,f,distance:hit.point.distanceTo(p),mesh:hit.object.name});
+    }
+    return{groupUuid:cityStructure.uuid,releaseVersion:r.releaseVersion,walkableSamples:evidence};
+  }
+  let crossingTransaction=null,disposed=false;
+  function prepareCrossingSupport({sampleGround,sampleSea,cityStructure}={}){
+    if(disposed)throw new Error('TRAM_SYSTEM_DISPOSED');
+    if(!crossingBundle)throw new Error('CROSSING_NOT_ENABLED');
+    if(crossingTransaction||crossingState.active)throw new Error('CROSSING_SUPPORT_TRANSACTION_EXISTS');
+    if(typeof sampleGround!=='function'||typeof sampleSea!=='function')throw new Error('CROSSING_FINAL_WORLD_SURFACES_REQUIRED');
+    const cityEvidence=validateCrossingCityStructure(cityStructure);
+    const nextRoot=new THREE.Group();nextRoot.name='tram-crossing-retained-global-supports';let next,approach;
+    try{
+      // Replacement exclusion is only staged after the real city structure
+      // exists. Nothing is attached until the approach and source bay pass.
+      next=buildGenericSupports(nextRoot,inReplacement,inOpenCitadelCoast);
+      const sourceEvidence=verifySourceDeck(next.viaduct);
+      if(!sourceEvidence.pass){const error=new Error('CROSSING_SOURCE_DECK_MISSING');error.report=sourceEvidence;throw error;}
+      approach=createTargetGlobalRailApproachSupport({...crossingBundle.approachOptions,sampleGround,sampleSea,sourceDeckInterface:crossingBundle.expectedSourceDeckInterface});
+      if(!approach.report.built||!approach.report.finitePass){const error=new Error('CROSSING_APPROACH_REJECTED');error.report=approach.report;throw error;}
+      const previous=genericSupports,oldHardFailures=installedTransit.cityGalleryCoverage.hardFailures;let status='prepared';
+      const report={status,installed:false,accepted:false,sourceDeck:sourceEvidence,cityStructure:cityEvidence,approach:approach.report,exclusionPlan:crossingBundle.exclusionPlan};
+      const tx={report,
+        commit(){if(status==='committed'||status==='finalized')return report;if(status!=='prepared')throw new Error('CROSSING_TRANSACTION_CLOSED');validateCrossingCityStructure(cityStructure);group.remove(previous.root);group.add(next.root,approach.group);genericSupports=next;Object.assign(crossingState,{status:'infrastructure-committed',active:true,support:approach.report,sourceDeck:sourceEvidence,exclusionActive:true});group.visible=true;railStartup.report.installed=true;installedTransit.cityGalleryCoverage.globalApproachSupportBuilt=true;installedTransit.cityGalleryCoverage.hardFailures=oldHardFailures.filter(x=>x.code!=='GLOBAL_APPROACH_SUPPORT_UNBUILT');for(const x of Object.values(crossingBundle.exclusionPlan))x.active=true;status='committed';report.status=status;report.installed=true;try{update(0);}catch(error){tx.rollback();throw error;}return report;},
+        rollback(){if(status==='rolled-back')return;if(status==='finalized')throw new Error('CROSSING_TRANSACTION_FINALIZED');if(status==='committed'){group.remove(next.root,approach.group);group.add(previous.root);genericSupports=previous;group.visible=false;railStartup.report.installed=false;Object.assign(crossingState,{status:'pending-final-surfaces-and-city-structure',active:false,support:null,sourceDeck:null,exclusionActive:false});installedTransit.cityGalleryCoverage.globalApproachSupportBuilt=false;installedTransit.cityGalleryCoverage.hardFailures=oldHardFailures;for(const x of Object.values(crossingBundle.exclusionPlan))x.active=false;}approach.dispose();releaseOwnedTree(next.root);status='rolled-back';report.status=status;report.installed=false;crossingTransaction=null;},
+        finalize(){if(status==='finalized')return;if(status!=='committed')throw new Error('CROSSING_NOT_COMMITTED');releaseOwnedTree(previous.root);status='finalized';report.status=status;},
+      };crossingTransaction=tx;return tx;
+    }catch(error){approach?.dispose();releaseOwnedTree(nextRoot);throw error;}
+  }
+
   scene.add(group);
   update(0);
+  railStartup.report.installed = !crossingBundle && Boolean(railStartup.splice);
+  railStartup.report.geometryAndVehicleRoutesShared = true;
   return {
     group,
     curve,
     curves: { red: redCurve, blue: blueCurve },
+    railSplice: railStartup.splice,
+    citadelTransitRelease: installedTransit,
+    crossingBundle,
+    crossingState,
+    terrainPreparation: crossingBundle?.terrainPreparation ?? null,
+    bootstrapCurves: crossingBundle?.terrainPreparation.bootstrapCurves ?? null,
+    bootstrapRelease: crossingBundle?.terrainPreparation.bootstrapRelease ?? null,
+    prepareCrossingSupport,
+    installCrossingSupport(options){const tx=prepareCrossingSupport(options);try{tx.commit();return tx;}catch(error){tx.rollback();throw error;}},
+    dispose(){if(disposed)return;if(crossingTransaction&&crossingTransaction.report.status!=='finalized')crossingTransaction.rollback();releaseOwnedTree(group);disposed=true;railStartup.report.installed=false;if(crossingState){Object.assign(crossingState,{status:'disposed',active:false,exclusionActive:false});installedTransit.cityGalleryCoverage.globalApproachSupportBuilt=false;for(const x of Object.values(crossingBundle.exclusionPlan))x.active=false;}},
     tram: redTram,
     trams: [redTram, blueTram],
     redTram,

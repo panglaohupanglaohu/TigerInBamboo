@@ -1,0 +1,21 @@
+{
+  "results": [
+    {
+      "mode": "original-reproduction",
+      "drops": 0,
+      "error": "ReferenceError: panNode is not defined"
+    },
+    {
+      "mode": "stereo",
+      "drops": 57,
+      "context": "running",
+      "error": null
+    },
+    {
+      "mode": "no-stereo",
+      "drops": 59,
+      "context": "running",
+      "error": null
+    }
+  ]
+}

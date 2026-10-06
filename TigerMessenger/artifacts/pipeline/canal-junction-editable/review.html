@@ -1,0 +1,7 @@
+<!doctype html><meta charset="utf-8"><title>交汇城堡 · 编辑实测</title>
+<style>body{background:#17242d;color:#e6eded;font:16px/1.6 system-ui;max-width:1200px;margin:32px auto}a{color:#98d8de}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}img{width:100%}</style>
+<h1>交汇城堡 · WFC 与实际编辑</h1>
+<p>实际主场景右键删除一个单元、撤销完整恢复、左键增加一个楼层单元、重做恢复新增结果，均通过；未点击保存。</p>
+<div class="grid"><figure><img src="before-pointer.png"><figcaption>编辑前</figcaption></figure><figure><img src="after-pointer-delete.png"><figcaption>右键删单元，邻接屋面重建</figcaption></figure><figure><img src="after-pointer-add.png"><figcaption>左键屋顶增层</figcaption></figure></div>
+<p>复用真实约束传播和有限回溯。当前 WFC 直接影响屋顶分区及庭院；墙角、拱门与装饰由邻接工厂生成，不宣称完整复原 Townscaper。</p>
+<p>补修独占资源的释放；60次楼群重建资源事件检查通过，不能作为GPU内存或帧率认证。<a href="browser-verification.json">实际操作验证</a> · <a href="lifecycle-tests.json">资源生命周期</a> · <a href="IMPLEMENTATION.md">实现与边界</a> · <a href="live.html">打开真实游戏验收页</a></p>

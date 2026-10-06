@@ -1,0 +1,31 @@
+{
+  "accepted": false,
+  "installed": false,
+  "method": "Actual production heavy flatcar + each of three real transport cargo models; production pose transform; createWarshipClearance triangle-edge/triangle crossing. No material masks, no wheel exclusions. Tests the original 80 full-route rejected WORLD poses by mapping old final u to ORIGINAL source u, then to candidate final u; no stale final-u reuse. Rail geometry uses production Catmull/Tube and selects new approach triangles within1.3m of its exact curve. Finite surface crossing, not continuous sweep or coplanar/solid-containment proof.",
+  "results": [
+    {
+      "cargo": "locust",
+      "triangles": 29352,
+      "poses": 80,
+      "structureContacts": 0,
+      "railContacts": 0,
+      "hits": []
+    },
+    {
+      "cargo": "ant",
+      "triangles": 87900,
+      "poses": 80,
+      "structureContacts": 0,
+      "railContacts": 0,
+      "hits": []
+    },
+    {
+      "cargo": "beetle",
+      "triangles": 54382,
+      "poses": 80,
+      "structureContacts": 0,
+      "railContacts": 0,
+      "hits": []
+    }
+  ]
+}

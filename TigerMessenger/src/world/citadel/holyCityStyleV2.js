@@ -1,5 +1,6 @@
 import {applyHistoricStone} from './historicStone.js';
 import {applyAshleyPalette} from './ashleyPalette.js';
+import {preservesCitadelMaterial} from './materialOwnership.js';
 import * as THREE from 'three';
 import {createMangaWaterfall} from '../mangaWaterfall.js';
 export const HOLY_STYLE_ROUND=8;
@@ -10,6 +11,7 @@ export function applyHolyCityRoofPalette(city){
  city.traverse(o=>{
   if(!o.isMesh)return;
   const recolor=m=>{
+   if(preservesCitadelMaterial(o,m))return m;
    if(!/^claude-house-roof/.test(m.name)&&m.name!=='citadel-target-blue-dome')return m;
    if(!clones.has(m)){const c=m.clone();c.color.setHex(0xbc825e);c.roughness=.94;clones.set(m,c);}return clones.get(m);
   };
@@ -56,14 +58,29 @@ export function addOldPalaceCrown(tower){
  const domeMat=new THREE.MeshStandardMaterial({color:0xd9c197,roughness:.91});
  const root=new THREE.Group();root.name='holy-old-palace-open-crown';tower.add(root);
  const add=(g,m,n,x,y,z)=>{const o=new THREE.Mesh(g,m);o.name=n;o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;root.add(o);return o;};
- for(const y of [32.65,35.1])add(new THREE.CylinderGeometry(2.05,2.05,.25,24),stone,'old-palace-cornice',0,y,0);
+ // A square-to-octagonal masonry transition seats the lantern on the shaft.
+ add(new THREE.BoxGeometry(3.15,.38,3.05),stone,'old-palace-crown-plinth',0,32.43,0);
+ add(new THREE.CylinderGeometry(1.85,1.65,.42,8),stone,'old-palace-crown-transition',0,32.72,0);
+ add(new THREE.CylinderGeometry(1.96,1.96,.26,8),stone,'old-palace-cornice',0,33.03,0);
+ const r=1.58,base=33.12,spring=34.20,span=2*r*Math.sin(Math.PI/8),inner=(span-.38)/2;
  for(let i=0;i<8;i++){
-  const a=i*Math.PI/4,x=Math.cos(a)*1.7,z=Math.sin(a)*1.7;
-  add(new THREE.CylinderGeometry(.13,.17,2.3,10),stone,'old-palace-arcade-column',x,33.86,z);
-  const capital=add(new THREE.BoxGeometry(.38,.2,.38),stone,'old-palace-capital',x,34.93,z);
+  const a=i*Math.PI/4,x=Math.cos(a)*r,z=Math.sin(a)*r;
+  add(new THREE.CylinderGeometry(.22,.25,1.20,8),stone,'old-palace-arcade-column',x,base+.60,z);
+  add(new THREE.BoxGeometry(.53,.20,.53),stone,'old-palace-column-base',x,base+.07,z);
+  add(new THREE.BoxGeometry(.49,.17,.49),stone,'old-palace-capital',x,spring,z);
+  // Extruded arch ring joins neighboring piers, leaving the gallery open.
+  const shape=new THREE.Shape(),outer=inner+.20;
+  // Solid spandrels carry the continuous upper cornice, not just arch tips.
+  shape.moveTo(-outer,0);shape.lineTo(-outer,.63);shape.lineTo(outer,.63);
+  shape.lineTo(outer,0);shape.lineTo(inner,0);
+  shape.absarc(0,0,inner,0,Math.PI,false);shape.closePath();
+  const mid=a+Math.PI/8,arch=add(new THREE.ExtrudeGeometry(shape,{depth:.28,bevelEnabled:false}),stone,'old-palace-arcade-arch',Math.cos(mid)*r*Math.cos(Math.PI/8),spring,Math.sin(mid)*r*Math.cos(Math.PI/8));
+  arch.geometry.translate(0,0,-.14);
+  arch.rotation.y=-mid-Math.PI/2;
  }
- const dome=add(new THREE.SphereGeometry(2.1,32,16,0,Math.PI*2,0,Math.PI/2),domeMat,'old-palace-ivory-dome',0,35.23,0);dome.scale.y=.83;
- add(new THREE.ConeGeometry(.10,.75,10),domeMat,'old-palace-finial',0,37.34,0);
+ add(new THREE.CylinderGeometry(1.94,1.87,.30,16),stone,'old-palace-cornice',0,34.91,0);
+ const dome=add(new THREE.SphereGeometry(2.02,32,16,0,Math.PI*2,0,Math.PI/2),domeMat,'old-palace-ivory-dome',0,35.04,0);dome.scale.y=.83;
+ add(new THREE.ConeGeometry(.10,.60,10),domeMat,'old-palace-finial',0,37.0,0);
  tower.userData.holyPalaceCrown=true;
 }
 
@@ -166,6 +183,10 @@ export function applyOldTownPalace(castle) {
   const matClones = new Map(), pending = [];
   castle.traverse(o => {
     if (!o.isMesh || o.userData.isOutline || o === foundation || o.userData.holyOldTownDone) return;
+    // Delayed sweeps also see newly installed authored candidates. Respect their
+    // ownership before either material replacement or shared vertex-colour edits.
+    const ownedMaterials = Array.isArray(o.material) ? o.material : [o.material];
+    if (ownedMaterials.some(m => preservesCitadelMaterial(o, m))) return;
     // Own name and parent use the full skip list; higher ancestors only exclude
     // vegetation/cloud/light groups (every building sits under a *-mountain-* assembly).
     if (OLD_TOWN_SKIP.test(o.name) || OLD_TOWN_SKIP.test(o.parent?.name || '')) return;

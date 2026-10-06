@@ -91,11 +91,13 @@ export function animateArticulatedRobot(root,{time=0,speed=0,state='idle',aim=0,
  let joints=CACHE.get(root);if(!joints){joints={};root.traverse(o=>{if(o.name.startsWith('joint-'))joints[o.name.slice(6)]=o;});CACHE.set(root,joints);}
  const kind=root.userData.robotType,walk=Math.min(1,speed/(kind==='beetle'?3.8:kind==='ant'?1.5:2.2)),phase=time*(kind==='ant'?3.8:5),firing=fire||braced||['aim','attack','braced'].includes(state),transport=state==='transport';
  for(const g of Object.values(joints)){g.rotation.set(0,0,0);g.position.fromArray(g.userData.rest);}
+ // Readiness is a pose, not a firing event; disabled robots may lower their arms.
+ const weaponReady=kind==='locust'&&state!=='disabled'&&!transport;
  const body=joints.body;if(!body)return;
  const greetAge=root.userData.greetingStarted===undefined?Infinity:(performance.now()/1000-root.userData.greetingStarted);
  const greet=greetAge>=0&&greetAge<4?Math.min(1,greetAge/.7,(4-greetAge)/.7):0;
  root.userData.greetingActive=greet>0;
- if(joints.head)joints.head.rotation.x=greet*Math.max(0,Math.sin(greetAge*Math.PI*2))*.25;
+ if(joints.head)joints.head.rotation.x=greet>0?greet*Math.max(0,Math.sin(greetAge*Math.PI*2))*.25:0;
 
  const rifle=root.getObjectByName('robot-rifle');if(rifle){rifle.position.fromArray(rifle.userData.restPosition);rifle.quaternion.fromArray(rifle.userData.restQuaternion);}
  const pulse=root.userData.weaponPulse;const pulseAge=pulse?performance.now()/1000-pulse.at:10;recoil=Math.max(recoil,pulseAge>=0?Math.max(0,1-pulseAge/(kind==='ant'?.45:.15)):0);
@@ -132,13 +134,13 @@ if(piston){const delta=wheel.position.clone();piston.position.copy(delta).multip
    ankle.position.fromArray(ankle.userData.rest).applyQuaternion(rotation.clone().invert());ankle.rotation.x-=angle;
   }
  }
- if(kind==='locust'&&firing){
+ if(kind==='locust'&&weaponReady){
   root.updateWorldMatrix(true,true);
   solveArm(joints['left-shoulder'],joints['left-elbow'],new THREE.Vector3(-.08,-.92,.12),body.localToWorld(new THREE.Vector3(-.45,.35,1.12)),body.localToWorld(new THREE.Vector3(-1.8,-.3,.4)));
   root.updateWorldMatrix(true,true);
   solveArm(joints['right-shoulder'],joints['right-elbow'],new THREE.Vector3(.08,-.92,.12),body.localToWorld(new THREE.Vector3(-.35,.35,1.62)),body.localToWorld(new THREE.Vector3(1.8,-.25,.4)));
  }
- if(rifle&&firing){
+ if(rifle&&(firing||weaponReady)){
   root.updateWorldMatrix(true,true);const arm=joints['left-elbow'];const hand=arm.localToWorld(new THREE.Vector3(-.08,-.92,.12));hand.add(new THREE.Vector3(0,0,.49).applyQuaternion(body.getWorldQuaternion(new THREE.Quaternion())).multiplyScalar(root.scale.x));rifle.position.copy(arm.worldToLocal(hand));
   rifle.quaternion.copy(arm.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(body.getWorldQuaternion(new THREE.Quaternion())).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),-Math.PI/2)));
  }
@@ -151,7 +153,7 @@ if(piston){const delta=wheel.position.clone();piston.position.copy(delta).multip
  for(const joint of Object.values(joints))if(joint.userData.supportPoints){const matrix=inverse.clone().multiply(joint.matrixWorld);for(const p of joint.userData.supportPoints){support.fromArray(p).applyMatrix4(matrix);lowest=Math.min(lowest,support.y);}}
  if(Number.isFinite(lowest)){for(const j of Object.values(joints))if(j.parent===root)j.position.y-=lowest;root.userData.supportShift=-lowest;}
  if(firing&&aimPoint)aimLocustRifle(root,aimPoint);
- root.userData.animationState=state;root.userData.mobileFire={firing,transport,speed,aim,pitch};
+ root.userData.animationState=state;root.userData.mobileFire={firing,weaponReady,transport,speed,aim,pitch};
 }
 
 function solveArm(shoulder,elbow,lowerRest,target,pole){

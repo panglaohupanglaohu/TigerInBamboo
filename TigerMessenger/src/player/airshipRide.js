@@ -12,6 +12,7 @@ import * as THREE from "three";
 import { quatYToDir } from "../world/sphereMath.js";
 import { canyonOffsetDir } from "../world/canyon.js";
 import { groundLiftAt } from "../world/hills.js";
+import { sfxBombRelease, sfxSmokeBurst, hintEngine } from "../audio/worldSfx.js";
 
 const BOARD_RANGE = 5.0;   // 绳尾感应半径（可跳起抓绳）
 const CLIMB_TIME = 1.7;    // 攀爬动画时长
@@ -19,7 +20,7 @@ const FLY_DIST = 16;       // 乘客第三人称：舱外跟拍
 const PILOT_DIST = 0.12;   // 驾驶员第一人称：贴眼，几乎无身后拉距
 const PILOT_FOV = 82;      // 驾驶员广角，开阔远景
 const SPEED = 9.0;         // 前后推进速度
-const BOOST_MULT = 2.5;    // 按住 E 加速倍率（2026-09-24 用户要求）
+const BOOST_MULT = 2.5;    // 按住左 Shift 加速倍率（保留 E 兼容）
 const BOOST_RAMP = 3.0;    // 加速/减速平滑速率（1/s）
 const TURN_SPEED = 1.5;    // 转向角速度 rad/s
 const VERT_SPEED = 8.0;    // 升降速度
@@ -186,7 +187,7 @@ export function createAirshipRide({
   let prevFov = 60;
   let yaw = 0;      // 绕局部 +Y（星球法线）的驾驶偏航
   let hover = 20;   // 当前悬浮高度
-  let boost = 1;    // 当前推进倍率（E 加速）
+  let boost = 1;    // 当前推进倍率（左 Shift / E 加速）
   let bombCd = 0;   // 投掷冷却计时
   const bombs = []; // 飞行中的烟雾弹
   const smokes = []; // 已引爆的烟雾团
@@ -284,12 +285,12 @@ export function createAirshipRide({
     if (viewMode === "pilot") {
       setHint(
         "[<kbd>C</kbd>] 舱外视角 · [<kbd>W</kbd>][<kbd>S</kbd>] 进退 · [<kbd>A</kbd>][<kbd>D</kbd>] 转向 · " +
-          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>E</kbd>] 加速 · [<kbd>F</kbd>] 下艇"
+          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>左 Shift</kbd>] 按住加速 · [<kbd>F</kbd>] 下艇"
       );
     } else {
       setHint(
         "[<kbd>C</kbd>] 驾驶员视角 · [<kbd>W</kbd>][<kbd>S</kbd>] 进退 · [<kbd>A</kbd>][<kbd>D</kbd>] 转向 · " +
-          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>E</kbd>] 加速 · [<kbd>F</kbd>] 下艇"
+          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>左 Shift</kbd>] 按住加速 · [<kbd>F</kbd>] 下艇"
       );
     }
   }
@@ -342,6 +343,7 @@ export function createAirshipRide({
   function dismount() {
     const a = airship();
     state = "idle";
+    boost = 1;
     viewMode = "passenger";
     player.riding = false;
     if (a) {
@@ -423,6 +425,7 @@ export function createAirshipRide({
       if (!a || !nearRope()) return;
       e.preventDefault();
       state = "climbing";
+      boost = 1;
       climbT = 0;
       climbFrom.copy(player.position);
       player.riding = true;
@@ -463,6 +466,7 @@ export function createAirshipRide({
       _bombVel.copy(_bombUp).multiplyScalar(-BOMB_SPEED * 0.55);
     }
     bombs.push(SmokeBomb(scene, _pos.clone(), _bombVel));
+    sfxBombRelease(_pos);
     toast("投掷烟雾弹！", 1.2);
   });
 
@@ -470,8 +474,11 @@ export function createAirshipRide({
    * 每帧调用。
    * @returns {boolean} 是否接管玩家控制
    */
+  const _engineTmp = new THREE.Vector3();
   function update(dt) {
     const a = airship();
+    // 驾驶中：航空艇重型引擎（玩家所乘，居中不衰减）
+    if (a && state === "flying") hintEngine("ride-airship", "heavy", a.getWorldPosition(_engineTmp), 0.55, true);
 
     // ---------- 推进烟雾弹飞行 / 烟雾散去（任何状态下都更新） ----------
     if (bombCd > 0) bombCd = Math.max(0, bombCd - dt);
@@ -487,6 +494,7 @@ export function createAirshipRide({
       _bombUp.copy(b.mesh.position).normalize();
       if (b.mesh.position.length() <= planetRadius + canyonOffsetDir(_bombUp) + BOMB_HIT_MARGIN) {
         smokes.push(spawnSmoke(scene, b.mesh.position.clone(), _bombUp));
+        sfxSmokeBurst(b.mesh.position);
         if (b.mesh.parent) b.mesh.parent.remove(b.mesh);
         b.mesh.geometry.dispose();
         b.mesh.material.dispose();
@@ -586,8 +594,8 @@ export function createAirshipRide({
 
     // 推进（W 前进 / S 后退）：沿艇首切向移动后重新投影回球面
     const thrust = (keys?.KeyW ? 1 : 0) - (keys?.KeyS ? 1 : 0);
-    // 按住 E 加速：倍率平滑逼近目标，松开后回落
-    const boostTarget = keys?.KeyE ? BOOST_MULT : 1;
+    // 左 Shift 按住加速，兼容原 E 键；不改变 Ctrl 下降。
+    const boostTarget = (keys?.ShiftLeft || keys?.KeyE) ? BOOST_MULT : 1;
     boost += (boostTarget - boost) * Math.min(1, BOOST_RAMP * dt);
 
     // 姿态：+Y 对齐法线 + 驾驶偏航
@@ -637,6 +645,7 @@ export function createAirshipRide({
     if (state === "idle") return;
     const a = airship();
     state = "idle";
+    boost = 1;
     viewMode = "passenger";
     player.riding = false;
     if (a) {

@@ -1,0 +1,45 @@
+{
+  "executedAt": "2026-10-04T10:42:50.981208+00:00",
+  "round": "r10",
+  "checks": [
+    {
+      "check": "surface",
+      "passed": true,
+      "report": "r10-surface-tests.json"
+    },
+    {
+      "check": "vegetation",
+      "passed": true,
+      "report": "r10-vegetation-tests.json"
+    },
+    {
+      "check": "lighting",
+      "passed": true,
+      "report": "r10-lighting-tests.json"
+    },
+    {
+      "check": "shore_contact",
+      "passed": true,
+      "report": "r10-shore_contact-tests.json"
+    },
+    {
+      "check": "surface_contract",
+      "passed": true,
+      "report": "r10-surface_contract-tests.json"
+    }
+  ],
+  "allPassed": true,
+  "sourceSHA256": {
+    "src/world/seaStackCoastalGeometry.js": "b456d086cad4df2f6fb044bee84006518b94ec3fb443cfc8bab6324769efe61c",
+    "src/world/seaStackHabitat.js": "0eeabf2d4751e61ebf24d66ffbeaf5a9b5bfbf0651a506a9ffdd4af77a57205c",
+    "src/world/seaStackLighting.js": "bed8574149230457435694fe20cd1eed126d7dd2a8451593ae58833ac22da011",
+    "src/world/seaStackScrubGeometry.js": "ffb3fde2560fad86932834806ecc04dfe37fe3e1eb627c90db78f2d873376f4d",
+    "src/world/seaStackShoreContact.js": "5e2d99f0c102c40f8a9b1a33252ab7f2843a63961370434f7782447bdd014666",
+    "src/world/seaStackSurfaceContract.js": "7c705ac98a6567a0e00d81ecddba74db8cbcf15c1c17ce75e7e4687d0b2a9860",
+    "src/world/seaStackSurfaceSmoothing.js": "1540141eb3b9b70406684574f3857070a180ac6fa4682da1c3d43c1f85bda4bd",
+    "src/world/seaStackTerraces.js": "ce59bf96f17a350e8c3a8e4525d2a31e701abae696989d76866b427e1268b2f8",
+    "src/world/seaStackVegetation.js": "37c49ae41026c82dcb16f25d4f38db4e25f3236fd798d52543a29d55b37890fe",
+    "src/world/seaStackWfc.js": "0d9d87a0b78c00240853576a1906cc36b37e857278ef3469a4d940f4732cbd93",
+    "src/world/gateSeaStacks.js": "f871e0dfd71ef3d2d84c6dd2774e4343f4ba02d9c12c90b95fdc3513e5c351c6"
+  }
+}

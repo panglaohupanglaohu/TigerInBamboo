@@ -1,0 +1,987 @@
+{
+  "version": "east-cliff-production-candidate-1",
+  "enabled": true,
+  "accepted": false,
+  "installed": false,
+  "status": "prepared-not-installed",
+  "sourceIntervals": {
+    "center": [
+      0.5924110319368087,
+      0.799
+    ],
+    "red": [
+      0.59,
+      0.798
+    ],
+    "blue": [
+      0.5925844302347414,
+      0.8
+    ]
+  },
+  "retainedOldSourceIntervals": {
+    "red": [
+      0.798,
+      0.8647604327666152
+    ],
+    "blue": [
+      0.8,
+      0.8666918429003021
+    ],
+    "center": [
+      0.799,
+      0.8657
+    ]
+  },
+  "sourceImpact": {
+    "center": {
+      "sourceStartU": 0.5924110319368087,
+      "previousSourceStartU": 0.6520028584966744,
+      "endU": 0.799,
+      "additionalSourceSpan": 155.98140442109369
+    },
+    "red": {
+      "sourceStartU": 0.59,
+      "previousSourceStartU": 0.6506955177743431,
+      "endU": 0.798,
+      "additionalSourceSpan": 157.02636418027373
+    },
+    "blue": {
+      "sourceStartU": 0.5925844302347414,
+      "previousSourceStartU": 0.6532799480090845,
+      "endU": 0.8,
+      "additionalSourceSpan": 160.68746124408815
+    }
+  },
+  "laneAudit": {
+    "center": {
+      "samples": 519,
+      "minRadius": 27.487688584035492,
+      "maxGrade": 0.03492276412262294,
+      "pass": true
+    },
+    "red": {
+      "samples": 516,
+      "minRadius": 25.988911670581473,
+      "maxGrade": 0.032816590566146914,
+      "pass": true
+    },
+    "blue": {
+      "samples": 528,
+      "minRadius": 27.41716654903258,
+      "maxGrade": 0.03464526132183948,
+      "pass": true
+    }
+  },
+  "joins": [
+    {
+      "label": "red source",
+      "position": 1.7763568394002505e-15,
+      "tangent": 0.004582593124699795
+    },
+    {
+      "label": "red retained",
+      "position": 3.678388539340399e-13,
+      "tangent": 0.004382780799783281
+    },
+    {
+      "label": "blue source",
+      "position": 1.7763568394002505e-15,
+      "tangent": 0.007500833221343639
+    },
+    {
+      "label": "blue retained",
+      "position": 0,
+      "tangent": 0.005252719670204855
+    },
+    {
+      "label": "center source",
+      "position": 0,
+      "tangent": 0.004074064528801349
+    },
+    {
+      "label": "center retained",
+      "position": 0,
+      "tangent": 0.004512717990556413
+    },
+    {
+      "label": "center newShore-central",
+      "position": 0,
+      "tangent": 0.0018769024758849083
+    },
+    {
+      "label": "center central-oldShore",
+      "position": 0,
+      "tangent": 0.009423741967201499
+    },
+    {
+      "label": "red newShore-central",
+      "position": 0,
+      "tangent": 0.0018625183144703875
+    },
+    {
+      "label": "red central-oldShore",
+      "position": 0,
+      "tangent": 0.01262437926688163
+    },
+    {
+      "label": "blue newShore-central",
+      "position": 0,
+      "tangent": 0.0016052642924795331
+    },
+    {
+      "label": "blue central-oldShore",
+      "position": 0,
+      "tangent": 0.009605384468902637
+    }
+  ],
+  "centerAnchor": {
+    "u": 0.5924110319368087,
+    "distance": 0.011753629429396438,
+    "bracket": [
+      0.582,
+      0.6005844302347414
+    ]
+  },
+  "terrainGeometryAuditInherited": false,
+  "centerCorrespondence": {
+    "samples": 174,
+    "minLaneDistance": 3.9388190554696014,
+    "maxLaneDistance": 4.237736430955306,
+    "maxCenterOffset": 0.06597932890142633,
+    "maxRadialMidpointDifference": 0.10285174965846977,
+    "monotonic": true,
+    "rows": [
+      {
+        "centerU": 0,
+        "redU": 1.4333623995680389e-9,
+        "blueU": 0.010896893897786718,
+        "redSide": -2.050060693761772,
+        "blueSide": 2.107651498762567,
+        "distance": 4.157936677054671,
+        "radialCenter": 161.1499803623765,
+        "radialMidpoint": 161.13936181605152
+      },
+      {
+        "centerU": 0.057803468208092484,
+        "redU": 0.028998677129723267,
+        "blueU": 0.03935918331629974,
+        "redSide": -2.052118355912967,
+        "blueSide": 2.159838880692014,
+        "distance": 4.213945826348152,
+        "radialCenter": 161.27061637931092,
+        "radialMidpoint": 161.31461845284525
+      },
+      {
+        "centerU": 0.11560693641618497,
+        "redU": 0.05799633076416129,
+        "blueU": 0.0676945766145003,
+        "redSide": -2.049835660811957,
+        "blueSide": 2.0510871121990784,
+        "distance": 4.103587447261424,
+        "radialCenter": 161.7226459097117,
+        "radialMidpoint": 161.77056650900343
+      },
+      {
+        "centerU": 0.17341040462427745,
+        "redU": 0.08804525833620767,
+        "blueU": 0.09502347839553095,
+        "redSide": -2.0498361212584784,
+        "blueSide": 2.0503973796249655,
+        "distance": 4.101362698175183,
+        "radialCenter": 162.2284034369043,
+        "radialMidpoint": 162.25059528546169
+      },
+      {
+        "centerU": 0.23121387283236994,
+        "redU": 0.11800963228337268,
+        "blueU": 0.1224244966023882,
+        "redSide": -2.0498371573323193,
+        "blueSide": 2.0498024359663605,
+        "distance": 4.099931477487222,
+        "radialCenter": 162.73117328743507,
+        "radialMidpoint": 162.72979708044346
+      },
+      {
+        "centerU": 0.28901734104046245,
+        "redU": 0.1470069924164461,
+        "blueU": 0.15076773227950457,
+        "redSide": -2.0498381248733435,
+        "blueSide": 2.0496307719349725,
+        "distance": 4.099618466938083,
+        "radialCenter": 163.2162445769055,
+        "radialMidpoint": 163.20799734006408
+      },
+      {
+        "centerU": 0.3468208092485549,
+        "redU": 0.17600435234880774,
+        "blueU": 0.17910871694451014,
+        "redSide": -2.049839080987763,
+        "blueSide": 2.0494780795953433,
+        "distance": 4.099379193701038,
+        "radialCenter": 163.69988003400516,
+        "radialMidpoint": 163.68547839586412
+      },
+      {
+        "centerU": 0.4046242774566474,
+        "redU": 0.20500171227084124,
+        "blueU": 0.20744771051048955,
+        "redSide": -2.0498400258769087,
+        "blueSide": 2.0493440293239384,
+        "distance": 4.099200207390165,
+        "radialCenter": 164.18209232915993,
+        "radialMidpoint": 164.16224660195329
+      },
+      {
+        "centerU": 0.4624277456647399,
+        "redU": 0.2339990727604821,
+        "blueU": 0.23578496852707165,
+        "redSide": -2.0498409597372027,
+        "blueSide": 2.049228298716058,
+        "distance": 4.099069686452798,
+        "radialCenter": 164.66289394777928,
+        "radialMidpoint": 164.63830822268972
+      },
+      {
+        "centerU": 0.5202312138728323,
+        "redU": 0.26299643265184963,
+        "blueU": 0.26412074155934084,
+        "redSide": -2.0498418827606195,
+        "blueSide": 2.049130572293199,
+        "distance": 4.098977394161832,
+        "radialCenter": 165.14229719463617,
+        "radialMidpoint": 165.11366941558984
+      },
+      {
+        "centerU": 0.5780346820809249,
+        "redU": 0.2919937927152337,
+        "blueU": 0.29245527568458507,
+        "redSide": -2.0498427951346248,
+        "blueSide": 2.0490505414765288,
+        "distance": 4.098914635676934,
+        "radialCenter": 165.62031419473308,
+        "radialMidpoint": 165.58833626212274
+      },
+      {
+        "centerU": 0.6358381502890174,
+        "redU": 0.320991152591348,
+        "blueU": 0.3207888136156569,
+        "redSide": -2.049843697042509,
+        "blueSide": 2.0489879041636625,
+        "distance": 4.098874215602795,
+        "radialCenter": 166.0969569048737,
+        "radialMidpoint": 166.06231475217086
+      },
+      {
+        "centerU": 0.6936416184971098,
+        "redU": 0.35039290378515614,
+        "blueU": 0.3487262651216454,
+        "redSide": -2.0498445800203196,
+        "blueSide": 2.048779971813799,
+        "distance": 4.098782565595645,
+        "radialCenter": 166.57885572055548,
+        "radialMidpoint": 166.53564012211328
+      },
+      {
+        "centerU": 0.7514450867052023,
+        "redU": 0.38130599203386684,
+        "blueU": 0.3751655400678734,
+        "redSide": -2.0498455177778583,
+        "blueSide": 2.073600965545167,
+        "distance": 4.124696428752079,
+        "radialCenter": 167.0840745687762,
+        "radialMidpoint": 167.00815790552855
+      },
+      {
+        "centerU": 0.8092485549132948,
+        "redU": 0.41195693882310386,
+        "blueU": 0.401862583812571,
+        "redSide": -2.0498464656860995,
+        "blueSide": 2.047169825434817,
+        "distance": 4.099973657623939,
+        "radialCenter": 167.58535932764704,
+        "radialMidpoint": 167.48250757798857
+      },
+      {
+        "centerU": 0.8670520231213873,
+        "redU": 0.4393166843843814,
+        "blueU": 0.43175059789155046,
+        "redSide": -2.049847288660401,
+        "blueSide": 2.0264951143148537,
+        "distance": 4.077640125794238,
+        "radialCenter": 168.02787235443532,
+        "radialMidpoint": 167.9514374428255
+      },
+      {
+        "centerU": 0.9248554913294798,
+        "redU": 0.46674105449737346,
+        "blueU": 0.46165030173825994,
+        "redSide": -1.9794969373814684,
+        "blueSide": 1.9751902718574128,
+        "distance": 3.954833174086975,
+        "radialCenter": 168.43137763900646,
+        "radialMidpoint": 168.4091318396671
+      },
+      {
+        "centerU": 0.9826589595375722,
+        "redU": 0.4941444891417506,
+        "blueU": 0.491450038199979,
+        "redSide": -2.034106271886974,
+        "blueSide": 2.0232434211044,
+        "distance": 4.057616539079195,
+        "radialCenter": 168.61414744987724,
+        "radialMidpoint": 168.61751122290428
+      },
+      {
+        "centerU": 1,
+        "redU": 0.5024429174426874,
+        "blueU": 0.5004545876351656,
+        "redSide": -2.0498484983103458,
+        "blueSide": 2.05302616213176,
+        "distance": 4.103245031196058,
+        "radialCenter": 168.6225162646508,
+        "radialMidpoint": 168.62249764936593
+      }
+    ]
+  },
+  "seaGuide": {
+    "sampled": 174,
+    "missing": 0,
+    "minRailCenterAboveSea": 0.6497359184559741,
+    "scope": "Center guide radius only; not expanded vehicle bottom, waves or a water-clearance acceptance."
+  },
+  "terrainDependency": {
+    "required": true,
+    "mode": "exact-remesh-after-retained-terrain",
+    "sourceHash": {
+      "position": 772107960,
+      "index": 1617888706,
+      "vertices": 34612
+    },
+    "origin": [
+      85,
+      0,
+      82.5
+    ],
+    "castleMatrix": [
+      -0.5771265090244172,
+      0.12463062405961449,
+      0.807088718870361,
+      0,
+      0.6354855835814281,
+      0.689249750214348,
+      0.3479839865419536,
+      0,
+      -0.5129162364767383,
+      0.7137240288626759,
+      -0.4769852670498,
+      0,
+      124.43456408079132,
+      72.61606956254715,
+      90.15650671642375,
+      1
+    ],
+    "accepted": false,
+    "installed": false,
+    "requires": [
+      "Validate the original sourceMesh geometry epoch before replacing it.",
+      "Build the retained release terrain first; do not rebuild the artifact base with the new curves.",
+      "Apply the exact artifact once; do not deform it with coastal cuts or apron fields afterwards.",
+      "Refresh all terrain/foundation/player/vegetation indices."
+    ],
+    "heightfieldCutsSufficient": false
+  },
+  "structureVerified": false,
+  "actorsVerified": false,
+  "waterReserveVerified": false,
+  "stationRuntimeVerified": false,
+  "limitations": [
+    "The advisor east red/blue terrain audit is external evidence; this wrapper does not repeat or certify it. No full scene or upper gallery clearance is implied.",
+    "Exact remesh is mandatory. Old coastal cuts are bootstrap inputs, not sufficient final terrain.",
+    "Station/loading and interlocking consumers must be rebuilt from this startup curve set before any vehicles exist.",
+    "Expanded-body .3m water reserve failed in the advisor audit; actual lowest vehicle and dynamic waves remain unverified.",
+    "New eastern gallery and public-side links require resurvey; no installation occurs."
+  ],
+  "ranges": {
+    "center": {
+      "newShore": [
+        0,
+        0.6174605473270436
+      ],
+      "central": [
+        0.6174605473270436,
+        0.7196613861754901
+      ],
+      "oldShore": [
+        0.7196613861754901,
+        1
+      ]
+    },
+    "red": {
+      "newShore": [
+        0,
+        0.618312425535821
+      ],
+      "central": [
+        0.618312425535821,
+        0.7262300433158717
+      ],
+      "oldShore": [
+        0.7262300433158717,
+        1
+      ]
+    },
+    "blue": {
+      "newShore": [
+        0,
+        0.6207709846918417
+      ],
+      "central": [
+        0.6207709846918417,
+        0.71614594662563
+      ],
+      "oldShore": [
+        0.71614594662563,
+        1
+      ]
+    }
+  },
+  "mapping": {
+    "center": {
+      "eastLength": 258.0536151161218,
+      "retainedReleaseLength": 354.52877202793917,
+      "newLength": 517.4504999832307,
+      "retainedFraction": 0.2683333333333333,
+      "eastEnd": 0.4987020306763347
+    },
+    "red": {
+      "eastLength": 257.8749470792966,
+      "retainedReleaseLength": 350.61086542497884,
+      "newLength": 514.4052302819061,
+      "retainedFraction": 0.2683333333333333,
+      "eastEnd": 0.5013070083637662
+    },
+    "blue": {
+      "eastLength": 263.9394652168838,
+      "retainedReleaseLength": 358.5043778447304,
+      "newLength": 526.2451683399449,
+      "retainedFraction": 0.2683333333333333,
+      "eastEnd": 0.5015522822746064
+    }
+  },
+  "startup": {
+    "status": "composed-before-construction",
+    "installed": false,
+    "routes": {
+      "version": "citadel-rail-splice-1",
+      "installed": false,
+      "lanes": {
+        "center": {
+          "version": "citadel-rail-splice-1",
+          "id": "center",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2617.49661699655,
+          "length": 2594.201191965569,
+          "oldSpanLength": 540.7459250142118,
+          "replacementLength": 517.4504999832307,
+          "prefixLength": 1550.6338719660318,
+          "suffixLength": 526.1168200163064,
+          "sourceInterval": [
+            0.5924110319368087,
+            0.799
+          ],
+          "replacementInterval": [
+            0.5977307684417302,
+            0.7971950588698637
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.5924110319368087,
+              "world": [
+                -113.24180272106042,
+                -10.70391368386948,
+                114.15356551210759
+              ],
+              "tangent": [
+                0.6297945144672102,
+                0.4057505225770417,
+                0.6623634825195819
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.004074064528801349
+            },
+            {
+              "name": "end",
+              "sourceU": 0.799,
+              "world": [
+                161.71882509800224,
+                40.06147421588754,
+                -36.176404036740834
+              ],
+              "tangent": [
+                0.3175773097692232,
+                -0.8804336897998654,
+                0.35210959967762506
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.007714808276101368
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.23899219042296016
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 519,
+            "chordLength": 517.4575228955653,
+            "lengthRelativeError": 0.000013572143296475463,
+            "expectedArcStep": 0.9989391891568159,
+            "maxArcStepRelativeError": 0.009808834564333013,
+            "minSampleChord": 0.9921361242105531,
+            "maxSampleChord": 1.008737618403084
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "clearanceVerified": false,
+            "routeStatus": "exact-remesh-dependent-offline-candidate"
+          }
+        },
+        "red": {
+          "version": "citadel-rail-splice-1",
+          "id": "red",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2587.1163133342784,
+          "length": 2563.401350442655,
+          "oldSpanLength": 538.1201931735301,
+          "replacementLength": 514.4052302819061,
+          "prefixLength": 1526.3986248672243,
+          "suffixLength": 522.5974952935242,
+          "sourceInterval": [
+            0.59,
+            0.798
+          ],
+          "replacementInterval": [
+            0.5954583056623739,
+            0.7961312241630516
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.59,
+              "world": [
+                -112.55305757871743,
+                -12.572230474963849,
+                114.64139543593267
+              ],
+              "tangent": [
+                0.6300364788758351,
+                0.4052305419214491,
+                0.6624516912045649
+              ],
+              "positionError": 1.7763568394002505e-15,
+              "tangentAngleDegrees": 0.004582593045167375
+            },
+            {
+              "name": "end",
+              "sourceU": 0.798,
+              "world": [
+                161.58239282721718,
+                41.80581012984338,
+                -34.67717930121596
+              ],
+              "tangent": [
+                0.32552177146906075,
+                -0.87854246266939,
+                0.3495693315873812
+              ],
+              "positionError": 7.105427357601002e-15,
+              "tangentAngleDegrees": 0.007702692895264408
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.2525490939623676
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 516,
+            "chordLength": 514.4117306454209,
+            "lengthRelativeError": 0.000012636659061958048,
+            "expectedArcStep": 0.9988451073435071,
+            "maxArcStepRelativeError": 0.00045936753988229666,
+            "minSampleChord": 0.998435835465822,
+            "maxSampleChord": 0.9993039443631909
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "clearanceVerified": false,
+            "routeStatus": "exact-remesh-dependent-offline-candidate"
+          }
+        },
+        "blue": {
+          "version": "citadel-rail-splice-1",
+          "id": "blue",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2647.435381332443,
+          "length": 2624.561231636614,
+          "oldSpanLength": 549.1193180357734,
+          "replacementLength": 526.2451683399449,
+          "prefixLength": 1568.828987030181,
+          "suffixLength": 529.4870762664884,
+          "sourceInterval": [
+            0.5925844302347414,
+            0.8
+          ],
+          "replacementInterval": [
+            0.5977490515821939,
+            0.7982569162860367
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.5925844302347414,
+              "world": [
+                -117.42962472391795,
+                -11.295637590962736,
+                109.78165659305925
+              ],
+              "tangent": [
+                0.5866428214966855,
+                0.44935572945825314,
+                0.6737429987684098
+              ],
+              "positionError": 1.7763568394002505e-15,
+              "tangentAngleDegrees": 0.007500833172753742
+            },
+            {
+              "name": "end",
+              "sourceU": 0.8,
+              "world": [
+                161.84439170971254,
+                38.25194418671131,
+                -37.64488216821549
+              ],
+              "tangent": [
+                0.31025465555874887,
+                -0.8820771853296002,
+                0.3545164140419062
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.00838788936423765
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.24974764922527048
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 528,
+            "chordLength": 526.2553434248549,
+            "lengthRelativeError": 0.000019335255736545798,
+            "expectedArcStep": 0.9985676818594781,
+            "maxArcStepRelativeError": 0.014559760593679298,
+            "minSampleChord": 0.9840287754750188,
+            "maxSampleChord": 1.0113356522030352
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "clearanceVerified": false,
+            "routeStatus": "exact-remesh-dependent-offline-candidate"
+          }
+        }
+      },
+      "twinTrackClearanceVerified": false
+    },
+    "routeClearanceVerified": false
+  },
+  "stationProjection": {
+    "method": "Same 4096 finite samples as actual tramSystem; retained old world point also migrated exactly. Not a dwell/door gameplay test.",
+    "stations": [
+      {
+        "lane": "red",
+        "stop": "locust",
+        "oldProjection": {
+          "u": 0.487548828125,
+          "distance": 2.063452386425722,
+          "world": [
+            18.163786155371483,
+            -97.00492873301737,
+            127.39483136494633
+          ]
+        },
+        "newProjection": {
+          "u": 0.486083984375,
+          "distance": 2.061586255555608,
+          "world": [
+            18.321336777866932,
+            -96.65420948943269,
+            127.63860988755492
+          ]
+        },
+        "preservedWorldError": 0
+      },
+      {
+        "lane": "red",
+        "stop": "ant",
+        "oldProjection": {
+          "u": 0.52099609375,
+          "distance": 2.0514947319370775,
+          "world": [
+            -38.89837169970318,
+            -132.39927771860874,
+            83.22662028638871
+          ]
+        },
+        "newProjection": {
+          "u": 0.51953125,
+          "distance": 2.0552428712051443,
+          "world": [
+            -38.69092396017914,
+            -132.39923827418122,
+            83.3233248767223
+          ]
+        },
+        "preservedWorldError": 0
+      },
+      {
+        "lane": "red",
+        "stop": "beetle",
+        "oldProjection": {
+          "u": 0.554443359375,
+          "distance": 2.051267606237108,
+          "world": [
+            -109.3676879881577,
+            -96.88077816311649,
+            67.98636622508539
+          ]
+        },
+        "newProjection": {
+          "u": 0.552978515625,
+          "distance": 2.051360643459389,
+          "world": [
+            -109.36609968684355,
+            -96.88271073269237,
+            67.98616731122789
+          ]
+        },
+        "preservedWorldError": 0
+      },
+      {
+        "lane": "red",
+        "stop": "frontline",
+        "oldProjection": {
+          "u": 0.53466796875,
+          "distance": 3.5132209088495747,
+          "world": [
+            -70.21798196548639,
+            -127.0435248483603,
+            69.99070204103681
+          ]
+        },
+        "newProjection": {
+          "u": 0.533203125,
+          "distance": 3.5160169532986574,
+          "world": [
+            -70.09523797154883,
+            -127.09623788673571,
+            70.01803174987964
+          ]
+        },
+        "preservedWorldError": 0
+      },
+      {
+        "lane": "blue",
+        "stop": "locust",
+        "oldProjection": {
+          "u": 0.48974609375,
+          "distance": 2.0726350657035533,
+          "world": [
+            21.951554443116574,
+            -97.90158569368388,
+            126.10603147712162
+          ]
+        },
+        "newProjection": {
+          "u": 0.48828125,
+          "distance": 2.0516286234137504,
+          "world": [
+            22.086634279720695,
+            -97.60110709654627,
+            126.31518841452018
+          ]
+        },
+        "preservedWorldError": 0
+      },
+      {
+        "lane": "blue",
+        "stop": "ant",
+        "oldProjection": {
+          "u": 0.523681640625,
+          "distance": 2.049945183166753,
+          "world": [
+            -37.40069892002836,
+            -134.69339244419504,
+            80.17605697829418
+          ]
+        },
+        "newProjection": {
+          "u": 0.522216796875,
+          "distance": 2.054558642722675,
+          "world": [
+            -37.26394723498094,
+            -134.69334381588706,
+            80.23978878830482
+          ]
+        },
+        "preservedWorldError": 0
+      },
+      {
+        "lane": "blue",
+        "stop": "beetle",
+        "oldProjection": {
+          "u": 0.5576171875,
+          "distance": 2.0690901218011235,
+          "world": [
+            -110.7288690498576,
+            -97.88234098709421,
+            64.24552346015302
+          ]
+        },
+        "newProjection": {
+          "u": 0.55615234375,
+          "distance": 2.058935979003943,
+          "world": [
+            -110.78493549398057,
+            -97.8142486943844,
+            64.25257371935251
+          ]
+        },
+        "preservedWorldError": 0
+      },
+      {
+        "lane": "blue",
+        "stop": "frontline",
+        "oldProjection": {
+          "u": 0.53759765625,
+          "distance": 7.614691734481024,
+          "world": [
+            -70.05274291101082,
+            -129.04174978893025,
+            66.40906526551564
+          ]
+        },
+        "newProjection": {
+          "u": 0.5361328125,
+          "distance": 7.616247239132349,
+          "world": [
+            -70.0052602651348,
+            -129.0620609525817,
+            66.41966405263882
+          ]
+        },
+        "preservedWorldError": 0
+      }
+    ]
+  },
+  "interlocking": {
+    "method": "Actual findFreightJunctions on prepared global center and same new service curve references, empty services at u0; not a traffic stress test.",
+    "zones": [
+      {
+        "center": {
+          "x": -129.6591638990023,
+          "y": -35.003262987342936,
+          "z": 89.00666535391494
+        },
+        "radius": 13,
+        "count": 16,
+        "id": "junction-1",
+        "owner": null,
+        "entered": false
+      },
+      {
+        "center": {
+          "x": -65.33418180693222,
+          "y": -36.38250531919329,
+          "z": 142.40563469612675
+        },
+        "radius": 28.157029536396557,
+        "count": 54,
+        "id": "junction-2",
+        "owner": null,
+        "entered": false
+      },
+      {
+        "center": {
+          "x": -16.104896656489085,
+          "y": 82.6084197554687,
+          "z": 139.9787283218892
+        },
+        "radius": 13,
+        "count": 4,
+        "id": "junction-3",
+        "owner": null,
+        "entered": false
+      }
+    ]
+  },
+  "seaRadiusSource": "Explicit diagnostic sphere radius160.5; center guide only. Actual vehicle/wave reserve is not certified."
+}

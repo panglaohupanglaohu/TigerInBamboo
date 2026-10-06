@@ -1,0 +1,106 @@
+{
+  "status": "terrain-frozen-colour-and-facing",
+  "startedAt": "2026-10-05T08:59:50+08:00",
+  "minimumEndAt": "2026-10-05T12:59:50+08:00",
+  "target": "target.png",
+  "requiredScore": ">95/100",
+  "rubric": {
+    "山势轮廓": 30,
+    "支脉鞍部": 20,
+    "岩面层次": 15,
+    "植被": 15,
+    "色光": 10,
+    "城市融合": 10
+  },
+  "latestVerifiedScore": null,
+  "baselinePreviousBatchScore": 63,
+  "hardGates": [
+    "保留旧版可回退",
+    "山体真实宽台与短崖",
+    "雕塑木马身份与功能保留",
+    "最终建筑承托与铁路净空通路连通",
+    "无渲染及编辑错误",
+    "对应机位实机对照"
+  ],
+  "currentWork": [
+    "Terrain shape frozen by latest user instruction, no further remeshing",
+    "Landscape palette changes real rock shader, turf vertex colours and canopy materials; positions unchanged and statue/horse preserved by tests",
+    "Cloud candidate rewritten to float above terrain and advect; awaiting actual GPU, no video per user",
+    "Proxy facing-4 old +45 degrees / new -55 degrees; final scene integration and supports not accepted"
+  ],
+  "automationId": "automation",
+  "nextPhase": "../citadel-architecture-four-hour-20261005/state.json",
+  "protectedLandmarks": [
+    "旧城细高塔",
+    "新城蓝穹顶",
+    "citadel-plaza-hero-statue及其圆台/环形铺装",
+    "citadel-trojan-horse及horseReservation/活动与系绳区域"
+  ],
+  "landmarkCorrection": "用户指出目标图遗漏雕塑和木马；按实际锚点和材质保留，不能由WFC装饰选择移除。",
+  "latestCandidate": "r20 landscape palette visible; stronger palette and cloud-v2 awaiting GPU",
+  "candidateAcceptance": "not-accepted",
+  "lastEvidence": "r18-blue-sky-target-front-plants-layout.png",
+  "timeAccountingNote": "上午截图后存在执行中断；不得将经过时长称为连续施工完成",
+  "latestUserDirection": {
+    "at": "2026-10-05T18:43:30+08:00",
+    "windowEnd": "2026-10-05T23:43:30+08:00",
+    "scope": "五小时山体与建筑统筹，不再以旧阶段评分阻止建筑优化",
+    "target": "../citadel-architecture-target-20261005/target-v3-landmarks.png"
+  },
+  "startupFix": {
+    "actualReady": true,
+    "ridgeFailure": null,
+    "evidence": "r02-startup-fixed-old-mountain-day-noCloud-plants.json"
+  },
+  "appearanceFix": {
+    "shader": "sample-clean",
+    "appErrors": [],
+    "canopyTrees": 171,
+    "cloudBanks": 3,
+    "score": null
+  },
+  "independentReview": "Advisor inspected r17 and r18 actual images: r17 lateral shelf small improvement without obvious global regression; r18 tower silhouette and blue sky closer, cities too small. Use existing platform area before expanding terrain. No acceptance score.",
+  "latestScore": null,
+  "latestUserCorrection": "User accepts current mountain shape: freeze geometry, prioritize visible colour changes. Cities must face central bay with mutual response. Castle white forms are moving clouds, not ground snow. No video recording requested.",
+  "nextAction": "Verify final landscape palette and detached flowing cloud banks in real GPU; verify facing-4 proxy on same terrain, then complete real architecture without resetting mountain work.",
+  "phaseOrder": [
+    "mountain geometry",
+    "new and old city architecture",
+    "railway layout and complete traversal"
+  ],
+  "deadlineStatus": "2026-10-05 23:43:30 reached; target not achieved. No score or continuous-work claim. Continue authorized terrain/city/rail work.",
+  "rejectedCandidates": [
+    {
+      "candidate": "r11-remesh",
+      "reason": "sea-relative step drops visually lengthened cliffs and removed visible broad tops; rejected geometry. Local reduced fog retained."
+    },
+    {
+      "candidate": "r13-aprons",
+      "reason": "Independent review found damaged rear shoulder, isolated point and fine side stair steps; replaced by front-only mask in r14."
+    }
+  ],
+  "latestGPU": {
+    "evidence": "r18-blue-sky-target-front-plants-layout.json",
+    "status": "sample-clean",
+    "glErrors": [],
+    "appErrors": [],
+    "scope": "sample only, not full gameplay acceptance"
+  },
+  "massingPreview": {
+    "module": "targetCityMassingPreview.js",
+    "variants": [
+      "original-1",
+      "stepped-2"
+    ],
+    "latestEvidence": "r18-stepped-massing-target-front-bare-terrain.png",
+    "count": 68,
+    "acceptedCity": false,
+    "limitations": [
+      "not WFC",
+      "no route/collision validation",
+      "statue/horse placeholders only; original props preserved",
+      "9m city-plaza gap not solved"
+    ]
+  },
+  "terrainUserAccepted": true
+}

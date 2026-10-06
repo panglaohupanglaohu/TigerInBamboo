@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-04T22:55:15.303843+00:00",
+  "status": "fixed-actual-scene-verified",
+  "cause": "Merged terrace cypress meshes lost ancestor names; broad new-city stone and colour passes consumed props. Sculpture lacked an exclusion.",
+  "fix": "Authored material ownership persists on cypress/statue materials across batches; terrace garden owns shrub materials; all three bulk palette/weathering passes respect ownership.",
+  "test": "real factories, rebatching without ancestor labels, two Ashley passes, historic50, city palette and repeated historic application; 16 protected meshes retain material identity/PBR and unchanged geometry, architectural wall remains weathered.",
+  "beforeViolationCount": 16,
+  "afterViolationCount": 0,
+  "runtimeGeometryChanged": false,
+  "needsPageReload": true,
+  "actualMeshCount": 12,
+  "actualWrongMaterialCount": 0,
+  "actualWallsRetainingFinish": 1529,
+  "gpuPrograms": 258,
+  "gpuFailures": [],
+  "glErrors": [],
+  "sourceSha256": {
+    "src/world/citadel/materialOwnership.js": "e8e3005e1e3295b96fa6694f80ccec3d92c728fa09cc7932607cb8a0e94c326f",
+    "src/world/citadel/citadelGarden.js": "f5627fc3b2c182f3af3fd71033dd413c8fe2fdfa1007fd68c280b0e3f3f648af",
+    "src/world/citadel/plazaStatue.js": "007ad13255364dbdd69353e03de01a8c4596851eac478ab539021e31e76d0907",
+    "src/world/citadel/historicStone.js": "09f8013d859af012802a91f54740afa6557bf99714bded4b193980aa564a82c1",
+    "src/world/citadel/cityColourStudy.js": "f01b0f466401aef4306a96d06ca4b5299fc031c5ce91d7761f998e7542ec7160",
+    "src/world/citadel/ashleyPalette.js": "c7b2165b1a7126afc2a804b6f5754bf2f708ec730caa698e4a79889f2a9882c8"
+  }
+}

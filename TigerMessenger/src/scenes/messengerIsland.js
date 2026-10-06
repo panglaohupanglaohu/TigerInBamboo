@@ -1,3 +1,9 @@
+import {applyTargetLandscapePalette} from '../world/citadel/targetLandscapePalette.js';
+import {applyTownscaperTargetMaterials} from '../world/citadel/townscaperTargetMaterials.js';
+import {applyCitadelTargetOcean} from '../world/citadel/targetAtmosphere.js';
+import {seatTerracedSeaStacks} from '../world/seaStackTerraces.js';
+import {applyCityColourStudy} from '../world/citadel/cityColourStudy.js';
+import {applyCitadelBayLayout} from '../world/citadel/bayLayout.js';
 import {placeBookshopTown} from '../world/bookshopTownSite.js';
 import {removeRequestedGateMountains} from '../world/gateMeetingConnection.js';
 import {installBookshopRobots} from '../world/bookshopRobotBase.js';
@@ -14,6 +20,7 @@ import {buildTerracePlanting} from "../world/citadel/terracePlanting.js";
 import {groundCitadelShrubs} from "../world/citadel/shrubGrounding.js";
 import {compactNewCityTerrain} from '../world/citadel/compactNewCity.js';
 import {buildNewCityRockShoulder} from '../world/citadel/rockShoulder.js';
+import {applyCitadelMountainStudy} from '../world/citadel/mountainStudy.js';
 import {buildUpperRockTerraces} from '../world/citadel/upperRockTerraces.js';
 import {loadMasterTerrainCandidate} from '../world/citadel/masterTerrainCandidate.js';
 import {applyCitadelHarborSeabed} from '../world/citadel/harborSeabedCandidate.js';
@@ -162,7 +169,7 @@ export const messengerIslandScene = {
     const grandTopTarget = grandDir
       .clone()
       .multiplyScalar(R + canyonOffsetDir(grandDir) + GRAND_CRYSTAL.h * 0.96);
-    const tramSystem = loadTram({ scene, R, hills, camp, grandTopTarget });
+    const tramSystem = loadTram({ scene, R, hills, camp, grandTopTarget, citadelEastGlobalCrossing:ctx.options?.citadelEastGlobalCrossing });
     const moebiusPack = loadMoebiusDistrict({ scene, R, tramSystem });
     const citadelPack = loadCitadelBlock({
       scene,
@@ -204,6 +211,7 @@ export const messengerIslandScene = {
       seed: ctx.options?.planetV8?.seed ?? FEATURES.terrainSeed ?? 42,
       features: planetFeatures,
       terrainMeshes,
+      deferCloudTerrain:!!tramSystem.crossingBundle,
     });
     const coastalCity=citadelPack?.odysseyCitadel?.getObjectByName('highland-west-city');
     const worldOcean=scene.getObjectByName('planet-v8-curved-ocean');
@@ -254,6 +262,28 @@ export const messengerIslandScene = {
 
     if (worldOcean?.userData.officialOcean) conformCampShallowsToOcean(camp.group, worldOcean, R);
     if (worldOcean?.userData.officialOcean && coastalCity) applyFrontHarborCoast(scene,citadelPack.odysseyCitadel);
+
+    applyCitadelBayLayout(citadelPack.odysseyCitadel,R);
+    const eastStartup=tramSystem.terrainPreparation;
+    applyCitadelMountainStudy(citadelPack.odysseyCitadel,R,
+      eastStartup?tramSystem.bootstrapCurves:tramSystem.curves,
+      eastStartup?tramSystem.bootstrapRelease:tramSystem.citadelTransitRelease,
+      eastStartup?{artifact:eastStartup.artifact,consumerCurves:tramSystem.curves}:null);
+    if(eastStartup){
+      // The global impostors otherwise freeze their buffers before the final
+      // mountain exists. Defer only this opt-in startup, then sample live meshes.
+      planetV8.completeCloudTerrain([
+        ...collectStaticTerrainMeshes(hills.mesh,transientExcludes),
+        ...collectStaticTerrainMeshes(hills.skirt,transientExcludes),
+        ...collectStaticTerrainMeshes(harbor,transientExcludes),
+        ...collectStaticTerrainMeshes(citadelPack.odysseyCitadel,transientExcludes),
+        ...collectStaticTerrainMeshes(moebiusRoot,transientExcludes),
+      ]);
+    }
+    applyCitadelTargetOcean(worldOcean,scene.getObjectByName('castleContainer'));
+    applyCityColourStudy(citadelPack.odysseyCitadel);
+    applyTownscaperTargetMaterials(scene.getObjectByName('castleContainer'));
+    applyTargetLandscapePalette(scene.getObjectByName('castleContainer'));
 
     // 三重门编译锚点保留给门侧巡检逻辑，侦察队实际以门的 seatRoot
     // 读取最新姿态，保证开发者菜单搬迁叹息之门后仍能正确赶赴目标。
@@ -516,6 +546,7 @@ export const messengerIslandScene = {
     placeBookshopTown(bookshop,R); // preserve the moved original shop after legacy settling
     if(bookshop.userData.blenderArt)fitBookshopPath(bookshop,()=>R+.9);
     const bookshopFactoryBase=installBookshopRobots({scene,bookshop,colliders,platforms,R});
+    seatTerracedSeaStacks(scene,R,tramSystem.curves,[bookshopFactoryBase,citadelPack.odysseyCitadel.getObjectByName('castleContainer')]);
 
     // eslint-disable-next-line prefer-const
     const combatPack = loadCitadelCombat({
@@ -584,6 +615,9 @@ export const messengerIslandScene = {
     const state = {
       scene,
       R,
+      // The per-frame updater consumes this state, not messengerLandmarks.
+      // Without the runtime here uTime remains zero on the ocean and shore.
+      planetV8,
       camp,
       platforms,
       clouds,

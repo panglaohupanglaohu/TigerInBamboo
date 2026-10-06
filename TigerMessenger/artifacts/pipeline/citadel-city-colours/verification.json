@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "before": {
+      "hash": 83626823,
+      "vertices": 30057
+    },
+    "after": {
+      "hash": 83626823,
+      "vertices": 30057
+    },
+    "geometryChanges": 0,
+    "transformChanges": 0,
+    "outsideChanges": 0,
+    "changed": 974,
+    "repeatedChanges": 0,
+    "study": {
+      "version": 1,
+      "palette": {
+        "oldStone": "#b2a38b",
+        "newStone": "#c6baa1",
+        "roof": "#8b5145",
+        "lead": "#596875",
+        "wood": "#51463d",
+        "teal": "#367d80",
+        "recess": "#494744",
+        "bronze": "#8d8061"
+      },
+      "counts": {
+        "old": {
+          "stone": 268,
+          "roof": 51,
+          "wood": 4,
+          "recess": 3,
+          "bronze": 8
+        },
+        "new": {
+          "stone": 605,
+          "roof": 10,
+          "recess": 7,
+          "teal": 2,
+          "bronze": 15,
+          "lead": 1
+        }
+      },
+      "meshes": 974,
+      "target": "citadel-city-colours/target.png"
+    }
+  },
+  "errors": []
+}

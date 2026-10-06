@@ -1,0 +1,11 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>十二门徒 · 实景研究验收</title>
+<style>body{margin:0;background:#18222b;color:#e4edf2;font:14px system-ui}header{padding:10px 14px}h1{font-size:18px;margin:0 0 8px}nav{display:flex;gap:6px;flex-wrap:wrap}button,select{background:#344957;color:inherit;border:1px solid #687e89;border-radius:5px;padding:7px 11px;cursor:pointer}button:disabled{opacity:.45}button[aria-pressed=true]{background:#92724a}#status{margin:8px 0;color:#bcdac7}#stage{width:100%;height:72vh;border:0;background:#111}details{padding:12px}pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:50vh;overflow:auto;font-size:12px}small{color:#adc0cc}</style>
+<header><h1>十二门徒 · 实际主场景验收</h1><nav>
+<button data-view="hero">Hero 主柱</button><button data-view="complete">完整岩柱</button><button data-view="orbit-left">绕柱左侧</button><button data-view="orbit-back">绕柱背面</button><button data-view="base">海蚀基座近景</button><button data-view="vegetation">Vegetation 植被</button><button data-view="foliage">叶丛近景</button><button data-view="coastline">Coastline 海岸</button><button data-view="rail">Rail 列车眼高</button><button data-view="plaza">Plaza 广场</button>
+<button data-time="0.5">Day 日光</button><button data-time="0.75">Dusk 黄昏</button><button id="flat" aria-pressed="false">Flat 白模</button><button id="noFog" aria-pressed="false">NoFog 无雾</button>
+<button id="unlit" aria-pressed="false">本色</button><button id="check">检查全部</button><button id="performance">性能采样 10 秒</button><button id="export">导出 PNG</button><button id="json">导出检查 JSON</button>
+<select id="variant" aria-label="几何版本"><option value="1">Study 候选</option><option value="0">Study=0 回退</option></select><button id="reload">重新加载</button>
+</nav><div id="status" role="status">等待完整 __tm、海面与岩群初始化…</div><small>镜头和昼夜时钟固定；海浪、天气及其他世界动画继续运行。检查是采样验证，不等于连续碰撞证明。导出图片仅含真实场景画布。</small></header>
+<iframe id="stage" title="TigerMessenger 实景"></iframe><details open><summary>检查结果 / 捕获错误</summary><pre id="results">尚未检查</pre></details>
+<script type="importmap">{"imports":{"three":"/TigerMessenger/vendor/three.module.js"}}</script>
+<script type="module" src="/TigerMessenger/tools/pipeline/sea_stack_study_harness.js"></script></html>

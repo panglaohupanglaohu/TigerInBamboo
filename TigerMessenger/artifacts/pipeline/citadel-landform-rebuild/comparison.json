@@ -1,0 +1,43 @@
+{
+  "checks": [
+    [
+      "Fixed structure world vertices unchanged",
+      true
+    ],
+    [
+      "23049 rail probes without hits",
+      true
+    ],
+    [
+      "No wet rear-coast rail samples",
+      true
+    ],
+    [
+      "Plant roots supported",
+      true
+    ],
+    [
+      "No new page errors or warnings",
+      true
+    ],
+    [
+      "10 regression and landform tests passed",
+      true
+    ]
+  ],
+  "before": {
+    "meshes": 514,
+    "vertices": 59267,
+    "hash": 3924031306
+  },
+  "after": {
+    "meshes": 514,
+    "vertices": 59267,
+    "hash": 3924031306
+  },
+  "plantCheck": {
+    "count": 212,
+    "missing": 0,
+    "maxGap": -0.04452126695829861
+  }
+}

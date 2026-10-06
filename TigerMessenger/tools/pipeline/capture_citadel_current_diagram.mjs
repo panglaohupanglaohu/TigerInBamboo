@@ -1,0 +1,11 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import {writeFileSync} from 'node:fs';
+const out=new URL('../../artifacts/pipeline/citadel-current-diagram/',import.meta.url).pathname;
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});
+const page=await browser.newPage({viewport:{width:1500,height:1000}}),errors=[];
+page.on('pageerror',e=>errors.push(e.message));
+await page.goto('http://localhost:8931/TigerMessenger/?autostart=1&timeOfDay=0.5'+(process.argv.includes('--before')?'&citadelBay=0':''));
+await page.waitForFunction(()=>window.__tm?.scene.getObjectByName('highland-gate'),null,{timeout:120000});await page.waitForTimeout(7000);
+const report=await page.evaluate(()=>{const t=__tm,T=t.THREE,c=t.scene.getObjectByName('castleContainer');t.cameraRig.update=()=>{};t.P.daySpeed=0;t.P.timeOfDay=.5;t.dayNight.update(.0001);document.querySelectorAll('body > :not(canvas)').forEach(e=>{if(e.tagName!=='SCRIPT')e.style.visibility='hidden';});t.camera.position.copy(c.localToWorld(new T.Vector3(-15,95,210)));t.camera.up.set(0,1,0).transformDirection(c.matrixWorld);t.camera.lookAt(c.localToWorld(new T.Vector3(4,10,25)));t.camera.fov=55;t.camera.far=4000;t.camera.updateProjectionMatrix();t.camera.updateMatrixWorld(true);t.distanceCulling.recollect();t.distanceCulling.update(3);return {bay:c.userData.bayLayout,city:c.getObjectByName('highland-west-city').position.toArray(),children:c.children.map(o=>({name:o.name,pos:o.position.toArray()}))};});
+await page.waitForTimeout(600);const shot=await page.evaluate(()=>{__tm.renderer.render(__tm.scene,__tm.camera);return __tm.renderer.domElement.toDataURL('image/png');});
+const label=process.argv.includes('--before')?'before':'after';writeFileSync(out+label+'.png',Buffer.from(shot.split(',')[1],'base64'));writeFileSync(out+label+'.json',JSON.stringify({report,errors},null,2));console.log(JSON.stringify({report,errors}));await browser.close();

@@ -1,0 +1,217 @@
+{
+  "startUTC": "2026-10-04T08:12:05Z",
+  "deadlineUTC": "2026-10-04T11:12:05Z",
+  "status": "三小时批次 r10 已完成实现与检查，交卷图组可审阅；美术尚有差距",
+  "scope": [
+    "approved 8 stacks and gate-left placement protected",
+    "semantic smoothing",
+    "surface-supported coherent vegetation",
+    "shared regional shading",
+    "versioned derived geometry"
+  ],
+  "rounds": [
+    {
+      "id": "r01",
+      "timestampUTC": "2026-10-04T08:40:00Z",
+      "score": {
+        "landform": 14,
+        "vegetation": 16,
+        "lighting": 11,
+        "colour": 8,
+        "integration": 14,
+        "total": 63,
+        "maximum": 100
+      },
+      "scoreType": "subjective visual review, not an automated objective metric",
+      "decision": "iterate",
+      "evidence": "r01-evidence.json",
+      "checks": "r01-checks.json"
+    },
+    {
+      "id": "r02",
+      "timestampUTC": "2026-10-04T08:45:00Z",
+      "reviewer": "bad_north_research independent visual review",
+      "score": {
+        "landform": 10,
+        "vegetation": 11,
+        "lighting": 7,
+        "colour": 6,
+        "integration": 7,
+        "total": 41,
+        "maximum": 100
+      },
+      "scoreType": "subjective independent visual review; not directly comparable to root r01 scoring",
+      "images": [
+        "r02-hero.png",
+        "r02-foliage.png"
+      ],
+      "decision": "major shape and turf-coverage revision required",
+      "findings": [
+        "Straight shafts remain too regular",
+        "Continuous turf cap covers too much mineral",
+        "Warm grey stone deviates from cool coastal palette",
+        "Canopy contact shadows not yet visible",
+        "Need whole-rock and waterline camera for integration review"
+      ]
+    },
+    {
+      "id": "r07",
+      "reviewer": "bad_north_research independent actual-image review",
+      "score": {
+        "landform": 17,
+        "vegetation": 17,
+        "lighting": 10,
+        "colour": 7,
+        "integration": 7,
+        "total": 58,
+        "maximum": 100
+      },
+      "images": [
+        "r07-hero-ui.jpg",
+        "r07-complete-ui.jpg",
+        "r07-foliage-ui.jpg",
+        "r07-base-ui.jpg"
+      ],
+      "decision": "iterate large nonparallel cliff planes, split turf pockets and cooler daylight palette",
+      "checks": "r07-checks.json"
+    },
+    {
+      "id": "r08",
+      "reviewer": "bad_north_research independent actual-image review",
+      "score": {
+        "landform": 19,
+        "vegetation": 16,
+        "lighting": 10,
+        "colour": 12,
+        "integration": 7,
+        "total": 64,
+        "maximum": 100
+      },
+      "images": [
+        "r08-hero-ui.jpg",
+        "r08-complete-ui.jpg",
+        "r08-foliage-ui.jpg",
+        "r08-base-ui.jpg",
+        "r08-coastline-ui.jpg"
+      ],
+      "decision": "iterate true component-boundary turf mask and synchronize foam with GPU ocean waves"
+    },
+    {
+      "id": "r09",
+      "reviewer": "bad_north_research independent actual-image review",
+      "score": {
+        "landform": 19,
+        "vegetation": 19,
+        "lighting": 10,
+        "colour": 12,
+        "integration": 7,
+        "total": 67,
+        "maximum": 100
+      },
+      "findings": [
+        "Large triangular turf cuts visibly removed; mineral rim now exposed",
+        "Continuous smooth cliff faces and cylindrical bodies remain",
+        "Surf and sea erosion contact still weak in actual base view"
+      ],
+      "checks": "r09-checks.json",
+      "decision": "Improve geological relief and actual surf visibility before deadline"
+    },
+    {
+      "id": "r10",
+      "reviewer": "bad_north_research independent actual-image review",
+      "score": {
+        "landform": 19,
+        "vegetation": 19,
+        "lighting": 10,
+        "colour": 12,
+        "integration": 9,
+        "total": 69,
+        "maximum": 100
+      },
+      "findings": [
+        "Broken surf visibly meets final rock feet; +2 integration",
+        "Surface-bound turf and real root correction confirmed",
+        "Long smooth faces and rounded column silhouette remain weaker than target"
+      ],
+      "checks": "r10-checks.json",
+      "decision": "Deliver the three-hour batch honestly; further geological silhouette work remains"
+    }
+  ],
+  "lastUpdate": "2026-10-04T11:03:13.188324+00:00",
+  "independentVisualScores": {
+    "baseline": 29,
+    "r02": 41,
+    "r03": 54,
+    "r04": 56,
+    "r05": 60,
+    "r07": 58,
+    "r08": 64,
+    "r09": 67,
+    "r10": 69
+  },
+  "currentIssues": [
+    "长连续光滑岩面和圆角筒体轮廓仍需更明显的地层断面",
+    "局部高度场光照尚不能覆盖跨岩柱及动态物体投影",
+    "同条件单次采样中新版调度间隔和三角面数增加，需要进一步性能优化"
+  ],
+  "finalRound": "r10",
+  "remainingSummary": "美术评分69/100，尚未达到满意成品。岩柱仍有过长连续光滑立面和圆角筒体轮廓，缺少目标海蚀石林尺度分明的层状断面与破碎岩肩。光照为局部高度场近似，未支持跨岩柱及全部动态物件投影；表面版本合同限定本岩群。",
+  "finalChecks": {
+    "几何与语义WFC": "18组几何 + 固定造型下3条合法WFC路径参数差异通过",
+    "五组自动检查": "surface / vegetation / lighting / shore_contact / surface_contract 全部通过",
+    "八座布局": "8/8，实际坐标相对基线最大偏差 0m",
+    "球面竖立": "岩柱轴与各自海面径向夹角 0°",
+    "植被实际承托": "154个根点无缺失；另测790草叶基边端点、75枝干真实根",
+    "草缘几何": "76,240三角面；距可承土边界至少0.40m；额外保守裸边≤0.02001m",
+    "铁路检查": "46800个采样探针，命中0；采样不等于连续碰撞证明",
+    "步行通道": "507网格 / 50,313顶点；新旧世界指纹81687140一致；68,680点采样无冲突",
+    "广场": "完整广场实景已检查；岩群位于其相反半球",
+    "版本一致性": "本岩群表面/植被/光照/海面合同0错误；不等于全球原子发布",
+    "浏览器检查": "采集窗口内0 JS错误；已编译着色器0失败",
+    "最终性能样本": "10秒rAF间隔中位 58.3ms / P95 67.0ms；1265×518，DPR1；非GPU耗时",
+    "同条件旧版性能样本": "同机位、白昼、无雾、1265×518、DPR1，10秒旧版rAF中位49.9ms/P95 51.5ms；新版58.3ms/P95 67.0ms。单次浏览器调度样本存在噪声，但不能声称性能提升。"
+  },
+  "completedEvidenceAtUTC": "2026-10-04T10:56:02.581730+00:00",
+  "performanceComparison": {
+    "legacy": "legacy-final-conditions-performance.json",
+    "current": "r10-performance.json",
+    "excludedEarlierMeasurements": [
+      "legacy-performance.json",
+      "r09-performance.json"
+    ],
+    "reasonExcluded": "Earlier review-only NoFog regex accidentally hid bookshop-steampunk-robots; fixed harness used for both final samples. Actual game factory never removed.",
+    "note": "Current sample is slower and has more triangles; no GPU time claim, no FPS benchmark claim."
+  },
+  "requirementCoverage": [
+    {
+      "request": "人工模块 + WFC + 铁路通道保护",
+      "status": "本批已实现，范围有限",
+      "result": "手工体块与一维兼容选择共同控制台宽、退台及峰冠；铁路、步行与布局采样检查通过。",
+      "remaining": "还不是三维模块拼接引擎；层状断面与破碎岩肩仍不足。"
+    },
+    {
+      "request": "按硬边、材质界与普通点分别平滑",
+      "status": "本批已实现",
+      "result": "语义约束平滑保留台面、基座及裂口，增加非对称岩肩与断面。",
+      "remaining": "部分长立面和圆角仍过于连续。"
+    },
+    {
+      "request": "植被依附最终表面，修复三角形草缘",
+      "status": "本批已实现并验证",
+      "result": "按连通承土区域生成草皮，以真实区域边界裁切；真实草叶根边及灌木枝根分别承托。",
+      "remaining": "后续可丰富更自然的植被构图与种类，当前先确保不悬浮、不切整片三角面。"
+    },
+    {
+      "request": "协调岩石、植被、动态物件光照；分开配色与阴影",
+      "status": "部分实现",
+      "result": "岩石、草皮、灌木共享场景主光方向；本色、白色剪影、日光、黄昏分别出图。",
+      "remaining": "局部高度场近似，不包含全部动态物件与跨岩柱投影。"
+    },
+    {
+      "request": "球面共享边界及版本，保留特色场景",
+      "status": "本岩群范围实现",
+      "result": "球面径向、海面波形及表面派生数据版本合同已检查；原布局与特色场景保留。",
+      "remaining": "未实施全世界共享边界的原子版本发布；图文法结构实验未开展。"
+    }
+  ]
+}

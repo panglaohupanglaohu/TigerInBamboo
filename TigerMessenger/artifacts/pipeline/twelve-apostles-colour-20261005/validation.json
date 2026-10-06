@@ -1,0 +1,17 @@
+{
+  "structureUnchanged": true,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    10
+  ],
+  "lightingTest": "PASS see lighting-test.txt",
+  "syntax": "PASS 3 files",
+  "actualGameVisualValidation": "pending parent capture",
+  "changes": "colour and light-response constants only"
+}

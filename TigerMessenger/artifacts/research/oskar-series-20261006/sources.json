@@ -1,0 +1,629 @@
+[
+  {
+    "id": "1786014232594485497",
+    "topic": "山的材质",
+    "author": "OskSta",
+    "date": "Thu May 02 12:45:50 +0000 2024",
+    "url": "https://x.com/OskSta/status/1786014232594485497",
+    "text": "Mountain textures! These have been tricky. Mountains kinda need lighting and normals, but with my texture blending tech I don't think I can afford that on low-end devices",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GMkxTviWAAAsHBp.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GMkxTviWAAAsHBp.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1784276757266231419",
+    "topic": "好的河流",
+    "author": "OskSta",
+    "date": "Sat Apr 27 17:41:43 +0000 2024",
+    "url": "https://x.com/OskSta/status/1784276757266231419",
+    "text": "More texture test! Wanna really get some good rivers for this project.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "photo",
+        "url": "https://pbs.twimg.com/media/GMMF6Y7XIAAPafI.png?name=orig",
+        "thumbnail": null,
+        "width": 800,
+        "height": 760
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1783792917183606829",
+    "topic": "材质测试",
+    "author": "OskSta",
+    "date": "Fri Apr 26 09:39:07 +0000 2024",
+    "url": "https://x.com/OskSta/status/1783792917183606829",
+    "text": "Texture test!",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GMFOB2CWIAAjEyg.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GMFOB2CWIAAjEyg.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1781405550061687016",
+    "topic": "手工UV转自动",
+    "author": "OskSta",
+    "date": "Fri Apr 19 19:32:34 +0000 2024",
+    "url": "https://x.com/OskSta/status/1781405550061687016",
+    "text": "Ok this might not look like much but I've got seamless patch blending! Some of the patches are projected (like the grass and the water) and some are manually UV-mapped (like the shoreline). With some good textures and some height based blending this is gonna be great.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GLjSdihXAAAIR6r.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GLjSdihXAAAIR6r.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1769641473895432220",
+    "topic": "山势调整",
+    "author": "OskSta",
+    "date": "Mon Mar 18 08:26:20 +0000 2024",
+    "url": "https://x.com/OskSta/status/1769641473895432220",
+    "text": "In cute tile based planets like this you often get a \"mushrooming\" issue where tall mountains get weirdly wide. I managed to mitigate this by a relax pass where all module-containing cells try to achieve their desired shape and size. Note the cells on the top left contracting.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GI8GyHBXQAAHGd7.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GI8GyHBXQAAHGd7.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1768627849529893109",
+    "topic": "球体分布",
+    "author": "OskSta",
+    "date": "Fri Mar 15 13:18:33 +0000 2024",
+    "url": "https://x.com/OskSta/status/1768627849529893109",
+    "text": "For reasons I will not be explaining at this point I've gone and put this on a sphere",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GIttcfnWgAAwgjY.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GIttcfnWgAAwgjY.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1764958522398146667",
+    "topic": "碰撞检验",
+    "author": "OskSta",
+    "date": "Tue Mar 05 10:17:57 +0000 2024",
+    "url": "https://x.com/OskSta/status/1764958522398146667",
+    "text": "A cute binary tree rect packer. Generating the placement attempts is kinda brute force (to get into all the nooks and crannies), but then it's using the tree properly for fast collision checks. I think this is the first time I've actually written a proper space partion tree. Fun.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GH5jlUxW8AA3p_S.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GH5jlUxW8AA3p_S.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1758250248483278925",
+    "topic": "水面反射",
+    "author": "OskSta",
+    "date": "Thu Feb 15 22:01:40 +0000 2024",
+    "url": "https://x.com/OskSta/status/1758250248483278925",
+    "text": "New water reflection I'm quite happy with",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GGaO03vXwAAJcQ0.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GGaO03vXwAAJcQ0.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1751945034851570056",
+    "topic": "光照",
+    "author": "OskSta",
+    "date": "Mon Jan 29 12:27:00 +0000 2024",
+    "url": "https://x.com/OskSta/status/1751945034851570056",
+    "text": "Some nice new highlights when the island is backlit. Achieved by simply adding another inverted mesh outline layer that shows up when looking into the sun. And masked by shadows, of course.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GFAoNWVWUAEn-DY.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GFAoNWVWUAEn-DY.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1751932427272909032",
+    "topic": "建筑与地形统一",
+    "author": "OskSta",
+    "date": "Mon Jan 29 11:36:54 +0000 2024",
+    "url": "https://x.com/OskSta/status/1751932427272909032",
+    "text": "I can now force specific modules to appear. To do this I first generate the specific bit of grid they need. A large module like this would be highly unlikely to appear by chance on a random grid.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/GFAa9r0XYAAahci.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/GFAa9r0XYAAahci.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1723738415177363639",
+    "topic": "地图导航",
+    "author": "AllCityKitty",
+    "date": "Sun Nov 12 16:23:58 +0000 2023",
+    "url": "https://x.com/AllCityKitty/status/1723738415177363639",
+    "text": "I was fighting with some weird unity thing for hours, but now it works fine again. The basic tile effects do their thing. Now on to the more complicated ones. 🏌️‍♀️⛳️\n\n#lowpoly #indiedev",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "video",
+        "url": "https://video.twimg.com/ext_tw_video/1723738238450376704/pu/vid/avc1/1280x716/w8ePtHX9iC6oF211.mp4?tag=12",
+        "thumbnail": "https://pbs.twimg.com/ext_tw_video_thumb/1723738238450376704/pu/img/sxw3--PsGjoNJBOP.jpg",
+        "width": 1280,
+        "height": 716
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1712088611934371876",
+    "topic": "配色",
+    "author": "OskSta",
+    "date": "Wed Oct 11 12:51:48 +0000 2023",
+    "url": "https://x.com/OskSta/status/1712088611934371876",
+    "text": "Another take on a palette authoring tool",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/F8KPAuoXsAAgEwY.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/F8KPAuoXsAAgEwY.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1708815475801505819",
+    "topic": "新城悬崖",
+    "author": "OskSta",
+    "date": "Mon Oct 02 12:05:32 +0000 2023",
+    "url": "https://x.com/OskSta/status/1708815475801505819",
+    "text": "a cool cliff I came across",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/F7bugQnWIAAiGkr.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/F7bugQnWIAAiGkr.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1707490932017279035",
+    "topic": "材质教程",
+    "author": "OskSta",
+    "date": "Thu Sep 28 20:22:16 +0000 2023",
+    "url": "https://x.com/OskSta/status/1707490932017279035",
+    "text": "They are of course 100% texture, painted onto a fairly low, poly mesh. I keep thinking I'm gonna need to give em some volume with billboard sprites, but now I'm not so sure anymore. Especially with the lil' shadows, they look quite volumetric as they are.",
+    "replyingTo": "1707490274425884929",
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/F7I5mdrXoAACVNE.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/F7I5mdrXoAACVNE.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1705195380457996629",
+    "topic": "表面阴影",
+    "author": "OskSta",
+    "date": "Fri Sep 22 12:20:34 +0000 2023",
+    "url": "https://x.com/OskSta/status/1705195380457996629",
+    "text": "I tamed the texture based surface shadows a bit, so the shadow casting height is independent of the z test height. Now I only get shadows over grass-cliff edges and under roofs. It has some artifacts across UV borders, but it's quite subtle so I might not actually have to fix it.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/F6oRNKHWsAA449Q.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/F6oRNKHWsAA449Q.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1704218784028905984",
+    "topic": "投影变化",
+    "author": "OskSta",
+    "date": "Tue Sep 19 19:39:55 +0000 2023",
+    "url": "https://x.com/OskSta/status/1704218784028905984",
+    "text": "I tried some texture based shadows. Note the shadows on the grass and along the roof edges. Looks kinda cool, but feels a bit too 3D for what I'm going for this time. I feel like it clashes with lines, and I like lines more.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/F6aYvN4WUAE1-9j.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/F6aYvN4WUAE1-9j.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1703750394164199473",
+    "topic": "植被变化",
+    "author": "OskSta",
+    "date": "Mon Sep 18 12:38:42 +0000 2023",
+    "url": "https://x.com/OskSta/status/1703750394164199473",
+    "text": "Looking at my procedural stylized ground texturing again. Really like the swirly blobbyness of these. They feel kind of damp for some reason.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/F6TvOddXAAAHOn1.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/F6TvOddXAAAHOn1.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1696864977171189980",
+    "topic": "修改边缘",
+    "author": "OskSta",
+    "date": "Wed Aug 30 12:38:31 +0000 2023",
+    "url": "https://x.com/OskSta/status/1696864977171189980",
+    "text": "I'm slowly emerging from a huge refactoring... While this here is not exactly the look I'm going for, it's showing off a big improvement to the texturing. I'm now able to draw with much bigger blotches without the blotches bleeding across and messing up important edges.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/F4x4x4sWgAAUEyz.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/F4x4x4sWgAAUEyz.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1677242779162877952",
+    "topic": "三角图",
+    "author": "OskSta",
+    "date": "Fri Jul 07 09:06:54 +0000 2023",
+    "url": "https://x.com/OskSta/status/1677242779162877952",
+    "text": "I am (once again) rewriting my generic triangle graph system to (hopefully) be more robust and generic. Here's a stress test where I'm adding random verts, making sure the graph stays mainifold and delauney-ish along the way.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/F0bBwHPXoAA5uh-.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/F0bBwHPXoAA5uh-.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1670790425232175108",
+    "topic": "混合六边形",
+    "author": "OskSta",
+    "date": "Mon Jun 19 13:47:33 +0000 2023",
+    "url": "https://x.com/OskSta/status/1670790425232175108",
+    "text": "I'm prepping for a talk in Cambridge next week, thus all the gifs. I made my generator also output pure triangle/hex and square grids, to illustrate why I'm going for my mixed approach.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/Fy_WMiFXwAADO_P.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/Fy_WMiFXwAADO_P.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1670720537662836736",
+    "topic": "软硬与描边",
+    "author": "OskSta",
+    "date": "Mon Jun 19 09:09:51 +0000 2023",
+    "url": "https://x.com/OskSta/status/1670720537662836736",
+    "text": "I smooth my mesh according to an edge type hierarchy. Black is hard, red is game-tile-border and blue is material-border. Verts only get to pull at equal or lower order verts, and only along the appropriate edges",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/Fy-VDNXXgAQAIUf.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/Fy-VDNXXgAQAIUf.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1669315384619540487",
+    "topic": "构建岛屿",
+    "author": "OskSta",
+    "date": "Thu Jun 15 12:06:16 +0000 2023",
+    "url": "https://x.com/OskSta/status/1669315384619540487",
+    "text": "The generator consistently spits out pretty cool islands now",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FyqZFcDX0AI72vb.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FyqZFcDX0AI72vb.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1482346496460828674",
+    "topic": "岛屿整体生成",
+    "author": "OskSta",
+    "date": "Sat Jan 15 13:38:40 +0000 2022",
+    "url": "https://x.com/OskSta/status/1482346496460828674",
+    "text": "I created a dedicated contrast texture system for the lines: an iterative simulation on the triangles that starts random and then tries to make contrasted edges different, and non-contrasted edges similar. A byproduct is a beautiful color gradient that help express connectivity",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FJJYfP-WUAYsoWb.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FJJYfP-WUAYsoWb.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1648377135524986950",
+    "topic": "六边形构建",
+    "author": "OskSta",
+    "date": "Tue Apr 18 17:25:09 +0000 2023",
+    "url": "https://x.com/OskSta/status/1648377135524986950",
+    "text": "The correct way to draw free hand hexagon grids",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "video",
+        "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/720x720/898nzhJ-WCRtUiA7.mp4?tag=12",
+        "thumbnail": "https://pbs.twimg.com/ext_tw_video_thumb/1648376992218202148/pu/img/jRv0SXmfeVHCaaUB.jpg",
+        "width": 720,
+        "height": 720
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1590669875869286400",
+    "topic": "放置草丛",
+    "author": "OskSta",
+    "date": "Thu Nov 10 11:37:06 +0000 2022",
+    "url": "https://x.com/OskSta/status/1590669875869286400",
+    "text": "An early look at grass billboards. I really like how they add a completely new kind of shape and detail frequency.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FhMwp-iWAAUnKqV.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FhMwp-iWAAUnKqV.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1582757294672314368",
+    "topic": "移动光源与茂密植被（同一链接两个关注点）",
+    "author": "OskSta",
+    "date": "Wed Oct 19 15:35:19 +0000 2022",
+    "url": "https://x.com/OskSta/status/1582757294672314368",
+    "text": "I'm seeing if my light volume approach can work with point lights too. The low resolution is noticeable for sure. Especially when you move em around like this. But if you keep em big and soft and somewhat still I think it's gonna be good.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FfcUj__XgAAYoM7.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FfcUj__XgAAYoM7.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1579474420749725696",
+    "topic": "大地势生成",
+    "author": "OskSta",
+    "date": "Mon Oct 10 14:10:21 +0000 2022",
+    "url": "https://x.com/OskSta/status/1579474420749725696",
+    "text": "I'm back on the island generation",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/Fetrat3XoAEjANH.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/Fetrat3XoAEjANH.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1579478470098243584",
+    "topic": "复杂地势生成",
+    "author": "OskSta",
+    "date": "Mon Oct 10 14:26:27 +0000 2022",
+    "url": "https://x.com/OskSta/status/1579478470098243584",
+    "text": "To make the cliffs look more organic, I'm doing some pretty radical cage deformation on the cells.",
+    "replyingTo": "1579474420749725696",
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FetumNKXkAI3ERh.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FetumNKXkAI3ERh.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1534809424619089921",
+    "topic": "构建城堡",
+    "author": "NXTBLD",
+    "date": "Thu Jun 09 08:07:36 +0000 2022",
+    "url": "https://x.com/NXTBLD/status/1534809424619089921",
+    "text": "What can the AEC industry learn from the games sector? \n@OskSta explores the technology, design and aesthetics behind Townscaper, the digital town building toy. \n\nLondon, 21 June. Book your place now. \nhttps://nxtbld.com/tickets-2022/?utm_campaign=meetedgar&utm_medium=social&utm_source=meetedgar.com\n\n#NXTBLD #townscaper",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "video",
+        "url": "https://video.twimg.com/ext_tw_video/1534809282973147136/pu/vid/1280x720/9gnvoPxMenBscH4z.mp4?tag=12",
+        "thumbnail": "https://pbs.twimg.com/ext_tw_video_thumb/1534809282973147136/pu/img/L8AkAzLegjPRd4yW.jpg",
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1482011744843223042",
+    "topic": "崖壁地形",
+    "author": "OskSta",
+    "date": "Fri Jan 14 15:28:29 +0000 2022",
+    "url": "https://x.com/OskSta/status/1482011744843223042",
+    "text": "Ok, I stumbled on a pretty cool art style now. Here, I'm creating pixel thin lines from contrasts in my procedural normal map. I should probably move to a bespoke contrast texture (to get more deliberate control over the lines). But I gotta say this looks pretty promising.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FJEo5JOXEAwNgOX.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FJEo5JOXEAwNgOX.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1479185088839659530",
+    "topic": "旧城地势生成",
+    "author": "OskSta",
+    "date": "Thu Jan 06 20:16:21 +0000 2022",
+    "url": "https://x.com/OskSta/status/1479185088839659530",
+    "text": "So, this is not the style I'm going for with this, but I though it was interesting. Now properly UV mapped, I can procedurally paint my procedural islands in world space. Here, I'm just painting the normals back on in blotches, transforming a low poly look to a sculpted clay look",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FIcd2TWX0AYuk3p.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FIcd2TWX0AYuk3p.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1458921394855718917",
+    "topic": "球面分布",
+    "author": "OskSta",
+    "date": "Thu Nov 11 22:15:40 +0000 2021",
+    "url": "https://x.com/OskSta/status/1458921394855718917",
+    "text": "I'm exploring the Half Edge data structure. Feels like a really lightweight, powerful and versatile way of representing topology. A big thanks to everyone suggesting I look into it.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FD8ghMeWUAIaam-.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FD8ghMeWUAIaam-.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1384958097542819845",
+    "topic": "整个场景连接",
+    "author": "OskSta",
+    "date": "Wed Apr 21 19:51:56 +0000 2021",
+    "url": "https://x.com/OskSta/status/1384958097542819845",
+    "text": "I wrote a script to trace topologically straight lines across the Townscaper grid. I think I'll use it for a thing in the gamepad controls and possibly some drag-to-paint mode.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/EzhbXsYXIAIJFaX.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/EzhbXsYXIAIJFaX.jpg",
+        "width": 512,
+        "height": 512
+      }
+    ],
+    "code": 200
+  }
+]

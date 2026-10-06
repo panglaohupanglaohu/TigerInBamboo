@@ -1,0 +1,137 @@
+{
+  "passed": true,
+  "cellCount": 398,
+  "pairedCells": 6,
+  "pairs": 3,
+  "pickedOwners": [
+    {
+      "ix": 0,
+      "iy": 0,
+      "iz": 1,
+      "char": "3",
+      "regionId": "left-mid-yellow",
+      "top": false
+    },
+    {
+      "ix": 0,
+      "iy": 1,
+      "iz": 1,
+      "char": "3",
+      "regionId": "left-mid-yellow",
+      "top": false
+    }
+  ],
+  "otherRegionsAndFoundationsIdentical": true,
+  "otherTargetRegionOwnersIdentical": true,
+  "solver": {
+    "hash": "da496c05",
+    "fixedOutsideCells": 27,
+    "wrongUpperOrientationRejected": true
+  },
+  "closedEdges": 432,
+  "fullTraversalAccepted": false,
+  "exactTriangleDistance": {
+    "triangles": 144,
+    "groundTriangles": 6,
+    "capsules": 513,
+    "step": 0.04,
+    "minSampleMargin": 0.09799999713897706,
+    "interiorMinSampleMargin": 0.09799999713897706,
+    "interiorGuaranteedBetweenSampleMargin": 0.07799999713897705,
+    "approachClearanceFailures": 0,
+    "entryVolumeChecks": 0,
+    "entryAabbTests": 9261,
+    "guaranteedFullRouteBodyMargin": 0.07799999713897705,
+    "scope": "whole-scene obstacle triangles for three routes and one metre approaches; low ground-contact surfaces excluded; support independently fails"
+  },
+  "measuredInnerHeights": [
+    2.15653373965366,
+    2.3000000298023227,
+    2.15653373965366,
+    2.15653373965366,
+    2.3000000298023227,
+    2.15653373965366,
+    2.15653373965366,
+    2.3000000298023227,
+    2.15653373965366
+  ],
+  "approachSupport": {
+    "passed": false,
+    "unsupportedSamples": 336,
+    "examples": [
+      [
+        -15.4,
+        3.35,
+        -0.38
+      ],
+      [
+        -15.05,
+        3.35,
+        -0.38
+      ],
+      [
+        -15.75,
+        3.35,
+        -0.38
+      ],
+      [
+        -15.4,
+        3.35,
+        -0.030000000000000027
+      ],
+      [
+        -15.4,
+        3.35,
+        -0.73
+      ]
+    ],
+    "reason": "left fixed quay is 2.70m below aperture; existing seawall-plinth is .095m below; no foundation modified",
+    "supportStepCriterion": 0.01,
+    "fullySupportedCenterRouteHalfLength": 1.6,
+    "actualGroundSamples": [
+      {
+        "x": -15.4,
+        "height": 0.6499999761581421,
+        "gap": 2.700000023841858,
+        "mesh": "irregular-quay"
+      },
+      {
+        "x": -14.5,
+        "height": 3.344999988079071,
+        "gap": 0.005000011920929026,
+        "mesh": "town-seawall"
+      },
+      {
+        "x": -14.25,
+        "height": 3.255000011920929,
+        "gap": 0.09499998807907106,
+        "mesh": "town-seawall-plinth"
+      },
+      {
+        "x": -14,
+        "height": 3.3499999046325684,
+        "gap": 9.536743172944284e-8,
+        "mesh": "court-left-support"
+      },
+      {
+        "x": -9.2,
+        "height": 3.3499999046325684,
+        "gap": 9.536743172944284e-8,
+        "mesh": "court-left-support"
+      }
+    ]
+  },
+  "undoRedoExact": true,
+  "repeatedPairRebuilds": 20,
+  "retainedResourceCount": [
+    1157,
+    83
+  ],
+  "lowerDeletionRejectedWithMessage": true,
+  "upperDeletionRetiresPairs": true,
+  "saveSchemaUnchanged": true,
+  "oldPass1CapsuleMargin": -0.23282247224793357,
+  "thinCeilingRejected": true,
+  "existingControllerInteriorSteps": 120,
+  "gameplayAndGPUAccepted": false
+}

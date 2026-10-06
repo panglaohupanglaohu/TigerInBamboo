@@ -12,7 +12,7 @@ import time
 PROJECT = Path(__file__).resolve().parents[2]
 DEFAULT_ARCHIVE = PROJECT.parent.parent / 'TigerMessenger-Archive'
 EXTENSIONS = {'.png', '.jpg', '.jpeg', '.webp', '.mp4', '.blend', '.blend1', '.blend2', '.glb', '.gltf', '.zip', '.exr'}
-PINNED = {'city-gate-expansion', 'crystal-twelve-clusters', 'holy-city-style-v2', 'tiger-target-v1-ten-rounds', 'swamp-v2-fifty-rounds'}
+PINNED = {'city-gate-expansion', 'crystal-twelve-clusters', 'holy-city-style-v2', 'tiger-target-v1-ten-rounds', 'swamp-v2-fifty-rounds', 'citadel-living-slopes', 'old-tower-crown', 'citadel-vegetation', 'citadel-landform-rebuild'}
 
 def digest(path):
     h = hashlib.sha256()
@@ -74,7 +74,9 @@ def main():
             if base.name == 'optimized' and p.suffix.lower() not in {'.blend', '.blend1', '.blend2'}:
                 continue
             rel = p.relative_to(PROJECT)
-            if PINNED.intersection(rel.parts) or 'target' in p.name.lower():
+            if (PINNED.intersection(rel.parts)
+                    or any('target' in part.lower() for part in rel.parts)
+                    or 'approved' in p.name.lower()):
                 continue
             stat = p.stat()
             if stat.st_mtime > cutoff:

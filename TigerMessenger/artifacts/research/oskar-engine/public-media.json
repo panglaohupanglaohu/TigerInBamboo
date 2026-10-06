@@ -1,0 +1,264 @@
+[
+  {
+    "id": "1590669875869286400",
+    "index": 0,
+    "src": "https://video.twimg.com/tweet_video/FhMwp-iWAAUnKqV.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/FhMwp-iWAAUnKqV.jpg",
+    "context": "An early look at grass billboards. I really like how they add a completely new kind of shape and detail frequency.  ",
+    "frames": [
+      {
+        "t": 0.44100000000000006,
+        "file": "video-0-frame-0.png"
+      },
+      {
+        "t": 2.4696000000000002,
+        "file": "video-0-frame-1.png"
+      },
+      {
+        "t": 4.498200000000001,
+        "file": "video-0-frame-2.png"
+      },
+      {
+        "t": 6.5268000000000015,
+        "file": "video-0-frame-3.png"
+      }
+    ],
+    "duration": 8.82,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1590669875869286400.html",
+    "title": "Grass on terraces"
+  },
+  {
+    "id": "1590669875869286400",
+    "index": 1,
+    "src": "https://video.twimg.com/tweet_video/FhM0u7qWAAEXgH4.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/FhM0u7qWAAEXgH4.jpg",
+    "context": "In the vertex shader, my grass gets to sample that contrast texture both where they stand, and also raycast into the background. The outline strength is determined by the difference between these two samples!\n\nNot perfect, but pretty good! Not too jittery when turning the camera  ",
+    "frames": [
+      {
+        "t": 0.333,
+        "file": "video-1-frame-0.png"
+      },
+      {
+        "t": 1.8648000000000002,
+        "file": "video-1-frame-1.png"
+      },
+      {
+        "t": 3.3966000000000003,
+        "file": "video-1-frame-2.png"
+      },
+      {
+        "t": 4.928400000000001,
+        "file": "video-1-frame-3.png"
+      }
+    ],
+    "duration": 6.66,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1590669875869286400.html",
+    "title": "Grass contrast debugging"
+  },
+  {
+    "id": "1590669875869286400",
+    "index": 2,
+    "src": "https://video.twimg.com/tweet_video/Fy1Chb6WYAI5lyc.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/Fy1Chb6WYAI5lyc.jpg",
+    "context": "I figured out how to mimic Thread.Sleep() in Burst! Just store time in a static unsafe NativeArray! Then you can write to it from the main thread and read from it inside a job! Probably super bad in many ways but good enough for visualization and debug! ",
+    "frames": [
+      {
+        "t": 1.1415,
+        "file": "video-2-frame-0.png"
+      },
+      {
+        "t": 6.3924,
+        "file": "video-2-frame-1.png"
+      },
+      {
+        "t": 11.6433,
+        "file": "video-2-frame-2.png"
+      },
+      {
+        "t": 16.8942,
+        "file": "video-2-frame-3.png"
+      }
+    ],
+    "duration": 22.83,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1590669875869286400.html",
+    "title": "Generation visualization"
+  },
+  {
+    "id": "1590669875869286400",
+    "index": 3,
+    "src": "https://video.twimg.com/tweet_video/FD8ghMeWUAIaam-.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/FD8ghMeWUAIaam-.jpg",
+    "context": "I'm exploring the Half Edge data structure. Feels like a really lightweight, powerful and versatile way of representing topology. A big thanks to everyone suggesting I look into it. ",
+    "frames": [
+      {
+        "t": 3.657,
+        "file": "video-3-frame-0.png"
+      },
+      {
+        "t": 20.479200000000002,
+        "file": "video-3-frame-1.png"
+      },
+      {
+        "t": 37.3014,
+        "file": "video-3-frame-2.png"
+      },
+      {
+        "t": 54.12360000000001,
+        "file": "video-3-frame-3.png"
+      }
+    ],
+    "duration": 73.14,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1590669875869286400.html",
+    "title": "Planar topology"
+  },
+  {
+    "id": "1590669875869286400",
+    "index": 4,
+    "src": "https://video.twimg.com/tweet_video/FBh3MF8WQAMH7C6.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/FBh3MF8WQAMH7C6.jpg",
+    "context": "Imma talk about my new island generator at Sweden Game Conference (@SwedenGameArena) on Friday (no idea if its gonna be recorded). Naturally, I'm preparing by implementing some nice timing and visualization. ",
+    "frames": [
+      {
+        "t": 2.0805000000000002,
+        "file": "video-4-frame-0.png"
+      },
+      {
+        "t": 11.6508,
+        "file": "video-4-frame-1.png"
+      },
+      {
+        "t": 21.2211,
+        "file": "video-4-frame-2.png"
+      },
+      {
+        "t": 30.791400000000003,
+        "file": "video-4-frame-3.png"
+      }
+    ],
+    "duration": 41.61,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1590669875869286400.html",
+    "title": "Island solver"
+  },
+  {
+    "id": "1590669875869286400",
+    "index": 5,
+    "src": "https://video.twimg.com/tweet_video/FBZ-TxLWQAAhNYv.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/FBZ-TxLWQAAhNYv.jpg",
+    "context": "I regret to inform you that I've relapsed into procedural island generation ",
+    "frames": [
+      {
+        "t": 2.214,
+        "file": "video-5-frame-0.png"
+      },
+      {
+        "t": 12.398400000000002,
+        "file": "video-5-frame-1.png"
+      },
+      {
+        "t": 22.582800000000002,
+        "file": "video-5-frame-2.png"
+      },
+      {
+        "t": 32.7672,
+        "file": "video-5-frame-3.png"
+      }
+    ],
+    "duration": 44.28,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1590669875869286400.html",
+    "title": "Early tiered islands"
+  },
+  {
+    "id": "1590669875869286400",
+    "index": 6,
+    "src": "https://video.twimg.com/tweet_video/FBaBzgvXMAImk_m.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/FBaBzgvXMAImk_m.jpg",
+    "context": "I'm able to do a couple of things here I've always wanted to, but never been able to before: - Properly combine seamless soft slopes with distinct sharp cliffs. - Erosion valid terrain with no local minimums. - Get the best of both square tiles and triangular tiles ",
+    "frames": [
+      {
+        "t": 2.8035,
+        "file": "video-6-frame-0.png"
+      },
+      {
+        "t": 15.699600000000002,
+        "file": "video-6-frame-1.png"
+      },
+      {
+        "t": 28.5957,
+        "file": "video-6-frame-2.png"
+      },
+      {
+        "t": 41.491800000000005,
+        "file": "video-6-frame-3.png"
+      }
+    ],
+    "duration": 56.07,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1590669875869286400.html",
+    "title": "Slopes and cliffs",
+    "observation": "Only first sampled frame contains terrain; others dark. No behavioral inference from dark frames."
+  },
+  {
+    "id": "1670790425232175108",
+    "index": 0,
+    "src": "https://video.twimg.com/tweet_video/Fy_WMiFXwAADO_P.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/Fy_WMiFXwAADO_P.jpg",
+    "context": "I'm prepping for a talk in Cambridge next week, thus all the gifs. I made my generator also output pure triangle/hex and square grids, to illustrate why I'm going for my mixed approach.  ",
+    "frames": [
+      {
+        "t": 1.4100000000000001,
+        "file": "video-7-frame-0.png"
+      },
+      {
+        "t": 7.896000000000001,
+        "file": "video-7-frame-1.png"
+      },
+      {
+        "t": 14.382,
+        "file": "video-7-frame-2.png"
+      },
+      {
+        "t": 20.868000000000002,
+        "file": "video-7-frame-3.png"
+      }
+    ],
+    "duration": 28.2,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1670790425232175108.html",
+    "title": "Grid comparison"
+  },
+  {
+    "id": "1670790425232175108",
+    "index": 1,
+    "src": "https://video.twimg.com/tweet_video/Fy_Z73pWcAUuVTZ.mp4",
+    "poster": "https://pbs.twimg.com/tweet_video_thumb/Fy_Z73pWcAUuVTZ.jpg",
+    "context": "Oh, and I finally got this lovely rock feature to show up! When working with WFC, sometimes you build a cool tile and it wont show up in forever, since it's conditions are so specific. You forget about it, and then suddenly: poof!  ",
+    "frames": [
+      {
+        "t": 0.37050000000000005,
+        "file": "video-8-frame-0.png"
+      },
+      {
+        "t": 2.0748,
+        "file": "video-8-frame-1.png"
+      },
+      {
+        "t": 3.7791,
+        "file": "video-8-frame-2.png"
+      },
+      {
+        "t": 5.4834000000000005,
+        "file": "video-8-frame-3.png"
+      }
+    ],
+    "duration": 7.41,
+    "inspection": "Four sampled times inspected, not full-duration viewing",
+    "sourcePage": "https://threadreaderapp.com/thread/1670790425232175108.html",
+    "title": "Special rock feature"
+  }
+]

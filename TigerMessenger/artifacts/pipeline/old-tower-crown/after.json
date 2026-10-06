@@ -1,0 +1,9 @@
+{
+  "tower": "highland-central-sacred-tower",
+  "errors": [],
+  "warnings": [
+    "[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface",
+    "[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate",
+    "[citadel] alignReleasedLighting 跳过: Cannot read properties of undefined (reading 'supports')"
+  ]
+}

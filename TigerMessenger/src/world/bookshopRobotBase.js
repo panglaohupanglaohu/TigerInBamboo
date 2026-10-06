@@ -1,3 +1,4 @@
+import {buildBookshopHarborRunway} from './bookshopHarborRunway.js';
 import {installBookshopWarmLighting} from './bookshopWarmLighting.js';
 import {createBookshopGroundSampler} from './bookshopGroundSampler.js';
 import {animateArticulatedRobot} from '../assets/robotArticulation.js';
@@ -51,6 +52,7 @@ export function installBookshopRobots({scene,bookshop,colliders,platforms,R=160}
  buildBookshopFactoryBase({root,districts,R,colliders});
  buildBookshopFreightSpurs({root,districts,R});
  buildFactoryLoadingYards({districts,R,platforms});
+ buildBookshopHarborRunway({root,districts,R});
  const steamUpdate=installFactorySteam(districts,R),previousUpdate=root.userData.update;root.userData.update=(dt,t)=>{previousUpdate?.(dt,t);steamUpdate(t);for(const m of models)animateArticulatedRobot(m,m.userData.defensePose?{...m.userData.defensePose,time:t}:{time:t,state:'idle'});};
  buildBookshopBaseServices({root,R,colliders});
  const updateLighting=installBookshopWarmLighting({root,districts,bookshop,R});

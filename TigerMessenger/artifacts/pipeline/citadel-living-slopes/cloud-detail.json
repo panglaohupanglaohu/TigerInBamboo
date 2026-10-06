@@ -1,0 +1,20 @@
+{
+  "particles": 384,
+  "spawnCells": 29,
+  "nx": 31,
+  "nz": 22,
+  "step": 8,
+  "validCells": 68,
+  "samples": 682,
+  "spawnBounds": {
+    "minX": -74,
+    "maxX": 46,
+    "minZ": -53,
+    "maxZ": -5
+  },
+  "source": "final rendered rock surfaces",
+  "method": "cached terrain field and wind advection; project shader",
+  "active": 352,
+  "unsupported": 25,
+  "alphaSum": 77.93675264948979
+}

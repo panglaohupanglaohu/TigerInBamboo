@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {RELEASE_ENABLED,resolveMountainParams,MOUNTAIN_RELEASE_PARAMS} from '../../src/world/citadel/mountainRelease.js';
+import {rockSurfaceOptions} from '../../src/world/citadel/mountainRockNormals.js';
+import {mountainLightOptions} from '../../src/world/citadel/mountainLightField.js';
+for(const query of['','?citadelTurfPass=0&citadelRockDetail=.7','?citadelRockRelief=&citadelRidgePass=weird','?citadelMountainRelease=0'])assert.equal(resolveMountainParams(query,{enabled:false}).params.toString(),new URLSearchParams(query).toString());
+assert.deepEqual(rockSurfaceOptions('?citadelMountainRelease=0'),{pass:0,bump:.38,relief:.65});assert.deepEqual(mountainLightOptions('?citadelMountainRelease=0'),{light:false,occlusion:true,palette:0,resolution:128});
+const preview=resolveMountainParams('?citadelMountainRelease=1');for(const[k,v]of Object.entries(MOUNTAIN_RELEASE_PARAMS))assert.equal(preview.params.get(k),v);assert.equal(preview.mode,RELEASE_ENABLED?'release-defaults':'explicit-candidate-preview');assert.equal(preview.releaseEnabled,RELEASE_ENABLED);
+const future=resolveMountainParams('',{enabled:true});for(const[k,v]of Object.entries(MOUNTAIN_RELEASE_PARAMS))assert.equal(future.params.get(k),v);const old=resolveMountainParams('?citadelMountainRelease=0',{enabled:true});assert.equal(old.params.get('citadelTurfPass'),null);
+for(const key of Object.keys(MOUNTAIN_RELEASE_PARAMS)){const q=resolveMountainParams(`?${key}=0`,{enabled:true});assert.equal(q.params.get(key),'0');}assert.equal(resolveMountainParams('?citadelRockRelief=',{enabled:true}).params.get('citadelRockRelief'),'');
+const resolvedRock=rockSurfaceOptions('?citadelMountainRelease=1');assert.equal(resolvedRock.pass,4);assert.equal(resolvedRock.bump,.12);assert.equal(resolvedRock.relief,.22);if(MOUNTAIN_RELEASE_PARAMS.citadelRockDetail)assert.equal(resolvedRock.detail,Number(MOUNTAIN_RELEASE_PARAMS.citadelRockDetail));else assert.equal(resolvedRock.detail,undefined);
+assert.deepEqual(rockSurfaceOptions(''),RELEASE_ENABLED?resolvedRock:rockSurfaceOptions('?citadelMountainRelease=0'));
+assert.deepEqual(mountainLightOptions(''),mountainLightOptions(RELEASE_ENABLED?'?citadelMountainRelease=1':'?citadelMountainRelease=0'));
+assert.deepEqual(mountainLightOptions('?citadelMountainRelease=1'),{light:false,occlusion:true,palette:Number(MOUNTAIN_RELEASE_PARAMS.citadelMountainPalette),resolution:128});
+console.log(JSON.stringify({pass:true,releaseEnabled:RELEASE_ENABLED,legacyQueriesUnchanged:true,explicitZeroPreserved:true,emptyValuePreserved:true,releaseZeroFallsBack:true,manifest:MOUNTAIN_RELEASE_PARAMS}));

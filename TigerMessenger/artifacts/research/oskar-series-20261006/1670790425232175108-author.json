@@ -1,0 +1,136 @@
+{
+  "code": 200,
+  "message": "OK",
+  "tweet": {
+    "url": "https://x.com/OskSta/status/1670790425232175108",
+    "id": "1670790425232175108",
+    "text": "I'm prepping for a talk in Cambridge next week, thus all the gifs. I made my generator also output pure triangle/hex and square grids, to illustrate why I'm going for my mixed approach.",
+    "raw_text": {
+      "text": "I'm prepping for a talk in Cambridge next week, thus all the gifs. I made my generator also output pure triangle/hex and square grids, to illustrate why I'm going for my mixed approach. https://t.co/EH7DuFY650",
+      "display_text_range": [
+        0,
+        185
+      ],
+      "facets": [
+        {
+          "type": "media",
+          "indices": [
+            186,
+            209
+          ],
+          "id": "1670789497573851136",
+          "display": "pic.x.com/EH7DuFY650",
+          "original": "https://t.co/EH7DuFY650",
+          "replacement": "https://x.com/OskSta/status/1670790425232175108/photo/1"
+        }
+      ]
+    },
+    "author": {
+      "screen_name": "OskSta",
+      "url": "https://x.com/OskSta",
+      "id": "767755917890842624",
+      "followers": 108099,
+      "following": 1407,
+      "likes": 81767,
+      "media_count": 545,
+      "name": "Oskar Stålberg",
+      "description": "Gamedev. Made @BadNorthGame and Townscaper. Both available on most platforms. Go buy em!",
+      "raw_description": {
+        "text": "Gamedev. Made @BadNorthGame and Townscaper. Both available on most platforms. Go buy em!",
+        "facets": []
+      },
+      "location": "Malmo, Sweden",
+      "banner_url": "https://pbs.twimg.com/profile_banners/767755917890842624/1532114530",
+      "avatar_url": "https://pbs.twimg.com/profile_images/767772432891510784/hDb4djkU_200x200.jpg",
+      "joined": "Mon Aug 22 16:10:49 +0000 2016",
+      "protected": false,
+      "website": {
+        "url": "http://oskarstalberg.com",
+        "display_url": "oskarstalberg.com"
+      },
+      "verification": {
+        "verified": false,
+        "verified_at": null,
+        "type": null
+      },
+      "avatar_color": null
+    },
+    "replies": 41,
+    "retweets": 289,
+    "likes": 4112,
+    "bookmarks": 305,
+    "quotes": 4,
+    "created_at": "Mon Jun 19 13:47:33 +0000 2023",
+    "created_timestamp": 1687182453,
+    "possibly_sensitive": false,
+    "views": 310452,
+    "is_note_tweet": false,
+    "community_note": null,
+    "lang": "en",
+    "replying_to": null,
+    "replying_to_status": null,
+    "media": {
+      "all": [
+        {
+          "id": "1670789497573851136",
+          "url": "https://video.twimg.com/tweet_video/Fy_WMiFXwAADO_P.mp4",
+          "thumbnail_url": "https://pbs.twimg.com/tweet_video_thumb/Fy_WMiFXwAADO_P.jpg",
+          "duration": 0,
+          "width": 640,
+          "height": 640,
+          "format": "video/mp4",
+          "type": "gif",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/tweet_video/Fy_WMiFXwAADO_P.mp4",
+              "bitrate": 0,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/tweet_video/Fy_WMiFXwAADO_P.mp4",
+              "bitrate": 0,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ],
+      "videos": [
+        {
+          "id": "1670789497573851136",
+          "url": "https://video.twimg.com/tweet_video/Fy_WMiFXwAADO_P.mp4",
+          "thumbnail_url": "https://pbs.twimg.com/tweet_video_thumb/Fy_WMiFXwAADO_P.jpg",
+          "duration": 0,
+          "width": 640,
+          "height": 640,
+          "format": "video/mp4",
+          "type": "gif",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/tweet_video/Fy_WMiFXwAADO_P.mp4",
+              "bitrate": 0,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/tweet_video/Fy_WMiFXwAADO_P.mp4",
+              "bitrate": 0,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ]
+    },
+    "source": "Twitter Web App",
+    "twitter_card": "player",
+    "color": null,
+    "provider": "twitter",
+    "reposted_by": null
+  }
+}

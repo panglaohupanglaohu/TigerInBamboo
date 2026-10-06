@@ -1,0 +1,90 @@
+{
+  "stage": "after bay map; before landform",
+  "selected": {
+    "triangles": 768,
+    "medianAspect": 16.97330394529564,
+    "p95Aspect": 164.88552341045545,
+    "maxAspect": 190.1033969301606,
+    "worst": [
+      {
+        "face": 4676,
+        "source": 4317,
+        "aspect": 169.0319497253817,
+        "height": 4.054029651194155,
+        "longest": 4.533070843219722
+      },
+      {
+        "face": 4732,
+        "source": 4317,
+        "aspect": 169.09281320461014,
+        "height": 4.618204037016936,
+        "longest": 5.139395713341692
+      },
+      {
+        "face": 4705,
+        "source": 4317,
+        "aspect": 169.4374045194096,
+        "height": 4.343474814558873,
+        "longest": 4.843489657505557
+      },
+      {
+        "face": 4674,
+        "source": 4317,
+        "aspect": 169.76816986490763,
+        "height": 4.562087177275968,
+        "longest": 5.078849131517023
+      },
+      {
+        "face": 4800,
+        "source": 4317,
+        "aspect": 190.1033969301606,
+        "height": 5.016177051349217,
+        "longest": 5.579629576011533
+      }
+    ]
+  },
+  "transition": {
+    "triangles": 123,
+    "medianAspect": 22.413159081735834,
+    "p95Aspect": 208.01982187609062,
+    "maxAspect": 566.9974261035125,
+    "worst": [
+      {
+        "face": 4382,
+        "source": 4099,
+        "aspect": 233.3822935507827,
+        "height": 23.901201285515523,
+        "longest": 26.48857033853798
+      },
+      {
+        "face": 5140,
+        "source": 4534,
+        "aspect": 235.5086097832822,
+        "height": 19.53092298937079,
+        "longest": 22.136892140357272
+      },
+      {
+        "face": 5141,
+        "source": 4534,
+        "aspect": 329.56296384667985,
+        "height": 20.785809472010467,
+        "longest": 23.5688178812036
+      },
+      {
+        "face": 5142,
+        "source": 4534,
+        "aspect": 457.480278166136,
+        "height": 21.96136240285116,
+        "longest": 24.91748853980297
+      },
+      {
+        "face": 5143,
+        "source": 4534,
+        "aspect": 566.9974261035125,
+        "height": 23.057294319781327,
+        "longest": 26.182645940237194
+      }
+    ]
+  },
+  "limitation": "Aspect alone does not identify exact rendered crease; downstream final face correspondence not exported for r17."
+}

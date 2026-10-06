@@ -6,6 +6,7 @@ import {applyJunctionHarbor} from "../../world/junctionHarbor.js";
 import {installCanalJunctionTarget} from "../../world/canalJunctionTarget.js";
 import {dockFrontHarborPatrol} from '../../world/citadel/frontHarborBerth.js';
 import { buildChristchurchTramSystem } from "../../world/tramSystem.js";
+import {targetCliffTransitEnabled} from '../../world/citadel/targetCityRelease.js';
 import { carveHillsForTrack } from "../../world/hills.js";
 import { buildWorldCanal, buildCanalJunctionBox } from "../../world/canalSystem.js";
 import { buildCanalLakeLink } from "../../world/canalLakeLink.js";
@@ -34,8 +35,8 @@ import { compileWaterRoutes } from "../../world/waterV8/curvedWaterCompiler.js";
 import { createWaterRouteFleet } from "../../world/waterV8/waterRouteFleet.js";
 import { buildOceanPatrolCurve, OFFICIAL_OCEAN_SEA_LEVEL } from "../../world/waterV8/officialOcean.js";
 
-export function loadTram({ scene, R, hills, camp, grandTopTarget }) {
-  const tramSystem = buildChristchurchTramSystem(scene, R, { beamTarget: grandTopTarget });
+export function loadTram({ scene, R, hills, camp, grandTopTarget, citadelEastGlobalCrossing = null }) {
+  const tramSystem = buildChristchurchTramSystem(scene, R, { beamTarget: grandTopTarget, citadelCliffTransit: targetCliffTransitEnabled(), citadelEastGlobalCrossing });
   carveHillsForTrack(hills.mesh, [tramSystem.curve, ...Object.values(tramSystem.curves || {})], R);
   {
     const trackPts = [tramSystem.curve, ...Object.values(tramSystem.curves || {})].flatMap((c) => c.getPoints(320));

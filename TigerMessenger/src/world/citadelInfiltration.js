@@ -437,8 +437,8 @@ export function createCitadelNightInfiltration({
   captureTarget = null,
   events = null, // P0 · 可选 CombatEventLog（本模块零随机，时间轴天然可重放）
 }) {
-  _up.copy(siteUp).normalize();
-  _right.copy(siteRight).normalize();
+  const _up = siteUp.clone().normalize();
+  const _right = siteRight.clone().normalize();
   // 站点右向量：build/rebuild 巡查计划专用。_right 会被 setHeading 当作
   // scratch 覆盖（见下），不能在下一次 rebuildPlans 时再依赖它。
   const _siteRight = _right.clone();
@@ -460,6 +460,7 @@ export function createCitadelNightInfiltration({
     roughness: 0.95,
     flatShading: true,
   });
+  let placementRevision = 0;
   const baseGround = horseGround.clone().addScaledVector(_up, 0.08);
   const baseRoutes = {
     waterfall: makePath([baseGround, ...(waterfallRoute || [])]),
@@ -703,6 +704,7 @@ export function createCitadelNightInfiltration({
 
   /** 地形编辑器热重建后刷新路线（citadelRange 在 rebuildWaterTerraces 里调用）。 */
   const setRoutes = (next = {}) => {
+    placementRevision++;
     if (Array.isArray(next.waterfallRoute)) _waterfallRoute = next.waterfallRoute.slice();
     if (Array.isArray(next.stairRoute)) _stairRoute = next.stairRoute.slice();
     if (Array.isArray(next.stairTransferRoutes)) {
@@ -1474,5 +1476,72 @@ export function createCitadelNightInfiltration({
     descentOrder: records.map((record) => record.soldier.name),
   });
 
-  return { root, update, reset: resetForDay, setRoutes, getState: root.userData.getState };
+  // Explicit idle-only relocation transaction. The original actor and its children
+  // remain intact. World-space input; external placement/range metadata belongs
+  // to the caller and must be committed only after ok:true.
+  const safeToRelocate = () => !active && !returning && !previousNight
+    && records.every(r => !r.soldier.visible && !r.javelin);
+  const finiteVector = v => v?.isVector3 && v.toArray().every(Number.isFinite);
+  const snapshotPlacement = () => ({
+    position:horse.position.clone(), quaternion:horse.quaternion.clone(), scale:horse.scale.clone(),
+    baseQuat:horse.userData.baseQuat?.clone(), ground:baseGround.clone(), up:_up.clone(), right:_siteRight.clone(),
+    waterfall:_waterfallRoute, stairs:_stairRoute, transfer:_stairTransferRoutes, surface:_patrolSurfacePoint,captureTarget,
+    routes:{...baseRoutes}, targets:terraceTargets, anchors:descentAnchors.map(p=>p.clone()),
+    records:records.map(r=>({anchor:r.anchor.clone(),drop:r.dropTarget.clone(),path:r.path,plan:r.patrolPlan,duration:r.moveDuration})),
+    groups:groups.map(g=>({...g.userData})),
+  });
+  const restorePlacement = s => {
+    horse.position.copy(s.position);horse.quaternion.copy(s.quaternion);horse.scale.copy(s.scale);
+    if(s.baseQuat)horse.userData.baseQuat=s.baseQuat.clone();else delete horse.userData.baseQuat;
+    horse.updateWorldMatrix(true,true);baseGround.copy(s.ground);_up.copy(s.up);_siteRight.copy(s.right);
+    _waterfallRoute=s.waterfall;_stairRoute=s.stairs;_stairTransferRoutes=s.transfer;_patrolSurfacePoint=s.surface;captureTarget=s.captureTarget;
+    Object.assign(baseRoutes,s.routes);terraceTargets=s.targets;
+    descentAnchors.forEach((p,i)=>p.copy(s.anchors[i]));
+    records.forEach((r,i)=>{const v=s.records[i];r.anchor.copy(v.anchor);r.dropTarget.copy(v.drop);r.path=v.path;r.patrolPlan=v.plan;r.moveDuration=v.duration;});
+    groups.forEach((g,i)=>Object.assign(g.userData,s.groups[i]));
+    root.userData.patrolTargetsByTerrace=terraceTargets;
+  };
+  const relocateGround = (next = {}) => {
+    if(!safeToRelocate())return {ok:false,reason:'not-idle-daytime'};
+    const position=next.worldPosition, ground=next.horseGround, up=next.siteUp||_up, right=next.siteRight||_siteRight;
+    const quaternion=next.worldQuaternion;
+    const routeOK=a=>Array.isArray(a)&&a.length>0&&a.every(finiteVector);
+    if(!finiteVector(position)||!finiteVector(ground)||!finiteVector(up)||!finiteVector(right)
+      ||up.lengthSq()<1e-10||right.clone().cross(up).lengthSq()<1e-10
+      ||!quaternion?.isQuaternion||!quaternion.toArray().every(Number.isFinite)||quaternion.lengthSq()<1e-10
+      ||!routeOK(next.stairRoute)||!Array.isArray(next.waterfallRoute)||!next.waterfallRoute.every(finiteVector))
+      return {ok:false,reason:'invalid-placement-or-routes'};
+    if(next.captureTarget!==undefined&&!finiteVector(next.captureTarget))return {ok:false,reason:'invalid-capture-target'};
+    if(next.stairTransferRoutes!==undefined&&(!Array.isArray(next.stairTransferRoutes)||!next.stairTransferRoutes.every(r=>routeOK(r.points))))return {ok:false,reason:'invalid-transfer-routes'};
+    if(next.patrolSurfacePoint!==undefined&&typeof next.patrolSurfacePoint!=='function')return {ok:false,reason:'invalid-surface-callback'};
+    // Require a rigid parent frame: decompose under non-uniform/sheared parents
+    // could change the actor scale or attachment shape during relocation.
+    horse.parent?.updateWorldMatrix(true,false);
+    const ps=horse.parent?.getWorldScale(new THREE.Vector3())||new THREE.Vector3(1,1,1);
+    if(Math.max(ps.x,ps.y,ps.z)-Math.min(ps.x,ps.y,ps.z)>1e-6||Math.min(ps.x,ps.y,ps.z)<=0)
+      return {ok:false,reason:'non-rigid-parent'};
+    const before=snapshotPlacement();
+    try {
+      const parentInverse=horse.parent?horse.parent.matrixWorld.clone().invert():new THREE.Matrix4();
+      horse.position.copy(position).applyMatrix4(parentInverse);
+      const parentQ=horse.parent?.getWorldQuaternion(new THREE.Quaternion())||new THREE.Quaternion();
+      horse.quaternion.copy(parentQ.invert().multiply(quaternion.clone().normalize()));
+      horse.userData.baseQuat=horse.quaternion.clone();horse.updateWorldMatrix(true,true);
+      _up.copy(up).normalize();_siteRight.copy(right).addScaledVector(_up,-right.dot(_up)).normalize();
+      baseGround.copy(ground).addScaledVector(_up,.08);
+      descentAnchors.forEach((p,i)=>p.copy(horse.localToWorld(new THREE.Vector3([-.72,-.24,.24,.72][i],2.46,0))));
+      records.forEach(r=>{r.anchor.copy(descentAnchors[r.ropeIndex]);const side=r.groupIndex===0?-1:1,slot=r.index%DESCENT_BATCH_SIZE;r.dropTarget.copy(baseGround).addScaledVector(_siteRight,side*.38+(slot===0?-.16:.16)).addScaledVector(_up,.02);});
+      _waterfallRoute=next.waterfallRoute.map(v=>v.clone());_stairRoute=next.stairRoute.map(v=>v.clone());
+      if(next.stairTransferRoutes)_stairTransferRoutes=next.stairTransferRoutes.map(r=>({...r,points:r.points.map(v=>v.clone())}));
+      if(next.patrolSurfacePoint)_patrolSurfacePoint=next.patrolSurfacePoint;
+      if(next.captureTarget!==undefined)captureTarget=next.captureTarget.clone();
+      rebuildPlans();root.userData.patrolTargetsByTerrace=terraceTargets;resetForDay();
+    } catch(error) {restorePlacement(before);return {ok:false,reason:'rebuild-failed',error:String(error.message||error)};}
+    const committed=++placementRevision;let rolledBack=false;
+    return {ok:true,revision:committed,horseUUID:horse.uuid,ground:baseGround.toArray(),
+      rollback(){if(rolledBack||placementRevision!==committed||!safeToRelocate())return {ok:false,reason:'stale-or-active'};restorePlacement(before);resetForDay();rolledBack=true;placementRevision++;return {ok:true};}};
+  };
+  const getPlacementState = () => ({revision:placementRevision,horseUUID:horse.uuid,baseGround:baseGround.toArray(),captureTarget:captureTarget?.toArray()||null,
+    anchors:descentAnchors.map(p=>p.toArray()),drops:records.map(r=>r.dropTarget.toArray()),safeToRelocate:safeToRelocate()});
+  return { root, update, reset: resetForDay, setRoutes, relocateGround, getPlacementState, getState: root.userData.getState };
 }

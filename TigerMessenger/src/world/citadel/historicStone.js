@@ -1,3 +1,5 @@
+import {applyCityColourStudy} from './cityColourStudy.js';
+import {preservesCitadelMaterial} from './materialOwnership.js';
 import {buildHistoricRelief} from './historicRelief.js';
 import * as THREE from 'three';
 
@@ -53,6 +55,7 @@ function stoneMask(){
  mask=new THREE.DataTexture(data,N,N);mask.wrapS=mask.wrapT=THREE.RepeatWrapping;mask.magFilter=THREE.LinearFilter;mask.minFilter=THREE.LinearMipmapLinearFilter;mask.generateMipmaps=true;mask.anisotropy=4;mask.needsUpdate=true;mask.name='historic-ashlar-masks';return mask;
 }
 function classification(o,m,root){
+ if(preservesCitadelMaterial(o,m))return null;
  if(Array.isArray(o.userData.sources)&&o.userData.sources.some(n=>skip.test(n)||/rock/.test(n)))return null;
  let district=root.name==='highland-gate'?'gate':'old',label=o.name+' '+m.name;
  for(let a=o;a&&a!==root;a=a.parent){if(skip.test(a.name))return null;if(a.name==='highland-west-city')district='new';if(!a.name.includes('assembly')&&/terrain|rock|cliff|ravine|peaks|ridge|slope/.test(a.name)&&!a.name.includes('foundation-platform')&&!label.includes('foundation-platform'))return null;if(a!==o)label+=' '+a.name;}
@@ -164,6 +167,7 @@ export function setHistoricRound(root,round){
  for(const e of s.semantic){e.m.color.copy(e.original.color);e.m.emissive.copy(e.original.emissive);e.m.emissiveIntensity=e.original.emissiveIntensity;if(s.round>=39){e.m.color.set(e.color);e.m.emissive.set(0);e.m.roughness=1;}}
  for(const g of s.relief)g.visible=s.round>=g.userData.historyRound;
  for(const e of s.meshes){const enabled=active[e.district].chips&&e.role==='stone'&&chipCandidate(e.o,e.district);if(enabled&&!e.chipped)e.chipped=chippedGeometry(e.geometry,e.district);e.o.geometry=enabled&&e.chipped?e.chipped:e.geometry;}
+ applyCityColourStudy(root);
  root.userData.historicStone=historicReport(root);return root.userData.historicStone;
 }
 export function historicReport(root){const s=states.get(root);if(!s)return null;return{round:s.round,pass:HISTORIC_PASSES[s.round-1]?.[2]||'baseline',semanticSurfaces:s.semantic.length,relief:s.relief.map(g=>({name:g.name,visible:g.visible,parts:g.userData.parts})),materials:s.materials.length,meshes:s.meshes.length,chipped:s.meshes.filter(e=>e.chipped&&e.o.geometry===e.chipped).length,districts:Object.fromEntries(['old','new','gate'].map(k=>[k,s.meshes.filter(e=>e.district===k).length])),roles:Object.fromEntries(['old','new','gate'].map(k=>[k,Object.fromEntries(['stone','paving','roof','recess','bronze'].map(r=>[r,s.materials.filter(e=>e.district===k&&e.role===r).length]))])),chipsByDistrict:Object.fromEntries(['old','new','gate'].map(k=>[k,s.meshes.filter(e=>e.district===k&&e.chipped&&e.o.geometry===e.chipped).length]))};}

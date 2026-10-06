@@ -1,0 +1,200 @@
+{
+  "rows": [
+    {
+      "i": 141,
+      "local": [
+        89.44499093234218,
+        -20.668978966614613,
+        78.64058422412022
+      ],
+      "results": [
+        {
+          "direction": [
+            1,
+            0,
+            0
+          ],
+          "hits": 11,
+          "inside": true,
+          "firstDistances": [
+            7.960088268596266,
+            7.997802681448121,
+            8.01508738114159,
+            8.02069343773923,
+            8.0681779654604,
+            8.100626986012376,
+            8.106409313986099,
+            8.10822938448139
+          ]
+        },
+        {
+          "direction": [
+            -1,
+            0,
+            0
+          ],
+          "hits": 0,
+          "inside": false,
+          "firstDistances": []
+        },
+        {
+          "direction": [
+            0,
+            1,
+            0
+          ],
+          "hits": 0,
+          "inside": false,
+          "firstDistances": []
+        },
+        {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "hits": 2,
+          "inside": false,
+          "firstDistances": [
+            13.121904641523457,
+            32.9603226557858
+          ]
+        },
+        {
+          "direction": [
+            0,
+            0,
+            1
+          ],
+          "hits": 0,
+          "inside": false,
+          "firstDistances": []
+        },
+        {
+          "direction": [
+            0,
+            0,
+            -1
+          ],
+          "hits": 2,
+          "inside": false,
+          "firstDistances": [
+            7.42792439533892,
+            37.569936562983784
+          ]
+        },
+        {
+          "direction": [
+            0.73,
+            0.41,
+            0.29
+          ],
+          "hits": 0,
+          "inside": false,
+          "firstDistances": []
+        }
+      ]
+    },
+    {
+      "i": 146,
+      "local": [
+        82.87076396902742,
+        -25.560348751399026,
+        88.46110863911214
+      ],
+      "results": [
+        {
+          "direction": [
+            1,
+            0,
+            0
+          ],
+          "hits": 11,
+          "inside": true,
+          "firstDistances": [
+            5.266698240729081,
+            5.367001745093436,
+            5.407268921299721,
+            5.423283740963839,
+            5.437987988882025,
+            5.510695439315157,
+            5.514901860070474,
+            5.523971847164962
+          ]
+        },
+        {
+          "direction": [
+            -1,
+            0,
+            0
+          ],
+          "hits": 0,
+          "inside": false,
+          "firstDistances": []
+        },
+        {
+          "direction": [
+            0,
+            1,
+            0
+          ],
+          "hits": 0,
+          "inside": false,
+          "firstDistances": []
+        },
+        {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "hits": 2,
+          "inside": false,
+          "firstDistances": [
+            5.619964999451113,
+            22.194570010437758
+          ]
+        },
+        {
+          "direction": [
+            0,
+            0,
+            1
+          ],
+          "hits": 0,
+          "inside": false,
+          "firstDistances": []
+        },
+        {
+          "direction": [
+            0,
+            0,
+            -1
+          ],
+          "hits": 4,
+          "inside": false,
+          "firstDistances": [
+            9.626890758444148,
+            10.152683229114643,
+            11.64282997793839,
+            29.190677824995092
+          ]
+        },
+        {
+          "direction": [
+            0.73,
+            0.41,
+            0.29
+          ],
+          "hits": 2,
+          "inside": false,
+          "firstDistances": [
+            15.75956173797472,
+            29.708308296568127
+          ]
+        }
+      ]
+    }
+  ],
+  "note": "Disagreement is a topology/numerics diagnostic, not permission to majority-vote away failed probes."
+}

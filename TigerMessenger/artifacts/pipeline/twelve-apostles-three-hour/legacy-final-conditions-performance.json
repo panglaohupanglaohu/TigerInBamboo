@@ -1,0 +1,52 @@
+{
+  "sampledAt": "2026-10-04T10:58:44.212Z",
+  "durationMs": 10011,
+  "view": "hero",
+  "clock": 0.5,
+  "flat": false,
+  "noFog": true,
+  "coastalUnlit": false,
+  "variant": "0",
+  "visibility": "visible",
+  "viewport": {
+    "iframeInnerWidth": 1265,
+    "iframeInnerHeight": 518,
+    "cssWidth": 1265,
+    "cssHeight": 518,
+    "drawingBufferWidth": 1265,
+    "drawingBufferHeight": 518,
+    "devicePixelRatio": 1,
+    "rendererPixelRatio": 1
+  },
+  "rafIntervalMs": {
+    "samples": 208,
+    "median": 49.89999999999418,
+    "p95": 51.5,
+    "max": 66.60000000000582
+  },
+  "rendererCalls": {
+    "samples": 209,
+    "median": 6652,
+    "p95": 6667,
+    "max": 6668
+  },
+  "rendererTriangles": {
+    "samples": 209,
+    "median": 2162742,
+    "p95": 2163282,
+    "max": 2164280
+  },
+  "rendererPoints": {
+    "samples": 209,
+    "median": 0,
+    "p95": 0,
+    "max": 0
+  },
+  "rendererLines": {
+    "samples": 209,
+    "median": 18448,
+    "p95": 18448,
+    "max": 18448
+  },
+  "method": "10 seconds of iframe requestAnimationFrame intervals; renderer.info sampled without forcing renders. CPU/browser scheduling evidence, NOT GPU time or benchmark-comparable FPS. Background throttling and unrelated activity may affect results."
+}

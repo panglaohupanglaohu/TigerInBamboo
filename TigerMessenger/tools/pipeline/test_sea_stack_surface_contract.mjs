@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import * as THREE from '../../vendor/three.module.js';
+import {publishSeaStackSurfaceContract as publish} from '../../src/world/seaStackSurfaceContract.js';
+import {prepareSeaStackSurface,createCoastalMaterial} from '../../src/world/seaStackLighting.js';
+const scene=new THREE.Scene(),ocean=new THREE.Mesh(new THREE.SphereGeometry(20,8,8),new THREE.MeshBasicMaterial());scene.add(ocean);
+const rock=new THREE.Mesh(new THREE.BoxGeometry(4,12,4),createCoastalMaterial());rock.position.set(0,24,0);rock.userData.seaStack={detailId:'shore-7',seaAnchor:[0,20,0]};scene.add(rock);prepareSeaStackSurface(rock,scene);
+const foam=new THREE.Mesh(new THREE.PlaneGeometry(),new THREE.MeshBasicMaterial());foam.name='gate-sea-stack-surf';foam.userData.stackOwner='shore-7';scene.add(foam);
+const positions=rock.geometry.attributes.position.array.slice(),waterPositions=ocean.geometry.attributes.position.array.slice(),matrix=rock.matrix.clone();
+const sharedGeo=new THREE.PlaneGeometry(),sharedMat=createCoastalMaterial({kind:'turf'});let disposedMat=0,disposedShared=0;sharedMat.addEventListener('dispose',()=>disposedMat++);sharedGeo.addEventListener('dispose',()=>disposedShared++);
+function add(geometry=sharedGeo,revision=rock.userData.coastalSurface.revision){const o=new THREE.Mesh(geometry,sharedMat);o.name='sea-stack-terrace-turf';o.userData.surfaceRevision=revision;rock.add(o);return o;}
+const old=add(),fresh=add();let report=publish(scene,[rock],ocean);
+assert.equal(old.parent,null);assert.equal(fresh.parent,rock);assert.equal(report.removedVegetation,1);assert.equal(disposedShared,0);assert.equal(disposedMat,0);
+assert.equal(foam.userData.surfaceContract.waterRevision,report.waterRevision);assert.equal(fresh.userData.surfaceContract.surfaceRevision,rock.userData.coastalSurface.revision);assert.deepEqual(report.stacks[0].anchorRockLocal,[0,-4,0]);assert.equal(report.water.objectUuid,ocean.uuid);
+const first=JSON.stringify(report.stacks);report=publish(scene,[rock],ocean);assert.equal(JSON.stringify(report.stacks),first);assert.equal(report.removedVegetation,0);
+const priorWater=report.waterRevision;ocean.geometry.attributes.position.needsUpdate=true;report=publish(scene,[rock],ocean);assert.notEqual(report.waterRevision,priorWater);assert.equal(report.water.positionVersion,1);
+const priorTransform=report.waterRevision;ocean.rotation.x=.2;report=publish(scene,[rock],ocean);assert.notEqual(report.waterRevision,priorTransform);
+add(sharedGeo,'obsolete');report=publish(scene,[rock],ocean);assert.equal(rock.children.length,0);assert.equal(report.errors[0].reason,'stale-vegetation-revision');assert.equal(disposedShared,1);assert.equal(disposedMat,0);
+const exclusive=new THREE.PlaneGeometry();let disposed=0;exclusive.addEventListener('dispose',()=>disposed++);add(exclusive);add(new THREE.PlaneGeometry());report=publish(scene,[rock],ocean);assert.equal(disposed,1);
+const unknown=add(new THREE.PlaneGeometry());delete unknown.userData.surfaceRevision;report=publish(scene,[rock],ocean);assert.equal(unknown.userData.surfaceContract,undefined);assert.equal(report.errors[0].reason,'missing-vegetation-revision');
+rock.visible=false;report=publish(scene,[rock],ocean);assert.equal(report.stacks.length,0);
+assert.deepEqual(rock.geometry.attributes.position.array,positions);assert.deepEqual(ocean.geometry.attributes.position.array,waterPositions);assert.deepEqual(rock.matrix.elements,matrix.elements);
+console.log('PASS duplicate cleanup; shared resource safety; exclusive geometry cleanup; revision propagation; water geometry/transform invalidation; idempotency; stale refusal; invisible exclusion; unchanged placement and surfaces');

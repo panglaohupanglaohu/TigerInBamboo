@@ -1,0 +1,71 @@
+{
+  "counts": {
+    "before": 398,
+    "delete": 397,
+    "undo": 398,
+    "redo": 397,
+    "final": 398
+  },
+  "deleted": [
+    {
+      "region": "left-front-coral",
+      "cell": [
+        1,
+        0,
+        2
+      ],
+      "before": "D",
+      "after": "."
+    }
+  ],
+  "undoExact": true,
+  "redoExact": true,
+  "finalOriginalSnapshot": true,
+  "saveInvoked": false,
+  "gpu": {
+    "before": {
+      "programs": 249,
+      "failed": [],
+      "glErrors": [],
+      "note": "Current linked programs and error queue sample; not GPU timing or proof of all frames"
+    },
+    "delete": {
+      "programs": 283,
+      "failed": [],
+      "glErrors": [],
+      "note": "Current linked programs and error queue sample; not GPU timing or proof of all frames"
+    },
+    "undo": {
+      "programs": 283,
+      "failed": [],
+      "glErrors": [],
+      "note": "Current linked programs and error queue sample; not GPU timing or proof of all frames"
+    },
+    "redo": {
+      "programs": 283,
+      "failed": [],
+      "glErrors": [],
+      "note": "Current linked programs and error queue sample; not GPU timing or proof of all frames"
+    },
+    "final": {
+      "programs": 289,
+      "failed": [],
+      "glErrors": [],
+      "note": "Current linked programs and error queue sample; not GPU timing or proof of all frames"
+    }
+  },
+  "errors": {
+    "before": [],
+    "delete": [],
+    "undo": [],
+    "redo": [],
+    "final": []
+  },
+  "limitations": [
+    "Visual experiment default off, center clearance1.428m below player1.66m.",
+    "One inherited foundation gap2.70m explicitly unsupported.",
+    "Real pointer deletion/undo/redo and GPU samples; not full navigation or all WFC module geometry."
+  ],
+  "deletedWasSolverPassage": true,
+  "deletedSolverModule": "body.passage@r90"
+}

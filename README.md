@@ -26,6 +26,14 @@
 WASD / Shift 疾跑 / 空格跳 / 滚轮缩放。零构建 ES modules，Three.js CDN 失败时回退 `TigerMessenger/vendor/`。
 详见 [`TigerMessenger/README.md`](TigerMessenger/README.md)。
 
+### TigerMessenger 当前开发状态（2026-10-06）
+
+正常游戏从书店镇出发，信使通过世界交通前往高山圣城。圣城正在进行目标图驱动的山体、彩色街区、瀑布和沿崖立体交通重建；高山之门将保留独立旧文明纪念性建筑的方向，目前迁建仍处于提案阶段。
+
+本次代码快照包含已接入的场景与默认关闭的实验候选，不代表全部验收通过。当前无参数入口保留稳定的 `user-marked` 交通版本；东岸切崖与新立交已完成内部联合启动和实际画面检查，尚未替换默认版本。最新候选可见全景独立评阅为58/100，整体验收目标为至少90分，连续通行、车辆、船与编辑检查仍待完成。详见[项目交接](TigerMessenger/docs/PROJECT_HANDOFF.md)。
+
+本次提交以代码、文档及运行/测试所需数据为范围，批量截图、视频和建模中间产物留在本地；部分历史文档中的本机证据链接需要本地归档。
+
 ## 核心理念
 
 平台智能体设计致敬 Tu & Terzopoulos 的经典论文 *Artificial Fishes: Physics, Locomotion, Perception, Behavior*

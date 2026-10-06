@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "buildMs": 6.96629200000001,
+  "audit": {
+    "enabled": true,
+    "applied": true,
+    "method": "verified three original top faces, 16-way barycentric sampling before nonlinear bay mapping; shared-edge transition fans",
+    "sourceFaces": [
+      4536,
+      4317,
+      4097
+    ],
+    "sourceTriangles": 17860,
+    "triangles": 18742,
+    "addedTriangles": 882,
+    "originalVertices": 10953,
+    "vertices": 11394,
+    "transitionFaces": 6,
+    "affected": [
+      {
+        "sourceFace": 4096,
+        "start": 4096,
+        "end": 4114
+      },
+      {
+        "sourceFace": 4097,
+        "start": 4114,
+        "end": 4370
+      },
+      {
+        "sourceFace": 4099,
+        "start": 4371,
+        "end": 4389
+      },
+      {
+        "sourceFace": 4315,
+        "start": 4604,
+        "end": 4622
+      },
+      {
+        "sourceFace": 4316,
+        "start": 4622,
+        "end": 4655
+      },
+      {
+        "sourceFace": 4317,
+        "start": 4655,
+        "end": 4911
+      },
+      {
+        "sourceFace": 4534,
+        "start": 5127,
+        "end": 5145
+      },
+      {
+        "sourceFace": 4536,
+        "start": 5146,
+        "end": 5402
+      },
+      {
+        "sourceFace": 4537,
+        "start": 5402,
+        "end": 5420
+      }
+    ],
+    "globalInjectivityProved": false,
+    "unchangedOriginalAttributes": true
+  },
+  "oldThree": {
+    "probes": 357,
+    "multiple": 98,
+    "hits": 208
+  },
+  "newThree": {
+    "probes": 357,
+    "multiple": 0,
+    "hits": 105
+  },
+  "oldPatch": {
+    "probes": 357,
+    "multiple": 156,
+    "hits": 354
+  },
+  "newPatch": {
+    "probes": 357,
+    "multiple": 67,
+    "hits": 354
+  },
+  "oldVerticesMappedExactly": true,
+  "allOriginalAttributesExact": true,
+  "unchangedBoundaryEdges": true,
+  "limitation": "357 local vertical probes are not a proof of global injectivity; transition fan can retain residual nonlinear folds."
+}

@@ -1,0 +1,1413 @@
+{
+  "seeds": 100,
+  "deterministic": true,
+  "socketMismatches": 0,
+  "nonFinite": 0,
+  "openEdges": 0,
+  "orientationErrors": 0,
+  "variants": 3,
+  "maxFootprintRatio": 1.213848639095397,
+  "minShelfArea": 53.49362561522145,
+  "results": [
+    {
+      "seed": 0,
+      "volume": 13178.210573863404,
+      "shelfArea": 66.83364368917822,
+      "footprintRatio": 1.2117892520654294,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 1,
+      "volume": 13405.84611265678,
+      "shelfArea": 76.35372050791139,
+      "footprintRatio": 1.1964618225052677,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 2,
+      "volume": 13073.490925118902,
+      "shelfArea": 76.55575469901564,
+      "footprintRatio": 1.1684549733742704,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 3,
+      "volume": 12914.531232377165,
+      "shelfArea": 66.68354811475055,
+      "footprintRatio": 1.1569984654455496,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 4,
+      "volume": 13213.493062857631,
+      "shelfArea": 66.96586882762571,
+      "footprintRatio": 1.206213013706596,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 5,
+      "volume": 14160.688253328848,
+      "shelfArea": 53.509117739438636,
+      "footprintRatio": 1.2056295812530455,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 6,
+      "volume": 13903.74164920847,
+      "shelfArea": 53.680341092264996,
+      "footprintRatio": 1.1803340958218969,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 7,
+      "volume": 12948.99116704587,
+      "shelfArea": 66.611554628633,
+      "footprintRatio": 1.159638837491295,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 8,
+      "volume": 13195.069482345678,
+      "shelfArea": 67.02268731918073,
+      "footprintRatio": 1.1972977586879543,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 9,
+      "volume": 14090.380160945064,
+      "shelfArea": 53.49385918240387,
+      "footprintRatio": 1.2114761056685301,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 10,
+      "volume": 13057.83483636476,
+      "shelfArea": 76.65807341599265,
+      "footprintRatio": 1.1890732127695158,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 11,
+      "volume": 13076.652586722865,
+      "shelfArea": 66.63999714275458,
+      "footprintRatio": 1.1591663209093315,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 12,
+      "volume": 13187.052250907564,
+      "shelfArea": 66.97809893667772,
+      "footprintRatio": 1.1853160581913749,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 13,
+      "volume": 13146.869388438992,
+      "shelfArea": 76.25757136111207,
+      "footprintRatio": 1.2138228165260123,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 14,
+      "volume": 13051.075059213435,
+      "shelfArea": 76.553560205275,
+      "footprintRatio": 1.1944051881779356,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 15,
+      "volume": 13220.37662987279,
+      "shelfArea": 66.75736588942264,
+      "footprintRatio": 1.155595289393195,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 16,
+      "volume": 13215.904691558015,
+      "shelfArea": 66.85454178310295,
+      "footprintRatio": 1.1706343140796813,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 17,
+      "volume": 13004.280363059159,
+      "shelfArea": 76.40152716383392,
+      "footprintRatio": 1.2125978251101643,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 18,
+      "volume": 13035.825078450518,
+      "shelfArea": 76.39220232502791,
+      "footprintRatio": 1.1961668818008555,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 19,
+      "volume": 13289.126070625809,
+      "shelfArea": 66.9097060193435,
+      "footprintRatio": 1.1652299026405204,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 20,
+      "volume": 14105.169534058912,
+      "shelfArea": 53.54322738192889,
+      "footprintRatio": 1.155927651172251,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 21,
+      "volume": 13848.683676542878,
+      "shelfArea": 53.62956256840661,
+      "footprintRatio": 1.2078387135607904,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 22,
+      "volume": 13922.082474430306,
+      "shelfArea": 53.51851536779009,
+      "footprintRatio": 1.20375580494827,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 23,
+      "volume": 13258.693587413054,
+      "shelfArea": 67.02590323113046,
+      "footprintRatio": 1.1778006947820505,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 24,
+      "volume": 14052.724516891898,
+      "shelfArea": 53.50899909417507,
+      "footprintRatio": 1.159294720645686,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 25,
+      "volume": 13881.273022677638,
+      "shelfArea": 53.66068108428033,
+      "footprintRatio": 1.199690836483763,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 26,
+      "volume": 14003.989040899407,
+      "shelfArea": 53.49362561522145,
+      "footprintRatio": 1.2104064568266106,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 27,
+      "volume": 13186.208590347194,
+      "shelfArea": 67.05106420176125,
+      "footprintRatio": 1.187308952763352,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 28,
+      "volume": 13122.31805055153,
+      "shelfArea": 76.22184852484267,
+      "footprintRatio": 1.159559389548463,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 29,
+      "volume": 13092.29012276194,
+      "shelfArea": 76.6100496602711,
+      "footprintRatio": 1.1884033671339624,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 30,
+      "volume": 13345.716312208142,
+      "shelfArea": 76.23216555907825,
+      "footprintRatio": 1.2135900062439302,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 31,
+      "volume": 13143.359830154364,
+      "shelfArea": 66.97240225487565,
+      "footprintRatio": 1.1934640096899412,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 32,
+      "volume": 12974.631658884737,
+      "shelfArea": 76.32671538724604,
+      "footprintRatio": 1.1567135030119708,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 33,
+      "volume": 13133.885762923237,
+      "shelfArea": 76.49609642002756,
+      "footprintRatio": 1.174321473358591,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 34,
+      "volume": 13447.233364096788,
+      "shelfArea": 76.36433517438323,
+      "footprintRatio": 1.2132089214940505,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 35,
+      "volume": 13140.846265032464,
+      "shelfArea": 66.82534147801445,
+      "footprintRatio": 1.1960775815703963,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 36,
+      "volume": 12922.697922663488,
+      "shelfArea": 76.48408673439353,
+      "footprintRatio": 1.1618552108349287,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 37,
+      "volume": 13163.670777973488,
+      "shelfArea": 76.345611244451,
+      "footprintRatio": 1.1578755484658148,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 38,
+      "volume": 14167.468911073982,
+      "shelfArea": 53.617766609612715,
+      "footprintRatio": 1.2092750319059793,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 39,
+      "volume": 13126.330045338815,
+      "shelfArea": 66.67704198338967,
+      "footprintRatio": 1.2016997117859087,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 40,
+      "volume": 13866.607602726393,
+      "shelfArea": 53.66635856348856,
+      "footprintRatio": 1.175096209781305,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 41,
+      "volume": 14036.080558947477,
+      "shelfArea": 53.51405488600628,
+      "footprintRatio": 1.158777329704505,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 42,
+      "volume": 14088.886441122788,
+      "shelfArea": 53.65659900387092,
+      "footprintRatio": 1.2019084527976462,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 43,
+      "volume": 13054.671058519025,
+      "shelfArea": 66.59508376318345,
+      "footprintRatio": 1.2091431387143043,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 44,
+      "volume": 13127.833269950248,
+      "shelfArea": 76.67239647240636,
+      "footprintRatio": 1.1853573839294844,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 45,
+      "volume": 13342.870729170716,
+      "shelfArea": 76.21085660983597,
+      "footprintRatio": 1.1597786978229148,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 46,
+      "volume": 13177.598850173199,
+      "shelfArea": 76.62476056045242,
+      "footprintRatio": 1.191334537490707,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 47,
+      "volume": 12950.519856594783,
+      "shelfArea": 66.6158501926738,
+      "footprintRatio": 1.2131580026086088,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 48,
+      "volume": 13232.828690032133,
+      "shelfArea": 76.61385885800877,
+      "footprintRatio": 1.1923249627442738,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 49,
+      "volume": 13433.799880579976,
+      "shelfArea": 76.29480785529604,
+      "footprintRatio": 1.1576629035651187,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 50,
+      "volume": 13110.392276788993,
+      "shelfArea": 76.52890475252781,
+      "footprintRatio": 1.1778765633220025,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 51,
+      "volume": 12894.972257199215,
+      "shelfArea": 66.72772463611295,
+      "footprintRatio": 1.2136215141713773,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 52,
+      "volume": 13275.38000495729,
+      "shelfArea": 76.4710449948002,
+      "footprintRatio": 1.1957859890443203,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 53,
+      "volume": 13423.431712661859,
+      "shelfArea": 76.44596234966491,
+      "footprintRatio": 1.158336563194331,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 54,
+      "volume": 13096.263307301328,
+      "shelfArea": 76.38052764746232,
+      "footprintRatio": 1.161945864889351,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 55,
+      "volume": 12948.138690613228,
+      "shelfArea": 66.87677478895621,
+      "footprintRatio": 1.2105195406450577,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 56,
+      "volume": 14080.16226956089,
+      "shelfArea": 53.542506745694936,
+      "footprintRatio": 1.199464756908779,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 57,
+      "volume": 14077.48944261104,
+      "shelfArea": 53.65640464818051,
+      "footprintRatio": 1.172225191583675,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 58,
+      "volume": 13917.11199553706,
+      "shelfArea": 53.52115094086511,
+      "footprintRatio": 1.1580873472510502,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 59,
+      "volume": 13085.348724169455,
+      "shelfArea": 66.99227823159518,
+      "footprintRatio": 1.203946958059639,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 60,
+      "volume": 14106.602332595112,
+      "shelfArea": 53.50036977851002,
+      "footprintRatio": 1.207688153967774,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 61,
+      "volume": 13962.83384887199,
+      "shelfArea": 53.68445692385532,
+      "footprintRatio": 1.1832217599093966,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 62,
+      "volume": 12991.673764638725,
+      "shelfArea": 66.60902162532017,
+      "footprintRatio": 1.1598237684963242,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 63,
+      "volume": 13214.612001852021,
+      "shelfArea": 67.02006897948291,
+      "footprintRatio": 1.1941045918535493,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 64,
+      "volume": 13379.710726536367,
+      "shelfArea": 76.19675177448107,
+      "footprintRatio": 1.2125275833286397,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 65,
+      "volume": 13013.599400619463,
+      "shelfArea": 76.63704854692807,
+      "footprintRatio": 1.1909899759980638,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 66,
+      "volume": 12949.381895746377,
+      "shelfArea": 66.66678930243829,
+      "footprintRatio": 1.158441662198794,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 67,
+      "volume": 13261.091829159452,
+      "shelfArea": 66.9480550586399,
+      "footprintRatio": 1.18129343654426,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 68,
+      "volume": 13374.706014377918,
+      "shelfArea": 76.29471052975583,
+      "footprintRatio": 1.2138348951921407,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 69,
+      "volume": 13003.581243606297,
+      "shelfArea": 76.50931297708976,
+      "footprintRatio": 1.1952924540432628,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 70,
+      "volume": 12978.475291386718,
+      "shelfArea": 66.80131040098084,
+      "footprintRatio": 1.1546801017022688,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 71,
+      "volume": 13231.144815755628,
+      "shelfArea": 66.81173368728828,
+      "footprintRatio": 1.1659052762544235,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 72,
+      "volume": 14055.140565156067,
+      "shelfArea": 53.59119635060651,
+      "footprintRatio": 1.2115701856866035,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 73,
+      "volume": 13900.024844742065,
+      "shelfArea": 53.55649297710272,
+      "footprintRatio": 1.1970547477073432,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 74,
+      "volume": 13097.531245200185,
+      "shelfArea": 66.95036933613974,
+      "footprintRatio": 1.1691925903059366,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 75,
+      "volume": 13189.985901113096,
+      "shelfArea": 66.67733687626692,
+      "footprintRatio": 1.157226133935548,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 76,
+      "volume": 13939.550096094978,
+      "shelfArea": 53.64214421845253,
+      "footprintRatio": 1.2058026878511647,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 77,
+      "volume": 13925.49739690815,
+      "shelfArea": 53.50719504481032,
+      "footprintRatio": 1.2060441582632084,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 78,
+      "volume": 13241.432178986992,
+      "shelfArea": 67.04417591052909,
+      "footprintRatio": 1.180905684165205,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 79,
+      "volume": 13182.587815325487,
+      "shelfArea": 66.6103668151776,
+      "footprintRatio": 1.1596946861766702,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 80,
+      "volume": 12959.190194474546,
+      "shelfArea": 76.63661594206673,
+      "footprintRatio": 1.1967087655449018,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 81,
+      "volume": 13101.08932670329,
+      "shelfArea": 76.18774046357757,
+      "footprintRatio": 1.2116998120563829,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 82,
+      "volume": 13314.485532302824,
+      "shelfArea": 67.03813192828905,
+      "footprintRatio": 1.1894613557908968,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 83,
+      "volume": 13185.828825765715,
+      "shelfArea": 66.64451977133024,
+      "footprintRatio": 1.159048507387123,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 84,
+      "volume": 12936.717612093582,
+      "shelfArea": 76.58452474103673,
+      "footprintRatio": 1.1845664442739514,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 85,
+      "volume": 13131.080413664553,
+      "shelfArea": 76.26420309194935,
+      "footprintRatio": 1.213848639095397,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 86,
+      "volume": 13278.456995433882,
+      "shelfArea": 66.93395295971739,
+      "footprintRatio": 1.1945979517309415,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 87,
+      "volume": 13140.914423552644,
+      "shelfArea": 66.76555479773134,
+      "footprintRatio": 1.1553074048286005,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 88,
+      "volume": 13022.626497032208,
+      "shelfArea": 76.45275025040638,
+      "footprintRatio": 1.1697468574267862,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 89,
+      "volume": 13223.911647958155,
+      "shelfArea": 76.41036664565604,
+      "footprintRatio": 1.212425037607753,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 90,
+      "volume": 13183.286139022988,
+      "shelfArea": 66.77889574345653,
+      "footprintRatio": 1.1961585170631897,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 91,
+      "volume": 13029.528085097594,
+      "shelfArea": 66.91774842488358,
+      "footprintRatio": 1.1660035944382174,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 92,
+      "volume": 13958.345109028316,
+      "shelfArea": 53.540552457346536,
+      "footprintRatio": 1.1561951395325751,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 93,
+      "volume": 14122.26816237603,
+      "shelfArea": 53.632146569638536,
+      "footprintRatio": 1.2074725941870263,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 94,
+      "volume": 13109.681859734792,
+      "shelfArea": 66.64383252200362,
+      "footprintRatio": 1.204213931945359,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 95,
+      "volume": 12911.345098744958,
+      "shelfArea": 67.03003349579217,
+      "footprintRatio": 1.1784132802463454,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 96,
+      "volume": 14009.87958498562,
+      "shelfArea": 53.50811458650239,
+      "footprintRatio": 1.1593914598966975,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "narrow-broken-terrace",
+        "broad-upper-cliff",
+        "blunt-broken-cap"
+      ]
+    },
+    {
+      "seed": 97,
+      "volume": 13444.595645935682,
+      "shelfArea": 76.63340016896365,
+      "footprintRatio": 1.1991425432242995,
+      "modules": [
+        "talus-plinth",
+        "deep-wave-notch",
+        "massive-lower-cliff",
+        "wide-broken-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 98,
+      "volume": 13088.24187636448,
+      "shelfArea": 66.59009646374591,
+      "footprintRatio": 1.2106761046918453,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    },
+    {
+      "seed": 99,
+      "volume": 12877.277305591137,
+      "shelfArea": 67.04929317659096,
+      "footprintRatio": 1.1877417458999626,
+      "modules": [
+        "talus-plinth",
+        "sheltered-wave-notch",
+        "jointed-lower-cliff",
+        "recessed-terrace",
+        "slab-upper-cliff",
+        "fractured-cap-ledge"
+      ]
+    }
+  ]
+}

@@ -42,6 +42,8 @@
 //  纯数据，禁止 import Three.js / DOM。
 // =====================================================================
 
+import {solveTownPassagePairs,PASSAGE_PAIR_VERSION} from "./townPassagePairSelection.js";
+import { orientationTransforms } from "../../procgen/wfc/orientationGroup.js";
 import { solveTownSelection, assertTownGraphMatchesGrid } from "./wfcTownSelection.js";
 
 /** 布局签名：只要它不变，解就不用重算 */
@@ -69,20 +71,22 @@ export function townGridSignature(grid) {
  * @returns {{ ok:boolean, byCell:object, roleAt:(ix:number,iy:number,iz:number)=>string|null,
  *             hash:string|null, unresolved:string[], fromCache:boolean, ms:number }}
  */
-export function resolveTownSelection(grid, { cache = null, seed = 1, graph = null } = {}) {
+export function resolveTownSelection(grid, { cache = null, seed = 1, graph = null, passagePair = false } = {}) {
   assertTownGraphMatchesGrid(graph, grid);
   if (graph && !graph.topologyHash) throw new Error("Face graph cache requires topologyHash");
-  const sig = graph ? `face:${graph.topologyHash}|${seed}` : `${townGridSignature(grid)}|${seed}`;
+  const sig = (passagePair?`${PASSAGE_PAIR_VERSION}|`:"")+(graph ? `face:${graph.topologyHash}|${seed}` : `${townGridSignature(grid)}|${seed}`);
   if (cache && cache.wfcTownSelection?.sig === sig) {
     return { ...cache.wfcTownSelection.value, fromCache: true };
   }
   const t0 = Date.now();
-  const r = solveTownSelection({ grid, seed, graph });
+  if(passagePair&&graph)throw Error("Passage pair requires original cell graph");
+  const r = passagePair?solveTownPassagePairs(grid,{seed}):solveTownSelection({ grid, seed, graph });
   const byCell = r.byCell ?? {};
   // 求解失败**不回退哈希路径**（S20④ 静默失败：只标格，不假装成功）。
   // roleAt 全部返回 null，调用方于是原样走手写规则。
   const value = {
     ok: r.ok === true,
+    pairCandidate:r.pairCandidate,
     byCell,
     hash: r.hash ?? null,
     topologyHash: r.topologyHash,
@@ -94,6 +98,18 @@ export function resolveTownSelection(grid, { cache = null, seed = 1, graph = nul
   const out = { ...value, roleAt };
   if (cache) cache.wfcTownSelection = { sig, value: { ...value, roleAt } };
   return { ...out, fromCache: false };
+}
+
+/** Preserve the actual solver rotation; never infer passage direction from a hash. */
+export function townPassageAssignment(assignment){
+ if(assignment?.variant?.startsWith("passage2.")){
+  const [,half,axis]=assignment.variant.split(".");return {...assignment,half,axis,pair:true,openings:axis==="x"?["E","W"]:["N","S"]};
+ }
+ if(assignment?.variant!=="passage")return null;
+ const transform=orientationTransforms("Y4").find(t=>t.name===assignment.rot);
+ if(!transform)throw new Error(`Unsupported passage orientation: ${assignment.rot}`);
+ const openings=[transform.perm.N,transform.perm.S];
+ return {...assignment,openings,axis:openings.includes("E")?"x":"z"};
 }
 
 /** 坡屋顶角色（这些格走屋顶分支） */
@@ -109,6 +125,8 @@ export function makeTownRoleOracle(selection) {
   if (!selection || !selection.ok) {
     return {
       enabled: false,
+      assignmentAt: () => null,
+      passageAt: () => null,
       roleAt: () => null,
       isSlopedRoof: () => null,
       isFlatTop: () => null,
@@ -116,8 +134,11 @@ export function makeTownRoleOracle(selection) {
     };
   }
   const roleAt = selection.roleAt;
+  const assignmentAt=(ix,iy,iz)=>selection.byCell?.[`${ix},${iy},${iz}`]??null;
   return {
     enabled: true,
+    assignmentAt,
+    passageAt:(ix,iy,iz)=>townPassageAssignment(assignmentAt(ix,iy,iz)),
     roleAt,
     isSlopedRoof: (ix, iy, iz) => {
       const r = roleAt(ix, iy, iz);

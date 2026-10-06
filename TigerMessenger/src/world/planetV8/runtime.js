@@ -70,7 +70,7 @@ function waterMesh(data, material) {
   return new THREE.Mesh(geometry, material);
 }
 
-export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed = 1, features = {}, terrainMeshes = null } = {}) {
+export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed = 1, features = {}, terrainMeshes = null, deferCloudTerrain = false } = {}) {
   const enabledTerrain = features.planetTerrainV1 ?? isPlanetTerrainV1();
   const enabledWater = features.curvedWaterV1 ?? isCurvedWaterV1();
   const enabledClouds = features.cloudImpostorV1 ?? isCloudImpostorV1();
@@ -211,7 +211,11 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
     }
   }
 
-  if (enabledClouds && state.compiler?.clouds) {
+  const completeCloudTerrain = (finalTerrainMeshes=terrainMeshes) => {
+    if (state.clouds) return state.clouds;
+    if (!enabledClouds || !state.compiler?.clouds) return null;
+    if (state.cloudTerrainDisposed) throw new Error("planet cloud startup already disposed");
+    const terrainMeshes=finalTerrainMeshes;
     const clusters = state.compiler.clouds;
     // 云贴地重投影（方案 A）：必须在 createCloudImpostorSystem 构建 GPU buffer 之前
     // 改写 JS 端 clusters——buffer 建完之后再改数据不会生效。地形清单由调用方在
@@ -243,7 +247,12 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
     state.clouds.renderer = createCloudImpostorSystem(THREE, root, state.clouds.clusters, { atlas: state.clouds.atlas, radius });
     trackLogicalResource(state.resourceRegistry, "cloud", `planet-${presentationVersion}`);
     root.userData.cloudImpostor = state.clouds;
-  }
+    state.cloudTerrainPending=false;
+    return state.clouds;
+  };
+  state.completeCloudTerrain=completeCloudTerrain;
+  state.cloudTerrainPending=!!(deferCloudTerrain&&enabledClouds&&state.compiler?.clouds);
+  if(!deferCloudTerrain)completeCloudTerrain();
   state.compiled = true;
   return state;
 }
@@ -265,6 +274,7 @@ export function updatePlanetV8Runtime(state, time = 0, wind = [1, 0]) {
 
 export function disposePlanetV8Runtime(state) {
   if (!state?.root) return;
+  state.cloudTerrainDisposed=true;
   state.root.traverse((object) => {
     object.geometry?.dispose?.();
     if (Array.isArray(object.material)) object.material.forEach((material) => material.dispose?.());

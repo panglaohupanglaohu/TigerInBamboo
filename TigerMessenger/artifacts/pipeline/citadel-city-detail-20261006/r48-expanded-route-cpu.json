@@ -1,0 +1,4466 @@
+{
+  "version": "target-city-walk-audit-4",
+  "at": "2026-10-06T00:34:54.597Z",
+  "externalMeshes": [
+    "bridge-stair-connector-cell-0",
+    "bay-bridge-walking-deck-0",
+    "bay-bridge-walking-deck-1",
+    "bay-bridge-walking-deck-2",
+    "front-bay-promenade-stone-deck",
+    "old-waterfront-continuous-stair-decks",
+    "old-waterfront-twisted-rail-landing"
+  ],
+  "ground": [
+    {
+      "id": "citadel-target-new-city-main:0,1.2,0",
+      "world": [
+        73.18937631252693,
+        114.48972539825633,
+        138.73394672254088
+      ],
+      "radius": 194.19497936442679,
+      "expectedRadius": 194.19497933777183,
+      "pavingRadius": 194.19497933777183,
+      "overlaidPublicStep": null,
+      "residual": 2.6654959128791234e-8,
+      "source": {
+        "mesh": "main-hall-floor",
+        "faceIndex": 22,
+        "instanceId": null,
+        "world": [
+          73.18937632257281,
+          114.48972541397106,
+          138.7339467415833
+        ],
+        "radius": 194.19497936442679
+      },
+      "passed": true
+    },
+    {
+      "id": "citadel-target-new-city-main:0,1.2,5",
+      "world": [
+        74.08216477560595,
+        116.02614467092492,
+        134.06036730428278
+      ],
+      "radius": 192.1520634209622,
+      "expectedRadius": 192.15206339458769,
+      "pavingRadius": 192.15206339458769,
+      "overlaidPublicStep": null,
+      "residual": 2.6374522121841437e-8,
+      "source": {
+        "mesh": "main-hall-floor",
+        "faceIndex": 22,
+        "instanceId": null,
+        "world": [
+          74.08216478577437,
+          116.02614468685054,
+          134.0603673226837
+        ],
+        "radius": 192.1520634209622
+      },
+      "passed": true
+    },
+    {
+      "id": "citadel-target-new-city-main:0,1.2,-5",
+      "world": [
+        72.29658784944792,
+        112.95330612558773,
+        143.40752614079895
+      ],
+      "radius": 196.34399543602174,
+      "expectedRadius": 196.3439954090718,
+      "pavingRadius": 196.3439954090718,
+      "overlaidPublicStep": null,
+      "residual": 2.6949948050969397e-8,
+      "source": {
+        "mesh": "main-hall-floor",
+        "faceIndex": 21,
+        "instanceId": null,
+        "world": [
+          72.29658785937126,
+          112.95330614109157,
+          143.4075261604829
+        ],
+        "radius": 196.34399543602174
+      },
+      "passed": true
+    },
+    {
+      "id": "citadel-target-old-city:0,0.3,14.5",
+      "world": [
+        151.37791559645981,
+        92.70461294949003,
+        50.87844938677487
+      ],
+      "radius": 184.65653307352127,
+      "expectedRadius": 184.6565330673309,
+      "pavingRadius": 184.6565330673309,
+      "overlaidPublicStep": null,
+      "residual": 6.1903620007797144e-9,
+      "source": {
+        "mesh": "gate-approach",
+        "faceIndex": 5,
+        "instanceId": null,
+        "world": [
+          151.37791560153454,
+          92.70461295259781,
+          50.8784493884805
+        ],
+        "radius": 184.65653307352127
+      },
+      "passed": true
+    },
+    {
+      "id": "citadel-target-old-city:0,0.3,12.5",
+      "world": [
+        152.91946883071395,
+        91.51900042924873,
+        50.41161260822406
+      ],
+      "radius": 185.20643097662128,
+      "expectedRadius": 185.20643097041253,
+      "pavingRadius": 185.20643097041253,
+      "overlaidPublicStep": null,
+      "residual": 6.208750846781186e-9,
+      "source": {
+        "mesh": "gate-approach",
+        "faceIndex": 4,
+        "instanceId": null,
+        "world": [
+          152.91946883584032,
+          91.51900043231677,
+          50.411612609914044
+        ],
+        "radius": 185.20643097662128
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-5",
+      "world": [
+        75.37002583648643,
+        118.44170875060266,
+        124.337667362608
+      ],
+      "radius": 187.53382279346243,
+      "expectedRadius": 187.53382279346243,
+      "pavingRadius": 187.53382279346243,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-0",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          75.37002583648646,
+          118.44170875060264,
+          124.33766736260799
+        ],
+        "radius": 187.53382279346243
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-6",
+      "world": [
+        75.60774676026733,
+        118.52145103400854,
+        123.74559825349513
+      ],
+      "radius": 187.2881171150135,
+      "expectedRadius": 187.2881171150135,
+      "pavingRadius": 187.2881171150135,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-1",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          75.60774676026735,
+          118.52145103400854,
+          123.74559825349512
+        ],
+        "radius": 187.2881171150135
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-7",
+      "world": [
+        75.84546768404823,
+        118.60119331741441,
+        123.15352914438225
+      ],
+      "radius": 187.0442989380936,
+      "expectedRadius": 187.0442989380936,
+      "pavingRadius": 187.0442989380936,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-2",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          75.84546768404824,
+          118.6011933174144,
+          123.15352914438225
+        ],
+        "radius": 187.0442989380936
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-8",
+      "world": [
+        75.98103838957994,
+        118.57014313875405,
+        122.5055238486888
+      ],
+      "radius": 186.65369096881506,
+      "expectedRadius": 186.65369112917404,
+      "pavingRadius": 186.65369112917404,
+      "overlaidPublicStep": null,
+      "residual": -1.6035897942856536e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-3",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          75.98103832430269,
+          118.5701430368874,
+          122.50552374344116
+        ],
+        "radius": 186.65369096881506
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-9",
+      "world": [
+        76.11660909511164,
+        118.53909296009368,
+        121.85751855299534
+      ],
+      "radius": 186.2646221065463,
+      "expectedRadius": 186.26462242689396,
+      "pavingRadius": 186.26462242689396,
+      "overlaidPublicStep": null,
+      "residual": -3.20347652404962e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-4",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          76.11660896420231,
+          118.53909275622392,
+          121.8575183434184
+        ],
+        "radius": 186.2646221065463
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-10",
+      "world": [
+        76.27557512511169,
+        118.53341742715716,
+        121.22232424544272
+      ],
+      "radius": 185.91123266609844,
+      "expectedRadius": 185.91123232095066,
+      "pavingRadius": 185.91123232095066,
+      "overlaidPublicStep": null,
+      "residual": 3.4514778235461563e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-5",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          76.27557526671876,
+          118.53341764721672,
+          121.22232447049429
+        ],
+        "radius": 185.91123266609844
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-11",
+      "world": [
+        76.50993380565332,
+        118.6095130105077,
+        120.62841401383021
+      ],
+      "radius": 185.6696013867777,
+      "expectedRadius": 185.66960121416557,
+      "pavingRadius": 185.66960121416557,
+      "overlaidPublicStep": null,
+      "residual": 1.7261214679820114e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-6",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          76.5099338767826,
+          118.60951312077584,
+          120.62841412597527
+        ],
+        "radius": 185.6696013867777
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-12",
+      "world": [
+        76.74423925812854,
+        118.68555086252266,
+        120.03447463519186
+      ],
+      "radius": 185.42980687764683,
+      "expectedRadius": 185.4298070532239,
+      "pavingRadius": 185.4298070532239,
+      "overlaidPublicStep": null,
+      "residual": -1.7557707110427145e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-7",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          76.74423918546208,
+          118.68555075014339,
+          120.03447452153536
+        ],
+        "radius": 185.42980687764683
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-13",
+      "world": [
+        76.97851787624444,
+        118.7615596099034,
+        119.44052056239269
+      ],
+      "radius": 185.19189539330705,
+      "expectedRadius": 185.19189563157258,
+      "pavingRadius": 185.19189563157258,
+      "overlaidPublicStep": null,
+      "residual": -2.3826552819627977e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-8",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          76.97851777720489,
+          118.76155945710627,
+          119.44052040872201
+        ],
+        "radius": 185.19189539330705
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-14",
+      "world": [
+        77.21287172459711,
+        118.8376499522459,
+        118.84660768473373
+      ],
+      "radius": 184.95602342919716,
+      "expectedRadius": 184.95602386594666,
+      "pavingRadius": 184.95602386594666,
+      "overlaidPublicStep": null,
+      "residual": -4.367495023416268e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-9",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          77.21287154226901,
+          118.83764967162631,
+          118.84660740409296
+        ],
+        "radius": 184.95602342919716
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-15",
+      "world": [
+        77.44713549063911,
+        118.91364259101854,
+        118.252645479124
+      ],
+      "radius": 184.72195689666262,
+      "expectedRadius": 184.72195687784736,
+      "pavingRadius": 184.72195687784736,
+      "overlaidPublicStep": null,
+      "residual": 1.8815256908055744e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-10",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          77.44713549852767,
+          118.91364260313075,
+          118.25264549116889
+        ],
+        "radius": 184.72195689666262
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-16",
+      "world": [
+        77.6815043529341,
+        118.9897492175322,
+        117.65874082291276
+      ],
+      "radius": 184.4899884776509,
+      "expectedRadius": 184.48998842598337,
+      "pavingRadius": 184.48998842598337,
+      "overlaidPublicStep": null,
+      "residual": 5.166754135643714e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-11",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          77.6815043746893,
+          118.989749250856,
+          117.6587408558638
+        ],
+        "radius": 184.4899884776509
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-17",
+      "world": [
+        77.9158121456193,
+        119.06578960774658,
+        117.0648027257442
+      ],
+      "radius": 184.2598817379672,
+      "expectedRadius": 184.25988189089077,
+      "pavingRadius": 184.25988189089077,
+      "overlaidPublicStep": null,
+      "residual": -1.5292357602447737e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-12",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          77.91581208095431,
+          119.06578950892981,
+          117.06480262858811
+        ],
+        "radius": 184.2598817379672
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-18",
+      "world": [
+        78.15015330012622,
+        119.14186618230232,
+        116.47088289709349
+      ],
+      "radius": 184.03178299290425,
+      "expectedRadius": 184.03178339912733,
+      "pavingRadius": 184.03178339912733,
+      "overlaidPublicStep": null,
+      "residual": -4.062230800627731e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-13",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          78.15015312762125,
+          119.14186591931417,
+          116.47088264000112
+        ],
+        "radius": 184.03178299290425
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-19",
+      "world": [
+        78.38450733995295,
+        119.21795673231823,
+        115.87697012428335
+      ],
+      "radius": 183.80567030856201,
+      "expectedRadius": 183.80567021596505,
+      "pavingRadius": 183.80567021596505,
+      "overlaidPublicStep": null,
+      "residual": 9.259696298613562e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-14",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          78.38450737944125,
+          119.21795679237744,
+          115.87697018265942
+        ],
+        "radius": 183.80567030856201
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-20",
+      "world": [
+        78.52007804548467,
+        119.18690655365788,
+        115.22896482858988
+      ],
+      "radius": 183.43564446835208,
+      "expectedRadius": 183.43564453390127,
+      "pavingRadius": 183.43564453390127,
+      "overlaidPublicStep": null,
+      "residual": -6.554918741130678e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-15",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          78.52007801742619,
+          119.18690651106743,
+          115.22896478741376
+        ],
+        "radius": 183.43564446835208
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-21",
+      "world": [
+        78.65564875101637,
+        119.15585637499751,
+        114.58095953289643
+      ],
+      "radius": 183.06727013478857,
+      "expectedRadius": 183.06727035814333,
+      "pavingRadius": 183.06727035814333,
+      "overlaidPublicStep": null,
+      "residual": -2.2335476046464464e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-16",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          78.65564865505104,
+          119.1558562296191,
+          114.5809593930997
+        ],
+        "radius": 183.06727013478857
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-22",
+      "world": [
+        78.79121945654808,
+        119.12480619633715,
+        113.93295423720296
+      ],
+      "radius": 182.70055729753045,
+      "expectedRadius": 182.70055767835353,
+      "pavingRadius": 182.70055767835353,
+      "overlaidPublicStep": null,
+      "residual": -3.8082308151388133e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-17",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          78.7912192923148,
+          119.12480594803206,
+          113.93295399971981
+        ],
+        "radius": 182.70055729753045
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-23",
+      "world": [
+        78.9267901620798,
+        119.09375601767678,
+        113.28494894150951
+      ],
+      "radius": 182.33551699432513,
+      "expectedRadius": 182.3355165193203,
+      "pavingRadius": 182.3355165193203,
+      "overlaidPublicStep": null,
+      "residual": 4.750048390178563e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-18",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          78.92679036769312,
+          119.09375632792961,
+          113.28494923662971
+        ],
+        "radius": 182.33551699432513
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-24",
+      "world": [
+        79.0623608676115,
+        119.06270583901642,
+        112.63694364581606
+      ],
+      "radius": 181.97215725752346,
+      "expectedRadius": 181.97215694039383,
+      "pavingRadius": 181.97215694039383,
+      "overlaidPublicStep": null,
+      "residual": 3.1712963277641393e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-19",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          79.06236100539644,
+          119.06270604651144,
+          112.63694384211263
+        ],
+        "radius": 181.97215725752346
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-25",
+      "world": [
+        79.19009987122972,
+        119.06489483103009,
+        112.15389883699717
+      ],
+      "radius": 181.730619496074,
+      "expectedRadius": 181.7306196629478,
+      "pavingRadius": 181.7306196629478,
+      "overlaidPublicStep": null,
+      "residual": -1.6687377524249314e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-20",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          79.19009979851357,
+          119.06489472169898,
+          112.15389873401206
+        ],
+        "radius": 181.730619496074
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-26",
+      "world": [
+        79.69236926687714,
+        119.38164456444207,
+        110.60927421221444
+      ],
+      "radius": 181.2105467673624,
+      "expectedRadius": 181.2105469337586,
+      "pavingRadius": 181.2105469337586,
+      "overlaidPublicStep": null,
+      "residual": -1.6639620525893406e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-21",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          79.69236919369982,
+          119.38164445482009,
+          110.60927411064768
+        ],
+        "radius": 181.2105467673624
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-27",
+      "world": [
+        78.88057232955798,
+        120.48043032665538,
+        109.66392671638934
+      ],
+      "radius": 181.0078883482725,
+      "expectedRadius": 181.00788824134793,
+      "pavingRadius": 181.00788824134793,
+      "overlaidPublicStep": null,
+      "residual": 1.0692457408367773e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-22",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          78.88057237615415,
+          120.4804303978253,
+          109.66392678116975
+        ],
+        "radius": 181.0078883482725
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-28",
+      "world": [
+        78.52258574858543,
+        120.72452986296707,
+        109.37024670605638
+      ],
+      "radius": 180.83710769882353,
+      "expectedRadius": 180.83710749683544,
+      "pavingRadius": 180.83710749683544,
+      "overlaidPublicStep": null,
+      "residual": 2.0198808670102153e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-23",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          78.52258583629215,
+          120.72452999781171,
+          109.37024682821873
+        ],
+        "radius": 180.83710769882353
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-29",
+      "world": [
+        78.08875682977204,
+        121.07416417293688,
+        109.00603728917315
+      ],
+      "radius": 180.66301073051332,
+      "expectedRadius": 180.66301043346738,
+      "pavingRadius": 180.66301043346738,
+      "overlaidPublicStep": null,
+      "residual": 2.970459433981887e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-24",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          78.0887569581655,
+          121.07416437200686,
+          109.00603746840075
+        ],
+        "radius": 180.66301073051332
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-30",
+      "world": [
+        77.65492791095863,
+        121.42379848290668,
+        108.64182787228994
+      ],
+      "radius": 180.49120081557712,
+      "expectedRadius": 180.49120042347212,
+      "pavingRadius": 180.49120042347212,
+      "overlaidPublicStep": null,
+      "residual": 3.921049938071519e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-25",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          77.65492807965876,
+          121.42379874669169,
+          108.641828108307
+        ],
+        "radius": 180.49120081557712
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-31",
+      "world": [
+        77.22109899214524,
+        121.77343279287646,
+        108.27761845540671
+      ],
+      "radius": 180.32168449131342,
+      "expectedRadius": 180.32168400414446,
+      "pavingRadius": 180.32168400414446,
+      "overlaidPublicStep": null,
+      "residual": 4.871689611718466e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-26",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          77.22109920077087,
+          121.77343312186758,
+          108.27761874793667
+        ],
+        "radius": 180.32168449131342
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-32",
+      "world": [
+        76.78727007333185,
+        122.12306710284625,
+        107.9134090385235
+      ],
+      "radius": 180.15446722464932,
+      "expectedRadius": 180.1544676499497,
+      "pavingRadius": 180.1544676499497,
+      "overlaidPublicStep": null,
+      "residual": -4.2530038513177715e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-27",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          76.787269892056,
+          122.12306681454372,
+          107.91340878376647
+        ],
+        "radius": 180.15446722464932
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-33",
+      "world": [
+        76.35344115451846,
+        122.47270141281606,
+        107.54919962164027
+      ],
+      "radius": 179.98955744115435,
+      "expectedRadius": 179.98955777140168,
+      "pavingRadius": 179.98955777140168,
+      "overlaidPublicStep": null,
+      "residual": -3.3024733170350373e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-28",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          76.35344101442413,
+          122.47270118810144,
+          107.5491994243075
+        ],
+        "radius": 179.98955744115435
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-34",
+      "world": [
+        75.91961223570506,
+        122.82233572278585,
+        107.18499020475706
+      ],
+      "radius": 179.8269604787528,
+      "expectedRadius": 179.82696071394412,
+      "pavingRadius": 179.82696071394412,
+      "overlaidPublicStep": null,
+      "residual": -2.3519132241744956e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-29",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          75.91961213641166,
+          122.82233556214948,
+          107.18499006457239
+        ],
+        "radius": 179.8269604787528
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-35",
+      "world": [
+        75.48578331689167,
+        123.17197003275564,
+        106.82078078787384
+      ],
+      "radius": 179.6666826167079,
+      "expectedRadius": 179.66668275683662,
+      "pavingRadius": 179.66668275683662,
+      "overlaidPublicStep": null,
+      "residual": -1.4012871929480752e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-30",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          75.48578325801752,
+          123.17196993668924,
+          106.82078070456035
+        ],
+        "radius": 179.6666826167079
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-36",
+      "world": [
+        75.05195439807828,
+        123.52160434272544,
+        106.45657137099062
+      ],
+      "radius": 179.50873006698876,
+      "expectedRadius": 179.50873011204456,
+      "pavingRadius": 179.50873011204456,
+      "overlaidPublicStep": null,
+      "residual": -4.505579909164226e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-31",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          75.05195437924063,
+          123.52160431172213,
+          106.45657134427054
+        ],
+        "radius": 179.50873006698876
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-37",
+      "world": [
+        74.61812547926489,
+        123.87123865269524,
+        106.09236195410739
+      ],
+      "radius": 179.35310897316535,
+      "expectedRadius": 179.3531089231342,
+      "pavingRadius": 179.3531089231342,
+      "overlaidPublicStep": null,
+      "residual": 5.003116143598163e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-32",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          74.6181255000799,
+          123.87123868724954,
+          106.09236198370222
+        ],
+        "radius": 179.35310897316535
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-38",
+      "world": [
+        74.18429656045149,
+        124.22087296266503,
+        105.72815253722418
+      ],
+      "radius": 179.19982540930891,
+      "expectedRadius": 179.19982526417294,
+      "pavingRadius": 179.19982526417294,
+      "overlaidPublicStep": null,
+      "residual": 1.451359707971278e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-33",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          74.18429662053418,
+          124.2208730632729,
+          105.7281526228546
+        ],
+        "radius": 179.19982540930891
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-39",
+      "world": [
+        73.7504676416381,
+        124.57050727263483,
+        105.36394312034096
+      ],
+      "radius": 179.04888537889786,
+      "expectedRadius": 179.0488851386356,
+      "pavingRadius": 179.0488851386356,
+      "overlaidPublicStep": null,
+      "residual": 2.402622669706034e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-34",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          73.75046774060247,
+          124.5705074397936,
+          105.36394326172683
+        ],
+        "radius": 179.04888537889786
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-40",
+      "world": [
+        73.3166387228247,
+        124.92014158260463,
+        104.99973370345774
+      ],
+      "radius": 178.9002948137301,
+      "expectedRadius": 178.9002944783161,
+      "pavingRadius": 178.9002944783161,
+      "overlaidPublicStep": null,
+      "residual": 3.3541400057401916e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-35",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          73.31663886028358,
+          124.9201418168131,
+          104.99973390031812
+        ],
+        "radius": 178.9002948137301
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-41",
+      "world": [
+        72.88280980401132,
+        125.26977589257442,
+        104.63552428657451
+      ],
+      "radius": 178.75405957284173,
+      "expectedRadius": 178.7540591422467,
+      "pavingRadius": 178.7540591422467,
+      "overlaidPublicStep": null,
+      "residual": 4.305950369598577e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-36",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          72.88280997957644,
+          125.26977619433282,
+          104.63552453862772
+        ],
+        "radius": 178.75405957284173
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-42",
+      "world": [
+        72.44898088519793,
+        125.61941020254422,
+        104.2713148696913
+      ],
+      "radius": 178.61018443297945,
+      "expectedRadius": 178.6101849156233,
+      "pavingRadius": 178.6101849156233,
+      "overlaidPublicStep": null,
+      "residual": -4.826438555483037e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-37",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          72.44898068942493,
+          125.61940986309304,
+          104.27131458792736
+        ],
+        "radius": 178.61018443297945
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-43",
+      "world": [
+        72.01515196638452,
+        125.96904451251402,
+        103.90710545280808
+      ],
+      "radius": 178.46867712118083,
+      "expectedRadius": 178.4686775087387,
+      "pavingRadius": 178.4686775087387,
+      "overlaidPublicStep": null,
+      "residual": -3.8755786135880044e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-38",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          72.01515180999832,
+          125.96904423896297,
+          103.90710522716616
+        ],
+        "radius": 178.46867712118083
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-44",
+      "world": [
+        71.58132304757113,
+        126.3186788224838,
+        103.54289603592485
+      ],
+      "radius": 178.3295422634787,
+      "expectedRadius": 178.3295425559234,
+      "pavingRadius": 178.3295425559234,
+      "overlaidPublicStep": null,
+      "residual": -2.9244472443679115e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-39",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          71.58132293018409,
+          126.3186786153323,
+          103.54289586612364
+        ],
+        "radius": 178.3295422634787
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-45",
+      "world": [
+        71.14749412875774,
+        126.66831313245359,
+        103.17868661904163
+      ],
+      "radius": 178.19278541719436,
+      "expectedRadius": 178.19278561449488,
+      "pavingRadius": 178.19278561449488,
+      "overlaidPublicStep": null,
+      "residual": -1.9730052258637443e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-40",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          71.14749404998106,
+          126.66831299220254,
+          103.17868650479902
+        ],
+        "radius": 178.19278541719436
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-46",
+      "world": [
+        70.71366520994435,
+        127.01794744242339,
+        102.81447720215841
+      ],
+      "radius": 178.05841206159377,
+      "expectedRadius": 178.0584121637152,
+      "pavingRadius": 178.0584121637152,
+      "overlaidPublicStep": null,
+      "residual": -1.0212141887677717e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-41",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          70.71366516938814,
+          127.0179473695751,
+          102.81447714319147
+        ],
+        "radius": 178.05841206159377
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-47",
+      "world": [
+        70.27983629113095,
+        127.36758175239319,
+        102.4502677852752
+      ],
+      "radius": 177.92642759685458,
+      "expectedRadius": 177.926427603758,
+      "pavingRadius": 177.926427603758,
+      "overlaidPublicStep": null,
+      "residual": -6.90340584696969e-9,
+      "source": {
+        "mesh": "surveyed-route-tread-42",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          70.27983628840417,
+          127.36758174745142,
+          102.45026778130023
+        ],
+        "radius": 177.92642759685458
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-48",
+      "world": [
+        69.84600737231756,
+        127.717216062363,
+        102.08605836839197
+      ],
+      "radius": 177.79683734304228,
+      "expectedRadius": 177.79683725468482,
+      "pavingRadius": 177.79683725468482,
+      "overlaidPublicStep": null,
+      "residual": 8.835746712065884e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-43",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          69.84600740702805,
+          127.71721612583299,
+          102.08605841912438
+        ],
+        "radius": 177.79683734304228
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-49",
+      "world": [
+        69.41217845350417,
+        128.0668503723328,
+        101.72184895150876
+      ],
+      "radius": 177.66964653909673,
+      "expectedRadius": 177.66964635543167,
+      "pavingRadius": 177.66964635543167,
+      "overlaidPublicStep": null,
+      "residual": 1.8366506537859095e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-44",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          69.41217852525867,
+          128.06685050472123,
+          101.72184905666319
+        ],
+        "radius": 177.66964653909673
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-50",
+      "world": [
+        68.97834953469078,
+        128.41648468230258,
+        101.35763953462555
+      ],
+      "radius": 177.54485983674772,
+      "expectedRadius": 177.5448600628053,
+      "pavingRadius": 177.5448600628053,
+      "overlaidPublicStep": null,
+      "residual": -2.2605757976634777e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-45",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          68.97834944686467,
+          128.4164845187973,
+          101.35763940557274
+        ],
+        "radius": 177.54485983674772
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-51",
+      "world": [
+        68.54452061587739,
+        128.76611899227237,
+        100.99343011774232
+      ],
+      "radius": 177.42248331970836,
+      "expectedRadius": 177.4224834504911,
+      "pavingRadius": 177.4224834504911,
+      "overlaidPublicStep": null,
+      "residual": -1.3078272331767948e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-46",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          68.54452056535146,
+          128.7661188973555,
+          100.99343004329742
+        ],
+        "radius": 177.42248331970836
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-52",
+      "world": [
+        68.110691697064,
+        129.11575330224218,
+        100.6292207008591
+      ],
+      "radius": 177.30252147261538,
+      "expectedRadius": 177.30252150807155,
+      "pavingRadius": 177.30252150807155,
+      "overlaidPublicStep": null,
+      "residual": -3.545616777955729e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-47",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          68.11069168344355,
+          129.1157532764222,
+          100.6292206807357
+        ],
+        "radius": 177.30252147261538
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-53",
+      "world": [
+        67.6768627782506,
+        129.46538761221197,
+        100.26501128397588
+      ],
+      "radius": 177.18497919998276,
+      "expectedRadius": 177.1849791400565,
+      "pavingRadius": 177.1849791400565,
+      "overlaidPublicStep": null,
+      "residual": 5.992626483930508e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-48",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          67.67686280113983,
+          129.46538765599882,
+          100.26501131788679
+        ],
+        "radius": 177.18497919998276
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-54",
+      "world": [
+        67.2430338594372,
+        129.81502192218176,
+        99.90080186709265
+      ],
+      "radius": 177.06986132029422,
+      "expectedRadius": 177.06986116492567,
+      "pavingRadius": 177.06986116492567,
+      "overlaidPublicStep": null,
+      "residual": 1.5536855357822787e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-49",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          67.24303391843911,
+          129.81502203608693,
+          99.90080195474982
+        ],
+        "radius": 177.06986132029422
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-55",
+      "world": [
+        66.80920494062381,
+        130.16465623215157,
+        99.53659245020944
+      ],
+      "radius": 176.95717256505816,
+      "expectedRadius": 176.95717231418328,
+      "pavingRadius": 176.95717231418328,
+      "overlaidPublicStep": null,
+      "residual": 2.5087487642849737e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-50",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          66.80920503534026,
+          130.164656416688,
+          99.53659259132397
+        ],
+        "radius": 176.95717256505816
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-56",
+      "world": [
+        66.37537602181042,
+        130.51429054212136,
+        99.17238303332621
+      ],
+      "radius": 176.84691707185513,
+      "expectedRadius": 176.8469172314258,
+      "pavingRadius": 176.8469172314258,
+      "overlaidPublicStep": null,
+      "residual": -1.5957067489580368e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-51",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          66.3753759619193,
+          130.51429042435709,
+          99.172382943842
+        ],
+        "radius": 176.84691707185513
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-57",
+      "world": [
+        65.94154710299703,
+        130.86392485209115,
+        98.808173616443
+      ],
+      "radius": 176.73910040731698,
+      "expectedRadius": 176.73910047142277,
+      "pavingRadius": 176.73910047142277,
+      "overlaidPublicStep": null,
+      "residual": -6.410579089788371e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-52",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          65.9415470790791,
+          130.8639248046249,
+          98.80817358060385
+        ],
+        "radius": 176.73910040731698
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-58",
+      "world": [
+        65.50771818418363,
+        131.21355916206096,
+        98.44396419955979
+      ],
+      "radius": 176.63372653063973,
+      "expectedRadius": 176.63372649921166,
+      "pavingRadius": 176.63372649921166,
+      "overlaidPublicStep": null,
+      "residual": 3.142807258882385e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-53",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          65.5077181958393,
+          131.21355918540752,
+          98.44396421707572
+        ],
+        "radius": 176.63372653063973
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-59",
+      "world": [
+        65.19958936918928,
+        131.5073392642659,
+        98.1782644074703
+      ],
+      "radius": 176.5903119712785,
+      "expectedRadius": 176.59031212481838,
+      "pavingRadius": 176.59031212481838,
+      "overlaidPublicStep": null,
+      "residual": -1.5353987237176625e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-54",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          65.19958931250025,
+          131.50733914992426,
+          98.17826432210728
+        ],
+        "radius": 176.5903119712785
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-60",
+      "world": [
+        63.933378301920705,
+        132.95990503129266,
+        97.61352085410861
+      ],
+      "radius": 176.90170323132457,
+      "expectedRadius": 176.90170338513522,
+      "pavingRadius": 176.90170338513522,
+      "overlaidPublicStep": null,
+      "residual": -1.538106459975097e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-55",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          63.93337824633259,
+          132.95990491568807,
+          97.61352076923662
+        ],
+        "radius": 176.90170323132457
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-61",
+      "world": [
+        62.533223858226904,
+        133.4741050997982,
+        98.93255298307199
+      ],
+      "radius": 177.5201138768276,
+      "expectedRadius": 177.52011395344314,
+      "pavingRadius": 177.52011395344314,
+      "overlaidPublicStep": null,
+      "residual": -7.661554946025717e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-56",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          62.5332238312383,
+          133.47410504219238,
+          98.93255294037388
+        ],
+        "radius": 177.5201138768276
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-62",
+      "world": [
+        62.16034975931654,
+        133.42314142432127,
+        99.25725730919018
+      ],
+      "radius": 177.53210081031943,
+      "expectedRadius": 177.53210097973206,
+      "pavingRadius": 177.53210097973206,
+      "overlaidPublicStep": null,
+      "residual": -1.6941262970249227e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-57",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          62.16034969999912,
+          133.42314129700026,
+          99.25725721447247
+        ],
+        "radius": 177.53210081031943
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-63",
+      "world": [
+        61.69198745618577,
+        133.39279845209785,
+        99.71549813243055
+      ],
+      "radius": 177.6027045152229,
+      "expectedRadius": 177.60270426706612,
+      "pavingRadius": 177.60270426706612,
+      "overlaidPublicStep": null,
+      "residual": 2.481567946688301e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-58",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          61.69198754238542,
+          133.39279863848202,
+          99.71549827175883
+        ],
+        "radius": 177.6027045152229
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-64",
+      "world": [
+        61.223625153055,
+        133.3624554798744,
+        100.17373895567093
+      ],
+      "radius": 177.67570132161683,
+      "expectedRadius": 177.6757011660913,
+      "pavingRadius": 177.6757011660913,
+      "overlaidPublicStep": null,
+      "residual": 1.55525526679412e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-59",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          61.22362520664614,
+          133.36245559661106,
+          100.17373904335636
+        ],
+        "radius": 177.67570132161683
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-65",
+      "world": [
+        60.75526284992425,
+        133.33211250765095,
+        100.6319797789113
+      ],
+      "radius": 177.75108879050038,
+      "expectedRadius": 177.7510887278598,
+      "pavingRadius": 177.7510887278598,
+      "overlaidPublicStep": null,
+      "residual": 6.264056651161809e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-60",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          60.75526287133481,
+          133.332112554638,
+          100.6319798143746
+        ],
+        "radius": 177.75108879050038
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-66",
+      "world": [
+        60.286900546793476,
+        133.30176953542752,
+        101.09022060215167
+      ],
+      "radius": 177.8288638814251,
+      "expectedRadius": 177.82886391192767,
+      "pavingRadius": 177.82886391192767,
+      "overlaidPublicStep": null,
+      "residual": -3.0502576464641606e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-61",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          60.28690053645262,
+          133.30176951256257,
+          101.0902205848119
+        ],
+        "radius": 177.8288638814251
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-67",
+      "world": [
+        59.818538243662715,
+        133.2714265632041,
+        101.54846142539205
+      ],
+      "radius": 177.90902346304847,
+      "expectedRadius": 177.9090235869569,
+      "pavingRadius": 177.9090235869569,
+      "overlaidPublicStep": null,
+      "residual": -1.2390842130116653e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-62",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          59.818538202000866,
+          133.27142647038448,
+          101.54846135466651
+        ],
+        "radius": 177.90902346304847
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-68",
+      "world": [
+        59.35017594053194,
+        133.24108359098065,
+        102.00670224863242
+      ],
+      "radius": 177.99156431375232,
+      "expectedRadius": 177.99156453133372,
+      "pavingRadius": 177.99156453133372,
+      "overlaidPublicStep": null,
+      "residual": -2.1758140178462781e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-63",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          59.350175867980795,
+          133.24108342810337,
+          102.0067021239368
+        ],
+        "radius": 177.99156431375232
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-69",
+      "world": [
+        58.88181363740118,
+        133.2107406187572,
+        102.4649430718728
+      ],
+      "radius": 178.076483637247,
+      "expectedRadius": 178.0764834338032,
+      "pavingRadius": 178.0764834338032,
+      "overlaidPublicStep": null,
+      "residual": 2.034438182363374e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-64",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          58.88181370467082,
+          133.21074077094406,
+          102.46494318893406
+        ],
+        "radius": 178.076483637247
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-70",
+      "world": [
+        58.413451334270405,
+        133.18039764653378,
+        102.92318389511317
+      ],
+      "radius": 178.16377700409154,
+      "expectedRadius": 178.16377689411874,
+      "pavingRadius": 178.16377689411874,
+      "overlaidPublicStep": null,
+      "residual": 1.0997280242008856e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-65",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          58.41345137032653,
+          133.18039772874027,
+          102.92318395864322
+        ],
+        "radius": 178.16377700409154
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-71",
+      "world": [
+        57.945089031139645,
+        133.15005467431035,
+        103.38142471835354
+      ],
+      "radius": 178.25344143993692,
+      "expectedRadius": 178.25344142370756,
+      "pavingRadius": 178.25344142370756,
+      "overlaidPublicStep": null,
+      "residual": 1.6229364518949296e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-66",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          57.94508903641538,
+          133.1500546864332,
+          103.38142472776607
+        ],
+        "radius": 178.25344143993692
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-72",
+      "world": [
+        57.476726728008884,
+        133.1197117020869,
+        103.83966554159392
+      ],
+      "radius": 178.34547336855974,
+      "expectedRadius": 178.34547344635084,
+      "pavingRadius": 178.34547344635084,
+      "overlaidPublicStep": null,
+      "residual": -7.779109978400811e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-67",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          57.47672670293859,
+          133.1197116440225,
+          103.83966549630091
+        ],
+        "radius": 178.34547336855974
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-73",
+      "world": [
+        57.008364424878124,
+        133.08936872986345,
+        104.29790636483429
+      ],
+      "radius": 178.43986938579587,
+      "expectedRadius": 178.43986929887896,
+      "pavingRadius": 178.43986929887896,
+      "overlaidPublicStep": null,
+      "residual": 8.691691277817881e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-68",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          57.008364452646546,
+          133.08936879469044,
+          104.29790641563713
+        ],
+        "radius": 178.43986938579587
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-74",
+      "world": [
+        56.540002121747364,
+        133.05902575764003,
+        104.75614718807466
+      ],
+      "radius": 178.5366252246013,
+      "expectedRadius": 178.53662523188086,
+      "pavingRadius": 178.53662523188086,
+      "overlaidPublicStep": null,
+      "residual": -7.279567171281087e-9,
+      "source": {
+        "mesh": "surveyed-route-tread-69",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          56.54000211944205,
+          133.05902575221475,
+          104.7561471838034
+        ],
+        "radius": 178.5366252246013
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-75",
+      "world": [
+        56.071639818616575,
+        133.0286827854166,
+        105.21438801131504
+      ],
+      "radius": 178.63573730866506,
+      "expectedRadius": 178.63573741042754,
+      "pavingRadius": 178.63573741042754,
+      "overlaidPublicStep": null,
+      "residual": -1.017624811083806e-7,
+      "source": {
+        "mesh": "surveyed-route-tread-70",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          56.07163978667455,
+          133.02868270963486,
+          105.2143879513781
+        ],
+        "radius": 178.63573730866506
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-76",
+      "world": [
+        55.7513377088934,
+        133.03473886200285,
+        105.5678801035926
+      ],
+      "radius": 178.74851244684515,
+      "expectedRadius": 178.74851246927588,
+      "pavingRadius": 178.74851246927588,
+      "overlaidPublicStep": null,
+      "residual": -2.2430725721278577e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-71",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          55.75133770189731,
+          133.03473884530865,
+          105.56788009034514
+        ],
+        "radius": 178.74851244684515
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-77",
+      "world": [
+        54.86749086288533,
+        132.95065623347475,
+        107.34849611871405
+      ],
+      "radius": 179.47149678254212,
+      "expectedRadius": 179.4714968050636,
+      "pavingRadius": 179.4714968050636,
+      "overlaidPublicStep": null,
+      "residual": -2.2521476239489857e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-72",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          54.86749085600016,
+          132.95065621679106,
+          107.34849610524313
+        ],
+        "radius": 179.47149678254212
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-78",
+      "world": [
+        55.54917204856039,
+        131.5725653888577,
+        108.61374562729472
+      ],
+      "radius": 179.42685484069247,
+      "expectedRadius": 179.4268547834367,
+      "pavingRadius": 179.4268547834367,
+      "overlaidPublicStep": null,
+      "residual": 5.7255761021224316e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-73",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          55.54917206628636,
+          131.57256543084299,
+          108.61374566195374
+        ],
+        "radius": 179.42685484069247
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-79",
+      "world": [
+        55.68960898798602,
+        131.12681288591372,
+        108.78300123701015
+      ],
+      "radius": 179.2465200539765,
+      "expectedRadius": 179.24652009169816,
+      "pavingRadius": 179.24652009169816,
+      "overlaidPublicStep": null,
+      "residual": -3.7721662238254794e-8,
+      "source": {
+        "mesh": "surveyed-route-tread-74",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          55.689608976266385,
+          131.12681285831863,
+          108.78300121411723
+        ],
+        "radius": 179.2465200539765
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-80",
+      "world": [
+        55.937331309841895,
+        130.5872894531169,
+        109.0434537201505
+      ],
+      "radius": 179.0879672116409,
+      "expectedRadius": 179.0879672116409,
+      "pavingRadius": 179.0879672116409,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-75",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          55.93733130984191,
+          130.5872894531169,
+          109.0434537201505
+        ],
+        "radius": 179.0879672116409
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-81",
+      "world": [
+        56.26373255123619,
+        130.1331014347498,
+        109.34698979918218
+      ],
+      "radius": 179.04467561970768,
+      "expectedRadius": 179.04467561970773,
+      "pavingRadius": 179.04467561970773,
+      "overlaidPublicStep": null,
+      "residual": -5.684341886080802e-14,
+      "source": {
+        "mesh": "surveyed-route-tread-76",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          56.2637325512362,
+          130.13310143474976,
+          109.34698979918214
+        ],
+        "radius": 179.04467561970768
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-82",
+      "world": [
+        56.59013379263047,
+        129.6789134163826,
+        109.65052587821387
+      ],
+      "radius": 179.00363586500225,
+      "expectedRadius": 179.00363586500225,
+      "pavingRadius": 179.00363586500225,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-77",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          56.59013379263047,
+          129.6789134163826,
+          109.65052587821386
+        ],
+        "radius": 179.00363586500225
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-83",
+      "world": [
+        56.91653503402476,
+        129.22472539801544,
+        109.95406195724556
+      ],
+      "radius": 178.96484949668093,
+      "expectedRadius": 178.96484949668093,
+      "pavingRadius": 178.96484949668093,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-78",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          56.916535034024776,
+          129.22472539801544,
+          109.95406195724556
+        ],
+        "radius": 178.96484949668093
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-84",
+      "world": [
+        57.242936275419055,
+        128.7705373796483,
+        110.25759803627726
+      ],
+      "radius": 178.92831798014637,
+      "expectedRadius": 178.92831798014637,
+      "pavingRadius": 178.92831798014637,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-79",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          57.24293627541908,
+          128.77053737964826,
+          110.25759803627726
+        ],
+        "radius": 178.92831798014637
+      },
+      "passed": true
+    },
+    {
+      "id": "stair-85",
+      "world": [
+        57.569337516813334,
+        128.31634936128114,
+        110.56113411530895
+      ],
+      "radius": 178.89404269677192,
+      "expectedRadius": 178.89404269677192,
+      "pavingRadius": 178.89404269677192,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-80",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          57.56933751681336,
+          128.31634936128114,
+          110.56113411530893
+        ],
+        "radius": 178.89404269677192
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-0",
+      "world": [
+        57.333459067820726,
+        128.78554113907825,
+        109.80788202727969
+      ],
+      "radius": 178.78830171584562,
+      "expectedRadius": 178.78830171584562,
+      "pavingRadius": 178.6913878464311,
+      "overlaidPublicStep": {
+        "index": 79,
+        "top": 3,
+        "heightOverPaving": 0.09691386941452151
+      },
+      "residual": 0,
+      "source": {
+        "mesh": "surveyed-route-tread-79",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          57.36455406032232,
+          128.85538840629607,
+          109.86743669786415
+        ],
+        "radius": 178.78830171584562
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-20",
+      "world": [
+        58.293495487716626,
+        129.21883100464623,
+        107.22253607259194
+      ],
+      "radius": 177.74225762103404,
+      "expectedRadius": 177.74225762103404,
+      "pavingRadius": 177.74225762103404,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 20,
+        "instanceId": null,
+        "world": [
+          58.293495487716626,
+          129.21883100464623,
+          107.22253607259194
+        ],
+        "radius": 177.74225762103404
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-40",
+      "world": [
+        52.375849738390144,
+        130.3737631759307,
+        115.69846616680846
+      ],
+      "radius": 182.00737027336064,
+      "expectedRadius": 182.00737027336064,
+      "pavingRadius": 182.00737027336064,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 40,
+        "instanceId": null,
+        "world": [
+          52.37584973839017,
+          130.37376317593066,
+          115.69846616680847
+        ],
+        "radius": 182.00737027336064
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-60",
+      "world": [
+        59.14319618332368,
+        129.67255040237916,
+        104.78641719814289
+      ],
+      "radius": 176.8985053974734,
+      "expectedRadius": 176.89850539747343,
+      "pavingRadius": 176.89850539747343,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 60,
+        "instanceId": null,
+        "world": [
+          59.14319618332371,
+          129.67255040237916,
+          104.78641719814286
+        ],
+        "radius": 176.8985053974734
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-80",
+      "world": [
+        53.158699045041544,
+        130.94548438390876,
+        113.19632505266625
+      ],
+      "radius": 181.0689790387262,
+      "expectedRadius": 181.0689790387262,
+      "pavingRadius": 181.0689790387262,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 80,
+        "instanceId": null,
+        "world": [
+          53.158699045041544,
+          130.94548438390876,
+          113.19632505266627
+        ],
+        "radius": 181.0689790387262
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-100",
+      "world": [
+        45.89573153329522,
+        132.53404219213263,
+        123.12133986502164
+      ],
+      "radius": 186.62945866856194,
+      "expectedRadius": 186.62945866856194,
+      "pavingRadius": 186.62945866856194,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 100,
+        "instanceId": null,
+        "world": [
+          45.89573153329525,
+          132.53404219213263,
+          123.12133986502164
+        ],
+        "radius": 186.62945866856194
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-120",
+      "world": [
+        58.75502344742861,
+        130.22523151211988,
+        104.42350075447298
+      ],
+      "radius": 176.96053574882882,
+      "expectedRadius": 176.96053574882882,
+      "pavingRadius": 176.96053574882882,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 120,
+        "instanceId": null,
+        "world": [
+          58.75502344742861,
+          130.22523151211988,
+          104.42350075447298
+        ],
+        "radius": 176.96053574882882
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-140",
+      "world": [
+        51.82616897706275,
+        131.71718132599477,
+        114.10673985873774
+      ],
+      "radius": 181.81230906760328,
+      "expectedRadius": 181.81230906760328,
+      "pavingRadius": 181.81230906760328,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 140,
+        "instanceId": null,
+        "world": [
+          51.826168977062764,
+          131.71718132599477,
+          114.10673985873774
+        ],
+        "radius": 181.81230906760328
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-160",
+      "world": [
+        44.854073383973585,
+        133.1622307217891,
+        123.76629923492743
+      ],
+      "radius": 187.2489370230108,
+      "expectedRadius": 187.24893702301082,
+      "pavingRadius": 187.24893702301082,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 160,
+        "instanceId": null,
+        "world": [
+          44.8540733839736,
+          133.16223072178906,
+          123.7662992349274
+        ],
+        "radius": 187.2489370230108
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-180",
+      "world": [
+        58.862934624476694,
+        131.17339402926376,
+        102.37181465867751
+      ],
+      "radius": 176.49728839354026,
+      "expectedRadius": 176.4972883935403,
+      "pavingRadius": 176.4972883935403,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 180,
+        "instanceId": null,
+        "world": [
+          58.86293462447671,
+          131.17339402926376,
+          102.3718146586775
+        ],
+        "radius": 176.49728839354026
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-200",
+      "world": [
+        51.94323281653553,
+        132.67527085085214,
+        112.06006564683123
+      ],
+      "radius": 181.2685445507629,
+      "expectedRadius": 181.2685445507629,
+      "pavingRadius": 181.2685445507629,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 200,
+        "instanceId": null,
+        "world": [
+          51.94323281653553,
+          132.67527085085214,
+          112.06006564683122
+        ],
+        "radius": 181.2685445507629
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-220",
+      "world": [
+        44.969909222172504,
+        134.11898835243335,
+        121.71895258482593
+      ],
+      "radius": 186.61644941022132,
+      "expectedRadius": 186.6164494102213,
+      "pavingRadius": 186.6164494102213,
+      "overlaidPublicStep": null,
+      "residual": 2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 220,
+        "instanceId": null,
+        "world": [
+          44.96990922217253,
+          134.11898835243335,
+          121.71895258482594
+        ],
+        "radius": 186.61644941022132
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-240",
+      "world": [
+        58.25392902727383,
+        132.0369022787528,
+        101.80298890808712
+      ],
+      "radius": 176.6100573611358,
+      "expectedRadius": 176.6100573611358,
+      "pavingRadius": 176.6100573611358,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 240,
+        "instanceId": null,
+        "world": [
+          58.25392902727383,
+          132.0369022787528,
+          101.80298890808712
+        ],
+        "radius": 176.6100573611358
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-260",
+      "world": [
+        51.33493467735627,
+        133.53954641163614,
+        111.49162729143868
+      ],
+      "radius": 181.379350892672,
+      "expectedRadius": 181.379350892672,
+      "pavingRadius": 181.379350892672,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 260,
+        "instanceId": null,
+        "world": [
+          51.33493467735627,
+          133.53954641163614,
+          111.49162729143866
+        ],
+        "radius": 181.379350892672
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-280",
+      "world": [
+        44.35803763211385,
+        134.97938813666212,
+        121.14855745226194
+      ],
+      "radius": 186.71915728463355,
+      "expectedRadius": 186.71915728463355,
+      "pavingRadius": 186.71915728463355,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 280,
+        "instanceId": null,
+        "world": [
+          44.35803763211386,
+          134.97938813666212,
+          121.14855745226191
+        ],
+        "radius": 186.71915728463355
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-300",
+      "world": [
+        59.01863364373027,
+        132.58894788045944,
+        99.29091291706214
+      ],
+      "radius": 175.84570965799438,
+      "expectedRadius": 175.84570965799438,
+      "pavingRadius": 175.84570965799438,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 300,
+        "instanceId": null,
+        "world": [
+          59.01863364373028,
+          132.58894788045944,
+          99.29091291706214
+        ],
+        "radius": 175.84570965799438
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-320",
+      "world": [
+        52.11821555124614,
+        134.11173701988938,
+        108.9897191431509
+      ],
+      "radius": 180.50214757071737,
+      "expectedRadius": 180.50214757071737,
+      "pavingRadius": 180.50214757071737,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 320,
+        "instanceId": null,
+        "world": [
+          52.11821555124614,
+          134.11173701988938,
+          108.9897191431509
+        ],
+        "radius": 180.50214757071737
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-340",
+      "world": [
+        45.1424949933438,
+        135.55285476694678,
+        118.64729353378095
+      ],
+      "radius": 185.7137624210554,
+      "expectedRadius": 185.7137624210554,
+      "pavingRadius": 185.7137624210554,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 340,
+        "instanceId": null,
+        "world": [
+          45.1424949933438,
+          135.55285476694678,
+          118.64729353378092
+        ],
+        "radius": 185.7137624210554
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-360",
+      "world": [
+        60.466598479469866,
+        132.98135237683414,
+        95.80523786118675
+      ],
+      "radius": 174.69657470393554,
+      "expectedRadius": 174.69657470393554,
+      "pavingRadius": 174.69657470393554,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 360,
+        "instanceId": null,
+        "world": [
+          60.466598479469866,
+          132.98135237683414,
+          95.80523786118674
+        ],
+        "radius": 174.69657470393554
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-380",
+      "world": [
+        53.591828767476315,
+        134.5319617427799,
+        105.51809167704963
+      ],
+      "radius": 179.17868319688463,
+      "expectedRadius": 179.17868319688463,
+      "pavingRadius": 179.17868319688463,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 380,
+        "instanceId": null,
+        "world": [
+          53.59182876747633,
+          134.5319617427799,
+          105.51809167704963
+        ],
+        "radius": 179.17868319688463
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-400",
+      "world": [
+        46.6254402348971,
+        135.98320198955608,
+        115.18077759657257
+      ],
+      "radius": 184.20633655816914,
+      "expectedRadius": 184.20633655816914,
+      "pavingRadius": 184.20633655816914,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 400,
+        "instanceId": null,
+        "world": [
+          46.62544023489713,
+          135.98320198955605,
+          115.18077759657257
+        ],
+        "radius": 184.20633655816914
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-420",
+      "world": [
+        61.16889239640831,
+        133.30081562653623,
+        93.85085912425481
+      ],
+      "radius": 174.12272856253978,
+      "expectedRadius": 174.12272856253978,
+      "pavingRadius": 174.12272856253978,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 420,
+        "instanceId": null,
+        "world": [
+          61.168892396408324,
+          133.30081562653623,
+          93.85085912425478
+        ],
+        "radius": 174.12272856253978
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-440",
+      "world": [
+        55.047976974413984,
+        134.93324804353722,
+        102.03690151885806
+      ],
+      "radius": 177.90106932821817,
+      "expectedRadius": 177.90106932821817,
+      "pavingRadius": 177.90106932821817,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 440,
+        "instanceId": null,
+        "world": [
+          55.047976974413984,
+          134.93324804353722,
+          102.03690151885803
+        ],
+        "radius": 177.90106932821817
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-460",
+      "world": [
+        48.10839629605931,
+        136.41356226818027,
+        111.7142642290598
+      ],
+      "radius": 182.7652992149045,
+      "expectedRadius": 182.76529921490453,
+      "pavingRadius": 182.76529921490453,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 460,
+        "instanceId": null,
+        "world": [
+          48.10839629605931,
+          136.41356226818027,
+          111.71426422905976
+        ],
+        "radius": 182.7652992149045
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-480",
+      "world": [
+        41.1206450629586,
+        137.8416315054215,
+        121.36525077187004
+      ],
+      "radius": 188.2040034680164,
+      "expectedRadius": 188.2040034680164,
+      "pavingRadius": 188.2040034680164,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 480,
+        "instanceId": null,
+        "world": [
+          41.1206450629586,
+          137.8416315054215,
+          121.36525077187002
+        ],
+        "radius": 188.2040034680164
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-500",
+      "world": [
+        57.155901538349255,
+        134.9329697916881,
+        98.09257038803679
+      ],
+      "radius": 176.3401706441219,
+      "expectedRadius": 176.3401706441219,
+      "pavingRadius": 176.3401706441219,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 500,
+        "instanceId": null,
+        "world": [
+          57.155901538349255,
+          134.9329697916881,
+          98.09257038803679
+        ],
+        "radius": 176.3401706441219
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-520",
+      "world": [
+        50.26069784125369,
+        136.46141543589184,
+        107.79423338017762
+      ],
+      "radius": 181.01782343260305,
+      "expectedRadius": 181.01782343260305,
+      "pavingRadius": 181.01782343260305,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 520,
+        "instanceId": null,
+        "world": [
+          50.260697841253716,
+          136.4614154358918,
+          107.79423338017762
+        ],
+        "radius": 181.01782343260305
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-540",
+      "world": [
+        43.27335048749441,
+        137.88992272199272,
+        117.44544108228233
+      ],
+      "radius": 186.22471716102163,
+      "expectedRadius": 186.22471716102163,
+      "pavingRadius": 186.22471716102163,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 540,
+        "instanceId": null,
+        "world": [
+          43.27335048749441,
+          137.88992272199272,
+          117.44544108228233
+        ],
+        "radius": 186.22471716102163
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-560",
+      "world": [
+        59.30886951192383,
+        135.39709920578724,
+        93.11751558061412
+      ],
+      "radius": 174.70199822563598,
+      "expectedRadius": 174.70199822563598,
+      "pavingRadius": 174.70199822563598,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 560,
+        "instanceId": null,
+        "world": [
+          59.30886951192383,
+          135.39709920578724,
+          93.11751558061411
+        ],
+        "radius": 174.70199822563598
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-580",
+      "world": [
+        52.443970627196194,
+        136.95841450339097,
+        102.83577453848369
+      ],
+      "radius": 179.11776540410142,
+      "expectedRadius": 179.11776540410145,
+      "pavingRadius": 179.11776540410145,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 580,
+        "instanceId": null,
+        "world": [
+          52.44397062719621,
+          136.95841450339094,
+          102.83577453848369
+        ],
+        "radius": 179.11776540410142
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-600",
+      "world": [
+        45.48095683962089,
+        138.41331405526063,
+        112.50030699820093
+      ],
+      "radius": 184.07357772775842,
+      "expectedRadius": 184.07357772775842,
+      "pavingRadius": 184.07357772775842,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 600,
+        "instanceId": null,
+        "world": [
+          45.480956839620916,
+          138.4133140552606,
+          112.50030699820093
+        ],
+        "radius": 184.07357772775842
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-620",
+      "world": [
+        38.483347758745396,
+        139.8306914384426,
+        122.14589550641209
+      ],
+      "radius": 189.61331733804147,
+      "expectedRadius": 189.6133173380415,
+      "pavingRadius": 189.6133173380415,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 620,
+        "instanceId": null,
+        "world": [
+          38.483347758745424,
+          139.8306914384426,
+          122.14589550641207
+        ],
+        "radius": 189.61331733804147
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-640",
+      "world": [
+        53.88668960923458,
+        137.34513351390152,
+        99.34722784785225
+      ],
+      "radius": 177.86886376779518,
+      "expectedRadius": 177.8688637677952,
+      "pavingRadius": 177.8688637677952,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 640,
+        "instanceId": null,
+        "world": [
+          53.886689609234594,
+          137.3451335139015,
+          99.34722784785225
+        ],
+        "radius": 177.86886376779518
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-660",
+      "world": [
+        46.95955921272589,
+        138.83895421835877,
+        109.03141246159271
+      ],
+      "radius": 182.67266985860522,
+      "expectedRadius": 182.67266985860525,
+      "pavingRadius": 182.67266985860525,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 660,
+        "instanceId": null,
+        "world": [
+          46.95955921272591,
+          138.83895421835874,
+          109.03141246159268
+        ],
+        "radius": 182.67266985860522
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-680",
+      "world": [
+        39.97263457624658,
+        140.2679199850092,
+        118.68285163841227
+      ],
+      "radius": 188.03861349444284,
+      "expectedRadius": 188.03861349444284,
+      "pavingRadius": 188.03861349444284,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 680,
+        "instanceId": null,
+        "world": [
+          39.97263457624658,
+          140.2679199850092,
+          118.68285163841229
+        ],
+        "radius": 188.03861349444284
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-700",
+      "world": [
+        55.32816982089409,
+        137.7305076289607,
+        95.85800617698553
+      ],
+      "radius": 176.69084994896565,
+      "expectedRadius": 176.69084994896565,
+      "pavingRadius": 176.69084994896565,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 700,
+        "instanceId": null,
+        "world": [
+          55.32816982089409,
+          137.7305076289607,
+          95.85800617698553
+        ],
+        "radius": 176.69084994896565
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-720",
+      "world": [
+        48.43069297201211,
+        139.25648685085747,
+        105.55842299141887
+      ],
+      "radius": 181.32975987473114,
+      "expectedRadius": 181.32975987473114,
+      "pavingRadius": 181.32975987473114,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 720,
+        "instanceId": null,
+        "world": [
+          48.43069297201211,
+          139.25648685085747,
+          105.55842299141887
+        ],
+        "radius": 181.32975987473114
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-740",
+      "world": [
+        41.451530424769174,
+        140.69387140497622,
+        115.21411259157793
+      ],
+      "radius": 186.51350236843535,
+      "expectedRadius": 186.51350236843535,
+      "pavingRadius": 186.51350236843535,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 740,
+        "instanceId": null,
+        "world": [
+          41.451530424769174,
+          140.6938714049762,
+          115.21411259157792
+        ],
+        "radius": 186.51350236843535
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-760",
+      "world": [
+        56.08253794391973,
+        138.2713393727078,
+        93.34026576661726
+      ],
+      "radius": 176.00176012624553,
+      "expectedRadius": 176.00176012624556,
+      "pavingRadius": 176.00176012624556,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 760,
+        "instanceId": null,
+        "world": [
+          56.08253794391973,
+          138.2713393727078,
+          93.34026576661725
+        ],
+        "radius": 176.00176012624553
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-780",
+      "world": [
+        49.19552367289501,
+        139.8086682497302,
+        103.04641461453878
+      ],
+      "radius": 180.51378571213033,
+      "expectedRadius": 180.51378571213036,
+      "pavingRadius": 180.51378571213036,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 780,
+        "instanceId": null,
+        "world": [
+          49.19552367289501,
+          139.80866824973018,
+          103.04641461453875
+        ],
+        "radius": 180.51378571213033
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-800",
+      "world": [
+        42.22976969447399,
+        141.26059769044633,
+        112.70944943612716
+      ],
+      "radius": 185.58375440890657,
+      "expectedRadius": 185.58375440890657,
+      "pavingRadius": 185.58375440890657,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 800,
+        "instanceId": null,
+        "world": [
+          42.22976969447397,
+          141.26059769044633,
+          112.70944943612716
+        ],
+        "radius": 185.58375440890657
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-820",
+      "world": [
+        56.149927362230045,
+        138.9677698172987,
+        91.79408493797808
+      ],
+      "radius": 175.7583836418,
+      "expectedRadius": 175.7583836418,
+      "pavingRadius": 175.7583836418,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 820,
+        "instanceId": null,
+        "world": [
+          56.149927362230045,
+          138.9677698172987,
+          91.79408493797808
+        ],
+        "radius": 175.7583836418
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-840",
+      "world": [
+        49.26346757304721,
+        140.5057000871471,
+        101.50053741324659
+      ],
+      "radius": 180.19739201630495,
+      "expectedRadius": 180.19739201630492,
+      "pavingRadius": 180.19739201630492,
+      "overlaidPublicStep": null,
+      "residual": 2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 840,
+        "instanceId": null,
+        "world": [
+          49.26346757304722,
+          140.5057000871471,
+          101.5005374132466
+        ],
+        "radius": 180.19739201630495
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-860",
+      "world": [
+        42.30801560011642,
+        141.96880216242204,
+        111.16921205654839
+      ],
+      "radius": 185.21258780311464,
+      "expectedRadius": 185.21258780311464,
+      "pavingRadius": 185.21258780311464,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 860,
+        "instanceId": null,
+        "world": [
+          42.30801560011645,
+          141.96880216242204,
+          111.16921205654839
+        ],
+        "radius": 185.21258780311464
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-880",
+      "world": [
+        56.50785805703289,
+        139.47966973809974,
+        90.0786637196698
+      ],
+      "radius": 175.39065525268018,
+      "expectedRadius": 175.39065525268018,
+      "pavingRadius": 175.39065525268018,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 880,
+        "instanceId": null,
+        "world": [
+          56.507858057032905,
+          139.47966973809972,
+          90.0786637196698
+        ],
+        "radius": 175.39065525268018
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-900",
+      "world": [
+        49.33082889942963,
+        141.20209874210926,
+        99.95434455680515
+      ],
+      "radius": 179.89562074953827,
+      "expectedRadius": 179.89562074953827,
+      "pavingRadius": 179.89562074953827,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 900,
+        "instanceId": null,
+        "world": [
+          49.33082889942963,
+          141.20209874210929,
+          99.95434455680514
+        ],
+        "radius": 179.89562074953827
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-920",
+      "world": [
+        42.38453865591421,
+        142.6751367047687,
+        109.62803462085117
+      ],
+      "radius": 184.8538604563877,
+      "expectedRadius": 184.85386045638774,
+      "pavingRadius": 184.85386045638774,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 920,
+        "instanceId": null,
+        "world": [
+          42.38453865591423,
+          142.67513670476868,
+          109.62803462085115
+        ],
+        "radius": 184.8538604563877
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-940",
+      "world": [
+        55.429890148870356,
+        140.55254909096163,
+        89.90810392507387
+      ],
+      "radius": 175.81512713439903,
+      "expectedRadius": 175.81512713439903,
+      "pavingRadius": 175.81512713439903,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 940,
+        "instanceId": null,
+        "world": [
+          55.42989014887037,
+          140.55254909096163,
+          89.90810392507385
+        ],
+        "radius": 175.81512713439903
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-960",
+      "world": [
+        48.70688831911909,
+        142.04941491961938,
+        99.37733959806408
+      ],
+      "radius": 180.07290988465277,
+      "expectedRadius": 180.07290988465277,
+      "pavingRadius": 180.07290988465277,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 960,
+        "instanceId": null,
+        "world": [
+          48.70688831911909,
+          142.04941491961938,
+          99.37733959806405
+        ],
+        "radius": 180.07290988465277
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-980",
+      "world": [
+        41.76286665833942,
+        143.52491339456162,
+        109.05227190974651
+      ],
+      "radius": 185.02955386941824,
+      "expectedRadius": 185.02955386941824,
+      "pavingRadius": 185.02955386941824,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 980,
+        "instanceId": null,
+        "world": [
+          41.76286665833945,
+          143.52491339456162,
+          109.05227190974651
+        ],
+        "radius": 185.02955386941824
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1000",
+      "world": [
+        54.28766107642305,
+        141.52007253823166,
+        90.06830400617407
+      ],
+      "radius": 176.31613784031092,
+      "expectedRadius": 176.31613784031092,
+      "pavingRadius": 176.31613784031092,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1000,
+        "instanceId": null,
+        "world": [
+          54.28766107642306,
+          141.52007253823166,
+          90.06830400617407
+        ],
+        "radius": 176.31613784031092
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1020",
+      "world": [
+        47.39125283554665,
+        143.0472126847131,
+        99.76930883326662
+      ],
+      "radius": 180.7272831845153,
+      "expectedRadius": 180.7272831845153,
+      "pavingRadius": 180.7272831845153,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1020,
+        "instanceId": null,
+        "world": [
+          47.39125283554665,
+          143.04721268471312,
+          99.76930883326662
+        ],
+        "radius": 180.7272831845153
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1040",
+      "world": [
+        40.444124201210926,
+        144.51934228035327,
+        109.4425412330628
+      ],
+      "radius": 185.73970309844776,
+      "expectedRadius": 185.7397030984478,
+      "pavingRadius": 185.7397030984478,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1040,
+        "instanceId": null,
+        "world": [
+          40.44412420121091,
+          144.51934228035327,
+          109.44254123306278
+        ],
+        "radius": 185.73970309844776
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1060",
+      "world": [
+        51.60011588525052,
+        142.83130024757017,
+        92.40451506080454
+      ],
+      "radius": 177.76936376497855,
+      "expectedRadius": 177.76936376497855,
+      "pavingRadius": 177.76936376497855,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1060,
+        "instanceId": null,
+        "world": [
+          51.60011588525052,
+          142.83130024757014,
+          92.40451506080454
+        ],
+        "radius": 177.76936376497855
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1080",
+      "world": [
+        44.68843997808595,
+        144.34187912423894,
+        102.09715664786219
+      ],
+      "radius": 182.3608075557067,
+      "expectedRadius": 182.36080755570674,
+      "pavingRadius": 182.36080755570674,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1080,
+        "instanceId": null,
+        "world": [
+          44.68843997808597,
+          144.34187912423894,
+          102.09715664786216
+        ],
+        "radius": 182.3608075557067
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1100",
+      "world": [
+        37.72973275537282,
+        145.80144959049633,
+        111.76404732883222
+      ],
+      "radius": 187.54412204013045,
+      "expectedRadius": 187.54412204013045,
+      "pavingRadius": 187.54412204013045,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1100,
+        "instanceId": null,
+        "world": [
+          37.72973275537285,
+          145.8014495904963,
+          111.76404732883223
+        ],
+        "radius": 187.54412204013045
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1120",
+      "world": [
+        48.195027963108075,
+        144.05719514115614,
+        96.22323891143782
+      ],
+      "radius": 179.81698445616738,
+      "expectedRadius": 179.81698445616743,
+      "pavingRadius": 179.81698445616743,
+      "overlaidPublicStep": null,
+      "residual": -5.684341886080802e-14,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1120,
+        "instanceId": null,
+        "world": [
+          48.1950279631081,
+          144.05719514115611,
+          96.2232389114378
+        ],
+        "radius": 179.81698445616738
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1140",
+      "world": [
+        41.26265103015122,
+        145.54532161729034,
+        105.90454487473495
+      ],
+      "radius": 184.66678001156913,
+      "expectedRadius": 184.66678001156913,
+      "pavingRadius": 184.66678001156913,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1140,
+        "instanceId": null,
+        "world": [
+          41.26265103015122,
+          145.54532161729034,
+          105.90454487473495
+        ],
+        "radius": 184.66678001156913
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1160",
+      "world": [
+        49.01928970448212,
+        144.51013447639232,
+        93.76904981145722
+      ],
+      "radius": 179.10528867696922,
+      "expectedRadius": 179.10528867696922,
+      "pavingRadius": 179.10528867696922,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1160,
+        "instanceId": null,
+        "world": [
+          49.019289704482134,
+          144.51013447639232,
+          93.7690498114572
+        ],
+        "radius": 179.10528867696922
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1180",
+      "world": [
+        42.746699675668125,
+        146.18464213014292,
+        101.91094109613033
+      ],
+      "radius": 183.25684119011402,
+      "expectedRadius": 183.25684119011402,
+      "pavingRadius": 183.25684119011402,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1180,
+        "instanceId": null,
+        "world": [
+          42.74669967566814,
+          146.18464213014295,
+          101.9109410961303
+        ],
+        "radius": 183.25684119011402
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1200",
+      "world": [
+        36.18469877503364,
+        147.04664517344844,
+        111.80922985416728
+      ],
+      "radius": 188.23748872843578,
+      "expectedRadius": 188.23748872843578,
+      "pavingRadius": 188.23748872843578,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1200,
+        "instanceId": null,
+        "world": [
+          36.18469877503367,
+          147.04664517344844,
+          111.8092298541673
+        ],
+        "radius": 188.23748872843578
+      },
+      "passed": true
+    },
+    {
+      "id": "plaza-triangle-1220",
+      "world": [
+        40.78917979577557,
+        146.98755196433387,
+        103.85644808140565
+      ],
+      "radius": 184.54067147641345,
+      "expectedRadius": 184.54067147641345,
+      "pavingRadius": 184.54067147641345,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "target-plaza-paving-surface",
+        "faceIndex": 1220,
+        "instanceId": null,
+        "world": [
+          40.78917979577555,
+          146.98755196433387,
+          103.85644808140563
+        ],
+        "radius": 184.54067147641345
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bridge-stair-connector-cell-0:0",
+      "world": [
+        81.5671183007243,
+        115.88945290390866,
+        117.03853212952947
+      ],
+      "radius": 183.79765527690094,
+      "expectedRadius": 183.79765527690097,
+      "pavingRadius": 183.79765527690097,
+      "overlaidPublicStep": null,
+      "residual": -2.842170943040401e-14,
+      "source": {
+        "mesh": "bridge-stair-connector-cell-0",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          81.5671183007243,
+          115.88945290390865,
+          117.03853212952946
+        ],
+        "radius": 183.79765527690094
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bridge-stair-connector-cell-0:2",
+      "world": [
+        80.87897747061217,
+        116.77865936954404,
+        116.04065928628502
+      ],
+      "radius": 183.42327793504148,
+      "expectedRadius": 183.42327793504148,
+      "pavingRadius": 183.42327793504148,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bridge-stair-connector-cell-0",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          80.87897747061217,
+          116.77865936954404,
+          116.040659286285
+        ],
+        "radius": 183.42327793504148
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-0:0",
+      "world": [
+        144.07955512606748,
+        88.32480103052289,
+        71.63645426990564
+      ],
+      "radius": 183.55372582100114,
+      "expectedRadius": 183.5537258210011,
+      "pavingRadius": 183.5537258210011,
+      "overlaidPublicStep": null,
+      "residual": 2.842170943040401e-14,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-0",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          144.07955512606748,
+          88.32480103052289,
+          71.63645426990567
+        ],
+        "radius": 183.55372582100114
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-0:1",
+      "world": [
+        136.1977428668816,
+        93.33661185091168,
+        74.8580267314824
+      ],
+      "radius": 181.28781657897554,
+      "expectedRadius": 181.28781657897554,
+      "pavingRadius": 181.28781657897554,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-0",
+        "faceIndex": 1,
+        "instanceId": null,
+        "world": [
+          136.1977428668816,
+          93.33661185091168,
+          74.8580267314824
+        ],
+        "radius": 181.28781657897554
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-0:2",
+      "world": [
+        143.96342236579014,
+        89.40251498097923,
+        69.71391357237235
+      ],
+      "radius": 183.24384412517466,
+      "expectedRadius": 183.24384412517466,
+      "pavingRadius": 183.24384412517466,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-0",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          143.96342236579014,
+          89.40251498097923,
+          69.71391357237235
+        ],
+        "radius": 183.24384412517466
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-0:3",
+      "world": [
+        135.94542109208248,
+        94.515325197696,
+        72.98414444161943
+      ],
+      "radius": 180.9447140786517,
+      "expectedRadius": 180.9447140786517,
+      "pavingRadius": 180.9447140786517,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-0",
+        "faceIndex": 3,
+        "instanceId": null,
+        "world": [
+          135.94542109208248,
+          94.515325197696,
+          72.98414444161942
+        ],
+        "radius": 180.9447140786517
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-1:0",
+      "world": [
+        120.05177817222675,
+        102.33697414586806,
+        84.12195105577031
+      ],
+      "radius": 178.77860154133384,
+      "expectedRadius": 178.77860154133384,
+      "pavingRadius": 178.77860154133384,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-1",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          120.05177817222675,
+          102.33697414586804,
+          84.12195105577031
+        ],
+        "radius": 178.77860154133384
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-1:1",
+      "world": [
+        112.17596426790146,
+        105.08624458117696,
+        91.90975854906735
+      ],
+      "radius": 179.09206983045428,
+      "expectedRadius": 179.09206983045428,
+      "pavingRadius": 179.09206983045428,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-1",
+        "faceIndex": 1,
+        "instanceId": null,
+        "world": [
+          112.17596426790146,
+          105.08624458117696,
+          91.90975854906735
+        ],
+        "radius": 179.09206983045428
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-1:2",
+      "world": [
+        119.52724956660354,
+        103.67725519370427,
+        82.42515455586202
+      ],
+      "radius": 178.40863974879508,
+      "expectedRadius": 178.40863974879508,
+      "pavingRadius": 178.40863974879508,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-1",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          119.52724956660356,
+          103.67725519370426,
+          82.42515455586202
+        ],
+        "radius": 178.40863974879508
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-1:3",
+      "world": [
+        111.51541890593367,
+        106.4870933214875,
+        90.34138870843613
+      ],
+      "radius": 178.7085790094975,
+      "expectedRadius": 178.7085790094975,
+      "pavingRadius": 178.7085790094975,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-1",
+        "faceIndex": 3,
+        "instanceId": null,
+        "world": [
+          111.51541890593367,
+          106.4870933214875,
+          90.34138870843613
+        ],
+        "radius": 178.7085790094975
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-2:0",
+      "world": [
+        96.89965944952098,
+        110.69659204827948,
+        104.86324989681766
+      ],
+      "radius": 180.66427613520827,
+      "expectedRadius": 180.66427613520827,
+      "pavingRadius": 180.66427613520827,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-2",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          96.899659449521,
+          110.69659204827947,
+          104.86324989681765
+        ],
+        "radius": 180.66427613520827
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-2:1",
+      "world": [
+        90.17330390693701,
+        112.15133015308223,
+        111.58336000395045
+      ],
+      "radius": 182.09885178762022,
+      "expectedRadius": 182.09885178762022,
+      "pavingRadius": 182.09885178762022,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-2",
+        "faceIndex": 1,
+        "instanceId": null,
+        "world": [
+          90.17330390693702,
+          112.15133015308221,
+          111.58336000395045
+        ],
+        "radius": 182.09885178762022
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-2:2",
+      "world": [
+        96.08950699560177,
+        112.16349912151821,
+        103.43725000015614
+      ],
+      "radius": 180.31391676028622,
+      "expectedRadius": 180.3139167602862,
+      "pavingRadius": 180.3139167602862,
+      "overlaidPublicStep": null,
+      "residual": 2.842170943040401e-14,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-2",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          96.08950699560178,
+          112.16349912151821,
+          103.43725000015615
+        ],
+        "radius": 180.31391676028622
+      },
+      "passed": true
+    },
+    {
+      "id": "external:bay-bridge-walking-deck-2:3",
+      "world": [
+        89.34956144351435,
+        113.62372741300129,
+        110.17130369524062
+      ],
+      "radius": 181.74545859327904,
+      "expectedRadius": 181.74545859327904,
+      "pavingRadius": 181.74545859327904,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "bay-bridge-walking-deck-2",
+        "faceIndex": 3,
+        "instanceId": null,
+        "world": [
+          89.34956144351435,
+          113.62372741300129,
+          110.17130369524062
+        ],
+        "radius": 181.74545859327904
+      },
+      "passed": true
+    },
+    {
+      "id": "external:front-bay-promenade-stone-deck:292",
+      "world": [
+        109.591602099312,
+        123.66775281612382,
+        20.6816617378375
+      ],
+      "radius": 166.52856652695405,
+      "expectedRadius": 166.52856652695405,
+      "pavingRadius": 166.52856652695405,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "front-bay-promenade-stone-deck",
+        "faceIndex": 292,
+        "instanceId": null,
+        "world": [
+          109.59160209931201,
+          123.66775281612382,
+          20.6816617378375
+        ],
+        "radius": 166.52856652695405
+      },
+      "passed": true
+    },
+    {
+      "id": "external:front-bay-promenade-stone-deck:876",
+      "world": [
+        81.77345814019193,
+        141.16003649816366,
+        33.44690597273434
+      ],
+      "radius": 166.52852572312514,
+      "expectedRadius": 166.52852572312514,
+      "pavingRadius": 166.52852572312514,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "front-bay-promenade-stone-deck",
+        "faceIndex": 876,
+        "instanceId": null,
+        "world": [
+          81.77345814019196,
+          141.16003649816363,
+          33.446905972734356
+        ],
+        "radius": 166.52852572312514
+      },
+      "passed": true
+    },
+    {
+      "id": "external:front-bay-promenade-stone-deck:1460",
+      "world": [
+        50.505302067798226,
+        146.9949058556099,
+        59.778312674876524
+      ],
+      "radius": 166.52847969856225,
+      "expectedRadius": 166.52847969856225,
+      "pavingRadius": 166.52847969856225,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "front-bay-promenade-stone-deck",
+        "faceIndex": 1460,
+        "instanceId": null,
+        "world": [
+          50.50530206779824,
+          146.9949058556099,
+          59.77831267487653
+        ],
+        "radius": 166.52847969856225
+      },
+      "passed": true
+    },
+    {
+      "id": "external:front-bay-promenade-stone-deck:2044",
+      "world": [
+        18.142971568081776,
+        141.2283122622053,
+        86.35475064408365
+      ],
+      "radius": 166.5285157579718,
+      "expectedRadius": 166.52851575797177,
+      "pavingRadius": 166.52851575797177,
+      "overlaidPublicStep": null,
+      "residual": 2.842170943040401e-14,
+      "source": {
+        "mesh": "front-bay-promenade-stone-deck",
+        "faceIndex": 2044,
+        "instanceId": null,
+        "world": [
+          18.142971568081805,
+          141.2283122622053,
+          86.35475064408368
+        ],
+        "radius": 166.5285157579718
+      },
+      "passed": true
+    },
+    {
+      "id": "external:old-waterfront-continuous-stair-decks:0",
+      "world": [
+        150.1869499422513,
+        93.42193890182003,
+        51.63257606367395
+      ],
+      "radius": 184.25444774035378,
+      "expectedRadius": 184.25444774035378,
+      "pavingRadius": 184.25444774035378,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "old-waterfront-continuous-stair-decks",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          150.1869499422513,
+          93.42193890182003,
+          51.632576063673966
+        ],
+        "radius": 184.25444774035378
+      },
+      "passed": true
+    },
+    {
+      "id": "external:old-waterfront-continuous-stair-decks:174",
+      "world": [
+        146.06342123056658,
+        96.79490840509422,
+        51.385587510851764
+      ],
+      "radius": 182.60409611660936,
+      "expectedRadius": 182.60409611660936,
+      "pavingRadius": 182.60409611660936,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "old-waterfront-continuous-stair-decks",
+        "faceIndex": 174,
+        "instanceId": null,
+        "world": [
+          146.06342123056658,
+          96.79490840509422,
+          51.38558751085177
+        ],
+        "radius": 182.60409611660936
+      },
+      "passed": true
+    },
+    {
+      "id": "external:old-waterfront-continuous-stair-decks:522",
+      "world": [
+        141.19210948881158,
+        101.65353267460155,
+        44.85280269702703
+      ],
+      "radius": 179.66754408324638,
+      "expectedRadius": 179.66754408324636,
+      "pavingRadius": 179.66754408324636,
+      "overlaidPublicStep": null,
+      "residual": 2.842170943040401e-14,
+      "source": {
+        "mesh": "old-waterfront-continuous-stair-decks",
+        "faceIndex": 522,
+        "instanceId": null,
+        "world": [
+          141.1921094888116,
+          101.65353267460154,
+          44.85280269702703
+        ],
+        "radius": 179.66754408324638
+      },
+      "passed": true
+    },
+    {
+      "id": "external:old-waterfront-continuous-stair-decks:870",
+      "world": [
+        133.77547069042026,
+        103.75148524738898,
+        36.92622875465335
+      ],
+      "radius": 173.2737534063473,
+      "expectedRadius": 173.2737534063473,
+      "pavingRadius": 173.2737534063473,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "old-waterfront-continuous-stair-decks",
+        "faceIndex": 870,
+        "instanceId": null,
+        "world": [
+          133.77547069042026,
+          103.75148524738898,
+          36.92622875465335
+        ],
+        "radius": 173.2737534063473
+      },
+      "passed": true
+    },
+    {
+      "id": "external:old-waterfront-continuous-stair-decks:1218",
+      "world": [
+        126.35883204354052,
+        105.84943798450635,
+        28.999654895245534
+      ],
+      "radius": 167.366776694441,
+      "expectedRadius": 167.36677669444097,
+      "pavingRadius": 167.36677669444097,
+      "overlaidPublicStep": null,
+      "residual": 2.842170943040401e-14,
+      "source": {
+        "mesh": "old-waterfront-continuous-stair-decks",
+        "faceIndex": 1218,
+        "instanceId": null,
+        "world": [
+          126.35883204354053,
+          105.84943798450635,
+          28.99965489524554
+        ],
+        "radius": 167.366776694441
+      },
+      "passed": true
+    },
+    {
+      "id": "external:old-waterfront-twisted-rail-landing:0",
+      "world": [
+        123.3710454590443,
+        109.21171625172818,
+        25.304149493175814
+      ],
+      "radius": 166.6970719775202,
+      "expectedRadius": 166.6970719775202,
+      "pavingRadius": 166.6970719775202,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "old-waterfront-twisted-rail-landing",
+        "faceIndex": 0,
+        "instanceId": null,
+        "world": [
+          123.3710454590443,
+          109.21171625172816,
+          25.304149493175814
+        ],
+        "radius": 166.6970719775202
+      },
+      "passed": true
+    },
+    {
+      "id": "external:old-waterfront-twisted-rail-landing:2",
+      "world": [
+        123.01389184190296,
+        109.91504703921582,
+        24.070396005289922
+      ],
+      "radius": 166.7126843271858,
+      "expectedRadius": 166.7126843271858,
+      "pavingRadius": 166.7126843271858,
+      "overlaidPublicStep": null,
+      "residual": 0,
+      "source": {
+        "mesh": "old-waterfront-twisted-rail-landing",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          123.01389184190296,
+          109.91504703921582,
+          24.070396005289922
+        ],
+        "radius": 166.7126843271858
+      },
+      "passed": true
+    }
+  ],
+  "contacts": [
+    {
+      "id": "new-main-open-arch",
+      "blocked": false,
+      "expected": false,
+      "passed": true,
+      "contact": null
+    },
+    {
+      "id": "new-main-solid-pier",
+      "blocked": true,
+      "expected": true,
+      "passed": true,
+      "contact": {
+        "reason": "geometry-contact",
+        "allowed": 0,
+        "requested": 2.12379135188888,
+        "mesh": "main-entry-real-arch",
+        "instanceId": null,
+        "point": [
+          72.30701120093714,
+          120.20230692615594,
+          132.8528344702555
+        ],
+        "sampleHeight": 1.5799999999999998
+      }
+    },
+    {
+      "id": "old-gate-open-arch",
+      "blocked": false,
+      "expected": false,
+      "passed": true,
+      "contact": null
+    },
+    {
+      "id": "old-gate-solid-pier",
+      "blocked": true,
+      "expected": true,
+      "passed": true,
+      "contact": {
+        "reason": "geometry-contact",
+        "allowed": 0.09395864085179224,
+        "requested": 2.8990167606984487,
+        "mesh": "old-city-front-open-gate",
+        "instanceId": null,
+        "point": [
+          150.86362854859553,
+          93.39161655056301,
+          54.5042971025468
+        ],
+        "sampleHeight": 1.5799999999999998
+      }
+    }
+  ],
+  "failedRows": [],
+  "failures": 0,
+  "profile": {
+    "queries": 177,
+    "meanMs": 0.07046018079097457,
+    "p95Ms": 0.12545800000043528
+  },
+  "provider": {
+    "version": "target-city-player-support-2",
+    "revision": 1,
+    "disposed": false,
+    "sourceMeshes": 940,
+    "queryInstances": 1744,
+    "indexedInstances": 17,
+    "walkableInstances": 145,
+    "terrainInstances": 1,
+    "unsupported": [],
+    "lastGround": {
+      "mesh": "old-waterfront-twisted-rail-landing",
+      "faceIndex": 2,
+      "instanceId": null,
+      "world": [
+        123.01389184190296,
+        109.91504703921582,
+        24.070396005289922
+      ],
+      "radius": 166.7126843271858
+    },
+    "lastWall": {
+      "reason": "geometry-contact",
+      "allowed": 0.09395864085179224,
+      "requested": 2.8990167606984487,
+      "mesh": "old-city-front-open-gate",
+      "instanceId": null,
+      "point": [
+        150.86362854859553,
+        93.39161655056301,
+        54.5042971025468
+      ],
+      "sampleHeight": 1.5799999999999998
+    },
+    "contract": {
+      "ground": "world radius or null",
+      "walls": "mutates proposed feet/velocity and returns boolean",
+      "maxStepUp": 0.4,
+      "maxDrop": 3,
+      "playerRadius": 0.35,
+      "playerHeight": 1.66,
+      "maxSweep": 8
+    },
+    "productionInstalled": false,
+    "navigationComplete": false,
+    "limitations": [
+      "Static geometry/instance transforms require refresh after changes; visibility and detachment are live.",
+      "Only registered public surfaces and explicit finalTerrain support feet; residential roofs and private terraces are excluded.",
+      "Finite 15-ray body sweep is not exact capsule contact: very small obstacles between samples, spawn-inside recovery, ceilings, moving geometry and wall sliding are not solved.",
+      "Mesh bounds only filter queries; actual double-sided triangles decide contacts, preserving true arches.",
+      "Dense geometry uses exact world BVH with face-predicate traversal; small meshes use Raycaster. Runtime still requires profiling.",
+      "World origin is the sphere centre, matching the existing player radius contract; no floating-origin support."
+    ]
+  },
+  "actualPlayerWalked": false,
+  "productionInstalled": false,
+  "accepted": false,
+  "limitations": [
+    "Finite ray/support probes on actual current meshes; no real player trajectory, jump, camera or gameplay simulation.",
+    "Runtime game collision pipeline and legacy platforms not replaced by this read-only audit."
+  ]
+}

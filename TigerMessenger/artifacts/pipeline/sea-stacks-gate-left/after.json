@@ -1,0 +1,238 @@
+{
+  "report": {
+    "plazaMin": null,
+    "plazaHemisphereVertices": 0,
+    "plazaClear": true,
+    "terraces": [
+      {
+        "seed": 0,
+        "waterRadius": 160.27137539660131,
+        "burial": 6,
+        "maxBaseAboveWater": -5.755394771816469,
+        "rimAngle": 0.99,
+        "plazaClearance": null,
+        "plazaOppositeHemisphere": true,
+        "roots": 46
+      },
+      {
+        "seed": 1,
+        "waterRadius": 160.29164659019625,
+        "burial": 6,
+        "maxBaseAboveWater": -5.460836672415638,
+        "rimAngle": 0.99,
+        "plazaClearance": null,
+        "plazaOppositeHemisphere": true,
+        "roots": 44
+      },
+      {
+        "seed": 2,
+        "waterRadius": 160.37817733296376,
+        "burial": 6.2099999999999795,
+        "maxBaseAboveWater": -5.372631962191747,
+        "rimAngle": 1.3399999999999992,
+        "plazaClearance": null,
+        "plazaOppositeHemisphere": true,
+        "roots": 45
+      },
+      {
+        "seed": 3,
+        "waterRadius": 160.3736617085249,
+        "burial": 5.999999999999943,
+        "maxBaseAboveWater": -5.657075435454232,
+        "rimAngle": 1.2,
+        "plazaClearance": null,
+        "plazaOppositeHemisphere": true,
+        "roots": 45
+      },
+      {
+        "seed": 4,
+        "skipped": "protected-corridor-or-city"
+      },
+      {
+        "seed": 5,
+        "waterRadius": 160.2680247724468,
+        "burial": 6,
+        "maxBaseAboveWater": -5.230255865363233,
+        "rimAngle": 1.2699999999999998,
+        "plazaClearance": null,
+        "plazaOppositeHemisphere": true,
+        "roots": 44
+      },
+      {
+        "seed": 6,
+        "waterRadius": 160.37996305246472,
+        "burial": 5.999999999999972,
+        "maxBaseAboveWater": -5.63591430456097,
+        "rimAngle": 1.41,
+        "plazaClearance": null,
+        "plazaOppositeHemisphere": true,
+        "roots": 46
+      },
+      {
+        "seed": 10,
+        "waterRadius": 160.3421972328729,
+        "burial": 6,
+        "maxBaseAboveWater": -5.6756786605612035,
+        "rimAngle": 1.41,
+        "plazaClearance": null,
+        "plazaOppositeHemisphere": true,
+        "roots": 45
+      },
+      {
+        "seed": 11,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 12,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 13,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 14,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 15,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 16,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 20,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 21,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 22,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 23,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 24,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 25,
+        "skipped": "outside-approved-gate-left-group"
+      },
+      {
+        "seed": 26,
+        "skipped": "outside-approved-gate-left-group"
+      }
+    ],
+    "axes": [
+      {
+        "angle": 0,
+        "burial": 6,
+        "modules": [
+          "talus-plinth",
+          "sheltered-wave-notch",
+          "jointed-lower-cliff",
+          "recessed-terrace",
+          "slab-upper-cliff",
+          "fractured-cap-ledge"
+        ],
+        "socketMismatches": 0
+      },
+      {
+        "angle": 0,
+        "burial": 6,
+        "modules": [
+          "talus-plinth",
+          "deep-wave-notch",
+          "massive-lower-cliff",
+          "wide-broken-terrace",
+          "slab-upper-cliff",
+          "fractured-cap-ledge"
+        ],
+        "socketMismatches": 0
+      },
+      {
+        "angle": 0,
+        "burial": 6.2099999999999795,
+        "modules": [
+          "talus-plinth",
+          "deep-wave-notch",
+          "massive-lower-cliff",
+          "wide-broken-terrace",
+          "slab-upper-cliff",
+          "fractured-cap-ledge"
+        ],
+        "socketMismatches": 0
+      },
+      {
+        "angle": 0,
+        "burial": 5.999999999999943,
+        "modules": [
+          "talus-plinth",
+          "sheltered-wave-notch",
+          "jointed-lower-cliff",
+          "recessed-terrace",
+          "slab-upper-cliff",
+          "fractured-cap-ledge"
+        ],
+        "socketMismatches": 0
+      },
+      {
+        "angle": 0,
+        "burial": 6,
+        "modules": [
+          "talus-plinth",
+          "deep-wave-notch",
+          "massive-lower-cliff",
+          "narrow-broken-terrace",
+          "broad-upper-cliff",
+          "blunt-broken-cap"
+        ],
+        "socketMismatches": 0
+      },
+      {
+        "angle": 0,
+        "burial": 5.999999999999972,
+        "modules": [
+          "talus-plinth",
+          "deep-wave-notch",
+          "massive-lower-cliff",
+          "narrow-broken-terrace",
+          "broad-upper-cliff",
+          "blunt-broken-cap"
+        ],
+        "socketMismatches": 0
+      },
+      {
+        "angle": 0,
+        "burial": 6,
+        "modules": [
+          "talus-plinth",
+          "deep-wave-notch",
+          "massive-lower-cliff",
+          "wide-broken-terrace",
+          "slab-upper-cliff",
+          "fractured-cap-ledge"
+        ],
+        "socketMismatches": 0
+      }
+    ],
+    "rocks": 21,
+    "visibleRocks": 7,
+    "vertices": 52560,
+    "nan": 0,
+    "probes": 46800,
+    "hits": [],
+    "hitCount": 0,
+    "greenery": 0
+  },
+  "errors": [],
+  "shaderErrors": []
+}

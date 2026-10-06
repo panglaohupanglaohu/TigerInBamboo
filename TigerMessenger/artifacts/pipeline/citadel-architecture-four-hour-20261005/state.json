@@ -1,0 +1,45 @@
+{
+  "status": "queued-after-target-terrain",
+  "approvedAt": "2026-10-05T09:18:10+08:00",
+  "target": "target.png",
+  "prerequisite": "用户后续纠正：山体建筑在新五小时窗口统筹推进，解除旧阶段阻塞",
+  "startedAt": "2026-10-05T13:59:57.479824+00:00",
+  "minimumDurationHours": 4,
+  "scoreRequirement": ">=95/100",
+  "latestVerifiedScore": null,
+  "rubric": {
+    "Townscaper体块与轮廓": 25,
+    "配色与材质": 20,
+    "共墙屋顶拱廊邻接连接": 20,
+    "新旧城地标与实景布局": 15,
+    "局部编辑反馈与一致性": 10,
+    "光照边线及环境融合": 10
+  },
+  "hardGates": [
+    "建筑承托与碰撞",
+    "桥/铁路/步行/广场保护",
+    "添加删除撤销重做与保存读取一致性",
+    "关键地标默认保护",
+    "WFC矛盾有确定恢复且不损坏布局",
+    "GPU编译及无WebGL错误",
+    "同机位实景独立复核"
+  ],
+  "notes": [
+    "不将概念图漂移当作移动交通或已批准山形的授权",
+    "从建筑实际开工起另计4小时，未验收不强行转阶段",
+    "不夸大为Oskar本人设计或原算法完整还原"
+  ],
+  "protectedLandmarks": [
+    "旧城细高塔",
+    "新城蓝穹顶",
+    "citadel-plaza-hero-statue及其圆台/环形铺装",
+    "citadel-trojan-horse及horseReservation/活动与系绳区域"
+  ],
+  "landmarkCorrection": "用户指出目标图遗漏雕塑和木马；按实际锚点和材质保留，不能由WFC装饰选择移除。",
+  "landmarkVisualSupplement": "../citadel-architecture-target-20261005/target-v3-landmarks.png",
+  "visualSupplementStatus": "用户指出缺失，已补图，实际锚点优先",
+  "currentWork": "Townscaper目标材料候选，材质归属测试通过；未声称几何及WFC连接改造完成",
+  "requiredScore": ">95/100 final whole scene",
+  "latestUserDirection": "先按目标图构建山体，再新旧城建筑，最后铁路；不再按旧轨道落点限制候选山体。雕塑木马保留。",
+  "oldLayoutPolicy": "Original retained for rollback; candidate buildings and railway may be repositioned to fit approved target terrain; current material-only prototype is not completed architecture."
+}

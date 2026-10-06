@@ -27,3 +27,6 @@
 
 ## 中间产物归档（用户授权，2026-09-26）
 按 docs/INTERMEDIATE_ARCHIVE.md 执行可恢复归档；旧验证产物外移到仓库外 TigerMessenger-Archive，原路径可能是符号链接。保护认可目标、原始资产、活跃批次和Git已追踪文件。不要删除外部归档或误判链接为缺失资产；跨设备复制前恢复或同时迁移归档。新工具若直接写归档链接，应先原子替换为本地新文件，不能覆盖历史归档对象。
+
+## 程序化场景顾问（2026-09-28 用户指定）
+十二门徒岩群、高山圣城城堡及相关场景方案，优先委派 `oskar_world_advisor` 独立研究/出案，主代理负责集成与最终验收。定义见仓库 `.codex/agents/oskar_world_advisor.toml`；Skill 位于仓库 `.agents/skills/oskar-world-advisor/SKILL.md`，个人安装在 `/Users/panglaohu/.codex/skills/oskar-world-advisor/SKILL.md`。本会话若无自定义角色选择接口，使用普通子代理并明确传入上述 Skill 与原始需求，不能谎称自定义配置已热加载。简单直接修正可由主代理读取技能处理，避免反复委派。顾问自身不递归派生顾问。用户后续要求优先；使用技能不增加批准关卡。

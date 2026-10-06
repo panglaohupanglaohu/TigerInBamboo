@@ -255,6 +255,7 @@ export function createCitadelSceneEdit({
   camera,
   scene,
   getCitadel,
+  selectTargetAt = () => null,
   panel,
   canEdit,
   isUiEvent,
@@ -384,7 +385,7 @@ export function createCitadelSceneEdit({
       const cell = hit.object.userData?.cell ?? lookupMergedCell(hit);
       if (cell && hit.face) {
         // 点击其它台地已建体块：自动切换编辑台地（不弹回 castPlane）
-        if (cell.terraceIndex !== activeTerrace && !gridTownscaper) {
+        if (Number.isInteger(cell.terraceIndex) && cell.terraceIndex !== activeTerrace && !gridTownscaper) {
           panel.setActiveTerrace(cell.terraceIndex);
           toast(`已切换到台地 ${cell.terraceIndex + 1}`, 1.0);
         }
@@ -547,6 +548,7 @@ export function createCitadelSceneEdit({
       if (!editing()) ghost.visible = false;
       return;
     }
+    if (getCitadel()?.userData.junctionEditor) { ghost.visible=false; return; }
     if (panel.usesHighlandUnitMap?.()) {
       // 山谷建筑不是正交体素，不显示会误导位置的旧格网幽灵块。
       ghost.visible = false;
@@ -560,7 +562,18 @@ export function createCitadelSceneEdit({
     const button = downButton;
     downButton = -1;
     const moved = Math.abs(e.clientX - downX) + Math.abs(e.clientY - downY);
-    if (moved > CLICK_SLOP_PX || !editing()) return;
+    if (moved > CLICK_SLOP_PX || !editing() || isUiEvent(e)) return;
+    // Switch only after a confirmed click, never during a camera drag.
+    selectTargetAt(e);
+    const junction=getCitadel()?.userData.junctionEditor;
+    if(junction){
+      const ray=castRay(e), hit=ray&&junction.pick(ray);
+      if(hit){const cell={...hit};if(button!==2&&hit.top&&!hit.empty)cell.iy++;
+        const result=panel.applyJunctionEdit(cell,button===2?'erase':'place');
+        if(result?.ok)toast(button===2?'已删除建筑单元':'已更新建筑单元',1.2);
+      }
+      ghost.visible=false;return;
+    }
 
     if (panel.usesHighlandUnitMap?.()) {
       const highlandHit = castHighlandUnit(e);
@@ -628,6 +641,7 @@ export function createCitadelSceneEdit({
     showGhost(pickTarget(e)); // 重建后立刻刷新预览
   });
 
+  dom.addEventListener("pointercancel", () => { downButton = -1; ghost.visible = false; });
   dom.addEventListener("pointerleave", () => {
     ghost.visible = false;
   });

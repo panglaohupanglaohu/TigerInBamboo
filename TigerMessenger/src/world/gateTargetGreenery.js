@@ -20,11 +20,11 @@ export function installGateTargetGreenery(gate){
  site.updateWorldMatrix(true,true);const ray=new THREE.Raycaster(),down=new THREE.Vector3(0,-1,0).transformDirection(site.matrixWorld);
  const rocks=[];site.traverseVisible(o=>{if(o.isMesh&&(o.name==='g30-far-mountain'||o.name==='gate-site-GateSite_rock-solid'))rocks.push(o);});
  let grounded=0;
- function groundedPlant(x,z,size,seed){ray.set(site.localToWorld(new THREE.Vector3(x,100,z)),down);ray.far=180;const hit=ray.intersectObjects(rocks,false)[0];if(!hit)return;const p=site.worldToLocal(hit.point.clone());if(p.y< -12)return;plant(p,size,seed);grounded++;}
+ function groundedPlant(x,z,size,seed){ray.set(site.localToWorld(new THREE.Vector3(x,100,z)),down);ray.far=180;const hit=ray.intersectObjects(rocks,false)[0];if(!hit)return;if(hit.object.geometry.userData.terraces)return;if(hit.object.userData.seaStack){const n=hit.face.normal.clone().transformDirection(hit.object.matrixWorld);const up=down.clone().negate();if(n.dot(up)<.65)return;const local=hit.object.worldToLocal(hit.point.clone());if(local.y<hit.object.userData.seaStack.height*.27)return;}const p=site.worldToLocal(hit.point.clone());if(p.y< -12)return;plant(p,size,seed);grounded++;}
  // Stair shoulders: leave the explicit walk surfaces and terrace center clear.
  // Old near-bank planting is omitted with the two removed shoulder meshes.
  // Vegetation descends the distant rock shoulders, rather than only dotting summits.
- for(const rock of rocks.filter(o=>o.name==='g30-far-mountain'))for(let k=0;k<64;k++){const a=k*2.399,r=2+(k%9)*1.15;groundedPlant(rock.position.x+Math.cos(a)*r,rock.position.z+Math.sin(a)*r,1.1+(k%4)*.35,k);}
+ for(const rock of rocks.filter(o=>o.name==='g30-far-mountain'))for(let k=0;k<(rock.userData.seaStack?12:64);k++){const a=k*2.399,r=2+(k%9)*1.15;groundedPlant(rock.position.x+Math.cos(a)*r,rock.position.z+Math.sin(a)*r,(rock.userData.seaStack ? .55 : 1.1)+(k%4)*.12,k);}
  // Platform edge beds in the architecture frame, outside the circulation corridor.
  const toSite=p=>site.worldToLocal(arch.localToWorld(p));
  const planterMat=new THREE.MeshBasicMaterial({color:0xc4a273});

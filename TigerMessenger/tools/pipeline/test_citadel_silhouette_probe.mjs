@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {probeCitadelSilhouette} from './citadel_silhouette_probe.js';
+const scene=new THREE.Scene(),castle=new THREE.Group();scene.add(castle);
+const mountain=new THREE.Mesh(new THREE.BoxGeometry(8,10,4),new THREE.MeshBasicMaterial());mountain.position.set(0,35,0);mountain.name='citadel-oskar-grid-mountain-surface';castle.add(mountain);
+const camera=new THREE.PerspectiveCamera(50,1,.1,100);camera.position.set(0,36,30);camera.lookAt(0,35,0);camera.updateMatrixWorld(true);scene.updateMatrixWorld(true);
+const t={THREE,scene,camera,renderer:{domElement:{getBoundingClientRect:()=>({width:400,height:400,left:10,top:20})}}};
+const before=camera.matrixWorld.toArray(),positions=mountain.geometry.attributes.position.array.slice();
+const opts={columns:8,region:[-5,5,-3,3],height:[30,43]};
+let report=await probeCitadelSilhouette(t,castle,opts);assert(report.rows.some(r=>r.status==='geometry-visible'));assert(report.rows.filter(r=>r.world).every(r=>r.castleLocal[1]>=30&&r.originalRayValidationError<1e-7));assert.deepEqual(camera.matrixWorld.toArray(),before);assert.deepEqual(mountain.geometry.attributes.position.array,positions);
+const block=new THREE.Mesh(new THREE.BoxGeometry(20,20,1),new THREE.MeshBasicMaterial());block.position.set(0,35,10);scene.add(block);scene.updateMatrixWorld(true);
+report=await probeCitadelSilhouette(t,castle,opts);assert(report.rows.filter(r=>r.world).every(r=>r.status==='opaque-geometry-occluded'));
+block.material.transparent=true;block.material.opacity=.5;report=await probeCitadelSilhouette(t,castle,opts);assert(report.rows.filter(r=>r.world).every(r=>r.status==='potential-silhouette-ambiguous-foreground'));
+block.visible=false;report=await probeCitadelSilhouette(t,castle,opts);assert(report.rows.some(r=>r.status==='geometry-visible'));
+report=await probeCitadelSilhouette(t,castle,{...opts,height:[41,43]});assert(report.rows.every(r=>r.status==='no-main-cap-hit'));report=await probeCitadelSilhouette(t,castle,{...opts,region:[-5,5,-3,-2.5]});assert(report.rejectedOutside>0);assert(report.rows.every(r=>r.status==='no-main-cap-hit'));
+console.log(JSON.stringify({passed:true,checks:['original ray match','opaque foreground','transparent ambiguous','hidden foreground excluded','height-region rejection','camera and geometry unchanged'],gpuPixelSilhouette:false}));

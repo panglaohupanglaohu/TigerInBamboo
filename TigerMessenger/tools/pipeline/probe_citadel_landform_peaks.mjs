@@ -1,0 +1,14 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import {writeFileSync,mkdirSync} from 'node:fs';
+const stage=process.argv[2]||'after',round='13';
+const out=new URL('../../artifacts/pipeline/citadel-landform-rebuild/',import.meta.url).pathname;
+mkdirSync(out,{recursive:true});
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});
+const page=await browser.newPage({viewport:{width:1500,height:1000}}),errors=[],warnings=[];
+page.on('pageerror',e=>errors.push(e.message));
+page.on('console',e=>{if(e.type()==='error'||e.text().includes('[citadel]'))warnings.push(e.text().slice(0,1000));});
+await page.goto('http://localhost:8931/TigerMessenger/?autostart=1&timeOfDay=.5&citadelMountain='+round+'&citadelLandform='+(stage==='before'?'0':'1'));
+await page.waitForFunction(()=>window.__tm?.scene.getObjectByName('highland-gate'),null,{timeout:120000});
+await page.waitForTimeout(7000);
+await page.evaluate(()=>{const t=__tm;t.cameraRig.update=()=>{};t.P.daySpeed=0;t.P.timeOfDay=.5;t.dayNight.update(.0001);document.querySelectorAll('body > :not(canvas)').forEach(e=>{if(e.tagName!=='SCRIPT')e.style.visibility='hidden';});});
+const hit=await page.evaluate(()=>{const t=__tm,T=t.THREE,c=t.scene.getObjectByName('castleContainer');t.camera.position.copy(c.localToWorld(new T.Vector3(9,28,104)));t.camera.up.set(0,1,0).transformDirection(c.matrixWorld);t.camera.lookAt(c.localToWorld(new T.Vector3(8,26,-15)));t.camera.fov=47;t.camera.updateProjectionMatrix();t.camera.updateMatrixWorld(true);const ray=new T.Raycaster(),terrain=[];c.traverse(o=>{if(o.isMesh&&/^citadel-oskar-grid-mountain-surface|^highland-ravine-wall|^citadel-backdrop-ridge/.test(o.name))terrain.push(o);});const samples=[];for(const [x,y]of [[440,480],[650,600],[1100,620],[450,670],[800,710],[1100,750]]){ray.setFromCamera(new T.Vector2(x/1500*2-1,1-y/1000*2),t.camera);const h=ray.intersectObjects(terrain,false)[0];samples.push({x,y,name:h?.object.name,point:h?c.worldToLocal(h.point.clone()).toArray():null});}return{samples,summary:c.userData.mountainStudy.summits};});console.log(JSON.stringify(hit));await browser.close();

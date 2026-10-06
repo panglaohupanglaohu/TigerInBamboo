@@ -1,0 +1,1253 @@
+{
+  "version": "citadel-splice-anchor-survey-1",
+  "sourceAt": "2026-10-06T00:58:29.041Z",
+  "terrainHashes": {
+    "targetTerrainCandidate.js": "70ff4c92952927db3ef2bf3839f1385b2b0aaddd28c2d812eaf53faa11511fee",
+    "targetNewCityRetreatField.js": "4a12b07d361bb1da31273650fb4db66883946a6e219edd71521de491a2f331c1",
+    "targetRailCliffField.js": "b727ce16444afed69ff486b88f65e3383edc5f88364e7c2502f5f3c718059379",
+    "targetTerrainHeightfield.js": "d74b5b21a53ac3149537f4d028a15f3f613b87b585294cbe3bcc38185e085113"
+  },
+  "pairs": {
+    "east": {
+      "totalMatched": 141,
+      "relevantMatched": 26,
+      "clearRuns": {
+        "red": [
+          {
+            "firstIndex": 1579,
+            "lastIndex": 1707,
+            "startU": 0.6101236476043277,
+            "endU": 0.6595826893353941,
+            "count": 129
+          },
+          {
+            "firstIndex": 1719,
+            "lastIndex": 1757,
+            "startU": 0.6642194744976816,
+            "endU": 0.6789026275115919,
+            "count": 39
+          }
+        ],
+        "blue": [
+          {
+            "firstIndex": 1616,
+            "lastIndex": 1797,
+            "startU": 0.6102719033232629,
+            "endU": 0.6786253776435045,
+            "count": 182
+          }
+        ]
+      },
+      "firstClearWithCollar": {
+        "worldSeparation": 4.1015025231365225,
+        "tangentAngleDegrees": 0.052294086375577,
+        "collar": {
+          "beforeSamples": 6,
+          "afterSamples": 6,
+          "approximateMetresEachSide": 6,
+          "minimumInflatedBodyOceanGap": 5.895877716093054
+        },
+        "red": {
+          "i": 1666,
+          "u": 0.6437403400309119,
+          "world": [
+            -27.386075864359775,
+            87.29356100045977,
+            140.3788813220472
+          ],
+          "tangent": [
+            0.7412155284637829,
+            0.6485965547442802,
+            -0.17297991079314723
+          ],
+          "local": [
+            129.98289282601462,
+            -68.88678853902746,
+            64.39161681968288
+          ],
+          "radius": 167.56011835940816,
+          "signedRadialGrade": 0.07202052752784766,
+          "inflatedBodyMinimumOceanGap": 6.341390586628535,
+          "recordedClear": false,
+          "currentFactoryClear": true
+        },
+        "blue": {
+          "i": 1712,
+          "u": 0.6465256797583081,
+          "world": [
+            -29.888535423109253,
+            89.78464713309053,
+            138.29213529439232
+          ],
+          "tangent": [
+            0.7414204303357035,
+            0.6481557324478636,
+            -0.17375238696430564
+          ],
+          "local": [
+            130.05340501635874,
+            -69.48623921903406,
+            68.44846410058312
+          ],
+          "radius": 167.56885777146823,
+          "signedRadialGrade": 0.07183201471032473,
+          "inflatedBodyMinimumOceanGap": 6.350870649369682,
+          "recordedClear": false,
+          "currentFactoryClear": true
+        }
+      },
+      "recommendedForFourPercentEndpoint": {
+        "worldSeparation": 4.101266555713049,
+        "tangentAngleDegrees": 0.1163536409646681,
+        "collar": {
+          "beforeSamples": 6,
+          "afterSamples": 6,
+          "approximateMetresEachSide": 6,
+          "minimumInflatedBodyOceanGap": 6.988247554901108
+        },
+        "red": {
+          "i": 1684,
+          "u": 0.6506955177743431,
+          "world": [
+            -13.791729740487451,
+            98.24417661686596,
+            136.10569468171795
+          ],
+          "tangent": [
+            0.7706318692405866,
+            0.5535316583208062,
+            -0.3157993434878835
+          ],
+          "local": [
+            120.05317663214697,
+            -54.187069003128826,
+            67.2728205355232
+          ],
+          "radius": 168.42473147716052,
+          "signedRadialGrade": 0.004576730352573773,
+          "inflatedBodyMinimumOceanGap": 7.4447365185998535,
+          "recordedClear": false,
+          "currentFactoryClear": true
+        },
+        "blue": {
+          "i": 1730,
+          "u": 0.6533232628398792,
+          "world": [
+            -16.288857002531845,
+            100.72488089323264,
+            134.00073646565258
+          ],
+          "tangent": [
+            0.7711052405317315,
+            0.5520955472658445,
+            -0.3171548749644692
+          ],
+          "local": [
+            120.10461866367146,
+            -54.79662432721547,
+            71.32820996013835
+          ],
+          "radius": 168.42513430822046,
+          "signedRadialGrade": 0.0032676320230003914,
+          "inflatedBodyMinimumOceanGap": 7.445136878104506,
+          "recordedClear": false,
+          "currentFactoryClear": true
+        }
+      },
+      "preferredStableLowGrade": {
+        "worldSeparation": 4.101266555713049,
+        "tangentAngleDegrees": 0.1163536409646681,
+        "collar": {
+          "beforeSamples": 6,
+          "afterSamples": 6,
+          "approximateMetresEachSide": 6,
+          "minimumInflatedBodyOceanGap": 6.988247554901108
+        },
+        "red": {
+          "i": 1684,
+          "u": 0.6506955177743431,
+          "world": [
+            -13.791729740487451,
+            98.24417661686596,
+            136.10569468171795
+          ],
+          "tangent": [
+            0.7706318692405866,
+            0.5535316583208062,
+            -0.3157993434878835
+          ],
+          "local": [
+            120.05317663214697,
+            -54.187069003128826,
+            67.2728205355232
+          ],
+          "radius": 168.42473147716052,
+          "signedRadialGrade": 0.004576730352573773,
+          "inflatedBodyMinimumOceanGap": 7.4447365185998535,
+          "recordedClear": false,
+          "currentFactoryClear": true
+        },
+        "blue": {
+          "i": 1730,
+          "u": 0.6533232628398792,
+          "world": [
+            -16.288857002531845,
+            100.72488089323264,
+            134.00073646565258
+          ],
+          "tangent": [
+            0.7711052405317315,
+            0.5520955472658445,
+            -0.3171548749644692
+          ],
+          "local": [
+            120.10461866367146,
+            -54.79662432721547,
+            71.32820996013835
+          ],
+          "radius": 168.42513430822046,
+          "signedRadialGrade": 0.0032676320230003914,
+          "inflatedBodyMinimumOceanGap": 7.445136878104506,
+          "recordedClear": false,
+          "currentFactoryClear": true
+        }
+      },
+      "candidates": [
+        {
+          "worldSeparation": 4.1015025231365225,
+          "tangentAngleDegrees": 0.052294086375577,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 5.895877716093054
+          },
+          "red": {
+            "i": 1666,
+            "u": 0.6437403400309119,
+            "world": [
+              -27.386075864359775,
+              87.29356100045977,
+              140.3788813220472
+            ],
+            "tangent": [
+              0.7412155284637829,
+              0.6485965547442802,
+              -0.17297991079314723
+            ],
+            "local": [
+              129.98289282601462,
+              -68.88678853902746,
+              64.39161681968288
+            ],
+            "radius": 167.56011835940816,
+            "signedRadialGrade": 0.07202052752784766,
+            "inflatedBodyMinimumOceanGap": 6.341390586628535,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 1712,
+            "u": 0.6465256797583081,
+            "world": [
+              -29.888535423109253,
+              89.78464713309053,
+              138.29213529439232
+            ],
+            "tangent": [
+              0.7414204303357035,
+              0.6481557324478636,
+              -0.17375238696430564
+            ],
+            "local": [
+              130.05340501635874,
+              -69.48623921903406,
+              68.44846410058312
+            ],
+            "radius": 167.56885777146823,
+            "signedRadialGrade": 0.07183201471032473,
+            "inflatedBodyMinimumOceanGap": 6.350870649369682,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.101514730672885,
+          "tangentAngleDegrees": 0.05868945097153587,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 6.115369897797308
+          },
+          "red": {
+            "i": 1669,
+            "u": 0.6448995363214838,
+            "world": [
+              -25.156246850327435,
+              89.223291510897,
+              139.83342860180906
+            ],
+            "tangent": [
+              0.745955988929144,
+              0.6378895126052191,
+              -0.19143310134096186
+            ],
+            "local": [
+              128.49627417202612,
+              -66.32950688651708,
+              64.88536925977309
+            ],
+            "radius": 167.77073719266522,
+            "signedRadialGrade": 0.06798965886620048,
+            "inflatedBodyMinimumOceanGap": 6.56784913244968,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 1715,
+            "u": 0.6476586102719033,
+            "world": [
+              -27.657842203559515,
+              91.71331530374887,
+              137.7443557726224
+            ],
+            "tangent": [
+              0.7461692877300249,
+              0.6373803190464506,
+              -0.19229592543970436
+            ],
+            "local": [
+              128.56427727111992,
+              -66.92995028347626,
+              68.94212490825481
+            ],
+            "radius": 167.77900937416644,
+            "signedRadialGrade": 0.06769071777175706,
+            "inflatedBodyMinimumOceanGap": 6.577298862604636,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.101526866830558,
+          "tangentAngleDegrees": 0.06458537138482154,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 6.341390586628535
+          },
+          "red": {
+            "i": 1672,
+            "u": 0.6460587326120556,
+            "world": [
+              -22.911953155327957,
+              91.1185186330278,
+              139.22952905908417
+            ],
+            "tangent": [
+              0.7508106678370204,
+              0.6256209878278962,
+              -0.2118530638234317
+            ],
+            "local": [
+              126.9498356173072,
+              -63.80715314784237,
+              65.37495490606038
+            ],
+            "radius": 167.96548394620766,
+            "signedRadialGrade": 0.06147915825214734,
+            "inflatedBodyMinimumOceanGap": 6.788260524340188,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 1718,
+            "u": 0.6487915407854985,
+            "world": [
+              -25.412668055651785,
+              93.607279025836,
+              137.137874371087
+            ],
+            "tangent": [
+              0.7510248685965026,
+              0.625043268218247,
+              -0.21279699153103313
+            ],
+            "local": [
+              127.01508933623217,
+              -64.40880627335744,
+              69.43158874559498
+            ],
+            "radius": 167.97298286137416,
+            "signedRadialGrade": 0.061078934935999994,
+            "inflatedBodyMinimumOceanGap": 6.797339951024981,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.101539116797029,
+          "tangentAngleDegrees": 0.07081954617053199,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 6.56784913244968
+          },
+          "red": {
+            "i": 1675,
+            "u": 0.6472179289026275,
+            "world": [
+              -20.6530265926932,
+              92.97429708924388,
+              138.5611970231834
+            ],
+            "tangent": [
+              0.7556652137973892,
+              0.6116146693565198,
+              -0.23430232795356815
+            ],
+            "local": [
+              125.33803279655069,
+              -61.32511189170519,
+              65.85961300614558
+            ],
+            "radius": 168.13676798123285,
+            "signedRadialGrade": 0.05236514285839476,
+            "inflatedBodyMinimumOceanGap": 6.995578971532439,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 1721,
+            "u": 0.6499244712990937,
+            "world": [
+              -23.15285371000693,
+              95.46157348074912,
+              136.46669382136687
+            ],
+            "tangent": [
+              0.7558750016898685,
+              0.6109605683461483,
+              -0.23532990831276177
+            ],
+            "local": [
+              125.40029019698864,
+              -61.92821492863793,
+              69.91609101909587
+            ],
+            "radius": 168.14316866549214,
+            "signedRadialGrade": 0.05185819007160883,
+            "inflatedBodyMinimumOceanGap": 7.003987419075116,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.101550622567228,
+          "tangentAngleDegrees": 0.07785211333214595,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 6.788260524340188
+          },
+          "red": {
+            "i": 1678,
+            "u": 0.6483771251931993,
+            "world": [
+              -18.379679234616354,
+              94.78512780175689,
+              137.82225966926936
+            ],
+            "tangent": [
+              0.7603838361658002,
+              0.5956636095265224,
+              -0.2588460661930492
+            ],
+            "local": [
+              123.65532073145482,
+              -58.889456169114126,
+              66.33847185784927
+            ],
+            "radius": 168.27658280790672,
+            "signedRadialGrade": 0.04050042564166102,
+            "inflatedBodyMinimumOceanGap": 7.182450776706531,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 1724,
+            "u": 0.6510574018126888,
+            "world": [
+              -20.878638519065248,
+              97.2706678090484,
+              135.724639380394
+            ],
+            "tangent": [
+              0.7605850187048723,
+              0.5949191072839811,
+              -0.25996477667203316
+            ],
+            "local": [
+              123.71434511009193,
+              -59.49428920953905,
+              70.39475225069917
+            ],
+            "radius": 168.28154413769215,
+            "signedRadialGrade": 0.03987306637270856,
+            "inflatedBodyMinimumOceanGap": 7.189904543409284,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.101540528603547,
+          "tangentAngleDegrees": 0.09295165771596492,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 6.995578971532439
+          },
+          "red": {
+            "i": 1681,
+            "u": 0.6495363214837713,
+            "world": [
+              -16.092860512077912,
+              96.54527867592616,
+              137.00650950226236
+            ],
+            "tangent": [
+              0.7649156675405864,
+              0.5773374127359711,
+              -0.28563181441547086
+            ],
+            "local": [
+              121.89652297002334,
+              -56.506900283453476,
+              66.81088818975432
+            ],
+            "radius": 168.37682334593126,
+            "signedRadialGrade": 0.025523117471208424,
+            "inflatedBodyMinimumOceanGap": 7.342286436307461,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 1727,
+            "u": 0.652190332326284,
+            "world": [
+              -18.590967827689077,
+              99.02875585550227,
+              134.90545366150226
+            ],
+            "tangent": [
+              0.7651741508693688,
+              0.576363596271232,
+              -0.28690333517516475
+            ],
+            "local": [
+              121.9520257681846,
+              -57.11380923049278,
+              70.86689801187968
+            ],
+            "radius": 168.37992754088765,
+            "signedRadialGrade": 0.02463283535743992,
+            "inflatedBodyMinimumOceanGap": 7.348939160774734,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.101266555713049,
+          "tangentAngleDegrees": 0.1163536409646681,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 6.988247554901108
+          },
+          "red": {
+            "i": 1684,
+            "u": 0.6506955177743431,
+            "world": [
+              -13.791729740487451,
+              98.24417661686596,
+              136.10569468171795
+            ],
+            "tangent": [
+              0.7706318692405866,
+              0.5535316583208062,
+              -0.3157993434878835
+            ],
+            "local": [
+              120.05317663214697,
+              -54.187069003128826,
+              67.2728205355232
+            ],
+            "radius": 168.42473147716052,
+            "signedRadialGrade": 0.004576730352573773,
+            "inflatedBodyMinimumOceanGap": 7.4447365185998535,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 1730,
+            "u": 0.6533232628398792,
+            "world": [
+              -16.288857002531845,
+              100.72488089323264,
+              134.00073646565258
+            ],
+            "tangent": [
+              0.7711052405317315,
+              0.5520955472658445,
+              -0.3171548749644692
+            ],
+            "local": [
+              120.10461866367146,
+              -54.79662432721547,
+              71.32820996013835
+            ],
+            "radius": 168.42513430822046,
+            "signedRadialGrade": 0.0032676320230003914,
+            "inflatedBodyMinimumOceanGap": 7.445136878104506,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.100115577448437,
+          "tangentAngleDegrees": 0.026545911843953475,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 6.600605811862437
+          },
+          "red": {
+            "i": 1687,
+            "u": 0.651854714064915,
+            "world": [
+              -11.462531724183881,
+              99.84488416961783,
+              135.10358605969157
+            ],
+            "tangent": [
+              0.7826179639514194,
+              0.5133564127600165,
+              -0.3520998664849257
+            ],
+            "local": [
+              118.0996413294873,
+              -51.9523277148018,
+              67.69859154726281
+            ],
+            "radius": 168.38458805532295,
+            "signedRadialGrade": -0.031400326008752026,
+            "inflatedBodyMinimumOceanGap": 7.326631697297444,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 1733,
+            "u": 0.6544561933534743,
+            "world": [
+              -13.958334464538677,
+              102.32292401973817,
+              132.99616229336254
+            ],
+            "tangent": [
+              0.7828662298531567,
+              0.5129656280167644,
+              -0.352117495488184
+            ],
+            "local": [
+              118.14799695752347,
+              -52.563735751584076,
+              71.75257596931361
+            ],
+            "radius": 168.3828823418089,
+            "signedRadialGrade": -0.03131092470213949,
+            "inflatedBodyMinimumOceanGap": 7.325282483374451,
+            "recordedClear": false,
+            "currentFactoryClear": true
+          }
+        }
+      ]
+    },
+    "west": {
+      "totalMatched": 58,
+      "relevantMatched": 55,
+      "clearRuns": {
+        "red": [
+          {
+            "firstIndex": 1967,
+            "lastIndex": 1981,
+            "startU": 0.7600463678516228,
+            "endU": 0.7654559505409583,
+            "count": 15
+          },
+          {
+            "firstIndex": 2186,
+            "lastIndex": 2256,
+            "startU": 0.8446676970633694,
+            "endU": 0.8717156105100463,
+            "count": 71
+          }
+        ],
+        "blue": [
+          {
+            "firstIndex": 2013,
+            "lastIndex": 2030,
+            "startU": 0.7601963746223565,
+            "endU": 0.7666163141993958,
+            "count": 18
+          },
+          {
+            "firstIndex": 2239,
+            "lastIndex": 2309,
+            "startU": 0.8455438066465257,
+            "endU": 0.8719788519637462,
+            "count": 71
+          }
+        ]
+      },
+      "firstClearWithCollar": {
+        "worldSeparation": 4.100399774257482,
+        "tangentAngleDegrees": 0.25660002907536883,
+        "collar": {
+          "beforeSamples": 6,
+          "afterSamples": 6,
+          "approximateMetresEachSide": 6,
+          "minimumInflatedBodyOceanGap": 2.994323606955078
+        },
+        "red": {
+          "i": 2192,
+          "u": 0.8469860896445132,
+          "world": [
+            151.66226391464386,
+            -34.537207309657,
+            54.16391575120123
+          ],
+          "tangent": [
+            -0.4282519782486063,
+            -0.12210883213872362,
+            0.8953712505100175
+          ],
+          "local": [
+            -58.11762125143786,
+            -69.0774038903719,
+            -73.27546218840442
+          ],
+          "radius": 164.70577025097978,
+          "signedRadialGrade": -0.0744931734961125,
+          "inflatedBodyMinimumOceanGap": 3.4781110249784604,
+          "recordedClear": true,
+          "currentFactoryClear": true
+        },
+        "blue": {
+          "i": 2247,
+          "u": 0.8485649546827795,
+          "world": [
+            150.97580044837838,
+            -38.50387461903262,
+            53.384430873256605
+          ],
+          "tangent": [
+            -0.42421410146241273,
+            -0.12200434463441315,
+            0.8973055978933627
+          ],
+          "local": [
+            -58.84492666130276,
+            -72.51891423428584,
+            -75.38266690134648
+          ],
+          "radius": 164.70014614859411,
+          "signedRadialGrade": -0.0696661053896844,
+          "inflatedBodyMinimumOceanGap": 3.49151662341896,
+          "recordedClear": true,
+          "currentFactoryClear": true
+        }
+      },
+      "recommendedForFourPercentEndpoint": {
+        "worldSeparation": 4.124403435009233,
+        "tangentAngleDegrees": 0.5938630881513454,
+        "collar": {
+          "beforeSamples": 6,
+          "afterSamples": 6,
+          "approximateMetresEachSide": 6,
+          "minimumInflatedBodyOceanGap": 0.024055924394531303
+        },
+        "red": {
+          "i": 2231,
+          "u": 0.8620556414219475,
+          "world": [
+            134.70594060532105,
+            -22.092204675477323,
+            85.70150825103661
+          ],
+          "tangent": [
+            -0.4276877977574766,
+            0.5215881935302314,
+            0.738260729024123
+          ],
+          "local": [
+            -21.32701400237003,
+            -60.300610782938676,
+            -70.73895821347216
+          ],
+          "radius": 161.17848633825162,
+          "signedRadialGrade": -0.03641273287046843,
+          "inflatedBodyMinimumOceanGap": 0.10268643727414428,
+          "recordedClear": true,
+          "currentFactoryClear": true
+        },
+        "blue": {
+          "i": 2289,
+          "u": 0.8644259818731118,
+          "world": [
+            132.92063166324579,
+            -25.31659909991508,
+            87.55263122688581
+          ],
+          "tangent": [
+            -0.4199193522162666,
+            0.5189122401656449,
+            0.744578957962514
+          ],
+          "local": [
+            -19.20450270338247,
+            -63.01340077678738,
+            -73.00753043618417
+          ],
+          "radius": 161.16540493075163,
+          "signedRadialGrade": -0.023356241181549862,
+          "inflatedBodyMinimumOceanGap": 0.14162402941656183,
+          "recordedClear": true,
+          "currentFactoryClear": true
+        }
+      },
+      "preferredStableLowGrade": {
+        "worldSeparation": 4.1087649774885,
+        "tangentAngleDegrees": 0.21440329224312227,
+        "collar": {
+          "beforeSamples": 6,
+          "afterSamples": 6,
+          "approximateMetresEachSide": 6,
+          "minimumInflatedBodyOceanGap": 0.14162402941656183
+        },
+        "red": {
+          "i": 2238,
+          "u": 0.8647604327666152,
+          "world": [
+            131.69864526431047,
+            -18.62687877617297,
+            90.98255012810814
+          ],
+          "tangent": [
+            -0.4585942018929006,
+            0.46285107831568706,
+            0.7585909551874577
+          ],
+          "local": [
+            -14.897269088340591,
+            -57.9855106017373,
+            -69.24216041304948
+          ],
+          "radius": 161.1499866745593,
+          "signedRadialGrade": 0.0000051726005044908975,
+          "inflatedBodyMinimumOceanGap": 0.16998667456579142,
+          "recordedClear": true,
+          "currentFactoryClear": true
+        },
+        "blue": {
+          "i": 2295,
+          "u": 0.8666918429003021,
+          "world": [
+            130.34745768723963,
+            -22.347517900838753,
+            92.08395208734542
+          ],
+          "tangent": [
+            -0.4560155878840408,
+            0.46556085011847326,
+            0.7584872302443445
+          ],
+          "local": [
+            -13.69223939871412,
+            -61.025350170433256,
+            -71.7299764199007
+          ],
+          "radius": 161.15000935116188,
+          "signedRadialGrade": -6.218411395254679e-7,
+          "inflatedBodyMinimumOceanGap": 0.17000935116200822,
+          "recordedClear": true,
+          "currentFactoryClear": true
+        }
+      },
+      "candidates": [
+        {
+          "worldSeparation": 4.100399774257482,
+          "tangentAngleDegrees": 0.25660002907536883,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 2.994323606955078
+          },
+          "red": {
+            "i": 2192,
+            "u": 0.8469860896445132,
+            "world": [
+              151.66226391464386,
+              -34.537207309657,
+              54.16391575120123
+            ],
+            "tangent": [
+              -0.4282519782486063,
+              -0.12210883213872362,
+              0.8953712505100175
+            ],
+            "local": [
+              -58.11762125143786,
+              -69.0774038903719,
+              -73.27546218840442
+            ],
+            "radius": 164.70577025097978,
+            "signedRadialGrade": -0.0744931734961125,
+            "inflatedBodyMinimumOceanGap": 3.4781110249784604,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 2247,
+            "u": 0.8485649546827795,
+            "world": [
+              150.97580044837838,
+              -38.50387461903262,
+              53.384430873256605
+            ],
+            "tangent": [
+              -0.42421410146241273,
+              -0.12200434463441315,
+              0.8973055978933627
+            ],
+            "local": [
+              -58.84492666130276,
+              -72.51891423428584,
+              -75.38266690134648
+            ],
+            "radius": 164.70014614859411,
+            "signedRadialGrade": -0.0696661053896844,
+            "inflatedBodyMinimumOceanGap": 3.49151662341896,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.100711158436708,
+          "tangentAngleDegrees": 0.6433728518918894,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 1.9634046085267585
+          },
+          "red": {
+            "i": 2202,
+            "u": 0.8508500772797527,
+            "world": [
+              147.2451604365827,
+              -34.669928781255834,
+              63.10226481064391
+            ],
+            "tangent": [
+              -0.45075816335475616,
+              0.12520662960280757,
+              0.8838214627811164
+            ],
+            "local": [
+              -48.3708942097746,
+              -68.86548537420633,
+              -75.36804541283766
+            ],
+            "radius": 163.90557360237923,
+            "signedRadialGrade": -0.09154174016035292,
+            "inflatedBodyMinimumOceanGap": 2.6111841527982165,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 2258,
+            "u": 0.8527190332326284,
+            "world": [
+              146.18294880550337,
+              -38.62790231780198,
+              63.2505346313341
+            ],
+            "tangent": [
+              -0.44070680661593253,
+              0.12600167064602213,
+              0.8887637985408713
+            ],
+            "local": [
+              -48.131481531527854,
+              -72.21694230060156,
+              -77.71884315933553
+            ],
+            "radius": 163.8969172684333,
+            "signedRadialGrade": -0.08003831119415242,
+            "inflatedBodyMinimumOceanGap": 2.6476702743277656,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.100998679723458,
+          "tangentAngleDegrees": 0.49599074491274775,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 0.9573013121870986
+          },
+          "red": {
+            "i": 2212,
+            "u": 0.8547140649149922,
+            "world": [
+              142.84898588465416,
+              -31.75936472424647,
+              71.54676345937868
+            ],
+            "tangent": [
+              -0.4269191134470075,
+              0.4204179944921196,
+              0.8006177492916613
+            ],
+            "local": [
+              -38.6555403268577,
+              -66.71453507145304,
+              -75.0637380448045
+            ],
+            "radius": 162.89085111655018,
+            "signedRadialGrade": -0.10528418183053262,
+            "inflatedBodyMinimumOceanGap": 1.5430832401586372,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 2269,
+            "u": 0.8568731117824774,
+            "world": [
+              141.44771835858802,
+              -35.4646961266765,
+              72.60749843554
+            ],
+            "tangent": [
+              -0.4204237886641459,
+              0.41752357506072074,
+              0.8055544067248347
+            ],
+            "local": [
+              -37.452522223391384,
+              -69.78980034092605,
+              -77.49554419172469
+            ],
+            "radius": 162.90196600801013,
+            "signedRadialGrade": -0.09736339508125895,
+            "inflatedBodyMinimumOceanGap": 1.5850965934664032,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.1201966373106975,
+          "tangentAngleDegrees": 0.14499996427678769,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 0.08681435227873635
+          },
+          "red": {
+            "i": 2222,
+            "u": 0.8585780525502318,
+            "world": [
+              138.62935011755923,
+              -26.896313433244252,
+              79.18527623386895
+            ],
+            "tangent": [
+              -0.42393229017513584,
+              0.527876779235241,
+              0.7359534763088581
+            ],
+            "local": [
+              -29.44923406076989,
+              -63.38611575528482,
+              -73.07199984346713
+            ],
+            "radius": 161.9006373136013,
+            "signedRadialGrade": -0.09111497517851518,
+            "inflatedBodyMinimumOceanGap": 0.6085084507244858,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 2280,
+            "u": 0.8610271903323263,
+            "world": [
+              136.84473257880532,
+              -30.117588925243414,
+              81.03312492224251
+            ],
+            "tangent": [
+              -0.42324330521921705,
+              0.5300243887226593,
+              0.7348055878572809
+            ],
+            "local": [
+              -27.329375714955198,
+              -66.09745604849496,
+              -75.3371388542568
+            ],
+            "radius": 161.8638851995665,
+            "signedRadialGrade": -0.08893068679028203,
+            "inflatedBodyMinimumOceanGap": 0.5803261086345799,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.126879114886984,
+          "tangentAngleDegrees": 0.28322844630487415,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 0.024055924394531303
+          },
+          "red": {
+            "i": 2232,
+            "u": 0.8624420401854714,
+            "world": [
+              134.28683477696055,
+              -21.573852823890192,
+              86.44645025194733
+            ],
+            "tangent": [
+              -0.41347870854179747,
+              0.5152780830679276,
+              0.7506822594763042
+            ],
+            "local": [
+              -20.419300118843037,
+              -59.95044472340773,
+              -70.50935821666184
+            ],
+            "radius": 161.15636469356082,
+            "signedRadialGrade": -0.010843919750580357,
+            "inflatedBodyMinimumOceanGap": 0.17639299711399303,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 2290,
+            "u": 0.8648036253776435,
+            "world": [
+              132.50624139560205,
+              -24.80121797764169,
+              88.30244933694259
+            ],
+            "tangent": [
+              -0.4118803113186197,
+              0.5118696729026521,
+              0.7538859642615778
+            ],
+            "local": [
+              -18.295945086114553,
+              -62.66058881294039,
+              -72.78479524014725
+            ],
+            "radius": 161.15311657199612,
+            "signedRadialGrade": -0.004354447460453601,
+            "inflatedBodyMinimumOceanGap": 0.17312113621713365,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          }
+        },
+        {
+          "worldSeparation": 4.099670068649373,
+          "tangentAngleDegrees": 0.03255413762353211,
+          "collar": {
+            "beforeSamples": 6,
+            "afterSamples": 6,
+            "approximateMetresEachSide": 6,
+            "minimumInflatedBodyOceanGap": 0.16781099480036232
+          },
+          "red": {
+            "i": 2242,
+            "u": 0.866306027820711,
+            "world": [
+              129.77946259756166,
+              -16.889011048338055,
+              94.02855882801707
+            ],
+            "tangent": [
+              -0.5017236813212489,
+              0.4037248618981543,
+              0.7650356746497318
+            ],
+            "local": [
+              -11.114667096969072,
+              -56.94733637096395,
+              -68.4703237793306
+            ],
+            "radius": 161.1499844293404,
+            "signedRadialGrade": 0.000020220615705194765,
+            "inflatedBodyMinimumOceanGap": 0.16998442943889813,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          },
+          "blue": {
+            "i": 2299,
+            "u": 0.868202416918429,
+            "world": [
+              128.4338942690412,
+              -20.601778458781208,
+              95.12951236973144
+            ],
+            "tangent": [
+              -0.5020310664241616,
+              0.40324953623172327,
+              0.7650847141813247
+            ],
+            "local": [
+              -9.912261280709927,
+              -59.97833545327113,
+              -70.95518986985915
+            ],
+            "radius": 161.15000029934484,
+            "signedRadialGrade": -0.000020643700507263577,
+            "inflatedBodyMinimumOceanGap": 0.17000029944745165,
+            "recordedClear": true,
+            "currentFactoryClear": true
+          }
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Finite original stations about 1m apart, not a continuous sweep; collar uses six stations on each side.",
+    "Envelope is conservative union of measured current vehicles; future cargo/robots outside it need new measurement.",
+    "Ocean gap uses official static directional sea level plus planet radius 160, not time-varying wave crests.",
+    "Only citadel mountain geometry is tested, not city buildings, rails, pylons, water-curtain structures, ships or the rest of the planet.",
+    "New connecting segment, derivative handle, grade, radius and foundations are NOT implied clear by a clean endpoint.",
+    "Recorded terrain and current CPU-remeshed terrain are different evidence epochs; keep both, and recapture actual installed final geometry before publication."
+  ]
+}

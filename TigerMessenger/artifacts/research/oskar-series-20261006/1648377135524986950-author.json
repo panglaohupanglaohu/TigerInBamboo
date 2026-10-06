@@ -1,0 +1,197 @@
+{
+  "code": 200,
+  "message": "OK",
+  "tweet": {
+    "url": "https://x.com/OskSta/status/1648377135524986950",
+    "id": "1648377135524986950",
+    "text": "The correct way to draw free hand hexagon grids",
+    "raw_text": {
+      "text": "The correct way to draw free hand hexagon grids https://t.co/9xoj2uBarR",
+      "display_text_range": [
+        0,
+        47
+      ],
+      "facets": [
+        {
+          "type": "media",
+          "indices": [
+            48,
+            71
+          ],
+          "id": "1648376992218202148",
+          "display": "pic.x.com/9xoj2uBarR",
+          "original": "https://t.co/9xoj2uBarR",
+          "replacement": "https://x.com/OskSta/status/1648377135524986950/video/1"
+        }
+      ]
+    },
+    "author": {
+      "screen_name": "OskSta",
+      "url": "https://x.com/OskSta",
+      "id": "767755917890842624",
+      "followers": 108099,
+      "following": 1407,
+      "likes": 81767,
+      "media_count": 545,
+      "name": "Oskar Stålberg",
+      "description": "Gamedev. Made @BadNorthGame and Townscaper. Both available on most platforms. Go buy em!",
+      "raw_description": {
+        "text": "Gamedev. Made @BadNorthGame and Townscaper. Both available on most platforms. Go buy em!",
+        "facets": []
+      },
+      "location": "Malmo, Sweden",
+      "banner_url": "https://pbs.twimg.com/profile_banners/767755917890842624/1532114530",
+      "avatar_url": "https://pbs.twimg.com/profile_images/767772432891510784/hDb4djkU_200x200.jpg",
+      "joined": "Mon Aug 22 16:10:49 +0000 2016",
+      "protected": false,
+      "website": {
+        "url": "http://oskarstalberg.com",
+        "display_url": "oskarstalberg.com"
+      },
+      "verification": {
+        "verified": false,
+        "verified_at": null,
+        "type": null
+      },
+      "avatar_color": null
+    },
+    "replies": 15,
+    "retweets": 219,
+    "likes": 3042,
+    "bookmarks": 332,
+    "quotes": 8,
+    "created_at": "Tue Apr 18 17:25:09 +0000 2023",
+    "created_timestamp": 1681838709,
+    "possibly_sensitive": false,
+    "views": 137217,
+    "is_note_tweet": false,
+    "community_note": null,
+    "lang": "en",
+    "replying_to": null,
+    "replying_to_status": null,
+    "media": {
+      "all": [
+        {
+          "id": "1648376992218202148",
+          "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/720x720/898nzhJ-WCRtUiA7.mp4?tag=12",
+          "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/1648376992218202148/pu/img/jRv0SXmfeVHCaaUB.jpg",
+          "duration": 44.327,
+          "width": 720,
+          "height": 720,
+          "format": "video/mp4",
+          "type": "video",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/pl/SE3DzSuoOPzI7d6l.m3u8?tag=12&v=cfc",
+              "container": "m3u8"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/320x320/qPNW1DlQKLsZrmXP.mp4?tag=12",
+              "bitrate": 432000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/540x540/d2qS9ievFrlZhPGM.mp4?tag=12",
+              "bitrate": 832000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/720x720/898nzhJ-WCRtUiA7.mp4?tag=12",
+              "bitrate": 1280000,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/pl/SE3DzSuoOPzI7d6l.m3u8?tag=12&v=cfc",
+              "bitrate": 0,
+              "content_type": "application/x-mpegURL"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/320x320/qPNW1DlQKLsZrmXP.mp4?tag=12",
+              "bitrate": 432000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/540x540/d2qS9ievFrlZhPGM.mp4?tag=12",
+              "bitrate": 832000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/720x720/898nzhJ-WCRtUiA7.mp4?tag=12",
+              "bitrate": 1280000,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ],
+      "videos": [
+        {
+          "id": "1648376992218202148",
+          "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/720x720/898nzhJ-WCRtUiA7.mp4?tag=12",
+          "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/1648376992218202148/pu/img/jRv0SXmfeVHCaaUB.jpg",
+          "duration": 44.327,
+          "width": 720,
+          "height": 720,
+          "format": "video/mp4",
+          "type": "video",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/pl/SE3DzSuoOPzI7d6l.m3u8?tag=12&v=cfc",
+              "container": "m3u8"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/320x320/qPNW1DlQKLsZrmXP.mp4?tag=12",
+              "bitrate": 432000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/540x540/d2qS9ievFrlZhPGM.mp4?tag=12",
+              "bitrate": 832000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/720x720/898nzhJ-WCRtUiA7.mp4?tag=12",
+              "bitrate": 1280000,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/pl/SE3DzSuoOPzI7d6l.m3u8?tag=12&v=cfc",
+              "bitrate": 0,
+              "content_type": "application/x-mpegURL"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/320x320/qPNW1DlQKLsZrmXP.mp4?tag=12",
+              "bitrate": 432000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/540x540/d2qS9ievFrlZhPGM.mp4?tag=12",
+              "bitrate": 832000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1648376992218202148/pu/vid/720x720/898nzhJ-WCRtUiA7.mp4?tag=12",
+              "bitrate": 1280000,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ]
+    },
+    "twitter_card": "player",
+    "color": null,
+    "provider": "twitter",
+    "reposted_by": null
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "durationSeconds" : 8.4600000000000009,
+  "frames" : [
+    {
+      "actualSeconds" : 0,
+      "file" : "frame-00.png",
+      "requestedSeconds" : 0
+    },
+    {
+      "actualSeconds" : 0.75,
+      "file" : "frame-01.png",
+      "requestedSeconds" : 0.76909090909090916
+    },
+    {
+      "actualSeconds" : 1.53,
+      "file" : "frame-02.png",
+      "requestedSeconds" : 1.5381818181818183
+    },
+    {
+      "actualSeconds" : 2.2799999999999998,
+      "file" : "frame-03.png",
+      "requestedSeconds" : 2.3072727272727276
+    },
+    {
+      "actualSeconds" : 3.0600000000000001,
+      "file" : "frame-04.png",
+      "requestedSeconds" : 3.0763636363636366
+    },
+    {
+      "actualSeconds" : 3.8399999999999999,
+      "file" : "frame-05.png",
+      "requestedSeconds" : 3.8454545454545457
+    },
+    {
+      "actualSeconds" : 4.5899999999999999,
+      "file" : "frame-06.png",
+      "requestedSeconds" : 4.6145454545454552
+    },
+    {
+      "actualSeconds" : 5.3700000000000001,
+      "file" : "frame-07.png",
+      "requestedSeconds" : 5.3836363636363638
+    },
+    {
+      "actualSeconds" : 6.1500000000000004,
+      "file" : "frame-08.png",
+      "requestedSeconds" : 6.1527272727272733
+    },
+    {
+      "actualSeconds" : 6.9000000000000004,
+      "file" : "frame-09.png",
+      "requestedSeconds" : 6.9218181818181828
+    },
+    {
+      "actualSeconds" : 7.6799999999999997,
+      "file" : "frame-10.png",
+      "requestedSeconds" : 7.6909090909090914
+    },
+    {
+      "actualSeconds" : 8.4000000000000004,
+      "file" : "frame-11.png",
+      "requestedSeconds" : 8.4200000000000017
+    }
+  ],
+  "id" : "1751945034851570056",
+  "method" : "AVFoundation public stream; source video not saved",
+  "source" : "https:\/\/video.twimg.com\/tweet_video\/GFAoNWVWUAEn-DY.mp4",
+  "status" : "sampled-not-continuous"
+}

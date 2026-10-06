@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oskar 研究 · 视频学习状态</title>
+<style>body{font:17px/1.7 system-ui,sans-serif;color:#263d40;background:#f4f1e7;margin:0;padding:4vw}main{max-width:1100px;margin:auto}h1{font-size:34px}a{color:#205f75}section{background:#fffdf6;border:1px solid #d4dacf;border-radius:12px;padding:22px;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:15px}td,th{text-align:left;padding:14px;border-bottom:1px solid #d7ded6;vertical-align:top}.scroll{overflow:auto}.status{color:#785019;font-weight:600}</style>
+<main><p>2026-10-04 · 顾问 oskar_world_advisor</p><h1>视频学习状态与场景实施方向</h1>
+<p class="status">研究已推进；全量学习未完成。八份导出字幕已读（Organic Towns仅04:25起），完整音画与720P仍未核实。</p>
+<p>浏览器字幕能够导出，截图和播放器操作仍间歇超时。自动翻译需要对照演讲画面复核。没有把字幕研究记作完整观看，也没有把方案记作游戏实现。</p>
+<section><h2>十二门徒应该怎样改</h2><ol>
+<li>人工模块确定海蚀基座、岩台和峰顶；WFC负责兼容选择，额外保护通道与铁路。</li>
+<li>按硬边、材质界与普通点分别平滑，保留台面及海蚀裂口。</li>
+<li>草皮与灌木依附最终表面，改掉沿整三角面截断的草缘。</li>
+<li>岩石、植被与动态物件采用协调的光照；颜色、技术对比场与阴影分开。</li>
+<li>球面区域共享边界及版本，特色场景保留造型。图文法可做后续局部结构实验。</li>
+</ol><p>以上是研究后的工程方向；同期运行时另行实施与验收，不以研究完成替代效果验证。</p></section>
+<section><h2>本批新增的字幕学习</h2><div class="scroll"><table><thead><tr><th>视频</th><th>读取范围</th><th>笔记</th></tr></thead><tbody>
+<tr><td><a href="https://www.youtube.com/watch?v=0bcZb-SsnrA">EPC2018 · Bad North WFC</a></td><td>00:00–37:22；末尾问答待补</td><td><a href="EPC2018.md">手工模块与可通行性</a></td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=NpfoRAzfGDg">Oskar2023 · Landscapes of Hex and Square</a></td><td>00:02–58:12</td><td><a href="ADVISOR.md">分层平滑、表面画刷与共享光照</a></td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=Y2CYNIjN-qk">Townscaper and the Design of Cities</a></td><td>00:11–06:37；评论性来源</td><td><a href="CITY_DESIGN.md">城市设计原则</a></td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=1tgMl92DAqk">EPC2024 · Paul Merrell</a></td><td>00:00–38:39</td><td><a href="EPC2024.md">图文法；非贴图系统教程</a></td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=7U_TesN8d6E">Destructible Worlds With WFC</a></td><td>00:00–19:52</td><td><a href="WFC_DESTRUCTIBLE.md">固定幸存瓦片后重新求解</a></td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=6JcFbivo8dQ">Developing The Bad North Look</a></td><td>00:00–55:29；1282行，含问答</td><td><a href="BAD_NORTH_LOOK.md">群落色块、共享体积光照与同步形变</a></td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=1hqt8JkYRdI">Organic Towns From Square Tiles</a></td><td>04:25–31:29；665行；开头4分25秒缺字幕</td><td><a href="ORGANIC_TOWNS.md">不规则四边形、角部模块与编辑传播</a></td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=5xrRTOikBBg">The Story of Townscaper</a></td><td>00:05–49:05；1334行，含问答</td><td><a href="STORY_TOWNSCAPER.md">语义配方、独立道具与细线适用边界</a></td></tr>
+</tbody></table></div></section>
+<section><h2>源码与项目实现边界</h2><p><a href="WFC_GITHUB.md">两个官方WFC仓库固定commit源码研究</a>：ndwfc七个Node小验证已执行；C#结论来自静态阅读，未运行。expand不是无限成本，destroyTile不是所读原库API，finite-limit返回true不代表已全部定值。</p><p>Bad North字幕描述共享低分辨率体积光照；本项目 seaStackLighting 当前为最终岩面2.5D高度场自遮蔽/接触光照近似，不能称为作者GI。未实现跨岩柱或动态投影，动态接收API不等于全部角色接入。</p></section>
+<section><h2>仍缺哪些</h2><p>Polygonal Planet短片只核实频道、标题及58秒时长；无字幕、截图超时。Bad North Look与Story已读完现有导出字幕；Organic Towns已读04:25–31:29，开头04:25之前和尾段未覆盖。三场连续音画及自动翻译校对仍未完成。Beyond Townscapers此前镜像转写读至51:39，画面尚未完整校对。X全部媒体未遍历。</p>
+<p><a href="coverage.json">逐项覆盖清单</a> · <a href="SPHERE_CODE_REVIEW.md">球面代码五点审查</a> · <a href="../../../docs/OSKAR_SPHERICAL_WORLD_CONNECTIONS.md">球面连接合同</a> · <a href="../../../docs/OSKAR_DEEP_RESEARCH_STATUS.md">研究总状态</a></p><p>顾问Skill已同步；本页保存原创摘要及来源，不复制完整字幕。</p></section></main></html>

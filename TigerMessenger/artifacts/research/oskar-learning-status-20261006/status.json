@@ -1,0 +1,2628 @@
+{
+  "schema": "oskar-learning-status-v1",
+  "as_of_date": "2026-10-06",
+  "audit_method": "本轮读取既有覆盖账本、逐项研究报告、样本时间清单与实现验收记录；未再次观看视频或运行游戏。",
+  "summary": {
+    "text_studied_videos": 9,
+    "browser_export_transcripts": 8,
+    "mirror_transcripts": 1,
+    "full_audiovisual_viewings_verified": 0,
+    "videos_720p_verified": 0,
+    "additional_video_gaps": 2,
+    "series_posts": 33,
+    "series_animated": 32,
+    "series_photos": 1,
+    "series_sampled_frames": 384,
+    "series_unique_times": 382,
+    "five_gifs": 5,
+    "five_gif_sample_times": 60,
+    "five_gif_detail_images": 4,
+    "github_repositories": 2
+  },
+  "videos": [
+    {
+      "id": "0bcZb-SsnrA",
+      "title": "EPC2018 · Bad North WFC",
+      "source": "https://www.youtube.com/watch?v=0bcZb-SsnrA",
+      "author": "Oskar Stålberg",
+      "coverage_type": "exported_transcript_read",
+      "coverage_label": "已顺序读完取得的字幕文本",
+      "range": "00:00–37:22",
+      "lines": 841,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "手工模块、邻接约束、可达启发式与失败重试；几何兼容不等于玩家可走。",
+      "gaps": "末约19秒无字幕证据；声音/幻灯片与机翻未完整核对。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "artifacts/research/oskar-2023-pcg/EPC2018.md"
+      ]
+    },
+    {
+      "id": "6JcFbivo8dQ",
+      "title": "Konsoll2018 · Developing The Bad North Look",
+      "source": "https://www.youtube.com/watch?v=6JcFbivo8dQ",
+      "author": "Oskar Stålberg",
+      "coverage_type": "exported_transcript_read",
+      "coverage_label": "已顺序读完取得的字幕文本",
+      "range": "00:00–55:29",
+      "lines": 1282,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "森林共同色块、共享低分辨率体积光照、几何形变同步草和导航。",
+      "gaps": "与55:40元数据相比末11秒无字幕证据；美术演示和机翻待音画核对。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "artifacts/research/oskar-2023-pcg/BAD_NORTH_LOOK.md"
+      ]
+    },
+    {
+      "id": "1hqt8JkYRdI",
+      "title": "Organic Towns From Square Tiles",
+      "source": "https://www.youtube.com/watch?v=1hqt8JkYRdI",
+      "author": "Oskar Stålberg",
+      "coverage_type": "exported_transcript_read",
+      "coverage_label": "已顺序读完取得的字幕文本",
+      "range": "04:25–31:29",
+      "lines": 665,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "六边分区、三角配对、不规则四边形松弛是不同步骤；编辑重开候选。",
+      "gaps": "缺00:00–04:25及31:29后（旧元数据至31:57）；不可称零秒起全文视频。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "artifacts/research/oskar-2023-pcg/ORGANIC_TOWNS.md"
+      ]
+    },
+    {
+      "id": "Uxeo9c-PX-w",
+      "title": "SGC2021 · Beyond Townscapers",
+      "source": "https://www.youtube.com/watch?v=Uxeo9c-PX-w",
+      "author": "Oskar Stålberg",
+      "coverage_type": "mirror_transcript_read",
+      "coverage_label": "镜像转写已研读",
+      "range": "00:00–51:39",
+      "lines": null,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "对偶过渡、单元形变、独立物件、材质语义、AO与倒影；后续实验不能倒归发行游戏。",
+      "gaps": "末约22秒无转写；镜像转写未逐段对照原音/投影片。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "docs/OSKAR_CONFERENCE_DEEP_STUDY.md"
+      ]
+    },
+    {
+      "id": "5xrRTOikBBg",
+      "title": "Konsoll2021 · The Story of Townscaper",
+      "source": "https://www.youtube.com/watch?v=5xrRTOikBBg",
+      "author": "Oskar Stålberg",
+      "coverage_type": "exported_transcript_read",
+      "coverage_label": "已顺序读完取得的字幕文本",
+      "range": "00:05–49:05",
+      "lines": 1334,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "邻接与海岸/花园语义分开、道具保形、线条尺度；鸟类避让不是WFC骨骼动画。",
+      "gaps": "前5秒无字幕证据；总时长与49:05后内容未独立核验。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "artifacts/research/oskar-2023-pcg/STORY_TOWNSCAPER.md"
+      ]
+    },
+    {
+      "id": "NpfoRAzfGDg",
+      "title": "Oskar 2023 · Landscapes of Hex and Square",
+      "source": "https://www.youtube.com/watch?v=NpfoRAzfGDg",
+      "author": "Oskar Stålberg",
+      "coverage_type": "exported_transcript_read",
+      "coverage_label": "已顺序读完取得的字幕文本",
+      "range": "00:02–58:12",
+      "lines": 1411,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "混合网格、语义分层平滑、表面笔刷与独立对比场、空间照明。",
+      "gaps": "起始2秒及实际视频末尾未核实；机翻、图示、演示连续过程待核对。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "artifacts/research/oskar-2023-pcg/ADVISOR.md"
+      ]
+    },
+    {
+      "id": "Y2CYNIjN-qk",
+      "title": "Townscaper and the Design of Cities",
+      "source": "https://www.youtube.com/watch?v=Y2CYNIjN-qk",
+      "author": "第三方评论；本台账未独立核实姓名",
+      "coverage_type": "exported_transcript_read",
+      "coverage_label": "已顺序读完取得的字幕文本",
+      "range": "00:11–06:37",
+      "lines": 143,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "横向有机布局与纵向秩序；评论不能证明具体球面或UV算法。",
+      "gaps": "字幕之外音画与完整时长未核验；不作为创作者实现一手证据。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "artifacts/research/oskar-2023-pcg/CITY_DESIGN.md"
+      ]
+    },
+    {
+      "id": "1tgMl92DAqk",
+      "title": "EPC2024 · Paul Merrell · 图文法",
+      "source": "https://www.youtube.com/watch?v=1tgMl92DAqk",
+      "author": "Paul Merrell（不是 Oskar）",
+      "coverage_type": "exported_transcript_read",
+      "coverage_label": "已顺序读完取得的字幕文本",
+      "range": "00:00–38:39",
+      "lines": 849,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "基于示例的图文法；complete graph指无悬空半边，不是K_n，也不是自动贴图教程。",
+      "gaps": "音画未完整核验；57MB论文未全文读，作者项目仅README，未运行。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "artifacts/research/oskar-2023-pcg/EPC2024.md"
+      ]
+    },
+    {
+      "id": "7U_TesN8d6E",
+      "title": "Destructible Worlds With WFC",
+      "source": "https://www.youtube.com/watch?v=7U_TesN8d6E",
+      "author": "第三方教程；讲者拼写未独立核实",
+      "coverage_type": "exported_transcript_read",
+      "coverage_label": "已顺序读完取得的字幕文本",
+      "range": "00:00–19:52",
+      "lines": 524,
+      "full_audiovisual_viewed": false,
+      "verified_720p": false,
+      "learned": "固定幸存瓦片再求解；不等于保存传播状态的最小增量求解器或3D物理破坏。",
+      "gaps": "音画未完整核验；教程修改源码未取得，destroyTile不属于原ndwfc API。",
+      "implementation_status": "已形成研究摘要与方案；不凭字幕研究认证其技术已在游戏完整实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/coverage.json",
+        "artifacts/research/oskar-2023-pcg/WFC_DESTRUCTIBLE.md"
+      ]
+    }
+  ],
+  "additional_videos": [
+    {
+      "id": "RPjBi_ojS7o",
+      "title": "Shape Your World | Polygonal Planet In 60 Seconds!",
+      "source": "https://www.youtube.com/shorts/RPjBi_ojS7o",
+      "author": "The Brainstitch Chronicles",
+      "coverage_type": "metadata_only",
+      "range": "58秒元数据；未取得有效画面",
+      "learned": "只核实标题/频道/时长。",
+      "gaps": "画面读取超时、无字幕；生成算法及完整观看均未确认。",
+      "implementation_status": "没有该视频支持的实现证据。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/CITY_DESIGN.md",
+        "artifacts/research/oskar-2023-pcg/coverage.json"
+      ]
+    },
+    {
+      "id": "_1fvJ5sHh6A",
+      "title": "AI and Games #65 · Townscaper",
+      "source": "https://www.youtube.com/watch?v=_1fvJ5sHh6A",
+      "author": "AI and Games / Tommy Thompson",
+      "coverage_type": "companion_article_read",
+      "range": "2026-10-05已读采访者配套正文；无可用视频字幕",
+      "learned": "模块/网格/邻接/装饰分工与失败处理的采访资料。",
+      "gaps": "视频未完整观看，字幕不可用；配套文章不是视频逐段研读。",
+      "implementation_status": "报告中的山体施工为项目另行实施，不证明视频全部技术已实现。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/AI_GAMES_65_IMPLEMENTATION.md"
+      ],
+      "companion_source": "https://www.gamedeveloper.com/game-platforms/how-townscaper-works-a-story-four-games-in-the-making"
+    }
+  ],
+  "repositories": [
+    {
+      "id": "ndwfc",
+      "title": "LingDong-/ndwfc",
+      "source": "https://github.com/LingDong-/ndwfc/tree/3479af8ee855455b0922b9b2f4c26d5378b0cbee",
+      "commit": "3479af8ee855455b0922b9b2f4c26d5378b0cbee",
+      "coverage": "README 1–189；ndwfc.js 1–229全文；ndwfc-tools.js 1–418全文；index.js worker609–645；LICENSE。",
+      "execution": "既有记录：7项无依赖Node小验证，含非法固定输入漏检、false状态混用、transforms字段等反例。",
+      "gaps": "未读全部样例/历史；无3D、并发、内存、球面性能验证；教程修改源码未取得。",
+      "implementation_status": "源码阅读与独立实验；不是Oskar私有源码，也不是整库已接入游戏。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/WFC_GITHUB.md",
+        "artifacts/research/oskar-2023-pcg/coverage.json"
+      ]
+    },
+    {
+      "id": "WaveFunctionCollapse",
+      "title": "mxgmn/WaveFunctionCollapse",
+      "source": "https://github.com/mxgmn/WaveFunctionCollapse/tree/de7d22e705e816b62b4d613199d0463820fcaef3",
+      "commit": "de7d22e705e816b62b4d613199d0463820fcaef3",
+      "coverage": "README算法等指定章节；Model.cs 1–255、OverlappingModel.cs 1–150、SimpleTiledModel.cs 1–254、Program.cs 1–72全文；LICENSE。",
+      "execution": "静态源码审查；未编译/运行C#。Run有限limit返回true可仍未定值属于源码推导。",
+      "gaps": "未遍历全部资源、样例和历史；未做球面适配或性能测试。",
+      "implementation_status": "不能把静态审查说成库已运行、完整球面引擎已移植。",
+      "evidence": [
+        "artifacts/research/oskar-2023-pcg/WFC_GITHUB.md",
+        "artifacts/research/oskar-2023-pcg/coverage.json"
+      ]
+    }
+  ],
+  "series_posts": [
+    {
+      "id": "1786014232594485497",
+      "title": "山的材质",
+      "verified_subject": "山体纹理与法线/光照的低端设备成本取舍",
+      "source": "https://x.com/OskSta/status/1786014232594485497",
+      "author": "OskSta",
+      "published": "Thu May 02 12:45:50 +0000 2024",
+      "category": "材质",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 7.05,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        6.99
+      ],
+      "sample_times_seconds": [
+        0,
+        0.63,
+        1.26,
+        1.92,
+        2.55,
+        3.18,
+        3.84,
+        4.47,
+        5.1,
+        5.76,
+        6.39,
+        6.99
+      ],
+      "full_continuous_viewing": false,
+      "learned": "山体纹理与法线/光照的低端设备成本取舍",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1786014232594485497-author.json",
+        "artifacts/research/oskar-series-20261006/1786014232594485497/samples.json",
+        "artifacts/research/oskar-series-20261006/MATERIAL_UV_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1786014232594485497/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1784276757266231419",
+      "title": "好的河流",
+      "verified_subject": "河流与岸线纹理静图，非动态流水证明",
+      "source": "https://x.com/OskSta/status/1784276757266231419",
+      "author": "OskSta",
+      "published": "Sat Apr 27 17:41:43 +0000 2024",
+      "category": "材质",
+      "coverage_type": "photo_and_mirrored_text",
+      "duration_seconds": null,
+      "sample_count": 0,
+      "unique_sample_times": 0,
+      "actual_sample_range_seconds": null,
+      "sample_times_seconds": [],
+      "full_continuous_viewing": false,
+      "learned": "河流与岸线纹理静图，非动态流水证明",
+      "gaps": "仅原图与文字；不能证明动态行为。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1784276757266231419-author.json",
+        "artifacts/research/oskar-series-20261006/1784276757266231419/samples.json",
+        "artifacts/research/oskar-series-20261006/MATERIAL_UV_ADVISOR.md"
+      ]
+    },
+    {
+      "id": "1783792917183606829",
+      "title": "材质测试",
+      "verified_subject": "纹理效果测试，未公开完整shader",
+      "source": "https://x.com/OskSta/status/1783792917183606829",
+      "author": "OskSta",
+      "published": "Fri Apr 26 09:39:07 +0000 2024",
+      "category": "材质",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 7.26,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        7.2
+      ],
+      "sample_times_seconds": [
+        0,
+        0.66,
+        1.32,
+        1.98,
+        2.64,
+        3.3,
+        3.96,
+        4.62,
+        5.28,
+        5.94,
+        6.6,
+        7.2
+      ],
+      "full_continuous_viewing": false,
+      "learned": "纹理效果测试，未公开完整shader",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1783792917183606829-author.json",
+        "artifacts/research/oskar-series-20261006/1783792917183606829/samples.json",
+        "artifacts/research/oskar-series-20261006/MATERIAL_UV_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1783792917183606829/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1781405550061687016",
+      "title": "手工UV转自动",
+      "verified_subject": "投射草/水贴图与手工岸线UV的无缝片区混合",
+      "source": "https://x.com/OskSta/status/1781405550061687016",
+      "author": "OskSta",
+      "published": "Fri Apr 19 19:32:34 +0000 2024",
+      "category": "材质",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 15.09,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        15.03
+      ],
+      "sample_times_seconds": [
+        0,
+        1.35,
+        2.73,
+        4.04,
+        5.47,
+        6.72,
+        8.18,
+        9.6,
+        10.78,
+        12.33,
+        13.71,
+        15.03
+      ],
+      "full_continuous_viewing": false,
+      "learned": "投射草/水贴图与手工岸线UV的无缝片区混合",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "自动岸线UV已有隔离CPU小样；正式岸线chart/着色器接入未由本研究证明。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1781405550061687016-author.json",
+        "artifacts/research/oskar-series-20261006/1781405550061687016/samples.json",
+        "artifacts/research/oskar-series-20261006/MATERIAL_UV_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1781405550061687016/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1769641473895432220",
+      "title": "山势调整",
+      "verified_subject": "按含模块cell期望尺寸/形状松弛，减小高山横向膨胀",
+      "source": "https://x.com/OskSta/status/1769641473895432220",
+      "author": "OskSta",
+      "published": "Mon Mar 18 08:26:20 +0000 2024",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 24.78,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        24.72
+      ],
+      "sample_times_seconds": [
+        0,
+        2.25,
+        4.44,
+        6.72,
+        8.94,
+        11.05,
+        13.5,
+        15.72,
+        18,
+        20.22,
+        22.5,
+        24.72
+      ],
+      "full_continuous_viewing": false,
+      "learned": "按含模块cell期望尺寸/形状松弛，减小高山横向膨胀",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1769641473895432220-author.json",
+        "artifacts/research/oskar-series-20261006/1769641473895432220/samples.json",
+        "artifacts/research/oskar-series-20261006/GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1769641473895432220/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1768627849529893109",
+      "title": "球体分布",
+      "verified_subject": "已生成地形放上球体，未公开创建流程",
+      "source": "https://x.com/OskSta/status/1768627849529893109",
+      "author": "OskSta",
+      "published": "Fri Mar 15 13:18:33 +0000 2024",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 6.87,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        6.81
+      ],
+      "sample_times_seconds": [
+        0,
+        0.6,
+        1.23,
+        1.86,
+        2.49,
+        3.12,
+        3.72,
+        4.35,
+        4.98,
+        5.61,
+        6.24,
+        6.81
+      ],
+      "full_continuous_viewing": false,
+      "learned": "已生成地形放上球体，未公开创建流程",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1768627849529893109-author.json",
+        "artifacts/research/oskar-series-20261006/1768627849529893109/samples.json",
+        "artifacts/research/oskar-series-20261006/GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1768627849529893109/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1764958522398146667",
+      "title": "碰撞检验",
+      "verified_subject": "二叉树矩形装箱碰撞查询，非三维场景精确碰撞",
+      "source": "https://x.com/OskSta/status/1764958522398146667",
+      "author": "OskSta",
+      "published": "Tue Mar 05 10:17:57 +0000 2024",
+      "category": "工具",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 22.2,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        22.15
+      ],
+      "sample_times_seconds": [
+        0,
+        1.93,
+        3.8,
+        5.97,
+        8.07,
+        10.02,
+        12.09,
+        14.07,
+        16.14,
+        18.03,
+        20.15,
+        22.15
+      ],
+      "full_continuous_viewing": false,
+      "learned": "二叉树矩形装箱碰撞查询，非三维场景精确碰撞",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1764958522398146667-author.json",
+        "artifacts/research/oskar-series-20261006/1764958522398146667/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1764958522398146667/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1758250248483278925",
+      "title": "水面反射",
+      "verified_subject": "新水面反射，具体技术未公开",
+      "source": "https://x.com/OskSta/status/1758250248483278925",
+      "author": "OskSta",
+      "published": "Thu Feb 15 22:01:40 +0000 2024",
+      "category": "光影",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 15.51,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        15.45
+      ],
+      "sample_times_seconds": [
+        0,
+        1.41,
+        2.82,
+        4.23,
+        5.64,
+        7.05,
+        8.46,
+        9.84,
+        11.28,
+        12.69,
+        14.1,
+        15.45
+      ],
+      "full_continuous_viewing": false,
+      "learned": "新水面反射，具体技术未公开",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1758250248483278925-author.json",
+        "artifacts/research/oskar-series-20261006/1758250248483278925/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1758250248483278925/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1751945034851570056",
+      "title": "光照",
+      "verified_subject": "背光反向网格高光层与阴影遮罩",
+      "source": "https://x.com/OskSta/status/1751945034851570056",
+      "author": "OskSta",
+      "published": "Mon Jan 29 12:27:00 +0000 2024",
+      "category": "光影",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 8.46,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        8.4
+      ],
+      "sample_times_seconds": [
+        0,
+        0.75,
+        1.53,
+        2.28,
+        3.06,
+        3.84,
+        4.59,
+        5.37,
+        6.15,
+        6.9,
+        7.68,
+        8.4
+      ],
+      "full_continuous_viewing": false,
+      "learned": "背光反向网格高光层与阴影遮罩",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1751945034851570056-author.json",
+        "artifacts/research/oskar-series-20261006/1751945034851570056/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1751945034851570056/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1751932427272909032",
+      "title": "建筑与地形统一",
+      "verified_subject": "先生成指定大模块需要的局部网格",
+      "source": "https://x.com/OskSta/status/1751932427272909032",
+      "author": "OskSta",
+      "published": "Mon Jan 29 11:36:54 +0000 2024",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 18.81,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        18.75
+      ],
+      "sample_times_seconds": [
+        0,
+        1.71,
+        3.39,
+        5.04,
+        6.84,
+        8.52,
+        10.23,
+        11.94,
+        13.45,
+        15.39,
+        17.07,
+        18.75
+      ],
+      "full_continuous_viewing": false,
+      "learned": "先生成指定大模块需要的局部网格",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1751932427272909032-author.json",
+        "artifacts/research/oskar-series-20261006/1751932427272909032/samples.json",
+        "artifacts/research/oskar-series-20261006/GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1751932427272909032/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1723738415177363639",
+      "title": "地图导航",
+      "verified_subject": "AllCityKitty高尔夫tile交互，可借鉴地图视觉而非导航算法",
+      "source": "https://x.com/AllCityKitty/status/1723738415177363639",
+      "author": "AllCityKitty",
+      "published": "Sun Nov 12 16:23:58 +0000 2023",
+      "category": "地图",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 27.375666666666667,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        27.326
+      ],
+      "sample_times_seconds": [
+        0,
+        2.476,
+        4.976,
+        7.459,
+        9.942,
+        12.442,
+        14.926,
+        17.409,
+        19.892,
+        22.392,
+        24.876,
+        27.326
+      ],
+      "full_continuous_viewing": false,
+      "learned": "AllCityKitty高尔夫tile交互，可借鉴地图视觉而非导航算法",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1723738415177363639-author.json",
+        "artifacts/research/oskar-series-20261006/1723738415177363639/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1723738415177363639/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1712088611934371876",
+      "title": "配色",
+      "verified_subject": "节点/三角区域/渐变式调色编辑工具",
+      "source": "https://x.com/OskSta/status/1712088611934371876",
+      "author": "OskSta",
+      "published": "Wed Oct 11 12:51:48 +0000 2023",
+      "category": "工具",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 29.16,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        29.1
+      ],
+      "sample_times_seconds": [
+        0,
+        2.64,
+        5.28,
+        7.92,
+        10.59,
+        13.14,
+        15.72,
+        18.54,
+        21.18,
+        23.82,
+        26.49,
+        29.1
+      ],
+      "full_continuous_viewing": false,
+      "learned": "节点/三角区域/渐变式调色编辑工具",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1712088611934371876-author.json",
+        "artifacts/research/oskar-series-20261006/1712088611934371876/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1712088611934371876/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1708815475801505819",
+      "title": "新城悬崖",
+      "verified_subject": "斜跨接崖体和下方负空间",
+      "source": "https://x.com/OskSta/status/1708815475801505819",
+      "author": "OskSta",
+      "published": "Mon Oct 02 12:05:32 +0000 2023",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 8.1,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        8.04
+      ],
+      "sample_times_seconds": [
+        0,
+        0.72,
+        1.47,
+        2.19,
+        2.94,
+        3.66,
+        4.41,
+        5.07,
+        5.88,
+        6.6,
+        7.35,
+        8.04
+      ],
+      "full_continuous_viewing": false,
+      "learned": "斜跨接崖体和下方负空间",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1708815475801505819-author.json",
+        "artifacts/research/oskar-series-20261006/1708815475801505819/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1708815475801505819/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1707490932017279035",
+      "title": "材质教程",
+      "verified_subject": "低面数地表上的纯纹理灌木和小阴影",
+      "source": "https://x.com/OskSta/status/1707490932017279035",
+      "author": "OskSta",
+      "published": "Thu Sep 28 20:22:16 +0000 2023",
+      "category": "材质",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 8.01,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        7.95
+      ],
+      "sample_times_seconds": [
+        0,
+        0.72,
+        1.44,
+        2.16,
+        2.91,
+        3.63,
+        4.35,
+        5.07,
+        5.82,
+        6.54,
+        7.26,
+        7.95
+      ],
+      "full_continuous_viewing": false,
+      "learned": "低面数地表上的纯纹理灌木和小阴影",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1707490932017279035-author.json",
+        "artifacts/research/oskar-series-20261006/1707490932017279035/samples.json",
+        "artifacts/research/oskar-series-20261006/MATERIAL_UV_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1707490932017279035/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1705195380457996629",
+      "title": "表面阴影",
+      "verified_subject": "分离投影高度与深度测试高度，保留局部接触影",
+      "source": "https://x.com/OskSta/status/1705195380457996629",
+      "author": "OskSta",
+      "published": "Fri Sep 22 12:20:34 +0000 2023",
+      "category": "光影",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 9,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        8.94
+      ],
+      "sample_times_seconds": [
+        0,
+        0.81,
+        1.62,
+        2.43,
+        3.27,
+        4.08,
+        4.89,
+        5.7,
+        6.54,
+        7.35,
+        8.16,
+        8.94
+      ],
+      "full_continuous_viewing": false,
+      "learned": "分离投影高度与深度测试高度，保留局部接触影",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1705195380457996629-author.json",
+        "artifacts/research/oskar-series-20261006/1705195380457996629/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1705195380457996629/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1704218784028905984",
+      "title": "投影变化",
+      "verified_subject": "早期纹理阴影实验，作者认为过强体积感与线条冲突",
+      "source": "https://x.com/OskSta/status/1704218784028905984",
+      "author": "OskSta",
+      "published": "Tue Sep 19 19:39:55 +0000 2023",
+      "category": "光影",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 10.05,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        9.99
+      ],
+      "sample_times_seconds": [
+        0,
+        0.9,
+        1.8,
+        2.73,
+        3.63,
+        4.56,
+        5.46,
+        6.39,
+        7.29,
+        8.22,
+        9.12,
+        9.99
+      ],
+      "full_continuous_viewing": false,
+      "learned": "早期纹理阴影实验，作者认为过强体积感与线条冲突",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1704218784028905984-author.json",
+        "artifacts/research/oskar-series-20261006/1704218784028905984/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1704218784028905984/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1703750394164199473",
+      "title": "植被变化",
+      "verified_subject": "程序地面圆润斑块，非植被生长模拟",
+      "source": "https://x.com/OskSta/status/1703750394164199473",
+      "author": "OskSta",
+      "published": "Mon Sep 18 12:38:42 +0000 2023",
+      "category": "材质",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 20.31,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        20.25
+      ],
+      "sample_times_seconds": [
+        0,
+        1.77,
+        3.69,
+        5.52,
+        7.38,
+        9.21,
+        11.07,
+        12.9,
+        14.76,
+        16.59,
+        18.45,
+        20.25
+      ],
+      "full_continuous_viewing": false,
+      "learned": "程序地面圆润斑块，非植被生长模拟",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1703750394164199473-author.json",
+        "artifacts/research/oskar-series-20261006/1703750394164199473/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1703750394164199473/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1696864977171189980",
+      "title": "修改边缘",
+      "verified_subject": "大笔触不跨重要边界的纹理改进",
+      "source": "https://x.com/OskSta/status/1696864977171189980",
+      "author": "OskSta",
+      "published": "Wed Aug 30 12:38:31 +0000 2023",
+      "category": "材质",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 15.9,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        15.84
+      ],
+      "sample_times_seconds": [
+        0,
+        1.44,
+        2.88,
+        4.32,
+        5.76,
+        7.2,
+        8.67,
+        10.11,
+        11.55,
+        12.99,
+        14.43,
+        15.84
+      ],
+      "full_continuous_viewing": false,
+      "learned": "大笔触不跨重要边界的纹理改进",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1696864977171189980-author.json",
+        "artifacts/research/oskar-series-20261006/1696864977171189980/samples.json",
+        "artifacts/research/oskar-series-20261006/MATERIAL_UV_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1696864977171189980/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1677242779162877952",
+      "title": "三角图",
+      "verified_subject": "动态增点三角图，流形/近似Delaunay压力测试",
+      "source": "https://x.com/OskSta/status/1677242779162877952",
+      "author": "OskSta",
+      "published": "Fri Jul 07 09:06:54 +0000 2023",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 28.05,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        27.88
+      ],
+      "sample_times_seconds": [
+        0,
+        2.49,
+        5.1,
+        7.59,
+        10.2,
+        12.66,
+        15.3,
+        17.79,
+        20.4,
+        22.95,
+        25.38,
+        27.88
+      ],
+      "full_continuous_viewing": false,
+      "learned": "动态增点三角图，流形/近似Delaunay压力测试",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1677242779162877952-author.json",
+        "artifacts/research/oskar-series-20261006/1677242779162877952/samples.json",
+        "artifacts/research/oskar-series-20261006/GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1677242779162877952/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1670790425232175108",
+      "title": "混合六边形",
+      "verified_subject": "纯三角/六边、方格与混合网格的比较",
+      "source": "https://x.com/OskSta/status/1670790425232175108",
+      "author": "OskSta",
+      "published": "Mon Jun 19 13:47:33 +0000 2023",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 28.23,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        28.17
+      ],
+      "sample_times_seconds": [
+        0,
+        2.55,
+        5.07,
+        7.68,
+        10.23,
+        12.6,
+        15.39,
+        17.94,
+        20.52,
+        23.07,
+        25.65,
+        28.17
+      ],
+      "full_continuous_viewing": false,
+      "learned": "纯三角/六边、方格与混合网格的比较",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1670790425232175108-author.json",
+        "artifacts/research/oskar-series-20261006/1670790425232175108/samples.json",
+        "artifacts/research/oskar-series-20261006/GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1670790425232175108/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1670720537662836736",
+      "title": "软硬与描边",
+      "verified_subject": "硬边、玩法格边、材质边层级平滑",
+      "source": "https://x.com/OskSta/status/1670720537662836736",
+      "author": "OskSta",
+      "published": "Mon Jun 19 09:09:51 +0000 2023",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 11.01,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        10.95
+      ],
+      "sample_times_seconds": [
+        0,
+        0.93,
+        1.81,
+        2.82,
+        3.99,
+        4.98,
+        5.85,
+        6.97,
+        8,
+        9,
+        9.99,
+        10.95
+      ],
+      "full_continuous_viewing": false,
+      "learned": "硬边、玩法格边、材质边层级平滑",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1670720537662836736-author.json",
+        "artifacts/research/oskar-series-20261006/1670720537662836736/samples.json",
+        "artifacts/research/oskar-series-20261006/GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1670720537662836736/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1669315384619540487",
+      "title": "构建岛屿",
+      "verified_subject": "多组岛屿结果，宽台/坡道/崖/洞口",
+      "source": "https://x.com/OskSta/status/1669315384619540487",
+      "author": "OskSta",
+      "published": "Thu Jun 15 12:06:16 +0000 2023",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 30.6,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        30.54
+      ],
+      "sample_times_seconds": [
+        0,
+        2.62,
+        5.55,
+        8.34,
+        11.1,
+        13.81,
+        16.66,
+        19.29,
+        22.14,
+        25.02,
+        27.81,
+        30.54
+      ],
+      "full_continuous_viewing": false,
+      "learned": "多组岛屿结果，宽台/坡道/崖/洞口",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1669315384619540487-author.json",
+        "artifacts/research/oskar-series-20261006/1669315384619540487/samples.json",
+        "artifacts/research/oskar-series-20261006/GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1669315384619540487/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1482346496460828674",
+      "title": "岛屿整体生成",
+      "verified_subject": "描线专用对比纹理，不是成品色板或完整岛屿算法",
+      "source": "https://x.com/OskSta/status/1482346496460828674",
+      "author": "OskSta",
+      "published": "Sat Jan 15 13:38:40 +0000 2022",
+      "category": "光影",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 24.36,
+      "sample_count": 12,
+      "unique_sample_times": 11,
+      "actual_sample_range_seconds": [
+        0,
+        21.9
+      ],
+      "sample_times_seconds": [
+        0,
+        2.19,
+        4.2,
+        6.63,
+        8.85,
+        9.87,
+        13.26,
+        15.48,
+        17.43,
+        19.56,
+        21.9,
+        21.9
+      ],
+      "full_continuous_viewing": false,
+      "learned": "描线专用对比纹理，不是成品色板或完整岛屿算法",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1482346496460828674-author.json",
+        "artifacts/research/oskar-series-20261006/1482346496460828674/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1482346496460828674/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1648377135524986950",
+      "title": "六边形构建",
+      "verified_subject": "徒手先画横段再连接六边网格，非球面生成代码",
+      "source": "https://x.com/OskSta/status/1648377135524986950",
+      "author": "OskSta",
+      "published": "Tue Apr 18 17:25:09 +0000 2023",
+      "category": "工具",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 44.32754444444444,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        44.261
+      ],
+      "sample_times_seconds": [
+        0,
+        3.999,
+        8.032,
+        12.065,
+        16.098,
+        20.131,
+        24.164,
+        28.196,
+        32.229,
+        36.262,
+        40.295,
+        44.261
+      ],
+      "full_continuous_viewing": false,
+      "learned": "徒手先画横段再连接六边网格，非球面生成代码",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1648377135524986950-author.json",
+        "artifacts/research/oskar-series-20261006/1648377135524986950/samples.json",
+        "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+        "artifacts/research/oskar-series-20261006/1648377135524986950/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1590669875869286400",
+      "title": "放置草丛",
+      "verified_subject": "早期草billboard，细碎轮廓与安静草台",
+      "source": "https://x.com/OskSta/status/1590669875869286400",
+      "author": "OskSta",
+      "published": "Thu Nov 10 11:37:06 +0000 2022",
+      "category": "材质",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 8.82,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        8.76
+      ],
+      "sample_times_seconds": [
+        0,
+        0.78,
+        1.59,
+        2.4,
+        3.18,
+        3.99,
+        4.8,
+        5.61,
+        6.39,
+        7.2,
+        8.01,
+        8.76
+      ],
+      "full_continuous_viewing": false,
+      "learned": "早期草billboard，细碎轮廓与安静草台",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1590669875869286400-author.json",
+        "artifacts/research/oskar-series-20261006/1590669875869286400/samples.json",
+        "artifacts/research/oskar-series-20261006/EXTRA_RENDERING_AND_BUILDING.md",
+        "artifacts/research/oskar-series-20261006/1590669875869286400/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1582757294672314368",
+      "title": "移动光源与茂密植被（同一链接两个关注点）",
+      "verified_subject": "低分辨率点光体积，作者提醒运动暴露限制；重复链接合并",
+      "source": "https://x.com/OskSta/status/1582757294672314368",
+      "author": "OskSta",
+      "published": "Wed Oct 19 15:35:19 +0000 2022",
+      "category": "光影",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 5.52,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        5.46
+      ],
+      "sample_times_seconds": [
+        0,
+        0.42,
+        0.99,
+        1.5,
+        1.98,
+        2.49,
+        3,
+        3.51,
+        3.99,
+        4.5,
+        5.01,
+        5.46
+      ],
+      "full_continuous_viewing": false,
+      "learned": "低分辨率点光体积，作者提醒运动暴露限制；重复链接合并",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1582757294672314368-author.json",
+        "artifacts/research/oskar-series-20261006/1582757294672314368/samples.json",
+        "artifacts/research/oskar-series-20261006/EXTRA_RENDERING_AND_BUILDING.md",
+        "artifacts/research/oskar-series-20261006/1582757294672314368/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1579474420749725696",
+      "title": "大地势生成",
+      "verified_subject": "岛屿生成结果及线框，不是完整生成算法",
+      "source": "https://x.com/OskSta/status/1579474420749725696",
+      "author": "OskSta",
+      "published": "Mon Oct 10 14:10:21 +0000 2022",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 23.58,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        23.32
+      ],
+      "sample_times_seconds": [
+        0,
+        1.98,
+        4.17,
+        6.42,
+        8.55,
+        10.71,
+        12.84,
+        14.97,
+        17.13,
+        19.29,
+        21.42,
+        23.32
+      ],
+      "full_continuous_viewing": false,
+      "learned": "岛屿生成结果及线框，不是完整生成算法",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1579474420749725696-author.json",
+        "artifacts/research/oskar-series-20261006/1579474420749725696/samples.json",
+        "artifacts/research/oskar-series-20261006/EXTRA_GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1579474420749725696/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1579478470098243584",
+      "title": "复杂地势生成",
+      "verified_subject": "单元控制笼变形形成自然崖壁",
+      "source": "https://x.com/OskSta/status/1579478470098243584",
+      "author": "OskSta",
+      "published": "Mon Oct 10 14:26:27 +0000 2022",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 16.68,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        16.47
+      ],
+      "sample_times_seconds": [
+        0,
+        1.44,
+        2.99,
+        4.53,
+        6.06,
+        7.56,
+        9.09,
+        10.44,
+        12.01,
+        13.63,
+        14.94,
+        16.47
+      ],
+      "full_continuous_viewing": false,
+      "learned": "单元控制笼变形形成自然崖壁",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1579478470098243584-author.json",
+        "artifacts/research/oskar-series-20261006/1579478470098243584/samples.json",
+        "artifacts/research/oskar-series-20261006/EXTRA_GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1579478470098243584/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1534809424619089921",
+      "title": "构建城堡",
+      "verified_subject": "NXTBLD Townscaper宣传剪辑，非完整城堡教程",
+      "source": "https://x.com/NXTBLD/status/1534809424619089921",
+      "author": "NXTBLD",
+      "published": "Thu Jun 09 08:07:36 +0000 2022",
+      "category": "工具",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 69.75,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        69.708
+      ],
+      "sample_times_seconds": [
+        0,
+        6.333,
+        12.667,
+        19,
+        25.333,
+        31.667,
+        38.042,
+        44.375,
+        50.708,
+        57.042,
+        63.375,
+        69.708
+      ],
+      "full_continuous_viewing": false,
+      "learned": "NXTBLD Townscaper宣传剪辑，非完整城堡教程",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1534809424619089921-author.json",
+        "artifacts/research/oskar-series-20261006/1534809424619089921/samples.json",
+        "artifacts/research/oskar-series-20261006/EXTRA_RENDERING_AND_BUILDING.md",
+        "artifacts/research/oskar-series-20261006/1534809424619089921/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1482011744843223042",
+      "title": "崖壁地形",
+      "verified_subject": "程序法线对比提细线，专用contrast当时仍是计划",
+      "source": "https://x.com/OskSta/status/1482011744843223042",
+      "author": "OskSta",
+      "published": "Fri Jan 14 15:28:29 +0000 2022",
+      "category": "光影",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 17.31,
+      "sample_count": 12,
+      "unique_sample_times": 11,
+      "actual_sample_range_seconds": [
+        0,
+        17.25
+      ],
+      "sample_times_seconds": [
+        0,
+        1.56,
+        3.12,
+        4.71,
+        6.27,
+        7.86,
+        8.79,
+        8.79,
+        12.57,
+        13.71,
+        15.72,
+        17.25
+      ],
+      "full_continuous_viewing": false,
+      "learned": "程序法线对比提细线，专用contrast当时仍是计划",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1482011744843223042-author.json",
+        "artifacts/research/oskar-series-20261006/1482011744843223042/samples.json",
+        "artifacts/research/oskar-series-20261006/NORMALS_EDGE_ADDENDUM.md",
+        "artifacts/research/oskar-series-20261006/1482011744843223042/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1479185088839659530",
+      "title": "旧城地势生成",
+      "verified_subject": "世界空间法线绘制，黏土外观非作者目标",
+      "source": "https://x.com/OskSta/status/1479185088839659530",
+      "author": "OskSta",
+      "published": "Thu Jan 06 20:16:21 +0000 2022",
+      "category": "材质",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 30.15,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        28.77
+      ],
+      "sample_times_seconds": [
+        0,
+        2.67,
+        5.46,
+        8.19,
+        10.38,
+        13.68,
+        16.2,
+        19.17,
+        21.9,
+        24.66,
+        27.39,
+        28.77
+      ],
+      "full_continuous_viewing": false,
+      "learned": "世界空间法线绘制，黏土外观非作者目标",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1479185088839659530-author.json",
+        "artifacts/research/oskar-series-20261006/1479185088839659530/samples.json",
+        "artifacts/research/oskar-series-20261006/NORMALS_EDGE_ADDENDUM.md",
+        "artifacts/research/oskar-series-20261006/1479185088839659530/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1458921394855718917",
+      "title": "球面分布",
+      "verified_subject": "Half Edge拓扑试验，圆域不是球面分布证明",
+      "source": "https://x.com/OskSta/status/1458921394855718917",
+      "author": "OskSta",
+      "published": "Thu Nov 11 22:15:40 +0000 2021",
+      "category": "地形",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 73.14,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        72.36
+      ],
+      "sample_times_seconds": [
+        0,
+        6.54,
+        13.26,
+        19.8,
+        26.58,
+        33.18,
+        38.76,
+        46.38,
+        51.9,
+        56.76,
+        66.48,
+        72.36
+      ],
+      "full_continuous_viewing": false,
+      "learned": "Half Edge拓扑试验，圆域不是球面分布证明",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1458921394855718917-author.json",
+        "artifacts/research/oskar-series-20261006/1458921394855718917/samples.json",
+        "artifacts/research/oskar-series-20261006/EXTRA_GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1458921394855718917/contact-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1384958097542819845",
+      "title": "整个场景连接",
+      "verified_subject": "拓扑直线辅助选取/拖绘，不等于可通行路径",
+      "source": "https://x.com/OskSta/status/1384958097542819845",
+      "author": "OskSta",
+      "published": "Wed Apr 21 19:51:56 +0000 2021",
+      "category": "工具",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 21.63,
+      "sample_count": 12,
+      "unique_sample_times": 12,
+      "actual_sample_range_seconds": [
+        0,
+        21.57
+      ],
+      "sample_times_seconds": [
+        0,
+        1.95,
+        3.93,
+        5.88,
+        7.86,
+        9.81,
+        11.79,
+        13.71,
+        15.72,
+        17.67,
+        19.59,
+        21.57
+      ],
+      "full_continuous_viewing": false,
+      "learned": "拓扑直线辅助选取/拖绘，不等于可通行路径",
+      "gaps": "仅离散抽样；帧间过程、完整动态稳定性与未公开实现仍未知。",
+      "implementation_status": "该批研究记录未实施对应系统；当前游戏施工另验，不把研究完成等同正式接入。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/coverage.json",
+        "artifacts/research/oskar-series-20261006/1384958097542819845-author.json",
+        "artifacts/research/oskar-series-20261006/1384958097542819845/samples.json",
+        "artifacts/research/oskar-series-20261006/EXTRA_GEOMETRY_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/1384958097542819845/contact-sheet.jpg"
+      ]
+    }
+  ],
+  "five_gifs": [
+    {
+      "id": "1849427564034498642",
+      "title": "树 octagonal impostors",
+      "source": "https://x.com/OskSta/status/1849427564034498642",
+      "author": "Oskar Stålberg",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 10.021002100210021,
+      "resolution": [
+        640,
+        640
+      ],
+      "sample_count": 12,
+      "sample_times_seconds": [
+        0.0,
+        0.9,
+        1.83,
+        2.73,
+        3.63,
+        4.53,
+        5.461,
+        6.361,
+        7.261,
+        8.161,
+        9.091,
+        9.991
+      ],
+      "actual_sample_range_seconds": [
+        0.0,
+        9.991
+      ],
+      "decoder_frames": 334,
+      "full_continuous_viewing": false,
+      "gaps": "12个离散时刻不是逐帧观看；原始640×640不是720P；没有完整shader源码。",
+      "implementation_status": "专项研究未改运行时。现有项目草/树/云/泡沫近似不可称原作者系统已复刻。",
+      "evidence": [
+        "artifacts/research/oskar-five-gifs-20261005/coverage.json",
+        "artifacts/research/oskar-five-gifs-20261005/study.md",
+        "artifacts/research/oskar-five-gifs-20261005/advisor.md",
+        "artifacts/research/oskar-five-gifs-20261005/author-1849427564034498642.json",
+        "artifacts/research/oskar-five-gifs-20261005/1849427564034498642-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1849730611964973481",
+      "title": "2024 多重岸浪",
+      "source": "https://x.com/OskSta/status/1849730611964973481",
+      "author": "Oskar Stålberg",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 18.06140878988561,
+      "resolution": [
+        640,
+        640
+      ],
+      "sample_count": 12,
+      "sample_times_seconds": [
+        0.0,
+        1.626,
+        3.281,
+        4.907,
+        6.562,
+        8.188,
+        9.843,
+        11.469,
+        13.125,
+        14.75,
+        16.406,
+        18.031
+      ],
+      "actual_sample_range_seconds": [
+        0.0,
+        18.031
+      ],
+      "decoder_frames": 600,
+      "full_continuous_viewing": false,
+      "gaps": "12个离散时刻不是逐帧观看；原始640×640不是720P；没有完整shader源码。",
+      "implementation_status": "专项研究未改运行时。现有项目草/树/云/泡沫近似不可称原作者系统已复刻。",
+      "evidence": [
+        "artifacts/research/oskar-five-gifs-20261005/coverage.json",
+        "artifacts/research/oskar-five-gifs-20261005/study.md",
+        "artifacts/research/oskar-five-gifs-20261005/advisor.md",
+        "artifacts/research/oskar-five-gifs-20261005/author-1849730611964973481.json",
+        "artifacts/research/oskar-five-gifs-20261005/1849730611964973481-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1852334860137849222",
+      "title": "云与树共用 impostor",
+      "source": "https://x.com/OskSta/status/1852334860137849222",
+      "author": "Oskar Stålberg",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 7.080445917445014,
+      "resolution": [
+        640,
+        640
+      ],
+      "sample_count": 12,
+      "sample_times_seconds": [
+        0.0,
+        0.633,
+        1.296,
+        1.928,
+        2.561,
+        3.194,
+        3.857,
+        4.489,
+        5.122,
+        5.755,
+        6.418,
+        7.05
+      ],
+      "actual_sample_range_seconds": [
+        0.0,
+        7.05
+      ],
+      "decoder_frames": 235,
+      "full_continuous_viewing": false,
+      "gaps": "12个离散时刻不是逐帧观看；原始640×640不是720P；没有完整shader源码。",
+      "implementation_status": "专项研究未改运行时。现有项目草/树/云/泡沫近似不可称原作者系统已复刻。",
+      "evidence": [
+        "artifacts/research/oskar-five-gifs-20261005/coverage.json",
+        "artifacts/research/oskar-five-gifs-20261005/study.md",
+        "artifacts/research/oskar-five-gifs-20261005/advisor.md",
+        "artifacts/research/oskar-five-gifs-20261005/author-1852334860137849222.json",
+        "artifacts/research/oskar-five-gifs-20261005/1852334860137849222-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1991099314714902634",
+      "title": "2025 岩岸配色与新岸浪",
+      "source": "https://x.com/OskSta/status/1991099314714902634",
+      "author": "Oskar Stålberg",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 16.351635163516352,
+      "resolution": [
+        640,
+        640
+      ],
+      "sample_count": 12,
+      "sample_times_seconds": [
+        0.0,
+        1.47,
+        2.97,
+        4.44,
+        5.941,
+        7.411,
+        8.911,
+        10.381,
+        11.881,
+        13.351,
+        14.851,
+        16.322
+      ],
+      "actual_sample_range_seconds": [
+        0.0,
+        16.322
+      ],
+      "decoder_frames": 545,
+      "full_continuous_viewing": false,
+      "gaps": "12个离散时刻不是逐帧观看；原始640×640不是720P；没有完整shader源码。",
+      "implementation_status": "专项研究未改运行时。现有项目草/树/云/泡沫近似不可称原作者系统已复刻。",
+      "evidence": [
+        "artifacts/research/oskar-five-gifs-20261005/coverage.json",
+        "artifacts/research/oskar-five-gifs-20261005/study.md",
+        "artifacts/research/oskar-five-gifs-20261005/advisor.md",
+        "artifacts/research/oskar-five-gifs-20261005/author-1991099314714902634.json",
+        "artifacts/research/oskar-five-gifs-20261005/1991099314714902634-sheet.jpg"
+      ]
+    },
+    {
+      "id": "1991101097818403263",
+      "title": "2025 岸浪几何调试",
+      "source": "https://x.com/OskSta/status/1991101097818403263",
+      "author": "Oskar Stålberg",
+      "coverage_type": "timed_frames_and_mirrored_text",
+      "duration_seconds": 14.462560386473431,
+      "resolution": [
+        640,
+        640
+      ],
+      "sample_count": 12,
+      "sample_times_seconds": [
+        0.0,
+        1.298,
+        2.627,
+        3.925,
+        5.254,
+        6.552,
+        7.88,
+        9.179,
+        10.507,
+        11.806,
+        13.134,
+        14.432
+      ],
+      "actual_sample_range_seconds": [
+        0.0,
+        14.432
+      ],
+      "decoder_frames": 479,
+      "full_continuous_viewing": false,
+      "gaps": "12个离散时刻不是逐帧观看；原始640×640不是720P；没有完整shader源码。",
+      "implementation_status": "专项研究未改运行时。现有项目草/树/云/泡沫近似不可称原作者系统已复刻。",
+      "evidence": [
+        "artifacts/research/oskar-five-gifs-20261005/coverage.json",
+        "artifacts/research/oskar-five-gifs-20261005/study.md",
+        "artifacts/research/oskar-five-gifs-20261005/advisor.md",
+        "artifacts/research/oskar-five-gifs-20261005/author-1991101097818403263.json",
+        "artifacts/research/oskar-five-gifs-20261005/1991101097818403263-sheet.jpg"
+      ]
+    }
+  ],
+  "additional_post": {
+    "id": "1795831296952041691",
+    "title": "用户称 Add planet：实际沿河导航演示",
+    "source": "https://x.com/OskSta/status/1795831296952041691",
+    "coverage_type": "timed_frames_and_mirrored_text",
+    "duration_seconds": 17.94,
+    "sample_count": 16,
+    "actual_sample_range_seconds": [
+      0,
+      16.8
+    ],
+    "gaps": "16个样本未见Add planet按钮/生成操作；不能证明帧间没有，但也不能据此还原生成算法。",
+    "implementation_status": "形成有向河道代价/地形分区建议；研究本身未实现该系统。",
+    "evidence": [
+      "artifacts/research/oskar-add-planet-20261006/coverage.json",
+      "artifacts/research/oskar-add-planet-20261006/STUDY.md"
+    ]
+  },
+  "implementation": [
+    {
+      "title": "顾问 Agent / Skill 资料",
+      "state": "已建立研究入口与专题规则",
+      "done": "几何、材质UV、配色、植被云、球面与大会的来源/限制已写入可读取资料。",
+      "not_done": "不是模型权重训练；不代表所有视频已看完或引擎已复原。",
+      "evidence": [
+        "docs/OSKAR_DEEP_RESEARCH_STATUS.md",
+        "docs/OSKAR_WORLD_ENGINE_STUDY.md"
+      ]
+    },
+    {
+      "title": "自动岸线 UV",
+      "state": "隔离小样；未由研究批次接入游戏",
+      "done": "buildAutomaticShoreUV：有序无分支岸带、闭环接缝复制、平面/球面弧长；报告记录4项Node测试通过。",
+      "not_done": "任意分叉河网、全局UV优化、atlas/mip、shader与正式场景接入未完成；当前主线程新增接入需另验。",
+      "evidence": [
+        "artifacts/research/oskar-series-20261006/MATERIAL_UV_ADVISOR.md",
+        "artifacts/research/oskar-series-20261006/AUTO_UV_PROTOTYPE.mjs",
+        "artifacts/research/oskar-series-20261006/test_auto_uv.mjs",
+        "artifacts/research/oskar-series-20261006/APPLICATION_PLAN.md"
+      ]
+    },
+    {
+      "title": "WFC 双层三连拱",
+      "state": "已实现候选并有CPU/GPU/编辑证据；默认关闭",
+      "done": "真实跨层socket选择、六格上下模块、398→397删除及undo恢复，浏览器GPU检查通过。",
+      "not_done": "外部接近路线承托仍失败（含2.70m落差），fullTraversalAccepted=false；不能称完整可通行城堡完成。",
+      "evidence": [
+        "artifacts/pipeline/junction-wfc-passage/PAIR_CANDIDATE.md",
+        "artifacts/pipeline/junction-wfc-passage/pair-tests.json",
+        "artifacts/pipeline/junction-wfc-passage/pair-browser-verification.json"
+      ]
+    },
+    {
+      "title": "岩面、草木与光照的项目实现",
+      "state": "已有项目近似与独立迭代；不认证为作者原技术",
+      "done": "既有研究指出海柱2.5D高度场接触光照、草根承托及自制云片等项目实现。",
+      "not_done": "不是作者共享体积GI/完整树云impostor/2025顶点岸浪的还原；本清单不重新审计当前模型版本或给美术分。",
+      "evidence": [
+        "docs/OSKAR_DEEP_RESEARCH_STATUS.md",
+        "artifacts/research/oskar-five-gifs-20261005/study.md"
+      ]
+    }
+  ],
+  "limits": [
+    "9视频指已有文字研读的9项，并非9场全部都是Oskar本人演讲；另列2个视频缺口。",
+    "33帖与五GIF按各自批次列出；历史12段/197时刻研究含重复材料，不能直接相加成作者全集覆盖。",
+    "历史545项来自用户截图，不是当前完整目录；未完成遍历全部X媒体。",
+    "完整字幕文件曾放浏览器临时目录；本次仅能复核保存的原创摘要和覆盖记录，不能保证临时原文件仍存在。",
+    "旧2026-09-29 conference-coverage metadata-only被10-04字幕记录更新；旧文档部分标题/缺口未同步时以逐项新报告为准。",
+    "同一条1582757294672314368的移动光源/植被两个关注点合并计一帖；两条12帧只有11个独立时刻。",
+    "AllCityKitty、NXTBLD、Paul Merrell与第三方评论/教程保留作者归属，不改署Oskar。",
+    "没有新代码改动；当前主线程施工中的实现状态可能继续变化，需独立运行时证据更新。"
+  ],
+  "evidence_validation": [
+    {
+      "path": "artifacts/pipeline/junction-wfc-passage/PAIR_CANDIDATE.md",
+      "exists": true,
+      "bytes": 6778
+    },
+    {
+      "path": "artifacts/pipeline/junction-wfc-passage/pair-browser-verification.json",
+      "exists": true,
+      "bytes": 1169
+    },
+    {
+      "path": "artifacts/pipeline/junction-wfc-passage/pair-tests.json",
+      "exists": true,
+      "bytes": 3212
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/ADVISOR.md",
+      "exists": true,
+      "bytes": 11351
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/AI_GAMES_65_IMPLEMENTATION.md",
+      "exists": true,
+      "bytes": 2649
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/BAD_NORTH_LOOK.md",
+      "exists": true,
+      "bytes": 13807
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/CITY_DESIGN.md",
+      "exists": true,
+      "bytes": 1358
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/EPC2018.md",
+      "exists": true,
+      "bytes": 8426
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/EPC2024.md",
+      "exists": true,
+      "bytes": 6578
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/ORGANIC_TOWNS.md",
+      "exists": true,
+      "bytes": 11867
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/STORY_TOWNSCAPER.md",
+      "exists": true,
+      "bytes": 11934
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/WFC_DESTRUCTIBLE.md",
+      "exists": true,
+      "bytes": 5927
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/WFC_GITHUB.md",
+      "exists": true,
+      "bytes": 12741
+    },
+    {
+      "path": "artifacts/research/oskar-2023-pcg/coverage.json",
+      "exists": true,
+      "bytes": 4239
+    },
+    {
+      "path": "artifacts/research/oskar-add-planet-20261006/STUDY.md",
+      "exists": true,
+      "bytes": 3454
+    },
+    {
+      "path": "artifacts/research/oskar-add-planet-20261006/coverage.json",
+      "exists": true,
+      "bytes": 2608
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/1849427564034498642-sheet.jpg",
+      "exists": true,
+      "bytes": 248238
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/1849730611964973481-sheet.jpg",
+      "exists": true,
+      "bytes": 275400
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/1852334860137849222-sheet.jpg",
+      "exists": true,
+      "bytes": 238405
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/1991099314714902634-sheet.jpg",
+      "exists": true,
+      "bytes": 233783
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/1991101097818403263-sheet.jpg",
+      "exists": true,
+      "bytes": 322113
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/advisor.md",
+      "exists": true,
+      "bytes": 6099
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/author-1849427564034498642.json",
+      "exists": true,
+      "bytes": 4405
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/author-1849730611964973481.json",
+      "exists": true,
+      "bytes": 4499
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/author-1852334860137849222.json",
+      "exists": true,
+      "bytes": 4144
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/author-1991099314714902634.json",
+      "exists": true,
+      "bytes": 4038
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/author-1991101097818403263.json",
+      "exists": true,
+      "bytes": 4257
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/coverage.json",
+      "exists": true,
+      "bytes": 3242
+    },
+    {
+      "path": "artifacts/research/oskar-five-gifs-20261005/study.md",
+      "exists": true,
+      "bytes": 5570
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1384958097542819845-author.json",
+      "exists": true,
+      "bytes": 3010
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1384958097542819845/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 315929
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1384958097542819845/samples.json",
+      "exists": true,
+      "bytes": 1797
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1458921394855718917-author.json",
+      "exists": true,
+      "bytes": 3022
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1458921394855718917/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 310252
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1458921394855718917/samples.json",
+      "exists": true,
+      "bytes": 1811
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1479185088839659530-author.json",
+      "exists": true,
+      "bytes": 3217
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1479185088839659530/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 191061
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1479185088839659530/samples.json",
+      "exists": true,
+      "bytes": 1797
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1482011744843223042-author.json",
+      "exists": true,
+      "bytes": 3206
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1482011744843223042/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 181805
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1482011744843223042/samples.json",
+      "exists": true,
+      "bytes": 1796
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1482346496460828674-author.json",
+      "exists": true,
+      "bytes": 4512
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1482346496460828674/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 224693
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1482346496460828674/samples.json",
+      "exists": true,
+      "bytes": 1798
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1534809424619089921-author.json",
+      "exists": true,
+      "bytes": 5971
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1534809424619089921/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 239296
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1534809424619089921/samples.json",
+      "exists": true,
+      "bytes": 1845
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1579474420749725696-author.json",
+      "exists": true,
+      "bytes": 2751
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1579474420749725696/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 204463
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1579474420749725696/samples.json",
+      "exists": true,
+      "bytes": 1811
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1579478470098243584-author.json",
+      "exists": true,
+      "bytes": 2898
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1579478470098243584/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 242181
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1579478470098243584/samples.json",
+      "exists": true,
+      "bytes": 1798
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1582757294672314368-author.json",
+      "exists": true,
+      "bytes": 3160
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1582757294672314368/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 258719
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1582757294672314368/samples.json",
+      "exists": true,
+      "bytes": 1779
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1590669875869286400-author.json",
+      "exists": true,
+      "bytes": 2913
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1590669875869286400/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 210579
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1590669875869286400/samples.json",
+      "exists": true,
+      "bytes": 1852
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1648377135524986950-author.json",
+      "exists": true,
+      "bytes": 7156
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1648377135524986950/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 196684
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1648377135524986950/samples.json",
+      "exists": true,
+      "bytes": 1895
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1669315384619540487-author.json",
+      "exists": true,
+      "bytes": 4075
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1669315384619540487/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 183759
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1669315384619540487/samples.json",
+      "exists": true,
+      "bytes": 1798
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1670720537662836736-author.json",
+      "exists": true,
+      "bytes": 4411
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1670720537662836736/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 322549
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1670720537662836736/samples.json",
+      "exists": true,
+      "bytes": 1803
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1670790425232175108-author.json",
+      "exists": true,
+      "bytes": 4360
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1670790425232175108/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 201724
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1670790425232175108/samples.json",
+      "exists": true,
+      "bytes": 1785
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1677242779162877952-author.json",
+      "exists": true,
+      "bytes": 4402
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1677242779162877952/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 140996
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1677242779162877952/samples.json",
+      "exists": true,
+      "bytes": 1811
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1696864977171189980-author.json",
+      "exists": true,
+      "bytes": 4492
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1696864977171189980/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 191748
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1696864977171189980/samples.json",
+      "exists": true,
+      "bytes": 1798
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1703750394164199473-author.json",
+      "exists": true,
+      "bytes": 4269
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1703750394164199473/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 212902
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1703750394164199473/samples.json",
+      "exists": true,
+      "bytes": 1757
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1704218784028905984-author.json",
+      "exists": true,
+      "bytes": 4432
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1704218784028905984/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 176033
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1704218784028905984/samples.json",
+      "exists": true,
+      "bytes": 1796
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1705195380457996629-author.json",
+      "exists": true,
+      "bytes": 4546
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1705195380457996629/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 228934
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1705195380457996629/samples.json",
+      "exists": true,
+      "bytes": 1808
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1707490932017279035-author.json",
+      "exists": true,
+      "bytes": 4516
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1707490932017279035/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 307428
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1707490932017279035/samples.json",
+      "exists": true,
+      "bytes": 1839
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1708815475801505819-author.json",
+      "exists": true,
+      "bytes": 4037
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1708815475801505819/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 200867
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1708815475801505819/samples.json",
+      "exists": true,
+      "bytes": 1837
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1712088611934371876-author.json",
+      "exists": true,
+      "bytes": 4034
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1712088611934371876/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 90365
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1712088611934371876/samples.json",
+      "exists": true,
+      "bytes": 1799
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1723738415177363639-author.json",
+      "exists": true,
+      "bytes": 8227
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1723738415177363639/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 190673
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1723738415177363639/samples.json",
+      "exists": true,
+      "bytes": 1906
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1751932427272909032-author.json",
+      "exists": true,
+      "bytes": 4342
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1751932427272909032/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 164860
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1751932427272909032/samples.json",
+      "exists": true,
+      "bytes": 1730
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1751945034851570056-author.json",
+      "exists": true,
+      "bytes": 4364
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1751945034851570056/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 229987
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1751945034851570056/samples.json",
+      "exists": true,
+      "bytes": 1824
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1758250248483278925-author.json",
+      "exists": true,
+      "bytes": 4069
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1758250248483278925/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 153300
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1758250248483278925/samples.json",
+      "exists": true,
+      "bytes": 1784
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1764958522398146667-author.json",
+      "exists": true,
+      "bytes": 4513
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1764958522398146667/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 155260
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1764958522398146667/samples.json",
+      "exists": true,
+      "bytes": 1798
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1768627849529893109-author.json",
+      "exists": true,
+      "bytes": 4156
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1768627849529893109/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 211376
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1768627849529893109/samples.json",
+      "exists": true,
+      "bytes": 1835
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1769641473895432220-author.json",
+      "exists": true,
+      "bytes": 4512
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1769641473895432220/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 236205
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1769641473895432220/samples.json",
+      "exists": true,
+      "bytes": 1793
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1781405550061687016-author.json",
+      "exists": true,
+      "bytes": 4491
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1781405550061687016/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 287643
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1781405550061687016/samples.json",
+      "exists": true,
+      "bytes": 1797
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1783792917183606829-author.json",
+      "exists": true,
+      "bytes": 4010
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1783792917183606829/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 165447
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1783792917183606829/samples.json",
+      "exists": true,
+      "bytes": 1825
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1784276757266231419-author.json",
+      "exists": true,
+      "bytes": 2855
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1784276757266231419/samples.json",
+      "exists": true,
+      "bytes": 123
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1786014232594485497-author.json",
+      "exists": true,
+      "bytes": 4293
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1786014232594485497/contact-sheet.jpg",
+      "exists": true,
+      "bytes": 228384
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/1786014232594485497/samples.json",
+      "exists": true,
+      "bytes": 1823
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/APPLICATION_PLAN.md",
+      "exists": true,
+      "bytes": 1739
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/AUTO_UV_PROTOTYPE.mjs",
+      "exists": true,
+      "bytes": 7775
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/EXTRA_GEOMETRY_ADVISOR.md",
+      "exists": true,
+      "bytes": 7352
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/EXTRA_RENDERING_AND_BUILDING.md",
+      "exists": true,
+      "bytes": 1591
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/GEOMETRY_ADVISOR.md",
+      "exists": true,
+      "bytes": 12475
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/MATERIAL_UV_ADVISOR.md",
+      "exists": true,
+      "bytes": 23350
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/NORMALS_EDGE_ADDENDUM.md",
+      "exists": true,
+      "bytes": 10695
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/RENDERING_AND_TOOLS.md",
+      "exists": true,
+      "bytes": 6655
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/coverage.json",
+      "exists": true,
+      "bytes": 20681
+    },
+    {
+      "path": "artifacts/research/oskar-series-20261006/test_auto_uv.mjs",
+      "exists": true,
+      "bytes": 3242
+    },
+    {
+      "path": "docs/OSKAR_CONFERENCE_DEEP_STUDY.md",
+      "exists": true,
+      "bytes": 14463
+    },
+    {
+      "path": "docs/OSKAR_DEEP_RESEARCH_STATUS.md",
+      "exists": true,
+      "bytes": 9328
+    },
+    {
+      "path": "docs/OSKAR_WORLD_ENGINE_STUDY.md",
+      "exists": true,
+      "bytes": 11555
+    }
+  ],
+  "delivery_validation": {
+    "unique_local_html_link_targets": 142,
+    "missing_local_targets": 0,
+    "http_readable_on_8931": [
+      "review.html",
+      "status.json",
+      "STATUS.md"
+    ],
+    "inline_javascript_syntax_checked": true,
+    "browser_render_visually_reviewed_this_turn": false,
+    "videos_rewatched_this_turn": false,
+    "models_or_skills_modified": false
+  }
+}

@@ -5,6 +5,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { sfxThunder } from "../audio/sfx.js";
+import { setWeatherAmbience } from "../audio/worldSfx.js";
 import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 const RAIN_COUNT = 550;
@@ -534,6 +535,8 @@ export function createWeatherSystem(scene, R, opts = {}) {
     }
 
     const rainingNow = mode === 1 && rainPhase === "raining";
+    // 天气底声：雨幕 / 雪天风 / 阵风（一个环境床，停雨即淡出；雷声仍由 sfxThunder 负责）
+    setWeatherAmbience({ rain: rainingNow ? 1 : 0, snow: mode === 2 ? 1 : 0, wind: wind.speed });
 
     // ---------- 雨 ----------
     if (rainingNow) {

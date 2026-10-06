@@ -1,0 +1,292 @@
+{
+  "target": "approved-target.png",
+  "rounds": 13,
+  "baseline": "r00",
+  "files": [
+    {
+      "file": "approved-target.png",
+      "sha256": "f26477780feeb9f77f0f3bc019caa0227fd3f08531277c9b9603dd2bf051236f",
+      "bytes": 3255487
+    },
+    {
+      "file": "r00-bay-ridge.png",
+      "sha256": "ba81023ce6d500e5eb11afd6622a89f36fa6de3d4790dc6028ecc072850584c3",
+      "bytes": 921046
+    },
+    {
+      "file": "r00-new-mountain.png",
+      "sha256": "0904b92ff014b3f44dd575aae116ae6d8a3a47995aa812a7757a2c2620b72d2f",
+      "bytes": 926631
+    },
+    {
+      "file": "r00-old-mountain.png",
+      "sha256": "1b03c6c94cd84f62e045abea64a4f9cfc101a26aea4e38e2b7d2edfcd2ae0203",
+      "bytes": 1069614
+    },
+    {
+      "file": "r00-overview.png",
+      "sha256": "32e226bfcc39158d7d07f14fc37fbbd8cd694d60622798df52063d30d570f497",
+      "bytes": 1170508
+    },
+    {
+      "file": "r01-bay-ridge.png",
+      "sha256": "44e3e67b7fa1ff6155711d20482fca7f99f70d4176ca097db9fb3912f01ce926",
+      "bytes": 1120710
+    },
+    {
+      "file": "r01-new-mountain.png",
+      "sha256": "1a4b651ad84c77f78cabb92b25258b07499e01be05dd8f64bd442d2be5072bb8",
+      "bytes": 1065920
+    },
+    {
+      "file": "r01-old-mountain.png",
+      "sha256": "7e8f3e5fff194cfd457c1f7148c5300f785454d7d2184f16348d98b383c8cb60",
+      "bytes": 1279921
+    },
+    {
+      "file": "r01-overview.png",
+      "sha256": "9f6c6564c87c588b9b39001923551d0cb129b2330cf70f7ee88e6c669557f16b",
+      "bytes": 1239721
+    },
+    {
+      "file": "r02-bay-ridge.png",
+      "sha256": "e5b009e3b3f1be6640fd5b8ca584e06d4f1600d266572e1639ae4b779d77d755",
+      "bytes": 1251849
+    },
+    {
+      "file": "r02-new-mountain.png",
+      "sha256": "218620fd6cdc17b2385faf07686516dc1459e5545968242deed59b744564d091",
+      "bytes": 1137805
+    },
+    {
+      "file": "r02-old-mountain.png",
+      "sha256": "a0cc96882ea6eec4560e1abfc4a4179cd424b65ceca204727f9d68b298178bd2",
+      "bytes": 1403674
+    },
+    {
+      "file": "r02-overview.png",
+      "sha256": "5e4cc42dea6ac809415d886d9568a1f646f9ff748ac5f6f0de4f68647c95a3a4",
+      "bytes": 1275137
+    },
+    {
+      "file": "r03-bay-ridge.png",
+      "sha256": "f2463e992bf6b3e4b0578e42f8be7fd63420dfa55560594a58d71163ab1897a1",
+      "bytes": 1270892
+    },
+    {
+      "file": "r03-new-mountain.png",
+      "sha256": "cc0e64bbc2a868635a162c395342a4193aa934bd0d6e308833ec4cfc7b86031c",
+      "bytes": 1145182
+    },
+    {
+      "file": "r03-old-mountain.png",
+      "sha256": "4d6592f98ca2a29644fdd18a0d250490542001195b30c0965e982a0f060ea549",
+      "bytes": 1419311
+    },
+    {
+      "file": "r03-overview.png",
+      "sha256": "739e62dc6a2f5ca3679fb190d1cf2366e9dded14ecd163caf0de9829c4ab6b70",
+      "bytes": 1280773
+    },
+    {
+      "file": "r04-bay-ridge.png",
+      "sha256": "96033900aeda0b2662e871dea00c633571c5a53f17a2fc021c55d8205722143c",
+      "bytes": 1251552
+    },
+    {
+      "file": "r04-new-mountain.png",
+      "sha256": "9dd7c59766bbbb49bce99556829d23c9a5f6ebaed58c34a7a8ad94b836dd98be",
+      "bytes": 1129720
+    },
+    {
+      "file": "r04-old-mountain.png",
+      "sha256": "22adec8e888094bdccd6ed489ddbd000099233e54d9e55a66b2591b29a1f1bcd",
+      "bytes": 1406727
+    },
+    {
+      "file": "r04-overview.png",
+      "sha256": "29c6adcf0d3468a17485d5f39b70d318830f688e0da8c038a5f51712ddf66cbb",
+      "bytes": 1268806
+    },
+    {
+      "file": "r05-bay-ridge.png",
+      "sha256": "c955f6c60ea59dfbfaf1c60c226d0567a3480205327564bd8b1c647db6c1d880",
+      "bytes": 1264075
+    },
+    {
+      "file": "r05-new-mountain.png",
+      "sha256": "b95195afa98f5769c1482ba54ca18834180540a2d37daad393442e847664f138",
+      "bytes": 1134391
+    },
+    {
+      "file": "r05-old-mountain.png",
+      "sha256": "3a16d337e63d1b183befcc0bb32f856c64495c575035452089583fd55461b431",
+      "bytes": 1413134
+    },
+    {
+      "file": "r05-overview.png",
+      "sha256": "512906a28e01380e961aed06ef8a5030ab199fa9f207bd09f3e565d20de9a942",
+      "bytes": 1272065
+    },
+    {
+      "file": "r06-bay-ridge.png",
+      "sha256": "cd1900261feff09cff606e4ecea0f413a2d4ef1d90eb57880e77cede6f97fc3c",
+      "bytes": 1262286
+    },
+    {
+      "file": "r06-new-mountain.png",
+      "sha256": "15dcc21c3627c0bac11d8b100e982312b3728c9169b5327fa10b4917b7d2191e",
+      "bytes": 1133638
+    },
+    {
+      "file": "r06-old-mountain.png",
+      "sha256": "83855722576c46794ba0ff1034dadd63926cd4eac1029eb30155b8b04414d453",
+      "bytes": 1412704
+    },
+    {
+      "file": "r06-overview.png",
+      "sha256": "7d659bfce03b721681e3f5b4bffb1ffd61e14691a3e6dca8e2449449ecec93b5",
+      "bytes": 1272318
+    },
+    {
+      "file": "r07-bay-ridge.png",
+      "sha256": "340705f62965c6aff12ccd9e1de873332b5d0f59b3296891517e4d7dd4415d23",
+      "bytes": 1265722
+    },
+    {
+      "file": "r07-new-mountain.png",
+      "sha256": "a6912f1eb36e233d2061bd9f77f63e28ca6e80c10c68a0e10d4cdb276472e34a",
+      "bytes": 1113472
+    },
+    {
+      "file": "r07-old-mountain.png",
+      "sha256": "9526bc465670e5402f2d0afae4febba2776c38e0d47dcd8cbc058c29220beeea",
+      "bytes": 1420554
+    },
+    {
+      "file": "r07-overview.png",
+      "sha256": "1f7900ee84601fbe3ba9817c19f84dc03717366c7d04ffe2e6ffb02b3a720629",
+      "bytes": 1274919
+    },
+    {
+      "file": "r08-bay-ridge.png",
+      "sha256": "c7758e149e70f0dfab146f2c4fa491c5a866fb1848ffe5f786b4ad2182efbf10",
+      "bytes": 1267672
+    },
+    {
+      "file": "r08-new-mountain.png",
+      "sha256": "73b493296c54c1b1dd8461ad48949f39ef037f0a8019a61a5957c968f84c515e",
+      "bytes": 1111068
+    },
+    {
+      "file": "r08-old-mountain.png",
+      "sha256": "7eebf988b09f9eaa6634af08688ac165f618e866ed7b140f39d5e414bc4c784b",
+      "bytes": 1420057
+    },
+    {
+      "file": "r08-overview.png",
+      "sha256": "4bd8561ef9dbbc9de9ec2e4bf4a404081f903348d85e049496f8c9de973702df",
+      "bytes": 1274202
+    },
+    {
+      "file": "r09-bay-ridge.png",
+      "sha256": "bada3b8f83f849f038bd1ff8554af9e6a2ee321263d0e935fd3a133271728505",
+      "bytes": 1265542
+    },
+    {
+      "file": "r09-new-mountain.png",
+      "sha256": "cf64d6c603797bd47a6bd2c4a1d52d21c2a4716245e197f88f758f1b6d5e2dd9",
+      "bytes": 1112066
+    },
+    {
+      "file": "r09-old-mountain.png",
+      "sha256": "70e287fdd02f60fa49e7438538df4231c5852c7bef72ffb5801a74f70d21eb75",
+      "bytes": 1418900
+    },
+    {
+      "file": "r09-overview.png",
+      "sha256": "bb8e52b6490b0b6d60e6d5aeec3314a04c6d677bc70d5da1ea587e4c02dc62cd",
+      "bytes": 1276217
+    },
+    {
+      "file": "r10-bay-ridge.png",
+      "sha256": "514fa3c3cb8a064b78eeefac514c26dd26944b626f18351b2385785b422c00a3",
+      "bytes": 1265821
+    },
+    {
+      "file": "r10-new-mountain.png",
+      "sha256": "8909c8c8be02ddeeb517ce0fd862cd3f60e0f581428fb5265f83dddcc8c04f22",
+      "bytes": 1113195
+    },
+    {
+      "file": "r10-old-mountain.png",
+      "sha256": "3230b30952969a7e250db45681c206bde465d7c63f66a61dcb202974bc2b2ce5",
+      "bytes": 1422516
+    },
+    {
+      "file": "r10-overview.png",
+      "sha256": "2c33ea6f68776d1c182368cf7216d1bc6c939d41495d123dbeaeddebd618582b",
+      "bytes": 1277332
+    },
+    {
+      "file": "r11-bay-ridge.png",
+      "sha256": "d7ea424f84a5c7b15bf78bb48ce71068b3cc212b495a39346fc2c8a060e5a1ce",
+      "bytes": 1256051
+    },
+    {
+      "file": "r11-new-mountain.png",
+      "sha256": "345f3dcb6d0ef7f31bd265cf5a6981f84cbbce808a9d4d31db122f3156af968d",
+      "bytes": 1111662
+    },
+    {
+      "file": "r11-old-mountain.png",
+      "sha256": "595d3f9e189cb00d0382f493701926e1626389d14d35d0b891109571c9bad7a5",
+      "bytes": 1416873
+    },
+    {
+      "file": "r11-overview.png",
+      "sha256": "defde6aff6b268b96764fc8a1b12da819ed944b47b894785f0bda7b06255e27d",
+      "bytes": 1273410
+    },
+    {
+      "file": "r12-bay-ridge.png",
+      "sha256": "c721ddf5ee96b4a0a9f57c2839e220d93cbee773e6bc8cf2e6bb8612d601a96c",
+      "bytes": 1278358
+    },
+    {
+      "file": "r12-new-mountain.png",
+      "sha256": "d32feadcded992d220f98e69424aa33348dea4688fb21f963b734d2fdcc8199f",
+      "bytes": 1116637
+    },
+    {
+      "file": "r12-old-mountain.png",
+      "sha256": "06eb04f3baa48c80773303427f8070cc162384f37d6fc519ca94599ba2d91985",
+      "bytes": 1428709
+    },
+    {
+      "file": "r12-overview.png",
+      "sha256": "d9426395e3bc647da716b10461bf11200219cbc37706d9ae61f936024fecc720",
+      "bytes": 1279438
+    },
+    {
+      "file": "r13-bay-ridge.png",
+      "sha256": "ed82a1fdaec17c106f4d608b9e7297a0711d20f59d45906860f5efe042402832",
+      "bytes": 1278924
+    },
+    {
+      "file": "r13-new-mountain.png",
+      "sha256": "0f46105a32069edf1904c35b895395a6fe7bfa9cfefe31a64fb8210d7151be05",
+      "bytes": 1121800
+    },
+    {
+      "file": "r13-old-mountain.png",
+      "sha256": "5283598caf68db0a0f98da301b8b55e857ca05e46d19aa9293405706eb031add",
+      "bytes": 1429313
+    },
+    {
+      "file": "r13-overview.png",
+      "sha256": "b7605b5c78aacfff07bcde29e891ca27525a6e11ee57e71a266000f6fc9d1a32",
+      "bytes": 1283131
+    }
+  ]
+}

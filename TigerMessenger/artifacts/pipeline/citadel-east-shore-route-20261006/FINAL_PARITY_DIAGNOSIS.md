@@ -1,0 +1,13 @@
+# Final refined candidate — two parity flags resolved
+
+The geometry was not changed and the original failed audit is retained. Only the two flagged locations were re-examined; the large unchanged generation batch was not rerun.
+
+Both rays contain **12 actual triangle intersections**, not 11. At the first point, hits 125993/125992 are 7.5165 micrometres apart and their +X normal signs are opposite. At the second point, hits 131081/131082 are 6.5402 micrometres apart, also opposite. Their minimum barycentric coordinates are positive (not exact shared-edge/vertex hits). The old distance-only 1e-5m deduplication combined each entry/exit pair into one crossing, producing a false odd count.
+
+Generalized solid-angle winding provides an independent geometric criterion: candidate winding is −7.3018e−7 and −1.4226e−7, close to zero/outside; original final terrain at these same points gives .9999999328 and .9999998924, close to one/inside. Six-direction voting was not used.
+
+The audit now clusters intersections with oriented normals. Same-facing coincident edge hits count once; opposing entry/exit hits cancel. Regression tests cover a closed box interior, exterior crossing shared diagonal edges, and a real 7-micrometre thin closed box whose opposing surfaces lie inside the clustering tolerance. Both tests pass. `remesh-final-topology-diagnosis.json` records the raw intersections, barycentrics, oriented result and winding values. Future full generation uses this helper; the saved old full-batch report intentionally retains its two raw flags.
+
+Topology limits: welding at 1e−7m gives zero inconsistent paired-edge winding, zero >2-use edges and zero collapsed triangles, but 19,193 unmatched endpoint edges. Original final terrain already has 13,164 such edges at 1e−5m. Adaptive refinement introduces collinear T junctions, so these counts do not by themselves prove visible gaps. Coarser welding also collapses thin triangles; it is unsuitable as a repair. No final global watertightness certificate is asserted. The raw remesh was closed; refinement still deserves separate conformity work, without changing the production algorithm in this task.
+
+Actual GPU image reviewed: the candidate retreats the exposed face but forms an overly straight, deeply fluted wall. Old plants remain visibly unsupported because the preview deliberately leaves planting/caches unchanged. Resolving the two audit false positives does not make the appearance or integration acceptable. Actors, loaded upper structures, vegetation refresh, water-wave clearance and runtime collision caches remain unverified.

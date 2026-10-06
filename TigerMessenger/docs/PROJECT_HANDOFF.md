@@ -1,3 +1,573 @@
+## 2026-10-06 18:32 首次东岸联合启动实景；仍default-off，当前可见58
+
+后台正常main显式citadelEastCrossing=1已完成旧bootstrap山→严格exact final→首次采样/植被/云→真实新city/approach支撑→统一轨车站联锁→animate。18:25全景和18:26临轨实图在citadel-east-joint-startup-20261006/live-front、live-cliff，GL0/errors[]。支撑status finalized，actual ground3915/sea5926 missing0，末跨triangle最大误差3.916e-6m；source strict2638422502，安装后position1944908823。全球云改defer到final山后，城市云也传actual新曲线；2云延迟+1城市轨样本专项通过，支撑7CPU由代理交回。正常无参首页仍user-marked旧生产，此内部开关不是交付入口，未提升默认。
+
+实际双时刻18:25:35/18:27:20红蓝进度位置均变，共享新curve/centreError0，仅证运动绑定，非全路载客/碰撞验收。实际山仍35–40m纸褶深崖/背坡大/城市小；顾问固定rubric本次可见全景58/100，完整分null，不能称90或与13:33不同帧61直接作分差改善。报告VISIBLE_PANORAMA_REVIEW.md。18:28已UI恢复daySpeed.4/玩家镜头/关菜单，书店未动，后台tab11保留，不动用户页。UI cloudRailSampleCount新增未重载；现截图云8，启动植被重新生成，不能套旧预览297→294数量。旧cloud-companion回退JSON深拷贝问题仍不由此次startup证明。
+
+root改main/loadTraffic/messengerIsland/mountainStudy联合接入和planetV8/runtime云defer，保留default-off。actual artifact136403tri/origin[-52,0,0]、T接头限制不变；额外.3m水储备仍未过，动态玩家/车/船/编辑待验。高山门v3古文明宏伟门仍概念未搬，不能隐藏。
+
+顾问wallSimplification无视觉收益未装；wallReshape默认off新raw片最大内收.598m、宽3.6m高39m、3窄岩肩，4tests/2949承托/148局部载货有限过，但需join/refine为独立final才可GPU，不硬套旧hash，不复制成满墙横沟。所有权：advisor已交回/idle。new_city_main新独占targetOldCity.js及专tests/报告，默认off现台两翼连续街区候选8–12模块上限，保护主塔/主阶/入口/瀑布/桥头，做可见横向展开并真实承托，不动山轨/main。root负责后续集成和宏观岸廊/山形视觉问题，不覆盖代理。12:10未达历史保留。
+
+## 2026-10-06 18:03 云与伴生联合外观已真实GPU回退；新整包tram接口已交
+
+详见citadel-cloud-companion-refresh-20261006/REPORT.md。17:57–18:00普通首页后台combined-cliff/front/reverted，GL0/errors[]。修真实云净空整组AABB假占位为逐非零实例保护盒1355，实际4云（旧8）；修伴生clone循环candidateHandle为只读几何视图，24柏31丛→24柏35丛，保原3实例mesh资源。树仍297→294（16移/3退役），308隐藏零槽不复活，1798失撑草片移除。只外观候选，原轨/廊/导航未改；实际纵褶35–40m仍严重、廊离崖/背坡/街群差，未评分。回退云8/preview=null；JSON伴生applied仍true是UI深拷贝旧报告，已源码改dispose后读report，未再次GPU，不能拿旧JSON证明伴生buffer逐值恢复。daySpeed.4/玩家镜头/菜单已UI恢复，书店未动，tab11保留。
+
+root新增default-off targetEastCliffStartupTerrain + mountainStudy第五参，旧bootstrap refine后strict hash2638422502安装exact final，首次surface/种树/云用新consumer曲线。保实际Mesh，已有消费者拒绝startup回退；3测试通过，main未调用。root cloud/companion/startup共19回归通过。源artifact136403tri/origin[-52,0,0]不变，T接头不称watertight。
+
+new_city_main已交 targetEastGlobalCrossingRelease + tramSystem opts.citadelEastGlobalCrossing默认off：统一轨车站联锁，先隐藏/暂停到actual cityStructure及approach支撑commit再显示，commit须animate前；真实末跨三角误差3.916e-6m，11CPU过。新50m源侧立交与finalterrain红1138蓝1162姿态/50952三角窄相0，62100body点带向parity0；global10395载货有限对新支撑0，原80失败三类真车复查0。新approach210.935m，不用旧154m。尚未实际startup，生产仍旧user-marked；额外.3m水储备未过单列。
+
+所有权：new_city_main现只新增targetEastCrossingStartupSupport.js与tests，做actual mountain/planet/hills/ocean径向sampler及支持事务wrapper，不动main/tram。advisor只新建targetEastCliffWallSimplification.js/scripts/tests，先可靠new-cliff来源插桩，保持顶底/承托/路线边界小片重铺；不能bbox盲削或法线冒充短崖。root负责main/loadTraffic/messengerIsland/mountainStudy联合装配与GPU。默认stairs8/rock7/main4/old11/cloud13/water4保持；61只13:33旧帧、12:10未达历史保留。高山门v3古文明仅概念未搬。下一轮先收两代理接口/报告。
+
+17:30补充：顾问只读崖形诊断已交回 citadel-live-vegetation-20261006/CLIFF_FORM_DIAGNOSIS.md，实际35–40m一次下切及碎边/外围粗顶点降海导致纵褶。建议仅new-cliff面标记/溶解共线窄分区后重铺，中段不可用改法线假装短崖；局部短台须保公共承托并让开轨车扫掠。未改产物，顾问现idle。
+
+## 2026-10-06 17:30 实际消费者事务接口已补，未统一调用或新GPU
+
+root新增真实 `targetCityPlayerSupport.prepareRefresh` 与 `targetCityPlayerNavigation.prepareTerrainRefresh`。提交时公共面/墙体缓存和径向落地缓存一起刷新；回退直接恢复旧cache引用，不能在source几何尚未回退时重建读到新山。中途失败、后续显式refresh导致过期均有拒绝/回退；4专项和13既有测试通过。
+
+candidate/runtime新增 `prepareCloudRefresh({surfaceIndex,rail,protectedBoxes})`：实际factory重新采final索引，必须给真实轨样本，重建云完整扫掠报告，提交后动画与report使用新云，回退恢复旧云对象与动画引用，复制原light layers，不只替换可见几何。2专项覆盖动画owner转移和资源生命周期，已有6candidate测试过。`prepareSurfaceSamplingRefresh()`重建后续编辑仍会使用的山面/承托索引并清采样缓存，`getSurfaceSamplers()`返回稳定回调；1专项验证actual两索引查询改变/回退。runtime10与terrainTransaction5回归过。所有方法默认没有调用，不是主游戏联合安装/功能验收。
+
+主 terrain transaction 提交顺序已改为 foundations→clouds→vegetation→navigation：先最终结构与采样，再云净空，再树/伴生，最后导航快照；回退反序。需要在commit阶段依赖前项新对象的consumer只在其commit中生成对应handle，不能在统一prepare阶段偷用旧结构/旧云。严禁用空handle满足门槛。
+
+advisor已交 `targetEastCliffCompanionRefresh.js`（6tests）：树apply后基于实际压紧实例和final sampler重建伴生，但保原group/3InstancedMesh/材质/geometry身份；交换实例buffer、count、report，原隐藏0槽不复活，rollback先companion后tree。尚未实际GPU，数量不能用fixture代替；最新实际图仍17:07combined-front/cliff且已经撤回。
+
+new_city_main仍独占50m立交candidate/scripts/tests，不动main/tram。最新有限global10395载货对新支撑0，桥有23.44m连续梁跨空绕开2根冲突柱；原80失败WORLD姿态三类实际车辆对新桥/轨管0。城市1534载货/14388ground/14346body0，中央52.891m和旧岸145.061m及两既有阶不变，新岸入口chartY抬5.078m。1144断面双线距3.9489–4.2978m/径向差.2288m，9错位SAT0，中线偏双轨中点最多.5305m需保留；18专项过。正在同final artifact做新线山面/实心检查，尚未交最终通过，未安装。其源u/作用域须用最新报告，不沿用旧154m。
+
+advisor下一项仅只读诊断17:07实图深长直板崖与target-v11短崖草台差距，输出最小方案，不改remesh/路线。root负责后续统一绑定，不抢代理文件。
+
+AGENTS所指旧 threejs-game-director 路径不存在，已检索本地 .agents/.codex技能未找到；未声称应用该包。本轮使用现有Oskar规范与实际代码/测试，不因该可选技能阻塞已授权施工。
+
+## 2026-10-06 17:12 切崖+实际植被已GPU并回退；全球接驳发现真实回程冲突
+
+本轮后台普通首页 actual survey 与联合外观预览：citadel-live-vegetation-20261006/combined-before、combined-cliff、combined-front、combined-reverted png/json，17:07–17:10，GL0/gpuFailures[]/console errors[]。严格final hash匹配，实际297树中278不变、16移栽、3明确退役，剩294；308原零缩放隐藏槽不复活，1798失撑草片撤除。与fixture402树不同，不能套fixture19全移结果。冠/干配对压紧、placements及同源mountainStudy.canopy元数据事务同步（顾问9tests已交回）；外部companions index/导航/云/碰撞仍未绑定。root新增surveyEastCliffLiveVegetation与显式UI预览，均默认不装生产。完整报告REPORT.md。实际山面悬树局部消除，但深长板状崖/稀疏街群/背坡与目标差距仍明显，无新评分。回退JSON preview=null、applied=false/restored=true；UI已恢复daySpeed.4与玩家镜头、书店未移动、菜单关闭，tab11保留。
+
+new_city_main仍独占新globalApproach candidate/tests/scripts，不改main/tram。桥面-.49/30m渐接-.75有限湿面0、21径向承托、631candidate lane loaded poses0；但全global10379姿态发现80保留回程冲突，真实蝗虫mesh与新桥61、新轨管42相交，蚂蚁也12次，不能以开洞或泛盒豁免。红sourceu .9422158771–.9499461946、蓝 .9433508638–.9505264210。原交叉法向差4.036m不足。代理正做源侧前延50m沿原角向升高立交（初筛三线minR25.943m、max坡3.943%、1m有限保留源段0，交叉约7.031m），中央旧岸尾几何保留；完整0.5m结构/轨车/城市上廊/承托审计待完成，不能安装。40m仍碰；60/70m新撞另一支线，失败保留。该新候选会改变source u/结构作用域，必须以最新报告重算，不套旧154m参数。
+
+生产仍user-marked旧release，stairs8/rock7/main4/old11/cloud13/water4；root terrain transaction5CPU仅原语，未接四真实消费者。后续先解决立交并核对新路线对切崖/保护铺装、海面和植被约束，再真实联合安装。高山门v3古文明门仍概念未搬。61仅13:33历史帧，不套新图；12:10未达保留，尚未90，连续玩家/车/船/编辑待验。
+
+## 2026-10-06 16:42 东岸联合安装准备：未改生产，接驳桥面与植被继续施工
+
+root新增默认关闭 `targetEastCliffTerrainTransaction.js`：严格来源epoch、保实际Mesh身份/材质，将final artifact转换回source局部坐标并建新完整表面索引。导航/植被/基础/云四消费者必须同步prepare→commit→rollback全参与；任一失败恢复原几何，旧对象不dispose。5专项CPU过（含源编辑拒绝、其它面索引变化拒绝、ray过滤器保持实际对象身份）。仅安装原语，尚未接真实消费者/main，不是联合安装或新GPU。
+
+new_city_main已完成cityGalleryScope:true的城市结构局部候选：newShore脚宽1.05/maxSpan18在真实final山面22脚全部seated、1390有限载货对实际结构/候选城市0碰、14460ground/14418body0失败；原1.2m脚宽失败保留。完整轨曲线未改，城市廊165.37m，前154.135m全球接驳必须另承托。现在该代理仅独占新增全球接驳支撑候选/专属tests/scripts，不改main/tram。真实海面前置发现城市deckTop=-.75套在接驳源头会低于静水6.81cm、真实波包络13.51cm（径向保守16.70cm），全宽14湿点，未造已知湿桥。实际轨管/枕底仍在波上，不能误称车轨沉水。代理继续保持轨曲线不变，按实际货车轮/底盘几何核实首12m约-.52渐接-.75桥面候选；通用body bottom-.5盒不是实际轮底，不能代替细部扫掠或自行取消门槛。桥身/桩入水与行车顶面湿分开。先收报告，不提前安装。
+
+advisor独占新targetEastCliffVegetationRefresh.js及专属脚本/tests。真实final fixture402树中383原地不动；19受切崖影响。24m原尺寸优先11树可安置、.8有限紧凑试验13树可安置，仍6未解决，正在检查greedy旧冠占位并做受影响19树联合候选分配；不能隐树或部分应用。56529草片中54731原支持不变，1798实际失撑片最大离地56.9m，仅这些草片有可回退裁除候选，6CPU过，未实景移栽，未称新崖顶绿化完整。生产隐藏实例及原演员尚未复现到该fixture，仍需实际场景调查。
+
+最新GPU仍16:06/16:09仅外观切崖预览，16:10已撤回，板直深褶/悬树可见；没有本轮新GPU/评分。生产stairs8/rock7/main4/old11/cloud13/water4保持。后台tab11仍daySpeed.4/玩家镜头，书店未移动。当前完整分null、未90；不要套13:33历史61。后续旧bootstrap山→严格exact remesh→正确作用域新结构及全球桥→全部真实消费者/索引/植被→统一轨车站联锁，最后实际动态与GPU；不能只换显示。高山门v3古文明石门仍概念未迁。
+
+## 2026-10-06 16:14 最终切崖已诊断GPU，仍未生产安装
+
+实际旧final source hash2638422502（331512非索引顶点、source→castle x=-52）。此前拒绝源于fixture遗漏refineRockFaces及局部frame/Float32加工，顾问已精确复现，并用raw重网格→生产refine输出remesh-final-surface-geometry.json，origin[-52,0,0]、136403tri。旧artifact/source报告保留，不删hash。后台普通主页16:06:55临轨、16:09全景已严格匹配挂候选真实GPU：citadel-east-remesh-gpu-20261006/candidate-cliff及candidate-front，GL0/errors[]。仅替换显示山；旧轨/结构/导航/植被缓存未换。画面确实退开岩脚，但板直深褶和悬树明显，未评分/未90。16:10撤回后reverted-cliff同光照供对照；最初before-cliff是灯光/演员未稳定的早帧，不作严格差分。候选撤回、daySpeed.4和玩家镜头已UI恢复，书店未动，后台tab11保留。
+
+顾问 final 审计2949承托保持、350载货姿态表面0；两处parity错误已具体定位为distance-only去重吞掉6.54/7.516微米的相反朝向交点（真实12次错成11），实体角winding≈0独立证外部，闭盒/薄盒2回归过。详见FINAL_PARITY_DIAGNOSIS.md。未改几何；非索引最终网格仍有T接头开放子边，不宣称完全watertight/所有玩法通过。顾问已交回。
+
+new_city_main继续独占新east wrapper/专属脚本：cityGalleryScope:true默认off将前154.135m globalApproach从城市上廊分开，城市新岸165.370m。完整轨曲线不变，center城市结构排除区global progress [.657146074992,.797195058870]，前接驳 [.597730768442,.657146074992]需通用桥柱，当前tram若仍按整replacement排除会悬空，必须保持hard flag。结构有限1390载货0碰/14460ground和14418body0失败；仍1基础脚角pre-refine terrainAboveDeck，正用final面定位并最小候选修正，不可安装。55/65额外广场链接继续关待重投影。旧.5m接阶粗步24碰保留；实际main dt<=.05且1/120子步，默认/疾跑步进<=.06/.087m，.1m有限过不等于人物实跑。
+
+下一步先收代理基础/接驳合同，再统一实际山/轨车站联锁/上廊/collision与植被索引安装候选。严禁只换轨显示或把154m外接线全铺城市步道；不能把本次GPU山外观当交通联合通过。高山门v3旧文明巨门仍概念，未搬；最新生产街群stairs8/rock7/water4等保持，完整分无新值。
+
+15:54补充：new_city_main已交回default-off targetEastCliffProductionRelease.js，19相关CPU过，完整说明citadel-east-release-adapter-20261006/HANDOFF.md。没有生产安装，旧source bootstrap + exact remesh/重新建索引是必需合同；实际hash仍被拒绝，先解决此项。附加广场55/65站号关闭待新线重新投影，中央原两城连接保留。
+
+## 2026-10-06 15:52 切崖实机预览被正确拒绝，继续核对生产几何
+后台普通首页重载后已正常启动，临轨崖壁before-cliff实际截图GL0。尝试新remesh预览时报source terrain geometry epoch differs；没有安装或隐藏原山，只有before，不能称after/GPU通过。证据citadel-east-remesh-gpu-20261006/ATTEMPT.md。已恢复daySpeed.4/玩家镜头/关闭菜单，书店信使未动。当前顾问重新负责新helper/fixture实际hash差异诊断，不删hash；new_city_main继续新default-off包装器（首次8CPU已过，最终待交），不改main/tram。root不擅自装几何不一致的产物。该候选工程进展不代表生产近岸轨线已替换。
+
+## 2026-10-06 15:39 实机街群/实车双时刻与完整东岸候选交接
+
+15:19全景、15:33广场真实GPU已保存并查看：citadel-secondary-street-clusters-20261006/live-front、live-plaza png/json，stairs8六间后置低屋/rock7矿物色面/main4合批，GL0/errors[]。新增屋多位于原屋后，视觉密度收益有限，岩面色变细微，不夸大趋近；没有新版独立分数，13:33的61仍只属旧帧。集成测试已覆盖街群、基座、合批全部主配置并过。真实列车两时刻07:32:35Z/07:33:50Z位置进度都变化、双线curveShared=true且centreError=0，证据live-motion-pair.json；仅证运动与绑定，不替代全路载客/碰撞/船/玩家验收。拍后已恢复daySpeed.4/玩家镜头，书店信使未移动。
+
+顾问交回REMESH_HANDOFF.md：x76–94/z69–96实际边界重网格，双线局部0.22m外移/半长22m过渡，整山81440三角闭合单体、2949实际铺装承托差1.99e-6m，173/177有限载货姿态山面及土内0；minR红31.010/蓝27.437m、grade3.282/3.473%，7CPU过。默认off，未GPU/原演员/上层结构，水包络底静态.09059/.10817m与实际波幅.067m单列，额外.3m储备未过。原全球源参数红.59/蓝.5925844302347414接当前release弧长fraction .2683333333333333，两者不同域；约157m仅红估计。不可把新短段当完整release。
+
+new_city_main现仅独占新增targetEastCliffProductionRelease.js和专属tests，精确replay+保留尾段+一致center/specs/结构合同，默认off，不改main/tram/旧生产。root只开发检查UI可逆“预览东岸切崖（仅外观）”按钮，哈希不符拒绝，恢复玩家镜头自动撤回；原碰撞/轨道未换，不可用于玩法验收。后台tab11已reload载入该UI，目前正在启动检查，后续需要检查按钮实际执行、渲染及撤回，未宣称切崖生产安装。高山门最新为v3独立宏伟旧文明石门概念，参见下一节，v2小彩门屋风格已被用户覆盖。
+
+## 用户最新高山门纠正：独立旧文明遗迹，不做小彩色门屋
+用户要求保留宏伟壮观、外观可见历史传承。已内置imagegen重绘highland-gate-oskar-target-20261006/target-v3-ancient-monument.png（prompt-v3.txt）：独立巨大石门/厚垣/层叠拱券/风化修补/蓝旗，临海峡口低视点以列车与行人衬尺度，铁路穿门后远接旧城后方。它是新提案、未批准施工几何、不是实机；v2彩墙橙顶小门屋风格被本次用户要求覆盖，后移接线关系仍保持。未实际迁门。
+
+施工接续：15:19后台普通首页实际确认stairs8/rock7/main4、GL0/errors[]；实图runtime1791271189852已保存（尚待查看和复制到正式证据目录），liveTransport双线共享实际curve/centreError0、两进度.200879/.968391，只一个时刻不是行车完整验证。应用户画图请求已先UI恢复daySpeed.4并退出检查镜头，玩家书店未动、tab11保留。顾问最新.22m连续外移+22m过渡最小瓶颈双线0碰，拼全山72722tri闭合、2949承托差1.21e-7，仍仅核心验过；其继续扩实际承托相邻段全段检查，无生产安装。new_city_main已交回。
+
+补充接续（用户此时要求查看高山门目标图）：root已把stairs8六间后置街群通过newCitySecondaryClusters:true接main/candidate，主保护main.report.footprints同stairs-local；8专项与原infill测试过。root rock7 mineral-planes增加冷灰/暖矿物分片，4光源测试过，before在citadel-rock-mineral-20261006。runtime cache marked-stacked-clusters-12。后台tab11已reload，仅在加载/开始送信阶段，未新GPU、未设daySpeed0；需先实际启动检查stairs8/rock7/liveTransport，然后截图与恢复.4/player。勿用14:52旧截图冒充。顾问已获得最小remesh闭合/2949承托保持，但红5姿态仍碰真实承托；正在同所有权处理约.2m连续外移后拼全山，不改生产。new_city_main已交回stairs源。
+
+## 2026-10-06 15:06 并行施工所有权与真实切崖瓶颈
+
+顾问A旧网格降顶点候选未装：35cm保护会使实际承托下降30.44m，已拒；2.8m保护2949实脚点不变，但红20表面/96内点、蓝10/10仍碰。不能继续放宽保护。当前顾问独占新default-off局部几何clip/remesh模块/脚本tests，先x83–85/z79–84沿实际边拆三角建直立崖，保公共承托与双线扫掠；源头静态包络底余量红.09059/蓝.10816，实际海面scale1波幅上界.067；.3为附加工程储备，不能写成真实波幅，仍单列未满足。
+
+new_city_main独占targetNewCityStairs.js及专属tests，default-off第二层街群后置候选，现stairs7保留；8连接位筛选4–8低层彩墙橙顶房，实际publicFootprints和main protectedFootprints保护，最高新增矮基座2.05m，不铺大裙房。root不得覆盖。等交回后candidate接completeSecondaryStreetClusters再GPU。
+
+root只改人工检查UI增加liveTransport只读实车进度/位置/曲线绑定/中心误差/wagon姿态及“检查列车运行”，main传实际tramSystem；源码语法检查过，尚未重载GPU，不称已验证行车。下次与街群一起加载，两个实际时刻读取可证明运动，不能替代全路动态碰撞。后台tab11仍上轮已恢复.4/玩家镜头，未动用户页。review首页已优先放14:52最新实景与未评分说明。暂无新美术分，不套13:33的61。
+
+14:55 补充纠正：顾问EAST_CLIFF_CORRIDOR_PROPOSAL.md按当前425城市Mesh/15921真实三角复测，991土内点向上没有实际城市三角命中；先前29点只在设计polygon内，这些铺装格实际未生成，不能称29处实际铺装穿透。红线对实际城市OBB0，蓝及原演员未全验。推荐A以双线world车体地侧包络收退裸坡，并固定真实铺装/房基承托；最紧x87/z80公共面在地侧约4m，不能随意削空。顾问继续仅新建default-off切崖候选/脚本tests，不碰main或生产release；先剖面后联合检查，source.59额外约157m及水余量5–9cm问题单列。新候选尚未完成安装。
+
+## 2026-10-06 14:54 水面湿区与窗饰合批已GPU；东岸重新定走廊
+
+普通首页水面4实际证据citadel-bay-ripples-20261006/live-final-wet-mask.png/json（runtime1791269120821）：最终湿区/实际球面海高许可修复旧WFC水mask先discard的条件，有限1.7m栅格/8bit高度，不宣称岸线视觉已大改。版本3细波保留。主楼34窗204件合成3区×2材质6件，main显式newCityWindowBatching:true、factory默认off；17CPU过。14:52真实GPU citadel-main-window-batching-20261006/live-front.png/json（1791269563751），GL0/errors[]，同机位.49。前后9932→8316calls但动态车辆/机器人集合不同，严禁归因为窗合批或称FPS提升；只可确认局部几何317→119mesh/tri不变及GPU正常。主楼newMain报告UI字段已补，将下次加载可见。本轮两次拍摄均恢复daySpeed.4/玩家镜头，后台tab11继续，书店玩家未移动。
+
+东岸世界圆弧已解决半径/坡度，但贴岸版红42/蓝33姿态撞真实土、673/318体内点，29红点在实际广场铺装下；不安装。外侧版硬测过但离崖改善不足，也不假交付。SPHERICAL_JOINT_REPORT.md有证据。顾问当前仅只读新报告/scripts：反求实际车体与公共铺装约束下的裸岩裁剪/路线高程组合，允许评估更广裸坡但不得实际改生产，输出具体保护冲突；勿再扫同手柄。new_city_main全部交回，无持有文件。
+
+最新图无评分，61只属13:33旧光照帧，未90；实际街群/山廊/云水差距仍大，不能将合批当视觉收敛。高山门v2仍提案未搬；12:10未达历史保留，连续玩家/车/船/编辑尚待。
+
+## 2026-10-06 14:30 水面细波纹与stairs7基座已实机；东岸线路仍未收敛
+
+普通首页新城facadeFoundationRefinement已显式开启、streetInfill继续后置，stairs7真实广场citadel-new-foundation-refinement-20261006/live-plaza.png/json（runtime1791268118401）；三处基座接地带、最高蓝楼暖石下基座及单层盲拱、上方小凹窗可见，体量高度未变。粉楼灰岩前方仍可见，不能称已完全解决。3专项+2水面测试及1实际candidate合成测试通过，GL0/gpuFailures[]/consoleerrors[]。支持与碰撞为有限CPU，不代替动态行走。
+
+水面targetBayWaterAppearance版本3，浅青/青蓝配色、共享uTime破碎细波带，无新增网格。首轮粗椭圆斑太大，已缩细成短波并减弱斑点；真实最终全景citadel-bay-ripples-20261006/live-front.png/json（runtime1791268221946）。保留coarse-wave-trial。最终仍缺近岸白沫丰富度和目标层次，无新评分，61只属13:33旧图。全景及广场timeOfDay.49，白ambient/fff6df太阳。检查结束UI恢复daySpeed.4/玩家镜头，书店信使不动、后台tab11保留。
+
+东岸advisor前15个候选未通过未安装，报告citadel-east-shore-route-20261006：source4%可行近端只多5.68m、下一段需约121m替换；5–8m小弯属选取控制柄/投影问题，不能宣称岸形无解。25m是既有项目阈值非车辆硬极限，本轮未放宽。41/52保护命中全部在广场外围岩肩x57–73/z92–95，未入实际铺装/主厅；不要误称撞雕像木马。顾问当前仅新候选文件/tests：重组整弧，中心>=27.05m/走廊8.74m，允许默认off外围岩肩局部陡崖候选，但保护真实公共三角/城台，球面world验证；不改生产release/main。new_city_main已全部交回，无所有权。
+
+下一步收顾问联合方案，继续纠正真实廊线离崖/主体街群比例/背坡与云水/动态玩法。高山门v2仍提案未搬。未90，不更改历史12:10未达记录。
+
+## 2026-10-06 14:14 新城低翼stairs6已主游戏GPU；继续接地和东岸贴崖
+
+正式main启用newCityStreetInfill，candidate在全部真实公共踏面生成后完成三低翼/两簇/7mesh；25CPU通过。真实全景/广场在citadel-new-street-infill-20261006/live-front、live-plaza png/json（原runtime1791267057346、1791267140645），stairs6/cloud13/rock6，GL0/errors[]。14:12拍摄后UI恢复daySpeed.4与玩家镜头，书店信使未移动，后台tab11保留。
+
+局部共墙已见，但主楼/街群比例、粉楼灰岩接触、前侧蓝楼高基座未近目标，廊线离岸/云水/背坡/旧门大块仍在；不更新分数，61仅13:33历史图，完整分null。高山门v2仍概念。candidate缓存streetinfill-6，stairs flanks-v6-street-infill-1；main将newCityStreetInfill设false可回退，工厂默认关闭。CPU有限检查不等于动态验收。
+
+活跃所有权：new_city_main拥有targetNewCityStairs.js+专属tests做default-off基座接地细化；advisor只新建新岸东段贴崖线路candidate/scripts/tests，不动生产release/main，避免再做1.5m微移或13点盲填。root不得覆盖其文件。
+
+## 2026-10-06 13:59 后肩分组云与岩石光源已实机；新城低翼候选未装
+正常首页clusteredComposition=true/maxBanks9实际8朵，旧3/中2/新3前后宽厚错层，已见citadel-cloud-clusters-20261006/live-front.png/json（原runtime-1791266220104）。GL0/gpuFailures[]/consoleerrors[]。root rock6修正从隐藏灯光父组选择强光的问题，按完整祖先visible及相机layers绑定缓存方向灯；4CPU过，实机sunName=DirectionalLight、ambient白，几何/本色未改。云形/层次略改善但覆盖仍小，不给新分数；61仅13:33独立可见帧。
+正常游戏已恢复daySpeed=.4和玩家镜头，tab11供后续，不动用户页/玩家。new_city_main正在完成新城streetInfill默认off候选：3低翼/2簇，7mesh，5508公共路径body有限过；粉楼到下蓝房因地势差6.084m拒绝。拥有stairs+tests，root下一轮先读交付报告再接completeStreetInfill后置方法，不能直接称实机。原主门灰面已证明是斜视侧墙，报告citadel-new-entry-audit-20261006，无需挖假洞。
+本轮review.html已补13:33的61分真实图与高山之门v2后移提案；新版云图单独未评分。交通/高山门迁建与连续玩家车辆船编辑验收继续未完成。
+
+13:40 new_city_main只读诊断已返回：主门灰面是约20°斜视看到main-hall-side-wall/后拱侧壁，不是堵块或山体；实际相机射线已定位。轴向50射线0阻挡，provider966ground/960walls0失败，后方山体在出口22.6–23.8m外。不要为截图挖假洞。代理正在保存报告，本轮未改主楼几何。
+
+## 2026-10-06 13:37 最新普通首页实机：新接阶/云13/染光纠正，帧评61
+已保存citadel-light-observer-20261006/live-front及live-plaza png/json。ambient恢复白色，sunfff6df，cloud13，新岸两条14/15m接城石阶已可见；GL0/gpuFailures[]、consoleerrors[]。实际原图runtime-1791264785544与1791264876725。4观察点测试+10runtime过；独立顾问按固定rubric可见帧61/100，完整分null，未90，见REVIEW。先前57仅历史city10。
+后台tab11已UI恢复daySpeed=.4、恢复玩家镜头，玩家书店未移动，页面保留供续测。性能无A/B不能声称提升。当前new_city_main只负责诊断实机新城主门拱内米灰平面是否真实阻挡，允许新默认off小候选+最小candidate接入，禁止动main/UI/runtime/terrain核心；root勿同时改candidate。顾问已结束评分。下一步先收诊断，未测连续玩家/列车/船/编辑仍不验收。
+高山之门v2是用户要求的新造型/后移目标提案，源码未搬；不能把左前旧门简单隐藏。继续按最新用户方向，普通首页和全球交通保护不变。
+
+## 最新用户纠正：高山之门后移与Townscaper门屋目标v2
+用户否定v1风格，明确要求门向旧城背后方向移动，使沿崖轨道与穿门轨道顺接。已用内置imagegen出target-v2-rear-gate.png：彩墙橙顶圆润门屋，旧城后侧来路穿门后沿外崖接下层铁路，步道上层。顾问已核对方向；v1“原位不变”的约束被新授权覆盖。当前是图示提案，门体和全球轨线尚未搬迁，图中弧线/高程/多视图不能作为净空或完整工程验证。最终图保留雕塑木马，第一生成稿上层误放铁路已做第二次图像纠正。原target-v11其余交通原则继续适用。
+
+## 2026-10-06 13:24 高山之门新目标图；前序云/接阶/光照工作接续
+用户刚请求高山之门结合真实场景用Oskar顾问重画，已生成highland-gate-oskar-target-20261006/target-v1.png，配prompt/README。主图来路3/4、右上实际两城位置、右下侧步道露台；是提案不是实机，未修改门体。不要误用其他叹息之门蓝环旧图。
+前序本轮：cloud13已GPU见runtime-1791263381345（当时仍受旧环境粉色染光），云更扁圆但整体未验收；新岸B14/15m阶默认工厂off，main显式newCityTransitLinks:true，structure revision4/candidate marked-stacked-links-4已接，9CPU与2628ground/2616walls/949载货0失败，最新重载已到“开始送信”，还未GPU进入，不称通过。所有代理已交回。
+root main updateMoebiusBarrier改观察点：普通玩法跟玩家，显式检查跟camera，防远方电车给圣城全局染粉，并每帧还原ambient白基色；4新测试+10runtime回归通过。main快照在citadel-light-observer-20261006，实际色彩变化仍待最新GPU。targetCityPresentation显示lighting并traverseVisible过滤隐藏灯。未改Svarbova层灯。
+后台tab11重新加载后在开始送信，尚未进入检查/冻结；不要动用户页。后续先正常开始，再固定.49检查光照、云13、新两石阶；完毕恢复daySpeed.4/玩家镜头。旧12:54证据/57历史分不能当最新分。
+
+## 2026-10-06 12:57 旧城六模块已实际GPU；沿岸缺口改为分段诊断
+12:59 顾问所有权已交回，下一步先读 citadel-transit-contact-20261006/OPTIONS_REPORT.md + options-audit.json：A内移1.5m有限过/2m撞土；C全替换段平滑降3m仅曲率坡度海面初筛过（minR25.616/maxGrade3.770%），降4m坡4.631%失败，所有C结构/地形collision未验，严禁默认安装。建议优先按真实城台高差做分段短石阶衔接，但这不是全岸贴崖已解决。root UI/candidate/runtime语法检查过，本轮全部代理空闲。
+
+
+旧城v11在原台地内新增三簇6低层模块：左上相连黄/青房2，原房廊角低翼4。47模型/WFC/session/editor测试+54承托过；仅+6mesh/516tri/0材质，15plot及33m塔/公共几何不变。默认接入，streetInfill=false能回退。actual普通首页GPU见citadel-old-street-infill-20261006/live-front与live-old-city png/json，oldCity11、GL0/gpuFailures[]、consoleerrors[]。仍明显不像目标稠密街城，不能抬评分。此前12:31帧独立57仅旧city10，新city11没有独立分数。daySpeed已恢复.4/玩家镜头还原，tab11供续测。
+
+runtime2已缓存每帧隐藏UUID引用，10CPU回归通过；没有实机FPS对照，不宣称已解决低帧率。root添加人工“检查可见物体”按钮，实际GPU射线确认左侧大块是高山之门highland-gate，不是匿名山体；不得为评分直接隐藏。可见负载报告marked-visible-object-audit.json含render10220calls/4.26Mtri，root对象数量只是可见标志树非实际屏幕提交统计。
+
+顾问接岸小补targetTransitLandwardContactField仅候选，13最终顶点/712有限载货0碰，无生产集成，因对全局视觉无实质帮助不安装。新岸缺口必须区分：东段真横向16–21.5m空带，广场西侧下方已有干岩但其高度低于廊背11–15m。这不是到城台的高差；实际城台2.837与上步道沿track-up比较南弧步道低1.8–7.6m、西弧步道高2.1–3.9m。全线降11m会沉海。顾问继续只读A/B/C方案，不能默认施工失败路线。Jev本轮文本建议低置信且硬门未过，记录marked-next-decision；不据此验收。
+
+## 2026-10-06 12:34 新上下同桥版已在正常首页实际GPU确认
+
+marked-stacked-live-front-day.png/json 为12:31保存的真实画面，release=user-marked-transit-release-1，上步下轨和新路线默认已安装，独立过渡桥已撤。GL0/gpuFailures[]；截图时timeOfDay=.49、daySpeed=0仅检查冻结，随后UI恢复daySpeed=.4并退出检查镜头，玩家仍书店未移动。后台browser1/tab11留作续测。此前橙天截帧实测timeOfDay=.6947，属夕照，不能仅归因天空边界。
+
+画面仍明显未达90：两岸部分廊线离崖、旧城密度低、新城背坡过大、云形及色彩、左侧遗留大块场景和前景世界边缘；低帧率7–10fps仍待优化。当前新版无独立分数，旧55仅旧1159可见帧，不能沿用。CPU步道/列车采样通过不等于完整实际玩家/动态列车船/编辑通过。先解决上述可见差距，勿重复跑已过静态采样冒充视觉迭代。
+
+## 2026-10-06 12:27 新手绘内收轨＋上下同桥已接普通首页源码
+
+生产tramSystem默认切createTargetUserMarkedProductionRelease，旧inner可opts.citadelTransitVersion=inner回退；关闭citadelCliffTransit仍全回原世界线。release统一曲线/车/站/联锁；最终walkingConnection=stacked-connected，不再独立短桥，release自带oldShore柱.9。候选cache marked-stacked-1、structure revision3。完整联合949载货0碰、32728ground/32668walls0失败（含两城36m接城阶、真实第14阶connector和各转角）。root另9 runtime/生产曲线回归过，生产完整构造42车位有限、结构issues[]，见integrated-production-marked-cpu.json。人工实操/动态船/全世界/视觉仍未过。
+
+source snapshot/manifest已保存marked-stacked-source-*。原GPU过渡短桥图不能冒充此版；正常游戏后台新tab11加载验证中（原tab10已由用户关闭），不用改用户review页/不自动搬玩家。所有子代理已交回源文件。
+
+## 2026-10-06 12:18 最新澄清：v11上下同线是最终目标
+
+用户再次指定34a0b535/target-v11-smooth-east-connection为当前目标：沿崖连续上步道下铁路，跨湾同一桥上下两层。此前红线是位置建议，不再把独立短桥当最终要求；上层接旧城街台、新城阶梯并实际贯通后，原独立步桥可以撤掉。短桥当前只过渡。new_city_main正做显式stacked-connected模式、新长线真实34–35m接城连接，不复用旧42m参数；root production wrapper为新轨准备，但尚未默认切换。模型/配色619c权威仍保持，90门槛未满足。
+
+12:10已如实交首版状态：short-walk-live-1210.png为实际独立短桥+旧inner长轨，宽镜头意外看到天空/世界边界，已将镜头退回原位置并扩大FOV待重载；不把该图当美术验收。first-release-live-1159.png独立复核55/100仅该可见帧，完整场景分null，见FIRST_RELEASE_INDEPENDENT_REVIEW；不套新短桥/新长轨。正式daySpeed0.4已恢复确认。新长rail有限联合949姿态0碰，旧岸0.9m柱已修一处崖脚冲突；新步行连接仍在施工，没通过前不拆独立过渡。
+
+## 2026-10-06 12:06 用户手绘优先：短步桥与长铁路分开
+
+最新 user-marked-walk-rail.png 中短橙红线为步行、长橙红线为铁路。覆盖此前中央强制上下共桥；两岸可保持上步道下轨。短桥直连旧城出口与新城真实台阶，长轨沿旧外岸、跨湾、绕新城广场海侧平顺接全球线。二维手绘需按真实半径/坡度和承托收口，偏移须报告，不能称精确复刻。
+
+new_city_main 已交独立短桥 optional walkingConnection，root 已接普通 tramSystem release 默认（citadelIndependentWalk=false 可回退）。真实新落点相对手绘偏5.48m、4.75m connector；6402步行采样/776旧release载货0失败，桥下水深0.51–0.55m不足0.8m，通船未过。主候选cache independent-walk-1，旧两条42m回城连接不再生成。刚接的短桥仍需重载GPU。
+
+advisor 当前拥有新 targetUserMarkedTransitPlan / Release及tests，只在新文件做长红线，不改旧release/main/tram。新长轨半径25.99/27.02/27.48m，坡<2.3%；三平台保护0冲突，显式海侧切崖后1064姿态三角OBB0碰/底部0土侵，尚需结构/瀑布/全世界联合检查，不默认启用。局部手绘偏15.5m、东接头24.3m如实保留；东原全球source本来偏离手绘，不能强行超坡接驳。
+
+浏览器阻塞已解除：用户恢复为HTTP但误带说明文字，root通过正常goto恢复主页tab10，未绕过策略。正式加载书店出生，start按钮用Enter可激活。实际GPU旧release证据 first-release-live-1159.png（保存约12:02），中央旧内湾双层和长连接可见，未包含新短桥/新长轨。检查加载 glError0/gpuFailures[]、release inner-1、实际配色rock5，daySpeed已用UI恢复0.4并报告确认；不是90评分。全景仍有低帧率约7–8fps和视觉差距，新镜头已扩大视野待下次加载。12:10:03验收时间和>=90门槛不变，未满足需如实交差距。
+
+## 2026-10-06 11:36 第一版贴崖交通已接正常首页源码，GPU仍阻塞
+
+当前默认loadTraffic通过targetCliffTransitEnabled接release内湾三线；main候选接相同cliffTransitRelease、mountainStudy接同coastalCliffCuts和oldShoreApron。正常首页仍信使书店出生，不移镜。回退citadelCliffTransit=0保留旧轨；citadelRuntime=0或关目标地形也不装新轨。新轨由production原曲线精确拼接，其他源段保留引用，所有轨/车/站/联锁在拼接后构建；旧前景轨道所在源区间被替换，原全球其他路线不隐藏。顾问release文件已交回，new_city_main候选/structure/fixture全部交回，现无源码独占冲突。
+
+两岸下层铁路上层步道、中央上下同桥、回街楼梯已真实几何。最终载货包络top5.36/halfWidth1.75/halfLength3.49，步道6.9；真实运输工厂locust折枪装车，修从未敬礼head NaN，2回归过并验证战斗恢复。瀑布口[-38.5,16.1,37.5788]yaw30、外挑16.037m、供水25.929m。结构140mesh/51010tri；正式最终curves+地形夹具上776姿态无已测碰撞。upper-walk连续301.759m，20259ground/19020walls核心带无失败；8条外沿6.7–7.9cm台阶偏差保留，flatnessPass=false。
+
+旧岸补岩v4-contact已集成：stepped-rock-link、maxGap32、实际最大27m、前肩3m接低岩台，末端实测接坡不羽化回水下；x>−47桥头/瀑布不填，原三平台保护。独立6专属过、8333平台点不变、1089loaded姿态0碰撞；root最终24相关集成测试已过，另16运行时/导航/联锁回归已过。实际生产构造42位置无无效坐标、结构issues=[]，记录integrated-production-cpu.json。注意与旧apron15m结果区分。
+
+11:30再次仅只读浏览器库存，tab9仍This page crashed/data:；此前恢复原HTTP也被URL策略拒绝，已请用户手动恢复。不得绕过/改用CDP/新后端/录屏。daySpeed恢复0.4仍未确认。未新GPU/无新评分；CPU工程投影integrated-cpu-geometry.png没有完整材质shader和真实深度，绝非实机，不可拿来评分/交付冒充。12:10:03截止照旧，届时如未GPU必须如实报告。参考cliff-transit-structure批INTEGRATION.md、UPPER_WALK_CONTINUITY.md。待：最新apron与完整正式游戏碰撞/GPU、船舶与全宽通行、编辑/游戏功能实测、90视觉验收。
+
+## 2026-10-06 10:40 两小时窗口施工继续（未实机验收）
+
+root新增citadelRailStartup并接tramSystem构造前，opts.citadelRailSplice默认空；三线同时拼接失败则全退原引用，所有轨道/车辆/站点/联锁随后统一构建。抽出createChristchurchTramSourceCurves(R)纯生产源曲线，CPU对历史实测全红蓝样点最大误差7.5e-12m，4专属CPU过；这不是新的GPU。targetOldCityWaterfall v2增加outboardReach水平水槽/水帘/海面泡沫同步外挑，candidate提供waterfallOutboardReach默认0，8CPU过。targetCoastalCliffCutField显式海侧范围退坡成崖，core保留冲突上报，3CPU过；targetTerrainCandidate接coastalCliffCuts可选项，尚无默认cuts。
+
+顾问正在做一条东→新城广场外缘→湾中→旧城外缘→西接线连续世界曲线，再切分结构段，避免固定原桥内埋端点。原中央桥接岸允许最小海移并短步道/楼梯回接，上下同桥且不做前景外圈。首轮坡1.73%海面/广场/core0冲突，弯半径18未通过，71处坡脚土侵需切崖，未发布可安装路线。new_city_main已交targetDoubleDeckBridge v2（有向交点修复内部盖面包含误判）、targetCliffRailGallery v1，24相关CPU过；当前接targetWaterfallRailReach新模块，root勿覆盖。岸廊新东12m子段净空过不代表全岸。
+
+浏览器库存明确tab9已变This page crashed/data:，不是正常游戏活页。通过原gameTab.goto正常http主页仍被URL policy拒绝，已异步请用户手动恢复主页；不绕过、不换后端。daySpeed .4恢复仍未确认。真实GPU/视觉评分仍未完成，不能用CPU当90。12:10:03截止不变。
+
+## 2026-10-06 10:10:03 最新两小时首版窗口，门槛90分
+
+用户批准target-v11-smooth-east-connection（附件34a0b535），从10:10:03至12:10:03交第一版山体+轨道实机，门槛>=90覆盖旧>95。旧10:08窗口未完成，记录在city-detail/acceptance-20261006-1008.md，不改写历史。按两岸外崖连续、上步道下铁路、旧城不穿山、新城绕广场面海下方并平顺外接、瀑布外挑执行。
+
+当前advisor独占targetCliffShoreRoute/TransitPlan，new_city_main独占targetDoubleDeckBridge；root准备tramSystem/main集成。中央轨面将试169/170/171m半径以缓和两岸坡度，不锁死最大净高上界173.905；需真实端切线/25m曲率/4%坡及包络。公开图片不是实机，未达门槛按时交真实差距。
+
+## 最新新城线路纠正
+
+用户指出新城轨道也必须沿外崖连续。中央桥出口→新城广场面海外缘下方→绕雕塑木马突出岸线→右侧接线，上步道下铁路，不能穿广场或取背后捷径。概念v9右岸缺段待v10修，原619c建筑配色不变。顾问的有限短段搜索不代表此完整绕行已解。
+
+## 2026-10-06 铁路离线实现进展（未安装实机）
+
+new_city_main已交还citadelRailSplice.js及测试：9CPU过，原曲线外段委托、每lane独立锚点、弧长映射和原引用rollback，删除区间内车辆默认拒绝迁移，无main/tramSystem修改。支持非跨闭合接缝区间，真实锚点回归使用记录样本/Hermite夹具，不冒称真实原控制点重建。
+
+advisor仍拥有targetCliffTransitPlan.js/tests/断面报告，正在有限搜索两岸外崖连接。已实现径向独立轨面：原桥localY下移约34%坡不可用；独立radius173.9052、grade约.000023、曲率31.768m，过默认4%与25m门槛，但旧柱拱及两岸土体阻挡，status仍failed。上桥4.4m，下轨双车需8.74m，必须重构下层支承；不改上桥、不沿内埋桥端凿山。6CPU过不表示路线通过。
+
+用户刚要求提供“旧城无穿山隧道”的修正目标图，生成v8发现左端将列车误画步道层，正在做v9针对性修正。原619c建筑配色仍权威，不以生成器改变主城模型。
+
+## 2026-10-06 09:44 heartbeat · 轨道离线施工启动，补实际草皮色链
+
+当前代理所有权：new_city_main独占citadelRailSplice.js+对应tests，制作全球曲线局部替换/距离映射；advisor独占targetCliffTransitPlan.js+tests+离线断面报告，真实桥下方案。两者都不改main/tramSystem、不默认安装未验轨道。当前真实桥直接localY下移存在坡度与柱拱冲突，正在解独立径向高程；不能把失败方案集成。
+
+root发现草色上轮只改了legacy groundcover，而实际显示的targetBenchTurf另有黄绿硬编码。已将实际覆盖草皮接同一CITADEL_TARGET_PALETTE并将色值写入report，几何不变、减少每顶点Color分配。targetBenchTurf+真实candidate14CPU通过；尚无新GPU，测试中的旧frontRail为旧fixture，不表示新贴崖铁路通过。Browser此前策略阻断保持，不绕过、不动用户在玩页面。
+
+## 2026-10-06 最新交通纠正：旧城不设穿山隧道
+
+旧城轨道全程沿外崖侧布置，左接线也沿崖绕行；下轨上步道以向海开放的柱拱支撑。瀑布外挑，轨道在崖外水帘后方通过，不以凿山隧道实现。中央双层联络桥不变。v7俯视左接线的遮挡歧义不作为施工许可。详见rail-cliffs批LATEST_DIRECTION。
+
+## 2026-10-06 最新：原批准配色 + 贴崖双层交通 + 删除新城外突体
+
+优先读 artifacts/pipeline/citadel-rail-cliffs-20261006/LATEST_DIRECTION.md。用户权威图exec-619c6b01不变，铁路加入此图；v6为概念，正在补俯视。先前外圈铁路方案已否定：两岸下轨上步道，中央桥也同桥上下叠置，旧城水帘洞轨道在水帘后。不要继续为旧圈轨过度削山。用户最新明确允许删新城东部外突山头/坡脚、山至城堡背后即止；advisor已接targetNewCityRetreatField、3+6CPU过，保留城基和地标采样，但GPU待验。
+
+new_city_main交还建筑colour-1材料/候选行，74CPU过、补屋顶ownership guard；root rock5冷灰蓝阴面减少暖混合，草色减黄，6CPU过。均未新GPU或评分。临时daySpeed=0需在允许的UI恢复原0.4，最新恢复尝试遇浏览器URL安全策略阻断，不绕过；用户在驾驶，不擅自重载/移镜。正常首页和书店出生不变。10:08:34验收时间不变，新铁路仍只有方案未实装。详细报告见building-colour/new-city-retreat批。代理当前已交还，无活动源文件所有权。
+
+## 2026-10-06 09:05 · 用户明确授权临轨坡脚改崖，轨道尽量不动
+
+新纠正覆盖局部r17冻结：新城临轨山体不该外扩斜坡，应收脚做陡崖；旧城也使用1482011744843223042崖壁参考。顶草台/现有城基、整体双城布局与雕塑木马保留。新轨道概念图citadel-rail-cliffs-20261006/target-v1.png已生成（built-in imagegen，prompt同目录），下方仅崖轨结构示意；不取代批准建筑布局、不冒充实机。原帖网页403，复核归档作者文与原帧/contact sheet，作者实际讲程序法线对比细线；崖面形态是画面观察，本项目切崖算法不是作者私有实现。
+
+顾问拥有targetTerrainCandidate/新railCliff几何及tests；root负责mountainStudy真实curves传递。根因terrainFirst原来把curves清空并跳过旧rail-coast切口，最终重网格侵轨。new_city_main测量已完成，global-tram-samples/actual-final-terrain及branch报告在citadel-live-tram-clearance-20261006；记录采集使用shell headless而非本会话要求CUA，已停止且如实留方法，后续不复用该浏览器方式。实际轨道某两支路XZ相近但Y差11.4m，必须3D分支筛选，不能二维挖山。
+
+导航main已交还，root重复21CPU通过；真实连续通行仍未验收。root新接仅开发者按钮主动开启的检查镜头，进入面板也不切镜头，恢复不移动玩家、不自动start、不改昼夜。正常首页仍从书店出生；严禁恢复默认全景。此轮普通首页重载用于近景颜色/GPU核验，不能代称完成玩法。两小时10:08:34截止不变，未有新版95分。
+
+## 2026-10-06 08:48 · 正常首页已默认加载，信使仍从书店出发
+
+最新用户强纠正：不要新入口/参数，不要自动把镜头带到城里；正常 http://localhost:8931/TigerMessenger/ 从书店镇以信使出发，到圣城看到新版本。root已接main默认installTargetCityRuntime，targetCityRelease为standalone默认r17环境/山参数但URL不变；iframe不默认启用避免harness双装。显式citadelRuntime=0可回退。已撤掉错误的默认全景presentation与正午冻结，正常故事/昼夜/出生保持。src/ui/targetCityPresentation.js未在main调用，仅之前调试遗留，不能恢复默认。
+
+08:45 CUA真实普通首页log确认old10/newstairs5/rock4/地标true；console error[]，实际画面是书店镇家书开始界面、城距279、书店距7；证据 default-game-load-20261006.json。早一轮默认全景时GPU glError0且rock shader matched/sunBound true、cloud12已实景，但旧城发白：根因holyCityStyleV2 1.5/5s延时重新涂色，无视preserve标记。执行代理已修其ownership契约，47CPU回归通过；当前重载已含修复，近城颜色仍需截图核验，不宣称已达95。
+
+默认main includeFrontRail=false，保留原全球铁路与电车更新；新模型/云瀑布update在主循环，原雕塑木马搬迁真控制器。先让用户实际看到，玩家导航尚待接，不能声称全可玩。
+
+当前文件所有权：new_city_main刚接main.js仅citadel ground/walls导航局部、必要newmodule/tests及runtime tram report准确性，root此时勿编辑main；其他代理已闲置。candidate construction已own+异常逆序cleanup/apply附加阶段dispose；root改imports old10/stairs5/cloud12/rock4。全部保留回退。
+
+学习清单已完整盘点 artifacts/research/oskar-learning-status-20261006/review.html：9文字视频（8导出+1镜像），0完整音画验证/0全程720P；另2视频仅元数据/文章；33帖32动态1静图384请求382独立时刻；五GIF60时刻4细节；2GitHub核心源码/ndwfc7实验、C#未执行。未把抽帧等同完整观看。该帖1712088611934371876是作者配色工具演示，不是公开山岩shader。用户要列表，最终回复须给链接/简表。
+
+用户两小时后验收首次可核实时间08:08:34，截止10:08:34；不能因为加载施工推后。最新目标为v5，r17固定，历史r47内部66不套新版本，仍未验收。
+
+## 2026-10-06 目标图近景再次纠正
+
+用户明确否定 v4 同视向放大（镜头没变），要求不同摄像机视角同时保持建筑空间关系。已生成 target-v5-street-cameras.png：旧城由街台仰视中央主塔，新城由海侧广场斜望城门，雕塑与木马在梯脚右侧。review仅展示原批准全景上半幅+v5下半幅。v4废止，勿将其同视向要求继续用于建模/验收。v5为概念近景，未宣称精确三维多视图重建，原全景仍唯一布局基准。没有改变r17山体和游戏模型。
+
+## 2026-10-06 最新用户纠正 · 目标局部图须与全景对应
+
+用户认可上方建筑全景，但指出旧版下方两个近景不同构图会误导验收。原 target-v3-landmarks 上半幅为唯一布局基准，旧下半幅废止用于布局验收。imagegen已生成 target-v4-corresponding-details.png（概念辅助图非实机）；review保留原全景上半幅原文件，以CSS展示新图下方细节，避免生成器改变母图。旧城以最高塔为组织中心；新城门—阶梯—雕塑—木马沿原全景关系，雕塑在木马左侧且在梯脚右侧。局部仍冲突时原全景优先，不可据近景另建一城。
+
+代理new_city_main已交旧城v9（12栋4组8对侧拱、37测试、公共网格与v8相同），顾问交云v12（短厚受光多瓣），均未GPU，不套66分，不立即接受。已通知执行代理以全景为准冻结候选待GPU。root仍需实际集成/截图。上次browser1/tab6已恢复DOM，原地标迁入ok，未保存r48新证据。
+
+## 2026-10-06 07:09 北京时间 · r48 检查修正与浏览器恢复中
+
+- 用户询问当前分数，已明确回答最新有证据 r47 为内部独立 66/100（18+15+14+9+7+3），r48 未评分；未到95不得验收。
+- r48 扩展通路采样的14失败来自采样器把护栏及承重拱顶当公众路面，并非实际公共踏面。改为独立、明确的公共几何名称，仍检查未注册公共桥面，不放宽误差。target_city_walk_audit v4 + 新单测（未注册甲板必须失败、护栏不能算甲板）通过。
+- 真实 r17 冻结变换、当前候选、海洋的 CPU 复现177次查询0失败，P95 0.109ms，记录 city-detail/r48-expanded-route-cpu.json。不是实际人物通行或GPU验证。
+- r48 原浏览器截图失败 expected PNG，无文件保存；浏览器2消失，库存证实实际页已不在，已重开 browser1/tab6同实机URL，首次DOM读超时，尚待加载完成。禁止将 r48 当已视觉通过。
+- 子任务 review.html 已更新 r47 实景全景/两城近景与66分，移除旧 r39/r40状态。r17地形不改。既定五小时至07:13尚在推进；所有现有代理空闲，不要覆盖其模块。
+
+## 2026-10-06 06:52 — r47实机66分，r48重载中
+
+r47 cloud11不等瓣连续opaque云、旧塔20小窗4立面、明亮r45色板、新主厅expanded真实接台、短滨水37.883m/3真贯通石拱v5均已实机。两城近景/全景在citadel-four-hour批r47-arches-clouds。独立内部评阅66/100（不同评阅者，非外部盲评），最终严格>95未满足。r44上一评阅67不可算本版。GPU sample-clean/glErrors[]；errors只有一次保存重复标签拒绝，不是游戏报错，已改新标签保留原证据。
+
+r46原木马夜间8人出马/7目标、日间最终8人归队已实际观察，r46-day-return文件拍早仍returning，请用r47-horse-idle-after-return的新JSON证明完成状态，不覆盖旧证据。root此前错误重复保存被服务器拒绝，已解释。
+
+当前完整reload: 浏览器旧id1失效，inventory实际新id2/tab4，已有页保留；不是重新建8标签。r48待: plaza3依据r47真实64树根诊断，西前缘x42.5..49/z77..93冠入x45.5、根差<.4、地高1..3.35，新增10树成对隐藏，外侧林保留，山形不变。扩展walk audit v3新增bridge/connector/promendade/waterfront真实顶三角面查询；单测明确未注册publicdeck会失败，不把下面地形当通过。尚未GPU结果，必须核对不能预填。
+
+root拥有候选集成/harness/tower8/player audit；new_city_main已交waterfront5+评阅、advisor已交cloud11/plaza3，均闲置，勿重复派发。r17冻结、无视频。用户窗口02:13至至少07:13仍推进。正式玩家/电车/存档未回接，不能称可玩交付。临时automation继续，周归档不动。
+
+## 2026-10-06 06:10 — r42草缘实机 / r43入口拒绝已修，r44完整验证中
+
+实际r42已GPU sample-clean/errors[]；草皮v3细化86326tri，可见连续草台；原雕塑木马迁入。r43扩大新厅XZ1.10、门槛以上Y1.20已GPU，但地标因入口起段横差.415m和线性上楼路线差.4286拒绝迁入，不能将r43算完整景观。已加真实.3m入口接台、mainApproach真实踏面采样与显式4级walkPath，CPU16项过，root消费新起点XYZ，r44完整重载待验证。
+
+当前root整合：turf4共享坡度2轮平滑（原位置不动）；cloud9多瓣单壳+连续有界漂流（去掉alphaHash淡出白点）；新厅expanded入口修复；waterfront stairs2多端点搜索，真实当前船bbox+旧新房/桥轨三角身体检查，只有built才接入。旧出口→rail96的CPU候选119.289m/336阶，实际现场可能另选；仍无正式电车、玩家导航、完整动态船航线验收。new_city_main仅继续waterfront两文件补接头侧栏杆；advisor已交还main+landmarkIntegration、turf4、cloud8（root随后改cloud9），勿重复覆盖。
+
+独立评分仍只有r39的64/100，不挪用到后续轮次。最终严格>95未满足。用户窗口02:13—至少07:13继续，r17山体固定，不录视频。当前tab37完整重载中，URL已cityDetail=1&candidateLandmarks=1自动接入；await状态完成后查看landmarkIntegration.ok、GPU/路线，再保存r44全景及近景。最新原始证据r42/r43在citadel-four-hour批，r43原地标缺失原因须保留。
+
+## 2026-10-06 05:33 — r39独立64分，继续真实施工，未验收
+
+r39实际全景+新旧城近景已保存；独立固定量表64/100（见city-detail批r39-independent-review），绝不能称95或完成。旧城v7真实居住拱廊、平方小窗；新城v2拱门与粉蓝色；r38实际WFC solve/矛盾原子回滚/删除后邻接重求解通过。r39连续草台及新广场排草孔已GPU可见。原statue/horse身份功能沿r32验证，重载需重新点击迁入。静态frontRail v2五拱六墩已实机，尚无电车或导航。
+
+当前工作：root整合cloud v6（深度写入alphaHash淡入淡出，夜色用色不透明度）、冷灰岩v3、原装饰crags候选隐藏可回退、playerSupport v2真实三角BVH及GPU采样按钮；new_city_main负责rail v3步道栏杆站棚；advisor已完成terraceLinks模块，正在forestCompanions。互不覆盖。harness刚reload待r40实测。当前仍只验收候选，主游戏没默认替换。山体r17固定，不录视频；用户窗口02:13—至少07:13，继续工作。
+
+## 2026-10-06 04:17 — r32 原地标迁移与编辑实测，未验收
+
+r32实际GPU/app采样clean，statue移到[56,78]、horse[72,78]，保留原UUID与控制器，有限0.5m路径/身体射线通过。夜间8人出马、7投矛目标；日光后8人归马，placementRevision=1，errors=[]。证据r32-horse-night及r32-horse-day-return。原actor回滚后已移除r32候选，下一版r33接入旧城v5屋顶、细化阴影、统一crags色以及成对树避让；新城代理正在修正两处边缘碰撞。r32旧城实际右键删除/撤销/重做/改色/JSON回读通过，塔受到点选保护；仅候选住宅实体编辑，不是WFC，不是生产存档。独立r29评分53/100，未对r32抬分；最终>95和铁路/导航硬检查仍未达。用户5小时窗口02:13—至少07:13继续，不录视频，不改r17山形。
+
+## 2026-10-06 03:19 实机模型推进，仍未最终验收
+新五小时窗口02:13—07:13仍有效。r27实际彩墙两城/三孔瀑布/四宽拱桥已渲染，GPU采样干净，但独立检查发现桥尾穿蓝房，不能称完成。已改[51,12,39]侧接tread14，connector真实裁切台阶边界并开栏杆入口；待r28GPU。新模块targetBayWaterAppearance使用最终land/sea采样深度及岸距纹理，改浅青水色和动态岸波，待GPU。targetOldCityWaterSupply尝试连接旧城水口，若采样埋地则拒绝生成，不能标连接完成。
+原雕塑木马survey/apply模块及原控制器relocateGround已单测，未在实机调用迁移，避免改坐标却残留旧路线。harness新增原雕塑木马落点测量。两城候选仅验收harness显示，未正式编辑/WFC/铁路集成，无最终分数。new_city_main负责targetNewCityStairs六房基座立面；oskar_world_advisor负责mountainCloudBanksCandidate近城云更圆且后退的更新。主线程rootcandidate/harness/水/地标集成，请勿重复覆盖。
+
+## 2026-10-06 02:13 新五小时施工窗口及研究落地
+用户让学习后继续构建，睡5小时不要停止；本轮至至少07:13，沿用临时automation。保持已认可r17山形，最终严格>95仍未验收。流动云不能变雪，不录视频。研究33唯一帖（32段抽样媒体+1张原图）已整理到artifacts/research/oskar-series-20261006，仓库与个人Oskar技能同步；不是连续全观看。自动岸线UV小样4项通过，未接运行时。
+
+实际r21配色/流动云/两城朝向代理已GPU采样干净，证据在citadel-four-hour批r21开头文件。新城主厅/旧城瀑布/实际海面放置候选11个CPU测试通过。targetCityDetailCandidate已接验收harness“真实主厅与瀑布候选”按钮，须先隐藏旧布局；GPU待本轮操作，不能当已渲染通过。新城长阶梯由new_city_main负责targetNewCityStairs.js与tests，勿重复派发。顾问INTEGRATION_REVIEW.md指出瀑布平面水圈、支持漏采/负gap、缺长阶梯等；分项任务板citadel-city-detail-20261006/state.json。旧城房组/高塔、雕塑木马新广场、廊桥、铁路仍待完成，原物件不删除。
+
+## 2026-10-06 最新用户纠正 — 固定山体，优先配色及两城呼应，云不是雪
+
+用户说“山体改好了，赶紧更改配色”，停止任何台地扩大/山形重塑；此认可不等于最终95。新旧城朝向必须有呼应，当前比例代理都朝+Z确实遗漏原城±30度设计。facing-4试旧+45/新−55绕各自平台中心（原实景不可重复叠加），4项核心越界明确拒绝，雕塑木马位置不变；尚未GPU与真实承托验收。
+
+targetLandscapePalette.js已接入真实岩石uniform、草皮顶点色、树冠材质，GPU图r20-landscape-colour-target-front-plants-layout.png；程序采样shader干净，但报告保留用户点击预览按钮触发的前置条件错误，后续已改友好提示。位置/几何/雕塑木马不变fixture通过。又加强暖灰岩与黄绿草，待下一轮实机。
+
+用户指出城堡白色为流动云，不是雪；顾问已重写mountainCloudBanksCandidate.js：离地有厚度、0.7m/s淡出循环、整运动包围盒保护，最终表面2m网格采样净空，未声称连续碰撞证明，待GPU。用户明确不录制，不要点击record-motion，直接实机检查和施工。证据服务已支持motion但未录视频，当前session10774。
+
+## 2026-10-06 00:53 — r17侧肩与r18天空/城市比例试验，未验收
+
+实际GPU：r17非对称鞍部台阶、r18浅蓝天空均sample-clean、glErrors=[]、errors=[]。天空全景的holyDayBlend从.76到1，仍限定citadelTargetAtmosphere候选正午，原暮色near不变；回退快照r17-environment-source.snapshot。独立顾问确认侧肩小幅改善、天空和塔相对更近；长圆弧岩台、草缘、厚白云、两城与铁路仍未完成，无95分。
+
+新增targetCityMassingPreview.js只作可撤回比例代理，默认original-1为44个；stepped-2为68个（分层房组、承托、33m塔、32m新台、穹顶+3）。live按钮city-massing，query massingVariant=stepped-2；代理非正式建筑/非WFC/无碰撞/不保存，不替换原雕塑木马。两版本实机检查通过，v1移除已核实；v2最后恢复操作后tab32已不在会话；实际标签清单仅review页tab33和研究页，下一轮需新开实机验收页，不能假定仍运行。图r18-stepped-massing-target-front-bare-terrain.png。城市仍过窄，下一步先利用现台椭圆排布宽40–43m、三高度带，统计屏幕bbox与真实承托；不先扩大海岸。
+
+review更新为terrain-rebuild-review.html（r18实景/r17裸山/明确标代理预览），不是已完成交付。r17/r18 Jev文字分流已保存，未充当视觉评分。临时automation继续；未完成原5小时目标，不把经过时长说成施工时长。
+
+## 2026-10-06 00:25 — r16低鞍错台实机，仍未验收
+
+r15中央后退低鞍、r16三级谷地错台均已实际GPU sample-clean、errors=[]；顾问看裸山确认局部改善，可保留可选候选。仍像狭窄对称阶梯槽，下一步一级向侧肩展开、对侧留崖，可用可撤回建筑代理体检验面积比例；正式建筑铁路仍未完成，无最终95分。
+
+证据r16-valley-benches-target-front-bare-terrain.png及plants-layout.png/json，CPU r16-valley-cpu.json。新开关citadelRecessedSaddle=1&citadelValleyBenches=1，叠加terrainFirst/remesh/aprons。验收页新增rebuild-bare-terrain按钮：先隐藏旧建筑铁路，可不重载整世界快速重建几何；实际测试通过，导出明确terrainPreviewOnly，仅裸山，旧植被/云/索引/碰撞未更新，完整重载后才能验收。r16-fast-preview不是正式效果。
+
+## 2026-10-06 00:03 — 前缘低台r14，仍未验收
+
+r13追加低台越过侧后肩，独立顾问发现轮廓退化，已否决。r14用前缘渐隐mask和建造核心连续保护，后肩采样与r12完全相同、海湾每行水点不减少（6072→6072；离散局部统计，不是完整航路验收）。实际GPU sample-clean、glErrors=[]、appErrors=[]；证据r14-front-aprons-target-front-plants-layout.png及bare-terrain.png/json。
+
+开关仍默认关闭：citadelTerrainFirst=1&citadelTargetRemesh=1&citadelTerraceAprons=1。裸山仅隐藏旧建筑/轨道观察，不是实际删除或新玩法完成；修复了验收页culling重显隐藏对象。下一步收环形裙台和前湾长壁。新旧城及铁路未重建，无95分。独立顾问已看r14两图，确认r13退化基本修复；下一项局部降低并后退中央鞍部，拆解湾后马蹄形高坝，保留两肩和低陆脊连接。临时automation继续。
+
+## 2026-10-05 23:46 — r12 GPU证据已保存
+
+`r12-remesh-target-front-plants-layout.png/json`已核对，sample-clean、glErrors=[]、appErrors=[]。恢复r10宽台轮廓并减雾；仍未验收，建筑铁路未完成。下一步缩短前湾长崖、打散台地轮廓。
+
+## 2026-10-05 23:44 — 五小时节点未完成，继续授权施工
+
+未达到目标，不能交95分：山体已有实际宽台，但环带和长崖仍明显；建筑与铁路重放未施工完成。r11 sea-relative step drops实机更差，已撤回几何；保留targetAtmosphere局部减雾，r12待GPU。r10 CPU三块平台、海湾和低鞍通过，r10/r11 GPU sample-clean及appErrors=[]只是本次采样，不能当完整验收。review: artifacts/pipeline/citadel-four-hour-20261005/terrain-rebuild-review.html。临时automation保留，继续按山体→新旧城→铁路和最终>95；不等用户重复批准。
+
+## 2026-10-05 23:32 — 全山闭合重网格候选，未验收
+
+用户最新顺序：先山体，再新旧城，最后铁路；旧建筑/轨道位置不冻结候选。最终严格 >95，不接受旧85分。r09整片共享顶点台地已GPU实际运行（sample-clean，appErrors=[]），截图 `artifacts/pipeline/citadel-four-hour-20261005/r09-remesh-overview-plants-layout.png`。宽台已出现，但环带规整、后壁高坝，原建筑埋入，尚非可玩交付。顾问独立确认差距。r10改有向宽度、错层断面、低鞍及允许切平台，CPU通过；GPU待检查。默认开关关闭，原版可回退。实际施工没有完成目标，不可报95。
+
+新增源码 targetTerrainHeightfield.js（顾问）、targetTerrainCandidate.js（主）、mountainStudy.js集成；CPU检查 tools/pipeline/test_target_terrain_candidate.mjs。实机URL加 `citadelTerrainFirst=1&citadelTargetRemesh=1&reviewView=target-front`。截图接收器 tools/pipeline/citadel_evidence_server.py 仅127.0.0.1:8932，按钮主动保存到批次；进程session50729。视频 `_1fvJ5sHh6A` 的配套作者文已读，音画字幕导出失败/播放器DOM超时，不能称已完整观看720P；笔记 artifacts/research/oskar-2023-pcg/AI_GAMES_65_IMPLEMENTATION.md。
+
+## 2026-10-05 22:55 最新用户顺序：山体 → 新旧城建筑 → 铁轨
+
+以 target-v3-landmarks.png 为统一方向，最终整体评分严格大于95。先真实宽草台/短崖/峰鞍/海湾；旧建筑与旧轨道不再锁死候选山形。原版保留回退，雕塑木马身份功能保留，建筑布局完成再铺铁路；阶段穿插不称最终通过，最终必须承托/净空/连通/渲染/编辑全部验证。citadelTerrainFirst=1为默认关闭重排候选，不能当正式可玩完成。顾问若有具体空间歧义可问用户，普通工程问题自主推进。
+
+## 2026-10-05 22:30 用户纠正：直接改山形与宽草台
+
+用户授权改变旧山形向目标趋近，原“旧山固定”已被更新；建筑、铁路、桥、通道和雕塑木马仍保护。r07实机修改6122个焊接点、最大17.63m、受检面无翻转、GPU采样干净，但实际左前坡仍无目标宽台，独立顾问明确未接近85分，不验收。顾问已实现默认关闭的三层闭合台地builder，待真实位置测量、旧面替换、实机验证；不是已完成景观。
+
+## 2026-10-05 最新五小时纠正：以目标实景相似度统筹山体与建筑
+
+用户明确现有实景没有接近目标，否定85分说法。当前从未验收85，旧批63也不能转为新候选分数。新窗口北京时间18:43:30—23:43:30；山体与建筑统筹，优先构图/山势/海湾/桥的大轮廓和天空浅青海白云，再彩墙橙顶、林冠、局部WFC。目标用architecture-target/target-v3-landmarks.png，雕塑木马保护。保留旧山形/铁路通路限制，若与图冲突先具体指出。不要把过去执行中断、API故障或经过时长称作连续施工。
+
+已实际修复新山脊足迹越出球面造成的场景启动失败：后移参数收回有效球面范围，加真实castle frame回归；候选异常隔离并记录ridgeFailure，不能中断正式场景。r02实际ready、errors[]。编辑器选中undefined台地导致radius报错：拒绝非整数索引、按真实数组边界夹取、缺地形输入禁用；真实panel API undefined/NaN/Infinity/-2/2均无异常并恢复0，未保存用户布局。
+
+r04真实候选GPU sample-clean、app errors[]，浅青海色已见变化，171棵候选树、3条轮廓云。仍显著不达目标：大折壁、草皮不足、林冠分散、后山不足、云呈细条、建筑原形未改。r03因海洋shader region局部变量冲突被否决，已加作用域修复，截图留作失败证据。不以这些工程数字给艺术加分。
+
+当前继续：r05新增默认关闭citadelTargetArchitecture=1彩色抹灰/橙顶材质试验（原位置几何不变，雕塑木马植被归属测试通过），云从灰绿薄带改顶白底浅青；等实际GPU及多视图。主色候选citadelTargetAtmosphere=1、新山citadelNewCityRidge=1、树citadelCanopy=1、云citadelCloudBanks=1仍默认关闭。新山轨道裁切已排除远下方另一半球轨道投影，但真实邻近轨道仍保护，maxcrest仍低于蓝顶，未解决构图。顾问三次stream/capacity失败，没有新独立分数；主线程继续实质工作。
+
+## 2026-10-05 09:18 用户批准Townscaper建筑目标并排入后续四小时阶段
+
+建筑目标已批准：`artifacts/pipeline/citadel-architecture-four-hour-20261005/target.png`（彩色抹灰/橙顶v2）。先完成当前山体四小时、>85及硬检查，再开建筑阶段，开工时另计至少4小时，固定评分>=95且功能硬检查全部通过。建筑阶段尚未开工，不能将09:18算建筑计时；排队状态及评分量表见该批state.json。包括新旧城的Townscaper模块连接及局部WFC编辑，锁定地标/铁路/桥/通路。当前任务非暂停，按阶段继续；临时automation覆盖两阶段，最终验收完成后才删除。
+
+## 2026-10-05 09:00 四小时山体任务已启动（优先于下文暂停记录）
+
+用户选定V10山体目标，授权08:59:50—至少12:59:50持续迭代，最终独立评分须严格超过85且保护/承托/渲染检查通过；未达标继续，不以时间结束或概念图冒充验收。批次 `artifacts/pipeline/citadel-four-hour-20261005/state.json`，原图固定为该批target.png。旧城山形固定，新城从旧山右侧沿海湾后缘连续接至仅略高蓝穹顶的低后肩。建筑/交通保护；当前默认仍r19，候选开关试验中，没有新验收分数。
+
+用户插入要求已出建筑目标：v1写实方案被否定，v2 Townscaper彩墙小窗橙顶提案位于 `citadel-architecture-target-20261005/target-v2-townscaper.png`。只作后续建筑美术方向，未授权通过概念漂移改山或交通；实际建筑施工排在山体之后。WFC编辑方案已说明，未声称实现新旧城编辑系统。
+
+## 2026-10-05 V11最高优先：旧山不动，新山顺势连续接上
+
+用户明确要求新旧城为连续山体，不是独立新城山系；旧城现有山体固定，仅延伸其右端山脊至新城后肩。顾问已按此改指导，生成 `artifacts/pipeline/citadel-target-20261005/target-v11-continuous-ridge.png`，以可见岩面/草台连接海湾后缘，不靠云遮缝、不填前湾或桥下，后肩高度仍仅略高穹顶。新图为待评概念；实际实施必须锁定旧城原几何及交通边界，不能以生成图漂移作为改旧山授权。建筑不改、两小时实机继续暂停。
+
+## 2026-10-05 V10最新高度要求：新城后山只略高于城堡
+
+用户明确推翻V9高主峰比例，要求新城山“高出城一点点”，并让oskar顾问审阅。顾问建议以后穹顶为基准，后峰退为偏右背景肩峰。新图 `artifacts/pipeline/citadel-target-20261005/target-v10-low-new-city-ridge.png` 已明显降高、保留侧脊/草台/林带，浅灰青海色恢复。仍为待评目标，不是批准回接，建筑不改，两小时实机迭代继续暂停。后续高度以此最新要求为准，不再对齐旧城主峰或V9高山。
+
+## 2026-10-05 V9补新城侧后高山
+
+用户明确V8仍遗漏侧图中新城侧后高高山峦，不能以城下岩基替代。本轮向右扩展全景，生成 `artifacts/pipeline/citadel-target-20261005/target-v9-new-city-back-range.png`，新城后右侧高主峰高于穹顶、侧脊下降到海崖、云在半山形成遮挡，旧城右中山块保留。仍待评概念，未改实机；水色生成略偏蓝，用户浅灰青参考仍优先，勿把V9颜色当作新批准色板。两小时实现仍暂停，建筑不优化。
+
+## 2026-10-05 V8按实景补回旧城右侧山块，重排新城承托地势
+
+用户否决V7全景地势，认可其侧视，并指出全景旧城右侧缺山块。顾问对照r20旧山/中湾实景后要求恢复宽厚中间山块—鞍部—次峰关系，不能以加树代替地形。新图 `artifacts/pipeline/citadel-target-20261005/target-v8-landform-panorama.png` 是单张修正全景：保留中间山块清晰体积，新城以连续岩基承托、附着草台林群，云避开关键结构。仍待用户评价，不宣称精确三维双视图一致；建筑优化与两小时实现仍暂停。
+
+## 2026-10-05 V7补齐全景新城山坡
+
+用户指出V6上半全景仍缺新城山坡/植被，而下半侧景有，顾问承认漏查。局部修正为 `artifacts/pipeline/citadel-target-20261005/target-v7-consistent-new-city.png`：上半右侧城堡台基周边、桥落点旁和外侧岩坡补草台与灰青林簇，下半保持参考。仅概念可见性修正，精确双视图几何和净空须在实际3D中验证；建筑仍不优化、两小时工作仍暂停，等待用户后续指示。
+
+## 2026-10-05 海色及顾问主导目标V6
+
+用户新增浅灰青海色参考，并指定oskar_world_advisor主导风格修改。顾问实际查看v4与作者树/云/海参考，指出碎岩/叶片/云团过度写实；按其指令生成 `artifacts/pipeline/citadel-target-20261005/target-v6-advisor-style.png`：连贯灰青林冠、简练岩面、宽草坡、低绕山云、浅灰青港湾。海色参考已存 `user-sea-colour-reference.png`。V6仍为待评概念，不代表建筑改造或已回接实机；两小时实现继续暂停。
+
+## 2026-10-05 目标图V4修正：新城山坡同样改造，云绕山组织
+
+用户指出V3遗漏新城山体植被、云只在天空。现基于实际旧山全景与新山侧景重画双视图 `artifacts/pipeline/citadel-target-20261005/target-v4-both-slopes-clouds.png`：两城自然山坡统一岩色、草岩边缘和连片树冠；低云绕山腰、穿鞍部、由山脊遮挡再露出，城堡和铁路保持可读。仍为待评概念，生成的外侧山脊细节不是实测几何；建筑优化仍推迟，两小时实机工作仍暂停。
+
+## 2026-10-05 最新目标范围修正：环境先行，建筑暂不处理
+
+用户先认可V2并要求两小时优化，随后明确“稍等”暂停，再要求依据当前实际场景重画、建筑留待后续Oskar优化。两小时实现未启动（仅初始只读检查，无自动化或生产修改），保持暂停。新提案为 `artifacts/pipeline/citadel-target-20261005/target-v3-environment-only.png`，以实际r20旧山机位截图为唯一图像输入，只提出岩色、草岩过渡、树群、云的改善；当前建筑轮廓与位置为固定约束。V3尚待用户评价，不按早期概念图重造建筑。
+
+## 2026-10-05：五条指定 X 动图专项学习
+
+已完成公开原帖镜像文字核对与五段原始 MP4 的时间序列抽样：60 个时刻＋4 张细节图，非连续逐帧观看。新证据是 2025 岸浪在生成时烘焙入向／出向／时间偏移并由循环顶点着色器驱动；2024 岸浪为多个重叠浪独立循环。树与云仍须区分作者已公开 impostor 概念和未公开 shader。来源、时间账本、工程差距、顾问报告见 `artifacts/research/oskar-five-gifs-20261005/`，可视入口 `review.html`。本批未改场景代码；下一步小样为凸岸＋凹湾顶点浪带、草岩林缘、树云旋转稳定性。
+
+## 2026-10-05 柏树与广场雕像材质误覆盖已修复
+
+用户截图中的树冠与雕像被统一石墙砖纹覆盖。根因是合并后的柏树丢失祖先名称，加上新城材质遍历范围过宽。新增材质归属标志，柏树/雕像导入材质在合并后仍受保护；台地花园保留植物本色。Ashley、historicStone、cityColourStudy三条批量处理均尊重归属，原城墙砖纹保留。未改几何、位置或道路；旧页面须刷新。
+
+真实工厂与匿名再次合并的回归：误改16→0，原材质/PBR及几何保持，墙体处理继续有效。实际场景12个台地花园/雕像网格无historic/city错误标记；1529个建筑网格保留历史石材处理，258个GPU程序采样编译/链接通过，GL错误为空。实际截图与记录 `artifacts/pipeline/citadel-material-ownership/review.html`。尚未达标的山体草缘/折壁与城堡接路仍独立保留；本次不扩大到地形重造。
+
+## 2026-10-05 05:40 五小时批次已交付：阶段版启用，美术及城堡接路仍有未达标项
+
+五小时窗口00:40:16—05:40:16已结束；批次交付不等于全部美术目标完成。正式默认 `citadel-mountain-20261005-r19` 已实际加载，r22在全部共享源码冻结后与r20的主岩、铁路曲线、514通道网格及49,604根部检查点逐项一致。实际日/暮/夜GPU采样无失败，GL与捕获错误为空；八组相关代码测试通过。完整实景、前后对照与云动画在 `artifacts/pipeline/citadel-five-hour-20261005/review.html`，最终证据 `r22-final-default-parity.json` / `final-verification.json`。
+
+视觉评分仍63/100（同量表r04为57），湾侧折壁、尖草缘、支脉及暮色仍未达到目标。bay1与turf6失败候选未发布。云为柔性雾片，未声称复原Oskar体积云。真实云视频已播放验证。r23 release=0回退实测通过：岩体、铁路、通道、80,731根部数据与基线一致；这是关闭本批候选参数，不等同历史源码恢复。
+
+城堡pass2已完成实际浏览器编辑验收：6格/3组双层拱洞，中央净高2.30m；下半承重格拒删有提示，上半右键398→397，撤销/重做/最终398准确恢复。面板修订号残留已修，3/4/5实际验证。没有点击保存，未覆盖用户草稿。虽然洞内胶囊净空通过，外部左端2.70m原地基落差使完整路线失败，仍默认关闭。证据 `artifacts/pipeline/junction-wfc-passage/review.html`、`pair-browser-verification.json`、`pair-ui-revision-verification.json`。
+
+后续重点是按 `bay-seam-next-step.md` 重建共享三维山缝，再更新植被；城堡另做既定地基之间的接路与完整通行。以上问题未因五小时批次而完成。当前未commit/push。已删除临时automation `automation`，保留每周 `tigermessenger`。实际测试场景页已关闭，成果页保留，浏览器临时尺寸已恢复。
+
+## 2026-10-05 05:10 高山圣城默认版本已回接，五小时窗口仍在最终复核
+
+原截止时间 **05:40:16** 不变。当前正式manifest为 `citadel-mountain-20261005-r19`：ridge6 / turf5 / woodland2 / normal4 / relief .22 / surfaceIndex1 / palette3 / light0 / detail .35。`citadelMountainRelease=0` 可恢复本批之前。r20实际无试验参数加载，mainRock、walkable、railCurve与49,604个roots items均与选定r16完全一致；bay1仍关闭。实景与可拖动前后对照：`artifacts/pipeline/citadel-five-hour-20261005/review.html`。
+
+默认实际检查：514通道网格不变，铁路曲线不变，23,049铁路探针0命中；48,628草叶基边端点承托无缺失、无>2mm正间隙、无>2cm埋深；63树/913灌木根有承托。实际GPU日/暮/沿线采样无失败、GL[]、页面errors[]，8组代码测试通过。证据 `r20-default-parity.json` / `r20-comparison.json` / `final-verification.json`。当前中湾1250×518下rAF中位50ms/p95约66.6ms，不能跨视角宣称性能提升或把采样当连续导航证明。
+
+顾问r19六图独立评分 **63/100（22/11/9/7/7/7）**，同量表r04=57。主峰后缘/上下岩台/短草缘/简化岩纹有改善，但湾侧大折片、尖草缘与暮色未达标。r17海湾细分实景变差、r18草缘出现断片均否决。新离线证明受试区外边界已拉长43.88m，后续规格见 `bay-seam-next-step.md`；本批没根治折壁。r21真实云动画10秒视频已保存并在浏览器播放验证，384粒子坐标变化含自然重生；仍是项目柔性雾片，不是完整Oskar体积云。
+
+城堡：pass1真实WFC拱洞及右键/撤销/重做已浏览器验证，但1.428m太低，默认关闭。pass2局部双层三连拱正在独立验收，2.30m洞内胶囊采样已通过，左端原地基落差2.70m导致整条路线未通过；不改基础、不宣称可通行，仍不发布。待共享城堡源码冻结后，root做候选真实编辑和最后默认回归。未保存用户城堡草稿、未commit/push。截止后删除临时automation `automation`，保留每周 `tigermessenger`。
+
+## 2026-10-05 04:20 五小时批次进行中（优先于下文早期状态）
+
+截止北京时间05:40:16不变。实际候选已到r17；当前保留r16：ridge6、turf5、woodland2、normal4、relief.22、surfaceIndex1、palette2、light0、detail.35。中央manifest `mountainRelease.js` candidate2仍RELEASE_ENABLED=false，尚未称默认回接。r16同机位图、完整边界/草根检查在 `artifacts/pipeline/citadel-five-hour-20261005/`；514通道网格/rail curves未变、23,049铁路探针0命中、48,628草端点无悬空/过埋、63树/913灌木有承托。r14总体63/100（统一r04尺度57/100），r16植被专项16/25不可混算为总体分。
+
+r17分城海湾3父面采样实际变差已否决：虽局部多层探针156→67，实际出现更强长竖褶。根因为bayLayout非线性径向压缝把约2m原网格拉跨30m，并非单纯法线问题；保留citadelBaySurfacePass=1为默认关闭实验。完整报告/实景保留，不声称纸片岩壁已根治。顾问已冻结源。植被代理只做最后turf6高度fade7–10候选，需图与根检查后选5或6，默认发布前再做无query实际平价验证。
+
+另完成交汇城堡WFC passage默认关闭候选：23真拱洞由实际solver rot/socket消费，398cells/11regions不改。CPU几何/编辑/资源回归过；净高1.428<玩家1.66，且1处旧地基低2.7m，明确仅视觉结构实验，不能通行验收/默认发布。现root在tab22加载canal-junction-editable/live.html?junctionWfcPassage=1做真实UI/GPU截图，之后回山r18。城堡具体资料 `artifacts/pipeline/junction-wfc-passage/IMPLEMENTATION.md`。
+
+Jev r17仅文本分类，实际来源PNG sha已更新；视觉失败和turf6未测的本地门槛阻止自动采纳。未提交/推送Git。临时automation id=automation在05:40批次交付后删除；每周tigermessenger不动。
+
+## 2026-10-05 十二门徒配色、动态碎波及圣城五小时开始
+
+本轮配色三个实际机位已对照独立评阅，改善有限但岩石/草皮/叶片层次更清楚；黄昏冷暖仍弱。证据 `artifacts/pipeline/twelve-apostles-colour-20261005/review.html` 与 `visual-review.md`。八座几何、位置及实例矩阵哈希不变。
+
+动态碎波修正不只着色：`messengerIsland` 更新state漏了planetV8，使海面/岸线uTime恒0；现加入运行时引用并记录实际13秒视频，26个GL采样0错误、可见岸线时间推进。泡沫采用接近、破碎、退散双前沿与空间断续，不是物理海浪模拟。前版“跟随真实水面”只完成绑定，漏时钟导致实际静止，现明确纠正。证据 `artifacts/pipeline/twelve-apostles-surf-20261005/review.html`，before-zero-clock.json / after-clock.json / dynamic-surf.webm；8种子承托/包络/资源测试通过。
+
+圣城五小时正式窗口北京时间2026-10-05 00:40:16–05:40:16，state `artifacts/pipeline/citadel-five-hour-20261005/state.json`，临时heartbeat id `automation`；结束后删此自动化，不动每周归档tigermessenger。当前仅建立批次，未称山体已优化。下一步新实景基线/固定边界哈希→顾问结构方案→候选迭代。
+
+交汇城堡22原型/48旋转变体真实WFC审计通过，398cells/1572邻接；几何消费目前仅屋顶分区和庭院，墙角/拱门仍邻接工厂。已用实际浏览器右键删除398→397、撤销398、左键增建399、撤销/重做399，最终撤销到原398，未点击保存。证据 `artifacts/pipeline/canal-junction-editable/review.html`、`browser-verification.json`。私有组装资源60次重建回收测试通过；不代表GPU内存或FPS已验收，实测帧率偏低仍需优化。
+
+圣城基线四机位实际评阅55/100；r01东肩候选几何相关分43/75（基线41/75），改进有限、未升默认。发现同clock下莫比斯电车结界周期覆写光色，现仅在验收iframe停车隔离并锁晴，不改变生产世界灯光。r00旧检查23049铁路探针0命中、海面余量0.647m；草根全量尚未完成，新BVH检查有500原Raycaster对照门槛，需实际重跑。草皮连续裁切候选 `citadelTurfPass=1` 也尚未视觉验收。下一动作以批次state为准。
+
+## 2026-10-05 WebGL 输出与灯光依赖修复
+
+`crystalLakeV10.js` 的全 discard 回调网格在真实 WebGL 复现1282；现保留onBeforeRender但drawRange=0，后备材质合法且不写颜色/深度。`releasedLighting.js` 在旧城parcel候选被保护性跳过时保留旧灯锚点，继续新城灯光对齐。独立6帧、完整游戏日间/夜间各120次GL采样通过，证据 `artifacts/pipeline/webgl-draw-output-fix/`。旧冻结地形失配告警仍保留；未称解决主岛85秒加载。需刷新已加载游戏。未提交Git。
+
+## 2026-10-04 十二门徒三小时迭代 r10（批次交付，美术未最终达标）
+
+实际游戏与同机位前后图：`artifacts/pipeline/twelve-apostles-three-hour/review.html`；可操作验收 `live.html?seaStackStudy=1`，旧版 `?seaStackStudy=0`。默认运行时已采用本批，未提交或推送 Git。独立实际图评分从基线29到r10 69/100（19/19/10/12/9）；不能写成“已满意/已完全还原 Bad North”。
+
+已做：四组不等崖面、非均匀退台与破碎峰冠；一维WFC选择实际约束台宽/退台/峰冠参数；固定球面布局与包络。语义平滑保留基座/台面/硬边。草皮按最终可承土连通面与三维边界距离内缩0.40m，额外保守裸边≤2.001cm；76,240个草皮三角面。真实草叶基边埋3mm、灌木枝根埋5mm。共同场景主光、局部64²岩高场及128²灌丛遮蔽，本色/剪影与明暗分开。泡沫跟随真实水面波形并匹配海面深度偏移，保持深度测试，实际白浪已见。表面与海面版本合同仅限本岩群。
+
+验证：5组最终脚本全过，源SHA与`r10-test-suite.json`匹配；独立790草叶基边端点及75枝干根通过，草缘越界/穿透/退化/内部缺口0；实际154根点全部有承托。8座位置偏差0，轴向与各自海面径向夹角0°。46,800铁路探针0命中；507步行网格/50,313顶点新旧hash均81687140，68,680点保护包络采样0冲突。着色器0编译失败，采集窗口0JS错误。采样不是完整连续碰撞/人工全程驾驶证明。最终性能见`r10-performance.json`，rAF间隔非GPU耗时，不宣称性能提升。
+
+未完成：连续光滑立面仍过长、部分轮廓仍偏圆角筒体；下一轮优先真正的层状断面及破碎岩肩，不靠加密草/画线遮盖。WFC仍是一维兼容语义驱动，不是整套3D模块网格拼接或ndwfc接入；跨柱/动态角色阴影、全球球面版本事务未做。原视频/X全量学习与其他场景任务不据此结项。研究与实现为项目适配，未称复原Oskar私有算法。
+
+## 2026-10-04 五份视频字幕研究与球面连接评审
+
+本批完整阅读EPC2018、Oskar2023、城市设计、EPC2024图文法、可破坏WFC的导出字幕。原创笔记和逐项范围见 `artifacts/research/oskar-2023-pcg/review.html`、`coverage.json`；统一连接合同见 `docs/OSKAR_SPHERICAL_WORLD_CONNECTIONS.md`。顾问Skill已更新相关决策，仓库与个人安装同步。完整音画及720P仍未验证，其他大会与全X学习仍有缺口；本批没有改运行时。下一步优先补Bad North Look画面研究，并在十二门徒样区验证分层平滑、连续草缘与共同照明，不把文档当作引擎交付。
+
+## 2026-10-04 Oskar 深入研究增量与顾问技能更新
+
+完成游戏系统/大会/动图三份专项研究和总报告 `docs/OSKAR_DEEP_RESEARCH_STATUS.md`，12段相关动图197个去重时间点实际检查；Beyond镜像文字读至51:39。修正云原帖编号与旧媒体发现页归属。仓库及个人Skill新增表现和模块实施规格，顾问定义接入总报告。可视页：`artifacts/research/oskar-deep-20261004/review.html`，12张图、17个本地链接检查通过。**完整大会音画观看仍为0，全X目录未遍历，原始全量学习目标保持未完成**；读取限制在证据清单记录，不归因用户未登录。本轮未改游戏场景或部署新引擎。下一步按可得的新原始视频/全文字幕补缺口；实现请求按技能的最小样区推进。
+
+## 2026-10-04 雨声音效异常修复
+
+移除 `src/audio/worldSfx.js` 的 `rainDrop` 中未声明的 `panNode` 赋值；保留雨滴随机立体声声像与现有连接。Chrome 真实 AudioContext 回归先复现原 ReferenceError，再以 600 次天气更新验证立体声/无 StereoPanner 两条分支，分别触发 57/59 次雨滴，无异常；另通过雨转雪更新。脚本：`tools/pipeline/check_rain_audio.mjs`；证据：`artifacts/pipeline/rain-audio-fix/verification.json`。未修改美术与战斗混音，未宣称全游戏回归完成。已加载页面需刷新以重新加载模块。
+
+## 2026-09-28 主山脊结构四轮修改（已接入）
+
+本轮按用户授权重构裸山高度分布：人工主脊/支脉图、较低鞍部、局部沟槽、两轮受约束平滑；保持城基、海岸底边、铁路和步行面固定。默认启用，citadelRidges=0 可看本轮之前。保留原始快照及四轮四机位实景，review: artifacts/pipeline/citadel-ridge-structure/review.html。
+
+最终 23049 次铁路净空探针零命中，后山最小海面余量 0.647m；500 个步行网格/30057 顶点 hash 83626823 不变；1000 个建筑网格记录完全相同；99 树+116 灌木无悬空，4 项边界/鞍部单测通过，非有限顶点及页面异常均 0。实际查看 r04 日夜画面；仍有陡崖/植被密度等目标差距，不宣称整体写实达标。未实施完整新地形模块 WFC 或水力侵蚀；用户追加 Bad North 调研已确认 WFC+手工地形模块+通行启发式，来源与下一步记录 docs/CITADEL_TERRAIN_ALGORITHM_RESEARCH.md。缺失的 threejs-game-director 技能未加载，未使用子代理。旧的桥位/城墙通路等任务未混入完成项。
+
+## 2026-09-28 新旧城配色落地
+
+完成伊斯坦布尔色彩研究接入：旧城暖灰石/砖红瓦/深木色，新城浅暖石/铅蓝灰主穹顶/松石绿旗帜。修正合批材质来源识别，保留历史风化。974 个网格着色，几何/局部变换/范围外材质变更均 0，步行网格前后相同，两项测试通过；已查看日夜实景。配色完成不等于建筑与山体达到目标图。记录与对照：`artifacts/pipeline/citadel-city-colours/review.html`、`notes.md`、`verification.json`。
+
+## 2026-09-28 圣城山体两小时迭代（本轮完成，仍有目标差距）
+
+以用户确认的 citadel-istanbul-study-v3.png 为目标，02:08:39 UTC 开始，持续至 04:08:47 UTC 后完成验收（北京时间 10:08–12:08，超过两小时）。保留基线 r00 与 r01–r13 共 13 轮修改的四机位截图；review: artifacts/pipeline/citadel-mountain-two-hour/review.html。query citadelMountain=0 可看旧山体，默认 r13。threejs-game-director 指定技能目录缺失，本批未加载，未用子代理。
+
+实景改动：7 组山岩采用蓝灰矿物色、断续层理/裂隙与浅几何风化；187 块嵌入岩壁的碎岩，移除新碎面的金线；上部裸山 367 顶点调整不对称山肩（最大 4.86m，绕开城市和铁路）；旧漂浮褐色植被退场，最终重新采样 85 棵柏树、107 丛灌木，灰绿材质不再被 1.5/5 秒的旧城配色回扫覆盖，平缓岩台增加少量苔色。布局与建筑本体保持现状。
+
+后山净空：最终海湾变换后重投影背景岩山，低处后山沿红蓝铁路让出海岸走廊。基线 196 次岩石碰撞降为 0。乘车机位进一步发现被岩山掩盖的旧轨面低于海面，r13 在生成钢轨/桥面/车辆之前抬高同一条局部曲线；新测 23,049 个包络探针零命中（含新增植被），后山核心段最低海面余量 0.647m，低于 0.35m 的样本为 0。500 个 walkable 网格 / 30,057 顶点世界 hash 保持 83626823。轨道相机回放已查看，不等于人工 F/C/E 全流程游戏验收。
+
+云系统重新烘焙最终地形高度场 101×101，烘焙前恢复距离剔除隐藏的网格，避免当前机位影响采样。最终 r13 正午/黄昏/夜间截图与全部 192 株植被根部射线检查通过：无缺失承托岩面、最高根部仍嵌入岩面约 0.04m，无悬空根部。3 个有意义的几何/边界/轨面单测通过；无非有限岩顶点、无页面 JS 异常。单独串行的同机位 headless Chrome 性能：r00 中位 40.5ms / P95 43.1ms，r13 39.9ms / P95 43.5ms；三角面约 260 万→282 万，调用约 7311→7308。没有宣称帧率提升；结果不代表用户机器所有视角。
+
+已知差距：山峰总体仍偏锥形，整体仍是低多边形场景，尚未达到绘画目标的山体剪影/林地密度；建筑铅蓝穹顶等整城配色尚未实施。Jev r13 仅接收文字证据、建议下一步继续 geometry，不能算看图或用户验收。启动基线已有 3 个警告（master terrain 源不匹配、parcel 候选无法加载、lighting supports 缺失），本轮未修。旧任务（莫比斯舰队重做、木马落地、桥位降高、城墙通道、整库 GitHub 推送）不在本次完成项内。
+
+## 2026-09-28 圣城暮色配色示意 v2（仅绘图）
+
+按用户提供的夕照照片冷暖关系重绘前版圣城示意，保留两城、门、桥与港口布局。输出 artifacts/pipeline/citadel-current-diagram/citadel-dusk-palette-v2.png；参考照片 user-color-reference.png，完整生成说明 prompt-dusk-v2.txt。暖赭石/旧砖红、铅蓝穹顶、灰紫阴影、深青海面与金橙夕照。图像为内置 imagegen 生成的配色方案，未改游戏材质或光照，未把桥位/通道/木马等待修项标为完成。前版和实景保留在同目录 review.html。
+
+## 2026-09-28 当前高山圣城示意（仅绘图）
+
+用户要求针对当前场景出图。本轮用 capture_citadel_current_diagram.mjs 重新截取全景 after.png，并结合 r50-old/new/gate 既有建筑近照，用内置 imagegen 生成 citadel-current-layout.png。保存于 artifacts/pipeline/citadel-current-diagram/review.html，生成原文 prompt.txt。图中左旧城/右阶梯新城/左前高山之门/前铁路后步行桥的主要关系按当前实景；植被、山石和细节为绘画表达，不是游戏现状的逐像素记录。待修通道编号仅提示，实际截图的城墙阻塞位置仍需核对，不能把图上新城标号当定位证据。本轮没有改城市场景，铁路降高移位、木马落地、城墙通道仍未实施。
+
+## 2026-09-28 巨轮细化与完整索具（Web 已接入）
+
+保持侧翼单泊位及原船五倍尺寸。修正悬空吊杆为甲板桅杆根部铰接吊杆；补桅杆支索、顶升索、绞盘—桅顶滑轮—吊杆端滑轮—吊钩—甲板收存环的完整索具，增加两条随船轻微起伏更新的系泊缆及岸上系缆桩。吊装转运桁架两端增鞍座与连接杆接到既有横梁。补船艏弧形甲板/闭合护栏、船尾栏杆、驾驶舱窗框门/灯/救生圈、货舱围板、通风筒、烟囱箍及支索。没有新增船舶航行或完整装卸玩法。
+
+实景前后对照 artifacts/pipeline/freighter-detail/review.html，source-before 保留本轮三文件原始快照，浏览器路由加载旧源产生同机位对照。10215 次局部红蓝铁路净空探测零命中，7 个船体起伏时间点实际缆绳网格端点误差最大 4.8e-14，船体顶点无非有限值，页面无异常。已人工看图确认吊索和甲板细节出现；船体仍是风格化程序模型，未声称与写实示意等效，也未做完整人工乘车/步行验收。
+
+## 2026-09-28 侧翼单泊位（取代已否决的前港及大型后港）
+
+用户否决扩大后港，要求只把船和紧凑码头放到基地一侧、完整保留临海弧形广场，货物不能占轨。现 dock 平面坐标 (-120.159400,-2.448781)，方向 PI/2-1.85；船仍为原型线性五倍，移走后港额外指廊/连接带。收货棚、箱子、零件托盘随泊位外移。红蓝铁路局部 10,215 包络探测零命中、页面无异常；未做人工全程驾驶验收。当前实景 after-overview.png / after-plaza.png 在 artifacts/pipeline/bookshop-side-berth。用户现在要求先看示意，以便巨轮建模。
+
+side-berth-modeling-v4.png 使用当前两张实景作参考，由内置 imagegen 生成：保留三厂/圆广场/铁路线相对布局，仅一侧巨轮和卸货平台；下方为船侧视结构说明。该图不是游戏截图或施工尺寸，船舱细节是建模参考，不表示所有细节已实现。之前两个港口概念均已否决，保留作历史。
+
+附带完成蝗虫默认端枪：idle/move/transport 均抬枪、非开火，disabled 放下；三个准备姿态枪轴与正前方点积为 1，原 18 个移动/运输瞄准检查仍通过，无页面异常，实景 artifacts/pipeline/locust-ready/raised-rifle.png。尚未完成：莫比斯舰队重做（已检查扫描秒杀/麻醉未区分机器人的旧逻辑，未修改舰队）、木马落地、圣城拱桥移位降高、城墙给港口上行通道开口。不要把这些标为完成。
+
+## 2026-09-28 后港布局取代广场前港（当前）
+
+用户否决广场临海弧外延码头。五倍巨轮、吊机、收货区现已移到工厂背后（基地平面坐标 0,-128，沿后岸停泊），码头改为后伸主平台、两侧突出卸货指廊及后场连接带。临海公共弧线无新增港口平台；吊装桁架自动接到最近工厂后场端点。红蓝轨道附近 5,652 次净空探测无碰撞，页面无异常。未做人工全程步行/乘车验收。
+
+artifacts/pipeline/bookshop-rear-harbor/after-overview.png、after-plaza.png 为实景；rear-harbor-concept-v3.png 为内置 imagegen 修订示意，非游戏截图，图中复杂机器人装卸不表示玩法完成。此前 unloading-concept-v2.png 前港布局已被用户否决，仅保留历史。生成原文在 prompt.txt。港口源前快照保留。后续优先修复用户指出的木马悬空、圣城铁路拱桥位置高度、港口上行通道被墙阻塞。
+
+## 2026-09-28 巨轮结构纠错与装卸示意图
+
+修正上一轮只整体放大遗留问题：补 freighter-boiler-engine-house 锅炉/机舱，使烟囱底端与甲板连接；大船船底从原 1.9 单位加深到 3.4，收窄水下船腹，改善球面海水截断浅船底。未变形甲板/驾驶舱，不声称改平整个球面海洋。港口吊梁延至 -39，吊货起点从真实船甲板坐标计算；新增 bookshopHarborRunway.js，将最近工厂吊装跑道接到码头起重机内端，双层桁架两端落在既有支架上。移除新泊位模式下旧 plaza 原地缆绳，保留旧船 query 对照。
+
+包含新船腹、机舱、连续桁架的红蓝轨道局部 18,441 次射线检查无碰撞，页面无异常。实景 after-plaza.png、after-overview.png、checks.json 在 artifacts/pipeline/bookshop-freighter-repair。没有新增完整机器人海运装卸逻辑/可登船功能，图中的机器人装卸属于设计示意。
+
+用户追加要求已用 imagegen 内置工具生成 unloading-concept-v2.png，以修复后两张实景为参考；图下标明“非游戏实景”。实际游戏模型和写实概念仍有差距。原图保留，生成说明在 prompt.txt。最终需要用户审阅图中布局；不能把生成图当实景或已验收建模。
+
+## 2026-09-28 五倍蒸汽货轮与广场外泊位（已回接 Web）
+
+用户指定原 NORTHWARD 蒸汽船按线性尺寸放大 5 倍；保留原船型、桅杆、船舱与货物。船、卸货吊机及收货区移到书店镇广场临海侧斜泊位，码头保持球面贴地。首个正前泊位与进出城铁路相交，已废弃；最终泊位角 -0.75、距广场中心 75，方向沿岸，船体在码头外侧。红蓝两条轨道局部 18,450 次净空探测对船/吊机/码头/堆场无碰撞，页面无异常；未做完整人工乘车与码头步行/登船验收，当前仍为停泊景观船。
+
+实景与原版对照 artifacts/pipeline/bookshop-grand-freighter/review.html；after.json 记录尺寸 [5,5,5] 与检查结果，source-before 保留原代码，?grandFreighter=0 可看原小船泊位。未重新生成目标图，也未改动轨道路线。下一步依据用户现场审阅微调泊位和船舱比例。
+
+## 2026-09-28 叹息之门海蚀石林与水晶主峰（已回接 Web）
+
+按用户蓝灰色十二门徒目标改造叹息之门 21 座远山：宽破碎岩顶、分层立壁、暗湿凹蚀岩脚、海面泡沫和碎石；移除这些山柱的水晶装饰及人工顶台，86 处小型灌木经表面射线落点。后排岩柱退让 18 米。岩体 44,331 顶点；27 种种子闭合/有限值/确定性检查通过；红蓝轨道 6,624 局部净空探测无新岩体/碎石碰撞，页面和着色器无异常。
+
+追加用户水晶要求：12 组 V10 水晶建筑中央主晶体从模型高度 60.72 提至 84.18（卫星按原比例），比最高侧晶体 60.77 高 38.5%；两翼不同高度，居住舱平台不抬升。实际 12 组高度比例均通过。?gateSeaStacks=0、?crystalCrown=0 可分别对照旧版本。source-before 保留修改前源码。
+
+证据：artifacts/pipeline/gate-sea-stacks/review.html、after.json、crystal-after.json。实景仍为风格化球面世界，岩柱自然度与目标海岸浪花仍有差距；没有宣称艺术达标、完整故事/人工全程乘车通过或 Blender/Godot 同步。当前任务没有生成新的替代目标图，没有使用子代理；threejs-game-director 原技能路径此前检查仍缺失。下一步按用户现场观察调整轮廓，不把 Jev 文本建议当视觉验收。
+
+## 2026-09-28 两城分隔与露天临海铁路（当前 Web）
+
+按用户认可的两城布局示意实施：新城沿球面外移 34 米弧长，保留建筑尺寸与原海拔；共享山体分带变形并将两城间接缝降至海下，扩大内湾。新城段铁路改到临海外缘，新城强制隧道关闭；旧城/高山之门侧控制点保留。独立步行桥重建，两岸连接点与新城路线数据随动；新城站增加到广场的步行连接及迁移后的下车坐标。原挂在新城节点下、实际落在旧山体的山坡房屋保留原位。山脊云高度场已按新场景重烘 10,201 格。
+
+检查：红蓝两线新城/湾区 2,880 净空射线（侧向 ±2.6、0；高度 0.5、3、10）未撞城体；7 个人行桥连接点支撑通过；两站下车规则解析成功；3 个球面迁移/旧城锚点/无强制隧道测试通过；页面无异常。未做全程人工乘车、完整步行和战斗剧情验收，也未同步 Godot/Blender。目标图的山体、建筑密度与材质仍有明显差距，本轮只完成布局与线路调整，不自评艺术达标。
+
+实景对照 artifacts/pipeline/citadel-bay-layout/review.html；源前快照 source-before、目标 approved-target.png、clearance.json。?citadelBay=0 可看原布局（云高度场使用新烘焙）。Jev 仅文本辅助，不作为视觉验收。项目要求的 threejs-game-director 技能路径仍缺失，本轮未加载；未使用子代理。下一步以用户现场验收结果调整海湾岸坡与桥梁细节。
+
 ## 2026-09-28 圣城历史材质 50 步 + 书店战斗修复（当前）
 
 已接入 Web 默认：旧城/新城/高山之门 50 项累计材质与构件修改，r00–r50 三机位 153 张实景可审阅（artifacts/pipeline/citadel-history-fifty/review.html）。石灰岩色差、灰缝、雨痕、修补、潮湿基脚、石质线脚/壁柱、边角磨损；合批导致门区柏树/常春藤变石色的问题已修。新增 462 构件合并为 5 网格，146 个小石件边缘微调。50 步不是 50 次整城重建，目标图的宫城密度、山体轮廓与自然植被仍未达标；不自评 8 分，不声明 Blender/Godot 已同步，不声称持续工作满 5 小时。
@@ -2136,3 +2706,86 @@ rtk proxy git diff --check
 - C主视角：camera.js 第一人称分支原先忽略 camOrbit/camPitch。现在右键拖动应用两角度，松开沿用回正规则，只转相机不改列车方向。红蓝车实鼠标测试yaw/pitch/回正/驾驶室隐藏均通过，零pageerror。first-person-right-look/check.json。
 - 37项robotOps测试通过。全战役与长期密集交火混音仍待完整验收。旧Godot/GLB未更新。
 - 声音参考：Infinity Ward 官方2019年武器独立声、退壳和环境反射/延迟介绍 https://blog.activision.com/call-of-duty/2019-07/Modern-Warfare-Initial-Intel-Creating-an-Orchestra-of-Incredible-Audio-Effects-Weapon-Sounds-in-Call-of-Duty-Modern-Warfare 。信使依据用户认可目标图及9月28日穿模/帽色截图；没有另造风格目标。
+
+
+## 2026-09-28 岩群 WFC 初版与飞艇加速
+- 十二门徒岩群已接入纵向模块 WFC（seaStackWfc.js）；21 根接口匹配，6,624 次铁路探测无命中；按各自海面法线定向。实际前后截图：artifacts/pipeline/sea-stacks-wfc/review.html。
+- **未视觉验收**：用户指出缺少多级宽岩台；当前仅为纵向半径接口组合，不能声称完成 Bad North 式地形模块布局。用户截图还显示岩脚悬空感，需核对可见海面与采样面。下一步应重构台地模块、岩台植被约束，并单独接入云雾渲染。
+- 飞艇新增左 Shift 按住加速，沿用 2.5 倍平滑推进，松开回落；保留 E 兼容，Ctrl 下降。上下艇复位倍率；直接运行控制器检查正常约 9、加速约 22.5、释放及重新登艇约 9 单位/秒。证据：artifacts/pipeline/airship-left-shift/check.json。
+- 莫比斯飞行器持续低频振荡层已静音，吸附音 55/82.6Hz 嗡鸣已删除，保留风声与战斗反馈。语法/场景加载检查通过；尚未进行主观听感验收。
+
+
+## 2026-09-28 Oskar engine research: partial
+User requested all OskSta media. Chrome Apple-event JavaScript disabled; user assistance requested. X web access returned 403. Located 9 public embedded clips and inspected 36 sampled times, not full-duration or full-timeline review. One clip has several dark sampled frames. Draft: docs/OSKAR_WORLD_ENGINE_STUDY.md. Evidence: artifacts/research/oskar-engine/index.html. Existing WFC, vegetation and cloud modules inspected at their entry points; no new engine implemented. Next: continue logged-in media inventory after user enables access, especially tree/cloud experiments.
+
+
+## 2026-09-28 Oskar 方法顾问接入
+- 用户指定十二门徒岩群与高山圣城城堡优先使用顾问，重点为配色与模块建模，增加人物动作约束研究。
+- 角色定义：仓库 .codex/agents/oskar_world_advisor.toml；Skill：.agents/skills/oskar-world-advisor，已安装 ~/.codex/skills/oskar-world-advisor。项目 AGENTS.md 已记录委派路由；本会话普通子代理明确加载 Skill 做首次双场景研究，未声称自定义角色配置已热加载。
+- 来源、视觉观察、项目推断分开；X登录标签已发现但内容读取超时，尚未全量遍历。Bad North/Townscaper深入研究未完成，角色动作WFC作者证据待核。
+- 本批只添加研究与顾问配置，未改变游戏场景。下一步按顾问方案先做岩群宽台地/城堡台基候选区，再做同机位配色与功能验收。
+
+
+## 2026-09-28 十二门徒峡谷边缘岩台与配色第一版
+- 已接入 seaStackTerraces.js；两级真实宽台面与蓝灰/浅岩台/深湿岩/灰绿配色，属于项目试色，非作者官方色板。WFC只用于局部崖壁变体，未实现完整3D模块拓扑。
+- 用户要求放峡谷边缘：球面径向布置，实际海面三角射线承托，底圈/泡沫/碎石统一采样，台面灌木实例贴地。
+- 21候选中8组通过铁路与城市保护盒选址；13组保守隐藏，不称全部迁移成功。全铁路46800次抽样零碰撞，底圈入水，默认页面/着色器零错误。
+- review: artifacts/pipeline/sea-stack-terraces/review.html；notes.md包含范围限制、回退与证据。仍有规则台阶感，未最终美术验收。圣城城堡未改。
+- 顾问只读审查已使用；Jev文本复核请求连接失败，本地人工复核，未假报通过。下一步可细化城市保护盒恢复安全候选，并继续打散台面轮廓。
+
+
+## 2026-09-28 顾问研究后的十二门徒海岸模块与选址修正
+- 用户指出上一版侵占书店广场；本批限定叹息之门左侧海岸，7/8候选通过，1个保护区冲突排除，其他旧候选隐藏。书店圆形场地整体保护，城市包围盒增加三角面窄检测。
+- oskar_world_advisor先调研WFC作者与Parks Victoria官方资料后实施两轮：12海蚀模块/6段接口，真实一维WFC选择宏观岩段，目前3种合法链。单侧岩台、平缓碎顶、较窄岩脚与蓝灰色层级；不是完整Bad North引擎。
+- 100 seed模块网格检查与3项几何测试通过；实际浏览器/着色器零错，46800铁路抽样零碰撞，底圈入水，广场截图完整开放。局部岩壁仍较平整，未称最终美术验收；多天气/长期漫游待做。
+- 当前检查页 artifacts/pipeline/sea-stacks-gate-left/review.html；顾问研究 artifacts/pipeline/sea-stacks-bad-north/advisor-research.md。本批未改圣城城堡。
+
+
+## 2026-09-29 十二门徒连通岩体与漂草修复
+- 顾问完成三种WFC驱动剪影：独柱、单肩主柱、低双肩残崖；Marching Tetrahedra负责连通封闭表面，非完整Bad North引擎。蓝灰配色与浅色上承岩台来自用户目标。
+- 指定叹息之门左侧8组通过保护区与相互间距检查，书店环形广场保持开放；93灌木根全部支持，46800铁路抽样0碰撞，页面/着色器0错误。7项测试通过，包含40seed新固体测试与27seed原网格测试。
+- 天空漂草源为旧highland-slope-grass-billboards的640实例，已纳入旧山体植被退役；实际215处新树/灌木承托检查通过。
+- 最新实景检查 artifacts/pipeline/twelve-apostles-coast/review.html；漂草证据 artifacts/pipeline/citadel-floating-grass/。保留source-before与旧检查页。
+- 实际看图：新轮廓和侧台区分成立、广场无遮挡。仍是风格化简化材质，未作全天气长期漫游验证。大会研究是元数据/部分字幕及公开帖子，完整视频未观看；研究覆盖已写入顾问Skill与conference ledger。后续不能把部分研究写成全部视频学习完成。
+
+
+## 2026-09-29 叹息之门占轨旧护栏
+- 用户截图暴露旧单线桥栏杆与双线轨道重叠。按原采样精确移除gateSiteData内门廊station -26..26旧横杆/立柱/缘石，保留现有步行廊护栏。桥面、桥墩、地形parts不变；Blender生成源同步排除，未更新旧GLB/Blend。
+- 同机位实景确认轨道内残杆消失，几何有限且其他parts逐项相同；证据 artifacts/pipeline/gate-rail-guard/review.html。前轮岩群净空检查不覆盖旧栏杆，不能宣称全线路护栏已验收。
+
+
+## 2026-09-29 十二门徒植被专项
+- 用户认可岩体；保持岩体和布局，新增seaStackVegetation.js：真实上承三角面草皮色域、三瓣灰绿低丛、短草扇。由随机圆灌木改为连续色块与簇状组织。
+- 顾问查阅既有2022年草实验抽帧；不是Bad North原始植被算法。未实现作者深度/背景对比shader，也不称为植被WFC。研究来源 https://threadreaderapp.com/thread/1590669875869286400.html 。
+- 12seed测试覆盖草皮贴面、根点、灌丛8向外围承托及原岩体position不变。渲染与运行记录 artifacts/pipeline/sea-stack-vegetation/review.html / after.json。近景仍风格化，草皮边界受三角分辨率限制。
+
+
+## 2026-09-29 Highland Citadel landform rebuild
+Two implemented candidates: rejected isolated spikes in candidate1, then runtime-probed subordinate shoulders with safe partial displacement and three protected relaxation passes. Old-town main ridge, low bay shoulder and new-city backdrop changed; city transforms and sea openings retained. Actual review: artifacts/pipeline/citadel-landform-rebuild/review.html. 10 tests pass; 514 checked structural meshes / 59267 world vertices have identical before/after hash3924031306; 23049 rail probes0hits,0wet rear-coast samples;212 planted roots supported. Three existing candidate/lighting warnings unchanged, not fixed. Query citadelLandform=0 retains baseline; source-before preserved. This is authored ridge-field terrain, not full WFC/hydraulic erosion. Notes include limits and actual screenshots; no all-weather long-run claim.
+
+
+## 2026-09-29 Citadel vegetation integrated
+
+Added supported slope turf and denser cypress/scrub using the project advisor proposal (not an exact Oskar shader reproduction). 618 roots supported; 23,049 rail probes clear; protected structures unchanged. Real before/after evidence and remaining visual limits: `artifacts/pipeline/citadel-vegetation/review.html` and `notes.md`. Current mountain geometry retained.
+
+
+## 2026-09-29 Old-town crown correction
+
+Completed local tower top-storey correction: seated octagonal transition, thicker shorter piers, eight arch rings; retained roof palette and lower tower. Actual close-up comparison: `artifacts/pipeline/old-tower-crown/review.html`. No page errors; existing three warnings unchanged. Notes include rollback and scope.
+
+
+2026-09-29 crown follow-up complete: solid arch spandrels, centered depth, narrower capitals; front/rear/skyline runtime images reviewed. Evidence: `artifacts/pipeline/old-tower-crown/review.html`; prior round preserved.
+
+
+## 2026-09-30 Citadel living slopes integrated
+
+Advisor-guided project implementation: shared turf/woodland habitat, 8000 supported short-grass instances, copied terrain winding repaired, final-mesh cloud cache replacing stale HF. 731 planted roots supported; 23049 rail probes clear; protected structure hash unchanged; 7 tests pass. Actual evidence/limits/source links: `artifacts/pipeline/citadel-living-slopes/review.html`, `notes.md`, `advisor-cloud-method.md`. Not an exact Oskar shader reproduction; clouds remain thin in front view and turf patch edges angular.
+
+Final cloud follow-up: repaired duplicated -52 composition translation via explicit coordinate conversion. Final runtime cloud close-up/overview now visibly correct; 8 total tests pass, active cloud centres at least61.05 scene units from rail in capture. Final evidence in citadel-living-slopes/cloud-fixed*.png.
+## 2026-10-05 03:18 北京时间 · 五小时山体迭代仍在进行
+
+截止仍为05:40:16，不能重设或提前声称完成。批次 `artifacts/pipeline/citadel-five-hour-20261005/state.json` 是实时交接；临时heartbeat `automation` 保留到截止，勿动每周归档。候选尚未默认发布，未提交Git。
+
+r04硬检查通过但独立57/100。r07低肩变形只影响13节点、试验15格无草，否决。r08/r09全部514通道网格、铁路曲线与基线相同；23049铁路探针0命中；74960草端点无>2毫米正间隙、无>2厘米埋深。建筑变化仅已分类动态云/瀑布。配色2较暖配色1更能区分岩石与植被；额外地形光照在实际正午对照下收益不清，保持关闭。光照四组合真实GPU编译/链接/GL采样正常，不等于性能改善。
+
+r09主峰pass5确实削了内部东帽，但实际轮廓没有明显改善，20/30不加分。新增只读屏幕轮廓采点找到了真正后缘（约z=-44），旧山17可见点与原Raycaster误差0；顾问据此完成待验的ridge6。r11草皮3改为连续色与源面法线插值，近图逐面跳绿减轻，植被专项12→14/25，长尖尾仍存在。当前完整root/rail检查运行中；下一轮normal4单变量实景对照，再对实际草皮几何做组件边界收口。准确工具状态以批次state为准。不要把着色平滑说成几何修复，或把无GPU错误说成美术达标。

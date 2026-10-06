@@ -207,6 +207,8 @@ export function mergeStaticGroup(root, options = {}) {
     mergedMesh.receiveShadow = meshes.some((m) => m.receiveShadow);
     mergedMesh.userData.mergedGeometry = mergedTag;
     mergedMesh.userData.mergedSourceCount = meshes.length;
+    // Retain material semantics after batching (no geometry/rendering changes).
+    mergedMesh.userData.materialSourceNames = [...new Set(meshes.flatMap(m => m.userData.materialSourceNames || [m.name]).filter(Boolean))];
     root.add(mergedMesh);
     madeSurfaces.push(mergedMesh);
     const triCount = totalVerts / 3;

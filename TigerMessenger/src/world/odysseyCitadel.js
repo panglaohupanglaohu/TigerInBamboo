@@ -1846,6 +1846,8 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     skipDecor: options.skipDecor === true,
     townCtxCache: options.townCtxCache ?? null,
     wfcTownV1: options.wfcTownV1,
+    wfcPassageV1: options.wfcPassageV1,
+    wfcPassagePair: options.wfcPassagePair,
     wfcTopology: options.wfcTopology,
     wfcSeed: options.wfcSeed ?? options.seed ?? 1,
     gridV6: options.gridV6 ?? null,
@@ -2807,6 +2809,7 @@ export function buildOdysseyCitadel(options = {}) {
     outerTerrainSystem.userData.highlandSlopeGrass?.update?.(t);
     castleContainer.userData.highlandHeroClouds?.update?.(t);
     castleContainer.userData.ridgeFlowClouds?.userData.update?.(t);
+    castleContainer.userData.mountainCloudBanks?.userData.update?.(t, P.timeOfDay);
     castleContainer.userData.highlandLightVolumes?.update?.(t);
     castleContainer.getObjectByName("citadel-new-city-lighting")?.userData.update?.(P.timeOfDay);
     castleContainer.getObjectByName("citadel-harbor-architecture")?.userData.update?.(P.timeOfDay);

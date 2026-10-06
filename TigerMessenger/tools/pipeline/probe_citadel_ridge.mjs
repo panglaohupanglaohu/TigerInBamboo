@@ -1,0 +1,15 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import {writeFileSync,mkdirSync} from 'node:fs';
+const stage=process.argv[2]||'r00',round=process.argv[3]||'0';
+const out=new URL('../../artifacts/pipeline/citadel-ridge-structure/',import.meta.url).pathname;
+mkdirSync(out,{recursive:true});
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});
+const page=await browser.newPage({viewport:{width:1500,height:1000}}),errors=[],warnings=[];
+page.on('pageerror',e=>errors.push(e.message));
+page.on('console',e=>{if(e.type()==='error'||e.text().includes('[citadel]'))warnings.push(e.text().slice(0,1000));});
+await page.goto('http://localhost:8931/TigerMessenger/?autostart=1&timeOfDay=.5&citadelRidges='+round);
+await page.waitForFunction(()=>window.__tm?.scene.getObjectByName('highland-gate'),null,{timeout:120000});
+await page.waitForTimeout(7000);
+await page.evaluate(()=>{const t=__tm;t.cameraRig.update=()=>{};t.P.weather=0;t.P.daySpeed=0;t.P.timeOfDay=.5;t.dayNight.update(.0001);document.querySelectorAll('body > :not(canvas)').forEach(e=>{if(e.tagName!=='SCRIPT')e.style.visibility='hidden';});});
+await page.evaluate(()=>{const t=__tm,T=t.THREE,c=t.scene.getObjectByName('castleContainer');t.camera.position.copy(c.localToWorld(new T.Vector3(-88,58,112)));t.camera.up.set(0,1,0).transformDirection(c.matrixWorld);t.camera.lookAt(c.localToWorld(new T.Vector3(-25,23,-5)));t.camera.fov=48;t.camera.updateProjectionMatrix();t.camera.updateMatrixWorld(true);t.distanceCulling.recollect();t.distanceCulling.update(3);});
+console.log(JSON.stringify(await page.evaluate(()=>{const t=__tm,T=t.THREE,c=t.scene.getObjectByName('castleContainer'),ray=new T.Raycaster(),meshes=[];ray.layers.enableAll();t.scene.traverseVisible(o=>{if(o.isMesh&&!o.userData.isOutline)meshes.push(o);});return [[650,460],[1100,490],[810,550],[200,580]].map(([x,y])=>{ray.setFromCamera(new T.Vector2(x/750-1,1-y/500),t.camera);return ray.intersectObjects(meshes,false).filter(h=>!h.object.material?.transparent).slice(0,1).map(h=>({name:h.object.name,local:c.worldToLocal(h.point.clone()).toArray(),parents:[h.object.parent?.name,h.object.parent?.parent?.name]}));});})));await browser.close();

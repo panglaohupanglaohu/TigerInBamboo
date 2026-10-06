@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-04T21:34:55.818818+00:00",
+  "status": "pass",
+  "checks": {
+    "mainRock": true,
+    "walkable": true,
+    "railCurveProtection": true,
+    "rootItemsExactlyEqual": true,
+    "releaseOff": true,
+    "gpuClean": true,
+    "railClear": true
+  },
+  "before": "r00b-check.json",
+  "after": "r23-rollback-check.json",
+  "release": {
+    "releaseVersion": "citadel-mountain-20261005-r19",
+    "releaseEnabled": true,
+    "active": false,
+    "mode": "legacy-defaults",
+    "applied": [],
+    "resolved": {
+      "citadelMountainRelease": "0",
+      "autostart": "1",
+      "timeOfDay": "0.5"
+    }
+  },
+  "baselineRoots": 80731,
+  "rollbackRoots": 80731,
+  "scope": "Compare geometry/walkable/rail/root data only. Runtime remains current source, not archived-code restore."
+}

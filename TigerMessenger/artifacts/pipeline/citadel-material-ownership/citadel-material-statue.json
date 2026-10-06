@@ -1,0 +1,2258 @@
+{
+  "at": "2026-10-04T22:56:48.009Z",
+  "selected": "statue",
+  "rows": [
+    {
+      "group": "citadel-terrace-garden",
+      "mesh": "",
+      "material": "citadel-cypress-deep",
+      "color": [
+        0.03500000014901161,
+        0.07500000298023224,
+        0.054999999701976776
+      ],
+      "roughness": 0.93,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-terrace-garden",
+      "mesh": "",
+      "material": "citadel-cypress-mid",
+      "color": [
+        0.07000000029802322,
+        0.14000000059604645,
+        0.09000000357627869
+      ],
+      "roughness": 0.93,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-terrace-garden",
+      "mesh": "",
+      "material": "citadel-cypress-sun",
+      "color": [
+        0.12999999523162842,
+        0.20999999344348907,
+        0.11999999731779099
+      ],
+      "roughness": 0.93,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-terrace-garden",
+      "mesh": "",
+      "material": "citadel-cypress-bark",
+      "color": [
+        0.20000000298023224,
+        0.17000000178813934,
+        0.11999999731779099
+      ],
+      "roughness": 0.93,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-terrace-garden",
+      "mesh": "",
+      "material": "",
+      "color": [
+        0.040915196900556984,
+        0.10702310296918527,
+        0.06480326668529614
+      ],
+      "roughness": 1,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-terrace-garden",
+      "mesh": "",
+      "material": "",
+      "color": [
+        0.09305896283800832,
+        0.181164244239483,
+        0.08650046202808521
+      ],
+      "roughness": 1,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-terrace-garden",
+      "mesh": "",
+      "material": "",
+      "color": [
+        0.171441100722554,
+        0.28314874041918053,
+        0.14412847084818123
+      ],
+      "roughness": 1,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-terrace-garden",
+      "mesh": "",
+      "material": "",
+      "color": [
+        0.10461648408208657,
+        0.08228270712149792,
+        0.05126945836711539
+      ],
+      "roughness": 1,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-plaza-hero-statue",
+      "mesh": "",
+      "material": "hero-warm-limestone",
+      "color": [
+        0.8100000023841858,
+        0.7900000214576721,
+        0.7200000286102295
+      ],
+      "roughness": 0.8600000143051147,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-plaza-hero-statue",
+      "mesh": "",
+      "material": "pedestal-limestone",
+      "color": [
+        0.75,
+        0.7300000190734863,
+        0.6800000071525574
+      ],
+      "roughness": 0.8600000143051147,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-plaza-hero-statue",
+      "mesh": "",
+      "material": "carved-edge-ivory",
+      "color": [
+        0.9100000262260437,
+        0.8799999952316284,
+        0.800000011920929
+      ],
+      "roughness": 0.8600000143051147,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    },
+    {
+      "group": "citadel-plaza-hero-statue",
+      "mesh": "",
+      "material": "soldier-statue-white-limestone",
+      "color": [
+        0.8100000023841858,
+        0.7900000214576721,
+        0.7200000286102295
+      ],
+      "roughness": 0.7200000286102295,
+      "metalness": 0,
+      "historic": false,
+      "cityColour": null,
+      "preserved": true
+    }
+  ],
+  "wallsWithHistoricFinish": 1529,
+  "violations": [],
+  "gpu": {
+    "programs": [
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-ink",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-steel",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "EquirectangularToCubeUV",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "SphericalGaussianBlur",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "locust-olive",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-blue-grey-geology",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m13",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m27",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m27",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "courier-straw",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "courier-hatBand",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-ink",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-steel",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "locust-olive",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-blue-grey-geology",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m13",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m27",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "courier-straw",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "courier-hatBand",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-rust",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-ink",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-olive",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-rust",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-steel",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-blue-grey-geology",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m13",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m27",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "courier-straw",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "courier-hatBand",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "claude-house-wall",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "claude-house-roof_blue",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-concentric-stone-paving",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-blue-grey-geology",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-cypress-deep",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "beetle-headlamp-glass",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "harbor-blue-canvas",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-blue-grey-geology",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "harbor-blue-canvas",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "harbor-hemp-brass",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-ink",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-olive",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-rust",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "robot-steel",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m13",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "MeshToonMaterial_m27",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "claude-house-wall",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "claude-house-roof_blue",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-concentric-stone-paving",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-blue-grey-geology",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-blue-grey-geology",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-cypress-deep",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "beetle-headlamp-glass",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "harbor-blue-canvas",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "citadel-blue-grey-geology",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "harbor-blue-canvas",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "harbor-hemp-brass",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      },
+      {
+        "name": "",
+        "linked": true,
+        "shaders": [
+          true,
+          true
+        ]
+      }
+    ],
+    "glErrors": []
+  },
+  "note": "Actual loaded game meshes; review uses fixed daylight/Moebius isolation from mountain harness; no persistence."
+}

@@ -1,0 +1,48 @@
+{
+  "readiness": {
+    "sceneReadyWallMs": 58546.89999997616,
+    "startedAt": "2026-10-04T17:56:17.940Z",
+    "actualReadyWallMs": 76732.19999998808
+  },
+  "view": "new-mountain",
+  "performance": {
+    "durationMs": 10023.199999988079,
+    "samples": 162,
+    "viewport": {
+      "width": 1250,
+      "height": 518,
+      "cssWidth": 1250,
+      "cssHeight": 518,
+      "pixelRatio": 1
+    },
+    "rafMs": {
+      "median": 66.59999999997672,
+      "p95": 67.30000000004657,
+      "max": 118.20000000001164
+    },
+    "calls": {
+      "median": 7304,
+      "p95": 7315,
+      "max": 7322
+    },
+    "triangles": {
+      "median": 3570857,
+      "p95": 3571565,
+      "max": 3571693
+    },
+    "note": "rAF intervals and renderer counters, not GPU timing; browser scheduling affects result"
+  },
+  "renderer": {
+    "render": {
+      "frame": 2225,
+      "calls": 14438,
+      "triangles": 7133250,
+      "points": 0,
+      "lines": 68324
+    },
+    "memory": {
+      "geometries": 6138,
+      "textures": 141
+    }
+  }
+}

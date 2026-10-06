@@ -1,0 +1,53 @@
+{
+  "status": "pass",
+  "at": "2026-10-04T20:49:37.274553+00:00",
+  "before": "r16-check.json",
+  "after": "r20-check.json",
+  "release": {
+    "releaseVersion": "citadel-mountain-20261005-r19",
+    "releaseEnabled": true,
+    "active": true,
+    "mode": "release-defaults",
+    "applied": [
+      "citadelRidgePass",
+      "citadelTurfPass",
+      "citadelWoodlandPass",
+      "citadelRockSurfacePass",
+      "citadelRockRelief",
+      "citadelSurfaceIndex",
+      "citadelMountainPalette",
+      "citadelMountainLightPass",
+      "citadelRockDetail"
+    ],
+    "resolved": {
+      "autostart": "1",
+      "timeOfDay": "0.5",
+      "citadelRidgePass": "6",
+      "citadelTurfPass": "5",
+      "citadelWoodlandPass": "2",
+      "citadelRockSurfacePass": "4",
+      "citadelRockRelief": ".22",
+      "citadelSurfaceIndex": "1",
+      "citadelMountainPalette": "3",
+      "citadelMountainLightPass": "0",
+      "citadelRockDetail": ".35"
+    }
+  },
+  "checks": {
+    "mainRock": true,
+    "railCurveProtection": true,
+    "walkable": true,
+    "rootsItemsExactlyEqual": true,
+    "rootCountsEqual": true,
+    "noBayExperiment": true,
+    "defaultActive": true,
+    "noExplicitMountainParameters": true
+  },
+  "mainRock": {
+    "hash": 4110862514,
+    "meshes": 8,
+    "vertices": 411342
+  },
+  "roots": 49604,
+  "note": "Exact selected geometry and root data parity; shader colour changed intentionally, not pixel-identity claim."
+}

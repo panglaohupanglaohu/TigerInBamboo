@@ -1,0 +1,18 @@
+{
+  "changedVertices": 13,
+  "protectedChanged": 0,
+  "originalVertices": 34612,
+  "outputVertices": 34612,
+  "checks": {
+    "poses": 712,
+    "triangleHits": [],
+    "soilHits": [],
+    "missing": 221
+  },
+  "limitations": [
+    "Exact production fixture terrain topology retained; top vertices only changed.",
+    "Only the altered terrain is included in this audit, not gallery structure or every world object.",
+    "Finite 1m loaded OBB and nine underbody probes, not continuous collision.",
+    "Missing surface remains unverified; no automatic installation."
+  ]
+}

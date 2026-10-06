@@ -1,0 +1,1259 @@
+{
+  "walkable": {
+    "beforeMeshes": 514,
+    "afterMeshes": 514,
+    "changed": 0,
+    "changes": []
+  },
+  "architecture": {
+    "beforeMeshes": 2222,
+    "afterMeshes": 2222,
+    "changed": 58,
+    "changes": [
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:2:4[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:2:4[0]",
+          "name": "highland-hero-cloud-blob-ridge:2:4",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 3533617884,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:2:4[0]",
+          "name": "highland-hero-cloud-blob-ridge:2:4",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 3702864737,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:2[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:2[0]",
+          "name": "highland-hero-cloud-blob-crossing:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 2079491341,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:2[0]",
+          "name": "highland-hero-cloud-blob-crossing:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 586882171,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-box-foam[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-box-foam[0]",
+          "name": "manga-waterfall-box-foam",
+          "vertices": 24,
+          "instances": 28,
+          "worldVertexHash": 1079553861,
+          "indexHash": 3527341833,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-box-foam[0]",
+          "name": "manga-waterfall-box-foam",
+          "vertices": 24,
+          "instances": 28,
+          "worldVertexHash": 4288282023,
+          "indexHash": 3527341833,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:0[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:0[0]",
+          "name": "highland-hero-cloud-blob-leeward:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 1850430922,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:0[0]",
+          "name": "highland-hero-cloud-blob-leeward:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 2126151668,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:1[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:1[0]",
+          "name": "highland-hero-cloud-blob-windward:1",
+          "vertices": 1920,
+          "instances": 1,
+          "worldVertexHash": 2376981871,
+          "indexHash": 2106772293,
+          "indexCount": 1920
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:1[0]",
+          "name": "highland-hero-cloud-blob-windward:1",
+          "vertices": 1920,
+          "instances": 1,
+          "worldVertexHash": 878105772,
+          "indexHash": 2106772293,
+          "indexCount": 1920
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:1[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:1[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:1",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 1166427762,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:1[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:1",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 2548919159,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:0[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:0[0]",
+          "name": "highland-hero-cloud-blob-crossing:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 403617152,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:0[0]",
+          "name": "highland-hero-cloud-blob-crossing:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 2209322152,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-2[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-2[0]",
+          "name": "manga-waterfall-curtain-2",
+          "vertices": 44,
+          "instances": 1,
+          "worldVertexHash": 1369187535,
+          "indexHash": 1856770349,
+          "indexCount": 180
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-2[0]",
+          "name": "manga-waterfall-curtain-2",
+          "vertices": 44,
+          "instances": 1,
+          "worldVertexHash": 3445401603,
+          "indexHash": 1856770349,
+          "indexCount": 180
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:1[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:1[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:1",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 2982648079,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:1[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:1",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 356676196,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:2[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:2[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 3210908189,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:2[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 3819168371,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:10[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:10[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:10",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 4124268761,
+          "indexHash": 906023125,
+          "indexCount": 720
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:10[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:10",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 1260431773,
+          "indexHash": 906023125,
+          "indexCount": 720
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:3[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:3[0]",
+          "name": "highland-hero-cloud-blob-outer-high:3",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 3818835349,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:3[0]",
+          "name": "highland-hero-cloud-blob-outer-high:3",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 2146259753,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-1[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-1[0]",
+          "name": "manga-waterfall-flow-streak-1",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 3795128154,
+          "indexHash": 714930285,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-1[0]",
+          "name": "manga-waterfall-flow-streak-1",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 3447789551,
+          "indexHash": 714930285,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-4[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-4[0]",
+          "name": "manga-waterfall-flow-streak-4",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 4088383137,
+          "indexHash": 714930285,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-4[0]",
+          "name": "manga-waterfall-flow-streak-4",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 1025384860,
+          "indexHash": 714930285,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:7[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:7[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:7",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 3250513966,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:7[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:7",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 453692535,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-0[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-0[0]",
+          "name": "manga-waterfall-ripple-0",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 1668231558,
+          "indexHash": 2964267881,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-0[0]",
+          "name": "manga-waterfall-ripple-0",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 423804324,
+          "indexHash": 2964267881,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:0[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:0[0]",
+          "name": "highland-hero-cloud-blob-lake-low:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 1556573643,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:0[0]",
+          "name": "highland-hero-cloud-blob-lake-low:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 4097858448,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:2[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:2[0]",
+          "name": "highland-hero-cloud-blob-leeward:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 1349577748,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:2[0]",
+          "name": "highland-hero-cloud-blob-leeward:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 2723334421,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:1[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:1[0]",
+          "name": "highland-hero-cloud-blob-lake-low:1",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 2114447893,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:1[0]",
+          "name": "highland-hero-cloud-blob-lake-low:1",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 2238991346,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-2[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-2[0]",
+          "name": "manga-waterfall-ripple-2",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 3491888403,
+          "indexHash": 2964267881,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-2[0]",
+          "name": "manga-waterfall-ripple-2",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 2583460363,
+          "indexHash": 2964267881,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:0[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:0[0]",
+          "name": "highland-hero-cloud-blob-windward:0",
+          "vertices": 1920,
+          "instances": 1,
+          "worldVertexHash": 3223323853,
+          "indexHash": 2106772293,
+          "indexCount": 1920
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:0[0]",
+          "name": "highland-hero-cloud-blob-windward:0",
+          "vertices": 1920,
+          "instances": 1,
+          "worldVertexHash": 1685227943,
+          "indexHash": 2106772293,
+          "indexCount": 1920
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-mist-particles[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-mist-particles[0]",
+          "name": "manga-waterfall-mist-particles",
+          "vertices": 30,
+          "instances": 96,
+          "worldVertexHash": 2253479021,
+          "indexHash": 1431872768,
+          "indexCount": 90
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-mist-particles[0]",
+          "name": "manga-waterfall-mist-particles",
+          "vertices": 30,
+          "instances": 96,
+          "worldVertexHash": 4213750891,
+          "indexHash": 1431872768,
+          "indexCount": 90
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:0[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:0[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 727253964,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:0[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 3546065927,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:3[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:3[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:3",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 3378962919,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:3[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:3",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 469707145,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:3[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:3[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:3",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 581372188,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:3[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:3",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 3331822643,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-cap[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-cap[0]",
+          "name": "highland-hero-cloud-blob-cap",
+          "vertices": 2160,
+          "instances": 1,
+          "worldVertexHash": 1791567099,
+          "indexHash": 3994577141,
+          "indexCount": 2160
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-cap[0]",
+          "name": "highland-hero-cloud-blob-cap",
+          "vertices": 2160,
+          "instances": 1,
+          "worldVertexHash": 1374840049,
+          "indexHash": 3994577141,
+          "indexCount": 2160
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-5[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-5[0]",
+          "name": "manga-waterfall-flow-streak-5",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 436884988,
+          "indexHash": 714930285,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-5[0]",
+          "name": "manga-waterfall-flow-streak-5",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 965761855,
+          "indexHash": 714930285,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:4[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:4[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:4",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 2835688204,
+          "indexHash": 906023125,
+          "indexCount": 720
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:4[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:4",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 3522214503,
+          "indexHash": 906023125,
+          "indexCount": 720
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-0[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-0[0]",
+          "name": "manga-waterfall-flow-streak-0",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 673407484,
+          "indexHash": 714930285,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-0[0]",
+          "name": "manga-waterfall-flow-streak-0",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 2895343111,
+          "indexHash": 714930285,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:9[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:9[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:9",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 2734381658,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:9[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:9",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 171880642,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:1[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:1[0]",
+          "name": "highland-hero-cloud-blob-leeward:1",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 4230691607,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-leeward:1[0]",
+          "name": "highland-hero-cloud-blob-leeward:1",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 749232799,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-7[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-7[0]",
+          "name": "manga-waterfall-flow-streak-7",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 810795266,
+          "indexHash": 714930285,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-7[0]",
+          "name": "manga-waterfall-flow-streak-7",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 3843710651,
+          "indexHash": 714930285,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:2[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:2[0]",
+          "name": "highland-hero-cloud-blob-lake-low:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 4159904905,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-lake-low:2[0]",
+          "name": "highland-hero-cloud-blob-lake-low:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 3970778812,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:4[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:4[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:4",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 1360256781,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:4[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:4",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 4251209049,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:0[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:0[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 2828956219,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:1:0[0]",
+          "name": "highland-hero-cloud-blob-ridge:1:0",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 1312728773,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:0[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:0[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:0",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 2625955379,
+          "indexHash": 906023125,
+          "indexCount": 720
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:0[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:0",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 916234757,
+          "indexHash": 906023125,
+          "indexCount": 720
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:2[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:2[0]",
+          "name": "highland-hero-cloud-blob-windward:2",
+          "vertices": 1920,
+          "instances": 1,
+          "worldVertexHash": 2442069991,
+          "indexHash": 2106772293,
+          "indexCount": 1920
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:2[0]",
+          "name": "highland-hero-cloud-blob-windward:2",
+          "vertices": 1920,
+          "instances": 1,
+          "worldVertexHash": 927798891,
+          "indexHash": 2106772293,
+          "indexCount": 1920
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-1[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-1[0]",
+          "name": "manga-waterfall-curtain-1",
+          "vertices": 44,
+          "instances": 1,
+          "worldVertexHash": 1523667430,
+          "indexHash": 1856770349,
+          "indexCount": 180
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-1[0]",
+          "name": "manga-waterfall-curtain-1",
+          "vertices": 44,
+          "instances": 1,
+          "worldVertexHash": 2227114111,
+          "indexHash": 1856770349,
+          "indexCount": 180
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:3[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:3[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:3",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 471045666,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:3[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:3",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 1068286752,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:2[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:2[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:2",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 2076519396,
+          "indexHash": 906023125,
+          "indexCount": 720
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:2[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:2",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 1261151174,
+          "indexHash": 906023125,
+          "indexCount": 720
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:5[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:5[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:5",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 346111071,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:5[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:5",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 1880866176,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-3[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-3[0]",
+          "name": "manga-waterfall-flow-streak-3",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 3983280065,
+          "indexHash": 714930285,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-3[0]",
+          "name": "manga-waterfall-flow-streak-3",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 3112295938,
+          "indexHash": 714930285,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:6[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:6[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:6",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 2532414816,
+          "indexHash": 906023125,
+          "indexCount": 720
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:6[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:6",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 1432842958,
+          "indexHash": 906023125,
+          "indexCount": 720
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:8[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:8[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:8",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 3450143765,
+          "indexHash": 906023125,
+          "indexCount": 720
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:8[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:8",
+          "vertices": 720,
+          "instances": 1,
+          "worldVertexHash": 3508112680,
+          "indexHash": 906023125,
+          "indexCount": 720
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-0[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-0[0]",
+          "name": "manga-waterfall-curtain-0",
+          "vertices": 44,
+          "instances": 1,
+          "worldVertexHash": 1217836678,
+          "indexHash": 1856770349,
+          "indexCount": 180
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-0[0]",
+          "name": "manga-waterfall-curtain-0",
+          "vertices": 44,
+          "instances": 1,
+          "worldVertexHash": 948391704,
+          "indexHash": 1856770349,
+          "indexCount": 180
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-1[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-1[0]",
+          "name": "manga-waterfall-ripple-1",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 612720620,
+          "indexHash": 2964267881,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-waterline-ripples[0]/manga-waterfall-ripple-1[0]",
+          "name": "manga-waterfall-ripple-1",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 913423937,
+          "indexHash": 2964267881,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:1[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:1[0]",
+          "name": "highland-hero-cloud-blob-crossing:1",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 486293978,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-crossing:1[0]",
+          "name": "highland-hero-cloud-blob-crossing:1",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 1816641303,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:2[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:2[0]",
+          "name": "highland-hero-cloud-blob-outer-high:2",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 1771809557,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:2[0]",
+          "name": "highland-hero-cloud-blob-outer-high:2",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 1936613081,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:1[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:1[0]",
+          "name": "highland-hero-cloud-blob-outer-high:1",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 3947095336,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:1[0]",
+          "name": "highland-hero-cloud-blob-outer-high:1",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 251945703,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-3[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-3[0]",
+          "name": "manga-waterfall-curtain-3",
+          "vertices": 44,
+          "instances": 1,
+          "worldVertexHash": 4023297539,
+          "indexHash": 1856770349,
+          "indexCount": 180
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-layered-curtains[0]/manga-waterfall-curtain-3[0]",
+          "name": "manga-waterfall-curtain-3",
+          "vertices": 44,
+          "instances": 1,
+          "worldVertexHash": 2327451152,
+          "indexHash": 1856770349,
+          "indexCount": 180
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:2[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:2[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 950859760,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:2[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:2",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 1660905767,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:4[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:4[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:4",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 4264312006,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-ridge:0:4[0]",
+          "name": "highland-hero-cloud-blob-ridge:0:4",
+          "vertices": 1440,
+          "instances": 1,
+          "worldVertexHash": 1517093835,
+          "indexHash": 3291237605,
+          "indexCount": 1440
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-2[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-2[0]",
+          "name": "manga-waterfall-flow-streak-2",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 797588440,
+          "indexHash": 714930285,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-2[0]",
+          "name": "manga-waterfall-flow-streak-2",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 1596548800,
+          "indexHash": 714930285,
+          "indexCount": 36
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:3[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:3[0]",
+          "name": "highland-hero-cloud-blob-windward:3",
+          "vertices": 1920,
+          "instances": 1,
+          "worldVertexHash": 1175914054,
+          "indexHash": 2106772293,
+          "indexCount": 1920
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-windward:3[0]",
+          "name": "highland-hero-cloud-blob-windward:3",
+          "vertices": 1920,
+          "instances": 1,
+          "worldVertexHash": 2868404623,
+          "indexHash": 2106772293,
+          "indexCount": 1920
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-basin[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-basin[0]",
+          "name": "manga-waterfall-basin",
+          "vertices": 52,
+          "instances": 1,
+          "worldVertexHash": 1540794821,
+          "indexHash": 2362042341,
+          "indexCount": 96
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-basin[0]",
+          "name": "manga-waterfall-basin",
+          "vertices": 52,
+          "instances": 1,
+          "worldVertexHash": 3902921061,
+          "indexHash": 2362042341,
+          "indexCount": 96
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:0[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:0[0]",
+          "name": "highland-hero-cloud-blob-outer-high:0",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 1429901346,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-outer-high:0[0]",
+          "name": "highland-hero-cloud-blob-outer-high:0",
+          "vertices": 1200,
+          "instances": 1,
+          "worldVertexHash": 3174140282,
+          "indexHash": 1757611829,
+          "indexCount": 1200
+        }
+      },
+      {
+        "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:1[0]",
+        "before": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:1[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:1",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 982327809,
+          "indexHash": 591409797,
+          "indexCount": 960
+        },
+        "after": {
+          "path": "castleContainer/highland-hero-cloud-blobs[0]/highland-hero-cloud-blob-flank-mist:1[0]",
+          "name": "highland-hero-cloud-blob-flank-mist:1",
+          "vertices": 960,
+          "instances": 1,
+          "worldVertexHash": 3037801536,
+          "indexHash": 591409797,
+          "indexCount": 960
+        }
+      },
+      {
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-6[0]",
+        "before": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-6[0]",
+          "name": "manga-waterfall-flow-streak-6",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 2975315387,
+          "indexHash": 714930285,
+          "indexCount": 36
+        },
+        "after": {
+          "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/highland-town-foundation-platform[0]/holy-old-town-waterfall[0]/manga-waterfall-calligraphic-flow-streaks[0]/manga-waterfall-flow-streak-6[0]",
+          "name": "manga-waterfall-flow-streak-6",
+          "vertices": 14,
+          "instances": 1,
+          "worldVertexHash": 3814688665,
+          "indexHash": 714930285,
+          "indexCount": 36
+        }
+      }
+    ],
+    "classification": {
+      "dynamicCloud": 40,
+      "waterfall": 18,
+      "other": 0
+    }
+  },
+  "railCurvesEqual": true,
+  "rail": {
+    "method": "3600 stations/lane filtered to citadel bounds, 3 lateral x 3 heights, tangent rays 2 m; all named obstacles regardless review visibility",
+    "stations": 2561,
+    "tests": 23049,
+    "hitCount": 0,
+    "hits": [],
+    "status": "measured",
+    "minSeaClearance": 0.6472760696798616,
+    "wetTrackSamples": 0
+  },
+  "rootSummary": {
+    "status": "measured",
+    "method": "trees/shrubs: lowest actual radial vertex across all instance parts; grass: legacy instance base vertices, or candidate each nonindexed triangle first two actual vertices (verified mountainGrass addSupportedGrass ends,tip layout); transformed by matrixWorld; radial ray to final study surfaces via independently validated exact world-triangle BVH",
+    "count": 36944,
+    "missing": 0,
+    "maxGap": 5.1955293542960135e-06,
+    "minGap": -15.124701346051665,
+    "above2mm": 0,
+    "limitations": "Tree/shrub lowest vertex does not certify complete footprint; no continuous collision proof. Groundcover full surface support and non-study plants \u672a\u6d4b."
+  }
+}

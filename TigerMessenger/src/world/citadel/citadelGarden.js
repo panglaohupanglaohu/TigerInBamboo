@@ -6,6 +6,7 @@ import {buildCitadelLeafyShrub as buildSlopeShrub} from './leafyShrub.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
 export function buildCitadelGarden(){
  const root=new THREE.Group();root.name='citadel-terrace-garden';
+ root.userData.preserveCitadelMaterials=true;
  const trees=[[52.4,10,23.8,.63],[53,10,30.4,.8],[52.2,10,36.2,.51],[67,10,22.8,.7],[67.7,10,29.3,.5],[66.8,10,36.7,.72],[48,4,84,.86],[72,4,80,.98],[46.3,4,58,.78],[73.7,4,58,.88],[44.5,10,33,.92],[75.5,10,33,1],[40,16,12,1.12],[80,16,12,.96]];
  if(PLAZA_R03){trees[7][0]=79;trees[7][2]=82;}
  trees.forEach(t=>t[2]+=t[1]===10?CITY_ADVANCE[1]:t[1]===16?CITY_ADVANCE[2]:0);
@@ -24,7 +25,7 @@ export function buildCitadelGarden(){
 let cypressParts=null,cypressMaterials=null;
 export function buildCitadelCypress(size=1,yaw=0){
  if(!cypressParts){
- cypressMaterials=data.materials.map(m=>{const p=m.pbrMetallicRoughness;return new THREE.MeshStandardMaterial({color:new THREE.Color().setRGB(...p.baseColorFactor.slice(0,3)),roughness:.93});});
+ cypressMaterials=data.materials.map(m=>{const p=m.pbrMetallicRoughness;const material=new THREE.MeshStandardMaterial({name:m.name,color:new THREE.Color().setRGB(...p.baseColorFactor.slice(0,3)),roughness:.93});material.userData.preserveCitadelMaterial=true;return material;});
  cypressParts=data.parts.map(p=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p.position,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(p.normal,3));g.setIndex(p.index);return {part:p,geometry:g};});
 
  }

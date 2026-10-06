@@ -1,0 +1,17 @@
+{
+  "source": "Actual browser pointer input and panel buttons; no save invoked",
+  "counts": {
+    "before": 398,
+    "delete": 397,
+    "undo": 398,
+    "add": 399,
+    "redo": 399
+  },
+  "deleteOne": true,
+  "undoExact": true,
+  "addOne": true,
+  "redoExact": true,
+  "wfcAllSolved": true,
+  "errors": [],
+  "performance": "Not a GPU memory or framerate benchmark; see lifecycle-tests.json for CPU ownership test."
+}

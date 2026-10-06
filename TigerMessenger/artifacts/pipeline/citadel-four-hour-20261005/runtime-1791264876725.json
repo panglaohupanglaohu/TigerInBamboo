@@ -1,0 +1,741 @@
+{
+  "at": "2026-10-06T05:34:36.768Z",
+  "view": "广场",
+  "timeOfDay": 0.49,
+  "daySpeed": 0,
+  "installed": true,
+  "lighting": {
+    "toneMapping": 0,
+    "exposure": 1,
+    "lights": [
+      {
+        "name": "",
+        "type": "AmbientLight",
+        "color": "ffffff",
+        "intensity": 0.8958333333333334
+      },
+      {
+        "name": "",
+        "type": "HemisphereLight",
+        "color": "ffffff",
+        "intensity": 0.4479166666666667
+      },
+      {
+        "name": "",
+        "type": "DirectionalLight",
+        "color": "fff6df",
+        "intensity": 1.5916666666666668
+      },
+      {
+        "name": "",
+        "type": "DirectionalLight",
+        "color": "75cfc3",
+        "intensity": 0.27870370370370373
+      },
+      {
+        "name": "citadel-svarbova-ambient",
+        "type": "AmbientLight",
+        "color": "8eb9e5",
+        "intensity": 0.34
+      },
+      {
+        "name": "citadel-svarbova-sun",
+        "type": "DirectionalLight",
+        "color": "78aee0",
+        "intensity": 0.62
+      }
+    ]
+  },
+  "oldCity": "target-old-city-11-three-street-clusters",
+  "newStairs": "target-new-city-stairs-5-stepped-flanks",
+  "rock": {
+    "version": "target-continuous-rock-5",
+    "meshes": 2,
+    "palette": {
+      "mtBase": "#bdc7d0",
+      "mtShade": "#7894b4",
+      "mtChalk": "#e5ddd0",
+      "mtVerdure": "#88aa7b",
+      "trRose": "#c3b8b7"
+    },
+    "detailGain": 0.09,
+    "geometryChanged": false,
+    "paletteMethod": "actual sun exposure plus continuous castle-chart broad strata and regional interpolation; no per-face random colours",
+    "sourceEvidence": "1712088611934371876 shows a palette authoring tool, not a disclosed rock shader",
+    "sunBound": true,
+    "shaderPatches": [
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      }
+    ],
+    "suppressedDecorations": [
+      {
+        "name": "citadel-study-fractured-buttresses",
+        "uuid": "22e6af93-42c1-4fe6-ab78-1f31a5eefca2"
+      }
+    ]
+  },
+  "clouds": "citadel-cloud-banks-candidate-13",
+  "landmarks": true,
+  "navigation": {
+    "providerAvailable": true,
+    "installedIntoPlayer": true,
+    "completeNavigationVerified": false,
+    "adapter": {
+      "version": "target-city-player-navigation-1",
+      "installed": true,
+      "continuousRouteVerified": false,
+      "legacyProxyRemoved": 1,
+      "terrainQueries": 54828,
+      "terrainHits": 0,
+      "scope": "candidate public floors/walls and actual final terrain; remaining world uses original collision",
+      "limitations": [
+        "Finite body rays retain provider limitations; continuous bookshop-to-city journey not yet tested.",
+        "No ceiling collision or spawn-inside recovery; neither tram routing nor moving-actor avoidance is implemented.",
+        "Terrain fallback samples actual upward-facing triangles only; private roofs never become an airborne landing target."
+      ],
+      "legacyProxyAmbiguous": false
+    }
+  },
+  "tram": {
+    "routeIntegrated": true,
+    "controlsChanged": false,
+    "railIsStatic": false,
+    "candidateRailPresent": false,
+    "geometryAndVehiclesShareRoute": true,
+    "releaseVersion": "user-marked-transit-release-1",
+    "continuousRouteVerified": false
+  },
+  "terrain": {
+    "revision": "target-terrain-r09-asymmetric-shoulder",
+    "aprons": true,
+    "saddle": true,
+    "valleyBenches": true,
+    "railCliff": {
+      "version": "target-new-city-rail-cliff-1",
+      "samples": 85,
+      "changedQueries": 231,
+      "protectedQueries": 0,
+      "maxDrop": 101.71093033612772,
+      "scope": {
+        "x": [
+          80,
+          143
+        ],
+        "z": [
+          70,
+          102
+        ]
+      },
+      "trackChanged": false,
+      "limits": [
+        "Only measured upper south-east track branch selected by 3D chart envelope. Other global segments remain unaudited by this local cut.",
+        "Actual source mesh and vehicle envelope must be tested after remeshing.",
+        "2.4m cliff transition; plateau cores stay fixed."
+      ],
+      "maxDropPoint": {
+        "x": 134.53846153846155,
+        "z": 74.91509433962266,
+        "before": 5.085979147619927,
+        "after": -96.6249511885078,
+        "sea": -93.6249511885078,
+        "edge": 101.10882121301798,
+        "railPlaneCap": -70.47191795793599
+      }
+    },
+    "newCityRetreat": {
+      "version": "target-new-city-coastal-retreat-1",
+      "built": true,
+      "visualReviewed": false,
+      "changedQueries": 1612,
+      "protectedQueries": 991,
+      "maxDrop": 159.70509948980887,
+      "edge": [
+        [
+          -58,
+          108
+        ],
+        [
+          -40,
+          92
+        ],
+        [
+          -28,
+          91
+        ],
+        [
+          -10,
+          98
+        ],
+        [
+          15,
+          104
+        ],
+        [
+          40,
+          104
+        ],
+        [
+          60,
+          99
+        ],
+        [
+          80,
+          92
+        ],
+        [
+          100,
+          82
+        ],
+        [
+          107,
+          80
+        ]
+      ],
+      "transitionWidth": 3.8,
+      "railChanged": false,
+      "scope": "new-city eastern exterior only; old city and reserved construction cores fixed",
+      "limitations": [
+        "Authored castle-chart envelope; not a global railway clearance guarantee.",
+        "Final mesh, foundations, turf and current actors require runtime re-sampling."
+      ],
+      "maxDropPoint": {
+        "x": 136.23076923076923,
+        "z": -9.518867924528301,
+        "before": 10.838206197373577,
+        "after": -148.8668932924353,
+        "sea": -145.8668932924353,
+        "edge": 98.00658131950537
+      }
+    },
+    "status": "terrain-only candidate; city and routes not rebuilt",
+    "defaultEnabled": false,
+    "mesh": {
+      "revision": "target-terrain-heightfield-1",
+      "grid": [
+        169,
+        106
+      ],
+      "stepActual": [
+        1.6923076923076923,
+        1.6886792452830188
+      ],
+      "validCells": 17030,
+      "invalidCells": 884,
+      "invalidSamples": 884,
+      "boundaryEdges": 550,
+      "components": 1,
+      "vertices": 34612,
+      "triangles": 69220,
+      "minArea": 1.4288777931360528,
+      "domainPolicy": "omit whole cells touching null; cap resulting boundary; no analytic sea-curve clipping",
+      "closed": true,
+      "empty": false,
+      "coordinateSpace": "caller chart",
+      "sceneMutation": false
+    },
+    "platforms": [
+      {
+        "id": "old-city-platform",
+        "center": [
+          -55,
+          9
+        ],
+        "radii": [
+          31,
+          30
+        ],
+        "height": 17
+      },
+      {
+        "id": "new-city-platform",
+        "center": [
+          74,
+          33
+        ],
+        "radii": [
+          29,
+          37
+        ],
+        "height": 12
+      },
+      {
+        "id": "new-city-plaza",
+        "center": [
+          62,
+          76
+        ],
+        "radii": [
+          30,
+          22
+        ],
+        "height": 3
+      }
+    ],
+    "ridges": [
+      {
+        "id": "old-main",
+        "a": [
+          -103,
+          -27,
+          31
+        ],
+        "b": [
+          -82,
+          -35,
+          43
+        ],
+        "width": 31
+      },
+      {
+        "id": "old-rear",
+        "a": [
+          -82,
+          -35,
+          43
+        ],
+        "b": [
+          -50,
+          -33,
+          31
+        ],
+        "width": 29
+      },
+      {
+        "id": "old-right-shoulder",
+        "a": [
+          -50,
+          -33,
+          31
+        ],
+        "b": [
+          -29,
+          -29,
+          33
+        ],
+        "width": 25
+      },
+      {
+        "id": "central-saddle",
+        "a": [
+          -29,
+          -34,
+          30
+        ],
+        "b": [
+          -3,
+          -41,
+          12
+        ],
+        "width": 13
+      },
+      {
+        "id": "bay-rear-join",
+        "a": [
+          -3,
+          -41,
+          12
+        ],
+        "b": [
+          32,
+          -37,
+          24
+        ],
+        "width": 15
+      },
+      {
+        "id": "new-rear",
+        "a": [
+          32,
+          -32,
+          24
+        ],
+        "b": [
+          77,
+          -29,
+          34
+        ],
+        "width": 27
+      },
+      {
+        "id": "new-east",
+        "a": [
+          77,
+          -29,
+          34
+        ],
+        "b": [
+          111,
+          -4,
+          26
+        ],
+        "width": 26
+      },
+      {
+        "id": "old-coastal-terraces",
+        "a": [
+          -107,
+          -4,
+          30
+        ],
+        "b": [
+          -91,
+          42,
+          23
+        ],
+        "width": 28
+      },
+      {
+        "id": "new-coastal-terraces",
+        "a": [
+          109,
+          -5,
+          26
+        ],
+        "b": [
+          111,
+          62,
+          19
+        ],
+        "width": 23
+      }
+    ],
+    "retired": [
+      "citadel-coastal-cliff-seal",
+      "highland-ravine-wall-west",
+      "citadel-backdrop-ridge-near",
+      "citadel-backdrop-ridge-mid",
+      "new-city-rock-shoulder",
+      "old-shore-blender-rock-support"
+    ],
+    "oldSourceGeometryReplaced": true,
+    "worldSaveModified": false,
+    "coastalCliffCut": {
+      "version": "target-coastal-cliff-cut-1",
+      "cutIds": [
+        "old-global-exterior-toe",
+        "marked-newShore-1",
+        "marked-newShore-2",
+        "marked-newShore-3",
+        "marked-newShore-4",
+        "marked-newShore-5",
+        "marked-newShore-6",
+        "marked-newShore-7",
+        "marked-newShore-8",
+        "marked-newShore-9",
+        "marked-newShore-10",
+        "marked-newShore-11",
+        "marked-newShore-12",
+        "marked-newShore-13",
+        "marked-newShore-14",
+        "marked-newShore-15",
+        "marked-newShore-16",
+        "marked-newShore-17",
+        "marked-newShore-18",
+        "marked-newShore-19",
+        "marked-newShore-20",
+        "marked-newShore-21",
+        "marked-newShore-22",
+        "marked-newShore-23",
+        "marked-newShore-24",
+        "marked-newShore-25",
+        "marked-newShore-26",
+        "marked-newShore-27",
+        "marked-newShore-28",
+        "marked-newShore-29",
+        "marked-newShore-30",
+        "marked-newShore-31",
+        "marked-newShore-32",
+        "marked-newShore-33",
+        "marked-newShore-34",
+        "marked-newShore-35",
+        "marked-newShore-36",
+        "marked-newShore-37",
+        "marked-newShore-38",
+        "marked-newShore-39",
+        "marked-newShore-40",
+        "marked-newShore-41",
+        "marked-newShore-42",
+        "marked-newShore-43",
+        "marked-newShore-44",
+        "marked-newShore-45",
+        "marked-newShore-46",
+        "marked-newShore-47",
+        "marked-newShore-48",
+        "marked-newShore-49",
+        "marked-newShore-50",
+        "marked-newShore-51",
+        "marked-newShore-52",
+        "marked-newShore-53",
+        "marked-newShore-54",
+        "marked-newShore-55",
+        "marked-newShore-56",
+        "marked-newShore-57",
+        "marked-newShore-58",
+        "marked-newShore-59",
+        "marked-newShore-60",
+        "marked-newShore-61",
+        "marked-newShore-62",
+        "marked-newShore-63",
+        "marked-oldShore-1",
+        "marked-oldShore-2",
+        "marked-oldShore-3",
+        "marked-oldShore-4",
+        "marked-oldShore-5",
+        "marked-oldShore-6",
+        "marked-oldShore-7",
+        "marked-oldShore-8",
+        "marked-oldShore-9",
+        "marked-oldShore-10",
+        "marked-oldShore-11",
+        "marked-oldShore-12",
+        "marked-oldShore-13",
+        "marked-oldShore-14",
+        "marked-oldShore-15",
+        "marked-oldShore-16",
+        "marked-oldShore-17",
+        "marked-oldShore-18",
+        "marked-oldShore-19",
+        "marked-oldShore-20",
+        "marked-oldShore-21",
+        "marked-oldShore-22",
+        "marked-oldShore-23",
+        "marked-oldShore-24",
+        "marked-oldShore-25",
+        "marked-oldShore-26",
+        "marked-oldShore-27",
+        "marked-oldShore-28",
+        "marked-oldShore-29",
+        "marked-oldShore-30",
+        "marked-oldShore-31",
+        "marked-oldShore-32",
+        "marked-oldShore-33",
+        "marked-oldShore-34",
+        "marked-oldShore-35",
+        "marked-oldShore-36",
+        "marked-oldShore-37",
+        "marked-oldShore-38",
+        "marked-oldShore-39",
+        "marked-oldShore-40",
+        "marked-oldShore-41",
+        "marked-oldShore-42",
+        "marked-oldShore-43",
+        "marked-oldShore-44",
+        "marked-oldShore-45",
+        "marked-oldShore-46",
+        "marked-oldShore-47",
+        "marked-oldShore-48",
+        "marked-oldShore-49",
+        "marked-oldShore-50",
+        "marked-oldShore-51",
+        "marked-oldShore-52",
+        "marked-oldShore-53",
+        "marked-oldShore-54",
+        "marked-oldShore-55",
+        "marked-oldShore-56",
+        "marked-oldShore-57",
+        "marked-oldShore-58",
+        "marked-oldShore-59"
+      ],
+      "changedQueries": 1886,
+      "protectedConflicts": 13,
+      "maxDrop": 151.55166196265276,
+      "status": "authored-field-not-mesh-validated",
+      "examples": [
+        {
+          "x": 33.00000000000001,
+          "z": 73.22641509433963,
+          "original": -4.101389430550056,
+          "sea": -6.945293810932276
+        },
+        {
+          "x": 33.00000000000001,
+          "z": 74.91509433962266,
+          "original": -3.851617522456615,
+          "sea": -7.155163055791128
+        },
+        {
+          "x": 33.00000000000001,
+          "z": 76.60377358490567,
+          "original": -3.92239969086632,
+          "sea": -7.383942818219717
+        },
+        {
+          "x": 33.00000000000001,
+          "z": 78.29245283018868,
+          "original": -4.331615096995799,
+          "sea": -7.6317180015569575
+        },
+        {
+          "x": 33.00000000000001,
+          "z": 79.9811320754717,
+          "original": -5.089774623096591,
+          "sea": -7.898581132972691
+        },
+        {
+          "x": 34.69230769230768,
+          "z": 81.66981132075473,
+          "original": -3.646735142108673,
+          "sea": -8.672569022414464
+        },
+        {
+          "x": 34.69230769230768,
+          "z": 83.35849056603773,
+          "original": -4.936866738337943,
+          "sea": -8.978900327531607
+        },
+        {
+          "x": 34.69230769230768,
+          "z": 85.04716981132076,
+          "original": -6.300654480769404,
+          "sea": -9.30471164924548
+        },
+        {
+          "x": 36.38461538461539,
+          "z": 85.04716981132076,
+          "original": -4.7478321552978535,
+          "sea": -9.815279334787895
+        },
+        {
+          "x": 36.38461538461539,
+          "z": 86.73584905660378,
+          "original": -5.348546524205838,
+          "sea": -10.161869972119854
+        },
+        {
+          "x": 38.07692307692309,
+          "z": 88.4245283018868,
+          "original": -5.0618335363890345,
+          "sea": -11.06218559128345
+        },
+        {
+          "x": 39.76923076923078,
+          "z": 90.11320754716981,
+          "original": -5.013519664509021,
+          "sea": -12.006443492013975
+        }
+      ],
+      "railClearanceVerified": false
+    },
+    "oldShoreApron": {
+      "version": "target-old-shore-landward-apron-4-contact",
+      "accepted": false,
+      "installed": false,
+      "status": "built-field-needs-mesh-audit",
+      "maxGap": 32,
+      "railSetback": 2.4,
+      "walkwayHeight": 6.9,
+      "vehicleTop": 5.71,
+      "profile": "stepped-rock-link",
+      "bridgeExclusion": {
+        "maxChartX": -47
+      },
+      "eligibleStations": 62,
+      "rejections": {
+        "bridgeAndWaterfall": 12,
+        "missingSurface": 0,
+        "gapTooWide": 0,
+        "alreadyJoined": 0
+      },
+      "changedQueries": 86,
+      "maxRaise": 61.36913762563838,
+      "segments": 61
+    }
+  },
+  "gpuProgramCount": 169,
+  "gpuFailures": [],
+  "oldMaterials": [
+    {
+      "name": "terrace-0--1",
+      "color": "f3dfc6",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-stone-residential-arcade",
+      "color": "f3dfc6",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-walls",
+      "color": "ef958f",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-cornice",
+      "color": "fff6e7",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-drip-edge",
+      "color": "ff9b58",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-roof",
+      "color": "f57b45",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-roof-eaves",
+      "color": "ff9b58",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-ridge",
+      "color": "ff9b58",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-windows-glass",
+      "color": "3e627b",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-windows-trim",
+      "color": "fff6e7",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-base",
+      "color": "fff6e7",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-1-stone-residential-arcade",
+      "color": "f3dfc6",
+      "type": "MeshStandardMaterial"
+    }
+  ],
+  "glError": 0,
+  "camera": {
+    "position": [
+      68.66804332301359,
+      168.11704425178345,
+      60.312596182142244
+    ],
+    "quaternion": [
+      0.3377049214758319,
+      0.897605085541535,
+      0.282300228433326,
+      -0.02381338798801626
+    ],
+    "fov": 46
+  }
+}

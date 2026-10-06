@@ -1,0 +1,1394 @@
+{
+  "version": "east-final-pier-probe-1",
+  "installed": false,
+  "accepted": false,
+  "artifact": "remesh-final-surface-geometry.json",
+  "sourceFrame": [
+    -52,
+    0,
+    0
+  ],
+  "sourceHash": {
+    "position": 2638422502,
+    "index": null,
+    "vertices": 331512,
+    "indexCount": 0,
+    "triangles": 110504,
+    "indexed": false,
+    "positionType": "Float32Array",
+    "indexType": null,
+    "localBounds": {
+      "min": [
+        -91,
+        -159.79254150390625,
+        -72
+      ],
+      "max": [
+        195,
+        42.99868392944336,
+        107
+      ]
+    },
+    "castleBounds": {
+      "min": [
+        -142.99999999999997,
+        -159.79254150390628,
+        -72.00000000000001
+      ],
+      "max": [
+        142.99999999999997,
+        42.99868392944333,
+        107
+      ]
+    },
+    "sourceToCastle": [
+      1,
+      -5.551115123125783e-17,
+      5.551115123125783e-17,
+      0,
+      0,
+      1.0000000000000002,
+      -2.7755575615628914e-17,
+      0,
+      5.551115123125783e-17,
+      -5.551115123125783e-17,
+      1.0000000000000002,
+      0,
+      -52.000000000000014,
+      -2.842170943040401e-14,
+      -7.105427357601002e-15,
+      1.0000000000000002
+    ],
+    "refinement": {
+      "refined": 2669,
+      "sourceTriangles": 69220,
+      "triangles": 110504,
+      "maxOffset": 0.2193362385370818,
+      "reliefAmplitude": 0.22,
+      "reliefCandidate": true
+    },
+    "surfaceNormals": {
+      "version": 1,
+      "method": "constrained source-corner fans with affine normal transport",
+      "positionChanged": false,
+      "cornerFanConstraints": true,
+      "rawAffineNormals": true,
+      "mixedSubdivisionSoftEdges": 1540,
+      "cannotLinkPairs": 6944,
+      "constraintRejectedSoftJoins": 610,
+      "sourceFaces": 69220,
+      "softEdges": 100358,
+      "angleFallbackEdges": 100358,
+      "semanticEdges": 0,
+      "protectedFaces": 0,
+      "unmatchedEdges": 0,
+      "subdivisionMismatchEdges": 0,
+      "nonManifoldEdges": 0,
+      "sharpEdges": 3472,
+      "smoothedCorners": 203389,
+      "interpolatedVertices": 331512,
+      "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+      "creaseAngleDeg": 42,
+      "protectionBounds": "shore-and-geometric-feature-edges-only",
+      "pass": 4,
+      "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+      "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+      "reasonCounts": {
+        "shoreAttributeFaces": 0,
+        "callbackProtectedFaces": 0,
+        "openEdges": 0,
+        "nonManifoldEdges": 0,
+        "subdivisionMismatchEdges": 0,
+        "protectedFaceEdges": 0,
+        "mixedSemanticEdges": 0,
+        "semanticBoundaryEdges": 0,
+        "sharpAngleEdges": 3472,
+        "windingEdges": 0,
+        "crestFoldEdges": 0
+      }
+    }
+  },
+  "rawTopology": {
+    "version": "east-cliff-patch-join-1",
+    "accepted": false,
+    "installed": false,
+    "connectedComponents": 1,
+    "windingAdjustedFaces": 16,
+    "nonOrientableConflicts": 0,
+    "changedSourceFaces": 816,
+    "removedPatchCaps": 706,
+    "transitionSeamWalls": 60,
+    "seamPoints": 572,
+    "triangles": 81440,
+    "degenerateRemoved": 1708,
+    "floatCollapsed": 0,
+    "badEdges": [],
+    "nonManifoldEdges": 0,
+    "orientationConflicts": 0,
+    "signedVolume": 1540681.637728406,
+    "closed": true
+  },
+  "finalRefinement": {
+    "refined": 3170,
+    "sourceTriangles": 81440,
+    "triangles": 136403,
+    "maxOffset": 0.21933620921718505,
+    "reliefAmplitude": 0.22,
+    "reliefCandidate": true
+  },
+  "curveVersion": "east-cliff-production-candidate-1",
+  "scope": "Final artifact geometry footing queries and actually rebuilt gallery candidates only. Gallery own vehicle audit uses parallel guide sections, NOT full red/blue release, so promising variants need the full structure replay.",
+  "globalApproachSupportBuilt": false,
+  "trials": [
+    {
+      "config": {
+        "id": "baseline",
+        "pierWidth": 1.2,
+        "maxSpan": 18
+      },
+      "length": 165.37000985942421,
+      "foundationCount": 22,
+      "foundationPass": false,
+      "failures": [
+        {
+          "station": 5,
+          "side": -1,
+          "u": 0.5,
+          "centerWorld": [
+            23.088697766783028,
+            138.0548780647835,
+            92.40953311436697
+          ],
+          "footingSamples": [
+            {
+              "offset": -2.4923553466796875,
+              "world": [
+                23.109816286531014,
+                136.13957153192806,
+                92.11464831070937
+              ],
+              "terrainAboveDeck": false
+            },
+            {
+              "offset": -0.75,
+              "world": [
+                23.91088992302861,
+                138.09562395998594,
+                92.20376666852998
+              ],
+              "terrainAboveDeck": true
+            },
+            {
+              "offset": -2.9638824462890625,
+              "world": [
+                22.048804427650577,
+                136.18738365024404,
+                91.38368617603805
+              ],
+              "terrainAboveDeck": false
+            },
+            {
+              "offset": -2.2270050048828125,
+              "world": [
+                22.751004824644625,
+                137.3137825988396,
+                90.91344328697151
+              ],
+              "terrainAboveDeck": false
+            },
+            {
+              "offset": -1.8426055908203125,
+              "world": [
+                22.98125686360902,
+                137.15333261525166,
+                91.80170153255719
+              ],
+              "terrainAboveDeck": false
+            }
+          ],
+          "bottomOffset": null,
+          "upperOffset": 6.638997469144028,
+          "seated": false,
+          "localCenter": [
+            68.46345776030726,
+            -18.516137475891437,
+            97.61252998235182
+          ],
+          "samples": [
+            {
+              "offset": -2.4923553466796875,
+              "world": [
+                23.109816286531014,
+                136.13957153192806,
+                92.11464831070937
+              ],
+              "terrainAboveDeck": false,
+              "local": [
+                67.97456565587576,
+                -19.925456699946974,
+                96.37535336236768
+              ],
+              "actualTerrainY": -19.925331954976965
+            },
+            {
+              "offset": -0.75,
+              "world": [
+                23.91088992302861,
+                138.09562395998594,
+                92.20376666852998
+              ],
+              "terrainAboveDeck": true,
+              "local": [
+                67.82795528061587,
+                -18.037165543692023,
+                97.31804316351057
+              ],
+              "actualTerrainY": -17.76286794714255
+            },
+            {
+              "offset": -2.9638824462890625,
+              "world": [
+                22.048804427650577,
+                136.18738365024404,
+                91.38368617603805
+              ],
+              "terrainAboveDeck": false,
+              "local": [
+                68.00291128735365,
+                -20.821123067302036,
+                97.30234639860424
+              ],
+              "actualTerrainY": -20.821071064627485
+            },
+            {
+              "offset": -2.2270050048828125,
+              "world": [
+                22.751004824644625,
+                137.3137825988396,
+                90.91344328697151
+              ],
+              "terrainAboveDeck": false,
+              "local": [
+                67.35850889660988,
+                -19.762151639446355,
+                97.97041333944355
+              ],
+              "actualTerrainY": -19.762086802350634
+            },
+            {
+              "offset": -1.8426055908203125,
+              "world": [
+                22.98125686360902,
+                137.15333261525166,
+                91.80170153255719
+              ],
+              "terrainAboveDeck": false,
+              "local": [
+                67.92253056903746,
+                -19.417320253826457,
+                97.31411022497963
+              ],
+              "actualTerrainY": -19.417353101894914
+            }
+          ]
+        }
+      ],
+      "terrainClearance": {
+        "issues": [],
+        "unknown": 0,
+        "pass": true,
+        "method": "9 underbody final-heightfield probes per lane pose, not triangle terrain sweep"
+      },
+      "vehicleClearance": {
+        "method": "actual visible mesh triangles vs oriented full body volume, plus signed-crossing closed-solid containment; finite sampled poses",
+        "sampleStepMaximum": 0.7482805875992046,
+        "poses": 444,
+        "collisions": [],
+        "pass": true,
+        "preservedUpperAndCandidateChecked": true,
+        "legacySupportsExcludedOnlyAsExplicitReplacementPlan": true
+      },
+      "performance": {
+        "meshes": 70,
+        "triangles": 23164
+      },
+      "issues": [
+        {
+          "type": "terrain-intrudes-deck",
+          "station": 5,
+          "side": -1
+        }
+      ]
+    },
+    {
+      "config": {
+        "id": "narrow-105",
+        "pierWidth": 1.05,
+        "maxSpan": 18
+      },
+      "length": 165.37000985942421,
+      "foundationCount": 22,
+      "foundationPass": true,
+      "failures": [],
+      "terrainClearance": {
+        "issues": [],
+        "unknown": 0,
+        "pass": true,
+        "method": "9 underbody final-heightfield probes per lane pose, not triangle terrain sweep"
+      },
+      "vehicleClearance": {
+        "method": "actual visible mesh triangles vs oriented full body volume, plus signed-crossing closed-solid containment; finite sampled poses",
+        "sampleStepMaximum": 0.7482805875992046,
+        "poses": 444,
+        "collisions": [],
+        "pass": true,
+        "preservedUpperAndCandidateChecked": true,
+        "legacySupportsExcludedOnlyAsExplicitReplacementPlan": true
+      },
+      "performance": {
+        "meshes": 70,
+        "triangles": 23164
+      },
+      "issues": []
+    },
+    {
+      "config": {
+        "id": "narrow-090",
+        "pierWidth": 0.9,
+        "maxSpan": 18
+      },
+      "length": 165.37000985942421,
+      "foundationCount": 22,
+      "foundationPass": true,
+      "failures": [],
+      "terrainClearance": {
+        "issues": [],
+        "unknown": 0,
+        "pass": true,
+        "method": "9 underbody final-heightfield probes per lane pose, not triangle terrain sweep"
+      },
+      "vehicleClearance": {
+        "method": "actual visible mesh triangles vs oriented full body volume, plus signed-crossing closed-solid containment; finite sampled poses",
+        "sampleStepMaximum": 0.7482805875992046,
+        "poses": 444,
+        "collisions": [],
+        "pass": true,
+        "preservedUpperAndCandidateChecked": true,
+        "legacySupportsExcludedOnlyAsExplicitReplacementPlan": true
+      },
+      "performance": {
+        "meshes": 70,
+        "triangles": 23164
+      },
+      "issues": []
+    },
+    {
+      "config": {
+        "id": "eleven-spans",
+        "pierWidth": 1.2,
+        "maxSpan": 16
+      },
+      "length": 165.37000985942421,
+      "foundationCount": 24,
+      "foundationPass": false,
+      "failures": [
+        {
+          "station": 5,
+          "side": -1,
+          "u": 0.45454545454545453,
+          "centerWorld": [
+            20.291944790979308,
+            134.92631776116164,
+            97.20230379880232
+          ],
+          "footingSamples": [
+            {
+              "offset": -2.0957489013671875,
+              "world": [
+                20.53553836161801,
+                133.36691973101128,
+                97.00235365142142
+              ],
+              "terrainAboveDeck": false
+            },
+            {
+              "offset": -0.75,
+              "world": [
+                21.060335070878708,
+                135.08761116820233,
+                96.88049513732575
+              ],
+              "terrainAboveDeck": true
+            },
+            {
+              "offset": -2.8481292724609375,
+              "world": [
+                19.352571163316988,
+                133.08778354676227,
+                96.27520317098845
+              ],
+              "terrainAboveDeck": false
+            },
+            {
+              "offset": -3.3074493408203125,
+              "world": [
+                19.73026695775902,
+                133.36550606117993,
+                95.07887921108293
+              ],
+              "terrainAboveDeck": false
+            },
+            {
+              "offset": -1.7112274169921875,
+              "world": [
+                20.213611256494055,
+                134.1579142742591,
+                96.63013416847534
+              ],
+              "terrainAboveDeck": false
+            }
+          ],
+          "bottomOffset": null,
+          "upperOffset": 6.639004497506853,
+          "seated": false,
+          "localCenter": [
+            73.55581477032834,
+            -20.78198563130385,
+            94.5280203237915
+          ],
+          "samples": [
+            {
+              "offset": -2.0957489013671875,
+              "world": [
+                20.53553836161801,
+                133.36691973101128,
+                97.00235365142142
+              ],
+              "terrainAboveDeck": false,
+              "local": [
+                73.05950420534226,
+                -21.771579581070963,
+                93.38547065607526
+              ],
+              "actualTerrainY": -21.77166524879831
+            },
+            {
+              "offset": -0.75,
+              "world": [
+                21.060335070878708,
+                135.08761116820233,
+                96.88049513732575
+              ],
+              "terrainAboveDeck": true,
+              "local": [
+                72.87273032818537,
+                -20.29449750627398,
+                94.40251744391561
+              ],
+              "actualTerrainY": -18.36728085086943
+            },
+            {
+              "offset": -2.8481292724609375,
+              "world": [
+                19.352571163316988,
+                133.08778354676227,
+                96.27520317098845
+              ],
+              "terrainAboveDeck": false,
+              "local": [
+                73.12056206826895,
+                -22.968769449707363,
+                94.1398476033744
+              ],
+              "actualTerrainY": -22.968656887525693
+            },
+            {
+              "offset": -3.3074493408203125,
+              "world": [
+                19.73026695775902,
+                133.36550606117993,
+                95.07887921108293
+              ],
+              "terrainAboveDeck": false,
+              "local": [
+                71.97165697108264,
+                -22.953630624432403,
+                94.71496743334575
+              ],
+              "actualTerrainY": -22.953611594995234
+            },
+            {
+              "offset": -1.7112274169921875,
+              "world": [
+                20.213611256494055,
+                134.1579142742591,
+                96.63013416847534
+              ],
+              "terrainAboveDeck": false,
+              "local": [
+                73.04346486960598,
+                -21.560493243531024,
+                94.29268731694468
+              ],
+              "actualTerrainY": -21.5605407092207
+            }
+          ]
+        }
+      ],
+      "terrainClearance": {
+        "issues": [],
+        "unknown": 0,
+        "pass": true,
+        "method": "9 underbody final-heightfield probes per lane pose, not triangle terrain sweep"
+      },
+      "vehicleClearance": {
+        "method": "actual visible mesh triangles vs oriented full body volume, plus signed-crossing closed-solid containment; finite sampled poses",
+        "sampleStepMaximum": 0.7482805875992046,
+        "poses": 444,
+        "collisions": [],
+        "pass": true,
+        "preservedUpperAndCandidateChecked": true,
+        "legacySupportsExcludedOnlyAsExplicitReplacementPlan": true
+      },
+      "performance": {
+        "meshes": 76,
+        "triangles": 23984
+      },
+      "issues": [
+        {
+          "type": "terrain-intrudes-deck",
+          "station": 5,
+          "side": -1
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "station": 5,
+      "side": -1,
+      "center": [
+        68.46345776030726,
+        -18.516137475891437,
+        97.61252998235182
+      ],
+      "badCorner": [
+        67.82795528061587,
+        -18.037165543692023,
+        97.31804316351057
+      ],
+      "cornerTerrainY": -17.76286794714255,
+      "cornerIntrusion": 0.2742975965494736,
+      "rows": [
+        {
+          "distance": -1.0506275497870758,
+          "x": 69.41671147984437,
+          "z": 98.05426021061369,
+          "deckPlaneY": -19.234595374190558,
+          "terrainY": -28.692309864669078,
+          "gap": 9.45771449047852
+        },
+        {
+          "distance": -1.0296149987913343,
+          "x": 69.39764640545361,
+          "z": 98.04542560604845,
+          "deckPlaneY": -19.220226216224575,
+          "terrainY": -28.678229601099666,
+          "gap": 9.458003384875092
+        },
+        {
+          "distance": -1.0086024477955928,
+          "x": 69.37858133106288,
+          "z": 98.03659100148322,
+          "deckPlaneY": -19.205857058258594,
+          "terrainY": -28.664149337530226,
+          "gap": 9.458292279271632
+        },
+        {
+          "distance": -0.9875898967998512,
+          "x": 69.35951625667214,
+          "z": 98.02775639691798,
+          "deckPlaneY": -19.19148790029261,
+          "terrainY": -28.650069073960843,
+          "gap": 9.458581173668232
+        },
+        {
+          "distance": -0.9665773458041097,
+          "x": 69.34045118228138,
+          "z": 98.01892179235274,
+          "deckPlaneY": -19.177118742326627,
+          "terrainY": -28.635988810391346,
+          "gap": 9.45887006806472
+        },
+        {
+          "distance": -0.9455647948083683,
+          "x": 69.32138610789065,
+          "z": 98.0100871877875,
+          "deckPlaneY": -19.162749584360647,
+          "terrainY": -28.621908546821963,
+          "gap": 9.459158962461316
+        },
+        {
+          "distance": -0.9245522438126268,
+          "x": 69.30232103349991,
+          "z": 98.00125258322227,
+          "deckPlaneY": -19.148380426394663,
+          "terrainY": -28.607828283252466,
+          "gap": 9.459447856857803
+        },
+        {
+          "distance": -0.9035396928168853,
+          "x": 69.28325595910917,
+          "z": 97.99241797865703,
+          "deckPlaneY": -19.134011268428683,
+          "terrainY": -28.593748019683083,
+          "gap": 9.4597367512544
+        },
+        {
+          "distance": -0.8825271418211437,
+          "x": 69.26419088471843,
+          "z": 97.9835833740918,
+          "deckPlaneY": -19.1196421104627,
+          "terrainY": -28.579667756113615,
+          "gap": 9.460025645650916
+        },
+        {
+          "distance": -0.8615145908254022,
+          "x": 69.24512581032768,
+          "z": 97.97474876952656,
+          "deckPlaneY": -19.105272952496716,
+          "terrainY": -28.565587492544232,
+          "gap": 9.460314540047516
+        },
+        {
+          "distance": -0.8405020398296607,
+          "x": 69.22606073593694,
+          "z": 97.96591416496132,
+          "deckPlaneY": -19.090903794530735,
+          "terrainY": -28.551507228974792,
+          "gap": 9.460603434444057
+        },
+        {
+          "distance": -0.8194894888339191,
+          "x": 69.2069956615462,
+          "z": 97.95707956039608,
+          "deckPlaneY": -19.07653463656475,
+          "terrainY": -28.537426965405352,
+          "gap": 9.4608923288406
+        },
+        {
+          "distance": -0.7984769378381777,
+          "x": 69.18793058715546,
+          "z": 97.94824495583084,
+          "deckPlaneY": -19.062165478598768,
+          "terrainY": -28.52334670183597,
+          "gap": 9.461181223237201
+        },
+        {
+          "distance": -0.777464386842436,
+          "x": 69.16886551276471,
+          "z": 97.93941035126561,
+          "deckPlaneY": -19.047796320632788,
+          "terrainY": -28.5092664382665,
+          "gap": 9.461470117633713
+        },
+        {
+          "distance": -0.7564518358466946,
+          "x": 69.14980043837397,
+          "z": 97.93057574670037,
+          "deckPlaneY": -19.033427162666804,
+          "terrainY": -28.49518617469709,
+          "gap": 9.461759012030285
+        },
+        {
+          "distance": -0.7354392848509531,
+          "x": 69.13073536398323,
+          "z": 97.92174114213513,
+          "deckPlaneY": -19.01905800470082,
+          "terrainY": -28.48110591112762,
+          "gap": 9.4620479064268
+        },
+        {
+          "distance": -0.7144267338552116,
+          "x": 69.1116702895925,
+          "z": 97.9129065375699,
+          "deckPlaneY": -19.00468884673484,
+          "terrainY": -28.46702564755821,
+          "gap": 9.462336800823369
+        },
+        {
+          "distance": -0.6934141828594701,
+          "x": 69.09260521520174,
+          "z": 97.90407193300466,
+          "deckPlaneY": -18.990319688768857,
+          "terrainY": -28.45294538398877,
+          "gap": 9.462625695219913
+        },
+        {
+          "distance": -0.6724016318637285,
+          "x": 69.073540140811,
+          "z": 97.89523732843942,
+          "deckPlaneY": -18.975950530802873,
+          "terrainY": -28.438865120419415,
+          "gap": 9.462914589616542
+        },
+        {
+          "distance": -0.6513890808679871,
+          "x": 69.05447506642027,
+          "z": 97.88640272387418,
+          "deckPlaneY": -18.961581372836893,
+          "terrainY": -28.424784856849918,
+          "gap": 9.463203484013025
+        },
+        {
+          "distance": -0.6303765298722456,
+          "x": 69.03540999202951,
+          "z": 97.87756811930895,
+          "deckPlaneY": -18.94721221487091,
+          "terrainY": -28.410704593280478,
+          "gap": 9.463492378409569
+        },
+        {
+          "distance": -0.609363978876504,
+          "x": 69.01634491763878,
+          "z": 97.86873351474371,
+          "deckPlaneY": -18.93284305690493,
+          "terrainY": -28.396624329711038,
+          "gap": 9.46378127280611
+        },
+        {
+          "distance": -0.5883514278807624,
+          "x": 68.99727984324804,
+          "z": 97.85989891017847,
+          "deckPlaneY": -18.918473898938945,
+          "terrainY": -28.382544066141598,
+          "gap": 9.464070167202653
+        },
+        {
+          "distance": -0.5673388768850209,
+          "x": 68.9782147688573,
+          "z": 97.85106430561324,
+          "deckPlaneY": -18.90410474097296,
+          "terrainY": -28.368463802572272,
+          "gap": 9.46435906159931
+        },
+        {
+          "distance": -0.5463263258892794,
+          "x": 68.95914969446656,
+          "z": 97.842229701048,
+          "deckPlaneY": -18.88973558300698,
+          "terrainY": -28.354383539002832,
+          "gap": 9.46464795599585
+        },
+        {
+          "distance": -0.5253137748935379,
+          "x": 68.94008462007581,
+          "z": 97.83339509648275,
+          "deckPlaneY": -18.875366425040998,
+          "terrainY": -28.340303275433364,
+          "gap": 9.464936850392366
+        },
+        {
+          "distance": -0.5043012238977964,
+          "x": 68.92101954568507,
+          "z": 97.82456049191751,
+          "deckPlaneY": -18.860997267075014,
+          "terrainY": -28.32622301186398,
+          "gap": 9.465225744788967
+        },
+        {
+          "distance": -0.48328867290205485,
+          "x": 68.90195447129433,
+          "z": 97.81572588735227,
+          "deckPlaneY": -18.846628109109034,
+          "terrainY": -28.312142748294512,
+          "gap": 9.465514639185479
+        },
+        {
+          "distance": -0.4622761219063134,
+          "x": 68.88288939690358,
+          "z": 97.80689128278703,
+          "deckPlaneY": -18.83225895114305,
+          "terrainY": -28.298062484725072,
+          "gap": 9.465803533582022
+        },
+        {
+          "distance": -0.44126357091057183,
+          "x": 68.86382432251284,
+          "z": 97.7980566782218,
+          "deckPlaneY": -18.817889793177066,
+          "terrainY": -28.28398222115566,
+          "gap": 9.466092427978595
+        },
+        {
+          "distance": -0.4202510199148303,
+          "x": 68.8447592481221,
+          "z": 97.78922207365656,
+          "deckPlaneY": -18.803520635211086,
+          "terrainY": -28.269901957586193,
+          "gap": 9.466381322375106
+        },
+        {
+          "distance": -0.39923846891908876,
+          "x": 68.82569417373136,
+          "z": 97.78038746909132,
+          "deckPlaneY": -18.789151477245102,
+          "terrainY": -28.25582169401681,
+          "gap": 9.466670216771707
+        },
+        {
+          "distance": -0.3782259179233473,
+          "x": 68.80662909934063,
+          "z": 97.77155286452609,
+          "deckPlaneY": -18.774782319279122,
+          "terrainY": -28.241741430447284,
+          "gap": 9.466959111168162
+        },
+        {
+          "distance": -0.3572133669276058,
+          "x": 68.78756402494987,
+          "z": 97.76271825996085,
+          "deckPlaneY": -18.76041316131314,
+          "terrainY": -28.227661166877873,
+          "gap": 9.467248005564734
+        },
+        {
+          "distance": -0.33620081593186424,
+          "x": 68.76849895055913,
+          "z": 97.75388365539561,
+          "deckPlaneY": -18.746044003347155,
+          "terrainY": -28.213580903308518,
+          "gap": 9.467536899961363
+        },
+        {
+          "distance": -0.31518826493612273,
+          "x": 68.7494338761684,
+          "z": 97.74504905083037,
+          "deckPlaneY": -18.731674845381175,
+          "terrainY": -28.199500639739078,
+          "gap": 9.467825794357903
+        },
+        {
+          "distance": -0.29417571394038117,
+          "x": 68.73036880177764,
+          "z": 97.73621444626514,
+          "deckPlaneY": -18.71730568741519,
+          "terrainY": -28.185420376169667,
+          "gap": 9.468114688754476
+        },
+        {
+          "distance": -0.27316316294463966,
+          "x": 68.7113037273869,
+          "z": 97.7273798416999,
+          "deckPlaneY": -18.702936529449207,
+          "terrainY": -28.17134011260014,
+          "gap": 9.468403583150934
+        },
+        {
+          "distance": -0.25215061194889826,
+          "x": 68.69223865299617,
+          "z": 97.71854523713466,
+          "deckPlaneY": -18.688567371483227,
+          "terrainY": -28.157259849030815,
+          "gap": 9.468692477547588
+        },
+        {
+          "distance": -0.23113806095315673,
+          "x": 68.67317357860543,
+          "z": 97.70971063256943,
+          "deckPlaneY": -18.674198213517244,
+          "terrainY": -28.143179585461347,
+          "gap": 9.468981371944103
+        },
+        {
+          "distance": -0.2101255099574152,
+          "x": 68.65410850421469,
+          "z": 97.70087602800419,
+          "deckPlaneY": -18.65982905555126,
+          "terrainY": -28.129099321891964,
+          "gap": 9.469270266340704
+        },
+        {
+          "distance": -0.18911295896167366,
+          "x": 68.63504342982394,
+          "z": 97.69204142343895,
+          "deckPlaneY": -18.64545989758528,
+          "terrainY": -28.115019058322495,
+          "gap": 9.469559160737216
+        },
+        {
+          "distance": -0.16810040796593212,
+          "x": 68.6159783554332,
+          "z": 97.68320681887371,
+          "deckPlaneY": -18.631090739619296,
+          "terrainY": -28.100938794753056,
+          "gap": 9.46984805513376
+        },
+        {
+          "distance": -0.14708785697019058,
+          "x": 68.59691328104246,
+          "z": 97.67437221430848,
+          "deckPlaneY": -18.616721581653312,
+          "terrainY": -28.086858531183616,
+          "gap": 9.470136949530303
+        },
+        {
+          "distance": -0.12607530597444905,
+          "x": 68.57784820665171,
+          "z": 97.66553760974324,
+          "deckPlaneY": -18.602352423687332,
+          "terrainY": -28.072778267614233,
+          "gap": 9.4704258439269
+        },
+        {
+          "distance": -0.10506275497870753,
+          "x": 68.55878313226097,
+          "z": 97.656703005178,
+          "deckPlaneY": -18.58798326572135,
+          "terrainY": -28.058698004044793,
+          "gap": 9.470714738323444
+        },
+        {
+          "distance": -0.08405020398296614,
+          "x": 68.53971805787023,
+          "z": 97.64786840061277,
+          "deckPlaneY": -18.57361410775537,
+          "terrainY": -28.044617740475324,
+          "gap": 9.471003632719956
+        },
+        {
+          "distance": -0.06303765298722461,
+          "x": 68.5206529834795,
+          "z": 97.63903379604753,
+          "deckPlaneY": -18.559244949789385,
+          "terrainY": -28.03053747690594,
+          "gap": 9.471292527116557
+        },
+        {
+          "distance": -0.04202510199148307,
+          "x": 68.50158790908876,
+          "z": 97.63019919148229,
+          "deckPlaneY": -18.5448757918234,
+          "terrainY": -28.016457213336473,
+          "gap": 9.471581421513072
+        },
+        {
+          "distance": -0.021012550995741536,
+          "x": 68.482522834698,
+          "z": 97.62136458691705,
+          "deckPlaneY": -18.53050663385742,
+          "terrainY": -28.00237694976706,
+          "gap": 9.47187031590964
+        },
+        {
+          "distance": 0,
+          "x": 68.46345776030726,
+          "z": 97.61252998235182,
+          "deckPlaneY": -18.516137475891437,
+          "terrainY": -27.98829668619768,
+          "gap": 9.472159210306241
+        },
+        {
+          "distance": 0.021012550995741536,
+          "x": 68.44439268591653,
+          "z": 97.60369537778658,
+          "deckPlaneY": -18.501768317925453,
+          "terrainY": -27.97421642262818,
+          "gap": 9.472448104702728
+        },
+        {
+          "distance": 0.04202510199148307,
+          "x": 68.42532761152577,
+          "z": 97.59486077322134,
+          "deckPlaneY": -18.487399159959473,
+          "terrainY": -27.96013615905877,
+          "gap": 9.472736999099297
+        },
+        {
+          "distance": 0.06303765298722461,
+          "x": 68.40626253713504,
+          "z": 97.5860261686561,
+          "deckPlaneY": -18.47303000199349,
+          "terrainY": -27.94605589548933,
+          "gap": 9.47302589349584
+        },
+        {
+          "distance": 0.08405020398296614,
+          "x": 68.3871974627443,
+          "z": 97.57719156409087,
+          "deckPlaneY": -18.458660844027506,
+          "terrainY": -27.628310684507134,
+          "gap": 9.169649840479629
+        },
+        {
+          "distance": 0.10506275497870753,
+          "x": 68.36813238835356,
+          "z": 97.56835695952563,
+          "deckPlaneY": -18.444291686061526,
+          "terrainY": -27.291988773005635,
+          "gap": 8.847697086944109
+        },
+        {
+          "distance": 0.12607530597444905,
+          "x": 68.34906731396282,
+          "z": 97.5595223549604,
+          "deckPlaneY": -18.429922528095542,
+          "terrainY": -26.955666861504618,
+          "gap": 8.525744333409076
+        },
+        {
+          "distance": 0.14708785697019058,
+          "x": 68.33000223957207,
+          "z": 97.55068775039516,
+          "deckPlaneY": -18.41555337012956,
+          "terrainY": -26.619344950003203,
+          "gap": 8.203791579873641
+        },
+        {
+          "distance": 0.16810040796593212,
+          "x": 68.31093716518133,
+          "z": 97.54185314582992,
+          "deckPlaneY": -18.401184212163578,
+          "terrainY": -26.283023038502726,
+          "gap": 7.881838826339148
+        },
+        {
+          "distance": 0.18911295896167366,
+          "x": 68.29187209079059,
+          "z": 97.53301854126468,
+          "deckPlaneY": -18.386815054197594,
+          "terrainY": -25.94670112700117,
+          "gap": 7.559886072803575
+        },
+        {
+          "distance": 0.2101255099574152,
+          "x": 68.27280701639984,
+          "z": 97.52418393669944,
+          "deckPlaneY": -18.372445896231614,
+          "terrainY": -25.61037921550072,
+          "gap": 7.237933319269107
+        },
+        {
+          "distance": 0.23113806095315673,
+          "x": 68.2537419420091,
+          "z": 97.5153493321342,
+          "deckPlaneY": -18.35807673826563,
+          "terrainY": -25.274057303998738,
+          "gap": 6.915980565733108
+        },
+        {
+          "distance": 0.25215061194889826,
+          "x": 68.23467686761836,
+          "z": 97.50651472756897,
+          "deckPlaneY": -18.343707580299647,
+          "terrainY": -24.937735392498716,
+          "gap": 6.594027812199069
+        },
+        {
+          "distance": 0.27316316294463966,
+          "x": 68.21561179322762,
+          "z": 97.49768012300373,
+          "deckPlaneY": -18.329338422333667,
+          "terrainY": -24.6014134809977,
+          "gap": 6.272075058664033
+        },
+        {
+          "distance": 0.29417571394038117,
+          "x": 68.19654671883688,
+          "z": 97.4888455184385,
+          "deckPlaneY": -18.314969264367683,
+          "terrainY": -24.265091569496768,
+          "gap": 5.950122305129085
+        },
+        {
+          "distance": 0.31518826493612273,
+          "x": 68.17748164444613,
+          "z": 97.48001091387326,
+          "deckPlaneY": -18.3006001064017,
+          "terrainY": -23.92876965799527,
+          "gap": 5.628169551593572
+        },
+        {
+          "distance": 0.33620081593186424,
+          "x": 68.1584165700554,
+          "z": 97.47117630930802,
+          "deckPlaneY": -18.28623094843572,
+          "terrainY": -23.592447746494283,
+          "gap": 5.306216798058564
+        },
+        {
+          "distance": 0.35721336692760564,
+          "x": 68.13935149566466,
+          "z": 97.46234170474278,
+          "deckPlaneY": -18.271861790469735,
+          "terrainY": -23.256125834993323,
+          "gap": 4.984264044523588
+        },
+        {
+          "distance": 0.3782259179233473,
+          "x": 68.1202864212739,
+          "z": 97.45350710017755,
+          "deckPlaneY": -18.25749263250375,
+          "terrainY": -22.919803923491795,
+          "gap": 4.662311290988043
+        },
+        {
+          "distance": 0.3992384689190887,
+          "x": 68.10122134688316,
+          "z": 97.44467249561231,
+          "deckPlaneY": -18.24312347453777,
+          "terrainY": -22.583482011991318,
+          "gap": 4.340358537453547
+        },
+        {
+          "distance": 0.4202510199148304,
+          "x": 68.08215627249243,
+          "z": 97.43583789104707,
+          "deckPlaneY": -18.228754316571788,
+          "terrainY": -22.24716010049033,
+          "gap": 4.018405783918542
+        },
+        {
+          "distance": 0.4412635709105718,
+          "x": 68.06309119810169,
+          "z": 97.42700328648183,
+          "deckPlaneY": -18.214385158605808,
+          "terrainY": -21.910838188989853,
+          "gap": 3.6964530303840455
+        },
+        {
+          "distance": 0.46227612190631345,
+          "x": 68.04402612371094,
+          "z": 97.4181686819166,
+          "deckPlaneY": -18.200016000639824,
+          "terrainY": -21.57451627748784,
+          "gap": 3.3745002768480177
+        },
+        {
+          "distance": 0.48328867290205485,
+          "x": 68.0249610493202,
+          "z": 97.40933407735136,
+          "deckPlaneY": -18.18564684267384,
+          "terrainY": -21.23819436598694,
+          "gap": 3.0525475233130983
+        },
+        {
+          "distance": 0.5043012238977965,
+          "x": 68.00589597492946,
+          "z": 97.40049947278612,
+          "deckPlaneY": -18.17127768470786,
+          "terrainY": -20.901872454486433,
+          "gap": 2.7305947697785733
+        },
+        {
+          "distance": 0.5253137748935379,
+          "x": 67.98683090053872,
+          "z": 97.39166486822089,
+          "deckPlaneY": -18.156908526741876,
+          "terrainY": -20.56555054298499,
+          "gap": 2.408642016243114
+        },
+        {
+          "distance": 0.5463263258892793,
+          "x": 67.96776582614798,
+          "z": 97.38283026365563,
+          "deckPlaneY": -18.142539368775893,
+          "terrainY": -20.229228631483945,
+          "gap": 2.0866892627080524
+        },
+        {
+          "distance": 0.5673388768850209,
+          "x": 67.94870075175723,
+          "z": 97.3739956590904,
+          "deckPlaneY": -18.128170210809913,
+          "terrainY": -19.892906719982445,
+          "gap": 1.7647365091725327
+        },
+        {
+          "distance": 0.5883514278807623,
+          "x": 67.92963567736649,
+          "z": 97.36516105452516,
+          "deckPlaneY": -18.11380105284393,
+          "terrainY": -19.5565848084814,
+          "gap": 1.4427837556374712
+        },
+        {
+          "distance": 0.6093639788765041,
+          "x": 67.91057060297575,
+          "z": 97.35632644995992,
+          "deckPlaneY": -18.099431894877945,
+          "terrainY": -19.22026289698047,
+          "gap": 1.1208310021025234
+        },
+        {
+          "distance": 0.6303765298722455,
+          "x": 67.89150552858501,
+          "z": 97.34749184539469,
+          "deckPlaneY": -18.085062736911965,
+          "terrainY": -18.883940985479963,
+          "gap": 0.7988782485679984
+        },
+        {
+          "distance": 0.6513890808679871,
+          "x": 67.87244045419426,
+          "z": 97.33865724082945,
+          "deckPlaneY": -18.07069357894598,
+          "terrainY": -18.547619073978492,
+          "gap": 0.4769254950325106
+        },
+        {
+          "distance": 0.6724016318637285,
+          "x": 67.85337537980352,
+          "z": 97.32982263626421,
+          "deckPlaneY": -18.05632442098,
+          "terrainY": -18.211297162477532,
+          "gap": 0.15497274149753082
+        },
+        {
+          "distance": 0.6934141828594702,
+          "x": 67.83431030541279,
+          "z": 97.32098803169897,
+          "deckPlaneY": -18.041955263014017,
+          "terrainY": -17.8749752509766,
+          "gap": -0.16698001203741697
+        },
+        {
+          "distance": 0.7144267338552116,
+          "x": 67.81524523102203,
+          "z": 97.31215342713374,
+          "deckPlaneY": -18.027586105048034,
+          "terrainY": -17.538653339476067,
+          "gap": -0.48893276557196685
+        },
+        {
+          "distance": 0.735439284850953,
+          "x": 67.7961801566313,
+          "z": 97.3033188225685,
+          "deckPlaneY": -18.013216947082054,
+          "terrainY": -17.202331427974567,
+          "gap": -0.8108855191074866
+        },
+        {
+          "distance": 0.7564518358466946,
+          "x": 67.77711508224056,
+          "z": 97.29448421800326,
+          "deckPlaneY": -17.99884778911607,
+          "terrainY": -16.866009516473124,
+          "gap": -1.132838272642946
+        },
+        {
+          "distance": 0.777464386842436,
+          "x": 67.75805000784982,
+          "z": 97.28564961343803,
+          "deckPlaneY": -17.984478631150086,
+          "terrainY": -16.529687604972562,
+          "gap": -1.4547910261775243
+        },
+        {
+          "distance": 0.7984769378381777,
+          "x": 67.73898493345907,
+          "z": 97.27681500887279,
+          "deckPlaneY": -17.970109473184106,
+          "terrainY": -16.193365693471574,
+          "gap": -1.7767437797125325
+        },
+        {
+          "distance": 0.8194894888339191,
+          "x": 67.71991985906833,
+          "z": 97.26798040430755,
+          "deckPlaneY": -17.955740315218122,
+          "terrainY": -15.857043781970074,
+          "gap": -2.0986965332480487
+        },
+        {
+          "distance": 0.8405020398296608,
+          "x": 67.70085478467759,
+          "z": 97.25914579974231,
+          "deckPlaneY": -17.94137115725214,
+          "terrainY": -15.52072187046917,
+          "gap": -2.420649286782968
+        },
+        {
+          "distance": 0.8615145908254022,
+          "x": 67.68178971028685,
+          "z": 97.25031119517708,
+          "deckPlaneY": -17.92700199928616,
+          "terrainY": -15.184399958968154,
+          "gap": -2.7426020403180047
+        },
+        {
+          "distance": 0.8825271418211436,
+          "x": 67.66272463589611,
+          "z": 97.24147659061184,
+          "deckPlaneY": -17.912632841320175,
+          "terrainY": -14.848078047467165,
+          "gap": -3.0645547938530093
+        },
+        {
+          "distance": 0.9035396928168853,
+          "x": 67.64365956150536,
+          "z": 97.2326419860466,
+          "deckPlaneY": -17.89826368335419,
+          "terrainY": -14.511756135966177,
+          "gap": -3.386507547388014
+        },
+        {
+          "distance": 0.9245522438126267,
+          "x": 67.62459448711462,
+          "z": 97.22380738148136,
+          "deckPlaneY": -17.88389452538821,
+          "terrainY": -14.175434224465189,
+          "gap": -3.708460300923022
+        },
+        {
+          "distance": 0.9455647948083683,
+          "x": 67.60552941272388,
+          "z": 97.21497277691613,
+          "deckPlaneY": -17.869525367422227,
+          "terrainY": -13.839112312963689,
+          "gap": -4.030413054458538
+        },
+        {
+          "distance": 0.9665773458041097,
+          "x": 67.58646433833314,
+          "z": 97.20613817235089,
+          "deckPlaneY": -17.855156209456247,
+          "terrainY": -13.5027904014627,
+          "gap": -4.3523658079935466
+        },
+        {
+          "distance": 0.9875898967998514,
+          "x": 67.56739926394239,
+          "z": 97.19730356778565,
+          "deckPlaneY": -17.840787051490263,
+          "terrainY": -13.166468489962195,
+          "gap": -4.674318561528068
+        },
+        {
+          "distance": 1.0086024477955928,
+          "x": 67.54833418955165,
+          "z": 97.18846896322042,
+          "deckPlaneY": -17.82641789352428,
+          "terrainY": -12.830146578461235,
+          "gap": -4.996271315063044
+        },
+        {
+          "distance": 1.0296149987913346,
+          "x": 67.52926911516091,
+          "z": 97.17963435865518,
+          "deckPlaneY": -17.8120487355583,
+          "terrainY": -12.493824666960275,
+          "gap": -5.318224068598024
+        },
+        {
+          "distance": 1.0506275497870758,
+          "x": 67.51020404077016,
+          "z": 97.17079975408994,
+          "deckPlaneY": -17.797679577592316,
+          "terrainY": -12.15750275545832,
+          "gap": -5.640176822133995
+        }
+      ]
+    }
+  ]
+}

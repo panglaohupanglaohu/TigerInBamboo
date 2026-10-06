@@ -1,0 +1,4222 @@
+{
+  "kind": "read-only-candidate-construction-statistics",
+  "gpuMeasurement": false,
+  "sourceHashBefore": {
+    "src/world/citadel/targetOldCity.js": "8d73ceeb2d287eac0252ec24e503d95e8dd62c3414cbf1c03353cfda50af2fe8",
+    "src/world/citadel/targetNewCityMain.js": "ff6570925c510035519b00f76406987272283386c03770b4182859e8a811f022",
+    "src/world/citadel/targetNewCityStairs.js": "275a998d58c01d9d28a7b82945eee77cc34b4554ebc9eb410508b1133cc5c9ef",
+    "src/world/citadel/targetCityDetailCandidate.js": "64d6f0f57aeb5057530eb34fe8384be4802b4de238971ea810ea360cb7c7440a",
+    "src/world/citadel/targetCliffTransitStructure.js": "7943d935f62953e4979ff2d5852ed09fa9737e8b91e4e594f99b0847b1b60471",
+    "src/world/citadel/targetCliffRailGallery.js": "df478f845fa029f6a5aea1aaf021cb3262e7ae51b686b4a630308eded093acec",
+    "src/world/citadel/targetDoubleDeckBridge.js": "5f7d018460f73454c83e751cd92cc6c7de44c768a60151a717ad152ddbb17e95",
+    "src/world/citadel/targetCityEntityEditor.js": "b182ab802aff30a3a8c44c7eb12144759af4f1bbdfb41f715546c2f39f6e00a3",
+    "src/world/citadel/targetCityPlayerSupport.js": "2337f80323bb49e2be20ee0714045ec0a5ff0de3dbfa896b61e6f7d558af85de"
+  },
+  "sourceHashAfter": {
+    "src/world/citadel/targetOldCity.js": "8d73ceeb2d287eac0252ec24e503d95e8dd62c3414cbf1c03353cfda50af2fe8",
+    "src/world/citadel/targetNewCityMain.js": "ff6570925c510035519b00f76406987272283386c03770b4182859e8a811f022",
+    "src/world/citadel/targetNewCityStairs.js": "275a998d58c01d9d28a7b82945eee77cc34b4554ebc9eb410508b1133cc5c9ef",
+    "src/world/citadel/targetCityDetailCandidate.js": "64d6f0f57aeb5057530eb34fe8384be4802b4de238971ea810ea360cb7c7440a",
+    "src/world/citadel/targetCliffTransitStructure.js": "7943d935f62953e4979ff2d5852ed09fa9737e8b91e4e594f99b0847b1b60471",
+    "src/world/citadel/targetCliffRailGallery.js": "df478f845fa029f6a5aea1aaf021cb3262e7ae51b686b4a630308eded093acec",
+    "src/world/citadel/targetDoubleDeckBridge.js": "5f7d018460f73454c83e751cd92cc6c7de44c768a60151a717ad152ddbb17e95",
+    "src/world/citadel/targetCityEntityEditor.js": "b182ab802aff30a3a8c44c7eb12144759af4f1bbdfb41f715546c2f39f6e00a3",
+    "src/world/citadel/targetCityPlayerSupport.js": "2337f80323bb49e2be20ee0714045ec0a5ff0de3dbfa896b61e6f7d558af85de"
+  },
+  "sameSourceDuringRun": true,
+  "options": {
+    "includeFrontRail": false,
+    "newCityStreetInfill": true,
+    "newCityFoundationRefinement": true,
+    "cliffTransit": "user-marked stacked-connected",
+    "oldShorePierWidth": 0.9,
+    "newCityTransitLinks": true,
+    "fitSunShadow": false
+  },
+  "versions": {
+    "oldCity": "target-old-city-11-three-street-clusters",
+    "main": "target-new-city-main-v3-expanded",
+    "stairs": "target-new-city-stairs-7-foundation-refinement",
+    "cliffTransit": "target-cliff-transit-structure-4"
+  },
+  "assets": {
+    "old-city": {
+      "meshObjects": 274,
+      "ancestorVisibleObjects": 274,
+      "usedMaterialObjects": 9,
+      "usedGeometryObjects": 274,
+      "geometryGroupCount": 1054,
+      "unculledSingleColourPassSubmissionUnits": 274,
+      "baseGeometryTriangles": 24628,
+      "instanceExpandedTriangles": 25828,
+      "instancedMeshes": [
+        {
+          "name": "house-0--1-1-terrace-balusters",
+          "count": 28,
+          "baseTriangles": 12
+        },
+        {
+          "name": "house-1--1-2-terrace-balusters",
+          "count": 24,
+          "baseTriangles": 12
+        },
+        {
+          "name": "house-1-1-1-terrace-balusters",
+          "count": 28,
+          "baseTriangles": 12
+        },
+        {
+          "name": "house-2--1-0-terrace-balusters",
+          "count": 24,
+          "baseTriangles": 12
+        }
+      ],
+      "knownBatchNameMeshCount": 38,
+      "knownBatchNames": [
+        "house-0--1-0-windows-glass",
+        "house-0--1-0-windows-trim",
+        "house-0--1-1-windows-glass",
+        "house-0--1-1-windows-trim",
+        "house-0--1-2-windows-glass",
+        "house-0--1-2-windows-trim",
+        "house-0-1-0-windows-glass",
+        "house-0-1-0-windows-trim",
+        "house-0-1-1-windows-glass",
+        "house-0-1-1-windows-trim",
+        "house-0-1-2-windows-glass",
+        "house-0-1-2-windows-trim",
+        "house-1--1-0-windows-glass",
+        "house-1--1-0-windows-trim",
+        "house-1--1-1-windows-glass",
+        "house-1--1-1-windows-trim",
+        "house-1--1-2-windows-glass",
+        "house-1--1-2-windows-trim",
+        "house-1-1-0-windows-glass",
+        "house-1-1-0-windows-trim",
+        "house-1-1-1-windows-glass",
+        "house-1-1-1-windows-trim",
+        "house-1-1-2-windows-glass",
+        "house-1-1-2-windows-trim",
+        "house-2--1-0-windows-glass",
+        "house-2--1-0-windows-trim",
+        "house-2--1-1-windows-glass",
+        "house-2--1-1-windows-trim",
+        "house-2-1-0-windows-glass",
+        "house-2-1-0-windows-trim",
+        "old-city-upper-left-street-infill-infill-yellow",
+        "old-city-upper-left-street-infill-infill-roof",
+        "old-city-upper-left-street-infill-infill-roofLight",
+        "old-city-upper-left-street-infill-infill-trim",
+        "old-city-upper-left-street-infill-infill-glass",
+        "old-city-upper-left-street-infill-infill-teal",
+        "tower-window-panes-batched",
+        "tower-window-reveals-batched"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 119,
+          "triangles": 11040
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 55,
+          "triangles": 11124
+        },
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 47,
+          "triangles": 632
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 18,
+          "triangles": 868
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 17,
+          "triangles": 1536
+        },
+        {
+          "name": "target-old-city-yellow",
+          "objects": 1,
+          "meshes": 7,
+          "triangles": 208
+        },
+        {
+          "name": "target-old-city-pink",
+          "objects": 1,
+          "meshes": 5,
+          "triangles": 140
+        },
+        {
+          "name": "target-old-city-teal",
+          "objects": 1,
+          "meshes": 4,
+          "triangles": 168
+        },
+        {
+          "name": "target-old-city-blue",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 112
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 179,
+        "after": 26,
+        "saving": 153,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 40,
+            "triangles": 2044,
+            "names": [
+              "terrace-0--1",
+              "terrace-0-1",
+              "terrace-1--1-deck",
+              "terrace-1--1-arcade-0",
+              "terrace-1--1-arcade-1",
+              "terrace-1--1-arcade-2",
+              "terrace-1--1-rear",
+              "terrace-1-1-deck",
+              "terrace-1-1-arcade-0",
+              "terrace-1-1-arcade-1",
+              "terrace-1-1-arcade-2",
+              "terrace-1-1-rear",
+              "terrace-2--1-deck",
+              "terrace-2--1-arcade-0",
+              "terrace-2--1-arcade-1",
+              "terrace-2--1-arcade-2",
+              "terrace-2--1-rear",
+              "terrace-2-1-deck",
+              "terrace-2-1-arcade-0",
+              "terrace-2-1-arcade-1",
+              "terrace-2-1-arcade-2",
+              "terrace-2-1-rear",
+              "house-0--1-1--house-0--1-0-shared-floor",
+              "house-0--1-2--house-0--1-1-shared-floor",
+              "house-0-1-0--house-0-1-1-shared-floor",
+              "house-0-1-1--house-0-1-2-shared-floor",
+              "house-1--1-1--house-1--1-0-shared-floor",
+              "house-1--1-2--house-1--1-1-shared-floor",
+              "house-1-1-0--house-1-1-1-shared-floor",
+              "house-1-1-1--house-1-1-2-shared-floor",
+              "old-city-front-open-gate",
+              "tower-base-band",
+              "tower-belt",
+              "tower-belt",
+              "tower-belt",
+              "tower-clockroom-floor",
+              "tower-bell-front",
+              "tower-bell-back",
+              "tower-bell-side--1",
+              "tower-bell-side-1"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0--1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0--1-0-drip-edge",
+              "house-0--1-0-roof-eaves",
+              "house-0--1-0-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 59,
+            "triangles": 708,
+            "names": [
+              "house-0--1-0-base",
+              "house-0--1-1-base",
+              "house-0--1-2-base",
+              "house-0-1-0-base",
+              "house-0-1-1-base",
+              "house-0-1-2-base",
+              "house-1--1-0-base",
+              "house-1--1-1-base",
+              "house-1--1-2-base",
+              "house-1-1-0-base",
+              "house-1-1-1-base",
+              "house-1-1-2-base",
+              "house-2--1-0-base",
+              "house-2--1-1-base",
+              "house-2-1-0-base",
+              "gate-approach",
+              "central-step-0",
+              "central-step-1",
+              "central-step-2",
+              "central-step-3",
+              "central-step-4",
+              "central-step-5",
+              "central-step-6",
+              "central-step-7",
+              "central-step-8",
+              "central-step-9",
+              "central-step-10",
+              "central-step-11",
+              "central-step-12",
+              "central-step-13",
+              "central-step-14",
+              "central-step-15",
+              "central-step-16",
+              "central-step-17",
+              "central-step-18",
+              "central-step-19",
+              "central-step-20",
+              "central-step-21",
+              "central-step-22",
+              "central-step-23",
+              "central-step-24",
+              "central-step-25",
+              "central-step-26",
+              "central-step-27",
+              "central-step-28",
+              "central-step-29",
+              "central-step-30",
+              "central-step-31",
+              "central-step-32",
+              "central-step-33",
+              "central-step-34",
+              "central-step-35",
+              "central-step-36",
+              "central-step-37",
+              "central-step-38",
+              "central-step-39",
+              "upper-street-landing",
+              "tower-shaft",
+              "tower-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-trim",
+            "entity": "house-0--1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 84,
+            "names": [
+              "house-0--1-1-cornice",
+              "house-0--1-1-terrace-deck",
+              "house-0--1-1-terrace-handrail",
+              "house-0--1-1-terrace-handrail",
+              "house-0--1-1-terrace-handrail",
+              "house-0--1-1-terrace-handrail",
+              "house-0--1-1-upper-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0--1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0--1-1-drip-edge",
+              "house-0--1-1-roof-eaves",
+              "house-0--1-1-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0--1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0--1-2-drip-edge",
+              "house-0--1-2-roof-eaves",
+              "house-0--1-2-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0-1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0-1-0-drip-edge",
+              "house-0-1-0-roof-eaves",
+              "house-0-1-0-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0-1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 24,
+            "names": [
+              "house-0-1-1-roof-eaves",
+              "house-0-1-1-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0-1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0-1-2-drip-edge",
+              "house-0-1-2-roof-eaves",
+              "house-0-1-2-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1--1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1--1-0-drip-edge",
+              "house-1--1-0-roof-eaves",
+              "house-1--1-0-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1--1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 24,
+            "names": [
+              "house-1--1-1-roof-eaves",
+              "house-1--1-1-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-trim",
+            "entity": "house-1--1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 84,
+            "names": [
+              "house-1--1-2-cornice",
+              "house-1--1-2-terrace-deck",
+              "house-1--1-2-terrace-handrail",
+              "house-1--1-2-terrace-handrail",
+              "house-1--1-2-terrace-handrail",
+              "house-1--1-2-terrace-handrail",
+              "house-1--1-2-upper-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1--1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1--1-2-drip-edge",
+              "house-1--1-2-roof-eaves",
+              "house-1--1-2-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1-1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1-1-0-drip-edge",
+              "house-1-1-0-roof-eaves",
+              "house-1-1-0-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-trim",
+            "entity": "house-1-1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 84,
+            "names": [
+              "house-1-1-1-cornice",
+              "house-1-1-1-terrace-deck",
+              "house-1-1-1-terrace-handrail",
+              "house-1-1-1-terrace-handrail",
+              "house-1-1-1-terrace-handrail",
+              "house-1-1-1-terrace-handrail",
+              "house-1-1-1-upper-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1-1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1-1-1-drip-edge",
+              "house-1-1-1-roof-eaves",
+              "house-1-1-1-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1-1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1-1-2-drip-edge",
+              "house-1-1-2-roof-eaves",
+              "house-1-1-2-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-stone",
+            "entity": "house-2--1-0",
+            "targetWall": true,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 56,
+            "names": [
+              "house-2--1-0-walls",
+              "house-2--1-0-cupola-tower-walls"
+            ]
+          },
+          {
+            "material": "target-old-city-trim",
+            "entity": "house-2--1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 84,
+            "names": [
+              "house-2--1-0-cornice",
+              "house-2--1-0-terrace-deck",
+              "house-2--1-0-terrace-handrail",
+              "house-2--1-0-terrace-handrail",
+              "house-2--1-0-terrace-handrail",
+              "house-2--1-0-terrace-handrail",
+              "house-2--1-0-upper-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-2--1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 28,
+            "names": [
+              "house-2--1-0-drip-edge",
+              "house-2--1-0-cupola-finial"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-2--1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-2--1-1-drip-edge",
+              "house-2--1-1-roof-eaves",
+              "house-2--1-1-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-2-1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-2-1-0-drip-edge",
+              "house-2-1-0-roof-eaves",
+              "house-2-1-0-ridge"
+            ]
+          },
+          {
+            "material": "target-old-city-roof",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 24,
+            "names": [
+              "old-city-upper-left-street-infill-infill-roof",
+              "old-city-gate-roof"
+            ]
+          },
+          {
+            "material": "target-old-city-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 1176,
+            "names": [
+              "old-city-upper-left-street-infill-infill-trim",
+              "tower-window-reveals-batched"
+            ]
+          },
+          {
+            "material": "target-old-city-glass",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 288,
+            "names": [
+              "old-city-upper-left-street-infill-infill-glass",
+              "tower-window-panes-batched"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 28,
+            "names": [
+              "old-city-gate-roof-eaves",
+              "tower-finial"
+            ]
+          }
+        ]
+      }
+    },
+    "new-city-main": {
+      "meshObjects": 317,
+      "ancestorVisibleObjects": 317,
+      "usedMaterialObjects": 13,
+      "usedGeometryObjects": 317,
+      "geometryGroupCount": 2,
+      "unculledSingleColourPassSubmissionUnits": 317,
+      "baseGeometryTriangles": 13338,
+      "instanceExpandedTriangles": 13338,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 0,
+      "knownBatchNames": [],
+      "materials": [
+        {
+          "name": "target-new-city-window",
+          "objects": 1,
+          "meshes": 170,
+          "triangles": 4760
+        },
+        {
+          "name": "target-new-city-trim",
+          "objects": 1,
+          "meshes": 50,
+          "triangles": 2214
+        },
+        {
+          "name": "target-new-city-glass",
+          "objects": 1,
+          "meshes": 34,
+          "triangles": 68
+        },
+        {
+          "name": "target-new-city-rib",
+          "objects": 1,
+          "meshes": 16,
+          "triangles": 2816
+        },
+        {
+          "name": "target-new-city-roofLight",
+          "objects": 1,
+          "meshes": 10,
+          "triangles": 280
+        },
+        {
+          "name": "target-new-city-stone",
+          "objects": 1,
+          "meshes": 8,
+          "triangles": 396
+        },
+        {
+          "name": "target-new-city-dome",
+          "objects": 1,
+          "meshes": 8,
+          "triangles": 864
+        },
+        {
+          "name": "target-new-city-roof",
+          "objects": 1,
+          "meshes": 7,
+          "triangles": 800
+        },
+        {
+          "name": "target-new-city-domeLight",
+          "objects": 1,
+          "meshes": 4,
+          "triangles": 432
+        },
+        {
+          "name": "target-new-city-domeShade",
+          "objects": 1,
+          "meshes": 4,
+          "triangles": 432
+        },
+        {
+          "name": "target-new-city-gold",
+          "objects": 1,
+          "meshes": 4,
+          "triangles": 220
+        },
+        {
+          "name": "target-new-city-blue",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-new-city-blueShade",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 315,
+        "after": 12,
+        "saving": 303,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-new-city-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 50,
+            "triangles": 2214,
+            "names": [
+              "main-hall-floor",
+              "entrance-stair-0",
+              "entrance-stair-1",
+              "entrance-stair-2",
+              "entrance-stair-3",
+              "entrance-landing",
+              "main-hall-front-cornice",
+              "entry-arch-stone-0",
+              "entry-arch-stone-1",
+              "entry-arch-stone-2",
+              "entry-arch-stone-3",
+              "entry-arch-stone-4",
+              "entry-arch-stone-5",
+              "entry-arch-stone-6",
+              "entry-arch-stone-7",
+              "entry-arch-stone-8",
+              "entry-arch-stone-9",
+              "entry-arch-stone-10",
+              "entry-arch-stone-11",
+              "entry-arch-stone-12",
+              "entry-arch-stone-13",
+              "entry-arch-stone-14",
+              "entry-arch-stone-15",
+              "entry-arch-stone-16",
+              "entry-arch-pier",
+              "entry-arch-pier",
+              "facade-corner-pilaster",
+              "facade-quoin",
+              "facade-quoin",
+              "facade-quoin",
+              "facade-quoin",
+              "facade-corner-pilaster",
+              "facade-quoin",
+              "facade-quoin",
+              "facade-quoin",
+              "facade-quoin",
+              "main-entry-upper-stringcourse",
+              "dome-drum-upper-cornice",
+              "dome-drum-lower-belt",
+              "blue-tower-base--1",
+              "blue-tower-upper-cornice--1",
+              "cream-wing-base--1",
+              "cream-wing-upper-cornice--1",
+              "rear-lantern--1",
+              "blue-tower-base-1",
+              "blue-tower-upper-cornice-1",
+              "cream-wing-base-1",
+              "cream-wing-upper-cornice-1",
+              "rear-lantern-1",
+              "entrance-landing-surveyed-joint"
+            ]
+          },
+          {
+            "material": "target-new-city-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 8,
+            "triangles": 396,
+            "names": [
+              "main-entry-real-arch",
+              "main-hall-rear-real-arch",
+              "main-hall-side-wall",
+              "main-hall-side-wall",
+              "main-hall-ceiling",
+              "dome-drum",
+              "cream-wing--1",
+              "cream-wing-1"
+            ]
+          },
+          {
+            "material": "target-new-city-roof",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 5,
+            "triangles": 40,
+            "names": [
+              "main-hall-orange-frieze",
+              "blue-tower-roof--1",
+              "cream-wing-roof--1",
+              "blue-tower-roof-1",
+              "cream-wing-roof-1"
+            ]
+          },
+          {
+            "material": "target-new-city-roofLight",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 280,
+            "names": [
+              "main-hall-orange-frieze-eave",
+              "main-hall-orange-frieze-ridge",
+              "blue-tower-roof--1-eave",
+              "blue-tower-roof--1-ridge",
+              "cream-wing-roof--1-eave",
+              "cream-wing-roof--1-ridge",
+              "blue-tower-roof-1-eave",
+              "blue-tower-roof-1-ridge",
+              "cream-wing-roof-1-eave",
+              "cream-wing-roof-1-ridge"
+            ]
+          },
+          {
+            "material": "target-new-city-window",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 170,
+            "triangles": 4760,
+            "names": [
+              "drum-window-0-left",
+              "drum-window-0-right",
+              "drum-window-0-top",
+              "drum-window-0-sill",
+              "drum-window-0-mullion",
+              "drum-window-1-left",
+              "drum-window-1-right",
+              "drum-window-1-top",
+              "drum-window-1-sill",
+              "drum-window-1-mullion",
+              "drum-window-2-left",
+              "drum-window-2-right",
+              "drum-window-2-top",
+              "drum-window-2-sill",
+              "drum-window-2-mullion",
+              "drum-window-3-left",
+              "drum-window-3-right",
+              "drum-window-3-top",
+              "drum-window-3-sill",
+              "drum-window-3-mullion",
+              "drum-window-4-left",
+              "drum-window-4-right",
+              "drum-window-4-top",
+              "drum-window-4-sill",
+              "drum-window-4-mullion",
+              "drum-window-5-left",
+              "drum-window-5-right",
+              "drum-window-5-top",
+              "drum-window-5-sill",
+              "drum-window-5-mullion",
+              "drum-window-6-left",
+              "drum-window-6-right",
+              "drum-window-6-top",
+              "drum-window-6-sill",
+              "drum-window-6-mullion",
+              "drum-window-7-left",
+              "drum-window-7-right",
+              "drum-window-7-top",
+              "drum-window-7-sill",
+              "drum-window-7-mullion",
+              "drum-window-8-left",
+              "drum-window-8-right",
+              "drum-window-8-top",
+              "drum-window-8-sill",
+              "drum-window-8-mullion",
+              "drum-window-9-left",
+              "drum-window-9-right",
+              "drum-window-9-top",
+              "drum-window-9-sill",
+              "drum-window-9-mullion",
+              "drum-window-10-left",
+              "drum-window-10-right",
+              "drum-window-10-top",
+              "drum-window-10-sill",
+              "drum-window-10-mullion",
+              "drum-window-11-left",
+              "drum-window-11-right",
+              "drum-window-11-top",
+              "drum-window-11-sill",
+              "drum-window-11-mullion",
+              "blue-front--1-4.2-left",
+              "blue-front--1-4.2-right",
+              "blue-front--1-4.2-top",
+              "blue-front--1-4.2-sill",
+              "blue-front--1-4.2-mullion",
+              "blue-side--1-4.2-left",
+              "blue-side--1-4.2-right",
+              "blue-side--1-4.2-top",
+              "blue-side--1-4.2-sill",
+              "blue-side--1-4.2-mullion",
+              "blue-front--1-7.4-left",
+              "blue-front--1-7.4-right",
+              "blue-front--1-7.4-top",
+              "blue-front--1-7.4-sill",
+              "blue-front--1-7.4-mullion",
+              "blue-side--1-7.4-left",
+              "blue-side--1-7.4-right",
+              "blue-side--1-7.4-top",
+              "blue-side--1-7.4-sill",
+              "blue-side--1-7.4-mullion",
+              "blue-front--1-10.65-left",
+              "blue-front--1-10.65-right",
+              "blue-front--1-10.65-top",
+              "blue-front--1-10.65-sill",
+              "blue-front--1-10.65-mullion",
+              "blue-side--1-10.65-left",
+              "blue-side--1-10.65-right",
+              "blue-side--1-10.65-top",
+              "blue-side--1-10.65-sill",
+              "blue-side--1-10.65-mullion",
+              "wing-front--1-3.5-left",
+              "wing-front--1-3.5-right",
+              "wing-front--1-3.5-top",
+              "wing-front--1-3.5-sill",
+              "wing-front--1-3.5-mullion",
+              "wing-side--1-3.5-left",
+              "wing-side--1-3.5-right",
+              "wing-side--1-3.5-top",
+              "wing-side--1-3.5-sill",
+              "wing-side--1-3.5-mullion",
+              "wing-front--1-6.7-left",
+              "wing-front--1-6.7-right",
+              "wing-front--1-6.7-top",
+              "wing-front--1-6.7-sill",
+              "wing-front--1-6.7-mullion",
+              "wing-side--1-6.7-left",
+              "wing-side--1-6.7-right",
+              "wing-side--1-6.7-top",
+              "wing-side--1-6.7-sill",
+              "wing-side--1-6.7-mullion",
+              "rear-lantern-window--1-left",
+              "rear-lantern-window--1-right",
+              "rear-lantern-window--1-top",
+              "rear-lantern-window--1-sill",
+              "rear-lantern-window--1-mullion",
+              "blue-front-1-4.2-left",
+              "blue-front-1-4.2-right",
+              "blue-front-1-4.2-top",
+              "blue-front-1-4.2-sill",
+              "blue-front-1-4.2-mullion",
+              "blue-side-1-4.2-left",
+              "blue-side-1-4.2-right",
+              "blue-side-1-4.2-top",
+              "blue-side-1-4.2-sill",
+              "blue-side-1-4.2-mullion",
+              "blue-front-1-7.4-left",
+              "blue-front-1-7.4-right",
+              "blue-front-1-7.4-top",
+              "blue-front-1-7.4-sill",
+              "blue-front-1-7.4-mullion",
+              "blue-side-1-7.4-left",
+              "blue-side-1-7.4-right",
+              "blue-side-1-7.4-top",
+              "blue-side-1-7.4-sill",
+              "blue-side-1-7.4-mullion",
+              "blue-front-1-10.65-left",
+              "blue-front-1-10.65-right",
+              "blue-front-1-10.65-top",
+              "blue-front-1-10.65-sill",
+              "blue-front-1-10.65-mullion",
+              "blue-side-1-10.65-left",
+              "blue-side-1-10.65-right",
+              "blue-side-1-10.65-top",
+              "blue-side-1-10.65-sill",
+              "blue-side-1-10.65-mullion",
+              "wing-front-1-3.5-left",
+              "wing-front-1-3.5-right",
+              "wing-front-1-3.5-top",
+              "wing-front-1-3.5-sill",
+              "wing-front-1-3.5-mullion",
+              "wing-side-1-3.5-left",
+              "wing-side-1-3.5-right",
+              "wing-side-1-3.5-top",
+              "wing-side-1-3.5-sill",
+              "wing-side-1-3.5-mullion",
+              "wing-front-1-6.7-left",
+              "wing-front-1-6.7-right",
+              "wing-front-1-6.7-top",
+              "wing-front-1-6.7-sill",
+              "wing-front-1-6.7-mullion",
+              "wing-side-1-6.7-left",
+              "wing-side-1-6.7-right",
+              "wing-side-1-6.7-top",
+              "wing-side-1-6.7-sill",
+              "wing-side-1-6.7-mullion",
+              "rear-lantern-window-1-left",
+              "rear-lantern-window-1-right",
+              "rear-lantern-window-1-top",
+              "rear-lantern-window-1-sill",
+              "rear-lantern-window-1-mullion"
+            ]
+          },
+          {
+            "material": "target-new-city-glass",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 34,
+            "triangles": 68,
+            "names": [
+              "drum-window-0-recess",
+              "drum-window-1-recess",
+              "drum-window-2-recess",
+              "drum-window-3-recess",
+              "drum-window-4-recess",
+              "drum-window-5-recess",
+              "drum-window-6-recess",
+              "drum-window-7-recess",
+              "drum-window-8-recess",
+              "drum-window-9-recess",
+              "drum-window-10-recess",
+              "drum-window-11-recess",
+              "blue-front--1-4.2-recess",
+              "blue-side--1-4.2-recess",
+              "blue-front--1-7.4-recess",
+              "blue-side--1-7.4-recess",
+              "blue-front--1-10.65-recess",
+              "blue-side--1-10.65-recess",
+              "wing-front--1-3.5-recess",
+              "wing-side--1-3.5-recess",
+              "wing-front--1-6.7-recess",
+              "wing-side--1-6.7-recess",
+              "rear-lantern-window--1-recess",
+              "blue-front-1-4.2-recess",
+              "blue-side-1-4.2-recess",
+              "blue-front-1-7.4-recess",
+              "blue-side-1-7.4-recess",
+              "blue-front-1-10.65-recess",
+              "blue-side-1-10.65-recess",
+              "wing-front-1-3.5-recess",
+              "wing-side-1-3.5-recess",
+              "wing-front-1-6.7-recess",
+              "wing-side-1-6.7-recess",
+              "rear-lantern-window-1-recess"
+            ]
+          },
+          {
+            "material": "target-new-city-domeLight",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 4,
+            "triangles": 432,
+            "names": [
+              "blue-dome-panel-0",
+              "blue-dome-panel-4",
+              "blue-dome-panel-8",
+              "blue-dome-panel-12"
+            ]
+          },
+          {
+            "material": "target-new-city-rib",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 16,
+            "triangles": 2816,
+            "names": [
+              "dome-raised-rib-0",
+              "dome-raised-rib-1",
+              "dome-raised-rib-2",
+              "dome-raised-rib-3",
+              "dome-raised-rib-4",
+              "dome-raised-rib-5",
+              "dome-raised-rib-6",
+              "dome-raised-rib-7",
+              "dome-raised-rib-8",
+              "dome-raised-rib-9",
+              "dome-raised-rib-10",
+              "dome-raised-rib-11",
+              "dome-raised-rib-12",
+              "dome-raised-rib-13",
+              "dome-raised-rib-14",
+              "dome-raised-rib-15"
+            ]
+          },
+          {
+            "material": "target-new-city-dome",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 8,
+            "triangles": 864,
+            "names": [
+              "blue-dome-panel-1",
+              "blue-dome-panel-3",
+              "blue-dome-panel-5",
+              "blue-dome-panel-7",
+              "blue-dome-panel-9",
+              "blue-dome-panel-11",
+              "blue-dome-panel-13",
+              "blue-dome-panel-15"
+            ]
+          },
+          {
+            "material": "target-new-city-domeShade",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 4,
+            "triangles": 432,
+            "names": [
+              "blue-dome-panel-2",
+              "blue-dome-panel-6",
+              "blue-dome-panel-10",
+              "blue-dome-panel-14"
+            ]
+          },
+          {
+            "material": "target-new-city-gold",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 4,
+            "triangles": 220,
+            "names": [
+              "dome-finial-foot",
+              "dome-finial-spire",
+              "rear-lantern-pin--1",
+              "rear-lantern-pin-1"
+            ]
+          },
+          {
+            "material": "target-new-city-roof",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 760,
+            "names": [
+              "rear-lantern-orange-cap--1",
+              "rear-lantern-orange-cap-1"
+            ]
+          }
+        ]
+      }
+    },
+    "new-city-stairs": {
+      "meshObjects": 176,
+      "ancestorVisibleObjects": 176,
+      "usedMaterialObjects": 8,
+      "usedGeometryObjects": 176,
+      "geometryGroupCount": 306,
+      "unculledSingleColourPassSubmissionUnits": 176,
+      "baseGeometryTriangles": 13200,
+      "instanceExpandedTriangles": 13200,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 17,
+      "knownBatchNames": [
+        "new-city-stair-house-1--1-refined-foundation-stone",
+        "new-city-stair-house-1--1-refined-foundation-trim",
+        "new-city-stair-house-1--1-refined-foundation-rose",
+        "new-city-stair-house-2--1-refined-foundation-stone",
+        "new-city-stair-house-2--1-refined-foundation-trim",
+        "new-city-stair-house-2--1-refined-foundation-blue",
+        "new-city-stair-house-2-1-refined-foundation-stone",
+        "new-city-stair-house-2-1-refined-foundation-trim",
+        "new-city-stair-house-2-1-refined-foundation-glass",
+        "new-city-stair-house-2-1-refined-foundation-blue",
+        "new-city-street-infill-blue",
+        "new-city-street-infill-roof",
+        "new-city-street-infill-roofLight",
+        "new-city-street-infill-window",
+        "new-city-street-infill-glass",
+        "new-city-street-infill-trim",
+        "new-city-street-infill-stone"
+      ],
+      "materials": [
+        {
+          "name": "target-new-stairs-window",
+          "objects": 1,
+          "meshes": 79,
+          "triangles": 2520
+        },
+        {
+          "name": "target-new-stairs-glass",
+          "objects": 1,
+          "meshes": 34,
+          "triangles": 1176
+        },
+        {
+          "name": "target-new-stairs-trim",
+          "objects": 1,
+          "meshes": 17,
+          "triangles": 2996
+        },
+        {
+          "name": "target-new-stairs-roofLight",
+          "objects": 1,
+          "meshes": 17,
+          "triangles": 616
+        },
+        {
+          "name": "target-new-stairs-stone",
+          "objects": 1,
+          "meshes": 10,
+          "triangles": 3180
+        },
+        {
+          "name": "target-new-stairs-blue",
+          "objects": 1,
+          "meshes": 9,
+          "triangles": 1864
+        },
+        {
+          "name": "target-new-stairs-roof",
+          "objects": 1,
+          "meshes": 7,
+          "triangles": 72
+        },
+        {
+          "name": "target-new-stairs-rose",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 776
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 173,
+        "after": 12,
+        "saving": 161,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-new-stairs-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 13,
+            "triangles": 364,
+            "names": [
+              "new-city-stair-house-0--1-foundation",
+              "new-city-stair-house-0--1-terrace-slab",
+              "new-city-stair-house-0--1-door-trim",
+              "new-city-stair-house-0-1-foundation",
+              "new-city-stair-house-0-1-terrace-slab",
+              "new-city-stair-house-0-1-door-trim",
+              "new-city-stair-house-1--1-terrace-slab",
+              "new-city-stair-house-1--1-door-trim",
+              "new-city-stair-house-1-1-foundation",
+              "new-city-stair-house-1-1-terrace-slab",
+              "new-city-stair-house-1-1-door-trim",
+              "new-city-stair-house-2--1-door-trim",
+              "new-city-stair-house-2-1-door-trim"
+            ]
+          },
+          {
+            "material": "target-new-stairs-blue",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 6,
+            "triangles": 168,
+            "names": [
+              "new-city-stair-house-0--1-walls",
+              "new-city-stair-house-0--1-upper-walls",
+              "new-city-stair-house-0-1-walls",
+              "new-city-stair-house-0-1-upper-walls",
+              "new-city-stair-house-2--1-walls",
+              "new-city-stair-house-2-1-walls"
+            ]
+          },
+          {
+            "material": "target-new-stairs-window",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 78,
+            "triangles": 2184,
+            "names": [
+              "new-city-stair-house-0--1-front--1.0439999999999998-white-frame",
+              "new-city-stair-house-0--1-front--1.0439999999999998-mullion",
+              "new-city-stair-house-0--1-front--1.0439999999999998-sill",
+              "new-city-stair-house-0--1-front-1.0439999999999998-white-frame",
+              "new-city-stair-house-0--1-front-1.0439999999999998-mullion",
+              "new-city-stair-house-0--1-front-1.0439999999999998-sill",
+              "new-city-stair-house-0--1-side-white-frame",
+              "new-city-stair-house-0--1-side-mullion",
+              "new-city-stair-house-0--1-side-sill",
+              "new-city-stair-house-0--1-upper-front--0.8615999999999999-white-frame",
+              "new-city-stair-house-0--1-upper-front--0.8615999999999999-mullion",
+              "new-city-stair-house-0--1-upper-front--0.8615999999999999-sill",
+              "new-city-stair-house-0--1-upper-front-0.8615999999999999-white-frame",
+              "new-city-stair-house-0--1-upper-front-0.8615999999999999-mullion",
+              "new-city-stair-house-0--1-upper-front-0.8615999999999999-sill",
+              "new-city-stair-house-0-1-front--1.0439999999999998-white-frame",
+              "new-city-stair-house-0-1-front--1.0439999999999998-mullion",
+              "new-city-stair-house-0-1-front--1.0439999999999998-sill",
+              "new-city-stair-house-0-1-front-1.0439999999999998-white-frame",
+              "new-city-stair-house-0-1-front-1.0439999999999998-mullion",
+              "new-city-stair-house-0-1-front-1.0439999999999998-sill",
+              "new-city-stair-house-0-1-side-white-frame",
+              "new-city-stair-house-0-1-side-mullion",
+              "new-city-stair-house-0-1-side-sill",
+              "new-city-stair-house-0-1-upper-front--0.8615999999999999-white-frame",
+              "new-city-stair-house-0-1-upper-front--0.8615999999999999-mullion",
+              "new-city-stair-house-0-1-upper-front--0.8615999999999999-sill",
+              "new-city-stair-house-0-1-upper-front-0.8615999999999999-white-frame",
+              "new-city-stair-house-0-1-upper-front-0.8615999999999999-mullion",
+              "new-city-stair-house-0-1-upper-front-0.8615999999999999-sill",
+              "new-city-stair-house-1--1-front--1.152-white-frame",
+              "new-city-stair-house-1--1-front--1.152-mullion",
+              "new-city-stair-house-1--1-front--1.152-sill",
+              "new-city-stair-house-1--1-front-1.152-white-frame",
+              "new-city-stair-house-1--1-front-1.152-mullion",
+              "new-city-stair-house-1--1-front-1.152-sill",
+              "new-city-stair-house-1--1-side-white-frame",
+              "new-city-stair-house-1--1-side-mullion",
+              "new-city-stair-house-1--1-side-sill",
+              "new-city-stair-house-1--1-upper-front--0.9696-white-frame",
+              "new-city-stair-house-1--1-upper-front--0.9696-mullion",
+              "new-city-stair-house-1--1-upper-front--0.9696-sill",
+              "new-city-stair-house-1--1-upper-front-0.9696-white-frame",
+              "new-city-stair-house-1--1-upper-front-0.9696-mullion",
+              "new-city-stair-house-1--1-upper-front-0.9696-sill",
+              "new-city-stair-house-1-1-front--1.152-white-frame",
+              "new-city-stair-house-1-1-front--1.152-mullion",
+              "new-city-stair-house-1-1-front--1.152-sill",
+              "new-city-stair-house-1-1-front-1.152-white-frame",
+              "new-city-stair-house-1-1-front-1.152-mullion",
+              "new-city-stair-house-1-1-front-1.152-sill",
+              "new-city-stair-house-1-1-side-white-frame",
+              "new-city-stair-house-1-1-side-mullion",
+              "new-city-stair-house-1-1-side-sill",
+              "new-city-stair-house-1-1-upper-front--0.9696-white-frame",
+              "new-city-stair-house-1-1-upper-front--0.9696-mullion",
+              "new-city-stair-house-1-1-upper-front--0.9696-sill",
+              "new-city-stair-house-1-1-upper-front-0.9696-white-frame",
+              "new-city-stair-house-1-1-upper-front-0.9696-mullion",
+              "new-city-stair-house-1-1-upper-front-0.9696-sill",
+              "new-city-stair-house-2--1-front--1.0439999999999998-white-frame",
+              "new-city-stair-house-2--1-front--1.0439999999999998-mullion",
+              "new-city-stair-house-2--1-front--1.0439999999999998-sill",
+              "new-city-stair-house-2--1-front-1.0439999999999998-white-frame",
+              "new-city-stair-house-2--1-front-1.0439999999999998-mullion",
+              "new-city-stair-house-2--1-front-1.0439999999999998-sill",
+              "new-city-stair-house-2--1-side-white-frame",
+              "new-city-stair-house-2--1-side-mullion",
+              "new-city-stair-house-2--1-side-sill",
+              "new-city-stair-house-2-1-front--1.0439999999999998-white-frame",
+              "new-city-stair-house-2-1-front--1.0439999999999998-mullion",
+              "new-city-stair-house-2-1-front--1.0439999999999998-sill",
+              "new-city-stair-house-2-1-front-1.0439999999999998-white-frame",
+              "new-city-stair-house-2-1-front-1.0439999999999998-mullion",
+              "new-city-stair-house-2-1-front-1.0439999999999998-sill",
+              "new-city-stair-house-2-1-side-white-frame",
+              "new-city-stair-house-2-1-side-mullion",
+              "new-city-stair-house-2-1-side-sill"
+            ]
+          },
+          {
+            "material": "target-new-stairs-glass",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 32,
+            "triangles": 896,
+            "names": [
+              "new-city-stair-house-0--1-front--1.0439999999999998-dark-inset",
+              "new-city-stair-house-0--1-front-1.0439999999999998-dark-inset",
+              "new-city-stair-house-0--1-side-dark-inset",
+              "new-city-stair-house-0--1-upper-front--0.8615999999999999-dark-inset",
+              "new-city-stair-house-0--1-upper-front-0.8615999999999999-dark-inset",
+              "new-city-stair-house-0--1-door-leaf",
+              "new-city-stair-house-0-1-front--1.0439999999999998-dark-inset",
+              "new-city-stair-house-0-1-front-1.0439999999999998-dark-inset",
+              "new-city-stair-house-0-1-side-dark-inset",
+              "new-city-stair-house-0-1-upper-front--0.8615999999999999-dark-inset",
+              "new-city-stair-house-0-1-upper-front-0.8615999999999999-dark-inset",
+              "new-city-stair-house-0-1-door-leaf",
+              "new-city-stair-house-1--1-front--1.152-dark-inset",
+              "new-city-stair-house-1--1-front-1.152-dark-inset",
+              "new-city-stair-house-1--1-side-dark-inset",
+              "new-city-stair-house-1--1-upper-front--0.9696-dark-inset",
+              "new-city-stair-house-1--1-upper-front-0.9696-dark-inset",
+              "new-city-stair-house-1--1-door-leaf",
+              "new-city-stair-house-1-1-front--1.152-dark-inset",
+              "new-city-stair-house-1-1-front-1.152-dark-inset",
+              "new-city-stair-house-1-1-side-dark-inset",
+              "new-city-stair-house-1-1-upper-front--0.9696-dark-inset",
+              "new-city-stair-house-1-1-upper-front-0.9696-dark-inset",
+              "new-city-stair-house-1-1-door-leaf",
+              "new-city-stair-house-2--1-front--1.0439999999999998-dark-inset",
+              "new-city-stair-house-2--1-front-1.0439999999999998-dark-inset",
+              "new-city-stair-house-2--1-side-dark-inset",
+              "new-city-stair-house-2--1-door-leaf",
+              "new-city-stair-house-2-1-front--1.0439999999999998-dark-inset",
+              "new-city-stair-house-2-1-front-1.0439999999999998-dark-inset",
+              "new-city-stair-house-2-1-side-dark-inset",
+              "new-city-stair-house-2-1-door-leaf"
+            ]
+          },
+          {
+            "material": "target-new-stairs-roof",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 72,
+            "names": [
+              "new-city-stair-house-0--1-hip-roof",
+              "new-city-stair-house-0-1-hip-roof",
+              "new-city-stair-house-1--1-hip-roof",
+              "new-city-stair-house-1-1-hip-roof",
+              "new-city-stair-house-2--1-hip-roof",
+              "new-city-stair-house-2-1-hip-roof",
+              "new-city-street-infill-roof"
+            ]
+          },
+          {
+            "material": "target-new-stairs-roofLight",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 16,
+            "triangles": 448,
+            "names": [
+              "new-city-stair-house-0--1-orange-eave",
+              "new-city-stair-house-0--1-ridge",
+              "new-city-stair-house-0--1-terrace-orange-cap",
+              "new-city-stair-house-0-1-orange-eave",
+              "new-city-stair-house-0-1-ridge",
+              "new-city-stair-house-0-1-terrace-orange-cap",
+              "new-city-stair-house-1--1-orange-eave",
+              "new-city-stair-house-1--1-ridge",
+              "new-city-stair-house-1--1-terrace-orange-cap",
+              "new-city-stair-house-1-1-orange-eave",
+              "new-city-stair-house-1-1-ridge",
+              "new-city-stair-house-1-1-terrace-orange-cap",
+              "new-city-stair-house-2--1-orange-eave",
+              "new-city-stair-house-2--1-ridge",
+              "new-city-stair-house-2-1-orange-eave",
+              "new-city-stair-house-2-1-ridge"
+            ]
+          },
+          {
+            "material": "target-new-stairs-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 6,
+            "triangles": 168,
+            "names": [
+              "new-city-stair-house-0--1-terrace-low-parapet",
+              "new-city-stair-house-0-1-terrace-low-parapet",
+              "new-city-stair-house-1--1-terrace-low-parapet",
+              "new-city-stair-house-1-1-walls",
+              "new-city-stair-house-1-1-upper-walls",
+              "new-city-stair-house-1-1-terrace-low-parapet"
+            ]
+          },
+          {
+            "material": "target-new-stairs-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 4,
+            "triangles": 3012,
+            "names": [
+              "new-city-stair-house-1--1-refined-foundation-stone",
+              "new-city-stair-house-2--1-refined-foundation-stone",
+              "new-city-stair-house-2-1-refined-foundation-stone",
+              "new-city-street-infill-stone"
+            ]
+          },
+          {
+            "material": "target-new-stairs-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 4,
+            "triangles": 2632,
+            "names": [
+              "new-city-stair-house-1--1-refined-foundation-trim",
+              "new-city-stair-house-2--1-refined-foundation-trim",
+              "new-city-stair-house-2-1-refined-foundation-trim",
+              "new-city-street-infill-trim"
+            ]
+          },
+          {
+            "material": "target-new-stairs-rose",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 56,
+            "names": [
+              "new-city-stair-house-1--1-walls",
+              "new-city-stair-house-1--1-upper-walls"
+            ]
+          },
+          {
+            "material": "target-new-stairs-blue",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 1696,
+            "names": [
+              "new-city-stair-house-2--1-refined-foundation-blue",
+              "new-city-stair-house-2-1-refined-foundation-blue",
+              "new-city-street-infill-blue"
+            ]
+          },
+          {
+            "material": "target-new-stairs-glass",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 280,
+            "names": [
+              "new-city-stair-house-2-1-refined-foundation-glass",
+              "new-city-street-infill-glass"
+            ]
+          }
+        ]
+      }
+    },
+    "cliff-transit-structure": {
+      "meshObjects": 161,
+      "ancestorVisibleObjects": 161,
+      "usedMaterialObjects": 27,
+      "usedGeometryObjects": 161,
+      "geometryGroupCount": 0,
+      "unculledSingleColourPassSubmissionUnits": 161,
+      "baseGeometryTriangles": 60468,
+      "instanceExpandedTriangles": 60468,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 23,
+      "knownBatchNames": [
+        "newShore-cliff-gallery-continuous-walk-deck",
+        "newShore-cliff-gallery-track-protective-ceiling",
+        "newShore-cliff-gallery-edge-curbs",
+        "newShore-cliff-gallery-handrails",
+        "newShore-cliff-gallery-rail-posts",
+        "central-cliff-gallery-continuous-walk-deck",
+        "central-cliff-gallery-track-protective-ceiling",
+        "central-cliff-gallery-edge-curbs",
+        "central-cliff-gallery-handrails",
+        "central-cliff-gallery-rail-posts",
+        "oldShore-cliff-gallery-continuous-walk-deck",
+        "oldShore-cliff-gallery-track-protective-ceiling",
+        "oldShore-cliff-gallery-edge-curbs",
+        "oldShore-cliff-gallery-handrails",
+        "oldShore-cliff-gallery-rail-posts",
+        "new-city-link-treads",
+        "new-city-link-stringers",
+        "new-city-link-open-support-arches",
+        "new-city-link-side-handrails",
+        "old-city-link-treads",
+        "old-city-link-stringers",
+        "old-city-link-open-support-arches",
+        "old-city-link-side-handrails"
+      ],
+      "materials": [
+        {
+          "name": "double-deck-stone",
+          "objects": 3,
+          "meshes": 89,
+          "triangles": 12924
+        },
+        {
+          "name": "double-deck-trim",
+          "objects": 3,
+          "meshes": 23,
+          "triangles": 276
+        },
+        {
+          "name": "cliff-gallery-stone",
+          "objects": 3,
+          "meshes": 23,
+          "triangles": 7724
+        },
+        {
+          "name": "",
+          "objects": 6,
+          "meshes": 11,
+          "triangles": 11940
+        },
+        {
+          "name": "cliff-gallery-rail",
+          "objects": 3,
+          "meshes": 6,
+          "triangles": 10760
+        },
+        {
+          "name": "double-deck-deck",
+          "objects": 3,
+          "meshes": 3,
+          "triangles": 5688
+        },
+        {
+          "name": "cliff-gallery-deck",
+          "objects": 3,
+          "meshes": 3,
+          "triangles": 3804
+        },
+        {
+          "name": "cliff-gallery-trim",
+          "objects": 3,
+          "meshes": 3,
+          "triangles": 7352
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 149,
+        "after": 16,
+        "saving": 133,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "double-deck-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 120,
+            "names": [
+              "newShore-double-deck-over-track-beam-0",
+              "newShore-double-deck-over-track-beam-1",
+              "newShore-double-deck-over-track-beam-2",
+              "newShore-double-deck-over-track-beam-3",
+              "newShore-double-deck-over-track-beam-4",
+              "newShore-double-deck-over-track-beam-5",
+              "newShore-double-deck-over-track-beam-6",
+              "newShore-double-deck-over-track-beam-7",
+              "newShore-double-deck-over-track-beam-8",
+              "newShore-double-deck-over-track-beam-9"
+            ]
+          },
+          {
+            "material": "double-deck-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 39,
+            "triangles": 5544,
+            "names": [
+              "newShore-double-deck-upper-bearing-0",
+              "newShore-double-deck-side-pier-0--1",
+              "newShore-double-deck-side-pier-0-1",
+              "newShore-double-deck-upper-bearing-1",
+              "newShore-double-deck-side-pier-1--1",
+              "newShore-double-deck-side-pier-1-1",
+              "newShore-double-deck-upper-bearing-2",
+              "newShore-double-deck-side-pier-2--1",
+              "newShore-double-deck-side-pier-2-1",
+              "newShore-double-deck-upper-bearing-3",
+              "newShore-double-deck-side-pier-3--1",
+              "newShore-double-deck-side-pier-3-1",
+              "newShore-double-deck-upper-bearing-4",
+              "newShore-double-deck-side-pier-4--1",
+              "newShore-double-deck-side-pier-4-1",
+              "newShore-double-deck-upper-bearing-5",
+              "newShore-double-deck-side-pier-5--1",
+              "newShore-double-deck-side-pier-5-1",
+              "newShore-double-deck-upper-bearing-6",
+              "newShore-double-deck-side-pier-6--1",
+              "newShore-double-deck-side-pier-6-1",
+              "newShore-double-deck-upper-bearing-7",
+              "newShore-double-deck-side-pier-7--1",
+              "newShore-double-deck-side-pier-7-1",
+              "newShore-double-deck-upper-bearing-8",
+              "newShore-double-deck-side-pier-8--1",
+              "newShore-double-deck-side-pier-8-1",
+              "newShore-double-deck-upper-bearing-9",
+              "newShore-double-deck-side-pier-9--1",
+              "newShore-double-deck-side-pier-9-1",
+              "newShore-double-deck-longitudinal-open-arches-0",
+              "newShore-double-deck-longitudinal-open-arches-1",
+              "newShore-double-deck-longitudinal-open-arches-2",
+              "newShore-double-deck-longitudinal-open-arches-3",
+              "newShore-double-deck-longitudinal-open-arches-4",
+              "newShore-double-deck-longitudinal-open-arches-5",
+              "newShore-double-deck-longitudinal-open-arches-6",
+              "newShore-double-deck-longitudinal-open-arches-7",
+              "newShore-double-deck-longitudinal-open-arches-8"
+            ]
+          },
+          {
+            "material": "cliff-gallery-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 3440,
+            "names": [
+              "newShore-cliff-gallery-track-protective-ceiling",
+              "newShore-cliff-gallery-open-seaward-arch-0",
+              "newShore-cliff-gallery-open-seaward-arch-1",
+              "newShore-cliff-gallery-open-seaward-arch-2",
+              "newShore-cliff-gallery-open-seaward-arch-3",
+              "newShore-cliff-gallery-open-seaward-arch-4",
+              "newShore-cliff-gallery-open-seaward-arch-5",
+              "newShore-cliff-gallery-open-seaward-arch-6",
+              "newShore-cliff-gallery-open-seaward-arch-7",
+              "newShore-cliff-gallery-open-seaward-arch-8"
+            ]
+          },
+          {
+            "material": "cliff-gallery-rail",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 4708,
+            "names": [
+              "newShore-cliff-gallery-handrails",
+              "newShore-cliff-gallery-rail-posts"
+            ]
+          },
+          {
+            "material": "double-deck-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "central-double-deck-over-track-beam-0",
+              "central-double-deck-over-track-beam-1",
+              "central-double-deck-over-track-beam-2"
+            ]
+          },
+          {
+            "material": "double-deck-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 11,
+            "triangles": 1836,
+            "names": [
+              "central-double-deck-upper-bearing-0",
+              "central-double-deck-side-pier-0--1",
+              "central-double-deck-side-pier-0-1",
+              "central-double-deck-upper-bearing-1",
+              "central-double-deck-side-pier-1--1",
+              "central-double-deck-side-pier-1-1",
+              "central-double-deck-upper-bearing-2",
+              "central-double-deck-side-pier-2--1",
+              "central-double-deck-side-pier-2-1",
+              "central-double-deck-longitudinal-open-arches-0",
+              "central-double-deck-longitudinal-open-arches-1"
+            ]
+          },
+          {
+            "material": "cliff-gallery-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 964,
+            "names": [
+              "central-cliff-gallery-track-protective-ceiling",
+              "central-cliff-gallery-open-seaward-arch-0",
+              "central-cliff-gallery-open-seaward-arch-1"
+            ]
+          },
+          {
+            "material": "cliff-gallery-rail",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 1560,
+            "names": [
+              "central-cliff-gallery-handrails",
+              "central-cliff-gallery-rail-posts"
+            ]
+          },
+          {
+            "material": "double-deck-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 120,
+            "names": [
+              "oldShore-double-deck-over-track-beam-0",
+              "oldShore-double-deck-over-track-beam-1",
+              "oldShore-double-deck-over-track-beam-2",
+              "oldShore-double-deck-over-track-beam-3",
+              "oldShore-double-deck-over-track-beam-4",
+              "oldShore-double-deck-over-track-beam-5",
+              "oldShore-double-deck-over-track-beam-6",
+              "oldShore-double-deck-over-track-beam-7",
+              "oldShore-double-deck-over-track-beam-8",
+              "oldShore-double-deck-over-track-beam-9"
+            ]
+          },
+          {
+            "material": "double-deck-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 39,
+            "triangles": 5544,
+            "names": [
+              "oldShore-double-deck-upper-bearing-0",
+              "oldShore-double-deck-side-pier-0--1",
+              "oldShore-double-deck-side-pier-0-1",
+              "oldShore-double-deck-upper-bearing-1",
+              "oldShore-double-deck-side-pier-1--1",
+              "oldShore-double-deck-side-pier-1-1",
+              "oldShore-double-deck-upper-bearing-2",
+              "oldShore-double-deck-side-pier-2--1",
+              "oldShore-double-deck-side-pier-2-1",
+              "oldShore-double-deck-upper-bearing-3",
+              "oldShore-double-deck-side-pier-3--1",
+              "oldShore-double-deck-side-pier-3-1",
+              "oldShore-double-deck-upper-bearing-4",
+              "oldShore-double-deck-side-pier-4--1",
+              "oldShore-double-deck-side-pier-4-1",
+              "oldShore-double-deck-upper-bearing-5",
+              "oldShore-double-deck-side-pier-5--1",
+              "oldShore-double-deck-side-pier-5-1",
+              "oldShore-double-deck-upper-bearing-6",
+              "oldShore-double-deck-side-pier-6--1",
+              "oldShore-double-deck-side-pier-6-1",
+              "oldShore-double-deck-upper-bearing-7",
+              "oldShore-double-deck-side-pier-7--1",
+              "oldShore-double-deck-side-pier-7-1",
+              "oldShore-double-deck-upper-bearing-8",
+              "oldShore-double-deck-side-pier-8--1",
+              "oldShore-double-deck-side-pier-8-1",
+              "oldShore-double-deck-upper-bearing-9",
+              "oldShore-double-deck-side-pier-9--1",
+              "oldShore-double-deck-side-pier-9-1",
+              "oldShore-double-deck-longitudinal-open-arches-0",
+              "oldShore-double-deck-longitudinal-open-arches-1",
+              "oldShore-double-deck-longitudinal-open-arches-2",
+              "oldShore-double-deck-longitudinal-open-arches-3",
+              "oldShore-double-deck-longitudinal-open-arches-4",
+              "oldShore-double-deck-longitudinal-open-arches-5",
+              "oldShore-double-deck-longitudinal-open-arches-6",
+              "oldShore-double-deck-longitudinal-open-arches-7",
+              "oldShore-double-deck-longitudinal-open-arches-8"
+            ]
+          },
+          {
+            "material": "cliff-gallery-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 3320,
+            "names": [
+              "oldShore-cliff-gallery-track-protective-ceiling",
+              "oldShore-cliff-gallery-open-seaward-arch-0",
+              "oldShore-cliff-gallery-open-seaward-arch-1",
+              "oldShore-cliff-gallery-open-seaward-arch-2",
+              "oldShore-cliff-gallery-open-seaward-arch-3",
+              "oldShore-cliff-gallery-open-seaward-arch-4",
+              "oldShore-cliff-gallery-open-seaward-arch-5",
+              "oldShore-cliff-gallery-open-seaward-arch-6",
+              "oldShore-cliff-gallery-open-seaward-arch-7",
+              "oldShore-cliff-gallery-open-seaward-arch-8"
+            ]
+          },
+          {
+            "material": "cliff-gallery-rail",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 4492,
+            "names": [
+              "oldShore-cliff-gallery-handrails",
+              "oldShore-cliff-gallery-rail-posts"
+            ]
+          },
+          {
+            "material": "",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": true,
+            "meshes": 2,
+            "triangles": 1740,
+            "names": [
+              "new-city-link-treads",
+              "old-city-link-treads"
+            ]
+          },
+          {
+            "material": "",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 3480,
+            "names": [
+              "new-city-link-stringers",
+              "old-city-link-stringers"
+            ]
+          },
+          {
+            "material": "",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 1668,
+            "names": [
+              "new-city-link-open-support-arches",
+              "old-city-link-open-support-arches"
+            ]
+          },
+          {
+            "material": "",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 1920,
+            "names": [
+              "new-city-link-side-handrails",
+              "old-city-link-side-handrails"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "galleryBreakdown": {
+    "oldShore": {
+      "meshObjects": 64,
+      "ancestorVisibleObjects": 64,
+      "usedMaterialObjects": 7,
+      "usedGeometryObjects": 64,
+      "geometryGroupCount": 0,
+      "unculledSingleColourPassSubmissionUnits": 64,
+      "baseGeometryTriangles": 20436,
+      "instanceExpandedTriangles": 20436,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 5,
+      "knownBatchNames": [
+        "oldShore-cliff-gallery-continuous-walk-deck",
+        "oldShore-cliff-gallery-track-protective-ceiling",
+        "oldShore-cliff-gallery-edge-curbs",
+        "oldShore-cliff-gallery-handrails",
+        "oldShore-cliff-gallery-rail-posts"
+      ],
+      "materials": [
+        {
+          "name": "double-deck-stone",
+          "objects": 1,
+          "meshes": 39,
+          "triangles": 5544
+        },
+        {
+          "name": "double-deck-trim",
+          "objects": 1,
+          "meshes": 10,
+          "triangles": 120
+        },
+        {
+          "name": "cliff-gallery-stone",
+          "objects": 1,
+          "meshes": 10,
+          "triangles": 3320
+        },
+        {
+          "name": "cliff-gallery-rail",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 4492
+        },
+        {
+          "name": "double-deck-deck",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 2328
+        },
+        {
+          "name": "cliff-gallery-deck",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 1556
+        },
+        {
+          "name": "cliff-gallery-trim",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 3076
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 61,
+        "after": 4,
+        "saving": 57,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "double-deck-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 120,
+            "names": [
+              "oldShore-double-deck-over-track-beam-0",
+              "oldShore-double-deck-over-track-beam-1",
+              "oldShore-double-deck-over-track-beam-2",
+              "oldShore-double-deck-over-track-beam-3",
+              "oldShore-double-deck-over-track-beam-4",
+              "oldShore-double-deck-over-track-beam-5",
+              "oldShore-double-deck-over-track-beam-6",
+              "oldShore-double-deck-over-track-beam-7",
+              "oldShore-double-deck-over-track-beam-8",
+              "oldShore-double-deck-over-track-beam-9"
+            ]
+          },
+          {
+            "material": "double-deck-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 39,
+            "triangles": 5544,
+            "names": [
+              "oldShore-double-deck-upper-bearing-0",
+              "oldShore-double-deck-side-pier-0--1",
+              "oldShore-double-deck-side-pier-0-1",
+              "oldShore-double-deck-upper-bearing-1",
+              "oldShore-double-deck-side-pier-1--1",
+              "oldShore-double-deck-side-pier-1-1",
+              "oldShore-double-deck-upper-bearing-2",
+              "oldShore-double-deck-side-pier-2--1",
+              "oldShore-double-deck-side-pier-2-1",
+              "oldShore-double-deck-upper-bearing-3",
+              "oldShore-double-deck-side-pier-3--1",
+              "oldShore-double-deck-side-pier-3-1",
+              "oldShore-double-deck-upper-bearing-4",
+              "oldShore-double-deck-side-pier-4--1",
+              "oldShore-double-deck-side-pier-4-1",
+              "oldShore-double-deck-upper-bearing-5",
+              "oldShore-double-deck-side-pier-5--1",
+              "oldShore-double-deck-side-pier-5-1",
+              "oldShore-double-deck-upper-bearing-6",
+              "oldShore-double-deck-side-pier-6--1",
+              "oldShore-double-deck-side-pier-6-1",
+              "oldShore-double-deck-upper-bearing-7",
+              "oldShore-double-deck-side-pier-7--1",
+              "oldShore-double-deck-side-pier-7-1",
+              "oldShore-double-deck-upper-bearing-8",
+              "oldShore-double-deck-side-pier-8--1",
+              "oldShore-double-deck-side-pier-8-1",
+              "oldShore-double-deck-upper-bearing-9",
+              "oldShore-double-deck-side-pier-9--1",
+              "oldShore-double-deck-side-pier-9-1",
+              "oldShore-double-deck-longitudinal-open-arches-0",
+              "oldShore-double-deck-longitudinal-open-arches-1",
+              "oldShore-double-deck-longitudinal-open-arches-2",
+              "oldShore-double-deck-longitudinal-open-arches-3",
+              "oldShore-double-deck-longitudinal-open-arches-4",
+              "oldShore-double-deck-longitudinal-open-arches-5",
+              "oldShore-double-deck-longitudinal-open-arches-6",
+              "oldShore-double-deck-longitudinal-open-arches-7",
+              "oldShore-double-deck-longitudinal-open-arches-8"
+            ]
+          },
+          {
+            "material": "cliff-gallery-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 3320,
+            "names": [
+              "oldShore-cliff-gallery-track-protective-ceiling",
+              "oldShore-cliff-gallery-open-seaward-arch-0",
+              "oldShore-cliff-gallery-open-seaward-arch-1",
+              "oldShore-cliff-gallery-open-seaward-arch-2",
+              "oldShore-cliff-gallery-open-seaward-arch-3",
+              "oldShore-cliff-gallery-open-seaward-arch-4",
+              "oldShore-cliff-gallery-open-seaward-arch-5",
+              "oldShore-cliff-gallery-open-seaward-arch-6",
+              "oldShore-cliff-gallery-open-seaward-arch-7",
+              "oldShore-cliff-gallery-open-seaward-arch-8"
+            ]
+          },
+          {
+            "material": "cliff-gallery-rail",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 4492,
+            "names": [
+              "oldShore-cliff-gallery-handrails",
+              "oldShore-cliff-gallery-rail-posts"
+            ]
+          }
+        ]
+      }
+    },
+    "central": {
+      "meshObjects": 22,
+      "ancestorVisibleObjects": 22,
+      "usedMaterialObjects": 7,
+      "usedGeometryObjects": 22,
+      "geometryGroupCount": 0,
+      "unculledSingleColourPassSubmissionUnits": 22,
+      "baseGeometryTriangles": 6876,
+      "instanceExpandedTriangles": 6876,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 5,
+      "knownBatchNames": [
+        "central-cliff-gallery-continuous-walk-deck",
+        "central-cliff-gallery-track-protective-ceiling",
+        "central-cliff-gallery-edge-curbs",
+        "central-cliff-gallery-handrails",
+        "central-cliff-gallery-rail-posts"
+      ],
+      "materials": [
+        {
+          "name": "double-deck-stone",
+          "objects": 1,
+          "meshes": 11,
+          "triangles": 1836
+        },
+        {
+          "name": "double-deck-trim",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "cliff-gallery-stone",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 964
+        },
+        {
+          "name": "cliff-gallery-rail",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 1560
+        },
+        {
+          "name": "double-deck-deck",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 852
+        },
+        {
+          "name": "cliff-gallery-deck",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 572
+        },
+        {
+          "name": "cliff-gallery-trim",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 1056
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 19,
+        "after": 4,
+        "saving": 15,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "double-deck-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "central-double-deck-over-track-beam-0",
+              "central-double-deck-over-track-beam-1",
+              "central-double-deck-over-track-beam-2"
+            ]
+          },
+          {
+            "material": "double-deck-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 11,
+            "triangles": 1836,
+            "names": [
+              "central-double-deck-upper-bearing-0",
+              "central-double-deck-side-pier-0--1",
+              "central-double-deck-side-pier-0-1",
+              "central-double-deck-upper-bearing-1",
+              "central-double-deck-side-pier-1--1",
+              "central-double-deck-side-pier-1-1",
+              "central-double-deck-upper-bearing-2",
+              "central-double-deck-side-pier-2--1",
+              "central-double-deck-side-pier-2-1",
+              "central-double-deck-longitudinal-open-arches-0",
+              "central-double-deck-longitudinal-open-arches-1"
+            ]
+          },
+          {
+            "material": "cliff-gallery-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 964,
+            "names": [
+              "central-cliff-gallery-track-protective-ceiling",
+              "central-cliff-gallery-open-seaward-arch-0",
+              "central-cliff-gallery-open-seaward-arch-1"
+            ]
+          },
+          {
+            "material": "cliff-gallery-rail",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 1560,
+            "names": [
+              "central-cliff-gallery-handrails",
+              "central-cliff-gallery-rail-posts"
+            ]
+          }
+        ]
+      }
+    },
+    "newShore": {
+      "meshObjects": 64,
+      "ancestorVisibleObjects": 64,
+      "usedMaterialObjects": 7,
+      "usedGeometryObjects": 64,
+      "geometryGroupCount": 0,
+      "unculledSingleColourPassSubmissionUnits": 64,
+      "baseGeometryTriangles": 21216,
+      "instanceExpandedTriangles": 21216,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 5,
+      "knownBatchNames": [
+        "newShore-cliff-gallery-continuous-walk-deck",
+        "newShore-cliff-gallery-track-protective-ceiling",
+        "newShore-cliff-gallery-edge-curbs",
+        "newShore-cliff-gallery-handrails",
+        "newShore-cliff-gallery-rail-posts"
+      ],
+      "materials": [
+        {
+          "name": "double-deck-stone",
+          "objects": 1,
+          "meshes": 39,
+          "triangles": 5544
+        },
+        {
+          "name": "double-deck-trim",
+          "objects": 1,
+          "meshes": 10,
+          "triangles": 120
+        },
+        {
+          "name": "cliff-gallery-stone",
+          "objects": 1,
+          "meshes": 10,
+          "triangles": 3440
+        },
+        {
+          "name": "cliff-gallery-rail",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 4708
+        },
+        {
+          "name": "double-deck-deck",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 2508
+        },
+        {
+          "name": "cliff-gallery-deck",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 1676
+        },
+        {
+          "name": "cliff-gallery-trim",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 3220
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 61,
+        "after": 4,
+        "saving": 57,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "double-deck-trim",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 120,
+            "names": [
+              "newShore-double-deck-over-track-beam-0",
+              "newShore-double-deck-over-track-beam-1",
+              "newShore-double-deck-over-track-beam-2",
+              "newShore-double-deck-over-track-beam-3",
+              "newShore-double-deck-over-track-beam-4",
+              "newShore-double-deck-over-track-beam-5",
+              "newShore-double-deck-over-track-beam-6",
+              "newShore-double-deck-over-track-beam-7",
+              "newShore-double-deck-over-track-beam-8",
+              "newShore-double-deck-over-track-beam-9"
+            ]
+          },
+          {
+            "material": "double-deck-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 39,
+            "triangles": 5544,
+            "names": [
+              "newShore-double-deck-upper-bearing-0",
+              "newShore-double-deck-side-pier-0--1",
+              "newShore-double-deck-side-pier-0-1",
+              "newShore-double-deck-upper-bearing-1",
+              "newShore-double-deck-side-pier-1--1",
+              "newShore-double-deck-side-pier-1-1",
+              "newShore-double-deck-upper-bearing-2",
+              "newShore-double-deck-side-pier-2--1",
+              "newShore-double-deck-side-pier-2-1",
+              "newShore-double-deck-upper-bearing-3",
+              "newShore-double-deck-side-pier-3--1",
+              "newShore-double-deck-side-pier-3-1",
+              "newShore-double-deck-upper-bearing-4",
+              "newShore-double-deck-side-pier-4--1",
+              "newShore-double-deck-side-pier-4-1",
+              "newShore-double-deck-upper-bearing-5",
+              "newShore-double-deck-side-pier-5--1",
+              "newShore-double-deck-side-pier-5-1",
+              "newShore-double-deck-upper-bearing-6",
+              "newShore-double-deck-side-pier-6--1",
+              "newShore-double-deck-side-pier-6-1",
+              "newShore-double-deck-upper-bearing-7",
+              "newShore-double-deck-side-pier-7--1",
+              "newShore-double-deck-side-pier-7-1",
+              "newShore-double-deck-upper-bearing-8",
+              "newShore-double-deck-side-pier-8--1",
+              "newShore-double-deck-side-pier-8-1",
+              "newShore-double-deck-upper-bearing-9",
+              "newShore-double-deck-side-pier-9--1",
+              "newShore-double-deck-side-pier-9-1",
+              "newShore-double-deck-longitudinal-open-arches-0",
+              "newShore-double-deck-longitudinal-open-arches-1",
+              "newShore-double-deck-longitudinal-open-arches-2",
+              "newShore-double-deck-longitudinal-open-arches-3",
+              "newShore-double-deck-longitudinal-open-arches-4",
+              "newShore-double-deck-longitudinal-open-arches-5",
+              "newShore-double-deck-longitudinal-open-arches-6",
+              "newShore-double-deck-longitudinal-open-arches-7",
+              "newShore-double-deck-longitudinal-open-arches-8"
+            ]
+          },
+          {
+            "material": "cliff-gallery-stone",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 10,
+            "triangles": 3440,
+            "names": [
+              "newShore-cliff-gallery-track-protective-ceiling",
+              "newShore-cliff-gallery-open-seaward-arch-0",
+              "newShore-cliff-gallery-open-seaward-arch-1",
+              "newShore-cliff-gallery-open-seaward-arch-2",
+              "newShore-cliff-gallery-open-seaward-arch-3",
+              "newShore-cliff-gallery-open-seaward-arch-4",
+              "newShore-cliff-gallery-open-seaward-arch-5",
+              "newShore-cliff-gallery-open-seaward-arch-6",
+              "newShore-cliff-gallery-open-seaward-arch-7",
+              "newShore-cliff-gallery-open-seaward-arch-8"
+            ]
+          },
+          {
+            "material": "cliff-gallery-rail",
+            "entity": null,
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 4708,
+            "names": [
+              "newShore-cliff-gallery-handrails",
+              "newShore-cliff-gallery-rail-posts"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "oldCityPerHouse": {
+    "house-0--1-0": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 24,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1000,
+      "instanceExpandedTriangles": 1000,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-0--1-0-windows-glass",
+        "house-0--1-0-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 228
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 664
+        },
+        {
+          "name": "target-old-city-pink",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 36
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0--1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0--1-0-drip-edge",
+              "house-0--1-0-roof-eaves",
+              "house-0--1-0-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-0--1-1": {
+      "meshObjects": 17,
+      "ancestorVisibleObjects": 17,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 17,
+      "geometryGroupCount": 68,
+      "unculledSingleColourPassSubmissionUnits": 17,
+      "baseGeometryTriangles": 2012,
+      "instanceExpandedTriangles": 2336,
+      "instancedMeshes": [
+        {
+          "name": "house-0--1-1-terrace-balusters",
+          "count": 28,
+          "baseTriangles": 12
+        }
+      ],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-0--1-1-windows-glass",
+        "house-0--1-1-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 9,
+          "triangles": 1140
+        },
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-yellow",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 56
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 976
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 120
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 10,
+        "after": 2,
+        "saving": 8,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-trim",
+            "entity": "house-0--1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 84,
+            "names": [
+              "house-0--1-1-cornice",
+              "house-0--1-1-terrace-deck",
+              "house-0--1-1-terrace-handrail",
+              "house-0--1-1-terrace-handrail",
+              "house-0--1-1-terrace-handrail",
+              "house-0--1-1-terrace-handrail",
+              "house-0--1-1-upper-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0--1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0--1-1-drip-edge",
+              "house-0--1-1-roof-eaves",
+              "house-0--1-1-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-0--1-2": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 24,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1084,
+      "instanceExpandedTriangles": 1084,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-0--1-2-windows-glass",
+        "house-0--1-2-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 300
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 664
+        },
+        {
+          "name": "target-old-city-teal",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 48
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0--1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0--1-2-drip-edge",
+              "house-0--1-2-roof-eaves",
+              "house-0--1-2-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-0-1-0": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 24,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1072,
+      "instanceExpandedTriangles": 1072,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-0-1-0-windows-glass",
+        "house-0-1-0-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 300
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 652
+        },
+        {
+          "name": "target-old-city-yellow",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 48
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0-1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0-1-0-drip-edge",
+              "house-0-1-0-roof-eaves",
+              "house-0-1-0-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-0-1-1": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 18,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1636,
+      "instanceExpandedTriangles": 1636,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-0-1-1-windows-glass",
+        "house-0-1-1-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 60
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 420
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 976
+        },
+        {
+          "name": "target-old-city-blue",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 84
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 72
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 24
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 2,
+        "after": 1,
+        "saving": 1,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0-1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 24,
+            "names": [
+              "house-0-1-1-roof-eaves",
+              "house-0-1-1-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-0-1-2": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 24,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1252,
+      "instanceExpandedTriangles": 1252,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-0-1-2-windows-glass",
+        "house-0-1-2-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 444
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 664
+        },
+        {
+          "name": "target-old-city-pink",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 72
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-0-1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-0-1-2-drip-edge",
+              "house-0-1-2-roof-eaves",
+              "house-0-1-2-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-1--1-0": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 5,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 24,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1084,
+      "instanceExpandedTriangles": 1084,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-1--1-0-windows-glass",
+        "house-1--1-0-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 692
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 300
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 48
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1--1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1--1-0-drip-edge",
+              "house-1--1-0-roof-eaves",
+              "house-1--1-0-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-1--1-1": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 18,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1428,
+      "instanceExpandedTriangles": 1428,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-1--1-1-windows-glass",
+        "house-1--1-1-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 60
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 420
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 768
+        },
+        {
+          "name": "target-old-city-teal",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 84
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 72
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 24
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 2,
+        "after": 1,
+        "saving": 1,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1--1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 24,
+            "names": [
+              "house-1--1-1-roof-eaves",
+              "house-1--1-1-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-1--1-2": {
+      "meshObjects": 17,
+      "ancestorVisibleObjects": 17,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 17,
+      "geometryGroupCount": 68,
+      "unculledSingleColourPassSubmissionUnits": 17,
+      "baseGeometryTriangles": 1196,
+      "instanceExpandedTriangles": 1472,
+      "instancedMeshes": [
+        {
+          "name": "house-1--1-2-terrace-balusters",
+          "count": 24,
+          "baseTriangles": 12
+        }
+      ],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-1--1-2-windows-glass",
+        "house-1--1-2-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 9,
+          "triangles": 660
+        },
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-yellow",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 56
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 664
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 48
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 10,
+        "after": 2,
+        "saving": 8,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-trim",
+            "entity": "house-1--1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 84,
+            "names": [
+              "house-1--1-2-cornice",
+              "house-1--1-2-terrace-deck",
+              "house-1--1-2-terrace-handrail",
+              "house-1--1-2-terrace-handrail",
+              "house-1--1-2-terrace-handrail",
+              "house-1--1-2-terrace-handrail",
+              "house-1--1-2-upper-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1--1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1--1-2-drip-edge",
+              "house-1--1-2-roof-eaves",
+              "house-1--1-2-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-1-1-0": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 24,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1084,
+      "instanceExpandedTriangles": 1084,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-1-1-0-windows-glass",
+        "house-1-1-0-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 300
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 664
+        },
+        {
+          "name": "target-old-city-blue",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 48
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1-1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1-1-0-drip-edge",
+              "house-1-1-0-roof-eaves",
+              "house-1-1-0-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-1-1-1": {
+      "meshObjects": 17,
+      "ancestorVisibleObjects": 17,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 17,
+      "geometryGroupCount": 68,
+      "unculledSingleColourPassSubmissionUnits": 17,
+      "baseGeometryTriangles": 1928,
+      "instanceExpandedTriangles": 2252,
+      "instancedMeshes": [
+        {
+          "name": "house-1-1-1-terrace-balusters",
+          "count": 28,
+          "baseTriangles": 12
+        }
+      ],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-1-1-1-windows-glass",
+        "house-1-1-1-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 9,
+          "triangles": 1068
+        },
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-pink",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 56
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 976
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 108
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 10,
+        "after": 2,
+        "saving": 8,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-trim",
+            "entity": "house-1-1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 84,
+            "names": [
+              "house-1-1-1-cornice",
+              "house-1-1-1-terrace-deck",
+              "house-1-1-1-terrace-handrail",
+              "house-1-1-1-terrace-handrail",
+              "house-1-1-1-terrace-handrail",
+              "house-1-1-1-terrace-handrail",
+              "house-1-1-1-upper-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1-1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1-1-1-drip-edge",
+              "house-1-1-1-roof-eaves",
+              "house-1-1-1-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-1-1-2": {
+      "meshObjects": 9,
+      "ancestorVisibleObjects": 9,
+      "usedMaterialObjects": 6,
+      "usedGeometryObjects": 9,
+      "geometryGroupCount": 24,
+      "unculledSingleColourPassSubmissionUnits": 9,
+      "baseGeometryTriangles": 1084,
+      "instanceExpandedTriangles": 1084,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-1-1-2-windows-glass",
+        "house-1-1-2-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 300
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 664
+        },
+        {
+          "name": "target-old-city-yellow",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 48
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-1-1-2",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-1-1-2-drip-edge",
+              "house-1-1-2-roof-eaves",
+              "house-1-1-2-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-2--1-0": {
+      "meshObjects": 15,
+      "ancestorVisibleObjects": 15,
+      "usedMaterialObjects": 5,
+      "usedGeometryObjects": 15,
+      "geometryGroupCount": 60,
+      "unculledSingleColourPassSubmissionUnits": 15,
+      "baseGeometryTriangles": 1260,
+      "instanceExpandedTriangles": 1536,
+      "instancedMeshes": [
+        {
+          "name": "house-2--1-0-terrace-balusters",
+          "count": 24,
+          "baseTriangles": 12
+        }
+      ],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-2--1-0-windows-glass",
+        "house-2--1-0-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 9,
+          "triangles": 1092
+        },
+        {
+          "name": "target-old-city-stone",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 56
+        },
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 240
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 120
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 11,
+        "after": 3,
+        "saving": 8,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-stone",
+            "entity": "house-2--1-0",
+            "targetWall": true,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 56,
+            "names": [
+              "house-2--1-0-walls",
+              "house-2--1-0-cupola-tower-walls"
+            ]
+          },
+          {
+            "material": "target-old-city-trim",
+            "entity": "house-2--1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 7,
+            "triangles": 84,
+            "names": [
+              "house-2--1-0-cornice",
+              "house-2--1-0-terrace-deck",
+              "house-2--1-0-terrace-handrail",
+              "house-2--1-0-terrace-handrail",
+              "house-2--1-0-terrace-handrail",
+              "house-2--1-0-terrace-handrail",
+              "house-2--1-0-upper-cornice"
+            ]
+          },
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-2--1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 2,
+            "triangles": 28,
+            "names": [
+              "house-2--1-0-drip-edge",
+              "house-2--1-0-cupola-finial"
+            ]
+          }
+        ]
+      }
+    },
+    "house-2--1-1": {
+      "meshObjects": 8,
+      "ancestorVisibleObjects": 8,
+      "usedMaterialObjects": 5,
+      "usedGeometryObjects": 8,
+      "geometryGroupCount": 26,
+      "unculledSingleColourPassSubmissionUnits": 8,
+      "baseGeometryTriangles": 1092,
+      "instanceExpandedTriangles": 1092,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-2--1-1-windows-glass",
+        "house-2--1-1-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 876
+        },
+        {
+          "name": "target-old-city-teal",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 144
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-2--1-1",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-2--1-1-drip-edge",
+              "house-2--1-1-roof-eaves",
+              "house-2--1-1-ridge"
+            ]
+          }
+        ]
+      }
+    },
+    "house-2-1-0": {
+      "meshObjects": 8,
+      "ancestorVisibleObjects": 8,
+      "usedMaterialObjects": 5,
+      "usedGeometryObjects": 8,
+      "geometryGroupCount": 26,
+      "unculledSingleColourPassSubmissionUnits": 8,
+      "baseGeometryTriangles": 1596,
+      "instanceExpandedTriangles": 1596,
+      "instancedMeshes": [],
+      "knownBatchNameMeshCount": 2,
+      "knownBatchNames": [
+        "house-2-1-0-windows-glass",
+        "house-2-1-0-windows-trim"
+      ],
+      "materials": [
+        {
+          "name": "target-old-city-roofLight",
+          "objects": 1,
+          "meshes": 3,
+          "triangles": 36
+        },
+        {
+          "name": "target-old-city-trim",
+          "objects": 1,
+          "meshes": 2,
+          "triangles": 1308
+        },
+        {
+          "name": "target-old-city-pink",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 28
+        },
+        {
+          "name": "target-old-city-roof",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 8
+        },
+        {
+          "name": "target-old-city-glass",
+          "objects": 1,
+          "meshes": 1,
+          "triangles": 216
+        }
+      ],
+      "compatiblePartitionUpperBound": {
+        "before": 3,
+        "after": 1,
+        "saving": 2,
+        "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+        "buckets": [
+          {
+            "material": "target-old-city-roofLight",
+            "entity": "house-2-1-0",
+            "targetWall": false,
+            "explicitWalkable": false,
+            "meshes": 3,
+            "triangles": 36,
+            "names": [
+              "house-2-1-0-drip-edge",
+              "house-2-1-0-roof-eaves",
+              "house-2-1-0-ridge"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "mainWindowCandidate": {
+    "conservativeSpatialZones": {
+      "drum": {
+        "groups": 12,
+        "meshes": 72,
+        "triangles": 1704,
+        "proposedMeshes": 2
+      },
+      "left": {
+        "groups": 11,
+        "meshes": 66,
+        "triangles": 1562,
+        "proposedMeshes": 2
+      },
+      "right": {
+        "groups": 11,
+        "meshes": 66,
+        "triangles": 1562,
+        "proposedMeshes": 2
+      }
+    },
+    "threeZonePrediction": {
+      "before": 204,
+      "after": 6,
+      "saving": 198
+    },
+    "windowGroups": 34,
+    "groupNames": [
+      "drum-window-0",
+      "drum-window-1",
+      "drum-window-2",
+      "drum-window-3",
+      "drum-window-4",
+      "drum-window-5",
+      "drum-window-6",
+      "drum-window-7",
+      "drum-window-8",
+      "drum-window-9",
+      "drum-window-10",
+      "drum-window-11",
+      "blue-front--1-4.2",
+      "blue-side--1-4.2",
+      "blue-front--1-7.4",
+      "blue-side--1-7.4",
+      "blue-front--1-10.65",
+      "blue-side--1-10.65",
+      "wing-front--1-3.5",
+      "wing-side--1-3.5",
+      "wing-front--1-6.7",
+      "wing-side--1-6.7",
+      "rear-lantern-window--1",
+      "blue-front-1-4.2",
+      "blue-side-1-4.2",
+      "blue-front-1-7.4",
+      "blue-side-1-7.4",
+      "blue-front-1-10.65",
+      "blue-side-1-10.65",
+      "wing-front-1-3.5",
+      "wing-side-1-3.5",
+      "wing-front-1-6.7",
+      "wing-side-1-6.7",
+      "rear-lantern-window-1"
+    ],
+    "meshes": 204,
+    "allMeshesHaveExpectedStaticShape": true,
+    "materialObjects": [
+      {
+        "name": "target-new-city-window",
+        "type": "MeshStandardMaterial",
+        "side": 0,
+        "transparent": false,
+        "opacity": 1
+      },
+      {
+        "name": "target-new-city-glass",
+        "type": "MeshStandardMaterial",
+        "side": 0,
+        "transparent": false,
+        "opacity": 1
+      }
+    ],
+    "triangles": 4828,
+    "rawTwoBatchPrediction": {
+      "before": 204,
+      "after": 2,
+      "saving": 202
+    },
+    "compatibleBuckets": {
+      "before": 204,
+      "after": 2,
+      "saving": 202,
+      "notApprovedBecauseSemanticAndSpatialPartitionStillRequired": true,
+      "buckets": [
+        {
+          "material": "target-new-city-window",
+          "entity": null,
+          "targetWall": false,
+          "explicitWalkable": false,
+          "meshes": 170,
+          "triangles": 4760,
+          "names": [
+            "drum-window-0-left",
+            "drum-window-0-right",
+            "drum-window-0-top",
+            "drum-window-0-sill",
+            "drum-window-0-mullion",
+            "drum-window-1-left",
+            "drum-window-1-right",
+            "drum-window-1-top",
+            "drum-window-1-sill",
+            "drum-window-1-mullion",
+            "drum-window-2-left",
+            "drum-window-2-right",
+            "drum-window-2-top",
+            "drum-window-2-sill",
+            "drum-window-2-mullion",
+            "drum-window-3-left",
+            "drum-window-3-right",
+            "drum-window-3-top",
+            "drum-window-3-sill",
+            "drum-window-3-mullion",
+            "drum-window-4-left",
+            "drum-window-4-right",
+            "drum-window-4-top",
+            "drum-window-4-sill",
+            "drum-window-4-mullion",
+            "drum-window-5-left",
+            "drum-window-5-right",
+            "drum-window-5-top",
+            "drum-window-5-sill",
+            "drum-window-5-mullion",
+            "drum-window-6-left",
+            "drum-window-6-right",
+            "drum-window-6-top",
+            "drum-window-6-sill",
+            "drum-window-6-mullion",
+            "drum-window-7-left",
+            "drum-window-7-right",
+            "drum-window-7-top",
+            "drum-window-7-sill",
+            "drum-window-7-mullion",
+            "drum-window-8-left",
+            "drum-window-8-right",
+            "drum-window-8-top",
+            "drum-window-8-sill",
+            "drum-window-8-mullion",
+            "drum-window-9-left",
+            "drum-window-9-right",
+            "drum-window-9-top",
+            "drum-window-9-sill",
+            "drum-window-9-mullion",
+            "drum-window-10-left",
+            "drum-window-10-right",
+            "drum-window-10-top",
+            "drum-window-10-sill",
+            "drum-window-10-mullion",
+            "drum-window-11-left",
+            "drum-window-11-right",
+            "drum-window-11-top",
+            "drum-window-11-sill",
+            "drum-window-11-mullion",
+            "blue-front--1-4.2-left",
+            "blue-front--1-4.2-right",
+            "blue-front--1-4.2-top",
+            "blue-front--1-4.2-sill",
+            "blue-front--1-4.2-mullion",
+            "blue-side--1-4.2-left",
+            "blue-side--1-4.2-right",
+            "blue-side--1-4.2-top",
+            "blue-side--1-4.2-sill",
+            "blue-side--1-4.2-mullion",
+            "blue-front--1-7.4-left",
+            "blue-front--1-7.4-right",
+            "blue-front--1-7.4-top",
+            "blue-front--1-7.4-sill",
+            "blue-front--1-7.4-mullion",
+            "blue-side--1-7.4-left",
+            "blue-side--1-7.4-right",
+            "blue-side--1-7.4-top",
+            "blue-side--1-7.4-sill",
+            "blue-side--1-7.4-mullion",
+            "blue-front--1-10.65-left",
+            "blue-front--1-10.65-right",
+            "blue-front--1-10.65-top",
+            "blue-front--1-10.65-sill",
+            "blue-front--1-10.65-mullion",
+            "blue-side--1-10.65-left",
+            "blue-side--1-10.65-right",
+            "blue-side--1-10.65-top",
+            "blue-side--1-10.65-sill",
+            "blue-side--1-10.65-mullion",
+            "wing-front--1-3.5-left",
+            "wing-front--1-3.5-right",
+            "wing-front--1-3.5-top",
+            "wing-front--1-3.5-sill",
+            "wing-front--1-3.5-mullion",
+            "wing-side--1-3.5-left",
+            "wing-side--1-3.5-right",
+            "wing-side--1-3.5-top",
+            "wing-side--1-3.5-sill",
+            "wing-side--1-3.5-mullion",
+            "wing-front--1-6.7-left",
+            "wing-front--1-6.7-right",
+            "wing-front--1-6.7-top",
+            "wing-front--1-6.7-sill",
+            "wing-front--1-6.7-mullion",
+            "wing-side--1-6.7-left",
+            "wing-side--1-6.7-right",
+            "wing-side--1-6.7-top",
+            "wing-side--1-6.7-sill",
+            "wing-side--1-6.7-mullion",
+            "rear-lantern-window--1-left",
+            "rear-lantern-window--1-right",
+            "rear-lantern-window--1-top",
+            "rear-lantern-window--1-sill",
+            "rear-lantern-window--1-mullion",
+            "blue-front-1-4.2-left",
+            "blue-front-1-4.2-right",
+            "blue-front-1-4.2-top",
+            "blue-front-1-4.2-sill",
+            "blue-front-1-4.2-mullion",
+            "blue-side-1-4.2-left",
+            "blue-side-1-4.2-right",
+            "blue-side-1-4.2-top",
+            "blue-side-1-4.2-sill",
+            "blue-side-1-4.2-mullion",
+            "blue-front-1-7.4-left",
+            "blue-front-1-7.4-right",
+            "blue-front-1-7.4-top",
+            "blue-front-1-7.4-sill",
+            "blue-front-1-7.4-mullion",
+            "blue-side-1-7.4-left",
+            "blue-side-1-7.4-right",
+            "blue-side-1-7.4-top",
+            "blue-side-1-7.4-sill",
+            "blue-side-1-7.4-mullion",
+            "blue-front-1-10.65-left",
+            "blue-front-1-10.65-right",
+            "blue-front-1-10.65-top",
+            "blue-front-1-10.65-sill",
+            "blue-front-1-10.65-mullion",
+            "blue-side-1-10.65-left",
+            "blue-side-1-10.65-right",
+            "blue-side-1-10.65-top",
+            "blue-side-1-10.65-sill",
+            "blue-side-1-10.65-mullion",
+            "wing-front-1-3.5-left",
+            "wing-front-1-3.5-right",
+            "wing-front-1-3.5-top",
+            "wing-front-1-3.5-sill",
+            "wing-front-1-3.5-mullion",
+            "wing-side-1-3.5-left",
+            "wing-side-1-3.5-right",
+            "wing-side-1-3.5-top",
+            "wing-side-1-3.5-sill",
+            "wing-side-1-3.5-mullion",
+            "wing-front-1-6.7-left",
+            "wing-front-1-6.7-right",
+            "wing-front-1-6.7-top",
+            "wing-front-1-6.7-sill",
+            "wing-front-1-6.7-mullion",
+            "wing-side-1-6.7-left",
+            "wing-side-1-6.7-right",
+            "wing-side-1-6.7-top",
+            "wing-side-1-6.7-sill",
+            "wing-side-1-6.7-mullion",
+            "rear-lantern-window-1-left",
+            "rear-lantern-window-1-right",
+            "rear-lantern-window-1-top",
+            "rear-lantern-window-1-sill",
+            "rear-lantern-window-1-mullion"
+          ]
+        },
+        {
+          "material": "target-new-city-glass",
+          "entity": null,
+          "targetWall": false,
+          "explicitWalkable": false,
+          "meshes": 34,
+          "triangles": 68,
+          "names": [
+            "drum-window-0-recess",
+            "drum-window-1-recess",
+            "drum-window-2-recess",
+            "drum-window-3-recess",
+            "drum-window-4-recess",
+            "drum-window-5-recess",
+            "drum-window-6-recess",
+            "drum-window-7-recess",
+            "drum-window-8-recess",
+            "drum-window-9-recess",
+            "drum-window-10-recess",
+            "drum-window-11-recess",
+            "blue-front--1-4.2-recess",
+            "blue-side--1-4.2-recess",
+            "blue-front--1-7.4-recess",
+            "blue-side--1-7.4-recess",
+            "blue-front--1-10.65-recess",
+            "blue-side--1-10.65-recess",
+            "wing-front--1-3.5-recess",
+            "wing-side--1-3.5-recess",
+            "wing-front--1-6.7-recess",
+            "wing-side--1-6.7-recess",
+            "rear-lantern-window--1-recess",
+            "blue-front-1-4.2-recess",
+            "blue-side-1-4.2-recess",
+            "blue-front-1-7.4-recess",
+            "blue-side-1-7.4-recess",
+            "blue-front-1-10.65-recess",
+            "blue-side-1-10.65-recess",
+            "wing-front-1-3.5-recess",
+            "wing-side-1-3.5-recess",
+            "wing-front-1-6.7-recess",
+            "wing-side-1-6.7-recess",
+            "rear-lantern-window-1-recess"
+          ]
+        }
+      ]
+    },
+    "bounds": [
+      {
+        "name": "drum-window-0",
+        "position": [
+          1.543855604036536,
+          15.75,
+          4.361747553814292
+        ]
+      },
+      {
+        "name": "drum-window-1",
+        "position": [
+          4.217891949777756,
+          15.75,
+          2.817891949777756
+        ]
+      },
+      {
+        "name": "drum-window-2",
+        "position": [
+          5.761747553814292,
+          15.75,
+          0.1438556040365362
+        ]
+      },
+      {
+        "name": "drum-window-3",
+        "position": [
+          5.761747553814292,
+          15.75,
+          -2.9438556040365356
+        ]
+      },
+      {
+        "name": "drum-window-4",
+        "position": [
+          4.217891949777756,
+          15.75,
+          -5.617891949777755
+        ]
+      },
+      {
+        "name": "drum-window-5",
+        "position": [
+          1.5438556040365379,
+          15.75,
+          -7.161747553814292
+        ]
+      },
+      {
+        "name": "drum-window-6",
+        "position": [
+          -1.5438556040365365,
+          15.75,
+          -7.161747553814292
+        ]
+      },
+      {
+        "name": "drum-window-7",
+        "position": [
+          -4.217891949777753,
+          15.75,
+          -5.617891949777759
+        ]
+      },
+      {
+        "name": "drum-window-8",
+        "position": [
+          -5.761747553814292,
+          15.75,
+          -2.9438556040365356
+        ]
+      },
+      {
+        "name": "drum-window-9",
+        "position": [
+          -5.761747553814293,
+          15.75,
+          0.14385560403653352
+        ]
+      },
+      {
+        "name": "drum-window-10",
+        "position": [
+          -4.217891949777757,
+          15.75,
+          2.817891949777755
+        ]
+      },
+      {
+        "name": "drum-window-11",
+        "position": [
+          -1.5438556040365412,
+          15.75,
+          4.361747553814292
+        ]
+      },
+      {
+        "name": "blue-front--1-4.2",
+        "position": [
+          -8.05,
+          4.2,
+          3.715
+        ]
+      },
+      {
+        "name": "blue-side--1-4.2",
+        "position": [
+          -10.465,
+          4.2,
+          1
+        ]
+      },
+      {
+        "name": "blue-front--1-7.4",
+        "position": [
+          -8.05,
+          7.4,
+          3.715
+        ]
+      },
+      {
+        "name": "blue-side--1-7.4",
+        "position": [
+          -10.465,
+          7.4,
+          1
+        ]
+      },
+      {
+        "name": "blue-front--1-10.65",
+        "position": [
+          -8.05,
+          10.65,
+          3.715
+        ]
+      },
+      {
+        "name": "blue-side--1-10.65",
+        "position": [
+          -10.465,
+          10.65,
+          1
+        ]
+      },
+      {
+        "name": "wing-front--1-3.5",
+        "position": [
+          -12,
+          3.5,
+          1.315
+        ]
+      },
+      {
+        "name": "wing-side--1-3.5",
+        "position": [
+          -14.215,
+          3.5,
+          -1
+        ]
+      },
+      {
+        "name": "wing-front--1-6.7",
+        "position": [
+          -12,
+          6.7,
+          1.315
+        ]
+      },
+      {
+        "name": "wing-side--1-6.7",
+        "position": [
+          -14.215,
+          6.7,
+          -1
+        ]
+      },
+      {
+        "name": "rear-lantern-window--1",
+        "position": [
+          -8.05,
+          13.7,
+          -0.2799999999999998
+        ]
+      },
+      {
+        "name": "blue-front-1-4.2",
+        "position": [
+          8.05,
+          4.2,
+          3.715
+        ]
+      },
+      {
+        "name": "blue-side-1-4.2",
+        "position": [
+          10.465,
+          4.2,
+          1
+        ]
+      },
+      {
+        "name": "blue-front-1-7.4",
+        "position": [
+          8.05,
+          7.4,
+          3.715
+        ]
+      },
+      {
+        "name": "blue-side-1-7.4",
+        "position": [
+          10.465,
+          7.4,
+          1
+        ]
+      },
+      {
+        "name": "blue-front-1-10.65",
+        "position": [
+          8.05,
+          10.65,
+          3.715
+        ]
+      },
+      {
+        "name": "blue-side-1-10.65",
+        "position": [
+          10.465,
+          10.65,
+          1
+        ]
+      },
+      {
+        "name": "wing-front-1-3.5",
+        "position": [
+          12,
+          3.5,
+          1.315
+        ]
+      },
+      {
+        "name": "wing-side-1-3.5",
+        "position": [
+          14.215,
+          3.5,
+          -1
+        ]
+      },
+      {
+        "name": "wing-front-1-6.7",
+        "position": [
+          12,
+          6.7,
+          1.315
+        ]
+      },
+      {
+        "name": "wing-side-1-6.7",
+        "position": [
+          14.215,
+          6.7,
+          -1
+        ]
+      },
+      {
+        "name": "rear-lantern-window-1",
+        "position": [
+          8.05,
+          13.299999999999999,
+          -0.2799999999999998
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "No renderer, camera frustum, occlusion, shadows, render.info or timing measurement.",
+    "Submission units are scene topology only, not actual draw calls.",
+    "Explicit walkable is not the complete provider rule; name/report-derived semantics require review.",
+    "No source geometry was merged, no materials were changed, and no live browser was used."
+  ]
+}

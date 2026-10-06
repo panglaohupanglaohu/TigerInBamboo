@@ -1,3 +1,5 @@
+import {seaStackTerracesEnabled} from './seaStackTerraces.js';
+import {seaStackWfcEnabled,standSeaStackOnOcean,gateSeaStacksEnabled,seaStackGeometry,seaStackMaterial,addSeaStackFoot} from './gateSeaStacks.js';
 import {mergeStaticGroup} from './geometryMerge.js';
 import * as THREE from 'three';
 import {MOEBIUS_PALETTE as P} from './moebiusPalette.js';
@@ -32,8 +34,9 @@ export function installGateTargetThirty(gate){
  const seaY=(x,z)=>sphereCenter.y+Math.sqrt(Math.max(100,160*160-(x-sphereCenter.x)**2-(z-sphereCenter.z)**2));
  const peaks=[];
  const mountains=(side,back=false)=>{for(let i=0;i<7;i++){
-  const x=back?-60+i*20:side*(85+(i%3)*8),z=back?93+(i%2)*8:- 60+i*20;
+  const x=back?-60+i*20:side*(85+(i%3)*8),z=back?93+(i%2)*8+(gateSeaStacksEnabled()?18:0):- 60+i*20;
   const h=28+(i*13%28),r=12+(i%3)*4,base=seaY(x,z)-6;
+  if(gateSeaStacksEnabled()){const geo=seaStackGeometry(r*.68,h,i+(back?20:side>0?0:10)),rock=add(geo,seaStackMaterial(h),'far-mountain',x,base+h/2,z,ridge);rock.rotation.y=i*.63;rock.userData.seaStack={height:h,radius:r*.68,base};if(seaStackWfcEnabled()||seaStackTerracesEnabled())standSeaStackOnOcean(rock,site,x,z,h,seaY,i*.63);const detailStart=ridge.children.length;addSeaStackFoot(ridge,x,z,r*.68,i,seaY);rock.userData.seaStack.detailId=`${side}-${back}-${i}`;for(const detail of ridge.children.slice(detailStart))detail.userData.stackOwner=rock.userData.seaStack.detailId;peaks.push({x,y:base+h,z,i});continue;}
   const geo=new THREE.CylinderGeometry(r*.18,r,h,7,6);const a=geo.attributes.position;
   for(let k=0;k<a.count;k++){const y=a.getY(k);const t=(y+h/2)/h; const fac=.86+.14*Math.sin(Math.floor(t*5)*1.9+i);a.setX(k,a.getX(k)*fac+Math.sin(t*5+i)*r*.18);a.setZ(k,a.getZ(k)*fac);}geo.computeVertexNormals();
   const normals=geo.attributes.normal,colors=[];for(let v=0;v<normals.count;v++){const c=new THREE.Color(back?0x789cbd:0x567fa4).multiplyScalar(.82+.18*Math.abs(normals.getY(v))+.12*normals.getX(v));colors.push(c.r,c.g,c.b);}geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));const m=new THREE.MeshBasicMaterial({vertexColors:true});
@@ -42,10 +45,10 @@ export function installGateTargetThirty(gate){
  if(n>=4)mountains(1);if(n>=5)mountains(-1);if(n>=6)mountains(1,true);
  const crystalMat=new THREE.MeshBasicMaterial({color:P.glass,transparent:true,opacity:.75,depthWrite:false});
  const crystal=(x,y,z,h,r)=>{const shape=new THREE.CylinderGeometry(r,r,h*.8,6);const shaft=add(shape,crystalMat,'far-crystal-shaft',x,y+h*.4,z,ridge);shaft.add(new THREE.LineSegments(new THREE.EdgesGeometry(shape,25),new THREE.LineBasicMaterial({color:0xc8f0f1,transparent:true,opacity:.7})));const tip=add(new THREE.ConeGeometry(r,h*.2,6),crystalMat,'far-crystal-tip',x,y+h*.9,z,ridge);tip.add(new THREE.LineSegments(new THREE.EdgesGeometry(tip.geometry,25),ink));};
- if(n>=7)for(const p of peaks.filter((_,i)=>i%3===1))crystal(p.x,p.y-4,p.z,23,2.2);
- if(n>=8)for(const p of peaks.filter((_,i)=>i%3===1))for(const s of[-1,1])crystal(p.x+s*4,p.y-7,p.z+2,13+s*2,1.25);
- if(n>=9)for(const p of peaks.filter((_,i)=>i%3===1))for(let k=0;k<2;k++)add(new THREE.CylinderGeometry(4.4,4.6,.6,12),cream,'far-terrace',p.x,p.y+k*7,p.z,ridge);
- if(n>=10){
+ if(n>=7&&!gateSeaStacksEnabled())for(const p of peaks.filter((_,i)=>i%3===1))crystal(p.x,p.y-4,p.z,23,2.2);
+ if(n>=8&&!gateSeaStacksEnabled())for(const p of peaks.filter((_,i)=>i%3===1))for(const s of[-1,1])crystal(p.x+s*4,p.y-7,p.z+2,13+s*2,1.25);
+ if(n>=9&&!gateSeaStacksEnabled())for(const p of peaks.filter((_,i)=>i%3===1))for(let k=0;k<2;k++)add(new THREE.CylinderGeometry(4.4,4.6,.6,12),cream,'far-terrace',p.x,p.y+k*7,p.z,ridge);
+ if(n>=10&&!gateSeaStacksEnabled()){
   const leaf=new THREE.MeshBasicMaterial({color:P.leaf}),ray=new THREE.Raycaster(),down=new THREE.Vector3(0,-1,0).transformDirection(site.matrixWorld);
   ridge.updateWorldMatrix(true,true);const rocks=ridge.children.filter(o=>o.name==='g30-far-mountain');
   for(const p of peaks)for(let k=0;k<5;k++){
