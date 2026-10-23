@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {CRYSTAL_V7_SHORES} from '../assets/crystalV7ShoresData.js';
+import {clipCrystalShoreFromLake} from './clipCrystalShoreFromLake.js';
 import {getCityFrame} from './crystalCityLayout.js';
 
 // Apply the same r03 edits to live factory nodes: keep animation/story identity.
@@ -33,12 +34,14 @@ export function installCrystalV7Shores(scene,city,swamp){
  const siteFor=r=>({dir:r.dir,radius:r.root});
  const sites=[...city.crystals.slice(0,3).map(siteFor),{dir:swamp.position.clone().normalize(),radius:swamp.position.length()},...city.crystals.slice(3).map(siteFor)];
  const bases=sites.map(s=>{const x=frame.east.clone().addScaledVector(s.dir,-frame.east.dot(s.dir)).normalize();return {x,z:x.clone().cross(s.dir).normalize()};});
- const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.78,flatShading:true});
+ const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.78,flatShading:true}),lakeCuts=[];
  for(const p of CRYSTAL_V7_SHORES){
   const s=sites[p.owner],b=bases[p.owner],positions=[];
   for(let i=0;i<p.positions.length;i+=3){const [x,y,z]=p.positions.slice(i,i+3);const v=s.dir.clone().multiplyScalar(s.radius).addScaledVector(b.x,x).addScaledVector(b.z,z).normalize().multiplyScalar(s.radius+y);positions.push(...v.toArray());}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('color',new THREE.Float32BufferAttribute(p.colors,3));g.computeVertexNormals();
-  const mesh=new THREE.Mesh(g,material);mesh.name='v7-'+p.name;mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);if(p.walk)walk.push(mesh);
+  const cut=p.owner!==3?clipCrystalShoreFromLake(g,swamp):{geometry:g,changed:false};
+  if(cut.changed){lakeCuts.push({name:'v7-'+p.name,owner:p.owner,walk:!!p.walk,sourceTriangles:cut.sourceTriangles,resultTriangles:cut.resultTriangles,changedTriangles:cut.changedTriangles,removedTriangles:cut.removedTriangles});g.dispose();}
+  const mesh=new THREE.Mesh(cut.geometry,material);mesh.name='v7-'+p.name;mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);if(p.walk)walk.push(mesh);
  }
  // A continuous stone rim connects the three bridges around the original open bowl.
  const rimGeo=new THREE.RingGeometry(18,21.5,96);rimGeo.rotateX(-Math.PI/2);
@@ -69,7 +72,7 @@ export function installCrystalV7Shores(scene,city,swamp){
   for(const hit of ray.intersectObjects(walk,false))if(hit.face.normal.clone().transformDirection(hit.object.matrixWorld).dot(up)>.5)return hit.point.length();return null;
  };
  root.userData.rotateCoreSite=q=>sites[3].dir.applyQuaternion(q);
- root.userData.walkMeshes=walk;root.userData.round=3;return root;
+ root.userData.walkMeshes=walk;root.userData.round=3;root.userData.lakeCavityClearance={version:1,cuts:lakeCuts,scope:'neighbour-authored-shores-only',bridgeMeshesUnchanged:true};return root;
 }
 
 // Regrade only the authored canyon shoulders where they overlap the city cove.

@@ -66,3 +66,6 @@ export function cragGeometry(seed=1){
  const top=(rings-1)*sides;for(let j=1;j<sides-1;j++)indices.push(top,top+j+1,top+j);
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));g.setIndex(indices);g.computeVertexNormals();g.computeBoundingSphere();return g;
 }
+
+// Opt-in final-mesh finish; never called by the legacy/refinement pipeline.
+export {finishMountainRockSurface} from './mountainRockSurfaceFinish.js';

@@ -1462,6 +1462,10 @@ export function mergeCitadelTownStatic(assemblyRoot) {
 
   const skip = citadelTownMergeSkip;
   const onSurface = citadelTownMergeOnSurface;
+  // Initial/full builds need the same cell ownership as incremental batches.
+  // Otherwise the first erase removes the walls but cannot remove their
+  // unclaimed BackSide shells, leaving solid dark faces in the deleted cells.
+  const onOutline = citadelTownMergeOnOutline;
 
   // 按层组合并：每层一个锚点，隐藏高层的组 visible 语义保持有效
   const layers = assemblyRoot.userData?.layers;
@@ -1477,11 +1481,11 @@ export function mergeCitadelTownStatic(assemblyRoot) {
   }
   if (levelGroups.length) {
     for (const level of levelGroups) {
-      mergeStaticGroup(level, { skip, onSurface });
+      mergeStaticGroup(level, { skip, onSurface, onOutline });
     }
   } else {
     // 兜底：无分层信息时整体合并（编辑器外部直用）
-    mergeStaticGroup(assemblyRoot, { skip, onSurface });
+    mergeStaticGroup(assemblyRoot, { skip, onSurface, onOutline });
   }
 
   // 外围台地石阶（无层语义）单独合并：contour-step 仍按名字拾取，跳过

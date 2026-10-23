@@ -1,3 +1,4 @@
+import {createTargetStreetDressing} from './targetStreetDressing.js';
 import * as T from 'three';
 const polygon=[[45,76],[49,69],[65,64],[81,67],[88,76],[83,87],[64,91],[49,87]];
 function clip(subject,a,b){const result=[],cross=p=>(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);for(let i=0;i<subject.length;i++){const p=subject[i],q=subject[(i+1)%subject.length],u=cross(p),v=cross(q);if(u>=-1e-9)result.push(p);if((u>=0)!==(v>=0)){const t=u/(u-v);result.push([p[0]+t*(q[0]-p[0]),p[1]+t*(q[1]-p[1])]);}}return result;}
@@ -5,7 +6,7 @@ function clip(subject,a,b){const result=[],cross=p=>(b[0]-a[0])*(p[1]-a[1])-(b[1
 export function createTargetNewCityPlaza({sampleSurface,castle=null,step=1.2,offset=.035}={}){
  if(typeof sampleSurface!=='function'||!Number.isFinite(step)||step<=0||step>2)throw new TypeError('final surface sampler and step <=2 required');
  const root=new T.Group();root.name='target-new-city-paved-plaza';root.userData.preserveCitadelMaterials=true;
- const report={version:'target-plaza-3-measured-west-vista',polygon,terrainMutation:false,offset,acceptedCells:0,rejectedCells:0,missing:0,samples:0,geometrySupport:'all clipped cell vertices on actual final terrain, finite interpolation',wfc:false};
+ const report={version:'target-plaza-4-statue-floral-inlay',polygon,terrainMutation:false,offset,acceptedCells:0,rejectedCells:0,missing:0,samples:0,geometrySupport:'all clipped cell vertices on actual final terrain, finite interpolation',wfc:false};
  const cache=new Map(),sample=(x,z)=>{const key=x.toFixed(7)+','+z.toFixed(7);if(cache.has(key))return cache.get(key);report.samples++;const hit=sampleSurface(x,z),y=typeof hit==='number'?hit:hit?.height;const value=Number.isFinite(y)?y:null;if(value===null)report.missing++;cache.set(key,value);return value;};
  const positions=[],uvs=[];
  for(let z=64;z<91;z+=step)for(let x=45;x<88;x+=step){let p=[[x,z],[Math.min(88,x+step),z],[Math.min(88,x+step),Math.min(91,z+step)],[x,Math.min(91,z+step)]];for(let j=0;j<polygon.length&&p.length;j++)p=clip(p,polygon[j],polygon[(j+1)%polygon.length]);if(p.length<3)continue;const ys=p.map(q=>sample(...q));if(ys.some(y=>y===null)||Math.max(...ys)-Math.min(...ys)>.45||Math.min(...ys)<2.25||Math.max(...ys)>3.35){report.rejectedCells++;continue;}for(let j=1;j<p.length-1;j++)for(const k of[0,j+1,j]){positions.push(p[k][0],ys[k]+offset,p[k][1]);uvs.push(p[k][0],p[k][1]);}report.acceptedCells++;}
@@ -18,11 +19,36 @@ export function createTargetNewCityPlaza({sampleSurface,castle=null,step=1.2,off
  vec2 h=dot(a,a)<dot(b,b)?a:b; float edge=max(dot(abs(h),vec2(.8660254,.5)),abs(h.y));
  float seam=smoothstep(.442,.473,edge);float tint=.96+.055*plazaHash(floor(stoneUv-h));
  diffuseColor.rgb*=mix(vec3(tint),vec3(.81,.82,.80),seam*.46);
- `);};material.defines={USE_UV:''};material.customProgramCacheKey=()=> 'target-plaza-hex-pavers-1';
+ vec2 motif=vUv-vec2(56.,78.);float r=length(motif),motifAngle=atan(motif.y,motif.x);
+ float ringBand=step(3.65,r)*step(r,7.6);
+ float petals=step(.18,cos(motifAngle*12.))*smoothstep(3.65,4.2,r)*(1.-smoothstep(6.6,7.6,r));
+ vec3 rose=vec3(.73,.48,.36),cream=vec3(1.,.94,.79);
+ diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*mix(cream,rose,petals),ringBand*.65);
+ vec2 pathA=vec2(62.,64.),pathB=vec2(56.,70.5),axis=pathB-pathA;
+ float along=clamp(dot(vUv-pathA,axis)/dot(axis,axis),0.,1.);float lateral=length(vUv-pathA-axis*along);
+ float approachBorder=(1.-smoothstep(.08,.16,abs(lateral-1.9)))*step(64.,vUv.y)*step(vUv.y,71.);
+ diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.75,.53,.40),approachBorder*.7);
+ float radialJoint=1.-smoothstep(.015,.035,abs(sin(motifAngle*12.)));
+ diffuseColor.rgb*=1.-radialJoint*ringBand*.12;
+
+ `);};material.defines={USE_UV:''};material.customProgramCacheKey=()=> 'target-plaza-radial-rose-cream-3';
  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));geo.computeVertexNormals();const mesh=new T.Mesh(geo,material);mesh.name='target-plaza-paving-surface';mesh.receiveShadow=true;mesh.userData.preserveCitadelMaterials=true;mesh.userData.targetWalkable=true;root.add(mesh);
- const ringPositions=[],cx=56,cz=78;report.rings={radii:[[3.4,3.65],[5.45,5.72],[7.6,7.95]],clippedSegments:0,rejectedSegments:0};
+ const ringPositions=[],cx=56,cz=78;report.rings={radii:[[3.4,3.65],[5.45,5.72],[7.6,7.95]],center:[56,78],motif:'twelve-petal-rose-and-cream-stone',clippedSegments:0,rejectedSegments:0};
  for(let i=0;i<96;i++)for(const radii of report.rings.radii){const a=i*Math.PI/48,b=(i+1)*Math.PI/48;let pts=[[cx+Math.cos(a)*radii[0],cz+Math.sin(a)*radii[0]],[cx+Math.cos(a)*radii[1],cz+Math.sin(a)*radii[1]],[cx+Math.cos(b)*radii[1],cz+Math.sin(b)*radii[1]],[cx+Math.cos(b)*radii[0],cz+Math.sin(b)*radii[0]]];const before=JSON.stringify(pts);for(let j=0;j<polygon.length&&pts.length;j++)pts=clip(pts,polygon[j],polygon[(j+1)%polygon.length]);if(JSON.stringify(pts)!==before)report.rings.clippedSegments++;if(pts.length<3)continue;const ys=pts.map(p=>sample(...p)),center=pts.reduce((v,p)=>[v[0]+p[0]/pts.length,v[1]+p[1]/pts.length],[0,0]),middle=sample(...center);if(middle===null||middle<2.25||middle>3.35||ys.some(y=>y===null||y<2.25||y>3.35)||Math.max(...ys)-Math.min(...ys)>.45){report.rings.rejectedSegments++;continue;}for(let j=1;j<pts.length-1;j++)for(const k of[0,j+1,j])ringPositions.push(pts[k][0],ys[k]+offset+.005,pts[k][1]);}
  const ringGeo=new T.BufferGeometry();ringGeo.setAttribute('position',new T.Float32BufferAttribute(ringPositions,3));ringGeo.computeVertexNormals();const ringMaterial=new T.MeshStandardMaterial({color:'#827a69',roughness:.95});ringMaterial.userData.preserveCitadelMaterial=true;const rings=new T.Mesh(ringGeo,ringMaterial);rings.name='target-plaza-statue-inlaid-rings';rings.receiveShadow=true;root.add(rings);
+ // Sea-facing perimeter: stone curb, dark posts and two continuous rails.
+ const fenceGeo=new T.BoxGeometry(1,1,1),fenceMat=new T.MeshStandardMaterial({color:'#526566',roughness:.88}),curbMat=new T.MeshStandardMaterial({color:'#d9caab',roughness:.95}),fenceRows=[],curbRows=[];
+ fenceMat.userData.preserveCitadelMaterial=curbMat.userData.preserveCitadelMaterial=true;
+ const addFence=(rows,a,b,width,height,lift)=>{const A=new T.Vector3(a[0],a[1]+lift,a[2]),B=new T.Vector3(b[0],b[1]+lift,b[2]),d=B.clone().sub(A),o=new T.Object3D();o.position.copy(A).add(B).multiplyScalar(.5);o.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.clone().normalize());o.scale.set(width,d.length()+.015,height);o.updateMatrix();rows.push(o.matrix.clone());};
+ let fenceSpans=0;
+ for(let edge=3;edge<8;edge++){const a=polygon[edge],b=polygon[(edge+1)%8],n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/1.65);for(let i=0;i<n;i++){const A=a.map((v,k)=>v+(b[k]-v)*i/n),B=a.map((v,k)=>v+(b[k]-v)*(i+1)/n),ya=sample(...A),yb=sample(...B);if(ya===null||yb===null||Math.max(ya,yb)>3.6||Math.min(ya,yb)<2.1)continue;
+ // The incoming stair keeps a full-width opening at the western ring edge.
+ if(Math.min(Math.hypot(A[0]-48.2,A[1]-76.463),Math.hypot(B[0]-48.2,B[1]-76.463))<2.8)continue;
+ const p=[A[0],ya+offset,A[1]],q=[B[0],yb+offset,B[1]];addFence(curbRows,p,q,.4,.4,.08);for(const lift of[.62,1.10])addFence(fenceRows,p,q,.075,.075,lift);for(const v of[p,q])addFence(fenceRows,v,[v[0],v[1]+1.15,v[2]],.10,.10,0);fenceSpans++;}}
+ for(const[rows,mat,name]of[[fenceRows,fenceMat,'plaza-sea-perimeter-railings'],[curbRows,curbMat,'plaza-sea-perimeter-stone-curb']]){const m=new T.InstancedMesh(fenceGeo,mat,rows.length);rows.forEach((v,i)=>m.setMatrixAt(i,v));m.name=name;m.castShadow=m.receiveShadow=true;m.userData.preserveCitadelMaterials=true;root.add(m);}
+ report.perimeterRailings={version:'sea-edge-open-stair-1',spans:fenceSpans,height:1.15,stairOpening:[48.2,76.463,5.6]};
+ const planted=[];for(const[x,z]of[[48,74],[48,83],[62,68.5],[64,87.5],[82,83]]){const y=sample(x,z);if(y!==null&&y>=2.25&&y<=3.35)planted.push([x,y+.05,z,.85,false]);}
+ const plazaGardens=createTargetStreetDressing({plants:planted,lamps:[],lightLimit:0});root.add(plazaGardens.group);report.gardens=plazaGardens.report;report.composition={statue:[56,78],horse:[72,78],arrival:[62,64],statueCenteredMotif:true,horseOriginalActor:true};
  const saved=[],inst=[],hiddenKeys=new Set(),vistaKeys=new Set(),westVistaKeys=new Set(),nearby=[],matrix=new T.Matrix4();
  if(castle){castle.updateWorldMatrix(true,true);const canopy=castle.getObjectByName('citadel-mountain-canopy-candidate'),inv=castle.matrixWorld.clone().invert();canopy?.traverse(o=>{if(o.isInstancedMesh)inst.push(o);});const key=m=>m.elements.map(n=>n.toFixed(5)).join(',');
   for(const m of inst.filter(m=>m.name!=='citadel-canopy-root-trunks'))for(let i=0;i<m.count;i++){m.getMatrixAt(i,matrix);const p=new T.Vector3().setFromMatrixPosition(inv.clone().multiply(m.matrixWorld).multiply(matrix));const within=polygon.every((a,j)=>{const b=polygon[(j+1)%polygon.length];return(b[0]-a[0])*(p.z-a[1])-(b[1]-a[1])*(p.x-a[0])>=0;});const y=within?sample(p.x,p.z):null;if(within&&y!==null&&y>=2.25&&y<=3.35&&Math.abs(p.y-y)<2)hiddenKeys.add(key(matrix));// Explicit foreground vista only: use actual crown bounds and supported root.
@@ -39,5 +65,5 @@ export function createTargetNewCityPlaza({sampleSurface,castle=null,step=1.2,off
  }
  report.forest={hiddenTrees:hiddenKeys.size,vistaTrees:vistaKeys.size,westVistaTrees:westVistaKeys.size,westVistaRootBounds:[42.5,49,77,93],vistaRootBounds:[49,76,84,98],nearby:nearby.map(r=>({...r,hidden:hiddenKeys.has(r.signature),reason:hiddenKeys.has(r.signature)?(westVistaKeys.has(r.signature)?'measured-west-vista':vistaKeys.has(r.signature)?'vista':'plaza'):(r.root[0]<49||r.root[0]>76||r.root[2]<84||r.root[2]>98?'outside-vista':r.ground===null?'missing-ground':r.ground<2.25||r.ground>3.35?'ground-height':Math.abs(r.root[1]-r.ground)>=2?'root-gap':'crown-outside')})),hiddenInstances:saved.length,method:'same original tree crown/trunk instance signatures; reversible plaza clearing, no terrain/root relocation'};
  report.triangles=(positions.length+ringPositions.length)/9;report.draws=2;report.accepted=report.acceptedCells>0&&report.missing===0;root.userData.targetPlazaReport=report;
- let disposed=false;return{group:root,report,dispose(){if(disposed)return;disposed=true;root.removeFromParent();for(const e of saved)e.mesh.setMatrixAt(e.index,e.matrix);for(const m of inst){m.instanceMatrix.needsUpdate=true;m.computeBoundingBox();m.computeBoundingSphere();}geo.dispose();ringGeo.dispose();material.dispose();ringMaterial.dispose();}};
+ let disposed=false;return{group:root,report,streetDressing:plazaGardens,dispose(){if(disposed)return;disposed=true;plazaGardens.dispose();fenceGeo.dispose();fenceMat.dispose();curbMat.dispose();root.removeFromParent();for(const e of saved)e.mesh.setMatrixAt(e.index,e.matrix);for(const m of inst){m.instanceMatrix.needsUpdate=true;m.computeBoundingBox();m.computeBoundingSphere();}geo.dispose();ringGeo.dispose();material.dispose();ringMaterial.dispose();}};
 }

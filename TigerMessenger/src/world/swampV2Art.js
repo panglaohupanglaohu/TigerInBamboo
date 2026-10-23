@@ -1,7 +1,23 @@
+import {installSwampGlowFlowerRenderBatch} from './swampGlowFlowerRenderBatch.js';
+import {installSwampFlowerRenderBatch} from './swampFlowerRenderBatch.js';
 import {MOEBIUS_PALETTE as P} from './moebiusPalette.js';
+import {createSwampLegacyWaterGrassGeometry} from './swampAlgaeClumps.js';
+import {applyGregLakeVisuals,GREG_LAKE_PALETTE} from './swampGregVisuals.js';
+import {installSwampCoralRim} from './swampCoralRim.js';
+import {installSwampCoralPerches} from './swampCoralPerches.js';
+import {installSwampCoralCanopy} from './swampCoralCanopy.js';
+import {installSwampCoralTrunkDetail} from './swampCoralTrunkDetail.js';
+import {installSwampRimRootBatch} from './swampRimRootBatch.js';
+import {installSwampCoralUnderstory} from './swampCoralUnderstory.js';
+import {installSwampNaturalCliff} from './swampNaturalCliff.js';
+import {installSwampGregEcology} from './swampGregEcology.js';
+import {auditSwampLivingPlants} from './swampGregLivingPaths.js';
+import {installSwampGregHabitation} from './swampGregHabitation.js';
 import {applySwampTigerV2} from '../assets/characters/swampTigerV2.js';
+import {installSwampSpatialPlan} from './swampSpatialPlan.js';
+import {installSwampWaterShore} from './swampWaterShore.js';
 import * as THREE from 'three';
-export const SWAMP_V2_ROUND=50;
+export const SWAMP_V2_ROUND=54;
 export function applySwampV2Art(swamp){
  if(new URLSearchParams(globalThis.location?.search||'').get('swampV2')==='0')return;
  swamp.userData.swampV2Round=SWAMP_V2_ROUND;
@@ -9,6 +25,9 @@ export function applySwampV2Art(swamp){
  applySwampTigerV2(swamp.userData.tiger);
  // Keep objects and random sequence intact; only suspend visible lianas for the approved build scope.
  swamp.traverse(o=>{if(o.name.startsWith('swamp-vine-')||o.name==='swamp-cross-tree-vine')o.visible=false;});
+ // towerTrees also contains palms for spherical placement. Only the towering
+ // tree factory has segmented trunks, exposed roots and branched crowns.
+ const rimTrees=(swamp.userData.towerTrees||[]).filter(t=>t.name==='swamp-towering-tree');
  const tree=swamp.getObjectByName('swamp-ancient-world-tree'),trunk=tree?.getObjectByName('world-tree-trunk');
  if(!trunk)return;
  // Replace the six-sided pole with a continuous tapered, gently curved trunk at the same anchor.
@@ -183,8 +202,8 @@ export function applySwampV2Art(swamp){
   flower.add(stamen);
  }
 
- for(const rimTree of swamp.userData.towerTrees||[]){
-  for(const segment of rimTree.children.slice(0,6)){
+ for(const rimTree of rimTrees){
+  for(const segment of rimTree.children.filter(o=>o.userData.swampTreePart==='trunk')){
    if(!segment.isMesh)continue;
    segment.geometry.computeBoundingBox();const b=segment.geometry.boundingBox;
    const height=b.max.y-b.min.y,r=Math.max(b.max.x-b.min.x,b.max.z-b.min.z)*.5;
@@ -195,7 +214,7 @@ export function applySwampV2Art(swamp){
   }
  }
 
- for(const rimTree of swamp.userData.towerTrees||[]){
+ for(const rimTree of rimTrees){
   const crowns=rimTree.children.filter(o=>o.name==='v2-rim-crown');
   const detail=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,0),new THREE.MeshBasicMaterial({color:0xffffff}),crowns.length*32);detail.name='v2-rim-leaflets';
   const pose=new THREE.Object3D();let n=0;
@@ -207,7 +226,7 @@ export function applySwampV2Art(swamp){
   detail.count=n;rimTree.add(detail);
  }
 
- const barkMeshes=[trunk,...(swamp.userData.towerTrees||[]).flatMap(t=>t.children.slice(0,6))];
+ const barkMeshes=[trunk,...rimTrees.flatMap(t=>t.children.filter(o=>o.userData.swampTreePart==='trunk'))];
  for(const mesh of barkMeshes){
   mesh.material=mesh.material.clone();mesh.material.onBeforeCompile=shader=>{
    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vSwampBark;').replace('#include <begin_vertex>','#include <begin_vertex>\nvSwampBark=position;');
@@ -288,16 +307,7 @@ export function applySwampV2Art(swamp){
  const stonePose=new THREE.Object3D();
  for(let i=0;i<32;i++){const a=i*2.399,r=7+(i%6);stonePose.position.set(Math.cos(a)*r,10.5,Math.sin(a)*r);stonePose.rotation.set(.1,a,.1);stonePose.scale.set(.65+(i%3)*.15,.25,.5);stonePose.updateMatrix();pebbles.setMatrixAt(i,stonePose.matrix);}swamp.add(pebbles);
 
- const grassVertices=[],grassColors=[];
- for(let i=0;i<30;i++){
-  const angle=i*2.399,r=6+(i%6),x=Math.cos(angle)*r,z=Math.sin(angle)*r;
-  for(let f=0;f<3;f++){
-   const a=angle+f*2.1,height=2+(i%4)*.6;
-   const point=(t,side)=>[x+Math.cos(a)*(.6*Math.sin(t*2.2)+side*.22*Math.sin(t*Math.PI)),10.5+t*height,z+Math.sin(a)*(.6*Math.sin(t*2.2)+side*.22*Math.sin(t*Math.PI))];
-   for(let j=0;j<8;j++){const t=j/8,u=(j+1)/8,c=new THREE.Color(0x254c59).lerp(new THREE.Color(0x5b978a),u);for(const v of [point(t,-1),point(u,-1),point(t,1),point(t,1),point(u,-1),point(u,1)]){grassVertices.push(...v);grassColors.push(c.r,c.g,c.b);}}
-  }
- }
- const grassGeo=new THREE.BufferGeometry();grassGeo.setAttribute('position',new THREE.Float32BufferAttribute(grassVertices,3));grassGeo.setAttribute('color',new THREE.Float32BufferAttribute(grassColors,3));grassGeo.computeVertexNormals();
+ const grassGeo=createSwampLegacyWaterGrassGeometry(swamp,lakeFloor);
  const grass=new THREE.Mesh(grassGeo,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide,fog:false}));grass.name='v2-underwater-grass';swamp.add(grass);
 
  const barge=swamp.userData.shipyard?.barge;
@@ -327,10 +337,10 @@ export function applySwampV2Art(swamp){
  }
 
  // Swamp V2 owns its tall forest silhouette; the city marsh pass must not flatten it again.
- for(const rimTree of swamp.userData.towerTrees||[])rimTree.userData.swampV2KeepCanopy=true;
+ for(const rimTree of rimTrees)rimTree.userData.swampV2KeepCanopy=true;
 
  // Replace flattened crown discs with overlapping, vertically staggered foliage lobes.
- for(const rimTree of swamp.userData.towerTrees||[]){
+ for(const rimTree of rimTrees){
   const crowns=rimTree.children.filter(o=>o.name==='v2-rim-crown');
   const oldLeaves=rimTree.getObjectByName('v2-rim-leaflets');if(oldLeaves)oldLeaves.visible=false;
   const foliage=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,2),new THREE.MeshBasicMaterial({color:0xffffff}),crowns.length*7);foliage.name='v2-rim-foliage-lobes';let index=0;
@@ -349,8 +359,8 @@ export function applySwampV2Art(swamp){
  }
 
  // Exposed bank roots: bowed, tapered wood instead of rectangular sticks.
- for(const rimTree of swamp.userData.towerTrees||[]){
-  for(const [ri,root]of rimTree.children.slice(6,12).entries()){
+ for(const rimTree of rimTrees){
+  for(const [ri,root]of rimTree.children.filter(o=>o.userData.swampTreePart==='root').entries()){
    if(!root.isMesh)continue;root.geometry.computeBoundingBox();const box=root.geometry.boundingBox,len=box.max.x-box.min.x;
    const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(.7,4,0),new THREE.Vector3(2.2,1.1,.12),new THREE.Vector3(4,-.12,.08)]);
    const geo=new THREE.TubeGeometry(curve,12,1,8,false),p=geo.attributes.position;
@@ -377,15 +387,15 @@ export function applySwampV2Art(swamp){
   const batch=new THREE.InstancedMesh(geo,new THREE.MeshBasicMaterial({vertexColors:true}),centralCrowns.length),ink=new THREE.InstancedMesh(geo,new THREE.MeshBasicMaterial({color:P.ink,side:THREE.BackSide}),centralCrowns.length),pose=new THREE.Object3D();batch.name='v2-central-crown-batch';ink.name='v2-central-crown-ink';
   centralCrowns.forEach((c,i)=>{c.updateMatrix();batch.setMatrixAt(i,c.matrix);batch.setColorAt(i,new THREE.Color([P.leaf,P.leafLight,P.leafLight,P.leafDark][i%4]));pose.position.copy(c.position);pose.quaternion.copy(c.quaternion);pose.scale.copy(c.scale).multiplyScalar(1.018);pose.updateMatrix();ink.setMatrixAt(i,pose.matrix);c.visible=false;});tree.add(batch,ink);
  }
- for(const rimTree of swamp.userData.towerTrees||[]){const foliage=rimTree.getObjectByName('v2-rim-foliage-lobes');if(!foliage)continue;
+ for(const rimTree of rimTrees){const foliage=rimTree.getObjectByName('v2-rim-foliage-lobes');if(!foliage)continue;
   const ink=new THREE.InstancedMesh(foliage.geometry,new THREE.MeshBasicMaterial({color:P.ink,side:THREE.BackSide}),foliage.count),matrix=new THREE.Matrix4(),expand=new THREE.Matrix4().makeScale(1.015,1.015,1.015);ink.name='v2-rim-crown-ink';
   for(let i=0;i<foliage.count;i++){foliage.getMatrixAt(i,matrix);ink.setMatrixAt(i,matrix.multiply(expand));}rimTree.add(ink);
  }
 
  // Rebuild the remaining angular branch segments, keeping every fork endpoint fixed.
- for(const rimTree of swamp.userData.towerTrees||[]){
-  for(const branch of rimTree.children.slice(12)){
-   if(!branch.isMesh||branch.name||branch.geometry?.attributes.position.count!==72)continue;
+ for(const rimTree of rimTrees){
+  for(const branch of rimTree.children.filter(o=>o.userData.swampTreePart==='branch')){
+   if(!branch.isMesh)continue;
    const p=branch.geometry.attributes.position;branch.geometry.computeBoundingBox();const h=branch.geometry.boundingBox.max.y-branch.geometry.boundingBox.min.y;let top=0,bottom=0;
    for(let i=0;i<p.count;i++){const r=Math.hypot(p.getX(i),p.getZ(i));if(p.getY(i)>0)top=Math.max(top,r);else bottom=Math.max(bottom,r);}
    const geo=new THREE.CylinderGeometry(top,bottom,h,12,6),v=geo.attributes.position;
@@ -398,6 +408,9 @@ export function applySwampV2Art(swamp){
  const stairCheeks=new THREE.Group();stairCheeks.name='v2-entry-stone-cheeks';
  for(const [i,step]of (swamp.userData.tigerWalkSurfaces||[]).entries())for(const side of [-1,1]){
   const block=new THREE.Mesh(new THREE.BoxGeometry(.65,3.65,1.8),new THREE.MeshBasicMaterial({color:i%2?P.stone:P.cream}));
+  // At the rim crossing the retaining cheek ends below the paws, rather than
+  // continuing as a knee-high obstacle through the circular patrol lane.
+  if(i===0){block.geometry.translate(0,-.65,0);block.userData.entryPatrolClearance='lowered-cheek';}
   block.position.copy(step.position).add(new THREE.Vector3(-Math.sin(.5)*side*4.65,-.85,Math.cos(.5)*side*4.65));block.rotation.y=step.rotation.y;stairCheeks.add(block);
   const seam=new THREE.LineSegments(new THREE.EdgesGeometry(block.geometry),new THREE.LineBasicMaterial({color:P.ink}));block.add(seam);
  }swamp.add(stairCheeks);
@@ -406,6 +419,7 @@ export function applySwampV2Art(swamp){
  const entryLamps=new THREE.Group();entryLamps.name='v2-entry-lamps';
  for(const i of [0,3,6]){
   const step=swamp.userData.tigerWalkSurfaces[i],lamp=new THREE.Group();lamp.position.copy(step.position).add(new THREE.Vector3(-Math.sin(.5)*4.65,1.05,Math.cos(.5)*4.65));
+  if(i===0){lamp.position.add(new THREE.Vector3(Math.cos(.5)*2.8,0,Math.sin(.5)*2.8));lamp.position.y=40;lamp.userData.entryPatrolClearance='outer-rim-lamp';}
   const brass=new THREE.MeshBasicMaterial({color:P.brass}),stem=new THREE.Mesh(new THREE.CylinderGeometry(.07,.12,2.3,10),brass);stem.position.y=1.15;lamp.add(stem);
   const globe=new THREE.Mesh(new THREE.SphereGeometry(.38,16,10),new THREE.MeshBasicMaterial({color:P.cream,transparent:true,opacity:.72}));globe.position.y=2.55;lamp.add(globe);
   for(const axis of [0,1]){const hoop=new THREE.Mesh(new THREE.TorusGeometry(.39,.025,5,24),brass);hoop.position.y=2.55;if(axis)hoop.rotation.y=Math.PI/2;lamp.add(hoop);}
@@ -417,6 +431,7 @@ export function applySwampV2Art(swamp){
  const entryFronds=new THREE.InstancedMesh(frondGeo,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide}),8*2*6),frondPose=new THREE.Object3D();entryFronds.name='v2-entry-fronds';let fi=0;
  for(const [i,step]of swamp.userData.tigerWalkSurfaces.entries())for(const side of [-1,1])for(let k=0;k<6;k++){
   frondPose.position.copy(step.position).add(new THREE.Vector3(-Math.sin(.5)*side*4.9,1,Math.cos(.5)*side*4.9));
+  if(i===0)frondPose.position.add(new THREE.Vector3(Math.cos(.5)*2.8,0,Math.sin(.5)*2.8));
   frondPose.rotation.set(0,-.5-Math.PI/2+(side<0?Math.PI:0)+(k-2.5)*.2,.35+(k%3)*.2);frondPose.scale.set(.7+(k%3)*.2,1,.65);frondPose.updateMatrix();entryFronds.setMatrixAt(fi,frondPose.matrix);entryFronds.setColorAt(fi,new THREE.Color([P.leafDark,P.leaf,P.leafLight][(i+k)%3]));fi++;
  }swamp.add(entryFronds);
 
@@ -433,6 +448,22 @@ export function applySwampV2Art(swamp){
   }
  }
  const ledgeGeo=new THREE.BufferGeometry();ledgeGeo.setAttribute('position',new THREE.Float32BufferAttribute(ledgeP,3));ledgeGeo.setAttribute('color',new THREE.Float32BufferAttribute(ledgeC,3));ledgeGeo.computeVertexNormals();const ledges=new THREE.Mesh(ledgeGeo,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide}));ledges.name='v2-bank-rock-shelves';swamp.add(ledges);
+ installSwampWaterShore(swamp);
+ installSwampCoralRim(swamp);
+ installSwampShoreDock(swamp);
+ installSwampSpatialPlan(swamp);
+ installSwampCoralCanopy(swamp);
+ applyGregLakeVisuals(swamp);
+ installSwampCoralTrunkDetail(swamp);
+ const ecology=installSwampGregEcology(swamp,{enabled:new URLSearchParams(globalThis.location?.search||'').get('gregLakeEcology')!=='0'});
+ if(ecology)swamp.userData.gregLivingPaths=auditSwampLivingPlants(swamp,ecology.records);
+ installSwampGregHabitation(swamp);
+ installSwampNaturalCliff(swamp);
+ installSwampCoralUnderstory(swamp);
+ installSwampCoralPerches(swamp);
+ installSwampFlowerRenderBatch(swamp);
+ installSwampGlowFlowerRenderBatch(swamp);
+ installSwampRimRootBatch(swamp);
 
 }
 
@@ -440,6 +471,12 @@ export function applySwampV2Art(swamp){
 export function finishSwampV2Art({scene,swamp}){
  applyMoebiusBoatPalette(scene);
  const inner=swamp.userData.inner||swamp;if(!inner.userData.swampV2Round)return;
+ // V7 applies final tree heights after creating the local factory. Re-anchor
+ // perch roots to those final trunks rather than keeping pre-placement joins.
+ inner.userData.gregUnderstory?.dispose?.();
+ installSwampCoralUnderstory(inner);
+ inner.userData.gregCoralPerches?.dispose?.();
+ installSwampCoralPerches(inner);
  const road=scene.getObjectByName('v7-continuous-swamp-promenade');if(!road)return;
  scene.updateMatrixWorld(true);const ray=new THREE.Raycaster();
  for(const tree of inner.userData.towerTrees||[])for(const root of tree.children.filter(o=>o.name==='v2-rim-bowed-root')){
@@ -449,7 +486,8 @@ export function finishSwampV2Art({scene,swamp}){
   for(let j=0;j<=12;j++)for(let k=0;k<=8;k++){const n=j*9+k;p.setY(n,p.getY(n)+(local.y+.12)*Math.pow(j/12,2));}
   p.needsUpdate=true;root.geometry.computeVertexNormals();root.geometry.computeBoundingSphere();root.userData.roadRooted=true;
  }
- road.material=new THREE.MeshBasicMaterial({color:P.stone,side:THREE.DoubleSide});
+ inner.userData.gregRimRootBatch?.rebuild();
+ road.material=new THREE.MeshBasicMaterial({color:inner.userData.gregLakeVisuals?GREG_LAKE_PALETTE.stone:P.stone,side:THREE.DoubleSide});
  road.material.onBeforeCompile=shader=>{
   shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec2 vPaving;').replace('#include <begin_vertex>','#include <begin_vertex>\nvPaving=uv;');
   shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec2 vPaving;').replace('#include <color_fragment>',`#include <color_fragment>
@@ -470,4 +508,86 @@ function applyMoebiusBoatPalette(scope){
   const clones=new Map();ship.traverse(o=>{if(!o.isMesh)return;const swap=m=>{if(!m||!colors[m.name])return m;if(!clones.has(m)){const c=m.clone();c.color.set(colors[m.name]);clones.set(m,c);}return clones.get(m);};o.material=Array.isArray(o.material)?o.material.map(swap):swap(o.material);});ship.userData.moebiusPalette=clones.size;
  }
 
+}
+
+// Moor the existing repair platform against the final basin wall. Boat and actor
+// transforms stay authoritative; this is a shore work landing, not a new lake island.
+export function installSwampShoreDock(swamp){
+ if(new URLSearchParams(globalThis.location?.search||'').get('gregLakeDock')==='0')return null;
+ if(swamp.userData.gregShoreDock)return swamp.userData.gregShoreDock;
+ const yard=swamp.userData.shipyard,barge=yard?.barge,ship=yard?.dock,wall=swamp.getObjectByName('swamp-sinkhole-wall'),floor=swamp.getObjectByName('swamp-lake-floor');
+ if(!barge||!ship||!wall||!floor)return null;
+ swamp.updateWorldMatrix(true,true);
+ const inverse=swamp.matrixWorld.clone().invert(),wallMatrix=inverse.clone().multiply(wall.matrixWorld),floorMatrix=inverse.clone().multiply(floor.matrixWorld);
+ function hitMesh(mesh,matrix,origin,direction){
+  const p=mesh.geometry.attributes.position,index=mesh.geometry.index,ray=new THREE.Ray(origin,direction),a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3(),hit=new THREE.Vector3();let best=null,dist=Infinity;
+  for(let i=0,n=index?index.count:p.count;i<n;i+=3){
+   a.fromBufferAttribute(p,index?index.getX(i):i).applyMatrix4(matrix);b.fromBufferAttribute(p,index?index.getX(i+1):i+1).applyMatrix4(matrix);c.fromBufferAttribute(p,index?index.getX(i+2):i+2).applyMatrix4(matrix);
+   if(ray.intersectTriangle(a,b,c,false,hit)){const d=hit.distanceToSquared(origin);if(d<dist){best=hit.clone();dist=d;}}
+  }return best;
+ }
+ const yaw=ship.rotation.y,axis=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw)),side=new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
+ // Stern-quarter entrance: aft of the first oar, and off the central sternpost.
+ const shipEnd=ship.position.clone().addScaledVector(axis,-2.35*ship.scale.x).addScaledVector(side,-.64*ship.scale.z),deckY=ship.position.y+.66*ship.scale.y;
+ shipEnd.y=deckY;
+ const outward=shipEnd.clone().setY(0).normalize(),shore=hitMesh(wall,wallMatrix,new THREE.Vector3(0,deckY,0),outward);
+ if(!shore)return {ok:false,reason:'repair shore ray misses final wall'};
+ const deckCentre=shore.clone().addScaledVector(outward,-2.1),deckYaw=Math.atan2(outward.z,-outward.x),along=outward.clone().negate(),across=new THREE.Vector3(-along.z,0,along.x);
+ const halfLength=2.5,halfWidth=2.0;
+ // Reuse the story barge group and furniture; remove only its old floating deck details.
+ for(const o of barge.children){
+  const name=o.name||'';let deck=false;
+  if(o.isMesh&&o.geometry){o.geometry.computeBoundingBox();const size=o.geometry.boundingBox.getSize(new THREE.Vector3());deck=size.x>4.7&&size.y<.2&&Math.abs(o.position.y)<.01;}
+  if(deck||['v2-barge-float','v2-deck-grain','v2-mooring-post'].includes(name)||o.geometry?.type==='TorusGeometry')o.visible=false;
+ }
+ barge.position.copy(deckCentre);barge.rotation.set(0,deckYaw,0);
+ const workbench=barge.getObjectByName('v2-repair-workbench');if(workbench)workbench.position.set(-1.35,.15,1.2);
+ const walkData=[],structureData=[],linePositions=[],footings=[];
+ const wood=new THREE.Color(0xb58a66),dark=new THREE.Color(0x806451);
+ function append(data,geometry,position,rotation,color){
+  const g=geometry.index?geometry.toNonIndexed():geometry,m=new THREE.Matrix4().compose(position,new THREE.Quaternion().setFromEuler(rotation),new THREE.Vector3(1,1,1)),p=g.attributes.position,n=g.attributes.normal,nm=new THREE.Matrix3().getNormalMatrix(m);
+  for(let i=0;i<p.count;i++){data.push(...new THREE.Vector3().fromBufferAttribute(p,i).applyMatrix4(m),...new THREE.Vector3().fromBufferAttribute(n,i).applyMatrix3(nm).normalize(),...color);}
+  if(g!==geometry)g.dispose();geometry.dispose();
+ }
+ const rotation=new THREE.Euler(0,deckYaw,0);
+ append(walkData,new THREE.BoxGeometry(halfLength*2,.2,halfWidth*2),deckCentre.clone().add(new THREE.Vector3(0,-.1,0)),rotation,wood);
+ for(let i=-6;i<=6;i++){const z=i*.29,A=deckCentre.clone().addScaledVector(along,-halfLength).addScaledVector(across,z),B=deckCentre.clone().addScaledVector(along,halfLength).addScaledVector(across,z);A.y=B.y=deckY+.004;linePositions.push(...A,...B);}
+ // The landward edge enters the actual bank; no decorative unsupported bridge to nowhere.
+ const shoreStart=deckCentre.clone().addScaledVector(outward,halfLength-.1),shoreEnd=shore.clone().addScaledVector(outward,.55);
+ function link(A,B,width,name){
+  const delta=B.clone().sub(A),length=Math.hypot(delta.x,delta.z),centre=A.clone().add(B).multiplyScalar(.5);centre.y=deckY-.1;
+  append(walkData,new THREE.BoxGeometry(width,.2,length+.1),centre,new THREE.Euler(0,Math.atan2(delta.x,delta.z),0),wood);
+  return {name,from:A.toArray(),to:B.toArray(),width};
+ }
+ const shoreLink=link(shoreStart,shoreEnd,1.4,'shore-interface');
+ const toward=shipEnd.clone().sub(deckCentre);toward.y=0;
+ // Exit from the nearest rectangle edge toward the aft quarter, rather than crossing oar rows.
+ const u=toward.dot(along),v=toward.dot(across),k=Math.min(halfLength/Math.max(Math.abs(u),1e-6),halfWidth/Math.max(Math.abs(v),1e-6));
+ const gangStart=deckCentre.clone().addScaledVector(toward,k*.97);gangStart.y=deckY;
+ const shipLink=link(gangStart,shipEnd,1.1,'stern-quarter-gangway');
+ for(const x of [-1.65,1.65])for(const z of [-1.7,1.7]){
+  // Irregular banks can bury a nominal corner. Bring that pile inboard until
+  // its base can be seated on an actual final terrain triangle.
+  let top,hits=[];const down=new THREE.Vector3(0,-1,0);
+  for(const inset of [1,.85,.7,.55,.4]){
+   top=deckCentre.clone().addScaledVector(along,x*inset).addScaledVector(across,z*inset);top.y=deckY-.2;
+   hits=[hitMesh(wall,wallMatrix,top,down),hitMesh(floor,floorMatrix,top,down)].filter(Boolean).sort((a,b)=>b.y-a.y);
+   if(hits.length)break;
+  }
+  if(!hits.length)continue;
+  const foot=hits[0],height=Math.max(.25,top.y-foot.y+.25),centre=top.clone();centre.y=top.y-height/2;
+  append(structureData,new THREE.CylinderGeometry(.13,.18,height,7),centre,new THREE.Euler(),dark);footings.push({top:top.toArray(),foot:foot.toArray(),embedded:.25});
+ }
+ for(const z of [-1.7,1.7])append(structureData,new THREE.BoxGeometry(5,.22,.18),deckCentre.clone().addScaledVector(across,z).add(new THREE.Vector3(0,-.3,0)),rotation,dark);
+ const owned=[];
+ function batch(data,name,walkable){
+  const p=[],n=[],c=[];for(let i=0;i<data.length;i+=9){p.push(...data.slice(i,i+3));n.push(...data.slice(i+3,i+6));c.push(...data.slice(i+6,i+9));}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(n,3));g.setAttribute('color',new THREE.Float32BufferAttribute(c,3));g.computeBoundingSphere();
+  const mesh=new THREE.Mesh(g,new THREE.MeshBasicMaterial({vertexColors:true}));mesh.name=name;mesh.userData.gregWalkable=walkable;swamp.add(mesh);owned.push(mesh);return mesh;
+ }
+ const walk=batch(walkData,'greg-shore-dock-walk',true);batch(structureData,'greg-shore-dock-piles',false);
+ const lines=new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(linePositions,3)),new THREE.LineBasicMaterial({color:0x66504b,transparent:true,opacity:.55}));lines.name='greg-shore-dock-board-lines';swamp.add(lines);owned.push(lines);
+ const report={ok:true,version:1,frame:'inner-swamp-local',barge,walkMeshes:[walk],deckCentre:deckCentre.toArray(),deckY,shore:shore.toArray(),shoreLink,shipLink,footings,renderMeshes:3,connectedToMainPath:false,scope:'fixed shore work landing and stern-quarter boarding; no new connection to the main bank path'};
+ swamp.userData.gregShoreDock=report;
+ return report;
 }

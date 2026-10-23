@@ -1,3 +1,183 @@
+## 2026-10-23 03:56 截止交付
+
+临时自动优化到期结束，已请求删除automation。本轮r7已接正常游戏，13/13相关测试、实际正式GPU、2400轨道点一致性与有限承托采样证据已保存；截止源码与source-manifest-r7逐项匹配，无新的未验证修改。交付：artifacts/pipeline/citadel-soft-mountains-20261022/index.html，详细ROOT-VERIFICATION及source-r7-final保留。
+
+明确缺项：后山高直崖及细长竖条仍未完全达到目标图；未完整乘车/攀爬/性能验收，wholeSupportAccepted/approach false不改写。后续根治需要语义边界局部重网格/控制笼，再验证船道切口、城基、轨道。没有提交、发布或混改其他区域。十二门徒岸浪与本地Hitman解码已在此前实际验证。
+
+## 2026-10-23 03:00 高山圣城r7冻结，交付页已核验
+
+本轮山肩/上缘/后山冠鞍部真实几何已接默认场景。13/13当前相关检查通过；根已看正式front/rear及两份实际正式几何导出的同机位固定光照rear/saddle。红蓝各1200轨道点不变；有限几何、严格启动、sourceDeck及有限承托采样通过，runtime errors[]。完整乘车/攀爬/性能未覆盖，wholeSupportAccepted/approach仍false，不能称全路线验收。
+
+最终交付页：artifacts/pipeline/citadel-soft-mountains-20261022/index.html，4/4图片实际加载。actual-compare-r7.html是真实正式导出前后比较，不再重新算候选。ROOT-VERIFICATION、source-manifest-r7/source-r7-final、STATE都已更新。后山大直崖与原有细长竖条仍有差距，未全量重网格，不称完全达到目标。禁止为耗满时间制造新修改；保持当前有验证版本。临时automation截止03:56，到期删除并通知实际交付和缺项。当前tab26交付页markHandoff；正式测试页21已恢复镜头关闭。十二门徒岸浪/Hitman解码证据已完成，见此前记录。
+
+## 07:12 叶冠墨线与正式集成检查点（07:46仍ACTIVE）
+
+B最后树冠细脉shader ink v3已冻结：原12–38world归零导致光板，现5条弯曲辐射脉/圆瓣边梅灰蓝细线依屏幕footprint淡出；唯一hook在swampCoralCanopy，GregVisuals只fanVeins委托，cacheKey greg-lake-fan-veins-v3-screen。原geometry/UV/index/instance矩阵逐字节不变，10draw/147708tri；实际初始373叶，不是371：正式跨湖桥后2叶trim为371visible，不改本次数量。7/7相关CPU过。主实际GPU overview-canopy-ink-v3.jpg/canopy-middle-ink-v3.jpg已看，shaderErrors[]；细脉可辨但仍有程序几何简化，不称目标完全匹配。gallery总览已更新。
+
+根代理最新整合71/71（validation-final-integration-0710.txt）覆盖角色/冠/树/草/自然崖/岸色/外崖/生物/桨手/入口/花groups/纹理寿命/BGM，另character-final15/15覆盖hair7/成年虎38/墨线/猴。与旧tests重复，不把数字累加假称独立总数。C最后final-integration-audit.json+probe已保存：同正式tour=crystal-v7启动链CPU实际装所有模块，正式树scaleY .55且finish重附着，19身份数量不变、13肖像+桨手/14builder口径，90更新原剧情引用不变。inventory源码hash刷新4a506...及行号、过期旧泳者/管虫说明已补，未完整跑用户存档/所有修船离港袭扰。CPU跨城file://boarding fetch及其它城baseline warning属shim限制，未假称全站通过。review的variant=before加载当前真实工厂，已额外显著提示跳生物历史页，不能当旧环境几何。
+
+主新正式完整游戏GPUfresh加载最新叶冠/虎返岸修复，在实际中岸按真实triangle一次定位后合成KeyW到production listener：1099.5ms/13采样、位移3.7626world、onGround true、足-ground差min/max=0，formal-middle-walk-final.json/.jpg存。原native键盘/完整载具剧情仍未覆盖，不称物理按键测；已点返回本次内存原位置并关闭正式临时页。截图实际显示信使新披肩/邮袋及叶面、崖壁和花船身份，正式站立/沿岸行走无新错误。draw约5.3k并非全局性能pass。
+
+implementation-manifest.json记录24当前源文件SHA256/bytes，未提交发布，不代替备份。所有团队当前完成冻结。五小时automation至07:46仍ACTIVE，约34分钟剩余：可继续小改完善证据与最终交付，但不要大改已验模型/反复全套测试。当前GPU问题主要精细度/自然程度与2D目标仍有差距，用户存档/全部任务分支和整局FPS仍边界。到07:46保存最终报告、删除automation并NOTIFY链接，不能提前停。browser4 gallery7 deliverable/creatures4 handoff/organic10 handoff当前trunkMiddle，每turn重mark；无正式临时页与视口override。
+
+## 06:55 虎迎接返岸修复与树皮墨线检查点（07:46仍ACTIVE）
+
+C真实factory600秒30Hz18001帧审计发现迎接后过水返阶被误判grounded，原1238假支撑脚帧/126独立射线无地。已窄修world/moebiusTiger.js _waterReturning保水上相见高度直到真实stairs射线，characters/tigerTargetV1.js按足底实际射线标water-supported/real-ground/airborne/unsupported，原38虎造型不变。修后600秒issues={}，338水面返阶帧足不沉水，601逐秒xz/步相对照旧版精确0、mode切换同一时刻；2763停止帧phase不推进。6936独立足点射线穿透0/站立gap<=.015inner，鼻水32次。原回归4/4含9003帧、新迎接1/1。原件before-tiger-water-return/补丁/前后完整trace报告均存。主GPU真实factory模拟入湖t2 greet-stay→模拟离湖t12 ascend明确water-supported/grounded:false/waterReturning:true→t28 patrol real-ground/true/false，shaderErrors[]。已看并保存tiger-return-water-before/after.jpg、tiger-return-real-ground-after.jpg及status JSON。虚拟player接口测试不是正式原生走入湖沼，保留原水上相见剧情。
+
+A树皮lineRevision midrange-ink-2，原40world归零改分层LOD到165淡出，梅灰细纵纹+稀少短裂，GPU近景后线权.32→.50/上限.38→.52。geometry/normal/index/bounds/matrices不变，285source/11batch/49232tri不变，source/batch shader逐字一致、barkLocal保持，10/10专测。主实际GPU v1近/中、v2近/总览已看shaderErrors[]，trunk-close-ink-v1/v2、trunk-middle-ink-v1、overview-bark-v2.jpg存；线仍较细淡，不能称2D目标已完全达成。bark-midrange-report.md已补GPU限制。
+
+root review.js新trunk/trunkMiddle只读镜头，新增明确“模拟入湖迎接/模拟离湖返岸”fixture按钮，通过runtime真实player字段调用原工厂，不写正式游戏/存档；status增加tigerSurface以免把水面当ground。最新gallery overview改overview-bark-v2.jpg，当前信使v7/tiger38。所有A/B/C源码冻结，未回退他人，未提交发布外发。剩余约51分钟继续针对可证实差距/正式集成验证，到07:46保存最终边界/删automation通知。不要重复重跑4分钟旧CPU除新增变化要求。最新性能9分钟tex112稳定证据仍有效，不称全局FPS通过。
+
+CUA browser4 gallery7 deliverable、creatures4 handoff、organic10 handoff当前overview；每新turn重mark。正式临时页已关闭，viewport无新增override。下轮先读此点，保持安静常规DONT_NOTIFY；不要提前删除五小时automation。
+
+## 06:22 持续资源增长修复与植被v6检查点（07:46仍ACTIVE）
+
+A确认robotOps/weaponEffects每次ant炮烟团调用puffTexture，新建CanvasTexture但SpriteMaterial.dispose不释放map；真实20炮120纹理/释放0。已窄修src/gameplay/robotOps/weaponEffects.js闭包懒建1共享steamMap，clear保留复用，controller.dispose释放一次，图案/节奏/数量未改；100炮600烟团仅1纹理且独立controller互不释放。BGM src/scenes/messenger/swampBgm.js按state WeakMap缓存真实湖沼root，1000tick扫描1次但1000音频调用和迟滞保持。专测7/7，合并understory专测共15/15（validation-understory-performance-v6.txt）。备份与performance-allocation-audit.md含来源链。主正式GPUfresh autostart约595秒，最后120条t476.5–595.4 textures112恒定、geometries3923/program273，scene材质/source151/bone0/shadowmap3；相较before t493.5 textures1082，此持续增长在该观察窗消除。保存formal-resources-after-steam-fix-9min.json/.jpg，正式临时页已关闭；draw仍9.5k–10.3k，未测FPS不要称性能最终通过。CPU湖沼600模拟秒/12000帧无新Texture/Geometry/Material/Canvas仅此范围，不替代GPU。
+
+B understory v6原495附着记录精确保持：宽圆垂叶与蕨交替，弧脊/错层叶尖/侧脉、簇内确定偏转，4draw。其fixture51484tri，主fixture50584tri、fern92/fan46/pendant350，种子不同不改身份或假凑数；8/8叶根/原点/2world通路/桥净空CPU。主实际GPU overview-understory-v6.jpg及understory-middle-v6.jpg看过，shaderErrors[]，中岸近景被原巨树支撑遮住部分，整体繁茂自然程度仍比目标简化。图库overview更新v6。
+
+主新GPU信使v7全身正侧背与持信(letter)/骑乘(ride)/跳跃(jump)/行走(walk)接口截图：courier-front/side/back/letter/ride/jump/walk-v7.jpg。邮袋letter打开0.9999986→ride关闭0.00000137，shaderErrors空。只是原接口局部工厂姿态，不冒称新正式载具实测或物理跳跃。图库front已更新v7与准确标签。黑发后部仍成团，没宣称像2D目标。
+
+所有A/B/C本輪完成冻结，源不再变，下一轮可重新分派。rootfixture全资源采样每10秒才遍历scene，有界120条，不是production。浏览器4 gallery7已deliverable需每轮重mark，creatures4/organic10需handoff，organic10当前courier背面idle；正式临时页已关，没有位置/存档改动。五小时automation继续到07:46，不提前删除；未提交发布外发。下一轮优先仍缺的细腻植被/树干与成年虎剧情验收，别重复已完成全套测试无新增理由。
+
+## 06:00 水草/岸缘第二轮实景检查点（07:46仍有效）
+
+B已冻结柔曲水草v2：原26簇122叶保持位置与RNG，2draw/8784tri；V2独立30簇90叶单独柔曲处理，1draw/6660tri，基部短柄接实床10.4，原方向与色系不变。主GPU实际看algae-curved-v2.jpg，宽扁下弯优于直尖锥，仍比目标简化，不称最终完成。C岸缘顶面配色v2连续XZ场+径向外土内岩取代5/7重复色带，原4620position/normal和外崖所有attribute精确不变，draw/tri不变。主GPU overview-rim-colour-algae-v2.jpg已看，shaderErrors[]，图库总览已更新。整合叶/岸缘/外崖CPU12/12，validation-leaf-rim-v2-integration.txt，不与旧69相加。
+
+主添加只读资源诊断到full-game-review.js，#resource-samples有界120条，未改正式生产。真实完整游戏自然autostart观察约8分钟，不定位/输入，采样formal-resources-5min.json、formal-resources-8min.json。renderer.info.memory textures确实增长：t192.5=211→311.5=470；372.5=653→493.5=1082，geometries4307→4381/program281，calls随剧情6602→11050。短20秒105稳定不能代表长时稳定，更不能称性能通过。已关闭正式临时页避免后台负担。A仍在运行只读120秒CPU分配探针、调用栈审计；首20秒新建船/士兵在saihojiPhalanx spawnWave，Texture/Canvas0，尚未解释8min真实GPU增长。A另已授权仅tickSwampBgm每帧全scene遍历的最小缓存+专用行为测试，待交付，不要漏接。B/C冻结可再用。
+
+CUA browser4：gallery7已markDeliverable并reload；creatures4已markHandoff；新增organicTab id需tabs.list读取，当前overview已markHandoff。当前viewport无新增override。下一轮接A报告并验证缓存，如果纹理增长定位未证实不得胡乱修其它城美术。继续自然叶/崖岸/正式接口验证到07:46，届时保存限制并删automation通知。目前不要删；常规保持安静。
+
+## 05:40 持续续作检查点（07:46截止仍ACTIVE）
+
+所有A/B/C当前子任务已完成冻结，均可复用，不要漏接工作。主代理实际GPU已看：courier reedbank-face-6正/侧/背及近脸，后续reedbank-hair-7正/侧/背近脸均已看，保存courier-face-close-v7/side-v7/back-v7.jpg；身体/rig/邮袋保持，38draw/39764tri，v7子集9/9。gallery仍保留全身v6实际截图（明确标签），当前实时model是v7。脸更年轻，发梢圆润但仍有黑团阅读，勿夸大和2D目标等同。
+
+树合批11批、285源mesh接口与49,232tri不变；主GPU overview-trunk-batch-algae-v1.jpg显示全部树可见，shaderErrors空，当前局部1205draw。水下algae-rooted-v1.jpg已实际看：26簇122叶真实床Y10.4，244→2draw；比4角锥改善，但叶片仍较尖硬，后续可加自然曲率/圆钝外轮廓，不放松floor/角色空间保护。outer-cliff-v1已GPU看自然厚切面，原rim顶面不改。七类剩余生物fauna v2 GPU粉挂眼与萤点均确认，静态图片已更新。52桨手新crew实际GPU看，repair-crew-coral-v1.jpg与本轮before并排（不是历史20261007快照）。
+
+最新完整整合validation-round-latest.txt 69/69（v6面部、树批、藻、外崖、桨手、水晶花groups等），其后v7头部单独validation-courier-v7-integration.txt 9/9，勿把重复项相加。水晶V9相同四材料索引groups修复，48片groups13824→192，原材质/三角/顶点/法线一致，CPU库存减少13632；GPU正式入口calls随剧情8k–9.9k而非原13k，但fps仍6–11随运行下降，性能未通过（旧运行tex约1289，潜在持续分配需审计，未证明原因）。其它水晶城美术没有改变。
+
+正式full-game-review添加明确标为合成的W输入1秒按钮，不改movement期间position。主代理实际点：1020ms、10采样、移动2.6736world、onGround=true、足点-ground采样差0；formal-synthetic-input-result.json/截图。不是原生键盘测试，不冒称物理按键walk通过。观察结束已点返回内存原位置并关闭正式临时页。
+
+持续automation id automation有效到2026-10-08 07:46China/23:46UTC，请后续每轮继续实际代码/模型改善并GPU，别只轮询。优先目标与actual仍差的宽扁圆叶/自然蕨层、岩面到土岸过渡、修大圆黑发团必要细节、审计长期性能分配；保留本次所有接口/路径/剧情。要扩目标之外的大范围美术先别自行改，V9仅等材质冗余提交修复可保留。到截止写最终成果/限制，删除本5h automation通知；不能现在因检查点已好就删除。图库index是当前统一成果入口，含19身份/13类别静态对照+桨手本轮左右，已实际打开。用户的X/GDC页 untouched。CUA browser4，gallery tab7、creatures tab4要重新mark；临时1280x800 viewport结束前reset。禁止全库reset/外发/提交。
+
+## 04:55 新一轮已接入与实景检查
+
+自然崖壁v6加深6处侵蚀肩，统一同面颜色避免锯齿三角色块，现有5/5真实附着/路线保护通过。树干v2实际变形27主干214分叉、12432顶点，额外draw/tri0，4/4独立；树冠rounded-fan-4圆瓣弧顶，10draw/371可见，正式23柱5旋转2trim交叉0。understory v5七群落通过避开bowed-root找种点，83rim/20主冠，4draw，真实逐顶点通路净空7/7。主代理overview-env-v5-canopy-v4.jpg已实际GPU看，但整体仍比目标稀疏、巨树细线少，勿称视觉最终完成。
+
+七种剩余生物实际回接coral-native-fauna-v1，65节点位置/原参数/RNG精确保持、5/5CPU。主代理七张compare-*-fauna-v1.jpg逐类GPU查看并更新静态列表，全部无shader错误；萤点过暗与粉挂眼不显，C正在小修，未列最终已接受。B维修尾真实父级65时点、7/7CPU，GPU raisedCoil:true已确认repair-monkey-raised-tail-v4.jpg；B下一做52桨手蓝粗描线/方块身体，原工作槽位与摇桨不能丢。
+
+最新整合validation-current-integration.txt 54/54通过，包括角色、树冠、树形、生态、崖壁、栖点、生物、入口净空、虎造型。本轮正式完整游戏新启动进行GPU；不能把上批键盘walk当本批。五小时automation仍ACTIVE至07:46，继续工作，未结束。
+
+## 04:40 入口P0已验与当前代理继续任务
+
+P0连接板最终 side-tread-link-2已CPU6/6；完整20秒601帧头/颈/身1803组三角裁切0穿板，保守净空.365/.453/.371world。主代理GPU真实下降t1.2/t1.6秒已看、板侧接/虎体可见，不再贯穿，截图tiger-entry-link-fixed-t1-2.jpg；原阶/三岸高度/2world通路保留。entryLink.graded=true真实Y35.402→34.8。新完整球面此连接的GPU实走仍待后续。
+
+当前三代理继续工作，不要漏收：A树干段内曲率/收分/根部外扩（swampCoralTrunkDetail.js，保护枝端/猴栖截面，原水下根不动）；B维修猴真实船父级尾净空审计（worker0已甲板上，worker1父级旋转下部分尾仍低，正修并扫立桅周期；之前本地footplane测试不足，不把CPU6/6当全父级验收）；C剩余7生物柔滑有机造型及正式inline工厂回接（不只对照builder）。共享moebiusSwamp仅局部patch，B只猴/worker两调用，C其它7构造。环境v4、虎38、信使v5暂冻结。
+
+五小时automation仍ACTIVE至07:46。下一批收CPU→实际GPU→更新19身份/13静态列表状态；不能静态图片还旧就写全部已重制。图库index已标模型快照，任务持续中。详证在本批JSON/stdout/PNG-JPG目录。
+
+## 04:25 实景新发现
+
+understory v4总览已看，规整绿篱打散成功，但coral rim整体仍偏空，保留作为中间版，后续应增加不均匀高扇叶/低蕨组合与自然外缘土岩，而非重造环状绿篱。原rim可走r35.4–39.4，outer edge约40.8，外侧植被空间仅约1.4local；需用真实顶点/头部净空审计，不可为了繁茂侵入2world路径。
+
+粉紫猴普通栖枝GPU已看，形体对应参考；维修新长尾却穿甲板/船壳，B正在repair专用自然盘尾（普通垂尾不变）。证据repair-monkey-pink-v2.jpg。A正在连接板P0，C审计已结束，代理互相共享精确数据。自动续作继续到07:46。当前源码/报告不能标全部生物形象最终通过。
+
+## 04:15 续作任务与环境第四版
+
+- 新粉紫瘦长猴 coralActorVersion2已GPU肖像，compare-longTailMonkey-pink-v2.jpg；普通3/维修2 identity及动作5/5CPU。原栖枝截图monkey-perch-pink-v2.jpg，整体坐姿向后倾，下一轮可自然化但非假称旧无尾摆已新增。维修镜头新view=repairMonkey用于看垂尾甲板净空。
+- understorey v4打散规整绿篱：7处不等宽群落、8高扇叶、低蕨/裸岩，rim143→43，4draw/29028tri，12CPU；完整源未动虎/路线。GPU总览待本轮确认。
+- P0确证：实际虎38 forceDrink下降头.933–1.300、身1.133–1.633秒穿greg-bank-entry-link实体，不仅相机问题。C审计tiger-entry-link-audit-before.json。A正在修 src/world/swampSpatialPlan.js 与tests/world/swampEntryLinkClearance.test.mjs，必须收结果/完整factory同探针回归，不许仅隐藏板。courier冻结v5。
+- 本轮继续至07:46的automation ACTIVE。优先P0连接板，再环境实际总览、完整游戏实走、视觉优化及剩余7生物造型。暂不把图库或CPU好看当最终全部完成。
+
+## 04:00 最新可续作状态
+
+- 虎round38宽扁口鼻/鼻头内嵌，已GPU左右看，比37白细管嘴改善；实际t4行走speed2.6、3足stance，t12drink四足接实阶并朝内湖。5/5造型+2/2饮水CPU。截图compare-tiger-v38/tiger-walk-v38/tiger-descend-v38/tiger-drink-v38.jpg，无shader错误。降阶t8相机看到头在bank-entry-link下，C在只读审计是否实际穿插，未称净空通过。
+- 鸟猴蜥细线新helper GPU3组已看，无shader错误，fine图片保存；去除深紫粗随机壳，保留所有彩色几何与行为CPU3/3。原before快照不改。
+- B正在下一具体轮：粉淡紫瘦长攀树猴，按用户47a4d1f6与接受目标左上猴替代当前黑胖玩具猩猩；普通3/维修2identity及全部动画接口保留。不要漏收代理结果，CPU合格后主代理GPU。花船黑娃不变。
+- 信使后脑v5已GPU确认，郵袋v4开/闭实景确认；仍需更细腻、自然服饰/面部轮廓，完整game键盘实走。
+- 持续五小时automation仍ACTIVE，至07:46；不要因第一检查点写完就删除。之后继续自然岩壁/不均匀植被/根部轮廓，优先entry-link头部净空审计。正式性能约11FPS仍不合格。当前所有改动未提交。
+
+## 03:45 总览视觉待改项
+
+overview-env-v3.jpg 实际总览已看，无shader错误，但仍明显不达目标：珊瑚湖缘顶是大片平整多边形，壁是光滑碗，顶部绿带像规整矮篱，巨树直圆柱分叉。后续优先自然岩台/不均匀块面、非等高蕨与扇叶簇、根部形体；禁止只堆垂叶数量。B已收到此具体评审，待鸟猴蜥描线完成再做。新checkpoint-v5 18/18回归通过（courier7+legacy3+environment等，详见文件，不与其它批次累计）。
+
+## 03:40 GPU复核补充
+
+信使后脑 reedbank-nape-5 已在背面GPU复核，后脑由头发连续覆盖，无shader错误，courier-back-v5.jpg。7/7CPU。13组静态前后截图已逐类查看，鸟猴蜥当前深紫描线太粗，不算视觉通过，B正在改这3个builder的局部描线；其它7组原型的破碎描线/低细节仍未重制，继续清单保留。C在继续round38宽扁口鼻。静态对照保留中间版证据，完成后更新图片，不误把所有形象标最终。
+
+## 03:35 角色/对照补充
+
+- 信使持信4近景已确认邮袋打开(open0.999999)，骑乘侧面收拢(open0.000001)，背面与run/jump采样截图保存。发现后脑肤色露出，a已修 reedbank-nape-5，7/7CPU，待GPU新背面。
+- 13组静态对照均已保存compare-*.jpg，实时左右页也可看。原型保留指几何函数保留，色板与萤火光点尺度可不同，勿误称完全未变。
+- 虎37仍有鼠状长白管嘴感，需宽扁口鼻连续白颊连接，C已收到信息。
+- 正式球面本批已启动，新信使同场；中岸onGround=true，约11FPS；观察后恢复原位置并关闭临时完整游戏页。未做本批键盘实走。
+
+## 03:25 补充正式GPU结果
+
+正式完整球面已启动，boot27496ms，round54；中岸真实玩家 onGround=true，groundR140.126，跨湖柱置换23、保留149、叶冠残余交叉0。截图formal-middle-r54.jpg显示新信使、花船、鲸与新版崖壁植物实际同场。全场约11.2FPS、10057calls、5462k三角，性能仍不合格，未新增宣称键盘实走。观察后已按“返回本次观察前位置”，页面确认存档/检查点不改，然后关闭完整游戏重负载临时页。下一轮继续近景、实走和降低负载。
+
+## 2026-10-08 03:20 五小时湖沼迭代检查点（仍在实施）
+
+用户已接受原创“苇岸行者”目标 courier-reedbank-target-v2.png；服务员模型、复制旅行邮差方案已否决。用户明确授权持续五小时且虎由本任务决定。自动续作 automation 至北京时间07:46，勿提前删除，截止时保存最终检查点并删除。
+
+- 当前入口 artifacts/pipeline/greg-lake-character-detail-20261008/index.html。creatures.html 用真实旧/新构造器同光同相机展示13组，inventory.json区分19项剧情身份；未改7组标原型保留，桨手旧快照缺失，不伪造before。
+- 正式玩家默认工厂已接苇岸行者，reedbank-mailpod-4：单侧披肩/斜襟/松裤/卷发/叶荚邮袋，持信打开3层信、奔跑骑乘关闭。38mesh/39844tri，6/6CPU。局部GPU轮廓3、持信4已看无shader错误；当前镜头人物偏小，邮袋/披肩近景、walk/run/back/ride/jump视觉还需验证。
+- 虎round37：金赭近黑纹、肌肉前臂、低额小侧眼、中性口线，移动距离驱动四足走。新造型4/4、完整饮水招呼2/2，之前36步态9003帧通过。GPU37已看无shader错误；加长鼻端有尖管嘴感，下一轮要宽扁口鼻连入白颊，不可称视觉定稿。
+- 主工厂round54；tree55段纵纹、naturalCliff v5、understory v3（18不等长裂缝群落；局部559株/4draw/40604tri）。环境11/11CPU，早前集成22/22CPU（在环境v3/邮袋4之前）。新v5/v3局部持信截图已看但未全面环境多机位验收；崖壁连续大平面仍与目标有差距。
+- 生物真实计数：鲸成人/幼/护航各1，虎1，普通猴3维修猴2，鸟4，蜥岸2水底1送水1，带鱼3小鱼9鳗1，垂挂生物3管虫11萤火虫46，花舟5每舟2黑男孩（10），水下泳者1，2船52桨手槽。
+- 生产完整游戏 fixture full-game-review.html 已复制本批，当前启动中，尚未本批完整GPU验收。不要把旧round53完整游戏结果当本轮新角色结果。
+- 当前源仍脏，不提交、不重置、不回退其他人。代理所有权：greg_reference_a courier模块，b 环境模块，c 虎模块；主代理负责swampV2Art集成/图库/完整实景。相关旧件在before、round36、environment-round2-before、rejected-courier-v1。
+
+下一轮优先：虎宽扁口鼻、信使叶荚/披肩近景；完整球面加载后中岸键盘走动并返回观察前位置；检查环境总览/上中下岸与码头路径；补全部13组静态真实对照。不得称已完成全部目标或性能验收，全场上轮8–14FPS尚有负载问题。不能将媒体全量学习写为已完成。
+
+## 2026-10-07 湖沼珊瑚批次交付（覆盖下方过程状态）
+
+- 总览、上岸、中岸、下岸四目标图完成：每舟双黑色调皮男娃、自然岩缝植物、圆鲸、岸边修船台、虎饮水阶朝湖心。目标图库 `artifacts/pipeline/greg-lake-approved-coral-flower-20261007/index.html`；设计图与实景分别列出。
+- round53 已回接珊瑚色板、薄扇冠、自然崖壁 v3、原故事动物/船、实体坑缘/三岸、入口虎脚底和湖壁相机退让。局部9机位GPU已看，shaderErrors=[]；本轮79/79回归通过，虎真实更新9,003帧独立4/4通过，水岸独立8/8通过，不重复合并计数。
+- 正式完整index多次启动成功；修复严格裁切Float32/WFC开底兼容。实际玩家三岸稳定，键盘走过中岸、坑缘、向湖心原阶下到上岸。穿湖的23根桥柱改为高位双拱/26腹杆，外围149柱、原桥面/轨线保留，跨度43.549world、湖岸视线净空17.392world。
+- 新桥叶冠检查最后修正5片转向、2片新增叶可恢复修剪；岸冠可见364/槽366，中央7片不变。原矩阵可精确回退，双向/包含及独立边检测交叉均0；正式桥体CPU3/3通过，安装一次约39ms。证据 `bridge-clearance-report.json`、`validation-bridge.txt`。
+- 交付入口 `artifacts/pipeline/greg-lake-implementation-20261007/index.html`，同目录RESULTS/TODOS区分已验/未验。正式全场约8–14FPS，性能未达标；修船台尚未陆接三岸主路；其他全部剧情分支未逐支完整跑完。目标图仍比程序化实景细腻，不称逐像素复现或整个游戏验收完成。
+- 三小时工作窗口的重复唤醒已删除，避免交付后再次改写。后续优先处理全场绘制负载与码头陆接；不将尚未完成的媒体全量学习改写成已完成。
+
+## 2026-10-07 21:00 湖沼珊瑚重构进行中（覆盖下方首轮状态）
+
+- 用户最新约束：花舟恰好两个黑色调皮男娃；植物从自然岩缝生长；虎饮水阶朝湖心下降、最低级贴内湖水面。总览/上岸/中岸/下岸四目标图已更新，目录 `artifacts/pipeline/greg-lake-approved-coral-flower-20261007/`。图为目标设计，不能当成游戏截图。
+- 实际工厂 round53：珊瑚色板、薄扇冠、圆润鲸、八瓣花舟/双男娃、鸟猴蜥、岸边修船台、猴栖枝、实体坑缘和玩家地面优先级已回接。自然崖壁实际 GPU 第2轮后仍有挂台感，正在第3轮；保留所有故事接口与水下世界树根。
+- 局部实际WebGL九机位已看，当前GPU虎朝湖心饮水正确；返岸巡游发现首阶与坑缘约0.25local裂缝，首阶接头已补，正在90/120秒实际root.update回归。完整球面游戏正在重新启动验收，不标完成。
+- 新正式启动错误为真实裁切/封口数值及WFC开底地表兼容问题，非安全审核拒绝。修复保留严格检查，CPU完整入口已越过原阻塞，GPU正式首页仍待本轮结果。
+- 当前交付入口 `artifacts/pipeline/greg-lake-implementation-20261007/index.html`；具体分工/证据/未完成项见同目录 RESULTS.md、TODOS.md。原始快照在 before/。仍未声称目标逐像素复现或全场FPS优化完成。
+
+## 2026-10-07 最新集成：Greg team 湖沼首轮
+
+- 最新用户五步已落地：六角色持久配置及实际代理工作、按小时PLAN、TODOS、逐角色学习/GDC24段报告、默认湖沼三层样区实施。入口 `docs/greg-team/RESULTS.md`，施工图 `artifacts/pipeline/greg-team-lake-20261007/lake-plan-board.png`。
+- 三岸H −2.6/−4.6/−6.6，净宽2 world，局部五色族/远线淡出、66株/3批实例植物、通行保护及1处干地样本工具架；独立评审发现矮标占路、架过矮，两项已修。24/24湖沼CPU测试过。
+- 最终正式世界115阶段CPU构建过，累计61.748秒、最长同步6.296秒、最高RSS4221MB；记录在greg-team-lake证据目录。未做GPU/玩家实走/帧时验收，不能声称浏览器崩溃已根治。
+- P0仍留：原虎主入口过陡、水盘r33与碗壁约r23.5截面核对、真实画面和移动验收。Sable已分析全634条字幕/32关键帧，不是连续全音画或完整三线shader复刻。水晶城全面改造尚未开始。
+- 连续会话此前修正现已进入正式CPU集成：旧城15屋环街、船侧真裁切、28常驻守军支撑刷新、木马/雕像净空修正、高山门石墙与收分、十二门徒两岸连通植被、交汇城堡放置恢复、叹息门徽记灯与黄梯移除。旧段落中的“代理实施中”是历史状态；全场真实渲染仍待验。守军mainHallReachable=false仍需处理，不可声称主殿全部连通。
+- 最新十二门徒正式世界审计两岸各components=1/closed=true；旧植被退休，新地形表面供云约束使用；没有声称新增山体全部玩家可达。
+
+## 2026-10-07 追加实景纠正：高山之门与十二门徒（未完成）
+
+- 高山之门按最新目标调整双塔宽窄比例、压低顶层、每层做下宽上窄的实体收分；拱顶铁围栏改厚石墙及雕刻徽记，门脚岩面增加成片草地/灌木/墙缝植物。由造型代理处理实际工厂，原14.4m铁路门洞、曲线、步道保持并检查。
+- 十二门徒最新授权覆盖旧零散岩柱/细碎绿植方案：删除当前这批植被，按用户Oskar示例把铁路两旁同侧岩群连接成高低错落的岩台、低山脊与宽草地，绿植成簇沿边缘/岩缝。必须保留真实轨道车辆净空、海水缺口、书店/城市保护体积，不能以新山体堵铁道。参考 `codex-clipboard-94af9300-4de9-4644-9183-01c439b76af5.png`；当前不满意图 `codex-clipboard-38d977fd-d2d0-4618-98e6-7d91d787362c.png`。尚未写成完成/验收。
+- 真实守军候选首次检查：28岗、542楼梯节点、16.45m爬升，建图由>30s降至1.49s；仍待最后细采样及全场。
+- 原守望者生产夹具存在木马重复0.72缩放，旧净空结论作废保留追溯。新夹具真实尺寸四轮有支撑，但骑乘举矛发现4对实际三角相交，资产代理正在修；不可用旧证据放行。
+
+## 2026-10-07 本轮复查：船侧真裁切、驻军承托、旧城环街（进行中）
+
+- 用户最新要求：旧城从矩形对称排布改为以主塔为圆心的错落环街、放射巷道及崖缘屋群。旧城代理正在改正式工厂，入口/步行桥/水渠锚点与编辑ID保留；完成后做统一生产装配。此项尚未验收。
+- 船侧此前 x<-90 的西坡修正位置错误，不对应截图书店货轮。本轮已识别实际 `bookshop-steam-parts-freighter`，默认 v5 真正裁除其后外突体并封口；实际来源数据船面交叉470→0，船外10m也为0，红/蓝实际2082姿态包络与内埋样本0。木马正侧径向回收最大20.27m，顶沿保留，新翻面/退化0。见 `artifacts/pipeline/ship-source-identification-20261007/IMPLEMENTED.md`；全场新装配待旧城冻结，GPU未验。
+- 浮兵并非只有夜兵：旧常驻守军缓存旧城坐标。已接入基于正式公共路面/实际台阶三角的28岗刷新与连续路线；生产配置的28岗及上行连通验证正在补。退休纯旧建筑组及晚建窗口已在渲染前强制隐藏，保护地形与角色身份。
+- 木马去掉外露额外胯钮/细连杆，保留真实胯—膝—跗—蹄父子链和腹舱/骑控。雕像改厚实尖削肩腿甲、承重姿势及18°斜矛；复活到归位期间切换金属，台座保持石材，结束精确恢复。控制器/天气8项CPU回归通过，资产与生产姿态净空继续校验；未声称奔跑动作或自然舰队入侵曾实景发生。
+- IAB崩溃排查找到多次unresponsive，无足够OOM/GPU根因证据。已拆分正常加载为真实任务让步、精确海面索引与逐团云/逐岩处理，事务失败仍回滚。上一完整CPU装配通过且峰值RSS约4.2GB，尚有8.5秒最大同步阶段；不能声称浏览器崩溃已根治。见 `artifacts/pipeline/startup-unresponsive-20261007/README.md`。
+- 新城三视图方案已生成并展示，路径 `artifacts/pipeline/new-city-walled-plan-20261007/new-city-three-views-v1.png`。是带中世纪围墙/后院的设计提案，不是运行时截图，尚未据图实施新墙体。
+- 本轮正常tab23 getTab被Browser Use安全策略拒绝；不绕过新浏览器/CDP。用户截图不等于本轮源码GPU验收。保留玩家、存档、天气和时间；刷新前有未保存建筑编辑需面板保存全部，不清localStorage。
+
+## 2026-10-07 用户连续复查修正（覆盖下方“仅诊断未修改”旧状态）
+新城球面竖直、实际台基/后院/十屋、步行石阶、木马及石雕关节、夜兵受支持巡逻、守望者雷击玩法、山面平滑/西侧外坡裁切、十二门徒增绿、门灯及交汇删格墨壳修复已写入正常源码。刚反馈的新城启动fatal已修：视觉密度要求与实际安全前置分开，main/fixture共用生产options。具体证据、未通过范围与恢复点见 `artifacts/pipeline/citadel-user-fixes-20261007/STATUS.md`。
+当前实景阻塞：可控IAB tab20仍为crashed data页，reload被安全策略拒绝，用户尚未明确恢复；不要绕过，不可把CPU集成称GPU/视觉验收。保留玩家与用户编辑，若需刷新，未保存布局先用面板保存全部。下一步正常首页实景复查启动、Q、删除、云/地形与守望者；临时五小时automation已删除，勿重建。
+莫比斯资料和项目级代理已保存，入口 `docs/MOEBIUS_GAME_ART_STUDY.md` / `.codex/agents/moebius_world_advisor.toml`；未称本会话角色热加载。
+
 ## 2026-10-06 最新用户纠正 — 固定山体，优先配色及两城呼应，云不是雪
 
 用户说“山体改好了，赶紧更改配色”，停止任何台地扩大/山形重塑；此认可不等于最终95。新旧城朝向必须有呼应，当前比例代理都朝+Z确实遗漏原城±30度设计。facing-4试旧+45/新−55绕各自平台中心（原实景不可重复叠加），4项核心越界明确拒绝，雕塑木马位置不变；尚未GPU与真实承托验收。
@@ -2215,3 +2395,26 @@ Completed local tower top-storey correction: seated octagonal transition, thicke
 Advisor-guided project implementation: shared turf/woodland habitat, 8000 supported short-grass instances, copied terrain winding repaired, final-mesh cloud cache replacing stale HF. 731 planted roots supported; 23049 rail probes clear; protected structure hash unchanged; 7 tests pass. Actual evidence/limits/source links: `artifacts/pipeline/citadel-living-slopes/review.html`, `notes.md`, `advisor-cloud-method.md`. Not an exact Oskar shader reproduction; clouds remain thin in front view and turf patch edges angular.
 
 Final cloud follow-up: repaired duplicated -52 composition translation via explicit coordinate conversion. Final runtime cloud close-up/overview now visibly correct; 8 total tests pass, active cloud centres at least61.05 scene units from rail in capture. Final evidence in citadel-living-slopes/cloud-fixed*.png.
+
+2026-10-07 01:29：正常场景新城庭院住宅10座、地面植物8处；修正入口双灯被立面遮埋，旧城双侧廊道暖光/住宅拱口灯最终实景可见。证据 citadel-five-hour-20261007/new-city-courtyard-day 与 old-street-lanterns-final。正常boot66190ms，GL0；玩家镜头/正常时间已恢复。岸边与柱脚泡沫近景不醒目，作为下阶段待修，未宣称四项完成。
+
+2026-10-07 02:27：海水v6实际中央桥下近景确认，岸纹与柱脚接触圈可见、开放海面横纹移除。湿柱纹独立于山体采样有效性，保留真实海面层过滤。5水专项通过，正常boot66396ms，GL0；证据 citadel-five-hour-20261007/wet-pier-contact-live-a/b。有限栅格使圆环仍有折线感。玩家镜头、正常时间已恢复，继续原05:08复查安排。
+
+2026-10-07 03:24：石雕v3胸腹/腿甲改闭合凸浮雕，肩部改连续体积；实际背侧检查发现腰隙并补实体腰芯、后裙甲。最终正背实景 ivory-rounded-relief-front-final/back-final 已查看，原高石台/奶白石/罗马盔保持，正常boot66422ms、installed=true/GL0/gpuFailures[]。轮廓饱满度改善，雕刻细节仍简化。石门反面实际证据 gate-opposite-side-live 留存，不把换镜头说成新改造。已恢复玩家镜头、正常时间.4/天气1，未移动玩家；05:08复查继续。
+
+2026-10-07 04:18：最终广场整体、木马正面/夜间实景补证完成，3帧GL0。已生成并浏览核对 citadel-five-hour-20261007/review.html，10张真实截图逐项保留差距；未重复测试或声称全部达标。玩家镜头/daySpeed .4/weather1恢复。按05:08截止，下轮删除临时自动化并交付。
+
+2026-10-07 05:12：五小时窗口按截止收尾。临时automation已由工具确认删除，每周维护未动。交付citadel-five-hour-20261007/review.html及实际截图/报告/差距；正常首页无错误页，玩家镜头与昼夜.4已恢复，玩家未移动。
+
+
+## 2026-10-11 Greg 当前目标迭代与 Jakub 研究代理
+Greg 四生产模块完成连贯青绿叶面、灰绿叶背与矿斑渗痕；CPU34/34，主代理正式index iframe GPU前后与实时两时点已保存。当前完整场景10–15 FPS，巨树遮挡/亮瀑流/水下层次仍有差距，未给90分。恢复与验证：artifacts/pipeline/greg-swamp-iteration-20261011/{ENVIRONMENT.md,REVIEW.md,review.html}。新目标为greg-swamp-target-20261010/target-v3-current-courier.png，当前短外套信使优先于旧苇岸行者。
+Jakub持久配置根目录.codex/agents/jakub.toml，已由研究worker读取（不声称角色热加载）；docs/jakub/{BRIEF.md,SOURCES.json,RESEARCH.md,STATE.md}。两用户图与两开发者文章已读；X全账号和五视频web403，绑定旧标签CUA超时，动态0秒/覆盖未知，尚未全量学完。书店镇运行时代码尚未改；待动态证据后再实施汽源锚点/LOD及功能分区。
+
+
+## 01:30 检查点
+岸根54→9渲染批省45draw，保留真实道路拟合/原节点射线，42/42环境整合测试通过。GPU重载正式rim-root-batch-final.jpg渲染成功，但该视角被岸植物遮挡、露根不清晰；只能称正式场景成功运行，不能称露根近景已验收或帧率提升。仍捕获MutationObserver.observe异常，来源未确认，后续定位。
+书店镇阶段目标已实际生成：artifacts/pipeline/jakub-bookshop-20261011/target-v1.png及target.html/TARGET_RESULT.md。以本日正式截图和历史场景为依据，X动态仍0秒，不能称全部学完。目标球面/铁路/机器人岗位有艺术偏差，未生产实施。
+下一轮：优先root-batch近景同机位A/B、60帧性能窗口及整场景不可见裁剪成本；再处理坑缘近镜头厚植物遮挡与水下根系，不重复做冠/树干/小花批处理。截止06:13临时自动greg-jakub删除交付。
+
+2026-10-21：书店镇广场原蒸汽车伤员送医Hard to Find已接正式入口，实测首人康复回广场并接下一位。原运输艇16重甲伤兵送黑娃24秒治疗后全返，期间下一集结0人，全部归队再集结18人；复用原模型。备份/实机/CPU/JEV：bookshop-medical-20261021。旧掩护轰炸进场0/2超时仍需修，最后相机遮挡小修未整场复测。

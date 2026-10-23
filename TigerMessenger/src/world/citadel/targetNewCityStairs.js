@@ -1,3 +1,4 @@
+import {createTargetStreetDressing} from './targetStreetDressing.js';
 import * as THREE from 'three';
 import { TARGET_NEW_CITY_MAIN_PALETTE } from './targetNewCityMain.js?revision=entry-r39-colour-1';
 import {TARGET_ARCHITECTURE_PALETTE,TARGET_ARCHITECTURE_COLOUR_VERSION} from './targetArchitecturePalette.js';
@@ -23,7 +24,9 @@ const pointSegmentDistance = (p,a,b) => {
  * READ ONLY, and must return terrain Y in this module's local frame or null.
  * It audits rather than carves terrain or silently moves the approved stair. */
 export function createTargetNewCityStairs({seed=20261006,palette={},route=TARGET_NEW_CITY_STAIR_ROUTE,
-  width=6.2,maxRise=.25,foundationBottom=-10.2,surfaceHeightAt=null,includeHouses=true,houseOffsets={},housingProfile='stepped-flanks-v5',streetInfill=false,facadeFoundationRefinement=false}={}) {
+  width=6.2,maxRise=.25,foundationBottom=-10.2,surfaceHeightAt=null,includeHouses=true,houseOffsets={},housingProfile='stepped-flanks-v5',streetInfill=false,facadeFoundationRefinement=false,placementMatrix=null}={}) {
+  if(placementMatrix!==null&&(!placementMatrix?.isMatrix4||!placementMatrix.elements.every(Number.isFinite)))throw new TypeError('placementMatrix must be a finite actual local-to-castle matrix');
+  const castlePoint=(x,z,y=0)=>placementMatrix?new THREE.Vector3(x,y,z).applyMatrix4(placementMatrix).toArray():[74+Math.cos(yaw)*x+Math.sin(yaw)*z,12+y,33-Math.sin(yaw)*x+Math.cos(yaw)*z];
   if(typeof facadeFoundationRefinement!=='boolean')throw new TypeError('facadeFoundationRefinement must be boolean');
   if(streetInfill!==false&&streetInfill!==true&&(!streetInfill||typeof streetInfill!=='object'||Array.isArray(streetInfill)))throw new TypeError('streetInfill must be false, true or an options record');
   if(!['stepped-flanks-v5','original'].includes(housingProfile))throw new TypeError('unknown housingProfile');
@@ -322,11 +325,28 @@ export function createTargetNewCityStairs({seed=20261006,palette={},route=TARGET
     footprints.push({id,polygon:poly,floorY:houseBottom,roofY:base+h+(row===0&&housingProfile==='original'?3.5:1.05),role:'stair-flank-house'});
     houses.push({id,position:[centre[0],base,centre[1]],size:[w,h,d],row,side,entrance:[centre[0],base,centre[1]+d/2],publicInterior:false,massing:housingProfile,upperSetback: housingProfile==='stepped-flanks-v5'&&row<2?[.76,1.02]:null});
   }
+  const flankPlants=[];
+  for(const h of houses)for(const sign of[-1,1]){
+    const x=h.position[0]+sign*(h.size[0]/2+.72),z=h.position[2];
+    if(route.some((p,i)=>i&&pointSegmentDistance([x,z],[route[i-1][0],route[i-1][2]],[p[0],p[2]])<width/2+1))continue;
+    const y=surfaceHeightAt?.(x,z);if(!Number.isFinite(y)||Math.abs(y-h.position[1])>2.5)continue;
+    flankPlants.push([x,y+.05,z,.72,sign===h.side]);
+  }
+  const flankDressing=createTargetStreetDressing({plants:flankPlants,lamps:[],lightLimit:0});flankDressing.group.name='new-city-stair-house-gardens';group.add(flankDressing.group);
+  function publicSolidIntersection({position,angle,width,depth,bottom,top,publicCollisionGroups=[]}){
+    if(!publicCollisionGroups.length)return null;
+    group.updateWorldMatrix(true,true);
+    const local=new THREE.Matrix4().compose(new THREE.Vector3(...position),new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),angle),new THREE.Vector3(1,1,1)),inverse=group.matrixWorld.clone().multiply(local).invert(),envelope=new THREE.Box3(new THREE.Vector3(-width/2-.10,bottom-position[1],-depth/2-.18),new THREE.Vector3(width/2+.10,top-position[1],depth/2+.18));
+    let obstacle=null;
+    for(const root of publicCollisionGroups){root.updateWorldMatrix(true,true);root.traverse(o=>{if(obstacle||!o.isMesh||o.userData.isOutline)return;o.geometry.computeBoundingBox();const transform=inverse.clone().multiply(o.matrixWorld);if(!envelope.intersectsBox(o.geometry.boundingBox.clone().applyMatrix4(transform)))return;const p=o.geometry.attributes.position,index=o.geometry.index;for(let i=0;i<(index?.count??p.count);i+=3){const triangle=new THREE.Triangle(...[0,1,2].map(j=>new THREE.Vector3().fromBufferAttribute(p,index?index.getX(i+j):i+j).applyMatrix4(transform)));if(envelope.intersectsTriangle(triangle)){obstacle={mesh:o.name,face:i/3};break;}}});if(obstacle)break;}
+    return obstacle;
+  }
+  let primaryInfillComplete=false;
   const infillReport={enabled:!!streetInfill,version:'new-city-street-infill-1',modules:[],rejected:[],supportSamples:[],extraMeshes:0,finitePass:null,publicRoutesChanged:false,existingFootprintsChanged:false,gpuVerified:false};
   function buildStreetInfill(options={}){
     if(group.getObjectByName('new-city-stair-house-street-infill'))throw new Error('street infill already constructed; recreate to change inputs');
     if(!options||typeof options!=='object'||Array.isArray(options))throw new TypeError('street infill options required');
-    const protectedPolygons=options.publicFootprints??walkSurfaces.map(s=>({id:s.id,polygon:s.polygon}));
+    const protectedPolygons=[...(options.publicFootprints??walkSurfaces.map(s=>({id:s.id,polygon:s.polygon}))),...(options.protectedFootprints??[])];
     if(!Array.isArray(protectedPolygons)||protectedPolygons.some(p=>!Array.isArray(p.polygon)||p.polygon.length<3||p.polygon.some(q=>q.length!==2||!q.every(Number.isFinite))))throw new TypeError('streetInfill.publicFootprints requires local XZ polygons');
     infillReport.enabled=true;
     const separated=(A,B)=>[A,B].some(poly=>poly.some((p,i)=>{const q=poly[(i+1)%poly.length],nx=-(q[1]-p[1]),nz=q[0]-p[0],a=A.map(v=>v[0]*nx+v[1]*nz),b=B.map(v=>v[0]*nx+v[1]*nz);return Math.max(...a)<=Math.min(...b)+1e-8||Math.max(...b)<=Math.min(...a)+1e-8;}));
@@ -346,7 +366,8 @@ export function createTargetNewCityStairs({seed=20261006,palette={},route=TARGET
       if(terrain.some(t=>t.height===null)){infillReport.rejected.push({id,reason:'actual-support-missing'});continue;}
       const high=Math.max(...terrain.map(t=>t.height)),low=Math.min(...terrain.map(t=>t.height)),floor=high+.08,bottom=low-.12,wallH=2.35,top=floor+wallH;
       if(high-low>5){infillReport.rejected.push({id,reason:'terrain-spread-would-create-tower',spread:high-low});continue;}
-      const landmark=poly.map(([x,z])=>[74+Math.cos(yaw)*x+Math.sin(yaw)*z,33-Math.sin(yaw)*x+Math.cos(yaw)*z]).some(([x,z])=>Math.hypot(x-56,z-78)<5||Math.hypot(x-72,z-78)<5.5);
+      const solid=publicSolidIntersection({position:[mid.x,floor,mid.y],angle,width:span,depth,bottom,top:top+.61,publicCollisionGroups:options.publicCollisionGroups});if(solid){infillReport.rejected.push({id,reason:'actual-public-solid-intersection',...solid});continue;}
+      const landmark=poly.map(([x,z])=>{const q=castlePoint(x,z,floor);return[q[0],q[2]];}).some(([x,z])=>Math.hypot(x-56,z-78)<5||Math.hypot(x-72,z-78)<5.5);
       if(landmark){infillReport.rejected.push({id,reason:'protected-landmark-circle'});continue;}
       const root=new THREE.Group();root.name=id;root.position.set(mid.x,floor,mid.y);root.rotation.y=angle;infillRoot.add(root);const colour=id==='lower-stepped-link'?'rose':id==='west-low-wing'?'stone':'blue';
       box(id+'-seated-base',span+.06,floor-bottom,depth+.06,0,-(floor-bottom)/2,0,colour,root,.035);
@@ -368,12 +389,17 @@ export function createTargetNewCityStairs({seed=20261006,palette={},route=TARGET
     for(const m of parts){m.removeFromParent();gs.delete(m.geometry);m.geometry.dispose();}infillRoot.clear();
     for(const [material,b]of batches){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(b.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(b.n,3));const key=Object.keys(materials).find(k=>materials[k]===material),mesh=add('new-city-street-infill-'+key,g,key,[0,0,0],infillRoot);mesh.userData.targetWalkable=false;mesh.userData.targetStreetInfill=true;}
     infillReport.extraMeshes=batches.size;infillReport.finitePass=infillReport.modules.length>=3&&infillReport.supportSamples.every(p=>p.gap===0&&p.buriedBody===0);infillReport.publicFootprintSource=options.publicFootprints?'caller actual public polygons':'authored factory stair polygons';
+    // Completion and geometric safety are different from the visual density
+    // target (three rooms). A changed, protected terrain may legitimately
+    // reject rooms; secondary rooms still perform their own independent probes.
+    primaryInfillComplete=true;
   }
   const secondaryReport={enabled:false,version:'new-city-secondary-street-clusters-1',modules:[],rejected:[],supportSamples:[],extraMeshes:0,finitePass:null,publicRoutesChanged:false,existingFootprintsChanged:false,gpuVerified:false};
-  function buildSecondaryStreetClusters({enabled=false,publicFootprints,protectedFootprints}={}){
+  function buildSecondaryStreetClusters({enabled=false,publicFootprints,protectedFootprints,publicCollisionGroups=[]}={}){
     if(typeof enabled!=='boolean')throw new TypeError('secondary street enabled must be boolean');if(!enabled)return secondaryReport;
     if(secondaryReport.enabled)throw new Error('secondary street clusters already constructed; recreate to change inputs');
-    if(!infillReport.enabled||!infillReport.finitePass)throw new Error('complete actual primary street infill first');
+    if(!infillReport.enabled||!primaryInfillComplete)throw new Error('complete actual primary street infill first');
+    if(infillReport.supportSamples.some(p=>!Number.isFinite(p.height)||p.gap!==0||p.buriedBody!==0))throw new Error('primary street infill contains unvalidated support');
     for(const [key,list]of Object.entries({publicFootprints,protectedFootprints}))if(!Array.isArray(list)||!list.length||list.some(p=>!Array.isArray(p.polygon)||p.polygon.length<3||p.polygon.some(q=>q.length!==2||!q.every(Number.isFinite))))throw new TypeError(key+' must contain actual local XZ polygons');
     const separated=(A,B)=>[A,B].some(poly=>poly.some((p,i)=>{const q=poly[(i+1)%poly.length],nx=-(q[1]-p[1]),nz=q[0]-p[0],a=A.map(v=>v[0]*nx+v[1]*nz),b=B.map(v=>v[0]*nx+v[1]*nz);return Math.max(...a)<=Math.min(...b)+1e-8||Math.max(...b)<=Math.min(...a)+1e-8;}));
     const plans=[['upper-left-back','0--1','back',0,'rose'],['upper-left-side','0--1','east',0,'stone'],['upper-right-side','1-1','east',0,'stone'],['middle-right-link','0-1','west',0,'stone'],['pink-back-room','1--1','back',.65,'blue'],['pink-side-room','1--1','west',.65,'stone'],['lower-blue-back','2--1','back',-.65,'rose'],['lower-blue-side','2--1','east',0,'stone']];
@@ -383,13 +409,14 @@ export function createTargetNewCityStairs({seed=20261006,palette={},route=TARGET
       const w=2.4,d=1.8,h=2.5,n=edge==='back'?[0,-1]:edge==='east'?[1,0]:[-1,0],t=[n[1],-n[0]],half=edge==='back'?house.size[2]/2:house.size[0]/2,x=house.position[0]+n[0]*(half+d/2-.12)+t[0]*shift,z=house.position[2]+n[1]*(half+d/2-.12)+t[1]*shift,angle=Math.atan2(n[0],n[1]),at=(u,v)=>[x+t[0]*u+n[0]*v,z+t[1]*u+n[1]*v],poly=[[-w/2-.12,-d/2-.18],[w/2+.12,-d/2-.18],[w/2+.12,d/2+.18],[-w/2-.12,d/2+.18]].map(p=>at(...p));
       const obstacle=[...publicFootprints,...protectedFootprints,...footprints.filter(p=>p.role==='stair-flank-house'&&p.id!==house.id),...infillReport.modules,...staged].find(p=>!separated(poly,p.polygon));
       if(obstacle){rejected.push({id,reason:'protected-or-existing-footprint',obstacle:obstacle.id});continue;}
-      const castlePoly=poly.map(([xx,zz])=>[74+Math.cos(yaw)*xx+Math.sin(yaw)*zz,33-Math.sin(yaw)*xx+Math.cos(yaw)*zz]);
+      const castlePoly=poly.map(([xx,zz])=>{const q=castlePoint(xx,zz,house.position[1]);return[q[0],q[2]];});
       if([[56,78,5],[72,78,5.5]].some(([cx,cz,r])=>castlePoly.some((p,i)=>pointSegmentDistance([cx,cz],p,castlePoly[(i+1)%castlePoly.length])<r))){rejected.push({id,reason:'landmark-clearance'});continue;}
       const samples=[],nx=Math.ceil((w+.06)/.25),nz=Math.ceil((d+.06)/.25);for(let ix=0;ix<=nx;ix++)for(let iz=0;iz<=nz;iz++){const u=ix/nx-.5,v=iz/nz-.5,q=at((w+.06)*u,(d+.06)*v),height=surfaceHeightAt?.(...q)??null;if(height!==null&&!Number.isFinite(height))throw new Error('nonfinite secondary street terrain');samples.push({id,x:q[0],z:q[1],height});}
       if(samples.some(p=>p.height===null)){rejected.push({id,reason:'actual-terrain-missing'});continue;}
       const high=Math.max(...samples.map(p=>p.height)),low=Math.min(...samples.map(p=>p.height)),floor=high+.08,bottom=low-.12,parentFoot=footprints.find(p=>p.id===house.id);
       if(floor-bottom>2.05){rejected.push({id,reason:'would-require-tall-skirt',foundationHeight:floor-bottom});continue;}
       if(floor+h+.61>parentFoot.roofY-.4){rejected.push({id,reason:'would-overtop-parent'});continue;}
+      const solid=publicSolidIntersection({position:[x,floor,z],angle,width:w,depth:d,bottom,top:floor+h+.61,publicCollisionGroups});if(solid){rejected.push({id,reason:'actual-public-solid-intersection',...solid});continue;}
       // Prove actual masonry contact at the shared edge, including parent
       // foundations with blind recesses. Envelope overlap alone is insufficient.
       const parent=group.getObjectByName(house.id),outward=new THREE.Vector3(n[0],0,n[1]).transformDirection(group.matrixWorld),contacts=[];
@@ -431,6 +458,6 @@ export function createTargetNewCityStairs({seed=20261006,palette={},route=TARGET
     performance:{meshes,triangles,materials:ms.size},bounds:{min:bounds.min.toArray(),max:bounds.max.toArray()},
     validation:{gpuVerified:false,navigationIntegrated:false,landmarkClearanceVerified:false,terrainChanged:false},
     limitations:['Default route and foundations require final terrain/landmark triangle checks.','Geometry provides continuous treads, but no movement-controller or navigation integration.','House doors are decorative; main public passage is the central staircase.','Entry interface is fixed to the current main-hall model; custom routes need caller endpoint validation.']};
-  group.userData.stairCandidateReport=report;let disposed=false;
-  return{group,report,completeSecondaryStreetClusters(options={}){if(disposed)throw new Error('stairs disposed');const result=buildSecondaryStreetClusters(options);if(!result.enabled)return result;group.updateWorldMatrix(true,true);let meshes=0,triangles=0;const bounds=new THREE.Box3(),inverse=group.matrixWorld.clone().invert();group.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;o.geometry.computeBoundingBox();bounds.union(o.geometry.boundingBox.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse,o.matrixWorld)));}});report.revision='target-new-city-stairs-8-secondary-clusters';report.performance={meshes,triangles,materials:ms.size};report.bounds={min:bounds.min.toArray(),max:bounds.max.toArray()};return result;},completeStreetInfill(options={}){if(disposed)throw new Error('stairs disposed');buildStreetInfill(options);group.updateWorldMatrix(true,true);let meshes=0,triangles=0;group.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;}});report.revision=facadeFoundationRefinement?'target-new-city-stairs-7-foundation-refinement':'target-new-city-stairs-6-street-infill';report.performance={meshes,triangles,materials:ms.size};const localBounds=new THREE.Box3(),inverse=group.matrixWorld.clone().invert();group.traverse(o=>{if(o.isMesh){o.geometry.computeBoundingBox();localBounds.union(o.geometry.boundingBox.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse,o.matrixWorld)));}});report.bounds={min:localBounds.min.toArray(),max:localBounds.max.toArray()};return infillReport;},dispose(){if(disposed)return;disposed=true;group.removeFromParent();for(const g of gs)g.dispose();for(const m of ms)m.dispose();group.clear();}};
+  report.streetGardens=flankDressing.report;group.userData.stairCandidateReport=report;let disposed=false;
+  return{group,report,streetDressing:flankDressing,completeSecondaryStreetClusters(options={}){if(disposed)throw new Error('stairs disposed');const result=buildSecondaryStreetClusters(options);if(!result.enabled)return result;group.updateWorldMatrix(true,true);let meshes=0,triangles=0;const bounds=new THREE.Box3(),inverse=group.matrixWorld.clone().invert();group.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;o.geometry.computeBoundingBox();bounds.union(o.geometry.boundingBox.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse,o.matrixWorld)));}});report.revision='target-new-city-stairs-8-secondary-clusters';report.performance={meshes,triangles,materials:ms.size};report.bounds={min:bounds.min.toArray(),max:bounds.max.toArray()};return result;},completeStreetInfill(options={}){if(disposed)throw new Error('stairs disposed');buildStreetInfill(options);group.updateWorldMatrix(true,true);let meshes=0,triangles=0;group.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;}});report.revision=facadeFoundationRefinement?'target-new-city-stairs-7-foundation-refinement':'target-new-city-stairs-6-street-infill';report.performance={meshes,triangles,materials:ms.size};const localBounds=new THREE.Box3(),inverse=group.matrixWorld.clone().invert();group.traverse(o=>{if(o.isMesh){o.geometry.computeBoundingBox();localBounds.union(o.geometry.boundingBox.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse,o.matrixWorld)));}});report.bounds={min:localBounds.min.toArray(),max:localBounds.max.toArray()};return infillReport;},dispose(){if(disposed)return;disposed=true;flankDressing.dispose();group.removeFromParent();for(const g of gs)g.dispose();for(const m of ms)m.dispose();group.clear();}};
 }

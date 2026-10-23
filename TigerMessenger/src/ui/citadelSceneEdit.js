@@ -506,6 +506,7 @@ export function createCitadelSceneEdit({
   }
 
   function showGhost(target) {
+    ghost.scale.set(1,1,1);
     const frame = editFrame();
     if (!target || !frame) {
       ghost.visible = false;
@@ -530,6 +531,16 @@ export function createCitadelSceneEdit({
     ghost.visible = true;
   }
 
+  function showJunctionGhost(e){
+    const citadel=getCitadel(),junction=citadel?.userData.junctionEditor,ray=castRay(e);
+    const target=ray&&junction?.placementTarget(junction.pick(ray),'place',panel.getState().activeChar);
+    if(!target){ghost.visible=false;return;}
+    ghost.position.copy(junction.cellWorld(target));
+    ghost.quaternion.copy(citadel.getWorldQuaternion(tmpQ));
+    ghost.scale.copy(citadel.getWorldScale(tmpV)).multiply(new THREE.Vector3(1.6/CELL,1.7/CELL_H,1.6/CELL));
+    ghost.material.color.setHex(CHAR_COLORS[panel.getState().activeChar]??CHAR_COLORS.W);ghost.visible=true;
+  }
+
   // ---------- 事件 ----------
   let downButton = -1;
   let downX = 0;
@@ -548,7 +559,7 @@ export function createCitadelSceneEdit({
       if (!editing()) ghost.visible = false;
       return;
     }
-    if (getCitadel()?.userData.junctionEditor) { ghost.visible=false; return; }
+    if (getCitadel()?.userData.junctionEditor) { showJunctionGhost(e); return; }
     if (panel.usesHighlandUnitMap?.()) {
       // 山谷建筑不是正交体素，不显示会误导位置的旧格网幽灵块。
       ghost.visible = false;
@@ -568,11 +579,14 @@ export function createCitadelSceneEdit({
     const junction=getCitadel()?.userData.junctionEditor;
     if(junction){
       const ray=castRay(e), hit=ray&&junction.pick(ray);
-      if(hit){const cell={...hit};if(button!==2&&hit.top&&!hit.empty)cell.iy++;
-        const result=panel.applyJunctionEdit(cell,button===2?'erase':'place');
+      const mode=button===2?'erase':'place',cell=junction.placementTarget(hit,mode,panel.getState().activeChar);
+      if(cell){
+        const result=panel.applyJunctionEdit(cell,mode);
         if(result?.ok)toast(button===2?'已删除建筑单元':'已更新建筑单元',1.2);
+      }else if(button!==2){
+        toast('此处不能承托完整建筑单元，或已与另一楼群重叠',1.8);
       }
-      ghost.visible=false;return;
+      showJunctionGhost(e);return;
     }
 
     if (panel.usesHighlandUnitMap?.()) {

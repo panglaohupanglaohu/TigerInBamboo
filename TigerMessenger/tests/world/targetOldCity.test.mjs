@@ -1,13 +1,13 @@
 import test from 'node:test';import assert from 'node:assert/strict';import * as T from 'three';
 import {createTargetOldCity} from '../../src/world/citadel/targetOldCity.js';
-test('old city finite scale and deterministic authored layout',()=>{const a=createTargetOldCity(),b=createTargetOldCity();assert.deepEqual(a.report,b.report);assert.ok(a.report.bounds.size[0]<41);assert.ok(Math.abs(a.report.bounds.max[1]-33)<1e-5);assert.ok(a.report.houses.length>=14);a.group.traverse(o=>{if(o.isMesh)for(const n of o.geometry.attributes.position.array)assert.ok(Number.isFinite(n));});a.dispose();b.dispose();});
-test('entry is a real open arch and central stairs ascend',()=>{const a=createTargetOldCity();a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);for(const x of[-1.7,0,1.7]){const ray=new T.Raycaster(new T.Vector3(x,2,18),new T.Vector3(0,0,-1),0,5);assert.equal(ray.intersectObject(a.group,true).length,0);}assert.ok(new T.Raycaster(new T.Vector3(3,2,18),new T.Vector3(0,0,-1),0,5).intersectObject(a.group,true).some(h=>h.object.name==='old-city-front-open-gate'));let last=0;for(let i=0;i<40;i++){const z=9.75-i*.5,hits=new T.Raycaster(new T.Vector3(0,12,z),new T.Vector3(0,-1,0),0,20).intersectObject(a.group,true);assert.ok(hits.length);assert.ok(hits[0].point.y>last);last=hits[0].point.y;}a.dispose();});
+test('old city finite scale and deterministic authored layout',()=>{const a=createTargetOldCity(),b=createTargetOldCity();assert.deepEqual(a.report,b.report);assert.ok(a.report.bounds.size[0]<49);assert.ok(Math.abs(a.report.bounds.max[1]-29)<1e-5);assert.ok(a.report.houses.length>=14);a.group.traverse(o=>{if(o.isMesh)for(const n of o.geometry.attributes.position.array)assert.ok(Number.isFinite(n));});a.dispose();b.dispose();});
+test('entry is a real open arch and central stairs ascend',()=>{const a=createTargetOldCity();a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);for(const x of[-1.7,0,1.7]){const ray=new T.Raycaster(new T.Vector3(x,2,18),new T.Vector3(0,0,-1),0,5);assert.equal(ray.intersectObject(a.group,true).length,0);}assert.ok(new T.Raycaster(new T.Vector3(3,2,18),new T.Vector3(0,0,-1),0,5).intersectObject(a.group,true).some(h=>h.object.name==='old-city-front-open-gate'));let last=.3;const steps=a.report.radialLayout.routes.find(r=>r.id==='old-radial-alley-0').surfaces.filter(s=>s.id.includes('-tread-2-'));for(const s of steps){const hits=new T.Raycaster(new T.Vector3(s.point[0],12,s.point[2]),new T.Vector3(0,-1,0),0,20).intersectObject(a.group,true);assert.ok(hits.length);assert.ok(hits[0].point.y>last);last=hits[0].point.y;}a.dispose();});
 test('dispose releases owned resources once',()=>{const a=createTargetOldCity(),parent=new T.Group();parent.add(a.group);let g=0,m=0;const gs=new Set(),ms=new Set();a.group.traverse(o=>{if(o.isMesh){gs.add(o.geometry);ms.add(o.material);}});gs.forEach(x=>x.addEventListener('dispose',()=>g++));ms.forEach(x=>x.addEventListener('dispose',()=>m++));a.dispose();a.dispose();assert.equal(g,gs.size);assert.equal(m,ms.size);assert.equal(a.group.parent,null);});
-test('second version keeps bell chamber and supporting arcade genuinely open',()=>{const a=createTargetOldCity();a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);const cast=(x,y,z,dir,far)=>new T.Raycaster(new T.Vector3(x,y,z),new T.Vector3(...dir),0,far).intersectObject(a.group,true);assert.equal(cast(11.55,28,-7,[0,0,-1],8).length,0);assert.ok(cast(12.75,28,-7,[0,0,-1],8).some(h=>h.object.name.startsWith('tower-bell')));const bay=17.3/3,x=11.15-17.3/2+bay*.5;assert.equal(cast(x,1,4,[0,0,-1],7).length,0);assert.ok(cast(x+2.5,1,4,[0,0,-1],7).some(h=>h.object.name.includes('arcade')));assert.deepEqual(a.report.exits.bridge,[19.8,.3,12.4]);a.dispose();});
+test('default radial tower bell chamber and bridge anchor remain genuinely open',()=>{const a=createTargetOldCity();a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);const cast=(x,y,z)=>new T.Raycaster(new T.Vector3(x,y,z),new T.Vector3(0,0,-1),0,8).intersectObject(a.group,true);assert.equal(cast(-1,24,-.5).filter(h=>h.object.name.startsWith('tower-bell')).length,0);assert.ok(cast(.2,24,-.5).some(h=>h.object.name.startsWith('tower-bell')));assert.deepEqual(a.report.exits.bridge,[19.8,.3,12.4]);assert.deepEqual(a.report.exits.waterfallFeed,[11,.3,13.7]);a.dispose();});
 
-test('v10 redistributes residential plots while retaining r30 public routes, palette and 33m tower',async()=>{
+test('historical axial: v10 redistributes residential plots while retaining r30 public routes, palette and 33m tower',async()=>{
  const fs=await import('node:fs');const prior=JSON.parse(fs.readFileSync(new URL('../../artifacts/pipeline/citadel-four-hour-20261005/r30-sun-rock-target-front-plants-terrain.json',import.meta.url),'utf8')).cityDetail.oldCity.geometry;
- const a=createTargetOldCity({seed:prior.seed,palette:prior.palette});
+ const a=createTargetOldCity({layout:'axial',seed:prior.seed,palette:prior.palette});
  for(const key of['entry','exits','stairs','walkable','palette'])assert.deepEqual(a.report[key],prior[key],key);
  assert.ok(a.report.bounds.min[0]>=prior.bounds.min[0]-1e-5);assert.ok(a.report.bounds.max[0]<=prior.bounds.max[0]+1e-5);assert.ok(Math.abs(a.report.bounds.max[1]-33)<1e-5);
  for(const fp of a.report.footprints.filter(f=>!f.id.startsWith('house-')))assert.deepEqual(fp,prior.footprints.find(p=>p.id===fp.id));
@@ -21,13 +21,9 @@ test('each house owns bevel walls, roof and two batched window materials under a
  a.dispose();
 });
 
-test('side and rear windows are mounted on their owner and absent within adjacent house envelopes',()=>{
- const a=createTargetOldCity();const sides=new Set(a.report.facadeWindows.map(w=>w.side));assert.deepEqual([...sides].sort(),['back','front','left','right']);assert.ok(a.report.rejectedWindows.length>0);
- for(const w of a.report.facadeWindows){const h=a.report.houses.find(h=>h.id===w.houseId),fp=a.report.footprints.find(f=>f.id===w.houseId),[x,y,z]=w.position,n=w.normal;const width=(Math.max(...fp.polygon.map(p=>p[0]))-Math.min(...fp.polygon.map(p=>p[0])))-.4;
-  const v=w.wallVolume;assert.ok(h.volumes.some(p=>p.id===v.id));if(n[0])assert.ok(Math.abs(Math.abs(x-h.position[0]-v.x)-v.w/2)<1e-8);else assert.ok(Math.abs(Math.abs(z-h.position[2]-v.z)-v.d/2)<1e-8);
-  const ex=n[0]?.15:.49,ez=n[2]?.15:.49;
-  for(const other of a.report.footprints.filter(f=>f.id!==h.id&&f.id.startsWith('house-'))){const minX=Math.min(...other.polygon.map(p=>p[0])),maxX=Math.max(...other.polygon.map(p=>p[0])),minZ=Math.min(...other.polygon.map(p=>p[1])),maxZ=Math.max(...other.polygon.map(p=>p[1]));const intersect=x+ex>minX&&x-ex<maxX&&z+ez>minZ&&z-ez<maxZ&&y+.64>other.floorY&&y-.64<other.roofY;assert.equal(intersect,false,`${w.id} window buried in ${other.id}`);}
- }
+test('rotated facade windows remain mounted on their original owner face',()=>{
+ const a=createTargetOldCity();assert.deepEqual([...new Set(a.report.facadeWindows.map(w=>w.side))].sort(),['back','front','left','right']);
+ for(const w of a.report.facadeWindows){const h=a.report.houses.find(h=>h.id===w.houseId),v=w.wallVolume,yaw=h.yaw,dx=w.position[0]-h.position[0],dz=w.position[2]-h.position[2],x=Math.cos(yaw)*dx-Math.sin(yaw)*dz,z=Math.sin(yaw)*dx+Math.cos(yaw)*dz;assert.ok(h.volumes.some(p=>p.id===v.id));if(['left','right'].includes(w.side))assert.ok(Math.abs(Math.abs(x-v.x)-v.w/2)<1e-8);else assert.ok(Math.abs(Math.abs(z-v.z)-v.d/2)<1e-8);}
  a.dispose();
 });
 
@@ -44,8 +40,8 @@ test('all additional upper walls recolour and undo with their residential entity
  editor.dispose();a.dispose();
 });
 
-test('v9 twelve adjacent inset residential bodies have real connected through arcades and supported open front galleries',()=>{
- const a=createTargetOldCity();a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);assert.equal(a.report.residentialArcades.length,12);
+test('historical axial: v9 twelve adjacent inset residential bodies have real connected through arcades and supported open front galleries',()=>{
+ const a=createTargetOldCity({layout:'axial'});a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);assert.equal(a.report.residentialArcades.length,12);
  for(const arcade of a.report.residentialArcades){const h=a.report.houses.find(h=>h.id===arcade.houseId),root=a.group.getObjectByName(h.id),v=h.facadeVolumes[0],fp=a.report.footprints.find(f=>f.id===h.id);assert.equal(h.bodyVariant,'through-arcade-inset-storey');assert.equal(h.volumes[0].includesVoid,true);assert.ok(v.d<h.volumes[0].d&&v.w<h.volumes[0].w);assert.equal(arcade.publicNavigationInstalled,false);
   for(const opening of arcade.openings)for(const dy of[.55,1.2,1.8])for(const dx of[-.35,0,.35]){const ray=new T.Raycaster(new T.Vector3(opening.centerX+dx,opening.floorY+dy,opening.frontZ+.1),new T.Vector3(0,0,-1),0,4.9);assert.equal(ray.intersectObject(root,true).length,0,h.id+' blocked through arch');}
   const rayAcross=new T.Raycaster(new T.Vector3(h.position[0]-v.w/2+.2,h.position[1]+1.1,h.position[2]),new T.Vector3(1,0,0),0,v.w-.4);assert.equal(rayAcross.intersectObject(root,true).length,0,'arcades connect behind front piers');
@@ -55,8 +51,8 @@ test('v9 twelve adjacent inset residential bodies have real connected through ar
  a.dispose();
 });
 
-test('v10 keeps sparse square windows, protected public geometry and authored roof roles',async()=>{
- const fs=await import('node:fs'),before=JSON.parse(fs.readFileSync(new URL('../../artifacts/pipeline/citadel-four-hour-20261005/r37-continuous-turf-target-front-plants-terrain.json',import.meta.url),'utf8')).cityDetail.oldCity.geometry,a=createTargetOldCity({seed:before.seed,palette:before.palette});
+test('historical axial: v10 keeps sparse square windows, protected public geometry and authored roof roles',async()=>{
+ const fs=await import('node:fs'),before=JSON.parse(fs.readFileSync(new URL('../../artifacts/pipeline/citadel-four-hour-20261005/r37-continuous-turf-target-front-plants-terrain.json',import.meta.url),'utf8')).cityDetail.oldCity.geometry,a=createTargetOldCity({layout:'axial',seed:before.seed,palette:before.palette});
  for(const key of['walkable','entry','exits','stairs'])assert.deepEqual(a.report[key],before[key],key);
  assert.deepEqual(a.report.footprints.filter(f=>!f.id.startsWith('house-')),before.footprints.filter(f=>!f.id.startsWith('house-')));
  assert.equal(a.report.version,'target-old-city-11-three-street-clusters');assert.ok(a.report.facadeWindows.length<before.facadeWindows.length*.7);assert.ok(a.report.facadeWindows.every(w=>w.width===.68&&w.height<1));
@@ -64,8 +60,8 @@ test('v10 keeps sparse square windows, protected public geometry and authored ro
  assert.ok(a.report.performance.meshes<=280);assert.ok(a.report.performance.triangles<28000,'connected side openings remain inside the explicit 28k geometry budget');a.dispose();
 });
 
-test('v9 actual same-level neighbours share open side arches, continuous floors and solid supporting jambs',()=>{
- const a=createTargetOldCity();a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);
+test('historical axial: v9 actual same-level neighbours share open side arches, continuous floors and solid supporting jambs',()=>{
+ const a=createTargetOldCity({layout:'axial'});a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);
  const r=a.report.streetArcades;assert.equal(r.groups.length,4);assert.equal(r.links.length,8);assert.equal(r.publicNavigationInstalled,false);assert.equal(r.terrainChanged,false);
  const cast=(p,d,far)=>new T.Raycaster(new T.Vector3(...p),new T.Vector3(...d),0,far).intersectObject(a.group,true);
  for(const link of r.links){const hs=link.houses.map(id=>a.report.houses.find(h=>h.id===id));assert.equal(hs[0].position[1],hs[1].position[1]);assert.ok(hs[0].position[0]*hs[1].position[0]>0,'links must not bridge the public ascending street');assert.ok(link.sharedDepth>=3.69);assert.equal(link.source,'actual-same-level-body-adjacency');
@@ -80,9 +76,9 @@ test('v9 actual same-level neighbours share open side arches, continuous floors 
  a.dispose();
 });
 
-test('v10 retains protected v8 public meshes and all 20 tower windows while residential plinths follow moved houses',async()=>{
+test('historical axial: v10 retains protected v8 public meshes and all 20 tower windows while residential plinths follow moved houses',async()=>{
  const fs=await import('node:fs/promises');let source=await fs.readFile(new URL('../../artifacts/pipeline/citadel-city-detail-20261006/source-before-old-city-v9/targetOldCity.js',import.meta.url),'utf8');source=source.replace("from 'three'",`from '${import.meta.resolve('three')}'`).replace("from './targetOldCityRoofWfc.js'",`from '${new URL('../../src/world/citadel/targetOldCityRoofWfc.js',import.meta.url).href}'`);
- const {createTargetOldCity:beforeFactory}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64')),a=createTargetOldCity(),before=beforeFactory({palette:a.report.palette});
+ const {createTargetOldCity:beforeFactory}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64')),a=createTargetOldCity({layout:'axial'}),before=beforeFactory({palette:a.report.palette});
  const publicMeshes=asset=>{const output=[];asset.group.traverse(o=>{if(!o.isMesh||o.userData.targetHouseSupportFor||o.userData.targetSharedResidentialFloor||o.userData.targetStreetInfill)return;let parent=o.parent;while(parent&&parent!==asset.group){if(parent.userData.targetEditableHouse)return;parent=parent.parent;}o.updateMatrix();output.push({name:o.name,position:[...o.geometry.attributes.position.array],normal:[...o.geometry.attributes.normal.array],index:o.geometry.index?[...o.geometry.index.array]:null,matrix:[...o.matrix.elements],colour:o.material.color.getHexString()});});return output;};
  assert.deepEqual(publicMeshes(a),publicMeshes(before),'public geometry must remain byte-equivalent');assert.equal(a.report.towerWindows.length,20);assert.deepEqual(a.report.towerWindows,before.report.towerWindows);
  for(const change of a.report.layoutRedistribution.changes){const old=before.report.houses.find(h=>h.id===change.id);assert.deepEqual(change.before.position,old.position);assert.equal(change.before.width,old.volumes[0].w);assert.equal(change.before.authoredHeight,old.authoredHeight);assert.ok(Math.abs(change.before.roofY-old.roofY)<1e-8);}
@@ -93,8 +89,8 @@ test('v10 retains protected v8 public meshes and all 20 tower windows while resi
  editor.dispose();before.dispose();a.dispose();
 });
 
-test('v10 actual tower-flank redistribution stays supported on existing decks and preserves public front strips and upward sightlines',async()=>{
- const a=createTargetOldCity({seed:20261005});a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);
+test('historical axial: v10 actual tower-flank redistribution stays supported on existing decks and preserves public front strips and upward sightlines',async()=>{
+ const a=createTargetOldCity({layout:'axial',seed:20261005});a.group.traverse(o=>{if(o.isMesh)o.material.side=T.DoubleSide;});a.group.updateMatrixWorld(true);
  const changes=a.report.layoutRedistribution.changes;assert.equal(changes.length,15);assert.ok(changes.every(c=>c.before.position.some((v,i)=>v!==c.after.position[i])));assert.equal(a.report.layoutRedistribution.towerMoved,false);
  const relocated=changes.find(c=>c.id==='house-2--1-1');assert.ok(relocated.before.position[0]<0&&relocated.after.position[0]>13.475);assert.equal(relocated.supportTerrace,'terrace-2-1');assert.ok(relocated.after.width<relocated.before.width);assert.ok(changes.find(c=>c.id==='house-2-1-0').after.position[0]<11.55);
  assert.equal(new Set(a.report.residentialArcades.map(r=>r.gallery.sideSetback.toFixed(2))).size,3);
@@ -112,8 +108,8 @@ test('v10 actual tower-flank redistribution stays supported on existing decks an
  a.dispose();
 });
 
-test('v11 six infill modules have actual slab support in three clusters without expanding city or public geometry',()=>{
- const a=createTargetOldCity(),before=createTargetOldCity({streetInfill:false});
+test('historical axial: v11 six infill modules have actual slab support in three clusters without expanding city or public geometry',()=>{
+ const a=createTargetOldCity({layout:'axial'}),before=createTargetOldCity({layout:'axial',streetInfill:false});
  assert.equal(a.report.streetInfill.modules.length,6);assert.equal(new Set(a.report.streetInfill.modules.map(m=>m.cluster)).size,3);
  assert.deepEqual(a.report.footprints,before.report.footprints);assert.deepEqual(a.report.bounds,before.report.bounds);
  assert.equal(a.report.houses.length,15);assert.equal(a.report.performance.materials,before.report.performance.materials);assert.equal(a.report.performance.meshes-before.report.performance.meshes,6);assert.ok(a.report.performance.triangles-before.report.performance.triangles<1500);
@@ -135,16 +131,16 @@ test('v11 six infill modules have actual slab support in three clusters without 
  assert.ok(upper);a.dispose();before.dispose();
 });
 
-test('v11 rollback exactly reproduces pre-infill geometry and attached rooms survive every legal roof role/editor transaction',async()=>{
+test('historical axial: v11 rollback exactly reproduces pre-infill geometry and attached rooms survive every legal roof role/editor transaction',async()=>{
  const fs=await import('node:fs/promises');let source=await fs.readFile(new URL('../../artifacts/pipeline/citadel-old-street-infill-20261006/targetOldCity.before.js',import.meta.url),'utf8');
  source=source.replace("from 'three'",`from '${import.meta.resolve('three')}'`).replace("from './targetOldCityRoofWfc.js'",`from '${new URL('../../src/world/citadel/targetOldCityRoofWfc.js',import.meta.url).href}'`).replace("from './targetArchitecturePalette.js'",`from '${new URL('../../src/world/citadel/targetArchitecturePalette.js',import.meta.url).href}'`);
- const factory=(await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'))).createTargetOldCity,prior=factory(),rollback=createTargetOldCity({streetInfill:false});
+ const factory=(await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'))).createTargetOldCity,prior=factory(),rollback=createTargetOldCity({layout:'axial',streetInfill:false});
  const geometry=a=>{const out=[];a.group.traverse(o=>{if(o.isMesh){o.updateMatrix();out.push([o.name,[...o.geometry.attributes.position.array],[...o.matrix.elements],o.material.color.getHexString()]);}});return out;};assert.deepEqual(geometry(rollback),geometry(prior));prior.dispose();rollback.dispose();
  const {createTargetCityEntityEditor}=await import('../../src/world/citadel/targetCityEntityEditor.js');
  for(const role of['hip-roof','open-terrace-pavilion','setback-upper-room','outer-edge-short-tower','upper-street-cupola']){
-  const id='house-1--1-1',a=createTargetOldCity({roofRoles:{[id]:role}}),root=a.group.getObjectByName(id),editor=createTargetCityEntityEditor({root:a.group,targetId:'infill',terrainVersion:'r17',factoryVersion:a.report.version}),wall=root.getObjectByName(id+'-walls'),original=wall.material;
+  const id='house-1--1-1',a=createTargetOldCity({layout:'axial',roofRoles:{[id]:role}}),root=a.group.getObjectByName(id),editor=createTargetCityEntityEditor({root:a.group,targetId:'infill',terrainVersion:'r17',factoryVersion:a.report.version}),wall=root.getObjectByName(id+'-walls'),original=wall.material;
   assert.equal(a.report.houses.find(h=>h.id===id).roofRole,role);assert.equal(editor.list().length,15);assert.equal(editor.edit({id,wallColor:'#ee9988'}).ok,true);assert.equal(wall.material.color.getHexString(),'ee9988');assert.equal(editor.undo().ok,true);assert.equal(wall.material,original);assert.equal(editor.edit({id,occupied:false}).ok,true);assert.equal(root.visible,false);assert.equal(a.group.getObjectByName(id+'-base').visible,true);assert.equal(editor.undo().ok,true);
   assert.ok(new T.Box3().setFromObject(root).max.y<=a.report.footprints.find(f=>f.id===id).roofY+1e-5);editor.dispose();a.dispose();
  }
- assert.throws(()=>createTargetOldCity({streetInfill:'yes'}),/streetInfill/);
+ assert.throws(()=>createTargetOldCity({layout:'axial',streetInfill:'yes'}),/streetInfill/);
 });

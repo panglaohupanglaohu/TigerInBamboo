@@ -10,6 +10,7 @@ import { PLANET_RADIUS } from "./planet.js";
 import { canyonOffsetDir } from "./canyon.js";
 import { WORLD_SCALE } from "./worldScale.js";
 import { createMoonOrb } from "./moonOrb.js";
+import { installMoonLakeAncientPine } from "../assets/moonLakeAncientPine.js";
 
 export const LAKE = {
   x: 4 * WORLD_SCALE,
@@ -152,6 +153,7 @@ export function createMoonLake(scene, planetRadius = PLANET_RADIUS) {
   // 「径向 = 局部 +Y、切平面 = 局部 XZ」摆好了，月亮用平面坐标即可。
   // 尺寸/站位/张角的推导见 moonOrb.js 顶部注释。
   const moonOrb = createMoonOrb(g);
+  const ancientPine = installMoonLakeAncientPine(g, planetRadius);
 
   scene.add(g);
 
@@ -167,6 +169,7 @@ export function createMoonLake(scene, planetRadius = PLANET_RADIUS) {
     splashes,
     reflect,
     moonOrb,
+    ancientPine,
     _splashCooldown: 0,
   };
 }

@@ -23,6 +23,9 @@ export function wornMetal(color,kind='paint'){
   `);
  };
  mat.customProgramCacheKey=()=>`robot-alloy-v5-gloss-${kind}`;
+ // The hook only reads unchanged geometry-local position and shades fragments;
+ // all rigid instance transforms remain in Three's standard vertex chunks.
+ mat.userData.robotRigidInstanceSafe=true;
  return mat;
 }
 export function armorPolygon(root,points,depth,position,material){

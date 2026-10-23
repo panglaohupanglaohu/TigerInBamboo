@@ -62,6 +62,9 @@ export function resolveSphericalColliders(player, colliders) {
   const rKeep = player.position.length();
   const up = _up.copy(player.position).normalize();
   for (const c of colliders) {
+    // Optional radial band: a collider only blocks at its own level (deck railings vs. the ground below).
+    if (c.minR !== undefined && rKeep < c.minR) continue;
+    if (c.maxR !== undefined && rKeep > c.maxR) continue;
     _push.copy(player.position).sub(c.position);
     // 去掉径向分量 → 切平面分离
     _push.addScaledVector(up, -_push.dot(up));

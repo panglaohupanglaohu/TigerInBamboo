@@ -396,7 +396,7 @@ export function createCitadelEditorPanel({
     const hint = panel.querySelector("#ce-hint");
     if (hint) {
       hint.innerHTML = canal
-        ? "河水相交处 · 点水面盖楼，可叠 12 层。<br/>3D：点屋顶往上盖 · 侧面改色 · 右键删块 · Q/E 换层（共 12 层）· Ctrl+S 保存"
+        ? "河水相交处 · 点水面盖楼，可叠 12 层。<br/>3D：点屋顶往上盖 · 侧面改色 · 右键删块 · PageDown/E 换层（共 12 层）· Q 召唤飞艇 · Ctrl+S 保存"
         : latestValley
           ? "与运河交汇古堡共用 Townscaper 网格：左键空格扩建/同色继续生长/异色改色；右键删除命中的单元并挖洞。<br/>邻接变化会自动重算屋顶、墙角、拱洞、阳台、支架与装饰；共 12 层，Ctrl+S 保存。"
         : "平面图：左键 放块/改色 · 右键 删块 · 滚轮 缩放网格 · 图顶=后排 图底=前排（正门）<br/>3D 直编辑：左键 点顶面叠块/侧面改色/空地加块 · 右键 删块 · H 隐藏高层<br/>台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>台地/护城河/城堡改动都即时预览 3D · 必须点「保存台地配置」或「保存全部」（Ctrl+S）才写入存档";
@@ -407,7 +407,7 @@ export function createCitadelEditorPanel({
     }
     const regionMode=!!getCitadelTarget?.()?.userData?.junctionEditor;
     for(const id of ['ce-canvas','ce-reset','ce-clear','ce-prev','ce-next','ce-hide','ce-drop','ce-export','ce-import']){const control=panel.querySelector('#'+id);if(control)control.style.display=regionMode?'none':'';}
-    if(regionMode&&hint)hint.textContent='11 组独立楼群 · 左键屋顶增层/侧面改色 · 右键删单元 · 原地基空位可重建 · Ctrl+Z 撤销 · 保存才写入存档';
+    if(regionMode&&hint)hint.textContent='左键台基空位建造／屋顶增层；同色侧面向相邻格扩建，异色侧面改色 · 右键删单元 · Ctrl+Z 撤销 · 保存才写入存档';
     refreshPaletteSwatches();
     refreshLatestUnitEditor();
     const ctxEl = panel.querySelector("#ce-castle-context");
@@ -2313,7 +2313,7 @@ export function createCitadelEditorPanel({
   };
   panel.querySelector("#ce-close").onclick = () => api.close();
 
-  // 面板打开时的快捷键（1–4 材质 · Q/E 层 · H 隐藏高层 · Ctrl+Z 撤销）
+  // Q 始终召唤飞艇；PageDown/E 切换编辑层。
   window.addEventListener("keydown", (e) => {
     if (!open || e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
@@ -2347,7 +2347,7 @@ export function createCitadelEditorPanel({
     if (e.shiftKey && shiftPalette[e.code]) chooseColor(shiftPalette[e.code]);
     else if (palette[e.code]) chooseColor(palette[e.code]);
     else if (e.code === "KeyG" && !isLatestValley()) selectChar("G");
-    else if (e.code === "KeyQ") isLatestValley() ? selectLatestBand(latestActiveBand - 1) : stepLayer(-1);
+    else if (e.code === "PageDown") { e.preventDefault(); isLatestValley() ? selectLatestBand(latestActiveBand - 1) : stepLayer(-1); }
     else if (e.code === "KeyE") isLatestValley() ? selectLatestBand(latestActiveBand + 1) : stepLayer(1);
     else if (e.code === "KeyH") isLatestValley()
       ? panel.querySelector("#ce-latest-hide-band")?.click()

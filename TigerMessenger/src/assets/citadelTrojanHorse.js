@@ -1,375 +1,127 @@
-import * as THREE from "three";
-import { toonMat, addOutline } from "./toon.js";
+import * as T from 'three';
+import {relicBuilder} from './relicMetal.js';
+import {mergeStaticGroup} from '../world/geometryMerge.js';
 
-/**
- * 低多边形（Low Poly）特洛伊木马——纯积木式几何解构。
- * 将原木肌理 / 肌肉线条拆成硬朗的 Box / 棱柱(Cylinder) 相互堆叠：
- *   轮车底座 + 低面车轮 → 锥形马腿 → 拉长的马身 → 前倾 25° 的脖子 →
- *   微低 30°、Z 轴拉长的马面 → 三角耳朵 → 锯齿状方块马鬃。
- * 并叠加：错落“补丁木块” + 横向黑色木板缝隙拼接线，增强手作拼装感。
- *
- * 材质沿用圣城 toonMat（硬边 Cel + 墨线轮廓），保证与护城河/朝圣水阶同画风。
- *
- * @param {object} [opts]
- * @param {string} [opts.name]
- * @param {number} [opts.seed]     随机补丁木块种子
- * @param {number} [opts.scale]    整体缩放
- * @returns {THREE.Group}
- */
-export function createCitadelTrojanHorse({
-  name = "citadel-trojan-horse",
-  seed = 9901,
-  scale = 1,
-} = {}) {
-  const g = new THREE.Group();
-  g.name = name;
-
-  // 统一原木硬边材质（红褐色平涂，与插画一致）
-  const wood = toonMat(0x8a6140, { flatShading: true });   // 风化橡木，比原 0x8b4513 去饱和
-  const darkWood = toonMat(0x4b3725, { flatShading: true }); // 深木（轮/鬃/缝隙）
-  const rope = toonMat(0x33261a, { flatShading: true });
-  const baseWood = toonMat(0xa07c57, { flatShading: true }); // 浅色编条，和深条拉开明暗
-
-  // 简易 LCG 伪随机，保证同 seed 拼块布局稳定
-  let state = seed >>> 0;
-  const rand = () => {
-    state = (state * 1664525 + 1013904223) >>> 0;
-    return state / 0x100000000;
-  };
-
-  const part = (geometry, material, pname, outline = 0.028, dry = 0) => {
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.name = pname;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    addOutline(mesh, outline, 0x1c2523, dry);
-    return mesh;
-  };
-
-  const S = scale;
-
-  // ============ 1. 轮车底座 (Base & Wheels) ============
-  // 载重平板车：扁平长方体
-  const platform = part(
-    new THREE.BoxGeometry(5.0 * S, 0.40 * S, 7.6 * S),
-    baseWood,
-    "troy-plank-platform",
-    0.032
-  );
-  platform.position.y = 0.42 * S;
-  g.add(platform);
-
-  // 底部两根枕木（横向），衔接车轮
-  for (const zSign of [1, -1]) {
-    const sleeper = part(
-      new THREE.BoxGeometry(5.4 * S, 0.32 * S, 0.62 * S),
-      darkWood,
-      "troy-axle-sleeper",
-      0.024
-    );
-    sleeper.position.set(0, 0.24 * S, zSign * 2.7 * S);
-    g.add(sleeper);
+export function createCitadelTrojanHorse({name='citadel-trojan-horse',seed=9901,scale=1}={}){
+ const g=new T.Group();g.name=name;g.userData.preserveCitadelMaterials=true;g.userData.sourceId='wood-rearing-trojan-4-concealed-hip';g.userData.seed=seed;
+ const grainData=new Uint8Array(128*256*4);
+ for(let y=0;y<256;y++)for(let x=0;x<128;x++){const wave=Math.sin(x*.53+Math.sin(y*.021)*1.8),fine=Math.sin(x*2.17+y*.031),v=Math.round(245+wave*5+fine*2),i=(y*128+x)*4;grainData.set([v,v,v,255],i);}
+ const grain=new T.DataTexture(grainData,128,256,T.RGBAFormat);grain.colorSpace=T.SRGBColorSpace;grain.wrapS=grain.wrapT=T.RepeatWrapping;grain.needsUpdate=true;
+ const wood=(name,color)=>{const material=new T.MeshStandardMaterial({name,color,map:grain,roughness:.88,metalness:0});material.userData.preserveCitadelMaterial=true;return material;};
+ const oak=wood('troy-weathered-oak',0xa8794f),endgrain=wood('troy-cut-oak',0xb68c5e),walnut=wood('troy-dark-wood',0x58402d),aged=wood('troy-aged-timber',0x8b633f);
+ const m={brass:oak,gold:endgrain,bronze:aged,dark:walnut},b=relicBuilder(g),{mesh,ell,box,rod,ring}=b;
+ function flank(name,zy,x,depth,mat){const p=b.plate(name,zy.map(([z,y])=>[-z,y]),0,depth,mat);p.rotation.y=Math.PI/2;p.position.x=x;return p;}
+ function neckSection(name,rows,mat){const pos=[],ix=[],n=24;for(const [y,z,rx,rz]of rows)for(let i=0;i<=n;i++){const a=i/n*Math.PI*2;pos.push(Math.sin(a)*rx,y,z+Math.cos(a)*rz);}for(let j=0;j<rows.length-1;j++)for(let i=0;i<n;i++){const a=j*(n+1)+i,c=a+n+1;ix.push(a,a+1,c,a+1,c+1,c);}const geom=new T.BufferGeometry();geom.setAttribute('position',new T.Float32BufferAttribute(pos,3));geom.setIndex(ix);geom.computeVertexNormals();return mesh(name,geom,mat);}
+ box('troy-metal-platform',[0,.43,0],[4.8,.40,7.6],m.dark);
+ for(const s of[-1,1]){
+  box('chassis-brass-inlay',[s*2.4,.51,0],[.05,.08,7.5],m.gold);
+  for(const z of[-2.7,2.7]){
+   rod('axle',[-2.64,.68,z],[2.64,.68,z],.12,m.dark);
+   const w=mesh('troy-wheel',new T.CylinderGeometry(.68,.68,.35,40),m.bronze,[s*2.55,.68,z]);w.rotation.z=Math.PI/2;
+   ring('wheel-brass-rim',[s*2.74,.68,z],.59,.045,m.gold,'x');ring('wheel-inset',[s*2.755,.68,z],.42,.024,m.dark,'x');
+   const hub=mesh('wheel-hub',new T.CylinderGeometry(.19,.19,.11,24),m.gold,[s*2.77,.68,z]);hub.rotation.z=Math.PI/2;
+   for(let i=0;i<6;i++){const a=i*Math.PI/3;rod('wheel-spoke',[s*2.76,.68+Math.sin(a)*.22,z+Math.cos(a)*.22],[s*2.76,.68+Math.sin(a)*.53,z+Math.cos(a)*.53],.038,m.gold);}
   }
-
-  // 低面六角车轮（CylinderGeometry r,r,h,6）
-  const wheelGeo = new THREE.CylinderGeometry(0.68 * S, 0.68 * S, 0.38 * S, 8);
-  wheelGeo.rotateZ(Math.PI / 2);
-  const wheelPositions = [
-    [-2.55, 0.68, 2.7],
-    [2.55, 0.68, 2.7],
-    [-2.55, 0.68, -2.7],
-    [2.55, 0.68, -2.7],
-  ];
-  for (const [wx, wy, wz] of wheelPositions) {
-    const wheel = part(wheelGeo, darkWood, "troy-wheel", 0.02);
-    wheel.position.set(wx * S, wy * S, wz * S);
-    g.add(wheel);
-    const hub = part(
-      new THREE.CylinderGeometry(0.17 * S, 0.17 * S, 0.46 * S, 6),
-      baseWood, "troy-wheel-hub", 0.012
-    );
-    hub.rotation.z = Math.PI / 2;
-    hub.position.set(wx * S, wy * S, wz * S);
-    g.add(hub);
-    for (let sp = 0; sp < 3; sp++) {
-      const spoke = part(
-        new THREE.BoxGeometry(0.30 * S, 1.22 * S, 0.11 * S),
-        baseWood, "troy-wheel-spoke", 0.008
-      );
-      spoke.position.set(wx * S, wy * S, wz * S);
-      spoke.rotation.set(0, Math.PI / 2, (sp * Math.PI) / 3);
-      g.add(spoke);
-    }
+ }
+ const joints={},restQuaternions=new Map();
+ function pivot(name,point,parent=g){const o=new T.Group();o.name=name;o.userData.trojanJoint=true;g.add(o);o.position.set(...point);g.updateMatrixWorld(true);if(parent!==g)parent.attach(o);restQuaternions.set(o,o.quaternion.clone());return o;}
+ function attachParts(joint,make){const before=new Set(g.children);make();g.updateMatrixWorld(true);for(const o of [...g.children])if(!before.has(o))joint.attach(o);}
+ const body=ell('troy-gunmetal-torso',[0,4.23,0],[1.43,1.19,2.55],m.dark);body.rotation.x=-.14;
+ // Overlapping bronze hull bands leave dark joints instead of plank seams.
+ for(let i=0;i<8;i++){const z=-2.1+i*.59,y=4.23+z*.14;const r=mesh('body-armour-band',new T.CylinderGeometry(1,1,.53,16,1,true),i%3===0?m.bronze:m.brass,[0,y,z]);r.rotation.x=Math.PI/2;r.scale.set(1.47,1,1.21);}
+ for(const s of[-1,1]){
+  // The hip is buried in the body. The stifle stays up inside the fleshy
+  // thigh silhouette, rather than becoming an extra exposed axle under it.
+  // One backward-bent hock and a forward-sloping pastern finish the chain.
+  const hip=[s*.96,4.25,-1.87],stifle=[s*1.08,3.35,-1.13],hock=[s*1.18,1.60,-2.14],hoof=[s*1.18,.79,-1.6];
+  const shoulder=[s*1.04,4.78,1.83],elbow=[s*1.1,4.2,3.12],wrist=[s*1.14,3.32,2.83],forehoof=[s*1.14,3.11,3.07];
+  for(const [label,points,names]of[['hind',[hip,stifle,hock,hoof],['hip','stifle','hock','hoof']],['fore',[shoulder,elbow,wrist,forehoof],['shoulder','elbow','wrist','hoof']]]){
+   const id=label+(s<0?'Left':'Right'),chain={};let parent=g;
+   for(let j=0;j<4;j++){const joint=pivot(id+'-'+names[j],points[j],parent);chain[names[j]]=joint;parent=joint;}
+   if(label==='hind')Object.defineProperty(chain,'knee',{value:chain.stifle,enumerable:false}); // Existing pose API alias, not a fifth joint.
+   joints[id]=chain;
+   if(label==='hind'){
+    attachParts(chain.hip,()=>{
+     ell('full-wooden-haunch',[s*.92,4.25,-1.83],[.83,.93,.93],m.brass);
+     const A=new T.Vector3(...hip),B=new T.Vector3(...stifle),delta=B.clone().sub(A);
+     const thigh=ell('continuous-powerful-hind-thigh',A.clone().lerp(B,.53).toArray(),[.57,delta.length()*.58,.59],m.brass);thigh.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize());
+     // Overlapping solid wood at a single real stifle. No hip disk or exposed
+     // intermediate rod lies between the haunch and this short upper segment.
+     ell('concealed-stifle-socket',stifle,[.31,.31,.31],m.brass);
+    });
+    attachParts(chain.stifle,()=>{
+     ell('wood-stifle-knuckle',stifle,[.32,.32,.32],m.brass);
+     rod('solid-hind-shin',stifle,hock,.24,m.brass,.34);
+     ell('hind-hock-socket',hock,[.21,.21,.21],m.bronze);
+    });
+    attachParts(chain.hock,()=>{
+     ell('single-wood-hock',hock,[.235,.235,.235],m.bronze);
+     rod('hind-pastern',hock,hoof,.19,m.brass,.22);
+     ell('hind-hoof-socket',hoof,[.21,.20,.21],m.bronze);
+    });
+   }else for(let j=0;j<3;j++)attachParts(chain[names[j]],()=>{
+    rod('fore-timber-bone',points[j],points[j+1],j===0?.23:.13,m.dark);
+    const a=new T.Vector3(...points[j]),c=new T.Vector3(...points[j+1]);
+    rod('fore-carved-limb',a.clone().lerp(c,.12).toArray(),a.clone().lerp(c,.85).toArray(),j===0?.34:.21,m.brass,j===0?.28:.17);
+    const p=points[j];ell('fore-joint',p,[j?.25:.42,j?.25:.42,j?.25:.42],m.dark);ring('fore-gold-bearing',[p[0]+s*(j?.255:.425),p[1],p[2]],j?.16:.29,.055,m.gold,'x');
+   });
+   attachParts(chain.hoof,()=>{const p=points[3];if(label==='hind')ell('wood-fetlock-at-hoof',p,[.225,.225,.225],m.bronze);box(label+'-wood-hoof',[p[0],p[1]-.11,p[2]+.07],[.60,.37,.69],m.bronze);});
   }
-
-  // ============ 2. 四肢 (Legs) ============
-  // 上细下粗的五棱柱马腿，拉长到车身
-  const legGeo = new THREE.CylinderGeometry(0.30 * S, 0.54 * S, 2.95 * S, 5);
-  const legPositions = [
-    [-1.48, 1.95, 1.92],
-    [1.48, 1.95, 1.92],
-    [-1.48, 1.95, -1.92],
-    [1.48, 1.95, -1.92],
-  ];
-  for (const [lx, ly, lz] of legPositions) {
-    const leg = part(legGeo, wood, "troy-leg", 0.026);
-    leg.position.set(lx * S, ly * S, lz * S);
-    g.add(leg);
-  }
-
-  // 腿部补丁木块
-  for (let i = 0; i < 10; i++) {
-    const px = (rand() - 0.5) * 2.6 * S;
-    const pz = (rand() - 0.5) * 3.4 * S;
-    const patch = part(
-      new THREE.BoxGeometry((0.2 + rand() * 0.25) * S, 0.03 * S, (0.3 + rand() * 0.3) * S),
-      i % 3 === 0 ? rope : wood,
-      "troy-leg-patch",
-      0.012
-    );
-    patch.position.set(px, (1.15 + rand() * 1.05) * S, pz);
-    patch.rotation.set(0, rand() * Math.PI, (rand() - 0.5) * 0.05);
-    g.add(patch);
-  }
-
-  // ============ 3. 躯干 (Torso) ============
-  // 拉长且厚重的马身：参考图中躯干是主要体量，Z 轴(长) > X 轴(宽)。
-  // 头部会按这个基准同步放大，避免出现“小头木马”。
-  const body = part(
-    new THREE.BoxGeometry(3.35 * S, 2.95 * S, 6.2 * S),
-    wood,
-    "troy-torso",
-    0.03
-  );
-  body.position.set(0, 4.15 * S, 0);
-  g.add(body);
-
-  // ============ 3.2 编条木纹 (Woven Planking) ============
-  // 目标图的木马是一圈圈横向编条，不是随机补丁。随机小块在远处糊成一团色斑，
-  // 规则的横向环带才能在剪影上读出“编木”。沿 Z 等距铺环带，环带之间留缝，
-  // 再用纵向立筋压住，形成经纬交织。
-  const WEAVE_BANDS = 9;
-  const bodyW = 3.35, bodyH = 2.95, bodyL = 6.2, bodyY = 4.15;
-  for (let i = 0; i < WEAVE_BANDS; i++) {
-    const t = (i + 0.5) / WEAVE_BANDS;
-    const bz = (t - 0.5) * bodyL * S;
-    const alt = i % 2 === 0;
-    const bandMat = alt ? wood : baseWood;
-    const bulge = alt ? 1.035 : 1.012;   // 交替外凸，产生编织的起伏
-    const band = part(
-      new THREE.BoxGeometry(bodyW * bulge * S, bodyH * 0.985 * S, (bodyL / WEAVE_BANDS) * 0.74 * S),
-      bandMat,
-      "troy-body-patch",
-      0.016
-    );
-    band.position.set(0, bodyY * S, bz);
-    g.add(band);
-    // 环带之间的深色缝隙
-    const gap = part(
-      new THREE.BoxGeometry(bodyW * 1.045 * S, bodyH * 0.94 * S, (bodyL / WEAVE_BANDS) * 0.18 * S),
-      darkWood,
-      "troy-wood-seam",
-      0.008
-    );
-    gap.position.set(0, bodyY * S, bz + (bodyL / WEAVE_BANDS) * 0.46 * S);
-    g.add(gap);
-  }
-  // 纵向立筋：压在环带外侧，交织感的另一半
-  for (const sx of [-1, 1]) {
-    for (let k = 0; k < 3; k++) {
-      const stile = part(
-        new THREE.BoxGeometry(0.13 * S, 0.42 * S, bodyL * 0.96 * S),
-        darkWood,
-        "troy-body-stile",
-        0.01
-      );
-      stile.position.set(sx * bodyW * 0.53 * S, (bodyY + (k - 1) * 0.92) * S, 0);
-      g.add(stile);
-    }
-  }
-  // 背脊与腹底各一条压条，封住上下口
-  for (const sy of [1, -1]) {
-    const cap = part(
-      new THREE.BoxGeometry(bodyW * 0.92 * S, 0.16 * S, bodyL * 0.98 * S),
-      baseWood,
-      "troy-body-cap",
-      0.012
-    );
-    cap.position.set(0, (bodyY + sy * bodyH * 0.5) * S, 0);
-    g.add(cap);
-  }
-
-  // 马身纵向木肋（深炭色细棱柱），加强拼接线
-  for (let i = 0; i < 3; i++) {
-    const rib = part(
-      new THREE.CylinderGeometry(0.05 * S, 0.05 * S, 5.1 * S, 4),
-      rope,
-      "troy-body-rib",
-      0.012
-    );
-    rib.rotation.x = Math.PI / 2;
-    rib.rotation.z = Math.PI / 4;
-    rib.position.set((i - 1) * 1.0 * S, 3.8 * S, 0);
-    g.add(rib);
-  }
-
-  // ============ 3.6 夜间潜入舱门 (Belly Hatch) ==========
-  // 舱口压在马腹最低处，白天闭合；夜晚由两扇木板向下分开，
-  // 让绳索和纸士兵从腹部中央明确露出来。
-  const bellyHatch = new THREE.Group();
-  bellyHatch.name = "troy-belly-hatch";
-  const cavity = part(
-    new THREE.BoxGeometry(1.7 * S, 0.08 * S, 1.9 * S),
-    darkWood,
-    "troy-belly-cavity",
-    0.014
-  );
-  cavity.position.set(0, 2.48 * S, 0);
-  bellyHatch.add(cavity);
-  const doors = [];
-  for (const side of [-1, 1]) {
-    const door = part(
-      new THREE.BoxGeometry(0.82 * S, 0.08 * S, 1.82 * S),
-      baseWood,
-      side < 0 ? "troy-belly-door-left" : "troy-belly-door-right",
-      0.018
-    );
-    door.position.set(side * 0.43 * S, 2.53 * S, 0);
-    bellyHatch.add(door);
-    doors.push(door);
-  }
-  g.add(bellyHatch);
-  const setBellyOpen = (amount = 0) => {
-    const open = THREE.MathUtils.clamp(Number(amount) || 0, 0, 1);
-    doors[0].rotation.z = 0.92 * open;
-    doors[1].rotation.z = -0.92 * open;
-    cavity.visible = open > 0.01;
-    bellyHatch.userData.open = open;
-  };
-  bellyHatch.userData = { cavity, doors, setOpen: setBellyOpen, open: 0 };
-  g.userData.bellyHatch = bellyHatch.userData;
-  g.userData.setBellyOpen = setBellyOpen;
-  setBellyOpen(0);
-
-  // ============ 4. 倾斜的脖子 (Animated Neck) ============
-  // 参考图里的脖子与肩胸连成一个厚重的前躯，不能做成细长立柱。
-  // 这里把宽度、深度和高度同时提高，让头部的尺寸有真实的承托关系。
-  // 胸块：把颈根压在躯干前端上，避免“细柱插方块”
-  const chest = part(
-    new THREE.BoxGeometry(2.25 * S, 1.55 * S, 1.45 * S),
-    baseWood,
-    "troy-chest",
-    0.026
-  );
-  chest.position.set(0, 4.85 * S, 2.55 * S);
-  g.add(chest);
-
-  const neck = part(
-    new THREE.BoxGeometry(1.45 * S, 2.70 * S, 1.50 * S),
-    wood,
-    "troy-neck",
-    0.026
-  );
-  neck.position.set(0, 5.85 * S, 3.00 * S);
-  neck.rotation.x = 0.40; // 前倾约 23°，拱颈
-  g.add(neck);
-
-  // 颈部也用横向编条，和躯干同一套木作语言
-  for (let i = 0; i < 4; i++) {
-    const nb = part(
-      new THREE.BoxGeometry(1.52 * S, 0.34 * S, 1.57 * S),
-      i % 2 === 0 ? baseWood : darkWood,
-      "troy-neck-band",
-      0.012
-    );
-    nb.position.set(0, (5.0 + i * 0.62) * S, (2.68 + i * 0.27) * S);
-    nb.rotation.x = 0.40;
-    g.add(nb);
-  }
-
-  // 脖子侧面的木板缝隙
-  for (let i = 0; i < 3; i++) {
-    const nseam = part(
-      new THREE.BoxGeometry(0.02 * S, 1.15 * S, 0.02 * S),
-      darkWood,
-      "troy-neck-seam",
-      0.005
-    );
-    nseam.position.set((i % 2 === 0 ? 1 : -1) * 0.76 * S, (5.4 + i * 0.5) * S, (2.8 + i * 0.22) * S);
-    g.add(nseam);
-  }
-
-  // ============ 5. 与躯干协调的马头 (Dynamic Head) ============
-  // 头部按参考图重新校准：头长约为躯干长度的三分之一，宽高也随厚颈
-  // 增加，保证头、颈、胸是连续的大体块，而不是细颈接小方块。
-  const head = part(
-    new THREE.BoxGeometry(1.22 * S, 1.18 * S, 2.05 * S),
-    wood,
-    "troy-head",
-    0.028
-  );
-  head.position.set(0, 7.05 * S, 3.95 * S);
-  head.rotation.x = -0.30; // 低头约 17°，厚重侧脸
-  g.add(head);
-
-  // 口鼻与头部保持约 7:10 的宽度，并拉出足够长度形成清晰的马脸。
-  const snout = part(
-    new THREE.BoxGeometry(0.86 * S, 0.72 * S, 1.05 * S),
-    darkWood,
-    "troy-snout",
-    0.024
-  );
-  snout.position.set(0, 6.62 * S, 4.88 * S);
-  snout.rotation.x = -0.30;
-  g.add(snout);
-
-  // 灵魂装饰：三角耳朵（3 面圆锥，稍微朝后抿）
-  const earGeo = new THREE.ConeGeometry(0.19 * S, 0.52 * S, 3);
-  earGeo.rotateX(0.2);
-  for (const side of [-1, 1]) {
-    const ear = part(earGeo, darkWood, "troy-ear", 0.014);
-    ear.position.set(side * 0.40 * S, 7.72 * S, 3.55 * S);
-    ear.rotation.set(-0.15, 0, side * 0.1);
-    g.add(ear);
-  }
-
-  // 锯齿状马鬃：一排渐小方块叠在脖子后，平替木片鬃毛
-  const maneCount = 5;
-  for (let i = 0; i < maneCount; i++) {
-    const maneGeo = new THREE.BoxGeometry(0.42 * S, (0.74 - i * 0.1) * S, 0.78 * S);
-    const maneUnit = part(maneGeo, darkWood, "troy-mane", 0.018);
-    maneUnit.position.set(0, (5.82 - i * 0.45) * S, (1.34 - i * 0.26) * S);
-    maneUnit.rotation.x = 0.42;
-    g.add(maneUnit);
-  }
-
-  // ============ 6. 拉条与绳索 (Strap Ribs) ============
-  // 胸部/颈部横向绳索
-  const strapGeo = new THREE.CylinderGeometry(0.055 * S, 0.055 * S, 2.2 * S, 4);
-  for (const [sx, sy, sz, rotZ] of [
-    [0, 4.7, 1.05, 0],
-    [0, 5.5, 2.35, 0],
-    [0, 3.3, -1.5, 0],
-  ]) {
-    const strap = part(strapGeo, rope, "troy-strap", 0.01);
-    strap.position.set(sx * S, sy * S, sz * S);
-    strap.rotation.x = Math.PI / 2;
-    strap.rotation.z = rotZ;
-    g.add(strap);
-  }
-
-  // 底座与车轮之间绑绳
-  for (const side of [-1, 1]) {
-    const tie = part(
-      new THREE.CylinderGeometry(0.05 * S, 0.05 * S, 1.2 * S, 4),
-      rope,
-      "troy-tie-rope",
-      0.01
-    );
-    tie.position.set(side * 1.9 * S, 0.75 * S, 2.35 * S);
-    tie.rotation.z = side * 0.15;
-    g.add(tie);
-  }
-
-  return g;
+  // Raised side hatch is decorative; functional belly opening stays at the
+  // original controller's descent anchors (local y=2.46).
+  flank('side-hatch',[[-.9,3.49],[.87,3.67],[.93,4.98],[-.94,4.76]],s*1.45,.075,m.bronze);
+  ring('hatch-civilization-seal',[s*1.56,4.23,0],.32,.036,m.gold,'x');
+  rod('hatch-symbol',[s*1.57,3.79,0],[s*1.57,4.67,0],.025,m.gold);
+  for(const z of[-.94,.94])for(const y of[3.82,4.5])rod('hatch-hinge',[s*1.56,y,z],[s*1.56,y+.25,z],.075,m.gold);
+ }
+ neckSection('arched-neck-core',[[4.3,1.82,.87,.9],[5.12,1.94,.79,.86],[5.91,2.12,.64,.75],[6.58,2.38,.48,.62],[7.18,2.76,.46,.57],[7.59,3.10,.45,.54]],m.dark);
+ for(let i=0;i<8;i++){const t=i/8,y=4.7+t*2.78,z=1.86+t*t*1.19,rx=.86-t*.40,rz=.86-t*.30;neckSection('neck-lapped-armour',[[y,z,rx,rz],[y+.35,z+.11,rx-.018,rz-.025]],i%3===0?m.bronze:m.brass);}
+ // A single solid long wedge from poll to muzzle, with a broad horse jaw.
+ // Faceted oval sections form a continuous forehead/nose rather than round balls.
+ const headRows=[[2.71,7.55,.43,.43],[3.07,7.49,.53,.56],[3.40,7.26,.55,.53],[3.83,7.02,.37,.38],[4.24,6.76,.30,.29],[4.66,6.59,.32,.26],[4.86,6.56,.28,.23]];
+ const hp=[],hi=[],hn=12;
+ for(const[z,y,rx,ry]of headRows)for(let i=0;i<=hn;i++){const a=i/hn*Math.PI*2;hp.push(Math.cos(a)*rx,y+Math.sin(a)*ry,z);}
+ for(let j=0;j<headRows.length-1;j++)for(let i=0;i<hn;i++){const a=j*(hn+1)+i,c=a+hn+1;hi.push(a,a+1,c,a+1,c+1,c);}
+ for(const[j,reverse]of[[0,true],[headRows.length-1,false]]){const center=hp.length/3;hp.push(0,headRows[j][1],headRows[j][0]);for(let i=0;i<hn;i++){const a=j*(hn+1)+i;hi.push(center,reverse?a+1:a,reverse?a:a+1);}}
+ const hg=new T.BufferGeometry();hg.setAttribute('position',new T.Float32BufferAttribute(hp,3));hg.setIndex(hi);hg.computeVertexNormals();mesh('carved-long-horse-head',hg,m.brass);
+ for(const s of[-1,1]){
+  ell('full-horse-cheek',[s*.405,7.14,3.19],[.25,.40,.42],m.brass);
+  ell('horse-eye',[s*.505,7.48,3.27],[.018,.054,.067],m.dark);
+  rod('carved-brow',[s*.49,7.61,3.17],[s*.49,7.51,3.44],.043,m.bronze);
+  ell('inset-nostril',[s*.300,6.68,4.56],[.011,.045,.070],m.dark);
+  rod('muzzle-mouth-seam',[s*.275,6.49,4.36],[s*.27,6.43,4.79],.012,m.dark);
+  const ear=mesh('carved-horse-ear',new T.ConeGeometry(.145,.64,4),m.brass,[s*.29,8.00,2.96]);ear.rotation.x=-.18;
+ }
+ for(let j=0;j<10;j++){
+  const y=4.91+j*.28,z=1.0+j*.17;
+  flank('segmented-metal-mane',[[z,y],[z-.47,y+.03],[z-.37,y+.38],[z+.27,y+.40]],-.10,.20,m.bronze);
+ }
+ // Swept segmented metal tail, comfortably within the old actor bounds.
+ const tail=[[0,4.66,-2.08],[0,4.44,-2.88],[0,3.69,-3.18],[0,2.89,-3.50],[0,2.23,-3.59]];
+ for(let i=0;i<tail.length-1;i++)rod('tail-spine',tail[i],tail[i+1],.16-i*.027,m.dark);
+ for(let i=0;i<7;i++)for(const s of[-1,1])flank('tail-metal-scale',[[-2.52-i*.15,4.40-i*.29],[-3.03-i*.13,4.27-i*.30],[-3.22-i*.10,3.73-i*.25],[-2.69-i*.15,4.03-i*.27]],s*.12,.11,m.brass);
+ // Keep the original belly doors and API independent from static batching.
+ const hatch=new T.Group();hatch.name='troy-belly-hatch';g.add(hatch);
+ // Timber sides join the low functional hatch to the raised belly. The central
+ // descent opening remains clear for the original night-time soldier anchors.
+ for(const s of[-1,1])box('belly-hatch-timber-cheek',[s*.88,2.97,0],[.12,.96,1.94],m.bronze);
+ const hb=relicBuilder(hatch),cavity=hb.box('troy-belly-cavity',[0,2.48,0],[1.7,.08,1.9],m.dark),doors=[];
+ for(const s of[-1,1])doors.push(hb.box(s<0?'troy-belly-door-left':'troy-belly-door-right',[s*.43,2.53,0],[.82,.08,1.82],m.bronze));
+ const setOpen=amount=>{const a=T.MathUtils.clamp(Number(amount)||0,0,1);doors[0].rotation.z=.92*a;doors[1].rotation.z=-.92*a;cavity.visible=a>.01;hatch.userData.open=a;};
+ hatch.userData={cavity,doors,setOpen,open:0};g.userData.bellyHatch=hatch.userData;g.userData.setBellyOpen=setOpen;setOpen(0);
+ // All parts sharing a wood material need UVs before static batching, including
+ // the custom neck/head surfaces; otherwise a missing UV strips the whole batch.
+ g.traverse(o=>{if(!o.isMesh||o.geometry.attributes.uv)return;const p=o.geometry.attributes.position,uv=[];for(let i=0;i<p.count;i++)uv.push(p.getX(i)*.35+p.getZ(i)*.23,p.getY(i)*.17);o.geometry.setAttribute('uv',new T.Float32BufferAttribute(uv,2));});
+ // Merge within each rigid link only; never bake joints into the body.
+ for(const chain of Object.values(joints))for(const joint of Object.values(chain))mergeStaticGroup(joint,{mergedTag:'trojan-rigid-link',skip:o=>o.parent!==joint});
+ const jointAncestor=o=>{for(let p=o.parent;p&&p!==g;p=p.parent)if(p.userData.trojanJoint)return true;return false;};
+ mergeStaticGroup(g,{mergedTag:'trojan-carved-wood',skip:o=>o.parent===hatch||jointAncestor(o)});
+ const rider=pivot('troy-rider-seat',[0,5.39,-.20]);rider.userData.trojanJoint=false;
+ const leftRein=pivot('troy-rein-left',[-.33,6.63,4.41]),rightRein=pivot('troy-rein-right',[.33,6.63,4.41]);
+ g.userData.ridingAnchors={seat:rider,leftRein,rightRein,forward:[0,0,1],implementedGameplay:false};
+ g.userData.articulation={version:2,hindChain:['hip','stifle','hock','hoof'],hiddenHip:true,stifleWithinThigh:true,kneeAlias:'stifle',joints,axis:'local-X',setJoint(chain,name,angle){const joint=joints[chain]?.[name];if(!joint||!Number.isFinite(angle))return false;joint.quaternion.copy(restQuaternions.get(joint)).multiply(new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),T.MathUtils.clamp(angle,-.65,.65)));return true;},reset(){for(const chain of Object.values(joints))for(const joint of Object.values(chain))joint.quaternion.copy(restQuaternions.get(joint));},limits:[-.65,.65],locomotionImplemented:false};
+ // Scale geometry and local translations like the old factory, allowing callers
+ // to retain their independent actor scale and ground placement.
+ if(scale!==1)g.traverse(o=>{if(o===g)return;o.position.multiplyScalar(scale);if(o.isMesh)o.geometry.scale(scale,scale,scale);});
+ g.userData.pose='raised-forelegs-crouched-hindlegs';return g;
 }

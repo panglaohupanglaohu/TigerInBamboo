@@ -1,11 +1,12 @@
 import {addFactoryTargetDetail} from './factoryTargetDetail.js';
+import {addFactoryTargetV21} from './factoryTargetV21.js';
 import * as THREE from 'three';
 import {addBookshopFacadeDetails} from './bookshopFacadeDetails.js';
 import {addFactoryWorkcell} from './factoryWorkcells.js';
 import {createBookshopWorker} from './bookshopWorker.js';
 import {factoryKit} from './factoryArchitecture.js';
 import {mergeStaticGroup} from '../world/geometryMerge.js';
-export const FACTORY_REVISION=20;
+export const FACTORY_REVISION=21;
 export const FACTORY_PASSES=[
  'Separate storefront and industrial court footprints',
  'Pale stone storefront piers and open arched bays',
@@ -27,15 +28,17 @@ export const FACTORY_PASSES=[
  'Public paving, warm street lamps and workers for scale',
  'Freight gate, signs, book displays and structural tank supports',
  'Review corrections: reading gallery, machining racks / ladles / mech walkways',
+ 'Target sheets 2026-10-12: cream limestone, riveted lattice gantry, chain hoist, 货运入口 gate lanterns',
 ];
 export function createBookshopFactoryCompound(kind,revision=FACTORY_REVISION){
  const root=new THREE.Group();root.name=kind+'-bookshop-factory-compound';const fixed=new THREE.Group();root.add(fixed);const K=factoryKit(fixed),{M,mesh,box,cyl,beam,pipe,torus,sign,arch,dome,roof,gear,crate,wheel}=K;const ant=kind==='ant',locust=kind==='locust',name=ant?'蚂蚁':locust?'蝗虫':'甲壳虫';const anim=[];
+ if(revision>=21){M.stone.color.set(0xd9cdb3);M.trim.color.set(0xeee5cf);} // warm cream limestone per target sheets
  // Local +Z fronts the public plaza. Freight moves down the right-side lane.
  const sx=-3.1,front=2.4;
  if(revision>=1){box(7.8,.18,6.2,sx,.09,-.6,M.stone);box(9,.15,10,4,.075,-6.6,M.stone);box(.22,4,5.8,sx-3.8,2,-.6);box(.22,4,5.8,sx+3.8,2,-.6);box(7.8,4,.22,sx,2,-3.5);}
  if(revision>=2){for(const x of[-6.6,-4.3,-2,.3]){box(.36,4.5,.42,x,2.25,front,M.trim);box(.64,.22,.63,x,.16,front,M.trim);box(.62,.2,.6,x,4.3,front,M.trim);}for(const x of[-5.45,-3.15,-.85])arch(x,.18,front,1.93,3.5,fixed,x!==-3.15);box(8.1,.28,6.5,sx,4.35,-.6,M.trim);box(8,1,.35,sx,3.87,front-.05);}
  if(revision>=3){if(locust){roof(sx,4.4,-.6,8.3,6.6,3,fixed,false);const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute([sx-4,4.4,front,sx+4,4.4,front,sx,7.4,front],3));g.computeVertexNormals();mesh(g,M.stone);arch(sx,4.65,front+.03,1.6,1.9);beam([sx-4.1,4.45,front+.05],[sx,7.5,front+.05],.08,M.trim);beam([sx,7.5,front+.05],[sx+4.1,4.45,front+.05],.08,M.trim);}else if(!ant){dome(sx,4.58,-1,2.05,2.4);dome(sx-2.8,4.5,.1,1.07,1.45);dome(sx+2.8,4.5,.1,1.07,1.45);}else{roof(sx,4.4,-.6,8.3,6.6,1.5);box(1.8,5,1.55,sx,6.8,-.2,M.stone);box(2.05,.23,1.9,sx,9.25,-.2,M.trim);dome(sx,9.38,-.2,1.0,1.45);}}
- if(revision>=4){sign(ant?'螞蟻書店':locust?'LOCUST BOOKSHOP':'BEETLE BOOKSHOP',6.65,.78,sx,4.04,front+.24);for(const x of[-6.9,.65]){cyl(.08,1,x,4.7,front,M.brass);mesh(new THREE.SphereGeometry(.16,12,8),M.brass,x,5.25,front);}}
+ if(revision>=4){sign(revision>=21?(ant?'蚂蚁书店':locust?'LOCUST BOOKSHOP':'甲壳虫书店'):(ant?'螞蟻書店':locust?'LOCUST BOOKSHOP':'BEETLE BOOKSHOP'),6.65,.78,sx,4.04,front+.24);for(const x of[-6.9,.65]){cyl(.08,1,x,4.7,front,M.brass);mesh(new THREE.SphereGeometry(.16,12,8),M.brass,x,5.25,front);}}
  if(revision>=5){const colors=[0x866a4e,0x586f73,0xa1814e,0x7c4034,0xa2a087].map(c=>new THREE.MeshStandardMaterial({color:c,roughness:.95}));for(const x of[-5.45,-.85]){for(let row=0;row<5;row++){box(1.76,.06,.32,x,.42+row*.5,front+.06,M.wood);for(let b=0;b<10;b++)box(.12,.29+(b%3)*.04,.13,x-.78+b*.17,.61+row*.5,front+.04,colors[(b+row)%5]);}box(.07,2.8,.1,x,1.7,front+.19,M.brass);box(1.85,.06,.1,x,2.72,front+.18,M.brass);for(let a=0;a<5;a++){const angle=Math.PI*a/4;beam([x,2.72,front+.17],[x+Math.cos(angle)*.84,2.72+Math.sin(angle)*.84,front+.17],.02,M.brass);}}
  for(const side of[-1,1]){const door=new THREE.Group();door.position.set(sx+side*.87,.18,front);door.rotation.y=side*1.15;fixed.add(door);box(.77,2.75,.07,-side*.38,1.38,0,M.wood,door);box(.59,1.9,.08,-side*.38,1.7,.02,M.glass,door);for(const y of[.36,1.2,2.67])box(.72,.07,.09,-side*.38,y,.04,M.brass,door);box(.045,.29,.12,-side*.66,1.2,.08,M.brass,door);}
  // A real central opening leads to a reading room, with shelves behind the shopfront.
@@ -71,11 +74,11 @@ export function createBookshopFactoryCompound(kind,revision=FACTORY_REVISION){
   if(ant){box(3,3.2,1.7,4.2,1.6,-11.7,M.iron);box(2.15,1.7,.12,4.2,1.55,-10.8,M.amber);for(let k=0;k<6;k++)box(.05,1.65,.06,3.3+k*.36,1.55,-10.68,M.iron);}
  }
  if(revision>=10){
-  const gh=locust?9.2:7.7;for(const x of[2.2,9.1]){for(const z of[2.3,-1.2])box(.2,gh,.2,x,gh/2,z,M.iron);for(let y=.3;y<gh-1;y+=1.5){beam([x,y,2.3],[x,y+1.5,-1.2],.055,M.brass);beam([x,y,-1.2],[x,y+1.5,2.3],.055,M.brass);}box(.6,.18,4,x,gh, .55,M.iron);}
-  for(const z of[-1.2,2.3]){box(7.5,.2,.2,5.65,gh,z,M.iron);box(7.5,.17,.2,5.65,gh+.8,z,M.iron);for(let x=2.2;x<9;x+=.85)beam([x,gh,z],[x+.85,gh+.8,z],.04,M.brass);}
+  const gh=locust?9.2:7.7;for(const x of[2.2,9.1]){for(const z of[2.3,-1.2])box(.2,gh,.2,x,gh/2,z,M.iron);const gm=revision>=21?M.iron:M.brass;for(let y=.3;y<gh-1;y+=1.5){beam([x,y,2.3],[x,y+1.5,-1.2],.055,gm);beam([x,y,-1.2],[x,y+1.5,2.3],.055,gm);}box(.6,.18,4,x,gh, .55,M.iron);}
+  for(const z of[-1.2,2.3]){box(7.5,.2,.2,5.65,gh,z,M.iron);box(7.5,.17,.2,5.65,gh+.8,z,M.iron);for(let x=2.2;x<9;x+=.85)beam([x,gh,z],[x+.85,gh+.8,z],.04,revision>=21?M.iron:M.brass);}
   const hook=new THREE.Group();hook.name=kind+'-working-parts-hoist';hook.position.set(5.5,gh, .6);root.add(hook);box(1,.28,.8,0,0,0,M.iron,hook);for(const x of[-.3,.3])beam([x,0,0],[x,-1.55,0],.025,M.iron,hook);
   if(ant){cyl(.65,1.7,0,-2.3,0,M.copper,hook).rotation.z=Math.PI/2;for(const x of[-.75,.75])torus(.66,.055,x,-2.3,0,M.iron,hook).rotation.y=Math.PI/2;}
-  else if(locust){const panel=box(1.25,1.6,.25,0,-2.3,0,M.slate,hook);panel.rotation.z=.16;for(const x of[-.5,.5])beam([x,-1.1,0],[x,-1.7,0],.025,M.brass,hook);}
+  else if(locust){if(revision<21){const panel=box(1.25,1.6,.25,0,-2.3,0,M.slate,hook);panel.rotation.z=.16;for(const x of[-.5,.5])beam([x,-1.1,0],[x,-1.7,0],.025,M.brass,hook);}}
   else wheel(0,-2.2,0,.73,hook);
   anim.push(t=>{hook.position.y=gh+Math.sin(t*.35)*.2;});
  }
@@ -139,7 +142,7 @@ export function createBookshopFactoryCompound(kind,revision=FACTORY_REVISION){
  }
  if(revision>=19){
   sign(ant?'螞蟻・蒸汽動力廠':locust?'LOCUST · HEAVY ASSEMBLY':'BEETLE · PRECISION WORKS',7.4,.7,3,8.05,-13.72);
-  for(const x of[10.4,14.7]){box(.62,2.7,.65,x,1.35,5.8,M.stone);box(.78,.2,.8,x,2.7,5.8,M.trim);mesh(new THREE.SphereGeometry(.16,12,8),M.brass,x,2.97,5.8);}sign('FREIGHT ENTRANCE',2.8,.55,12.5,2.5,5.85);
+  for(const x of[10.4,14.7]){box(.62,2.7,.65,x,1.35,5.8,M.stone);box(.78,.2,.8,x,2.7,5.8,M.trim);mesh(new THREE.SphereGeometry(.16,12,8),M.brass,x,2.97,5.8);}sign(revision>=21?'货运入口':'FREIGHT ENTRANCE',2.8,.55,12.5,2.5,5.85);
   for(const side of[-1,1])for(let z=-26.5;z<-14.5;z+=.55)box(.025,.013,1.9,side<0?-9.14:15.04,.45+(Math.round(z*10)%7+7)*.48,z,M.iron);
   for(let i=0;i<4;i++){const x=-6.8+i*1.9;crate(x,.1,4.0,.5);box(.7,.07,.65,x,.77,4.0,M.wood);for(let j=0;j<5;j++)box(.10,.18,.18,x-.25+j*.12,.9,4,M.slate);}
   for(const x of[-6.6,.3]){box(.6,2.1,.035,x,2.55,front+.36,M.slate);sign('BOOKS',.36,.45,x,2.8,front+.4);}
@@ -157,5 +160,6 @@ export function createBookshopFactoryCompound(kind,revision=FACTORY_REVISION){
  }
 
  if(revision>=20){anim.push(addFactoryWorkcell(root,kind));addBookshopFacadeDetails(fixed,kind);addFactoryTargetDetail(fixed,kind);}
- mergeStaticGroup(fixed,{skip:o=>o.userData.dynamicTownWorker});root.userData.factoryKind=kind;root.userData.revision=revision;root.userData.passes=FACTORY_PASSES.slice(0,revision);root.userData.update=(dt,t)=>{for(const a of anim)a(t);};return root;
+ if(revision>=21)addFactoryTargetV21(fixed,root,kind,K,anim);
+ mergeStaticGroup(fixed,{skip:o=>o.userData.dynamicTownWorker});root.userData.factoryKind=kind;root.userData.revision=revision;root.userData.passes=FACTORY_PASSES.slice(0,revision);root.userData.update=(dt,t)=>{if(!(root.userData.batianShutdownSeconds>0))root.userData.batianFrozenTime=t;const workTime=root.userData.batianShutdownSeconds>0?(root.userData.batianFrozenTime??t):t;for(const a of anim)a(workTime);};return root;
 }

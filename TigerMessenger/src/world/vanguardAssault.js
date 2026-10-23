@@ -1892,6 +1892,7 @@ export function createVanguardAssault({
    * @param {THREE.Object3D} [attacker] 开火的士兵（可空；打击目标池本就是红盔全体）
    */
   function onFleetUnderAttack(attacker = null, _hubDir = null) {
+    if(scene?.userData?.batianCommandMode===true)return false; // Batian owns command; never start the legacy mission.
     // 威胁登记**不受节流限制**：每一发命中都把攻击者记进优先打击名单，
     // 否则 3s 窗口内其他弓手/生物的攻击会被吞掉，重甲兵报复不全。
     if (attacker?.parent && !attacker.userData?.dead) st.threats.set(attacker, st.t);

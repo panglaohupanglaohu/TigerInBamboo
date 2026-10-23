@@ -1,3 +1,4 @@
+import {createTargetNewCityCliffField} from './targetNewCityCliffField.js';
 import {createTargetNewCityRetreatField} from './targetNewCityRetreatField.js';
 import {createTargetOldShoreApronField} from './targetOldShoreApronField.js';
 import {createTargetCoastalCliffCutField} from './targetCoastalCliffCutField.js';
@@ -88,7 +89,7 @@ export function targetTerrainHeight(x,z,sea,{aprons=false,saddle=false,valleyBen
  }
  return Math.max(sea-3,y);
 }
-export function applyTargetTerrainCandidate(castle,{radius=160,curves=null,railCliffSamples=null,coastalCliffCuts=null,cliffTransitRelease=null}={}){
+export function applyTargetTerrainCandidate(castle,{radius=160,curves=null,railCliffSamples=null,coastalCliffCuts=null,cliffTransitRelease=null,newCityRadialCliff=true}={}){
  const params=targetCityParams();
  if(params.get('citadelTerrainFirst')!=='1'||params.get('citadelTargetRemesh')!=='1')return null;
  const source=castle.getObjectByName('citadel-oskar-grid-mountain-surface');if(!source)return null;
@@ -103,7 +104,8 @@ export function applyTargetTerrainCandidate(castle,{radius=160,curves=null,railC
  const newCityRetreat=params.get('citadelNewCityRetreat')!=='0'?createTargetNewCityRetreatField({platforms:TARGET_CITY_PLATFORMS}):null;
  const railCliff=railCliffSamples?createTargetRailCliffField({...railCliffSamples,platforms:TARGET_CITY_PLATFORMS}):null;
  const coastCut=coastalCliffCuts?createTargetCoastalCliffCutField({...coastalCliffCuts,platforms:TARGET_CITY_PLATFORMS}):null;
- const afterCut=(x,z)=>{const s=sea(x,z);if(s===null)return null;const original=targetTerrainHeight(x,z,s,{aprons,saddle,valleyBenches});const railHeight=railCliff?railCliff.height(x,z,original,s):original;const retreated=newCityRetreat?newCityRetreat.height(x,z,railHeight,s):railHeight;return coastCut?coastCut.height(x,z,retreated,s):retreated;};
+ const newCityCliff=newCityRadialCliff?createTargetNewCityCliffField({castleMatrix:castle.matrixWorld}):null;
+ const afterCut=(x,z)=>{const s=sea(x,z);if(s===null)return null;const original=targetTerrainHeight(x,z,s,{aprons,saddle,valleyBenches});const shelf=newCityCliff?newCityCliff.shelfHeight(x,z,original):original;const railHeight=railCliff?railCliff.height(x,z,shelf,s):shelf;const retreated=newCityRetreat?newCityRetreat.height(x,z,railHeight,s):railHeight;const cut=coastCut?coastCut.height(x,z,retreated,s):retreated;return newCityCliff?newCityCliff.cliffHeight(x,z,cut,s):cut;};
  const oldShoreApron=cliffTransitRelease&&coastCut?createTargetOldShoreApronField({castleMatrix:castle.matrixWorld,worldCurve:cliffTransitRelease.segments.center.oldShore,sampleTerrain:afterCut,sampleSea:sea,platforms:TARGET_CITY_PLATFORMS,profile:'stepped-rock-link',maxGap:32,maxChartX:-47,walkwayHeight:6.9,vehicleTop:5.71}):null;
  const {geometry,audit}=buildTargetTerrainHeightfield({bounds:{minX:-143,maxX:143,minZ:-72,maxZ:107},step:1.7,floorAt:(x,z)=>{const s=sea(x,z);return s===null?null:s-12;},heightAt:(x,z)=>{const s=sea(x,z),h=afterCut(x,z);return s===null||h===null?null:oldShoreApron?oldShoreApron.height(x,z,h,s):h;}});
  const toMesh=source.matrixWorld.clone().invert().multiply(castle.matrixWorld);geometry.applyMatrix4(toMesh);
@@ -111,6 +113,7 @@ export function applyTargetTerrainCandidate(castle,{radius=160,curves=null,railC
  source.geometry=geometry;source.userData.targetTerrainCandidate=true;
  const retired=[];castle.traverse(o=>{if(o!==source&&o.isMesh&&/^(citadel-coastal-cliff-seal|highland-ravine-wall|citadel-backdrop-ridge|new-city-rock-shoulder|old-shore-blender-rock-support)/.test(o.name)){o.visible=false;o.userData.supersededTerrain=true;retired.push(o.name);}});
  const report={revision:saddle&&valleyBenches?'target-terrain-r09-asymmetric-shoulder':saddle?'target-terrain-r07-recessed-saddle':aprons?'target-terrain-r06-front-aprons':'target-terrain-r04',aprons,saddle,valleyBenches,railCliff:railCliff?.report??null,newCityRetreat:newCityRetreat?.report??null,status:'terrain-only candidate; city and routes not rebuilt',defaultEnabled:false,mesh:audit,platforms:TARGET_CITY_PLATFORMS,ridges:TARGET_TERRAIN_RIDGES,retired,oldSourceGeometryReplaced:true,worldSaveModified:false};
+ report.newCityRadialCliff=newCityCliff?.report??null;
  report.coastalCliffCut=coastCut?.report??null;
  report.oldShoreApron=oldShoreApron?.report??null;
  source.userData.targetTerrainReport=report;return report;

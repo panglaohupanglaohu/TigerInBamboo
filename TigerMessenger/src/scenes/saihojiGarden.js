@@ -2,7 +2,7 @@
 //  场景：西芳寺（苔寺）景观 —— 太古巨型浮岛白鲸脊背上的苔海六景
 //  - 六座苔海石庭整座扎根、承托在巨鲸脊背的墨绿苔原地壳上
 //  - 平时巨鲸藏在地下（鲸身全沉、只见苔庭落在地表）；
-//    扫描灯艇（莫比斯航空艇编队）掠过苔庭上空时才升空，
+//    霸天舰队抵达并实际攻击苔庭后才升空，
 //    尾鳍随升空扬起 35°，随灯艇远去再缓缓藏回地下
 //  - 鲸体：非等比拉伸山岳躯干 + 背部横向切平 + 巨型 Y 字尾鳍
 //    （assets/leviathanIsland.js）；入口苔径/主石/枯瀑/岛群/空庭/回望
@@ -10,6 +10,7 @@
 //  构建逻辑在 world/saihoji.js + assets/leviathanIsland.js。
 // =====================================================================
 import * as THREE from "three";
+import {saihojiBattleTrigger} from "../world/saihojiBattleTrigger.js";
 import { arrangeSaihojiPines } from "../world/saihojiPineLayout.js";
 import { buildSaihojiTargetGarden } from "../world/saihojiTargetGarden.js";
 import { PLANET_RADIUS } from "../world/planet.js";
@@ -412,8 +413,9 @@ export const saihojiGardenScene = {
       if (!squad) squad = scene.getObjectByName("moebius-aircraft-squad") || null;
       if (phalanxRoot) {let owner=phalanxRoot;while(owner.parent)owner=owner.parent;if(owner!==scene)phalanxRoot=null;}
       if (!phalanxRoot) phalanxRoot = scene.getObjectByName("saihoji-phalanx-battle") || null;
-      const campaign = phalanxRoot?.userData?.campaignStatus;
-      const isSignaled = !!(campaign?.managed && campaign.discoveryAllowed);
+      const attack=saihojiBattleTrigger(scene.userData.batianFleet,hubDir,R);
+      leviathanGroup.userData.batianBattleTrigger=attack;
+      const isSignaled = attack.allowed;
       let target = null;
       let scanDist = Infinity;
       let near = false;
@@ -421,7 +423,8 @@ export const saihojiGardenScene = {
       if (squad) {
         // 编队组自身不动，成员逐帧摆到 formationCenter：
         // 读 _patrolCenter（updateAircraftHover 每帧刷新）为编队实时位置
-        const center = squad.userData?._patrolCenter;
+        const position=scene.userData.batianFleet?.snapshot?.().flagshipPosition;
+        const center = position ? new THREE.Vector3(...position) : squad.userData?._patrolCenter;
         if (center) squadPos.copy(center);
         else squad.getWorldPosition(squadPos);
         // 切向角距（不含飞行高度）：航线横向最近 54.5，而灯艇高度 ~24——
@@ -429,15 +432,14 @@ export const saihojiGardenScene = {
         // 一偏整趟掠过都不触发（用户反馈从未见鲸升起）。改用方向角距：
         // 灯艇从苔庭上空掠过即算「扫描过来」，与高度无关。
         scanDist = squadPos.clone().normalize().angleTo(hubDir) * R;
-        near = scanDist < RISE_RADIUS;
-        far = scanDist > SINK_RADIUS;
+        near = attack.allowed;
+        far = !attack.allowed;
         if (storyPhase === 0) {
           // 伏击序章：蓝盔先完成松下隐蔽。提前掠过的舰队可以扫描，
           // 但尚不能揭示鲲、提前吸起承载正在登陆士兵的苔台。
           const ambushState = phalanxRoot?.userData?.saihojiAmbush?.state;
-          const gateReason = !ambushState ? "missing-phalanx" :
-            ambushState.stage === "landing" ? "allies-landing" :
-              campaign?.managed && !campaign.discoveryAllowed ? "awaiting-signal" : null;
+          const gateReason = !attack.allowed ? attack.reason : !ambushState ? "missing-phalanx" :
+            ambushState.stage === "landing" ? "allies-landing" : null;
           leviathanGroup.userData.saihojiDiscoveryGate = {blocked:!!gateReason,reason:gateReason};
           const preparingAmbush = !!gateReason;
           if (preparingAmbush) {
@@ -562,6 +564,14 @@ export const saihojiGardenScene = {
         setLeviathanStormBgm(false, { fade: 0.8 });
       }
 
+      if(!attack.allowed){
+        target=buriedR;stormArmed=false;stormPreludeT=0;
+        setLeviathanStormBgm(false,{fade:.8});
+        if(storyPhase!==0&&(currentR-buriedR)/Math.max(1e-3,risenR-buriedR)<.03){
+          phalanxRoot?.userData?.whaleReturned?.();storyPhase=0;lastSinkStep=0;
+          finaleLeft=false;finaleScanned=false;returnSignaled=false;
+        }
+      }
       // ---------- 对抗期对外契约：机队锁定悬停 / 盘沿锚点 / 反击脉冲 ----------
       const range = risenR - buriedR;
       const lift01 = (currentR - buriedR) / Math.max(1e-3, range);
@@ -570,7 +580,7 @@ export const saihojiGardenScene = {
       if (squad) {
         const lock = squad.userData.whaleLock || (squad.userData.whaleLock = {});
         const wantLock =
-          storyPhase === 1 || isSignaled || (storyPhase === 0 && near && lift01 > 0.03);
+          attack.allowed && (storyPhase === 1 || isSignaled || (storyPhase === 0 && near && lift01 > 0.03));
         if (wantLock && !lock.active) {
           // 新一轮锁定：重置过渡起点（从当前航线位平滑俯冲/爬升到盘顶）
           lock.active = true;
@@ -588,7 +598,7 @@ export const saihojiGardenScene = {
         // 吃力感：鲸越被拽低，机队悬停越挣扎（供 aircraft 每帧读取做晃动）
         lock.strain = 1 - suction01;
         // 反击脉冲：战斗期 aircraft 每隔一阵闪爆光束、推倒光束落点附近的士兵
-        if (storyPhase === 1) {
+        if (storyPhase === 1 && scene.userData.batianCommandMode!==true && attack.allowed) {
           pulseCd -= step;
           if (pulseCd <= 0) {
             pulseCd = 15 + Math.random() * 9;
@@ -604,6 +614,7 @@ export const saihojiGardenScene = {
             };
           }
         }
+        if(!attack.allowed||scene.userData.batianCommandMode===true)squad.userData.groundPulse=null;
         const gp = squad.userData.groundPulse;
         if (gp) {
           gp.t -= step;
@@ -697,6 +708,7 @@ export const saihojiGardenScene = {
         : 0;
       // 战斗期：机队锁定盘顶，吸食始终进行（不再依赖角距）
       if (storyPhase === 1) strength = Math.max(strength, 0.85);
+      if(!attack.allowed)strength=0;
       scanSmooth += (strength - scanSmooth) * Math.min(1, step * 2.2);
       if (scanSmooth > 0.008) {
         const tNow = Number(t) || 0;
@@ -730,8 +742,8 @@ export const saihojiGardenScene = {
         ? 1 + squad.userData.groundPulse.t * 1.6
         : 1;
       const stepFlash = 1 + stepShake * 0.5; // 档位下沉瞬间光束一颤
-      if (scanSmooth > 0.02 && suction01 > 0.02 && squadPos.lengthSq() > 0) {
-        beamGroup.visible = true;
+      if (attack.allowed && scene.userData.batianCommandMode!==true && scanSmooth > 0.02 && suction01 > 0.02 && squadPos.lengthSq() > 0) {
+        beamGroup.visible = attack.allowed && scene.userData.batianCommandMode!==true;
         _plateTop.copy(hubDir).multiplyScalar(plateTopR);
         _beamDir.copy(_plateTop).sub(squadPos);
         const beamLen = Math.max(0.1, _beamDir.length());

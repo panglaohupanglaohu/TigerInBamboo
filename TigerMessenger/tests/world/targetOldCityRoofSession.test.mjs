@@ -78,7 +78,8 @@ test('occupancy plus WFC solve commits atomically, clearing only the deleted plo
 
 test('atomic occupancy/roof failures preserve scene, colour, locks and both histories',()=>{
  const f=fixture(),s=f.session,id=s.list()[0].id;s.solve({seed:7,locks:{[id]:'setback-upper-room'}});const before=s.exportJSON(),old=s.currentAsset,h=s.history,rh=s.roofHistory;
- const conflict={locks:{'house-0--1-1':'upper-street-cupola','house-0--1-2':'outer-edge-short-tower'}};
+ const edge=solveTargetOldCityRoofWfc({report:old.report,seed:7}).edges.find(e=>e.a!==id&&e.b!==id);assert.ok(edge);
+ const conflict={locks:{[edge.a]:'upper-street-cupola',[edge.b]:'outer-edge-short-tower'}};
  assert.equal(s.editAndSolve({id,occupied:false,wallColor:'#112233'},conflict).ok,false);
  f.control.commit='reject';assert.equal(s.editAndSolve({id,occupied:false}).ok,false);f.control.commit='ok';f.control.validate=false;assert.equal(s.editAndSolve({id,occupied:false}).ok,false);
  assert.equal(s.exportJSON(),before);assert.equal(s.currentAsset,old);assert.deepEqual(s.history,h);assert.deepEqual(s.roofHistory,rh);assert.equal(f.scene.children[1],old.group);assert.equal(f.counts.get(old),0);

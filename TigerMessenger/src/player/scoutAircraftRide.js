@@ -170,6 +170,8 @@ export function createScoutAircraftRide({
       dismount();
       return;
     }
+    // One F press = one action: if another ride already used it, do not also board.
+    if (event.defaultPrevented) return;
     const target = nearest();
     if (!target || player?.riding) return;
     event.preventDefault();

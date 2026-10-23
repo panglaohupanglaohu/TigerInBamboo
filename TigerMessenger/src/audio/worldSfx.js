@@ -1,4 +1,7 @@
 import {loadRobotWeaponSamples,robotSample,robotSampleState} from './robotWeaponSamples.js';
+import {synthBatianBombRelease,synthBatianBombFall,synthBatianBombExplosion} from './batianBombSound.js';
+import {bombMixFocus} from './bombMixFocus.js';
+import {synthBatianShieldHit} from './batianShieldSound.js';
 // =====================================================================
 //  世界音效库（战斗 / 武器 / 载具 / 能力 / 天气）
 //
@@ -205,7 +208,7 @@ function voice(spec, pos) {
   out.gain.value = (spec.gain ?? 1) * sp.gain;
   node.connect(out);
   out.connect(bus.cats[spec.cat] || bus.master);
-  voices.push({ id: spec.id, cat: spec.cat, prio, end: t0 + dur, out, panNode, position:pos?{x:pos.x,y:pos.y,z:pos.z}:null, baseGain:spec.gain??1, maxDist:spec.maxDist??60, ref:spec.ref??DEFAULT_REF });
+  const tracking={ id: spec.id, cat: spec.cat, prio, end: t0 + dur, out, panNode, position:pos?{x:pos.x,y:pos.y,z:pos.z}:null, baseGain:spec.gain??1, maxDist:spec.maxDist??60, ref:spec.ref??DEFAULT_REF };voices.push(tracking);
   setTimeout(() => {
     try {
       out.disconnect();
@@ -213,7 +216,7 @@ function voice(spec, pos) {
       /* ignore */
     }
   }, (dur + 0.4) * 1000);
-  return { ctx, t0, input, dur };
+  return { ctx, t0, input, dur, tracking };
 }
 
 // ----------------------------------------------------------- 合成积木 --
@@ -999,7 +1002,8 @@ export function updateWorldSfx(dt) {
   const muted = isMuted();
   const ctx = getCtx();
   const d = Math.max(0, Math.min(0.1, Number(dt) || 0));
-  if(bus){reap(bus.ctx.currentTime);for(const v of voices){const s=spatial(v.position,v.maxDist,v.ref);v.out.gain.setTargetAtTime(muted?0:v.baseGain*(s?.gain||0),bus.ctx.currentTime,.035);if(v.panNode&&s)v.panNode.pan.setTargetAtTime(s.pan,bus.ctx.currentTime,.035);}}
+  if(muted)bombMixFocus.reset();const bombMix=bombMixFocus.read();
+  if(bus){reap(bus.ctx.currentTime);for(const v of voices){const s=spatial(v.position,v.maxDist,v.ref),focus=v.id.startsWith('batianBomb')?1:v.cat==='weapon'?bombMix.otherWeapons:1;v.out.gain.setTargetAtTime(muted?0:v.baseGain*(s?.gain||0)*focus,bus.ctx.currentTime,.035);if(v.panNode&&s)v.panNode.pan.setTargetAtTime(s.pan,bus.ctx.currentTime,.035);}bus.cats.vehicle.gain.setTargetAtTime(.55*bombMix.vehicles,bus.ctx.currentTime,.045);bus.cats.weather.gain.setTargetAtTime(.6*bombMix.vehicles,bus.ctx.currentTime,.045);}
   updateEngines(ctx, muted);
   updateSuction(ctx, muted);
   updateWeather(ctx, d, muted);
@@ -1012,6 +1016,7 @@ export function getWorldSfxSnapshot() {
   if (bus) reap(now);
   return {
     ready: !!bus,listener:{...listener},robotSamples:bus?robotSampleState(bus.ctx):null,
+    bombMix:bombMixFocus.read(),
     oneShots: voices.map((v) => ({ id: v.id, cat: v.cat, gain:v.out.gain.value, maxDistance:v.maxDist })),
     foreground: voices.filter((v) => FOREGROUND_CATS.has(v.cat)).length,
     engines: engineSlots.map((s) => ({ key: s.key, level: +s.level.toFixed(3) })),
@@ -1088,6 +1093,24 @@ export function sfxRobotConfirmed(pos,disabled=false) {
 window.addEventListener('keydown',e=>{if(e.code==='KeyM'&&bus)bus.master.gain.setTargetAtTime(isMuted()?0:MASTER_GAIN,bus.ctx.currentTime,.012);});
 
 // ------------------------------------------------------- 航空艇烟雾弹 --
+/** 霸天胶囊弹：脱舱、跟随实体的下坠呼啸、落地重爆各自同步。 */
+export function sfxBatianBombRelease(pos){const v=voice({id:'batianBombLatch',cat:'weapon',prio:82,maxInst:2,cd:.12,maxDist:180,ref:20,gain:.65,dur:.25},pos);if(v){bombMixFocus.pulse('latch',.16,Math.min(1,v.tracking.out.gain.value/.2));synthBatianBombRelease(v.ctx,v.input,v.t0);}}
+export function sfxBatianBombFall(pos,duration){
+  const v=voice({id:'batianBombFall',cat:'weapon',prio:86,maxInst:2,replaceOldest:true,cd:.3,maxDist:200,ref:24,gain:.7,dur:duration+.08},pos);if(!v)return null;
+  const sound=synthBatianBombFall(v.ctx,v.input,{start:v.t0,duration});let stopped=false;
+  return {update(p){if(v.tracking.position)Object.assign(v.tracking.position,{x:p.x,y:p.y,z:p.z});if(!stopped&&!isMuted()&&voices.includes(v.tracking)&&v.ctx.currentTime<v.tracking.end){const sp=spatial(p,v.tracking.maxDist,v.tracking.ref);bombMixFocus.pulse('fall',.18,Math.min(1,(sp?.gain||0)/.3));}},stop(){if(stopped)return;stopped=true;sound.stop();v.tracking.end=v.ctx.currentTime;v.tracking.baseGain=0;v.tracking.out.gain.setTargetAtTime(0,v.ctx.currentTime,.01);}};
+}
+export function sfxBatianBombExplosion(pos){const v=voice({id:'batianBombBlast',cat:'impact',prio:96,maxInst:2,replaceOldest:true,cd:.16,maxDist:260,ref:26,gain:.8,dur:2},pos);if(v){bombMixFocus.pulse('blast',.5,Math.min(1,v.tracking.out.gain.value/.2));synthBatianBombExplosion(v.ctx,v.input,v.t0);}}
+
+let shieldHitVariation = 0;
+/** Actual flagship shield interception, spatialized at the ripple contact point. */
+export function sfxBatianShieldHit(pos, impactPower = 20) {
+  const v = voice({id:'batianShieldHit',cat:'impact',prio:90,maxInst:3,replaceOldest:true,cd:.065,maxDist:210,ref:25,gain:.85,dur:.56},pos);
+  if (!v) return false;
+  synthBatianShieldHit(v.ctx,v.input,v.t0,shieldHitVariation++,impactPower);
+  return true;
+}
+
 /** 投弹：挂钩脱开的“咔嗒”+下坠破风。 */
 export function sfxBombRelease(pos) {
   const v = voice({ id: "bombDrop", cat: "weapon", prio: 60, maxInst: 1, cd: 0.2, maxDist: 60, gain: 0.55, dur: 0.6 }, pos);

@@ -1,3 +1,4 @@
+import {FlockManager} from '../../world/flock.js';
 // =====================================================================
 //  电车 / 运河交汇古堡 / 星海运河 / 战船 / 叹息之门
 // =====================================================================
@@ -259,9 +260,14 @@ export function loadAbandonedGateBlock({ scene, R, tramSystem, flock, canyonDir 
   });
   scene.add(abandonedGate);
 
-  const birdGate = scene.getObjectByName("highland-gate") || abandonedGate;
+  // 2026-10-13 user: swap the gates' birds — the 250-bird vortex now lives at the Highland Gate,
+  // the ten gather/disperse birds at the Sighs Gate. ?gateBirdSwap=0 restores the old anchors.
+  const birdSwap = new URLSearchParams(globalThis.location?.search || "").get("gateBirdSwap") !== "0";
+  const highlandGate = scene.getObjectByName("highland-gate");
+  const birdGate = birdSwap && highlandGate ? highlandGate : abandonedGate;
   const gateBirdVortex = new BirdVortexManager(scene, {
-    name: "bird-vortex-triple-gate",
+    name: birdGate === abandonedGate ? "bird-vortex-triple-gate" : "bird-vortex-highland-gate",
+    count: 250, // Original 1000 reduced to one quarter.
     getTram: () => tramSystem?.getNearestTram?.(birdGate.position) || tramSystem?.tram || null,
   });
   gateBirdVortex.syncToGate(birdGate, { respawn: true });
@@ -313,5 +319,22 @@ export function loadAbandonedGateBlock({ scene, R, tramSystem, flock, canyonDir 
   // 重型运输艇 ×3 全部随莫比斯机队参加苔庭之战（气垫贴海进场），门口不再停
   const gateHaulers = null;
 
-  return { abandonedGate, gateBirdVortex, gatePods, gateHaulers };
+  let highlandGateFlock=null;
+  const highland=birdSwap?abandonedGate:scene.getObjectByName('highland-gate');
+  if(highland){
+    highland.updateWorldMatrix(true,true);
+    let centre;
+    if(birdSwap){ // above the Sighs Gate's own top, measured from its real geometry
+      const seat=highland.userData?.seatRoot||highland,base=seat.getWorldPosition(new THREE.Vector3()),up=base.clone().normalize(),box=new THREE.Box3().setFromObject(highland);
+      let top=0;for(const x of[box.min.x,box.max.x])for(const y of[box.min.y,box.max.y])for(const z of[box.min.z,box.max.z])top=Math.max(top,new THREE.Vector3(x,y,z).dot(up));
+      centre=up.clone().multiplyScalar(Math.min(top,base.length()+40)+4);
+    }else centre=highland.localToWorld(new THREE.Vector3(0,32,0));
+    const alt=centre.length()-R;
+    highlandGateFlock=new FlockManager(scene,{count:10,planetRadius:R,centerDir:centre.clone().normalize(),altMin:alt-2,altMax:alt+5,homeRadius:6,homeWeight:1.5});
+    highlandGateFlock.root.name=birdSwap?'sighs-gate-ten-birds':'highland-gate-ten-birds';
+    highlandGateFlock.root.userData.anchor={kind:birdSwap?'sighs-gate-rooftop':'highland-gate-rooftop',count:10,behaviour:'gather-disperse'};
+    const update=highlandGateFlock.update.bind(highlandGateFlock);
+    highlandGateFlock.update=(dt,t)=>{const spread=.5-.5*Math.cos(t*Math.PI/10);highlandGateFlock.homeRadius=3+spread*7;highlandGateFlock.homeWeight=1.8-spread*.8;update(dt,t);};
+  }
+  return { abandonedGate, gateBirdVortex, highlandGateFlock, gatePods, gateHaulers };
 }

@@ -52,7 +52,7 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
   let groundR = PLANET_RADIUS;
 
   const localRadius = localGround?.(pos);
-  const hasLocalGround = Number.isFinite(localRadius);
+  const hasLocalGround = Number.isFinite(localRadius) || localRadius === -Infinity; // explicit authored cavity: no ground here
 
   // ---- 山区高度场（连绵土坡）：视觉与碰撞共用 groundLiftAt，斜坡平滑吸附 ----
   if (hills && !hasLocalGround) {
@@ -170,7 +170,7 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
     // Platform side resolution can change the angular position on a slope.
     // Sample the final footprint, including entry into or exit from the crater.
     const finalLocalRadius = localGround?.(pos);
-    const surfR = Number.isFinite(finalLocalRadius) ? finalLocalRadius : hillRadius == null ? baseRadius : citadel > 0 ? Math.max(hillRadius, baseRadius) : hillRadius;
+    const surfR = (Number.isFinite(finalLocalRadius) || finalLocalRadius === -Infinity) ? finalLocalRadius : hillRadius == null ? baseRadius : citadel > 0 ? Math.max(hillRadius, baseRadius) : hillRadius;
     // Do not cancel the first upward substep of a jump inside the snap margin.
     // Penetration is still corrected regardless of velocity.
     if (r < surfR || (r < surfR + 0.1 && vel.dot(_up) <= 0.6)) {

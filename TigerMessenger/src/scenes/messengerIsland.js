@@ -1,13 +1,15 @@
+import {finishStartupSteps} from '../core/startupTasks.js';
 import {applyTargetLandscapePalette} from '../world/citadel/targetLandscapePalette.js';
 import {applyTownscaperTargetMaterials} from '../world/citadel/townscaperTargetMaterials.js';
 import {applyCitadelTargetOcean} from '../world/citadel/targetAtmosphere.js';
-import {seatTerracedSeaStacks} from '../world/seaStackTerraces.js';
+import {seatTerracedSeaStacksSteps} from '../world/seaStackTerraces.js';
 import {applyCityColourStudy} from '../world/citadel/cityColourStudy.js';
 import {applyCitadelBayLayout} from '../world/citadel/bayLayout.js';
 import {placeBookshopTown} from '../world/bookshopTownSite.js';
 import {removeRequestedGateMountains} from '../world/gateMeetingConnection.js';
 import {installBookshopRobots} from '../world/bookshopRobotBase.js';
 import {relocateCrystalCore} from '../world/crystalCorePlacement.js';
+import {installSwampBridgeClearance} from '../world/swampBridgeClearance.js';
 import {installHighlandGate} from '../world/citadel/highlandGate.js';
 import {finishCrystalV9Scene} from '../world/crystalV9.js';
 import {citadelCoastalTramEnabled} from "../world/citadel/coastalTramRoute.js";
@@ -146,7 +148,10 @@ export const messengerIslandScene = {
   name: "信使主岛",
   description: "送信玩法关卡：平台、土坡、月牙湖码头、背侧大湖、植被与云环",
 
-  load(ctx) {
+  load(ctx) { return finishStartupSteps(this.loadSteps(ctx)); },
+
+  *loadSteps(ctx) {
+    yield '正在构建岛屿地形…';
     const scene = ctx.scene;
     const R = ctx.planetRadius ?? PLANET_RADIUS;
 
@@ -155,11 +160,13 @@ export const messengerIslandScene = {
     const planetFeatures = officialPagePlanetFeatures({ ...FEATURES, ...(ctx.options?.planetV8?.features || {}) });
     const planetLayers = planetRendererOwnership(planetFeatures);
     const clouds = planetLayers.clouds ? [] : createCloudRing(scene, R);
+    yield '正在布置岛屿植被…';
     const playZone = decoratePlayZone(scene, R);
     const camp = buildStartingCamp(scene, R);
     const farSide = decorateFarSide(scene, R);
     const moonLake = createMoonLake(scene, R);
 
+    yield '正在构建港口…';
     const harborBuilt = buildOldHarborScene({ seed: 8844 });
     const harbor = harborBuilt.group;
     scene.add(harbor);
@@ -169,8 +176,11 @@ export const messengerIslandScene = {
     const grandTopTarget = grandDir
       .clone()
       .multiplyScalar(R + canyonOffsetDir(grandDir) + GRAND_CRYSTAL.h * 0.96);
+    yield '正在铺设铁路…';
     const tramSystem = loadTram({ scene, R, hills, camp, grandTopTarget, citadelEastGlobalCrossing:ctx.options?.citadelEastGlobalCrossing });
+    yield '正在构建水晶城…';
     const moebiusPack = loadMoebiusDistrict({ scene, R, tramSystem });
+    yield '正在构建高山圣城…';
     const citadelPack = loadCitadelBlock({
       scene,
       R,
@@ -182,6 +192,7 @@ export const messengerIslandScene = {
       highlandIslandLift: planetFeatures.highlandIslandLift || 0,
     });
 
+    yield '正在构建高山之门…';
     installHighlandGate({scene,tramSystem});
 
     // 云贴地重投影（方案 A）· 阶段 0：可见地形清单。createPlanetV8Runtime 已挪到
@@ -204,6 +215,7 @@ export const messengerIslandScene = {
       ...collectStaticTerrainMeshes(citadelPack?.odysseyCitadel, transientExcludes),
       ...collectStaticTerrainMeshes(moebiusRoot, transientExcludes),
     ];
+    yield '正在构建海洋与天空…';
     const planetV8 = createPlanetV8Runtime({
       scene,
       planet: ctx.planet,
@@ -211,7 +223,7 @@ export const messengerIslandScene = {
       seed: ctx.options?.planetV8?.seed ?? FEATURES.terrainSeed ?? 42,
       features: planetFeatures,
       terrainMeshes,
-      deferCloudTerrain:!!tramSystem.crossingBundle,
+      deferCloudTerrain:true,
     });
     const coastalCity=citadelPack?.odysseyCitadel?.getObjectByName('highland-west-city');
     const worldOcean=scene.getObjectByName('planet-v8-curved-ocean');
@@ -255,6 +267,7 @@ export const messengerIslandScene = {
         ['adaptCitadelMountainForest', function(){ adaptCitadelMountainForest(citadelPack.odysseyCitadel,R); }],
       ];
       for (var si = 0; si < citadelSteps.length; si++) {
+        yield '正在整理圣城地形（' + (si + 1) + '/' + citadelSteps.length + '）…';
         try { citadelSteps[si][1](); }
         catch (e) { console.warn('[citadel] ' + citadelSteps[si][0] + ' 跳过: ' + (e && e.message || e)); }
       }
@@ -265,21 +278,11 @@ export const messengerIslandScene = {
 
     applyCitadelBayLayout(citadelPack.odysseyCitadel,R);
     const eastStartup=tramSystem.terrainPreparation;
+    yield '正在整理山体与岩面植被…';
     applyCitadelMountainStudy(citadelPack.odysseyCitadel,R,
       eastStartup?tramSystem.bootstrapCurves:tramSystem.curves,
       eastStartup?tramSystem.bootstrapRelease:tramSystem.citadelTransitRelease,
       eastStartup?{artifact:eastStartup.artifact,consumerCurves:tramSystem.curves}:null);
-    if(eastStartup){
-      // The global impostors otherwise freeze their buffers before the final
-      // mountain exists. Defer only this opt-in startup, then sample live meshes.
-      planetV8.completeCloudTerrain([
-        ...collectStaticTerrainMeshes(hills.mesh,transientExcludes),
-        ...collectStaticTerrainMeshes(hills.skirt,transientExcludes),
-        ...collectStaticTerrainMeshes(harbor,transientExcludes),
-        ...collectStaticTerrainMeshes(citadelPack.odysseyCitadel,transientExcludes),
-        ...collectStaticTerrainMeshes(moebiusRoot,transientExcludes),
-      ]);
-    }
     applyCitadelTargetOcean(worldOcean,scene.getObjectByName('castleContainer'));
     applyCityColourStudy(citadelPack.odysseyCitadel);
     applyTownscaperTargetMaterials(scene.getObjectByName('castleContainer'));
@@ -298,6 +301,7 @@ export const messengerIslandScene = {
     // 的岛面平地上（旧位 11.5/5.5 在走廊尽头山坡边缘）。
     const bookshopX = -3.3 * WORLD_SCALE;
     const bookshopZ = 5.8 * WORLD_SCALE;
+    yield '正在布置书店与湖沼…';
     const bookshop = createCatalogObject("bookshop", {
       signLine1: "HARD TO FIND",
       signLine2: "BOOKSHOP",
@@ -329,6 +333,8 @@ export const messengerIslandScene = {
     }
   }
 
+    const canalsRemoved = new URLSearchParams(globalThis.location?.search || "").get("canals") !== "1";
+    yield '正在连接水路与交汇城堡…';
     const traffic = loadCanalNetwork({
       scene,
       R,
@@ -343,7 +349,10 @@ export const messengerIslandScene = {
       harbor,
       harborBuilt,
       legacyCanalWorld: planetFeatures.legacyCanalWorld,
-      canalScope: planetFeatures.canalScope || (planetFeatures.legacyCanalWorld ? "world" : "none"),
+      // 2026-10-15 (user): the area is open ocean now; canals and the canal-junction town are removed.
+      // Ocean warship patrol (oceanWorldRoutes) is unaffected. ?canals=1 restores both.
+      canalScope: canalsRemoved ? "none" : (planetFeatures.canalScope || (planetFeatures.legacyCanalWorld ? "world" : "none")),
+      buildCanalJunction: !canalsRemoved && FEATURES.canalJunctionV1 !== false,
       oceanWorldRoutes: planetFeatures.oceanWorldRoutesV1 === true,
       canalBoatsOut: {
         onBoatChange(b) {
@@ -371,6 +380,7 @@ export const messengerIslandScene = {
       }
     }
 
+    yield '正在布置港湾与苔庭…';
     const crystalMotherPort = new URLSearchParams(location.search).get("crystalMotherPort") !== "0"
       ? buildCrystalMotherPort({scene, platforms, city: moebiusPack.moebius, boats: traffic.canalBoats?.boats}) : null;
     const mossAvoidCommon = tramSystem.curve.getPoints(60).map((p) => ({
@@ -446,6 +456,7 @@ export const messengerIslandScene = {
     ];
     if (moonLake?.deepCollider) colliders.push(moonLake.deepCollider);
 
+    yield '正在构建叹息之门…';
     const gatePack = loadAbandonedGateBlock({
       scene,
       R,
@@ -454,8 +465,10 @@ export const messengerIslandScene = {
       canyonDir: moebiusPack.canyonDir,
     });
     if(crystalV7Round()>=3)shapeCrystalV7Cove(gatePack.abandonedGate,skyPack.moebiusSwamp);
+    yield '正在整理水晶城与湖沼…';
     finishCrystalV9Scene({scene,city:moebiusPack.moebius,swamp:skyPack.moebiusSwamp,gate:gatePack.abandonedGate});
     if(crystalV7Round()>=3)relocateCrystalCore({scene,pack:moebiusPack,swamp:skyPack.moebiusSwamp,port:crystalMotherPort});
+    if(crystalV7Round()>=3)installSwampBridgeClearance(scene,skyPack.moebiusSwamp);
     if(crystalV7Round()>=3)removeRequestedGateMountains(gatePack.abandonedGate);
     // 舰队分队的两个后期绑定：combatPack 在下面才创建，先留个引用槽。
     // 侦察机每帧才去读它，所以「创建顺序」和「使用顺序」可以错开——
@@ -531,6 +544,7 @@ export const messengerIslandScene = {
     // 必须放在电车建成之后：要拿轨道曲线做净空避让，否则树会种在
     // carveHillsForTrack 削平的走廊里、悬在半空。
     // 也必须放在 settleBuriedAssets 之前，让沉降 pass 顺手把边界树落回地表。
+    yield '正在布置连接道路与林带…';
     const bookshopPlanting = createBookshopPlantingClearance(bookshop);
     const corridorForest = decorateCorridorForests(scene, R, {
       trackCurves: tramSystem
@@ -545,10 +559,24 @@ export const messengerIslandScene = {
     settleBuriedAssets(scene, colliders);
     placeBookshopTown(bookshop,R); // preserve the moved original shop after legacy settling
     if(bookshop.userData.blenderArt)fitBookshopPath(bookshop,()=>R+.9);
+    yield '正在布置书店基地…';
     const bookshopFactoryBase=installBookshopRobots({scene,bookshop,colliders,platforms,R});
-    seatTerracedSeaStacks(scene,R,tramSystem.curves,[bookshopFactoryBase,citadelPack.odysseyCitadel.getObjectByName('castleContainer')]);
+    yield '正在布置十二门徒岩面植被…';
+    yield* seatTerracedSeaStacksSteps(scene,R,tramSystem.curves,[bookshopFactoryBase,citadelPack.odysseyCitadel.getObjectByName('castleContainer')]);
+    // Freeze cloud buffers only after the connected sea-stack landscape exists.
+    // Collect the final meshes, including late geometry and its closed cut faces.
+    yield '正在贴合云层与最终山体…';
+    yield* planetV8.completeCloudTerrainSteps([
+      ...collectStaticTerrainMeshes(hills.mesh,transientExcludes),
+      ...collectStaticTerrainMeshes(hills.skirt,transientExcludes),
+      ...collectStaticTerrainMeshes(harbor,transientExcludes),
+      ...collectStaticTerrainMeshes(citadelPack.odysseyCitadel,transientExcludes),
+      ...collectStaticTerrainMeshes(moebiusRoot,transientExcludes),
+      ...(scene.userData.seaStackCloudSurfaces || []),
+    ]);
 
     // eslint-disable-next-line prefer-const
+    yield '正在连接舰队与士兵…';
     const combatPack = loadCitadelCombat({
       scene,
       R,
@@ -590,6 +618,7 @@ export const messengerIslandScene = {
       airship: skyPack.airship,
       flock: moebiusPack.flock,
       gateBirdVortex: gatePack.gateBirdVortex,
+      highlandGateFlock: gatePack.highlandGateFlock,
       birdVortex: gatePack.gateBirdVortex,
       terraceBirds: citadelPack.terraceBirds,
       hallFlock: moebiusPack.hallFlock,
@@ -598,6 +627,8 @@ export const messengerIslandScene = {
       tripleGateScoutAircraft,
       scoutDefense,
       saihojiPhalanx: combatPack.saihojiPhalanx,
+      vanguardHaulers: combatPack.vanguardHaulers,
+      vanguardSquad: combatPack.vanguardSquad,
       tacticalGraph: combatPack.tacticalGraph,
       mossSaihoji,
       moebiusSwamp: skyPack.moebiusSwamp,
@@ -648,6 +679,7 @@ export const messengerIslandScene = {
       airshipAnchor: skyPack.airshipAnchor,
       moebius: moebiusPack.moebius,
       gateBirdVortex: gatePack.gateBirdVortex,
+      highlandGateFlock: gatePack.highlandGateFlock,
       gatePods: gatePack.gatePods,
       gateHaulers: gatePack.gateHaulers,
       terraceBirds: citadelPack.terraceBirds,
@@ -658,6 +690,7 @@ export const messengerIslandScene = {
       swampBgm: createSwampBgmState(),
     };
 
+    yield '信使主岛已构建，正在连接玩法…';
     return {
       id: "messenger",
       platforms,

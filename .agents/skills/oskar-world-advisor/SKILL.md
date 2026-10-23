@@ -19,6 +19,8 @@ description: Develop and review procedural terrain and architectural proposals u
 
 ## 深入研究与实施路由（2026-10-04更新）
 
+- 用户指定六项方法重学：优先读 [references/six-methods.md](references/six-methods.md)。每项须能解释机制、反例及现有代码差距；历史抽帧数量不代表学会。含三角／六边、河流WFC、岸浪、树云impostor、二叉装箱、反向壳描边。
+- 八系统能力、用户18链接、六边形分区与重点二叉树装箱：读 [references/eight-systems.md](references/eight-systems.md)。保留六边形基础分区要求，区分玩法单元／变形笼／渲染网格；研究支持不等于完整系统交付。
 - 草、树、云、线条：读 [references/rendering.md](references/rendering.md)，其中含已核对的云原帖纠错和表现验收。
 - 星球地形组织、河网或 Add planet 材料：读 [references/planet-and-navigation.md](references/planet-and-navigation.md)，区分实际生成操作、已有地景旋转和导航可视化。
 - 球面山体畸变、大模块预留、混合网格与语义边平滑：读 [references/geometry-and-sphere.md](references/geometry-and-sphere.md)。

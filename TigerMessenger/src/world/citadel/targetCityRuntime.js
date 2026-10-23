@@ -1,4 +1,6 @@
-import {createTargetCityDetailCandidate} from './targetCityDetailCandidate.js?revision=marked-stacked-clusters-12';
+import {bindTargetTowerLight} from './targetTowerLight.js';
+import {finishStartupSteps} from '../../core/startupTasks.js';
+import {createTargetCityDetailCandidate,createTargetCityDetailCandidateSteps} from './targetCityDetailCandidate.js?revision=walled-court-13';
 import {integrateTargetCityLandmarks} from './targetCityLandmarkIntegration.js';
 
 export const TARGET_CITY_RUNTIME_VERSION = 'target-city-runtime-2';
@@ -62,7 +64,13 @@ function captureRollback({castle,sceneRoot,oceanMesh,actors,renderer}) {
  * before throwing, and register owned handles via onOwned for teardown recovery.
  * Registered handles must have idempotent dispose methods.
  */
-export function installTargetCityRuntime({castle,sceneRoot,citadelRange,terrainMeshes,oceanMesh,legacyRoots=[],renderer=null,distanceCulling=null,worldToRange,candidateOptions={}}={},
+export function installTargetCityRuntime(options, adapters) {
+  return finishStartupSteps(installTargetCityRuntimeSteps(options, adapters));
+}
+
+// Startup-only staged transaction: run before the game loop or editor is enabled.
+// The synchronous API and injected transaction adapters keep their original contract.
+export function* installTargetCityRuntimeSteps({castle,sceneRoot,citadelRange,terrainMeshes,oceanMesh,legacyRoots=[],renderer=null,distanceCulling=null,worldToRange,candidateOptions={}}={},
   {createCandidate=createTargetCityDetailCandidate,integrateLandmarks=integrateTargetCityLandmarks}={}) {
   if(!castle?.isObject3D||!sceneRoot?.isObject3D||!below(castle,sceneRoot))throw new TypeError('live castle attached to sceneRoot is required');
   const existing=active.get(castle);if(existing){if(existing.sceneRoot!==sceneRoot||existing.citadelRange!==citadelRange)throw new Error('runtime already installed with another scene/range');return existing.handle;}
@@ -81,6 +89,18 @@ export function installTargetCityRuntime({castle,sceneRoot,citadelRange,terrainM
   if(!castle.matrixWorld.elements.every(Number.isFinite)||Math.abs(castle.matrixWorld.determinant())<1e-12)throw new Error('castle frame must be finite and invertible');
   const actors=[statue,horse,controller.root].filter(Boolean),savedVisibility=new Map(),statueParent=statue.parent,statueIndex=statue.parent?.children.indexOf(statue)??-1;
   castle.traverse(o=>{if(!(o.isMesh||o.isLine||o.isPoints)||actors.some(a=>below(o,a)))return;let keep=terrain.includes(o)||o===ocean;for(let p=o;p&&p!==castle;p=p.parent)if(ROCK.test(p.name)||PLANT.test(p.name)||/cloud/i.test(p.name))keep=true;if(!keep)savedVisibility.set(o,o.visible);});
+  // Retire whole architectural owners where every existing renderable is
+  // legacy. Their night-window/editor refreshes may create new mesh children
+  // later; hiding only the original mesh snapshot lets those remnants return.
+  // Mixed owners containing final terrain, plants or actors stay untouched.
+  const retireOwners=[];
+  castle.traverse(owner=>{
+    if(!owner.isGroup||owner===castle||actors.some(actor=>below(actor,owner)||below(owner,actor)))return;
+    let legacyCount=0,retained=false;
+    owner.traverse(o=>{if(o.isMesh||o.isLine||o.isPoints){if(savedVisibility.has(o))legacyCount++;else retained=true;}});
+    if(legacyCount&&!retained)retireOwners.push(owner);
+  });
+  for(const owner of retireOwners)savedVisibility.set(owner,owner.visible);
   for(const o of legacyRoots)savedVisibility.set(o,o.visible);
   const replacedVisibility=new Map(['citadel-mountain-cloud-banks-candidate','citadel-ridge-flow-clouds'].map(name=>castle.getObjectByName(name)).filter(Boolean).map(o=>[o,o.visible]));
   const rollbackScene=captureRollback({castle,sceneRoot,oceanMesh:ocean,actors,renderer}),owned=[],ownedSet=new Set(),disposeErrors=[];
@@ -109,17 +129,31 @@ export function installTargetCityRuntime({castle,sceneRoot,citadelRange,terrainM
   function refresh(){if(disposed)return;sceneRoot.updateMatrixWorld(true);distanceCulling?.recollect?.();bindSuppressedObjects();enforceVisibility();}
   try {
     enforceVisibility();
-    candidate=completed(createCandidate({...candidateOptions,castle,sceneRoot,terrainMeshes:terrain,oceanMesh:ocean,renderer,onOwned:register}),'createCandidate');
+    const buildOptions={...candidateOptions,castle,sceneRoot,terrainMeshes:terrain,oceanMesh:ocean,renderer,onOwned:register};
+    candidate=createCandidate===createTargetCityDetailCandidate ? yield* createTargetCityDetailCandidateSteps(buildOptions) : completed(createCandidate(buildOptions),'createCandidate');
     if(!candidate?.root?.isObject3D||candidate.root.parent||typeof candidate.dispose!=='function'||typeof candidate.update!=='function'||typeof candidate.getPlayerSupport!=='function'||!candidate.report)throw new Error('candidate factory must return a detached, owned runtime handle');
     for(const o of candidate.replacedCloudRoots??[])if(!replacedVisibility.has(o))replacedVisibility.set(o,o.visible);
-    castle.add(candidate.root);candidate.root.userData.candidateHandle=candidate;report.cityDetail=candidate.report;
+    castle.add(candidate.root);candidate.bindWaterContacts?.();candidate.root.userData.candidateHandle=candidate;report.cityDetail=candidate.report;
+    const towerLight=bindTargetTowerLight(castle,candidate.root);
+    if(towerLight){register(towerLight);const disposeCity=candidate.dispose.bind(candidate);candidate.dispose=()=>{towerLight.dispose();disposeCity();};report.towerLight=towerLight.report;}
     report.tram.candidateRailPresent=!!candidate.report.frontRail;
     report.tram.railIsStatic=!!candidate.report.frontRail;
-    completed(candidate.completeTerraceLinks?.(),'completeTerraceLinks');completed(candidate.completeWaterfrontStairs?.(),'completeWaterfrontStairs');completed(candidate.clearForest?.(),'clearForest');
+    yield '正在连接城市露台…';
+    completed(candidate.completeTerraceLinks?.(),'completeTerraceLinks');
+    yield '正在连接滨水台阶…';
+    completed(candidate.completeWaterfrontStairs?.(),'completeWaterfrontStairs');
+    yield '正在补全旧城侧街…';
+    completed(candidate.completeOldWingStreets?.(),'completeOldWingStreets');
+    yield '正在校验植被通行空间…';
+    completed(candidate.clearForest?.(),'clearForest');
+
     bindSuppressedObjects();enforceVisibility();sceneRoot.updateMatrixWorld(true);
+    yield '正在安置雕像与木马…';
     migration=completed(integrateLandmarks({castle,sceneRoot,range:citadelRange,detailCandidate:candidate,terrainMeshes:terrain,...(worldToRange?{worldToRange}:{})}),'integrateLandmarks');
     report.landmarkIntegration=migration?.report??null;
-    if(migration?.ok!==true||typeof migration.rollback!=='function')throw Object.assign(new Error('landmark integration rejected: '+(migration?.reason??'invalid-result')),{landmarkReport:migration?.report});
+    if(migration?.ok!==true||typeof migration.rollback!=='function')throw Object.assign(new Error('landmark integration rejected: '+(migration?.reason??'invalid-result')+' '+JSON.stringify(migration?.report?.failures?.slice(0,2)??[])),{landmarkReport:migration?.report});
+    yield '正在校验城前云层…';
+    completed(candidate.completeCloudClearance?.({actors:[statue,horse]}),'completeCloudClearance');
     report.cityDetail=candidate.report;report.landmarkIntegration=migration.report;
     if(distanceCulling?.update){originalCullingUpdate=distanceCulling.update;cullingWrapper=function(...args){try{return originalCullingUpdate.apply(this,args);}finally{enforceVisibility();}};distanceCulling.update=cullingWrapper;}
     refresh();report.status='installed-awaiting-runtime-validation';report.installed=true;

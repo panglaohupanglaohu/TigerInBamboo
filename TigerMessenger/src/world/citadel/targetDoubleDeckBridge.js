@@ -95,7 +95,7 @@ export function createTargetDoubleDeckBridge({
   maxSpan = 28, pierWidth = 1.6, sideRibThickness = .7, deckThickness = .55,
   deckTopOffset = -.75, beamThickness = .36, sampleStep = .75,
   maximumFoundationDepth = 90, requiredBoatWidth = 4, requiredBoatHeight = 3, requiredWaterDepth = .8,
-  palette = {},
+  palette = {}, includeUpper = true,
 } = {}) {
   if (!Array.isArray(upperPath) || upperPath.length < 2 || !upperPath.every(finite3)) throw new TypeError('Actual finite upperPath required');
   if (!upperDeck?.isObject3D || !worldCurve?.getPointAt || !worldCurve?.getTangentAt || !worldCurve?.getLength) throw new TypeError('Actual upperDeck root and world curve required');
@@ -118,7 +118,7 @@ export function createTargetDoubleDeckBridge({
   if (!Number.isFinite(length) || length < 8 || length > 1000 || sampleStep > 2 || maxSpan < 8) throw new RangeError('Bridge length/sampling/span outside candidate bounds');
   const preserved = collectTriangles(upperDeck, mesh => !legacySupport(mesh.name));
   const walking = collectTriangles(upperDeck, mesh => mesh.userData.targetWalkable === true || mesh.name.startsWith('bay-bridge-walking-deck-'));
-  if (!walking.length) throw new TypeError('upperDeck contains no actual walking meshes');
+  if (includeUpper && !walking.length) throw new TypeError('upperDeck contains no actual walking meshes');
   const replacementRequired = [];
   upperDeck.traverse(mesh => { if (mesh.isMesh && legacySupport(mesh.name)) replacementRequired.push({ name: mesh.name, uuid: mesh.uuid }); });
 
@@ -210,8 +210,8 @@ export function createTargetDoubleDeckBridge({
       // at exactly the path endpoint would sample beyond the retained slab.
       const supportU = T.MathUtils.clamp(i / spanCount, .55 / length, 1 - .55 / length);
       const f = frame(supportU), probes = [-.28, 0, .28].map(z => underside(f, 0, z));
-      const known = probes.every(Boolean), minimum = known ? Math.min(...probes.map(p => p.offset)) : null;
-      if (!known) issues.push({ type: 'upper-bearing-missing', station: i });
+      const known = includeUpper && probes.every(Boolean), minimum = known ? Math.min(...probes.map(p => p.offset)) : null;
+      if (includeUpper && !known) issues.push({ type: 'upper-bearing-missing', station: i });
       // Missing attachment is not invented; no beam/upper legs are drawn.
       const beamTop = known ? minimum - .08 : null;
       if (known) {
@@ -286,7 +286,7 @@ export function createTargetDoubleDeckBridge({
       version: TARGET_DOUBLE_DECK_BRIDGE_VERSION, installed: false, accepted: false,
       status: issues.length || collisions.length || terrainIssues.length || terrainUnknown.length ? 'rejected-or-unresolved-candidate' : 'finite-geometry-checked-uninstalled',
       frame: 'group geometry castle-local; curve, body OBBs and contact evidence world-space',
-      upperPath: upperPath.map(p => [...p]), upperDeckPreserved: true,
+      upperPath: upperPath.map(p => [...p]), upperDeckPreserved: includeUpper, includeUpper,
       dimensions: { length, laneSpacing, clearWidth: clearHalfWidth * 2, deckWidth: deckHalfWidth * 2, sideCenter, pierWidth, sideRibThickness, deckThickness, deckTopOffset, beamThickness, vehicleEnvelope: bodySpec, commonSectionBodyGap: laneSpacing - bodySpec.halfWidth * 2, structuralMarginEnvelopesOverlapBetweenLanes: laneSpacing < 2 * (bodySpec.halfWidth + bodySpec.lateralMargin) },
       lowerRadius: { min: Math.min(...frames.map(f => f.point.length())), max: Math.max(...frames.map(f => f.point.length())), imposedByFactory: false },
       replacementRequired, replacementApplied: false,

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {bindCoastalMesh} from './seaStackLighting.js';
 
-const ROLES=new Set(['sea-stack-terrace-turf','sea-stack-terrace-shrubs','sea-stack-coastal-grass']);
+const ROLES=new Set(['sea-stack-terrace-turf','sea-stack-terrace-shrubs','sea-stack-coastal-grass','sea-stack-coastal-trees']);
 function signature(text){let h=2166136261;for(let i=0;i<text.length;i++)h=Math.imul(h^text.charCodeAt(i),16777619);return (h>>>0).toString(16);}
 function meshStamp(mesh){return {objectUuid:mesh.uuid,geometryUuid:mesh.geometry?.uuid,positionVersion:mesh.geometry?.attributes.position?.version??null,indexVersion:mesh.geometry?.index?.version??null,worldMatrix:mesh.matrixWorld.toArray()};}
 
@@ -9,7 +9,7 @@ function meshStamp(mesh){return {objectUuid:mesh.uuid,geometryUuid:mesh.geometry
 export function publishSeaStackSurfaceContract(scene,rocks,ocean){
  scene.updateMatrixWorld(true);
  const water=meshStamp(ocean),waterRevision=`water-${signature(JSON.stringify(water))}`;
- const report={version:1,scope:'approved-gate-left-sector',waterRevision,water,stacks:[],removedVegetation:0,disposedExclusiveGeometries:0,errors:[],atomicGlobalPublish:false};
+ const report={version:1,scope:rocks.some(r=>r.userData.connectedCoastalBank)?'rail-separated-connected-coastal-banks':'approved-gate-left-sector',waterRevision,water,stacks:[],removedVegetation:0,disposedExclusiveGeometries:0,errors:[],atomicGlobalPublish:false};
  const discarded=[];
  for(const rock of rocks){
   const data=rock.userData.seaStack;

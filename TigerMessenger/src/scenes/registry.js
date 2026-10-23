@@ -1,3 +1,4 @@
+import {runStartupSteps, yieldStartupTask} from '../core/startupTasks.js';
 // =====================================================================
 //  场景注册表 + 加载器
 //  - 新场景：写 scenes/<id>.js，在此 register
@@ -93,3 +94,21 @@ export function loadScenes(ids, ctx) {
 }
 
 export { REGISTRY };
+
+/** Normal browser boot yields between the same construction steps as load(). */
+export async function loadScenesIncrementally(ids, ctx, checkpoint = yieldStartupTask) {
+  const handles = [];
+  for (const id of ids) {
+    const mod = REGISTRY.get(id);
+    if (!mod) continue;
+    await checkpoint('正在准备' + mod.name + '…');
+    const context = {...ctx, options: {...(ctx.options || {}), ...(ctx.options?.[id] || {})}};
+    const handle = mod.loadSteps
+      ? await runStartupSteps(mod.loadSteps(context), checkpoint)
+      : mod.load(context);
+    if (!handle) continue;
+    handle.id = handle.id || mod.id;
+    handles.push(handle);
+  }
+  return handles;
+}

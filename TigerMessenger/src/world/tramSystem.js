@@ -6,7 +6,7 @@ import {createTargetEastGlobalCrossingRelease} from './citadel/targetEastGlobalC
 import {createTargetGlobalRailApproachSupport} from './citadel/targetGlobalRailApproachSupport.js';
 import {ROBOT_CARGO_SLOTS} from '../gameplay/robotOps/logistics.js';
 import {freightBoardDistance} from '../player/freightBoarding.js';
-import {bookshopTownPose} from './bookshopTownSite.js';
+import {bookshopTownPose,BOOKSHOP_RAISE,liftBookshopRailCurve,bookshopRailRaiseAtWorld} from './bookshopTownSite.js';
 import {createFreightInterlocking} from '../gameplay/robotOps/freightInterlocking.js';
 import {factoryFreightStops, factoryFreightEntry, factoryFreightExit, freightTrainingDepot} from './bookshopLoadingYards.js';
 // =====================================================================
@@ -487,7 +487,7 @@ function addViaductDeck(group, curve, R, allSegments=false, excludeProgress=()=>
       p: _p.clone(),
       right: _right.clone(),
       up: _up.clone(),
-      elevated: !excludeProgress(t) && _p.length() - groundRadiusAt(_p, R) > 0.15,
+      elevated: !excludeProgress(t) && _p.length() - bookshopRailRaiseAtWorld(_p, R) - groundRadiusAt(_p, R) > 0.15,
     });
   }
   // 岛面贴地段是唯一非高架连续弧；旋转数组后取唯一的高架连续段
@@ -1010,7 +1010,8 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
   // analytical hill cover must not regenerate a bored tunnel after the cut.
   const openCoastEnd = installedTransit ? railStartup.splice.lanes.center.mapOriginalProgress(installedTransit.report.retainedOldSourceIntervals.center[1]).progress : null;
   const inOpenCitadelCoast = u => !!installedTransit && u >= replacementInterval[0] && u <= openCoastEnd;
-  const {center: curve, red: redCurve, blue: blueCurve} = railStartup.curves;
+  // Raised bookshop island (?bookshopRaise=1): lift the finished lanes in place, keeping progress u.
+  const curve=liftBookshopRailCurve(railStartup.curves.center,R),redCurve=liftBookshopRailCurve(railStartup.curves.red,R),blueCurve=liftBookshopRailCurve(railStartup.curves.blue,R);
   const trackLen = curve.getLength();
   group.userData.citadelRailStartup = railStartup.report;
   railStartup.report.openCitadelCoastInterval = installedTransit ? [replacementInterval[0], openCoastEnd] : null;
@@ -1424,9 +1425,18 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
     cityStructure.updateWorldMatrix(true,true);const walkable=[];cityStructure.traverse(o=>{if(o.isMesh&&o.userData.targetWalkable)walkable.push(o);});
     if(!walkable.length)throw new Error('CROSSING_CITY_STRUCTURE_EMPTY');
     const evidence=[];
-    for(const name of['newShore','central','oldShore'])for(const f of[.05,.5,.95]){
-      const path=r.galleries[name].upperPath,p=new THREE.Vector3(...path[Math.floor((path.length-1)*f)]).applyMatrix4(installedTransit.castleMatrix),up=p.clone().normalize(),ray=new THREE.Raycaster(p.clone().addScaledVector(up,.2),up.clone().negate(),0,.4),hits=ray.intersectObjects(walkable,false),hit=hits.find(h=>h.point.distanceTo(p)<.08);
+    for(const name of['newShore','central','oldShore']){
+      const gallery=r.galleries[name];
+      if(gallery.upperEnabled===false){
+        const slab=cityStructure.getObjectByName('cliff-transit-'+name)?.getObjectByName(name+'-double-deck-lower-slab');
+        if(!r.stackedOnlyBetweenCityLinks||name==='central'||gallery.mode!=='rail-only'||!slab?.isMesh||!slab.geometry.attributes.position.count||gallery.lowerStructure?.includeUpper!==false||!gallery.vehicleClearance?.pass)throw new Error('CROSSING_CITY_RAIL_ONLY_GEOMETRY_MISMATCH:'+JSON.stringify({name,stacked:r.stackedOnlyBetweenCityLinks,mode:gallery.mode,slab:!!slab,includeUpper:gallery.lowerStructure?.includeUpper,clearance:gallery.vehicleClearance?.pass}));
+        continue;
+      }
+      if(!Array.isArray(gallery.upperPath)||gallery.upperPath.length<2)throw new Error('CROSSING_CITY_WALKABLE_PATH_MISSING');
+      for(const f of[.05,.5,.95]){
+      const path=gallery.upperPath,p=new THREE.Vector3(...path[Math.floor((path.length-1)*f)]).applyMatrix4(installedTransit.castleMatrix),up=p.clone().normalize(),ray=new THREE.Raycaster(p.clone().addScaledVector(up,.2),up.clone().negate(),0,.4),hits=ray.intersectObjects(walkable,false),hit=hits.find(h=>h.point.distanceTo(p)<.08);
       if(!hit)throw new Error('CROSSING_CITY_WALKABLE_GEOMETRY_MISMATCH');evidence.push({gallery:name,f,distance:hit.point.distanceTo(p),mesh:hit.object.name});
+    }
     }
     return{groupUuid:cityStructure.uuid,releaseVersion:r.releaseVersion,walkableSamples:evidence};
   }

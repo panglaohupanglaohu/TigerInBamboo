@@ -648,7 +648,7 @@ const _acFeedTan = new THREE.Vector3();
  * @param {{ swamp?: THREE.Object3D }} [opts] swamp：地图放置的湖沼（含 nectarTargets）
  */
 export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
-  if (!aircraft) return;
+  if (!aircraft || aircraft.userData?.batianFleetOwner?.active) return;
 
   const members =
     aircraft.userData.members ||

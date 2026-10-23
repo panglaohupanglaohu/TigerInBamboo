@@ -1,7 +1,7 @@
 import * as T from 'three';
 import { createTargetOldCityWaterfall } from './targetOldCityWaterfall.js';
 
-export const TARGET_WATERFALL_RAIL_REACH_VERSION = 'target-waterfall-rail-reach-1';
+export const TARGET_WATERFALL_RAIL_REACH_VERSION = 'target-waterfall-rail-reach-2';
 const finite3 = value => Array.isArray(value) && value.length === 3 && value.every(Number.isFinite);
 const faceIndices = [[0, 1, 3, 2], [4, 6, 7, 5], [0, 4, 5, 1], [2, 3, 7, 6], [0, 2, 6, 4], [1, 5, 7, 3]];
 
@@ -50,7 +50,8 @@ function bodyBox(spec) {
  */
 export function solveTargetWaterfallRailReach({
   segments, castleMatrix, waterfall, bodyEnvelope, sampleSea, sampleTerrain = null,
-  margin = .6, verticalMargin = .35, maxReach = 30, sampleStep = .5, maxSamples = 10000,
+  // Include the bridge coping and a visible dry gap outside the vehicle body.
+  margin = 2.0, verticalMargin = .35, maxReach = 30, sampleStep = .5, maxSamples = 10000,
 } = {}) {
   if (!Array.isArray(segments) || !segments.length) throw new TypeError('Explicit approved old-shore segments required');
   if (!waterfall || !finite3(waterfall.position) || !Number.isFinite(waterfall.yawRadians) || !Number.isFinite(waterfall.width) || waterfall.width <= 0) throw new TypeError('waterfall requires castle-local position, yawRadians and positive width');

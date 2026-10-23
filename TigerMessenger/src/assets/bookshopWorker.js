@@ -10,7 +10,7 @@ export function createBookshopWorker({coat=0x47545a,apron=false,carrying=false}=
  mesh(new THREE.CylinderGeometry(.20,.26,.64,10),m.coat,0,1.02,0);
  mesh(new THREE.SphereGeometry(.135,12,8),m.skin,0,1.46,0).scale.set(.86,1.12,.90);
  mesh(new THREE.CylinderGeometry(.16,.16,.06,12),m.dark,0,1.60,0);mesh(new THREE.CylinderGeometry(.195,.195,.025,12),m.dark,0,1.565,.025);
- for(const s of[-1,1]){const elbow=[s*.28,.98,.025],hand=carrying?[s*.22,1.01,.32]:[s*.31,.79,.04];limb([s*.18,1.27,0],elbow,.066,m.coat);limb(elbow,hand,.054,m.coat);mesh(new THREE.SphereGeometry(.06,8,6),m.skin,...hand);}
+ for(const s of[-1,1]){const elbow=[s*.28,.98,.025],hand=carrying?[s*.22,1.01,.32]:[s*.31,.79,.04];limb([s*.18,1.27,0],elbow,.066,m.coat).name='worker-arm-upper-'+s;limb(elbow,hand,.054,m.coat).name='worker-arm-lower-'+s;mesh(new THREE.SphereGeometry(.06,8,6),m.skin,...hand).name='worker-hand-'+s;}
  if(apron)mesh(new THREE.BoxGeometry(.33,.59,.045),m.apron,0,.98,.21);
  if(carrying)mesh(new THREE.BoxGeometry(.40,.23,.28),m.apron,0,1.08,.32);
  return g;

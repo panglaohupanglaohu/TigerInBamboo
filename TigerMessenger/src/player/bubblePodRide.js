@@ -164,6 +164,8 @@ export function createBubblePodRide({
       dismount();
       return;
     }
+    // One F press = one action: if another ride already used it (e.g. sliding off the airship), do not also board.
+    if (e.defaultPrevented || player.riding) return;
     const fleet = getFleet?.();
     const near = findNearestBubblePod(fleet, player.position, BOARD_RANGE);
     if (!near) return;

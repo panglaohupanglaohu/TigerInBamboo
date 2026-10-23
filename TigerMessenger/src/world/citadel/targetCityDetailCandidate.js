@@ -1,3 +1,5 @@
+import {finishStartupSteps} from '../../core/startupTasks.js';
+import {createTargetNewCityPlacement} from './targetNewCityPlacement.js';
 import {createTargetCliffTransitStructure} from './targetCliffTransitStructure.js?revision=4';
 import {solveTargetWaterfallRailReach} from './targetWaterfallRailReach.js?revision=1';
 import {createTargetOldCityWaterfrontStairs} from './targetOldCityWaterfrontStairs.js?revision=5';
@@ -10,19 +12,19 @@ import {createTargetFrontBayRailCandidate} from './targetFrontBayRailCandidate.j
 import {applyTargetCityForestClearance} from './targetCityForestClearance.js';
 import {createTargetNewCityPlaza} from './targetNewCityPlaza.js?revision=3';
 import {applyTargetRockAppearance} from './targetRockAppearance.js?revision=rock7-mineral-planes';
-import {fitTargetCitySunShadow} from './targetCitySunShadow.js?revision=r36';
-import {createMountainCloudBanksCandidate} from './mountainCloudBanksCandidate.js?revision=13-clusters-1';
+import {fitTargetCitySunShadow} from './targetCitySunShadow.js?revision=r37-follow';
+import {createMountainCloudBanksCandidate} from './mountainCloudBanksCandidate.js?revision=14-circuits-1';
 import {officialOceanLevelAt} from '../waterV8/officialOcean.js';
 import {applyTargetCanopyAppearance} from './targetCanopyAppearance.js?revision=3';
 import {createTargetOldCityWaterSupply} from './targetOldCityWaterSupply.js?revision=2';
 import {createTargetBridgeStairConnector} from './targetBridgeStairConnector.js?revision=polygon2';
-import {createTargetBayWaterAppearance} from './targetBayWaterAppearance.js?revision=7-final-wet-mask';
+import {createTargetBayWaterAppearance} from './targetBayWaterAppearance.js?revision=8-shore-pier-ripples';
 import * as THREE from 'three';
 import {createTargetNewCityStairRoute} from './targetNewCityStairRoute.js?revision=stairs-r32-terminal-access';
 import {createTargetCityBayBridge} from './targetCityBayBridge.js?revision=3';
 import {createTargetOldCity,TARGET_OLD_CITY_PALETTE} from './targetOldCity.js?revision=layout-v11-street-infill';
-import {createTargetNewCityStairs} from './targetNewCityStairs.js?revision=flanks-v8-secondary-1';
-import {createTargetNewCityMain,createTargetNewCityApproachSampler,TARGET_NEW_CITY_MAIN_PALETTE} from './targetNewCityMain.js?revision=window-batches-1';
+import {createTargetNewCityStairs} from './targetNewCityStairs.js?revision=flanks-v9-radial-solid-1';
+import {createTargetNewCityMain,createTargetNewCityApproachSampler,TARGET_NEW_CITY_MAIN_PALETTE} from './targetNewCityMain.js?revision=walled-court-1';
 import {TARGET_ARCHITECTURE_PALETTE,TARGET_ARCHITECTURE_COLOUR_VERSION} from './targetArchitecturePalette.js';
 import {createTargetOldCityWaterfall, TARGET_WATERFALL_PALETTE} from './targetOldCityWaterfall.js';
 import {buildMountainSurfaceIndex} from './mountainSurfaceIndex.js';
@@ -59,6 +61,16 @@ function samplers(castle, sceneRoot, terrainMeshes, oceanMesh) {
   };
   const api={terrain: (x, z) => cached('land', terrainIndex, x, z), foundationTerrain:(x,z)=>cached('foundation',foundationIndex,x,z), sea: (x, z) => cached('sea', oceanIndex, x, z),
     sources: {foundationTerrain:foundationSurfaces.map(m=>({name:m.name,geometry:m.geometry.uuid})),foundationMethod:'actual final mountain and visible planet-surface triangles; no analytic seabed',terrain: terrain.map(m => ({name: m.name, geometry: m.geometry.uuid, positionVersion: m.geometry.attributes.position.version})), ocean: {name: ocean.name, geometry: ocean.geometry.uuid}, method: 'final mesh triangle intersections along castle-local vertical', terrainTriangles: terrainIndex.stats.triangles, oceanTriangles: oceanIndex.stats.triangles}};
+  // Sample actual final triangles along an architectural frame's vertical.
+  // Returning frame-local height lets foundations and courtyard seats share the
+  // same rigid transform as their visible geometry, rather than subtracting Y.
+  api.terrainInFrame=(placement,x,z)=>{
+    const worldFrame=frame.clone().multiply(placement),worldInverse=worldFrame.clone().invert();
+    const localRay=new THREE.Ray(V(x,220,z).applyMatrix4(worldFrame),V(0,-1,0).transformDirection(worldFrame));
+    const hit=terrainIndex.sample(localRay,0,1000);if(!hit)return null;
+    const point=hit.point.clone().applyMatrix4(worldInverse),chart=hit.point.clone().applyMatrix4(inverse);
+    return{height:point.y,point:point.toArray(),castlePoint:chart.toArray(),mesh:hit.object.name,faceIndex:hit.faceIndex};
+  };
   api.prepareRefresh=()=>{
     const before={terrainIndex,foundationIndex,cache,sources:api.sources,revision};let state='prepared';
     return{commit(){
@@ -83,6 +95,34 @@ function samplers(castle, sceneRoot, terrainMeshes, oceanMesh) {
 
 function xzAt(anchor, yaw, x, z) {
   return [anchor[0] + Math.cos(yaw) * x + Math.sin(yaw) * z, anchor[2] - Math.sin(yaw) * x + Math.cos(yaw) * z];
+}
+
+/** Replace the connector's tilted fan with shared-height stone terraces.
+ * Equal height contours are shared across fan triangles, so there are no
+ * independent grid-cell heights or diagonal cracks. Fixed XZ footprint stays. */
+function stepBridgeConnector(connector,castleMatrix,rise=.15){
+  const previous=connector.report.walkSurfaces,positions=[],walkSurfaces=[],material=connector.group.children.find(o=>o.name.startsWith('bridge-stair-connector-cell-'))?.material;
+  if(!material)return;
+  const clip=(poly,h,above)=>{const out=[];for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length],da=(a[1]-h)*(above?1:-1),db=(b[1]-h)*(above?1:-1);if(da>=-1e-9)out.push(a);if((da>=0)!==(db>=0)){const t=(h-a[1])/(b[1]-a[1]);out.push(a.map((v,k)=>v+(b[k]-v)*t));}}return out;};
+  const tri=(...vertices)=>positions.push(...vertices.flat());
+  for(const surface of previous)for(const original of surface.triangles){
+    const low=Math.min(...original.map(p=>p[1])),high=Math.max(...original.map(p=>p[1]));
+    for(let k=Math.floor(low/rise);k<Math.ceil((high+1e-8)/rise);k++){
+      const lo=k*rise,top=(k+1)*rise,poly=clip(clip(original,lo,true),top,false);if(poly.length<3)continue;
+      const area=poly.reduce((sum,p,i)=>{const q=poly[(i+1)%poly.length];return sum+p[0]*q[2]-q[0]*p[2];},0)/2;if(Math.abs(area)<1e-9)continue;
+      if(area>0)poly.reverse();const upper=poly.map(p=>[p[0],top,p[2]]),bottom=surface.footingY,lower=poly.map(p=>[p[0],bottom,p[2]]),faces=[];
+      for(let j=1;j<upper.length-1;j++){tri(upper[0],upper[j],upper[j+1]);tri(lower[0],lower[j+1],lower[j]);faces.push([upper[0],upper[j],upper[j+1]]);}
+      for(let j=0;j<upper.length;j++){const n=(j+1)%upper.length;tri(upper[j],lower[j],lower[n]);tri(upper[j],lower[n],upper[n]);}
+      walkSurfaces.push({id:'bridge-stair-connector-stepped-floor',polygon:upper.map(p=>[p[0],p[2]]),vertices:upper,triangles:faces,top,footingY:bottom});
+    }
+  }
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
+  for(const mesh of [...connector.group.children])if(mesh.name.startsWith('bridge-stair-connector-cell-'))connector.group.remove(mesh);
+  const mesh=new THREE.Mesh(geometry,material);mesh.name='bridge-stair-connector-stepped-floor';mesh.castShadow=mesh.receiveShadow=true;mesh.userData.targetWalkable=true;mesh.userData.preserveCitadelMaterials=true;connector.group.add(mesh);
+  const old=connector.dispose;let released=false;connector.dispose=()=>{if(released)return;released=true;geometry.dispose();old();};
+  const radialSlopes=walkSurfaces.map(w=>{const points=w.triangles[0].map(p=>V(...p).applyMatrix4(castleMatrix)),normal=new THREE.Triangle(...points).getNormal(V()),up=points.reduce((sum,p)=>sum.add(p),V()).normalize(),c=Math.abs(normal.dot(up));return Math.sqrt(Math.max(0,1-c*c))/c;});
+  connector.report.steppedLanding={version:'shared-height-contour-steps-1',riser:rise,terraces:walkSurfaces.length,originalMaximumTriangleSlope:connector.report.maximumTriangleSlope,originalMaximumRadialSlope:connector.report.maximumRadialSlope,maximumSurfaceLift:rise,fixedXZFootprint:true,originalSeamStepBound:rise};
+  connector.report.walkSurfaces=walkSurfaces;connector.report.maximumTriangleSlope=0;connector.report.maximumRadialSlope=Math.max(...radialSlopes);connector.report.version='target-bridge-stair-connector-2-contour-steps';
 }
 
 /** A deterministic shoreline survey around the old platform. A candidate
@@ -129,16 +169,18 @@ function survey(s, width, platform, transitRelease=null, castleMatrix=null) {
   return {selected: best, examined, failures};
 }
 
-function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, oceanMesh, width = 9, seed = 20261005, newCityPalette = {}, waterfallPalette = {}, waterfallOutboardReach = 0, oldPlatform = [-55, 17, 9],fitSunShadow=true,renderer=null,includeFrontRail=true,cliffTransitRelease=null,cliffTransitStructureOptions={},cloudRailCurves=null,newCityStreetInfill=false,newCityFoundationRefinement=false,newCityWindowBatching=false,newCitySecondaryClusters=false,onOwned=()=>{}} = {}) {
+function* constructTargetCityDetailCandidateSteps({castle, sceneRoot, terrainMeshes, oceanMesh, width = 9, seed = 20261005, newCityPalette = {}, waterfallPalette = {}, waterfallOutboardReach = 0, oldPlatform = [-55, 17, 9],fitSunShadow=true,renderer=null,includeFrontRail=true,cliffTransitRelease=null,cliffTransitStructureOptions={},cloudRailCurves=null,newCityStreetInfill=false,newCityFoundationRefinement=false,newCityWindowBatching=false,newCityWalledLayout=false,newCitySecondaryClusters=false,oldCityWingStreets=false,oldCityWingCollisionGroups=[],onOwned=()=>{}} = {}) {
   if (!castle?.isObject3D) throw new TypeError('castle Object3D is required to sample the frozen scene');
   if (!(Number.isFinite(width) && width > 0)) throw new RangeError('width must be positive and finite');
   if (oldPlatform.length !== 3 || !oldPlatform.every(Number.isFinite)) throw new TypeError('oldPlatform must be a finite castle-local triple');
   let scene = sceneRoot || castle; while (!sceneRoot && scene.parent) scene = scene.parent;
   const own=handle=>{if(handle)onOwned(handle);return handle;};
+  yield '正在读取城市地基…';
   const s = samplers(castle, scene, terrainMeshes, oceanMesh), root = new THREE.Group();
   own({dispose(){root.removeFromParent();root.clear();}});
   root.name = NAME; root.userData.preserveCitadelMaterials = true;
   const liveOcean=oceanMesh||scene.getObjectByName('planet-v8-curved-ocean');
+  yield '正在连接海岸水面…';
   const bayWater = s.error||!liveOcean?.material?.isShaderMaterial ? null : own(createTargetBayWaterAppearance({ocean:liveOcean,castle,finalWetMask:true,sampleTerrain:s.terrain,sampleSea:s.sea}));
   const sunShadow=fitSunShadow?own(fitTargetCitySunShadow(scene,castle,{directionLocal:[-.45,.82,.36],renderer,softShadows:true})):null;
   const rockAppearance=own(applyTargetRockAppearance(castle));
@@ -146,19 +188,54 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
   const oldPalette={...TARGET_OLD_CITY_PALETTE};
   newCityPalette={...TARGET_NEW_CITY_MAIN_PALETTE,rose:TARGET_ARCHITECTURE_PALETTE.rose,...newCityPalette};
   root.userData.targetArchitectureColourVersion=TARGET_ARCHITECTURE_COLOUR_VERSION;
-  let oldCity = own(createTargetOldCity({seed,palette:oldPalette}));oldCity.group.position.fromArray(oldPlatform);oldCity.group.rotation.y=degrees(45);root.add(oldCity.group);
-  const main = own(createTargetNewCityMain({seed, palette: newCityPalette, proportion:'expanded-1',batchWindowDetails:newCityWindowBatching}));
-  main.group.position.set(74, 12, 33); main.group.rotation.y = degrees(-55); root.add(main.group);
-  const stairs = own(createTargetNewCityStairs({seed, palette:newCityPalette,facadeFoundationRefinement:newCityFoundationRefinement, houseOffsets:{'new-city-stair-house-1--1':[6.5*Math.cos(degrees(-55)),6.5*Math.sin(degrees(-55))]}, surfaceHeightAt:s.error?null:(x,z)=>{const q=xzAt([74,12,33],degrees(-55),x,z),hit=s.terrain(...q);return hit?hit.height-12:null;}}));
-  // Retain only the authored flank houses. The early descent was rejected by
-  // the actual terrain audit; surveyed treads replace it rather than hiding land.
+  yield '正在建造旧城街道…';
+  let oldCity = own(createTargetOldCity({seed,palette:oldPalette,wingStreets:oldCityWingStreets}));oldCity.group.position.fromArray(oldPlatform);oldCity.group.rotation.y=degrees(45);root.add(oldCity.group);
+  const newCityPlacement=createTargetNewCityPlacement(castle.matrixWorld),newCityMatrix=newCityPlacement.matrix;
+  const newLocalSurface=(x,z)=>s.error?null:s.terrainInFrame(newCityMatrix,x,z)?.height??null;
+  yield '正在建造新城与后院…';
+  const main = own(createTargetNewCityMain({seed, palette: newCityPalette, proportion:'expanded-1',layout:newCityWalledLayout?'walled-court-1':'legacy',batchWindowDetails:newCityWindowBatching,courtyardSurfaceHeightAt:s.error?null:newLocalSurface}));
+  newCityMatrix.decompose(main.group.position,main.group.quaternion,main.group.scale);root.add(main.group);
+  const stairs = own(createTargetNewCityStairs({seed, palette:newCityPalette,placementMatrix:newCityMatrix,facadeFoundationRefinement:newCityFoundationRefinement, houseOffsets:{'new-city-stair-house-1--1':[6.5*Math.cos(degrees(-55)),6.5*Math.sin(degrees(-55))]}, surfaceHeightAt:s.error?null:newLocalSurface}));
+  // Retain only the authored flank houses; surveyed treads connect the actual
+  // tilted entrance back to the unchanged plaza and bridge endpoints.
   for(const child of [...stairs.group.children])if(!/^new-city-stair-house-/.test(child.name))stairs.group.remove(child);
-  stairs.group.position.copy(main.group.position);stairs.group.rotation.copy(main.group.rotation);root.add(stairs.group);
-  const approach=xzAt([74,12,33],degrees(-55),main.report.stairs.bottom[0],main.report.stairs.bottom[2]);
-  const mainApproach=s.error?null:own(createTargetNewCityApproachSampler({main,sampleTerrain:s.terrain,origin:[74,12,33],yaw:degrees(-55)}));
-  const surveyedStairs=s.error?null:own(createTargetNewCityStairRoute({sampleSurface:mainApproach.sampleSurface,start:[approach[0],12+main.report.stairs.bottom[1],approach[1]],terminalAccess:{from:[72,68],width:2.4}}));
+  newCityMatrix.decompose(stairs.group.position,stairs.group.quaternion,stairs.group.scale);root.add(stairs.group);
+  // A short solid transition joins the radial entrance to the surveyed
+  // castle-chart stairs. Its rear edge is the actual transformed landing; its
+  // forward edge is level in the stairs' chart, avoiding a transverse step.
+  const transitionWidth=4.4,transitionLength=5,edgeZ=15.5;
+  const rear=[-transitionWidth/2,transitionWidth/2].map(x=>V(...newCityPlacement.transform([x,.3,edgeZ])));
+  const center=rear[0].clone().lerp(rear[1],.5),forward=V(0,0,1).transformDirection(newCityMatrix);forward.y=0;forward.normalize();
+  const approach=center.clone().addScaledVector(forward,transitionLength);approach.y=center.y-1;
+  const side=V(-forward.z,0,forward.x),front=[approach.clone().addScaledVector(side,transitionWidth/2),approach.clone().addScaledVector(side,-transitionWidth/2)];
+  // Order corners by their actual lateral correspondence to the rear edge.
+  if(front[0].distanceTo(rear[0])>front[1].distanceTo(rear[0]))front.reverse();
+  const neck=front.map(p=>p.clone().addScaledVector(forward,-1.5)),transitionVertices=[];
+  const emit=(a,b,c)=>{for(const p of[a,b,c])transitionVertices.push(...p.clone().applyMatrix4(newCityPlacement.inverse).toArray());};
+  for(const chartCorners of[[rear[0],rear[1],neck[1],neck[0]],[neck[0],neck[1],front[1],front[0]]]){
+    const cross=chartCorners[1].clone().sub(chartCorners[0]).cross(chartCorners[3].clone().sub(chartCorners[0]));
+    if(cross.y>0){emit(chartCorners[0],chartCorners[1],chartCorners[2]);emit(chartCorners[0],chartCorners[2],chartCorners[3]);}
+    else{emit(chartCorners[0],chartCorners[2],chartCorners[1]);emit(chartCorners[0],chartCorners[3],chartCorners[2]);}
+    for(let i=0;i<4;i++){const A=chartCorners[i],B=chartCorners[(i+1)%4],a=A.clone().add(V(0,-.4,0)),b=B.clone().add(V(0,-.4,0));emit(A,B,b);emit(A,b,a);}
+    const base=chartCorners.map(p=>p.clone().add(V(0,-.4,0)));emit(base[0],base[2],base[1]);emit(base[0],base[3],base[2]);
+  }
+  const transitionGeometry=new THREE.BufferGeometry();transitionGeometry.setAttribute('position',new THREE.Float32BufferAttribute(transitionVertices,3));transitionGeometry.computeVertexNormals();
+  const transitionMaterial=new THREE.MeshStandardMaterial({color:newCityPalette.stone||'#efdcaf',roughness:.96,side:THREE.DoubleSide});transitionMaterial.userData.preserveCitadelMaterial=true;transitionMaterial.userData.targetArchitectureColour={version:TARGET_ARCHITECTURE_COLOUR_VERSION,role:'stone',albedo:newCityPalette.stone||'#efdcaf'};
+  const transition=new THREE.Mesh(transitionGeometry,transitionMaterial);transition.name='entrance-landing-radial-transition';transition.userData.targetWalkable=true;transition.userData.preserveCitadelMaterials=true;transition.castShadow=transition.receiveShadow=true;main.group.add(transition);
+  let transitionDisposed=false;const transitionOwner=own({dispose(){if(transitionDisposed)return;transitionDisposed=true;transition.removeFromParent();transitionGeometry.dispose();transitionMaterial.dispose();}});
+  const transitionPath=[approach.toArray(),neck[0].clone().lerp(neck[1],.5).toArray(),center.toArray()].map(p=>V(...p).applyMatrix4(newCityPlacement.inverse).toArray());
+  main.report.stairs.walkPath=[...transitionPath,...main.report.stairs.walkPath];
+  main.report.stairs.radialTransition={width:transitionWidth,length:transitionLength,rear:rear.map(p=>p.toArray()),front:front.map(p=>p.toArray()),walkPath:[approach.toArray(),center.toArray()],solidThickness:.4};
+  const mainApproach=s.error?null:own(createTargetNewCityApproachSampler({main,sampleTerrain:s.terrain,placementMatrix:newCityMatrix}));
+  const plazaStairEnd=[48.2,3,78-Math.sqrt(7.95**2-7.8**2)];
+  yield '正在铺设广场台阶…';
+  const surveyedStairs=s.error?null:own(createTargetNewCityStairRoute({sampleSurface:mainApproach.sampleSurface,start:approach.toArray(),end:plazaStairEnd,entryLanding:{height:approach.y,outward:[forward.x,forward.z],backLength:1},waypointRoutes:[48,46,44,42,40].map(x=>[[x,approach.z+5]]),lowerFlightSlope:.45,terminalAccess:{from:[72,68],width:2.2}}));
   if(surveyedStairs)root.add(surveyedStairs.group);
   const newPlaza=s.error?null:own(createTargetNewCityPlaza({sampleSurface:s.terrain,castle}));if(newPlaza)root.add(newPlaza.group);
+  root.updateMatrixWorld(true);
+  const pedestrianPaths=[surveyedStairs?.report.selected?.walkPath||[],[[72,3,78],[72,3,68],surveyedStairs?.report.end||[62,3,64]]];
+  for(const owner of[main,stairs,newPlaza])if(owner?.streetDressing){const garden=owner.streetDressing;garden.protectRoutes(pedestrianPaths,root.matrixWorld.clone().invert().multiply(garden.group.matrixWorld));}
+  yield '正在贴合城市草地…';
   const benchTurf=s.error?null:own(createTargetBenchTurf({castle,surfaces:terrainMeshes||[castle.getObjectByName('citadel-oskar-grid-mountain-surface')].filter(Boolean),sampleSea:s.sea,exclusions:newPlaza?[{polygon:newPlaza.report.polygon,minY:2.2,maxY:3.5}]:[]}));if(benchTurf?.group)root.add(benchTurf.group);
   const oldPort=oldCity.report.exits.bridge,oldXZ=xzAt(oldPlatform,degrees(45),oldPort[0],oldPort[2]);
   const stackedWalking=cliffTransitRelease?.walkingConnection?.kind==='stacked-connected';
@@ -187,18 +264,35 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
   }
   const bridgeArrival=walkingConnection?[...walkingConnection.path.at(-1)]:[51,12,39]; // Actual side-entry dock, independent of the rail bridge.
   const dockTangent=walkingConnection?[bridgeArrival[0]-walkingConnection.path.at(-2)[0],bridgeArrival[2]-walkingConnection.path.at(-2)[2]]:[28,6];
-  const bridgeConnector=surveyedStairs?.report.selected?own(createTargetBridgeStairConnector({stairReport:surveyedStairs.report,dock:bridgeArrival,dockTangent,groundHeightAt:(x,z)=>s.terrain(x,z)?.height??null})):null;
-  if(bridgeConnector){root.add(bridgeConnector.group);surveyedStairs.setSideOpeningFootprints(bridgeConnector.sideOpeningFootprints);if(walkingConnection)walkingConnection.sideOpeningFootprints=bridgeConnector.sideOpeningFootprints;}
+  yield '正在连接步行桥…';
+  let bridgeConnector=null;
+  if(surveyedStairs?.report.selected){
+    const candidates=[];
+    for(const treadIndex of Array.from({length:21},(_,i)=>6+i*2).filter(i=>i<surveyedStairs.report.selected.treads.length)){
+      const connector=createTargetBridgeStairConnector({stairReport:surveyedStairs.report,dock:bridgeArrival,dockTangent,treadIndex,groundHeightAt:(x,z)=>s.terrain(x,z)?.height??null});
+      const radialSlopes=connector.report.walkSurfaces.flatMap(surface=>surface.triangles.map(triangle=>{
+        const points=triangle.map(p=>V(...p).applyMatrix4(castle.matrixWorld)),normal=new THREE.Triangle(...points).getNormal(V()),up=points.reduce((sum,p)=>sum.add(p),V()).normalize(),cos=Math.abs(normal.dot(up));return cos>1e-8?Math.sqrt(Math.max(0,1-cos*cos))/cos:Infinity;
+      }));connector.report.maximumRadialSlope=Math.max(...radialSlopes);
+      if(connector.report.support.validated&&Number.isFinite(connector.report.maximumRadialSlope))candidates.push(connector);else connector.dispose();
+    }
+    candidates.sort((a,b)=>(a.report.maximumRadialSlope+a.report.length*.003)-(b.report.maximumRadialSlope+b.report.length*.003));
+    if(candidates.length){bridgeConnector=own(candidates.shift());bridgeConnector.report.selection={method:'actual supported connector radial triangle slope then length; fixed bridge dock',tried:21,selectedTread:bridgeConnector.report.treadIndex};}
+    for(const candidate of candidates)candidate.dispose();
+  }
+  if(bridgeConnector){stepBridgeConnector(bridgeConnector,castle.matrixWorld);root.add(bridgeConnector.group);surveyedStairs.setSideOpeningFootprints(bridgeConnector.sideOpeningFootprints);if(walkingConnection)walkingConnection.sideOpeningFootprints=bridgeConnector.sideOpeningFootprints;}
   const bridge=cliffTransitRelease?null:own(createTargetCityBayBridge({sideOpeningFootprints:bridgeConnector?.sideOpeningFootprints||[],maxSpan:36,pierWidth:1.8,path:[[oldXZ[0],oldPlatform[1]+oldPort[1],oldXZ[1]],[-10,16,24],[23,14.8,33],bridgeArrival],groundHeightAt:s.error?null:(x,z)=>s.terrain(x,z)?.height??null,oceanHeightAt:s.error?null:(x,z)=>s.sea(x,z)?.height??null}));if(bridge)root.add(bridge.group);
+  yield '正在校验瀑布出水位置…';
   const previousWaterfallSurvey=s.error?null:survey(s,width,oldPlatform);
   const surveyReport = s.error ? {selected: null, examined: 0, failures: {[s.error]: 1}} : cliffTransitRelease?survey(s,width,oldPlatform,cliffTransitRelease,castle.matrixWorld):previousWaterfallSurvey;
   const placement = surveyReport.selected, supportGeometry = [], supportMaterials = [];
   own({dispose(){supportGeometry.forEach(g=>g.dispose());supportMaterials.forEach(m=>m.dispose());}});
+  yield '正在布置城前流云…';
   const cloudSources=terrainMeshes||[castle.getObjectByName('citadel-oskar-grid-mountain-surface')].filter(Boolean);
-  root.updateMatrixWorld(true);const cloudBuildings=root.children.filter(o=>o!==benchTurf?.group).map(o=>new THREE.Box3().setFromObject(o).applyMatrix4(castle.matrixWorld));
+  root.updateMatrixWorld(true);const cloudBuildings=[],cloudLocalBuildings=[];
+  for(const child of root.children){if(child===benchTurf?.group)continue;child.traverseVisible(o=>{if(!o.isMesh||o.userData.skipColliders||o.userData.isOutline||/cloud|mist|water|foam|turf|grass|foliage/.test(o.name))return;o.geometry.computeBoundingBox();const world=castle.matrixWorld.clone().multiply(o.matrixWorld);if(o.isInstancedMesh){const instance=new THREE.Matrix4();for(let i=0;i<o.count;i++){o.getMatrixAt(i,instance);if(Math.abs(instance.determinant())>1e-12){cloudBuildings.push(o.geometry.boundingBox.clone().applyMatrix4(world.clone().multiply(instance)));cloudLocalBuildings.push(o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld.clone().multiply(instance)));}}}else{cloudBuildings.push(o.geometry.boundingBox.clone().applyMatrix4(world));cloudLocalBuildings.push(o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld));}});}
   if(cloudRailCurves&&Object.values(cloudRailCurves).some(c=>typeof c?.getSpacedPoints!=='function'))throw new TypeError('actual cloud rail curves required');
   const cloudRail=cloudRailCurves?Object.values(cloudRailCurves).flatMap(c=>c.getSpacedPoints(Math.ceil(c.getLength()))):[];
-  let detailClouds=s.error?null:own(createMountainCloudBanksCandidate(castle,{enabled:true,surfaceIndex:buildMountainSurfaceIndex(cloudSources),radius:160,waterHeight:officialOceanLevelAt,sampleSea:s.sea,clusteredComposition:true,maxBanks:9,protectedBoxes:cloudBuildings,rail:cloudRail}));
+  let detailClouds=s.error?null:own(createMountainCloudBanksCandidate(castle,{enabled:true,surfaceIndex:buildMountainSurfaceIndex(cloudSources),radius:160,waterHeight:officialOceanLevelAt,sampleSea:s.sea,circulating:true,maxBanks:6,protectedBoxes:cloudBuildings,protectedLocalBoxes:cloudLocalBuildings,rail:cloudRail}));
   if(detailClouds)detailClouds.report.actualRailSampleCount=cloudRail.length;
   if(detailClouds?.group){detailClouds.group.name='target-detail-mountain-cloud-banks';root.add(detailClouds.group);}
   const replacedCloudRoots=[castle.getObjectByName('citadel-mountain-cloud-banks-candidate'),castle.getObjectByName('citadel-ridge-flow-clouds')].filter(Boolean);
@@ -216,7 +310,7 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
     newPlaza:newPlaza?.report||null,frontRail:frontRail?.report||null,
     oldCity: {position:oldPlatform,yawDegrees:45,geometry:oldCity.report},
     newCityStairs: {authored:stairs.report,authoredTreadsVisible:false,surveyed:surveyedStairs?.report||null},
-    newCity: {position: [74, 12, 33], yawDegrees: -55, geometry: main.report, supportSamples: []},
+    newCity: {position: [74, 12, 33], yawDegrees: -55, placementMatrix:newCityMatrix.toArray(),radialPlacement:newCityPlacement.report, geometry: main.report, supportSamples: []},
     waterfall: {built: false, survey: surveyReport, reason: placement ? null : 'no-sampled-dry-shore-to-open-sea-spillway'},
     validation: {visualAccepted: false, independentScore: null, navigationVerified: false, collisionVerified: false, continuousSupportVerified: false, gpuCompiled: false},
     limitations: ['Read-only triangle samples do not establish a continuous collision-free passage.', 'The rebuilt stair route and connected old-city supply channel have finite surface samples; production navigation remains uninstalled.', 'Original city buildings, sculpture and horse are retained; the review harness controls comparison visibility.'],
@@ -224,8 +318,8 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
   if (!s.error) for (const footprint of main.report.footprints.filter(f => f.floorY === 0)) {
     const points = [...footprint.polygon, footprint.polygon.reduce((a,p)=>[a[0]+p[0]/footprint.polygon.length,a[1]+p[1]/footprint.polygon.length],[0,0])];
     for (const [x, z] of points) {
-      const q = xzAt([74, 12, 33], degrees(-55), x, z), sample = s.terrain(...q);
-      report.newCity.supportSamples.push({part: footprint.id, corner: [q[0], 12, q[1]], surface: sample, gap: sample ? 12 - sample.height : null});
+      const q = newCityPlacement.transform([x,0,z]), sample = s.terrainInFrame(newCityMatrix,x,z);
+      report.newCity.supportSamples.push({part: footprint.id, corner: q, surface: sample, gap: sample ? -sample.height : null});
     }
   }
   const newCityGaps = report.newCity.supportSamples.filter(v => v.gap !== null).map(v => v.gap);
@@ -239,15 +333,15 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
   const footingMaterial=new THREE.MeshStandardMaterial({color:newCityPalette.stone||'#efdcaf',roughness:.96});supportMaterials.push(footingMaterial);
   report.baseFootings=[];
   if(!s.error)for(const [label,asset,position,yaw] of [['new',main,[74,12,33],degrees(-55)],['old',oldCity,oldPlatform,degrees(45)]]){
-    const local=new THREE.Group();local.position.fromArray(position);local.rotation.y=yaw;bases.add(local);
+    const local=new THREE.Group();const placement=label==='new'?newCityMatrix:new THREE.Matrix4().makeRotationY(yaw).setPosition(...position);placement.decompose(local.position,local.quaternion,local.scale);bases.add(local);
     for(const fp of asset.report.footprints.filter(f=>f.floorY===0)){
-      const xs=fp.polygon.map(p=>p[0]),zs=fp.polygon.map(p=>p[1]),rows=fp.polygon.map(p=>s.terrain(...xzAt(position,yaw,...p)));
+      const xs=fp.polygon.map(p=>p[0]),zs=fp.polygon.map(p=>p[1]),rows=fp.polygon.map(p=>s.terrainInFrame(placement,...p));
       if(rows.some(r=>!r)){report.baseFootings.push({id:label+':'+fp.id,status:'missing-surface'});continue;}
-      const bottom=Math.min(...rows.map(r=>r.height))-position[1]-.06,top=0;
+      const bottom=Math.min(...rows.map(r=>r.height))-.06,top=0;
       if(bottom>=top)continue;
       const g=new THREE.BoxGeometry(Math.max(...xs)-Math.min(...xs),top-bottom,Math.max(...zs)-Math.min(...zs));supportGeometry.push(g);
       const mesh=new THREE.Mesh(g,footingMaterial);mesh.name='target-footing-'+label+'-'+fp.id;mesh.position.set((Math.max(...xs)+Math.min(...xs))/2,(top+bottom)/2,(Math.max(...zs)+Math.min(...zs))/2);mesh.castShadow=true;mesh.receiveShadow=true;local.add(mesh);
-      report.baseFootings.push({id:label+':'+fp.id,bottomY:position[1]+bottom,topY:position[1],sampled:true,continuousProof:false});
+      report.baseFootings.push({id:label+':'+fp.id,localBottom:bottom,localTop:top,placementMatrix:placement.toArray(),bottomY:new THREE.Vector3(0,bottom,0).applyMatrix4(placement).y,topY:position[1],sampled:true,continuousProof:false});
     }
   }
   if (placement) {
@@ -310,6 +404,7 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
       abutment: {newOwnedGeometry: true, parts: feet, connectionToOldCity: waterSupply?.report.status || 'supply-channel-candidate', expectedPiers: 9, builtPiers: feet.length, missingPiers: 9-feet.length},
       surfaceSamplingPassed: missingEndpointSamples === 0 && endpointResidual < 1e-4};
   }
+  yield '正在建造沿崖通道…';
   if(cliffTransitRelease){
     if(s.error)throw new Error('Cliff transit requires actual final terrain and rendered ocean: '+s.error);
     root.updateMatrixWorld(true);
@@ -322,19 +417,22 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
     if(!placement){report.cliffTransit.issues.push({type:'no-valid-waterfall-rail-joint-placement'});report.cliffTransit.finitePass=false;report.cliffTransit.status='built-candidate-rejected-or-unresolved';}
     if(waterfallReach&&!waterfallReach.options){report.cliffTransit.issues.push({type:'waterfall-rail-reach-rejected',reasons:waterfallReach.report.reasons});report.cliffTransit.finitePass=false;report.cliffTransit.status='built-candidate-rejected-or-unresolved';}
   }
+  yield '正在连接街区入口…';
   // Complete the house links only after surveyed public surfaces exist.
   if(newCityStreetInfill){
     const publicSurfaces=[
-      ...(report.newCityStairs.surveyed?.selected?.treads||[]).map(t=>({id:'surveyed-tread',polygon:t.polygon})),
+      ...(report.newCityStairs.surveyed?.selected?.treads||[]).map(t=>({id:'surveyed-tread',polygon:t.polygon,top:t.top})),
       ...(report.bridgeConnector?.walkSurfaces||[]),
       ...Object.values(report.cliffTransit?.galleries||{}).flatMap(g=>g.walkSurfaces||[]),
-      ...(report.cliffTransit?.connections||[]).flatMap(l=>(l.walkSurfaces||[]).map(s=>({id:l.id,polygon:s.corners.map(p=>[p[0],p[2]])}))),
+      ...(report.cliffTransit?.connections||[]).flatMap(l=>(l.walkSurfaces||[]).map(s=>({id:l.id,polygon:s.corners.map(p=>[p[0],p[2]]),corners:s.corners,top:s.top}))),
       ...(report.cliffTransit?.newCityTransitLinks?.links||[]).flatMap(l=>l.walkSurfaces||[])
     ];
-    const yaw=stairs.group.rotation.y,cs=Math.cos(yaw),sn=Math.sin(yaw);
-    const publicFootprints=publicSurfaces.filter(p=>p.polygon).map(p=>({id:p.id,polygon:p.polygon.map(([x,z])=>{const dx=x-stairs.group.position.x,dz=z-stairs.group.position.z;return[dx*cs-dz*sn,dx*sn+dz*cs];})}));
-    stairs.completeStreetInfill({publicFootprints});
-    if(newCitySecondaryClusters)stairs.completeSecondaryStreetClusters({enabled:true,publicFootprints,protectedFootprints:main.report.footprints});
+    const publicFootprints=publicSurfaces.filter(p=>p.polygon).map(p=>({id:p.id,polygon:p.polygon.map(([x,z])=>{const vertex=(p.vertices??p.corners??[]).find(v=>Math.hypot(v[0]-x,v[2]-z)<1e-5),y=vertex?.[1]??p.top??p.height??s.terrain(x,z)?.height??0;const q=V(x,y,z).applyMatrix4(newCityPlacement.inverse);return[q.x,q.z];})}));
+    const publicCollisionGroups=[surveyedStairs?.group,bridgeConnector?.group,cliffTransit?.group].filter(Boolean);
+    root.updateMatrixWorld(true);
+    const primary=stairs.completeStreetInfill({publicFootprints,protectedFootprints:main.report.footprints,publicCollisionGroups});
+    report.newCityStreetCompletion={completed:true,modules:primary.modules.length,visualDensityTargetMet:primary.finitePass,validSupport:primary.supportSamples.every(p=>Number.isFinite(p.height)&&p.gap===0&&p.buriedBody===0),rejected:primary.rejected};
+    if(newCitySecondaryClusters)stairs.completeSecondaryStreetClusters({enabled:true,publicFootprints,protectedFootprints:main.report.footprints,publicCollisionGroups});
   }
   let disposed = false, forestClearance = null, roofSession = null, playerSupport=null, terraceLinks=null, forestCompanions=null, waterfrontStairs=null;
   function completeTerraceLinks(){if(!terraceLinks&&!s.error){terraceLinks=createTargetNewCityTerraceLinks({castle,candidateRoot:root,sampleTerrain:s.terrain});root.add(terraceLinks.group);report.terraceLinks=terraceLinks.report;playerSupport?.refresh();}return terraceLinks;}
@@ -346,17 +444,37 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
     if(waterfrontStairs.report.built)root.add(waterfrontStairs.group);
     report.waterfrontStairs=waterfrontStairs.report;report.waterfrontStairs.actualStaticShips=shipWorldBoxes;playerSupport?.refresh();return waterfrontStairs;
   }
+  // Called after attachment and public geometry completion, before forest and
+  // navigation snapshots. Each replacement roof asset samples the current mesh.
+  function completeOldWingStreets(){
+    if(!oldCityWingStreets)return null;
+    if(disposed||root.parent!==castle||s.error)throw new Error('old wing streets require attached city and actual final terrain');
+    if(oldCity.report.wingStreets.enabled)return oldCity.report.wingStreets;
+    castle.updateWorldMatrix(true,true);
+    const yaw=oldCity.group.rotation.y,cs=Math.cos(yaw),sn=Math.sin(yaw);
+    const publicSurfaces=[
+      ...(report.bridge?.walkSurfaces||[]),
+      ...Object.values(report.cliffTransit?.galleries||{}).flatMap(g=>g.walkSurfaces||[]),
+      ...(report.cliffTransit?.connections||[]).flatMap(l=>(l.walkSurfaces||[]).map(v=>({id:l.id,polygon:v.polygon||v.corners?.map(p=>[p[0],p[2]])})))
+    ];
+    const protectedFootprints=publicSurfaces.filter(v=>v.polygon?.length>=3).map(v=>({id:v.id||'actual-public-surface',polygon:v.polygon.map(([x,z])=>{const dx=x-oldPlatform[0],dz=z-oldPlatform[2];return[dx*cs-dz*sn,dx*sn+dz*cs];})}));
+    const collisionGroups=[main.group,stairs.group,surveyedStairs?.group,bridge?.group,cliffTransit?.group,bridgeConnector?.group,waterSupply?.group,support,frontRail?.group,mainApproach?.group,newPlaza?.group,terraceLinks?.group,waterfrontStairs?.group,waterfall?.group.getObjectByName('target-waterfall-stone-three-arch-outlets'),...oldCityWingCollisionGroups].filter(Boolean);
+    const wings=oldCity.completeWingStreets({enabled:true,sampleSurface:(x,z)=>{const hit=s.terrain(...xzAt(oldPlatform,yaw,x,z));return hit?hit.height-oldPlatform[1]:null;},collisionGroups,protectedFootprints});
+    report.oldCity.geometry=oldCity.report;
+    playerSupport?.refresh();
+    return wings;
+  }
   function getPlayerSupport(){if(!playerSupport)playerSupport=createTargetCityPlayerSupport({castle,candidateRoot:root,finalTerrain:terrainMeshes||[castle.getObjectByName('citadel-oskar-grid-mountain-surface')].filter(Boolean)});return playerSupport;}
   function clearForest(){if(!forestClearance){forestClearance=applyTargetCityForestClearance({castle,candidateRoot:root});report.forestClearance=forestClearance.report;}if(!forestCompanions&&!s.error){forestCompanions=createTargetForestCompanions({castle,candidateRoot:root,sampleTerrain:s.terrain,sampleSea:s.sea});root.add(forestCompanions.group);report.forestCompanions=forestCompanions.report;}return forestClearance;}
   function openRoofSession(editorOptions){
     if(roofSession)return roofSession;
-    const createAsset=({roofRoles})=>{const next=own(createTargetOldCity({seed,roofRoles,palette:oldPalette}));next.group.position.fromArray(oldPlatform);next.group.rotation.y=degrees(45);return next;};
+    const createAsset=({roofRoles})=>{const next=own(createTargetOldCity({seed,roofRoles,palette:oldPalette,wingStreets:oldCityWingStreets}));next.group.position.fromArray(oldPlatform);next.group.rotation.y=degrees(45);return next;};
     const commitAsset=(next,previous)=>{
       if(previous!==oldCity||previous.group.parent!==root)throw new Error('stale old city roof transaction');
       const previousReport=report.oldCity.geometry;
       forestCompanions?.dispose();forestCompanions=null;forestClearance?.dispose();forestClearance=null;
       previous.group.removeFromParent();root.add(next.group);oldCity=next;report.oldCity.geometry=next.report;
-      try{clearForest();playerSupport?.refresh();return{ok:true};}
+      try{completeOldWingStreets();clearForest();playerSupport?.refresh();return{ok:true};}
       catch(error){forestCompanions?.dispose();forestCompanions=null;forestClearance?.dispose();forestClearance=null;next.group.removeFromParent();root.add(previous.group);oldCity=previous;report.oldCity.geometry=previousReport;clearForest();playerSupport?.refresh();throw error;}
     };
     roofSession=createTargetOldCityRoofSession({initialAsset:oldCity,createAsset,editorOptions,commitAsset});
@@ -371,25 +489,25 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
   const cloudBindings=new Set();
   // New terrain sampling and animation ownership must move together. Only an
   // explicit terrain transaction calls this; ordinary construction is unchanged.
-  function prepareCloudRefresh({surfaceIndex,rail,protectedBoxes=[]}={}){
+  function prepareCloudRefresh({surfaceIndex,rail,protectedBoxes=[],actors=[]}={}){
     if(disposed||!detailClouds||detailClouds.group.parent!==root)throw new Error('attached live cloud owner required');
     if(!surfaceIndex?.sample||!Array.isArray(rail)||rail.length<2||rail.some(p=>!p?.isVector3)||!Array.isArray(protectedBoxes))throw new TypeError('fresh final index and actual rail samples required');
     castle.updateWorldMatrix(true,true);
     const previous=detailClouds,previousReport=report.clouds,childIndex=root.children.indexOf(previous.group);
     // A whole-city/whole-gallery world AABB encloses empty rear sky on the
     // curved planet. Reserve actual solid mesh bounds, not the group's void.
-    const boxes=[];
-    for(const child of root.children){
+    const boxes=[],localBoxes=[],castleInverse=castle.matrixWorld.clone().invert();
+    for(const child of [...root.children,...actors]){
       if(child===previous.group||child===benchTurf?.group)continue;
       child.traverseVisible(o=>{
         if(!o.isMesh||o.userData.skipColliders||o.userData.isOutline||/cloud|mist|water|foam|turf|grass|foliage/.test(o.name))return;
         if(o.isInstancedMesh){
           o.geometry.computeBoundingBox();const instance=new THREE.Matrix4();
-          for(let i=0;i<o.count;i++){o.getMatrixAt(i,instance);if(Math.abs(instance.determinant())<1e-12)continue;boxes.push(o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld.clone().multiply(instance)));}
-        }else boxes.push(new THREE.Box3().setFromObject(o));
+          for(let i=0;i<o.count;i++){o.getMatrixAt(i,instance);if(Math.abs(instance.determinant())<1e-12)continue;boxes.push(o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld.clone().multiply(instance)));localBoxes.push(o.geometry.boundingBox.clone().applyMatrix4(castleInverse.clone().multiply(o.matrixWorld).multiply(instance)));}
+        }else{boxes.push(new THREE.Box3().setFromObject(o));o.geometry.computeBoundingBox();localBoxes.push(o.geometry.boundingBox.clone().applyMatrix4(castleInverse.clone().multiply(o.matrixWorld)));}
       });
     }
-    const next=createMountainCloudBanksCandidate(castle,{enabled:true,surfaceIndex,radius:160,waterHeight:officialOceanLevelAt,sampleSea:s.sea,clusteredComposition:true,maxBanks:9,rail,protectedBoxes:[...boxes,...protectedBoxes]});
+    const next=createMountainCloudBanksCandidate(castle,{enabled:true,surfaceIndex,radius:160,waterHeight:officialOceanLevelAt,sampleSea:s.sea,circulating:true,maxBanks:6,rail,protectedBoxes:[...boxes,...protectedBoxes],protectedLocalBoxes:[...localBoxes,...protectedBoxes.map(b=>b.clone().applyMatrix4(castleInverse))]});
     if(!next.group||next.report.banks.length===0){next.dispose();throw Object.assign(new Error('refreshed cloud field has no valid banks'),{cloudReport:next.report});}
     next.group.name=previous.group.name;next.group.visible=previous.group.visible;
     const mask=previous.group.children.find(o=>o.isMesh)?.layers.mask??previous.group.layers.mask;
@@ -413,24 +531,36 @@ function constructTargetCityDetailCandidate({castle, sceneRoot, terrainMeshes, o
     };
     cloudBindings.add(binding);return binding;
   }
+  let initialCloudClearance=null;
+  function completeCloudClearance({actors=[]}={}){
+    if(initialCloudClearance)return initialCloudClearance.report;
+    if(root.parent!==castle||actors.some(o=>!o?.isObject3D))throw new Error('final cloud clearance requires attached city and actual actors');
+    initialCloudClearance=prepareCloudRefresh({surfaceIndex:buildMountainSurfaceIndex(cloudSources),rail:cloudRail,actors});initialCloudClearance.commit();
+    report.clouds.finalSceneClearance={completed:true,actors:actors.map(o=>o.name),phase:'after real landmark migration and street completion'};return report.clouds;
+  }
   function update(seconds = 0) {
     if (disposed || !Number.isFinite(seconds)) return;
     waterfall?.update(seconds);detailClouds?.update(seconds);
 
   }
   update(0); root.updateMatrixWorld(true);
+
   const bounds = new THREE.Box3().setFromObject(root); report.bounds = {min: bounds.min.toArray(), max: bounds.max.toArray()};
   root.userData.detailCandidateReport = report;
   function dispose() {
-    if (disposed) return; for(const binding of [...cloudBindings].reverse())binding.rollback(); disposed = true; playerSupport?.dispose();waterfrontStairs?.dispose();terraceLinks?.dispose();forestCompanions?.dispose();forestClearance?.dispose(); frontRail?.dispose(); benchTurf?.dispose(); root.removeFromParent(); bayWater?.dispose(); canopyAppearance.dispose(); rockAppearance.dispose(); sunShadow?.dispose(); newPlaza?.dispose(); detailClouds?.dispose(); mainApproach?.dispose();main.dispose(); if(roofSession)roofSession.close();else oldCity.dispose(); bridge?.dispose(); cliffTransit?.dispose(); bridgeConnector?.dispose(); stairs.dispose(); surveyedStairs?.dispose(); waterfall?.dispose(); waterSupply?.dispose();
+    if (disposed) return; for(const binding of [...cloudBindings].reverse())binding.rollback(); disposed = true; playerSupport?.dispose();waterfrontStairs?.dispose();terraceLinks?.dispose();forestCompanions?.dispose();forestClearance?.dispose(); frontRail?.dispose(); benchTurf?.dispose(); root.removeFromParent(); bayWater?.dispose(); canopyAppearance.dispose(); rockAppearance.dispose(); sunShadow?.dispose(); newPlaza?.dispose(); detailClouds?.dispose(); mainApproach?.dispose();transitionOwner.dispose();main.dispose(); if(roofSession)roofSession.close();else oldCity.dispose(); bridge?.dispose(); cliffTransit?.dispose(); bridgeConnector?.dispose(); stairs.dispose(); surveyedStairs?.dispose(); waterfall?.dispose(); waterSupply?.dispose();
     supportGeometry.forEach(g => g.dispose()); supportMaterials.forEach(m => m.dispose()); root.clear();
   }
-  return {root, group: root, report, update, dispose, clearForest, openRoofSession, getPlayerSupport, prepareCloudRefresh, prepareSurfaceSamplingRefresh, getSurfaceSamplers, completeTerraceLinks, completeWaterfrontStairs, replacedCloudRoots};
+  return {bindWaterContacts:()=>bayWater?.bindContactMeshes([root]),root, group: root, report, update, dispose, clearForest, openRoofSession, getPlayerSupport, completeCloudClearance, prepareCloudRefresh, prepareSurfaceSamplingRefresh, getSurfaceSamplers, completeTerraceLinks, completeWaterfrontStairs, completeOldWingStreets, replacedCloudRoots};
 }
 
 export function createTargetCityDetailCandidate(options={}) {
+ return finishStartupSteps(createTargetCityDetailCandidateSteps(options));
+}
+
+export function* createTargetCityDetailCandidateSteps(options={}) {
  const owned=[];
- try {return constructTargetCityDetailCandidate({...options,onOwned(handle){owned.push(handle);options.onOwned?.(handle);}});}
+ try {return yield* constructTargetCityDetailCandidateSteps({...options,onOwned(handle){owned.push(handle);options.onOwned?.(handle);}});}
  catch(error){for(const handle of owned.reverse())try{handle.dispose?.();}catch{} throw error;}
 }
 
@@ -438,7 +568,7 @@ export function applyTargetCityDetailCandidate(castle, options = {}) {
   const previous = castle?.getObjectByName(NAME)?.userData.candidateHandle;
   if (previous) return previous;
   const candidate = createTargetCityDetailCandidate({...options, castle});
-  try {castle.add(candidate.root); candidate.completeTerraceLinks();candidate.completeWaterfrontStairs();candidate.clearForest(); candidate.root.userData.candidateHandle = candidate;}
+  try {castle.add(candidate.root); candidate.bindWaterContacts?.();candidate.completeTerraceLinks();candidate.completeWaterfrontStairs();candidate.completeOldWingStreets();candidate.clearForest(); candidate.root.userData.candidateHandle = candidate;}
   catch(error){candidate.dispose();throw error;}
   candidate.report.status = 'unaccepted-attached-detail-candidate';
   return candidate;

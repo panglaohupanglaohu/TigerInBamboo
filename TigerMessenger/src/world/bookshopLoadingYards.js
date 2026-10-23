@@ -1,6 +1,6 @@
 import {createBookshopSteamClouds} from './bookshopSteamClouds.js';
 import * as THREE from 'three';
-import {bookshopTownPose,seatTownObject,townSurfacePoint} from './bookshopTownSite.js';
+import {bookshopTownPose,seatTownObject,townSurfacePoint,townRailPoint,BOOKSHOP_RAISE,bookshopRailRaiseAtWorld} from './bookshopTownSite.js';
 import {factoryKit} from '../assets/factoryArchitecture.js';
 import {warpFactoryToSphere,subdivideFactorySpans} from './bookshopSurfaceWarp.js';
 import {mergeStaticGroup} from './geometryMerge.js';
@@ -11,7 +11,7 @@ export function factoryFreightStops(R=160){
  return [-2.15,Math.PI,2.15].map((a,i)=>{
   const d=new THREE.Group();base.add(d);const x=Math.sin(a)*48,z=32+Math.cos(a)*48;
   seatTownObject(base,d,x,z,Math.atan2(-x,32-z),R);d.updateWorldMatrix(true,false);
-  const point=(x,z)=>d.localToWorld(townSurfacePoint(d,x,z,R,1.12));
+  const point=(x,z)=>d.localToWorld(townRailPoint(d,x,z,R,1.12));
   return {name:['locust','ant','beetle'][i],points:[point(-24,-44),point(-12,-44),point(0,-44),point(12,-44),point(24,-44)],center:point(0,-44)};
  });
 }
@@ -35,7 +35,7 @@ export function buildFactoryLoadingYards({districts,R,platforms}){
    for(let k=0;k<8;k++)box(.30,.08,.22,x-1.6+k*.44,.7,end+.1,k%2?M.iron:M.brass);
    // Broad stair back into the workshop service yard.
    for(let k=0;k<3;k++)box(2.8,.22*(3-k),.48,x,.11*(3-k),start+.24+k*.48,M.stone);
-   for(let z=end+.7;z<start;z+=1.4){const center=d.localToWorld(townSurfacePoint(d,x,z,R,1.57));const q=d.getWorldQuaternion(new THREE.Quaternion());platforms.push({mesh:yard,center,normal:center.clone().normalize(),right:new THREE.Vector3(1,0,0).applyQuaternion(q),forward:new THREE.Vector3(0,0,1).applyQuaternion(q),half:new THREE.Vector3(2.5,.2,.8),topHeight:R+1.57,kind:'factory-loading-platform'});}
+   for(let z=end+.7;z<start;z+=1.4){const center=d.localToWorld(townSurfacePoint(d,x,z,R,1.57));const q=d.getWorldQuaternion(new THREE.Quaternion());platforms.push({mesh:yard,center,normal:center.clone().normalize(),right:new THREE.Vector3(1,0,0).applyQuaternion(q),forward:new THREE.Vector3(0,0,1).applyQuaternion(q),half:new THREE.Vector3(2.5,.2,.8),topHeight:R+1.57+BOOKSHOP_RAISE,kind:'factory-loading-platform'});}
   }
   // Longitudinal runways cover all nine full-size robot flatcars.
   for(const x of[-38,38])for(const z of[-31,-53]){box(1.3,1.2,1.3,x,-.35,z,M.stone);box(.7,.24,.7,x,.34,z,M.trim);box(.35,15,.35,x,7.5,z,M.iron);for(let y=.4;y<14;y+=2)beam([x-.5,y,z],[x+.5,y+2,z],.07,M.brass);}
@@ -48,9 +48,9 @@ export function factoryFreightEntry(R=160){
  const pose=bookshopTownPose(R),root=new THREE.Group();root.position.copy(pose.position);root.quaternion.copy(pose.quaternion);root.updateWorldMatrix(true,false);
  const controls=[[30,65.7],[16,65.7],[6,65.7]];
  for(let i=0;i<=48;i++){const a=-i*Math.PI*2/48;controls.push([Math.sin(a)*33.7,32+Math.cos(a)*33.7]);}
- const points=controls.map(([x,z])=>root.localToWorld(townSurfacePoint(root,x,z,R,1.12)));
+ const points=controls.map(([x,z])=>root.localToWorld(townRailPoint(root,x,z,R,1.12)));
  const first=factoryFreightStops(R)[0].points,finish=first[0],tangent=first[1].clone().sub(finish).normalize();
- const start=points[points.length-1],handle=root.localToWorld(townSurfacePoint(root,-92,65.7,R,1.12));
+ const start=points[points.length-1],handle=root.localToWorld(townRailPoint(root,-92,65.7,R,1.12));
  const connector=new THREE.CubicBezierCurve3(start,handle,finish.clone().addScaledVector(tangent,-42),finish);
  for(let i=1;i<20;i++)points.push(connector.getPoint(i/20).setLength(R+1.12));
  return points;
@@ -59,10 +59,10 @@ export function installFactorySteam(districts,R){return createBookshopSteamCloud
 
 export function freightTrainingDepot(R=160){
  const pose=bookshopTownPose(R),root=new THREE.Group();root.position.copy(pose.position);root.quaternion.copy(pose.quaternion);root.updateWorldMatrix(true,false);
- return {name:'frontline',center:root.localToWorld(townSurfacePoint(root,35,-51,R,1.12))};
+ return {name:'frontline',center:root.localToWorld(townRailPoint(root,35,-51,R,1.12))};
 }
 
 export function factoryFreightExit(R=160){
  const pose=bookshopTownPose(R),root=new THREE.Group();root.position.copy(pose.position);root.quaternion.copy(pose.quaternion);root.updateWorldMatrix(true,false);
- return [[98,24],[100,55],[83,85],[57,102]].map(([x,z])=>root.localToWorld(townSurfacePoint(root,x,z,R,1.12)));
+ return [[98,24],[100,55],[83,85],[57,102]].map(([x,z])=>root.localToWorld(townRailPoint(root,x,z,R,1.12)));
 }

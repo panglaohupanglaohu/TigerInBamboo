@@ -65,7 +65,7 @@ export function loadMoebiusDistrict({ scene, R, tramSystem }) {
 
   const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
   const flock = new FlockManager(scene, {
-    count: 18,
+    count: 5, // quarter of former 18, rounded to a whole bird; Sighs Gate
     planetRadius: R,
     centerDir: canyonDir,
     windDir: new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), canyonDir).normalize(),

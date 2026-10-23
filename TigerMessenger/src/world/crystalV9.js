@@ -33,7 +33,30 @@ export function installCrystalV9Towers(city){
   record.h=69*s;root.userData.v9Round=round;root.userData.v9Root=g;
  }
 }
-export function finishCrystalV9Scene({scene,city,swamp,gate}){if(crystalV9Round()>=5)installCliffs(city,gate);finishCrystalV10Scene({scene,city,swamp,gate}); }
+// 2026-10-10 用户：旧版莫比斯城留下的浅蓝玻璃尖锥（moebius-crystal-instances，绿丘小岛上的三棱/四棱尖塔）
+// 换成新水晶塔的造型：每根旧尖锥原地换成一簇 v9 六棱水晶（同一套配色、墨线），高度与原尖锥相当略高。
+// 旧实例与它的外壳描线一并隐藏。?legacySpires=1 保留旧尖锥。
+export function replaceLegacyCrystalSpires(scene){
+ const report={replaced:0,meshes:0};
+ if(new URLSearchParams(globalThis.location?.search||'').get('legacySpires')==='1'||!scene)return report;
+ const found=[];scene.traverse(o=>{if(o.isInstancedMesh&&o.name==='moebius-crystal-instances'&&!o.userData.v9Replaced)found.push(o);});
+ const m=new THREE.Matrix4(),p=new THREE.Vector3(),q=new THREE.Quaternion(),sc=new THREE.Vector3();
+ for(const inst of found){
+  const parent=inst.parent;if(!parent)continue;
+  for(let i=0;i<inst.count;i++){
+   inst.getMatrixAt(i,m);m.premultiply(inst.matrix);m.decompose(p,q,sc);
+   const k=sc.y/69*1.3,g=new THREE.Group();g.name='v9-legacy-spire-replacement';
+   g.position.copy(p);g.quaternion.copy(q);g.scale.setScalar(k);
+   for(const [x,z,r,h,c]of [[0,0,3.2,69,0],[-5,1,2.0,53,2],[4,2,2.2,59,0],[2,-4,1.4,43,3],[-2,-4,1.15,38,4]])prism(r,h,colors[(c+i)%colors.length],g,x,z);
+   parent.add(g);report.replaced++;
+  }
+  inst.visible=false;inst.userData.v9Replaced=true;report.meshes++;
+  // its thin outline shell is the sibling instanced mesh sharing the same geometry
+  for(const o of parent.children)if(o!==inst&&o.isInstancedMesh&&o.geometry===inst.geometry)o.visible=false;
+ }
+ return report;
+}
+export function finishCrystalV9Scene({scene,city,swamp,gate}){if(crystalV9Round()>=5)installCliffs(city,gate);if(crystalV9Round()>=5)scene.userData.v9LegacySpires=replaceLegacyCrystalSpires(scene);finishCrystalV10Scene({scene,city,swamp,gate}); }
 function rod(parent,a,b,r,color,name='v9-organic-stem'){
  const delta=b.clone().sub(a),m=outlined(new THREE.CylinderGeometry(r*.75,r,delta.length(),6),matte(color),name,parent);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.normalize());return m;
 }
@@ -45,7 +68,15 @@ function flower(parent,x,y,z,r){
  }
  for(let k=0;k<rings;k++)for(let j=0;j<segments;j++){const a=k*(segments+1)+j,b=a+segments+1;idx.push(a,b,a+1,a+1,b,b+1);}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(vs,3));g.setIndex(idx);g.computeVertexNormals();
- const petals=[0xe77783,0xeb9aab,0xd26482,0xf1b0ad].map(matte);g.clearGroups();for(let i=0;i<idx.length;i+=6)g.addGroup(i,6,Math.floor((i/6)%segments/6)%4);
+ const petals=[0xe77783,0xeb9aab,0xd26482,0xf1b0ad].map(matte);
+ // Stable material partition: retain every original triangle and its winding,
+ // but submit the four opaque colours once each, rather than every quad.
+ // Normals were computed above using the original accumulation order.
+ const byMaterial=petals.map(()=>[]);
+ for(let i=0;i<idx.length;i+=6)byMaterial[Math.floor((i/6)%segments/6)%4].push(...idx.slice(i,i+6));
+ const grouped=[];g.clearGroups();
+ byMaterial.forEach((indices,materialIndex)=>{const start=grouped.length;grouped.push(...indices);if(indices.length)g.addGroup(start,indices.length,materialIndex);});
+ g.setIndex(grouped);
  const m=new THREE.Mesh(g,petals);m.name='v9-coral-flower-canopy';parent.add(m);
  for(let j=0;j<8;j++){
   const a=j*Math.PI/4,pts=[];for(let k=0;k<=rings;k++){const t=k/rings,rr=r*t*1.07;pts.push(new THREE.Vector3(x+Math.cos(a)*rr,y+r*(.10+.32*t*t-.06*t)+.02,z+Math.sin(a)*rr*.82));}

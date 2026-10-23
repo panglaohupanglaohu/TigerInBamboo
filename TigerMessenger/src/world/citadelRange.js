@@ -35,7 +35,7 @@ import {
 // 再导出，供编辑器等沿用 citadelRange 路径
 export { CITADEL_CASCADE_POOL_SPECS, CITADEL_CASCADE_MARKER };
 import { createSnowMassif } from "../assets/snowMassif.js";
-import { createColossalVernacularTree } from "../assets/ancient.js";
+import { createHarborBroadleafTree } from "../assets/harborBroadleafTree.js";
 import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
 import { createTieSoldier } from "../assets/harbor.js";
@@ -372,7 +372,7 @@ const _horseTipAxis = new THREE.Vector3(0, 0, 1);
  * @param {number} dt
  */
 function updateTrojanHorseTiedown(horse, dt) {
-  if (!horse?.isObject3D) return;
+  if (!horse?.isObject3D || horse.userData.guardianActive) return;
   const squad =
     horse.userData.tiedownSquad || horse.getObjectByName("horse-tiedown-squad");
   if (!squad) return;
@@ -910,10 +910,10 @@ function buildRangeShrub(name, scale, materials, seed) {
 }
 
 /**
- * 港口深潭太古巨木（士兵装货栈桥旁 · 仅此双株使用 createColossalVernacularTree）
+ * 港口阔叶树（士兵装货栈桥旁 · 仅此双株使用 createHarborBroadleafTree）
  */
 function buildSacredTarnTree(_materials) {
-  const tree = createColossalVernacularTree({
+  const tree = createHarborBroadleafTree({
     seed: 9901,
     merge: true,
     namePrefix: "tarn-elder-tree",
@@ -1107,8 +1107,8 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     sacredTarnTree.userData.referenceScale = 1;
   }
 
-  // 第二棵太古巨木：港口深潭旁交错对生（仅港口双株，不影响全局松树）
-  const tarnCompanionPine = createColossalVernacularTree({
+  // 第二棵港口阔叶树：仅港口双株，不影响全局松树
+  const tarnCompanionPine = createHarborBroadleafTree({
     seed: 7788,
     merge: true,
     namePrefix: "tarn-companion",

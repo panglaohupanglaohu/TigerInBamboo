@@ -1,3 +1,5 @@
+import {createTargetNewCityEnclosure} from './targetNewCityEnclosure.js';
+import {createTargetStreetDressing} from './targetStreetDressing.js';
 import * as THREE from 'three';
 import {TARGET_ARCHITECTURE_PALETTE,TARGET_ARCHITECTURE_COLOUR_VERSION} from './targetArchitecturePalette.js';
 
@@ -5,13 +7,15 @@ import {TARGET_ARCHITECTURE_PALETTE,TARGET_ARCHITECTURE_COLOUR_VERSION} from './
 // No terrain, light, texture, or scene-global material is owned by this factory.
 export const TARGET_NEW_CITY_MAIN_PALETTE = Object.freeze(Object.fromEntries(['stone','trim','blue','blueShade','roof','roofLight','dome','domeLight','domeShade','rib','window','glass','gold'].map(k=>[k,TARGET_ARCHITECTURE_PALETTE[k]])));
 
-export function createTargetNewCityMain({ seed = 17, palette = {}, proportion = 'original', batchWindowDetails = false } = {}) {
+export function createTargetNewCityMain({ seed = 17, palette = {}, proportion = 'original', batchWindowDetails = false, courtyardSurfaceHeightAt = null, layout = 'legacy' } = {}) {
+  if(!['legacy','walled-court-1'].includes(layout))throw new TypeError('unknown new-city layout');
+  const walled=layout==='walled-court-1';
   if(typeof batchWindowDetails!=='boolean')throw new TypeError('batchWindowDetails must be boolean');
   if(!['original','expanded-1'].includes(proportion))throw new TypeError('unknown new-city proportion');
   const expanded=proportion==='expanded-1',sxz=expanded?1.1:1,sy=expanded?1.2:1,pivotY=1.2;
   const mapY=y=>y<=pivotY?y:pivotY+(y-pivotY)*sy;
   const mapPoint=p=>[p[0]*sxz,mapY(p[1]),p[2]*sxz];
-  const colours = { ...TARGET_NEW_CITY_MAIN_PALETTE, ...palette };
+  const colours = { ...TARGET_NEW_CITY_MAIN_PALETTE,townYellow:TARGET_ARCHITECTURE_PALETTE.yellow,townTeal:TARGET_ARCHITECTURE_PALETTE.teal,townRose:TARGET_ARCHITECTURE_PALETTE.pink, ...palette };
   const group = new THREE.Group(); group.name = 'citadel-target-new-city-main';
   group.userData.preserveCitadelMaterials = true;
   group.userData.targetArchitecture = 'new-city-main-v2';
@@ -164,6 +168,61 @@ export function createTargetNewCityMain({ seed = 17, palette = {}, proportion = 
     window(`rear-lantern-window-${side}`, tx, top + .6, tz + 1.12, 0, .4, .52);
     footprint(`rear-lantern-${side}`, tx, tz, 2.54, 2.54, top - 1.08, top + 3.68, { elevated: true, supportedBy: `blue-tower-${side}` });
   }
+  // Low orange-roof homes embrace the drum on both flanks and the rear,
+  // leaving the entrance and rear nave axis open. Seat them on the actual hill.
+  const courtyardHomes=[],courtyardRejected=[],courtyardPlants=[];
+  const legacyHomes=[
+    [0,-13.2,-9.8,4.5,4.4,5.1,'townYellow'],[1,13.2,-9.8,4.5,4.4,5.8,'townTeal'],
+    [2,-7.5,-15.3,4.6,4.4,4.8,'townRose'],[3,7.5,-15.3,4.6,4.4,5.4,'townYellow'],
+    [4,-17.1,-4.2,3.7,4.3,4.1,'townTeal'],[5,17.1,-4.2,3.7,4.3,4.6,'townYellow'],
+    [6,-16.0,4.6,3.6,4.1,4.3,'townRose'],[7,16.0,4.6,3.6,4.1,4.8,'townTeal'],
+    [8,-18.2,-10.7,3.4,4.0,4.0,'townYellow'],[9,18.2,-10.7,3.4,4.0,4.2,'townRose']];
+  const walledPositions=[[-12.9,-10.1],[12.6,-9.1],[-8.8,-15.1],[8.7,-15.2],[-17.4,-4.4],[17.4,-3.5],[-14.2,3.9],[14.2,4.6],[-17.5,-11.0],[17.5,-9.3]];
+  const homes=walled?legacyHomes.map((row,i)=>[row[0],...walledPositions[i],row[3],i===6?3.9:row[4],...row.slice(5)]):legacyHomes;
+  for(const [i,x,z,w,d,h,colour]of homes){
+    const corners=[[-w/2,-d/2],[w/2,-d/2],[w/2,d/2],[-w/2,d/2]].map(([a,b])=>[(x+a)*sxz,(z+b)*sxz]);
+    const probes=[...corners,[x*sxz,z*sxz],[(x-w/2)*sxz,z*sxz],[(x+w/2)*sxz,z*sxz],[x*sxz,(z-d/2)*sxz],[x*sxz,(z+d/2)*sxz]];
+    const ys=courtyardSurfaceHeightAt?probes.map(p=>courtyardSurfaceHeightAt(...p)):probes.map(()=>0);
+    if(ys.some(v=>!Number.isFinite(v))||Math.max(...ys)-Math.min(...ys)>(i>=6?2.5:4.5)){courtyardRejected.push({i,reason:'missing-or-steep-actual-ground',samples:ys});continue;}
+    const top=Math.max(0,...ys)+.08,bottom=Math.min(0,...ys)-.10,unmap=v=>v<=pivotY?v:pivotY+(v-pivotY)/sy,floor=unmap(top),low=unmap(bottom),id='dome-courtyard-house-'+i;
+    box(id+'-foundation',w+.2,floor-low,d+.2,x,(floor+low)/2,z,'stone',.07);
+    box(id+'-wall',w,h,d,x,floor+h/2,z,colour,.10);roof(id+'-roof',x,floor+h,z,w+.45,d+.45,.9);
+    for(const side of[-1,1]){window(id+'-front-'+side,x+side*w*.23,floor+1.7,z+d/2+.02,0,.52,.7);window(id+'-upper-'+side,x+side*w*.23,floor+3.5,z+d/2+.02,0,.52,.7);}
+    footprint(id,x,z,w+.45,d+.45,low,floor+h+.95,{supportedBy:'actual-courtyard-terrain',courtyard:true});
+    courtyardHomes.push({id,position:[x*sxz,top,z*sxz],support:ys,foundationHeight:top-bottom,colour});
+  }
+  // Seat planted pockets on their own actual ground, not the adjacent home's
+  // highest corner. The entrance/nave and every house footprint remain clear.
+  for(const[x,z,size,tall]of[[-6.4,6.3,.95,true],[6.4,6.3,.95,true],[-12.2,5.2,1,false],[12.2,5.2,1,false],[-16,8.1,1.15,true],[16,8.1,1.15,true],[-8.3,-11.3,.8,false],[8.3,-11.3,.8,false],[-18.4,-.6,1.1,true],[18.4,-.6,1.1,true],[-14.7,-7.5,.85,false],[14.7,-7.5,.85,false]]){
+    if(footprints.some(f=>{const xs=f.polygon.map(p=>p[0]),zs=f.polygon.map(p=>p[1]);return x>Math.min(...xs)-.65&&x<Math.max(...xs)+.65&&z>Math.min(...zs)-.65&&z<Math.max(...zs)+.65;}))continue;
+    const px=x*sxz,pz=z*sxz,ys=[[0,0],[-.45,0],[.45,0],[0,-.45],[0,.45]].map(([dx,dz])=>courtyardSurfaceHeightAt?courtyardSurfaceHeightAt(px+dx,pz+dz):0);
+    if(ys.some(y=>!Number.isFinite(y))||Math.max(...ys)-Math.min(...ys)>.45)continue;
+    courtyardPlants.push([px,Math.max(...ys)-.05,pz,size,tall,true]);
+  }
+  // An open rear court is a destination reached through the real nave, not
+  // another house in the rear door axis. Low perimeter masonry leaves its sky
+  // and centre open; the surrounding homes remain the higher enclosing mass.
+  const rearCourt={built:false,clearAxis:true,source:'user rear-courtyard reference 2026-10-07',bounds:[[-4.3,-17.5],[4.3,-10.7]],steps:[],openRearGate:2.4};
+  const courtProbes=[[-4.3,-17.5],[4.3,-17.5],[-4.3,-10.7],[4.3,-10.7],[0,-14.1]].map(([x,z])=>courtyardSurfaceHeightAt?courtyardSurfaceHeightAt(x*sxz,z*sxz):0);
+  if(courtProbes.every(Number.isFinite)&&Math.max(...courtProbes)-Math.min(...courtProbes)<1.0){
+    const unmap=v=>v<=pivotY?v:pivotY+(v-pivotY)/sy;
+    const sampledTop=Math.max(.08,...courtProbes.map(y=>y+.04)),sampledBottom=Math.min(...courtProbes)-.08;
+    const top=walled?unmap(sampledTop):sampledTop,bottom=walled?unmap(sampledBottom):sampledBottom;
+    const court=box('rear-court-stone-floor',8.6,top-bottom,6.8,0,(top+bottom)/2,-14.1,'trim',.025);court.userData.targetWalkable=true;
+    footprint('rear-court-stone-floor',0,-14.1,8.6,6.8,bottom,top,{walkable:true,support:true});
+    const path=box('rear-court-door-path',3.8,top-bottom,1.5,0,(top+bottom)/2,-10.4,'trim',.025);path.userData.targetWalkable=true;
+    for(let i=0;i<4;i++){const y=Math.max(top,1.2-(i+1)*.3),z=-8.3-i*.6,m=box('rear-court-access-step-'+i,3.8,y-bottom,.62,0,(y+bottom)/2,z,'trim',.02);m.userData.targetWalkable=true;rearCourt.steps.push(mapPoint([0,y,z]));}
+    for(const side of[-1,1]){
+      box('rear-court-side-curb-'+side,.28,.48,6.8,side*4.16,top+.24,-14.1,'stone',.03);
+      box('rear-court-rear-wall-'+side,2.8,1.05,.34,side*2.65,top+.525,-17.33,'stone',.05);
+      for(const z of[-12,-15.5]){box('rear-court-pergola-pier-'+side+'-'+z,.26,2.25,.26,side*4.16,top+1.125,z,'stone',.025);}
+      box('rear-court-pergola-beam-'+side,.38,.2,4.2,side*4.16,top+2.27,-13.75,'trim',.025);
+      for(const z of[-12.5,-16])if(!walled)courtyardPlants.push([side*2.85*sxz,top-.06,z*sxz,.8,false,true]);
+    }
+    // Inlaid strips articulate circulation without covering the planting beds.
+    for(const side of[-1,1])box('rear-court-axis-inlay-'+side,.09,.012,6.2,side*.95,top+.007,-14.1,'stone',0);
+    Object.assign(rearCourt,{built:true,top,bottom,support: courtProbes,centralPathWidth:1.9*sxz,throughNave:true});
+  }else rearCourt.reason='missing-or-steep-rear-court-ground';
   // Candidate-only piecewise deformation in the COMPLETE group frame. Cut
   // triangles at the fixed threshold first: merely moving endpoints of tall
   // triangles would otherwise stretch the geometry below the 1.2m doorway.
@@ -180,7 +239,20 @@ export function createTargetNewCityMain({ seed = 17, palette = {}, proportion = 
    for(const f of footprints){f.polygon=f.polygon.map(([x,z])=>[x*sxz,z*sxz]);f.floorY=mapY(f.floorY);f.roofY=mapY(f.roofY);if(f.opening){for(const k of['minX','maxX','frontZ','rearZ'])f.opening[k]*=sxz;for(const k of['floorY','springY','crownY'])f.opening[k]=mapY(f.opening[k]);}}
   }
   if(expanded){box('entrance-landing-surveyed-joint',6.82,.65,2.4,0,-.025,14.4,'trim',.02);footprint('entrance-landing-surveyed-joint',0,14.4,6.82,2.4,-.35,.3,{support:true,walkable:true});}
+  let enclosure=null;
+  if(walled){
+    group.updateMatrixWorld(true);
+    const floor=group.getObjectByName('rear-court-stone-floor');let court=null;
+    if(floor){const bounds=new THREE.Box3().setFromObject(floor);court={top:bounds.max.y,bottom:bounds.min.y,minX:bounds.min.x,maxX:bounds.max.x,minZ:bounds.min.z,maxZ:bounds.max.z};
+      for(const node of [...group.children])if(node===floor||node.name.startsWith('rear-court-axis-inlay-')){node.removeFromParent();geometries.delete(node.geometry);node.geometry.dispose();}
+      const i=footprints.findIndex(f=>f.id==='rear-court-stone-floor');if(i>=0)footprints.splice(i,1);
+      Object.assign(rearCourt,{clearAxis:false,circulation:'two-sided-fountain-bypass',top:court.top,bottom:court.bottom});
+    }
+    enclosure=createTargetNewCityEnclosure({surfaceHeightAt:courtyardSurfaceHeightAt,materials:mats,court,scale:sxz});group.add(enclosure.group);footprints.push(...enclosure.report.footprints);
+    for(const node of group.children)if(node.name.startsWith('rear-court-access-step-')||node.name==='rear-court-door-path'){node.userData.targetWalkable=true;node.userData.newCityPublicWalkable=true;}
+  }
   group.updateMatrixWorld(true);
+  const courtDressing=createTargetStreetDressing({plants:courtyardPlants,lamps:[[-4.8,4.7,6.8],[4.8,4.7,6.8]].map(mapPoint),lightLimit:2});group.add(courtDressing.group);
   const windowBatchReport={enabled:batchWindowDetails,version:'main-window-batches-1',windowCount:windowRoots.length,beforeMeshes:windowRoots.reduce((n,r)=>n+r.children.length,0),afterMeshes:null,zones:[],triangles:0,sourceMeshesRemoved:false,gpuMeasured:false};
   if(batchWindowDetails){
     // The expanded deformation above is complete before baking. Three spatial
@@ -228,27 +300,29 @@ export function createTargetNewCityMain({ seed = 17, palette = {}, proportion = 
   let triangles = 0, meshes = 0;
   group.traverse(o => { if (o.isMesh) { meshes++; triangles += (o.geometry.index?.count ?? o.geometry.attributes.position.count) / 3; } });
   const report = {
+    layout,enclosure:enclosure?.report??null,
     version: batchWindowDetails?'target-new-city-main-v4-window-batches':expanded?'target-new-city-main-v3-expanded':'target-new-city-main-v2', windowBatching:windowBatchReport, proportion, scaleContract:{xz:sxz,aboveThresholdY:sy,thresholdY:pivotY,splitTriangles,defaultUnchanged:!expanded,requiresRouteRebuild:expanded}, seed, palette: colours, origin: 'platform centre at ground, +Z entrance',
     bounds: { min: bounds.min.toArray(), max: bounds.max.toArray(), size: size.toArray() }, footprints,
     entry: { position: mapPoint([0, 1.2, 6.7]), inward: [0, 0, -1], clearWidth: 5*sxz, clearHeightAtCentre: 7.6*sy, rectangularClearHeight: 5.1*sy },
     passage: { from: mapPoint([0, 1.2, 6.7]), to: mapPoint([0, 1.2, -8]), clearWidth: 5*sxz, rectangularClearHeight: 5.1*sy, through: true },
     stairs: { bottom: expanded?[0,.3,14.75]:mapPoint([0, 0, 12.96]), top: mapPoint([0, 1.2, 7.8]), width: 6.2*sxz, steps: 4, maxRise: .3, ...(expanded?{walkPath:[[0,.3,14.75],...Array.from({length:4},(_,i)=>[0,(i+1)*.3,(12.3-i*1.3)*sxz]),[0,1.2,7.1*sxz],[0,1.2,6.7*sxz]],jointLanding:{top:.3,bottom:-.35,polygon:[[-3.41,13.2],[3.41,13.2],[3.41,15.6],[-3.41,15.6]]}}:{}) },
     performance: { meshes, triangles, materials: materials.size, geometries: geometries.size },
+    courtyard:{version:'dome-surrounding-homes-3-open-rear-court',rearCourt,homes:courtyardHomes,rejected:courtyardRejected,dressing:courtDressing.report,frontAxisKeptClear:true},
     targetSource: 'artifacts/pipeline/citadel-architecture-target-20261005/target-v3-landmarks.png',
     validation: { gpuIntegrated: false, visualScore: null, note: 'Geometry factory only; final terrain seating, connected approach, GPU lighting and independent target review remain integration responsibilities.' },
   };
   group.userData.targetArchitecture=report.version;
   group.userData.targetArchitectureReport = report;
   let disposed = false;
-  return { group, report, dispose() { if (disposed) return; disposed = true; group.removeFromParent(); for (const g of geometries) g.dispose(); for (const m of materials) m.dispose(); group.clear(); } };
+  return { group, report,streetDressing:courtDressing, dispose() { if (disposed) return; disposed = true;enclosure?.dispose();courtDressing.dispose(); group.removeFromParent(); for (const g of geometries) g.dispose(); for (const m of materials) m.dispose(); group.clear(); } };
 }
 
 /** Snapshot only the real entrance tread/landing triangles into castle chart.
  * Works before main is attached. Caller owns dispose and must recreate after
  * changing proportion/placement. Never samples hall roofs as walking ground. */
-export function createTargetNewCityApproachSampler({main,origin=[74,12,33],yaw=-55*Math.PI/180,sampleTerrain}={}){
+export function createTargetNewCityApproachSampler({main,origin=[74,12,33],yaw=-55*Math.PI/180,placementMatrix=null,sampleTerrain}={}){
  const root=main?.group||main;if(!root?.isObject3D||typeof sampleTerrain!=='function')throw new TypeError('main group and terrain sampler required');
- root.updateWorldMatrix(true,true);const inverse=root.matrixWorld.clone().invert(),placement=new THREE.Matrix4().makeRotationY(yaw).setPosition(...origin),vertices=[];
+ root.updateWorldMatrix(true,true);const inverse=root.matrixWorld.clone().invert(),placement=placementMatrix?.clone()??new THREE.Matrix4().makeRotationY(yaw).setPosition(...origin),vertices=[];
  root.traverse(o=>{if(!o.isMesh||!/^entrance-(stair-|landing)/.test(o.name))return;const m=placement.clone().multiply(inverse).multiply(o.matrixWorld),p=o.geometry.attributes.position,ix=o.geometry.index;for(let i=0;i<(ix?.count||p.count);i++)vertices.push(...new THREE.Vector3().fromBufferAttribute(p,ix?ix.getX(i):i).applyMatrix4(m).toArray());});
  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.computeBoundingSphere();const material=new THREE.MeshBasicMaterial({side:THREE.DoubleSide}),mesh=new THREE.Mesh(geometry,material),ray=new THREE.Raycaster();mesh.updateMatrixWorld(true);let disposed=false;
  return{sampleSurface(x,z){if(disposed)throw new Error('approach sampler disposed');const ground=sampleTerrain(x,z),gy=typeof ground==='number'?ground:ground?.height;ray.set(new THREE.Vector3(x,220,z),new THREE.Vector3(0,-1,0));ray.far=1000;const hit=ray.intersectObject(mesh,false)[0];if(hit&&(!Number.isFinite(gy)||hit.point.y>gy))return{height:hit.point.y,mesh:'actual-main-approach-triangles'};return ground;},dispose(){if(disposed)return;disposed=true;geometry.dispose();material.dispose();}};

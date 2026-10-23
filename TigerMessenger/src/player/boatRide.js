@@ -280,7 +280,7 @@ export function createBoatRide({
       else dismount();
       return;
     }
-    if (!player.riding && nearBoat()) {
+    if (!e.defaultPrevented && !player.riding && nearBoat()) {
       e.preventDefault();
       const target=getBoat?.() || null;
       if (target?.userData.boardingRoute) beginCrossing(target);

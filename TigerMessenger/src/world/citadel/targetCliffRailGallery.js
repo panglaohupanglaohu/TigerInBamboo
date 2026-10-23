@@ -24,7 +24,7 @@ export function createTargetCliffRailGallery({
   laneSpacing = 4.1, vehicleEnvelope = {}, maxSpan = 12, pierWidth = 1.2,
   sideRibThickness = .6, sampleStep = .75, roofWidth = null,
   endpointTargets = null, endpointTolerance = .15, maximumWalkingGrade = .12,
-  palette = {},
+  palette = {}, upperEnabled = true,
 } = {}) {
   if (!worldCurve?.getPointAt || !worldCurve?.getTangentAt || !worldCurve?.getLength) throw new TypeError('worldCurve is required');
   const matrix = castleMatrix?.isMatrix4 ? castleMatrix.clone() : new T.Matrix4().fromArray(castleMatrix ?? []);
@@ -47,6 +47,13 @@ export function createTargetCliffRailGallery({
   let structure = null, disposed = false;
   const dispose = () => { if (disposed) return; disposed = true; group.removeFromParent(); structure?.dispose(); for (const g of geometries) g.dispose(); for (const m of materials) m.dispose(); upper.clear(); group.clear(); };
   try {
+    if(!upperEnabled){
+      const railPath=Array.from({length:Math.ceil(length/sampleStep)+1},(_,i)=>worldCurve.getPointAt(i/Math.ceil(length/sampleStep)).applyMatrix4(inverse).toArray());
+      structure=createTargetDoubleDeckBridge({upperPath:railPath,upperDeck:upper,includeUpper:false,worldCurve,castleMatrix:matrix,sampleTerrain,sampleSea,laneSpacing,vehicleEnvelope,maxSpan,pierWidth,sideRibThickness,sampleStep,palette:{stone:colours.stone,trim:colours.trim,deck:colours.deck}});
+      group.add(structure.group);
+      const report={version:TARGET_CLIFF_RAIL_GALLERY_VERSION,upperEnabled:false,mode:'rail-only',length,upperPath:[],walkSurfaces:[],openings:[],issues:structure.report.issues,supportSamples:{count:0,failures:[],pass:true,scope:'no public upper walkway in this section'},vehicleClearance:structure.report.vehicleClearance,terrainClearance:structure.report.terrainClearance,foundations:structure.report.supports,foundationSampledPass:structure.report.foundationSampledPass,lowerRadius:structure.report.lowerRadius,lowerStructure:structure.report,performance:structure.report.performance};
+      group.userData.bridgeCandidateReport=report;return{group,report,dispose};
+    }
     const frame = u => {
       const point = worldCurve.getPointAt(u, new T.Vector3()), tangent = worldCurve.getTangentAt(u, new T.Vector3()).normalize();
       const right = point.clone().normalize().cross(tangent).normalize(), up = tangent.clone().cross(right).normalize();
@@ -155,7 +162,7 @@ export function createTargetCliffRailGallery({
     for (const key of ['start', 'end']) if (endpoints[key].targetWorld && !endpoints[key].connected) issues.push({ type: 'endpoint-gap', end: key, distance: endpoints[key].targetGap });
     if (supportFailures.length) issues.push({ type: 'walkway-support-failed', count: supportFailures.length });
     const report = {
-      version: TARGET_CLIFF_RAIL_GALLERY_VERSION, installed: false, accepted: false,
+      version: TARGET_CLIFF_RAIL_GALLERY_VERSION, upperEnabled:true, installed: false, accepted: false,
       status: issues.length || !structure.report.vehicleClearance.pass || structure.report.terrainClearance.pass !== true ? 'rejected-or-unresolved-candidate' : 'finite-geometry-checked-uninstalled',
       frame: 'castle-local identity output; source curve and endpointTargets world-space',
       length, walkwayWidth, roofWidth: coverWidth, sideCenter, endpointApronExtension: .04, walkwayHeightMode: typeof walkwayHeight === 'function' ? 'callback' : 'constant-offset',

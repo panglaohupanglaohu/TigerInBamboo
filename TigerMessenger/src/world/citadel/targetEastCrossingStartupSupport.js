@@ -1,3 +1,7 @@
+import {applyTargetFinalMountainFinish,applyTargetSoftMountainFinish} from './targetFinalMountainFinish.js';
+import {applyNewCityCliffGeometry} from './targetNewCityCliffField.js';
+import {createCastleOceanSampler} from './newCityRidgeCandidate.js';
+import {applyWestHeadlandRetreatGeometry,replayWestHeadlandRetreatGeometry} from './targetWestRailHeadlandRetreat.js';
 import * as T from 'three';
 import {buildMountainSurfaceIndex} from './mountainSurfaceIndex.js';
 import {officialOceanLevelAt} from '../waterV8/officialOcean.js';
@@ -33,6 +37,11 @@ export function createTargetEastCrossingStartupSupport(options={}){
  // and index bytes, then release it. An installed report alone is insufficient.
  const expected=new T.BufferGeometryLoader().parse(artifact.geometry);
  try{expected.applyMatrix4(source.matrixWorld.clone().invert().multiply(castle.matrixWorld).multiply(new T.Matrix4().makeTranslation(...artifact.origin)));
+  if(strict.report.newCityRadialCliff)applyNewCityCliffGeometry(expected,{toChart:castle.matrixWorld.clone().invert().multiply(source.matrixWorld),castleMatrix:castle.matrixWorld,surfaceIndexFactory:buildMountainSurfaceIndex,seaAt:createCastleOceanSampler(castle.matrixWorld,radius)});
+  if(strict.report.finalMountainFinish)applyTargetFinalMountainFinish(expected,{toChart:castle.matrixWorld.clone().invert().multiply(source.matrixWorld)});
+  if(castle.userData.mountainStudy?.westHeadlandRetreat?.version==='west-rail-ship-headland-retreat-1')applyWestHeadlandRetreatGeometry(expected,{toChart:castle.matrixWorld.clone().invert().multiply(source.matrixWorld),castleMatrix:castle.matrixWorld,radius});
+  if(['west-rail-ship-headland-retreat-2','west-rail-ship-headland-retreat-3','west-rail-ship-headland-retreat-4','west-rail-ship-headland-retreat-5'].includes(castle.userData.mountainStudy?.westHeadlandRetreat?.version)){const replay=replayWestHeadlandRetreatGeometry(expected,{toChart:castle.matrixWorld.clone().invert().multiply(source.matrixWorld),castleMatrix:castle.matrixWorld,report:castle.userData.mountainStudy.westHeadlandRetreat});expected.copy(replay.geometry);replay.geometry.dispose();}
+  if(castle.userData.mountainStudy?.softMountain)applyTargetSoftMountainFinish(expected,{toChart:castle.matrixWorld.clone().invert().multiply(source.matrixWorld),castleMatrix:castle.matrixWorld,railCurves:tramSystem.curves});
   if(hash(expected.attributes.position.array)!==hash(source.geometry.attributes.position.array)||hash(expected.index?.array)!==hash(source.geometry.index?.array)||expected.attributes.position.count!==source.geometry.attributes.position.count)throw new Error('CROSSING_STARTUP_FINAL_GEOMETRY_MISMATCH');
  }finally{expected.dispose();}
  const material=ocean.material,scale=new T.Vector3(),oceanOrigin=new T.Vector3(),quaternion=new T.Quaternion();ocean.matrixWorld.decompose(oceanOrigin,quaternion,scale);

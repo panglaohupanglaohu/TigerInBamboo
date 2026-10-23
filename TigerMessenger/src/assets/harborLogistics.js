@@ -17,6 +17,7 @@ import {
 import { isInfiltrationMissionActive } from "../audio/sfx.js";
 import { citadelTerraceMetrics } from "../world/odysseyCitadel.js";
 import { tickObjectSedation } from "../world/tranquilizer.js";
+import { configureHarborPatrolFrustum } from "./harborPatrolFrustum.js";
 
 const _v = new THREE.Vector3();
 const _v2 = new THREE.Vector3();
@@ -413,9 +414,9 @@ export function createHarborLogistics(opts) {
       soldier.traverse((o) => {
         if (o.isMesh) {
           o.castShadow = true;
-          o.frustumCulled = false;
         }
       });
+      configureHarborPatrolFrustum(soldier);
       root.add(soldier);
       patrolSquad.push(soldier);
       // 从船舷起排，立刻看得见在港口地面上

@@ -4,8 +4,11 @@
 // =====================================================================
 import { showToast } from "../ui/hud.js";
 import { createBgmOwnership } from "./bgmOwnership.js";
+import { createBatianBgm } from "./batianBgm.js";
 const bgmOwnership = createBgmOwnership();
 const bgmAudio = (key, url) => bgmOwnership.wrap(key, new Audio(url));
+const updateBatianMusic = createBatianBgm(bgmOwnership, bgmAudio, () => stopAmbienceNodes());
+export const setBatianBattleBgm = active => updateBatianMusic(active, muted);
 export const getBgmOwnershipSnapshot = () => bgmOwnership.snapshot();
 
 export function updateBgmListenerContext(context) {

@@ -1,3 +1,6 @@
+import {saihojiBattleTrigger} from './saihojiBattleTrigger.js';
+import {throttledCollect} from '../core/sceneLookup.js';
+let harborCandidates = null;
 import {marchFraction} from './citadel/marchSeparation.js';
 import redArrivalData from '../../assets/navigation/citadelRedArrival.js';
 import {placeDockConnector} from './warshipDockConnector.js';
@@ -1195,11 +1198,12 @@ export function createSaihojiPhalanxBattle({
   // 攻城梯/台地落点需要在「含台地高度」的世界坐标插值，不能只做球面归一。
   const castleObj = scene.getObjectByName("castleContainer");
   const latestAssault = castleObj?.userData?.highlandAssaultAnchors ?? null;
-  const newCityAssault = createNewCityAssaultRoute(castleObj);
-  const newCityGuards = newCityAssault ? createNewCityGuardPosts(castleObj) : null;
+  let newCityAssault = createNewCityAssaultRoute(castleObj);
+  let newCitySupport = null, newCitySupportRoot = null;
+  let newCityGuards = newCityAssault ? createNewCityGuardPosts(castleObj) : null;
   const arrivalCity=castleObj?.getObjectByName('highland-west-city');
   arrivalCity?.updateWorldMatrix(true,true);
-  const redArrivalRoute=newCityGuards&&redArrivalData.passed&&redArrivalData.coastSignature===castleObj?.userData.frontHarborCoast?.geometrySignature&&arrivalCity&&redArrivalData.cityMatrix.every((v,i)=>Math.abs(v-arrivalCity.matrixWorld.elements[i])<.0001)?redArrivalData:null;
+  let redArrivalRoute=newCityGuards&&redArrivalData.passed&&redArrivalData.coastSignature===castleObj?.userData.frontHarborCoast?.geometrySignature&&arrivalCity&&redArrivalData.cityMatrix.every((v,i)=>Math.abs(v-arrivalCity.matrixWorld.elements[i])<.0001)?redArrivalData:null;
   root.userData.redArrivalRoute={source:redArrivalRoute?'validated-new-front-harbor':(newCityGuards?'unavailable-new-front-harbor':'legacy'),length:redArrivalRoute?.length??null,boardingVerified:false,reason:newCityGuards&&!redArrivalRoute?(redArrivalData.invalidatedReason??'City transform no longer matches verified route'):null};
   root.userData.infantryAssaultSource = newCityAssault?.source ?? "legacy-citadel";
   const ladderPolicyDisabled = !!(
@@ -1498,12 +1502,15 @@ export function createSaihojiPhalanxBattle({
   const _deckPt = new THREE.Vector3();
   function placeCohortOnPlaza(wave, centerDir, face) {
     if(newCityAssault){
+      if(newCitySupportRoot&&!newCityGuards?.ready)return;
       const id=Number(wave.boat.name.split('-').at(-1));
       const company=id>=200?id-198:id;
       for(const s of wave.soldiers){
         if(s.userData.dead||s.userData.downed)continue;
         const path=newCityAssault.entryFor(company,s.userData.gx,s.userData.gz);
+        if(!path?.length)return;
         s.position.copy(path[0]).addScaledVector(newCityAssault.up,.06);
+        if(newCitySupport)s.userData.newCitySupportedPosition=s.position.clone();
         s.userData.formationPos=s.position.clone();
         s.userData.siegeEntryRoute=path.map(p=>p.clone().addScaledVector(newCityAssault.up,.06));
         s.userData.siegeRoute="stairs";s.userData.stairRoute=0;s.userData.stairPointIndex=0;
@@ -2680,8 +2687,9 @@ export function createSaihojiPhalanxBattle({
   function spawnSiegeStairRoutes() {
     if (siegeStairRoutes.length) return;
     if(newCityAssault){
+      if(newCitySupportRoot&&!newCityGuards?.ready)return;
       const points=newCityAssault.points.map(p=>p.clone().addScaledVector(newCityAssault.up,.06));
-      siegeStairRoutes.push({points,base:points[0].clone(),top:points.at(-1).clone(),capture:points.at(-1).clone(),terraces:[],floorRoutes:[],destination:"new-city-main-tower",routeSystem:newCityAssault.source});
+      siegeStairRoutes.push({points,base:points[0].clone(),top:points.at(-1).clone(),capture:points.at(-1).clone(),terraces:[],floorRoutes:[],destination:newCitySupport?.report.routeDestination||"new-city-main-tower",routeSystem:newCityAssault.source});
       logEvent("stairs",{routes:1,points:points.length,destination:"new-city-main-tower"});
       return;
     }
@@ -2811,6 +2819,7 @@ export function createSaihojiPhalanxBattle({
     _right.crossVectors(_fwd, _up).normalize();
     _fwd.crossVectors(_up, _right).normalize();
     s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
+    if(newCitySupport)s.userData.newCitySupportedPosition=worldPos.clone();
     s.userData.holdPos = worldPos.clone(); // 防守哨位：不追击，贴身才还击
     redRoot.add(s);
     redSoldiers.push(s);
@@ -2819,7 +2828,8 @@ export function createSaihojiPhalanxBattle({
 
   // 移动朝向（近圣城区域用球面法向近似即可，台地高差相对半径可忽略）
   function faceMoving(s, moveDir, k = 0.14) {
-    _up.copy(s.position).normalize();
+    if(newCitySupport&&s.userData.newCitySupportedPosition)_up.copy(newCitySupport.up);
+    else _up.copy(s.position).normalize();
     _fwd.copy(moveDir).addScaledVector(_up, -moveDir.dot(_up));
     if (_fwd.lengthSq() < 1e-8) return;
     _fwd.normalize();
@@ -2899,7 +2909,9 @@ export function createSaihojiPhalanxBattle({
 
   function collectOldHarborCombatants(group) {
     const list = [];
-    scene?.traverse?.((o) => {
+    // perf 2026-10-14: helmeted candidates re-collected at most every 0.5 s; every per-frame check below is unchanged.
+    if (scene && !harborCandidates) harborCandidates = throttledCollect(scene, (o) => o?.userData?.helmSide === "red" || o?.userData?.helmSide === "blue");
+    (harborCandidates?.() || []).forEach((o) => {
       if (o === group || o === scene || o === root || o === harborCombat) return;
       if (!isHarborCombatant(o) || !isInsideOldHarbor(o, group)) return;
       list.push(o);
@@ -3131,7 +3143,7 @@ export function createSaihojiPhalanxBattle({
   }
 
   function ensureRedGarrison() {
-    if (redRoot) return;
+    if (redRoot || newCitySupportRoot && !newCityGuards?.ready) return;
     // 红盔守军：路口小队（原地防守）+ 攻城梯顶部阻击 + 少量长弓手居高俯射
     redRoot = new THREE.Group();
     redRoot.name = "citadel-red-garrison";
@@ -3201,10 +3213,12 @@ export function createSaihojiPhalanxBattle({
   function spawnRedSquadAt(p) {
     logEvent("redSquad", { post: p });
     if(newCityGuards){
+      if(newCitySupportRoot&&!newCityGuards.ready)return;
       const group=newCityGuards.groups[p];
       group.points.forEach((point,i)=>{
         const soldier=spawnRedAt(i%2===0?'spear':'gladius',point,newCityGuards.face);
         soldier.userData.guardPostId=group.id;
+        if(newCitySupport)soldier.userData.newCitySupportedPosition=soldier.position.clone();
       });
       return;
     }
@@ -3450,7 +3464,10 @@ export function createSaihojiPhalanxBattle({
     const fraction=newCityAssault?marchFraction(s.position,marchDelta,s,peers):1;
     s.userData.waitingForPeer=fraction<.999;
     if(fraction<.999)root.userData.citadelMarchWaits=(root.userData.citadelMarchWaits||0)+1;
-    s.position.addScaledVector(marchDelta,fraction);
+    if(newCitySupport){
+      s.position.copy(newCitySupport.move(s.position,s.position.clone().addScaledVector(marchDelta,fraction)));
+      s.userData.newCitySupportedPosition=s.position.clone();
+    }else s.position.addScaledVector(marchDelta,fraction);
   }
   function updateSiege(dt, t) {
     const livingReds = redSoldiers.filter((s) => s.visible && !s.userData.dead);
@@ -3668,7 +3685,7 @@ export function createSaihojiPhalanxBattle({
               s.userData._grndT = 0.12;
               s.userData._grndR = siegeMarchGroundR(s.position);
             }
-            if (s.userData._grndR) {
+            if (s.userData._grndR && !newCitySupport) {
               s.position.normalize().multiplyScalar(s.userData._grndR);
             }
             faceMoving(s, _tmpB);
@@ -4393,6 +4410,8 @@ export function createSaihojiPhalanxBattle({
     const drums = isInfiltrationMissionActive();
     if (drums) quietT = 0;
     else quietT += dt;
+    const fleetAttack=saihojiBattleTrigger(scene.userData.batianFleet,hubDir(_tmp),PLANET_RADIUS);
+    root.userData.batianBattleTrigger=fleetAttack;
     const whaleUp = typeof isWhaleRisen === "function" ? !!isWhaleRisen() : false;
 
     // 循环条件（苔庭鲸 ↔ 机队交互）契约：root.userData.assembled 供鲸读，
@@ -4453,7 +4472,7 @@ export function createSaihojiPhalanxBattle({
 
     if (phase === "atCastle") {
       // The campaign pact launches this voyage. Unmanaged legacy tests retain drum timing.
-      if (campaignStatus.managed ? campaignStatus.launchAllowed : quietT > 1.6) {
+      if (fleetAttack.allowed || (campaignStatus.managed ? campaignStatus.launchAllowed : quietT > 1.6)) {
         setPhase("sailOut");
         shipIdx = 0;
         nextShipIn = 0.4;
@@ -4586,7 +4605,7 @@ export function createSaihojiPhalanxBattle({
       ambush.update(dt,{
         units,
         allLanded:shipIdx>=SHIP_COUNT&&waves.slice(0,SHIP_COUNT).every(w=>w.state !== "sailOut"),
-        discovery:{detected:(!campaignStatus.managed||campaignStatus.discoveryAllowed)&&members.length>0&&!!lock?.active&&whaleUp,source:"saihojiGarden.whaleLock+actualLift",fleetMembers:members.length,whaleLockActive:!!lock?.active,whaleRisen:whaleUp},
+        discovery:{detected:fleetAttack.allowed&&members.length>0&&!!lock?.active&&whaleUp,source:"saihojiGarden.whaleLock+actualLift",fleetMembers:members.length,whaleLockActive:!!lock?.active,whaleRisen:whaleUp},
       });
     }
     // The opt-in gate is deliberately last: all legacy movement paths finish,
@@ -4618,7 +4637,7 @@ export function createSaihojiPhalanxBattle({
     wasWhaleUp = ambush.active && whaleUp;
 
     const squad = typeof getSquad === "function" ? getSquad() : null;
-    const members = squad?.userData?.members || [];
+    const members = fleetAttack.allowed ? (scene.userData.batianFleet?.units?.()||[]) : [];
     // 先锋兵**落地之后**才进箭矢/标枪的目标池：还在机腹下伴飞时打不到。
     const vanguardRoot = typeof getVanguards === "function" ? getVanguards() : null;
     const vanguardTroopers =
@@ -4702,7 +4721,7 @@ export function createSaihojiPhalanxBattle({
 
     // ---------- 长弓手攒射：整理队伍后按列齐射，箭矢追射盘顶机队 ----------
     // 战斗期用 fightFormed 锁定（鲸被拽到半空也不停箭），直到鲸落回地面
-    if (phase === "fight" && ambush.active && (whaleUp || fightFormed) && shooters.length && live.length) {
+    if (fleetAttack.allowed && phase === "fight" && ambush.active && (whaleUp || fightFormed) && shooters.length && live.length) {
       for (const s of shooters) {
         if (s.userData.ropeTeam) continue;
         // 冲击眩晕：跳过射击
@@ -4926,10 +4945,77 @@ export function createSaihojiPhalanxBattle({
 
   }
 
+  /** Call after production city public surfaces are committed. Legacy positions
+   * are never used once a released root exists, including failed admission. */
+  function refreshNewCitySupport({root: releasedRoot=castleObj?.userData?.targetCityRuntime?.root}={}) {
+    if(!releasedRoot)return {ready:false,reason:"production-city-not-installed"};
+    const previousSupport=newCitySupport;
+    const guards=createNewCityGuardPosts(castleObj,{root:releasedRoot});
+    newCitySupportRoot=releasedRoot;newCityGuards=guards;newCitySupport=guards.support;
+    redArrivalRoute=null; // Authored old-city boat gangway has a different frame.
+    root.userData.redArrivalRoute={source:"awaiting-released-city-gangway",boardingVerified:false,reason:"Production city moved; old gangway cannot admit reinforcements"};
+    const route=newCitySupport?.route||[];
+    newCityAssault={source:"released-new-city-public-route-v2",points:route,up:newCitySupport?.up||castleUpWorld,
+      entryFor(company,gx,gz){
+        if(!guards.ready||route.length<2)return null;
+        const offset=route[0].clone().addScaledVector(castleEast,((gx||0)-2)*CELL).addScaledVector(castleFwdWorld,((gz||0)-2)*CELL);
+        const path=newCitySupport.path(offset,route.at(-1));
+        return path?.length>1?path:route.map(p=>p.clone());
+      }};
+    root.userData.infantryAssaultSource=newCityAssault.source;
+    root.userData.newCitySupport=newCitySupport?.report||{ready:false,reason:"no-public-support"};
+    siegeStairRoutes.length=0;
+    if(!guards.ready){
+      const report=root.userData.newCitySupport;report.waitingForPublicRoute=true;report.supportedWaiting=0;report.unsupportedActorIds=[];
+      // Incomplete admission does not keep the authored cliff coordinates.
+      // Reuse a still-real previous floor, otherwise a verified staging node.
+      for(const s of [...redSoldiers,...waves.filter(w=>w.state==="siege").flatMap(w=>w.soldiers)]){
+        const p=newCitySupport?.sample(s.position)||previousSupport?.sample(s.position)||newCitySupport?.nearest(s.position);
+        if(p){s.position.copy(p);s.userData.holdPos=p.clone();s.userData.newCitySupportedPosition=p.clone();report.supportedWaiting++;}
+        else if(s.visible&&!s.userData.dead)report.unsupportedActorIds.push(s.userData.uid);
+      }
+      return report;
+    }
+    spawnSiegeStairRoutes();
+    redPostWorld.splice(0,redPostWorld.length,...guards.groups.map(g=>g.points[1].clone()));
+    let post=0,bow=0;
+    for(const soldier of redSoldiers){
+      const p=soldier.userData.phalanxRole==="longbow"?guards.archers[bow++%4]:newCitySupport.posts[post++%24];
+      soldier.position.copy(p);soldier.userData.holdPos=p.clone();soldier.userData.newCitySupportedPosition=p.clone();
+      faceMoving(soldier,guards.face,1);
+    }
+    for(const wave of waves){if(wave.state!=="siege")continue;
+      for(const soldier of wave.soldiers){if(soldier.userData.dead||soldier.userData.downed)continue;
+        const p=newCitySupport.nearest(soldier.position);if(!p)continue;
+        soldier.position.copy(p);soldier.userData.newCitySupportedPosition=p.clone();
+        const path=route.length?newCitySupport.path(p,route.at(-1)):null;
+        soldier.userData.siegeEntryRoute=(path?.length?path:[p.clone()]).map(v=>v.addScaledVector(newCitySupport.up,.05));
+        soldier.userData.siegeRoute="stairs";soldier.userData.stairRoute=0;soldier.userData.stairPointIndex=0;soldier.userData.siegeStage="climb";
+      }
+    }
+    ensureRedGarrison();
+    return root.userData.newCitySupport;
+  }
+  function enforceNewCitySupport(){
+    if(!newCitySupport)return;
+    const actors=[...redSoldiers,...waves.filter(w=>w.state==="siege").flatMap(w=>w.soldiers)];
+    for(const s of actors){
+      if(s.userData.dead||s.userData.downed||!s.visible)continue;
+      const previous=s.userData.newCitySupportedPosition;
+      if(!previous)continue;
+      // Combat separation and melee chase cannot bypass public-path admission.
+      s.position.copy(newCitySupport.move(previous,s.position));
+      s.userData.newCitySupportedPosition=s.position.clone();
+    }
+  }
+
   function update(dt, t) {
+    const releasedRoot=castleObj?.userData?.targetCityRuntime?.root;
+    if(releasedRoot&&releasedRoot!==newCitySupportRoot)refreshNewCitySupport({root:releasedRoot});
     try {
       updateSimulation(dt, t);
     } finally {
+      enforceNewCitySupport();
       // All branches (including early returns) finish after movement, weapon aim and damage.
       romanPresentation.update(dt, t, root);
       ambush.applyConcealmentPose();
@@ -4992,9 +5078,11 @@ export function createSaihojiPhalanxBattle({
   root.userData.reset = () => {
     root.userData.resetRequested = true;
   };
+  root.userData.refreshNewCitySupport=refreshNewCitySupport;
   return {
     root,
     userData: root.userData,
+    refreshNewCitySupport,
     update,
     isAssembled,
     reset: resetBattle,

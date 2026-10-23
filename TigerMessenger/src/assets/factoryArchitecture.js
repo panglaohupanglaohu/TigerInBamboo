@@ -15,8 +15,8 @@ export function factoryKit(root){
   const c=document.createElement('canvas');c.height=256;c.width=Math.max(256,Math.min(2048,Math.round(256*w/h)));
   const ctx=c.getContext('2d');ctx.fillStyle='#e3d7b8';ctx.fillRect(0,0,c.width,c.height);
   ctx.strokeStyle='#65533a';ctx.lineWidth=5;ctx.strokeRect(5,5,c.width-10,c.height-10);ctx.lineWidth=1.5;ctx.strokeRect(13,13,c.width-26,c.height-26);
-  const traditional=/[螞蟻書店蒸汽動力廠]/.test(text),title=/BOOKSHOP|書店/.test(text);
-  const face=traditional?'"Songti TC", "Noto Serif TC", serif':title?'Georgia, "Palatino Linotype", serif':'"Trebuchet MS", Arial, sans-serif';
+  const simplified=/[蚂蚁书甲壳虫货运入口工厂起重架]/.test(text),traditional=simplified||/[螞蟻書店蒸汽動力廠]/.test(text),title=/BOOKSHOP|書店|书店/.test(text);
+  const face=simplified?'"Songti SC", "Noto Serif SC", "PingFang SC", serif':traditional?'"Songti TC", "Noto Serif TC", serif':title?'Georgia, "Palatino Linotype", serif':'"Trebuchet MS", Arial, sans-serif';
   ctx.fillStyle='#243330';ctx.textAlign='center';ctx.textBaseline='middle';
   const lines=w/h<1.2&&text==='BOOKS'?[...text]:text.split('\n');
   let size=Math.floor(Math.min(132,190/lines.length));ctx.letterSpacing=traditional?'2px':'3px';

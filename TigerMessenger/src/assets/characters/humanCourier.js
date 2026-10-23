@@ -1,18 +1,18 @@
 import * as THREE from 'three';
 import { COURIER_SCALE } from '../../core/characterScale.js';
 import { COURIER_HEIGHT } from '../../core/characterScale.js';
-import { buildWastelandCourier } from './courierWasteland.js';
+import { buildExpeditionCourier } from './courierExpedition.js';
+import { buildMoebiusCourier } from './courierMoebius.js';
 
 // Preserve the caller's scale contract while fitting the revised silhouette.
 // The original builder remains in courierCodrops.js for reference/recovery.
-export function buildHumanCourier({ scale = COURIER_SCALE } = {}) {
-  const root = buildWastelandCourier({ scale: 1 });
+export function buildHumanCourier({ scale = COURIER_SCALE, style = 'moebius' } = {}) {
+  const root = style === 'expedition' ? buildExpeditionCourier() : buildMoebiusCourier();
   root.updateMatrixWorld(true);
   const bounds = new THREE.Box3().setFromObject(root, true);
   const fittedScale = COURIER_HEIGHT / (bounds.max.y - bounds.min.y) * (scale / COURIER_SCALE);
   root.scale.setScalar(fittedScale);
   root.position.y = -bounds.min.y * fittedScale;
-  root.userData.runtimeModel = 'wasteland-sloped-shoulders-pelvis';
   return root;
 }
 
@@ -153,10 +153,18 @@ export function animateHumanCourier(player, root, dt, moving) {
     : 0.02 + Math.sin(phase * 1.2) * 0.015;
   pose(u.cape, capeTilt, 0, Math.cos(phase * 0.8) * 0.015);
 
+  for (const [i, tail] of (u.headbandTails || []).entries()) {
+    tail.rotation.x = Math.sin(phase * .8 + i) * .13;
+    tail.rotation.y = Math.sin(phase * 1.1 + i) * .10;
+  }
+
   // 蜡封信显隐与手持跟随
   if (u.letter) {
     u.letter.visible = !!player.holdingLetter;
   }
+
+  // Optional articulated mail pouch; legacy character factories have no hook.
+  u.updatePostalPod?.(player, dt);
 
   // 程序化头部与腰部注视交互（Codrops 核心交互）
   updateCourierLookAt(player, root, dt);

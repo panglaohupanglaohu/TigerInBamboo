@@ -1,3 +1,4 @@
+import { buildHexGrassSurface } from './hexGrassSurface.js';
 /**
  * hills.js —— 连绵小土坡：把原灰色浮空平台改成从岛面隆起的连续山丘。
  *
@@ -234,12 +235,11 @@ export function carveHillsForTrack(hillsMesh, trackCurves, R, capLift = 0.62) {
   // 全压平半径：车道中心 ±0.9 + 车体半宽 ~1.3 + 余量；车体底角不得压山
   const CORRIDOR_R = 4.4 * WORLD_SCALE;
   const FADE_R = 6.0 * WORLD_SCALE; // 过渡带外缘，平滑接回原山体
-  let vi = 0;
   let changed = false;
-  for (let iz = 0; iz < nz; iz++) {
-    for (let ix = 0; ix < nx; ix++, vi++) {
-      const x = GRID_MIN_X + ix * GRID_STEP;
-      const z = GRID_MIN_Z + iz * GRID_STEP;
+  const authored = hillsMesh.geometry.userData.hexGrass?.flat;
+  for (let vi = 0; vi < pos.count; vi++) {
+      const x = authored ? authored[vi * 2] : GRID_MIN_X + (vi % nx) * GRID_STEP;
+      const z = authored ? authored[vi * 2 + 1] : GRID_MIN_Z + Math.floor(vi / nx) * GRID_STEP;
       const lift = groundLiftAt(x, z);
       if (lift <= capLift + 1e-3) continue;
       let dMin = Infinity;
@@ -257,7 +257,6 @@ export function carveHillsForTrack(hillsMesh, trackCurves, R, capLift = 0.62) {
       flatToWorld(x, newLift, z, R, tmp);
       pos.setXYZ(vi, tmp.x, tmp.y, tmp.z);
       changed = true;
-    }
   }
   if (changed) {
     pos.needsUpdate = true;
@@ -291,6 +290,19 @@ const groundHit = new THREE.Vector3();
 export function sampleHillMeshRadius(mesh, pos, R) {
   const flat = worldToFlatXZ(pos, R);
   if (!flat || !mesh?.geometry?.index) return null;
+  const hex = mesh.geometry.userData.hexGrass;
+  if (hex) {
+    const geo = mesh.geometry, p = geo.attributes.position;
+    groundRay.origin.set(0, 0, 0); groundRay.direction.copy(pos).normalize();
+    const candidates = new Set();
+    const bx=Math.floor(flat.x/hex.step),bz=Math.floor(flat.z/hex.step);
+    for(let x=bx-1;x<=bx+1;x++)for(let z=bz-1;z<=bz+1;z++)for(const t of hex.buckets.get(x+','+z)||[])candidates.add(t);
+    for (const t of candidates) {
+      groundA.fromBufferAttribute(p, geo.index.getX(t)); groundB.fromBufferAttribute(p, geo.index.getX(t + 1)); groundC.fromBufferAttribute(p, geo.index.getX(t + 2));
+      if (groundRay.intersectTriangle(groundA, groundB, groundC, false, groundHit)) return groundHit.length();
+    }
+    return null;
+  }
   const nx = Math.round((GRID_MAX_X - GRID_MIN_X) / GRID_STEP) + 1;
   const nz = Math.round((GRID_MAX_Z - GRID_MIN_Z) / GRID_STEP) + 1;
   const ix = Math.floor((flat.x - GRID_MIN_X) / GRID_STEP);
@@ -464,5 +476,25 @@ export function buildHills(scene, R) {
   skirt.name = "hills-closed-skirt";
   scene.add(skirt);
 
+  const oldGeometry = mesh.geometry;
+  mesh.geometry = buildHexGrassSurface({ minX: GRID_MIN_X, maxX: GRID_MAX_X, minZ: GRID_MIN_Z, maxZ: GRID_MAX_Z,
+    heightAt: groundLiftAt, toWorld: (x,h,z,out) => flatToWorld(x,h,z,R,out) });
+  oldGeometry.dispose();
+  mesh.material.flatShading = false;
+  mesh.userData.surfaceOwner = 'shared-hex-grass';
+  // Rebuild the collar from the EXACT clipped hex perimeter, so no unmatched old quad rim remains.
+  const hex = mesh.geometry.userData.hexGrass, hp = mesh.geometry.attributes.position, sp = [], si = [];
+  for (const {a,b} of hex.boundary) {
+    const start = sp.length / 3;
+    for (const i of [a,b]) sp.push(hp.getX(i),hp.getY(i),hp.getZ(i));
+    for (const i of [a,b]) {
+      let x=hex.flat[i*2],z=hex.flat[i*2+1];
+      if(Math.abs(x-GRID_MIN_X)<1e-5)x-=skirtRampWidth;else if(Math.abs(x-GRID_MAX_X)<1e-5)x+=skirtRampWidth;
+      if(Math.abs(z-GRID_MIN_Z)<1e-5)z-=skirtRampWidth;else if(Math.abs(z-GRID_MAX_Z)<1e-5)z+=skirtRampWidth;
+      flatToWorld(x,skirtBottomHeight,z,R,tmp); sp.push(tmp.x,tmp.y,tmp.z);
+    }
+    si.push(start,start+2,start+1,start+1,start+2,start+3);
+  }
+  skirt.geometry.dispose(); skirt.geometry=new THREE.BufferGeometry();skirt.geometry.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));skirt.geometry.setIndex(si);skirt.geometry.computeVertexNormals();
   return { mesh, skirt, sampleRadius: (pos) => sampleHillMeshRadius(mesh, pos, R) };
 }

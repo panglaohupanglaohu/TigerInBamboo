@@ -531,7 +531,7 @@ export const BUILDING_CATALOG = {
   },
   swamp_pinkHanger: {
     id: "swamp_pinkHanger",
-    label: "沼泽·粉垂生物",
+    label: "沼泽·辣椒猴",
     create: (opts = {}) => SWAMP_COMPONENT_BUILDERS.pinkHanger(opts.rnd ?? Math.random),
     defaultYaw: 0,
     collideRadius: 0.4,
@@ -539,7 +539,7 @@ export const BUILDING_CATALOG = {
   },
   swamp_bird: {
     id: "swamp_bird",
-    label: "沼泽·沼泽鸟",
+    label: "沼泽·荧光雀",
     create: (opts = {}) =>
       SWAMP_COMPONENT_BUILDERS.swampBird(opts.rnd ?? Math.random, opts.color ?? 0xeaf6ff),
     defaultYaw: 0,
@@ -564,7 +564,7 @@ export const BUILDING_CATALOG = {
   },
   swamp_ribbonFish: {
     id: "swamp_ribbonFish",
-    label: "沼泽·发光带鱼",
+    label: "沼泽·荧色蝾螈",
     create: (opts = {}) => SWAMP_COMPONENT_BUILDERS.ribbonFish(opts.rnd ?? Math.random),
     defaultYaw: 0,
     collideRadius: 0.3,

@@ -1,3 +1,4 @@
+import {finishStartupSteps} from '../../core/startupTasks.js';
 // 云集群贴地重投影（方案 A）· 阶段 1 核心：
 // 用 THREE.Raycaster 对场景可见地形（hills / 旧港 / 圣城 / moebius 街区等）沿云锚点
 // 方向从球外向球心采样真实高度，改写 clusters 的 JS 端数据（instance.altitude /
@@ -121,7 +122,11 @@ export function ridgeScoreAt(sample, direction, { epsilon = 0.008 } = {}) {
  *    修掉了“绝对凸度对宽缓山丘天然≈0”的尺度失配问题。
  * 命中则把 anchor 与 pathPoints 用同一旋转整体搬移。
  */
-export function relocateCloudClustersToRidges(clusters, {
+export function relocateCloudClustersToRidges(clusters, options) {
+  return finishStartupSteps(relocateCloudClustersToRidgesSteps(clusters, options));
+}
+
+export function* relocateCloudClustersToRidgesSteps(clusters, {
   terrainMeshes = null,
   radius = 160,
   seaLevel = 0,
@@ -160,6 +165,7 @@ export function relocateCloudClustersToRidges(clusters, {
   let maxH = 0;
   let maxScore = 0;
   for (const instance of clusters.instances) {
+    yield '正在安排云层绕山路线…';
     if (!instance?.anchor) continue;
     const oldDir = new THREE.Vector3(instance.anchor[0], instance.anchor[1], instance.anchor[2]).normalize();
     const [t1, t2] = tangentFrame(oldDir);
@@ -241,7 +247,11 @@ export function relocateCloudClustersToRidges(clusters, {
  * - pathPoints[].altitude = sample(point.direction) + point.terrainClearance
  * - 收尾重算 clusters.climateHash（altitude 变了，哈希必须同步，否则下游缓存失配）
  */
-export function remapCloudClustersToSceneTerrain(clusters, {
+export function remapCloudClustersToSceneTerrain(clusters, options) {
+  return finishStartupSteps(remapCloudClustersToSceneTerrainSteps(clusters, options));
+}
+
+export function* remapCloudClustersToSceneTerrainSteps(clusters, {
   terrainMeshes = null,
   radius = 160,
   seaLevel = 0,
@@ -255,6 +265,7 @@ export function remapCloudClustersToSceneTerrain(clusters, {
     seaLevel,
   );
   for (const instance of clusters.instances) {
+    yield '正在贴合云层高度…';
     if (!instance) continue;
     const clearance = Number(instance.terrainClearance) || 1.2;
     const realHeight = sample(instance.anchor);

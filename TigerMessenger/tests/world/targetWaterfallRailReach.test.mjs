@@ -18,7 +18,7 @@ const reasons = result => result.report.reasons.map(r => r.type);
 test('actual vehicle OBB sets finite reach, real animated curtain stays seaward, and input geometry is untouched', () => {
   const input = fixture(), before = input.segments[0].worldCurve.v1.toArray(), result = solveTargetWaterfallRailReach(input);
   assert.equal(result.report.accepted, true, JSON.stringify(result.report.reasons));
-  assert.ok(result.outboardReach > 8 && result.outboardReach < 10);
+  assert.ok(result.outboardReach > 10 && result.outboardReach < 12);
   assert.ok(result.report.minimumChannelHeadroom > 3);
   assert.equal(result.report.impactSamples.length, 21);
   assert.equal(result.report.stoneContacts.length, 0);
@@ -33,7 +33,7 @@ test('actual vehicle OBB sets finite reach, real animated curtain stays seaward,
       asset.update(time);
       for (const name of ['target-waterfall-aqua-three-stream-curtain', 'target-waterfall-silver-flow-ribbons']) {
         const p = asset.group.getObjectByName(name).geometry.attributes.position;
-        for (let i = 0; i < p.count; i++) assert.ok(p.getZ(i) >= result.report.maximumVehicleZWithinBand + .6 - 1e-5);
+        for (let i = 0; i < p.count; i++) assert.ok(p.getZ(i) >= result.report.maximumVehicleZWithinBand + 2.0 - 1e-5);
       }
     }
   } finally { asset.dispose(); }
@@ -90,7 +90,7 @@ test('explicit selected old-shore subrange excludes a distant return branch; who
   };
   const selected = solveTargetWaterfallRailReach({ ...input, segments: [{ id: 'explicit-old-section', worldCurve: curve, startU: 0, endU: .5, direction: 1 }] });
   assert.equal(selected.report.accepted, true);
-  assert.ok(selected.outboardReach < 10);
+  assert.ok(selected.outboardReach < 12);
   assert.throws(() => solveTargetWaterfallRailReach({ ...input, segments: [{ id: 'global', worldCurve: curve, startU: 0, endU: 1, direction: 1 }] }), /Whole closed/);
 });
 

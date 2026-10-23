@@ -2,6 +2,7 @@ import * as THREE from 'three';
 function mergeGeometries(parts){const merged=new THREE.BufferGeometry();for(const name of Object.keys(parts[0].attributes)){const first=parts[0].attributes[name],C=first.array.constructor,array=new C(parts.reduce((n,g)=>n+g.attributes[name].array.length,0));let offset=0;for(const g of parts){array.set(g.attributes[name].array,offset);offset+=g.attributes[name].array.length;}merged.setAttribute(name,new THREE.BufferAttribute(array,first.itemSize,first.normalized));}merged.computeBoundingSphere();return merged;}
 import source from './warshipV6Data.js';
 import {getToonGradient} from './toon.js';
+import {createSwampRowerStyle} from './swampRowerStyle.js';
 const decode=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 let cache;
 function resources(){
@@ -13,8 +14,9 @@ function resources(){
  cache={poses,geometry};return cache;
 }
 /** Saved Blender asset, synchronous factory: no late visual swap during boarding. */
-export function createWarshipV6(){
+export function createWarshipV6({crewStyle=null}={}){
  const {poses,geometry}=resources(),byId=new Map();
+ const swampCrew=crewStyle==='swamp-coral'?createSwampRowerStyle():null;
  const materials=source.materials.map(m=>{const p=m.pbrMetallicRoughness||{},c=p.baseColorFactor||[1,1,1,1],mat=new THREE.MeshToonMaterial({color:new THREE.Color().fromArray(c),gradientMap:getToonGradient(),side:m.doubleSided?THREE.DoubleSide:THREE.FrontSide,opacity:c[3],transparent:m.alphaMode==='BLEND'});mat.name=m.name||'';return mat;});
  const nodes=source.nodes.map(s=>{const n=new THREE.Group();n.name=s.name||'';n.userData.sourceNodeId=s.sourceId;n.userData.crewWeaponOwner=s.extras?.warship_crew_index;n.userData.crewWeaponRole=s.extras?.warship_weapon_role;n.visible=!s.hidden;if(s.matrix)new THREE.Matrix4().fromArray(s.matrix).decompose(n.position,n.quaternion,n.scale);else{if(s.translation)n.position.fromArray(s.translation);if(s.rotation)n.quaternion.fromArray(s.rotation);if(s.scale)n.scale.fromArray(s.scale);}if(s.sourceId)byId.set(s.sourceId,n);return n;});
  source.nodes.forEach((s,i)=>s.children?.forEach(c=>nodes[i].add(nodes[c])));const boat=byId.get('n0');boat.name='fisher-boat';
@@ -22,7 +24,7 @@ export function createWarshipV6(){
  const inv=new THREE.Matrix4().copy(boat.matrixWorld).invert(),staticGroups=new Map(),dynamicGroups=new Map(),crew=byId.get('n219')||new THREE.Group();
  function controlled(n){for(let p=n;p&&p!==boat;p=p.parent)if(dynamic.has(p.userData.sourceNodeId)||Number.isInteger(p.userData.crewWeaponOwner)||p===crew)return true;return false;}
  function hidden(n){for(let p=n;p&&p!==boat;p=p.parent)if(!p.visible)return true;return false;}
- source.nodes.forEach((s,i)=>{if(s.mesh===undefined||hidden(nodes[i]))return;for(const part of geometry[s.mesh]){
+ source.nodes.forEach((s,i)=>{if(s.mesh===undefined||hidden(nodes[i]))return;const parts=swampCrew?.resolve(s.sourceId,geometry[s.mesh])||geometry[s.mesh];for(const part of parts){
   if(controlled(nodes[i])){const key=part.signature+':'+part.material;let group=dynamicGroups.get(key);if(!group)dynamicGroups.set(key,group={part,nodes:[]});group.nodes.push(nodes[i]);}
   else{const g=part.g.index?part.g.toNonIndexed():part.g.clone();g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inv,nodes[i].matrixWorld));const key=part.material+':'+Object.keys(g.attributes).sort().join(',');if(!staticGroups.has(key))staticGroups.set(key,{material:part.material,geometries:[],sources:[]});staticGroups.get(key).geometries.push(g);staticGroups.get(key).sources.push({node:nodes[i],part});}
  }});
@@ -41,7 +43,7 @@ export function createWarshipV6(){
   }
  }
  const batches=[];
- for(const group of dynamicGroups.values()){const mesh=new THREE.InstancedMesh(group.part.g,materials[group.part.material],group.nodes.length);mesh.frustumCulled=true;mesh.userData.animatedWarshipCulling=true;mesh.castShadow=mesh.receiveShadow=true;renderRoot.add(mesh);batches.push({...group,mesh});}
+ for(const group of dynamicGroups.values()){const mesh=new THREE.InstancedMesh(group.part.g,group.part.material?.isMaterial?group.part.material:materials[group.part.material],group.nodes.length);mesh.frustumCulled=true;mesh.userData.animatedWarshipCulling=true;mesh.castShadow=mesh.receiveShadow=true;renderRoot.add(mesh);batches.push({...group,mesh});}
  const matA=new THREE.Matrix4(),matB=new THREE.Matrix4(),pa=new THREE.Vector3(),pb=new THREE.Vector3(),qa=new THREE.Quaternion(),qb=new THREE.Quaternion(),sa=new THREE.Vector3(),sb=new THREE.Vector3(),zero=new THREE.Matrix4().makeScale(0,0,0);
  const tracks=source.poseKeys.map((k,i)=>({key:k,node:byId.get(k),offset:i*16})),stride=source.poseKeys.length*16;
  function pose(frameA,frameB,alpha){for(const tr of tracks){if(!tr.node)continue;matA.fromArray(poses,source.frameIndex[frameA]*stride+tr.offset).decompose(pa,qa,sa);matB.fromArray(poses,source.frameIndex[frameB]*stride+tr.offset).decompose(pb,qb,sb);tr.node.position.copy(pa).lerp(pb,alpha);tr.node.quaternion.copy(qa).slerp(qb,alpha);tr.node.scale.copy(sa).lerp(sb,alpha);}}
@@ -56,7 +58,7 @@ export function createWarshipV6(){
  const storedWeapons=rows.map((_,i)=>nodes.filter(n=>n.userData.crewWeaponOwner===i));
  let time=0,boarding=0,boardingPitch=null;
  boat.userData={...boat.userData,kind:'fisherBoat',collideRadius:7.5,crew,oars:Array.from({length:26},(_,i)=>byId.get('n'+(63+i*5))),oarPhase:0,oarSpeed:0,
-  warshipV6:{source:source.source,sha256:source.sourceSHA256,nodes:byId,batches:batches.length,staticDraws:staticGroups.size,pose,render,refreshStaticGeometry,
+  warshipV6:{source:source.source,sha256:source.sourceSHA256,crewStyle,nodes:byId,batches:batches.length,staticDraws:staticGroups.size,pose,render,refreshStaticGeometry,
    lanternMaterials:new Set(source.nodes.filter(n=>n.name?.startsWith("night-lantern-")&&n.mesh!==undefined).flatMap(n=>source.meshes[n.mesh].primitives.map(p=>materials[p.material]))),
    boardingContract:Object.freeze({rootPoint:Object.freeze(source.boarding?.rootPoint||[1.94,.664,.48]),length:source.boarding?.length||1.35,width:.34,deployedPitch:.12,clearanceValidated:false,source:source.source.replace(".glb",".assembly.json")}),
    bindCrewIdentity(index,identity){if(!rows[index])return false;rows[index].identity={...identity};for(const n of storedWeapons[index])n.userData.soldierUid=identity.uid;return true;},
@@ -76,7 +78,7 @@ export function createWarshipV6(){
     // Preserve the authored retract/swing animation; only tilt at the deployed end.
     if(boardingPitch!==null&&boarding>0){const hinge=byId.get('add:boarding-hinge');if(hinge)hinge.rotation.x+=(boardingPitch-.12)*THREE.MathUtils.smoothstep(boarding,.8,1);}
     let left=0,right=0;for(let i=0;i<26;i++){const r=rows[i];r.sedateT=Math.max(0,r.sedateT-d);if(r.attach){r.attach.userData.sedated=r.sedateT>0;r.attach.userData.sedateT=r.sedateT;}if(r.sedateT>0||!r.embarked){if(r.sedateT>0){if(r.side<0)left++;else right++;}for(const tr of rowTracks[i])if(tr.node)matA.fromArray(poses,source.frameIndex[180]*stride+tr.offset).decompose(tr.node.position,tr.node.quaternion,tr.node.scale);}}
-    boat.userData.oarSedatedCount=left+right;boat.userData.oarImbalance=(right-left)/13;boat.userData.oarPhase=time*6.2;render();},
+    boat.userData.oarSedatedCount=left+right;boat.userData.oarImbalance=(right-left)/13;boat.userData.oarPhase=time*6.2;boat.userData.warshipV6.posePostProcess?.();render();},
    paintCrest(pal){for(const batch of batches){const id=batch.nodes[0].userData.sourceNodeId||'';const color=id.startsWith('n224:')?pal.crest:id.startsWith('n225:')?pal.feathers:id.startsWith('n226:')?pal.stems:null;if(color!==null){batch.mesh.userData.crewCrest=true;batch.mesh.material=batch.mesh.material.clone();batch.mesh.material.color.setHex(color);}}},
   }};
  pose(180,180,0);render();return boat;

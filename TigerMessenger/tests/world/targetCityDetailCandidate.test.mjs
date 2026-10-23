@@ -136,3 +136,21 @@ test('startup cloud sweep consumes the actual installed rail curves',()=>{
  assert.equal(c.report.validation.visualAccepted,false);
  c.dispose();f.dispose();
 });
+
+
+test('post-attached old wings use actual support and survive roof rebuild, undo and failed staging',()=>{
+ const f=frozenScene(),c=createTargetCityDetailCandidate({castle:f.castle,includeFrontRail:false,oldCityWingStreets:true});
+ assert.throws(()=>c.completeOldWingStreets(),/attached/);
+ f.castle.add(c.root);c.completeTerraceLinks();const w=c.completeOldWingStreets();
+ assert.equal(w.report.enabled,true);assert.ok(w.report.modules.length>0);
+ assert.equal(c.completeOldWingStreets(),w.report);
+ for(const m of w.report.modules)assert.ok(m.supportSamples.length>0);
+ c.clearForest();const session=c.openRoofSession({targetId:'target-v11',terrainVersion:'frozen-fixture',factoryVersion:c.report.oldCity.geometry.version});
+ const solved=session.solve({seed:20261006});assert.equal(solved.ok,true,JSON.stringify(solved));
+ assert.equal(session.currentAsset.report.wingStreets.enabled,true);assert.ok(session.currentAsset.report.wingStreets.modules.length>0);
+ assert.equal(session.undoRoof().ok,true);assert.equal(session.currentAsset.report.wingStreets.enabled,true);
+ assert.equal(session.redoRoof().ok,true);const previous=session.currentAsset;
+ const fail=session.solve({locks:{'house-0--1-0':'upper-street-cupola','house-0--1-1':'outer-edge-short-tower'}});
+ assert.equal(fail.ok,false);assert.equal(session.currentAsset,previous);assert.equal(previous.group.parent,c.root);assert.equal(previous.report.wingStreets.enabled,true);
+ c.dispose();f.dispose();
+});

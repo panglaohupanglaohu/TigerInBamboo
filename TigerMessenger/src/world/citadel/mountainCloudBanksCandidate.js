@@ -1,3 +1,4 @@
+import {createMountainCirculatingCloudBanks} from './mountainCirculatingCloudBanks.js';
 import * as THREE from 'three';
 import {buildRidgeCloudField} from './ridgeCloudField.js';
 import {canopyClearOfConstraints} from './mountainCanopyCandidate.js';
@@ -10,11 +11,12 @@ export const TARGET_CITY_CLOUD_FRONTS = [
 ];
 // Connected opaque-ish 3D mist shells, not sprites or an implementation of Oskar's impostors.
 export function createMountainCloudBanksCandidate(castle, {
-  enabled = false, surfaceIndex = null, protectedBoxes = [], rail = [], radius = 160,
+  enabled = false, surfaceIndex = null, protectedBoxes = [], protectedLocalBoxes = null, rail = [], radius = 160,
   bounds = {x: [-110, 130], z: [-65, 105]}, maxBanks = 8,
   waterHeight = () => 0, sampleSea = null, timeOfDay = () => .5,
-  cityFrontExclusions = TARGET_CITY_CLOUD_FRONTS, clusteredComposition = false,
+  cityFrontExclusions = TARGET_CITY_CLOUD_FRONTS, clusteredComposition = false, circulating = false,
 } = {}) {
+  if(enabled&&circulating)return createMountainCirculatingCloudBanks(castle,{surfaceIndex,sampleSea,protectedBoxes,protectedLocalBoxes,rail,maxBanks,timeOfDay});
   const report = {version:MOUNTAIN_CLOUD_BANKS_VERSION, enabled:!!enabled, banks:[], rejected:{unsupported:0,height:0,neighbour:0,clearance:0,cityFront:0,envelope:0}, method:'connected 3D cloud banks traced along final-mesh contours; regular depth occlusion; deterministic bounded drift'};
   if(!enabled)return {group:null,report,update(){},dispose(){}};
   if(!surfaceIndex?.sample)throw new TypeError('Cloud banks require final surfaceIndex');

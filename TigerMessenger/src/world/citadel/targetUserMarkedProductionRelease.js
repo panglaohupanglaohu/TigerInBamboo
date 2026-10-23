@@ -17,7 +17,7 @@ export function createTargetUserMarkedProductionRelease({sourceCurves,radius=160
     return y===null?null:retreat.height(x,z,targetTerrainHeight(x,z,y,{aprons:true,saddle:true,valleyBenches:true}),y);
   };
   const release=createTargetUserMarkedTransitRelease({sourceCurves,sampleSea:sea,sampleTerrain:terrain,platforms:TARGET_CITY_PLATFORMS});
-  release.structureOptions={galleryPierWidths:{oldShore:.9}};
+  release.structureOptions={stackedOnlyBetweenCityLinks:true,galleryPierWidths:{oldShore:.9}};
   // Latest approved image: the continuous pedestrian route is on top of the
   // railway gallery. Both city links are solved against the new route; no
   // separate crossing is retained once those connections are built.

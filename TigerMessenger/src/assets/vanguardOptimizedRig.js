@@ -58,6 +58,7 @@ export function createVanguardRig(controller) {
     try {
       let direction=V(0,.95,.312),target=V(-.34,.765,.22),bladeAxis=V(.02,-.925,.38),bend=.08,lean=0,drop=0;
       if(action==='aim'||(!forced&&left> -1.9&&left<-.6))direction.set(0,0,1);
+      if(action==='shield'){bend=.38;lean=.06;drop=-.04;}
       if(action==='stagger'){target.set(-.38,.85,.20);bladeAxis.set(-.25,-.90,.36);bend=.38;lean=-.08;drop=-.018;}
       if(action==='rope'){target.set(-.31,.75,.18);bladeAxis.set(.02,-.925,.38);}
       if(action==='walk'){target.z+=right*.08;target.y+=Math.abs(right)*.015;}
@@ -70,16 +71,16 @@ export function createVanguardRig(controller) {
       direction.normalize();bladeAxis.normalize();set('n1',V(0,drop,0),new THREE.Quaternion().setFromAxisAngle(V(1,0,0),lean));
       const origin=V(.255,1.46,-.085),gunQ=new THREE.Quaternion().setFromUnitVectors(V(0,0,1),direction);
       const gunGrip=V(0,-.11,-.12).multiply(gunScale).applyQuaternion(gunQ).add(origin);
-      const leftTarget=action==='rope'?V(.47,1.48,.14):gunGrip;
+      const leftTarget=action==='shield'?V(.25,1,.4):action==='rope'?V(.47,1.48,.14):gunGrip;
       const leftAxis=action==='rope'?V(0,1,0):V(0,1,0).applyQuaternion(gunQ);
       arm('L',leftTarget,leftAxis);arm('R',target,bladeAxis);
       set('n39',origin.clone().sub(V(.21,1.12,0)),gunQ,gunScale);
       set('n59',target.clone().sub(V(-.21,1.12,0)),new THREE.Quaternion().setFromUnitVectors(V(1,0,0),bladeAxis));
       set('add:rope-grip',leftTarget);
-      const stationary=forced?.walk===0 || (!walking && action!=='walk');
+      const stationary=forced?forced.walk===0:(!walking&&action!=='walk');
       leg('L',bend,stationary?0:parts.legL.rotation.x);
       leg('R',-bend*.45,stationary?0:parts.legR.rotation.x);
-      meta.action=action;meta.liveRig=true;meta.leftHandRole=action==='rope'?'rope':'gun grip';
+      meta.action=action;meta.liveRig=true;meta.leftHandRole=action==='shield'?'shield emitter':action==='rope'?'rope':'gun grip';
     } finally {busy=false;}
   }
   return {

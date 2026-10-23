@@ -113,8 +113,8 @@ function attachNightLanterns(boat) {
   _nightBoatLights.push(light);
 }
 
-export function createFisherBoat() {
-  const boat = createWarshipV6();
+export function createFisherBoat(options) {
+  const boat = createWarshipV6(options);
   // Bind the saved lantern meshes to the existing day/night controller; do not add duplicate geometry.
   const lanterns = boat.userData.warshipV6.lanternMaterials;
   boat.traverse(node => {

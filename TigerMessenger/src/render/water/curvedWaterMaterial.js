@@ -74,11 +74,11 @@ export function createCurvedWaterMaterial(THREE, {
         // mask means a WFC boundary cell, not an ocean cell; treating it as
         // opaque would wash the adjacent land triangle blue.
         if (waterMask < 0.42) discard;
-        float crest = smoothstep(0.014, 0.052, abs(vWave)) * (0.18 + fetch * 0.82);
+        // Keep open ocean quiet; foam belongs at shoreline contacts.
         float shorelineFoam = (1.0 - smoothstep(0.05, 0.32, shore)) * smoothstep(0.008, 0.035, abs(vWave));
         float ripplePhase = length(vRadial.xz - vWater1.xy) * 155.0 + uTime * 1.15 + vWater0.w * 6.2831;
         float lakeRipple = (0.5 + 0.5 * sin(ripplePhase)) * (1.0 - smoothstep(0.15, 0.86, shore));
-        float foam = mix(crest + shorelineFoam, lakeRipple * 0.2 + shorelineFoam * 0.7, uWaterKind);
+        float foam = mix(shorelineFoam, lakeRipple * 0.2 + shorelineFoam * 0.7, uWaterKind);
         vec3 deepColor = uColor * mix(0.64, 1.0, depth);
         vec3 color = deepColor * light * mix(0.48, 1.0, uNight);
         color += vec3(0.02, 0.05, 0.065) * (vWave + 0.06) * (1.0 - uWaterKind * 0.35);

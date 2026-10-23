@@ -367,6 +367,27 @@ function buildDistributedPatrolPlan({
   };
 }
 
+// A migrated city owns a verified narrow walking corridor. Keep patrol turns on
+// that exact polyline instead of projecting obsolete terrace targets onto cliffs.
+export function buildVerifiedRoutePatrolPlan(groupRecords, route, duration) {
+  const source = route.points;
+  const paths = groupRecords.map((record, i) => {
+    const reverse = [source.at(-1).clone()];
+    let remaining = 12 + i * 1.2;
+    for (let j = source.length - 2; j >= 0 && remaining > 0; j--) {
+      const a = reverse.at(-1), b = source[j], distance = a.distanceTo(b);
+      if (distance < 1e-8) continue;
+      reverse.push(a.clone().lerp(b, Math.min(1, remaining / distance)));
+      remaining -= distance;
+    }
+    return makePath([...reverse, ...reverse.slice(0, -1).reverse()]);
+  });
+  return {segments: [{kind: 'route-patrol', terraceIndex: 0, duration, paths}],
+    coverageByTerrace: new Map([[0, []]]), totalDuration: duration,
+    terminalPoints: paths.map(path => path.points.at(-1).clone()),
+    source: 'verified-stair-route', lateralOffset: 0};
+}
+
 /**
  * @param {object|null} [progressOut] 若传入 `{ value: number }`，写入当前段进度 0–1
  */
@@ -473,6 +494,7 @@ export function createCitadelNightInfiltration({
   let _stairRoute = (stairRoute || []).slice();
   let _stairTransferRoutes = (stairTransferRoutes || []).slice();
   let _patrolSurfacePoint = patrolSurfacePoint || null;
+  let _patrolOnStairRoute = false;
   const makeCastleTopTargets = () => {
     const target = captureTarget?.isVector3 ? captureTarget : baseRoutes.stairs.points.at(-1);
     if (!target) return new Map([[0, []]]);
@@ -681,7 +703,9 @@ export function createCitadelNightInfiltration({
       }
       const approachEnd = groupRecords[0].path.points.at(-1)?.clone()
         || baseGround.clone();
-      const patrolPlan = buildDistributedPatrolPlan({
+      const patrolPlan = _patrolOnStairRoute
+        ? buildVerifiedRoutePatrolPlan(groupRecords, route, patrolDuration)
+        : buildDistributedPatrolPlan({
         groupRecords,
         patrolTerraces,
         terraceTargets,
@@ -704,6 +728,8 @@ export function createCitadelNightInfiltration({
 
   /** 地形编辑器热重建后刷新路线（citadelRange 在 rebuildWaterTerraces 里调用）。 */
   const setRoutes = (next = {}) => {
+    // Old terrace editor refreshes must not replace a runtime-verified route.
+    if (_patrolOnStairRoute && next.patrolOnStairRoute !== true) return false;
     placementRevision++;
     if (Array.isArray(next.waterfallRoute)) _waterfallRoute = next.waterfallRoute.slice();
     if (Array.isArray(next.stairRoute)) _stairRoute = next.stairRoute.slice();
@@ -724,6 +750,7 @@ export function createCitadelNightInfiltration({
   assistanceRoot.visible = false;
   root.add(assistanceRoot);
 
+  let guardianOwner = null, guardianRequested = null;
   let active = false;
   let returning = false;
   let previousNight = false;
@@ -735,7 +762,7 @@ export function createCitadelNightInfiltration({
 
   const setRecordPose = (record, position, lookDirection) => {
     record.soldier.position.copy(position);
-    setHeading(record.soldier, lookDirection, _up);
+    setHeading(record.soldier, lookDirection, _patrolOnStairRoute && position.lengthSq()>1 ? position.clone().normalize() : _up);
   };
 
   const setMovementPose = (record, moving, climbing, clock, pace = 1) => {
@@ -1240,6 +1267,11 @@ export function createCitadelNightInfiltration({
    * @param {{ listener?: THREE.Vector3 }} [ctx] listener = 玩家世界坐标
    */
   const update = (dt, _time, phase, ctx = {}) => {
+    if (guardianOwner || guardianRequested) {
+      if (returning) updateReturn(dt);
+      else if (active) startReturn();
+      return;
+    }
     const night = isNight(phase);
     if (night && !previousNight) startNight();
     if (!night && previousNight) startReturn();
@@ -1344,7 +1376,7 @@ export function createCitadelNightInfiltration({
         if (segment?.kind === "terrace-patrol") {
           tryJavelinForPatrol(record, segment, _patrolProgress.value);
         }
-        const moving = segment?.kind === "terrace-patrol"
+        const moving = segment?.kind === "route-patrol" || segment?.kind === "terrace-patrol"
           || segment?.kind === "stair-transfer";
         // 蓄力时仍朝下一家门户，便于看清投掷方向
         if (record.javelin?.phase === "windup" && record.javelin.to) {
@@ -1479,13 +1511,13 @@ export function createCitadelNightInfiltration({
   // Explicit idle-only relocation transaction. The original actor and its children
   // remain intact. World-space input; external placement/range metadata belongs
   // to the caller and must be committed only after ok:true.
-  const safeToRelocate = () => !active && !returning && !previousNight
+  const safeToRelocate = () => !guardianOwner && !guardianRequested && !active && !returning && !previousNight
     && records.every(r => !r.soldier.visible && !r.javelin);
   const finiteVector = v => v?.isVector3 && v.toArray().every(Number.isFinite);
   const snapshotPlacement = () => ({
     position:horse.position.clone(), quaternion:horse.quaternion.clone(), scale:horse.scale.clone(),
     baseQuat:horse.userData.baseQuat?.clone(), ground:baseGround.clone(), up:_up.clone(), right:_siteRight.clone(),
-    waterfall:_waterfallRoute, stairs:_stairRoute, transfer:_stairTransferRoutes, surface:_patrolSurfacePoint,captureTarget,
+    waterfall:_waterfallRoute, stairs:_stairRoute, transfer:_stairTransferRoutes, surface:_patrolSurfacePoint,patrolOnStairRoute:_patrolOnStairRoute,captureTarget,
     routes:{...baseRoutes}, targets:terraceTargets, anchors:descentAnchors.map(p=>p.clone()),
     records:records.map(r=>({anchor:r.anchor.clone(),drop:r.dropTarget.clone(),path:r.path,plan:r.patrolPlan,duration:r.moveDuration})),
     groups:groups.map(g=>({...g.userData})),
@@ -1494,7 +1526,7 @@ export function createCitadelNightInfiltration({
     horse.position.copy(s.position);horse.quaternion.copy(s.quaternion);horse.scale.copy(s.scale);
     if(s.baseQuat)horse.userData.baseQuat=s.baseQuat.clone();else delete horse.userData.baseQuat;
     horse.updateWorldMatrix(true,true);baseGround.copy(s.ground);_up.copy(s.up);_siteRight.copy(s.right);
-    _waterfallRoute=s.waterfall;_stairRoute=s.stairs;_stairTransferRoutes=s.transfer;_patrolSurfacePoint=s.surface;captureTarget=s.captureTarget;
+    _waterfallRoute=s.waterfall;_stairRoute=s.stairs;_stairTransferRoutes=s.transfer;_patrolSurfacePoint=s.surface;_patrolOnStairRoute=s.patrolOnStairRoute;captureTarget=s.captureTarget;
     Object.assign(baseRoutes,s.routes);terraceTargets=s.targets;
     descentAnchors.forEach((p,i)=>p.copy(s.anchors[i]));
     records.forEach((r,i)=>{const v=s.records[i];r.anchor.copy(v.anchor);r.dropTarget.copy(v.drop);r.path=v.path;r.patrolPlan=v.plan;r.moveDuration=v.duration;});
@@ -1534,6 +1566,7 @@ export function createCitadelNightInfiltration({
       _waterfallRoute=next.waterfallRoute.map(v=>v.clone());_stairRoute=next.stairRoute.map(v=>v.clone());
       if(next.stairTransferRoutes)_stairTransferRoutes=next.stairTransferRoutes.map(r=>({...r,points:r.points.map(v=>v.clone())}));
       if(next.patrolSurfacePoint)_patrolSurfacePoint=next.patrolSurfacePoint;
+      _patrolOnStairRoute=next.patrolOnStairRoute===true;
       if(next.captureTarget!==undefined)captureTarget=next.captureTarget.clone();
       rebuildPlans();root.userData.patrolTargetsByTerrace=terraceTargets;resetForDay();
     } catch(error) {restorePlacement(before);return {ok:false,reason:'rebuild-failed',error:String(error.message||error)};}
@@ -1541,7 +1574,26 @@ export function createCitadelNightInfiltration({
     return {ok:true,revision:committed,horseUUID:horse.uuid,ground:baseGround.toArray(),
       rollback(){if(rolledBack||placementRevision!==committed||!safeToRelocate())return {ok:false,reason:'stale-or-active'};restorePlacement(before);resetForDay();rolledBack=true;placementRevision++;return {ok:true};}};
   };
-  const getPlacementState = () => ({revision:placementRevision,horseUUID:horse.uuid,baseGround:baseGround.toArray(),captureTarget:captureTarget?.toArray()||null,
+  const getPlacementState = () => ({revision:placementRevision,patrolOnStairRoute:_patrolOnStairRoute,horseUUID:horse.uuid,baseGround:baseGround.toArray(),captureTarget:captureTarget?.toArray()||null,
     anchors:descentAnchors.map(p=>p.toArray()),drops:records.map(r=>r.dropTarget.toArray()),safeToRelocate:safeToRelocate()});
-  return { root, update, reset: resetForDay, setRoutes, relocateGround, getPlacementState, getState: root.userData.getState };
+  const requestGuardianLease = owner => {
+    if (!owner || guardianOwner && guardianOwner !== owner || guardianRequested && guardianRequested !== owner) return false;
+    if (guardianOwner === owner) return true;
+    guardianRequested = owner;
+    if (active && !returning) startReturn();
+    if (returning || records.some(r => r.soldier.visible)) return false;
+    resetForDay();previousNight = false;guardianOwner = owner;guardianRequested = null;
+    horse.userData.guardianActive=true;if(staticSquad)staticSquad.visible=false;
+    return true;
+  };
+  const releaseGuardianLease = owner => {
+    if (guardianOwner !== owner && guardianRequested !== owner) return false;
+    const held=guardianOwner===owner;
+    guardianOwner = null;guardianRequested = null;
+    // Cancelling a request must not restart the same night's deployment while
+    // its soldiers are still returning; a held lease can resume a fresh cycle.
+    if(held){previousNight=false;horse.userData.guardianActive=false;horse.userData.baseQuat?.copy(horse.quaternion);horse.userData.tipAmount=0;if(staticSquad)staticSquad.visible=true;}
+    return true;
+  };
+  return { root, update, reset: resetForDay, setRoutes, relocateGround, getPlacementState, getState: root.userData.getState,requestGuardianLease,releaseGuardianLease };
 }

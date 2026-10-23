@@ -3,6 +3,7 @@ export {
   listScenes,
   getSceneModule,
   loadScenes,
+  loadScenesIncrementally,
   resolveSceneIdsFromUrl,
   DEFAULT_SCENE_IDS,
 } from "./registry.js";

@@ -16,7 +16,7 @@ export const HISTORIC_PASSES = [
  ['new','joints','新城：错缝灰浆'],['new','wash','新城：矿物斑驳'],
  ['new','rain','新城：雨痕'],['new','damp','新城：临水湿痕'],
  ['new','pits','新城：表面石孔'],['new','repairs','新城：修补砌块'],
- ['gate','emission','高山之门：移除墙面自发光'],['gate','warm','高山之门：暖灰砂石'],
+ ['gate','emission','高山之门：移除墙面自发光'],['gate','warm','高山之门：风化砖红石材'],
  ['gate','rough','高山之门：粗糙石面'],['gate','blocks','高山之门：巨石色差'],
  ['gate','joints','高山之门：粗灰浆缝'],['gate','wash','高山之门：矿物沉积'],
  ['gate','rain','高山之门：长雨痕'],['gate','damp','高山之门：潮湿基脚'],
@@ -35,7 +35,7 @@ function semanticGateSurfaces(root){
  root.traverse(o=>{
   if(!o.isMesh||Array.isArray(o.material))return;
   const names=[o.name,...(o.userData.sources||[])].join(' ');
-  const color=/wall-ivy|rock-shrub/.test(names)?0x536849:/cypress-trunk|vine-stem/.test(names)?0x705b43:/cypress/.test(names)?0x3e5848:/foot-rock|Gate_rock|rock-foundation/.test(names)?0x7d8075:null;
+  const color=/wall-ivy|rock-shrub/.test(names)?0x536849:/cypress-trunk|vine-stem/.test(names)?0x705b43:/cypress/.test(names)?0x3e5848:/foot-rock|Gate_rock|rock-foundation/.test(names)?(root.userData.approvedMonument?0x879aaa:0x7d8075):null;
   if(color===null)return;const original=o.material,m=original.clone();o.material=m;entries.push({m,original,color});
  });return entries;
 }
@@ -86,6 +86,8 @@ function installMaterial(original,root,district,role,state){
   shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
    vec3 hn=abs(normalize(cross(dFdx(vHistoric),dFdy(vHistoric))));
    vec2 huv=hn.y>.72?vHistoric.xz*.30:vec2(hn.x>hn.z?vHistoric.z:vHistoric.x,vHistoric.y)*vec2(.28,.34);
+   // The monumental gate reads as broad ashlar rather than dense small bricks.
+   if(ageD.y>.5)huv*=.30;
    vec4 hm=texture2D(ageMask,huv);
    vec4 hw=texture2D(ageMask,huv*.193+vec2(.137,.391));
    float vertical=1.0-smoothstep(.5,.85,hn.y);
@@ -101,6 +103,19 @@ function installMaterial(original,root,district,role,state){
    diffuseColor.rgb*=max(.40,value);
    diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.72,.79,.64),damp*.34);
    diffuseColor.rgb*=1.0+ageC.y*(hw.g-.60);
+   if(ageD.y>.5){
+    // Broad repair colour and selective mineral streaks, not all-over grime.
+    float oldBlock=smoothstep(.28,.68,hm.r);
+    vec3 mineral=mix(vec3(.88,.94,1.03),vec3(1.035,1.005,.94),oldBlock);
+    float flow=.5+.5*sin(vHistoric.x*.57+sin(vHistoric.z*.41)*1.6);
+    float rainTrail=smoothstep(.69,.88,flow)*vertical*(.45+.55*hw.g);
+    float moss=(1.0-hm.a)*smoothstep(.58,.83,hw.g)*.30+damp*.34;
+    diffuseColor.rgb*=mineral*(1.0-rainTrail*.085);
+    // Sparse pale salt/lime deposits keep the faded red masonry readable.
+    float lime=smoothstep(.64,.88,hw.r)*(.30+.70*(1.0-hm.a));
+    diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.57,.49,.40),lime*.22);
+    diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.65,.77,.59),clamp(moss,0.0,.22));
+   }
   `);
   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
    // Small derivative relief; does not displace the walkable or collision surfaces.
@@ -111,7 +126,7 @@ function installMaterial(original,root,district,role,state){
    normal=normalize(abs(hd)*normal-sign(hd)*ageC.z*(dFdx(hh)*hr1+dFdy(hh)*hr2));
   `);
  };
- m.customProgramCacheKey=()=>`historic-stone-v1-${original.customProgramCacheKey?.()||''}`;
+ m.customProgramCacheKey=()=>`historic-stone-v2-gate-${original.customProgramCacheKey?.()||''}`;
  m.userData.historicStone=true;m.needsUpdate=true;return m;
 }
 function chipCandidate(o,district){
@@ -158,11 +173,17 @@ export function setHistoricRound(root,round){
   if(e.role==='bronze'&&a.bronze){m.color.set(0x6e7356);m.roughness=.78;m.metalness=.48;m.emissive.set(0);}
   const enabled=stone&&(e.role!=='paving'||a.paving),strength=e.district==='new'?.8:1;
   const val=k=>enabled&&a[k]?strength:0;
-  e.u.ageInverse.value.copy(inverse);e.u.ageD.value.x=e.district==='old'?4.95:e.district==='new'?4:0;
+  e.u.ageInverse.value.copy(inverse);e.u.ageD.value.x=e.district==='old'?4.95:e.district==='new'?4:0;e.u.ageD.value.y=e.district==='gate'&&enabled&&a.blocks?1:0;
   e.u.ageA.value.set(val('blocks')*.42,val('joints')*.22,val('wash')*.26,val('rain')*.26);
   e.u.ageB.value.set(val('damp')*.20,val('pits')*.28,val('repairs')*.075,val('cornice')*.16);
   e.u.ageC.value.set(val('foot')*.10,e.role==='roof'&&a.roof?.38:0,val('relief')*.045,0);
   if(a.balance){e.u.ageA.value.x*=.88;e.u.ageB.value.y*=.7;}
+  if(e.district==='gate'&&stone&&a.warm){
+   m.color.set(e.role==='paving'?0xb39a86:0xad7564);m.emissive.set(0);m.roughness=.98;m.metalness=0;
+   e.u.ageA.value.set(val('blocks')*.26,val('joints')*.11,val('wash')*.14,val('rain')*.14);
+   e.u.ageB.value.set(val('damp')*.24,val('pits')*.025,val('repairs')*.08,val('cornice')*.075);
+   e.u.ageC.value.x=val('foot')*.075;e.u.ageC.value.z=val('relief')*.018;
+  }
  }
  for(const e of s.semantic){e.m.color.copy(e.original.color);e.m.emissive.copy(e.original.emissive);e.m.emissiveIntensity=e.original.emissiveIntensity;if(s.round>=39){e.m.color.set(e.color);e.m.emissive.set(0);e.m.roughness=1;}}
  for(const g of s.relief)g.visible=s.round>=g.userData.historyRound;

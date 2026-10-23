@@ -131,3 +131,27 @@ test('refresh rebinds replaced identities and changed/missing report UUIDs after
  assert.equal(runtime.dispose().ok,true);restored(f);
  runtime.refresh();replacement.visible=true;runtime.enforceVisibility();assert.equal(replacement.visible,true,'disposed cache is inert');
 });
+
+
+test('staged startup publishes only a completed runtime and rolls back checkpoint interruption',async()=>{
+ const {installTargetCityRuntimeSteps}=await import('../../src/world/citadel/targetCityRuntime.js');
+ const {runStartupSteps}=await import('../../src/core/startupTasks.js');
+ const f=fixture(),labels=[];
+ const runtime=await runStartupSteps(installTargetCityRuntimeSteps(f.options,{createCandidate:f.createCandidate}),async label=>{labels.push(label);assert.equal(f.castle.userData.targetCityRuntime,undefined);await new Promise(resolve=>setTimeout(resolve,1));});
+ assert.ok(labels.length>=6);assert.equal(runtime.report.installed,true);assert.equal(runtime.report.landmarkIntegration.ok,true);runtime.dispose();restored(f);
+ const interrupted=fixture();
+ await assert.rejects(runStartupSteps(installTargetCityRuntimeSteps(interrupted.options,{createCandidate:interrupted.createCandidate}),async()=>{throw new Error('startup interrupted');}),/startup interrupted/);
+ assert.equal(interrupted.control.disposeCount,1);assert.equal(interrupted.control.ownedDispose,1);restored(interrupted);
+});
+
+
+test('retired architectural owners hide late window fragments but preserve mixed terrain and actor owners',()=>{
+ const f=fixture(),oldBuilding=new T.Group();oldBuilding.name='legacy-building-owner';
+ const oldWall=new T.Mesh(new T.BoxGeometry(),new T.MeshBasicMaterial());oldBuilding.add(oldWall);f.castle.add(oldBuilding);
+ const runtime=installTargetCityRuntime(f.options,{createCandidate:f.createCandidate});
+ assert.equal(oldBuilding.visible,false);assert.equal(f.street.visible,true,'statue owner is protected');assert.equal(f.leaf.parent.visible,true,'vegetation owner remains');
+ const lateWindow=new T.Mesh(new T.BoxGeometry(),oldWall.material);oldBuilding.add(lateWindow);oldBuilding.visible=true;runtime.enforceVisibility();
+ assert.equal(oldBuilding.visible,false);assert.equal(lateWindow.visible,true,'retired owner, not a destroyed late mesh');
+ assert.equal(runtime.dispose().ok,true);assert.equal(oldBuilding.visible,true);assert.equal(oldBuilding.children.includes(lateWindow),true);oldBuilding.removeFromParent();restored(f);
+ oldWall.geometry.dispose();lateWindow.geometry.dispose();oldWall.material.dispose();
+});

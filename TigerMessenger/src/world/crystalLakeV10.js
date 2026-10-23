@@ -1,3 +1,4 @@
+import {findByName} from '../core/sceneLookup.js';
 import {MOEBIUS_PALETTE as P} from './moebiusPalette.js';
 import * as THREE from 'three';
 import {cityLocalToDir,getCityFrame,dirToCityLocal} from './crystalCityLayout.js';
@@ -58,7 +59,7 @@ export function installCrystalLakeV10({scene,city,swamp}){
  material.colorWrite=false;
  material.depthWrite=false;
  lake.onBeforeRender=(_r,_s,camera)=>{
-  const cityLake=scene.getObjectByName('city-sea-lake');
+  const cityLake=findByName(scene,'city-sea-lake');
   if(cityLake&&!cityLake.userData.v10WaterStyle){
    const surface=cityLake.children.find(o=>o.isMesh&&o.geometry.userData.sphericalWater&&o.renderOrder===2);
    if(surface){
@@ -78,7 +79,7 @@ export function installCrystalLakeV10({scene,city,swamp}){
     for(const g of islands.children){const d=g.position.clone().normalize();ray.set(d.clone().multiplyScalar(250),d.clone().negate());const h=ray.intersectObject(surface,false)[0];if(h&&h.point.length()>g.position.length())g.position.copy(h.point);}
    }
   }
-  const ocean=scene.getObjectByName('planet-v8-curved-ocean');if(!ocean)return;
+  const ocean=findByName(scene,'planet-v8-curved-ocean');if(!ocean)return;
   const m=ocean.material;material.uniforms.night.value=m.uniforms.uNight.value;
   if(!m.userData.crystalLake){
    Object.assign(m.uniforms,{uCrystalTime:material.uniforms.time,uCrystalEye:material.uniforms.eye,uCrystalEyeHeight:material.uniforms.eyeHeight,uCrystalTowers:material.uniforms.towers,uCrystalSwamp:material.uniforms.swamp,uCrystalCenter:{value:frame.center},uCrystalEast:{value:frame.east},uCrystalNorth:{value:frame.north}});

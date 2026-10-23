@@ -7,12 +7,15 @@ import * as THREE from 'three';
 import {createCitadelPlayerWalls} from './playerWalls.js';
 import data from '../../../assets/models/optimized/gate-of-sighs/gateTargetData.js';
 import {citadelCoastalFrame,citadelCoastalTramEnabled} from './coastalTramRoute.js';
+import {plantHighlandGateLandscape} from './highlandGateLandscape.js';
+import {buildHighlandGateMonument} from './highlandGateMonument.js';
 
 export const HIGHLAND_GATE_ROUND=30;
 export function installHighlandGate({scene,tramSystem}){
  if(!citadelCoastalTramEnabled())return null;
  const requested=Number(new URLSearchParams(location.search).get('highlandGate')??HIGHLAND_GATE_ROUND);const round=Number.isFinite(requested)?Math.max(0,Math.min(30,Math.floor(requested))):HIGHLAND_GATE_ROUND;if(round<=0)return null;
- const cv=tramSystem.curve,target=new THREE.Vector3(-94,0,80).applyMatrix4(citadelCoastalFrame()).normalize();
+ const approvedMonument=new URLSearchParams(location.search).get('highlandMonument')!=='0';
+ const cv=tramSystem.curve,target=new THREE.Vector3(...(approvedMonument?[-174,0,-42]:[-94,0,80])).applyMatrix4(citadelCoastalFrame()).normalize();
  let u=0,best=Infinity;for(let i=0;i<12000;i++){const d=cv.getPointAt(i/12000).normalize().distanceToSquared(target);if(d<best){best=d;u=i/12000;}}
  const origin=cv.getPointAt(u),up=origin.clone().normalize(),z=cv.getTangentAt(u).normalize(),x=new THREE.Vector3().crossVectors(up,z).normalize();z.crossVectors(x,up).normalize();
  const root=new THREE.Group();root.name='highland-gate';root.position.copy(origin);root.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(x,up,z));root.userData={round,railU:u,source:data.source,displayName:'高山之门'};
@@ -26,12 +29,12 @@ export function installHighlandGate({scene,tramSystem}){
  }
  const add=(name,geometry,color,position=[0,0,0])=>{geometry.translate(...position);const mesh=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color,roughness:.95,flatShading:true,emissive:color,emissiveIntensity:.12}));mesh.name=name;root.add(mesh);return mesh;};
  if(round>=5){for(const side of[-1,1]){
- const pos=[],indices=[],N=round>=29?40:24,levels=round>=29?[[-19,17],[-13,16],[-10,14.5],[-6,14],[-3,12],[0,9],[1.1,8],[2.1,7]]:[[-19,17],[-11,15],[-4,12],[1.1,9],[2.1,7]];
- levels.forEach(([y,r],j)=>{for(let i=0;i<N;i++){const a=i/N*Math.PI*2,rr=r*(1+.09*Math.sin(i*2.7+side)+.06*Math.cos(i*1.9+j));pos.push(side*15.5+Math.cos(a)*rr,y+.35*Math.sin(i*2+j),Math.sin(a)*rr*1.3);}});
+ const pos=[],indices=[],N=approvedMonument?14:round>=29?40:24,levels=approvedMonument?[[-19,16],[-12,14],[-12,12],[-5,10.5],[-5,9],[2.1,7]]:round>=29?[[-19,17],[-13,16],[-10,14.5],[-6,14],[-3,12],[0,9],[1.1,8],[2.1,7]]:[[-19,17],[-11,15],[-4,12],[1.1,9],[2.1,7]];
+ levels.forEach(([y,r],j)=>{for(let i=0;i<N;i++){const a=i/N*Math.PI*2,rr=r*(1+(approvedMonument?.035:.09)*Math.sin(i*2.7+side)+(approvedMonument?.015:.06)*Math.cos(i*1.9+j));pos.push(side*15.5+Math.cos(a)*rr*(approvedMonument&&Math.cos(a)*side>0?1.28:1),y+(approvedMonument?0:.35)*Math.sin(i*2+j),Math.sin(a)*rr*(approvedMonument?1.56:1.3));}});
  for(let j=0;j<levels.length-1;j++)for(let i=0;i<N;i++){const a=j*N+i,b=j*N+(i+1)%N,c=a+N,d=b+N;indices.push(a,c,b,b,c,d);}for(let i=1;i<N-1;i++)indices.push((levels.length-1)*N,(levels.length-1)*N+i+1,(levels.length-1)*N+i);if(round>=29)for(let i=1;i<N-1;i++)indices.push(0,i,i+1);
  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setIndex(indices);geo.computeVertexNormals();add('highland-gate-rock-foundation-'+side,geo,round>=29?0x9fa8a2:0x849393);
  }}
- if(round>=6){for(const side of[-1,1])for(let i=0;i<17;i++){
+ if(round>=6&&!approvedMonument){for(const side of[-1,1])for(let i=0;i<17;i++){
  const a=i*2.399,x=side*16+Math.cos(a)*(10+i%3),z=Math.sin(a)*(12+i%4),y=-5-(i%4)*2.2;
  if(Math.abs(x)<7)continue;
  const geo=new THREE.IcosahedronGeometry(1,1);geo.scale(2+i%3,3.5+i%4,2.8+i%3);geo.rotateY(i*.73);add('highland-foot-rock-'+side+'-'+i,geo,i%3===0?0xa4aaa0:0x788a90,[x,y,z]);
@@ -89,6 +92,17 @@ export function installHighlandGate({scene,tramSystem}){
  for(const mesh of root.children)if(/walk-baluster|walk-parapet-cap|stair-post|stair-handrail|terrace-cap/.test(mesh.name))mesh.userData.citadelSolidExterior=true;}
  if(round>=30){for(const z of[-35.7,35.7]){const end=add('highland-walk-end-parapet',new THREE.BoxGeometry(1.8,1,.24),0xdacdb2,[-5.25,.45,z]);end.userData.citadelSolidExterior=true;}}
  if(round>=30){const walls=root.children.filter(o=>o.name.includes('Gate_stone')),ray=new THREE.Raycaster();for(const z of[-11.1,0,11.1]){ray.set(new THREE.Vector3(0,18.2,z-4),new THREE.Vector3(0,0,1));ray.far=8;const hit=ray.intersectObjects(walls,false)[0];if(hit)add('highland-arch-crown-keystone',new THREE.BoxGeometry(.8,.75,.24),0xd4c09a,[0,18.2,hit.point.z-.12]);}}
+ if(approvedMonument){
+  // Replace only the superseded monument, retaining its actual pedestrian
+  // decks/stairs and rock foundation. Source geometry remains in gateTargetData.
+  for(const mesh of [...root.children]){
+   if(!mesh.isMesh||mesh.userData.highlandGateWalkable)continue;
+   if(/Gate_(stone|brick|edge|cloth|gold|dark)|side-ashlar|arched-niche|niche-carved|crown-stone|bronze-crown|arch-crown-keystone|wall-ivy|vine-stem/.test(mesh.name)){
+    root.remove(mesh);mesh.geometry.dispose();mesh.material.dispose();
+   }
+  }
+  buildHighlandGateMonument(root);
+ }
  scene.add(root);root.updateMatrixWorld(true);
  if(round>=2){
  const inverse=root.matrixWorld.clone().invert(),len=cv.getLength();
@@ -97,14 +111,24 @@ export function installHighlandGate({scene,tramSystem}){
  w.addScaledVector(side,a).addScaledVector(normal,h).applyMatrix4(inverse);pos.setXYZ(i,w.x,w.y,w.z);
  }pos.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.geometry.computeBoundingSphere();mesh.geometry.computeBoundingBox();}
  }
- if(round>=7){for(const mesh of [...root.children]){if(!/Gate_(stone|edge|brick)|rock-foundation|foot-rock/.test(mesh.name))continue;const edge=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry,28),new THREE.LineBasicMaterial({color:0x5e635b,transparent:true,opacity:.24}));edge.name='highland-ink-'+mesh.name;edge.userData.isOutline=true;root.add(edge);}}
+ if(round>=7&&!approvedMonument){for(const mesh of [...root.children]){if(!/Gate_(stone|edge|brick)|rock-foundation|foot-rock/.test(mesh.name))continue;const edge=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry,28),new THREE.LineBasicMaterial({color:0x5e635b,transparent:true,opacity:.24}));edge.name='highland-ink-'+mesh.name;edge.userData.isOutline=true;root.add(edge);}}
  if(round>=27)mergeHighlandGateDecor(root);
  root.updateMatrixWorld(true);
  root.userData.toRailWorld=(x,h,d)=>{const t=(u+d/cv.getLength()+1)%1,w=cv.getPointAt(t),normal=w.clone().normalize(),side=new THREE.Vector3().crossVectors(normal,cv.getTangentAt(t)).normalize();return w.addScaledVector(side,x).addScaledVector(normal,h);};
+ if(approvedMonument)plantHighlandGateLandscape(root,{curve:cv,railU:u});
  const surfaces=root.children.filter(o=>o.isMesh&&o.userData.highlandGateWalkable),groundRay=new THREE.Raycaster(),local=new THREE.Vector3();
- root.userData.sampleGroundRadius=position=>{local.copy(position);root.worldToLocal(local);if(Math.abs(local.x)>42||Math.abs(local.z)>48||local.y>8)return null;const up=position.clone().normalize();groundRay.set(position.clone().addScaledVector(up,.6),up.clone().negate());groundRay.far=3;for(const hit of groundRay.intersectObjects(surfaces,false)){if(hit.face.normal.clone().transformDirection(hit.object.matrixWorld).dot(up)>.5)return hit.point.length();}return null;};
+ root.userData.sampleGroundRadius=position=>{local.copy(position);root.worldToLocal(local);if(Math.abs(local.x)>42||Math.abs(local.z)>48||local.y>(approvedMonument?28:8))return null;const up=position.clone().normalize();groundRay.set(position.clone().addScaledVector(up,.6),up.clone().negate());groundRay.far=3;for(const hit of groundRay.intersectObjects(surfaces,false)){if(hit.face.normal.clone().transformDirection(hit.object.matrixWorld).dot(up)>.5)return hit.point.length();}return null;};
  root.userData.resolveWalls=createCitadelPlayerWalls(root);
  applyAshleyPalette(root);
  applyHistoricStone(root);
+ // Keep the approved yellow/teal palette and pale connecting masonry.
+ root.traverse(o=>{
+  if(!o.isMesh||Array.isArray(o.material))return;
+  if(/Gate_cloth/.test(o.name)){o.material.color.set(0x547998);o.material.emissive.set(0);o.material.roughness=1;o.material.metalness=0;}
+  if(approvedMonument&&o.userData.highlandGateWalkable&&!o.userData.approvedGateMonument){o.material.color.set(0xe2d2b2);o.material.emissive.set(0);}
+  if(/Gate_gold/.test(o.name)){o.material.color.set(0xb4a477);o.material.emissive.set(0);o.material.roughness=.88;o.material.metalness=.12;}
+ });
+ root.userData.materialDirection={version:approvedMonument?'old-city-rear-stepped-stone-gate-2':'aged-brick-red-3',wallAlbedo:approvedMonument?['#e2d2b2','#eee1c6']:'#ad7564',pavingAlbedo:approvedMonument?'#e2d2b2':'#b39a86',broadAshlar:true,selectiveMineralWash:true,repairedBlockTones:true,mutedIndigoCloth:true,geometryChanged:approvedMonument};
+ root.userData.placementDirection={version:approvedMonument?'old-city-rear-rail-1':'original-front',requestedChart:approvedMonument?[-174,0,-42]:[-94,0,80],railCurveUnchanged:true};
  return root;
 }

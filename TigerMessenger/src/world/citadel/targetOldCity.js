@@ -1,11 +1,14 @@
+import {createTargetStreetDressing} from './targetStreetDressing.js';
 import * as THREE from 'three';
 import {validateTargetOldCityRoofRoles} from './targetOldCityRoofWfc.js';
 import {TARGET_ARCHITECTURE_PALETTE,TARGET_ARCHITECTURE_COLOUR_VERSION} from './targetArchitecturePalette.js';
+import {rebuildTargetOldCityRadialLayout} from './targetOldCityRadialLayout.js';
 
 export const TARGET_OLD_CITY_PALETTE = Object.freeze(Object.fromEntries(['stone','trim','roof','roofLight','yellow','pink','teal','blue','glass'].map(k=>[k,TARGET_ARCHITECTURE_PALETTE[k]])));
 /** Authored architectural candidate. Local +Z faces the bay; caller owns placement/yaw.
  * Not a WFC solver, navigation installation or a mutation of the existing city. */
-export function createTargetOldCity({seed=20261006,palette={},roofRoles={},streetInfill=true,wingStreets=false}={}) {
+export function createTargetOldCity({seed=20261006,palette={},roofRoles={},streetInfill=true,wingStreets=false,layout='radial'}={}) {
+  if(!['radial','axial'].includes(layout))throw new TypeError('old-city layout must be radial or axial');
   if(typeof streetInfill!=='boolean')throw new TypeError('streetInfill must be boolean');
   if(typeof wingStreets!=='boolean')throw new TypeError('wingStreets must be boolean');
   const roleOverrides=validateTargetOldCityRoofRoles(roofRoles);
@@ -38,7 +41,7 @@ export function createTargetOldCity({seed=20261006,palette={},roofRoles={},stree
     posts.forEach(([x,z],i)=>{dummy.position.set(x,y+.415,z);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});mesh.instanceMatrix.needsUpdate=true;parent.add(mesh);
   }
   function detailHouseWindows(){
-    const tower={id:'old-city-high-tower',min:[9.625,8.3,-13.075],max:[13.475,33,-9.225]};
+    const tower={id:'old-city-high-tower',min:[-1.925,8.3,-17.125],max:[1.925,33,-13.275]};
     const obstacles=housePlans.map(p=>({id:p.id,min:[p.hx-p.w/2-.2,p.floor,p.hz-2.55],max:[p.hx+p.w/2+.2,p.roofY,p.hz+2.55]}));obstacles.push(tower);
     for(const p of housePlans){const panes=[],trims=[];
       for(const volume of p.volumes){const narrow=volume.w<4,columns=narrow?[0]:[-Math.min(1.35,volume.w*.24),Math.min(1.35,volume.w*.24)];
@@ -232,11 +235,14 @@ export function createTargetOldCity({seed=20261006,palette={},roofRoles={},stree
   roof('old-city-gate-roof',0,6.6,15.65,8.6,2);
   foot('old-city-front-open-gate',0,15.65,8,1,.3,7.85,{opening:{width:4.2,rectangularHeight:3.25}});
   // High, slender cream landmark. Total top is exactly 33m above this origin.
-  const tx=11.55,tz=-11.15,base=8.3;
-  box('tower-shaft',3.15,18.2,3.15,tx,base+9.1,tz,'trim');
+  const tx=0,tz=-15.2,base=8.3;
+  box('tower-axial-court-foundation',6.2,8.3,6.4,0,4.15,-14,'stone');
+  foot('tower-axial-court',0,-14,6.2,6.4,0,8.3,{walkable:true,support:true});
+  arch('tower-street-portal',tx,tz,3.15,4.5,.9,2.6,3.15,base);
+  box('tower-shaft',3.15,13.7,3.15,tx,base+4.5+6.85,tz,'trim');
   box('tower-base-band',3.45,.55,3.45,tx,base+.275,tz,'stone');
   const towerWindows=[],towerPanes=[],towerFrames=[];
-  for(const y of[11,14.5,18,21.5,25])for(let side=0;side<4;side++){
+  for(const y of[14.5,18,21.5,25])for(let side=0;side<4;side++){
     const yaw=side*Math.PI/2,rot=new THREE.Matrix4().makeRotationY(yaw),basePoint=new THREE.Vector3(tx,y,tz);
     const pane=box('tower-window-pane',.48,.74,.04,0,0,1.602,'glass');pane.applyMatrix4(rot);pane.position.add(basePoint);towerPanes.push(pane);
     for(const [x,dy,w,h,d]of[[-.285,0,.09,.94,.10],[.285,0,.09,.94,.10],[0,.425,.66,.09,.10],[0,-.425,.72,.11,.16]]){
@@ -252,13 +258,31 @@ export function createTargetOldCity({seed=20261006,palette={},roofRoles={},stree
   arch('tower-bell-front',tx,tz+1.5,3.2,3.05,.72,1.55,.25,26.825);
   arch('tower-bell-back',tx,tz-1.5,3.2,3.05,.72,1.55,.25,26.825);
   for(const side of[-1,1]){const m=arch('tower-bell-side-'+side,0,0,3.2,3.05,.72,1.55,.25,0);m.position.set(tx+side*1.5,26.825,tz);m.rotation.y=Math.PI/2;}
+  const beacon=new THREE.Group();beacon.name='tower-beacon-anchor';beacon.position.set(tx,28.25,tz);group.add(beacon);
+  const beaconMaterial=new THREE.MeshBasicMaterial({color:0xffc575});materials.add(beaconMaterial);
+  const beaconGeometry=new THREE.SphereGeometry(.18,10,8);geometries.add(beaconGeometry);
+  const beaconCore=new THREE.Mesh(beaconGeometry,beaconMaterial);beaconCore.name='tower-beacon-lantern-core';beaconCore.userData.noDistanceCulling=true;beacon.add(beaconCore);
   box('tower-cornice',3.85,.4,3.85,tx,30.075,tz,'trim');
   add('tower-red-cupola',new THREE.SphereGeometry(1.8,20,12,0,Math.PI*2,0,Math.PI/2),'roof',tx,30.275,tz);
   add('tower-finial',new THREE.ConeGeometry(.12,.925,8),'roofLight',tx,32.5375,tz);
-  foot('old-city-high-tower',tx,tz,3.65,3.65,base,33,{supportedBy:'terrace-2-1'});
+  foot('old-city-high-tower',tx,tz,3.65,3.65,base,33,{supportedBy:'tower-axial-court'});
+  const streetPlants=[],streetLamps=[];
+  for(let row=0;row<3;row++)for(const side of[-1,1]){
+    const y=.3+row*4,z=10-row*10;
+    streetPlants.push([side*3.25,y,z+2.4,.85,true],[side*8.2,y,z+2.75,.8,false],[side*14.1,y,z+2.75,.72,false]);
+    if(row>0)streetLamps.push([side*5.38,2.45,z+2.5],[side*11.15,2.45,z+2.5]);
+  }
+  // Prioritise the inner lamp on BOTH sides for the limited real light budget.
+  streetLamps.sort((a,b)=>Math.abs(a[0])-Math.abs(b[0]));
+  for(const plot of arcadePlots.filter(p=>p.col===0)){
+    const bayOffset=plot.w>6?0:-Math.sign(plot.x)*plot.w/4;
+    streetLamps.push([plot.x+bayOffset,plot.floor+2.15,plot.z+2.30]);
+  }
+  streetLamps.unshift([0,11.25,-14.05]);
+  let streetDressing=createTargetStreetDressing({plants:streetPlants,lamps:streetLamps,lightLimit:3});group.add(streetDressing.group);
   // The two side streets are explicit endpoints only; external bridge/feed geometry belongs to integration.
   group.updateMatrixWorld(true);const bounds=new THREE.Box3().setFromObject(group);let meshes=0,triangles=0;group.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3*(o.isInstancedMesh?o.count:1);}});
-  const report={version:'target-old-city-11-three-street-clusters',seed,origin:'platform-local ground; +Z bay/front',palette:colours,footprints,houses,streetInfill:{enabled:streetInfill,modules:infillModules,windows:infillWindows,clusters:['upper-left','middle-left','lower-right'],existingPlotsUnchanged:true,privateGalleryCornersReclaimed:streetInfill,publicRoutesChanged:false,wfcDomainExpanded:false,newUpperHomesEditable:false},layoutRedistribution:{target:'target-v5-street-cameras.png',method:'authored tower flanks, uneven terrace positions, height falloff and three upper-wall setbacks; not WFC positioning',towerPosition:[11.55,8.3,-11.15],towerMoved:false,existingPublicRoutesChanged:false,terrainChanged:false,changes:layoutChanges},walkable,towerWindows,facadeWindows,rejectedWindows,residentialArcades,streetArcades:{selection:'first two inhabited levels; fixed actual same-level plot adjacency',groups:[0,1].flatMap(row=>[-1,1].map(side=>({id:`street-arcade-${row}-${side}`,houses:arcadePlots.filter(p=>p.row===row&&p.side===side).map(p=>p.id)}))),links:arcadeLinks,sharedFloors:sharedArcadeFloors,publicGeometryChanged:false,terrainChanged:false,publicNavigationInstalled:false,galleryAccessClaimed:false},roofRoleSelection:{method:Object.keys(roleOverrides).length?'validated explicit role overrides':'deterministic authored terrace-level and plot-edge rules',overrides:roleOverrides,wfc:false,solverRun:false,modifiedHouseCount:houses.filter(h=>h.roofRole!=='hip-roof').length},houseGrouping:{stableIds:true,windowMaterialBatchesPerHouse:2,editorIntegrated:false,wfcIntegrated:false},
+  const report={streetDressing:streetDressing.report,version:'target-old-city-13-axial-street',seed,origin:'platform-local ground; +Z bay/front',palette:colours,footprints,houses,streetInfill:{enabled:streetInfill,modules:infillModules,windows:infillWindows,clusters:['upper-left','middle-left','lower-right'],existingPlotsUnchanged:true,privateGalleryCornersReclaimed:streetInfill,publicRoutesChanged:false,wfcDomainExpanded:false,newUpperHomesEditable:false},layoutRedistribution:{target:'target-v5-street-cameras.png',method:'authored tower flanks, uneven terrace positions, height falloff and three upper-wall setbacks; not WFC positioning',towerPosition:[0,8.3,-15.2],towerMoved:true,existingPublicRoutesChanged:false,terrainChanged:false,changes:layoutChanges},walkable,towerWindows,facadeWindows,rejectedWindows,residentialArcades,streetArcades:{selection:'first two inhabited levels; fixed actual same-level plot adjacency',groups:[0,1].flatMap(row=>[-1,1].map(side=>({id:`street-arcade-${row}-${side}`,houses:arcadePlots.filter(p=>p.row===row&&p.side===side).map(p=>p.id)}))),links:arcadeLinks,sharedFloors:sharedArcadeFloors,publicGeometryChanged:false,terrainChanged:false,publicNavigationInstalled:false,galleryAccessClaimed:false},roofRoleSelection:{method:Object.keys(roleOverrides).length?'validated explicit role overrides':'deterministic authored terrace-level and plot-edge rules',overrides:roleOverrides,wfc:false,solverRun:false,modifiedHouseCount:houses.filter(h=>h.roofRole!=='hip-roof').length},houseGrouping:{stableIds:true,windowMaterialBatchesPerHouse:2,editorIntegrated:false,wfcIntegrated:false},
     bounds:{min:bounds.min.toArray(),max:bounds.max.toArray(),size:bounds.getSize(new THREE.Vector3()).toArray()},
     entry:{position:[0,.3,16.3],outward:[0,0,1],clearWidth:4.2,rectangularClearHeight:3.25},
     exits:{upperStreet:[0,8.3,-12.5],bridge:[19.8,.3,12.4],waterfallFeed:[11,.3,13.7]},
@@ -267,27 +291,41 @@ export function createTargetOldCity({seed=20261006,palette={},roofRoles={},stree
     validation:{gpuIntegrated:false,visualScore:null,navigationInstalled:false,surfaceSeated:false},
     limitations:['Hand-authored candidate, not WFC or editable cell generation.','External bridge, waterfall feed and platform seating require integration.','Terrace-side access joins require runtime walkability checks; visual geometry is not a collision installation.']};
   group.userData.targetArchitectureReport=report;let disposed=false,activeWings=null;
+  const radial=layout==='radial'?rebuildTargetOldCityRadialLayout({group,report,mats,geometries,streetDressing}):null;
+  if(radial)streetDressing=radial.streetDressing;
   report.wingStreets={enabled:false,requested:wingStreets,status:wingStreets?'awaiting-actual-surface':'disabled',version:'old-wing-streets-1'};
+  // A requested post-placement factory keeps its identity while awaiting sampling.
+  if(wingStreets&&layout==='axial')report.version='target-old-city-13-axial-street';
   /** Post-placement candidate. Surface callback and protection polygons are in
    * this old-city group's LOCAL coordinates; collisionGroups are actual WORLD
    * scene objects. No surface fallback, new terrain or shared platform is made.
    * New rooms are protected architecture, outside the fifteen editable plots. */
-  function completeWingStreets({enabled=wingStreets,sampleSurface,collisionGroups=[],protectedFootprints=[]}={}){
+  function completeWingStreets(options={}){
     if(disposed)throw new Error('OLD_WING_CITY_DISPOSED');
+    const enabled=options.enabled??wingStreets;
+    if(typeof enabled!=='boolean')throw new TypeError('OLD_WING_ENABLED_BOOLEAN');
     if(!enabled)return null;
+    if(radial){
+      if(activeWings)throw new Error('OLD_WINGS_ALREADY_INSTALLED');
+      const next=radial.completeWingStreets(options);activeWings={...next,dispose(){next.dispose();activeWings=null;}};return activeWings;
+    }
+    const {sampleSurface,collisionGroups=[],protectedFootprints=[]}=options;
     if(activeWings)throw new Error('OLD_WINGS_ALREADY_INSTALLED');
     if(typeof sampleSurface!=='function'||!Array.isArray(collisionGroups)||!Array.isArray(protectedFootprints))throw new TypeError('OLD_WINGS_REQUIRE_ACTUAL_SURFACE_AND_PROTECTIONS');
     group.updateWorldMatrix(true,true);const inverse=group.matrixWorld.clone().invert(),obstacles=[];
     const roots=[group,...collisionGroups],seen=new Set();
     for(const root of roots){if(!root?.isObject3D)throw new TypeError('OLD_WING_COLLISION_GROUP');root.updateWorldMatrix(true,true);root.traverse(mesh=>{
       if(!mesh.isMesh||seen.has(mesh))return;seen.add(mesh);
-      for(let p=mesh;p;p=p.parent)if(!p.visible)return;
+      // An explicitly supplied root can be hidden during a startup transaction
+      // (notably pending tram geometry). Still audit it; honour hidden children.
+      for(let p=mesh;p&&p!==root;p=p.parent)if(!p.visible)return;
       const base=inverse.clone().multiply(mesh.matrixWorld),p=mesh.geometry.attributes.position;if(!p)return;
       const transforms=[];if(mesh.isInstancedMesh){for(let i=0;i<mesh.count;i++){const m=new THREE.Matrix4();mesh.getMatrixAt(i,m);if(Math.abs(m.determinant())>1e-12)transforms.push(base.clone().multiply(m));}}else transforms.push(base);
       const localBounds=new THREE.Box3().setFromBufferAttribute(p);for(const matrix of transforms)obstacles.push({mesh,matrix,box:localBounds.clone().applyMatrix4(matrix)});
     });}
     const protectedRects=[{id:'central-street',polygon:[[-2.7,-14],[2.7,-14],[2.7,18],[-2.7,18]]},...[-7.6,2.4,12.4].map(z=>({id:'public-cross-street-'+z,polygon:[[-30,z-.75],[30,z-.75],[30,z+.75],[-30,z+.75]]})),...protectedFootprints];
     for(const p of protectedRects)if(!Array.isArray(p.polygon)||p.polygon.length<3||p.polygon.some(v=>v.length!==2||!v.every(Number.isFinite)))throw new TypeError('OLD_WING_PROTECTED_POLYGON');
+    for(const p of protectedRects){let sign=0;for(let i=0;i<p.polygon.length;i++){const a=p.polygon[i],b=p.polygon[(i+1)%p.polygon.length],c=p.polygon[(i+2)%p.polygon.length],cross=(b[0]-a[0])*(c[1]-b[1])-(b[1]-a[1])*(c[0]-b[0]);if(Math.abs(cross)<1e-10)continue;if(sign&&Math.sign(cross)!==sign)throw new TypeError('OLD_WING_PROTECTED_POLYGON_MUST_BE_CONVEX');sign=Math.sign(cross);}if(!sign)throw new TypeError('OLD_WING_PROTECTED_POLYGON_DEGENERATE');}
     const overlaps=(a,b)=>{for(const poly of[a,b])for(let i=0;i<poly.length;i++){const p=poly[i],q=poly[(i+1)%poly.length],axis=[p[1]-q[1],q[0]-p[0]],aa=a.map(v=>v[0]*axis[0]+v[1]*axis[1]),bb=b.map(v=>v[0]*axis[0]+v[1]*axis[1]);if(Math.max(...aa)<=Math.min(...bb)||Math.max(...bb)<=Math.min(...aa))return false;}return true;};
     const triangle=new THREE.Triangle();let triangleTests=0;
     function collision(box){for(const o of obstacles){if(!box.intersectsBox(o.box))continue;const g=o.mesh.geometry,p=g.attributes.position,idx=g.index,start=g.drawRange.start,end=Math.min(idx?.count??p.count,start+g.drawRange.count);for(let i=start;i+2<end;i+=3){for(const[v,j]of[[triangle.a,0],[triangle.b,1],[triangle.c,2]])v.fromBufferAttribute(p,idx?idx.getX(i+j):i+j).applyMatrix4(o.matrix);triangleTests++;if(box.intersectsTriangle(triangle))return o.mesh.name;}}return null;}
@@ -296,7 +334,7 @@ export function createTargetOldCity({seed=20261006,palette={},roofRoles={},stree
     // streets intact. A shallow outer footprint stops before the west cliff.
     for(const side of[-1,1])for(const band of['middle','front']){
       const id=`old-wing-${side}-${band}`,x=side*22.05,zs=band==='middle'?[-3.95,-.75]:[5.45,8.65],w=3.65,d=3.2,heights=band==='middle'?[6.1,5.15]:[4.7,3.85];
-      const plans=zs.map((z,i)=>({id:id+'-'+i,x,z,w,d,h:heights[i],side,colour:side===-1?['yellow','teal'][i]:['pink','blue'][i],polygon:[[x-w/2-.07,z-d/2],[x+w/2+.07,z-d/2],[x+w/2+.07,z+d/2],[x-w/2-.07,z+d/2]],samples:[]}));
+      const plans=zs.map((z,i)=>({id:id+'-'+i,x,z,w,d,h:heights[i],side,colour:side===-1?['yellow','teal'][i]:['pink','blue'][i],polygon:[[x-w/2-.08,z-d/2],[x+w/2+.08,z-d/2],[x+w/2+.08,z+d/2],[x-w/2-.08,z+d/2]],samples:[]}));
       let reason=null;
       for(const p of plans){const blocked=protectedRects.find(q=>overlaps(p.polygon,q.polygon));if(blocked){reason={kind:'protected-footprint',id:blocked.id};break;}
         for(let ix=0;ix<=8;ix++)for(let iz=0;iz<=7;iz++){const sx=p.x-p.w/2+p.w*ix/8,sz=p.z-p.d/2+p.d*iz/7,result=sampleSurface(sx,sz),height=typeof result==='number'?result:result?.height;p.samples.push({x:sx,z:sz,height});if(!Number.isFinite(height))reason={kind:'missing-actual-support',at:[sx,sz]};}
@@ -304,7 +342,7 @@ export function createTargetOldCity({seed=20261006,palette={},roofRoles={},stree
       const samples=plans.flatMap(p=>p.samples),finite=samples.map(p=>p.height).filter(Number.isFinite),lo=finite.length?Math.min(...finite):null,hi=finite.length?Math.max(...finite):null;
       if(!reason&&hi-lo>1.25)reason={kind:'unsupported-height-spread',spread:hi-lo,maximum:1.25};
       const floor=hi+.05;
-      if(!reason)for(const p of plans){const box=new THREE.Box3(new THREE.Vector3(p.x-p.w/2-.07,floor+.025,p.z-p.d/2),new THREE.Vector3(p.x+p.w/2+.07,floor+p.h+.72,p.z+p.d/2)),hit=collision(box);if(hit){reason={kind:'actual-obstacle-triangle',mesh:hit};break;}}
+      if(!reason)for(const p of plans){const box=new THREE.Box3(new THREE.Vector3(p.x-p.w/2-.08,floor+.025,p.z-p.d/2),new THREE.Vector3(p.x+p.w/2+.08,floor+p.h+.72,p.z+p.d/2)),hit=collision(box);if(hit){reason={kind:'actual-obstacle-triangle',mesh:hit};break;}}
       if(reason){rejected.push({id,reason,plans:plans.map(p=>({id:p.id,polygon:p.polygon})),supportRange:[lo,hi]});continue;}
       accepted.push({id,side,band,floor,supportRange:[lo,hi],plans});
     }
@@ -343,9 +381,9 @@ export function createTargetOldCity({seed=20261006,palette={},roofRoles={},stree
       group.add(candidate);group.updateWorldMatrix(true,true);let meshes=0,triangles=0;candidate.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;}});next.performance={meshes,triangles,newMaterials:0};
       // Bounds are reported in factory-local space even after world placement.
       const b=new THREE.Box3(new THREE.Vector3(...before.bounds.min),new THREE.Vector3(...before.bounds.max));candidate.traverse(o=>{if(!o.isMesh)return;const bb=new THREE.Box3().setFromBufferAttribute(o.geometry.attributes.position);b.union(bb.applyMatrix4(inverse.clone().multiply(o.matrixWorld)));});
-      report.bounds={min:b.min.toArray(),max:b.max.toArray(),size:b.getSize(new THREE.Vector3()).toArray()};report.performance={...before.performance,meshes:before.performance.meshes+meshes,triangles:before.performance.triangles+triangles,geometries:geometries.size};report.wingStreets=next;report.version='target-old-city-12-wing-streets-candidate';installed=true;
+      report.bounds={min:b.min.toArray(),max:b.max.toArray(),size:b.getSize(new THREE.Vector3()).toArray()};report.performance={...before.performance,meshes:before.performance.meshes+meshes,triangles:before.performance.triangles+triangles,geometries:geometries.size};report.wingStreets=next;report.version='target-old-city-13-axial-street';installed=true;
       activeWings={group:candidate,report:next,dispose(){if(closed)return;closed=true;cleanup();if(installed){Object.assign(report,before);activeWings=null;}}};return activeWings;
     }catch(error){cleanup();throw error;}
   }
-  return{group,report,completeWingStreets,dispose(){if(disposed)return;activeWings?.dispose();disposed=true;group.removeFromParent();instances.forEach(m=>m.dispose());geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());group.clear();}};
+  return{group,report,completeWingStreets,dispose(){if(disposed)return;activeWings?.dispose();streetDressing.dispose();disposed=true;group.removeFromParent();instances.forEach(m=>m.dispose());geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());group.clear();}};
 }

@@ -1,3 +1,4 @@
+import {findByName} from '../core/sceneLookup.js';
 import {targetCityParams} from './citadel/targetCityRelease.js';
 // =====================================================================
 //  环境：青绿二次元天空 + 暖日照 + 苔海反光
@@ -168,7 +169,7 @@ export function setupEnvironment(scene) {
       skyMat.uniforms.moebiusV10Blend.value=(crystalUp?THREE.MathUtils.smoothstep(camera.position.clone().normalize().dot(crystalUp),.45,.75):0)*(1-.85*glow);
       if(crystalUp)skyMat.uniforms.moebiusV10Up.value.copy(crystalUp);
       skyMat.uniforms.moebiusV10Day.value=1-THREE.MathUtils.smoothstep(Math.abs((P.timeOfDay??.5)-.5),.22,.43);
-      const city=scene.getObjectByName('highland-west-city');
+      const city=findByName(scene,'highland-west-city');
       if(!city)return;
       city.localToWorld(anchor.set(35,15,20));
       const targetStyle=U.citadelTargetStyle.value>0;
@@ -179,7 +180,7 @@ export function setupEnvironment(scene) {
       const targetNear=targetStyle?1-THREE.MathUtils.smoothstep(distance,300,450):near;
       const dusk=1-THREE.MathUtils.smoothstep(Math.abs((P.timeOfDay??.5)-.85),.025,.14);
       skyMat.uniforms.citadelBlend.value=near*dusk*(1-glow);
-      const highland=scene.getObjectByName('highland-gate');
+      const highland=findByName(scene,'highland-gate');
       const gateNear=highland?1-THREE.MathUtils.smoothstep(camera.position.distanceTo(highland.position),140,230):0;
       // 圣城白天天色只在正午前后生效，朝霞暮云时让位给昼夜本色与霞光
       const holyNoon=1-THREE.MathUtils.smoothstep(Math.abs(tod-.5),.12,.2);

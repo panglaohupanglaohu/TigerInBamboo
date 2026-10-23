@@ -1,13 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { createTargetNewCityMain,createTargetNewCityApproachSampler } from '../../src/world/citadel/targetNewCityMain.js';
+import {createTargetNewCityPlacement} from '../../src/world/citadel/targetNewCityPlacement.js';
+import {buildMountainSurfaceIndex} from '../../src/world/citadel/mountainSurfaceIndex.js';
+import { createTargetNewCityMain } from '../../src/world/citadel/targetNewCityMain.js';
 
 test('new-city main has bounded finite real geometry and target dome height', () => {
   const asset = createTargetNewCityMain({ seed: 194 });
   const { group, report } = asset;
-  assert.ok(report.bounds.size[0] <= 32);
-  assert.ok(report.bounds.size[2] <= 26);
+  assert.ok(report.bounds.size[0] <= 44, 'ten surrounding homes remain within the 44m court envelope');
+  assert.ok(report.bounds.size[2] <= 34);
+  assert.equal(report.courtyard.homes.length,10);
+  assert.equal(report.courtyard.rearCourt.built,true);
   assert.ok(Math.abs(report.bounds.max[1] - 24.5) < 1e-5);
   assert.ok(report.performance.triangles < 25000);
   assert.equal(report.validation.gpuIntegrated, false);
@@ -72,10 +76,10 @@ test('v2 expanded front and rear arches match masonry, voussoirs and reported op
  const wall=g.getObjectByName('main-entry-real-arch');wall.geometry.computeBoundingBox();assert.equal(wall.geometry.boundingBox.max.y,Math.fround(11.2));assert.equal(g.children.filter(o=>o.name.startsWith('entry-arch-stone-')).length,17);for(const pier of g.children.filter(o=>o.name==='entry-arch-pier')){const b=new THREE.Box3().setFromObject(pier);assert.ok(Math.min(Math.abs(b.min.x),Math.abs(b.max.x))>=2.5299);assert.ok(Math.abs(b.min.y-1.2)<1e-5&&Math.abs(b.max.y-6.3)<1e-5);}a.dispose();
 });
 
-test('v2 keeps r38 footprints, entrance/step endpoints and dome height while using square pale-framed windows',async()=>{
+test('courtyard extension retains r38 core footprints, entry/steps and dome height with real open rear court',async()=>{
  const fs=await import('node:fs'),prior=JSON.parse(fs.readFileSync(new URL('../../artifacts/pipeline/citadel-four-hour-20261005/r38-full-wfc-rail-landmarks-new-city-detail-plants-terrain.json',import.meta.url),'utf8')).cityDetail.newCity.geometry,a=createTargetNewCityMain({seed:prior.seed});
- for(const f of a.report.footprints){const {opening,...geometry}=f,{opening:oldOpening,...oldGeometry}=prior.footprints.find(p=>p.id===f.id);assert.deepEqual(geometry,oldGeometry);}
- assert.deepEqual(a.report.stairs,prior.stairs);assert.deepEqual(a.report.entry.position,prior.entry.position);assert.deepEqual(a.report.passage.from,prior.passage.from);assert.deepEqual(a.report.passage.to,prior.passage.to);assert.deepEqual(a.report.bounds,prior.bounds);assert.equal(a.report.version,'target-new-city-main-v2');assert.equal(a.report.palette.blue,'#80c8eb');assert.equal(a.report.palette.blueShade,'#73bee3');
+ for(const old of prior.footprints){const f=a.report.footprints.find(p=>p.id===old.id);assert.ok(f,'preserved core '+old.id);const {opening,...geometry}=f,{opening:oldOpening,...oldGeometry}=old;assert.deepEqual(geometry,oldGeometry);}assert.equal(a.report.footprints.filter(f=>f.courtyard).length,10);assert.ok(a.report.footprints.find(f=>f.id==='rear-court-stone-floor').walkable);
+ assert.deepEqual(a.report.stairs,prior.stairs);assert.deepEqual(a.report.entry.position,prior.entry.position);assert.deepEqual(a.report.passage.from,prior.passage.from);assert.deepEqual(a.report.passage.to,prior.passage.to);assert.ok(Math.abs(a.report.bounds.max[1]-prior.bounds.max[1])<1e-6);assert.equal(a.report.version,'target-new-city-main-v2');assert.equal(a.report.palette.blue,'#80c8eb');assert.equal(a.report.palette.blueShade,'#73bee3');
  for(const prefix of['blue-front-','wing-front-','drum-window-'])for(const window of a.group.children.filter(o=>o.isGroup&&o.name.startsWith(prefix))){const pane=window.getObjectByName(window.name+'-recess');assert.ok(pane.geometry.parameters.height/pane.geometry.parameters.width<=1.2);assert.ok(window.getObjectByName(window.name+'-sill'));}a.dispose();
 });
 
@@ -89,8 +93,7 @@ test('expanded-1 cuts threshold-crossing faces, preserves step elevations and up
 
 import {compileOfficialOcean} from '../../src/world/waterV8/officialOcean.js';
 import {applyTargetTerrainCandidate} from '../../src/world/citadel/targetTerrainCandidate.js';
-import {createTargetStairSurfaceSampler,createTargetNewCityStairRoute} from '../../src/world/citadel/targetNewCityStairRoute.js';
-function frozenScene() {
+function radialTerrainScene() {
   const scene = new THREE.Group(), castle = new THREE.Group(); scene.add(castle);
   castle.matrixAutoUpdate = false;
   castle.matrix.fromArray([-.5771265090244172,.12463062405961449,.807088718870361,0,.6354855835814281,.689249750214348,.3479839865419536,0,-.5129162364767383,.7137240288626759,-.4769852670498,0,124.43456408079132,72.61606956254715,90.15650671642375,1]);
@@ -109,8 +112,37 @@ function frozenScene() {
   return {scene, castle, source, ocean, originalBuilding, dispose() {for (const m of [source, ocean]) {m.geometry.dispose(); m.material.dispose();}}};
 }
 
-test('expanded actual footprints retain sampled frozen-r17 support',()=>{const f=frozenScene(),sample=createTargetStairSurfaceSampler(f.castle,[f.source]),a=createTargetNewCityMain({proportion:'expanded-1'}),m=new THREE.Matrix4().makeRotationY(-55*Math.PI/180).setPosition(74,12,33);let probes=0,maxGap=-Infinity;for(const foot of a.report.footprints.filter(f=>f.support||(!f.elevated&&!f.supportedBy&&f.floorY<=.01))){const xs=foot.polygon.map(p=>p[0]),zs=foot.polygon.map(p=>p[1]);for(let i=0;i<=8;i++)for(let j=0;j<=8;j++){const p=new THREE.Vector3(THREE.MathUtils.lerp(Math.min(...xs),Math.max(...xs),i/8),foot.floorY,THREE.MathUtils.lerp(Math.min(...zs),Math.max(...zs),j/8)).applyMatrix4(m),hit=sample(p.x,p.z);assert.ok(hit);const gap=p.y-hit.height;assert.ok(gap<=.3&&gap>=-.35);maxGap=Math.max(maxGap,gap);probes++;}}assert.equal(probes,891);console.log({expandedSupportProbes:probes,maxGap,entry:a.report.entry.position,approach:a.report.stairs.bottom});a.dispose();f.dispose();});
+function radialAsset(f){
+ const placement=createTargetNewCityPlacement(f.castle.matrixWorld),world=f.castle.matrixWorld.clone().multiply(placement.matrix),inverse=world.clone().invert(),index=buildMountainSurfaceIndex([f.source]),down=new THREE.Vector3(0,-1,0).transformDirection(world);
+ const sample=(x,z)=>{const hit=index.sample(new THREE.Ray(new THREE.Vector3(x,180,z).applyMatrix4(world),down),0,400);return hit?hit.point.clone().applyMatrix4(inverse).y:null;};
+ const asset=createTargetNewCityMain({proportion:'expanded-1',courtyardSurfaceHeightAt:sample});placement.matrix.decompose(asset.group.position,asset.group.quaternion,asset.group.scale);f.castle.add(asset.group);f.scene.updateMatrixWorld(true);return{asset,placement,world,sample};
+}
 
-test('expanded landing and real four-step path pass unchanged transverse .3 and vertical .42 gates',()=>{
- const f=frozenScene(),a=createTargetNewCityMain({proportion:'expanded-1'});a.group.position.set(74,12,33);a.group.rotation.y=-55*Math.PI/180;f.castle.add(a.group);f.scene.updateMatrixWorld(true);const matrix=a.group.matrix.clone(),convert=p=>new THREE.Vector3(...p).applyMatrix4(matrix),terrainSample=createTargetStairSurfaceSampler(f.castle,[f.source]),start=convert(a.report.stairs.bottom).toArray(),approach=createTargetNewCityApproachSampler({main:a,sampleTerrain:terrainSample}),route=createTargetNewCityStairRoute({sampleSurface:approach.sampleSurface,start,terminalAccess:{from:[72,68],width:2.4}});assert.ok(route.report.selected);f.castle.add(route.group);const surfaces=[f.source];a.group.traverse(o=>{if(o.isMesh&&/^(entrance-stair-|entrance-landing)/.test(o.name))surfaces.push(o);});route.group.traverse(o=>{if(o.isMesh&&/^surveyed-route-(tread-|entry|turn-platform)/.test(o.name))surfaces.push(o);});const sample=createTargetStairSurfaceSampler(f.castle,surfaces),path=[...route.report.selected.walkPath.slice().reverse().map(p=>new THREE.Vector3(...p)),...a.report.stairs.walkPath.map(convert)];let maxTransverse=0,maxVertical=0;for(let i=1;i<path.length;i++){const p=path[i-1],q=path[i],dx=q.x-p.x,dz=q.z-p.z,len=Math.hypot(dx,dz),steps=Math.max(1,Math.ceil(len/.5));for(let j=0;j<=steps;j++){const v=p.clone().lerp(q,j/steps),ys=[-.45,0,.45].map(side=>sample(v.x-dz/(len||1)*side,v.z+dx/(len||1)*side)?.height);assert.ok(ys.every(Number.isFinite));const transverse=Math.max(...ys)-Math.min(...ys),vertical=Math.abs(Math.max(...ys)-v.y);maxTransverse=Math.max(maxTransverse,transverse);maxVertical=Math.max(maxVertical,vertical);assert.ok(transverse<=.3,JSON.stringify({v,ys,transverse}));assert.ok(vertical<=.42,JSON.stringify({v,ys,vertical}));}}console.log({expandedJointStart:start,maxTransverse,maxVertical});approach.dispose();route.dispose();a.dispose();f.dispose();
+test('radial surrounding houses and rear court have actual terrain seated foundations',()=>{
+ const f=radialTerrainScene(),{asset:a,world,sample}=radialAsset(f);let probes=0,foundationRays=0;
+ assert.equal(a.report.courtyard.homes.length,10);assert.equal(a.report.courtyard.rearCourt.built,true);
+ for(const foot of a.report.footprints.filter(p=>p.courtyard||p.id==='rear-court-stone-floor')){
+  const centre=foot.polygon.reduce((p,q)=>[p[0]+q[0]/foot.polygon.length,p[1]+q[1]/foot.polygon.length],[0,0]);
+  for(const [x,z] of [...foot.polygon,centre]){const y=sample(x,z);assert.ok(Number.isFinite(y),foot.id+' terrain missing');assert.ok(foot.floorY<=y+.03,foot.id+' foundation floats');probes++;}
+  const h=a.report.courtyard.homes.find(h=>h.id===foot.id),top=h?.position[1]??a.report.courtyard.rearCourt.top;
+  const xs=foot.polygon.map(p=>p[0]),zs=foot.polygon.map(p=>p[1]);
+  for(const u of[-.35,0,.35])for(const v of[-.35,0,.35]){const point=new THREE.Vector3(centre[0]+u*(Math.max(...xs)-Math.min(...xs)),top+.01,centre[1]+v*(Math.max(...zs)-Math.min(...zs))).applyMatrix4(world),down=new THREE.Vector3(0,-1,0).transformDirection(world),hits=new THREE.Raycaster(point,down,0,.04).intersectObject(a.group,true);
+   assert.ok(hits.some(hit=>hit.object.name===foot.id+'-foundation'||hit.object.name===foot.id),foot.id+' actual foundation top missing');foundationRays++;
+  }
+ }
+ assert.equal(probes,55);assert.equal(foundationRays,99);a.dispose();f.dispose();
+});
+
+test('rear court keeps a real open axis and gate, solid side boundaries and supported access steps',()=>{
+ const a=createTargetNewCityMain({proportion:'expanded-1',courtyardSurfaceHeightAt:()=>-.12}),g=a.group;g.updateMatrixWorld(true);g.traverse(o=>{if(o.isMesh)o.material.side=THREE.DoubleSide;});
+ for(const x of[-.85,0,.85])for(const y of[.6,1.3,1.8]){const ray=new THREE.Raycaster(new THREE.Vector3(x,y,-11.8),new THREE.Vector3(0,0,-1),0,8);assert.deepEqual(ray.intersectObject(g,true).map(h=>h.object.name),[],`rear gate/axis blocked at ${x},${y}`);}
+ for(const x of[-2.9,2.9]){const ray=new THREE.Raycaster(new THREE.Vector3(x,.6,-18),new THREE.Vector3(0,0,-1),0,2);assert.ok(ray.intersectObject(g,true).some(h=>h.object.name.startsWith('rear-court-rear-wall')));}
+ for(const [x,y,z] of a.report.courtyard.rearCourt.steps){const hit=new THREE.Raycaster(new THREE.Vector3(x,y+.02,z),new THREE.Vector3(0,-1,0),0,.04).intersectObject(g,true)[0];assert.ok(hit?.object.userData.targetWalkable);assert.ok(Math.abs(hit.point.y-y)<1e-5);}
+ a.dispose();
+});
+
+test('actual radial entrance walk keeps three-foot .3 spread and .42 vertical support gates',()=>{
+ const f=radialTerrainScene(),{asset:a,world}=radialAsset(f),surfaces=[f.source];a.group.traverse(o=>{if(o.isMesh&&/^(entrance-stair-|entrance-landing)/.test(o.name))surfaces.push(o);});const index=buildMountainSurfaceIndex(surfaces),path=a.report.stairs.walkPath.map(p=>new THREE.Vector3(...p).applyMatrix4(world));let count=0;
+ for(let i=1;i<path.length;i++){const A=path[i-1],B=path[i],n=Math.max(1,Math.ceil(A.distanceTo(B)/.5));for(let k=0;k<=n;k++){const p=A.clone().lerp(B,k/n),up=p.clone().normalize(),side=new THREE.Vector3().crossVectors(B.clone().sub(A),up).normalize(),offsets=[];for(const lateral of[-.45,0,.45]){const q=p.clone().addScaledVector(side,lateral),origin=q.clone().addScaledVector(up,.6),hit=index.sample(new THREE.Ray(origin,up.clone().negate()),0,1.2);assert.ok(hit,'actual foot support missing');offsets.push(hit.point.clone().sub(q).dot(up));count++;}assert.ok(Math.max(...offsets)-Math.min(...offsets)<=.3);assert.ok(offsets.every(y=>Math.abs(y)<=.42));}}
+ assert.ok(count>30);a.dispose();f.dispose();
 });

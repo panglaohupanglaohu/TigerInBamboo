@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import {seatTownObject,townSurfaceMesh} from './bookshopTownSite.js';
 import {mergeStaticGroup} from './geometryMerge.js';
 import {detailBookshopHarbor} from './bookshopHarborDetail.js';
+import {createBookshopFreighterHull,installLeeBaiHullNames} from './bookshopFreighterHull.js';
+import {officialOceanLevelAt} from './waterV8/officialOcean.js';
 
 // Shop fronts and their working yards share the same spherical site.
 export function buildBookshopFactoryBase({root,districts,R,colliders}){
@@ -43,10 +45,26 @@ export function buildBookshopFactoryBase({root,districts,R,colliders}){
  const shed=new THREE.Group();dock.add(shed);for(let i=0;i<18;i++)crate(shed,(i%3)*1.1-1,0,4+Math.floor(i/3)*1.15,.85);mergeStaticGroup(shed);
  // Cargo ship sits in the water, independently of the land surface.
  const ship=new THREE.Group();ship.name='bookshop-steam-parts-freighter';dock.add(ship);seatTownObject(dock,ship,grandFreighter?-35:-24,0,0,R);ship.scale.setScalar(grandFreighter?5:1);ship.userData.scaleFromOriginal=grandFreighter?5:1;ship.position.addScaledVector(new THREE.Vector3(0,1,0).applyQuaternion(ship.quaternion),.5);
- const hull=new THREE.Shape();hull.moveTo(-2.7,-7);hull.lineTo(-2.7,5.5);hull.quadraticCurveTo(-2.4,8.5,0,10);hull.quadraticCurveTo(2.4,8.5,2.7,5.5);hull.lineTo(2.7,-7);hull.quadraticCurveTo(0,-9,-2.7,-7);
- const hg=new THREE.ExtrudeGeometry(hull,{depth:grandFreighter?3.4:1.9,bevelEnabled:true,bevelThickness:.18,bevelSize:.25,bevelSegments:2,steps:1});hg.rotateX(Math.PI/2);
- if(grandFreighter){const p=hg.attributes.position;for(let i=0;i<p.count;i++){const t=THREE.MathUtils.clamp(-p.getY(i)/3.4,0,1);p.setX(i,p.getX(i)*(1-.23*t*t));p.setZ(i,p.getZ(i)*(1-.055*t));}p.needsUpdate=true;hg.computeVertexNormals();}
- const hm=new THREE.Mesh(hg,iron);hm.name='freighter-solid-deep-hull';ship.add(hm);box(ship,4.8,.2,14,0,.2,0,wood);box(ship,4,2.2,3.5,0,1.4,-4.8,stone);box(ship,4.5,.16,4,0,2.6,-4.8,roof);for(let x=-1.3;x<=1.4;x+=1.3)box(ship,.8,.75,.1,x,1.8,-3,glass);cyl(ship,.65,4,0,3.2,-1.8,copper);cyl(ship,.8,.25,0,5.25,-1.8,iron);plume(ship,0,5.5,-1.8);
+ const hullDepth=grandFreighter?3.4:1.9;
+ const hg=createBookshopFreighterHull(hullDepth);
+ const hullMaterial=iron.clone();hullMaterial.color.set(0xffffff);hullMaterial.vertexColors=true;
+ const topside=new THREE.Color(0x29434b),antifouling=new THREE.Color(0x87483b);
+ const hullPositions=hg.attributes.position,hullColors=new Float32Array(hullPositions.count*3);
+ hg.setAttribute('color',new THREE.BufferAttribute(hullColors,3));
+ const paintSphericalWaterline=()=>{
+  ship.updateWorldMatrix(true,false);const p=new THREE.Vector3(),colour=new THREE.Color();
+  for(let i=0;i<hullPositions.count;i++){
+   p.fromBufferAttribute(hullPositions,i).applyMatrix4(ship.matrixWorld);
+   const clearance=p.length()-(R+officialOceanLevelAt(p.clone().normalize()));
+   const blend=1-THREE.MathUtils.smoothstep(clearance,-.35,.15);
+   colour.copy(topside).lerp(antifouling,blend);colour.toArray(hullColors,i*3);
+  }
+  hg.attributes.color.needsUpdate=true;
+ };
+ paintSphericalWaterline();let hullPaletteFinalized=false;
+ const shipIvory=stone.clone();shipIvory.color.set(0xe0d5b9);
+ const shipCopper=copper.clone();shipCopper.color.set(0xb67d4e);shipCopper.roughness=.54;
+ const hm=new THREE.Mesh(hg,hullMaterial);hm.name='freighter-solid-deep-hull';ship.add(hm);box(ship,4.8,.2,14,0,.2,0,wood);const cabin=box(ship,4,2.2,3.5,0,1.4,-4.8,shipIvory);cabin.name='leebai-aft-wheelhouse';box(ship,4.5,.16,4,0,2.6,-4.8,roof);for(let x=-1.3;x<=1.4;x+=1.3)box(ship,.8,.75,.1,x,1.8,-3,glass);const funnel=cyl(ship,.65,4,0,3.2,-1.8,shipCopper);funnel.name='leebai-single-copper-funnel';cyl(ship,.8,.25,0,5.25,-1.8,iron);plume(ship,0,5.5,-1.8);
  if(grandFreighter){
   const engine=new THREE.Group();engine.name='freighter-boiler-engine-house';ship.add(engine);
   box(engine,3.2,1.3,3.4,0,.8,-1.5,iron);box(engine,3.45,.15,3.6,0,1.5,-1.5,roof);
@@ -59,8 +77,9 @@ export function buildBookshopFactoryBase({root,districts,R,colliders}){
  for(const s of[-1,1]){for(let z=-7;z<=5.5;z+=2)beam(ship,[s*2.5,.3,z],[s*2.5,1.1,z],.035,brass);beam(ship,[s*2.5,1.1,-7],[s*2.5,1.1,5.5],.035,brass);}
  moving.push({o:ship,type:'ship',y:ship.position.y});const unloading=moving.find(m=>m.type==='unloading');if(grandFreighter){ship.updateWorldMatrix(true,true);const pickup=dock.worldToLocal(ship.localToWorld(new THREE.Vector3(1.1,.55,0)));unloading.pickupX=pickup.x;unloading.pickupY=pickup.y;}else{unloading.pickupX=ship.position.x;unloading.pickupY=ship.position.y+.25;}
  const harborDetails=detailBookshopHarbor({ship,dock,R});
- const tractor=new THREE.Group();tractor.name='bookshop-moving-steam-freight';root.add(tractor);box(tractor,1.2,.7,2,0,.8,0,iron);cyl(tractor,.35,1.3,0,1.3,.5,copper);cyl(tractor,.12,1.1,0,2.1,.5,iron);for(const x of[-.70,.70])for(const z of[-.65,.65]){const w=cyl(tractor,.36,.2,x,.4,z,iron);w.rotation.z=Math.PI/2;}for(let i=0;i<2;i++){box(tractor,1.4,.22,1.7,0,.45,-2.3-i*2,iron);crate(tractor,0,.6,-2.3-i*2,1);}plume(tractor,0,2.7,.5);
+ installLeeBaiHullNames(ship,hullDepth,harborDetails.deck);
+ const tractor=new THREE.Group();tractor.name='bookshop-moving-steam-freight';root.add(tractor);box(tractor,1.2,.7,2,0,.8,0,iron);cyl(tractor,.35,1.3,0,1.3,.5,copper);cyl(tractor,.12,1.1,0,2.1,.5,iron);for(const x of[-.70,.70])for(const z of[-.65,.65]){const w=cyl(tractor,.36,.2,x,.4,z,iron);w.rotation.z=Math.PI/2;}const freightCrates=[];for(let i=0;i<2;i++){box(tractor,1.4,.22,1.7,0,.45,-2.3-i*2,iron);const first=tractor.children.length;crate(tractor,0,.6,-2.3-i*2,1);freightCrates.push(...tractor.children.slice(first));}tractor.userData.freightCrates=freightCrates;root.userData.plazaRescueTrain=tractor;plume(tractor,0,2.7,.5);
  root.userData.factoryBase={version:2,workshops:12,workingHoists:4,receivingBays:1,cargoShip:ship.name,ground:'spherical',freighterScale:grandFreighter?5:1,berth:grandFreighter?'single side berth; public waterfront arc preserved':'original factory quay'};
- root.userData.update=(dt,t)=>{for(const d of districts)for(const c of d.children)c.userData.update?.(dt,t);for(const m of moving){if(m.type==='unloading'){const phase=(t/28)%1,smooth=u=>u*u*(3-2*u);let x=m.pickupX,y=m.pickupY;if(phase<.2)y=m.pickupY+smooth(phase/.2)*(7-m.pickupY);else if(phase<.55){x=m.pickupX*(1-smooth((phase-.2)/.35));y=7;}else if(phase<.75){x=0;y=7-smooth((phase-.55)/.2)*6.8;}else{x=smooth((phase-.75)/.25)*m.pickupX;y=7;}m.cargo.visible=phase<.75;m.o.position.x=x;m.cargo.position.y=y;for(const cable of m.cables){const length=10.6-y-1.9;cable.scale.y=length;cable.position.y=y+1.9+length/2;}}else if(m.type==='hoist'){m.o.position.set(Math.sin(t*.18)*1.7,m.y-1-Math.sin(t*.3)*.7,0);}else m.o.position.y=m.y+Math.sin(t*.65)*.055;}for(const {o,i}of steam){const a=(t*.4+i/6)%1;o.position.set(Math.sin(i*2+a)*a*.8,a*3.5,Math.cos(i+a)*a*.4);o.scale.setScalar(.6+a*1.8);o.material.opacity=(1-a)*.23;}harborDetails.update();const a=t*.035;seatTownObject(root,tractor,Math.sin(a)*26.8,32+Math.cos(a)*26.8,a+Math.PI/2,R);};
+ root.userData.update=(dt,t)=>{if(!hullPaletteFinalized){paintSphericalWaterline();hullPaletteFinalized=true;}for(const d of districts)for(const c of d.children)c.userData.update?.(dt,t);for(const m of moving){if(m.type==='unloading'){const phase=(t/28)%1,smooth=u=>u*u*(3-2*u);let x=m.pickupX,y=m.pickupY;if(phase<.2)y=m.pickupY+smooth(phase/.2)*(7-m.pickupY);else if(phase<.55){x=m.pickupX*(1-smooth((phase-.2)/.35));y=7;}else if(phase<.75){x=0;y=7-smooth((phase-.55)/.2)*6.8;}else{x=smooth((phase-.75)/.25)*m.pickupX;y=7;}m.cargo.visible=phase<.75;m.o.position.x=x;m.cargo.position.y=y;for(const cable of m.cables){const length=10.6-y-1.9;cable.scale.y=length;cable.position.y=y+1.9+length/2;}}else if(m.type==='hoist'){m.o.position.set(Math.sin(t*.18)*1.7,m.y-1-Math.sin(t*.3)*.7,0);}else m.o.position.y=m.y+Math.sin(t*.65)*.055;}for(const {o,i}of steam){const a=(t*.4+i/6)%1;o.position.set(Math.sin(i*2+a)*a*.8,a*3.5,Math.cos(i+a)*a*.4);o.scale.setScalar(.6+a*1.8);o.material.opacity=(1-a)*.23;}harborDetails.update();root.userData.jakubPass?.update(dt,t);if(!tractor.userData.medicalOwned){const a=tractor.userData.plazaAngle=(tractor.userData.plazaAngle??0)+dt*.035;seatTownObject(root,tractor,Math.sin(a)*26.8,32+Math.cos(a)*26.8,a+Math.PI/2,R);}};
  return root.userData.factoryBase;
 }

@@ -10,7 +10,7 @@ import {buildBookshopAirshipDock} from './bookshopAirshipDock.js';
 import {buildBookshopFreightSpurs} from './bookshopFreightSpurs.js';
 import {createBookshopFactoryCompound} from '../assets/bookshopFactoryCompounds.js';
 import {buildBookshopFactoryBase} from './bookshopFactoryBase.js';
-import {bookshopTownPose,buildBookshopTownGround,townSurfacePoint,townSurfaceMesh,seatTownObject} from './bookshopTownSite.js';
+import {bookshopTownPose,buildBookshopTownGround,townSurfacePoint,townSurfaceMesh,seatTownObject,BOOKSHOP_RAISE} from './bookshopTownSite.js';
 import * as THREE from 'three';
 import {BOOKSHOP_ROBOT_FACTORIES} from '../assets/bookshopRobots.js';
 import {mergeStaticGroup} from './geometryMerge.js';
@@ -37,13 +37,13 @@ export function installBookshopRobots({scene,bookshop,colliders,platforms,R=160}
   // Spherical deformation preserves each factory's height while seating its long halls.
   warpFactoryToSphere(shop,district,R);
   // Scaled wall footprints leave both public doors and industrial portals open.
-  const wall=(x1,z1,x2,z2)=>{const length=Math.hypot(x2-x1,z2-z1),steps=Math.ceil(length/.65);for(let j=0;j<=steps;j++){const f=j/steps,x=(x1+(x2-x1)*f)*1.25,z=(z1+(z2-z1)*f)*1.25;colliders.push({position:district.localToWorld(townSurfacePoint(district,x,z,R)),radius:.40,kind:'bookshop-factory-wall',factory:['locust','ant','beetle'][i],minRadius:R+.9,maxRadius:R+10});}};
+  const wall=(x1,z1,x2,z2)=>{const length=Math.hypot(x2-x1,z2-z1),steps=Math.ceil(length/.65);for(let j=0;j<=steps;j++){const f=j/steps,x=(x1+(x2-x1)*f)*1.25,z=(z1+(z2-z1)*f)*1.25;colliders.push({position:district.localToWorld(townSurfacePoint(district,x,z,R)),radius:.40,kind:'bookshop-factory-wall',factory:['locust','ant','beetle'][i],minRadius:R+.9+BOOKSHOP_RAISE,maxRadius:R+10+BOOKSHOP_RAISE});}};
   const walls=[[-6.9,2.4,-6.9,-3.5],[.7,2.4,.7,-3.5],[-6.9,-3.5,.7,-3.5],[-6.9,2.4,-4.3,2.4],[-2,2.4,.7,2.4],[-8,-4,-8,-12],[-8,-12,0,-12],[-1.3,-2.5,-1.3,-13],[8.1,-2.5,8.1,-13],[-9,-14,-9,-28],[14.9,-14,14.9,-28],[-9,-28,14.9,-28]];
   const cameraWalls=new THREE.Group();cameraWalls.name='factory-camera-walls';cameraWalls.visible=false;district.add(cameraWalls);
   const cameraMaterial=new THREE.MeshBasicMaterial({side:THREE.DoubleSide});
   for(const line of walls){wall(...line);const[x1,z1,x2,z2]=line,h=z1<-4?9:5.5,o=new THREE.Mesh(new THREE.BoxGeometry(Math.hypot(x2-x1,z2-z1)*1.25,h,.30),cameraMaterial);o.position.set((x1+x2)*.625,h/2,(z1+z2)*.625);o.rotation.y=-Math.atan2(z2-z1,x2-x1);cameraWalls.add(o);}
   mergeStaticGroup(cameraWalls);warpFactoryToSphere(cameraWalls,district,R);district.userData.cameraWalls=cameraWalls.children.filter(c=>c.isMesh);
-  for(let x=-7.8;x<.5;x+=1.5)for(let z=-3.5;z<3.5;z+=1.5){const center=district.localToWorld(townSurfacePoint(district,x,z,R,1.17)),q=district.getWorldQuaternion(new THREE.Quaternion());platforms.push({mesh:shop,center,normal:center.clone().normalize(),right:new THREE.Vector3(1,0,0).applyQuaternion(q),forward:new THREE.Vector3(0,0,1).applyQuaternion(q),half:new THREE.Vector3(.78,.15,.78),topHeight:R+1.17,kind:'bookshop-reading-room'});}
+  for(let x=-7.8;x<.5;x+=1.5)for(let z=-3.5;z<3.5;z+=1.5){const center=district.localToWorld(townSurfacePoint(district,x,z,R,1.17)),q=district.getWorldQuaternion(new THREE.Quaternion());platforms.push({mesh:shop,center,normal:center.clone().normalize(),right:new THREE.Vector3(1,0,0).applyQuaternion(q),forward:new THREE.Vector3(0,0,1).applyQuaternion(q),half:new THREE.Vector3(.78,.15,.78),topHeight:R+1.17+BOOKSHOP_RAISE,kind:'bookshop-reading-room'});}
 
   floor(district,4.3,4.2,s.robotX,s.robotZ,'robot-service-pad');
   const robot=make({rigged:true});robot.userData.displaySeated=i===1;animateArticulatedRobot(robot,{state:'idle'});robot.scale.setScalar(1.25);district.add(robot);seatTownObject(district,robot,s.robotX,s.robotZ,i===0?.15:0,R);models.push(robot);robot.updateWorldMatrix(true,true);

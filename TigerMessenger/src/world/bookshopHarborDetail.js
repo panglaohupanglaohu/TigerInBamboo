@@ -6,18 +6,50 @@ import {mergeStaticGroup} from './geometryMerge.js';
 export function detailBookshopHarbor({ship,dock,R=160}){
  const detail=new THREE.Group();detail.name='freighter-deck-equipment';ship.add(detail);
  const {M,box,cyl,beam,torus,gear,wheel,sign,crate}=factoryKit(detail);
+ // Sample the finished triangles in ship-local coordinates. This also follows
+ // future waterline changes without a second, approximate hull definition.
+ const hull=ship.getObjectByName('freighter-solid-deep-hull');
+ const shell=new THREE.Mesh(hull.geometry,new THREE.MeshBasicMaterial());
+ shell.updateMatrixWorld();
+ const ray=new THREE.Raycaster(),fittings=[];
+ const shellAt=(side,y,z)=>{
+  ray.set(new THREE.Vector3(side*10,y,z),new THREE.Vector3(-side,0,0));
+  const hit=ray.intersectObject(shell,false)[0];
+  if(!hit)throw new Error(`Freighter shell missing at ${side},${y},${z}`);
+  const normal=hit.face.normal.clone();if(normal.x*side<0)normal.negate();
+  return {point:hit.point.clone(),normal};
+ };
+ const seat=(side,y,z,offset)=>{const h=shellAt(side,y,z);return {...h,centre:h.point.clone().addScaledVector(h.normal,offset)};};
+ const record=(kind,side,h,offset,extra={})=>fittings.push({kind,side,point:h.point.toArray(),normal:h.normal.toArray(),centre:h.centre.toArray(),offset,...extra});
  // Bow mooring gear, rub rails, riveted hull belt and cabin joinery.
  for(const s of[-1,1]){
-  // Extruded hull bevel expands beyond the source profile's 2.7 half-width.
-  // Mount fittings on the finished shell, not buried inside the bevel.
-  for(const y of[-.25,-1.1])beam([s*3.02,y,-6.8],[s*3.02,y,5.5],.065,M.copper);
-  for(let z=-6.4;z<5.5;z+=1.35){const p=new THREE.Group();p.position.set(s*3.03,-.42,z);p.rotation.y=s*Math.PI/2;detail.add(p);torus(.18,.035,0,0,0,M.brass,p);box(.28,.28,.018,0,0,-.02,M.dark,p);}
-  for(let z=-6.9;z<5.5;z+=.48)for(const y of[-.83,-1.45]){const rivet=cyl(.028,.025,s*3.01,y,z,M.brass);rivet.rotation.z=Math.PI/2;}
+  for(const y of[-.25,-1.1]){
+   let previous=null;
+   for(let i=0;i<=62;i++){
+    const h=seat(s,y,THREE.MathUtils.lerp(-6.8,5.5,i/62),.074);
+    record('rub-rail',s,h,.074,{radius:.065});
+    if(previous)beam(previous.centre.toArray(),h.centre.toArray(),.065,M.copper);
+    previous=h;
+   }
+  }
+  for(let z=-6.4;z<5.5;z+=1.35){
+   const h=seat(s,-.42,z,.044),p=new THREE.Group();p.position.copy(h.centre);
+   p.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),h.normal);detail.add(p);
+   torus(.18,.035,0,0,0,M.brass,p);box(.28,.28,.018,0,0,-.02,M.dark,p);
+   record('porthole',s,h,.044,{radius:.215,quaternion:p.quaternion.toArray()});
+  }
+  for(let z=-6.9;z<5.5;z+=.48)for(const y of[-.83,-1.45]){
+   const h=seat(s,y,z,.0135),rivet=cyl(.028,.025,...h.centre.toArray(),M.brass);
+   rivet.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),h.normal);
+   record('rivet',s,h,.0135,{radius:.028,height:.025});
+  }
   beam([s*2.2,.33,-6.8],[s*2.2,1.14,-6.8],.06,M.iron);
   for(let z=-6.1;z<-3.1;z+=.8){box(.055,.70,.48,s*2.03,1.83,z,M.amber);box(.08,.04,.53,s*2.06,1.83,z,M.brass);}
   for(const z of[-6.1,-3.8]){cyl(.13,.38,s*1.85,2.95,z,M.iron);cyl(.22,.07,s*1.85,3.16,z,M.brass);}
   for(const z of[5.4,6.4]){cyl(.13,.36,s*1.9,.5,z,M.iron);box(.54,.10,.13,s*1.9,.69,z,M.iron);}
  }
+ detail.userData.hullFittings={surface:'actual indexed hull triangles',records:fittings};
+ shell.material.dispose();
  sign('NORTHWARD',2.0,.32,0,1.23,-2.99);
  // Exposed propeller shaft modules and wheel hubs among the incoming crates.
  for(const z of[1.9,4.7]){

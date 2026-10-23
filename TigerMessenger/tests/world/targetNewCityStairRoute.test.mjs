@@ -92,3 +92,11 @@ test('terminal access validates its coordinates and never changes tread geometry
  for(const terminalAccess of[{from:[NaN,20],width:2.4},{from:[2,20],width:0},{from:[0,20],width:2.4}])assert.throws(()=>createTargetNewCityStairRoute({...options,terminalAccess}),/terminalAccess/);
  const plain=createTargetNewCityStairRoute(options),open=createTargetNewCityStairRoute({...options,terminalAccess:{from:[6,18],width:2.4}});assert.deepEqual(open.report.selected,plain.report.selected);assert.ok(open.report.parapets.omittedSegments.length>0);const n=open.report.parapets.omittedSegments.length;open.setSideOpeningFootprints([]);assert.equal(open.report.parapets.omittedSegments.length,n);plain.dispose();open.dispose();
 });
+
+test('direct ring-edge stair keeps the horse-plaza approach open through terminal parapet',()=>{
+ const end=[48.2,3,78-Math.sqrt(7.95**2-7.8**2)],opts={sampleSurface:()=>3,start:[48,9,50],end,width:4.4,lowerFlightSlope:.35};
+ const closed=createTargetNewCityStairRoute(opts),opened=createTargetNewCityStairRoute({...opts,terminalAccess:{from:[72,68],width:2.2}});
+ assert.ok(opened.report.selected);assert.deepEqual(opened.report.selected,closed.report.selected);
+ const trace=route=>{route.group.updateMatrixWorld(true);const a=new THREE.Vector3(72,3.55,68),b=new THREE.Vector3(end[0],3.55,end[2]),d=b.clone().sub(a),ray=new THREE.Raycaster(a,d.clone().normalize(),0,d.length());return ray.intersectObjects([route.group.getObjectByName('surveyed-route-side-parapets'),route.group.getObjectByName('surveyed-route-side-copings')],false).length;};
+ assert.ok(trace(closed)>0);assert.equal(trace(opened),0);closed.dispose();opened.dispose();
+});

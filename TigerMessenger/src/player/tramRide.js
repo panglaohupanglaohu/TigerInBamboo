@@ -198,7 +198,7 @@ export function createTramRide({
 
     if (e.code !== "KeyF") return;
     if (state === "idle") {
-      if (!nearTram()) return;
+      if (e.defaultPrevented || player.riding || !nearTram()) return;
       e.preventDefault();
       const boardingVehicle=tram();
       previousPlayerVisible = playerGroup?.visible ?? true;

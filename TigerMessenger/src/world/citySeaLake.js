@@ -9,6 +9,9 @@ import { latLonToDir, quatYToDir } from "./sphereMath.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { CANYON, canyonOffsetDir } from "./canyon.js";
 import { groundLiftAt, worldToFlatXZ } from "./hills.js";
+import { createSwampBelugaModel, createSwampRibbonFishModel, createSwampShellModel } from "./moebiusSwamp.js";
+// Same species as the swamp → same look as the swamp. ?seaSwampSpecies=0 keeps the old stand-ins.
+const SWAMP_SPECIES = (() => { try { return new URLSearchParams(globalThis.location?.search || "").get("seaSwampSpecies") !== "0"; } catch { return true; } })();
 
 
 /**
@@ -118,6 +121,18 @@ function part(geo, mat, outline = 0.02) {
 /* ---------- 湖沼移植生物（海水培育版） ---------- */
 
 function buildSeaBeluga(rnd) {
+  if (SWAMP_SPECIES) {
+    // swamp beluga is ~8.2 long (old stand-in ~6.8): scale to the same footprint, front stays +Z
+    const whale = new THREE.Group();
+    whale.name = "sea-beluga";
+    const model = createSwampBelugaModel(rnd);
+    model.scale.setScalar(0.82);
+    whale.add(model);
+    whale.userData.phase = rnd() * Math.PI * 2;
+    whale.userData.kind = "sea-beluga";
+    whale.userData.swampSpecies = "moebius-beluga-whale";
+    return whale;
+  }
   const whale = new THREE.Group();
   whale.name = "sea-beluga";
   const skin = new THREE.MeshBasicMaterial({ color: 0xe8f0e6, fog: false });
@@ -192,6 +207,21 @@ function buildSeaEel(rnd) {
 }
 
 function buildSeaRibbonFish(rnd) {
+  if (SWAMP_SPECIES) {
+    const g = new THREE.Group();
+    g.name = "sea-ribbonfish";
+    const model = createSwampRibbonFishModel(rnd);
+    model.scale.setScalar(0.85);
+    g.add(model);
+    // the lake's tail wave drives the same body mesh; baseZ keeps the swamp fish's real thickness
+    g.userData.bodyMesh = model.userData.bodyMesh;
+    g.userData.baseX = model.userData.baseX;
+    g.userData.baseZ = model.userData.baseZ;
+    g.userData.phase = rnd() * Math.PI * 2;
+    g.userData.kind = "sea-ribbon";
+    g.userData.swampSpecies = "swamp-glow-ribbonfish";
+    return g;
+  }
   const g = new THREE.Group();
   g.name = "sea-ribbonfish";
   const geo = new THREE.PlaneGeometry(3.2, 0.5, 14, 1);
@@ -246,6 +276,14 @@ function buildSeaTubeWorms(rnd) {
 }
 
 function buildSeaShell(rnd) {
+  if (SWAMP_SPECIES) {
+    const g = new THREE.Group();
+    g.name = "sea-shell";
+    g.add(createSwampShellModel(rnd));
+    g.userData.kind = "sea-shell";
+    g.userData.swampSpecies = "swamp-shell";
+    return g;
+  }
   const g = new THREE.Group();
   g.name = "sea-shell";
   const shell = part(
@@ -668,7 +706,9 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
         const pos = mesh.geometry.attributes.position;
         for (let i = 0; i < pos.count; i++) {
           const x = baseX[i];
-          pos.setZ(i, Math.sin(x * 2.2 + t * 6 + ph) * 0.12 * (0.5 + x / 3.2));
+          const baseZ = f.userData.baseZ;
+          const wave = Math.sin(x * 2.2 + t * 6 + ph) * 0.12 * (0.5 + x / 3.2);
+          pos.setZ(i, baseZ ? baseZ[i] + wave : wave);
         }
         pos.needsUpdate = true;
       }

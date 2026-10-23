@@ -1,4 +1,10 @@
+import { installSwampWarshipRowing } from './swampWarshipRowing.js';
+import {installSwampTigerEncounter} from './swampTigerEncounter.js';
+import {installFlowerBoatPaddles, installFlowerBoyActivities} from './swampFlowerActivities.js';
+import {applySwampInternalGlow} from './swampInternalGlow.js';
 import {applySwampV2Art} from './swampV2Art.js';
+import {faunaTube} from './swampFaunaGeometry.js';
+import {createSwampAlgaeClumps} from './swampAlgaeClumps.js';
 // =====================================================================
 //  莫比斯原初湖沼 · createMoebiusSwampZone()  —— 月夜重构版（对照参考截屏）
 //
@@ -155,18 +161,28 @@ function getGlowTexture() {
 }
 
 /** 加色辉光 sprite：萤火虫 / 光晕 / 光池 */
-function glowSprite(color, scale, opacity) {
+function coralAtmosphereEnabled() {
+  return new URLSearchParams(globalThis.location?.search || '').get('gregLakeVisuals') !== '0';
+}
+function setCoralGlowOpacity(sprite, authoredOpacity) {
+  sprite.material.opacity = authoredOpacity * (sprite.userData.coralGlow?.opacityFactor ?? 1);
+}
+function glowSprite(color, scale, opacity, role = 'ambient') {
+  const enabled = coralAtmosphereEnabled();
+  const sizeFactor = !enabled || role === 'signal' ? 1 : role === 'large-stamen' ? .45 : .35;
+  const opacityFactor = !enabled || role === 'signal' ? 1 : role === 'large-stamen' ? .35 : .2;
   const m = new THREE.SpriteMaterial({
     map: getGlowTexture(),
     color,
     transparent: true,
-    opacity,
+    opacity: opacity * opacityFactor,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
     fog: false,
   });
   const s = new THREE.Sprite(m);
-  s.scale.setScalar(scale);
+  s.scale.setScalar(scale * sizeFactor);
+  s.userData.coralGlow = {role, enabled, authoredScale: scale, authoredOpacity: opacity, sizeFactor, opacityFactor};
   s.raycast = () => {};
   return s;
 }
@@ -294,80 +310,154 @@ function createRipple() {
  *  3. 程序化实时拼装「珍珠瓷感异星白鲸」NPC
  *  Thinking in Boxes：卵形身 + 圆鼻头 + 双扁鳍 + 微翘分叉尾
  * ===================================================================== */
+// Local actor meshes deliberately use smooth normals and a restrained ink hull.
+// Do not change the shared part() factory: trees, props and other worlds retain it.
+const CORAL_ACTOR_INK = 0x514b64;
+function coralActorMesh(geometry, color, ink = 0.009) {
+  const mesh = new THREE.Mesh(geometry, toonMat(color));
+  if (ink > 0) addOutline(mesh, ink, CORAL_ACTOR_INK, 0);
+  return mesh;
+}
+function coralEllipsoid(position, scale, color, rotation = [0, 0, 0]) {
+  const geometry = new THREE.SphereGeometry(1, 16, 12);
+  geometry.scale(...scale);
+  geometry.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rotation)));
+  geometry.translate(...position);
+  return {geometry, color};
+}
+// Rigid anatomical pieces share one draw call; wing/arm pivots remain separate.
+function coralActorBatch(pieces, ink = 0.009) {
+  const positions = [], normals = [], colors = [];
+  for (const piece of pieces) {
+    const geometry = piece.geometry.index ? piece.geometry.toNonIndexed() : piece.geometry;
+    const c = new THREE.Color(piece.color);
+    positions.push(...geometry.attributes.position.array);
+    normals.push(...geometry.attributes.normal.array);
+    for (let i = 0; i < geometry.attributes.position.count; i++) colors.push(c.r, c.g, c.b);
+    if (geometry !== piece.geometry) geometry.dispose();
+    piece.geometry.dispose();
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  const mesh = coralActorMesh(geometry, 0xffffff, ink);
+  mesh.material.vertexColors = true;
+  return mesh;
+}
+
+// Small animals need an even pen contour rather than the shared noisy brush
+// hull. Pixel width is capped by each real anatomical piece's thin radius, so
+// wing tips, toes and tapering tails cannot inflate into dark bands.
+function coralFineActorBatch(pieces) {
+  const limits=[],outlineNormals=[];
+  for(const piece of pieces){
+    const source=piece.geometry,geometry=source.index?source.toNonIndexed():source;
+    geometry.computeBoundingBox();
+    const box=geometry.boundingBox,size=box.getSize(new THREE.Vector3());
+    const radius=Math.min(size.x,size.y,size.z)*.5,p=geometry.attributes.position,n=geometry.attributes.normal;
+    const welded=new Map(),keys=[];
+    for(let i=0;i<p.count;i++){
+      const key=[p.getX(i),p.getY(i),p.getZ(i)].map(v=>Math.round(v*1e6)).join(',');keys.push(key);
+      if(!welded.has(key))welded.set(key,new THREE.Vector3());
+      welded.get(key).add(new THREE.Vector3().fromBufferAttribute(n,i));
+    }
+    for(const normal of welded.values())normal.normalize();
+    const tube=source.parameters?.radialSegments&&source.parameters?.tubularSegments?source:null;
+    const rings=[];
+    if(tube){
+      const original=source.attributes.position,segments=source.parameters.radialSegments;
+      for(let j=0;j<=source.parameters.tubularSegments;j++){
+        const center=new THREE.Vector3();for(let k=0;k<segments;k++)center.add(new THREE.Vector3().fromBufferAttribute(original,j*(segments+1)+k));
+        center.multiplyScalar(1/segments);rings.push(center);
+      }
+    }
+    for(let i=0;i<p.count;i++){
+      let thinRadius=radius;
+      if(tube){
+        const originalIndex=source.index?source.index.getX(i):i,ring=Math.floor(originalIndex/(source.parameters.radialSegments+1));
+        thinRadius=new THREE.Vector3().fromBufferAttribute(p,i).distanceTo(rings[ring]);
+      }
+      limits.push(Math.min(.006,thinRadius*.06));outlineNormals.push(...welded.get(keys[i]));
+    }
+    if(geometry!==source)geometry.dispose();
+  }
+  const mesh=coralActorBatch(pieces,0),geometry=mesh.geometry.clone();
+  geometry.setAttribute('normal',new THREE.Float32BufferAttribute(outlineNormals,3));
+  geometry.setAttribute('coralInkLimit',new THREE.Float32BufferAttribute(limits,1));
+  const resolution={value:new THREE.Vector2(1,1)},width={value:.85};
+  const material=new THREE.MeshBasicMaterial({color:0x435968,side:THREE.BackSide,fog:false,toneMapped:false});
+  material.onBeforeCompile=shader=>{
+    shader.uniforms.coralInkResolution=resolution;shader.uniforms.coralInkWidth=width;
+    shader.vertexShader=shader.vertexShader.replace('#include <common>',`#include <common>
+attribute float coralInkLimit;
+uniform vec2 coralInkResolution;
+uniform float coralInkWidth;`).replace('#include <project_vertex>',`#include <project_vertex>
+vec4 inkLimitClip = projectionMatrix * modelViewMatrix * vec4(position + normal * coralInkLimit, 1.0);
+if (gl_Position.w > 0.0 && inkLimitClip.w > 0.0) {
+  vec2 deltaPixels = (inkLimitClip.xy / inkLimitClip.w - gl_Position.xy / gl_Position.w) * coralInkResolution * .5;
+  float availablePixels = length(deltaPixels);
+  if (availablePixels > .00001) gl_Position.xy += deltaPixels / availablePixels * min(coralInkWidth, availablePixels) * 2.0 / coralInkResolution * gl_Position.w;
+}`);
+  };
+  material.customProgramCacheKey=()=> 'swamp-fine-animal-ink-v1';
+  const outline=new THREE.Mesh(geometry,material);outline.name='swamp-fine-animal-ink';outline.userData.isOutline=true;
+  outline.userData.fineAnimalInk={version:1,cssPixels:.85,color:'#435968',radiusFraction:.06,maxLocalExpansion:.006};
+  outline.raycast=()=>{};
+  outline.onBeforeRender=renderer=>{renderer.getDrawingBufferSize(resolution.value);width.value=.85*renderer.getPixelRatio();};
+  mesh.add(outline);return mesh;
+}
+
 function buildBelugaWhale(rnd) {
   const whale = new THREE.Group();
   whale.name = "moebius-beluga-whale";
-
-  // 月夜里的画面亮色主体：不受光米白浅绿瓷感
-  const skin = new THREE.MeshBasicMaterial({ color: new THREE.Color(WHALE_SKIN), fog: false });
-
-  /** @type {THREE.Mesh[]} */
-  const parts = [];
-  const addPart = (mesh) => {
-    mesh.castShadow = true;
-    addOutline(mesh, 0.045);
-    whale.add(mesh);
-    parts.push(mesh);
-    return mesh;
-  };
-
-  // 身体：横向非等比拉伸、前圆后尖的流线型卵形多面体
-  const body = new THREE.Mesh(facet(new THREE.SphereGeometry(1, 12, 9)), skin);
-  body.scale.set(1.8, 1.2, 3.4); // 锁死的非等比缩放
-  addPart(body);
-
-  // 鼻头：前端贴一个小圆球，圆润憨厚
-  const nose = new THREE.Mesh(facet(new THREE.SphereGeometry(0.62, 10, 8)), skin);
-  nose.position.set(0, 0.12, 3.25);
-  addPart(nose);
-
-  // 眼睛：刚好破水而出的黑豆眼（贴头顶面，昂首后仍嵌在头上）
-  const eyeMat = toonMat(0x1a1a1a);
-  for (const side of [-1, 1]) {
-    const eye = new THREE.Mesh(facet(new THREE.SphereGeometry(0.16, 6, 5)), eyeMat);
-    eye.position.set(side * 0.95, 0.42, 2.9);
-    addPart(eye);
+  // A closed axial loft joins forehead, trunk and tail stock without overlapping
+  // head spheres or faceted outline normals. Front remains +Z for old animation.
+  const profile = [
+    [-4.35, .18, .13, .38], [-3.8, .42, .28, .28], [-3.1, .8, .55, .14],
+    [-2.2, 1.27, .84, .04], [-1, 1.64, 1.08, 0], [.4, 1.76, 1.18, .03],
+    [1.55, 1.54, 1.22, .12], [2.4, 1.16, 1.1, .23], [2.95, .84, .88, .28],
+    [3.3, .56, .62, .19], [3.57, .28, .31, .05]
+  ];
+  const curve = new THREE.CatmullRomCurve3(profile.map(p => new THREE.Vector3(p[1], p[2], p[3])));
+  const positions = [], indices = [], slices = 32, rings = 49;
+  // Interpolate the actual monotonic Z profile independently of radius spline.
+  for (let j = 0; j < rings; j++) {
+    const t = j / (rings - 1), u = t * (profile.length - 1), k = Math.min(profile.length - 2, Math.floor(u));
+    const z = THREE.MathUtils.lerp(profile[k][0], profile[k + 1][0], u - k), r = curve.getPoint(t);
+    for (let i = 0; i < slices; i++) {
+      const angle = i / slices * Math.PI * 2;
+      positions.push(Math.cos(angle) * r.x, Math.sin(angle) * r.y + r.z, z);
+      if (j < rings - 1) { const a = j * slices + i, b = j * slices + (i + 1) % slices;
+        indices.push(a, b, a + slices, b, b + slices, a + slices); }
+    }
   }
-
-  // 憨态可掬的微笑嘴线
-  const mouth = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(-0.5, -0.12, 3.72),
-      new THREE.Vector3(0, -0.28, 3.86),
-      new THREE.Vector3(0.5, -0.12, 3.72),
-    ]),
-    new THREE.LineBasicMaterial({ color: INK_COLOR })
-  );
-  mouth.raycast = () => {};
-  whale.add(mouth);
-
-  // 鱼鳍：身体两侧贴两片扁平三角形
-  for (const side of [-1, 1]) {
-    const fin = new THREE.Mesh(facet(new THREE.ConeGeometry(0.6, 1.9, 3)), skin);
-    fin.scale.set(1, 1, 0.26); // 压扁成三角鳍
-    fin.rotation.order = "ZXY";
-    fin.rotation.z = side * (Math.PI / 2 - 0.45); // 向外平展微后掠
-    fin.rotation.x = 0.25;
-    fin.position.set(side * 1.72, -0.42, 0.6);
-    addPart(fin);
+  const back = positions.length / 3; positions.push(0, .38, -4.48);
+  const front = positions.length / 3; positions.push(0, .02, 3.72);
+  for (let i = 0; i < slices; i++) {
+    const next = (i + 1) % slices, base = (rings - 1) * slices;
+    indices.push(back, next, i, front, base + i, base + next);
   }
-
-  // 尾部：微翘的尾柄 + 分叉尾巴（两片后掠叶瓣）
-  const tailStock = new THREE.Mesh(facet(new THREE.ConeGeometry(0.55, 1.7, 6)), skin);
-  tailStock.rotation.x = -Math.PI / 2 - 0.22; // 朝后且微翘
-  tailStock.position.set(0, 0.3, -3.85);
-  addPart(tailStock);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geo.setIndex(indices); geo.computeVertexNormals();
+  const body = coralActorMesh(geo, WHALE_SKIN, .012);
+  body.name = 'swamp-beluga-continuous-body'; whale.add(body);
+  const appendages = [];
   for (const side of [-1, 1]) {
-    const fluke = new THREE.Mesh(facet(new THREE.ConeGeometry(0.52, 1.8, 3)), skin);
-    fluke.scale.set(1, 1, 0.2);
-    fluke.rotation.order = "ZXY";
-    fluke.rotation.x = -Math.PI / 2 - 0.4;
-    fluke.rotation.z = side * 0.55;
-    fluke.position.set(side * 0.62, 0.72, -4.6);
-    addPart(fluke);
+    appendages.push(coralEllipsoid([side * 1.73, -.49, .25], [.95, .12, .43], WHALE_SKIN, [0, side * -.4, side * -.23]));
+    appendages.push(coralEllipsoid([side * .73, .45, -4.3], [1.02, .12, .47], WHALE_SKIN, [0, side * .28, side * .08]));
   }
-
-  whale.userData.parts = parts;
+  const fins = coralActorBatch(appendages, .01); fins.name = 'swamp-beluga-rounded-fins'; whale.add(fins);
+  // Tiny eyes lie on the forehead side surface, rather than floating beyond it.
+  const eyes = coralActorBatch([-1, 1].map(side => coralEllipsoid([side * .887, .43, 2.9], [.045, .07, .075], CORAL_ACTOR_INK)), 0);
+  eyes.name = 'swamp-beluga-side-eyes'; whale.add(eyes);
+  const mouth = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-.25, -.14, 3.59), new THREE.Vector3(0, -.18, 3.66), new THREE.Vector3(.25, -.14, 3.59)
+  ]), new THREE.LineBasicMaterial({color: CORAL_ACTOR_INK}));
+  mouth.name = 'swamp-beluga-mouth'; mouth.raycast = () => {}; whale.add(mouth);
+  whale.userData.parts = [body, fins, eyes];
+  whale.userData.coralActorVersion = 1;
   return whale;
 }
 
@@ -465,80 +555,169 @@ function buildWorldTree(rnd, swampZone) {
  *  4b. 内凹荷叶小舟（Y = 25.0）：ConeGeometry 翻转 180° 成凹陷浅碗
  * ===================================================================== */
 function buildNativeDoll(scale = 1) {
-  const doll = new THREE.Group();
-  doll.name = "swamp-native-doll";
-  const mat = toonMat(DOLL_SKIN, { flatShading: true });
-  const torso = part(new THREE.ConeGeometry(0.26 * scale, 0.72 * scale, 5), mat, 0.012);
-  torso.position.y = 0.36 * scale;
-  doll.add(torso);
-  const head = part(new THREE.SphereGeometry(0.17 * scale, 6, 5), mat, 0.01);
-  head.position.y = 0.86 * scale;
-  doll.add(head);
-  // 金色卷发（插画中黑皮肤金发的土著特征）
-  const hairMat = toonMat(DOLL_HAIR, { flatShading: true });
-  for (let i = 0; i < 4; i++) {
-    const curl = part(new THREE.SphereGeometry(0.075 * scale, 5, 4), hairMat, 0.008);
-    const a = (i / 4) * Math.PI * 2 + 0.4;
-    curl.position.set(
-      Math.cos(a) * 0.1 * scale,
-      (0.97 + (i % 2) * 0.04) * scale,
-      Math.sin(a) * 0.1 * scale
-    );
-    doll.add(curl);
+  const doll=new THREE.Group();doll.name="swamp-native-doll";
+  const skin=0x282834,hair=0xd9cbb8;
+  const pieces=[
+    coralEllipsoid([0,.61,0],[.145,.24,.11],skin),
+    coralEllipsoid([0,.86,0],[.062,.10,.062],skin),
+    coralEllipsoid([0,.98,.015],[.155,.17,.14],skin),
+    coralEllipsoid([0,1.095,-.015],[.16,.082,.14],hair),
+    coralEllipsoid([-.074,1.102,.082],[.09,.065,.071],hair),
+    coralEllipsoid([.082,1.103,.064],[.08,.07,.083],hair),
+  ];
+  for(const side of [-1,1]){
+    pieces.push(coralEllipsoid([side*.153,.98,.008],[.033,.051,.032],skin));
+    pieces.push(coralEllipsoid([side*.057,.982,.137],[.011,.014,.006],hair));
   }
+  for(const p of pieces)p.geometry.scale(scale,scale,scale);
+  const body=coralFineActorBatch(pieces);body.name='swamp-native-child-anatomy';doll.add(body);
+  const limbs=[];
+  for(const kind of ['arm','leg'])for(const side of [-1,1]){
+    const arm=kind==='arm',limb=new THREE.Group();limb.name=`swamp-child-${kind}-${side}`;
+    limb.position.set(side*(arm?.13:.072)*scale,(arm?.75:.43)*scale,0);
+    const points=arm?[[0,0,0],[side*.12,-.12,.05],[side*.23,-.10,.15]]:[[0,0,0],[side*.015,-.17,.015],[side*.018,-.37,.035]];
+    const geometry=faunaTube(points,u=>(arm?.034:.043)*(1-.26*u),16,8);geometry.scale(scale,scale,scale);
+    const end=points[2],tip=coralEllipsoid(end,arm?[.039,.045,.045]:[.044,.04,.084],skin);tip.geometry.scale(scale,scale,scale);
+    limb.add(coralFineActorBatch([{geometry,color:skin},tip]));doll.add(limb);limbs.push({node:limb,arm,side});
+  }
+  doll.userData.coralSwimLimbs=limbs;doll.userData.coralFaunaVersion=1;
   return doll;
+}
+
+// The flower passengers are the two playful boys in the user's drawing.
+// Cache rigid anatomy by pose: three shared meshes per boy, no cone clothing
+// and no per-curl draw calls. The legacy swimmer is a separate story actor.
+const flowerBoyAssets = new Map();
+function flowerBoyGeometry(pose) {
+  if (flowerBoyAssets.has(pose)) return flowerBoyAssets.get(pose);
+  const skin=0x282834,hair=0xd9cbb8,body=[],head=[],arm=[];
+  const ell=(list,p,s,color=skin)=>{
+    const geometry=new THREE.SphereGeometry(1,8,6);geometry.scale(...s);geometry.translate(...p);list.push({geometry,color});
+  };
+  const limb=(list,a,b,r)=>{
+    const start=new THREE.Vector3(...a),end=new THREE.Vector3(...b),delta=end.clone().sub(start);
+    const geometry=new THREE.SphereGeometry(1,8,6);geometry.scale(r,delta.length()*.5+r*.25,r);
+    geometry.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),delta.normalize()));
+    geometry.translate(...start.add(end).multiplyScalar(.5).toArray());list.push({geometry,color:skin});
+  };
+  ell(body,[0,.18,0],[.22,.16,.17]); // seated pelvis
+  ell(body,[0,.45,.035],[.20,.29,.14]);
+  limb(body,[0,.62,.06],[0,.75,.09],.075); // visible neck
+  for(const side of [-1,1]){
+    limb(body,[side*.13,.15,.04],[side*.16,.12,.35],.073);
+    limb(body,[side*.16,.12,.35],[side*.17,-.22,.51],.059);
+    ell(body,[side*.17,-.25,.59],[.07,.055,.14]);
+  }
+  limb(body,[-.18,.61,.04],[-.29,.30,.16],.053);
+  limb(body,[-.29,.30,.16],[-.27,.05,.25],.046);
+  ell(body,[-.27,.035,.27],[.068,.038,.073]);
+  ell(head,[0,0,0],[.18,.205,.17]);
+  ell(head,[0,-.025,.17],[.055,.043,.05]); // small nose, same black skin
+  for(const side of [-1,1])ell(head,[side*.07,.015,.159],[.017,.015,.018],0x11151f);
+  // Pale irregular tufts, not the former four orange spheres.
+  for(let i=0;i<9;i++){
+    const a=i*Math.PI*2/9;
+    ell(head,[Math.cos(a)*.155,.13+(i%3)*.016,Math.sin(a)*.135],[.093,.105+(i%2)*.015,.095],hair);
+  }
+  ell(head,[0,.22,0],[.125,.10,.12],hair);
+  if(pose==='play'){
+    limb(arm,[0,0,0],[.13,-.32,.30],.052);
+    limb(arm,[.13,-.32,.30],[.08,-.76,.60],.046);
+    ell(arm,[.08,-.79,.65],[.064,.038,.085]);
+  }else{
+    limb(arm,[0,0,0],[.17,.16,.12],.052);
+    limb(arm,[.17,.16,.12],[.06,.28,.29],.046);
+    ell(arm,[.06,.29,.31],[.063,.052,.072]);
+  }
+  const assets=[body,head,arm].map(pieces=>{
+    const mesh=coralActorBatch(pieces,0);return {geometry:mesh.geometry,material:mesh.material};
+  });
+  flowerBoyAssets.set(pose,assets);return assets;
+}
+
+function buildFlowerBoy(pose,scale=1) {
+  const boy=new THREE.Group();boy.name='swamp-native-doll';
+  const rig=new THREE.Group();rig.name='swamp-flower-boy-rig';rig.scale.setScalar(scale);boy.add(rig);
+  const meshes=flowerBoyGeometry(pose).map((asset,i)=>{
+    const mesh=new THREE.Mesh(asset.geometry,asset.material);mesh.name=['swamp-boy-body-limbs','swamp-boy-head-hair','swamp-boy-play-arm'][i];rig.add(mesh);return mesh;
+  });
+  const [,head,arm]=meshes;head.position.set(0,.86,.09);arm.position.set(.18,.61,.04);
+  boy.userData.flowerBoy={pose,rig,head,arm,scale,anatomy:['head','neck','torso','leftArm','rightArm','leftHand','rightHand','leftLeg','rightLeg','leftFoot','rightFoot']};
+  boy.userData.updateFlowerBoy=time=>{
+    head.rotation.y=Math.sin(time*.75+(pose==='play'?0:1.5))*(pose==='play'?.08:.28);
+    head.rotation.x=pose==='play'?.20+.04*Math.sin(time):-.06;
+    arm.rotation.x=Math.sin(time*1.35+(pose==='play'?0:2))*(pose==='play'?.10:.12);
+    arm.rotation.z=pose==='play'?.03*Math.sin(time*.8):.08*Math.sin(time*1.1);
+  };
+  boy.userData.updateFlowerBoy(0);return boy;
 }
 
 function createLotusLeafBoat(rnd, radius = 4.2) {
   const g = new THREE.Group();
   g.name = "swamp-lotus-leaf-boat";
 
-  // 开放圆锥沿 X 轴翻转 180° → 向内凹陷的浅碗状巨型荷叶小舟
-  // （不加描边壳：碗内要保持参考图的亮绿叶面，双面渲染）
-  const leafGeo = new THREE.ConeGeometry(radius, radius * 0.42, 8, 1, true);
-  const leaf = new THREE.Mesh(
-    facet(leafGeo),
-    toonMat(LOTUS_LEAF, { flatShading: true, side: THREE.DoubleSide })
-  );
-  leaf.castShadow = leaf.receiveShadow = true;
-  leaf.rotation.x = Math.PI; // 口朝上，内凹
-  leaf.position.y = 0.08;
-  g.add(leaf);
+  // Thin closed flower cup: the central floor remains under the old passengers.
+  // Eight lobes belong to one continuous wall; no opaque inverse hull fills it.
+  const segments = 64, rows = 12, positions = [], colors = [], indices = [];
+  const surface = (t, angle, underside = false) => {
+    const lobe = .5 + .5 * Math.cos(angle * 8);
+    const r = radius * t * (1 - .045 * t ** 6 * (1 - lobe));
+    const rise = Math.max(0, (t - .58) / .42);
+    const y = .08 + radius * (.18 * rise * rise + .055 * rise ** 3 * lobe);
+    return new THREE.Vector3(Math.cos(angle) * r, y - (underside ? radius * .012 : 0), Math.sin(angle) * r);
+  };
+  // Center is one vertex per side; ring seams share indices for a watertight cup.
+  for (let side = 0; side < 2; side++) {
+    const c = new THREE.Color(side ? 0x91afa0 : 0xcbdab6), base = positions.length / 3;
+    const center = surface(0, 0, !!side); positions.push(...center.toArray()); colors.push(c.r,c.g,c.b);
+    for (let row = 1; row <= rows; row++) for (let i = 0; i < segments; i++) {
+      const v = surface(row / rows, i / segments * Math.PI * 2, !!side);
+      positions.push(...v.toArray()); colors.push(c.r,c.g,c.b);
+    }
+    const tri = (a,b,c) => indices.push(...(side ? [a,b,c] : [a,c,b]));
+    for (let i = 0; i < segments; i++) tri(base, base + 1 + i, base + 1 + (i + 1) % segments);
+    for (let row = 1; row < rows; row++) for (let i = 0; i < segments; i++) {
+      const a = base + 1 + (row - 1) * segments + i, b = base + 1 + (row - 1) * segments + (i + 1) % segments;
+      tri(a,b,a+segments); tri(b,b+segments,a+segments);
+    }
+  }
+  const sideSize = 1 + rows * segments, rim = 1 + (rows - 1) * segments;
+  for (let i = 0; i < segments; i++) {
+    const a = rim+i,b = rim+(i+1)%segments;
+    indices.push(a,b,a+sideSize,b,b+sideSize,a+sideSize);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+  geometry.setIndex(indices); geometry.computeVertexNormals();
+  const cup = new THREE.Mesh(geometry, toonMat(0xffffff,{vertexColors:true,side:THREE.DoubleSide}));
+  cup.name='swamp-flower-boat-cup';g.add(cup);
+  const linePoints = [];
+  const lineAt = (t,a) => surface(t,a).add(new THREE.Vector3(0,.007,0));
+  for(let i=0;i<segments;i++)linePoints.push(lineAt(1,i*Math.PI*2/segments),lineAt(1,(i+1)*Math.PI*2/segments));
+  for(let i=0;i<16;i++)for(let j=1;j<12;j++)linePoints.push(lineAt(j/12,i*Math.PI/8),lineAt((j+1)/12,i*Math.PI/8));
+  const veins=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(linePoints),new THREE.LineBasicMaterial({color:CORAL_ACTOR_INK,transparent:true,opacity:.58}));
+  veins.name='swamp-flower-boat-veins';veins.raycast=()=>{};g.add(veins);
+  g.userData.flowerCup={radius,floorY:.08,flatRadius:radius*.58,version:1};
 
-  // 叶底厚盘（水下侧也有体积）
-  const pad = part(
-    new THREE.CylinderGeometry(radius * 0.7, radius * 0.86, 0.22, 8),
-    toonMat(0x27ae60, { flatShading: true }),
-    0.026
-  );
-  pad.position.y = -0.35;
-  g.add(pad);
-
-  // 碗中 2~3 个极简焦黑土著人偶，还原叙事生活气息
-  const dollN = 2 + ((rnd() * 2) | 0);
-  for (let i = 0; i < dollN; i++) {
-    const doll = buildNativeDoll(0.85 + rnd() * 0.4);
-    const a = rnd() * Math.PI * 2;
-    const d = rnd() * radius * 0.42;
-    doll.position.set(Math.cos(a) * d, 0.1, Math.sin(a) * d);
-    doll.rotation.y = rnd() * Math.PI * 2;
-    g.add(doll);
+  // Keep the old RNG budget, but the approved story now fixes exactly two boys.
+  const oldDollN=2+((rnd()*2)|0),oldScales=[];
+  for(let i=0;i<oldDollN;i++){oldScales.push(.85+rnd()*.4);rnd();rnd();rnd();}
+  g.userData.passengers=[];
+  for(let i=0;i<2;i++){
+    const boy=buildFlowerBoy(i===0?'play':'look',oldScales[i]*1.15),side=i===0?1:-1;
+    boy.position.set(0,.1,side*radius*.50);boy.rotation.y=i===0?0:Math.PI;
+    const rig=boy.userData.flowerBoy.rig;
+    rig.position.set(0,surface(.84,i===0?Math.PI/2:-Math.PI/2).y-.1,radius*.34);
+    g.add(boy);g.userData.passengers.push(boy);
   }
 
-  // 一杆长篙（插画中角色的撑杆）
-  const pole = part(
-    new THREE.CylinderGeometry(0.05, 0.05, radius * 1.7, 4),
-    toonMat(0x6e4a2f, { flatShading: true }),
-    0.01
-  );
-  pole.rotation.z = Math.PI / 2 - 0.35;
-  pole.position.set(radius * 0.4, 0.7, radius * 0.2);
-  g.add(pole);
+  installFlowerBoatPaddles(g,radius);
 
   // 参考图叶舟中的粉色发光花蕊尖锥
   const spike = buildStamenSpike(rnd);
-  spike.position.set(-radius * 0.25, 0.12, radius * 0.1);
-  spike.rotation.z = 0.12;
+  // 花蕊在叶舟正中（两个娃在 ±z 两侧，中央是空的），竖直立着
+  spike.position.set(0, (g.userData.flowerCup?.floorY ?? 0.08) + 0.04, 0);
   g.add(spike);
   g.userData.halo = spike.userData.halo;
 
@@ -562,23 +741,16 @@ function buildSwampEel(rnd) {
       Math.cos(t * Math.PI * 1.4 + phase) * 1.6
     ));
   }
-  const tube = part(
-    new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 48, 0.3, 6, false),
-    toonMat(EEL_COLOR, { flatShading: true }),
-    0.02
-  );
-  g.add(tube);
-  const head = part(new THREE.SphereGeometry(0.44, 7, 6), toonMat(EEL_COLOR, { flatShading: true }), 0.02);
-  head.position.copy(pts[8]).add(new THREE.Vector3(0.35, 0, 0));
-  head.scale.set(1.5, 0.9, 0.9);
-  g.add(head);
-  const eyeMat = toonMat(FISH_DARK);
+  const skin=0xa8b58b,head=pts[8].clone().add(new THREE.Vector3(.24,0,0));
+  const pieces=[{geometry:faunaTube(pts,u=>.006+.285*(1-Math.exp(-u*6)),48,12),color:skin},coralEllipsoid(head.toArray(),[.49,.28,.275],skin)];
+  pieces.push(coralEllipsoid([head.x+.08,head.y-.14,head.z],[.35,.085,.225],0xd5d5ae));
   for (const side of [-1, 1]) {
-    const eye = new THREE.Mesh(facet(new THREE.SphereGeometry(0.07, 5, 4)), eyeMat);
-    eye.position.copy(head.position).add(new THREE.Vector3(0.3, 0.14, side * 0.26));
-    g.add(eye);
+    pieces.push(coralEllipsoid([head.x+.21,head.y+.09,head.z+side*.242],[.035,.038,.015],0x435968));
+    pieces.push(coralEllipsoid([head.x-.29,head.y-.08,head.z+side*.30],[.26,.035,.13],0xc5cba3,[side*.2,side*.3,0]));
   }
+  const anatomy=coralFineActorBatch(pieces);anatomy.name='swamp-eel-smooth-anatomy';g.add(anatomy);
   g.userData.phase = phase;
+  g.userData.coralFaunaVersion=1;
   return g;
 }
 
@@ -586,22 +758,20 @@ function buildSwampEel(rnd) {
 function buildTubeWormCluster(rnd) {
   const g = new THREE.Group();
   g.name = "swamp-tube-worms";
-  const mat = toonMat(WORM_COLOR, { flatShading: true });
+  const pieces=[];
   const n = 4 + ((rnd() * 4) | 0);
   for (let i = 0; i < n; i++) {
     const h = 1.1 + rnd() * 1.6;
-    const worm = part(new THREE.CylinderGeometry(0.13 + rnd() * 0.07, 0.2 + rnd() * 0.08, h, 6), mat, 0.014);
+    const top=.13+rnd()*.07,bottom=.2+rnd()*.08;
     const a = rnd() * Math.PI * 2;
     const d = rnd() * 0.9;
-    worm.position.set(Math.cos(a) * d, h / 2, Math.sin(a) * d);
-    worm.rotation.z = (rnd() - 0.5) * 0.3;
-    worm.rotation.x = (rnd() - 0.5) * 0.3;
-    g.add(worm);
-    const tip = part(new THREE.SphereGeometry(0.16 + rnd() * 0.06, 6, 5), toonMat(0xf2825f, { flatShading: true }), 0.012);
-    tip.position.set(worm.position.x, h + 0.06, worm.position.z);
-    tip.scale.y = 0.7;
-    g.add(tip);
+    const leanZ=(rnd()-.5)*.3,leanX=(rnd()-.5)*.3,tipR=.16+rnd()*.06;
+    const x=Math.cos(a)*d,z=Math.sin(a)*d,tip=[x+leanZ*h*.6,h,z-leanX*h*.6];
+    pieces.push({geometry:faunaTube([[x,0,z],[x+leanZ*h*.2,h*.42,z-leanX*h*.2],[tip[0]-.06*Math.sin(i),h*.78,tip[2]],tip],u=>THREE.MathUtils.lerp(bottom*.73,top*.72,u),20,10),color:i%2?0xc98d8a:0xc5a193});
+    pieces.push(coralEllipsoid(tip,[tipR*.90,tipR*.75,tipR*.90],0xf0cbb5));
+    pieces.push(coralEllipsoid([tip[0],tip[1]+tipR*.55,tip[2]],[tipR*.45,tipR*.22,tipR*.45],0xf4dfb9));
   }
+  const anatomy=coralFineActorBatch(pieces);anatomy.name='swamp-soft-tube-worm-anatomy';g.add(anatomy);g.userData.coralTubeCount=n;g.userData.coralFaunaVersion=1;
   return g;
 }
 
@@ -637,29 +807,20 @@ function buildMoebiusMushroom(rnd, scale = 1) {
 function buildPinkHanger(rnd) {
   const g = new THREE.Group();
   g.name = "swamp-pink-hanger";
-  const mat = toonMat(PINK_HANG, { flatShading: true });
-  const body = part(new THREE.SphereGeometry(0.42, 7, 6), mat, 0.02);
-  body.scale.set(0.85, 1.2, 0.85);
-  body.position.y = -0.5;
-  g.add(body);
+  const skin=0xd3a0ab,pieces=[];
+  pieces.push({geometry:faunaTube([[0,.03,-.03],[.035,-.30,0],[-.035,-.68,.03],[0,-1.1,.025]],u=>.035+.22*Math.pow(Math.sin(Math.PI*u),.65),24,12),color:skin});
   const tailPts = [
     new THREE.Vector3(0, -0.9, 0),
     new THREE.Vector3(0.18, -1.7, 0.08),
     new THREE.Vector3(-0.12, -2.6, -0.06),
     new THREE.Vector3(0.1, -3.4, 0.05),
   ];
-  const tail = part(
-    new THREE.TubeGeometry(new THREE.CatmullRomCurve3(tailPts), 16, 0.09, 5, false),
-    mat,
-    0.012
-  );
-  g.add(tail);
-  const eyeMat = toonMat(FISH_DARK);
+  pieces.push({geometry:faunaTube(tailPts,u=>.006+.079*Math.pow(1-u,.8),28,10),color:skin});
   for (const side of [-1, 1]) {
-    const eye = new THREE.Mesh(facet(new THREE.SphereGeometry(0.05, 5, 4)), eyeMat);
-    eye.position.set(side * 0.16, -0.42, 0.34);
-    g.add(eye);
+    pieces.push({geometry:faunaTube([[side*.12,-.34,.01],[side*.31,-.13,.025],[side*.27,.055,-.02],[side*.18,.07,-.07]],u=>.023+.02*(1-u),16,8),color:skin});
+    pieces.push(coralEllipsoid([side*.088,-.48,.258],[.021,.026,.014],0x435968));
   }
+  const anatomy=coralFineActorBatch(pieces);anatomy.name='swamp-pink-clinging-anatomy';g.add(anatomy);g.userData.coralFaunaVersion=1;
   g.userData.phase = rnd() * Math.PI * 2;
   return g;
 }
@@ -668,32 +829,37 @@ function buildPinkHanger(rnd) {
 function buildSwampBird(rnd, color) {
   const g = new THREE.Group();
   g.name = "swamp-bird";
-  const mat = toonMat(color, { flatShading: true });
-  const body = part(new THREE.ConeGeometry(0.28, 1.0, 5), mat, 0.014);
-  body.rotation.x = Math.PI / 2;
-  g.add(body);
-  const wingGeo = new THREE.PlaneGeometry(1.15, 0.42);
-  for (const side of [-1, 1]) {
-    const wing = part(wingGeo, toonMat(color, { flatShading: true, side: THREE.DoubleSide }), 0.01);
-    wing.position.set(side * 0.62, 0.08, 0);
-    wing.rotation.z = side * 0.5;
-    wing.userData.side = side;
-    g.add(wing);
-    g.userData[`wing${side > 0 ? "R" : "L"}`] = wing;
+  // Latest direction: the accepted anatomy stays pale green; only the head emits pink light.
+  const head=0xd8ffe0,breast=0xd8ffe0,wingColor=0xd8ffe0,tailColor=0xd8ffe0,featherLight=0xd8ffe0;
+  const pieces = [
+    coralEllipsoid([0,0,0],[.24,.22,.51],breast),
+    coralEllipsoid([0,.14,.43],[.21,.2,.25],head),
+    coralEllipsoid([0,.11,.68],[.065,.07,.21],0x8a7782),
+    coralEllipsoid([-.095,.01,-.6],[.085,.04,.3],tailColor,[0,-.14,0]),
+    coralEllipsoid([.095,.01,-.6],[.085,.04,.3],tailColor,[0,.14,0]),
+    ...[-1,1].map(side=>coralEllipsoid([side*.183,.19,.48],[.028,.033,.033],CORAL_ACTOR_INK))
+  ];
+  const body=coralFineActorBatch(pieces);body.name='swamp-bird-anatomy';g.add(body);
+  for(const side of [-1,1]) {
+    const wing=coralFineActorBatch([
+      coralEllipsoid([side*.44,0,-.03],[.62,.055,.29],wingColor,[0,side*.25,0]),
+      coralEllipsoid([side*.85,-.015,-.23],[.42,.035,.12],featherLight,[0,side*.45,0])
+    ]);
+    wing.position.set(side*.17,.08,0);wing.rotation.z=side*.5;
+    wing.userData.side=side;wing.name='swamp-bird-wing';g.add(wing);
+    g.userData[`wing${side>0?'R':'L'}`]=wing;
   }
-  const beak = part(new THREE.ConeGeometry(0.08, 0.28, 4), toonMat(0xe8b64c, { flatShading: true }), 0.008);
-  beak.rotation.x = Math.PI / 2;
-  beak.position.set(0, 0.04, 0.6);
-  g.add(beak);
-  // 月夜里飞鸟自带微光
-  const halo = glowSprite(color, 2.2, 0.45);
-  g.add(halo);
-  g.userData.halo = halo;
+  // User correction: preserve skin colours; fluorescence comes from the head.
+  applySwampInternalGlow(body,{center:[0,.14,.43],radius:[.21,.2,.25],strength:.95,region:'bird-head'});
+  for(const wing of [g.userData.wingL,g.userData.wingR])wing.material.toneMapped=false;
+  const halo=glowSprite(0x91efce,1.12,.38,'signal');halo.visible=false;
+  g.add(halo);g.userData.halo=halo;
   g.userData.orbitR = 15 + rnd() * 11;
-  g.userData.orbitY = 44 + rnd() * 7; // 枝头高度：树冠/垂叶之间
-  g.userData.dart = 2.5 + rnd() * 3.5; // 径向穿梭幅度（枝头间来回）
+  g.userData.orbitY = 44 + rnd() * 7;
+  g.userData.dart = 2.5 + rnd() * 3.5;
   g.userData.speed = 0.22 + rnd() * 0.18;
   g.userData.phase = rnd() * Math.PI * 2;
+  g.userData.coralActorVersion=1;
   return g;
 }
 
@@ -713,108 +879,171 @@ const _raidV1 = new THREE.Vector3(); // 湖沼生物袭击机队临时向量
 const _raidV2 = new THREE.Vector3();
 
 /** 长尾猴：暗毛浅脸 + S 形长尾，树冠间跳跃 */
-function buildLongTailMonkey(rnd) {
+function buildLongTailMonkey(rnd, {tailPose='hanging', tailRise=false} = {}) {
   const g = new THREE.Group();
   g.name = "swamp-longtail-monkey";
-  const fur = toonMat(MONKEY_FUR, { flatShading: true });
-  const body = part(new THREE.SphereGeometry(0.42, 6, 5), fur, 0.014);
-  body.scale.set(0.9, 1.15, 0.9);
-  body.position.y = 0.5;
-  g.add(body);
-  const head = part(new THREE.SphereGeometry(0.26, 6, 5), fur, 0.012);
-  head.position.y = 1.02;
-  g.add(head);
-  const face = part(new THREE.SphereGeometry(0.16, 6, 5), toonMat(MONKEY_FACE, { flatShading: true }), 0.008);
-  face.scale.set(1, 0.85, 0.6);
-  face.position.set(0, 1.0, 0.18);
-  g.add(face);
-  for (const s of [-1, 1]) {
-    const ear = part(new THREE.SphereGeometry(0.09, 5, 4), fur, 0.006);
-    ear.position.set(s * 0.24, 1.1, 0);
-    g.add(ear);
-  }
-  // 四肢短棍
-  const limbGeo = new THREE.CylinderGeometry(0.06, 0.05, 0.5, 4);
-  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-    const limb = part(limbGeo, fur, 0.008);
-    limb.position.set(sx * 0.28, 0.22, sz * 0.2);
-    limb.rotation.z = sx * 0.5;
-    limb.rotation.x = -sz * 0.3;
-    g.add(limb);
-    if (sz === 1) {
-      // 前肢：玩家入沼投果时高举
-      if (sx === -1) g.userData.armL = limb;
-      else g.userData.armR = limb;
-      limb.userData.baseRotX = limb.rotation.x;
+  // Approved hanging-climber reference: narrow pink/mauve body, small face,
+  // grasping hands and a downward tail. Existing shoulder pivots stay exact.
+  const fur=0x9b7c96,shade=0x856d82,face=0xc9b5ad;
+  const pieces=[
+    coralEllipsoid([0,.56,-.025],[.18,.47,.16],fur),
+    coralEllipsoid([0,.9,.015],[.13,.23,.13],fur),
+    coralEllipsoid([0,1.12,.025],[.153,.18,.143],fur),
+    coralEllipsoid([0,1.11,.15],[.103,.111,.028],face),
+    coralEllipsoid([0,1.075,.184],[.022,.014,.018],shade),
+    coralEllipsoid([0,.57,.124],[.098,.27,.022],0xb396a6)
+  ];
+  for(const side of [-1,1]){
+    pieces.push(coralEllipsoid([side*.148,1.14,.013],[.047,.064,.035],fur));
+    pieces.push(coralEllipsoid([side*.159,1.14,.042],[.023,.038,.012],face));
+    pieces.push(coralEllipsoid([side*.042,1.139,.177],[.010,.013,.009],0x435968));
+    // Folded narrow thigh and a long grasping foot keep the original perch
+    // support envelope, instead of broad seated toy haunches.
+    pieces.push(coralEllipsoid([side*.13,.23,-.08],[.074,.245,.09],shade,[.32,0,side*.23]));
+    pieces.push(coralEllipsoid([side*.153,.028,.018],[.055,.046,.16],fur));
+    for(let toe=-1;toe<=1;toe++)pieces.push(coralEllipsoid([side*.153+toe*.031,.014,.149],[.016,.023,.056],fur,[.15,0,0]));
+    // The preserved animation pivot is outside the newly slender torso. A
+    // real shoulder bridge reaches that exact pivot and a small joint covers
+    // it in every existing lift/throw rotation. The arm itself is continuous.
+    pieces.push({geometry:faunaTube([[side*.11,.73,.075],[side*.20,.715,.106],[side*.27,.7,.13]],t=>.051-.003*t,10,8),color:fur});
+    pieces.push(coralEllipsoid([side*.27,.7,.13],[.056,.056,.056],fur));
+    const armChain=[[0,0,0],[-side*.065,-.17,.018],[-side*.085,-.31,.028],[-side*.064,-.5,.094]];
+    const armPieces=[
+      {geometry:faunaTube(armChain,t=>.049-.015*t,24,10),color:fur},
+      coralEllipsoid([-side*.064,-.5,.094],[.044,.064,.047],shade)
+    ];
+    for(let finger=-1;finger<=1;finger++){
+      const x=-side*.064+finger*.024;
+      const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(x,-.53,.11),new THREE.Vector3(x,-.585,.145),new THREE.Vector3(x,-.58,.18)]);
+      armPieces.push({geometry:new THREE.TubeGeometry(curve,5,.012,5,false),color:fur});
     }
+    const armTubeVertexCount=armPieces[0].geometry.index.count;
+    const arm=coralFineActorBatch(armPieces);
+    arm.position.set(side*.27,.7,.13);arm.rotation.x=-.3;
+    arm.userData.baseRotX=-.3;arm.name='swamp-monkey-arm';g.add(arm);
+    arm.userData.monkeyArmChain={version:3,points:armChain,tubeVertexCount:armTubeVertexCount,shoulderBridge:[[side*.11,.73,.075],[side*.27,.7,.13]],jointRadius:.056};
+    g.userData[side<0?'armL':'armR']=arm;
   }
-  // 长尾：比身体更长的 S 形垂尾
-  const pts = [];
-  for (let i = 0; i <= 8; i++) {
-    const tt = i / 8;
-    pts.push(new THREE.Vector3(Math.sin(tt * 3.0) * 0.35, 0.45 - tt * 0.9 - tt * tt * 0.6, -0.35 - tt * 1.7));
+  let points=[new THREE.Vector3(0,.37,-.14),new THREE.Vector3(-.13,.02,-.21),new THREE.Vector3(-.16,-.57,-.23),new THREE.Vector3(-.07,-1.25,-.2),new THREE.Vector3(.09,-1.89,-.15),new THREE.Vector3(.27,-1.95,-.12),new THREE.Vector3(.35,-1.83,-.12)];
+  const hangingLength=new THREE.CatmullRomCurve3(points).getLength();
+  if(tailPose==='deck'){
+    // The same long tail coils behind the heels. Preserve its arc length;
+    // the low coil clears the footplane even during the existing -.18 lift lean.
+    const coil=radius=>{
+      const p=[new THREE.Vector3(0,.37,-.14)];
+      for(let k=0;k<=10;k++){
+        const a=Math.PI*.5+k/10*Math.PI*1.8,r=radius*(1-.2*k/10);
+        if(tailRise){
+          // The mast worker counter-rotates around a yawed axis. A low flat
+          // loop would tilt through the deck; coil up beside the left hip.
+          const angle=-Math.PI*.5+k/10*Math.PI*1.8;
+          p.push(new THREE.Vector3(-radius+.025+Math.cos(angle)*r,.4+radius*.82+Math.sin(angle)*r*.82,-.14));
+        }else p.push(new THREE.Vector3(Math.cos(a)*r,.24+.025*Math.sin(k/10*Math.PI),-.14-radius+Math.sin(a)*r));
+      }
+      return p;
+    };
+    let low=.1,high=.8;
+    for(let i=0;i<24;i++){
+      const radius=(low+high)/2;
+      if(new THREE.CatmullRomCurve3(coil(radius)).getLength()<hangingLength)low=radius;else high=radius;
+    }
+    points=coil((low+high)/2);
   }
-  const tail = part(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 20, 0.05, 4, false), fur, 0.008);
-  g.add(tail);
-  g.userData.phase = rnd() * Math.PI * 2;
+  const curve=new THREE.CatmullRomCurve3(points),tail=new THREE.TubeGeometry(curve,40,.039,8,false),position=tail.attributes.position;
+  const tailVertexStart=pieces.reduce((n,p)=>n+(p.geometry.index?.count??p.geometry.attributes.position.count),0);
+  for(let j=0;j<=40;j++){
+    const centre=curve.getPointAt(j/40),taper=1-.68*j/40;
+    for(let k=0;k<=8;k++){const i=j*9+k,v=new THREE.Vector3().fromBufferAttribute(position,i).sub(centre).multiplyScalar(taper).add(centre);position.setXYZ(i,v.x,v.y,v.z);}
+  }
+  tail.computeVertexNormals();pieces.push({geometry:tail,color:fur});
+  pieces.push(coralEllipsoid(points.at(-1).toArray(),[.013,.013,.013],fur));
+  const body=coralFineActorBatch(pieces);body.name='swamp-monkey-anatomy';g.add(body);
+  g.userData.phase=rnd()*Math.PI*2;g.userData.coralActorVersion=2;
+  g.userData.monkeyTail={pose:tailPose==='deck'?'deck':'hanging',raisedCoil:tailRise,arcLength:curve.getLength(),hangingLength,vertexStart:tailVertexStart,vertexCount:body.geometry.attributes.position.count-tailVertexStart};
   return g;
 }
 
 /** 发光蜥蜴：薄荷绿平涂 + 细尾四足 + 微光晕，地面缓爬 */
 function buildGlowLizard(rnd) {
-  const g = new THREE.Group();
-  g.name = "swamp-glow-lizard";
-  const mat = toonMat(LIZARD_GLOW, { flatShading: true });
-  const body = part(new THREE.SphereGeometry(0.3, 6, 5), mat, 0.012);
-  body.scale.set(0.8, 0.5, 1.6);
-  body.position.y = 0.18;
-  g.add(body);
-  const head = part(new THREE.SphereGeometry(0.16, 6, 5), mat, 0.008);
-  head.scale.set(0.9, 0.6, 1.2);
-  head.position.set(0, 0.16, 0.55);
-  g.add(head);
-  const tail = part(new THREE.ConeGeometry(0.09, 1.1, 4), mat, 0.006);
-  tail.rotation.x = -Math.PI / 2 + 0.15;
-  tail.position.set(0, 0.14, -0.95);
-  g.add(tail);
-  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-    const leg = part(new THREE.ConeGeometry(0.05, 0.3, 4), mat, 0.005);
-    leg.rotation.z = sx * 1.9;
-    leg.position.set(sx * 0.28, 0.1, sz * 0.3);
-    g.add(leg);
+  const g=new THREE.Group();g.name='swamp-glow-lizard';
+  const pieces=[
+    coralEllipsoid([0,.18,0],[.24,.15,.48],LIZARD_GLOW),
+    coralEllipsoid([0,.17,.48],[.155,.115,.27],LIZARD_GLOW),
+    coralEllipsoid([0,.135,.64],[.11,.07,.14],LIZARD_GLOW)
+  ];
+  for(const side of [-1,1]){
+    pieces.push(coralEllipsoid([side*.135,.225,.54],[.027,.033,.035],CORAL_ACTOR_INK));
+    for(const z of [-.27,.27]){
+      pieces.push(coralEllipsoid([side*.25,.105,z],[.19,.055,.075],LIZARD_GLOW,[0,side*(z>0?-.5:.5),0]));
+      pieces.push(coralEllipsoid([side*.37,.05,z-.05],[.07,.045,.12],LIZARD_GLOW));
+      for(let toe=-1;toe<=1;toe++)pieces.push(coralEllipsoid([side*(.38+toe*.045),.024,z+.04],[.019,.018,.073],LIZARD_GLOW,[0,side*toe*.2,0]));
+    }
   }
-  const halo = glowSprite(LIZARD_GLOW, 1.5, 0.4);
-  halo.position.y = 0.3;
-  g.add(halo);
-  g.userData.halo = halo;
-  g.userData.phase = rnd() * Math.PI * 2;
+  const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,.15,-.34),new THREE.Vector3(.07,.13,-.65),new THREE.Vector3(.09,.1,-1.02),new THREE.Vector3(-.07,.08,-1.46)]);
+  const tail=new THREE.TubeGeometry(curve,24,.085,8,false),pos=tail.attributes.position;
+  for(let j=0;j<=24;j++){const center=curve.getPointAt(j/24),taper=1-.92*j/24;for(let i=0;i<=8;i++){const idx=j*9+i,v=new THREE.Vector3().fromBufferAttribute(pos,idx).sub(center).multiplyScalar(taper).add(center);pos.setXYZ(idx,v.x,v.y,v.z);}}
+  tail.computeVertexNormals();pieces.push({geometry:tail,color:LIZARD_GLOW});
+  pieces.push(coralEllipsoid([-.07,.08,-1.46],[.007,.007,.007],LIZARD_GLOW));
+  const body=coralFineActorBatch(pieces);body.name='swamp-lizard-anatomy';g.add(body);
+  applySwampInternalGlow(body,{center:[0,.18,0],radius:[.24,.15,.48],strength:.85,region:'lizard-torso'});
+  const halo=glowSprite(LIZARD_GLOW,1.5,.4);halo.visible=false;halo.position.y=.3;g.add(halo);g.userData.halo=halo;
+  g.userData.phase=rnd()*Math.PI*2;g.userData.coralActorVersion=1;
   return g;
+}
+
+// A leaf is an open blade, never a back-face extrusion of a rectangular plane.
+// The narrow central strip is part of the same mesh, so it adds no draw call.
+function createSwampLooseLeaf(width, height) {
+  const boundary=[[-.5,0],[-.3,-.34],[0,-.5],[.3,-.34],[.5,0],[.3,.34],[0,.5],[-.3,.34]];
+  const positions=[],colors=[],base=new THREE.Color(PALM_LEAF),vein=new THREE.Color(0x514b64);
+  const triangle=(a,b,c,color)=>{for(const v of [a,b,c]){positions.push(v[0]*width,v[1]*height,v[2]||0);colors.push(color.r,color.g,color.b);}};
+  for(let i=0;i<boundary.length;i++)triangle([0,0],boundary[i],boundary[(i+1)%boundary.length],base);
+  triangle([-.45,0,.002],[.35,-.012,.002],[.46,0,.002],vein);
+  triangle([-.45,0,.002],[.46,0,.002],[.35,.012,.002],vein);
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geo.computeVertexNormals();
+  return new THREE.Mesh(geo,toonMat(0xffffff,{vertexColors:true,side:THREE.DoubleSide}));
 }
 
 /** 发光带鱼：侧扁长带 + 顶点波动摆尾，水下环游 */
 function buildRibbonFish(rnd) {
   const g = new THREE.Group();
   g.name = "swamp-glow-ribbonfish";
-  const geo = new THREE.PlaneGeometry(3.8, 0.6, 16, 1);
-  const pos = geo.attributes.position;
-  const baseX = new Float32Array(pos.count);
-  for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    const taper = 0.3 + 0.7 * (0.5 + x / 3.8); // 头宽尾细
-    baseX[i] = x;
-    pos.setY(i, pos.getY(i) * taper);
+  const skin=0xc3cbb0,geometry=faunaTube([[-1.9,0,0],[-.9,.02,0],[.8,.02,0],[1.9,.01,0]],u=>.012+.10*Math.pow(Math.sin(Math.PI*u),.6)+.065*Math.exp(-Math.pow((u-.90)/.12,2)),36,10);geometry.scale(1,1.65,.58);
+  const pieces=[{geometry,color:skin},coralEllipsoid([1.84,.016,0],[.13,.10,.064],skin),coralEllipsoid([-1.92,0,0],[.26,.135,.013],0xd9d5b4)];
+  for(const side of[-1,1])pieces.push(coralEllipsoid([1.78,.045,side*.060],[.023,.025,.012],0x435968));
+  // Same original long body/tail and swim phase; four lateral limbs identify
+  // this authored creature as a salamander. Merge toes into the original draw.
+  const limbs=[];
+  for(const [pair,x]of [['front',1.04],['rear',-.92]])for(const side of [-1,1]){
+    const start=pieces.reduce((sum,p)=>sum+(p.geometry.index?p.geometry.index.count:p.geometry.attributes.position.count),0);
+    pieces.push({geometry:faunaTube([[x,.015,side*.05],[x-.13,-.04,side*.19],[x-.06,-.07,side*.32]],u=>.018+.024*(1-u),14,8),color:skin});
+    for(let toe=-1;toe<=1;toe++)pieces.push({geometry:faunaTube([[x-.06,-.07,side*.30],[x+.025+toe*.055,-.08,side*.37],[x+.065+toe*.075,-.075,side*(.41-Math.abs(toe)*.018)]],u=>.004+.010*(1-u),8,6),color:skin});
+    const end=pieces.reduce((sum,p)=>sum+(p.geometry.index?p.geometry.index.count:p.geometry.attributes.position.count),0);
+    limbs.push({pair,side,toes:3,vertexStart:start,vertexCount:end-start,anchor:[x,.015,side*.05]});
   }
-  geo.computeVertexNormals();
-  const bodyMesh = new THREE.Mesh(geo, toonMat(RIBBON_GLOW, { flatShading: true, side: THREE.DoubleSide }));
+  const bodyMesh=coralFineActorBatch(pieces);bodyMesh.name='swamp-ribbon-fish-smooth-anatomy';
+  const pos=bodyMesh.geometry.attributes.position,baseX=new Float32Array(pos.count),baseZ=new Float32Array(pos.count);
+  for(let i=0;i<pos.count;i++){baseX[i]=pos.getX(i);baseZ[i]=pos.getZ(i);}
+  bodyMesh.geometry.computeBoundingSphere();bodyMesh.geometry.boundingSphere.radius+=.35;
+  // The outline follows the same animated positions, never a stale flat sheet.
+  for(const child of bodyMesh.children)if(child.userData.isOutline){child.geometry.setAttribute('position',pos);child.geometry.boundingSphere=bodyMesh.geometry.boundingSphere.clone();}
   g.add(bodyMesh);
-  const head = part(new THREE.SphereGeometry(0.16, 5, 4), toonMat(RIBBON_GLOW, { flatShading: true }), 0.008);
-  head.position.set(1.9, 0.05, 0);
-  g.add(head);
-  const halo = glowSprite(RIBBON_GLOW, 2.4, 0.35);
+  const emission=applySwampInternalGlow(bodyMesh,{center:[1.84,.016,0],radius:[.19,.14,.12],strength:.45,region:'salamander-head'});
+  const headLight={enabled:true,intensity:.45};
+  g.userData.headLight=headLight;
+  g.userData.setHeadLight=(enabled,intensity=headLight.intensity)=>{
+    headLight.enabled=!!enabled;headLight.intensity=THREE.MathUtils.clamp(Number.isFinite(intensity)?intensity:.45,0,1);
+    emission.setStrength(headLight.enabled?headLight.intensity:0);return headLight;
+  };
+  g.userData.salamanderLimbs=limbs;
+  // Keep the old animation reference but retire its misplaced body/tail halo.
+  const halo = glowSprite(0xd8ddb9, .8, .24);halo.visible=false;halo.position.set(1.84,.016,0);
   g.add(halo);
   g.userData.halo = halo;
   g.userData.bodyMesh = bodyMesh;
   g.userData.baseX = baseX;
+  g.userData.baseZ = baseZ;
+  g.userData.coralFaunaVersion=1;
   g.userData.phase = rnd() * Math.PI * 2;
   return g;
 }
@@ -843,6 +1072,7 @@ function buildRimPalm(rnd) {
   trunkGeo.translate(0, h / 2, 0);
   trunkGeo.rotateZ(0.12 + rnd() * 0.14); // 微微弯向坑心
   const trunk = part(trunkGeo, toonMat(TOWER_TRUNK, { flatShading: true }), 0.024);
+  trunk.userData.swampTreePart = 'palm-trunk';
   g.add(trunk);
   const leafMat = toonMat(PALM_LEAF, { flatShading: true, side: THREE.DoubleSide });
   const top = new THREE.Vector3(-Math.sin(0.12 + 0.14) * h * 0.5, h * 0.98, 0);
@@ -855,6 +1085,7 @@ function buildRimPalm(rnd) {
     leaf.rotation.order = "YXZ";
     leaf.rotation.y = a;
     leaf.rotation.x = 0.85 + rnd() * 0.5; // 外展下垂
+    leaf.userData.swampTreePart = 'palm-leaf';
     g.add(leaf);
   }
   return g;
@@ -896,6 +1127,7 @@ function buildToweringTree(rnd) {
     );
     mesh.position.copy(a).addScaledVector(_d.normalize(), len * 0.5);
     mesh.quaternion.setFromUnitVectors(yAxis, _d);
+    mesh.userData.swampTreePart = 'branch';
     g.add(mesh);
     return mesh;
   }
@@ -919,7 +1151,7 @@ function buildToweringTree(rnd) {
       THREE.MathUtils.lerp(R_BOT, R_TOP, t1),
       barkMat,
       OUT
-    );
+    ).userData.swampTreePart = 'trunk';
   }
 
   // 露根
@@ -934,6 +1166,7 @@ function buildToweringTree(rnd) {
     root.position.set(Math.cos(a) * R_BOT * 0.45, 0.12, Math.sin(a) * R_BOT * 0.45);
     root.rotation.y = a + Math.PI / 2;
     root.rotation.z = (rnd() - 0.5) * 0.3;
+    root.userData.swampTreePart = 'root';
     g.add(root);
   }
 
@@ -1195,7 +1428,7 @@ function buildGiantFlower(rnd) {
   );
   core.position.y = 0.4;
   g.add(core);
-  const halo = glowSprite(0xffe6a0, 7.0, 0.75);
+  const halo = glowSprite(0xffe6a0, 7.0, 0.75, 'large-stamen');
   halo.position.y = 0.5;
   g.add(halo);
   g.userData.halo = halo;
@@ -1203,24 +1436,41 @@ function buildGiantFlower(rnd) {
   return g;
 }
 
-/** 粉色发光花蕊尖锥：圆锥 + 亮尖 + 光晕（参考图叶舟中的粉锥） */
+/** 粉色发光花蕊尖锥：圆锥 + 亮尖 + 光晕（参考图叶舟中的粉锥）。
+ *  2026-10-10 用户：它是花蕊，要在叶舟正中并发点光——锥体自发光（底部粉→尖端粉白渐变，不受夜色压暗），
+ *  外加更明显的光晕和叶面上的一圈粉色光池。 */
 function buildStamenSpike(rnd) {
   const g = new THREE.Group();
   g.name = "swamp-stamen-spike";
-  const spike = part(new THREE.ConeGeometry(0.42, 1.7, 6), toonMat(PINK_HANG, { flatShading: true }), 0.014);
+  const geo = new THREE.ConeGeometry(0.42, 1.7, 10);
+  const base = new THREE.Color(0xf08aa6), tipC = new THREE.Color(STAMEN_PINK), pos = geo.attributes.position, cols = [];
+  for (let i = 0; i < pos.count; i++) { const u = THREE.MathUtils.clamp((pos.getY(i) + 0.85) / 1.7, 0, 1); const c = base.clone().lerp(tipC, u * u); cols.push(c.r, c.g, c.b); }
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(cols, 3));
+  const spike = part(geo, new THREE.MeshBasicMaterial({ vertexColors: true, fog: false, toneMapped: false }), 0.014);
   spike.position.y = 0.85;
+  spike.userData.selfLit = true;
   g.add(spike);
   const tip = new THREE.Mesh(
-    facet(new THREE.SphereGeometry(0.12, 6, 5)),
-    new THREE.MeshBasicMaterial({ color: STAMEN_PINK, fog: false })
+    facet(new THREE.SphereGeometry(0.14, 8, 6)),
+    new THREE.MeshBasicMaterial({ color: 0xffffff, fog: false, toneMapped: false })
   );
   tip.position.y = 1.72;
   g.add(tip);
-  const halo = glowSprite(STAMEN_PINK, 2.2, 0.5);
-  halo.position.y = 1.5;
+  const halo = glowSprite(STAMEN_PINK, 3.0, 0.7, 'signal');
+  halo.position.y = 1.1;
   halo.userData.pulse = rnd() * Math.PI * 2;
   g.add(halo);
+  // 叶面光池：加色圆盘，中心亮、边缘淡出
+  const pool = new THREE.Mesh(new THREE.CircleGeometry(1.5, 28), new THREE.MeshBasicMaterial({
+    map: getGlowTexture(), color: 0xff9fbf, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, toneMapped: false,
+  }));
+  pool.name = "swamp-stamen-glow-pool";
+  pool.rotation.x = -Math.PI / 2;
+  pool.position.y = 0.04;
+  pool.raycast = () => {};
+  g.add(pool);
   g.userData.halo = halo;
+  g.userData.pool = pool;
   return g;
 }
 
@@ -1431,11 +1681,8 @@ export function createMoebiusSwampZone(opts = {}) {
   const fallingLeaves = [];
   const LEAF_POOL = 60;
   for (let i = 0; i < LEAF_POOL; i++) {
-    const leaf = part(
-      new THREE.PlaneGeometry(0.6 + rnd() * 0.4, 0.32 + rnd() * 0.2),
-      toonMat(PALM_LEAF, { flatShading: true, side: THREE.DoubleSide }),
-      0.006
-    );
+    const leaf = createSwampLooseLeaf(0.6 + rnd() * 0.4, 0.32 + rnd() * 0.2);
+    leaf.name = 'swamp-falling-leaf';
     leaf.visible = false;
     leaf.userData = { active: false };
     swampZone.add(leaf);
@@ -1445,11 +1692,8 @@ export function createMoebiusSwampZone(opts = {}) {
   for (let i = 0; i < 18; i++) {
     const a = rnd() * Math.PI * 2;
     const d = 3 + rnd() * 28;
-    const fl = part(
-      new THREE.PlaneGeometry(0.7 + rnd() * 0.5, 0.38 + rnd() * 0.25),
-      toonMat(PALM_LEAF, { flatShading: true, side: THREE.DoubleSide }),
-      0.006
-    );
+    const fl = createSwampLooseLeaf(0.7 + rnd() * 0.5, 0.38 + rnd() * 0.25);
+    fl.name = 'swamp-floating-leaf';
     fl.position.set(Math.cos(a) * d, WATER_Y + 0.08, Math.sin(a) * d);
     fl.rotation.set(-Math.PI / 2 + (rnd() - 0.5) * 0.2, rnd() * Math.PI, 0);
     fl.userData.drift = rnd() * Math.PI * 2;
@@ -1488,8 +1732,9 @@ export function createMoebiusSwampZone(opts = {}) {
 
   /* ---------- 月光柱：树冠隙缝漏下几缕微弱冷光柱（「月夜」暗示） ---------- */
   const shafts = [];
+  const shaftOpacityFactor = coralAtmosphereEnabled() ? .25 : 1;
   const shaftMat = new THREE.MeshBasicMaterial({
-    color: MOON_SHAFT, transparent: true, opacity: 0.08,
+    color: MOON_SHAFT, transparent: true, opacity: 0.08 * shaftOpacityFactor,
     blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, fog: false,
   });
   for (let i = 0; i < 3; i++) {
@@ -1500,6 +1745,7 @@ export function createMoebiusSwampZone(opts = {}) {
       new THREE.CylinderGeometry(0.5 + rnd() * 0.3, 2.0 + rnd() * 0.8, h, 8, 1, true),
       shaftMat
     );
+    shaft.name = 'swamp-moon-shaft';
     shaft.position.set(Math.cos(a) * d, WATER_Y + h / 2 - 2, Math.sin(a) * d);
     shaft.rotation.z = (rnd() - 0.5) * 0.16;
     shaft.raycast = () => {};
@@ -1510,7 +1756,7 @@ export function createMoebiusSwampZone(opts = {}) {
   /* ---------- 萤火虫：水面与坑壁间漂移闪烁（月夜光源之一） ---------- */
   const fireflies = [];
   for (let i = 0; i < 46; i++) {
-    const sp = glowSprite(i % 3 === 2 ? FIREFLY_B : FIREFLY_A, 0.5 + rnd() * 0.7, 0.8);
+    const sp = buildCoralFirefly(i % 3 === 2 ? FIREFLY_B : FIREFLY_A, 0.5 + rnd() * 0.7);
     const a = rnd() * Math.PI * 2;
     const d = rnd() * 26;
     sp.position.set(Math.cos(a) * d, WATER_Y + 1 + rnd() * 12, Math.sin(a) * d);
@@ -1578,7 +1824,6 @@ export function createMoebiusSwampZone(opts = {}) {
   /* ---------- 湖底：蓝色藻类地面（非草皮）+ 河床乱石 ---------- */
   // 坑底不是草皮，而是幽蓝发光的藻类植物铺地，强化“深邃湖水”的纵深感
   const ALGAE_COLOR = 0x1f6fb0;       // 湖底蓝藻主色
-  const ALGAE_GLOW = 0x3fa8e0;        // 藻类受光亮斑（微发光感）
   const floor = part(
     jitter(new THREE.CylinderGeometry(13.5, 15, 1.2, 12), 0.8, rnd),
     toonMat(ALGAE_COLOR, { flatShading: true }),
@@ -1591,26 +1836,7 @@ export function createMoebiusSwampZone(opts = {}) {
   swampZone.userData.sampleGroundRadius = createSwampGroundSampler(swampZone, walkSurfaces);
 
   // 藻类簇：湖底散布的蓝绿发光藻团（高低起伏，营造水下植被层）
-  const algaeTuftMat = toonMat(ALGAE_GLOW, { flatShading: true });
-  const algaeDarkMat = toonMat(0x16527e, { flatShading: true });
-  for (let i = 0; i < 26; i++) {
-    const a = rnd() * Math.PI * 2;
-    const d = 1.5 + rnd() * 11;
-    const clump = new THREE.Group();
-    const blades = 3 + ((rnd() * 4) | 0);
-    for (let b = 0; b < blades; b++) {
-      const blade = part(
-        new THREE.ConeGeometry(0.12 + rnd() * 0.1, 1.0 + rnd() * 1.8, 4),
-        rnd() < 0.5 ? algaeTuftMat : algaeDarkMat,
-        0.008
-      );
-      blade.position.set((rnd() - 0.5) * 0.6, (0.5 + rnd() * 0.9), (rnd() - 0.5) * 0.6);
-      blade.rotation.z = (rnd() - 0.5) * 0.4;
-      clump.add(blade);
-    }
-    clump.position.set(Math.cos(a) * d, SWAMP_FLOOR_Y + 0.2, Math.sin(a) * d);
-    swampZone.add(clump);
-  }
+  const rootedAlgae = createSwampAlgaeClumps(rnd, swampZone, floor, SWAMP_FLOOR_Y);
 
   // 河床暗蓝乱石（置于藻类之间，不喧宾夺主）
   for (let i = 0; i < 14; i++) {
@@ -1638,26 +1864,8 @@ export function createMoebiusSwampZone(opts = {}) {
   /* ---------- 水下游鱼：绿黑斑纹小鱼群（玻璃剖面下的生灵） ---------- */
   /** @type {THREE.Group[]} */
   const fishes = [];
-  const fishGreenMat = toonMat(FISH_GREEN, { flatShading: true });
-  const fishAltMat = toonMat(0x2e8f6e, { flatShading: true });
-  const spotMat = toonMat(FISH_DARK, { flatShading: true });
   for (let i = 0; i < 9; i++) {
-    const fish = new THREE.Group();
-    fish.name = `swamp-fish-${i}`;
-    const fMat = i % 2 ? fishGreenMat : fishAltMat;
-    const fBody = part(new THREE.ConeGeometry(0.32, 1.3, 4), fMat, 0.014);
-    fBody.rotation.x = Math.PI / 2;
-    fish.add(fBody);
-    const fTail = part(new THREE.ConeGeometry(0.22, 0.5, 3), fMat, 0.01);
-    fTail.rotation.x = -Math.PI / 2;
-    fTail.position.z = -0.85;
-    fish.add(fTail);
-    // 黑斑纹：体侧 2~3 枚深色斑点
-    for (let k = 0; k < 2 + (i % 2); k++) {
-      const spot = new THREE.Mesh(facet(new THREE.SphereGeometry(0.06, 4, 3)), spotMat);
-      spot.position.set((k - 1) * 0.22, 0.12, (rnd() - 0.5) * 0.5);
-      fish.add(spot);
-    }
+    const fish = buildCoralSmallFish(rnd, i);
     fish.position.set((rnd() - 0.5) * 30, 13 + rnd() * 9, (rnd() - 0.5) * 30);
     fish.userData.orbitR = 6 + rnd() * 12;
     fish.userData.orbitY = fish.position.y;
@@ -1684,10 +1892,10 @@ export function createMoebiusSwampZone(opts = {}) {
   whale.userData.bobPhase = 0.4;
   // 绕湖心椭圆巡游（本地 XZ）
   whale.userData.swim = {
-    cx: -2,
+    cx: 5,
     cz: -5,
-    rx: 9,
-    rz: 7,
+    rx: 2.5,
+    rz: 2,
     speed: 0.11,
     phase: 0.2,
     yawOffset: Math.PI * 0.5, // 切向朝向
@@ -1706,10 +1914,10 @@ export function createMoebiusSwampZone(opts = {}) {
   whalePup.userData.baseRotX = -0.95;
   whalePup.userData.bobPhase = 2.1;
   whalePup.userData.swim = {
-    cx: -2,
+    cx: 5,
     cz: -5,
-    rx: 11.5,
-    rz: 9,
+    rx: 3.4,
+    rz: 2.8,
     speed: 0.13,
     phase: 1.8,
     yawOffset: Math.PI * 0.5,
@@ -1726,19 +1934,9 @@ export function createMoebiusSwampZone(opts = {}) {
   swampZone.add(feedRaft);
   if (feedRaft.userData.halo) glowHalos.push(feedRaft.userData.halo);
 
-  // 喂食孩子：立于筏缘，双臂高举向白鲸口边递食
-  const feeder = buildNativeDoll(1.05);
-  const feedArmGeo = new THREE.CylinderGeometry(0.06, 0.05, 0.62, 4);
-  for (const s of [-1, 1]) {
-    const arm = part(feedArmGeo, toonMat(DOLL_SKIN, { flatShading: true }), 0.006);
-    arm.position.set(s * 0.17, 0.66, 0.12);
-    arm.rotation.x = 1.15; // 前上举
-    arm.rotation.z = -s * 0.5;
-    feeder.add(arm);
-  }
-  feeder.position.set(-0.95, 0.12, -0.85); // 筏缘靠鲸一侧
-  feeder.rotation.y = -2.3; // 面向白鲸头
-  feedRaft.add(feeder);
+  // One of the same two boys feeds the whale; never add a third passenger.
+  const feeder=feedRaft.userData.passengers[1];
+  feeder.userData.storyRole='whale-feeder';feedRaft.userData.feeder=feeder;
 
   // 食物碎屑：手与鲸口之间的弧线上几点暖光
   const foodBits = [];
@@ -1746,7 +1944,7 @@ export function createMoebiusSwampZone(opts = {}) {
   const mouthW = new THREE.Vector3(7.6, 27.5, 4.5);
   for (let i = 0; i < 4; i++) {
     const k = 0.15 + i * 0.22;
-    const bit = glowSprite(0xffe08a, 0.42, 0.85);
+    const bit = glowSprite(0xffe08a, 0.42, 0.85, 'signal');
     bit.position.lerpVectors(handW, mouthW, k);
     bit.position.y += Math.sin(k * Math.PI) * 0.5 + 0.6;
     bit.userData.phase = i * 1.7;
@@ -1756,6 +1954,13 @@ export function createMoebiusSwampZone(opts = {}) {
 
   // 水下泅游的黑人孩子：玻璃水下的暗色剪影，绕鲸缓游
   const swimmer = buildNativeDoll(0.95);
+  swimmer.userData.heiwaMedic = true;
+  swimmer.name = 'swamp-heiwa-medic-agent';
+  // This animated story actor must not use cached static decoration bounds.
+  swimmer.traverse(o=>{if(o.isMesh)o.userData.noDistanceCulling=true;});
+  // Clear water opposite the dock: the previous berth (7,12) intersected
+  // the departing warship orbit centered at (9,8).
+  swimmer.userData.heiwaTreatmentPoint = [0, WATER_Y + .3, -12];
   swimmer.rotation.order = "YXZ";
   swimmer.rotation.x = 1.35; // 俯身水平泅游
   swimmer.position.set(2.5, 20.8, 9.5);
@@ -1783,15 +1988,8 @@ export function createMoebiusSwampZone(opts = {}) {
     lotuses.push(lotus);
     if (lotus.userData.halo) glowHalos.push(lotus.userData.halo);
 
-    // 水下茎秆：从湖底 Y=10 一路连到荷叶
-    const stemH = WATER_Y - SWAMP_FLOOR_Y;
-    const stem = part(
-      new THREE.CylinderGeometry(0.13, 0.2, stemH, 5),
-      toonMat(0x1e8449, { flatShading: true }),
-      0.014
-    );
-    stem.position.set(slot.x, SWAMP_FLOOR_Y + stemH * 0.5, slot.z);
-    swampZone.add(stem);
+    // These are free rowing craft, not rooted lotus plants.
+
   }
 
   /* ---------- 氛围气泡 ---------- */
@@ -1929,7 +2127,7 @@ export function createMoebiusSwampZone(opts = {}) {
   // 轻追踪飞向机队局部点，命中 → runtime.onFleetAttacked(射主) 触发开战
   const raidSpikes = [];
   for (let i = 0; i < 10; i++) {
-    const sp = glowSprite(i % 2 ? 0x8fffc0 : 0xd8ffe0, 0.3, 0.95);
+    const sp = glowSprite(i % 2 ? 0x8fffc0 : 0xd8ffe0, 0.3, 0.95, 'signal');
     sp.visible = false;
     sp.userData = { active: false, vel: new THREE.Vector3(), life: 0, owner: null, targetObj: null };
     swampZone.add(sp);
@@ -1956,6 +2154,55 @@ export function createMoebiusSwampZone(opts = {}) {
     if (lz.userData.halo) glowHalos.push(lz.userData.halo);
   }
 
+  // Keep authored orbit/RNG/raid data intact. Only ordinary lizards use this
+  // rendered-ground route; the ship's water carrier retains its own animation.
+  const coralLizardRoutesEnabled = new URLSearchParams(globalThis.location?.search || '').get('gregLakeRim') !== '0';
+  let coralFloorGeometry=null, coralFloorRadius=0, coralFloorLocalTop=0;
+  function updateGroundLizards(t) {
+    const rim = coralLizardRoutesEnabled && swampZone.userData.gregCoralRim;
+    for (let index = 0; index < lizards.length; index++) {
+      const lz = lizards[index], u = lz.userData;
+      const legacyAngle = t * u.speed + u.phase;
+      let angle = legacyAngle, radius = u.orbitR + Math.sin(angle * 3.1) * 1.4, y = u.baseY;
+      let heading = -angle + Math.sin(t * 2.2 + u.phase) * .25;
+      if (rim?.ok) {
+        if (!u.coralRoute) {
+          const body=lz.getObjectByName('swamp-lizard-anatomy'),p=body.geometry.attributes.position;
+          let footMin=Infinity,envelopeRadius=0;
+          for(let i=0;i<p.count;i++){footMin=Math.min(footMin,p.getY(i)*lz.scale.y);envelopeRadius=Math.max(envelopeRadius,Math.hypot(p.getX(i)*lz.scale.x,p.getZ(i)*lz.scale.z));}
+          u.coralRoute={kind:index<2?'rim-ping-pong':'floor-grounded',footMin,envelopeRadius,legacyOrbitR:u.orbitR,legacyBaseY:u.baseY};
+        }
+        const route=u.coralRoute;
+        if(index<2){
+          const patrolRadius=rim.rimPatrolRadius||37.4;
+          const clearance=Math.asin((route.envelopeRadius+.16)/(patrolRadius-.1));
+          const start=rim.entranceAngle+rim.entranceHalfAngle+clearance;
+          const span=Math.PI*2-2*(rim.entranceHalfAngle+clearance);
+          const phase=t*u.speed*.35+u.phase;
+          angle=start+span*(.5+.5*Math.sin(phase));
+          radius=patrolRadius+.1*Math.sin(phase*2);
+          const da=span*.5*Math.cos(phase),dr=.2*Math.cos(phase*2);
+          heading=Math.atan2(dr*Math.cos(angle)-radius*Math.sin(angle)*da,dr*Math.sin(angle)+radius*Math.cos(angle)*da);
+          y=rim.topY-route.footMin;
+          Object.assign(route,{radius:patrolRadius,radialAmplitude:.1,startAngle:start,endAngle:start+span,topY:rim.topY,entranceClearance:clearance});
+        }else{
+          if(coralFloorGeometry!==floor.geometry){
+            floor.geometry.computeBoundingBox();coralFloorLocalTop=floor.geometry.boundingBox.max.y;
+            const positions=floor.geometry.attributes.position;let topRadius=0;
+            for(let i=0;i<positions.count;i++)if(Math.abs(positions.getY(i)-coralFloorLocalTop)<1e-4)topRadius=Math.max(topRadius,Math.hypot(positions.getX(i),positions.getZ(i)));
+            coralFloorRadius=topRadius*Math.cos(Math.PI/(floor.geometry.parameters?.radialSegments||48));coralFloorGeometry=floor.geometry;
+          }
+          const maxRadius=coralFloorRadius*Math.min(floor.scale.x,floor.scale.z)-route.envelopeRadius-.05;
+          radius=Math.min(radius,maxRadius);
+          const topY=floor.position.y+coralFloorLocalTop*floor.scale.y;
+          y=topY-route.footMin;Object.assign(route,{topY,maxRadius});
+        }
+      }
+      lz.position.set(Math.cos(angle)*radius,y,Math.sin(angle)*radius);
+      lz.rotation.y=heading;
+    }
+  }
+
   // 发光带鱼：水下摆尾环游（3 条）
   /** @type {THREE.Group[]} */
   const ribbons = [];
@@ -1972,7 +2219,7 @@ export function createMoebiusSwampZone(opts = {}) {
 
   /* ---------- 战船维修厂：长尾猴换桅杆 / 蜥蜴送水 / 白鲸陪伴战船驶出湖沼 ---------- */
   // 船A：进坞维修的战船（桅杆帆索已拆下待换），长尾猴负责吊装备用桅
-  const shipA = createFisherBoat();
+  const shipA = createFisherBoat({crewStyle:'swamp-coral'});
   shipA.name = "swamp-warship-repair";
   // 正式页的全球海壳会完整盖住这艘谷底维修船；允许装配器在确认
   // 整船（含描边）都在水下后关闭该子树。独立湖沼场景不受此标记影响。
@@ -2021,12 +2268,12 @@ export function createMoebiusSwampZone(opts = {}) {
   glowHalos.push(dockLantern);
 
   // 两只工猴：甲板推举者 + 骑桅顶挂钩者（随桅杆起落，立起时挥手）
-  const mkLift = buildLongTailMonkey(rnd);
+  const mkLift = buildLongTailMonkey(rnd, {tailPose:'deck'});
   mkLift.scale.setScalar(0.5);
   mkLift.position.set(-0.2, 0.66, 0.34);
   mkLift.rotation.y = Math.PI / 2; // 面向桅杆
   shipA.add(mkLift);
-  const mkTop = buildLongTailMonkey(rnd);
+  const mkTop = buildLongTailMonkey(rnd, {tailPose:'deck',tailRise:true});
   mkTop.scale.setScalar(0.46);
   mkTop.position.set(0.14, MAST_LEN * 0.62, 0.1);
   mkTop.rotation.y = Math.PI * 0.3;
@@ -2043,7 +2290,7 @@ export function createMoebiusSwampZone(opts = {}) {
   waterLizard.add(gourd);
   const waterDrops = [];
   for (let i = 0; i < 5; i++) {
-    const drop = glowSprite(0xa8e8ff, 0.22, 0.9);
+    const drop = glowSprite(0xa8e8ff, 0.22, 0.9, 'signal');
     drop.visible = false;
     drop.userData.seed = i;
     drop.userData.deliveryTarget = new THREE.Vector3();
@@ -2087,13 +2334,16 @@ export function createMoebiusSwampZone(opts = {}) {
   }
 
   // 船B：修毕待发的战船 —— 泊稳 → 划桨驶向入口豁口 → 爬上石阶出沼（循环）
-  const shipB = createFisherBoat();
+  const shipB = createFisherBoat({crewStyle:'swamp-coral'});
   shipB.name = "swamp-warship-depart";
   // 同上：只有正式页海壳的实际包围检测通过才会关闭，不能按位置硬删。
   shipB.userData.officialOceanOcclusionCandidate = true;
+  installSwampWarshipRowing(shipA,swampZone);
+  installSwampWarshipRowing(shipB,swampZone);
+  shipB.userData.swampLakeVoyage={phase:"dock",cycle:0,closedWaterRoute:true};
   const SHIPB_SCALE = 2; // 战船整体放大一倍
   swampZone.add(shipB);
-  let shipyardWakeT = 0; // 尾流涟漪计时
+  // Wake remains driven by updateWarshipOars.
 
   // 护送白鲸：泊位绕游 / 并游护航 / 出口破水领航后潜回
   const escortWhale = buildBelugaWhale(rnd);
@@ -2309,6 +2559,7 @@ export function createMoebiusSwampZone(opts = {}) {
       const ph = lotus.userData.bobPhase || 0;
       lotus.position.y = (lotus.userData.baseY || WATER_Y) + Math.sin(t * 1.05 + ph) * 0.09;
       lotus.rotation.z = Math.sin(t * 0.8 + ph) * 0.028;
+      for(const boy of lotus.userData.passengers||[])boy.userData.updateFlowerBoy?.(t+ph);
     }
     // 鲸豚：暂时游回湖心椭圆巡游（离开喂食筏）+ 轻柔浮沉换气
     for (const w of whales) {
@@ -2323,15 +2574,34 @@ export function createMoebiusSwampZone(opts = {}) {
         // 切向朝向（沿轨道前进）
         const tx = -Math.sin(ang) * sw.rx;
         const tz = Math.cos(ang) * sw.rz;
-        w.rotation.y = Math.atan2(tx, tz) + (sw.yawOffset || 0);
+        // The continuous beluga loft's nose is +Z. atan2(tx,tz) already
+        // points it along the real path tangent; the old extra quarter-turn
+        // made it travel sideways.
+        w.rotation.y = Math.atan2(tx, tz);
       }
-      w.position.y = (w.userData.baseY ?? WHALE_Y) + Math.sin(t * 0.55 + ph) * 0.4;
-      const breathe = Math.sin(t * 0.28 + ph);
-      const baseRx = w.userData.baseRotX ?? -1.05;
-      // 换气时略抬头，幅度比贴筏讨食时小
-      w.rotation.x = baseRx + breathe * 0.28;
-      w.rotation.z = Math.sin(t * 0.4 + ph) * 0.04;
+      // 2026-10-10 用户：鲸要像鲸——平着身子在水下游几圈，再上浮换气，不要一直把头露在水面。
+      // 周期按圈数：0–0.5 圈贴水面（背和额隆露出），其余约 1.9 圈潜在水下；上浮/下潜各用约 0.15 圈。
+      if (sw) {
+        const cyc = 2.4, lap = ((t * sw.speed) / (Math.PI * 2) + 0.06 + (w.userData.surfaceOffset || 0)) % cyc;
+        const ss = (a, b, x) => { const k = Math.min(1, Math.max(0, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
+        const surfAt = (u) => ss(0, 0.06, u) * (1 - ss(0.35, 0.5, u));
+        const k = w.scale.x || 1, surfY = WATER_Y - 0.45 * k, deepY = WATER_Y - 3.4 * k;
+        const surf = surfAt(lap), next = surfAt((lap + 0.01) % cyc);
+        w.userData.surfacing = surf;
+        w.position.y = deepY + (surfY - deepY) * surf + Math.sin(t * 0.9 + ph) * 0.06 * surf;
+        // nose follows the climb / dive: vertical rate over the orbit's horizontal speed, gently clamped
+        const vy = (next - surf) * (surfY - deepY) / (0.01 * Math.PI * 2 / sw.speed);
+        const vh = sw.speed * (sw.rx + sw.rz) / 2;
+        w.rotation.x = Math.max(-0.35, Math.min(0.35, -Math.atan2(vy, vh)));
+        w.rotation.z = Math.sin(t * 0.4 + ph) * 0.05;
+      } else {
+        w.position.y = (w.userData.baseY ?? WHALE_Y) + Math.sin(t * 0.55 + ph) * 0.4;
+        w.rotation.x = (w.userData.baseRotX ?? -1.05) + Math.sin(t * 0.28 + ph) * 0.28;
+        w.rotation.z = Math.sin(t * 0.4 + ph) * 0.04;
+      }
     }
+
+    swampZone.userData.flowerBoyActivities?.update(t);
 
     /* ---------- 5 朵巨型发光花朵：轮换飘落湖面（花蕊发光） ---------- */
     const giantFlowers = swampZone.userData.giantFlowers || [];
@@ -2767,13 +3037,7 @@ export function createMoebiusSwampZone(opts = {}) {
       }
     }
     // 发光蜥蜴：贴地缓爬，头朝行进向微摆
-    for (const lz of lizards) {
-      const u = lz.userData;
-      const a = t * u.speed + u.phase;
-      const r = u.orbitR + Math.sin(a * 3.1) * 1.4;
-      lz.position.set(Math.cos(a) * r, u.baseY, Math.sin(a) * r);
-      lz.rotation.y = -a + Math.sin(t * 2.2 + u.phase) * 0.25;
-    }
+    updateGroundLizards(t);
     // 发光带鱼：环游 + 带状身体波动摆尾
     for (const rf of ribbons) {
       const u = rf.userData;
@@ -2788,20 +3052,34 @@ export function createMoebiusSwampZone(opts = {}) {
       for (let i = 0; i < rp.count; i++) {
         const x = u.baseX[i];
         const tailK = 0.5 - x / 3.8; // 头 0 → 尾 1
-        rp.setZ(i, Math.sin(x * 2.0 - t * u.wave + u.phase) * 0.3 * (0.15 + 0.85 * tailK));
+        rp.setZ(i, (u.baseZ?.[i]||0)+Math.sin(x * 2.0 - t * u.wave + u.phase) * 0.3 * (0.15 + 0.85 * tailK));
       }
       rp.needsUpdate = true;
     }
+    // Medical controller owns the original child until the last bedside visit ends.
     // 水下泅游的孩子：绕鲸缓游 + 打腿摆
-    {
+    if (!swimmer.userData.healingOwned) {
+      // 2026-10-10 用户：这个娃一直潜在水下不换气不对。改成平时头露出水面游，约每 14 秒潜下去一小会儿（约 3 秒）再浮上来。
       const a = t * 0.1 + 2.4;
-      swimmer.position.set(7 + Math.cos(a) * 6.5, 20.6 + Math.sin(t * 0.9) * 0.4, 4 + Math.sin(a) * 6.5);
+      if (swimmer.userData.bodyH === undefined) { const b = new THREE.Box3().setFromObject(swimmer); swimmer.userData.bodyH = Math.max(.4, (b.max.y - b.min.y) / Math.max(1e-3, Math.cos(swimmer.rotation.x)) || 1.2); }
+      const H = Math.min(2.5, swimmer.userData.bodyH), cyc = (t + 5.0) % 14;
+      const ss = (lo, hi, x) => { const k = Math.min(1, Math.max(0, (x - lo) / (hi - lo))); return k * k * (3 - 2 * k); };
+      const under = ss(9.5, 10.3, cyc) * (1 - ss(12.6, 13.6, cyc));
+      const tilt = 1.0 + 0.4 * under; // head-up crawl at the surface, flatter when diving
+      const surfaceY = WATER_Y + 0.14 - (H - 0.22) * Math.cos(tilt) + Math.sin(t * 1.3) * 0.03;
+      swimmer.position.set(7 + Math.cos(a) * 6.5, surfaceY - 2.2 * under, 4 + Math.sin(a) * 6.5);
+      swimmer.rotation.x = tilt;
       swimmer.rotation.y = -a;
-      swimmer.rotation.z = Math.sin(t * 2.6) * 0.18;
+      swimmer.rotation.z = Math.sin(t * 2.6) * 0.18 * (0.6 + 0.4 * under);
+      swimmer.userData.swimPhase = under > .5 ? 'dive' : 'surface';
+      for(const limb of swimmer.userData.coralSwimLimbs||[]){
+        limb.node.rotation.x=swimmer.userData.swimPhase==='healing'?(limb.arm?-.75+Math.sin(t*3)*.08:0):Math.sin(t*(limb.arm?1.6:2.6)+limb.side*Math.PI*.5)*(limb.arm?.24:.31);
+        limb.node.rotation.z=limb.arm?(swimmer.userData.healingPatients>0?limb.side*-.9:Math.sin(t*1.6+limb.side*Math.PI*.5)*.12):0;
+      }
     }
     // 食物碎屑微光闪烁
     for (const b of foodBits) {
-      b.material.opacity = 0.45 + 0.45 * (0.5 + 0.5 * Math.sin(t * 3 + b.userData.phase));
+      setCoralGlowOpacity(b, 0.45 + 0.45 * (0.5 + 0.5 * Math.sin(t * 3 + b.userData.phase)));
     }
     // 赛博水墨虎巡游/饮水；传入 player 以便见送信人跳下相见
     tiger.userData.update?.(_dt, t, runtime);
@@ -2844,6 +3122,7 @@ export function createMoebiusSwampZone(opts = {}) {
       const topArmBase = mkTop.userData.armR.userData.baseRotX ?? -0.3;
       mkTop.userData.armR.rotation.x =
         liftK > 0.96 ? topArmBase - 1.2 + Math.sin(t * 3.1) * 0.5 : topArmBase - 0.9 * liftK;
+      swampZone.userData.flowerBoyActivities?.repair?.update(t,liftK);
 
       // -- 送水蜥蜴：沿甲板右舷走道往返，水珠逐个弧抛到两列纸兵头顶
       const lzX = Math.sin(t * 0.32) * 1.25;
@@ -2877,102 +3156,33 @@ export function createMoebiusSwampZone(opts = {}) {
             1.12 + (target.y - 1.12) * k + Math.sin(k * Math.PI) * 0.42,
             0.28 + (target.z - 0.28) * k
           );
-          drop.material.opacity = 0.2 + 0.75 * Math.sin(k * Math.PI);
+          setCoralGlowOpacity(drop, 0.2 + 0.75 * Math.sin(k * Math.PI));
         } else {
           drop.visible = false;
         }
       }
 
       // -- 船B：泊稳(9s) → 全桨驶向入口豁口(11s) → 爬阶出沼渐隐(6s)
-      const DUR_DOCK = 9, DUR_SAIL = 11, DUR_FADE = 6;
-      const DUR_ALL = DUR_DOCK + DUR_SAIL + DUR_FADE;
-      const bt = (t + 4) % DUR_ALL;
-      /** 出航路径：k∈[0,1] 泊位→出口；k>1 沿出口继续外推 */
-      const sailPos = (k, out) => {
-        let ang, r;
-        if (k <= 1) {
-          const kk = k * k * (3 - 2 * k);
-          ang = 1.1 + (0.3 - 1.1) * kk;
-          r = 16 + 6 * kk;
-        } else {
-          ang = 0.3 + (k - 1) * 0.05;
-          r = 22 + (k - 1) * 9;
-        }
-        out.set(Math.cos(ang) * r, WATER_Y + 0.02, Math.sin(ang) * r);
-      };
-      let bPhase = "dock";
-      if (bt >= DUR_DOCK + DUR_SAIL) bPhase = "fade";
-      else if (bt >= DUR_DOCK) bPhase = "sail";
-      shipB.visible = true;
-      if (bPhase === "dock") {
-        sailPos(0, _syV1);
-        shipB.position.copy(_syV1);
-        shipB.position.y += Math.sin(t * 1.1) * 0.05;
-        // 泊稳时船头已对准出口豁口
-        shipB.rotation.y = Math.atan2(-(Math.sin(0.3) * 22 - shipB.position.z), Math.cos(0.3) * 22 - shipB.position.x);
-        shipB.scale.setScalar(SHIPB_SCALE);
-        updateWarshipOars(shipB, dt, 0);
-      } else if (bPhase === "sail") {
-        const k = (bt - DUR_DOCK) / DUR_SAIL;
-        sailPos(k, _syV1);
-        sailPos(k + 0.05, _syV2);
-        shipB.position.copy(_syV1);
-        shipB.position.y += Math.sin(t * 1.3) * 0.04;
-        shipB.rotation.y = Math.atan2(-(_syV2.z - _syV1.z), _syV2.x - _syV1.x);
-        shipB.scale.setScalar(SHIPB_SCALE);
-        updateWarshipOars(shipB, dt, 1); // 全速划桨，纸兵齐动
-        shipyardWakeT -= dt; // 船首尾流涟漪
-        if (shipyardWakeT <= 0) {
-          shipyardWakeT = 0.5;
-          shipB.updateWorldMatrix(true, false);
-          _syV2.set(2.5, 0, 0);
-          shipB.localToWorld(_syV2);
-          spawnRipple(_syV2.x, _syV2.z, 0.7);
-        }
-      } else {
-        const k = (bt - DUR_DOCK - DUR_SAIL) / DUR_FADE;
-        sailPos(1 + k, _syV1);
-        sailPos(1 + k + 0.05, _syV2);
-        shipB.position.copy(_syV1);
-        shipB.position.y += k * 1.3; // 顺入口石阶抬升，驶出湖沼
-        shipB.rotation.y = Math.atan2(-(_syV2.z - _syV1.z), _syV2.x - _syV1.x);
-        shipB.scale.setScalar(SHIPB_SCALE * (1 - k * 0.42));
-        shipB.visible = k < 0.97;
-        updateWarshipOars(shipB, dt, 1 - k);
-      }
+      const DUR_ALL=26,bt=(t+4)%DUR_ALL;
+      const bPhase=bt<9?'dock':'sail';
+      const k=bPhase==='dock'?0:(bt-9)/17,phase=k*k*(3-2*k)*Math.PI*2;
+      const stroke=shipB.userData.oarPhase/6.2*Math.PI*2;
+      const angle=phase+.014*(1-Math.cos(stroke))*Math.sin(Math.PI*k)**2;
+      shipB.position.set(9+1.5*Math.cos(angle),WATER_Y+.02+Math.sin(t*1.3)*.04,8+2.5*Math.sin(angle));
+      const dx=-1.5*Math.sin(angle),dz=2.5*Math.cos(angle);
+      shipB.rotation.y=Math.atan2(-dz,dx);shipB.scale.setScalar(SHIPB_SCALE);shipB.visible=true;
+      updateWarshipOars(shipB,dt,bPhase==='dock'?0:Math.hypot(dx,dz)*6*k*(1-k)*Math.PI*2/17/2.3);
+      shipB.userData.swampLakeVoyage.phase=bPhase;shipB.userData.swampLakeVoyage.cycle=bt;
 
       // -- 护送白鲸：泊位绕游 → 左舷并游 → 出口破水领航，随后潜回泊位
       const bDirX = Math.cos(shipB.rotation.y);
       const bDirZ = -Math.sin(shipB.rotation.y);
-      escortWhale.visible = true;
-      if (bPhase === "dock") {
-        const wa = t * 0.4;
-        escortWhale.position.set(
-          shipB.position.x + Math.cos(wa) * 4.2,
-          WATER_Y - 0.7 + Math.sin(t * 1.1) * 0.18,
-          shipB.position.z + Math.sin(wa) * 3.4
-        );
-        escortWhale.rotation.y = Math.atan2(-Math.sin(wa), Math.cos(wa));
-        escortWhale.rotation.x = -0.12 + Math.sin(t * 0.9) * 0.06;
-      } else if (bPhase === "sail") {
-        escortWhale.position.set(
-          shipB.position.x - Math.sin(shipB.rotation.y) * 2.6 + bDirX * 0.8,
-          WATER_Y - 0.6 + Math.sin(t * 1.4) * 0.2,
-          shipB.position.z - Math.cos(shipB.rotation.y) * 2.6 + bDirZ * 0.8
-        );
-        escortWhale.rotation.y = Math.atan2(bDirX, bDirZ);
-        escortWhale.rotation.x = -0.16 + Math.sin(t * 1.2) * 0.08;
-      } else {
-        const k = (bt - DUR_DOCK - DUR_SAIL) / DUR_FADE;
-        escortWhale.position.set(
-          shipB.position.x + bDirX * 3.5,
-          WATER_Y - 0.7 + Math.sin(k * Math.PI) * 2.3, // 破水跃起再落回
-          shipB.position.z + bDirZ * 3.5
-        );
-        escortWhale.rotation.y = Math.atan2(bDirX, bDirZ);
-        escortWhale.rotation.x = -0.2 - Math.sin(k * Math.PI) * 0.45;
-        escortWhale.visible = k < 0.92;
-      }
+      escortWhale.visible=true;
+      const escortK=THREE.MathUtils.smoothstep(k,0,.1)*(1-THREE.MathUtils.smoothstep(k,.9,1));
+      const side=5.7,lead=.35+.4*Math.sin(t*.4)*(1-escortK);
+      escortWhale.position.set(shipB.position.x-Math.sin(shipB.rotation.y)*side+bDirX*lead,WATER_Y-.7+Math.sin(t*1.1)*.18,shipB.position.z-Math.cos(shipB.rotation.y)*side+bDirZ*lead);
+      escortWhale.rotation.y=Math.atan2(bDirX,bDirZ);escortWhale.rotation.x=-.12+Math.sin(t*.9)*.06;
+
       }
     }
     // 气泡
@@ -3009,18 +3219,18 @@ export function createMoebiusSwampZone(opts = {}) {
         f.position.set(ax, ay, az);
       }
       const tw = 0.5 + 0.5 * Math.sin(t * u.flicker + u.phase * 3);
-      f.material.opacity = u.op * (0.3 + 0.7 * tw);
+      setCoralGlowOpacity(f, u.op * (0.3 + 0.7 * tw));
     }
     // 花蕊光晕呼吸
     for (const h of glowHalos) {
-      h.material.opacity = 0.38 + 0.26 * (0.5 + 0.5 * Math.sin(t * 1.6 + (h.userData.pulse || 0)));
+      setCoralGlowOpacity(h, 0.38 + 0.26 * (0.5 + 0.5 * Math.sin(t * 1.6 + (h.userData.pulse || 0))));
     }
     // 光池微闪
     for (const p of pools) {
-      p.material.opacity = 0.05 + 0.04 * (0.5 + 0.5 * Math.sin(t * 0.7 + p.userData.phase));
+      setCoralGlowOpacity(p, 0.05 + 0.04 * (0.5 + 0.5 * Math.sin(t * 0.7 + p.userData.phase)));
     }
     // 月光柱微弱呼吸
-    shaftMat.opacity = 0.022 + 0.012 * (0.5 + 0.5 * Math.sin(t * 0.4));
+    shaftMat.opacity = shaftOpacityFactor * (0.022 + 0.012 * (0.5 + 0.5 * Math.sin(t * 0.4)));
     // 水面微漾（玻璃顶点轻晃）
     const p = water.geometry.attributes.position;
     for (let i = 0; i < p.count; i++) {
@@ -3030,7 +3240,14 @@ export function createMoebiusSwampZone(opts = {}) {
     p.needsUpdate = true;
   };
 
+  swampZone.userData.coralAtmosphere = {enabled: coralAtmosphereEnabled(), haloSizeFactor: .35, haloOpacityFactor: .2, stamenSizeFactor: .45, stamenOpacityFactor: .35, shaftOpacityFactor};
   applySwampV2Art(swampZone);
+  rootedAlgae.refreshAttachment(); // V2 replaces the bed geometry; sample that actual final surface.
+  installFlowerBoyActivities(swampZone,lotuses,whale,foodBits,{whales,shipyard:swampZone.userData.shipyard});
+  // Same production factory for the full game and review. Install after authored
+  // terrain/actors; the encounter keeps the original patrol and carrier updates.
+  if(new URLSearchParams(globalThis.location?.search||'').get('swampTigerEncounter')!=='0')installSwampTigerEncounter(swampZone);
+  if (coralLizardRoutesEnabled && swampZone.userData.gregCoralRim?.ok) updateGroundLizards(0);
   return swampZone;
 }
 
@@ -3244,29 +3461,58 @@ export function placeMoebiusSwampOnSphere(
 //  不改动 zone 原有 inline 生成逻辑（zone 内仍用大范围散布）。
 // =====================================================================
 
+// Both the formal lake and the component preview use this anatomy. Random
+// spots deliberately consume the original 2/3 samples before placement draws.
+function buildCoralSmallFish(rnd,index){
+  const fish=new THREE.Group();fish.name=`swamp-fish-${index}`;
+  const skin=index%2?0x91b4a0:0x779f97,fin=0xbdc9b0;
+  const pieces=[coralEllipsoid([0,0,.05],[.23,.235,.64],skin),
+    coralEllipsoid([0,-.095,.15],[.18,.14,.49],0xcbd4b8),
+    coralEllipsoid([0,0,-.69],[.085,.075,.21],skin),
+    coralEllipsoid([0,.10,-.91],[.026,.20,.16],fin,[.34,0,0]),
+    coralEllipsoid([0,-.10,-.91],[.026,.20,.16],fin,[-.34,0,0]),
+    coralEllipsoid([0,.21,-.12],[.022,.12,.25],fin)];
+  for(const side of [-1,1]){
+    pieces.push(coralEllipsoid([side*.20,-.065,.10],[.15,.023,.16],fin,[0,side*.35,side*.18]));
+    pieces.push(coralEllipsoid([side*.14,.06,.51],[.014,.024,.026],0x435968));
+  }
+  for(let k=0;k<2+(index%2);k++){
+    const z=(rnd()-.5)*.5;
+    pieces.push(coralEllipsoid([(k%2?1:-1)*.219,.07,z],[.011,.041,.054],0x52766d));
+  }
+  const mesh=coralFineActorBatch(pieces);mesh.name='swamp-small-fish-anatomy';fish.add(mesh);
+  fish.userData.coralFaunaVersion=1;return fish;
+}
+let coralFireflyTexture;
+function buildCoralFirefly(color,size){
+  const sp=glowSprite(color,size,.8);
+  if(coralAtmosphereEnabled()){
+    if(!coralFireflyTexture){
+      const size=32,data=new Uint8Array(size*size*4);
+      for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+        const r=Math.hypot((x+.5)/size-.5,(y+.5)/size-.5),i=(y*size+x)*4;
+        data[i]=data[i+1]=data[i+2]=255;
+        data[i+3]=Math.round(255*(r<.15?1:r<.23?(.23-r)/.08:0));
+      }
+      coralFireflyTexture=new THREE.DataTexture(data,size,size);coralFireflyTexture.needsUpdate=true;
+      coralFireflyTexture.minFilter=coralFireflyTexture.magFilter=THREE.LinearFilter;
+    }
+    // The core is spatially tiny; the broad-halo opacity factor made it vanish.
+    // Keep its original point size/phase, but retain visible local radiance.
+    sp.userData.coralGlow.opacityFactor=.75;
+    setCoralGlowOpacity(sp,.8);
+    sp.material.map=coralFireflyTexture;sp.material.needsUpdate=true;
+    sp.userData.coralFaunaVersion=1;
+  }
+  return sp;
+}
+
 /** 绿黑斑纹小鱼群（9条，圆形排布，可独立放置） */
 function buildFishSchool(rnd = Math.random) {
   const g = new THREE.Group();
   g.name = "swamp-fish-school";
-  const fishGreenMat = toonMat(FISH_GREEN, { flatShading: true });
-  const fishAltMat = toonMat(0x2e8f6e, { flatShading: true });
-  const spotMat = toonMat(FISH_DARK, { flatShading: true });
   for (let i = 0; i < 9; i++) {
-    const fish = new THREE.Group();
-    fish.name = `swamp-fish-${i}`;
-    const fMat = i % 2 ? fishGreenMat : fishAltMat;
-    const fBody = part(new THREE.ConeGeometry(0.32, 1.3, 4), fMat, 0.014);
-    fBody.rotation.x = Math.PI / 2;
-    fish.add(fBody);
-    const fTail = part(new THREE.ConeGeometry(0.22, 0.5, 3), fMat, 0.01);
-    fTail.rotation.x = -Math.PI / 2;
-    fTail.position.z = -0.85;
-    fish.add(fTail);
-    for (let k = 0; k < 2 + (i % 2); k++) {
-      const spot = new THREE.Mesh(facet(new THREE.SphereGeometry(0.06, 4, 3)), spotMat);
-      spot.position.set((k - 1) * 0.22, 0.12, (rnd() - 0.5) * 0.5);
-      fish.add(spot);
-    }
+    const fish = buildCoralSmallFish(rnd, i);
     // 独立放置：紧凑圆形排布（zone 内用 ±15 大范围，这里收拢到半径 ~1.5）
     const a = (i / 9) * Math.PI * 2;
     const d = 1.0 + (rnd() - 0.5) * 0.6;
@@ -3285,7 +3531,7 @@ function buildFireflies(rnd = Math.random) {
   const g = new THREE.Group();
   g.name = "swamp-fireflies";
   for (let i = 0; i < 46; i++) {
-    const sp = glowSprite(i % 3 === 2 ? FIREFLY_B : FIREFLY_A, 0.5 + rnd() * 0.7, 0.8);
+    const sp = buildCoralFirefly(i % 3 === 2 ? FIREFLY_B : FIREFLY_A, 0.5 + rnd() * 0.7);
     const a = rnd() * Math.PI * 2;
     const d = rnd() * 5;
     const y = rnd() * 6;
@@ -3336,3 +3582,9 @@ export const SWAMP_COMPONENT_BUILDERS = {
   fishSchool: buildFishSchool,
   fireflies: buildFireflies,
 };
+
+// 2026-10-13 user: creatures of the same species outside the swamp use the swamp's model.
+// Front axes match the old sea copies (beluga +Z, ribbonfish +X), so callers can drop them in.
+export function createSwampBelugaModel(rnd = Math.random) { return buildBelugaWhale(rnd); }
+export function createSwampRibbonFishModel(rnd = Math.random) { return buildRibbonFish(rnd); }
+export function createSwampShellModel(rnd = Math.random) { return buildShell(rnd); }

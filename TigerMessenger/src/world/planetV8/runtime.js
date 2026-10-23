@@ -1,3 +1,4 @@
+import {finishStartupSteps} from '../../core/startupTasks.js';
 // =====================================================================
 // Optional production caller for Planet V8.  It compiles a bounded set of
 // landmark charts at scene load, submits typed arrays to Three, and leaves
@@ -25,7 +26,7 @@ import {
 } from "../waterV8/officialOcean.js";
 import { buildCloudImpostorAtlas } from "../../render/clouds/impostorAtlasBuilder.js";
 import { createCloudImpostorSystem } from "../../render/clouds/cloudImpostorSystem.js";
-import { remapCloudClustersToSceneTerrain, relocateCloudClustersToRidges } from "./cloudTerrainRemap.js";
+import { remapCloudClustersToSceneTerrainSteps, relocateCloudClustersToRidgesSteps } from "./cloudTerrainRemap.js";
 import { createSemanticTerrainMaterial } from "../../render/terrain/semanticTerrainMaterial.js";
 import { createCurvedWaterMaterial, createCurvedLakeMaterial } from "../../render/water/curvedWaterMaterial.js?v=20260827-terrain-v11";
 import { paintPlanetOceanBed } from "../planet.js";
@@ -211,7 +212,7 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
     }
   }
 
-  const completeCloudTerrain = (finalTerrainMeshes=terrainMeshes) => {
+  function* completeCloudTerrainSteps(finalTerrainMeshes=terrainMeshes) {
     if (state.clouds) return state.clouds;
     if (!enabledClouds || !state.compiler?.clouds) return null;
     if (state.cloudTerrainDisposed) throw new Error("planet cloud startup already disposed");
@@ -226,7 +227,7 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
         : (features.oceanSeaLevel ?? OFFICIAL_OCEAN_SEA_LEVEL);
       // 阶段 2A（先于 remap）：按真实脊线重摆/筛选云实例——先决定“云该出现在哪”，
       // 再由下方 remap 把高度贴到新位置的真实地表。参数全部可经 features 覆盖调参。
-      relocateCloudClustersToRidges(clusters, {
+      yield* relocateCloudClustersToRidgesSteps(clusters, {
         terrainMeshes,
         radius,
         seaLevel: cloudSeaLevel,
@@ -237,12 +238,13 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
         scoreThreshold: features.cloudRidgeThreshold ?? 0.35,
         candidateCount: features.cloudRidgeCandidates ?? 12,
       });
-      remapCloudClustersToSceneTerrain(clusters, {
+      yield* remapCloudClustersToSceneTerrainSteps(clusters, {
         terrainMeshes,
         radius,
         seaLevel: cloudSeaLevel,
       });
     }
+    yield '正在准备云层画面…';
     state.clouds = { atlas: buildCloudImpostorAtlas(), clusters };
     state.clouds.renderer = createCloudImpostorSystem(THREE, root, state.clouds.clusters, { atlas: state.clouds.atlas, radius });
     trackLogicalResource(state.resourceRegistry, "cloud", `planet-${presentationVersion}`);
@@ -250,6 +252,8 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
     state.cloudTerrainPending=false;
     return state.clouds;
   };
+  const completeCloudTerrain = (meshes=terrainMeshes) => finishStartupSteps(completeCloudTerrainSteps(meshes));
+  state.completeCloudTerrainSteps=completeCloudTerrainSteps;
   state.completeCloudTerrain=completeCloudTerrain;
   state.cloudTerrainPending=!!(deferCloudTerrain&&enabledClouds&&state.compiler?.clouds);
   if(!deferCloudTerrain)completeCloudTerrain();

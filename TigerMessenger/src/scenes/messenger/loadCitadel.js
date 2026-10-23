@@ -1,3 +1,6 @@
+import {findByName,throttledCollect} from '../../core/sceneLookup.js';
+let tourCandidates = null;
+import {fitHarborTreesOutsideRail} from '../../world/citadel/harborTreeRailClearance.js';
 import {oldHarborGradeEnabled,placeOldHarborAtOcean} from '../../world/citadel/oldHarborOceanGrade.js';
 import {citadelCoastalTramEnabled} from "../../world/citadel/coastalTramRoute.js";
 import {commonSurfaceFrameEnabled,applyCitadelCommonSurfaceFrame} from '../../world/citadel/commonSurfaceFrame.js';
@@ -110,6 +113,9 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   buildCitadelHarborSeabed(scene,odysseyCitadel);
   applyCliffBlenderRefinement(odysseyCitadel);
   snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborColliders, camp, R });
+  harbor.userData.treeRailClearance = fitHarborTreesOutsideRail(
+    harbor.userData.oldHarborGiantTrees, tramSystem?.curves || {center:tramSystem?.curve}
+  );
   if (tramSystem?.curve && !citadelCoastalTramEnabled()) {
     carveCitadelMountainForTram(odysseyCitadel, tramSystem.curve, R);
   }
@@ -168,9 +174,8 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
 }
 
 /**
- * 旧港口的两株参天古樟必须是港口子树的一部分，而不是圣城山坡植物。
- * 复用 range 构建器已生成的确定性资产，重新设置为港口局部坐标，保持
- * 两株古树的灯光注册、资产类型和存档引用不变。
+ * 港口两株灰绿阔叶树沿用原根点与稳定节点引用。
+ * 最终港口定姿后再按实际红蓝车辆包络约束整体树冠尺寸；不移动轨道。
  */
 function restoreOldHarborTreePair({ harbor, harborBuilt, citadelRange }) {
   if (!harbor || !citadelRange) return [];
@@ -184,11 +189,11 @@ function restoreOldHarborTreePair({ harbor, harborBuilt, citadelRange }) {
     tree.visible = true;
     tree.position.set(x, y, z);
     tree.rotation.set(0, yaw, 0);
-    tree.scale.setScalar(.38);
+    tree.scale.setScalar(1);
     tree.userData.pendingHarborRestore = false;
     tree.userData.designRole = "old-harbor-giant-tree";
     tree.userData.harborLocal = { x, y, z, yaw };
-    tree.userData.referenceScale = .38;
+    tree.userData.referenceScale = 1;
   }
   const restored = trees.map(([tree]) => tree);
   harbor.userData.oldHarborGiantTreeCount = restored.length;
@@ -353,7 +358,9 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
       // 目前湖沼暂无其它战斗生物登记 → 返回空（框架就绪，新生物加入即自动参战）。
       const protectedNames = /tiger|swamp-tiger|fox-ali/i;
       const list = [];
-      scene.traverse((o) => {
+      // perf 2026-10-14: candidates re-collected at most every 0.5 s; per-call checks unchanged.
+      tourCandidates ??= throttledCollect(scene, (o) => !!(o.userData?.combatant || o.userData?.wildCreature));
+      tourCandidates().forEach((o) => {
         if (!o.parent || o.userData?.dead) return;
         if (!o.userData?.combatant && !o.userData?.wildCreature) return;
         if (o.userData.faction === "moebius") return;   // 舰队自身单位
@@ -369,7 +376,7 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
   const saihojiPhalanxBattle = createSaihojiPhalanxBattle({
         scene,
         isWhaleRisen: () => {
-          const lev = scene.getObjectByName("leviathanGroup");
+          const lev = findByName(scene, "leviathanGroup");
           return !!(lev && lev.position.length() > R + 3);
         },
         getSquad: () => aircraftSquad,

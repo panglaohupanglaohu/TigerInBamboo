@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import {createCoastalMaterial,bindCoastalMesh} from './seaStackLighting.js';
 import {buildSeaStackHabitat} from './seaStackHabitat.js';
+import {createSeaStackCoastalTree} from './seaStackCoastalTree.js';
 import {createCoastalScrubGeometry} from './seaStackScrubGeometry.js';
 // Lighting is bound after planting, using the same final rock surface revision.
 
-export function plantSeaStackTerraces(rock) {
+export function plantSeaStackTerraces(rock,{protectedBoxes=[]}={}) {
  if(new URLSearchParams(globalThis.location?.search||'').get('seaStackStudy')==='0')return plantSeaStackTerracesLegacy(rock);
  const g=rock.geometry,p=g.attributes.position,index=g.index,h=rock.userData.seaStack.height;
  const seed=g.userData.terraces.seed,revision=rock.userData.coastalSurface?.revision||g.userData.surfaceRevision||`coastal-${seed}-study1`;
@@ -95,7 +96,7 @@ export function plantSeaStackTerraces(rock) {
  // Coastal scrub grows in pockets, leaving exposed mineral between them.
  // An area-weighted threshold avoids both an unbroken grass cap and seed-
  // dependent empty habitats; the final boundary still follows one smooth field.
- const eligiblePatches=patches.filter(p=>{const c=p.a.clone().add(p.b).add(p.c).multiplyScalar(1/3);return edgeDistance(c,p.surface.component)>habitatInset&&c.y> -h*.24;}),eligibleArea=eligiblePatches.reduce((sum,p)=>sum+p.area,0),bareFraction=.48+.04*Math.sin(seed*1.31);
+ const eligiblePatches=patches.filter(p=>{const c=p.a.clone().add(p.b).add(p.c).multiplyScalar(1/3);return edgeDistance(c,p.surface.component)>habitatInset&&c.y> -h*.24;}),eligibleArea=eligiblePatches.reduce((sum,p)=>sum+p.area,0),bareFraction=.16+.025*Math.sin(seed*1.31);
  let accumulated=0;for(const candidate of [...eligiblePatches].sort((a,b)=>a.value-b.value)){
   accumulated+=candidate.area;habitatCut=candidate.value;if(accumulated>=eligibleArea*bareFraction)break;
  }
@@ -111,14 +112,16 @@ export function plantSeaStackTerraces(rock) {
   return best;
  }
  g.computeBoundingBox();const box=g.boundingBox;
- for(let x=box.min.x+.2;x<box.max.x-.2;x+=.92)for(let z=box.min.z+.2;z<box.max.z-.2;z+=.92){
+ for(let x=box.min.x+.2;x<box.max.x-.2;x+=.74)for(let z=box.min.z+.2;z<box.max.z-.2;z+=.74){
   const hit=sample(x+(random()-.5)*.55,z+(random()-.5)*.55);if(!hit||hit.p.y< -h*.24||hit.normal.y<.84||signedHabitat(hit.p,hit.component)<.025)continue;
-  const sparse=random();if(sparse>.52)continue;
-  const atEdge=signedHabitat(hit.p,hit.component)<.18||field(hit.p)<.38||sparse>.22||hit.normal.y<.92;
+  const sparse=random();if(sparse>.82||roots.length>=220)continue;
+  const atEdge=signedHabitat(hit.p,hit.component)<.18||field(hit.p)<.38||sparse>.52||hit.normal.y<.90;
   const supportRadius=atEdge?.16:.60;
   const edgeSamples=[[supportRadius,0],[-supportRadius,0],[0,supportRadius],[0,-supportRadius]].map(([dx,dz])=>sample(hit.p.x+dx,hit.p.z+dz));
   const safe=edgeSamples.every(q=>q&&q.component===hit.component&&Math.abs(q.p.y-hit.p.y)<.32&&signedHabitat(q.p,q.component)>.015);
   if(!safe)continue;
+  const plantBox=new THREE.Box3(hit.p.clone().add(new THREE.Vector3(-1.45,-.1,-1.45)),hit.p.clone().add(new THREE.Vector3(1.45,1.6,1.45))).applyMatrix4(rock.matrixWorld);
+  if(protectedBoxes.some(entry=>plantBox.intersectsBox(entry.box||entry)))continue;
   const r=hit.p.toArray();roots.push(r);
   if(atEdge)fringe.push({hit,size:.30+random()*.36});
   else clumps.push({hit,size:.56+random()**2*.86,angle:random()*Math.PI*2});
@@ -159,9 +162,23 @@ export function plantSeaStackTerraces(rock) {
  const grass=new THREE.InstancedMesh(bladeGeometry,createCoastalMaterial({kind:'grass',color:0xb1bc88,side:THREE.DoubleSide,height:h}),fringe.length);grass.name='sea-stack-coastal-grass';
  fringe.forEach(({hit,size},i)=>{q.setFromUnitVectors(up,hit.normal);matrix.compose(hit.p.clone().addScaledVector(hit.normal,-.003),q,new THREE.Vector3(size,size,size));grass.setMatrixAt(i,matrix);});
  grass.userData.roots=fringe.map(f=>f.hit.p.toArray());grass.userData.surfaceRevision=revision;rock.add(grass);bindCoastalMesh(grass,rock);
+ const treeGeometry=createSeaStackCoastalTree(),treeSites=[];let rejectedTreeClearance=0;
+ for(const {hit}of clumps){
+  if(treeSites.length>=7)break;
+  if(hit.normal.y<.90||habitat.distance(hit.p,hit.component,1.2)<.80||treeSites.some(t=>t.hit.p.distanceTo(hit.p)<2.6))continue;
+  const size=.65+random()*.18;
+  const edgeHits=[[.65,0],[-.65,0],[0,.65],[0,-.65]].map(([dx,dz])=>sample(hit.p.x+dx,hit.p.z+dz));
+  if(!edgeHits.every(v=>v&&v.component===hit.component&&v.normal.y>.85&&Math.abs(v.p.y-hit.p.y)<.35))continue;
+  q.setFromUnitVectors(up,hit.normal);matrix.compose(hit.p,q,new THREE.Vector3(size,size,size));
+  const bounds=treeGeometry.boundingBox.clone().applyMatrix4(matrix).applyMatrix4(rock.matrixWorld).expandByScalar(.35);
+  if(protectedBoxes.some(b=>bounds.intersectsBox(b.box||b))){rejectedTreeClearance++;continue;}
+  treeSites.push({hit,size,matrix:matrix.clone()});roots.push(hit.p.toArray());
+ }
+ const trees=new THREE.InstancedMesh(treeGeometry,createCoastalMaterial({kind:'scrub',color:0xffffff,vertexColors:true,height:h}),treeSites.length);trees.name='sea-stack-coastal-trees';
+ treeSites.forEach((t,i)=>trees.setMatrixAt(i,t.matrix));trees.userData.roots=treeSites.map(t=>t.hit.p.toArray());trees.userData.surfaceRevision=revision;trees.userData.clearance={method:'complete world canopy AABB plus .35m against supplied protected meshes',rejected:rejectedTreeClearance};rock.add(trees);bindCoastalMesh(trees,rock);
  turf.userData.surfaceRevision=revision;
- turf.userData.planting={triangles:positions.length/9,clusters:clumps.length,grassTufts:fringe.length,rejectedGrassContacts,seed,surfaceRevision:revision,method:'component-boundary-distance-on-subdivided-final-surface',habitat:{...habitat.audit,inset:habitatInset,fade:habitatFade,distance:'3D Euclidean segment distance within same edge-connected component',triangleSafety:'centroid distance minus triangle radius certifies entire triangle via 1-Lipschitz bound',boundaryRefineRadius:.01,safetyMargin:.00001,queryCap:habitatInset+habitatFade+.05},rootCount:roots.length,habitatCut,eligibleArea,targetBareFraction:bareFraction,turfOffset:[0,.001,0]};
- rock.userData.vegetationAudit={habitat:turf.userData.planting.habitat,surfaceRevision:revision,roots:roots.length,shrubCanopies:canopyRoots.length,patchTriangles:positions.length/9,rootConstruction:'barycentric-final-surface; independently ray-checked in pipeline'};
+ turf.userData.planting={triangles:positions.length/9,policy:'abundant-coastal-vegetation-20261007',smallTrees:treeSites.length,instanceBudget:1327,clusters:clumps.length,grassTufts:fringe.length,rejectedGrassContacts,seed,surfaceRevision:revision,method:'component-boundary-distance-on-subdivided-final-surface',habitat:{...habitat.audit,inset:habitatInset,fade:habitatFade,distance:'3D Euclidean segment distance within same edge-connected component',triangleSafety:'centroid distance minus triangle radius certifies entire triangle via 1-Lipschitz bound',boundaryRefineRadius:.01,safetyMargin:.00001,queryCap:habitatInset+habitatFade+.05},rootCount:roots.length,habitatCut,eligibleArea,targetBareFraction:bareFraction,turfOffset:[0,.001,0]};
+ rock.userData.vegetationAudit={habitat:turf.userData.planting.habitat,surfaceRevision:revision,roots:roots.length,smallTrees:treeSites.length,shrubCanopies:canopyRoots.length,patchTriangles:positions.length/9,rootConstruction:'barycentric-final-surface; independently ray-checked in pipeline'};
  return roots;
 }
 

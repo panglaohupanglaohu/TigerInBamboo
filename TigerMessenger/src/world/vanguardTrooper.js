@@ -182,7 +182,9 @@ function glow(geo, color, opacity = 1) {
  * 一名先锋重甲兵。整体高约 1.45（普通纸士兵约 1.33，略高一档但不出戏）。
  * @param {{scale?:number, seed?:number}} [opts]
  */
-export function createVanguardTrooper({ scale = 1, seed = 0, optimized = true } = {}) {
+export const VANGUARD_VISUAL_SCALE = 1.5;
+
+export function createVanguardTrooper({ scale = VANGUARD_VISUAL_SCALE, seed = 0, optimized = true } = {}) {
   const root = new THREE.Group();
   root.name = "vanguard-trooper";
 
@@ -494,7 +496,7 @@ export function soilVanguardUniform(trooper) {
   return true;
 }
 
-export function createVanguardSquad({ count = VANGUARD_SQUAD_SIZE, scale = 1 } = {}) {
+export function createVanguardSquad({ count = VANGUARD_SQUAD_SIZE, scale = VANGUARD_VISUAL_SCALE } = {}) {
   const root = new THREE.Group();
   root.name = "vanguard-squad";
   const troopers = [];

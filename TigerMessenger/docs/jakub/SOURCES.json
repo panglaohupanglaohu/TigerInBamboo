@@ -1,0 +1,156 @@
+{
+  "created": "2026-10-11",
+  "coverage": "partial_static_and_text_research_dynamic_blocked",
+  "sources": [
+    {
+      "id": "qoubah-timeline",
+      "url": "https://x.com/qoubah",
+      "status": "blocked_403_web_run",
+      "viewedSeconds": 0,
+      "notes": "Not yet watched",
+      "timepoints": [],
+      "failure": "web.run direct open returned HTTP 403 Forbidden",
+      "sameSourceReplacementVerified": false
+    },
+    {
+      "id": "user-video-1",
+      "url": "https://x.com/frostpunkgame/status/1837175208379068465/video/1",
+      "status": "blocked_403_web_run",
+      "viewedSeconds": 0,
+      "notes": "Not yet watched",
+      "timepoints": [],
+      "failure": "web.run direct open returned HTTP 403 Forbidden",
+      "sameSourceReplacementVerified": false
+    },
+    {
+      "id": "user-video-2",
+      "url": "https://x.com/frostpunkgame/status/1828063904729096331/video/1",
+      "status": "blocked_403_web_run",
+      "viewedSeconds": 0,
+      "notes": "Not yet watched",
+      "timepoints": [],
+      "failure": "web.run direct open returned HTTP 403 Forbidden",
+      "sameSourceReplacementVerified": false
+    },
+    {
+      "id": "user-video-3",
+      "url": "https://x.com/frostpunkgame/status/1811476803690676360/video/1",
+      "status": "blocked_403_web_run",
+      "viewedSeconds": 0,
+      "notes": "Not yet watched",
+      "timepoints": [],
+      "failure": "web.run direct open returned HTTP 403 Forbidden",
+      "sameSourceReplacementVerified": false
+    },
+    {
+      "id": "user-video-4",
+      "url": "https://x.com/frostpunkgame/status/1747261080811012546/video/1",
+      "status": "blocked_403_web_run",
+      "viewedSeconds": 0,
+      "notes": "Not yet watched",
+      "timepoints": [],
+      "failure": "web.run direct open returned HTTP 403 Forbidden",
+      "sameSourceReplacementVerified": false
+    },
+    {
+      "id": "user-video-5",
+      "url": "https://x.com/11bitstudios/status/1721542988705243189/video/1",
+      "status": "blocked_403_web_run",
+      "viewedSeconds": 0,
+      "notes": "Not yet watched",
+      "timepoints": [],
+      "failure": "web.run direct open returned HTTP 403 Forbidden",
+      "sameSourceReplacementVerified": false
+    },
+    {
+      "id": "official-design-20240417",
+      "url": "https://news.xbox.com/en-us/2024/04/17/build-your-utopia-with-frostpunk-2-beta-available-now/",
+      "author": "Kuba Stokalski, Frostpunk 2 Co-Director & Game Director",
+      "status": "full_text_read",
+      "evidenceKind": "author_statement",
+      "viewedSeconds": 0,
+      "notes": "Scope changes from buildings to districts; hours/days to weeks/months/years; societal conflict. Not a video replacement."
+    },
+    {
+      "id": "official-ui-20250918",
+      "url": "https://news.xbox.com/en-us/2025/09/18/adapting-frostpunk-2s-depth-to-a-gamepad/",
+      "author": "Igor Skibiński, Production Coordinator, 11 bit studios",
+      "status": "full_text_read",
+      "evidenceKind": "developer_statement_UI_scope",
+      "viewedSeconds": 0,
+      "notes": "Radial design, contextual district color coding; industrial textures and gold versus oil. Text about UI does not prove 3D material shader implementation."
+    },
+    {
+      "id": "official-gameplay-20240116",
+      "url": "https://www.youtube.com/watch?v=PWlLOpqIYjA",
+      "author": "11 bit studios",
+      "status": "search_metadata_only_open_failed",
+      "viewedSeconds": 0,
+      "candidateFor": "user-video-4",
+      "sameSourceReplacementVerified": false,
+      "notes": "Official Gameplay Trailer dated January 16 2024. Candidate only; no frames/stream viewed, no equality to X media verified."
+    },
+    {
+      "id": "official-city-stills-20231002",
+      "url": "https://11bitstudios.com/see-the-city-in-frostpunk-2/",
+      "author": "11 bit studios",
+      "status": "search_excerpt_only_direct_403",
+      "viewedSeconds": 0,
+      "notes": "Search lists first in-game screenshots, October 2 2023. No media comparison made."
+    },
+    {
+      "id": "official-teaser-20231130",
+      "url": "https://11bitstudios.com/frostpunk-2-gameplay-teaser/",
+      "author": "11 bit studios",
+      "status": "search_excerpt_only",
+      "viewedSeconds": 0,
+      "notes": "Different dated teaser candidate. No verified relation to five user X media."
+    }
+  ],
+  "userImages": [
+    {
+      "file": "../../artifacts/pipeline/jakub-bookshop-20261011/references/user-city-overview.png",
+      "status": "static_image_actually_viewed",
+      "viewedSeconds": 0
+    },
+    {
+      "file": "../../artifacts/pipeline/jakub-bookshop-20261011/references/user-steam-town.png",
+      "status": "static_image_actually_viewed",
+      "viewedSeconds": 0,
+      "provenance": "unverified_do_not_label_Frostpunk2"
+    }
+  ],
+  "updatedAt": "2026-10-10T17:17:18.379083+00:00",
+  "timelineCoverage": {
+    "channel": "web.run",
+    "status": "403_forbidden",
+    "pagesRead": 0,
+    "earliestPost": null,
+    "latestPost": null,
+    "paginationReached": false,
+    "allGIFsCovered": false,
+    "limitations": "CUA handled by parent separately; this ledger records only this worker evidence"
+  },
+  "browserAttempt": {
+    "api": "cua.createBrowserTab",
+    "browser": "iab",
+    "url": "https://x.com/qoubah",
+    "visible": false,
+    "result": "Browser is not available: iab",
+    "dynamicViewedSeconds": 0
+  },
+  "sceneReferences": [
+    {
+      "path": "artifacts/pipeline/bookshop-freighter-repair/after-overview.png",
+      "status": "actually_viewed_historical_scene",
+      "evidence": "PROGRESS.md dated2026-09-28 calls this actual scene",
+      "currentDayGPU": false
+    },
+    {
+      "path": "artifacts/pipeline/bookshop-warm-lighting/after-base.png",
+      "status": "actually_viewed_historical_scene",
+      "evidence": "capture.json world targets + project handoff warm-lighting integration",
+      "currentDayGPU": false
+    }
+  ]
+}

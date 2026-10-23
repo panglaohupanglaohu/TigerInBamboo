@@ -1,3 +1,4 @@
+import {createTargetCityPatrolSupport} from './targetCityPatrolSupport.js';
 import * as T from 'three';
 import {surveyTargetCityLandmarks,applyTargetCityLandmarksCandidate} from './targetCityLandmarksCandidate.js?revision=statue-front-2';
 import {createTargetStairSurfaceSampler} from './targetNewCityStairRoute.js';
@@ -20,17 +21,29 @@ export function integrateTargetCityLandmarks({castle,sceneRoot,range,detailCandi
  const pavingHeights=[];for(const ratio of[0,.5,1])for(let i=0;i<(ratio?24:1);i++){const h=sample(horse[0]+3.2*ratio*Math.cos(i*Math.PI/12),horse[2]+3.2*ratio*Math.sin(i*Math.PI/12));if(!h)return reject('horse-paving-support-miss');pavingHeights.push(h.height);}
  const pavingTop=Math.max(...pavingHeights)+.06;report.horsePavingTop=pavingTop;
  const end=sr.end,entry=dr.newCity.geometry.entry.position,yaw=dr.newCity.yawDegrees*Math.PI/180,np=dr.newCity.position;
- const entryLocal=[np[0]+entry[0]*Math.cos(yaw)+entry[2]*Math.sin(yaw),np[1]+entry[1],np[2]-entry[0]*Math.sin(yaw)+entry[2]*Math.cos(yaw)];
+ const placement=dr.newCity.placementMatrix?new T.Matrix4().fromArray(dr.newCity.placementMatrix):new T.Matrix4().makeRotationY(yaw).setPosition(...np);
+ const toCity=p=>v(p).applyMatrix4(placement).toArray(),entryLocal=toCity(entry);
  const walking=sr.selected.walkPath||[sr.start,...sr.selected.treads.map(t=>[t.x,t.top,t.z]),end];
  if(!walking.every(p=>Array.isArray(p)&&p.length===3&&p.every(Number.isFinite)))return reject('invalid-walk-path');
  report.walkPathSource=sr.selected.walkPath?'selected.walkPath':'legacy-tread-centres';
  const mainWalk=dr.newCity.geometry.stairs?.walkPath;
  if(mainWalk&&!mainWalk.every(p=>Array.isArray(p)&&p.length===3&&p.every(Number.isFinite)))return reject('invalid-main-step-path');
- const mainPoints=mainWalk?mainWalk.map(p=>[np[0]+p[0]*Math.cos(yaw)+p[2]*Math.sin(yaw),np[1]+p[1],np[2]-p[0]*Math.sin(yaw)+p[2]*Math.cos(yaw)]):[entryLocal];
+ const mainPoints=mainWalk?mainWalk.map(toCity):[entryLocal];
  report.mainWalkPathSource=mainWalk?'geometry.stairs.walkPath':'legacy-direct-entry';
  const points=[horse,[Math.max(horse[0],statue[0]+6),horse[1],68],...walking.slice().reverse(),...mainPoints];
+ const radialSample=dr.newCity.placementMatrix?createTargetCityPatrolSupport({castle,supports}):null;
  const rows=[];for(let i=1;i<points.length;i++){const a=v(points[i-1]),b=v(points[i]),dist=Math.hypot(b.x-a.x,b.z-a.z),n=Math.max(1,Math.ceil(dist/.5));for(let j=0;j<=n;j++){
   const p=a.clone().lerp(b,j/n),dx=b.x-a.x,dz=b.z-a.z,len=Math.hypot(dx,dz)||1,feet=[];
+  // The real main entrance is radial-horizontal. Castle-chart Y differences
+  // across that floor are curvature, not steps. Audit it in the player's frame.
+  if(radialSample&&i>=2+walking.length){
+   const world=p.clone().applyMatrix4(castle.matrixWorld),up=world.clone().normalize(),tangent=b.clone().sub(a).transformDirection(castle.matrixWorld),sideVector=new T.Vector3().crossVectors(tangent,up).normalize();
+   let center=null;for(const side of[-.45,0,.45]){const request=world.clone().addScaledVector(sideVector,side),hit=radialSample(request);feet.push({world:request.toArray(),height:hit?hit.clone().sub(request).dot(up):null});if(side===0)center=hit;}
+   if(feet.some(f=>f.height===null)||!center){report.failures.push({kind:'support-miss',point:p.toArray(),feet});continue;}
+   const values=feet.map(f=>f.height),onTransition=i<2+walking.length+(dr.newCity.geometry.stairs.radialTransition?3:0);if(Math.max(...values.map(Math.abs))>.42||(!onTransition&&Math.max(...values)-Math.min(...values)>.3))report.failures.push({kind:'support-step-or-gap',point:p.toArray(),feet});
+   const local=castle.worldToLocal(center.clone());rows.push({position:local.toArray(),feet,frame:'radial-world'});continue;
+  }
+
   for(const side of[-.45,0,.45]){const x=p.x-dz/len*side,z=p.z+dx/len*side,h=sample(x,z);feet.push({x,z,height:h? (Math.hypot(x-horse[0],z-horse[2])<=3.2?pavingTop:h.height):null});}
   if(feet.some(f=>!Number.isFinite(f.height))){report.failures.push({kind:'support-miss',point:p.toArray()});continue;}
   const h=Math.max(...feet.map(f=>f.height));if(Math.abs(h-p.y)>.42||Math.max(...feet.map(f=>f.height))-Math.min(...feet.map(f=>f.height))>.3)report.failures.push({kind:'support-step-or-gap',point:p.toArray(),feet});
@@ -68,7 +81,7 @@ export function integrateTargetCityLandmarks({castle,sceneRoot,range,detailCandi
  if(report.failures.length)return reject('route-obstacle-rejected');
  const horseActor=range.trojanHorse,oldRange=horseActor.userData.rangeLocal,oldPlacement=horseActor.userData.placement;
  const toRange=worldToRange(castle.localToWorld(v(horse)));if(!Number.isFinite(toRange?.x)||!Number.isFinite(toRange?.z))return reject('range-coordinate-failed');
- const result=applyTargetCityLandmarksCandidate({castle,sceneRoot,range,terrainMeshes:terrain,clearanceVerified:true,routes:{stairRoute:rows.map(r=>castle.localToWorld(v(r.position))),waterfallRoute:[],captureTarget:castle.localToWorld(v(entryLocal))}});
+ const result=applyTargetCityLandmarksCandidate({castle,sceneRoot,range,terrainMeshes:terrain,clearanceVerified:true,routes:{stairRoute:rows.map(r=>castle.localToWorld(v(r.position))),waterfallRoute:[],captureTarget:castle.localToWorld(v(entryLocal)),patrolSurfacePoint:radialSample??createTargetCityPatrolSupport({castle,supports}),patrolOnStairRoute:true}});
  if(!result.ok)return reject('actor-transaction:'+result.reason);
  for(const s of saved)s.mesh.setMatrixAt(s.index,new T.Matrix4().makeScale(0,0,0));for(const m of inst){m.instanceMatrix.needsUpdate=true;m.computeBoundingBox();m.computeBoundingSphere();}
  const actual=horseActor.getWorldPosition(new T.Vector3()),localRange=worldToRange(actual);horseActor.userData.rangeLocal={lx:localRange.x,lz:localRange.z};horseActor.userData.placement={...oldPlacement,kind:'target-new-city-plaza-original-actor',castleLocal:castle.worldToLocal(actual.clone()).toArray(),yaw:survey.candidates.horse.selected.yaw};

@@ -41,6 +41,7 @@
  * @property {string} name
  * @property {string} [description]
  * @property {(ctx: SceneContext) => SceneHandle} load
+ * @property {(ctx: SceneContext) => Generator<string, SceneHandle>} [loadSteps] Same construction, yielding before heavy stages.
  */
 
 /** 空更新（避免主循环判空分支） */

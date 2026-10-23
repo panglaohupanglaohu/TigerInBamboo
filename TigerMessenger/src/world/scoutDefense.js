@@ -426,6 +426,7 @@ export function createScoutDefenseSquad(options = {}) {
   }
 
   function makeShot(unit, target, time) {
+    if (scene.userData.batianCommandMode === true && !unit.manual) return false;
     if (!target || target.pending) return false;
     target.pending = true;
     unit.attackCd = SHOT_INTERVAL + (unit.index % 3) * 0.12;
@@ -567,7 +568,7 @@ export function createScoutDefenseSquad(options = {}) {
     const fleetAnchor = nFleet > 0 ? getFleetAnchor?.() : null;
     for (const unit of units) {
       unit.group.userData.update?.(time, dt);
-      if (unit.manual) continue;
+      if (unit.manual || unit.group.userData.batianFleetOwner?.active) continue;
       unit.attackCd = Math.max(0, unit.attackCd - dt);
       unit.flashT = Math.max(0, unit.flashT - dt);
       const light = unit.group.userData.beaconLight;
@@ -690,7 +691,7 @@ export function createScoutDefenseSquad(options = {}) {
     if (zoneT >= dwell) {
       zoneT = 0;
       // 2026-09-18 袭击巡回：city → gate → [bookshop → citadel]* → city
-      zone = zone === "city" ? "gate" : zone === "gate" && raidZones.length
+      zone = zone === "city" ? "gate" : zone === "gate" && raidZones.length && scene.userData.batianCommandMode !== true
         ? raidZones[raidCursor++ % raidZones.length].name
         : zone === "raid" || (raidZones.length && zone !== "city" && zone !== "gate")
           ? "city"

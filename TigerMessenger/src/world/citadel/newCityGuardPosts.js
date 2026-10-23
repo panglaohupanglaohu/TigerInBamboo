@@ -1,9 +1,15 @@
 import * as THREE from 'three';
 import {CITY_ADVANCE} from './compactNewCity.js';
+import {createNewCityPublicSupport} from './newCityPublicSupport.js';
 
 // Authored new-city frame, metres. Keep the central stair corridor open.
 // Six original four-person squads; the four original archers retain the balcony.
-export function createNewCityGuardPosts(castle) {
+export function createNewCityGuardPosts(castle,options={}) {
+  if(options.root){
+    const support=createNewCityPublicSupport(castle,options),posts=support?.posts||[];
+    return {source:'new-city-supported-garrison-v2',ready:support?.report.ready===true,support,
+      groups:Array.from({length:6},(_,i)=>({id:'public-post-'+i,points:posts.slice(i*4,i*4+4)})),archers:posts.slice(24,28),up:support?.up,face:support?.face};
+  }
   const city=castle?.getObjectByName('highland-west-city');
   if(!city)return null;
   city.updateWorldMatrix(true,true);

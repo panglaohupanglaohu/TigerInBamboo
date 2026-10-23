@@ -190,6 +190,7 @@ function abortAircraftForage(member) {
  */
 export function applyAircraftTranqHit(member) {
   if (!member) return null;
+  const owner=member.userData.batianFleetOwner;if(owner?.active&&owner.receiveHit){const hit=owner.receiveHit(member,35);return {hits:0,knocked:!!hit?.disabled,intercepted:!!hit?.intercepted};}
   const tf = member.userData.tranqFall;
   if (tf?.phase === "fall" || tf?.phase === "down" || tf?.phase === "rise") {
     return { hits: member.userData.tranqHits || 0, knocked: true, already: true };

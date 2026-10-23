@@ -16,6 +16,8 @@ import { sfxBombRelease, sfxSmokeBurst, hintEngine } from "../audio/worldSfx.js"
 
 const BOARD_RANGE = 5.0;   // 绳尾感应半径（可跳起抓绳）
 const CLIMB_TIME = 1.7;    // 攀爬动画时长
+const ROPE_DIST = 7.5;     // 索降时镜头距离：看得见整个人顺绳下滑
+const ROPE_MAX_SPEED = 7;  // 索降最快下滑速度（单位/秒），最后 1.6 单位刹车
 const FLY_DIST = 16;       // 乘客第三人称：舱外跟拍
 const PILOT_DIST = 0.12;   // 驾驶员第一人称：贴眼，几乎无身后拉距
 const PILOT_FOV = 82;      // 驾驶员广角，开阔远景
@@ -177,12 +179,15 @@ export function createAirshipRide({
   toast = () => {},
   getObstacle = null, // () => ({ dir, topRadial, angularRadius }) 建筑净空区（圣城）
   playerGroup = null, // 驾驶员视角时隐藏角色模型，避免挡视野
+  groundRadius = null, // (position) => 该处地面/步道的球面半径（与玩家物理同一套采样）
 }) {
-  /** @type {'idle'|'climbing'|'flying'} */
+  /** @type {'idle'|'climbing'|'flying'|'descending'} */
   let state = "idle";
   /** @type {'passenger'|'pilot'} 舱外跟拍 / 驾驶员第一人称 */
   let viewMode = "passenger";
   let climbT = 0;
+  // 索降（2026-10-10 用户：参考直升机快速索降，看得到信使沿绳滑下）
+  const descent = { t: 0, phase: 'step', s: 0, v: 0, span: 0, from: new THREE.Vector3(), top: new THREE.Vector3(), axis: new THREE.Vector3(), ground: new THREE.Vector3(), side: new THREE.Vector3() };
   let prevDist = 0;
   let prevFov = 60;
   let yaw = 0;      // 绕局部 +Y（星球法线）的驾驶偏航
@@ -192,6 +197,7 @@ export function createAirshipRide({
   const bombs = []; // 飞行中的烟雾弹
   const smokes = []; // 已引爆的烟雾团
   const _dir = new THREE.Vector3();
+  const travelRotation = new THREE.Quaternion();
   const climbFrom = new THREE.Vector3();
   const ropeTop = new THREE.Vector3(), ropeAxis = new THREE.Vector3();
   const ropeDelta = new THREE.Vector3(), ropeEnd = new THREE.Vector3();
@@ -340,6 +346,178 @@ export function createAirshipRide({
     return out;
   }
 
+  /** 绳顶与下垂方向（与当前绳长无关） */
+  function ropeFrame(a, outTop, outAxis) {
+    const rope = a?.userData?.rope;
+    if (!rope?.geometry || !rope.parent) return false;
+    rope.geometry.computeBoundingBox();
+    const length = rope.geometry.boundingBox.max.y;
+    if (!(length > 0)) return false;
+    rope.updateWorldMatrix(true, false);
+    outTop.set(0, length, 0); rope.localToWorld(outTop);
+    rope.getWorldPosition(_tmp);
+    outAxis.copy(_tmp).sub(outTop).normalize();// pointing down the rope
+    return true;
+  }
+
+  /**
+   * 2026-10-10 用户：索降终点要按"承接面"算，不能按绳尾算。
+   * 沿信使脚下那条线（绳外侧 0.3）从绳顶往下逐段探：用与玩家物理同一套地面采样，
+   * 第一次脚底到达或越过采样面的位置就是承接面（步道、台阶、码头、屋顶、地表——哪个在上面先碰到哪个）。
+   * 返回从绳顶沿绳到承接面的距离；探不到返回 null。
+   */
+  function landingSpan(top, axis, side) {
+    if (!groundRadius) return null;
+    const feet = new THREE.Vector3();
+    const gap = (h) => {
+      feet.copy(top).addScaledVector(axis, h).addScaledVector(side, -0.3);
+      let g = null; try { g = groundRadius(feet.clone()); } catch { g = null; }
+      return Number.isFinite(g) ? feet.length() - g : null;
+    };
+    let prevH = 1.0;
+    for (let h = 1.2; h <= 82; h += 0.15) {
+      const d = gap(h);
+      if (d !== null && d <= 0.02) {
+        let lo = prevH, hi = h;// lo above the surface, hi at/below it
+        for (let i = 0; i < 12; i++) { const mid = (lo + hi) / 2, dm = gap(mid); if (dm !== null && dm <= 0.02) hi = mid; else lo = mid; }
+        return hi;
+      }
+      prevH = h;
+    }
+    return null;
+  }
+
+  /** 把绳子放到 span 长（绳顶固定），绳尾即承接面 */
+  function setRopeSpan(a, top, axisDown, span) {
+    const rope = a?.userData?.rope;
+    if (!rope?.geometry || !rope.parent) return false;
+    rope.geometry.computeBoundingBox();
+    const length = rope.geometry.boundingBox.max.y;
+    ropeEnd.copy(top).addScaledVector(axisDown, span);
+    ropeLocalTop.copy(top); rope.parent.worldToLocal(ropeLocalTop);
+    const endLocal = ropeEnd.clone(); rope.parent.worldToLocal(endLocal);
+    ropeLocalAxis.set(0, 1, 0).applyQuaternion(rope.quaternion);
+    const scale = ropeLocalTop.clone().sub(endLocal).dot(ropeLocalAxis) / length;
+    rope.position.copy(endLocal); rope.scale.y = scale;
+    const knot = rope.userData.boardingKnot;
+    if (knot) { knot.position.y = .12 / scale; knot.scale.y = 1 / scale; }
+    rope.updateWorldMatrix(false, true);
+    return true;
+  }
+
+  /** 快速索降：出舱 → 双手握绳沿绳下滑（先加速后刹车）→ 落在承接面上屈膝 → 交还步行。 */
+  function beginDescent() {
+    const a = airship();
+    if (!a || !ropeFrame(a, descent.top, descent.axis)) { dismount(); return; }
+    // 人在绳的哪一侧：朝着艇身，绳在胸前
+    _up.copy(a.position).normalize();
+    descent.side.copy(a.position).sub(descent.top); descent.side.addScaledVector(_up, -descent.side.dot(_up));
+    if (descent.side.lengthSq() < 1e-6) descent.side.set(1, 0, 0);
+    descent.side.normalize();
+    let span = landingSpan(descent.top, descent.axis, descent.side);
+    descent.surfaceFound = span !== null;
+    if (span === null) span = 80;
+    span = THREE.MathUtils.clamp(span, 1.6, 82);
+    setRopeSpan(a, descent.top, descent.axis, span);
+    descent.span = span;
+    descent.ground.copy(descent.top).addScaledVector(descent.axis, span);
+    descent.axis.negate();// the slide code walks "top - axis * s"
+    descent.from.copy(player.position);
+    descent.t = 0; descent.phase = 'step'; descent.s = 0; descent.v = 0;
+    state = "descending";
+    viewMode = "passenger";
+    a.userData.flying = true;
+    player.riding = true;
+    player.velocity.set(0, 0, 0);
+    if (playerGroup) playerGroup.visible = true;
+    a.visible = true;
+    cameraRig?.setFirstPerson?.(false);
+    cameraRig?.setFov?.(prevFov);
+    cameraRig?.setDist?.(ROPE_DIST);
+    setHint(null);
+    toast("索降 · 抓稳绳子往下滑…", 2.2);
+  }
+
+  /**
+   * 同乘伙伴（虎虎 / 红狐）在吊舱顶上的位置：信使站在舱顶中间，伙伴沿舱身前后各占一边，朝艇首。
+   * slot = +1 / -1。仅在飞行或索降时有效（攀爬中伙伴先在地面等）。
+   */
+  function rideSpot(slot, outPos, outFwd) {
+    if (state !== "flying" && state !== "descending") return false;
+    const a = airship();
+    const gondola = a?.userData?.parts?.gondolaMesh;
+    if (!gondola || !deckSeat(outPos)) return false;
+    gondola.updateWorldMatrix(true, false);
+    const sc = new THREE.Vector3(); gondola.getWorldScale(sc);
+    const q = gondola.getWorldQuaternion(new THREE.Quaternion());
+    const along = new THREE.Vector3(0, 0, 1).applyQuaternion(q);
+    // 驾驶员第一人称时两位伙伴都退到身后，不挡视线
+    const k = viewMode === "pilot" ? -(slot >= 0 ? 1.15 : 2.35) : (slot >= 0 ? 1 : -1) * 1.15;
+    if (slot === 2) {
+      // 2026-10-13 阿狸：吊舱顶侧边，与虎虎（-1）、营救护送（+1）错开
+      const side = new THREE.Vector3(1, 0, 0).applyQuaternion(q);
+      outPos.addScaledVector(side, 0.55 * sc.x).addScaledVector(along, (viewMode === "pilot" ? -1.7 : -0.35) * sc.z);
+      outFwd.copy(along);
+      return true;
+    }
+    outPos.addScaledVector(along, k * sc.z);
+    outFwd.copy(along);
+    return true;
+  }
+
+  /** 绳上某处（离绳顶 s）对应的人脚底位置：人在绳外侧 0.3，手在头顶上方握绳 */
+  function ropeFeet(s, out) {
+    out.copy(descent.top).addScaledVector(descent.axis, -(s + 1.55)).addScaledVector(descent.side, -0.3);
+    return out;
+  }
+
+  function updateDescent(dt, a) {
+    descent.t += dt;
+    player.riding = true; player.onGround = false; player.velocity.set(0, 0, 0);
+    const travel = Math.max(0, descent.span - 1.55);
+    if (descent.phase === 'step') {
+      // 0.8 秒：从舱顶跨出、转身面向绳子、握绳
+      const u = Math.min(1, descent.t / 0.8), e = u * u * (3 - 2 * u);
+      ropeFeet(0, _seat);
+      player.position.lerpVectors(descent.from, _seat, e);
+      if (u >= 1) { descent.phase = 'slide'; descent.t = 0; }
+    } else if (descent.phase === 'slide') {
+      const left = travel - descent.s;
+      const brake = Math.sqrt(Math.max(0, 2 * 9 * Math.max(0, left - 0.05)));// 最后一段按 9 单位/秒² 刹车
+      descent.v = Math.min(descent.v + 14 * dt, ROPE_MAX_SPEED, Math.max(1.2, brake));
+      descent.s = Math.min(travel, descent.s + descent.v * dt);
+      ropeFeet(descent.s, player.position);
+      // 下滑时人略微绕绳摆动
+      _tmp.crossVectors(descent.axis, descent.side).normalize();
+      player.position.addScaledVector(_tmp, Math.sin(descent.s * 0.9) * 0.06);
+      if (descent.s >= travel - 1e-3) { descent.phase = 'land'; descent.t = 0; }
+    } else if (descent.phase === 'land') {
+      // 0.35 秒：落地屈膝缓冲，然后放开绳子
+      if (descent.t >= 0.35) { finishDescent(a); return; }
+    }
+    // 面朝绳子
+    _fwd.copy(descent.side); _up.copy(player.position).normalize(); _fwd.addScaledVector(_up, -_fwd.dot(_up));
+    if (_fwd.lengthSq() > 1e-6) { _fwd.normalize(); player.forward.copy(_fwd); player.facing.copy(_fwd); }
+  }
+
+  function finishDescent(a) {
+    state = "idle";
+    boost = 1;
+    viewMode = "passenger";
+    player.riding = false;
+    if (a) { a.userData.flying = false; a.visible = true; }
+    let g = null;
+    try { g = groundRadius?.(player.position); } catch { g = null; }
+    if (Number.isFinite(g) && player.position.length() < g + 0.05) player.position.setLength(g + 0.05);
+    if (playerGroup) playerGroup.visible = true;
+    player.velocity.set(0, 0, 0);
+    cameraRig?.setFirstPerson?.(false);
+    if (cameraRig?.setDist && prevDist) cameraRig.setDist(prevDist);
+    cameraRig?.setFov?.(prevFov);
+    setHint(null);
+    toast("已索降着陆", 1.8);
+  }
+
   function dismount() {
     const a = airship();
     state = "idle";
@@ -354,6 +532,11 @@ export function createAirshipRide({
       const rb = ropeBottom(_tmp);
       if (rb) {
         player.position.copy(rb).addScaledVector(_up, 0.2);
+        // 2026-10-10 用户：绳尾垂到湖沼步道上时，绳尾在步道面以下，人被放进步道里面、看不到信使。
+        // 落点不低于该处地面（步道/台阶/地表），站到面上再交还重力。
+        let g = null;
+        try { g = groundRadius?.(player.position); } catch { g = null; }
+        if (Number.isFinite(g) && player.position.length() < g + 0.05) player.position.setLength(g + 0.05);
       }
     }
     if (playerGroup) playerGroup.visible = true;
@@ -437,7 +620,9 @@ export function createAirshipRide({
       toast("抓住垂绳，登上航空艇…", 1.8);
     } else if (state === "flying") {
       e.preventDefault();
-      dismount();
+      beginDescent();
+    } else if (state === "descending") {
+      e.preventDefault();
     }
   });
 
@@ -569,6 +754,12 @@ export function createAirshipRide({
       return true;
     }
 
+    /* ---------- descending：快速索降 ---------- */
+    if (state === "descending") {
+      updateDescent(dt, a);
+      return true;
+    }
+
     /* ---------- flying：WASD 驾驶 ---------- */
     a.userData.flying = true;
     player.riding = true;
@@ -613,9 +804,17 @@ export function createAirshipRide({
       _pos.copy(_dir).multiplyScalar(planetRadius + hover);
       _pos.addScaledVector(_fwd, thrust * SPEED * boost * dt);
       _dir.copy(_pos).normalize();
-      // 偏航角随球面平行移动做微小补偿（防经线汇聚漂移）
+      // Transport the heading with the surface normal. Keeping the same local
+      // yaw instead makes long southern flights curl around the pole, so W
+      // never reaches the city despite the engine continuing to move.
+      travelRotation.setFromUnitVectors(_up, _dir);
+      _fwd.applyQuaternion(travelRotation).normalize();
       a.position.copy(_dir).multiplyScalar(planetRadius + hover);
+      _up.copy(_dir);
       quatYToDir(_dir, _q0);
+      _f0.copy(FWD_LOCAL).applyQuaternion(_q0).normalize();
+      _tmp.crossVectors(_f0, _fwd);
+      yaw = Math.atan2(_tmp.dot(_up), _f0.dot(_fwd));
       _qYaw.setFromAxisAngle(_yAxis, yaw);
       a.quaternion.copy(_q0).multiply(_qYaw);
     } else {
@@ -731,6 +930,7 @@ export function createAirshipRide({
     forceExit,
     setPose,
     summon,
+    rideSpot,
     isFlying: () => state === "flying",
     isPilotView: () => viewMode === "pilot" && state === "flying",
     getState: () => state,

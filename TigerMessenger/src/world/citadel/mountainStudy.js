@@ -1,3 +1,5 @@
+import {applyTargetSoftMountainFinish} from './targetFinalMountainFinish.js';
+import {retreatWestRailHeadland} from './targetWestRailHeadlandRetreat.js';
 import {installEastCliffStartupTerrain} from './targetEastCliffStartupTerrain.js';
 import {targetCityParams} from './targetCityRelease.js';
 import {applyTargetTerrainCandidate} from './targetTerrainCandidate.js';
@@ -120,7 +122,7 @@ export function applyCitadelMountainStudy(castle,radius=160,curves={},transitRel
  // previous city transform. WeakMap source positions prevent double bending.
  if(round>=7&&!terrainFirst)conformNewCityBackdropToOcean(castle.getObjectByName('highland-west-city'),radius,curves.red||Object.values(curves)[0]);
  const railCoast=round>=8&&!terrainFirst?openFinalMountainRailCoast(castle,radius,curves):null;
- const targetTerrain=applyTargetTerrainCandidate(castle,{radius,curves,coastalCliffCuts:transitRelease?.coastalCliffCuts??null,cliffTransitRelease:transitRelease});
+ const targetTerrain=applyTargetTerrainCandidate(castle,{radius,curves,newCityRadialCliff:!startupTerrain,coastalCliffCuts:transitRelease?.coastalCliffCuts??null,cliffTransitRelease:transitRelease});
  const broadTerraces=targetTerrain?null:replaceWestWallWithTerraces(castle,{radius,curves});
  castle.updateWorldMatrix(true,true);const inverse=castle.matrixWorld.clone().invert(),surfaces=[];
  castle.traverse(o=>{if(o.isMesh&&!o.userData.supersededTerrain&&!o.isInstancedMesh&&ROCK_NAMES.test(o.name)&&!Array.isArray(o.material))surfaces.push(o);});
@@ -163,10 +165,11 @@ export function applyCitadelMountainStudy(castle,radius=160,curves={},transitRel
    Object.assign(refined.userData.rockRefinement,{reliefAmplitude:rockSurface.relief,reliefCandidate:rockSurface.relief!==.65});
    geometry.push({name:mesh.name,...refined.userData.rockRefinement});mesh.geometry=refined;
   }
-  mesh.userData.mountainStudyOriginalMaterial=mesh.material.uuid;mesh.material=rockMaterial(mesh.material,inverse,radius,round,mesh.geometry.userData.rockSurfaceNormals?rockSurface:(rockSurface.moss!==undefined||rockSurface.detail!==undefined?{pass:0,bump:.38,moss:rockSurface.moss,detail:rockSurface.detail}:undefined),new THREE.Matrix3().getNormalMatrix(inverse.clone().multiply(mesh.matrixWorld)));
+  mesh.userData.mountainStudyOriginalMaterial=mesh.material.uuid;mesh.material=rockMaterial(mesh.material,inverse,radius,round,(mesh.geometry.userData.rockSurfaceNormals||startupTerrain)?{...rockSurface,pass:rockSurface.pass||1}:(rockSurface.moss!==undefined||rockSurface.detail!==undefined?{pass:0,bump:.38,moss:rockSurface.moss,detail:rockSurface.detail}:undefined),new THREE.Matrix3().getNormalMatrix(inverse.clone().multiply(mesh.matrixWorld)));
  }
+ const retreatEnabled=targetCityParams().get('citadelWestHeadlandRetreat')!=='0';
  let crags=null;
- if(round>=6)crags=addMountainCrags(castle,round>=7?cragSources:surfaces,rockMaterial(surfaces[0].material,inverse,radius,round,rockSurface.moss!==undefined||rockSurface.detail!==undefined?{pass:0,bump:.38,moss:rockSurface.moss,detail:rockSurface.detail}:undefined),{radius,rail,protectedBoxes}).userData.placement;
+ if(round>=6&&!retreatEnabled)crags=addMountainCrags(castle,round>=7?cragSources:surfaces,rockMaterial(surfaces[0].material,inverse,radius,round,rockSurface.moss!==undefined||rockSurface.detail!==undefined?{pass:0,bump:.38,moss:rockSurface.moss,detail:rockSurface.detail}:undefined),{radius,rail,protectedBoxes}).userData.placement;
  // Bootstrap cuts/refinement above intentionally use the retained release.
  // The strict replacement precedes every cached sampler and generated plant.
  let exactRemesh=null;
@@ -175,6 +178,10 @@ export function applyCitadelMountainStudy(castle,radius=160,curves={},transitRel
   exactRemesh=installEastCliffStartupTerrain({enabled:true,castle,artifact:startupTerrain.artifact}).report;
   rail.length=0;for(const curve of Object.values(startupTerrain.consumerCurves))for(let i=0;i<1000;i++)rail.push(curve.getPointAt(i/1000));
  }
+ const westHeadlandRetreat=retreatEnabled?retreatWestRailHeadland(castle,{radius}):null;
+ const sourceMountain=castle.getObjectByName('citadel-oskar-grid-mountain-surface');
+ const softMountain=startupTerrain&&sourceMountain&&westHeadlandRetreat?applyTargetSoftMountainFinish(sourceMountain.geometry,{toChart:castle.matrixWorld.clone().invert().multiply(sourceMountain.matrixWorld),castleMatrix:castle.matrixWorld,railCurves:startupTerrain.consumerCurves}):null;
+ if(round>=6&&retreatEnabled)crags=addMountainCrags(castle,surfaces,rockMaterial(surfaces[0].material,inverse,radius,round,rockSurface.moss!==undefined||rockSurface.detail!==undefined?{pass:0,bump:.38,moss:rockSurface.moss,detail:rockSurface.detail}:undefined),{radius,rail,protectedBoxes}).userData.placement;
  // One immutable snapshot after final geometry/material sides/transforms.
  // Optional until same-scene placement and cloud-field parity are verified.
  const canopyEnabled=targetCityParams().get('citadelCanopy')==='1';
@@ -200,5 +207,5 @@ export function applyCitadelMountainStudy(castle,radius=160,curves={},transitRel
  if(cloudBanksEnabled){const candidate=createMountainCloudBanksCandidate(castle,{enabled:true,surfaceIndex,radius,rail,protectedBoxes,waterHeight:officialOceanLevelAt});if(candidate.group){castle.add(candidate.group);cloudBanks=candidate.report;candidate.group.userData.update=candidate.update;castle.userData.mountainCloudBanks=candidate.group;if(cloudBanks.count>0&&castle.userData.ridgeFlowClouds)castle.userData.ridgeFlowClouds.visible=false;}}
  const lightField=applyMountainLightCandidate(castle,surfaces,{plantingRoot:castle.getObjectByName('citadel-study-mountain-planting'),cragRoot:castle.getObjectByName('citadel-study-fractured-buttresses')});
  const {params:resolvedSearch,...release}=resolveMountainParams(globalThis.location?.search||'');
- return castle.userData.mountainStudy={exactRemesh,targetTerrain,broadTerraces,release,cloudField,cloudBanks,sampling,lightField,round,version:1,target:'citadel-mountain-two-hour/approved-target.png',surfaces:surfaces.map(m=>m.name),geometryChanged:round>=5,geometry,crags,railCoast,planting,canopy,ridgeFailure,newCityRidge:ridgeCandidate?.audit??null,summits,shader:'world-anchored blue-grey rock, mineral wash, strata and joint relief'};
+ return castle.userData.mountainStudy={westHeadlandRetreat,softMountain,exactRemesh,targetTerrain,broadTerraces,release,cloudField,cloudBanks,sampling,lightField,round,version:1,target:'citadel-mountain-two-hour/approved-target.png',surfaces:surfaces.map(m=>m.name),geometryChanged:round>=5,geometry,crags,railCoast,planting,canopy,ridgeFailure,newCityRidge:ridgeCandidate?.audit??null,summits,shader:'world-anchored blue-grey rock, mineral wash, strata and joint relief'};
 }

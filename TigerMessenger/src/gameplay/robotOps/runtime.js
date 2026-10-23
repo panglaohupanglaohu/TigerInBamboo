@@ -13,6 +13,8 @@ import {animateArticulatedRobot} from '../../assets/robotArticulation.js';
 import {townSurfacePoint,seatTownObject,townSurfaceMesh} from '../../world/bookshopTownSite.js';
 import {factoryKit} from '../../assets/factoryArchitecture.js';
 import {mergeStaticGroup} from '../../world/geometryMerge.js';
+import {createRobotRenderBatch} from './renderBatch.js';
+export const ROBOT_WRECK_SECONDS=15,ROBOT_SMALL_PART_SHADOW_RADIUS=.35; // perf 2026-10-15
 const SAVE='tigermessenger-robot-operations-v1';
 const NAMES={locust:'蝗虫',ant:'蚂蚁',beetle:'甲壳虫'};
 export function createRobotOperations({scene,base,tramSystem,camera,cameraRig,colliders=[],getFleet=()=>null,getAssault=()=>null,R=160}){
@@ -24,6 +26,8 @@ export function createRobotOperations({scene,base,tramSystem,camera,cameraRig,co
  for(let x=-24;x<=24;x+=4)for(const z of[-15.5,15.5]){const p=townSurfacePoint(field,x,z,R,1.15);cyl(.08,.6,...p.toArray(),M.brass);}
  sign('ROBOT LEGION · PROVING GROUND',12,1.4,0,3.4,15.8);mergeStaticGroup(field);
  const modelRoot=new THREE.Group();modelRoot.name='robot-live-units';root.add(modelRoot);
+ const renderBatch=createRobotRenderBatch(modelRoot);
+ const profileEnabled=new URLSearchParams(globalThis.location?.search||'').get('robotProfile')==='1',profileFrames=[];
  const templates=new Map(),models=new Map(),landingBays=new Map(),waitingFactories=new Map(),lastTrainProgress=new Map(),previousJobs=new Map();let focusMode=null,elapsed=0,shipment=0,saveTimer=0,eventCursor=0,exerciseNumber=0;
  const api={logistics,combat,models,root,field,message:'三厂各有 3 套首批零件，按三台同型成批出厂。',focus(mode){focusMode=mode;if(!mode)cameraRig?.snapToPlayer?.();},
   freightStatus(id){const s=tramSystem.freightServices.find(s=>s.tram.userData.variant===id);return !s?'待命':s.tram.userData.signalHold?'交汇处让行':s.shuntingBack?'回厂调车':logistics.isHolding(id)?'吊装锁定':waitingFactories.has(id)?'等待同型三台齐备':s.dwell>0?'站内停留':'运行中';},
@@ -34,15 +38,19 @@ export function createRobotOperations({scene,base,tramSystem,camera,cameraRig,co
   snapshot(){return{logistics:logistics.snapshot(),combat:combat.snapshot(),models:models.size,effects:effects.count,shipment,focus:focusMode};}
  };
  api.defense=createBaseDefense({scene,base,logistics,models,combat,getFleet,getAssault,R});
+ api.profile=()=>({enabled:profileEnabled,samples:profileFrames.length,...Object.fromEntries(['updateMs','poseAndDefenseMs','renderBatchMs'].map((k,i)=>[k,profileFrames.length?profileFrames.reduce((sum,f)=>sum+f[i],0)/profileFrames.length:0]))});
  const pedestrians=createBookshopPedestrians({base,colliders,tramSystem,R,isAlarm:()=>api.defense?.active});api.pedestrians=pedestrians;
  const panel=createRobotOpsPanel(api);api.panel=panel;
  const effects=createRobotEffects({root,models,field,point:townSurfacePoint,R});
  const handling=createRobotHandlingRig({base,root,R});
  function template(kind){if(!templates.has(kind)){const m=BOOKSHOP_ROBOT_FACTORIES[ROBOT_KINDS.indexOf(kind)]({rigged:true});m.scale.setScalar(1.25);animateArticulatedRobot(m,{state:'transport'});m.updateMatrixWorld(true);const b=new THREE.Box3().setFromObject(m,true);m.userData.transportMinY=b.min.y;m.userData.transportMaxY=b.max.y;m.userData.transportSize=b.getSize(new THREE.Vector3()).toArray();templates.set(kind,m);}return templates.get(kind);}
+ const wreckSince=new Map(),_wreckPos=new THREE.Vector3(),_wreckQuat=new THREE.Quaternion();
  function ensureModel(u){if(models.has(u.id))return models.get(u.id);let m;
   if(u.kind==='sentry'){m=new THREE.Group();const kit=factoryKit(m);kit.box(1.8,.45,1.8,0,.225,0,kit.M.iron);kit.cyl(.62,1.1,0,.95,0,kit.M.copper);kit.box(1.5,.7,1.1,0,1.8,0,kit.M.slate);kit.cyl(.12,1.4,0,1.8,.75,kit.M.iron).rotation.x=Math.PI/2;mergeStaticGroup(m);}
   else m=template(u.kind).clone(true);
-  m.traverse(o=>{if(o.isMesh)o.userData.noDistanceCulling=true;});m.name='robot-unit-'+u.id;m.userData.robotId=u.id;m.userData.robotType=u.kind;modelRoot.add(m);models.set(u.id,m);return m;
+  m.updateMatrixWorld(true);const ws=new THREE.Vector3();m.traverse(o=>{if(!o.isMesh)return;o.userData.noDistanceCulling=true;
+   // perf 2026-10-15: small parts (joints, plates, bolts; world radius < .35 m) cast no shadow; about half of each robot's shadow draws.
+   if(o.castShadow){if(!o.geometry.boundingSphere)o.geometry.computeBoundingSphere();o.matrixWorld.decompose(_wreckPos,_wreckQuat,ws);if(o.geometry.boundingSphere.radius*Math.max(ws.x,ws.y,ws.z)<ROBOT_SMALL_PART_SHADOW_RADIUS)o.castShadow=false;}});m.name='robot-unit-'+u.id;m.userData.robotId=u.id;m.userData.robotType=u.kind;modelRoot.add(m);models.set(u.id,m);return m;
  }
  function court(kind){return base.getObjectByName(kind+'-bookshop-court');}
  function stockPose(u){const d=court(u.kind),index=logistics.units.filter(v=>v.kind===u.kind).findIndex(v=>v.id===u.id)%6,x=-14+(index%3)*7,z=index<3?-37.6:-33.6;const p=d.localToWorld(townSurfacePoint(d,x,z,R,1.58));const up=p.clone().normalize(),forward=new THREE.Vector3(0,0,1).transformDirection(d.matrixWorld),right=new THREE.Vector3().crossVectors(up,forward).normalize();forward.crossVectors(right,up).normalize();const q=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(right,up,forward));return{p,q};}
@@ -53,7 +61,10 @@ export function createRobotOperations({scene,base,tramSystem,camera,cameraRig,co
   if(!landingBays.has(u.id)){const p=findDeploymentBay(combat.units,obstacles,[...landingBays].filter(([id])=>!combat.get(id)).map(([id,p])=>({id,...p})),u.id);if(p)landingBays.set(u.id,p);}
   return landingBays.get(u.id)||null;
  }
- function drawUnit(u){const m=ensureModel(u);m.visible=true;if(u.status==='lost'){const c=combat.get(u.id);if(c){const p=fieldPose(c);m.position.copy(p.p);m.quaternion.copy(p.q);animateArticulatedRobot(m,{state:'disabled'});}else m.visible=false;return;}let pose,state='idle';
+ function drawUnit(u){const m=ensureModel(u);m.visible=true;if(u.status==='lost'){
+   // perf 2026-10-15: a wreck stays on the field for ROBOT_WRECK_SECONDS, then its model is hidden (save data untouched).
+   if(!wreckSince.has(u.id))wreckSince.set(u.id,elapsed);if(elapsed-wreckSince.get(u.id)>ROBOT_WRECK_SECONDS){m.visible=false;return;}
+   const c=combat.get(u.id);if(c){const p=fieldPose(c);m.position.copy(p.p);m.quaternion.copy(p.q);animateArticulatedRobot(m,{state:'disabled'});}else m.visible=false;return;}let pose,state='idle';
   if(u.status==='transit'){pose=cargoPose(u,m);state='transport';}
   else if(u.status==='loading'||u.status==='unloading'){
    const job=logistics.trains[u.train]?.job;if(!job)return;const source=u.status==='loading'?stockPose(u):cargoPose(u,m),deploy=deployPosition(u),target=u.status==='loading'?cargoPose(u,m):deploy?fieldPose({...deploy,heading:Math.PI}):null;if(!source||!target)return;
@@ -124,6 +135,7 @@ export function createRobotOperations({scene,base,tramSystem,camera,cameraRig,co
   }
  }
  api.update=(dt)=>{
+  const profileStart=profileEnabled?performance.now():0;
   elapsed+=dt;logistics.update(dt);combat.update(dt);pedestrians.update(dt);
   for(const service of tramSystem.freightServices){const id=service.tram.userData.variant,t=logistics.trains[id],previous=lastTrainProgress.get(id);lastTrainProgress.set(id,service.progress);if(previous!==undefined&&t.slots.some(slot=>slot&&logistics.get(slot)?.status==='transit')){const delta=((service.progress-previous)*service.direction+1)%1;if(delta<.05)t.haulDistance=(t.haulDistance||0)+delta*service.trackLen;}}
   for(const service of tramSystem.freightServices){
@@ -138,22 +150,33 @@ export function createRobotOperations({scene,base,tramSystem,camera,cameraRig,co
   for(const[id,kind]of waitingFactories){if(logistics.dock(id,kind)){waitingFactories.delete(id);if(logistics.trains[id].slots.filter(Boolean).length===3)logistics.trains[id].haulDistance=0;api.message=NAMES[kind]+'三台齐备，开始逐台吊装。';}else if(!canAwaitBatch(id,kind))waitingFactories.delete(id);}
   if(!shipment&&[...waitingFactories.values()].some(kind=>{const f=logistics.factories[kind];return f.kits<3&&!f.active&&logistics.units.filter(u=>u.status!=='lost').length<logistics.maxUnits-2;}))api.receiveShipment();
   if(shipment>0){shipment=Math.max(0,shipment-dt);if(shipment===0){for(const kind of ROBOT_KINDS)logistics.receive(kind,3);api.message='本船零件已入库，三厂各收到 3 套。';}}
-  handling.begin();
+  const poseStart=profileEnabled?performance.now():0;handling.begin();
   for(const u of logistics.units)drawUnit(u);for(const u of combat.units)if(u.team==='enemy')drawEnemy(u);
-  api.defense.update(dt);
+  api.defense.update(scene.userData.batianFleet?.active?(scene.userData.batianFrameDelta??dt):dt);
+  const poseEnd=profileEnabled?performance.now():0;
   for(const e of combat.events)if(e.sequence>eventCursor)effects.emit(e);eventCursor=combat.eventSequence;effects.update(dt);
   for(const u of combat.units){const l=logistics.get(u.id);if(!l)continue;l.health=u.hp/u.maxHp;if(u.hp<=0)logistics.markLost(u.id);else if(u.state==='repair')logistics.repair(u.id);else if(l.status==='repair'&&u.hp===u.maxHp)logistics.finishRepair(u.id);}
   saveTimer+=dt;if(saveTimer>=30){saveTimer=0;const message=api.message;api.save();api.message=message;}
   panel.update(elapsed);
+  const batchStart=profileEnabled?performance.now():0;renderBatch.update();
+  if(profileEnabled){const end=performance.now();profileFrames.push([end-profileStart,poseEnd-poseStart,end-batchStart]);if(profileFrames.length>60)profileFrames.shift();}
  };
+ let troopCameraScanAt=0,troopCameraTargets=[];
  api.updateCamera=()=>{if(!focusMode)return;let target,up,eye;
-  if(focusMode==='loading'){const unit=logistics.units.find(u=>u.status==='loading'||u.status==='unloading'),m=unit&&models.get(unit.id);if(m){target=m.getWorldPosition(new THREE.Vector3());up=target.clone().normalize();const forward=new THREE.Vector3(0,0,1).applyQuaternion(m.getWorldQuaternion(new THREE.Quaternion())),right=new THREE.Vector3().crossVectors(up,forward).normalize();eye=target.clone().addScaledVector(up,7).addScaledVector(right,12).addScaledVector(forward,16);target.addScaledVector(up,2);}else{const service=tramSystem.freightServices.find(s=>logistics.trains[s.tram.userData.variant].slots.some(Boolean));if(service){target=service.wagons[2].getWorldPosition(new THREE.Vector3());up=target.clone().normalize();eye=service.wagons[2].localToWorld(new THREE.Vector3(15,10,17));}else{target=base.localToWorld(new THREE.Vector3(0,0,-30));up=target.clone().normalize();eye=base.localToWorld(new THREE.Vector3(30,45,30));}}}
+  if(focusMode==='heiwa'){let healer=null;scene.traverse(o=>{if(o.userData.heiwaMedic)healer=o;});if(!healer)return;target=healer.getWorldPosition(new THREE.Vector3());up=new THREE.Vector3(0,1,0).transformDirection(healer.parent.matrixWorld);eye=healer.parent.localToWorld(healer.position.clone().add(new THREE.Vector3(6,5,-8)));target.addScaledVector(up,.5);}
+  else if(focusMode==='heavy-troops'){
+   if(performance.now()>troopCameraScanAt){troopCameraScanAt=performance.now()+700;troopCameraTargets=[];scene.traverse(o=>{if(o.userData.bookshopReceiveHit)troopCameraTargets.push(o);});}
+   const alive=troopCameraTargets.filter(o=>o.parent&&o.visible&&!o.userData.dead&&!o.userData.downed),grounded=alive.filter(o=>o.userData.onGround),group=(grounded.length?grounded:alive).slice(0,6);
+   if(group.length){target=group.reduce((sum,o)=>sum.add(o.getWorldPosition(new THREE.Vector3())),new THREE.Vector3()).multiplyScalar(1/group.length);up=target.clone().normalize();const forward=new THREE.Vector3(0,0,1).applyQuaternion(group[0].getWorldQuaternion(new THREE.Quaternion()));forward.addScaledVector(up,-forward.dot(up)).normalize();const right=new THREE.Vector3().crossVectors(up,forward).normalize();eye=target.clone().addScaledVector(up,5).addScaledVector(forward,11).addScaledVector(right,9);target.addScaledVector(up,1);}
+   else{target=base.localToWorld(new THREE.Vector3(0,0,32));up=target.clone().normalize();eye=base.localToWorld(new THREE.Vector3(12,18,54));}
+  }else if(focusMode==='loading'){const unit=logistics.units.find(u=>u.status==='loading'||u.status==='unloading'),m=unit&&models.get(unit.id);if(m){target=m.getWorldPosition(new THREE.Vector3());up=target.clone().normalize();const forward=new THREE.Vector3(0,0,1).applyQuaternion(m.getWorldQuaternion(new THREE.Quaternion())),right=new THREE.Vector3().crossVectors(up,forward).normalize();eye=target.clone().addScaledVector(up,7).addScaledVector(right,12).addScaledVector(forward,16);target.addScaledVector(up,2);}else{const service=tramSystem.freightServices.find(s=>logistics.trains[s.tram.userData.variant].slots.some(Boolean));if(service){target=service.wagons[2].getWorldPosition(new THREE.Vector3());up=target.clone().normalize();eye=service.wagons[2].localToWorld(new THREE.Vector3(15,10,17));}else{target=base.localToWorld(new THREE.Vector3(0,0,-30));up=target.clone().normalize();eye=base.localToWorld(new THREE.Vector3(30,45,30));}}}
+  else if(focusMode==='medical'&&base.userData.plazaRescueTrain){const train=base.userData.plazaRescueTrain;target=train.getWorldPosition(new THREE.Vector3());up=target.clone().normalize();eye=train.localToWorld(new THREE.Vector3(8,7,9));target.addScaledVector(up,1);}
   else if(focusMode==='train'||focusMode==='blue-train'){const s=tramSystem.freightServices[focusMode==='blue-train'?1:0],car=s.wagons[2];target=car.position.clone();up=target.clone().normalize();const outward=target.clone().sub(base.getWorldPosition(new THREE.Vector3())).addScaledVector(up,-target.clone().sub(base.getWorldPosition(new THREE.Vector3())).dot(up)).normalize();eye=target.clone().addScaledVector(up,34).addScaledVector(outward,42);}
   else{const parent=focusMode==='field'?field:focusMode==='factory'?court('locust'):base;const local=focusMode==='field'?new THREE.Vector3(0,0,0):focusMode==='factory'?new THREE.Vector3(0,2,-30):new THREE.Vector3(0,0,32);target=parent.localToWorld(local);up=target.clone().normalize();eye=parent.localToWorld(focusMode==='field'?new THREE.Vector3(0,44,28):focusMode==='factory'?new THREE.Vector3(-30,28,-64):new THREE.Vector3(0,95,106));}
-  if(focusMode==='loading'){
+  if(focusMode==='loading'||focusMode==='medical'){
    const blockers=base.userData.cameraOccludersNear?.(target,65)||[],ray=new THREE.Raycaster(),origin=target.clone().addScaledVector(up,2),offset=eye.clone().sub(target),horizontal=offset.clone().addScaledVector(up,-offset.dot(up)).normalize();
    let chosen=null;
-   for(const height of[12,20,30]){for(const angle of[0,Math.PI,-Math.PI/2,Math.PI/2]){const candidate=target.clone().addScaledVector(up,height).addScaledVector(horizontal.clone().applyAxisAngle(up,angle),22),delta=candidate.clone().sub(origin);ray.set(origin,delta.clone().normalize());ray.far=delta.length();if(!ray.intersectObjects(blockers,false).length){chosen=candidate;break;}}if(chosen)break;}
+   for(const height of(focusMode==='medical'?[7,12,20]:[12,20,30])){for(const angle of[0,Math.PI,-Math.PI/2,Math.PI/2]){const candidate=target.clone().addScaledVector(up,height).addScaledVector(horizontal.clone().applyAxisAngle(up,angle),focusMode==='medical'?10:22),delta=candidate.clone().sub(origin);ray.set(origin,delta.clone().normalize());ray.far=delta.length();if(!ray.intersectObjects(blockers,false).length){chosen=candidate;break;}}if(chosen)break;}
    if(chosen)eye=chosen;else eye=target.clone().addScaledVector(up,36).addScaledVector(horizontal,8);
   }
   camera.position.copy(eye);camera.up.copy(up);camera.lookAt(target);camera.updateMatrixWorld();

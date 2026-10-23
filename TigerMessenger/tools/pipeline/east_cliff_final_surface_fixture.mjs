@@ -10,7 +10,7 @@ export function eastCliffFinalSurfaceFixture({radius=160,search='',sourceOffsetX
  const f=actualUserMarkedStructureFixture(),mesh=f.terrain;let raw=mesh.geometry;
  mesh.position.x=sourceOffsetX;mesh.updateMatrix();f.scene.updateMatrixWorld(true);
  const previous=globalThis.location;globalThis.location={search:'?citadelTerrainFirst=1&citadelTargetRemesh=1&citadelTerraceAprons=1&citadelRecessedSaddle=1&citadelValleyBenches=1'};
- try{applyTargetTerrainCandidate(f.castle,{curves:f.curves,coastalCliffCuts:f.release.coastalCliffCuts,cliffTransitRelease:f.release});}finally{if(previous===undefined)delete globalThis.location;else globalThis.location=previous;}
+ try{applyTargetTerrainCandidate(f.castle,{newCityRadialCliff:false,curves:f.curves,coastalCliffCuts:f.release.coastalCliffCuts,cliffTransitRelease:f.release});}finally{if(previous===undefined)delete globalThis.location;else globalThis.location=previous;}
  raw.dispose();raw=mesh.geometry;
  f.scene.updateMatrixWorld(true);
  const before=inspectEastCliffSourceEpoch({castle:f.castle,sourceMesh:mesh});

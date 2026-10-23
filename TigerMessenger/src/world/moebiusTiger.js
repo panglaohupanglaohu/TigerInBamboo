@@ -1,3 +1,4 @@
+import {createSwampGroundRayIndex} from './swampGroundRayIndex.js';
 // 湖沼虎运行时：原模型工厂已归入 assets；巡游与灯谜保留在世界逻辑层。
 import * as THREE from "three";
 import { createMoebiusTigerModel, TIGER_SCALE } from "../assets/characters/moebiusTiger.js";
@@ -32,7 +33,26 @@ function attachRoamBehavior(tiger, roam) {
   const speed = roam.speed ?? 2.4;
   const rim = roam.rim;
   const steps = roam.steps;
-  const up = [...steps].reverse();
+  // Finish the ascent at the rim before resuming circular patrol.
+  // Stair mouth: a point on the landing straight behind the top tread, along the stair axis. The tiger lines up
+  // here before it steps down (and walks out through it after climbing), instead of cutting the landing corner
+  // diagonally with one side of its body hanging over the drop (user report 2026-10-10).
+  const mouth = (() => {
+    if (steps.length < 2) return null;
+    const ax = steps[1].x - steps[0].x, az = steps[1].z - steps[0].z, l = Math.hypot(ax, az);
+    if (l < 1e-4) return null;
+    return new THREE.Vector3(steps[0].x - ax / l * 1.6, steps[0].y, steps[0].z - az / l * 1.6);
+  })();
+  let mouthDone = false;
+  const up = [...steps].reverse().concat(mouth ? [mouth, rim[0]] : [rim[0]]);
+  // Turn like an animal: limited turn rate, and slow down while the heading is far off.
+  const TURN_RATE = 2.6;
+  function turnToward(yaw, dt) {
+    const err = Math.atan2(Math.sin(yaw - tiger.rotation.y), Math.cos(yaw - tiger.rotation.y));
+    const max = TURN_RATE * Math.max(dt, 1e-3);
+    tiger.rotation.y += Math.max(-max, Math.min(max, err));
+    return Math.abs(err);
+  }
   let mode = "patrol";
   let wp = 0;
   let pause = 0;
@@ -48,6 +68,7 @@ function attachRoamBehavior(tiger, roam) {
    * 球面贴地：与 applySwampSphereFit 同公式，消除坑缘“平面斜坡”悬空感。
    * pathY = 设计路径高度（如 SWAMP_GROUND_Y 或石阶 y）
    */
+  const groundIndex=createSwampGroundRayIndex({enabled:new URLSearchParams(globalThis.location?.search||'').get('tigerGroundIndex')!=='0'});
   const footingRay = new THREE.Raycaster();
   const footingOrigin = new THREE.Vector3(), footingDown = new THREE.Vector3();
   function groundY(x, z, pathY) {
@@ -55,13 +76,13 @@ function attachRoamBehavior(tiger, roam) {
     // Only the rim vegetation receives applySwampSphereFit; applying its drop
     // here buries the tiger beneath the unchanged walkway and stairs.
     if (tiger.parent?.userData.swampV2Round) {
-      const frame=tiger.parent,surfaces=frame.userData.tigerWalkSurfaces||[];
+      const frame=tiger.parent,surfaces=[...(frame.userData.tigerWalkSurfaces||[]),...(frame.userData.gregCoralRim?.walkMeshes||[])];
       frame.updateWorldMatrix(true,false);
       footingOrigin.set(x,60,z);frame.localToWorld(footingOrigin);
       footingDown.set(0,-1,0).transformDirection(frame.matrixWorld);
       footingRay.set(footingOrigin,footingDown);
       for(const surface of surfaces)surface.updateWorldMatrix(true,false);
-      const hits=footingRay.intersectObjects(surfaces,false);
+      const hits=groundIndex.intersectObjects(footingRay,surfaces);
       if(hits.length)return frame.worldToLocal(hits[0].point.clone()).y+.08;
       return pathY + 0.65;
     }
@@ -111,14 +132,16 @@ function attachRoamBehavior(tiger, roam) {
 
   const seek = (target, dt, arrive, spd = speed, pathY) => {
     if (!target) return true;
-    if (tiger.parent?.userData.swampV2Round && mode === "patrol") {
+    if (tiger.parent?.userData.swampV2Round && (mode === "patrol" || (mode === "to-steps" && target === rim[0]))) {
       const radius = Math.hypot(target.x, target.z);
       const angle = Math.atan2(tiger.position.z, tiger.position.x);
       const delta = Math.atan2(Math.sin(Math.atan2(target.z,target.x)-angle), Math.cos(Math.atan2(target.z,target.x)-angle));
       if (Math.abs(delta)*radius < arrive) return true;
-      const next = angle + Math.sign(delta)*Math.min(Math.abs(delta),spd*dt/radius);
+      const ahead = angle + Math.sign(delta)*.05;
+      const err = turnToward(Math.atan2(radius*Math.cos(ahead)-tiger.position.x,radius*Math.sin(ahead)-tiger.position.z), dt);
+      const slow = Math.max(.15, Math.cos(Math.min(err, Math.PI/2)));
+      const next = angle + Math.sign(delta)*Math.min(Math.abs(delta),spd*slow*dt/radius);
       const x=radius*Math.cos(next),z=radius*Math.sin(next);
-      tiger.rotation.y=Math.atan2(x-tiger.position.x,z-tiger.position.z);
       tiger.position.x=x;tiger.position.z=z;
       tiger.userData._baseY=groundY(x,z,target.y);
       return false;
@@ -127,10 +150,13 @@ function attachRoamBehavior(tiger, roam) {
     const dz = target.z - tiger.position.z;
     const d = Math.hypot(dx, dz);
     if (d < arrive) return true;
-    const step = Math.min(d, spd * dt);
-    tiger.position.x += (dx / d) * step;
-    tiger.position.z += (dz / d) * step;
-    tiger.rotation.y = Math.atan2(dx, dz);
+    const err = turnToward(Math.atan2(dx, dz), dt);
+    // big heading error: mostly turn on the spot, then walk on along the new heading
+    const step = Math.min(d, spd * dt * Math.max(.15, Math.cos(Math.min(err, Math.PI / 2))));
+    // last ~0.6 units: step straight onto the point (no orbiting around a tight arrival radius)
+    const hx = d < .6 ? dx / d : Math.sin(tiger.rotation.y), hz = d < .6 ? dz / d : Math.cos(tiger.rotation.y);
+    tiger.position.x += hx * (d < .6 ? Math.min(d, spd * dt) : step);
+    tiger.position.z += hz * (d < .6 ? Math.min(d, spd * dt) : step);
     // 水平移动时同步贴地：优先显式 pathY，否则用目标设计 y（路径点），再不则径向地表
     const py = Number.isFinite(pathY)
       ? pathY
@@ -189,6 +215,10 @@ function attachRoamBehavior(tiger, roam) {
       return;
     }
     const player = runtime?.player ?? null;
+    if(tiger.userData.encounterController?.step(dt,t,player)){
+      prevUpdate(dt,t);
+      return;
+    }
     if (greetCd > 0) greetCd -= dt;
 
     // 强制饮水（旧接口）
@@ -201,6 +231,7 @@ function attachRoamBehavior(tiger, roam) {
     // 不再受虎的视野半径限制——进沼即相见；重复进出仍有短暂冷却防刷。
     if (
       player &&
+      !tiger.userData.encounterController &&
       greetCd <= 0 &&
       (mode === "patrol" ||
         mode === "to-steps" ||
@@ -248,7 +279,9 @@ function attachRoamBehavior(tiger, roam) {
       tiger.userData._greeting = true;
       const pl = playerLocal(player);
       if (!pl) {
-        // 人走了：回坑缘
+        // Keep the established water-walking identity while returning to the
+        // original stair queue; land support begins only at an actual tread.
+        tiger.userData._waterReturning = true;
         mode = "ascend";
         queue = up;
         qi = 0;
@@ -292,6 +325,7 @@ function attachRoamBehavior(tiger, roam) {
       if (greetStayT <= 0) {
         tiger.userData._greeting = false;
         greetCd = GREET_COOLDOWN;
+        tiger.userData._waterReturning = true;
         mode = "ascend";
         queue = up;
         qi = 0;
@@ -309,7 +343,14 @@ function attachRoamBehavior(tiger, roam) {
         rim[wp]?.y ?? rim[0].y
       );
     } else if (mode === "to-steps") {
-      if (seek(steps[0], dt, 0.7)) {
+      // Reach the stair mouth along the supported rim, not a chord over the bowl.
+      const rimAngle=Math.atan2(rim[0].z,rim[0].x),here=Math.atan2(tiger.position.z,tiger.position.x);
+      const rimDistance=Math.abs(Math.atan2(Math.sin(rimAngle-here),Math.cos(rimAngle-here)))*Math.hypot(rim[0].x,rim[0].z);
+      const entranceTarget=tiger.parent?.userData.swampV2Round&&rimDistance>.12?rim[0]:(mouth&&!mouthDone?mouth:steps[0]);
+      const arrived = seek(entranceTarget, dt, entranceTarget === rim[0] ? .08 : entranceTarget === mouth ? .35 : .7);
+      if (arrived && entranceTarget === mouth) mouthDone = true;
+      if (arrived && entranceTarget===steps[0]) {
+        mouthDone = false;
         mode = "descend";
         queue = steps;
         qi = 0;
@@ -342,11 +383,23 @@ function attachRoamBehavior(tiger, roam) {
       if (drinkT <= 0) mode = "ascend";
     } else if (mode === "ascend") {
       tiger.userData._walking = true;
-      if (qi < queue.length && seek(queue[qi], dt, 0.6)) qi++;
+      if (qi < queue.length && seek(queue[qi], dt, qi === queue.length - 1 ? .015 : .6)) qi++;
       const ty = qi < queue.length ? queue[qi].y : rim[0].y;
       const targetY = groundY(tiger.position.x, tiger.position.z, ty);
-      tiger.userData._baseY += (targetY - tiger.userData._baseY) * Math.min(1, dt * 3);
+      if(tiger.userData._waterReturning){
+        const frame=tiger.parent,surfaces=frame?.userData.tigerWalkSurfaces||[];
+        frame.updateWorldMatrix(true,false);
+        footingOrigin.set(tiger.position.x,60,tiger.position.z);frame.localToWorld(footingOrigin);
+        footingDown.set(0,-1,0).transformDirection(frame.matrixWorld);footingRay.set(footingOrigin,footingDown);
+        for(const surface of surfaces)surface.updateWorldMatrix(true,false);
+        const hit=groundIndex.intersectObjects(footingRay,surfaces)[0];
+        const treadY=hit?frame.worldToLocal(hit.point.clone()).y:null;
+        if(treadY!==null&&treadY+.08>=WATER_WALK_Y)tiger.userData._waterReturning=false;
+      }
+      if(tiger.userData._waterReturning)tiger.userData._baseY=WATER_WALK_Y;
+      else tiger.userData._baseY += (targetY - tiger.userData._baseY) * Math.min(1, dt * 3);
       if (qi >= queue.length) {
+        tiger.userData._waterReturning=false;
         mode = "patrol";
         wp = 1;
         queue = steps;
@@ -408,7 +461,7 @@ export function updateSwampTigerDialog({
   tiger.getWorldPosition(_tigerBubbleWorld);
   _playerWorld.copy(player.position);
   const dist = _tigerBubbleWorld.distanceTo(_playerWorld);
-  const near = dist <= TIGER_TALK_RANGE;
+  const near = dist <= TIGER_TALK_RANGE && (!tiger.userData.encounterController || tiger.userData.encounterController.report.phase === "meeting");
 
   if (isBlocked()) {
     if (d.active) {

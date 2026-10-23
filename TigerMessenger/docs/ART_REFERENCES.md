@@ -1,3 +1,9 @@
+## 2026-10-07 湖沼珊瑚方案与最新用户修正
+
+本轮以用户认可的珊瑚总览和原实际湖沼布局为设计依据；用户提供的蓝色森林漫画细节用于双黑色男娃花舟、圆鲸、小蜥蜴、长尾猴、荧光雀以及自然岩缝生长关系。灰紫崖壁、珊瑚岩沿、藕色树干、鼠尾草扇冠与浅青水是本项目选定配色，不称为 Gregorios Kythreotis 或 Mœbius 的原始数值。
+
+四张目标图使用 imagegen skill 与内置图像工具编辑，提示和备份存于 `artifacts/pipeline/greg-lake-approved-coral-flower-20261007/`。真实工厂保留世界树水下根、三岸高差、原故事船与动物关系；CPU与实际GPU证据见 `artifacts/pipeline/greg-lake-implementation-20261007/RESULTS.md`。threejs-* 指定技能路径本机缺失，本轮没有伪称加载。先前 GDC/GIF 研究只按已有可追溯记录引用，不新增全部媒体观看结论。研究代理团队不是原作者本人。
+
 ## 2026-10-05 高山圣城五小时批次与局部城堡WFC
 
 沿用 `OSKAR_DEEP_RESEARCH_STATUS.md`、`OSKAR_WORLD_ENGINE_STUDY.md` 与顾问技能中的公开研究。手工模块、兼容选择、建筑邻接和局部编辑是设计参考；球面变形、草缘阈值、色板与双层拱体均为本项目实现，不归称Oskar原始算法，也未新增完整音画观看结论。
@@ -405,3 +411,23 @@ Completed local tower top-storey correction: seated octagonal transition, thicke
 Advisor-guided project implementation: shared turf/woodland habitat, 8000 supported short-grass instances, copied terrain winding repaired, final-mesh cloud cache replacing stale HF. 731 planted roots supported; 23049 rail probes clear; protected structure hash unchanged; 7 tests pass. Actual evidence/limits/source links: `artifacts/pipeline/citadel-living-slopes/review.html`, `notes.md`, `advisor-cloud-method.md`. Not an exact Oskar shader reproduction; clouds remain thin in front view and turf patch edges angular.
 
 Final cloud follow-up: repaired duplicated -52 composition translation via explicit coordinate conversion. Final runtime cloud close-up/overview now visibly correct; 8 total tests pass, active cloud centres at least61.05 scene units from rail in capture. Final evidence in citadel-living-slopes/cloud-fixed*.png.
+
+## 2026-10-06 异文明金属地标
+用户认可罗马头盔守望者目标 `artifacts/pipeline/other-civilization-metal-20261006/statue-target-v2-roman.png` 与前腿抬起、后腿屈曲的黄铜马 `metal-horse-target-v3.png`。内置 imagegen 由用户海报参考演变；实际工厂已更新，尚待正常首页GPU外观核对。信使按用户头部、胸甲、腰胯束带、靴底参考修形，同样不把概念图作为实机证据。
+
+
+## 2026-10-07 最新材质与石门比例覆盖
+用户最新现场反馈覆盖此前金属材质：守望者采用奶白石材，恢复原高石台；木马采用木材与连续长马脸，保留悬空前腿、弓后腿。高山之门两根塔柱下部明显宽厚、向上收分，保中央轨道净空。执行对照仍为用户已批准的罗马头盔雕塑、弓腿木马、浅石双塔图片；没有另造新概念或宣称逐像素复现。正常首页证据保存在 citadel-five-hour-20261007，第一次雕塑近景仍含旧墨壳，后续去除后另验。
+
+## 2026-10-07 莫比斯游戏风格与用户实景修正
+研究入口 [MOEBIUS_GAME_ART_STUDY.md](MOEBIUS_GAME_ART_STUDY.md)：Sable / Gregorios Kythreotis（空间与地标）、Rollerdrome / Antoine Dekerle（色板与运动可读性）、Synergy / Vito Salamone（生态城市）；Aquamarine、Ultros 为湖沼补充，Caravan SandWitch 保留间接影响标签。原始来源、作者身份与观看范围分别记录。叹息之门本批仅按用户要求加昼夜灯位与实际受光材质，没有宣称复刻任何作者私有shader。
+本批造型仍按用户原目标及最新覆盖项：奶白石罗马守望者、真实木马关节，十二门徒大量绿色植物，低空云绕行前侧。CPU和未完成GPU状态见 artifacts/pipeline/citadel-user-fixes-20261007/STATUS.md。
+
+
+## 2026-10-11 当前湖沼目标与 Jakub
+Greg目标：artifacts/pipeline/greg-swamp-target-20261010/target-v3-current-courier.png。本批只实施青绿叶面/灰绿叶背与壁面矿斑，实际对照和局限见greg-swamp-iteration-20261011/REVIEW.md。Jakub来源账本docs/jakub/SOURCES.json；第二用户蒸汽镇图来源未证实，不能称Frostpunk2画面；指定X动态均未实看。
+
+### 2026-10-15 霸天重型轰炸机表现参考（非现实战术复刻）
+- USAF B-52事实页：https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104465/b-52-stratofortress/ — 采用其“远程重型轰炸机”的类别、体量与稳重感，不照搬现实武器参数。
+- DVIDS Luke Hill / 8th Air Force，2019-04-11，26秒《B-52 Areal B-roll》：https://www.dvidshub.net/video/673773/b-52-areal-b-roll — 页面说明专门展示机腹弹舱。网页文本已读；内嵌浏览器视频页超时，未声称播放或全量观看。
+- 游戏推演：连续航迹时钟、长直线与宽弧返回、转向限速、机头沿位移；六瓣铰接舱门在攻击前逐步展开。圈形路线与数值属于游戏尺度美术设计，不是B-52真实作战流程。

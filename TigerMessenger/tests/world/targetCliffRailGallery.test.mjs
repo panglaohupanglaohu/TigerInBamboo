@@ -133,3 +133,14 @@ test('measured new-east anchor neighbourhood uses the actual castle matrix and c
     console.log('actual-frame-east-gallery', JSON.stringify({ meshes: h.report.performance.meshes, triangles: h.report.performance.triangles, floorSamples: h.report.supportSamples.count, foundations: h.report.foundationSampledPass, status: h.report.status }));
   } finally { h.dispose(); }
 });
+
+test('rail-only approaches retain supported track slab and arches without an upper public level',()=>{
+ const h=createTargetCliffRailGallery(base({upperEnabled:false}));
+ try{
+  assert.equal(h.report.mode,'rail-only');assert.deepEqual(h.report.walkSurfaces,[]);
+  assert.equal(h.report.vehicleClearance.pass,true);assert.equal(h.report.foundationSampledPass,true);
+  assert.ok(h.group.getObjectByName('double-deck-lower-slab'));
+  let upper=0;h.group.traverse(o=>{if(o.userData.targetWalkable||/over-track-beam|upper-bearing|gallery-handrail/.test(o.name))upper++;});
+  assert.equal(upper,0);assert.ok(h.report.foundations.every(p=>p.upperOffset===-.75));
+ }finally{h.dispose();}
+});

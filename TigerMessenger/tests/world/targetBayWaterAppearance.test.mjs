@@ -24,3 +24,32 @@ test('final wet mask stores actual sea-sheet height and rejects incompatible dis
  original.fragmentShader=original.fragmentShader.replace('if (waterMask < 0.42) discard;','if (waterMask < 0.4) discard;');
  assert.throws(()=>createTargetBayWaterAppearance({ocean,castle:new THREE.Group(),finalWetMask:true,resolution:[3,3],sampleTerrain:()=>-20,sampleSea:()=>0}),/wet-mask contract/);assert.equal(ocean.material,original);ocean.geometry.dispose();original.dispose();
 });
+
+
+test('bridge-pier contact rings follow only the actual sea-plane intersection',()=>{
+ const material=createCurvedWaterMaterial(THREE),ocean=new THREE.Mesh(new THREE.SphereGeometry(10),material),castle=new THREE.Group();castle.position.set(12,8,-4);castle.rotation.y=.6;
+ const root=new THREE.Group();castle.add(root);
+ const pier=new THREE.Mesh(new THREE.BoxGeometry(1.2,8,1.2));pier.name='double-deck-side-pier-0';pier.position.set(3,0,1);root.add(pier);
+ const dry=pier.clone();dry.position.set(-3,8,1);root.add(dry);
+ const c=createTargetBayWaterAppearance({ocean,castle,bounds:[-8,8,-4,4],resolution:[17,9],sampleTerrain:()=>-5,sampleSea:()=>0});
+ assert.equal(c.bindContactMeshes([root]),1);const tex=ocean.material.uniforms.uCitadelPillarField.value.image;
+ const value=(x,z)=>tex.data[(Math.round((z+4)/8*(tex.height-1))*tex.width+Math.round((x+8)/16*(tex.width-1)))*4];
+ assert.equal(value(3,1),0);assert.ok(value(-3,1)>140);assert.ok(value(4,1)<value(7,1));
+ c.dispose();pier.geometry.dispose();pier.material.dispose();ocean.geometry.dispose();material.dispose();
+});
+
+test('wet bridge contacts retain their sea-sheet evidence outside sampled mountain terrain',()=>{
+ const source=createCurvedWaterMaterial(THREE),ocean=new THREE.Mesh(new THREE.SphereGeometry(10),source),castle=new THREE.Group();
+ const pier=new THREE.Mesh(new THREE.BoxGeometry(1,8,1));pier.name='shore-bridge-pier';pier.position.set(3,-2,1);castle.add(pier);
+ const sea=(x,z)=>-2+x*.02+z*.01;
+ const water=createTargetBayWaterAppearance({ocean,castle,finalWetMask:true,bounds:[-8,8,-4,4],resolution:[17,9],sampleTerrain:()=>null,sampleSea:sea});
+ assert.equal(water.report.wet,0);assert.equal(water.bindContactMeshes([castle]),1);
+ const f=ocean.material.uniforms.uCitadelPillarField.value.image;
+ const ix=Math.round(11/16*(f.width-1)),iz=Math.round(5/8*(f.height-1)),k=(iz*f.width+ix)*4;
+ assert.equal(f.data[k+3],255);assert.equal(f.data[k],0);
+ const actual=sea(-8+16*ix/(f.width-1),-4+8*iz/(f.height-1));
+ assert.ok(Math.abs(-400+(f.data[k+1]*256+f.data[k+2])/65535*500-actual)<.008);
+ assert.equal(f.data[3],0,'distant water gets no invented contact');
+ assert.match(ocean.material.fragmentShader,/max\(bayWet,pierRegion\)/);
+ water.dispose();pier.geometry.dispose();pier.material.dispose();ocean.geometry.dispose();source.dispose();
+});

@@ -2,7 +2,7 @@
 export function createBgmOwnership() {
   const requests=new Map(), elements=new Set(), versions=new WeakMap();
   let context={listener:null,saihoji:null},owner=null,needsResume=false,revision=0,activeElement=null;
-  const priorities={tram:100,infiltration:90,siege:85,storm:80,cue:79,fleet:70,bubble:60,musicBox:50,citadelElder:45,swamp:30,canyon:20};
+  const priorities={tram:100,batian:95,infiltration:90,siege:85,storm:80,cue:79,fleet:70,bubble:60,musicBox:50,citadelElder:45,swamp:30,canyon:20};
   const spatial=new Set(['storm','cue','fleet','siege','infiltration']);
   const finite=p=>p&&['x','y','z'].every(k=>Number.isFinite(p[k]));
   function nearby(key,r) {
@@ -61,7 +61,7 @@ export function createBgmOwnership() {
       el.addEventListener('ended',()=>{if(key!=='tram'&&!el.loop){const request=requests.get(key);if(request)request.active=false;reconcile();}});
       return el;
     },
-    snapshot(){return {owner,revision,listener:context.listener,requests:[...requests].map(([key,r])=>({key,active:r.active,inRange:r.inRange??null,distance:r.distance??null})),elements:[...elements].map(r=>({key:r.key,source:r.el.currentSrc||r.el.src,paused:r.el.paused,volume:r.readVolume(),currentTime:r.el.currentTime}))};},
+    snapshot(){return {owner,revision,listener:context.listener,requests:[...requests].map(([key,r])=>({key,active:r.active,inRange:r.inRange??null,distance:r.distance??null})),elements:[...elements].map(r=>({key:r.key,source:r.el.currentSrc||r.el.src,paused:r.el.paused,volume:r.readVolume(),currentTime:r.el.currentTime,readyState:r.el.readyState??null,networkState:r.el.networkState??null,mediaError:r.el.error?.code??null}))};},
   };
   return api;
 }

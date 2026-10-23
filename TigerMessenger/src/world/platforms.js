@@ -93,6 +93,20 @@ export function buildWorld(scene) {
       emissive: def.color,
       emissiveIntensity: rock ? 0.015 : 0.06,
     });
+    if (!rock) {
+      // Hills own the visible top in this footprint. Suppress the coincident shell fragments
+      // rather than letting two different lattices cut one another into square cards/stripes.
+      mat.onBeforeCompile = shader => {
+        shader.vertexShader = 'varying vec3 grassWorld;\n' + shader.vertexShader;
+        shader.vertexShader = shader.vertexShader.replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n grassWorld=(modelMatrix*vec4(transformed,1.0)).xyz;');
+        shader.fragmentShader = 'varying vec3 grassWorld;\n' + shader.fragmentShader;
+        shader.fragmentShader = shader.fragmentShader.replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+          vec3 gd=normalize(grassWorld);float ga=acos(clamp(gd.y,-1.0,1.0));
+          vec2 gxz=gd.xz*(ga*${PLANET_RADIUS.toFixed(1)}/max(.000001,length(gd.xz)));
+          if(gd.y>.64 && gxz.x>=${(-11.5*WORLD_SCALE).toFixed(1)} && gxz.x<=${(16.5*WORLD_SCALE).toFixed(1)} && gxz.y>=${(-15.5*WORLD_SCALE).toFixed(1)} && gxz.y<=${(12.5*WORLD_SCALE).toFixed(1)})discard;`);
+      };
+      mat.customProgramCacheKey = () => 'hex-grass-single-owner-v1';
+    }
     const mesh = new THREE.Mesh(geometry, mat);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -106,6 +120,7 @@ export function buildWorld(scene) {
           : { color: 0x6a8aba, transparent: true, opacity: 0.45 }
       )
     );
+    if (!rock) edge.visible = false;
     scene.add(edge);
 
     // 碰撞用：中心取台面中心方向上的点（半径 topR）

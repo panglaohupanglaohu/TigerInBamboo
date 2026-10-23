@@ -48,3 +48,8 @@ python3 tools/maintenance/archive_intermediates.py --restore --apply
 ## 2026-10-04 weekly maintenance
 
 Protected target-named parent directories and approved images in addition to target filenames. Added active citadel-living-slopes, old-tower-crown, citadel-vegetation and citadel-landform-rebuild batches to PINNED; no existing protection removed. Archived 1135 files / 562561857 bytes. All 1701 manifest-backed links and original HTTP URL bytes verified. No entries over90 days; tracked assets retained. Evidence: artifacts/maintenance/2026-10-04/report.md.
+
+
+## 2026-10-11 weekly maintenance
+
+按原保护规则外移524文件/482209058bytes（459.9MiB），2225原路径链接与原8931完整HTTP内容SHA验证全部通过，恢复不需要，重新计划候选0。项目9.28GiB/归档1.23GiB（du不跟随链接）；90天归档0；2163个受Git追踪旧媒体/模型约2.30GiB仍保留，无永久删除。证据artifacts/maintenance/2026-10-11/report.md及JSON。

@@ -1,3 +1,4 @@
+import {buildMountainSurfaceIndex} from './citadel/mountainSurfaceIndex.js';
 import * as THREE from 'three';
 import {createCoastalMaterial,bindCoastalMesh} from './seaStackLighting.js';
 
@@ -76,7 +77,7 @@ function bindWaterWave(foam,ocean){
 
 // Project-local water contact detail, from the rendered ocean and final rock.
 // Returns a rock-local group: caller must add it to rock (not directly scene).
-export function createSeaStackShoreContact(rock,ocean,scene){
+export function createSeaStackShoreContact(rock,ocean,scene,{oceanIndex=null}={}){
  scene.updateMatrixWorld(true);rock.updateWorldMatrix(true,false);
  const data=rock.userData.seaStack,meta=rock.geometry.userData.terraces;
  const waterStamp={objectUuid:ocean.uuid,geometryUuid:ocean.geometry.uuid,positionVersion:ocean.geometry.attributes.position.version,indexVersion:ocean.geometry.index?.version??null,worldMatrix:ocean.matrixWorld.toArray()};
@@ -96,12 +97,14 @@ export function createSeaStackShoreContact(rock,ocean,scene){
   for(const m of old.materials)if(!liveMaterials.has(m))m.dispose();
  }
 
+ // Snapshot only after final matrices, shared by all stacks during seating.
+ const waterSurface=oceanIndex||buildMountainSurfaceIndex([ocean]);
  const group=new THREE.Group();group.name='sea-stack-shore-contact';
  const anchor=new THREE.Vector3(...data.seaAnchor),up=anchor.clone().normalize();
  const u=new THREE.Vector3(1,0,0).applyQuaternion(rock.getWorldQuaternion(new THREE.Quaternion())).projectOnPlane(up).normalize(),v=up.clone().cross(u).normalize();
  const scale=rock.getWorldScale(new THREE.Vector3()),envelope=(meta.footprintRadius||data.radius*1.5)*Math.max(scale.x,scale.z),limit=envelope+1;
  const ray=new THREE.Raycaster(),positions=[],waterPositions=[],ribbonCoordinates=[],blockPositions=[],centers=[];let misses=0,maxRadial=0,maxFoamLift=0,occludedFoamSegments=0,shiftedFoamSegments=0;
- const waterAt=point=>{const direction=point.clone().normalize();ray.set(direction.clone().multiplyScalar(Math.max(point.length(),anchor.length())+120),direction.clone().negate());ray.far=300;return ray.intersectObject(ocean,false)[0]?.point.clone();};
+ const waterAt=point=>{const direction=point.clone().normalize();ray.set(direction.clone().multiplyScalar(Math.max(point.length(),anchor.length())+120),direction.clone().negate());ray.far=300;return waterSurface.sample(ray.ray,ray.near,ray.far)?.point.clone();};
  const local=point=>rock.worldToLocal(point.clone());
  function foamPoint(point){const water=waterAt(point);if(!water){misses++;return null;}const lifted=water.clone().addScaledVector(water.clone().normalize(),.035);maxFoamLift=Math.max(maxFoamLift,lifted.distanceTo(water));maxRadial=Math.max(maxRadial,water.clone().sub(anchor).projectOnPlane(up).length());return local(lifted);}
  function boundary(angle){

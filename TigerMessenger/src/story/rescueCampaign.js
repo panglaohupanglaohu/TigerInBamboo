@@ -6,7 +6,7 @@ import { createEscortMotion } from './escortMotion.js';
 import { resolveCollisions, resolveAssetColliders } from '../world/collision.js';
 
 const SAVE_KEY = 'tm.rescue.campaign.v1';
-export function createRescueCampaign({ scene, player, camera, messenger, worldLandmarks, fox, platforms = [], hills = null, colliders = [], isStarted, isRiding, toast }) {
+export function createRescueCampaign({ scene, player, camera, messenger, worldLandmarks, fox, platforms = [], hills = null, colliders = [], isStarted, isRiding, toast, getRideSpot = null }) {
   if (!messenger) return { update() {}, snapshot: () => null };
   let saved;
   try { saved = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch { /* fresh game */ }
@@ -164,7 +164,14 @@ export function createRescueCampaign({ scene, player, camera, messenger, worldLa
     up.copy(player.position).normalize();
     forward.copy(player.forward).addScaledVector(up, -player.forward.dot(up)).normalize();
     side.crossVectors(up, forward).normalize();
-    if (isRiding() || glide) {
+    const onDeck = isRiding() && getRideSpot?.(offset > 0 ? -1 : 1, followPos, forward);
+    if (onDeck) {
+      // 2026-10-10 用户：同乘飞艇时伙伴站在吊舱顶上、信使身边，不悬在半空。
+      walkers.delete(actor);
+      world.lerp(followPos, 1 - Math.exp(-dt * 10));
+      up.copy(world).normalize();
+      forward.addScaledVector(up, -forward.dot(up)).normalize();
+    } else if (isRiding() || glide) {
       // 随行：载具上或滑行跟随（glide）——直接收敛到玩家身旁。
       // 湖沼虎走不了山地步行网格（湖沼在 hills 之外会被碰撞钳回原地）。
       walkers.delete(actor);

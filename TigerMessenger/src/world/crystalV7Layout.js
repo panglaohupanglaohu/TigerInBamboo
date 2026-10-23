@@ -7,7 +7,9 @@ export function crystalV7Round() {
  if(!new URLSearchParams(location.search).has('crystalV7'))return 3;
  return Math.max(0,Math.min(3,Number(new URLSearchParams(location.search).get('crystalV7'))||0));
 }
-export const V7_SWAMP_LOCAL={lx:.28,lz:.08};
+// 2026-10-08: move the whole authored lake outside the tram and its piers.
+// Shores, navigation and core rotation derive from this single initial site.
+export const V7_SWAMP_LOCAL={lx:.30,lz:.45};
 export function crystalV7Layout(){
  const layout=generateHighRidgeLayout(20260803);
  // Keep the measured mother-tower berth transform exactly intact.

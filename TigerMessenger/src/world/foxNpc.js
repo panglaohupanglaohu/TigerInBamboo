@@ -57,6 +57,8 @@ export function createFoxNpc({
   isPlayerOnTram = () => false,
   getActiveTram = () => null,
   getFoxTramSeatLocal = null,
+  /** 2026-10-13：送信人乘飞艇时阿狸的座位（世界坐标 pos + 艇首朝向 fwd）；不在飞行中返回 false */
+  getAirshipSpot = null,
 }) {
   if (!fox) {
     return {
@@ -99,6 +101,42 @@ export function createFoxNpc({
   const _look = new THREE.Vector3();
   const _worldPos = new THREE.Vector3();
   const _worldQuat = new THREE.Quaternion();
+  // ---- 飞艇：跟随中的阿狸随送信人登上吊舱顶，卧在虎虎另一侧 ----
+  let onAirship = false;
+  const _shipPos = new THREE.Vector3(), _shipFwd = new THREE.Vector3(), _shipUp = new THREE.Vector3(), _shipSide = new THREE.Vector3(), _shipBasis = new THREE.Matrix4();
+  function sceneRoot() { let r = fox; while (r.parent) r = r.parent; return r; }
+  function placeOnAirship() {
+    // 阿狸局部 +X 为正脸、+Y 向上：正脸朝艇首，贴着星球径向站稳
+    _shipUp.copy(_shipPos).normalize();
+    _shipFwd.addScaledVector(_shipUp, -_shipFwd.dot(_shipUp)).normalize();
+    _shipSide.crossVectors(_shipFwd, _shipUp).normalize();
+    _shipBasis.makeBasis(_shipFwd, _shipUp, _shipSide);
+    fox.quaternion.setFromRotationMatrix(_shipBasis);
+    fox.position.copy(_shipPos).addScaledVector(_shipUp, 0.04);
+    fox.updateMatrixWorld(true);
+    if (fox.userData?.collider?.position) fox.userData.collider.position.copy(fox.position);
+  }
+  function boardAirship() {
+    if (onAirship || onTram) return false;
+    if (!homeParent) homeParent = fox.parent || null;
+    if (typeof fox.setCompanionRest === "function") fox.setCompanionRest(true);
+    else fox.userData.companionResting = true;
+    const root = sceneRoot();
+    if (fox.parent !== root) root.attach(fox);
+    onAirship = true;
+    idleMode = "airship";
+    if (elStatus) elStatus.textContent = "卧在飞艇吊舱顶陪你";
+    placeOnAirship();
+    return true;
+  }
+  function alightAirship(toast) {
+    if (!onAirship) return false;
+    // 复用电车下车流程：回到营地父节点、站起、落在送信人身旁继续跟随
+    onAirship = false; onTram = true; tramHost = fox.parent;
+    alightTram({ toast: false, keepFollow: isFollowing() });
+    if (toast && isFollowing()) showToast("阿狸跳下飞艇，继续跟着你～", 2.0);
+    return true;
+  }
   const _seatLocal = new THREE.Vector3();
 
   // ---------- 对话面板 ----------
@@ -525,8 +563,16 @@ export function createFoxNpc({
     // ---- 电车：跟随中的阿狸尾随上车、卧在送信人旁 ----
     const playerRiding = !!isPlayerOnTram?.();
     const tram = getActiveTram?.() || null;
+    // ---- 飞艇：送信人在飞（或降落中）且阿狸跟随 → 上吊舱顶 ----
+    const shipSeat = !playerRiding && isFollowing() && idleMode !== "stay" && !!getAirshipSpot?.(_shipPos, _shipFwd);
 
-    if (isFollowing() && playerRiding && tram && idleMode !== "stay") {
+    if (shipSeat) {
+      if (!onAirship) { if (boardAirship()) showToast("阿狸跳上飞艇，卧在吊舱顶陪你～", 2.4); }
+      else placeOnAirship();
+      animateFoxCompanion(fox, { time: t, dt, moving: false, playerPos: player.position });
+    } else if (onAirship) {
+      alightAirship(true);
+    } else if (isFollowing() && playerRiding && tram && idleMode !== "stay") {
       if (!onTram) {
         if (boardTram(tram)) {
           showToast("阿狸跳上电车，卧在你旁边～", 2.4);
@@ -591,9 +637,11 @@ export function createFoxNpc({
     isChatOpen: () => chatOpen,
     isFollowing,
     isOnTram: () => onTram,
+    isOnAirship: () => onAirship,
     boardTram,
     alightTram,
     dispose() {
+      if (onAirship) alightAirship(false);
       if (onTram) alightTram({ toast: false, keepFollow: false });
       window.removeEventListener("keydown", onKeyDown, { capture: true });
       if (elHint) elHint.classList.remove("show");

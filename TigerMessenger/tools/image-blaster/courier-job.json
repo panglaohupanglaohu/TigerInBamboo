@@ -1,0 +1,14 @@
+{
+  "upstream": "https://github.com/neilsonnn/image-blaster",
+  "revision": "4acb43ba126a12358f71838d1b1a05e856b10eaf",
+  "world": "tiger-messenger",
+  "objectId": "courier",
+  "provider": "hunyuan",
+  "faceCount": 50000,
+  "generateType": "Normal",
+  "enablePbr": true,
+  "imageEditPrompt": "Create exactly ONE full-body male courier from the largest full-body figure on the LEFT of this reference sheet. Preserve his rugged mature face, swept dark hair with grey streaks, short beard, teal headband with two tails, athletic proportions, blue-grey fitted suit, dark gloves, knee pads, boots, worn brown leather equipment and small travel backpack. The mail satchel must hang vertically at the side of the ribcage UNDER the arm, its broad face facing outward; it must NOT sit across the front of the forearm. Keep letters inside the bag and the rolled map on the backpack as attached parts of this single character. Neutral relaxed A-pose, arms slightly apart for later rigging, both empty hands and both boots fully visible, no gun. White background, centered single character, studio lighting. Exclude the other turnaround figures, all detail panels, all captions, all text, scene and ground shadows. Deliver one clean character reference image for image-to-3D, not a turnaround sheet.",
+  "generatedModel": null,
+  "state": "awaiting-local-FAL_KEY",
+  "rigging": "Hunyuan output is an appearance mesh; skeleton and current walk/ride/letter hooks require later integration."
+}

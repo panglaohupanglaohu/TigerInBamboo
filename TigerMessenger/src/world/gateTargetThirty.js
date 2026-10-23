@@ -79,12 +79,15 @@ export function installGateTargetThirty(gate){
   m.needsUpdate=true;root.onBeforeRender=()=>{};const before=ocean.onBeforeRender;ocean.onBeforeRender=function(...args){before?.apply(this,args);m.uniforms.uG30Time.value=performance.now()/1000;};
  }}
  const stations=[-23.76,-7.92,7.92,23.76];
+ // The eight existing crown emblems use their own merged material group.
+ const emblem=new THREE.MeshStandardMaterial({color:P.brass,roughness:.7,metalness:.15,emissive:0xffcd8c,emissiveIntensity:.12});emblem.name='gate-crown-emblem';
+ root.userData.crownEmblems=[];
  if(n>=16)for(const s of[-1,1])for(const z of stations)box(1.7,.55,1.65,stone,'pier-plinth',s*6.55,-11.3,z);
  if(n>=17)for(const s of[-1,1])for(const z of stations)box(1.7,.48,1.6,cream,'capital',s*6.55,-.65,z);
  if(n>=18)for(const s of[-1,1])for(const z of[-15.84,0,15.84]){const o=add(new THREE.TorusGeometry(7.1,.09,6,40,Math.PI),bronze,'lower-arch-rim',s*6.98,-12.5,z);o.rotation.y=Math.PI/2;}
  if(n>=19)for(const s of[-1,1])for(const y of[20.35,20.85])box(.18,.12,48.9,bronze,'cornice-step',s*7.03,y,0);
  if(n>=20)for(const s of[-1,1])for(const z of[-15.84,0,15.84]){const o=add(new THREE.TorusGeometry(7.48,.12,6,48,Math.PI),bronze,'upper-arch-band',s*7.05,11.44,z);o.rotation.y=Math.PI/2;o.scale.y=1.05;}
- if(n>=21)for(const s of[-1,1])for(const z of stations)ring(.82,.14,bronze,'mechanical-collar',s*7.35,20.475,z,true);
+ if(n>=21)for(const s of[-1,1])for(const z of stations){const badge=ring(.82,.14,emblem,'mechanical-collar',s*7.35,20.475,z,true);badge.userData.gateCrownEmblem=true;root.userData.crownEmblems.push({position:badge.position.toArray(),outward:[s,0,0],radius:.96});}
  if(n>=22)for(const s of[-1,1])for(const z of stations)for(const d of[-.45,.45])add(new THREE.CylinderGeometry(.065,.065,17,7),bronze,'drive-rod',s*7.05,9,z+d);
  if(n>=23)for(const s of[-1,1])for(const z of stations)for(const y of[3,7,11]){const o=ring(.48,.07,bronze,'pod-collar',s*6.65,y,z);o.rotation.x=Math.PI/2;}
  if(n>=24)for(const s of[-1,1])for(const z of stations)for(const d of[-.32,.32])box(.045,8,.045,bronze,'pod-mullion',s*6.85,7,z+d);
@@ -95,6 +98,6 @@ export function installGateTargetThirty(gate){
  if(n>=29)for(const s of[-1,1])for(const z of stations){add(new THREE.ConeGeometry(.12,2.8,6),new THREE.MeshBasicMaterial({color:0xf6bc65}),'gold-needle',s*6.55,23,z);}
  if(n>=30)for(let z=-24;z< -15.5;z+=.65)box(.06,.75,.06,bronze,'platform-baluster',-29.55+(root.userData.meetingShift?.[0]||0),3.95+(root.userData.meetingShift?.[1]||0),z+(root.userData.meetingShift?.[2]||0));
  root.userData.thirtyFeatures=GATE_THIRTY_STEPS.slice(0,n);
- root.updateWorldMatrix(true,true);const merged=mergeStaticGroup(root,{skip:o=>!o.name.startsWith('g30-')||o.material?.transparent,skipOutline:()=>true});for(const o of merged.surfaces)o.name='g30-static-ornaments';root.userData.thirtyBatchMeshes=merged.surfaces.length;
+ root.updateWorldMatrix(true,true);const merged=mergeStaticGroup(root,{skip:o=>!o.name.startsWith('g30-')||o.material?.transparent,skipOutline:()=>true,onSurface:(mesh,material)=>{if(material===emblem){mesh.userData.gateCrownEmblem=true;root.userData.crownEmblemMesh=mesh;}}});for(const o of merged.surfaces)o.name=o.userData.gateCrownEmblem?'g30-crown-emblems':'g30-static-ornaments';root.userData.thirtyBatchMeshes=merged.surfaces.length;
  site.updateWorldMatrix(true,true);
 }

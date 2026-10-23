@@ -153,6 +153,7 @@ if(piston){const delta=wheel.position.clone();piston.position.copy(delta).multip
  for(const joint of Object.values(joints))if(joint.userData.supportPoints){const matrix=inverse.clone().multiply(joint.matrixWorld);for(const p of joint.userData.supportPoints){support.fromArray(p).applyMatrix4(matrix);lowest=Math.min(lowest,support.y);}}
  if(Number.isFinite(lowest)){for(const j of Object.values(joints))if(j.parent===root)j.position.y-=lowest;root.userData.supportShift=-lowest;}
  if(firing&&aimPoint)aimLocustRifle(root,aimPoint);
+ if(firing&&aimPoint&&kind!=='locust'){const gun=kind==='ant'?root.getObjectByName('robot-pressure-cannon'):joints.turret;if(gun){root.updateWorldMatrix(true,true);const origin=gun.getWorldPosition(new THREE.Vector3()),z=aimPoint.clone().sub(origin).normalize(),up=origin.clone().normalize(),x=new THREE.Vector3().crossVectors(up,z).normalize(),y=new THREE.Vector3().crossVectors(z,x).normalize();if(x.lengthSq()>1e-6)gun.quaternion.copy(gun.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(x,y,z))));root.updateWorldMatrix(true,true);}}
  root.userData.animationState=state;root.userData.mobileFire={firing,weaponReady,transport,speed,aim,pitch};
 }
 

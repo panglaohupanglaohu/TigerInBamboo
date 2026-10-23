@@ -8,7 +8,7 @@ export function installGateSite(group,seat){
  const root=new THREE.Group();root.name='gate-canyon-site-blender';root.position.fromArray(data.origin);root.quaternion.fromArray(data.quaternion);
  const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.96,metalness:0,flatShading:true});
  for(const part of data.parts){const geometry=new THREE.BufferGeometry();for(const [key,values] of Object.entries({position:part.positions,normal:part.normals,color:part.colors}))geometry.setAttribute(key,new THREE.Float32BufferAttribute(values,3));geometry.computeBoundingSphere();const mesh=new THREE.Mesh(geometry,material);mesh.name=part.name;mesh.castShadow=true;mesh.receiveShadow=true;mesh.userData.gateWalkable=part.walkable;root.add(mesh);}
- root.userData.triangles=data.triangles;root.userData.approachRoute=data.approachRoute;group.add(root);seat.userData.siteRoot=root;return root;
+ root.userData.triangles=data.triangles;root.userData.approachRoute=[];root.userData.retiredLegacyApproachRoute=data.approachRoute.map(p=>[...p]);group.add(root);seat.userData.siteRoot=root;return root;
 }
 export function sampleGateSiteGround(root){
  if(!root)return()=>null;const ray=new THREE.Raycaster(),local=new THREE.Vector3(),up=new THREE.Vector3(),down=new THREE.Vector3(),origin=new THREE.Vector3();ray.far=2.5;const walkable=root.children.filter(o=>o.userData.gateWalkable),bounds=new THREE.Box3();for(const mesh of walkable){mesh.geometry.computeBoundingBox();bounds.union(mesh.geometry.boundingBox);}bounds.expandByScalar(3);

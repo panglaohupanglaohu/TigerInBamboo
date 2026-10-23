@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import {seatTownObject,BOOKSHOP_SITE_OUTLINE} from './bookshopTownSite.js';
+import {createBookshopMedicalTrain} from './bookshopMedicalTrain.js';
+import {seatTownObject,townSurfacePoint,BOOKSHOP_SITE_OUTLINE} from './bookshopTownSite.js';
 // Cached walkability grid + breadth-first routes; staggered requests avoid an
 // all-crowd pathfinding spike. Seeded random destinations, dwell and train yield.
 export function createBookshopPedestrians({base,colliders,tramSystem,R=160,isAlarm=()=>false}){
@@ -16,10 +17,11 @@ export function createBookshopPedestrians({base,colliders,tramSystem,R=160,isAla
  for(const [id,m]of workers.entries()){const pos=chart(m.getWorldPosition(wp)),home=world(near(pos));base.attach(m);m.scale.setScalar(1);actors.push({id,m,...home,home,wait:random()*9,path:[],speed:.65+random()*.55,phase:random()*6.28,blocked:0,legs:[m.getObjectByName('worker-leg--1'),m.getObjectByName('worker-leg-1')]});seatTownObject(base,m,home.x,home.z,random()*6.28,R);}
  let tick=0,nextPath=0,time=0,alarm=false;const trainPoints=[];
  function choose(a){let goal;if(alarm){goal={x:a.home.x,z:Math.min(a.home.z,-5)};}else{const destinations=[{x:0,z:32},{x:-20,z:45},{x:20,z:44},{x:-44,z:22},{x:32,z:45},a.home];goal=destinations[Math.floor(random()*destinations.length)];goal={x:goal.x+(random()-.5)*8,z:goal.z+(random()-.5)*8};}a.path=route(a,goal);a.wait=a.path.length?0:2+random()*3;}
- const api={actors,algorithm:'Cached walkability grid + BFS + seeded destinations + reciprocal yielding + staggered replans',update(dt){
-  time+=dt;tick+=dt;if(tick<.1)return;dt=Math.min(.2,tick);tick=0;const nowAlarm=!!isAlarm();if(nowAlarm!==alarm){alarm=nowAlarm;actors.forEach(a=>{a.path=[];a.wait=random()*1.5;});}
+ const medical=createBookshopMedicalTrain({base,actors,chart,routeWorld:(a,b)=>route(chart(a),chart(b)).map(p=>base.localToWorld(townSurfacePoint(base,p.x,p.z,R))),seatActor:a=>seatTownObject(base,a.m,a.x,a.z,0,R)});
+ const api={actors,medical,groundAt(p){const q=chart(p);return base.localToWorld(townSurfacePoint(base,q.x,q.z,R));},routeWorld(from,to){return route(chart(from),chart(to)).map(p=>base.localToWorld(townSurfacePoint(base,p.x,p.z,R)));},trainNear(p){return trainPoints.some(q=>q.distanceTo(p)<5);},algorithm:'Cached walkability grid + BFS + seeded destinations + reciprocal yielding + staggered replans',update(dt){
+  medical.update(dt);time+=dt;tick+=dt;if(tick<.1)return;dt=Math.min(.2,tick);tick=0;const nowAlarm=!!isAlarm();if(nowAlarm!==alarm){alarm=nowAlarm;actors.forEach(a=>{a.path=[];a.wait=random()*1.5;});}
   trainPoints.length=0;for(const s of tramSystem.freightServices)for(const v of[s.tram,...s.wagons])trainPoints.push(v.getWorldPosition(new THREE.Vector3()));
-  for(const a of actors){a.wait-=dt;if(!a.path.length){if(a.wait<=0&&time>=nextPath){choose(a);nextPath=time+.16;}continue;}
+  for(const a of actors){if(a.m.userData.bookshopDowned||a.m.userData.bookshopDefending||a.m.userData.bookshopMedical)continue;a.wait-=dt;if(!a.path.length){if(a.wait<=0&&time>=nextPath){choose(a);nextPath=time+.16;}continue;}
    const target=a.path[0],dx=target.x-a.x,dz=target.z-a.z,dist=Math.hypot(dx,dz);if(dist<.2){a.path.shift();if(!a.path.length)a.wait=2+random()*7;continue;}
    const step=Math.min(dist,a.speed*dt*(alarm?1.3:1)),x=a.x+dx/dist*step,z=a.z+dz/dist*step;
    const blocked=actors.some(b=>b!==a&&Math.hypot(x-b.x,z-b.z)<.68&&(b.id<a.id||!b.path.length));
@@ -27,5 +29,5 @@ export function createBookshopPedestrians({base,colliders,tramSystem,R=160,isAla
    if(blocked||trainNear){a.blocked+=dt;if(a.blocked>6&&!trainNear){a.path=[];a.wait=.5+random()*2;a.blocked=0;}continue;}
    a.blocked=0;a.x=x;a.z=z;a.phase+=dt*a.speed*7;seatTownObject(base,a.m,x,z,Math.atan2(dx,dz),R);for(const[i,leg]of a.legs.entries())if(leg)leg.rotation.x=Math.sin(a.phase+i*Math.PI)*.28;
   }
- },snapshot(){return{count:actors.length,alarm,walking:actors.filter(a=>a.path.length&&a.blocked===0).length,trainYielding:actors.filter(a=>a.blocked>0).length};}};return api;
+ },snapshot(){return{medical:medical.snapshot(),count:actors.length,alarm,walking:actors.filter(a=>a.path.length&&a.blocked===0).length,trainYielding:actors.filter(a=>a.blocked>0).length};}};return api;
 }

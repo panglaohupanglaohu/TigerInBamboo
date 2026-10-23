@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {bookshopRaiseAtWorld} from './bookshopTownSite.js';
 
 // Deform static factory geometry onto the planet while transporting its authored
 // normals with the deformation Jacobian. Recomputing non-indexed normals turns
@@ -14,12 +15,13 @@ export function warpFactoryToSphere(shop,district,R){
  shop.traverse(o=>{
   if(!o.isMesh||o.userData.dynamicTownWorker)return;
   const rel=inverse.clone().multiply(o.matrixWorld),back=rel.clone().invert();
+  const lift=bookshopRaiseAtWorld(o.getWorldPosition(new THREE.Vector3()),R);
   const normalToDistrict=new THREE.Matrix3().getNormalMatrix(rel),normalBack=new THREE.Matrix3().getNormalMatrix(back);
   o.geometry=o.geometry.clone();const pos=o.geometry.attributes.position,norm=o.geometry.attributes.normal;
   for(let i=0;i<pos.count;i++){
    p.fromBufferAttribute(pos,i).applyMatrix4(rel);const height=p.y;
    v.set(p.x,0,p.z).sub(sphereCenter);const len=v.length();u.copy(v).divideScalar(len);
-   const radius=R+.92+height;
+   const radius=R+.92+lift+height;
    dx.set(1,0,0).addScaledVector(u,-u.x).multiplyScalar(radius/len);
    dz.set(0,0,1).addScaledVector(u,-u.z).multiplyScalar(radius/len);
    if(norm){n.fromBufferAttribute(norm,i).applyMatrix3(normalToDistrict).normalize();a.crossVectors(u,dz).multiplyScalar(n.x);b.crossVectors(dz,dx).multiplyScalar(n.y);c.crossVectors(dx,u).multiplyScalar(n.z);n.copy(a).add(b).add(c).applyMatrix3(normalBack).normalize();norm.setXYZ(i,n.x,n.y,n.z);}

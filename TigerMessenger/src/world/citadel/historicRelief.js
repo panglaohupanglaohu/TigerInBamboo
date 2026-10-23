@@ -37,7 +37,7 @@ export function buildHistoricRelief(root){
    }
   }
  }
- if(root.name==='highland-gate'&&root.userData.toRailWorld){
+ if(root.name==='highland-gate'&&root.userData.toRailWorld&&!root.userData.approvedMonument){
   const g=group(root,'historic-gate-stone-cornices',33);
   const inv=root.matrixWorld.clone().invert();
   for(const x of[-12.7,12.7])for(const y of[29.9,30.35]){
