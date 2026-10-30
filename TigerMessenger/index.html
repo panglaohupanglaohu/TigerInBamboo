@@ -1813,7 +1813,12 @@
             "[TigerMessenger] three.js source: local vendor" +
               (wantCdn ? "（已忽略 ?cdn=1，默认本地更稳）" : "")
           );
-          await import("./src/main.js?v=20261029-morris-threeview-r81");
+          // Public Pages uses a compact release; localhost keeps source iteration.
+          const localHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+          const release = !localHost || new URLSearchParams(location.search).has("bundle");
+          const entry = release ? "./runtime/game-5de701c63638.js" : "./src/main.js?v=20261029-morris-threeview-r81";
+          console.info("[TigerMessenger] entry:", entry);
+          await import(entry);
         }
       }
     } catch (err) {

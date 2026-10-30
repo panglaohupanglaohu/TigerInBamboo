@@ -1,0 +1,306 @@
+{
+  "file": "game-5de701c63638.js",
+  "sha256": "5de701c63638d2d3ca5d0f76d9a7b5d2e6c4c024aff0bc2791fea4daea4f8550",
+  "bytes": 6539113,
+  "sourceModules": 831,
+  "externalImports": [
+    "three/addons/loaders/GLTFLoader.js",
+    "three",
+    "three/addons/utils/BufferGeometryUtils.js",
+    "three/addons/misc/Timer.js"
+  ],
+  "preservedSourceUrls": [
+    "src/main.js",
+    "src/ui/targetCityPresentation.js",
+    "src/audio/sfx.js",
+    "src/world/morrisPrincess.js",
+    "src/quest/memoryBridge.js",
+    "src/story/storyboardLevelPanel.js",
+    "src/world/morrisPrincessAsset.js",
+    "src/assets/characters/courierBlenderV2.js",
+    "src/audio/morrisGardenBgm.js",
+    "src/audio/batianBgm.js",
+    "src/audio/robotWeaponSamples.js",
+    "runtime/packedData.js",
+    "src/assets/characters/tigerSkinV3.js",
+    "src/world/citadel/harborArchitecture.js",
+    "src/world/morrisHorseAsset.js",
+    "src/world/citadel/installFrontBoarding.js"
+  ],
+  "packedData": [
+    {
+      "source": "assets/models/optimized/canal-junction/junctionTargetData.js",
+      "file": "data/2deac8ebc1cce565.bin",
+      "rawBytes": 9950645,
+      "bytes": 336339,
+      "sha256": "2deac8ebc1cce565314f074c9cb28f591b2630af1fecfeeec59f03c80b6db396"
+    },
+    {
+      "source": "assets/models/optimized/gate-of-sighs/gateTargetData.js",
+      "file": "data/f23dda0f179c47ac.bin",
+      "rawBytes": 4901775,
+      "bytes": 349607,
+      "sha256": "f23dda0f179c47acb6f20fd89c9f7595458d2aef031fdec266cac0430c1787f3"
+    },
+    {
+      "source": "assets/models/optimized/gate-heroes/gateHeroesData.js",
+      "file": "data/2f7b1883b80fa701.bin",
+      "rawBytes": 1066832,
+      "bytes": 75283,
+      "sha256": "2f7b1883b80fa701f7856f8242e582a55d01448987bb796438d9e858199f6153"
+    },
+    {
+      "source": "assets/models/optimized/gate-of-sighs/gateSiteData.js",
+      "file": "data/8fcba95e8cbf6efa.bin",
+      "rawBytes": 14310996,
+      "bytes": 1216603,
+      "sha256": "8fcba95e8cbf6efa7d48054939dfebf8ecdb483f71e057142012d52a81538da2"
+    },
+    {
+      "source": "src/assets/battleSoccoData.js",
+      "file": "data/d63e44518518b388.bin",
+      "rawBytes": 877751,
+      "bytes": 57830,
+      "sha256": "d63e44518518b38820fe64fdf8a8154842cf77f90f4bbd55aabe013887fa2d13"
+    },
+    {
+      "source": "src/assets/battleVanguardData.js",
+      "file": "data/45fc48b9bc742eec.bin",
+      "rawBytes": 1238034,
+      "bytes": 89841,
+      "sha256": "45fc48b9bc742eecde623220c95d8053039530eed60b1f0ca14cd57b9b3e7eb6"
+    },
+    {
+      "source": "assets/models/optimized/gate-of-sighs/gateDressingData.js",
+      "file": "data/0529598d0b9c469b.bin",
+      "rawBytes": 6872629,
+      "bytes": 448805,
+      "sha256": "0529598d0b9c469bae4162c4d684a0a41696190c9f642c24d8aed33f9a46ffa9"
+    },
+    {
+      "source": "assets/models/optimized/moebiusTigerAnatomyData.js",
+      "file": "data/eacac5dbe28fc828.bin",
+      "rawBytes": 2676416,
+      "bytes": 222996,
+      "sha256": "eacac5dbe28fc828439d4f190d8f768cbcaa72a32d13c02b408a79521024ad4d"
+    },
+    {
+      "source": "src/assets/warshipV6Data.js",
+      "file": "data/e05b91eb22105e65.bin",
+      "rawBytes": 8297917,
+      "bytes": 933577,
+      "sha256": "e05b91eb22105e6595ce78e3da83e7306bd2e8763512c6fde38a6a399bbc5edb"
+    },
+    {
+      "source": "src/assets/saihojiPineData.js",
+      "file": "data/99ae997979d5775d.bin",
+      "rawBytes": 9486691,
+      "bytes": 2859034,
+      "sha256": "99ae997979d5775d39dd06a1bbf9ab232f37c1bdb35d228564010a43a364fe83"
+    },
+    {
+      "source": "assets/models/optimized/citadel-horse-terrace/masonryData.js",
+      "file": "data/360cec1244ec1661.bin",
+      "rawBytes": 2749755,
+      "bytes": 68583,
+      "sha256": "360cec1244ec16611a7e0be18109d8d35d66a7082628561715a8f98837c9cba5"
+    },
+    {
+      "source": "assets/models/optimized/citadel-west-massif/westMassifR02.js",
+      "file": "data/b8c4345c1684ca7f.bin",
+      "rawBytes": 600846,
+      "bytes": 75099,
+      "sha256": "b8c4345c1684ca7f67418303c5f03e52b34f9c8477f0e961eb1303f0ef72c304"
+    },
+    {
+      "source": "assets/models/optimized/citadel-processional-parapets/processionalParapets.js",
+      "file": "data/4775f3b91aba3eaf.bin",
+      "rawBytes": 386806,
+      "bytes": 21521,
+      "sha256": "4775f3b91aba3eaffe454dd769417fc633188bcca8de9d52158a881587a4adc6"
+    },
+    {
+      "source": "assets/models/optimized/citadel-compact-foundations/compactFoundationsR05.js",
+      "file": "data/fff874153dca1146.bin",
+      "rawBytes": 1618505,
+      "bytes": 190361,
+      "sha256": "fff874153dca11461ede38f9ce28283679172ad10f104d2a368819f1858212c7"
+    },
+    {
+      "source": "assets/models/optimized/citadel-middle-terraces/middleTerracesR01.js",
+      "file": "data/514cafeb354d8b8c.bin",
+      "rawBytes": 298082,
+      "bytes": 20091,
+      "sha256": "514cafeb354d8b8c32c15dcd9f0acb5fce5b37a0ea57b29620b6b17374a8eb1e"
+    },
+    {
+      "source": "src/assets/claudeCitadelHousesData.js",
+      "file": "data/8d6b9669fd33ce58.bin",
+      "rawBytes": 313575,
+      "bytes": 22173,
+      "sha256": "8d6b9669fd33ce58ed53bc9f355ac65eab6eb24bf7d9dd6853cac0267b4d9014"
+    },
+    {
+      "source": "assets/models/optimized/citadel-statue/citadelStatueData.js",
+      "file": "data/ac6c08cd083406ec.bin",
+      "rawBytes": 425418,
+      "bytes": 41819,
+      "sha256": "ac6c08cd083406ec9a5c9e08084a8aef234344e2b3cf455a6b696fa80db10f34"
+    },
+    {
+      "source": "assets/models/optimized/citadel-plaza-edge/plazaEdgeR03.js",
+      "file": "data/fac73739cc21dbf2.bin",
+      "rawBytes": 1765963,
+      "bytes": 96984,
+      "sha256": "fac73739cc21dbf240a72bd827ad1d9e17438d4cf270c5f2d21547858db13bc3"
+    },
+    {
+      "source": "assets/models/optimized/citadel-plaza-edge/plazaEdgeR01.js",
+      "file": "data/a2e941d6eab49bc0.bin",
+      "rawBytes": 1546620,
+      "bytes": 81513,
+      "sha256": "a2e941d6eab49bc007e119dff2facf45f1e6f22a4590aa2bbd891b36f263c314"
+    },
+    {
+      "source": "assets/models/optimized/citadel-plaza-edge/plazaEdgeR02.js",
+      "file": "data/c727299a35ceaaa6.bin",
+      "rawBytes": 1657961,
+      "bytes": 89704,
+      "sha256": "c727299a35ceaaa64cf35a4fd94f89179af2620e4c08fcf1f8e9f3761af0b979"
+    },
+    {
+      "source": "assets/models/optimized/citadel-rock-shoulder/rockShoulderR02.js",
+      "file": "data/68e8fad894adbd26.bin",
+      "rawBytes": 1524099,
+      "bytes": 135464,
+      "sha256": "68e8fad894adbd2622ca8614f05e26aab0dfa250ba30825a3523c614c3d271a9"
+    },
+    {
+      "source": "assets/models/optimized/citadel-upper-rock-terraces/upperRockTerracesR01.js",
+      "file": "data/af4b5c8f7b0046ef.bin",
+      "rawBytes": 641177,
+      "bytes": 59704,
+      "sha256": "af4b5c8f7b0046ef7a3d21bde39ebd2b2b5c66867dcc6cce6b7c5c80d9094ec6"
+    },
+    {
+      "source": "assets/models/optimized/citadel-old-city-slope/oldCityCoastalR03.js",
+      "file": "data/d61f6911249234d7.bin",
+      "rawBytes": 13016305,
+      "bytes": 1338753,
+      "sha256": "d61f6911249234d7d2b2ae698690f84752154974673f7d9c5a80bb2b54545a2e"
+    },
+    {
+      "source": "assets/models/optimized/citadel-front-coast/frontCoastOpenWater.js",
+      "file": "data/c5a0d1bc8eefda80.bin",
+      "rawBytes": 24349811,
+      "bytes": 3196163,
+      "sha256": "c5a0d1bc8eefda80985a4ebd0873c7051f23b957cc1c2681c561409b03348eb2"
+    },
+    {
+      "source": "assets/models/optimized/citadel-shore-arcades/shoreArcadesR01.js",
+      "file": "data/3e0d735ce5ec8122.bin",
+      "rawBytes": 725948,
+      "bytes": 45741,
+      "sha256": "3e0d735ce5ec8122447c6191a1c31eefc0840350ba02574db709c941ef3bf194"
+    },
+    {
+      "source": "assets/models/optimized/citadel-plaza-retaining/plazaRetainingR01.js",
+      "file": "data/e9ed84ff3365cdb4.bin",
+      "rawBytes": 341639,
+      "bytes": 28243,
+      "sha256": "e9ed84ff3365cdb42025c7f4ef0565b31ea37e7970c75cee3d043feb8d381080"
+    },
+    {
+      "source": "assets/models/optimized/citadel-plaza-retaining/plazaRetainingR02.js",
+      "file": "data/b17c0a1d31606677.bin",
+      "rawBytes": 589036,
+      "bytes": 52063,
+      "sha256": "b17c0a1d316066770c93c30957dbacdf795aedbf6786049a04ba8bd34383ed57"
+    },
+    {
+      "source": "assets/models/optimized/citadel-plaza-retaining/plazaRetainingR04.js",
+      "file": "data/93f0ae551d4cb3bd.bin",
+      "rawBytes": 6109662,
+      "bytes": 766240,
+      "sha256": "93f0ae551d4cb3bd58df0ea94ee0e7ebedecd17981dab9b41d38d5b7dc8e6d6b"
+    },
+    {
+      "source": "assets/models/optimized/citadel-watergate/watergateR01.js",
+      "file": "data/d88afaf402711902.bin",
+      "rawBytes": 1837582,
+      "bytes": 114511,
+      "sha256": "d88afaf402711902dd5ee3a26a74f0dbc6c63fe167065ba0b5c0e41feeb159a2"
+    },
+    {
+      "source": "assets/models/optimized/citadel-master-terrain/masterTerrainR06.js",
+      "file": "data/937cccf1c28757e8.bin",
+      "rawBytes": 346665,
+      "bytes": 35124,
+      "sha256": "937cccf1c28757e888984b0add08f2259cb1e7daeafe8320af0c93cf33d2a3f6"
+    },
+    {
+      "source": "assets/models/optimized/citadel-master-terrain/masterTerrainR08.js",
+      "file": "data/644345405917407a.bin",
+      "rawBytes": 3063751,
+      "bytes": 273047,
+      "sha256": "644345405917407afabb68ff178c87dad21c82b458cad5613b9cec88f41635c1"
+    },
+    {
+      "source": "assets/models/optimized/citadel-master-terrain/masterTerrainR07.js",
+      "file": "data/74ad45838c8c7158.bin",
+      "rawBytes": 3064087,
+      "bytes": 273878,
+      "sha256": "74ad45838c8c71584a6c40b027fab1752e3801dd2425957551ca49c7fba08efb"
+    },
+    {
+      "source": "assets/models/optimized/citadel-master-terrain/masterTerrainR09.js",
+      "file": "data/a09b1c83dff30200.bin",
+      "rawBytes": 2876979,
+      "bytes": 257074,
+      "sha256": "a09b1c83dff3020063da136f084c0f0872bc62723598c244d171256951e4f4b2"
+    },
+    {
+      "source": "assets/models/optimized/citadel-master-terrain/masterTerrainR03.js",
+      "file": "data/19d7976c714b9a0a.bin",
+      "rawBytes": 209503,
+      "bytes": 21340,
+      "sha256": "19d7976c714b9a0a0894530bd803b51948a496c7ae6ed6219d9dc6123fdcfe06"
+    },
+    {
+      "source": "assets/models/optimized/citadel-master-terrain/masterTerrainR02.js",
+      "file": "data/bbeb01b823f1c685.bin",
+      "rawBytes": 956838,
+      "bytes": 123233,
+      "sha256": "bbeb01b823f1c685dea09a2a4a45b04dec99b2ef96fb8fa40ab8100c78242300"
+    },
+    {
+      "source": "assets/models/optimized/citadel-master-terrain/masterTerrainR05.js",
+      "file": "data/a23505084a3bf557.bin",
+      "rawBytes": 346637,
+      "bytes": 35318,
+      "sha256": "a23505084a3bf557a96d3487c837fe57aef1ea58ecb4fbcb4c65a2b2dfd9028b"
+    },
+    {
+      "source": "assets/models/optimized/citadel-master-terrain/masterTerrainR04.js",
+      "file": "data/8253c460f76f390e.bin",
+      "rawBytes": 346621,
+      "bytes": 34160,
+      "sha256": "8253c460f76f390e000cb91e41ce16dc79cdfaef50b69df9a1d55bd6a9567378"
+    },
+    {
+      "source": "assets/models/optimized/citadel-harbor-curtain/harborCurtainR01.js",
+      "file": "data/181f5dc12e419b65.bin",
+      "rawBytes": 2284823,
+      "bytes": 128693,
+      "sha256": "181f5dc12e419b65961322ccd3b0a3a4efa8bfd9e9c29fb210fcadcdeb6bf02a"
+    },
+    {
+      "source": "assets/models/optimized/citadel-front-harbor-finish/frontHarborFinishR06.js",
+      "file": "data/e4fdbc301506ac89.bin",
+      "rawBytes": 13514276,
+      "bytes": 778874,
+      "sha256": "e4fdbc301506ac89df3ff2654d438c8ede784415f792370c51293ac8c592a2ca"
+    }
+  ],
+  "sourceMode": "committed HEAD"
+}
