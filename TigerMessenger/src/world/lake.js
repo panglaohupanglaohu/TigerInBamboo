@@ -9,8 +9,9 @@ import { flatToWorld, quatYToDir, latLonToDir, flatXZToLatLon } from "./sphereMa
 import { PLANET_RADIUS } from "./planet.js";
 import { canyonOffsetDir } from "./canyon.js";
 import { WORLD_SCALE } from "./worldScale.js";
-import { createMoonOrb } from "./moonOrb.js";
+import { createMoonOrb } from "./moonOrb.js?v=lake-orbit-20261024";
 import { installMoonLakeAncientPine } from "../assets/moonLakeAncientPine.js";
+import {moonWaterGeometry,moonDeepGeometry,createMoonLakeShore} from './moonLakeShore.js?v=shore-r2-20261025';
 
 export const LAKE = {
   x: 4 * WORLD_SCALE,
@@ -62,12 +63,9 @@ export function createMoonLake(scene, planetRadius = PLANET_RADIUS) {
   g.quaternion.copy(quatYToDir(_dir, new THREE.Quaternion()));
 
   // 月牙浅水：外圆 - 偏心内圆（缺口）
-  const shape = new THREE.Shape();
-  shape.absarc(0, 0, LAKE.rOuter, 0, Math.PI * 2, false);
-  const hole = new THREE.Path();
-  hole.absarc(1.1, 0.7, LAKE.rOuter * 0.72, 0, Math.PI * 2, true);
-  shape.holes.push(hole);
-  const waterGeo = new THREE.ShapeGeometry(shape, 28);
+  // The eccentric circle crosses the outside circle. It is an open crescent
+  // cutout, never a Shape hole extending outside its parent polygon.
+  const waterGeo = moonWaterGeometry();
   const water = new THREE.Mesh(
     waterGeo,
     toonMat(0x4a7a8a, { transparent: true, opacity: 0.82, side: THREE.DoubleSide })
@@ -94,12 +92,14 @@ export function createMoonLake(scene, planetRadius = PLANET_RADIUS) {
 
   // 深水：墨青暗色圆（视觉标识阻挡区）
   const deep = new THREE.Mesh(
-    new THREE.CircleGeometry(LAKE.rDeep, 20),
+    moonDeepGeometry(waterGeo,{x:LAKE.deepDX,y:-LAKE.deepDZ,radius:LAKE.rDeep}),
     toonMat(0x2e5568, { transparent: true, opacity: 0.9, side: THREE.DoubleSide })
   );
   deep.rotation.x = -Math.PI / 2;
-  deep.position.set(LAKE.deepDX, 0.02, LAKE.deepDZ);
+  deep.position.y = 0.02;
   g.add(deep);
+  const shore=createMoonLakeShore();
+  g.add(shore);
 
   // 环湖小径：沙色环带（绕湖动线的视觉引导）
   const path = new THREE.Mesh(
@@ -170,6 +170,7 @@ export function createMoonLake(scene, planetRadius = PLANET_RADIUS) {
     reflect,
     moonOrb,
     ancientPine,
+    shore,
     _splashCooldown: 0,
   };
 }
@@ -203,9 +204,10 @@ export function updateLakeFx(lake, player, t, dt) {
   // 玩家坐标要换到湖局部（月光路是在切平面里摆的）——下面涉水水花那段
   // 也要做同一次换算，所以这里先算一次，两边共用。
   let viewerLocal = null;
-  if (player?.position) {
+  const viewerPosition=lake.viewerOverride??player?.position;
+  if (viewerPosition) {
     _quatInv.copy(lake.group.quaternion).invert();
-    viewerLocal = _local.copy(player.position).sub(lake.group.position).applyQuaternion(_quatInv);
+    viewerLocal = _local.copy(viewerPosition).sub(lake.group.position).applyQuaternion(_quatInv);
   }
   lake.moonOrb?.update?.(t, dt, viewerLocal);
 

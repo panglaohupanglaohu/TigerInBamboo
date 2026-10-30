@@ -47,7 +47,12 @@ export function createSceneDistanceCulling(THREE_, {
     return false;
   };
 
-  const isExcluded = (object) => object.userData.noDistanceCulling === true || matchesUpChain(object, excluded);
+  const isExcluded = (object) => {
+    // Rigged characters can be deeper than the six-level name heuristic.
+    // Explicit ownership applies through the full hierarchy, including async GLB joints.
+    for (let node=object;node;node=node.parent) if(node.userData.noDistanceCulling===true)return true;
+    return matchesUpChain(object, excluded);
+  };
 
   const collect = () => {
     entries = [];

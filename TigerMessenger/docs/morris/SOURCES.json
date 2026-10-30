@@ -1,0 +1,94 @@
+{
+  "sources": [
+    {
+      "id": "va-wallpaper",
+      "title": "William Morris and wallpaper design",
+      "url": "https://www.vam.ac.uk/articles/william-morris-and-wallpaper-design",
+      "publisher": "Victoria and Albert Museum",
+      "accessed": "2026-10-27",
+      "coverage": "article text lines 34–63 read; no claim of museum-image pixel inspection",
+      "facts": [
+        "Close observation of nature is stylised rather than literal transcription.",
+        "Later patterns interweave foreground and background foliage."
+      ],
+      "project_inference": "Use repeatable curved stem graphs and layered botanical silhouettes rather than unconstrained random scatter."
+    },
+    {
+      "id": "wmg-acanthus",
+      "title": "Acanthus wallpaper B32b.2",
+      "url": "https://wmgallery.org.uk/object/acanthus-wallpaper-5/",
+      "publisher": "William Morris Gallery",
+      "accessed": "2026-10-27",
+      "coverage": "catalogue text lines39–63 read; image URL located, not counted as visual study",
+      "facts": [
+        "Designed1874, registered22July1875.",
+        "Repeat66cm,30woodblocks."
+      ],
+      "project_inference": "Build a reusable controlled motif cell; game dimensions and code formulas are proposed engineering parameters, not historical Morris algorithms."
+    },
+    {
+      "id": "wmg-embroidery",
+      "title": "Wool on linen collection entries F335 and F430",
+      "url": "https://wmgallery.org.uk/material/wool-on-linen/",
+      "publisher": "William Morris Gallery",
+      "accessed": "2026-10-27",
+      "coverage": "catalogue text65–68 and124–126 read",
+      "facts": [
+        "F335 combines alternating stylised flower clumps over arabesque stems and leaves.",
+        "F430 peacock is attributed toWebb; vine pattern toMorris."
+      ],
+      "project_inference": "Separate large motif from small interstitial pattern; preserve collaborative attribution for fauna."
+    },
+    {
+      "id": "nt-hare",
+      "title": "The Hare, study for The Forest tapestry NT2900066.2",
+      "url": "https://www.nationaltrustcollections.org.uk/object/2900066.2",
+      "publisher": "National Trust Collections",
+      "accessed": "2026-10-27",
+      "coverage": "catalogue text620–664 read; date inconsistencies within page retained as caution",
+      "facts": [
+        "Hare drawing attributed toPhilipWebb.",
+        "The Forest tapestry described asMorris,Webb,Dearle collaboration.",
+        "Scaling gridlines used for tapestry cartoon."
+      ],
+      "project_inference": "Animal silhouettes should be carefully observed, then integrated with ornamental foliage; do not attribute every animal drawing toMorris."
+    },
+    {
+      "id": "va-webb",
+      "title": "Philip Webb: a new vision for domestic space",
+      "url": "https://www.vam.ac.uk/articles/philip-webb-a-new-vision-for-domestic-space",
+      "publisher": "Victoria and Albert Museum",
+      "accessed": "2026-10-27",
+      "coverage": "article text32–49 read",
+      "facts": [
+        "Red House architecture byWebb, working closely withMorris.",
+        "Asymmetry,natural materials and landscape integration are discussed."
+      ],
+      "project_inference": "Preserve island castle identity while relating material,forecourt and planting; user castle is original fantasy proposal, not a historicalMorris building."
+    },
+    {
+      "id": "nt-red-house",
+      "title": "Red House",
+      "url": "https://www.nationaltrust.org.uk/visit/london/red-house",
+      "publisher": "National Trust",
+      "accessed": "2026-10-27",
+      "coverage": "official page text and search excerpt read; no visit claim",
+      "facts": [
+        "Red House combines architecture,original crafted interiors and garden."
+      ],
+      "project_inference": "Treat castle and garden as a coordinated composition."
+    },
+    {
+      "id": "va-textiles-failed",
+      "title": "William Morris textiles",
+      "url": "https://www.vam.ac.uk/articles/willam-morris-textiles",
+      "publisher": "Victoria and Albert Museum",
+      "accessed": "2026-10-27",
+      "coverage": "search snippet only; article open timed out",
+      "facts": [],
+      "project_inference": null
+    }
+  ],
+  "scope": "First bounded research batch, not complete mastery of Morris oeuvre",
+  "historical_algorithm_claim": false
+}

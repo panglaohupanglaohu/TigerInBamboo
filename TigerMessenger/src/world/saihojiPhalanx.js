@@ -1,3 +1,4 @@
+import {interceptSaihojiFleetProjectile,applySaihojiFleetHullContact,recordSaihojiFleetContact} from './saihojiFleetContact.js?v=saihoji-battle-r9-20261025';
 import {saihojiBattleTrigger} from './saihojiBattleTrigger.js';
 import {throttledCollect} from '../core/sceneLookup.js';
 let harborCandidates = null;
@@ -1029,7 +1030,7 @@ export function createSaihojiPhalanxBattle({
               s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
               if (s.userData._meleeCd <= 0) {
                 s.userData._meleeCd = 1.4 + rand() * 0.6;
-                const r = applyVanguardHit(grudgeFoe, "melee");
+                const r = hitVanguard(grudgeFoe, "melee");
                 if (r.wounded) {
                   root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
                 }
@@ -1077,7 +1078,7 @@ export function createSaihojiPhalanxBattle({
               s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
               if (s.userData._meleeCd <= 0) {
                 s.userData._meleeCd = 1.2 + rand() * 0.5;
-                const r = applyVanguardHit(grudgeFoe, "melee");
+                const r = hitVanguard(grudgeFoe, "melee");
                 if (r.wounded) {
                   root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
                 }
@@ -1692,6 +1693,9 @@ export function createSaihojiPhalanxBattle({
         }
       }
 
+      if(ac?.userData.saihojiIntercept?.(previousArrowPosition,a.position,'arrow')){a.visible=false;u.target=null;continue;}
+      const intercepted=interceptSaihojiFleetProjectile(scene.userData.batianFleet,ac,previousArrowPosition,a.position,'arrow');
+      if(intercepted){recordSaihojiFleetContact(root,intercepted);a.position.copy(intercepted.point);a.visible=false;u.target=null;continue;}
       // 弹道切线旋转：顺应抛物线轨迹自然前行与俯冲
       _tmp.copy(a.position).sub(previousArrowPosition);
       if (_tmp.lengthSq() > 1e-6) {
@@ -1732,13 +1736,16 @@ export function createSaihojiPhalanxBattle({
       const acPos = tgt ? tgt.clone() : _sparkTmp.clone();
       const hitR = ac?.userData?.unitClass === "vanguard-trooper" ? 1.1 : 4.8;
       if (ac?.parent && tip.distanceTo(acPos) < hitR) {
+        const commandHit=applySaihojiFleetHullContact(scene.userData.batianFleet,ac,tip,'arrow');
+        if(commandHit){recordSaihojiFleetContact(root,commandHit);if(commandHit.intercepted){a.visible=false;u.target=null;continue;}}
+
         if (ac.userData.unitClass === "vanguard-trooper") {
           u.miss = 0.01;
           spawnSpark(tip);
           sfxImpact("armor", tip);
           root.userData.vanguardDeflects = (root.userData.vanguardDeflects || 0) + 1;
           logEvent("vanguardDeflect", { by: "arrow", uid: ac.userData.uid ?? 0, contact: true });
-          const r = applyVanguardHit(ac, "arrow");
+          const r = hitVanguard(ac, "arrow");
           if (r.wounded) {
             root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
             logEvent("vanguardWound", { uid: ac.userData.uid ?? 0, by: "arrow", life: r.life, dead: r.dead });
@@ -1760,7 +1767,7 @@ export function createSaihojiPhalanxBattle({
         a.scale.setScalar(0.9 + rand() * 0.25);
         if (ac.userData.phalanxRole) applySoldierDamage(ac, "arrow");
         else if (ac.userData.unitClass === "vanguard-trooper") {
-          const r = applyVanguardHit(ac, "arrow");
+          const r = hitVanguard(ac, "arrow");
           if (r.wounded) {
             root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
             logEvent("vanguardWound", { uid: ac.userData.uid ?? 0, by: "arrow", life: r.life, dead: r.dead });
@@ -1880,8 +1887,12 @@ export function createSaihojiPhalanxBattle({
       }
       u.fly += dt / 1.5;
       const p = Math.min(1, u.fly);
+      const previousJavelinPosition=j.position.clone();
       j.position.lerpVectors(u.from, u.to, p);
       j.position.addScaledVector(u.arcUp, Math.sin(p * Math.PI) * 4.5);
+      if(ac?.userData.saihojiIntercept?.(previousJavelinPosition,j.position,'javelin')){j.visible=false;u.target=null;continue;}
+      const intercepted=interceptSaihojiFleetProjectile(scene.userData.batianFleet,ac,previousJavelinPosition,j.position,'javelin');
+      if(intercepted){recordSaihojiFleetContact(root,intercepted);j.position.copy(intercepted.point);j.visible=false;u.target=null;continue;}
       _jvTmpB.copy(u.to).sub(u.from).normalize();
       j.quaternion.setFromUnitVectors(_axisX, _jvTmpB);
       const trail = j.getObjectByName?.("javelin-trail");
@@ -1906,6 +1917,8 @@ export function createSaihojiPhalanxBattle({
       const acPos = _sparkTmp.clone();
       const jHitR = ac?.userData?.unitClass === "vanguard-trooper" ? 1.2 : 5.0;
       if (ac?.parent && tip.distanceTo(acPos) < jHitR) {
+        const commandHit=applySaihojiFleetHullContact(scene.userData.batianFleet,ac,tip,'javelin');
+        if(commandHit){recordSaihojiFleetContact(root,commandHit);if(commandHit.intercepted){j.visible=false;u.target=null;continue;}}
         if (ac.userData.unitClass === "vanguard-trooper") {
           // 重甲代差：标枪砸在装甲上弹碎，从不钉进去。10 支 = 1 次损伤口径不变。
           u.miss = 0.01;
@@ -1914,7 +1927,7 @@ export function createSaihojiPhalanxBattle({
           if (rand() < 0.6) spawnSmoke(tip);
           root.userData.vanguardDeflects = (root.userData.vanguardDeflects || 0) + 1;
           logEvent("vanguardDeflect", { by: "javelin", uid: ac.userData.uid ?? 0, contact: true });
-          const r = applyVanguardHit(ac, "javelin");
+          const r = hitVanguard(ac, "javelin");
           if (r.wounded) {
             root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
             logEvent("vanguardWound", { uid: ac.userData.uid ?? 0, by: "javelin", life: r.life, dead: r.dead });
@@ -1954,6 +1967,8 @@ export function createSaihojiPhalanxBattle({
 
   /** 硬重置（调试/热重载）：士兵撤阵清场，回到 atCastle 等下一轮鼓息运兵 */
   function resetBattle() {
+    delete root.userData.commandFleetContacts;
+    delete root.userData.batianBattleContactTotal;
     ambush.reset();
     for (const controller of shipCarry.values()) controller.dispose();
     shipCarry.clear();
@@ -3441,6 +3456,34 @@ export function createSaihojiPhalanxBattle({
     });
   }
 
+  // Called only by an actual arsenal impact; reuse the original casualty ledger.
+  root.userData.receiveBatianBlast=(point,type)=>{
+    const fleet=scene.userData.batianFleet;
+    if(!fleet?.active||fleet.snapshot?.().target!=='moss'||!point?.isVector3)return 0;
+    const range={rain:13,cannon:20,ion:30,traction:25}[type];
+    if(!range)return 0;
+    const actors=new Set([...waves.flatMap(w=>w.soldiers),...garrison.flatMap(g=>g.soldiers),...redSoldiers]);
+    let affected=0;
+    for(const actor of actors){
+      if(!actor.parent||!actor.visible||actor.userData.dead)continue;
+      actor.getWorldPosition(_tmp);if(_tmp.distanceTo(point)>range)continue;
+      if(type==='rain'||type==='cannon')applySoldierDamage(actor,type==='cannon'?'pike':'melee');
+      else actor.userData._stunT=Math.max(actor.userData._stunT||0,type==='ion'?3:2);
+      affected++;
+    }
+    if(affected)logEvent('batianGroundImpact',{type,affected,point:point.toArray()});
+    return affected;
+  };
+
+  function hitVanguard(actor,kind){return actor?.userData?.saihojiReceiveHit?.(kind)||applyVanguardHit(actor,kind);}
+  root.userData.receiveCommandTrooperStrike=(actor,amount)=>{
+    if(!waves.some(w=>w.soldiers.includes(actor))&&!garrison.some(g=>g.soldiers.includes(actor)))return false;
+    if(actor.userData.dead||actor.userData.downed)return false;
+    if(amount>=80)applySoldierDamage(actor,'pike');
+    else{actor.userData.commandBoltHits=(actor.userData.commandBoltHits||0)+1;if(actor.userData.commandBoltHits%2===0)applySoldierDamage(actor,'vanguardBolt');}
+    return true;
+  };
+
   // Bad North「盾一次只能挡一个威胁」：盾步兵未陷入近战、未爬梯时，
   // 每两支羽箭挡下一支（确定性交替，测试可复现）；挡下的箭弹开坠落不计数。
   function shieldBlocksArrow(s) {
@@ -3530,7 +3573,7 @@ export function createSaihojiPhalanxBattle({
           s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
           if (s.userData._meleeCd <= 0) {
             s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
-            const r = applyVanguardHit(vgFoe, "melee"); // 15 刀 1 伤
+            const r = hitVanguard(vgFoe, "melee"); // 15 刀 1 伤
             if (r.wounded) {
               root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
               logEvent("vanguardWound", { uid: vgFoe.userData.uid ?? 0, by: "melee", life: r.life, dead: r.dead });
@@ -3787,7 +3830,7 @@ export function createSaihojiPhalanxBattle({
             faceCombatTarget(s, vgFoe, 0.35);
             aimCombatToolAt(s, vgFoe, 1);
             s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
-            const r = applyVanguardHit(vgFoe, "melee");
+            const r = hitVanguard(vgFoe, "melee");
             if (r.wounded) {
               root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
               logEvent("vanguardWound", { uid: vgFoe.userData.uid ?? 0, by: "melee", life: r.life, dead: r.dead });
@@ -4472,7 +4515,7 @@ export function createSaihojiPhalanxBattle({
 
     if (phase === "atCastle") {
       // The campaign pact launches this voyage. Unmanaged legacy tests retain drum timing.
-      if (fleetAttack.allowed || (campaignStatus.managed ? campaignStatus.launchAllowed : quietT > 1.6)) {
+      if (fleetAttack.allowed || (scene.userData.batianCommandMode !== true && (campaignStatus.managed ? campaignStatus.launchAllowed : quietT > 1.6))) {
         setPhase("sailOut");
         shipIdx = 0;
         nextShipIn = 0.4;
@@ -4482,7 +4525,7 @@ export function createSaihojiPhalanxBattle({
 
     if (phase === "sailOut") {
       if(waterRoutesEnabled&&!ensureWaterNavigation())return;
-      if (campaignStatus.managed && campaignStatus.discoveryAllowed) {
+      if (scene.userData.batianCommandMode !== true && campaignStatus.managed && campaignStatus.discoveryAllowed) {
         while (shipIdx < SHIP_COUNT) {
           spawnWave(shipIdx);
           shipIdx++;
@@ -4750,7 +4793,7 @@ export function createSaihojiPhalanxBattle({
             s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
             if (s.userData._meleeCd <= 0) {
               s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
-              const r = applyVanguardHit(grudgeFoe, "melee"); // 15 刀 1 伤（代差）
+              const r = hitVanguard(grudgeFoe, "melee"); // 15 刀 1 伤（代差）
               if (r.wounded) {
                 root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
                 logEvent("vanguardWound", { uid: grudgeFoe.userData.uid ?? 0, by: "melee", life: r.life, dead: r.dead });
@@ -4828,7 +4871,6 @@ export function createSaihojiPhalanxBattle({
     // 2026-09-05：不再瞬移落地。先锋兵由 vanguardAssault 状态机护送到场——
     // 3 台 GatePodCraft 索降 6 名 + SOCCO 运输艇贴海送 14 名，逐人采样苔庭地表落地。
     // 落地半径、战斗推进、绳索撤离全归它管；这里只负责扣响发令枪。
-    root.userData.groundHeightAt = groundHeightAt;
     root.userData.whaleMaw = whaleMaw; // 控制台/测试可驱动：castNet() / swallow() / stats()
     root.userData.getDefenders = () => shooters.filter((s) => s?.parent && !s.userData?.dead);
     root.userData.spawnSmoke = spawnSmoke; // 灰烬/麻醉雾复用现成烟池
@@ -5078,6 +5120,11 @@ export function createSaihojiPhalanxBattle({
   root.userData.reset = () => {
     root.userData.resetRequested = true;
   };
+  root.userData.groundHeightAt=groundHeightAt; // Site consumers need support before the first battle tick.
+  root.userData.getBattleSnapshot=()=>({phase,assembled:isAssembled(),ambush:{...ambush.state},campaign:{...campaignStatus},
+    ships:waves.map(w=>({name:w.boat.name,state:w.state,progress:w.u,soldiers:w.soldiers.length,living:w.soldiers.filter(s=>!s.userData.dead).length})),
+    battleContacts:root.userData.batianBattleContactTotal||0,contacts:root.userData.commandFleetContacts?.cycle===scene.userData.batianFleet?.snapshot?.().cycle?root.userData.commandFleetContacts:null,arrowsFired:root.userData.arrowsFired??0,
+    trigger:root.userData.batianBattleTrigger??null,departure:root.userData.kunDeparture??null});
   root.userData.refreshNewCitySupport=refreshNewCitySupport;
   return {
     root,

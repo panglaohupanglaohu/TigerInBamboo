@@ -1,7 +1,9 @@
+import {WORLD_SOURCE_RANGE,sourceSpatial} from './sourceRangePolicy.js';
+import {synthMorrisBird} from './morrisBirdSound.js';
 import {loadRobotWeaponSamples,robotSample,robotSampleState} from './robotWeaponSamples.js';
 import {synthBatianBombRelease,synthBatianBombFall,synthBatianBombExplosion} from './batianBombSound.js';
 import {bombMixFocus} from './bombMixFocus.js';
-import {synthBatianShieldHit} from './batianShieldSound.js';
+import {synthBatianShieldHit} from './batianShieldSound.js?v=water-bowl-20261024';
 // =====================================================================
 //  世界音效库（战斗 / 武器 / 载具 / 能力 / 天气）
 //
@@ -75,7 +77,7 @@ function buildBus(ctx) {
       ability: cat(0.9),
       event: cat(0.75),
       vehicle: cat(0.55),
-      weather: cat(0.6),
+      weather: cat(0.15),
     },
   };
   loadRobotWeaponSamples(ctx);
@@ -120,19 +122,7 @@ export function setSfxListener(pos, camera) {
 }
 
 /** 距离 → {gain, pan, dist}；超出范围返回 null（不建节点）。 */
-function spatial(pos, maxDist, ref = DEFAULT_REF) {
-  if (!pos || !listener.has) return { gain: 1, pan: 0, dist: 0 };
-  const dx = pos.x - listener.x;
-  const dy = pos.y - listener.y;
-  const dz = pos.z - listener.z;
-  const dist = Math.hypot(dx, dy, dz);
-  if (!(dist < maxDist)) return null;
-  let gain = dist <= ref ? 1 : Math.pow(ref / dist, 0.85);
-  const edge = maxDist * 0.75;
-  if (dist > edge) gain *= 1 - (dist - edge) / (maxDist - edge);
-  const pan = dist > 0.5 ? ((dx * listener.rx + dy * listener.ry + dz * listener.rz) / dist) * 0.75 : 0;
-  return { gain, pan, dist };
-}
+function spatial(pos,maxDist,ref=DEFAULT_REF){return sourceSpatial(pos,listener,maxDist,ref);}
 
 // ---------------------------------------------------------- 声部管理 --
 function reap(now) {
@@ -208,7 +198,7 @@ function voice(spec, pos) {
   out.gain.value = (spec.gain ?? 1) * sp.gain;
   node.connect(out);
   out.connect(bus.cats[spec.cat] || bus.master);
-  const tracking={ id: spec.id, cat: spec.cat, prio, end: t0 + dur, out, panNode, position:pos?{x:pos.x,y:pos.y,z:pos.z}:null, baseGain:spec.gain??1, maxDist:spec.maxDist??60, ref:spec.ref??DEFAULT_REF };voices.push(tracking);
+  const tracking={ id: spec.id, cat: spec.cat, prio, end: t0 + dur, out, panNode, position:pos?{x:pos.x,y:pos.y,z:pos.z}:null, baseGain:spec.gain??1, maxDist:Math.min(WORLD_SOURCE_RANGE,spec.maxDist??60), ref:Math.min(3,spec.ref??DEFAULT_REF) };voices.push(tracking);
   setTimeout(() => {
     try {
       out.disconnect();
@@ -758,7 +748,7 @@ function updateEngines(ctx, muted) {
     scored.push({ h, sp, score: sp.gain * (h.own ? 4 : 1) });
   }
   scored.sort((a, b) => b.score - a.score);
-  const chosen = scored.slice(0, ENGINE_SLOTS);
+  const chosen = muted?[]:scored.slice(0, ENGINE_SLOTS);
   engineHints.length = 0;
   if (!ctx) return;
   while (engineSlots.length < ENGINE_SLOTS && chosen.length > engineSlots.length) engineSlots.push(makeEngineSlot(ctx));
@@ -779,7 +769,7 @@ function updateEngines(ctx, muted) {
   for (const slot of engineSlots) {
     const c = muted ? null : assign.get(slot);
     if (!c) {
-      slot.out.gain.setTargetAtTime(0, t, LOOP_TAU);
+      slot.out.gain.cancelScheduledValues(t);slot.out.gain.setValueAtTime(0,t);
       if (slot.level < 0.01) slot.key = null;
       slot.level *= 0.9;
       continue;
@@ -867,14 +857,14 @@ function updateSuction(ctx, muted) {
   const t = ctx.currentTime;
   const sp = on ? spatial(pos, 220, 20) : null;
   const g = sp ? sp.gain * (0.25 + 0.45 * level) : 0;
-  suction.out.gain.setTargetAtTime(g, t, on ? 0.5 : 0.35);
+  if(!sp){suction.out.gain.cancelScheduledValues(t);suction.out.gain.setValueAtTime(0,t);}else suction.out.gain.setTargetAtTime(g,t,.15);
   if (sp && suction.pan) suction.pan.pan.setTargetAtTime(sp.pan, t, 0.1);
   suction.whistle.frequency.setTargetAtTime(900 + 700 * level, t, 0.4);
 }
 
 // ------------------------------------------------------------ 天气 --
 let weatherBed = null;
-const weatherWant = { rain: 0, snow: 0, wind: 0.8 };
+const weatherWant = { rain: 0, snow: 0, wind: 0.8,position:null };
 let dropTimer = 0;
 let gustPhase = 0;
 
@@ -883,6 +873,7 @@ let gustPhase = 0;
  * @param {{rain:number, snow:number, wind:number}} s rain/snow 0..1，wind = 风速
  */
 export function setWeatherAmbience(s) {
+  weatherWant.position=s?.position?{x:s.position.x,y:s.position.y,z:s.position.z}:null;
   weatherWant.rain = Math.max(0, Math.min(1, Number(s?.rain) || 0));
   weatherWant.snow = Math.max(0, Math.min(1, Number(s?.snow) || 0));
   weatherWant.wind = Math.max(0, Number(s?.wind) || 0);
@@ -1000,10 +991,11 @@ function updateWeather(ctx, dt, muted) {
  */
 export function updateWorldSfx(dt) {
   const muted = isMuted();
-  const ctx = getCtx();
+  const ctx = getCtx()??(muted?bus?.ctx:null);
   const d = Math.max(0, Math.min(0.1, Number(dt) || 0));
+  if(bus){bus.master.gain.cancelScheduledValues(bus.ctx.currentTime);bus.master.gain.setValueAtTime(muted?0:MASTER_GAIN,bus.ctx.currentTime);}
   if(muted)bombMixFocus.reset();const bombMix=bombMixFocus.read();
-  if(bus){reap(bus.ctx.currentTime);for(const v of voices){const s=spatial(v.position,v.maxDist,v.ref),focus=v.id.startsWith('batianBomb')?1:v.cat==='weapon'?bombMix.otherWeapons:1;v.out.gain.setTargetAtTime(muted?0:v.baseGain*(s?.gain||0)*focus,bus.ctx.currentTime,.035);if(v.panNode&&s)v.panNode.pan.setTargetAtTime(s.pan,bus.ctx.currentTime,.035);}bus.cats.vehicle.gain.setTargetAtTime(.55*bombMix.vehicles,bus.ctx.currentTime,.045);bus.cats.weather.gain.setTargetAtTime(.6*bombMix.vehicles,bus.ctx.currentTime,.045);}
+  if(bus){reap(bus.ctx.currentTime);for(const v of voices){const s=spatial(v.position,v.maxDist,v.ref),focus=v.id.startsWith('batianBomb')?1:v.cat==='weapon'?bombMix.otherWeapons:1;if(muted||!s){v.out.gain.cancelScheduledValues(bus.ctx.currentTime);v.out.gain.setValueAtTime(0,bus.ctx.currentTime);}else v.out.gain.setTargetAtTime(v.baseGain*s.gain*focus,bus.ctx.currentTime,.035);if(v.panNode&&s)v.panNode.pan.setTargetAtTime(s.pan,bus.ctx.currentTime,.035);}bus.cats.vehicle.gain.setTargetAtTime(.55*bombMix.vehicles,bus.ctx.currentTime,.045);bus.cats.weather.gain.setTargetAtTime(.15*bombMix.vehicles,bus.ctx.currentTime,.045);}
   updateEngines(ctx, muted);
   updateSuction(ctx, muted);
   updateWeather(ctx, d, muted);
@@ -1015,7 +1007,7 @@ export function getWorldSfxSnapshot() {
   const now = bus?.ctx?.currentTime ?? 0;
   if (bus) reap(now);
   return {
-    ready: !!bus,listener:{...listener},robotSamples:bus?robotSampleState(bus.ctx):null,
+    sourceRange:WORLD_SOURCE_RANGE,weatherBedLevel:'25 percent of original by latest user instruction',ready: !!bus,listener:{...listener},robotSamples:bus?robotSampleState(bus.ctx):null,
     bombMix:bombMixFocus.read(),
     oneShots: voices.map((v) => ({ id: v.id, cat: v.cat, gain:v.out.gain.value, maxDistance:v.maxDist })),
     foreground: voices.filter((v) => FOREGROUND_CATS.has(v.cat)).length,
@@ -1105,7 +1097,7 @@ export function sfxBatianBombExplosion(pos){const v=voice({id:'batianBombBlast',
 let shieldHitVariation = 0;
 /** Actual flagship shield interception, spatialized at the ripple contact point. */
 export function sfxBatianShieldHit(pos, impactPower = 20) {
-  const v = voice({id:'batianShieldHit',cat:'impact',prio:90,maxInst:3,replaceOldest:true,cd:.065,maxDist:210,ref:25,gain:.85,dur:.56},pos);
+  const v = voice({id:'batianShieldHit',cat:'impact',prio:90,maxInst:3,replaceOldest:true,cd:.065,maxDist:210,ref:25,gain:.85,dur:.40},pos);
   if (!v) return false;
   synthBatianShieldHit(v.ctx,v.input,v.t0,shieldHitVariation++,impactPower);
   return true;
@@ -1127,4 +1119,19 @@ export function sfxSmokeBurst(pos) {
   const { t0 } = v;
   chain(v, osc(v, "sine", 110, 45, t0, 0.25), env(v, 0.6, t0, 0.003, 0.25));
   chain(v, noise(v, "white", t0 + 0.02, 1.2), filt(v, "lowpass", 2600, 0.7, 350, t0 + 0.02, 1.2), env(v, 0.5, t0 + 0.02, 0.06, 1.1));
+}
+
+// Morris garden birds share the existing SFX voice budget, spatial panning and M.
+const morrisBirdVoices=[];
+export function sfxMorrisBird(kind,pos){
+ getMorrisBirdAudioStatus();
+ const v=voice({id:kind==='cuckoo'?'morrisCuckoo':'morrisRobin',cat:'event',prio:12,maxInst:1,cd:2.4,maxDist:65,ref:9,gain:kind==='cuckoo'?.43:.5,dur:1.7},pos);
+ if(!v)return false;
+ synthMorrisBird(v.ctx,v.input,v.t0,kind);
+ const analyser=v.ctx.createAnalyser();analyser.fftSize=256;v.tracking.out.connect(analyser);morrisBirdVoices.push({kind,ctx:v.ctx,analyser,out:v.tracking.out,end:v.t0+1.7});
+ return true;
+}
+export function getMorrisBirdAudioStatus(){
+ const rows=[];for(let i=morrisBirdVoices.length-1;i>=0;i--){const a=morrisBirdVoices[i];if(a.ctx.currentTime>a.end+.15){a.out.disconnect(a.analyser);a.analyser.disconnect();morrisBirdVoices.splice(i,1);continue;}const d=new Float32Array(256);a.analyser.getFloatTimeDomainData(d);rows.push({kind:a.kind,state:a.ctx.state,gain:a.out.gain.value,rms:Math.sqrt(d.reduce((n,x)=>n+x*x,0)/d.length)});}
+ return{range:WORLD_SOURCE_RANGE,weatherGain:bus?.cats.weather.gain.value??null,weatherBaseGain:.15,weatherOriginalBaseGain:.6,muted:isMuted(),active:rows,source:'existing world SFX budget and live post-gain analyser',synthesis:'original, not field recording'};
 }

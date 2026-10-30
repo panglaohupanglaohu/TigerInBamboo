@@ -37,6 +37,8 @@ export function createPlayer(scene) {
   };
 
   const playerGroup = new THREE.Group();
+  playerGroup.name = "player-courier-root";
+  playerGroup.userData.noDistanceCulling = true;
   scene.add(playerGroup);
 
   // 2026-09-13：采用认可目标图的人形信使，保留原球面移动与任务接口。
@@ -44,7 +46,7 @@ export function createPlayer(scene) {
   playerGroup.add(messengerMesh);
   // 2026-10-09 用户要求并入正式游戏：默认使用 Blender 三视图信使 v2；?courier=classic 回到原信使。
   if (new URLSearchParams(globalThis.location?.search || "").get("courier") !== "classic") {
-    import("../assets/characters/courierBlenderV2.js")
+    import("../assets/characters/courierBlenderV2.js?v=head-profile-20261028")
       .then((m) => m.upgradeCourierToBlenderV2(messengerMesh))
       .catch((error) => console.warn("[courier blenderV2] 加载失败，保留原信使", error));
   }

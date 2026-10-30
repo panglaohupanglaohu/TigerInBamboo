@@ -13,7 +13,7 @@ import {applyTargetCityForestClearance} from './targetCityForestClearance.js';
 import {createTargetNewCityPlaza} from './targetNewCityPlaza.js?revision=3';
 import {applyTargetRockAppearance} from './targetRockAppearance.js?revision=rock7-mineral-planes';
 import {fitTargetCitySunShadow} from './targetCitySunShadow.js?revision=r37-follow';
-import {createMountainCloudBanksCandidate} from './mountainCloudBanksCandidate.js?revision=14-circuits-1';
+import {createMountainCloudBanksCandidate} from './mountainCloudBanksCandidate.js?revision=15-varied-clouds';
 import {officialOceanLevelAt} from '../waterV8/officialOcean.js';
 import {applyTargetCanopyAppearance} from './targetCanopyAppearance.js?revision=3';
 import {createTargetOldCityWaterSupply} from './targetOldCityWaterSupply.js?revision=2';

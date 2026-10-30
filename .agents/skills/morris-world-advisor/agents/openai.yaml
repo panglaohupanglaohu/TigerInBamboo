@@ -1,0 +1,4 @@
+interface:
+  display_name: "Morris 顾问"
+  short_description: "以博物馆资料和可计算装饰规则指导莫里斯岛与城堡美术"
+  default_prompt: "使用 $morris-world-advisor 按当前实景与认可目标评审莫里斯岛的植物、动物、城堡和路径。"

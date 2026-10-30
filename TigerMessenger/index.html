@@ -484,6 +484,11 @@
       box-shadow: 0 0 6px #8effd8;
     }
 
+    @media (max-width:700px) {
+      #tm-perf-probe { left:auto !important; right:8px; top:70px !important; font-size:9px !important; }
+      body.touch-pad-open #tm-perf-probe { display:none !important; }
+    }
+
     /* ---------- 触控遥控杆 ---------- */
     #touch-controls {
       position: fixed;
@@ -1719,7 +1724,13 @@
   {
     "imports": {
       "three": "./vendor/three.module.js",
-      "three/addons/": "./vendor/jsm/"
+      "three/addons/": "./vendor/jsm/",
+      "./src/audio/sfx.js": "./src/audio/sfx.js?v=morris-tall-r15-range10-weather25",
+      "./src/audio/worldSfx.js": "./src/audio/worldSfx.js?v=morris-tall-r14-weather25-20261026",
+      "./src/world/lake.js": "./src/world/lake.js?v=moon-shore-r2-20261025",
+      "./src/world/lake.js?v=moon-orbit-20261024": "./src/world/lake.js?v=moon-shore-r2-20261025",
+      "./src/world/moonLakeSceneGarden.js?v=greg-orbit-20261024": "./src/world/moonLakeSceneGarden.js?v=shore-r4d-20261025",
+      "./src/world/platforms.js": "./src/world/platforms.js?v=moon-coast-r4d-20261025"
     }
   }
   </script>
@@ -1802,7 +1813,7 @@
             "[TigerMessenger] three.js source: local vendor" +
               (wantCdn ? "（已忽略 ?cdn=1，默认本地更稳）" : "")
           );
-          await import("./src/main.js?v=20261009-swamp-production-factory");
+          await import("./src/main.js?v=20261029-morris-threeview-r81");
         }
       }
     } catch (err) {

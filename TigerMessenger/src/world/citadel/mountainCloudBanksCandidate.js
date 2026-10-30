@@ -1,4 +1,4 @@
-import {createMountainCirculatingCloudBanks} from './mountainCirculatingCloudBanks.js';
+import {createMountainCirculatingCloudBanks} from './mountainCirculatingCloudBanks.js?v=shape-varied-20261024';
 import * as THREE from 'three';
 import {buildRidgeCloudField} from './ridgeCloudField.js';
 import {canopyClearOfConstraints} from './mountainCanopyCandidate.js';

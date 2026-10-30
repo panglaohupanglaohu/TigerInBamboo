@@ -1,3 +1,4 @@
+import {WORLD_SOURCE_RANGE} from './sourceRangePolicy.js';
 // =====================================================================
 //  音频：简易 Web Audio 合成音效 + 白天轻环境点缀（零外部资源，可静音）
 //  全局环境不含持续低频振荡；电车声仅在听距内按距离渐入/渐出
@@ -5,8 +6,11 @@
 import { showToast } from "../ui/hud.js";
 import { createBgmOwnership } from "./bgmOwnership.js";
 import { createBatianBgm } from "./batianBgm.js";
+import {createMorrisGardenBgm} from './morrisGardenBgm.js?v=morris-spanish-guitar-r18';
 const bgmOwnership = createBgmOwnership();
 const bgmAudio = (key, url) => bgmOwnership.wrap(key, new Audio(url));
+const morrisGardenMusic=createMorrisGardenBgm(bgmOwnership,bgmAudio,()=>stopAmbienceNodes());
+export const getMorrisGardenBgmSnapshot=()=>morrisGardenMusic.snapshot();
 const updateBatianMusic = createBatianBgm(bgmOwnership, bgmAudio, () => stopAmbienceNodes());
 export const setBatianBattleBgm = active => updateBatianMusic(active, muted);
 export const getBgmOwnershipSnapshot = () => bgmOwnership.snapshot();
@@ -14,6 +18,7 @@ export const getBgmOwnershipSnapshot = () => bgmOwnership.snapshot();
 export function updateBgmListenerContext(context) {
   bgmOwnership.setContext(context);
   updateCitadelElderBgm(context);
+  morrisGardenMusic.update({listener:context.morrisListener??context.listener,center:context.morrisCenter,gameStarted:context.gameStarted,muted});
   const owner = bgmOwnership.takeResume();
   if (muted) return;
   if (!owner) {if(!bgmOwnership.owner)resumeDefaultAmbience();return;}
@@ -54,7 +59,7 @@ let tramLastUpdate = 0;
 let tramClankTimer = null;
 let tramBellTimer = null;
 let tramProximity = 0;
-const TRAM_MAX_DISTANCE = 22;
+const TRAM_MAX_DISTANCE = WORLD_SOURCE_RANGE;
 const TRAM_PEAK_GAIN = 0.42;
 
 // 电车搭乘 BGM：蓝车沿用原有 Tram.mp3 →《三亩地 - 城南花已开》；
@@ -392,7 +397,8 @@ export function updateTramSound(tramPosition, listenerPosition) {
   const proximity = Math.max(0, Math.min(1, 1 - distance / TRAM_MAX_DISTANCE));
   tramProximity = muted ? 0 : proximity;
   const target = muted ? 0 : TRAM_PEAK_GAIN * Math.pow(proximity, 1.15);
-  if (Math.abs(target - tramLastGain) >= 0.003) {
+  if(distance>=TRAM_MAX_DISTANCE||muted){tramNodes.master.gain.cancelScheduledValues(now);tramNodes.master.gain.setValueAtTime(0,now);tramLastGain=0;}
+  else if (Math.abs(target - tramLastGain) >= 0.003) {
     tramLastGain = target;
     tramNodes.master.gain.setTargetAtTime(target, now, 0.08);
   }
@@ -524,6 +530,7 @@ export function sfxThunder(opts = {}) {
   ensureAudio(); // 用户手势后恢复，便于 HTMLAudio 播放
 
   const distance = Math.max(0, Number(opts.distance) || 8);
+  if(distance>=WORLD_SOURCE_RANGE)return;
   // 声速近似：游戏单位约 0.04s/单位，夹在 0.04–1.0s
   const delayMs = Math.min(1000, Math.max(40, (0.05 + distance * 0.038) * 1000));
   // 近雷更响，远雷更轻
@@ -2769,7 +2776,7 @@ export function isSiegeAssaultBgmHandoff() {
   return !!siegeAssaultHandoff;
 }
 
-function setMuted(next) {
+export function setMuted(next) {
   muted = next;
   bgmOwnership.setContext({muted});
   if (muted) {

@@ -18,7 +18,7 @@ export function createPerfProbe(renderer, { bootStartMs = 0, visible = null } = 
   const el = document.createElement("div");
   el.id = "tm-perf-probe";
   el.style.cssText =
-    "position:fixed;left:8px;bottom:8px;z-index:9999;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;" +
+    "position:fixed;left:220px;top:8px;z-index:12;font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;" +
     "background:rgba(0,0,0,.62);color:#9fe;padding:6px 8px;white-space:pre;pointer-events:none;border-radius:6px";
 
   let shown = visible;

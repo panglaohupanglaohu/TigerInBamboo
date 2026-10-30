@@ -32,6 +32,10 @@ export const MOON_ORB = Object.freeze({
   radius: 3.4,
   /** 圆心距湖心的切向距离。必须大于环湖小径外沿（LAKE.pathOuter = 4.7） */
   offset: 7.5,
+  /** Slow orbit around the lake centre; phase preserves the authored starting bearing. */
+  orbitPeriod: 180,
+  orbitSamples: 360,
+  orbitClearance: 0.22,
   /** 切向方位：月牙开阔水面那一侧（湖的缺口在 +X/−Z，实体水面在 −X/+Z） */
   dirX: -0.83,
   dirZ: 0.55,
@@ -358,6 +362,62 @@ export function createMoonOrb(parent, opts = {}) {
   }
   parent.add(reflect);
 
+  const orbitRadius = Math.hypot(baseX, baseZ);
+  const initialAngle = Math.atan2(baseZ, baseX);
+  const period = opts.orbitPeriod ?? MOON_ORB.orbitPeriod;
+  const samples = MOON_ORB.orbitSamples;
+  const heights = new Float64Array(samples).fill(hgt);
+  const orbitReport = {period, radius:orbitRadius, centre:[0,0], baselineHeight:hgt,
+    peakHeight:hgt, obstacleCount:0, sampledVertices:0,
+    clearanceMethod:'one-time obstacle vertex envelope; finite sampling approximation, not exact triangle collision',
+    clearanceMargin:MOON_ORB.orbitClearance, continuous:true};
+  group.userData.moonOrbit = orbitReport;
+  let startTime = null;
+  /** Supply already-seated real scene trees. No raycasts or geometry scans per frame. */
+  function setOrbitObstacles(objects = []) {
+    parent.updateWorldMatrix(true,true);
+    const inverse = parent.matrixWorld.clone().invert(), relative = new THREE.Matrix4();
+    const v = new THREE.Vector3(), points = [], unique = new Set();
+    for(const object of objects.filter(Boolean)) {
+      object.updateWorldMatrix(true,true);
+      object.traverse(mesh=>{
+        if(!mesh.isMesh || !mesh.geometry?.attributes.position || mesh.userData.isOutline)return;
+        relative.multiplyMatrices(inverse,mesh.matrixWorld);
+        const positions=mesh.geometry.attributes.position;
+        for(let i=0;i<positions.count;i++) {
+          v.fromBufferAttribute(positions,i).applyMatrix4(relative);
+          if(v.y < hgt-R-0.5)continue;
+          const radial=Math.hypot(v.x,v.z);
+          if(Math.abs(radial-orbitRadius)>R+0.6)continue;
+          const key=v.x.toFixed(3)+','+v.y.toFixed(3)+','+v.z.toFixed(3);
+          if(unique.has(key))continue;unique.add(key);points.push(v.clone());
+        }
+      });
+    }
+    const clearanceR = Math.hypot(R,depth/2) + MOON_ORB.orbitClearance;
+    const raw = new Float64Array(samples).fill(hgt);
+    for(let i=0;i<samples;i++) {
+      const angle=initialAngle+i*Math.PI*2/samples;
+      const x=Math.cos(angle)*orbitRadius,z=Math.sin(angle)*orbitRadius;
+      for(const p of points) {
+        const horizontal2=(p.x-x)**2+(p.z-z)**2;
+        if(horizontal2>=clearanceR**2)continue;
+        raw[i]=Math.max(raw[i],p.y+Math.sqrt(clearanceR**2-horizontal2)+MOON_ORB.bobAmp+0.06);
+      }
+    }
+    // Circular dilation then averaging: a smooth upper envelope rather than spikes.
+    // Dilation and averaging have the same support, so averaged values cannot drop
+    // below the corresponding raw sample. Wraparound is identical at 0 / 2π.
+    const window=9,wide=new Float64Array(samples);
+    for(let i=0;i<samples;i++)for(let k=-window;k<=window;k++)wide[i]=Math.max(wide[i],raw[(i+k+samples)%samples]);
+    for(let i=0;i<samples;i++) {let sum=0;for(let k=-window;k<=window;k++)sum+=wide[(i+k+samples)%samples];heights[i]=sum/(window*2+1);}
+    Object.assign(orbitReport,{obstacleCount:objects.filter(Boolean).length,sampledVertices:points.length,
+      peakHeight:Math.max(...heights),minimumHeight:Math.min(...heights),
+      clearanceRadius:clearanceR,rawPeakHeight:Math.max(...raw)});
+    // Also seat the initial pose before the first rendered update.
+    if(startTime===null)group.position.y=heights[0];
+    return orbitReport;
+  }
   const state = { baseX, baseZ, hgt, R };
 
   /**
@@ -368,14 +428,22 @@ export function createMoonOrb(parent, opts = {}) {
    * @param {THREE.Vector3|null} viewerLocal 观察者在**湖局部坐标**里的位置
    */
   function update(t, _dt, viewerLocal = null) {
-    // 悬浮呼吸：很慢、很小，只是让它不像贴在天上的一张纸
-    group.position.y = state.hgt + Math.sin(t * MOON_ORB.bobSpeed) * MOON_ORB.bobAmp;
+    // Absolute elapsed time preserves angular speed independent of render rate.
+    const now=Number.isFinite(t)?t:0;
+    if(startTime===null)startTime=now;
+    const elapsed=Math.max(0,now-startTime),turn=((elapsed/period)%1+1)%1;
+    const phase=turn*samples,index=Math.floor(phase),mix=phase-index;
+    const orbitHeight=THREE.MathUtils.lerp(heights[index],heights[(index+1)%samples],mix);
+    const angle=initialAngle+turn*Math.PI*2;
+    group.position.set(Math.cos(angle)*orbitRadius,
+      orbitHeight+Math.sin(elapsed*MOON_ORB.bobSpeed)*MOON_ORB.bobAmp,
+      Math.sin(angle)*orbitRadius);
     // 偏航跟随：月牙是片状的，得转过来对着人，否则侧面看只剩一条线。
     // 真实的月亮在无穷远处，本来就永远正对观察者——所以这不是取巧。
     // 只转偏航（绕当地的天），绝不翻滚：月亮不该躺下来。
     // 转速有上限，慢慢摆过去；玩家绕湖走一圈时看得出它在跟，但不突兀。
     if (viewerLocal) {
-      const wantYaw = Math.atan2(viewerLocal.x - state.baseX, viewerLocal.z - state.baseZ);
+      const wantYaw = Math.atan2(viewerLocal.x - group.position.x, viewerLocal.z - group.position.z);
       let d = wantYaw - face.rotation.y;
       while (d > Math.PI) d -= Math.PI * 2;   // 取最短弧，别绕远路
       while (d < -Math.PI) d += Math.PI * 2;
@@ -386,8 +454,8 @@ export function createMoonOrb(parent, opts = {}) {
     // 光晕整片推到月亮身后：不这么做，正对镜头的光晕四边形会和有厚度的
     // 月牙相交，交线在画面上是一道生硬的斜边。
     if (viewerLocal) {
-      const ax = state.baseX - viewerLocal.x;
-      const az = state.baseZ - viewerLocal.z;
+      const ax = group.position.x - viewerLocal.x;
+      const az = group.position.z - viewerLocal.z;
       const an = Math.hypot(ax, az);
       if (an > 1e-4) {
         for (const shell of glows) {
@@ -405,8 +473,8 @@ export function createMoonOrb(parent, opts = {}) {
     // ---- 月光路：从月亮的地面投影朝观察者铺过来 ----
     // 真实的月光路永远指向观察者（每个人看到的都是朝自己来的那一条），
     // 所以这里每帧对着玩家转，而不是钉死一个方向。
-    const gx = state.baseX;
-    const gz = state.baseZ;
+    const gx = group.position.x;
+    const gz = group.position.z;
     let dirX = -gx;
     let dirZ = -gz;
     if (viewerLocal) {
@@ -432,5 +500,5 @@ export function createMoonOrb(parent, opts = {}) {
     reflect.visible = k > 0.01;
   }
 
-  return { group, face, body, earthshine, maria: mariaGroup, glows, reflect, streak, dashes, update };
+  return { group, face, body, earthshine, maria: mariaGroup, glows, reflect, streak, dashes, update, setOrbitObstacles, orbitReport };
 }

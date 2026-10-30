@@ -1,7 +1,10 @@
+import {createMorrisPrincessPatrol} from './world/morrisPrincessPatrol.js?v=morris-threeview-r81';
+import {createMorrisHorseRide} from './player/morrisHorseRide.js?v=morris-profile-route-r57';
+import {installMorrisIslandPresentation} from './ui/morrisIslandPresentation.js?v=threeview-r81';
 import {sfxLaserSwing} from './audio/worldSfx.js';
 import {vanguardRosterSlot,vanguardMuzzleWorld} from './world/vanguardTrooper.js';
 import { batianObstacleRadius } from './world/batianDestination.js';
-import { createBatianFleet } from './world/batianFleet.js';
+import { createBatianFleet } from './world/batianFleet.js?v=heavy-cover-r3-20261025';
 import { installCrystalColossus } from './assets/crystalColossus.js';
 import {createStartupProgress,runStartupSteps} from './core/startupTasks.js';
 import {sampleSwampRimGround,sampleSwampAuthoredGround,sampleSwampStairGround} from './world/swampPlayerSupport.js';
@@ -30,13 +33,14 @@ import {createTargetCityProductionOptions} from './world/citadel/targetCityProdu
 import {createCitadelPlazaGuardian} from './world/citadel/citadelPlazaGuardian.js';
 import {createCitadelGuardianAtmosphere} from './world/citadel/citadelGuardianAtmosphere.js';
 import {createTargetEastCrossingStartupSupport} from './world/citadel/targetEastCrossingStartupSupport.js';
-import {installTargetCityRuntimeSteps} from './world/citadel/targetCityRuntime.js';
-import {installTargetCityPresentation} from './ui/targetCityPresentation.js';
+import {installTargetCityRuntimeSteps} from './world/citadel/targetCityRuntime.js?v=varied-clouds-20261024';
+import {installTargetCityPresentation} from './ui/targetCityPresentation.js?v=coral-view-20261024';
+import {installMoonLakePresentation} from './ui/moonLakePresentation.js?v=moon-coast-r4d-20261025';
 import {targetCityRuntimeEnabled} from './world/citadel/targetCityRelease.js';
-import {nearestCitadelTarget,isCitadelClick} from './ui/citadelTargetPicking.js';
+import {nearestCitadelTarget,isCitadelClick} from './ui/citadelTargetPicking.js?v=morris-editor-block-r57';
 import {setSfxListener,updateWorldSfx,hintEngine,sfxBombRelease,sfxSmallExplosion,sfxEnergyPulse,sfxBatianBombRelease,sfxBatianBombFall,sfxBatianBombExplosion,sfxBatianShieldHit,sfxBoltCharge,sfxBoltFire,sfxBoltHit,sfxRobotShot} from './audio/worldSfx.js';
 import {createRobotGreeting} from './gameplay/robotGreeting.js';
-import {createRobotOperations} from './gameplay/robotOps/runtime.js';
+import {createRobotOperations} from './gameplay/robotOps/runtime.js?v=morris-walk-r40';
 import {createJunctionPlayerSupport} from './world/canalJunctionTarget.js';
 import {createCitadelPlayerWalls,createCitadelCameraOccluders} from './world/citadel/playerWalls.js';
 import {createCitadelPlayerGround} from './world/citadel/playerGround.js';
@@ -55,20 +59,20 @@ import { bindOriginalWorldRomanArmor } from "./world/romanWorldArmor.js";
 import { Timer } from "three/addons/misc/Timer.js";
 import * as THREE from "three";
 import { createStage } from "./core/stage.js";
-import { createPerfProbe } from "./tools/perfProbe.js";
+import { createPerfProbe } from "./tools/perfProbe.js?v=remote-clearance-20261025";
 import { createSceneCensus } from "./tools/sceneCensus.js";
 import { createInput } from "./core/input.js";
-import { createCameraRig } from "./core/camera.js";
-import { createDevPanel } from "./core/devPanel.js";
+import { createCameraRig } from "./core/camera.js?v=airship-down15-20261025";
+import { morrisViewer } from "./world/morrisViewer.js";
+import { createDevPanel } from "./core/devPanel.js?v=morris-profile-route-r57";
 import { createStoryEngine } from "./story/storyEngine.js";
 import { createRescueCampaign } from "./story/rescueCampaign.js";
 import { createTigerCompanion } from "./gameplay/tigerCompanion.js";
-import { createFootsteps } from "./audio/footsteps.js";
 import { requestStoryboard } from "./story/storyLLM.js";
 import { createStoryboardPanel } from "./story/storyboardPanel.js";
 import { createMapEditor } from "./core/mapEditor.js";
 import { createCitadelEditorPanel } from "./ui/citadelEditorPanel.js";
-import { createCitadelSceneEdit } from "./ui/citadelSceneEdit.js";
+import { createCitadelSceneEdit } from "./ui/citadelSceneEdit.js?v=morris-editor-block-r57";
 import { createCrystalCityEditorPanel } from "./ui/crystalCityEditorPanel.js";
 import {
   rebuildCitadelTown,
@@ -93,7 +97,7 @@ import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P, FEATURES, isOskLightingV1, isVoxelAoV1, isLocalLightBudgetV1 } from "./core/params.js";
 import { createMiniBloom } from "./render/postprocessing/miniBloom.js";
 import { nightWeightAt } from "./render/lighting/highlandLightVolumes.js";
-import { createSceneDistanceCulling } from "./core/sceneDistanceCulling.js";
+import { createSceneDistanceCulling } from "./core/sceneDistanceCulling.js?v=courier-culling-r1";
 import { createIdleLightCulling } from "./render/lighting/idleLightCulling.js";
 import { createLightPool } from "./render/lighting/lightPool.js";
 import { createLightingDirector } from "./render/lighting/lightingDirector.js";
@@ -112,7 +116,7 @@ import { createBookshopAtmosphere } from "./world/bookshopAtmosphere.js";
 import { installBookshopJakubPass } from "./world/bookshopJakubPass.js";
 import { bookshopRaiseAtWorld, BOOKSHOP_TERRACE } from "./world/bookshopTownSite.js";
 import { createTramRide } from "./player/tramRide.js";
-import { createAirshipRide } from "./player/airshipRide.js";
+import { createAirshipRide } from "./player/airshipRide.js?v=airship-down15-20261025";
 import { handleAirshipSummonShortcut } from "./player/airshipSummonShortcut.js";
 import { createAircraftRide } from "./player/aircraftRide.js";
 import { createScoutAircraftRide } from "./player/scoutAircraftRide.js";
@@ -121,7 +125,7 @@ import { createBoatRide } from "./player/boatRide.js";
 import { createWeatherSystem } from "./world/weather.js";
 import { seasonAt } from "./world/seasonBands.js";
 import { createSeasonWeatherBias } from "./world/seasonWeatherBias.js";
-import { createElderMusicInteraction } from "./world/elderMusic.js";
+import { createElderMusicInteraction } from "./world/elderMusic.js?v=mounted-elder-r1";
 import { createFoxNpc } from "./world/foxNpc.js";
 import {
   updateSwampTigerDialog,
@@ -139,7 +143,7 @@ import {
 } from "./world/equatorialClouds.js";
 // 城头云盖要和三重门严格对齐：高度/锚点/沿轨跨度全部取自城门模块，不再各自硬编码
 import { GATE, GATE_DEPTH, findGateSeatU } from "./world/abandonedGate.js";
-import { createPlayer, syncPlayerVisual } from "./player/player.js";
+import { createPlayer, syncPlayerVisual } from "./player/player.js?v=head-profile-20261028";
 import { updatePlayerControl } from "./player/controller.js";
 import { updatePlayerAnim } from "./player/animation.js";
 import { createQuestSystem } from "./quest/questSystem.js";
@@ -155,6 +159,7 @@ import {
 import {
   ensureAudio,
   updateBgmListenerContext,
+  getMorrisGardenBgmSnapshot,
   getBgmOwnershipSnapshot,
   startAmbience,
   startTramSound,
@@ -172,7 +177,7 @@ import {
   resolveSceneIdsFromUrl,
   loadScenesIncrementally,
   listScenes,
-} from "./scenes/registry.js";
+} from "./scenes/registry.js?v=morris-threeview-r81";
 import { mergeColliders, updateScenes } from "./scenes/sceneApi.js";
 import {
   resolveWorldLandmarks,
@@ -182,15 +187,17 @@ import {
 
 // ---------- 舞台 ----------
 const { scene, camera, renderer } = createStage();
+morrisViewer.camera = camera;
 let targetCityRuntime=null;
 let citadelGuardian=null;
 let targetCityInspection=null;
+let moonLakeInspection=null;
+let morrisInspection=null,morrisStartupTourShown=false;
 // Include the scene and every post-processing pass in frame diagnostics.
 renderer.info.autoReset = false;
 // 性能探针（F10 显隐 / F9 截图）。performance.now() 以页面导航为起点，
 // 首帧读数即完整 boot 耗时，无需额外基准。
 const perfProbe = createPerfProbe(renderer);
-const footsteps = createFootsteps();
 // 固定容量灯池：接管全部点光，常驻 lightPoolCapacity 盏代理灯追随最重要的灯位。
 // 它与 idleLightCulling 会争抢同一批灯的 visible，所以二选一。回滚：?lightPoolV1=0
 const lightPool = P.lightPoolV1 === false
@@ -481,6 +488,7 @@ function isPlayerPilotingVehicle() {
   if (scoutAircraftRide?.isRiding?.()) return true;
   if (bubblePodRide?.isRiding?.()) return true;
   if (boatRide?.isRiding?.()) return true;
+  if (morrisHorseRide?.isRiding?.()) return true;
   // 电车也算乘坐：救援护送（虎虎/红狐）据此在电车上随行（主人 2026-09-18）。
   if (tramRide?.isRiding?.()) return true;
   return false;
@@ -544,6 +552,8 @@ const worldLandmarks = resolveWorldLandmarks({
   saihoji: sceneHandles.find((h) => h.id === "saihoji") ?? null,
   makeVec: () => new THREE.Vector3(),
 });
+
+if(messenger?.morrisIsland)worldLandmarks.push({id:'morris-island',name:'繁花锦岛',color:'#bd9755',tier:0,region:'far-nature',getDir:()=>messenger.morrisIsland.root.getWorldPosition(new THREE.Vector3())});
 
 // ---------- 小地图（左上角 · 经典场景标注 + 送信人位置/视野框） ----------
 // getDir 惰性求值：三重门/白鲸湖可被开发者菜单搬迁，每次绘制取最新方向
@@ -738,10 +748,14 @@ const devPanel = createDevPanel({
   onOpenStoryboard: () => storyboardPanel.setOpen(true),
   onOpenShotHarness: () => shotHarnessPanel?.setOpen(true),
   onOpenCityReview:()=>{
+    moonLakeInspection?.restore();
+    morrisInspection?.restore();
     if(!targetCityRuntime?.report.installed)return;
     targetCityInspection??=installTargetCityPresentation({THREE,castle:targetCityRuntime.root.parent,camera,cameraRig,renderer,runtime:targetCityRuntime,scene,tramSystem:messenger?.landmarks?.tramSystem});
     targetCityInspection.open();
   },
+  onOpenMoonLake:()=>{morrisInspection?.restore();if(!messenger?.moonLake?.group)return;targetCityInspection?.restore();moonLakeInspection??=installMoonLakePresentation({lake:messenger.moonLake,camera,cameraRig});moonLakeInspection.open();},
+  onOpenMorris:()=>{targetCityInspection?.restore();moonLakeInspection?.restore();morrisInspection??=installMorrisIslandPresentation({island:messenger.morrisIsland,camera,cameraRig,getMusicStatus:getMorrisGardenBgmSnapshot,onApproachPrincess:()=>{if(player.riding){showToast('请先离开当前载具',2);return;}const i=messenger.morrisIsland,h=i.princessPatrol?.horse;if(!h)return;const q=h.position.clone().add(new THREE.Vector3(2.6,0,0));q.y=i.heightAt(q.x,q.z)+.05;player.position.copy(i.root.localToWorld(q));player.velocity.set(0,0,0);player.onGround=true;player.groundR=player.position.length();cameraRig.snapToPlayer();showToast('会面起点 · 靠近公主按 E',3);},onApproachHorse:()=>{const i=messenger.morrisIsland,h=i.horses.find(h=>!h.userData.princessOccupied);if(!h)return;if(player.riding){showToast('请先离开当前载具',2);return;}const x=h.position.x+1.8,z=h.position.z,y=i.heightAt(x,z);player.position.copy(i.root.localToWorld(new THREE.Vector3(x,y+.05,z)));player.velocity.set(0,0,0);player.onGround=true;player.groundR=player.position.length();player.forward.copy(h.getWorldPosition(new THREE.Vector3()).sub(player.position)).normalize();player.facing.copy(player.forward);cameraRig.snapToPlayer();showToast('试骑起点 · 靠近披锦马按 F',3);}});morrisInspection.open();},
   cloudWallEnabled: isCloudWallEnabled(),
   onCloudWallToggle: (on) => {
     const enabled = setCloudWallEnabled(on);
@@ -1153,6 +1167,10 @@ const boatRide = createBoatRide({
   },
 });
 
+const morrisHorseRide=createMorrisHorseRide({player,playerGroup,messengerMesh,cameraRig,keys,getIsland:()=>messenger?.morrisIsland,groundRadius:p=>playerSupportRadius(p),waterRadius:p=>PLANET_RADIUS+batianOceanLevelAt(p),toast:showToast,enabled:()=>gameStarted});
+const morrisPrincessPatrol=createMorrisPrincessPatrol({island:messenger?.morrisIsland,player,isStarted:()=>gameStarted,onMeet:()=>morrisHorseRide.brake()});
+if(messenger?.morrisIsland)messenger.morrisIsland.princessPatrol=morrisPrincessPatrol;
+
 // ---------- 高山圣城 · Townscaper 搭建面板 ----------
 // 已开局时用鼠标左键点选圣城 → 弹出可拖拽/可收起的搭建面板；
 // 面板编辑（2D 平面图 / 场景 3D 直编辑）→ rebuildCitadelTown 即时重建场景圣城
@@ -1474,10 +1492,13 @@ function selectCitadelAtPointer(e, { waterFallback = false } = {}) {
   const ray = new THREE.Raycaster();ray.layers.enable(1);
   const rect = renderer.domElement.getBoundingClientRect();
   ray.setFromCamera(new THREE.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),camera);
-  let selected=nearestCitadelTarget(ray,citadelTargets)?.target;
+  const morrisRoot=messenger?.morrisIsland?.root;
+  if(morrisInspection?.active)return null;
+  const blockers=morrisRoot?[morrisRoot]:[];
+  let selected=nearestCitadelTarget(ray,citadelTargets,blockers)?.target;
   if(!selected&&waterFallback){
     const steps=scene.getObjectByName('citadel-pilgrimage-water-steps');
-    if(steps)selected=nearestCitadelTarget(ray,[{...citadelTargets[0],pick:()=>[steps]}])?.target;
+    if(steps)selected=nearestCitadelTarget(ray,[{...citadelTargets[0],pick:()=>[steps]}],blockers)?.target;
   }
   if(!selected)return null;
   if((selected.id??null)!==citadelTargetId){
@@ -1496,7 +1517,7 @@ let citadelSceneEdit = citadelEditorPanel
       getCitadel: () => getCitadelTarget(),
       selectTargetAt: (e) => selectCitadelAtPointer(e),
       panel: citadelEditorPanel,
-      canEdit: () => gameStarted, // 已开局即可编辑（不再要求航空艇）
+      canEdit: () => gameStarted && !morrisInspection?.active, // Morris inspection never enters castle editing
       isUiEvent: isCitadelUiEvent,
       toast: showToast,
     })
@@ -1587,7 +1608,8 @@ const elderMusic = createElderMusicInteraction({
     null,
   elHint: document.getElementById("elder-hint"),
   isGameStarted: () => gameStarted,
-  isBusyRiding: isPlayerPilotingVehicle,
+  isBusyRiding: () => !morrisHorseRide.isRiding() && isPlayerPilotingVehicle(),
+  onInteract: () => morrisHorseRide.brake(),
   // 主线对暗号的 E 优先：红狐就在八音盒旁，虎/狐章节靠近时八音盒让位
   shouldYieldKeyE: rescueWantsCodePhraseE,
 });
@@ -1652,7 +1674,7 @@ function isFacingCloudWall(p, cam, cloudWall) {
 }
 
 function updateMoebiusBarrier(dt) {
-  const observer = targetCityInspection?.active ? camera.position : player?.position;
+  const observer = targetCityInspection?.active||moonLakeInspection?.active||morrisInspection?.active ? camera.position : player?.position;
   const target = Number.isFinite(observer?.y) && observer.y < 0 ? 1 : 0;
   moebiusFactor += (target - moebiusFactor) * Math.min(1, dt / 2); // 2 秒时间常数
   if (lightingDirector.isEnabled()) {
@@ -1990,6 +2012,8 @@ const motherPortForGuard=messenger?.landmarks?.crystalMotherPort;
 const portEdgeGuard=createEdgeGuard({getZone:()=>motherPortForGuard?.root,supportRadius:playerSupportRadius,toast:text=>showToast(text),
   getNetworkMeshes:()=>(motherPortForGuard?.records||[]).map(r=>r.mesh).filter(m=>m&&!/rail/.test(m.name)),zoneRadius:13,zoneY:[-12,24],label:'母塔港'});
 function samplePlayerLocalGround(position){
+  const flowerGround=messenger?.morrisIsland?.sampleGroundRadius(position);
+  if(flowerGround!=null)return flowerGround;
   // Other authored regions have older radial support providers. They must not
   // fill the lake excavation after a lower tread passes below their height.
   if(swampOwnsPhysics(position))return sampleSwampStairGround(swampGroundZone,position) ?? sampleSwampAuthoredGround(swampGroundZone,position) ?? sampleSwampGround(position) ?? -Infinity;
@@ -2079,6 +2103,7 @@ function animate() {
   swampCavityClearance?.update?.();
   // 搭乘接管：飞行器驾驶舱 / 气泡艇 / 电车 / 航空艇
   const riding =
+    morrisHorseRide.update(dt) ||
     scoutAircraftRide?.update(dt) ||
     aircraftRide.update() ||
     bubblePodRide.update(dt) ||
@@ -2115,7 +2140,6 @@ function animate() {
     }
   }
   frameCpuMark("physicsAndRide");
-  footsteps.update(dt, player, gameStarted && !riding);
 
   // 电车搭乘 BGM：车上必须保持电车曲。峡谷曲只记 wanted，声道不抢。
   {
@@ -2147,20 +2171,22 @@ function animate() {
   const bgmWhale = saihojiRuntime?.group;
   if(!citadelBgmCity?.parent)citadelBgmCity=scene.getObjectByName('highland-west-city');
   const bgmCityCenter=citadelBgmCity?citadelBgmCity.localToWorld(citadelBgmPoint.fromArray(citadelBgmCity.userData.plazaAnchor || [60,4,71.5])):null;
-  updateBgmListenerContext({listener:player.position,saihoji:bgmWhale?.getWorldPosition(saihojiBgmPoint) || null,newCity:bgmCityCenter,gameStarted});
+  updateBgmListenerContext({listener:player.position,saihoji:bgmWhale?.getWorldPosition(saihojiBgmPoint) || null,newCity:bgmCityCenter,morrisCenter:messenger?.morrisIsland?.root.position,morrisListener:morrisInspection?.active&&messenger?.morrisIsland?.previewListening?camera.position:player.position,gameStarted});
 
   // 玩家驾驶的飞行器：引擎声居中（泡艇/航空艇由各自乘坐模块登记）
   if (scoutAircraftRide?.isRiding?.()) hintEngine("ride-scout", "jet", player.position, 0.7, true);
   else if (aircraftRide.isRiding?.()) hintEngine("ride-aircraft", "light", player.position, 0.6, true);
-  setSfxListener(batianFollowCamera?camera.position:player.position,camera);
+  setSfxListener(morrisInspection?.active&&messenger?.morrisIsland?.previewListening?camera.position:batianFollowCamera?camera.position:player.position,camera);
   updateWorldSfx(dt);
 
   // 场景模块自更新（湖、云、平台脉动等）
   frameCpuMark("audio");
   batianFleet?.beforeSceneUpdate();
   updateScenes(sceneHandles, dt, t, { player, gameStarted, keys });
-  batianFleet?.update(elapsedFrame,t);
-  if(batianFleet){const bs=batianFleet.snapshot();const targetSelect=document.getElementById('batian-target');if(targetSelect&&bs.target&&bs.phase!=='idle')targetSelect.value=bs.target;setBatianBattleBgm(gameStarted&&!['idle','dock'].includes(bs.phase));const el=document.getElementById('batian-fleet-status');if(el){el.textContent=(batianTargets.find(x=>x.id===bs.target)?.label||'等待书店镇出击')+' · '+(bs.arsenal?.pendingProjectiles>0?'霸天连续投弹':bs.beamActive&&bs.fireLog.at(-1)?.role==='flagship'?({cannon:'晶核脉冲',rain:'连续轰炸',ion:'离子干扰',traction:'牵引光场'}[bs.fireLog.at(-1)?.type]||'旗舰攻击'):{idle:'待命',assemble:'集结',transit:'霸天转场',blockade:'编队到场',pincer:'两翼轮番攻击',cannon:'霸天主炮',guard:'护卫掩护',withdraw:bs.coverBombing?.allowed&&bs.coverBombing.passes<2?'收队前掩护轰炸':'收队',return:'返航',dock:'补能'}[bs.phase]||bs.phase)+' · 能源 '+Math.round(bs.energy)+' · '+bs.members+'架 · '+(bs.shield?'护罩开启':'护罩关闭');if(bs.groundAssault?.active)el.textContent+=' · '+({suppression:'压制防空',insertion:'运输艇索降',sweep:'广场交战',evacuation:'地面收队'}[bs.groundAssault.stage]||'地面作战')+' · 本次 '+bs.groundAssault.assigned+' · 可战 '+bs.groundAssault.ready+' · 索降中 '+bs.groundAssault.rappelling+' · 已落地 '+bs.groundAssault.deployed;if(bs.groundAssault?.tactics){const ts=bs.groundAssault.tactics;el.textContent+=' · 光盾拦截 '+ts.shieldBlocks+' · 光剑命中 '+ts.swordHits+' · 枪阵射击 '+ts.gunBursts;}if(bs.groundAssault?.medical?.patients)el.textContent+=' · 送往黑娃救治 '+bs.groundAssault.medical.patients;el.dataset.saihojiBattle=JSON.stringify(scene.getObjectByName("leviathanGroup")?.userData.batianBattleTrigger||null);if(bs.target==='moss')el.textContent+=JSON.parse(el.dataset.saihojiBattle)?.allowed?' · 苔庭迎战':' · 苔庭等待霸天攻击';el.dataset.audit=JSON.stringify(bs);el.dataset.beamActive=bs.beamActive?'1':'0';el.dataset.bombActive=bs.arsenal?.pendingProjectiles>0?'1':'0';el.dataset.ionActive=bs.arsenal?.activeIon?'1':'0';el.dataset.bayOpen=bs.bay?.openness>.5?'1':'0';el.dataset.target=bs.target||'';el.dataset.shattered=String(bs.arsenal?.robotsShattered||0);el.dataset.fireRole=bs.fireLog.at(-1)?.role||'';}}
+  // Saihoji defenders and Kun advance on the world's clamped simulation clock.
+  // The flagship must share that clock or it finishes a sortie before landing at low FPS.
+  batianFleet?.update(batianFleet?.snapshot().target==='moss'?dt:elapsedFrame,t);
+  if(batianFleet){const bs=batianFleet.snapshot();const targetSelect=document.getElementById('batian-target');if(targetSelect&&bs.target&&bs.phase!=='idle')targetSelect.value=bs.target;setBatianBattleBgm(gameStarted&&!['idle','dock'].includes(bs.phase));const el=document.getElementById('batian-fleet-status');if(el){el.textContent=(batianTargets.find(x=>x.id===bs.target)?.label||'等待书店镇出击')+' · '+(bs.arsenal?.pendingProjectiles>0?'霸天连续投弹':bs.beamActive&&bs.fireLog.at(-1)?.role==='flagship'?({cannon:'晶核脉冲',rain:'连续轰炸',ion:'离子干扰',traction:'牵引光场'}[bs.fireLog.at(-1)?.type]||'旗舰攻击'):{idle:'待命',assemble:'集结',transit:'霸天转场',blockade:'编队到场',pincer:'两翼轮番攻击',cannon:'霸天主炮',guard:'护卫掩护',withdraw:bs.coverBombing?.allowed&&bs.coverBombing.passes<2?'收队前掩护轰炸':'收队',return:'返航',dock:'补能'}[bs.phase]||bs.phase)+' · 能源 '+Math.round(bs.energy)+' · '+bs.members+'架 · '+(bs.shield?'护罩开启':'护罩关闭');if(bs.groundAssault?.active)el.textContent+=' · '+({suppression:'压制防空',insertion:'运输艇索降',sweep:'广场交战',evacuation:'地面收队'}[bs.groundAssault.stage]||'地面作战')+' · 本次 '+bs.groundAssault.assigned+' · 可战 '+bs.groundAssault.ready+' · 索降中 '+bs.groundAssault.rappelling+' · 已落地 '+bs.groundAssault.deployed;if(bs.groundAssault?.tactics){const ts=bs.groundAssault.tactics;el.textContent+=' · 光盾拦截 '+ts.shieldBlocks+' · 光剑命中 '+ts.swordHits+' · 枪阵射击 '+ts.gunBursts;}if(bs.groundAssault?.medical?.patients)el.textContent+=' · 送往黑娃救治 '+bs.groundAssault.medical.patients;el.dataset.saihojiFormation=JSON.stringify(scene.getObjectByName("saihoji-phalanx-battle")?.userData.getBattleSnapshot?.()||null);el.dataset.saihojiBattle=JSON.stringify(scene.getObjectByName("leviathanGroup")?.userData.batianBattleTrigger||null);if(bs.target==='moss')el.textContent+=JSON.parse(el.dataset.saihojiBattle)?.allowed?' · 苔庭迎战':' · 苔庭等待霸天攻击';el.dataset.audit=JSON.stringify(bs);el.dataset.beamActive=bs.beamActive?'1':'0';el.dataset.bombActive=bs.arsenal?.pendingProjectiles>0?'1':'0';el.dataset.ionActive=bs.arsenal?.activeIon?'1':'0';el.dataset.bayOpen=bs.bay?.openness>.5?'1':'0';el.dataset.target=bs.target||'';el.dataset.shattered=String(bs.arsenal?.robotsShattered||0);el.dataset.fireRole=bs.fireLog.at(-1)?.role||'';}}
   frameCpuMark("sceneUpdates");
   citadelGuardian?.update(dt);
   // Trains move in updateScenes. Seat and freight poses must use this frame's
@@ -2195,10 +2221,12 @@ function animate() {
   const tz = player.velocity.z - vr * uz;
   const moving = Math.hypot(tx, ty, tz) > 0.3;
   updatePlayerAnim(player, messengerMesh, dt, moving);
+  morrisPrincessPatrol?.update(dt,t);
+  morrisHorseRide.pose();
   // 驾驶舱第一人称（飞行器 / 气泡艇）由各自 update 写相机，跳过第三人称跟随
   const cockpitView =
     scoutAircraftRide?.isRiding?.() || aircraftRide.isRiding?.() || bubblePodRide.isRiding?.();
-  if (!cockpitView&&!targetCityInspection?.active) {
+  if (!cockpitView&&!targetCityInspection?.active&&!moonLakeInspection?.active&&!morrisInspection?.active) {
     if (swampTourCamera) {
       camera.position.copy(swampTourCamera.position);
       camera.up.copy(swampTourCamera.up);
@@ -2208,6 +2236,9 @@ function animate() {
   }
   { const tt=performance.now()*0.001; swampPaintWater.update(tt); swampWaterfalls.update(tt); swampRimFlowers.update(tt); swampFloatingDebris.update(tt); swampHarborScene.update(tt); }
   robotOperations?.updateCamera();
+  moonLakeInspection?.update(dt,t);
+  if(!morrisStartupTourShown&&gameStarted&&new URLSearchParams(location.search).get('tour')==='morris'){const button=document.getElementById('dev-morris-review');if(button){morrisStartupTourShown=true;button.click();if(new URLSearchParams(location.search).get('morrisClean')==='1'){const style=document.createElement('style');style.textContent='body > :not(canvas):not(script):not(style):not(link){visibility:hidden!important;pointer-events:none!important}';document.head.append(style);}morrisInspection?.setView(({court:'城堡琴庭',bridge:'桥前望溪',overview:'岛屿全景',creek:'溪谷',castle:'城堡'})[new URLSearchParams(location.search).get('morrisView')]||'公主巡游');}}
+  morrisInspection?.update(dt,t);
   frameCpuMark("cameraWaterAndStory");
   quest.updateInteraction(dt);
   elderMusic.update(dt, t);
@@ -2334,6 +2365,11 @@ function animate() {
     const impact= combatView?.arsenal?.lastImpact;
     if(attacking&&impact&&impact.age<(impact.type==='ion'?5:impact.type==='rain'?1.8:0)&&!showUnderside){const p=new THREE.Vector3().fromArray(impact.point),normal=p.clone().normalize(),sideGround=new THREE.Vector3(0,1,0).cross(normal).normalize();if(sideGround.lengthSq()<.1)sideGround.set(1,0,0);const backGround=normal.clone().cross(sideGround).normalize();camera.up.copy(normal);camera.position.copy(p).addScaledVector(normal,25).addScaledVector(sideGround,30).addScaledVector(backGround,35);camera.lookAt(p.clone().addScaledVector(normal,4));}
     const blast=scene.userData.batianBlast;if(blast&&blast.age<.65&&camera.position.distanceTo(blast.position)<250){const shake=.45*(1-blast.age/.65);camera.position.addScaledVector(side,Math.sin(blast.age*83)*shake).addScaledVector(up,Math.cos(blast.age*67)*shake);}
+    if(attacking&&combatView?.target==='moss'){
+      const battlefield=scene.getObjectByName('saihoji-phalanx-battle'),d=target.dir.clone().normalize();
+      const height=battlefield?.userData.groundHeightAt?.(d);
+      if(Number.isFinite(height)){const centre=d.clone().multiplyScalar(height),across=new THREE.Vector3(0,1,0).cross(d);if(across.lengthSq()<.01)across.set(1,0,0);across.normalize();const back=d.clone().cross(across).normalize();camera.up.copy(d);camera.position.copy(centre).addScaledVector(d,45).addScaledVector(across,28).addScaledVector(back,55);camera.lookAt(centre.clone().addScaledVector(d,12));}
+    }
     camera.updateMatrixWorld(true);
   }
   if (entryParams.get('tour') === 'moon-grass') {
@@ -2534,6 +2570,7 @@ window.__tm = {
   get robotOperations(){return robotOperations;},
   tramRide,
   robotGreeting,
+  morrisHorseRide, morrisPrincessPatrol,
   boatRide, // Actual boarding controller, exposed alongside other ride diagnostics.
   bgm: { snapshot:getBgmOwnershipSnapshot },
   airshipRide,

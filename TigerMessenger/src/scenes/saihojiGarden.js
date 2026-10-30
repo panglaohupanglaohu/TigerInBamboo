@@ -59,16 +59,16 @@ function readSquadArrowHits(squad) {
   return hits;
 }
 
-function readWhaleSinkStep(squad) {
+function readWhaleSinkStep(squad, defenders = null) {
   return THREE.MathUtils.clamp(
-    Math.floor(readSquadArrowHits(squad) / ARROW_SINK_STEP),
+    Math.floor(Math.max(readSquadArrowHits(squad), Number(defenders?.userData?.batianBattleContactTotal)||0) / ARROW_SINK_STEP),
     0,
     ARROW_SINK_STEPS
   );
 }
 
-function readSquadSuction01(squad) {
-  return 1 - readWhaleSinkStep(squad) / ARROW_SINK_STEPS;
+function readSquadSuction01(squad, defenders = null) {
+  return 1 - readWhaleSinkStep(squad, defenders) / ARROW_SINK_STEPS;
 }
 
 /** @type {import("./sceneApi.js").SceneModule} */
@@ -476,7 +476,7 @@ export const saihojiGardenScene = {
         } else if (storyPhase === 1) {
           // 战斗期：飞艇不掉高度。每 50 支箭鲸下一档，12 档 / 600 支落地。
           setLeviathanStormBgm(true);
-          const sinkStep = readWhaleSinkStep(squad);
+          const sinkStep = readWhaleSinkStep(squad, phalanxRoot);
           const suction01 = 1 - sinkStep / ARROW_SINK_STEPS;
           const range = risenR - buriedR;
           const lift01 = (currentR - buriedR) / Math.max(1e-3, range);
@@ -576,7 +576,7 @@ export const saihojiGardenScene = {
       const range = risenR - buriedR;
       const lift01 = (currentR - buriedR) / Math.max(1e-3, range);
       const plateTopR = currentR + islandGroup.position.y * LEVIATHAN_SIZE;
-      const suction01 = readSquadSuction01(squad);
+      const suction01 = readSquadSuction01(squad, phalanxRoot);
       if (squad) {
         const lock = squad.userData.whaleLock || (squad.userData.whaleLock = {});
         const wantLock =

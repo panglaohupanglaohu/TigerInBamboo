@@ -1,8 +1,12 @@
+import {installMainIslandEdgeCleanup} from '../world/mainIslandEdgeCleanup.js';
+import {prepareMorrisElderEnsemble,moveMorrisElderEnsemble,installMorrisGroundOwnership,applyMorrisSeaPalette} from '../world/morrisElderPlacement.js?v=morris-live-r42';
+import {sfxMorrisBird,getMorrisBirdAudioStatus} from '../audio/worldSfx.js';
+import {createMorrisIsland} from '../world/morrisIsland.js?v=morris-threeview-r83';
 import {finishStartupSteps} from '../core/startupTasks.js';
 import {applyTargetLandscapePalette} from '../world/citadel/targetLandscapePalette.js';
 import {applyTownscaperTargetMaterials} from '../world/citadel/townscaperTargetMaterials.js';
 import {applyCitadelTargetOcean} from '../world/citadel/targetAtmosphere.js';
-import {seatTerracedSeaStacksSteps} from '../world/seaStackTerraces.js';
+import {seatTerracedSeaStacksSteps} from '../world/seaStackTerraces.js?v=coral-20261024';
 import {applyCityColourStudy} from '../world/citadel/cityColourStudy.js';
 import {applyCitadelBayLayout} from '../world/citadel/bayLayout.js';
 import {placeBookshopTown} from '../world/bookshopTownSite.js';
@@ -58,7 +62,8 @@ import { buildWorld } from "../world/platforms.js";
 import { buildHills, groundLiftAt } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets, decorateCorridorForests } from "../world/nature.js?v=bookshop-clearance-20260908";
 import { fitBookshopPath } from "../assets/bookshopPath.js";
-import { createMoonLake } from "../world/lake.js";
+import { createMoonLake } from "../world/lake.js?v=moon-orbit-20261024";
+import {installMoonLakeSceneGarden} from '../world/moonLakeSceneGarden.js?v=greg-orbit-20261024';
 import { GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { canyonOffsetDir } from "../world/canyon.js";
 import { SAIHOJI_ZONES, SAIHOJI_HUB } from "../world/saihoji.js";
@@ -71,7 +76,7 @@ import { buildOldHarborScene } from "../assets/harbor.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
 import { mergeStaticGroup } from "../world/geometryMerge.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
-import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20260903-navona-at-harbor-v1";
+import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20261025-batian-landing-r9";
 import { loadMoebiusDistrict, placeMoebiusSwampAndSky } from "./messenger/loadMoebius.js";
 import { loadTram, loadCanalNetwork, loadAbandonedGateBlock } from "./messenger/loadTraffic.js";
 import { updateMessengerIsland } from "./messenger/updateIsland.js";
@@ -557,6 +562,7 @@ export const messengerIslandScene = {
     colliders.push(...corridorForest.colliders);
 
     settleBuriedAssets(scene, colliders);
+    installMoonLakeSceneGarden({lake:moonLake,hills,platforms,colliders,trackCurves:tramSystem?[tramSystem.curve,...Object.values(tramSystem.curves||{})]:[]});
     placeBookshopTown(bookshop,R); // preserve the moved original shop after legacy settling
     if(bookshop.userData.blenderArt)fitBookshopPath(bookshop,()=>R+.9);
     yield '正在布置书店基地…';
@@ -593,6 +599,33 @@ export const messengerIslandScene = {
     // 正式页海壳内的谷底静态副本不会进入视野。只处理内容工厂明确标记、
     // 且包围范围完整低于海面的子树；战斗、车辆、倒影等动态内容绝不猜测。
     const officialOceanOcclusion = pruneTaggedOfficialOceanOccludeds(scene, { radius: R });
+
+    yield '正在种植繁花锦岛与披锦大马…';
+    // Survey the installed authored regions and railway before adding land.
+    const morrisObstacles=colliders.map(c=>({position:c.position?.clone(),radius:c.radius??2}));
+    for(const object of [bookshop,citadelPack.odysseyCitadel,moebiusPack.moebius,
+      gatePack.abandonedGate,skyPack.moebiusSwamp,mossSaihoji,mossSwamp,moonLake.group]){
+      if(!object?.getWorldPosition)continue;
+      object.updateWorldMatrix(true,true);
+      const bounds=new THREE.Box3().setFromObject(object),sphere=bounds.getBoundingSphere(new THREE.Sphere());
+      if(sphere.radius<100)morrisObstacles.push({position:sphere.center,radius:sphere.radius+5});
+      else morrisObstacles.push({position:object.getWorldPosition(new THREE.Vector3()),radius:32});
+    }
+    // The original main shell reaches its old rectangular corner/skirt: keep it all.
+    morrisObstacles.push({position:new THREE.Vector3(0,R,0),radius:106});
+    const morrisDeparture=bookshop.getWorldPosition(new THREE.Vector3()).normalize().multiplyScalar(R);
+    const morrisDestination=latLonToDir(SAIHOJI_HUB.lat,SAIHOJI_HUB.lon,new THREE.Vector3()).multiplyScalar(R);
+    const morrisRouteMid=morrisDeparture.clone().add(morrisDestination).normalize().multiplyScalar(R);
+    const morrisElder=camp?.landmarks?.elder||scene.getObjectByName('music-elder');
+    const morrisEnsemble=prepareMorrisElderEnsemble({elder:morrisElder,camp,playZone,corridorForest,colliders,hills,R});
+    const morrisProtected=(morrisEnsemble?.fixed??colliders).filter(c=>c.position).map(c=>({position:c.position.clone(),radius:Math.max(1,c.radius??1),floorRadius:morrisEnsemble?.sourceSample(c.position)??R+.6}));
+    const morrisIsland=createMorrisIsland({scene,R,obstacles:morrisObstacles,near:morrisRouteMid,anchor:morrisEnsemble?.anchor,sourceSample:morrisEnsemble?.sourceSample,protectedSites:morrisProtected,route:{departure:morrisDeparture,destination:morrisDestination},birdAudio:{play:sfxMorrisBird,status:getMorrisBirdAudioStatus},
+      curves:[tramSystem.curve,...Object.values(tramSystem.curves||{})]});
+    moveMorrisElderEnsemble({ensemble:morrisEnsemble,island:morrisIsland});
+    const mainIslandEdgeCleanup=installMainIslandEdgeCleanup({platforms,hills,colliders,trackCurves:[tramSystem.curve,...Object.values(tramSystem.curves||{})],R});
+    installMorrisGroundOwnership({island:morrisIsland,hills,platforms});
+    morrisIsland.report.seaPalette=applyMorrisSeaPalette(scene.getObjectByName('planet-v8-curved-ocean'),morrisIsland.root,morrisIsland.report.radius,[tramSystem.curve,...Object.values(tramSystem.curves||{})]);
+    morrisIsland.report.mainIslandEdgeCleanup={revision:mainIslandEdgeCleanup.revision,status:mainIslandEdgeCleanup.status,clearedTexels:mainIslandEdgeCleanup.clearedTexels,shadowMasks:mainIslandEdgeCleanup.shadowMasks};
 
     messengerLandmarks = {
       playZone,
@@ -698,10 +731,12 @@ export const messengerIslandScene = {
       clouds,
       moonLake,
       colliders,
+      morrisIsland,
       landmarks: messengerLandmarks,
       vanguardAssault: combatPack.vanguardAssault, // 苔庭之战任务（调试/验收可驱动）
       update(dt, t, runtime) {
         updateMessengerIsland(state, dt, t, runtime);
+        morrisIsland.update(dt,t);
       },
       debug: { playZone, camp, farSide, harbor },
     };

@@ -37,7 +37,7 @@ import { highlandTerrainSurfaceHeight } from "../../world/highlandCitadelDesign.
 import {
   createCitadelTerraceBirds,
 } from "../../world/citadelTerraceBirds.js?v=20260823-citadel-reference-v2";
-import { createSaihojiPhalanxBattle } from "../../world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1";
+import { createSaihojiPhalanxBattle } from "../../world/saihojiPhalanx.js?v=20261025-batian-landing-r9";
 import { createVanguardSquad } from "../../world/vanguardTrooper.js";
 import { createVanguardAssault } from "../../world/vanguardAssault.js";
 import { createSoccoCraft } from "../../world/gateHaulerCraft.js";

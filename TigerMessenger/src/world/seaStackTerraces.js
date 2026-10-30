@@ -1,5 +1,5 @@
 import {connectedSeaStackLandscapeEnabled,planConnectedSeaStackBanks,buildConnectedSeaStackBank} from './seaStackConnectedLandscape.js';
-import {twelveApostlesTargetEnabled,buildTwelveApostlesTarget} from './twelveApostlesTarget.js';
+import {twelveApostlesTargetEnabled,buildTwelveApostlesTarget} from './twelveApostlesTarget.js?v=shell-coral-20261024';
 import {plantConnectedSeaStackMeadow} from './seaStackMeadowVegetation.js';
 import {createCoastalMaterial} from './seaStackLighting.js';
 import {finishStartupSteps} from '../core/startupTasks.js';

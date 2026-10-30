@@ -575,7 +575,7 @@ export function createCitadelSceneEdit({
     const moved = Math.abs(e.clientX - downX) + Math.abs(e.clientY - downY);
     if (moved > CLICK_SLOP_PX || !editing() || isUiEvent(e)) return;
     // Switch only after a confirmed click, never during a camera drag.
-    selectTargetAt(e);
+    if (selectTargetAt(e) === null) return;
     const junction=getCitadel()?.userData.junctionEditor;
     if(junction){
       const ray=castRay(e), hit=ray&&junction.pick(ray);

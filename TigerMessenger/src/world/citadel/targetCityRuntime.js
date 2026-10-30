@@ -1,6 +1,6 @@
 import {bindTargetTowerLight} from './targetTowerLight.js';
 import {finishStartupSteps} from '../../core/startupTasks.js';
-import {createTargetCityDetailCandidate,createTargetCityDetailCandidateSteps} from './targetCityDetailCandidate.js?revision=walled-court-13';
+import {createTargetCityDetailCandidate,createTargetCityDetailCandidateSteps} from './targetCityDetailCandidate.js?revision=walled-court-14-clouds';
 import {integrateTargetCityLandmarks} from './targetCityLandmarkIntegration.js';
 
 export const TARGET_CITY_RUNTIME_VERSION = 'target-city-runtime-2';

@@ -15,3 +15,10 @@ test('every motion segment protects solid buildings and rail, not just cloud anc
  for(const route of c.report.routes){const points=route.points.map(p=>new T.Vector3(...p));for(let i=0;i<points.length;i++){const swept=new T.Box3().setFromPoints([points[i],points[(i+1)%points.length]]).expandByVector(new T.Vector3(7.5,3.6,4)).applyMatrix4(castle.matrixWorld);assert.ok(canopyClearOfConstraints(swept,boxes,rail,1.5,6));}}
  c.dispose();
 });
+test('six solid cloud silhouettes have independent shapes and morph timing',()=>{
+ const {clouds:c}=fixture();const signatures=c.group.children.map(m=>Array.from(m.geometry.attributes.position.array).join(','));assert.equal(new Set(signatures).size,6);
+ assert.equal(new Set(c.report.banks.map(b=>b.shapeRate)).size,6);assert.equal(new Set(c.report.banks.map(b=>b.shapePhase)).size,6);
+ for(const mesh of c.group.children){assert.equal(mesh.material.transparent,false);assert.equal(mesh.material.depthWrite,true);assert.equal(mesh.material.opacity,1);}
+ c.update(30);for(let i=0;i<6;i++){const mesh=c.group.children[i];assert.notEqual(Array.from(mesh.geometry.attributes.position.array).join(','),signatures[i]);assert.ok(mesh.geometry.boundingBox.min.y> -1);assert.ok(mesh.geometry.boundingBox.max.y<3.6);}
+ c.dispose();
+});

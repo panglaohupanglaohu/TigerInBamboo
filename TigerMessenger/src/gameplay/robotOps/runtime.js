@@ -1,13 +1,13 @@
 import {findDeploymentBay,repairDeploymentOverlaps} from './deployment.js';
-import {createBaseDefense} from './baseDefense.js';
-import {createBookshopPedestrians} from '../../world/bookshopPedestrians.js';
+import {createBaseDefense} from './baseDefense.js?v=heavy-cover-r1-20261025';
+import {createBookshopPedestrians} from '../../world/bookshopPedestrians.js?v=walk-matrix-r1';
 import {validateRobotOperationsSave} from './saveState.js';
 import {createRobotHandlingRig} from './handlingRig.js';
 import {createRobotEffects} from './effects.js';
 import * as THREE from 'three';
 import {RobotLogistics,ROBOT_KINDS,ROBOT_CARGO_SLOTS} from './logistics.js';
 import {RobotCombat,ROBOT_RULES} from './combat.js';
-import {createRobotOpsPanel} from './panel.js';
+import {createRobotOpsPanel} from './panel.js?v=walk-matrix-r1';
 import {BOOKSHOP_ROBOT_FACTORIES} from '../../assets/bookshopRobots.js';
 import {animateArticulatedRobot} from '../../assets/robotArticulation.js';
 import {townSurfacePoint,seatTownObject,townSurfaceMesh} from '../../world/bookshopTownSite.js';

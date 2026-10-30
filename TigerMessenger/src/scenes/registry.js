@@ -5,8 +5,8 @@ import {runStartupSteps, yieldStartupTask} from '../core/startupTasks.js';
 //  - URL：?scene=messenger,saihoji  或  ?scene=saihoji
 //  - 默认：messenger + saihoji（送信岛 + 苔寺景观）
 // =====================================================================
-import { messengerIslandScene } from "./messengerIsland.js";
-import { saihojiGardenScene } from "./saihojiGarden.js";
+import { messengerIslandScene } from "./messengerIsland.js?v=morris-threeview-r81";
+import { saihojiGardenScene } from "./saihojiGarden.js?v=saihoji-battle-r9-20261025";
 
 /** @type {Map<string, import("./sceneApi.js").SceneModule>} */
 const REGISTRY = new Map();

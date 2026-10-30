@@ -1,5 +1,5 @@
 /** Pick the nearest visible castle hit across all registered instances. */
-export function nearestCitadelTarget(raycaster,targets){
+export function nearestCitadelTarget(raycaster,targets,occluders=[]){
  let best=null;
  for(const target of targets){
   for(const root of (target.pick?target.pick():[target.get()])||[]){
@@ -10,6 +10,15 @@ export function nearestCitadelTarget(raycaster,targets){
     if(!best||hit.distance<best.hit.distance)best={target,hit};
     break;
    }
+  }
+ }
+ if(best)for(const root of occluders){
+  if(!root)continue;
+  for(const hit of raycaster.intersectObject(root,true)){
+   let visible=true;for(let node=hit.object;node;node=node.parent)if(!node.visible){visible=false;break;}
+   if(!visible||hit.object.userData?.isOutline||hit.object.userData?.transientFx)continue;
+   if(hit.distance<=best.hit.distance)return null;
+   break;
   }
  }
  return best;

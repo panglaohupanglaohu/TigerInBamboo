@@ -10,3 +10,9 @@ assert.equal(nearestCitadelTarget(ray,[a,c,b]).target,b);assert.equal(nearestCit
 near.visible=false;assert.equal(nearestCitadelTarget(ray,[a,b,c]).target,a);near.visible=true;
 assert(isCitadelClick({button:2,x:100,y:100},{button:2,clientX:102,clientY:101}));assert(!isCitadelClick({button:2,x:100,y:100},{button:2,clientX:130,clientY:100}));assert(!isCitadelClick({button:0,x:100,y:100},{button:2,clientX:100,clientY:100}));
 console.log('PASS nearest-instance independent of registration order, hidden ancestors excluded, click/drag/button discrimination');
+
+const island=new THREE.Group();scene.add(island);box(island,-4);scene.updateMatrixWorld(true);
+assert.equal(nearestCitadelTarget(ray,[a,b],[island]),null,'Morris ground blocks castles behind');
+island.visible=false;assert.equal(nearestCitadelTarget(ray,[a,b],[island]).target,b,'hidden island does not block');
+island.visible=true;island.position.z=-20;scene.updateMatrixWorld(true);assert.equal(nearestCitadelTarget(ray,[a,b],[island]).target,b,'castle in front remains editable');
+console.log('PASS Morris foreground occlusion, hidden and behind cases');

@@ -431,3 +431,20 @@ Greg目标：artifacts/pipeline/greg-swamp-target-20261010/target-v3-current-cou
 - USAF B-52事实页：https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104465/b-52-stratofortress/ — 采用其“远程重型轰炸机”的类别、体量与稳重感，不照搬现实武器参数。
 - DVIDS Luke Hill / 8th Air Force，2019-04-11，26秒《B-52 Areal B-roll》：https://www.dvidshub.net/video/673773/b-52-areal-b-roll — 页面说明专门展示机腹弹舱。网页文本已读；内嵌浏览器视频页超时，未声称播放或全量观看。
 - 游戏推演：连续航迹时钟、长直线与宽弧返回、转向限速、机头沿位移；六瓣铰接舱门在攻击前逐步展开。圈形路线与数值属于游戏尺度美术设计，不是B-52真实作战流程。
+
+## 2026-10-26 繁花锦岛
+用户指定 Arts and Crafts / William Morris 与华丽马具大马在卷叶草花丛中吃草。实际来源及转译边界见 `artifacts/pipeline/morris-island-20261026/RESEARCH.md`。V&A壁纸自然观察/重复花叶、Acanthus and Vine交织卷叶用于真实几何花田、卷叶和马具藤纹，马匹为原创挽马造型。正式入口已安装，3马919花83卷叶；GPU与缺项见同批review/STATE，不称完全复制手机图或完整游览验收。
+
+## 2026-10-26 莫里斯岛扩建目标 V2
+最新参考仍为用户工艺美术运动手机截图：强调深靛蓝/墨绿负形、交织卷叶枝蔓、成簇红白花、织锦马具，而非泛化小岛花园。`artifacts/pipeline/morris-elder-target-20261026/target-v2.png` 已实际生成并看图；V1保留对照，V2是施工目标，不是实景。用户最新地势为“中央高、周围低”，动物缩小25%、植物约15%；最新明确选址为原 music-elder 岸边，并迁原老人/乐器/石松到城堡旁。用户尚未确认接受V2，不能记录成已认可目标。实际几何与目标细节存在差距，正常验收另见Morris ecology批次。
+
+### 2026-10-26 莫里斯岛高树与城堡 V3
+以用户原 Arts and Crafts 挂毯示意图和此前目标V2为图像输入，内置imagegen完成V3；提高尖柏与掌状叶悬铃的垂直节奏，动物为前版60%，保留红白繁花、卷叶、溪桥/农门、山肩城堡和原老人琴庭。`artifacts/pipeline/morris-elder-target-20261026/PROMPT-v3.txt`保存完整提示词。Oskar研究顾问按既有配色/模块研究出独立城堡方案并交付真实几何，非作者本人设计；当前游戏实景与概念图分开展示，未宣称织物表面与密度完全匹配。
+区域原创器乐《织锦花园》用独立曲谱、加法合成钢琴/弦乐/笛声，借鉴舒缓、神秘花园的器乐氛围，不复制神秘园乐团曲目或采样录音。源曲谱/音频出处说明在本批和 `music/Morris-Garden-Original.txt`；游戏原老人Balmorhea交互曲继续保留且优先。实际正常播放、M静音、区域听点渐出与完整媒体收尾证据见 `artifacts/pipeline/morris-tall-garden-20261026/`。
+
+### 2026-10-26 莫里斯岛盘山入堡 r24
+继续依据用户目标V3和公主骑马向城堡原示意，优先把“低花坪→横溪石桥→农门→盘山回转→城堡→背景高峰”的空间顺序做成实际几何。Oskar研究顾问参与城堡实体细节与路线设计评审；主代理采用有最小半径的连续道路、真实坡肩与宽桥潭，并协调新增高树和原古松净空。采用成簇红/奶油花、五瓣蜀葵、卷叶、鳞叶尖柏、掌状叶分枝树和沿墙攀缘花，保持原生物模型的小尺度关系。目标图不变，不追加公主角色。当前正常实景、旧失败/修正、来源和限制均在 `artifacts/pipeline/morris-verdure-20261026/`。
+
+2026-10-26 Morris对象目标图与骑乘：`artifacts/pipeline/morris-object-targets-20261026/`两张基于实际布局/原对象身份的imagegen施工目标，非实景验收；Morris花叶转译沿用认可V3。用户指定Ghost of Tsushima骑乘节奏；已查PlayStation Blog2020-05-29问答与2018-06-19官方演示讲解索引（见PROJECT_HANDOFF原链接），仅作为公开参考，不声称观看完整马匹动作视频。本批使用原马+原创膝部程序步态/平滑起停、未提取第三方动画。
+
+2026-10-26 Morris目标实体迭代r35：依据用户认可`morris-object-targets-20261026`两张图调整真实几何，不再出替代目标图。Oskar方法顾问负责桥Details；主代理负责高树/道路/溪流，来源仍为本项目已存公开Oskar方法研究及认可Morris转译。细节和正式GPU观察见`morris-target-iteration-20261026/REVIEW.md`，不得把JEV文字概率当目标图匹配率。

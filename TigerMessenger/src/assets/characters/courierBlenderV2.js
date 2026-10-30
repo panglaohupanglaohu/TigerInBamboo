@@ -1,11 +1,11 @@
 import * as T from 'three';
 import {MESSENGER_PALETTE} from './courierMoebius.js';
 
-// 候选：Blender 三视图信使 v2（artifacts/pipeline/courier-blender-threeview-20261008/v2）。
-// 只在 URL 带 ?courier=blenderV2 时由 player.js 加载；默认信使不变。
+// 正式 Blender 三视图信使 v2，2026-10-28 按用户要求移除六件防风镜。
+// 原 v2 GLB 与建模源保留，?courier=classic 可回到原 JS 信使。
 // GLB 的关节节点名与 humanCourier.js 驱动的一致（body/head/legL/kneeL/armL/elbowL/handL…/letter），
 // 静止姿态旋转为单位四元数，所以原有六个动作代码直接驱动这些节点。
-export const COURIER_BLENDER_V2_URL=new URL('../../../assets/models/courier-blender-v2/courier-v2.glb',import.meta.url).href;
+export const COURIER_BLENDER_V2_URL=new URL('../../../assets/models/courier-blender-v2/courier-head-profile.glb?v=profile-r2',import.meta.url).href;
 const JOINTS=['body','head','legL','legR','kneeL','kneeR','armL','armR','elbowL','elbowR','handL','handR','letter'];
 
 function flatShade(mesh,surface,ink){

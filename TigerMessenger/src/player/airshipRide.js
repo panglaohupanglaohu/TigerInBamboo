@@ -315,8 +315,8 @@ export function createAirshipRide({
 
   function applyCameraForView() {
     if (viewMode === "pilot") {
-      // 第一人称：贴眼、沿艇首向前看（不走身后高位俯视，避免看向地面）
-      cameraRig?.setFirstPerson?.(true);
+      // 驾驶员沿艇首向地面下俯15度；右键环视松开后仍回到此取景角。
+      cameraRig?.setFirstPerson?.(true, { pitch: THREE.MathUtils.degToRad(15) });
       cameraRig?.setFov?.(PILOT_FOV);
     } else {
       cameraRig?.setFirstPerson?.(false);

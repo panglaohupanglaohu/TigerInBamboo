@@ -6,6 +6,7 @@ import {animateArticulatedRobot} from '../../assets/robotArticulation.js';
 import {applyVanguardHit} from '../../world/vanguardTrooper.js';
 import {applyFleetHullDamage} from '../../world/fleetHullDamage.js';
 import {isAircraftKnocked} from '../../world/tranquilizer.js';
+export function defenseTargetPoint(enemy){const point=enemy.getWorldPosition(new THREE.Vector3());if(enemy.userData.bookshopReceiveHit)point.addScaledVector(point.clone().normalize(),1.35);return point;}
 // Defense reacts to real fleet objects, never generates stand-in enemies.
 export function createBaseDefense({scene,base,logistics,models,combat,getFleet,getAssault,R=160}){
  const weapons=createWeaponEffects(scene),states=new Map(),up=new THREE.Vector3(),point=new THREE.Vector3(),local=new THREE.Vector3(),ray=new THREE.Raycaster();let time=0,salvoReset=0,salvoBudget=3;
@@ -44,7 +45,10 @@ export function createBaseDefense({scene,base,logistics,models,combat,getFleet,g
    if(state.mounted!==mounted){state.position.copy(m.getWorldPosition(new THREE.Vector3()));state.heading=null;state.mounted=mounted;}
    if(!mounted)m.position.copy(m.parent.worldToLocal(state.position.clone()));
    let origin=m.getWorldPosition(new THREE.Vector3());let enemy=null,dist=Infinity;const closeTroops=candidates.filter(e=>e.userData.bookshopReceiveHit&&e.getWorldPosition(point).distanceTo(origin)<35),flagship=candidates.find(e=>e.userData.kind==='crystal-colossus'&&e.getWorldPosition(point).distanceTo(origin)<=110);for(const e of closeTroops.length?closeTroops:flagship?[flagship]:candidates){const d=e.getWorldPosition(point).distanceTo(origin);if(d<dist){dist=d;enemy=e;}}if(!enemy)continue;
-   const target=enemy.getWorldPosition(new THREE.Vector3()),kind=m.userData.robotType;let speed=0;
+   const target=defenseTargetPoint(enemy),kind=m.userData.robotType;
+   // Command trooper roots are at the soles, below the light shield. Aim at
+   // the actual torso so weapon FX, interception and damage share one ray.
+   let speed=0;
    up.copy(origin).normalize();
    if(!mounted&&dist>12){
     // Tangent-plane steering with ground support, swept wall checks and separation.

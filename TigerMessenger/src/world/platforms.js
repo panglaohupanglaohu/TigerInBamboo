@@ -108,6 +108,7 @@ export function buildWorld(scene) {
       mat.customProgramCacheKey = () => 'hex-grass-single-owner-v1';
     }
     const mesh = new THREE.Mesh(geometry, mat);
+    mesh.userData.authoredMainIslandShell = !rock;
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     scene.add(mesh);

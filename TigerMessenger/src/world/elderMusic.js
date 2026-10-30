@@ -22,6 +22,7 @@ export function createElderMusicInteraction({
   isBusyRiding = () => false,
   // 主线对暗号的 E 优先（狐狸就在八音盒旁）：虎/狐章节靠近目标时八音盒让位
   shouldYieldKeyE = () => false,
+  onInteract = () => {},
 }) {
   let elder = elderInit || null;
   let notePulse = 0;
@@ -64,6 +65,7 @@ export function createElderMusicInteraction({
       return;
     }
 
+    onInteract();
     const wasPlaying = isMusicBoxPlaying();
     const started = toggleMusicBox({
       onNote: () => { notePulse = 1; },

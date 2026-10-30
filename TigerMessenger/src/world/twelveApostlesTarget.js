@@ -22,6 +22,7 @@ export const twelveApostlesTargetEnabled=()=>new URLSearchParams(globalThis.loca
 const C=hex=>new THREE.Color(hex);
 const PAL={
  rock:[C(0xe2dbc8),C(0xd6d3c6),C(0xc8cdcc),C(0xe6e0d0),C(0xcfd1cc),C(0xd9d4c3),C(0xc1c7c9)],
+ coral:C(0xdfb7a3),shell:C(0xe8cbb5),
  shade:C(0x8f9ca6),wet:C(0x4f5961),deep:C(0x313b44),
  grass:C(0x9abb57),grassDrape:C(0x7f9a50),
  bush:[0x3c6a39,0x46773f,0x335d33,0x527f45],talus:[0xb9bcb8,0xa9aeac,0xc4c4bc]
@@ -109,7 +110,7 @@ const inPoly=(x,z,poly)=>{let c=false;for(let i=0,j=poly.length-1;i<poly.length;
 export function buildTwelveApostlesTarget({parent,radius=160,railCurves,railPoints,waterAt,protectedBoxes=[],plazaMargin=()=>Infinity,referencePoint,masses=APOSTLE_MASSES,clearance=10}){
  let nearest=null;for(const[name,curve]of Object.entries(railCurves||{})){if(!curve?.getPointAt)continue;const length=curve.getLength(),count=Math.ceil(length/2);for(let i=0;i<count;i++){const u=i/count,p=curve.getPointAt(u),dd=p.distanceToSquared(referencePoint);if(!nearest||dd<nearest.dd)nearest={name,curve,length,u,dd};}}
  if(!nearest)throw new Error('twelve apostles need the actual rail curves');
- const report={version:'apostles-oskar-wfc-16-wide-crown',railSource:nearest.name,input:{radius,referencePoint:referencePoint.toArray()},masses:[],railUnchanged:true,triangles:0,levels:LEVEL_Y,maxStep:MAX_STEP},rocks=[];
+ const report={version:'apostles-oskar-wfc-16-wide-crown',colourRevision:'shell-coral-dry-strata-1',railSource:nearest.name,input:{radius,referencePoint:referencePoint.toArray()},masses:[],railUnchanged:true,triangles:0,levels:LEVEL_Y,maxStep:MAX_STEP},rocks=[];
  const _sz=new THREE.Vector3();protectedBoxes=protectedBoxes.filter(e=>e.box.getSize(_sz).length()<25);
  parent.updateWorldMatrix(true,false);const parentInv=parent.matrixWorld.clone().invert();
  const rockMat=new THREE.MeshStandardMaterial({vertexColors:true,flatShading:false,roughness:.95,metalness:0,side:THREE.DoubleSide});
@@ -172,13 +173,20 @@ export function buildTwelveApostlesTarget({parent,radius=160,railCurves,railPoin
   const topL=new Int32Array(nV);let smoothChanged=0;for(let i=0;i<nV;i++){let t=0;for(let k=1;k<=maxLevel;k++)if(occ[k][i]>=.5)t=k;topL[i]=t;if(t!==lv[i])smoothChanged++;}
   if(!lv.some(l=>l>0)){report.masses.push({id:m.id,rejected:'no-land',wfc:sol.attempts});continue;}
   // ---- 3. marching geometry per quad per layer
-  const P=[],Cc=[],Hn=[],bushes=[],talus=[],foamSegs=[],rimSegments=[],r=rng(seed+5);
-  const push=(v,col)=>{P.push(v[0],v[1],v[2]);Cc.push(col.r,col.g,col.b);};
+  const P=[],Cc=[],Hn=[],normalGreen=[],bushes=[],talus=[],foamSegs=[],rimSegments=[],r=rng(seed+5);
+  const push=(v,col)=>{P.push(v[0],v[1],v[2]);Cc.push(col.r,col.g,col.b);normalGreen.push(col.apostleOriginalNormalGreen??(col.g>col.r*1.06));};
   const tri=(a,b,c,ca,cb,cc,h='cap')=>{push(a,ca);push(b,cb);push(c,cc);Hn.push(h);};
   const quad=(a,b,c,d,ca,cb=ca,cc=ca,cd=ca,h='cap')=>{tri(a,b,c,ca,cb,cc,h);tri(a,c,d,ca,cc,cd,h);};
   const strata=(y,ph)=>1+.05*Math.sin(y*1.35+ph)+.025*Math.sin(y*3.1+ph*2);
-  const rockCol=(base,y,depth,ph)=>{const c=base.clone().lerp(PAL.shade,Math.min(.22,Math.max(0,depth)*.14)).multiplyScalar(strata(y,ph));
-   if(y<2.4){const w=Math.min(1,(2.4-y)/2.2);c.lerp(y<-.4?PAL.deep:PAL.wet,w);}return c;};
+  const rockCol=(base,y,depth,ph)=>{const c=base.clone(),legacy=base.clone().lerp(PAL.shade,Math.min(.22,Math.max(0,depth)*.14)).multiplyScalar(strata(y,ph));
+   // The approved target has a few broad shell/peach mineral seams among
+   // neutral/cool limestone, rather than every face being warmed by sunset.
+   // Height-continuous low-frequency bands only: geometry and wet feet stay fixed.
+   if(y>2.4){const phase=y*1.12+.11*Math.sin(y*.33+ph),u=THREE.MathUtils.clamp((Math.sin(phase)-.55)/.36,0,1),band=u*u*(3-2*u),dry=THREE.MathUtils.clamp((y-2.4)/1.2,0,1);
+    c.lerp(PAL.coral,band*dry*.54);c.lerp(PAL.shell,band*dry*.14);}
+   c.lerp(PAL.shade,Math.min(.22,Math.max(0,depth)*.14)).multiplyScalar(strata(y,ph));
+   if(y<2.4){const w=Math.min(1,(2.4-y)/2.2);c.lerp(y<-.4?PAL.deep:PAL.wet,w);legacy.lerp(y<-.4?PAL.deep:PAL.wet,w);}
+   c.apostleOriginalNormalGreen=legacy.g>legacy.r*1.06;return c;};
   const ekey=(a,b)=>a<b?a*100003+b:b*100003+a;
   // iso point on edge (solid a, empty b) for layer k, pushed into the rock by depth d (edge-consistent)
   const isoT=(a,b,k)=>{const lo=Math.min(a,b),hi=Math.max(a,b),vl=occ[k][lo],vh=occ[k][hi];return Math.min(.92,Math.max(.08,(vl-.5)/(vl-vh)));}; // interpolated, param from the lower-index vertex
@@ -277,13 +285,13 @@ export function buildTwelveApostlesTarget({parent,radius=160,railCurves,railPoin
   // normals + winding: with DoubleSide three.js flips the normal of back-facing fragments, so each triangle
   // is first wound to face its hint (caps up, walls outward, ledges up/down). Turf caps then get the smooth
   // curved-sea normal (no faceted patches); walls/ledges keep a flat face normal.
-  {const Nn=new Float32Array(P.length),swap=(o,a,b)=>{for(let c=0;c<3;c++){let t=P[o+a*3+c];P[o+a*3+c]=P[o+b*3+c];P[o+b*3+c]=t;t=Cc[o+a*3+c];Cc[o+a*3+c]=Cc[o+b*3+c];Cc[o+b*3+c]=t;}};
+  {const Nn=new Float32Array(P.length),swap=(o,a,b)=>{for(let c=0;c<3;c++){let t=P[o+a*3+c];P[o+a*3+c]=P[o+b*3+c];P[o+b*3+c]=t;t=Cc[o+a*3+c];Cc[o+a*3+c]=Cc[o+b*3+c];Cc[o+b*3+c]=t;}const n=o/3+a,m=o/3+b,t=normalGreen[n];normalGreen[n]=normalGreen[m];normalGreen[m]=t;};
    for(let t=0;t<Hn.length;t++){const o=t*9,cap=Hn[t]==='cap',h=cap?[0,1,0]:Hn[t];
     const ux=P[o+3]-P[o],uy=P[o+4]-P[o+1],uz=P[o+5]-P[o+2],vx=P[o+6]-P[o],vy=P[o+7]-P[o+1],vz=P[o+8]-P[o+2];let nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;const L=Math.hypot(nx,ny,nz)||1;nx/=L;ny/=L;nz/=L;
     if(nx*h[0]+ny*h[1]+nz*h[2]<0){swap(o,1,2);nx=-nx;ny=-ny;nz=-nz;}
     if(cap){for(let v=0;v<3;v++){const x=P[o+v*3],z=P[o+v*3+2],l=Math.hypot(x/Rw,1,z/Rw);Nn[o+v*3]=x/Rw/l;Nn[o+v*3+1]=1/l;Nn[o+v*3+2]=z/Rw/l;}}
     else for(let v=0;v<3;v++){Nn[o+v*3]=nx;Nn[o+v*3+1]=ny;Nn[o+v*3+2]=nz;}}
-   const smoothGroups=new Map();for(let i=0;i<P.length;i+=3){if(Cc[i+1]<=Cc[i]*1.06)continue;
+   const smoothGroups=new Map();for(let i=0;i<P.length;i+=3){if(!normalGreen[i/3])continue;
     const key=[P[i],P[i+1],P[i+2]].map(x=>x.toFixed(5)).join(',');if(!smoothGroups.has(key))smoothGroups.set(key,[]);smoothGroups.get(key).push(i);}
    for(const ids of smoothGroups.values()){const sum=new THREE.Vector3();for(const i of ids)sum.add(new THREE.Vector3(Nn[i],Nn[i+1],Nn[i+2]));sum.normalize();for(const i of ids){const old=new THREE.Vector3(Nn[i],Nn[i+1],Nn[i+2]);if(old.dot(sum)>.35){Nn[i]=sum.x;Nn[i+1]=sum.y;Nn[i+2]=sum.z;}}}
    geo.setAttribute('position',new THREE.Float32BufferAttribute(P,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(Cc,3));geo.setAttribute('normal',new THREE.BufferAttribute(Nn,3));}geo.computeBoundingBox();geo.computeBoundingSphere();

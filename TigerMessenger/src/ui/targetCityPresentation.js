@@ -14,6 +14,16 @@ export function installTargetCityPresentation({THREE:T,castle,camera,cameraRig,r
  for(const name of Object.keys(views))button(name,()=>handle.setView(name));
  function inspectTime(phase){if(!savedClock)savedClock={daySpeed:P.daySpeed,timeOfDay:P.timeOfDay};P.daySpeed=0;P.timeOfDay=phase;}
  button('水中桥柱',()=>{const sections=runtime.report.cityDetail?.bayWater?.pillarContactSections;if(!sections?.length)return;const pick=sections.find(p=>p.name==='central-double-deck-side-pier-1-1')??sections[0];const y=pick.center[1],x=(pick.bounds[0]+pick.bounds[1])/2,z=(pick.bounds[2]+pick.bounds[3])/2;views['水中桥柱']=[[x+12,y+4,z+28],[x,y+.6,z],42];handle.setView('水中桥柱');});
+ // Read-only camera onto the actual installed sea stacks, sharing this inspection lifecycle.
+ function inspectApostles(close=false){
+  const rocks=[];scene.traverse(o=>{if(o.isMesh&&o.userData.apostleMass&&o.visible)rocks.push(o);});if(!rocks.length)return;
+  scene.updateMatrixWorld(true);const selected=rocks.find(o=>o.userData.apostleMass==='front-left')??rocks[0];
+  const centre=new T.Vector3();if(close)new T.Box3().setFromObject(selected).getCenter(centre);else{for(const rock of rocks)centre.add(new T.Box3().setFromObject(rock).getCenter(new T.Vector3()));centre.multiplyScalar(1/rocks.length);}
+  const up=centre.clone().normalize(),along=new T.Vector3(0,0,1).transformDirection(selected.matrixWorld),outward=new T.Vector3().crossVectors(up,along).normalize();
+  const eye=centre.clone().addScaledVector(up,close?6:64).addScaledVector(outward,close?55:165).addScaledVector(along,close?9:10);
+  handle.active=true;handle.view=close?'十二门徒岩层近看':'十二门徒全景';camera.position.copy(eye);camera.up.copy(up);camera.lookAt(centre);camera.fov=48;camera.zoom=1;camera.far=4000;camera.updateProjectionMatrix();camera.updateMatrixWorld(true);inspectTime(.48);
+ }
+ button('十二门徒全景',()=>inspectApostles(false));button('十二门徒岩层近看',()=>inspectApostles(true));
  button('正午检查',()=>inspectTime(.48));button('夜间检查',()=>inspectTime(.03));
  // Inspect the actual installed actors, including their current parent frame.
  // These views never substitute a studio model or relocate the player.

@@ -75,6 +75,7 @@ export function createCameraRig(camera, player, opts = {}) {
   let camDist = P.camDist;
   /** 第一人称：贴眼向前看（飞艇驾驶员等），不走身后高位俯视 */
   let firstPerson = false;
+  let firstPersonPitch = 0;
   let followProfile = null;
   const defaultFov = camera.fov;
   let midDrag = false;
@@ -98,8 +99,9 @@ export function createCameraRig(camera, player, opts = {}) {
    * 第一人称模式：相机在眼位，沿 player.forward 看向远方（不看地面）。
    * @param {boolean} on
    */
-  function setFirstPerson(on) {
+  function setFirstPerson(on, { pitch = 0 } = {}) {
     firstPerson = !!on;
+    firstPersonPitch = firstPerson ? pitch : 0;
     if (firstPerson) {
       camOrbit = 0;
       camPitch = 0;
@@ -184,7 +186,8 @@ export function createCameraRig(camera, player, opts = {}) {
         camPitch -= camPitch * k;
       }
       _fwd.applyAxisAngle(up, camOrbit);
-      _fwd.multiplyScalar(Math.cos(camPitch)).addScaledVector(up, -Math.sin(camPitch) + .04).normalize();
+      const pitch = camPitch + firstPersonPitch;
+      _fwd.multiplyScalar(Math.cos(pitch)).addScaledVector(up, -Math.sin(pitch) + .04).normalize();
 
       // 眼位 = 玩家位置（已是驾驶员眼高）
       camDesired.copy(player.position);

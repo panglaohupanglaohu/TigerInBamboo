@@ -41,3 +41,10 @@
 
 ## Jakub 书店镇顾问（2026-10-11 用户指定）
 配置为仓库根 `.codex/agents/jakub.toml`，入口 `docs/jakub/BRIEF.md`。研究 qoubah 的 Frostpunk 2 动态及用户五链接，学习后优化书店镇蒸汽朋克。该代理不是真实作者。覆盖/实际观看秒数记入 SOURCES.json；403或未播放不得声称全量学习。当前只完成静态/文章第一批研究，运行时未改。
+
+## 独立 Morris 顾问（2026-10-27 用户指定）
+用户指定独立 `morris_world_advisor`，与 Oskar 无从属关系，不再以 `oskar_morris_castle_target` 承接该岛风格。配置为仓库根 `.codex/agents/morris_world_advisor.toml`，技能为 `.agents/skills/morris-world-advisor/SKILL.md`，研究来源及范围见 `docs/morris/BRIEF.md`、`SOURCES.json`。Morris 主导莫里斯岛及后续用户交予的城堡美术；工程接入和实景验收由主代理负责，不自动重造其他城堡。保留历史移交和作者归属；配置不等于当前会话热加载。
+
+
+## REA-agent 对话入口
+用户发送 `/REA-agent 路径 问题` 时，读取 `/Users/panglaohu/.codex/skills/rea-agent/SKILL.md`，调用实际 REA MCP 或本地工具；它是对话触发约定，不声称新增了 Codex 内置斜杠命令。
