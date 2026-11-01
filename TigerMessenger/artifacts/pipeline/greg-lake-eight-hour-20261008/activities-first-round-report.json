@@ -1,0 +1,129 @@
+{
+  "revision": "activities-first-round-1",
+  "status": "CPU passed; frozen for root multi-time GPU review",
+  "atUTC": "2026-10-08T02:07:11.865546+00:00",
+  "reference": "artifacts/pipeline/greg-lake-current-target-20261008/target-v2.png (actually viewed)",
+  "ownership": [
+    "src/world/swampFlowerActivities.js",
+    "src/world/moebiusSwamp.js: lotus stem refs, main whale +Z tangent, repair work update hook, final activities install options"
+  ],
+  "implementation": {
+    "flowerBoats": "Five original cups/ten original identity refs; route planning assigns nearby clear patrol pockets. 8s moored phase and 50–74s small route loop, sweep-speed boost coupled to actual power stroke. This first round is short safe rowing, not a full lake ferry service or embark/disembark mechanic.",
+    "paddles": "Two per boat; actual palms retained; blade centre Y24.88 power and25.38 recovery. Original water stems retain bed anchors and follow real boat endpoint.",
+    "navigation": "Plans deterministic safe pockets once with no RNG; actual water-level tree/dock/barge source-triangle footprints, reserved original whale-orbit envelopes and exact authored departure centreline expanded7.5; circles conservatively include full paddle reach. No per-frame position snapping.",
+    "whales": "Loft nose confirmed+Z; old yaw offsetπ/2 removed from update, actual original ellipse/centres/speeds retained. Continuous body/fins tail vertices/normal deform coherently, shared-outline geometry retained. Static cull sphere inflated .23 once.",
+    "feeder": "Existing original feeder true shoulder/elbow/hip/knee swim and7.2s breath cycle preserved; food still follows real right palm to unchanged whale mouth; three sampled cycles each1.5s mouth/nose above water.",
+    "repair": "Original2workers/52rowers; lift hands pull actual dynamic line endpoints; same mast16s cycle/foot placements/tail shapes; raised worker mallet reaches real mast side and withdraws, then checks. No new workers."
+  },
+  "CPU": {
+    "tests": 12,
+    "log": "activities-first-round-validation.txt",
+    "sampleHz": 10,
+    "metrics": {
+      "seconds": 180,
+      "samples": 1801,
+      "spans": [
+        3.546822136248035,
+        3.5468267824273356,
+        3.546817549377642,
+        3.546823265119136,
+        3.546828005553075
+      ],
+      "minObstacle": 1.0558917235865617,
+      "minBoatGap": 1.4666532024748613,
+      "minEdge": 1.4154846528396074,
+      "minDirection": 0.9996448436405492,
+      "maxStemError": 1.0658141036401503e-14,
+      "maxRopeError": 5.8927631492873816e-08,
+      "minToolAxis": 0.06287305826514217,
+      "minDepartureGap": 1.0580461335936402,
+      "minWhaleGap": 2.9232632977389073,
+      "maxTailChange": 0.26398947834968567,
+      "minWhaleDirection": 0.9999999999999996,
+      "powerSamples": 9641,
+      "recoverySamples": 6487,
+      "repairPhases": [
+        "inspect",
+        "haul-rope",
+        "secure-and-check"
+      ]
+    },
+    "formalStartup": "activities-formal-startup.json",
+    "formalIdentities": {
+      "whale-adult": 1,
+      "whale-young": 1,
+      "whale-escort": 1,
+      "tiger": 1,
+      "monkey-canopy": 3,
+      "monkey-repair": 2,
+      "glow-bird": 4,
+      "lizard-rim": 2,
+      "lizard-underwater": 1,
+      "lizard-carrier": 1,
+      "ribbonfish": 3,
+      "fish": 9,
+      "eel": 1,
+      "pink-hanger": 3,
+      "tube-worms": 11,
+      "fireflies": 46,
+      "flower-boys": 10,
+      "swimmer": 1,
+      "rowers": 52
+    },
+    "formalReferencesStable": true,
+    "formalLimit": "Browser API shim; other-city baseline file/fetch warnings retained in log. This is not full browser GPU acceptance."
+  },
+  "budget": {
+    "additionalDrawsThisRound": 3,
+    "newRenderables": [
+      "1 dynamic LineSegments hoist rope",
+      "2 mallet meshes"
+    ],
+    "boatAndWhaleDrawChange": 0,
+    "ownedGeometryUUIDsStableAcross180s": true,
+    "allocationBoundary": "No per-frame geometry/material/texture creation in new activity code; global existing scene effect allocation not claimed zero."
+  },
+  "GPUShots": [
+    {
+      "view": "overview",
+      "seconds": [
+        0,
+        12,
+        30,
+        60
+      ],
+      "check": "five boats change position and head along travel; no unwanted cup/paddle overlap with shore foliage; planned pockets are deliberately more spread than old fixed positions"
+    },
+    {
+      "view": "dock",
+      "seconds": [
+        1,
+        4,
+        8,
+        13
+      ],
+      "check": "inspect/alternating haul/grasp/tap; verify ropes do not obscure faces or clip tool through mast; long tails and feet stay clear"
+    },
+    {
+      "view": "whale/feeder",
+      "seconds": [
+        0.8,
+        2.6,
+        4.3,
+        8
+      ],
+      "check": "tail cycle and right-way swimming, feeder breath/submerge/feed; no body/snout overlap"
+    }
+  ],
+  "limits": [
+    "Conservative navigation envelopes are CPU evidence, not proof of every leaf/bridge occlusion; root GPU still required.",
+    "Mallet centre/rope hand anchors measured; exact swept solid collision of tool fingers/mast not exhaustively tested.",
+    "Boat paths remain short patrols; longer cross-lake routes and richer landing interaction are later iteration work.",
+    "Existing whale–whale and whale–tree full solid collision not newly proved; unchanged original routes should be visually checked."
+  ],
+  "rollback": "activities-before exact source files retained; restore only owned hunks to avoid concurrent changes; no save data changes",
+  "hashes": {
+    "src/world/swampFlowerActivities.js": "5ed8d1a6c3a2e123290dd065875035baae4e4f9849e600a00db51736c226b414",
+    "src/world/moebiusSwamp.js": "456df6788bd97dbacc89b7749a8edf5f77b936b10d17dc60f8b2b08d1d35bd34"
+  }
+}

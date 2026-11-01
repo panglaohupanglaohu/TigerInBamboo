@@ -1,0 +1,27 @@
+{
+  "task": "Morris deadline closure verification",
+  "observations": [
+    "Deadline21:25UTC passed; close incomplete without further geometry changes.",
+    "Current r71 actual last read travelled74.4657m, bridge0court0; V17/V13 loaded visible moving. Final audit unavailable browser.user.",
+    "Earlier version bridge/court visits and resume do not prove current full traversal.",
+    "Actual inspected imagery still has broad smooth rock, sparse/coarse flora and basic castle, below approved targets.",
+    "All source snapshots and review retained. No publication."
+  ],
+  "checks": [
+    {
+      "name": "r71 numeric route and11 deterministic controller checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current normal full ride and E interaction",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "approved target visual match",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

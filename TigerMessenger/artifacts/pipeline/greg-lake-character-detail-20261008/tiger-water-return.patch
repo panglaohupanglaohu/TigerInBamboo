@@ -1,0 +1,80 @@
+--- before/src/world/moebiusTiger.js
++++ after/src/world/moebiusTiger.js
+@@ -249,7 +249,9 @@
+       tiger.userData._greeting = true;
+       const pl = playerLocal(player);
+       if (!pl) {
+-        // 人走了：回坑缘
++        // Keep the established water-walking identity while returning to the
++        // original stair queue; land support begins only at an actual tread.
++        tiger.userData._waterReturning = true;
+         mode = "ascend";
+         queue = up;
+         qi = 0;
+@@ -293,6 +295,7 @@
+       if (greetStayT <= 0) {
+         tiger.userData._greeting = false;
+         greetCd = GREET_COOLDOWN;
++        tiger.userData._waterReturning = true;
+         mode = "ascend";
+         queue = up;
+         qi = 0;
+@@ -350,8 +353,20 @@
+       if (qi < queue.length && seek(queue[qi], dt, qi === queue.length - 1 ? .015 : .6)) qi++;
+       const ty = qi < queue.length ? queue[qi].y : rim[0].y;
+       const targetY = groundY(tiger.position.x, tiger.position.z, ty);
+-      tiger.userData._baseY += (targetY - tiger.userData._baseY) * Math.min(1, dt * 3);
++      if(tiger.userData._waterReturning){
++        const frame=tiger.parent,surfaces=frame?.userData.tigerWalkSurfaces||[];
++        frame.updateWorldMatrix(true,false);
++        footingOrigin.set(tiger.position.x,60,tiger.position.z);frame.localToWorld(footingOrigin);
++        footingDown.set(0,-1,0).transformDirection(frame.matrixWorld);footingRay.set(footingOrigin,footingDown);
++        for(const surface of surfaces)surface.updateWorldMatrix(true,false);
++        const hit=footingRay.intersectObjects(surfaces,false)[0];
++        const treadY=hit?frame.worldToLocal(hit.point.clone()).y:null;
++        if(treadY!==null&&treadY+.08>=WATER_WALK_Y)tiger.userData._waterReturning=false;
++      }
++      if(tiger.userData._waterReturning)tiger.userData._baseY=WATER_WALK_Y;
++      else tiger.userData._baseY += (targetY - tiger.userData._baseY) * Math.min(1, dt * 3);
+       if (qi >= queue.length) {
++        tiger.userData._waterReturning=false;
+         mode = "patrol";
+         wp = 1;
+         queue = steps;
+--- before/src/assets/characters/tigerTargetV1.js
++++ after/src/assets/characters/tigerTargetV1.js
+@@ -121,14 +121,21 @@
+   // Small weight transfer follows footfalls; the ground solver below retains sole contact.
+   body.rotation.z=walking?.022*Math.sin(stridePhase*Math.PI*2):0;
+   body.position.y+=walking?.025*Math.cos(stridePhase*Math.PI*4):0;
+-  const mode=tiger.userData._mode,grounded=!tiger.userData._companion&&['patrol','to-steps','descend','drink','ascend'].includes(mode);
++  const mode=tiger.userData._mode,groundMode=!tiger.userData._companion&&['patrol','to-steps','descend','drink','ascend'].includes(mode);
++  const waterReturning=mode==='ascend'&&!!tiger.userData._waterReturning;
++  let initialFeet=[];
++  if(groundMode&&!waterReturning&&swamp?.userData.tigerWalkSurfaces){
++   swamp.updateWorldMatrix(true,false);inverseFrame.copy(swamp.matrixWorld).invert();groundSurfaces=[...swamp.userData.tigerWalkSurfaces,...(swamp.userData.gregCoralRim?.walkMeshes||[])];for(const step of groundSurfaces)step.updateWorldMatrix(true,false);
++   initialFeet=paws.map(p=>support(swamp,p));
++  }
++  const grounded=groundMode&&!waterReturning&&initialFeet.length===4&&initialFeet.every(f=>f.height!==null);
+   if(!grounded||!swamp?.userData.tigerWalkSurfaces){
+-   tiger.userData.tigerTargetSupport={time:t,mode,grounded:false,pitch:0,feet:[]};
++   const supportKind=waterReturning||['greet-meet','greet-stay'].includes(mode)?'water-supported':mode==='greet-jump'?'airborne':tiger.userData._companion?'external':'unsupported';
++   tiger.userData.tigerTargetSupport={time:t,mode,grounded:false,supportKind,waterHeight:supportKind==='water-supported'?25.15:null,pitch:0,feet:initialFeet.map(p=>({height:p.height,foot:p.foot.toArray(),samplesSupported:p.samplesSupported}))};
+    tiger.userData.updateTargetForelimbs?.(drinkBlend,swingPhases);tiger.userData.updateTargetHindlimbs?.(drinkBlend,swingPhases);
+    tiger.userData.updateTargetDrinkDetails?.(dt,t,0);return;
+   }
+-  swamp.updateWorldMatrix(true,false);inverseFrame.copy(swamp.matrixWorld).invert();groundSurfaces=[...swamp.userData.tigerWalkSurfaces,...(swamp.userData.gregCoralRim?.walkMeshes||[])];for(const step of groundSurfaces)step.updateWorldMatrix(true,false);
+-  const fore=support(swamp,paws[0]),rear=support(swamp,paws[2]);
++  const fore=initialFeet[0],rear=initialFeet[2];
+   const span=Math.hypot(fore.foot.x-rear.foot.x,fore.foot.z-rear.foot.z);
+   const slope=fore.height!==null&&rear.height!==null?Math.atan2(rear.height-fore.height,Math.max(.1,span)):0;
+   const pitch=THREE.MathUtils.lerp(THREE.MathUtils.clamp(slope,-1.1,1.1),THREE.MathUtils.clamp(slope,0,.22),drinkBlend);tiger.rotation.x=pitch;
+@@ -147,7 +154,7 @@
+   const torsoLift=drinkBlend<.01?clearTorso(swamp):0;
+   if(drinkBlend>.8){const from=tiger.worldToLocal(swamp.localToWorld(best.clone())),to=best.clone();to.y=25.12;tiger.worldToLocal(swamp.localToWorld(to));body.position.add(to.sub(from));}
+   tiger.updateWorldMatrix(true,true);tiger.userData.updateTargetForelimbs?.(drinkBlend,swingPhases);tiger.userData.updateTargetHindlimbs?.(drinkBlend,swingPhases);
+-  updateNeck();tiger.userData.updateTargetDrinkDetails?.(dt,t,drinkBlend);tiger.userData.tigerTargetSupport={time:t,mode,grounded:true,pitch,drinkBlend,torsoLift,feet:paws.map(p=>support(swamp,p)).map(p=>({height:p.height,foot:p.foot.toArray(),samplesSupported:p.samplesSupported})),noseBefore:min};
++  updateNeck();tiger.userData.updateTargetDrinkDetails?.(dt,t,drinkBlend);tiger.userData.tigerTargetSupport={time:t,mode,grounded:true,supportKind:'real-ground',pitch,drinkBlend,torsoLift,feet:paws.map(p=>support(swamp,p)).map(p=>({height:p.height,foot:p.foot.toArray(),samplesSupported:p.samplesSupported})),noseBefore:min};
+  };
+ 
+  // Continuous adult cranium: broad temples, narrowed lower jaw and softened forehead.

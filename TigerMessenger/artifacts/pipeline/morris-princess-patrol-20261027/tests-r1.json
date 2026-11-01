@@ -1,0 +1,25 @@
+{
+  "passed": 11,
+  "scope": "actual factory/controller deterministic simulation, not normal browser complete ride",
+  "snapshot": {
+    "revision": "normal-route-patrol-r1",
+    "state": "downhill-patrol",
+    "routeDistance": 59.46100412500535,
+    "routeLength": 181.2638010233845,
+    "direction": -1,
+    "speed": 0.6499999933641756,
+    "travelled": 831.8580009919224,
+    "bridgePasses": 4,
+    "courtVisits": 5,
+    "meetings": 1,
+    "dialogue": -1,
+    "horseLocal": [
+      7.918163157451276,
+      1.5325039262480253,
+      32.48569970599999
+    ],
+    "riderVisible": true,
+    "horseOccupied": true,
+    "routeSource": "current installed island route and raycast bridge support"
+  }
+}

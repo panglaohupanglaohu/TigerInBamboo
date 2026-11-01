@@ -1,0 +1,32 @@
+{
+ "target": "DUKE coastal steam freight ship concept sheet 2026-10-12 (side, deck plan, 3/4 bow, cutaway, crane detail)",
+ "candidate": "duke-r4",
+ "visual_observations_source": "assistant viewed studio renders; text only for Jev",
+ "observations": [
+  "in-game: production model at the lower wharf, gangway and mooring lines present",
+  "ship rode too high: about 2-3 m of red bottom exposed"
+ ],
+ "changes": "red boundary lowered to 0.6 m below waterline, ship rides 1.2 m light in game; harbor now uses the production model with gangway, mooring lines and funnel steam",
+ "checks": [
+  {
+   "name": "raised harbor node test",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "in-game render at wharf",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "courier boarding/gangway walk",
+   "required": false,
+   "passed": null
+  }
+ ],
+ "constraints": [
+  "additive; robots/rails/story untouched",
+  "no keys or images sent"
+ ],
+ "version": "duke-r4"
+}

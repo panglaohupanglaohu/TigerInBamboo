@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "c6085a19d6d6281cc0169b07bce6efa5a4be94a364498cd279d639918c89777c",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.88
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.47,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0.39,
+        "navigation": 0.03,
+        "review": 0.58
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.87
+    }
+  },
+  "usage": {
+    "input_tokens": 679,
+    "output_tokens": 91,
+    "cost_usd": 0.000286,
+    "credits_remaining_usd": 4.876291
+  },
+  "elapsed_ms": 1825,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "full game story and vehicle regression",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

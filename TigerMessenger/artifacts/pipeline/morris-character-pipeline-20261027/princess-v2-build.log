@@ -1,0 +1,27 @@
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/build_morris_princess_v2.py:11: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.diffuse_color=(*[((int(h[i:i+2],16)/255+.055)/1.055)**2.4 if int(h[i:i+2],16)/255>.04045 else int(h[i:i+2],16)/255/12.92 for i in (0,2,4)],1);m.use_nodes=True
+Info: Saved as "princess-v2.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+09:08:53 | INFO: Starting glTF 2.0 export
+09:08:53 | INFO: Extracting primitive: continuous bent sleeve
+09:08:53 | INFO: Primitives created: 3
+09:08:53 | INFO: Extracting primitive: continuous bent sleeve.001
+09:08:53 | INFO: Primitives created: 3
+09:08:53 | INFO: Extracting primitive: bodice acanthus spine
+09:08:53 | INFO: Primitives created: 4
+09:08:53 | INFO: Extracting primitive: brow
+09:08:53 | INFO: Primitives created: 8
+09:08:53 | INFO: Extracting primitive: cloak embroidered border
+09:08:53 | INFO: Primitives created: 2
+09:08:53 | INFO: Extracting primitive: Sphere.034
+09:08:53 | INFO: Primitives created: 3
+09:08:53 | INFO: Finished glTF 2.0 export in 0.04780912399291992 s
+00:01.427  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-character-pipeline-20261027/princess-v2-front.png'
+00:02.099  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-character-pipeline-20261027/princess-v2-side.png'
+00:02.739  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-character-pipeline-20261027/princess-v2-back.png'
+
+{"revision": "reference-loft-v2", "workflow": "new continuous authored lofts/sweeps and closed drape; courier-style empty pivots; no skinning claimed", "mesh_count": 6, "vertices": 33228, "triangles": 65872, "bounds_blender": [[-0.4950000047683716, -0.42900002002716064, -0.6929999589920044], [0.4950000047683716, 0.5350000262260437, 0.8640000224113464]], "nodes": ["MorrisPrincess", "body", "head", "cape", "armL", "armR"], "validation": "structural and offline component render only; no game navigation acceptance"}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

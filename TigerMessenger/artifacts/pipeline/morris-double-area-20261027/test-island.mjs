@@ -1,0 +1,7 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import * as T from 'three';import{createMorrisIsland}from'../../../src/world/morrisIsland.js';
+const island=createMorrisIsland({scene:new T.Scene()}),r=island.report,checks=[];
+assert.equal(r.planarAreaRatio,14);checks.push('footprint area twice previous ratio7, no root scale');assert.ok(Math.abs(r.radius-22*Math.sqrt(14))<1e-8);assert.equal(island.root.scale.x,1);checks.push('world geometry radius82.316 no actor root enlargement');
+for(const [j,h] of island.horses.entries()){assert.ok(Math.abs(h.scale.x-[.6075,.6345,.6615][j])<1e-9);const p=h.position,rad=new T.Vector3(p.x,160+p.y,p.z).length()-160;assert.ok(rad>1,`horse dry ground ${rad}`);}checks.push('three horses unchanged scale, all initial placements above sea');
+const outerTrees=island.botany.trees.filter(t=>Math.hypot(t.position.x,t.position.z)>50);assert.ok(outerTrees.length>=4);checks.push('new outer meadows contain spread tall trees');
+const bad=[];island.root.traverse(m=>{if(m.geometry)for(const v of m.geometry.attributes.position.array)if(!Number.isFinite(v))bad.push(m.name)});assert.equal(bad.length,0);checks.push('all generated positions finite');
+console.log(JSON.stringify({checks,report:r,outerTrees:outerTrees.map(t=>t.position.toArray()),horsePositions:island.horses.map(h=>h.position.toArray()),scope:'factory checks only; actual normal GPU pending'},null,2));island.dispose();

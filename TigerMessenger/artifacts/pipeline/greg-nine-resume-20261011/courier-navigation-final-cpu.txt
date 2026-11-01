@@ -1,0 +1,48 @@
+file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/ui/hud.js:4
+export const elQuestPanel = document.getElementById("quest-panel");
+                            ^
+
+ReferenceError: document is not defined
+    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/ui/hud.js:4:29
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:643:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.19.0
+✖ tests/world/authoredCavityCollision.test.mjs (169.5205ms)
+✔ entrance bridge closes the rim gap outside the stair head only (0.575ms)
+✔ without the guard, stepping off the rim inward falls into the crater (the reported bug) (67.949666ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 0 (635.41475ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 0.9 (532.694209ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 2 (522.544083ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 3.1 (521.479792ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 4 (488.009833ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 5.2 (617.626417ms)
+✔ full rim lap at radius 38.8 counter-clockwise completes, through the entrance, without dropping (198.242834ms)
+✔ full rim lap at radius 38.8 clockwise completes, through the entrance, without dropping (201.568791ms)
+✔ full rim lap at radius 39.4 counter-clockwise completes, through the entrance, without dropping (207.7365ms)
+✔ full rim lap at radius 39.4 clockwise completes, through the entrance, without dropping (196.789333ms)
+✔ full rim lap at radius 39.9 counter-clockwise completes, through the entrance, without dropping (197.91325ms)
+✔ full rim lap at radius 39.9 clockwise completes, through the entrance, without dropping (196.941584ms)
+✔ authored bank route (entry link, three terraces, flights) is still walkable with the guard on (176.227875ms)
+✔ swampEdgeGuard=0 style disable leaves physics untouched (54.944042ms)
+✔ real V7 promenade overlap no longer steals support from feet on the coral rim (10.910791ms)
+✔ feet below rim retain lower promenade and entrance/water are not captured (5.985166ms)
+✔ production collision substeps keep a standing player on the actual new rim (13.217167ms)
+✔ all three real bank midpoints stay supported through gravity instead of falling to old V7 terrain (189.212ms)
+✔ real lower tread remains available beneath an upper terrace, late quay registration stays dynamic (1.395917ms)
+✔ production controller and gravity can enter from the outer rim and descend actual stairs with guard and steer active (2186.034667ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 22
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7174.674292
+
+✖ failing tests:
+
+test at tests/world/authoredCavityCollision.test.mjs:1:1
+✖ tests/world/authoredCavityCollision.test.mjs (169.5205ms)
+  'test failed'

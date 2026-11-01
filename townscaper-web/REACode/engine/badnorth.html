@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Engine — Bad North 逆向重建（叠层岩岛 / 雾海 / 岸线丝带）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #a8b0b3; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 14px; top: 12px; z-index: 5;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: #2f3a3f; text-shadow: 0 1px 0 rgba(255,255,255,.55);
+    pointer-events: none; white-space: pre;
+  }
+  #hud b { font-weight: 600; }
+  #hint {
+    position: fixed; left: 14px; bottom: 12px; z-index: 5;
+    font: 11px/1.5 ui-monospace, Menlo, monospace;
+    color: rgba(47,58,63,.72);
+  }
+</style>
+</head>
+<body>
+<div id="hud"></div>
+<div id="hint">拖动旋转 · 滚轮缩放 · 1 夏 / 2 晨（配色） · V 调试视角 · R 换岛 · F 雾 · L 岸线丝带</div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { buildGrid } from '../src/grid.js';
+import { buildBrushAtlas, buildLedgeField } from './bnbrush.js';
+import { makeCanopyGeometry } from './bncanopy.js';
+
+/**
+ * badnorth.html — 对 Bad North（Plausible Concept, 2018）成品画面的逆向重建。
+ *
+ * 证据来源与边界（重要）：
+ *   · https://www.badnorth.com 本身**没有可玩构建** —— 它是 Squarespace 静态站，
+ *     19 个 script 标签全部是 squarespace/typekit，唯一 iframe 是 Steam 商店挂件。
+ *     所以这里不可能做装机逆向（没有 wasm / asar / 原生二进制可拆）。
+ *   · 可用证据是**官方截图**（badnorth.com 媒体区的 1920×1080 原图），那是游戏
+ *     帧缓冲的真实输出 —— 等价于一次「离线渲染结果采样」。所有参数都是从像素里量的，
+ *     量不到的（引擎版本、着色器源码、网格细节）在 BADNORTH-REA.md 里标为未知。
+ *
+ * 从参考帧量到的六个结构性结论，以及本文件对应的实现：
+ *
+ * (1) 没有地平线。天空与远处海面是**同一个颜色**，水用距离雾直接溶进背景。
+ *     量：12×8 网格平均色，四角 #c1c1c1 / #bcbebf，中间带 #a1abae；
+ *     竖直剖面顶部 #c1c1c1 → 0.5H #a5aeb2 → 底部 #c4c4c4（中间偏暗、上下偏亮）。
+ *     → 天空用竖直渐变 + 以岛为心的径向压暗；水的雾色 = 天空地平线色。
+ *
+ * (2) 岛是**叠层岩板**：地形高度被量化成台阶，侧面是竖长大四边形。参考帧里能清楚
+ *     看到崖面上有横向的板缝和竖向的块缝（dawn1 那张尤其明显）。
+ *     → 高度按 0.62 世界单位量化，侧面按 3 段竖向再切一次，间隔出板缝。
+ *
+ * (3) 崖面不是纯平色，而是**每块面一个色 + 面内竖直渐变**，整体从浅藕粉过渡到
+ *     深紫灰。量到的四个簇：#9d8e97(h325,s.10,v.62) 受光 / #8b797e(h343,v.55) /
+ *     #705a67(v.44) / 倒影与深影 #6d687e(h254,s.18,v.50)。
+ *     → 光照模型用「冷紫环境 + 暖阳直射」，影子乘 (0.62,0.62,0.78)。
+ *
+ * (4) 草面是**手绘笔触**：密集的深橄榄小点 + 更大的灌木暗块，绝不是平涂。
+ *     → 世界坐标 hash 双尺度色块，只作用在朝上的面。
+ *
+ * (5) 岸线是一条**带状丝带**，不是水体边缘的硬切线：夏季帧是鲑鱼粉
+ *     （#d9a79e），晨雾帧变成青色（#a8e0e8）—— 说明它跟着环境色走，不是沙。
+ *     而且在 c_foam 那一块能看到**两条平行的丝带**，说明是分层外扩的等距轮廓。
+ *     → 沿海岸线向外偏移生成 2 圈 ribbon。
+ *
+ * (6) 岛下有一片**竖向柔化的倒影**（比水暗、偏紫），近岸最深、远处散掉；
+ *     崖根还有一圈更暗的「湿影」贴着岸。
+ *     → 地形镜像一份、y 翻转、紫色调、按深度衰减 alpha。
+ */
+
+// ---------------------------------------------------------------- 调色板
+// 全部来自 ref/summer1.jpg 的 k=14 聚类与定点取色；hex 后括号是占比或位置。
+const PAL = {
+  summer: {
+    skyTop: 0xc1c1c1,       // 顶部（左边缘 y=0 实测）
+    skyMid: 0xafb4b6,       // 地平线带（实测 0xa6afb2，补上压暗损耗）
+    skyLow: 0xd0d0d0,       // 画面底部（左边缘 y=1 实测 0xc4c4c4，我们这边被径向压暗吃了一截，先补回来）
+    fog: 0xa6afb2,          // 水的雾色 = 天空地平线色 → 无地平线
+    water: 0xb7babc,
+    waterDeep: 0x8fa0a7,    // 近岛径向压暗（12×8 网格 x=0.20,y=0.50）
+    shadeRing: 0x6d687e,    // 崖根湿影 / 倒影
+    cliffLit: 0xa89aa2,
+    cliffMid: 0x9d8e97,
+    cliffShade: 0x8b797e,
+    cliffDeep: 0x705a67,
+    grass: 0xa9ac83,        // 实测 4.47% 的 #b9b793，但我们这边有 +5% 提亮，先压回来
+    grassDark: 0x6f7150,
+    sand: 0xdfd4c3,         // 1.47%
+    shore: 0xd9a79e,        // 岸线丝带（夏季）
+    foam: 0xf9faee,         // 1.32%
+    wall: 0xf3efe4,
+    roof: 0xb9c79c,
+    unitBody: 0x3f5f8f,
+    unitCream: 0xe8dcc0,
+    sun: 0xfff4e2,
+    amb: 0xb9b2d6,          // 冷紫环境
+  },
+  dawn: {
+    skyTop: 0xb3a9a4,
+    skyMid: 0xa79da0,
+    skyLow: 0xb0a6a2,
+    fog: 0xa79da0,
+    water: 0xb2a8a8,
+    waterDeep: 0x9a8f95,
+    shadeRing: 0x6f6478,
+    cliffLit: 0xd0a3a4,
+    cliffMid: 0xc08d92,
+    cliffShade: 0xa8707a,
+    cliffDeep: 0x8a5560,
+    grass: 0xa8a08c,
+    grassDark: 0x7d7563,
+    sand: 0xd8c8bd,
+    shore: 0xa8e0e8,        // 晨雾帧的青色岸线
+    foam: 0xe8f6f8,
+    wall: 0xf0e6dc,
+    roof: 0xa9a68f,
+    unitBody: 0x44639a,
+    unitCream: 0xece0c8,
+    sun: 0xffeede,
+    amb: 0xc2b6c4,
+  },
+};
+let pal = PAL.summer;
+
+// ---------------------------------------------------------------- 网格
+// 复用仓库的 Townscaper 网格：六边 → 切 4 个风筝形 → 抖动 → 松弛。
+// Bad North 的岛比 Townscaper 粗得多（一座岛约 80~150 格），所以半径取小、格子取大。
+const CELL = 1.15;
+// 台地台阶高度 = 一层崖壁的高度。参考帧里崖壁高 / 格子宽 ≈ 0.7，
+// 格子宽 ≈1.15 → 0.86。这个数决定整座岛是「矮胖」还是「峭」。
+const STEP = 0.95;
+
+function buildIsland(seed) {
+  const grid = buildGrid({ radius: 5.0, hexSize: CELL, jitter: 0.24, relaxPasses: 4 });
+  // 踩过的坑（很隐蔽）：buildGrid 的 sanitize 会**删掉**一些格子，但 cell.id 是
+  // 「push 时的序号」，删格之后 id 就不再等于数组下标了。我原来用 Float32Array
+  // 按 c.id 存高度，于是写进越界槽位被静默丢弃、读出来是 0 —— 岛中央凭空出现
+  // 一整圈"水洞"，看着像地形生成错了，其实是索引错了。这里把 id 重排成下标。
+  grid.cells.forEach((c, i) => { c.id = i; });
+
+  // --- 高度场：几个高斯堆 + 径向衰减，然后**量化成台阶** ---
+  // 量化是整条风格的根：没有台阶就没有「叠层岩板」，只有一座圆包。
+  const gauss = (x, z, cx, cz, r) => Math.exp(-((x - cx) ** 2 + (z - cz) ** 2) / (r * r));
+  // 岛形按 seed 生成：一座主台地 + 3~4 个卫星台地。
+  // 参考帧的岛都是「一块大台地 + 两三块低一级的台地」，不是均匀的圆包。
+  let rs = (seed * 22695477 + 1) | 0;
+  const rnd = () => ((rs = (Math.imul(rs, 1103515245) + 12345) | 0) >>> 8) / 16777216;
+
+  const bumps = [];
+  const a0 = rnd() * Math.PI * 2;
+  bumps.push([Math.cos(a0) * 0.5, Math.sin(a0) * 0.5, 1.7 + rnd() * 0.5, 3.1 + rnd() * 0.4]);
+  const nSat = 3 + ((rnd() * 2) | 0);
+  for (let i = 0; i < nSat; i++) {
+    const a = a0 + (i + 1) * (Math.PI * 2 / (nSat + 0.7)) + (rnd() - 0.5) * 0.55;
+    const r = 1.7 + rnd() * 1.0;
+    bumps.push([Math.cos(a) * r, Math.sin(a) * r, 1.15 + rnd() * 0.5, 0.9 + rnd() * 1.0]);
+  }
+
+  // 岛的**轮廓**（陆地边界）：一个带角向起伏的椭圆，不是圆。
+  // 参考帧的岛轮廓都有明显的凹凸与尖角，正圆一看就是程序生成。
+  const FOOT = 4.5;
+  const wobble = (ang) => 1 + 0.11 * Math.sin(ang * 3 + seed * 0.7) + 0.06 * Math.sin(ang * 5 - seed * 1.3);
+  const isLand = (x, z) => {
+    const ang = Math.atan2(z, x);
+    const r = Math.hypot(x * 0.94, z * 1.02) / (FOOT * wobble(ang));
+    return r < 1;
+  };
+
+  const H = new Float32Array(grid.cells.length);
+  grid.cells.forEach((c) => {
+    if (!isLand(c.cx, c.cz)) { H[c.id] = 0; return; }
+    // 陆地内部先给一层"基座"（level 1），再叠丘陵。
+    // 踩过的坑：第一版没有基座，丘陵之间的低洼直接落到 0 → 岛内部出现一条条
+    // 的水沟，整座岛变成"夹心蛋糕"。参考帧的岛内部从来没有水。
+    let hill = 0;
+    for (const [cx, cz, r, a] of bumps) hill += gauss(c.cx, c.cz, cx, cz, r) * a;
+    // 离岸越近越低：轮廓上一圈永远是 level 1，形成窄窄的低台（不是大片沙地）
+    // 只有最外 1.1 单位降到 level 1：参考帧的低台就一格宽，不是一大片
+    const edge = Math.min(1, (FOOT * 1.02 - Math.hypot(c.cx * 0.94, c.cz * 1.02)) / 0.7);
+    hill *= 0.35 + 0.65 * Math.max(0, edge);
+    const lv = 1 + Math.round(Math.min(3, Math.max(0, hill)));
+    H[c.id] = lv * STEP;
+  });
+
+  // --- 邻接：用两个共享角点反过来建边表，比依赖 edges[] 的顺序安全 ---
+  const kp = (p) => (Math.round(p.x * 64) + ':' + Math.round(p.z * 64));
+  const edgeMap = new Map();
+  for (const c of grid.cells) {
+    for (let i = 0; i < 4; i++) {
+      const a = kp(c.pts[i]), b = kp(c.pts[(i + 1) % 4]);
+      const k = a < b ? a + '|' + b : b + '|' + a;
+      const list = edgeMap.get(k);
+      if (list) list.push(c.id); else edgeMap.set(k, [c.id]);
+    }
+  }
+  const neighbour = (c, i) => {
+    const a = kp(c.pts[i]), b = kp(c.pts[(i + 1) % 4]);
+    const k = a < b ? a + '|' + b : b + '|' + a;
+    const list = edgeMap.get(k);
+    if (!list || list.length < 2) return -1;
+    return list[0] === c.id ? list[1] : list[0];
+  };
+
+  return { grid, H, neighbour };
+}
+
+function smoothstep(a, b, x) {
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+}
+
+// ---------------------------------------------------------------- 造地形
+/**
+ * 生成三组几何：
+ *   tops   —— 每格的顶面（草 / 沙），逐面着色
+ *   sides  —— 露出水面的侧面（崖），每块面再切 3 段竖向，带板缝
+ *   shore  —— 岸线丝带（两圈外扩）
+ */
+function buildTerrain({ grid, H, neighbour }) {
+  const topPos = [], topCol = [], topNrm = [];
+  const sidePos = [], sideCol = [];
+
+
+  const cTop = new THREE.Color();
+  const cLit = new THREE.Color(), cShade = new THREE.Color();
+  const tmp = new THREE.Color();
+
+  // 太阳方向：参考帧里受光的是朝右前（+x, +z）的面，光偏高
+  const sun = new THREE.Vector3(0.45, 0.86, 0.24).normalize();
+
+  const pushTri = (pos, col, a, b, c, n, ca, cb, cc) => {
+    pos.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
+    col.push(ca.r, ca.g, ca.b, cb.r, cb.g, cb.b, cc.r, cc.g, cc.b);
+    void n;
+  };
+
+  // --- 顶面 ---
+  for (const cell of grid.cells) {
+    const h = H[cell.id];
+    if (h <= 0) continue;
+    // 岸边的格子压一点，形成「沙环」：参考帧里草地外面永远有一圈浅色
+    let nearWater = false;
+    for (let i = 0; i < 4; i++) {
+      const n = neighbour(cell, i);
+      if (n < 0 || H[n] <= 0) { nearWater = true; break; }
+    }
+    // 沙：只有**贴着水**的格子才刷沙色。参考帧的浅色带就一格宽，
+    // 而 level-1 台地有大片在内陆（丘陵之间），那些必须是草。
+    const isBeach = nearWater;
+
+    cTop.setHex(isBeach ? pal.sand : pal.grass);
+    // 逐面的细微色差：让相邻台地不是同一块色布
+    const v = 0.94 + hash1(cell.id * 7.3) * 0.11;
+    cTop.multiplyScalar(v);
+
+    const p = cell.pts;
+    const y = h;
+    const A = { x: p[0].x, y, z: p[0].z };
+    const B = { x: p[1].x, y, z: p[1].z };
+    const C = { x: p[2].x, y, z: p[2].z };
+    const D = { x: p[3].x, y, z: p[3].z };
+    // pts 的绕向已由 grid.js 归一（+Y），直接两三角
+    pushTri(topPos, topCol, A, B, C, null, cTop, cTop, cTop);
+    pushTri(topPos, topCol, A, C, D, null, cTop, cTop, cTop);
+    for (let k = 0; k < 6; k++) topNrm.push(0, 1, 0);
+  }
+
+  // --- 侧面 ---
+  const STRATA = 3;          // 每块面竖向切几段
+  for (const cell of grid.cells) {
+    const h = H[cell.id];
+    if (h <= 0) continue;
+    for (let i = 0; i < 4; i++) {
+      const nb = neighbour(cell, i);
+      const nh = nb < 0 ? 0 : H[nb];
+      if (nh >= h - 1e-4) continue;          // 邻居更高或等高：这面被埋住了
+      const p0 = cell.pts[i], p1 = cell.pts[(i + 1) % 4];
+      // 外法线：绕向 +Y 时，边 (p0→p1) 的外侧是 (dz, -dx)
+      const ex = p1.x - p0.x, ez = p1.z - p0.z;
+      const len = Math.hypot(ex, ez) || 1;
+      const nx = ez / len, nz = -ex / len;
+      // 竖直面要用**水平**的太阳方向算明暗（原方向太阳很高，水平分量小，
+      // 于是所有崖面 ndl 几乎一样，整圈崖壁一个色 —— 参考帧有明确的受光/背光两侧）
+      const shx = 0.62, shz = 0.38;
+      const ndl = Math.max(0, nx * shx + nz * shz) / Math.hypot(shx, shz);
+      const ndlY = 0.10;                     // 竖直面也吃到一点天光
+
+      // 受光 → 浅藕粉，背光 → 紫灰；再按高度往深色走（崖根更暗）
+      cLit.setHex(pal.cliffLit);
+      cShade.setHex(pal.cliffDeep);
+      const faceJitter = 0.92 + hash1(cell.id * 13.1 + i * 3.7) * 0.16;
+
+      // 崖根 AO：这一面两侧的邻居越高，说明它夹在一条缝里，越该暗。
+      // 参考帧里台地之间的窄缝明显比开阔的崖面深一档，光靠"靠下压暗"是做不出来的。
+      let occl = 0;
+      for (const j of [(i + 3) & 3, (i + 1) & 3]) {
+        const side = neighbour(cell, j);
+        if (side >= 0 && H[side] > h) occl += Math.min(1, (H[side] - h) / (STEP * 1.6)) * 0.5;
+      }
+      const occlMul = 1 - 0.28 * Math.min(1, occl);
+
+      const yTop = h, yBot = Math.max(nh, -0.55);   // 落到水下 0.55 再停，避免看到底
+      for (let s = 0; s < STRATA; s++) {
+        const t0 = s / STRATA, t1 = (s + 1) / STRATA;
+        const ya = yTop + (yBot - yTop) * t0;
+        const yb = yTop + (yBot - yTop) * t1;
+
+        // 板缝：段与段之间压暗 6%，参考帧的横向缝就是这个
+        const seam = s === 0 ? 1.0 : 0.94;
+
+        const shadeA = Math.min(1, 0.12 + 0.80 * ndl + ndlY);
+        const cA = tmp.copy(cShade).lerp(cLit, Math.min(1, shadeA)).multiplyScalar(faceJitter * seam * occlMul);
+        // 底部（t=1）再暗一档：崖根总是比崖顶深
+        const cB = cA.clone().multiplyScalar(1 - 0.12 * t1);
+        // 每段单独微调：板缝才看得出来是「一层一层叠的」
+        const seg = 0.97 + hash1(cell.id * 31.7 + i * 7.1 + s * 2.3) * 0.07;
+        cA.multiplyScalar(seg); cB.multiplyScalar(seg);
+
+        const A0 = { x: p0.x, y: ya, z: p0.z };
+        const B0 = { x: p1.x, y: ya, z: p1.z };
+        const A1 = { x: p0.x, y: yb, z: p0.z };
+        const B1 = { x: p1.x, y: yb, z: p1.z };
+        // 绕向必须让法线朝**外**。第一版写成 (A0,B0,B1)/(A0,B1,A1)，法线朝内，
+        // 被背面剔除掉 —— 从岛外就能直接看穿崖体看到水面，画面里出现一条条
+        // "水沟"（其实是洞），而几何本身完全正确。翻转之后才封闭。
+        pushTri(sidePos, sideCol, A0, B1, B0, null, cA, cB, cA);
+        pushTri(sidePos, sideCol, A0, A1, B1, null, cA, cB, cB);
+      }
+    }
+  }
+
+  return { topPos, topCol, topNrm, sidePos, sideCol };
+}
+
+/**
+ * 海岸距离场：把"每个水面像素离陆地多远"烘成一张贴图。
+ *
+ * 为什么不用几何丝带：第一版是沿着每条"陆地-水"边向外偏移生成窄四边形带。
+ * 问题是相邻格子的外法线方向不同，拐角必然开缝；把每段两端延长去补缝，又会在
+ * 凸角处戳出一根根"粉色尖刺"（截图上就是一圈放射状的小三角）。参考帧里的丝带是
+ * **连续**的，而且宽度是沿法线变的 —— 那本质就是一个等距轮廓，用距离场画才对。
+ *
+ * 顺带这张场还能给出另外两样东西：
+ *   · 崖根的湿影（参考帧里贴着岸那条暗带，越往外越淡）；
+ *   · 近岛的水色压暗（12x8 网格实测的近岛偏深）。
+ *
+ * 值域：0..3 世界单位编码进 8 位红色通道（3/255 ≈ 0.012 单位精度，够用）。
+ */
+function buildCoastField({ grid, H }, { res = 128, extent = 9.0 } = {}) {
+  const N = res;
+  const step = (extent * 2) / N;
+  const land = new Uint8Array(N * N);
+
+  const inside = (cell, x, z) => {
+    const p = cell.pts;
+    let sign = 0;
+    for (let i = 0; i < 4; i++) {
+      const a = p[i], b = p[(i + 1) % 4];
+      const cr = (b.x - a.x) * (z - a.z) - (b.z - a.z) * (x - a.x);
+      const s = Math.sign(cr);
+      if (s === 0) continue;
+      if (sign === 0) sign = s;
+      else if (s !== sign) return false;
+    }
+    return true;
+  };
+
+  for (const cell of grid.cells) {
+    if (H[cell.id] <= 0) continue;
+    const xs = cell.pts.map((q) => q.x), zs = cell.pts.map((q) => q.z);
+    const i0 = Math.max(0, Math.floor((Math.min(...xs) + extent) / step));
+    const i1 = Math.min(N - 1, Math.ceil((Math.max(...xs) + extent) / step));
+    const j0 = Math.max(0, Math.floor((Math.min(...zs) + extent) / step));
+    const j1 = Math.min(N - 1, Math.ceil((Math.max(...zs) + extent) / step));
+    for (let j = j0; j <= j1; j++) {
+      for (let i = i0; i <= i1; i++) {
+        const x = -extent + (i + 0.5) * step;
+        const z = -extent + (j + 0.5) * step;
+        if (inside(cell, x, z)) land[j * N + i] = 1;
+      }
+    }
+  }
+
+  // 两遍 chamfer 距离变换（3-4 邻域 + 对角 1.414），单位是世界单位
+  const INF = 1e9;
+  const d = new Float32Array(N * N);
+  for (let i = 0; i < d.length; i++) d[i] = land[i] ? 0 : INF;
+  const W = step, D = step * Math.SQRT2;
+  for (let j = 1; j < N - 1; j++) {
+    for (let i = 1; i < N - 1; i++) {
+      const k = j * N + i;
+      if (d[k] === 0) continue;
+      d[k] = Math.min(d[k], d[k - 1] + W, d[k - N] + W, d[k - N - 1] + D, d[k - N + 1] + D);
+    }
+  }
+  for (let j = N - 2; j >= 1; j--) {
+    for (let i = N - 2; i >= 1; i--) {
+      const k = j * N + i;
+      if (d[k] === 0) continue;
+      d[k] = Math.min(d[k], d[k + 1] + W, d[k + N] + W, d[k + N + 1] + D, d[k + N - 1] + D);
+    }
+  }
+
+  const MAXD = 3.0;
+  // 用 RGBA 而不是单通道 R8：踩过的坑 —— R8 在本机的 SwiftShader 上 sample 回来
+  // 恒为 1.0（画面里水面变成一整片常数色、丝带完全不出现），换成 RGBA8 立刻正常。
+  const data = new Uint8Array(N * N * 4);
+  let far = 0;
+  for (let i = 0; i < d.length; i++) {
+    const v = Math.min(MAXD, d[i]);
+    if (d[i] > MAXD) far++;
+    const b = Math.round((v / MAXD) * 255);
+    data[i * 4] = b; data[i * 4 + 1] = b; data[i * 4 + 2] = b; data[i * 4 + 3] = 255;
+  }
+  return { data, res: N, extent, max: MAXD, step, landPct: land.reduce((a, b) => a + b, 0) / land.length };
+}
+
+function hash1(n) {
+  let h = Math.imul(n | 0, 0x27d4eb2d) ^ 0x165667b1;
+  h ^= h >>> 15; h = Math.imul(h, 0x2545f491);
+  h ^= h >>> 13;
+  return (h >>> 0) / 4294967296;
+}
+// ---------------------------------------------------------------- 渲染器
+// 关掉 three 的颜色管理。开着的时候 Color.setHex 会把 sRGB 值转成线性值存起来，
+// 而我们的 ShaderMaterial 是**直接写 gl_FragColor**、不做回编码的 ——
+// 于是所有颜色都被"降了一次伽马"：草地 #b9b793 被画成 #8a8a55，整幅发黑发绿。
+// 这条链路的目标是复现量到的像素值，所以关掉管理、原样进出。
+THREE.ColorManagement.enabled = false;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+// 参考帧是 LDR 直出：天空 #bcbebf、最亮泡沫 #f9faee，没有高光溢出，
+// 也没有 ACES 那种把浅色压灰的肩部。所以这里关掉 tone mapping。
+renderer.toneMapping = THREE.NoToneMapping;
+renderer.setClearColor(0xa8b0b3, 1);
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+// fov 24 + 远距离 = 近似正交。参考帧四角的竖棱几乎没有收敛，
+// 说明不是标准透视；用长焦拉远是复现"等距感"最省事的办法。
+const camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 1, 600);
+
+const cam = { yaw: 0.62, pitch: 0.52, dist: 22.0, target: new THREE.Vector3(0, 1.75, 0) };
+function updateCamera() {
+  const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+  camera.position.set(
+    cam.target.x + Math.sin(cam.yaw) * cp * cam.dist,
+    cam.target.y + sp * cam.dist,
+    cam.target.z + Math.cos(cam.yaw) * cp * cam.dist,
+  );
+  camera.lookAt(cam.target);
+}
+
+// ---------------------------------------------------------------- 天空
+// 一个反面球，shader 里做竖直渐变 + 以岛为心的径向压暗。
+// 量到的剖面：顶部 #bcbebf → 地平线带 #a6afb2 → 底部 #b4b8ba（中间偏暗、上下偏亮）。
+const skyUniforms = {
+  uTop: { value: new THREE.Color(pal.skyTop) },
+  uMid: { value: new THREE.Color(pal.skyMid) },
+  uLow: { value: new THREE.Color(pal.skyLow) },
+  uCentre: { value: new THREE.Vector2(0.5, 0.5) },
+  uDip: { value: 0.14 },
+};
+const sky = new THREE.Mesh(
+  new THREE.SphereGeometry(320, 24, 16),
+  new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    depthWrite: false,
+    uniforms: skyUniforms,
+    vertexShader: /* glsl */`
+      varying vec3 vDir;
+
+      void main() {
+        vDir = normalize(position);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform vec3 uTop;
+      uniform vec3 uMid;
+      uniform vec3 uLow;
+      uniform vec2 uCentre;
+      uniform float uDip;
+      varying vec3 vDir;
+
+      void main() {
+        // 用屏幕位置做竖直渐变：参考帧的渐变是**构图**性质的，
+        // 不跟着相机俯仰走（转视角时天不"翻"）。
+        vec2 uv = gl_FragCoord.xy / vec2(1600.0, 900.0);
+        float y = clamp(uv.y, 0.0, 1.0);
+        vec3 c = mix(uLow, uMid, smoothstep(0.0, 0.46, y));
+        c = mix(c, uTop, smoothstep(0.46, 1.0, y));
+        // 以岛心为心的径向压暗：12x8 网格实测四角 #c1c1c1、中间带 #a1abae，
+        // 差约 0.13 的明度，且四角**对称**变亮 —— 这是镜头/构图层的渐变，不是雾。
+        float r = length((uv - uCentre) * vec2(1.0, 0.86));
+        c *= 1.0 - uDip * exp(-r * r * 3.4);
+        gl_FragColor = vec4(c, 1.0);
+      }
+    `,
+  }),
+);
+sky.frustumCulled = false;
+scene.add(sky);
+
+// ---------------------------------------------------------------- 海面
+// 关键：雾色 == 天空地平线色，于是远水溶进天，画面里**没有地平线**。
+const waterUniforms = {
+  uWater: { value: new THREE.Color(pal.water) },
+  uDeep: { value: new THREE.Color(pal.waterDeep) },
+  uFog: { value: new THREE.Color(pal.fog) },
+  uFogNear: { value: 18.0 },
+  uFogFar: { value: 58.0 },
+  uIsland: { value: new THREE.Vector2(0, 0) },
+  uCoast: { value: null },
+  uCoastExtent: { value: 9.0 },
+  uCoastMax: { value: 3.0 },
+  uShore: { value: new THREE.Color(pal.shore) },
+  uShade: { value: new THREE.Color(pal.shadeRing) },
+  // 雾不是"一个固定色"，而是**屏幕空间的天空渐变**：
+  // 参考帧左边缘剖面顶部 #c1c1c1 / 中部 #a6aeb3 / 底部 #bdc0bf —— 如果雾是单一色，
+  // 远处的水平面会全部收敛到同一个值，顶部不可能比中部亮 26。
+  uSkyTop: { value: new THREE.Color(pal.skyTop) },
+  uSkyMid: { value: new THREE.Color(pal.skyMid) },
+  uSkyLow: { value: new THREE.Color(pal.skyLow) },
+  uScreenH: { value: 1080 },
+};
+let coastTex = null;
+const water = new THREE.Mesh(
+  new THREE.PlaneGeometry(420, 420),
+  new THREE.ShaderMaterial({
+    uniforms: waterUniforms,
+    vertexShader: /* glsl */`
+      varying vec3 vW;
+
+      void main() {
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform vec3 uWater;
+      uniform vec3 uDeep;
+      uniform vec3 uFog;
+      uniform vec3 uShore;
+      uniform vec3 uShade;
+      uniform vec3 uSkyTop;
+      uniform vec3 uSkyMid;
+      uniform vec3 uSkyLow;
+      uniform float uFogNear;
+      uniform float uFogFar;
+      uniform float uCoastExtent;
+      uniform float uCoastMax;
+      uniform float uScreenH;
+      uniform vec2 uIsland;
+      uniform sampler2D uCoast;
+      varying vec3 vW;
+
+
+      void main() {
+        // 到陆地的距离（世界单位），来自 buildCoastField 烘的 128x128 距离场。
+        // 用 8 位通道存 0..3 单位，靠 LINEAR 采样得到连续值。
+        vec2 cuv = (vW.xz) / (2.0 * uCoastExtent) + 0.5;
+        float d = texture2D(uCoast, cuv).r * uCoastMax;
+
+        vec3 c = uWater;
+        // 近岛压暗（12x8 网格实测：近岛 #8fa0a7 / 远水 #b7babc）
+        // 注意：这里不能用距离场 d —— 场只烘到 ±9 单位，更远的地方会被
+        // ClampToEdge 采样成常数 3，整片远水于是变成同一个偏深的颜色。
+        // 远端压暗用"到岛心的径向距离"，距离场只负责岸线附近的高频部分。
+        float rad = length(vW.xz - uIsland);
+        c = mix(uDeep, uWater, smoothstep(3.0, 11.0, rad));
+        // 崖根湿影：贴着岸最暗，1.2 单位外基本没了
+        c = mix(c, uShade, exp(-d * 3.0) * 0.50);
+        // 主丝带（鲑鱼粉）：d 在 0.42~0.95 之间，内外各留一段柔边
+        float b1 = smoothstep(0.22, 0.34, d) * (1.0 - smoothstep(0.50, 0.62, d));
+        // 第二条细丝带（参考帧 c_foam 里能看到两条平行线）
+        float b2 = smoothstep(0.92, 0.99, d) * (1.0 - smoothstep(1.05, 1.12, d));
+        c = mix(c, uShore, clamp(b1, 0.0, 1.0) * 0.88);
+        c = mix(c, uShore, b2 * 0.5);
+        // 距离雾：目标色 = **同一条屏幕空间天空渐变**上的同高度色。
+        // 所以远处的水不是"变灰"，而是逐行溶进它上方的天空 —— 地平线自然消失。
+        float fy = clamp(gl_FragCoord.y / uScreenH, 0.0, 1.0);
+        vec3 fogCol = mix(uSkyLow, uSkyMid, smoothstep(0.0, 0.46, fy));
+        fogCol = mix(fogCol, uSkyTop, smoothstep(0.46, 1.0, fy));
+        float f = smoothstep(uFogNear, uFogFar, length(vW - cameraPosition));
+        c = mix(c, fogCol, f);
+        gl_FragColor = vec4(c, 1.0);
+      }
+    `,
+  }),
+);
+water.rotation.x = -Math.PI / 2;
+// 水不写深度、先画：否则倒影（在 y<0）永远比水面远，会被深度测试剔掉 ——
+// 画面里就完全看不到倒影。改成"水先画但不占深度 → 倒影后画 → 地形最后画"。
+water.material.depthWrite = false;
+water.renderOrder = -1;
+
+water.position.y = 0;
+scene.add(water);
+
+// ---------------------------------------------------------------- 材质
+// 顶面：草/沙 + 手绘笔触。笔触用世界坐标 hash，双尺度叠加。
+function makeTopMaterial() {
+  return new THREE.ShaderMaterial({
+    vertexColors: true,
+    uniforms: {
+      uFog: { value: new THREE.Color(pal.fog) },
+      uFogNear: { value: 18.0 },
+      uFogFar: { value: 58.0 },
+      uDark: { value: new THREE.Color(pal.grassDark) },
+      uDabAmt: { value: 1.0 },
+      // 预烘笔触图集（bnbrush.js）：R 大划痕 / G 中划痕 / B 低频密度
+      uBrush: { value: null },
+      // 图集是 256²，划痕约 11px。要让划痕在屏幕上约 0.2 世界单位（55px/单位下 ≈ 11px），
+      // 图集就得覆盖 256/11*0.2 ≈ 4.6 个世界单位 → scale ≈ 0.21。
+      // 第一版用 0.62（覆盖 1.6 单位），划痕被压成 4px，mip 一糊就看不见了。
+      uBrushScale: { value: 0.36 },
+      // 台地沿口距离场：草笔触在沿口淡出，不翻过崖沿
+      uLedge: { value: null },
+      uLedgeExtent: { value: 8.5 },
+      uLedgeMax: { value: 1.2 },
+      uLedgeTint: { value: new THREE.Color(0xcdc59c) },
+      uViewMode: { value: 0 },   // 0 正常 / 1 只看贴图 / 2 只看明暗（第 11 轮的调试视角）
+    },
+    vertexShader: /* glsl */`
+      // 注意：three 已经注入了 attribute vec3 color（几何体带 color 属性时），
+      // 这里再声明一次就是 redefinition，整个 material 编译失败、物体直接不画。
+      varying vec3 vC;
+
+      varying vec3 vW;
+
+      varying vec3 vN;
+
+      void main() {
+        vC = color;
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        vN = normalize(mat3(modelMatrix) * normal);
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform vec3 uFog;
+      uniform vec3 uDark;
+      uniform vec3 uLedgeTint;
+      uniform float uFogNear;
+      uniform float uFogFar;
+      uniform float uDabAmt;
+      uniform float uBrushScale;
+      uniform float uLedgeExtent;
+      uniform float uLedgeMax;
+      uniform float uViewMode;
+      // 必须分两行声明：写成 uniform sampler2D uBrush, uLedge; 时 three 的
+      // uniform 解析只认第一个，uLedge 会跟 uBrush 抢同一个纹理单元 ——
+      // 表现为"沿口场"实际采样的是笔触图集的 B 通道（一片片的斑块）。
+      uniform sampler2D uBrush;
+      uniform sampler2D uLedge;
+      varying vec3 vC;
+
+      varying vec3 vW;
+
+      varying vec3 vN;
+
+
+      void main() {
+        vec3 base = vC;
+        float m = 0.0;          // 笔触遮罩：提到外面是为了调试视角能读到
+        if (vN.y > 0.42) {
+          // 笔触来自 bnbrush.js 预烘的 256² 划痕图集（几千个随机方向的小椭圆）。
+          // 关键是**阈值化**：图集里每个像素是"被几条划痕盖住"的连续值，
+          // 直接拿它当权重会得到 0.1 左右的混合，缩图后等于没有笔触（实测就是这样）。
+          // 先用 smoothstep 压成硬边遮罩，才有手绘那种"一笔是一笔"的分界。
+          vec2 buv = fract(vW.xz * uBrushScale);
+          float coarse = texture2D(uBrush, buv).r;
+          float fine = texture2D(uBrush, fract(buv * 2.63)).g;
+          float dens = texture2D(uBrush, fract(buv * 0.22)).b;
+
+          float aMask = smoothstep(0.30, 0.72, coarse) * (0.55 + 0.70 * dens);
+          float bMask = smoothstep(0.22, 0.62, fine) * (0.45 + 0.60 * dens);
+          m = clamp(aMask * 0.85 + bMask * 0.55, 0.0, 1.0);
+
+          // 台地沿口距离场：笔触在沿口淡出，沿口一圈稍微"干"一点（偏沙色）
+          vec2 luv = vW.xz / (2.0 * uLedgeExtent) + 0.5;
+          float ld = texture2D(uLedge, luv).r * uLedgeMax;
+          float keep = smoothstep(0.0, 0.16, ld);
+          m *= keep;
+
+          // 沙地（滩）不画笔触：参考帧的沙是干净的一片，笔触只长在草上。
+          // 这里没有第二个属性可用，就用顶点色亮度区分 —— 沙 #dfd4c3 比草 #a9ac83 亮得多。
+          float sandy = smoothstep(0.76, 0.86, vC.r);
+          m *= 1.0 - sandy * 0.85;
+
+          // 深色笔触压在底色上，再用"第二层更细的划痕"提一点点亮 ——
+          // 参考帧的草是明暗交替的，只有暗笔触会显得脏。
+          base = mix(base, uDark, m * 0.55);
+          float hi = clamp(bMask - aMask * 0.6, 0.0, 1.0) * keep;
+          base = mix(base, base * 1.14 + 0.012, hi * 0.55 * (1.0 - sandy));
+          base = mix(base, uLedgeTint, (1.0 - keep) * 0.30);
+        }
+        float f = smoothstep(uFogNear, uFogFar, length(vW - cameraPosition));
+        vec3 outc = mix(base, uFog, f);
+        // 调试视角：1 = 去掉明暗只留贴图色，2 = 只留亮度。两者都能一眼分辨
+        // "这条线是贴图没画出来" 还是 "被光照压掉了"。
+        // 1 = 只看笔触遮罩（黑白，能立刻看出"贴图到底有没有画上去"）
+        // 2 = 只看面明暗（灰度，能看出台地的受光关系）
+        if (uViewMode > 1.5) outc = vec3(dot(base, vec3(0.299, 0.587, 0.114)));
+        else if (uViewMode > 0.5) outc = vec3(m);
+        gl_FragColor = vec4(outc, 1.0);
+      }
+    `,
+  });
+}
+
+// 侧面（崖）：每块面一个色 + 面内竖直渐变 + 横向板缝 + 轮廓边的暖色描边
+function makeSideMaterial() {
+  return new THREE.ShaderMaterial({
+    vertexColors: true,
+    uniforms: {
+      uFog: { value: new THREE.Color(pal.fog) },
+      uFogNear: { value: 18.0 },
+      uFogFar: { value: 58.0 },
+      uRim: { value: new THREE.Color(0xe6c9c4) },
+      uRimAmt: { value: 0.55 },
+      uSeam: { value: 0.55 },     // 世界单位：板缝间距
+      uSeamAmt: { value: 0.085 },
+      // 崖面竖向水渍：复用同一张笔触图集，把 uv 沿 y 压扁 → 拉成竖条纹
+      uBrush: { value: null },
+      uStreakAmt: { value: 0.13 },
+      uViewMode: { value: 0 },
+    },
+    vertexShader: /* glsl */`
+      // 注意：three 已经注入了 attribute vec3 color（几何体带 color 属性时），
+      // 这里再声明一次就是 redefinition，整个 material 编译失败、物体直接不画。
+      varying vec3 vC;
+
+      varying vec3 vW;
+
+      varying vec3 vN;
+
+      void main() {
+        vC = color;
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        vN = normalize(mat3(modelMatrix) * normal);
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform vec3 uFog;
+      uniform vec3 uRim;
+      uniform float uFogNear;
+      uniform float uFogFar;
+      uniform float uRimAmt;
+      uniform float uSeam;
+      uniform float uSeamAmt;
+      uniform float uStreakAmt;
+      uniform sampler2D uBrush;
+      uniform float uViewMode;
+      varying vec3 vC;
+
+      varying vec3 vW;
+
+      varying vec3 vN;
+
+      void main() {
+        vec3 c = vC;
+        // 竖向水渍：参考帧的崖面不是干净的一块色，有淡淡的竖条（雨水冲刷）。
+        // 复用草面那张笔触图集，把 uv 的 y 频率压到 0.07 → 划痕被拉成几十像素长的竖条。
+        float st = 0.0;
+        if (uStreakAmt > 0.001) {
+          st = texture2D(uBrush, vec2((vW.x + vW.z) * 0.30, vW.y * 0.07)).g;
+          c *= 1.0 - smoothstep(0.25, 0.75, st) * uStreakAmt;
+        }
+
+        // 横向板缝：参考帧每约 0.55 世界单位一道，只在侧面出现
+        float y = vW.y / uSeam;
+        float d = abs(fract(y) - 0.5);
+        float px = max(fwidth(y), 1e-4);
+        if (px < 0.42) {
+          float seam = 1.0 - smoothstep(0.0, 0.06 + px * 1.4, 0.5 - d);
+          c *= 1.0 - seam * uSeamAmt;
+        }
+        // 轮廓亮边：参考帧 c_grass 里台地外沿有一条 1~2px 的粉色亮线，
+        // 那是"边缘受光"，不是描边。用菲涅尔近似。
+        vec3 V = normalize(cameraPosition - vW);
+        float fr = pow(1.0 - clamp(dot(normalize(vN), V), 0.0, 1.0), 3.0);
+        c = mix(c, uRim, fr * uRimAmt);
+        float f = smoothstep(uFogNear, uFogFar, length(vW - cameraPosition));
+        vec3 outc = mix(c, uFog, f);
+        if (uViewMode > 1.5) outc = vec3(dot(c, vec3(0.299, 0.587, 0.114)));
+        else if (uViewMode > 0.5) outc = vec3(st);
+        gl_FragColor = vec4(outc, 1.0);
+      }
+    `,
+  });
+}
+
+// 岸线丝带：加色/接近白的窄带
+function makeShoreMaterial() {
+  return new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    uniforms: {
+      uShore: { value: new THREE.Color(pal.shore) },
+      uFog: { value: new THREE.Color(pal.fog) },
+      uFogNear: { value: 18.0 },
+      uFogFar: { value: 58.0 },
+      uAmt: { value: 0.92 },
+    },
+    vertexShader: /* glsl */`
+      varying vec2 vUv;
+
+      varying vec3 vW;
+
+      void main() {
+        vUv = uv;
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform vec3 uShore;
+      uniform vec3 uFog;
+      uniform float uFogNear;
+      uniform float uFogFar;
+      uniform float uAmt;
+      varying vec2 vUv;
+
+      varying vec3 vW;
+
+      void main() {
+        // 内缘实、外缘软（参考帧里丝的靠水侧是渐隐的）
+        float a = smoothstep(0.0, 0.22, vUv.x) * (1.0 - smoothstep(0.62, 1.0, vUv.x));
+        a = max(a, 0.25);
+        float f = smoothstep(uFogNear, uFogFar, length(vW - cameraPosition));
+        gl_FragColor = vec4(mix(uShore, uFog, f), a * uAmt * (1.0 - f * 0.7));
+      }
+    `,
+  });
+}
+
+// 岸根湿影：比水暗的紫，越往外越淡（参考帧 c_foam 里贴着崖根那条暗带）
+function makeShadeMaterial() {
+  return new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    uniforms: {
+      uCol: { value: new THREE.Color(pal.shadeRing) },
+      uAmt: { value: 0.55 },
+    },
+    vertexShader: /* glsl */`
+      varying vec2 vUv;
+
+      varying vec3 vW;
+
+      void main() {
+        vUv = uv;
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform vec3 uCol;
+      uniform float uAmt;
+      varying vec2 vUv;
+
+      varying vec3 vW;
+
+      void main() {
+        float a = (1.0 - smoothstep(0.0, 1.0, vUv.x)) * uAmt;
+        gl_FragColor = vec4(uCol, a);
+      }
+    `,
+  });
+}
+
+// 倒影：镜像地形，紫调，越深越淡
+function makeReflectMaterial() {
+  return new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    uniforms: {
+      uCol: { value: new THREE.Color(pal.shadeRing) },
+      uAmt: { value: 0.40 },
+      uFall: { value: 1.5 },
+    },
+    vertexShader: /* glsl */`
+      varying vec3 vW;
+
+      void main() {
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform vec3 uCol;
+      uniform float uAmt;
+      uniform float uFall;
+      varying vec3 vW;
+
+      void main() {
+        // 越深越淡：参考帧的倒影只在岛下一小段可见，再往下就散进水里了
+        float a = uAmt * exp(vW.y / uFall);
+        gl_FragColor = vec4(uCol, clamp(a, 0.0, 1.0));
+      }
+    `,
+  });
+}
+
+// ---------------------------------------------------------------- 装配
+const world = new THREE.Group();
+scene.add(world);
+
+const topMat = makeTopMaterial();
+const sideMat = makeSideMaterial();
+const shoreMat = makeShoreMaterial();
+const shadeMat = makeShadeMaterial();
+const reflectMat = makeReflectMaterial();
+
+let island = null;
+let stats = {};
+// 预烘的两张图：笔触图集只跟 seed 有关（换岛才重建），沿口场每个岛都要重建
+let brushTex = null;
+let ledgeTex = null;
+
+function geoTris(arr) { return arr.length / 9; }
+
+function buildWorld(seed) {
+  // 清场
+  while (world.children.length) {
+    const o = world.children.pop();
+    o.geometry?.dispose?.();
+  }
+
+  island = buildIsland(seed);
+  const T = buildTerrain(island);
+
+  // --- 顶面 ---
+  const gTop = new THREE.BufferGeometry();
+  gTop.setAttribute('position', new THREE.Float32BufferAttribute(T.topPos, 3));
+  gTop.setAttribute('normal', new THREE.Float32BufferAttribute(T.topNrm, 3));
+  gTop.setAttribute('color', new THREE.Float32BufferAttribute(T.topCol, 3));
+  const mTop = new THREE.Mesh(gTop, topMat);
+  mTop.renderOrder = 1;
+  world.add(mTop);
+
+  // --- 侧面 ---
+  const gSide = new THREE.BufferGeometry();
+  gSide.setAttribute('position', new THREE.Float32BufferAttribute(T.sidePos, 3));
+  gSide.computeVertexNormals();
+  gSide.setAttribute('color', new THREE.Float32BufferAttribute(T.sideCol, 3));
+  const mSide = new THREE.Mesh(gSide, sideMat);
+  mSide.renderOrder = 1;
+  world.add(mSide);
+
+  // --- 笔触图集 + 台地沿口距离场（bnbrush.js）---
+  if (!brushTex) {
+    const B = buildBrushAtlas({ size: 256, seed: SEED });
+    brushTex = new THREE.DataTexture(B.data, B.size, B.size, THREE.RGBAFormat);
+    // 用 Clamp 而不是 Repeat：这台机器的后端上 Repeat 的 DataTexture 采样不稳定
+    // （四个通道读回同一个值）。平铺改成在 shader 里手动 fract()，效果相同。
+    brushTex.wrapS = THREE.ClampToEdgeWrapping;
+    brushTex.wrapT = THREE.ClampToEdgeWrapping;
+    brushTex.magFilter = THREE.LinearFilter;
+    // 不做 mipmap。这台机器的 SwiftShader 上，DataTexture + generateMipmaps 会得到
+    // 一张"不完整"的纹理，采样**恒为黑** —— 笔触于是完全不出现，而 shader 零报错、
+    // 纹理 version=1、数据也确实是满的。和上一轮 RedFormat 返回恒定值的坑同一类。
+    brushTex.minFilter = THREE.LinearFilter;
+    brushTex.generateMipmaps = false;
+    brushTex.needsUpdate = true;      // 和距离场同一个坑：不显式置位就不会上传
+  }
+  topMat.uniforms.uBrush.value = brushTex;
+  sideMat.uniforms.uBrush.value = brushTex;
+
+  const L = buildLedgeField(island, { res: 128, extent: 8.5, max: 1.2 });
+  if (!ledgeTex) {
+    ledgeTex = new THREE.DataTexture(L.data, L.res, L.res, THREE.RGBAFormat);
+    ledgeTex.magFilter = THREE.LinearFilter;
+    ledgeTex.minFilter = THREE.LinearFilter;
+    ledgeTex.wrapS = THREE.ClampToEdgeWrapping;
+    ledgeTex.wrapT = THREE.ClampToEdgeWrapping;
+    topMat.uniforms.uLedge.value = ledgeTex;
+  } else {
+    ledgeTex.image.data.set(L.data);
+  }
+  ledgeTex.needsUpdate = true;
+  topMat.uniforms.uLedgeExtent.value = L.extent;
+  topMat.uniforms.uLedgeMax.value = L.max;
+
+  // --- 海岸距离场 → 水面材质（湿影 + 两圈丝带都在 water 的 shader 里画）---
+  const C = buildCoastField(island, { res: 320, extent: 9.0 });
+  if (!coastTex) {
+    coastTex = new THREE.DataTexture(C.data, C.res, C.res, THREE.RGBAFormat);
+    coastTex.magFilter = THREE.LinearFilter;
+    coastTex.minFilter = THREE.LinearFilter;
+    coastTex.wrapS = THREE.ClampToEdgeWrapping;
+    coastTex.wrapT = THREE.ClampToEdgeWrapping;
+    waterUniforms.uCoast.value = coastTex;
+    // 必须显式置位：DataTexture 的版本号在这台机器上停在 0（构造时那次 needsUpdate
+    // 没生效），three 于是**根本没上传纹理** —— 采样拿到的是默认 1x1 白图，d 恒为 3，
+    // 画面里丝带/湿影一个都不出现，而 shader 编译毫无报错。
+    coastTex.needsUpdate = true;
+  } else {
+    coastTex.image.data.set(C.data);
+    coastTex.needsUpdate = true;
+  }
+  window.__coastField = C;
+  waterUniforms.uCoastExtent.value = C.extent;
+  waterUniforms.uCoastMax.value = C.max;
+
+  // --- 倒影：把顶面和侧面镜像一份 ---
+  const refl = new THREE.Group();
+  refl.scale.y = -1;
+  refl.position.y = -0.02;
+  const rTop = new THREE.Mesh(gTop, reflectMat);
+  const rSide = new THREE.Mesh(gSide, reflectMat);
+  rTop.renderOrder = 4; rSide.renderOrder = 4;
+  refl.add(rTop, rSide);
+  world.add(refl);
+
+  // --- 单位 / 船 ---
+  const pop = placeUnits(island);
+  world.add(pop.group);
+  const houses = placeHouses(island);
+  world.add(houses.group);
+  const trees = placeTrees(island, seed);
+  world.add(trees.group);
+  const boats = placeBoats();
+  world.add(boats.group);
+
+  stats = {
+    cells: island.grid.cells.length,
+    land: island.H.filter((h) => h > 0).length,
+    topTris: geoTris(T.topPos),
+    sideTris: geoTris(T.sidePos),
+    coastRes: C.res,
+    viewMode: VIEW_NAMES[viewMode],
+    coastPct: +C.landPct.toFixed(3),
+    soldiers: pop.count,
+    houses: houses.count,
+    trees: trees.count,
+    boats: boats.count,
+    maxLevel: +(Math.max(...Array.from(island.H)) / STEP).toFixed(1),
+  };
+  window.__worldStats = stats;
+  return stats;
+}
+
+// ---------------------------------------------------------------- 单位
+// 参考帧（c_units 裁剪）：士兵约 18~22px 高，深蓝锥形身体 + 尖盔 + 米色圆盾，
+// 顶缘有一道近白的棱光。这里是 3 个 InstancedMesh（躯干/盔/盾）拼的。
+function makeSoldierParts() {
+  const body = new THREE.BoxGeometry(0.105, 0.185, 0.085);
+  body.translate(0, 0.093, 0);
+  const head = new THREE.ConeGeometry(0.058, 0.10, 5);
+  head.translate(0, 0.235, 0);
+  const shield = new THREE.CircleGeometry(0.038, 8);
+  shield.translate(0.052, 0.108, 0.0);
+  return { body, head, shield };
+}
+
+const unitMat = (hex, rim = 0) => new THREE.MeshBasicMaterial({ color: hex, fog: true });
+// 不用标准材质：参考帧的单位几乎是纯色 + 一道棱光，没有可见的高光斑。
+
+function placeUnits({ grid, H, neighbour }) {
+  const group = new THREE.Group();
+  const parts = makeSoldierParts();
+
+  // 找一块最高的大台地放主力，另一块放小队
+  // 只挑"四邻同高"的格子放部队：不然人站到崖沿上，会变成一排挂在边缘的锥子
+  const flat = grid.cells.filter((c) => {
+    if (H[c.id] <= 0) return false;
+    for (let i = 0; i < 4; i++) {
+      const n = neighbour(c, i);
+      if (n < 0 || Math.abs(H[n] - H[c.id]) > 1e-4) return false;
+    }
+    return true;
+  }).sort((a, b) => H[b.id] - H[a.id]);
+  const byH = flat.length ? flat : grid.cells.filter((c) => H[c.id] > 0);
+  const groups = [];
+  const take = (cell, n, cols) => {
+    const h = H[cell.id];
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const cx = (i % cols) - (cols - 1) / 2;
+      const cz = ((i / cols) | 0) - 0.5;
+      out.push({ x: cell.cx + cx * 0.26, y: h, z: cell.cz + cz * 0.26, rot: 0.35 });
+    }
+    return out;
+  };
+  if (byH[0]) groups.push({ list: take(byH[0], 18, 3), hex: pal.unitBody });
+  const far = byH.find((c) => Math.hypot(c.cx - byH[0].cx, c.cz - byH[0].cz) > 2.2);
+  if (far) groups.push({ list: take(far, 9, 3), hex: pal.unitBody });
+
+  let count = 0;
+  for (const g of groups) {
+    const mat = unitMat(g.hex);
+    const shieldMat = unitMat(pal.unitCream);
+    for (const key of ['body', 'head', 'shield']) {
+      const geo = parts[key];
+      const m = new THREE.InstancedMesh(geo, key === 'shield' ? shieldMat : mat, g.list.length);
+      const mm = new THREE.Matrix4();
+      const q = new THREE.Quaternion();
+      g.list.forEach((p, i) => {
+        q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), p.rot);
+        mm.compose(new THREE.Vector3(p.x, p.y, p.z), q, new THREE.Vector3(1, 1, 1));
+        m.setMatrixAt(i, mm);
+      });
+      m.instanceMatrix.needsUpdate = true;
+      group.add(m);
+    }
+    count += g.list.length;
+  }
+  return { group, count };
+}
+
+
+// ---------------------------------------------------------------- 房屋
+// 参考帧（c_grass 裁剪）：房子是纯白/米白墙 + 淡绿屋顶，方块状，没有贴图细节，
+// 只有屋顶两面因为法线不同差一档明暗。所以这里用盒子 + 四棱锥顶就够了。
+function placeHouses({ grid, H, neighbour }) {
+  const group = new THREE.Group();
+  const wallGeo = new THREE.BoxGeometry(0.46, 0.30, 0.40);
+  const roofGeo = new THREE.ConeGeometry(0.40, 0.24, 4);
+  roofGeo.rotateY(Math.PI / 4);
+  const wallMat = unitMat(pal.wall);
+  const roofMat = unitMat(pal.roof);
+
+  const flat = grid.cells.filter((c) => {
+    if (H[c.id] <= 0) return false;
+    for (let i = 0; i < 4; i++) {
+      const n = neighbour(c, i);
+      if (n < 0 || Math.abs(H[n] - H[c.id]) > 1e-4) return false;
+    }
+    return true;
+  }).sort((a, b) => H[b.id] - H[a.id]);
+
+  let count = 0;
+  for (let i = 0; i < Math.min(5, flat.length); i++) {
+    const c = flat[i * 2 % flat.length];
+    if (!c) continue;
+    const g = new THREE.Group();
+    const w = new THREE.Mesh(wallGeo, wallMat);
+    w.position.y = 0.15;
+    const r = new THREE.Mesh(roofGeo, roofMat);
+    r.position.y = 0.42;
+    g.add(w, r);
+    g.position.set(c.cx, H[c.id], c.cz);
+    g.rotation.y = 0.3 + i * 0.7;
+    group.add(g);
+    count++;
+  }
+  return { group, count };
+}
+
+// ---------------------------------------------------------------- 树
+// 参考帧（summer1 右下 / c_grass 左上）里，岛上零散分布着几坨深绿色的团块 ——
+// 那不是"三球拼的树"，是**球堆等值面 + 松弛**出来的有机树冠（第 12 轮 blobrelax，
+// 入口在 bncanopy.js）。
+//
+// 这里**没有**走 impostor：第 4 轮那套八方位烘焙是为"几百棵树"设计的，而这页只有
+// 二十几棵、每棵一千多三角 —— 直接 InstancedMesh 更省事，也避开了烘焙图集的
+// 采样问题（实测烘出来的树冠会被裁成"绿碗"）。真要上百棵再换 impostor 不迟。
+function placeTrees({ grid, H, neighbour }, seed) {
+  const group = new THREE.Group();
+  const mat = new THREE.MeshBasicMaterial({ vertexColors: true });
+  // 颜色比草地深两档（参考帧的树是墨绿压在黄绿上），两种树高低错开
+  const kinds = [
+    makeCanopyGeometry(seed * 3 + 1, { res: 15, tint: '#4e6238', height: 0.82 }),
+    makeCanopyGeometry(seed * 5 + 2, { res: 15, tint: '#5b6f42', height: 0.62 }),
+  ];
+
+  // 只种在"四邻同高"的平地上，且彼此拉开距离（参考帧的树不长在崖边，也不成排）
+  const flat = grid.cells.filter((c) => {
+    if (H[c.id] <= 0) return false;
+    let same = 0;
+    for (let i = 0; i < 4; i++) {
+      const n = neighbour(c, i);
+      if (n >= 0 && Math.abs(H[n] - H[c.id]) < 1e-4) same++;
+    }
+    // 四邻同高当然最好，但那样可种的格子太少（实测整岛只有 5~6 棵）。
+    // 放宽到"至少 3 个邻居同高"：仍然是平地，只是贴着台地内沿。
+    return same >= 3;
+  });
+  let rs = (seed * 7919 + 13) | 0;
+  const rnd = () => ((rs = (Math.imul(rs, 1103515245) + 12345) | 0) >>> 8) / 16777216;
+  for (let i = flat.length - 1; i > 0; i--) {
+    const j = (rnd() * (i + 1)) | 0;
+    const t = flat[i]; flat[i] = flat[j]; flat[j] = t;
+  }
+
+  const picked = [];
+  for (const c of flat) {
+    if (picked.length >= 10) break;
+    if (picked.some((p) => (p.x - c.cx) ** 2 + (p.z - c.cz) ** 2 < 1.9)) continue;
+    picked.push({ x: c.cx, z: c.cz, y: H[c.id] });
+  }
+
+  // 分成两批做实例化
+  const batches = [[], []];
+  picked.forEach((p, i) => {
+    const k = rnd() < 0.45 ? 0 : 1;
+    batches[k].push({ ...p, s: 0.80 + rnd() * 0.35, rot: rnd() * Math.PI * 2 });
+  });
+
+  const m4 = new THREE.Matrix4();
+  const q = new THREE.Quaternion();
+  const up = new THREE.Vector3(0, 1, 0);
+  batches.forEach((list, k) => {
+    if (!list.length) return;
+    const inst = new THREE.InstancedMesh(kinds[k].geometry, mat, list.length);
+    list.forEach((p, i) => {
+      q.setFromAxisAngle(up, p.rot);
+      m4.compose(new THREE.Vector3(p.x, p.y - 0.02, p.z), q, new THREE.Vector3(p.s, p.s, p.s));
+      inst.setMatrixAt(i, m4);
+    });
+    inst.instanceMatrix.needsUpdate = true;
+    group.add(inst);
+  });
+
+  return { group, count: picked.length };
+}
+
+// ---------------------------------------------------------------- 船
+// 参考帧里的长船：细长、两端上翘、舷侧一排米色圆盾，船尾拖出断续白点。
+// 这台机器上不需要真的船模型 —— 只要剪影对，60px 大小下就看不出差别。
+function placeBoats() {
+  const group = new THREE.Group();
+  const hullMat = unitMat(0x9b7b87);
+  const stemMat = unitMat(0x7d5f6b);
+  const shieldMat = unitMat(pal.unitCream);
+
+  // 船体：六棱柱压扁 + 拉长；船首尾各一个上翘的锥
+  const hullGeo = new THREE.CylinderGeometry(0.085, 0.055, 1.25, 6, 1, false);
+  hullGeo.rotateZ(Math.PI / 2);
+  hullGeo.scale(1, 0.72, 1);
+  const stemGeo = new THREE.ConeGeometry(0.045, 0.28, 5);
+  const shieldGeo = new THREE.CircleGeometry(0.032, 8);
+
+  const spots = [{ a: 0.55, r: 7.2 }, { a: 2.1, r: 7.6 }, { a: 4.6, r: 6.8 }];
+  for (const s2 of spots) {
+    const x = Math.cos(s2.a) * s2.r, z = Math.sin(s2.a) * s2.r;
+    const boat = new THREE.Group();
+    const hull = new THREE.Mesh(hullGeo, hullMat);
+    hull.position.y = 0.05;
+    boat.add(hull);
+    for (const sign of [1, -1]) {
+      const stem = new THREE.Mesh(stemGeo, stemMat);
+      stem.position.set(sign * 0.66, 0.10, 0);
+      stem.rotation.z = sign * -1.15;
+      boat.add(stem);
+    }
+    for (let i = 0; i < 5; i++) {
+      const sh = new THREE.Mesh(shieldGeo, shieldMat);
+      sh.position.set(-0.34 + i * 0.17, 0.115, 0.075);
+      sh.rotation.x = -Math.PI / 2.3;
+      boat.add(sh);
+    }
+    // 船头朝岛心方向
+    boat.position.set(x, 0, z);
+    boat.rotation.y = -s2.a + Math.PI / 2;
+    group.add(boat);
+
+    // 尾迹：从船尾往后拖，越远越稀越小
+    const dots = [];
+    for (let i = 0; i < 12; i++) {
+      const t = i / 12;
+      const back = 0.75 + t * 4.4;
+      dots.push({
+        x: x - Math.cos(s2.a) * back + Math.sin(s2.a) * (Math.sin(t * 9.0) * 0.18),
+        z: z - Math.sin(s2.a) * back - Math.cos(s2.a) * (Math.sin(t * 9.0) * 0.18),
+        s: 0.055 * (1 - t * 0.55),
+      });
+    }
+    const dotGeo = new THREE.CircleGeometry(1, 5);
+    const dotMesh = new THREE.InstancedMesh(dotGeo, unitMat(pal.foam), dots.length);
+    const mm = new THREE.Matrix4();
+    const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
+    dots.forEach((d, i) => {
+      mm.compose(new THREE.Vector3(d.x, 0.04, d.z), q, new THREE.Vector3(d.s, d.s, d.s));
+      dotMesh.setMatrixAt(i, mm);
+    });
+    dotMesh.instanceMatrix.needsUpdate = true;
+    group.add(dotMesh);
+  }
+  return { group, count: spots.length };
+}
+
+// ---------------------------------------------------------------- 主题 / 换岛
+function applyPalette(name) {
+  pal = PAL[name] || PAL.summer;
+  skyUniforms.uTop.value.setHex(pal.skyTop);
+  skyUniforms.uMid.value.setHex(pal.skyMid);
+  skyUniforms.uLow.value.setHex(pal.skyLow);
+  waterUniforms.uWater.value.setHex(pal.water);
+  waterUniforms.uDeep.value.setHex(pal.waterDeep);
+  waterUniforms.uFog.value.setHex(pal.fog);
+  topMat.uniforms.uFog.value.setHex(pal.fog);
+  topMat.uniforms.uDark.value.setHex(pal.grassDark);
+  sideMat.uniforms.uFog.value.setHex(pal.fog);
+  shoreMat.uniforms.uShore.value.setHex(pal.shore);
+  shoreMat.uniforms.uFog.value.setHex(pal.fog);
+  shadeMat.uniforms.uCol.value.setHex(pal.shadeRing);
+  reflectMat.uniforms.uCol.value.setHex(pal.shadeRing);
+  renderer.setClearColor(pal.fog, 1);
+  buildWorld(SEED);
+}
+
+let SEED = 7;
+const opts = { shore: true, fog: true };
+const VIEW_NAMES = ['shaded', 'texture', 'light'];
+let viewMode = 0;
+function setViewMode(m) {
+  viewMode = ((m % 3) + 3) % 3;
+  for (const mat of [topMat, sideMat]) {
+    if (mat.uniforms.uViewMode) mat.uniforms.uViewMode.value = viewMode;
+  }
+  return VIEW_NAMES[viewMode];
+}
+let theme = 'summer';
+
+function setOpt(k, v) {
+  opts[k] = v;
+  if (k === 'shore') {
+    world.traverse((o) => {
+      if (!o.material) return;
+      if (o.material === shoreMat || o.material === shadeMat) o.visible = v;
+    });
+  }
+  if (k === 'fog') {
+    const near = v ? 26 : 900, far = v ? 96 : 1800;
+    for (const m of [waterUniforms, topMat.uniforms, sideMat.uniforms, shoreMat.uniforms]) {
+      m.uFogNear.value = near; m.uFogFar.value = far;
+    }
+  }
+}
+
+// ---------------------------------------------------------------- 交互
+let drag = null;
+renderer.domElement.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY }; });
+addEventListener('pointerup', () => { drag = null; });
+addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  cam.yaw -= (e.clientX - drag.x) * 0.006;
+  cam.pitch = Math.min(1.32, Math.max(0.16, cam.pitch + (e.clientY - drag.y) * 0.004));
+  drag = { x: e.clientX, y: e.clientY };
+  updateCamera();
+});
+renderer.domElement.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  cam.dist = Math.min(110, Math.max(16, cam.dist * (1 + Math.sign(e.deltaY) * 0.08)));
+  updateCamera();
+}, { passive: false });
+
+addEventListener('keydown', (e) => {
+  if (e.key === '1') { theme = 'summer'; applyPalette('summer'); }
+  if (e.key === '2') { theme = 'dawn'; applyPalette('dawn'); }
+  if (e.key === 'r' || e.key === 'R') {
+    SEED = (SEED * 7919 + 13) % 100000;
+    // 换岛连笔触布局一起换：不然每座岛的草长得一模一样
+    if (brushTex) { brushTex.dispose(); brushTex = null; }
+    buildWorld(SEED);
+  }
+  if (e.key === 'f' || e.key === 'F') setOpt('fog', !opts.fog);
+  if (e.key === 'l' || e.key === 'L') setOpt('shore', !opts.shore);
+  // V = 循环三种调试视角（正常 / 只看贴图 / 只看明暗）
+  if (e.key === 'v' || e.key === 'V') setViewMode(viewMode + 1);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  waterUniforms.uScreenH.value = innerHeight;
+});
+
+// ---------------------------------------------------------------- HUD / 循环
+const hud = document.getElementById('hud');
+let frames = 0, fps = 0, tPrev = performance.now();
+let clockT = 0;   // 累计秒数：涟漪要用它（badnorth 这边没有 world.html 那个 clock uniform）
+
+function frame(now) {
+  const dt = (now - tPrev) / 1000;
+  tPrev = now;
+  clockT += dt;
+  frames++;
+  if (frames % 20 === 0) fps = Math.round(20 / Math.max(dt * 20, 1e-3) * 1);
+
+  waterUniforms.uScreenH.value = renderer.domElement.height;
+  // 岛心的屏幕坐标：天空的径向压暗跟着它走
+  const c = new THREE.Vector3(0, 1, 0).project(camera);
+  skyUniforms.uCentre.value.set(c.x * 0.5 + 0.5, c.y * 0.5 + 0.5);
+  waterUniforms.uIsland.value.set(0, 0);
+
+  renderer.render(scene, camera);
+
+  if (frames % 10 === 0) {
+    hud.textContent =
+      'Bad North 重建 · ' + theme + '  fov24  dist' + cam.dist.toFixed(0) + '\n' +
+      'cells ' + stats.cells + '  land ' + stats.land + '  maxLv ' + stats.maxLevel + '\n' +
+      'tris top ' + stats.topTris + '  side ' + stats.sideTris + '  coast ' + stats.coastRes + '²\n' +
+      'units ' + stats.soldiers + '  houses ' + stats.houses + '  trees ' + stats.trees + '\n' +
+      'view ' + stats.viewMode + '  draw ' + renderer.info.render.calls + '  tris ' + renderer.info.render.triangles;
+  }
+  requestAnimationFrame(frame);
+}
+
+buildWorld(SEED);
+updateCamera();
+requestAnimationFrame(frame);
+
+// ---------------------------------------------------------------- 测试钩子
+window.__bn = {
+  get stats() { return stats; },
+  get scene() { return scene; },
+  get world() { return world; },
+  get island() { return island; },
+  get calls() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles }; },
+  get materials() { return { topMat, sideMat, shoreMat, shadeMat, reflectMat, waterUniforms, skyUniforms }; },
+  get camera() { return camera; },
+  setView(yaw, pitch, dist, tx, ty, tz) {
+    cam.yaw = yaw; cam.pitch = pitch; cam.dist = dist;
+    if (tx !== undefined) cam.target.set(tx, ty, tz);
+    updateCamera();
+  },
+  setTheme(n) { theme = n; applyPalette(n); },
+  setSeed(s) { SEED = s; buildWorld(s); },
+  setOpt,
+  setViewMode,
+  get viewMode() { return VIEW_NAMES[viewMode]; },
+  // 读回像素做量化比对用
+  readback() {
+    const gl = renderer.getContext();
+    const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
+    const px = new Uint8Array(w * h * 4);
+    gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, px);
+    return { w, h, px: Array.from(px) };
+  },
+};
+window.__worldStats = stats;
+console.log('[badnorth] ready', JSON.stringify(stats));
+
+</script>
+</body>
+</html>

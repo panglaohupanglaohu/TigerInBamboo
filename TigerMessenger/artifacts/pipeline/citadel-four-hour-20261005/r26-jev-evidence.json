@@ -1,0 +1,53 @@
+{
+  "version": "r26-real-city-models",
+  "goal": "Citadel target v3 >95 visual and all hard checks; not yet accepted",
+  "visual_observations": {
+    "source": "root inspected actual r26 no-cloud screenshot and r25 with clouds, independent advisor inspected r23; new reports pending",
+    "sha256": "58a0a438a15e288a215508b8634b8f98b45bd185384654b0495b8345cd478c60",
+    "differences": [
+      "Actual old-city coloured stepped houses, bell tower, new main dome, flowing waterfall, sampled stair route and four-wide-arch bridge are in isolated review harness.",
+      "Old city still too sparse/regular; new flank houses on tall plain bases. Reference has denser connected terraces.",
+      "Bridge endpoint may intersect flank house; narrow-phase path integration review pending.",
+      "Original statue is hidden by legacy isolation; horse remains present but new plaza and editable WFC integration not complete.",
+      "Front cloud banks overlap architecture; terrain frozen by user, no new terrain shape changes."
+    ]
+  },
+  "checks": [
+    {
+      "name": "r26 app shader GL samples clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "sampled bridge footing and at least one under-arch boat opening",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "surveyed new stair samples not buried",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "bridge city entry narrow phase collisions",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "landmark plaza rail route editor production integration",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "independent final visual score >95",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No concept or CPU tests counted as final visual acceptance",
+    "Keep r17 mountain geometry",
+    "No source code, private data, images or credentials in request",
+    "Continue user authorized five hour window through 2026-10-06 07:13 Asia Shanghai"
+  ]
+}

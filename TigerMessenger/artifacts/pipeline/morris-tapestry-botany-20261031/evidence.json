@@ -1,0 +1,28 @@
+{
+  "task": "Morris user tapestry reference integration r81",
+  "observations": [
+    "Three user supplied reference images preserved locally; no attribution beyond supplied reference claimed.",
+    "Production flora uses one reusable 512px alpha-tested lobed-leaf and blue/cream flower motif per clump instead of six overlapping flat cards; existing separate high-poly flower toggle preserved.",
+    "Plane-tree leaf geometry changed from ten triangles to two-triangle alpha cards with painted veins, curved woody limbs and red peel/yellow fruit preserved.",
+    "Same component scene GPU r78: 35864 triangles /12 calls; r79:20312 triangles /12 calls. About43percent fewer triangles for this component; no FPS or full scene speed claim.",
+    "Formal r79 bridge GPU inspected: creek flows at valley bottom below stone bridge; high cliff water ribbon removed. Banks still visually simple and island not target-complete.",
+    "Final r81 normal-game bridge view actually inspected and saved: painted leaf cards and blue/cream ground motif visible; creek below bridge; banks and tree silhouette still not reference-complete. Inspection camera is not a full mounted navigation proof."
+  ],
+  "checks": [
+    {
+      "name": "syntax valid",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "rendered riverbed support sampled",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "final production GPU",
+      "required": true,
+      "passed": true
+    }
+  ]
+}

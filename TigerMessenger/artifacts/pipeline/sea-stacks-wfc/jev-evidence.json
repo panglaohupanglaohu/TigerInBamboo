@@ -1,0 +1,39 @@
+{
+  "task": "Sea stack vertical-module WFC initial review",
+  "target": "Blue grey Twelve Apostles sea stacks; broad terraces and vegetation requested by user",
+  "visual_observations": {
+    "source": "Assistant inspected after-coast.png and user actual flight screenshot",
+    "image_sha256": "f19f0b73d7c2cbc02e19817d8b3e739ef4e824cb84a2b3413377018105934199",
+    "completed": [
+      "Own sea normal orientation",
+      "Seeded socket-compatible vertical modules"
+    ],
+    "remaining": [
+      "Insufficient broad terraces",
+      "Over-regular horizontal lines",
+      "User flight view reveals apparent exposed bases; investigate actual visible water surface before acceptance"
+    ]
+  },
+  "checks": [
+    {
+      "name": "21 stacks interface matching",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "6624 rail probes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Runtime and shader errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Not visually accepted",
+    "WFC is vertical chain only, not 3D island topology",
+    "No claim of completed plants or cloud integration"
+  ]
+}

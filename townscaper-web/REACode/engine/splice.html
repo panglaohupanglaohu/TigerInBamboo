@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Splice：把 footprint 插进一格</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #243c40; overflow: hidden; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<script type="module">
+import { buildMesa } from './mesa.js';
+import { spliceFootprint, footprintFor } from '../src/splice.js';
+
+const cv = document.getElementById('view');
+const ctx = cv.getContext('2d');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+const LEVEL = 0.42;
+
+const { town, grid } = buildMesa({ seed: 7, radius: 10, hexSize: 0.46, towers: 2, caves: 1, houses: 0 });
+
+// 挑三块形状差异最大的陆地格子：一块接近方形、一块歪、一块很扁
+const land = grid.cells.filter((c) => town.top(c) > 0);
+const skew = (c) => {
+  const d = (a, b) => Math.hypot(a.x - b.x, a.z - b.z);
+  const e = [d(c.pts[0], c.pts[1]), d(c.pts[1], c.pts[2]), d(c.pts[2], c.pts[3]), d(c.pts[3], c.pts[0])];
+  return Math.max(...e) / Math.min(...e);
+};
+land.sort((a, b) => skew(a) - skew(b));
+const picks = [land[0], land[(land.length * 0.5) | 0], land[land.length - 1]];
+
+const cases = picks.map((cell, i) => {
+  const rect = footprintFor(cell, { inset: 0.16 + i * 0.06, aspect: 1.0 + i * 0.7 });
+  const y = town.top(cell) * LEVEL;
+  const r = spliceFootprint(cell, rect, { y, skirt: 0.34 });
+  return { cell, rect, y, ...r, skew: skew(cell) };
+});
+
+function resize() {
+  cv.width = innerWidth * dpr;
+  cv.height = innerHeight * dpr;
+  cv.style.width = innerWidth + 'px';
+  cv.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+// 俯视正交投影：x→右、z→下。
+// 为什么放弃斜视：这个页要证明的是"洞 + 四块补片刚好铺满一格"，
+// 斜视会把补片互相遮挡，看图的人（和我）分不清哪块盖住了哪块。
+function proj(p, ox, oy, s) { return [ox + p.x * s, oy + p.z * s]; }
+
+function path(pts, ox, oy, s, close = true) {
+  pts.forEach((p, i) => {
+    const [x, y] = proj(p, ox, oy, s);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  if (close) ctx.closePath();
+}
+
+function draw() {
+  ctx.fillStyle = '#243c40';
+  ctx.fillRect(0, 0, innerWidth, innerHeight);
+  const W = innerWidth / 3;
+
+  cases.forEach((c, i) => {
+    const ox = W * i + W / 2;
+    const oy = innerHeight * 0.50;
+    const cx = c.cell.pts.reduce((a, p) => a + p.x, 0) / 4;
+    const cz = c.cell.pts.reduce((a, p) => a + p.z, 0) / 4;
+    let R = 0;
+    for (const p of c.cell.pts) R = Math.max(R, Math.hypot(p.x - cx, p.z - cz));
+    const s = Math.min(W, innerHeight) * 0.30 / Math.max(0.2, R);
+    const loc = (p) => ({ x: p.x - cx, z: p.z - cz });
+
+    // 1) 整格底面（深色，用来露出"补片没盖住"的部分，方便看出有没有缝）
+    ctx.beginPath(); path(c.cell.pts.map(loc), ox, oy, s); ctx.closePath();
+    ctx.fillStyle = '#3b4a3c'; ctx.fill();
+
+    // 2) 四块环形补片，交替色 + 描边
+    c.ring.forEach((p, k) => {
+      ctx.beginPath(); path(p.pts.map(loc), ox, oy, s); ctx.closePath();
+      ctx.fillStyle = k % 2 ? '#93a06f' : '#aeb886';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(24,36,28,0.85)'; ctx.lineWidth = 1.1; ctx.stroke();
+    });
+
+    // 3) 洞（被插进去的位置）
+    ctx.beginPath(); path(c.hole.pts.map(loc), ox, oy, s); ctx.closePath();
+    ctx.fillStyle = '#1c2b25'; ctx.fill();
+    ctx.strokeStyle = '#cfe0c4'; ctx.lineWidth = 1.2; ctx.stroke();
+
+    // 4) 房子 footprint（比洞小一圈，说明它是"放进洞里"的）
+    const hx = c.hole.pts.reduce((a, p) => a + p.x, 0) / 4 - cx;
+    const hz = c.hole.pts.reduce((a, p) => a + p.z, 0) / 4 - cz;
+    const bR = R * 0.17;
+    ctx.beginPath();
+    path([{x:hx-bR,z:hz-bR},{x:hx+bR,z:hz-bR},{x:hx+bR,z:hz+bR},{x:hx-bR,z:hz+bR}], ox, oy, s);
+    ctx.closePath();
+    ctx.fillStyle = '#efe6d2'; ctx.fill();
+    ctx.strokeStyle = 'rgba(30,40,34,0.8)'; ctx.lineWidth = 1; ctx.stroke();
+
+    // 5) 格子外轮廓（最外圈，验证补片正好顶到它）
+    ctx.beginPath(); path(c.cell.pts.map(loc), ox, oy, s); ctx.closePath();
+    ctx.strokeStyle = '#e6efdc'; ctx.lineWidth = 1.4; ctx.stroke();
+
+    // 文字
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#e8efe2';
+    ctx.font = '600 14px -apple-system, "PingFang SC", sans-serif';
+    ctx.fillText(`格子 #${c.cell.id} · 歪斜 ${c.skew.toFixed(2)}`, ox, 40);
+    ctx.font = '11.5px ui-monospace, monospace';
+    ctx.fillStyle = '#b9cbb4';
+    [
+      `面积 格 ${c.stats.cellArea} = 环 ${c.stats.ringArea} + 洞 ${c.stats.holeArea}`,
+      `守恒误差 ${c.stats.closure}`,
+      `补片 ${c.stats.patches} 块 · 裙边 ${c.stats.skirtQuads} 块（往下 0.34）`,
+    ].forEach((t, k) => ctx.fillText(t, ox, innerHeight - 74 + k * 16));
+  });
+
+  window.__splice = {
+    cases: cases.map((c) => ({
+      id: c.cell.id, skew: +c.skew.toFixed(3),
+      patches: c.stats.patches, closure: c.stats.closure,
+      cellArea: c.stats.cellArea, ringArea: c.stats.ringArea, holeArea: c.stats.holeArea,
+    })),
+  };
+}
+
+addEventListener('resize', resize);
+resize();
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+{
+  "status": "integrated-current-normal-GPU-checked",
+  "revision": "morris-route-r25-20261026",
+  "route": {
+    "actualRoadMaxRadialGrade": 0.151659509792735,
+    "bridgeCenter": [
+      8,
+      32
+    ],
+    "bridgeCrossings": 1,
+    "design": "winding uphill shoulder with opposing contour bends, cross-stream bridge, two hairpins and final castle turn",
+    "finalTurnRadius": 7.6,
+    "hairpinCenterRadius": 6,
+    "keys": [
+      [
+        0,
+        1.75
+      ],
+      [
+        29.847711798008216,
+        4
+      ],
+      [
+        37.8477117980082,
+        4.4
+      ],
+      [
+        57.26108089516526,
+        5.6
+      ],
+      [
+        76.10905490364152,
+        9.5
+      ],
+      [
+        121.95964494250656,
+        11.3
+      ],
+      [
+        140.80761895098303,
+        11.8
+      ],
+      [
+        160.3020104362747,
+        10.946204291414205
+      ]
+    ],
+    "length": 160.3020104362747,
+    "marks": {
+      "bridgeBack": 37.8477117980082,
+      "bridgeFront": 29.847711798008216,
+      "eastEnd": 140.80761895098303,
+      "eastStart": 121.95964494250656,
+      "gate": 160.3020104362747,
+      "westEnd": 76.10905490364152,
+      "westStart": 57.26108089516526
+    },
+    "minimumDesignedInnerRadius": 4,
+    "surface": "real graded ground shoulders plus raycast-supported winding road mesh",
+    "width": 3.2
+  },
+  "tests": 11,
+  "evidence": [
+    "normal-uphill-r25.png",
+    "normal-audit.json",
+    "normal-console.json"
+  ],
+  "missing": [
+    "complete actual player walk"
+  ],
+  "consoleErrors": [],
+  "previous": "../morris-verdure-20261026/review.html",
+  "jevActual": "jev-result.json",
+  "jevCache": "jev-cache.json"
+}

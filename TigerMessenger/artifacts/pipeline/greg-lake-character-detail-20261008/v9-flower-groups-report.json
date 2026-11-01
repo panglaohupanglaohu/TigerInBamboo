@@ -1,0 +1,52 @@
+{
+  "change": "V9 flower material-group stable partition",
+  "scope": "src/world/crystalV9.js flower index/groups only; no geometry/colour/animation/main changes",
+  "backup": "v9-flower-groups-before/src/world/crystalV9.js",
+  "tests": {
+    "specific": "2/2 pass, compares48 factory canopies against saved original factory source",
+    "invariants": [
+      "same position and normal byte arrays",
+      "same ordered triangle index triplets per material, preserving winding and multiplicity",
+      "same four color/side/transparent/depth states",
+      "same vein and stem geometry/transforms"
+    ],
+    "formalStartup": "1/1 bridge formal-startup pass; retains23removed piers/5rotated crowns/2reversible trims/371visible crowns and0bridge leaf intersections"
+  },
+  "drawInventory": {
+    "flowersBefore": 13824,
+    "flowersAfter": 192,
+    "potentialMainPassSaved": 13632,
+    "wholeSceneBefore": {
+      "objects": 16922,
+      "draws": 32306,
+      "triangles": 6209759,
+      "outlineObjects": 2595,
+      "outlineDraws": 2595,
+      "outlineTriangles": 636524,
+      "instancedObjects": 513,
+      "instances": 15632,
+      "materials": 4419
+    },
+    "wholeSceneAfter": {
+      "objects": 16924,
+      "draws": 18676,
+      "triangles": 6212457,
+      "outlineObjects": 2595,
+      "outlineDraws": 2595,
+      "outlineTriangles": 636524,
+      "instancedObjects": 513,
+      "instances": 15632,
+      "materials": 4421
+    },
+    "method": "CPU visible-subtree submission inventory, no camera frustum or shadow pass; GPU measured drawcalls/FPS pending root",
+    "isolatedMetropolis": {
+      "beforeDraws": 16831,
+      "afterDraws": 3199,
+      "unchangedObjects": 1513,
+      "unchangedTriangles": 815490,
+      "unchangedMaterials": 932
+    },
+    "concurrentChangesNote": "Whole-scene inventory includes +2 objects and +2698 triangles outside metropolis from concurrent work; do not attribute these to this fix. Isolated metropolis delta is exactly -13632 draws with identical object/triangle/material counts."
+  },
+  "GPU": "Pending parent current-entry reload and same-camera comparison. No frame-rate success claimed."
+}

@@ -1,0 +1,12 @@
+{"regressionOrphanTriangles":138,"fixedConsecutiveDeletes":5,"actualSceneVerified":false}
+✔ initial and full junction rebuilds retain outline ownership (237.36825ms)
+✔ five consecutive deletes leave no orphan dark shell triangles or invalid buffers (384.198333ms)
+✔ regression fixture reproduces orphan shells when initial batch ownership is absent (108.849958ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 858.571167

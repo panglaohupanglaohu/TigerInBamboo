@@ -1,0 +1,30 @@
+{
+  "task": "Batian shield audio round8",
+  "observations": [
+    "Source inspection actual ant/locust/beetle per-projectile powers100/24/9 were all sent to identical default shield sound. Existing power is now forwarded only for audio pressure/timbre, not changing hit/damage/energy formulas.",
+    "Real fleet CPU callback receives9/24/100, existing energy drain unchanged and wingnodes intact.",
+    "Real browser OfflineAudioContext weighted24hit cap3 plus falling bomb/blast: peak.827925/rms.139876,0clipping. Prior default-v1 WAV/report preserved; currentpreview updated.",
+    "New weighted sound needs fresh full-game verification; no claims of subjective better sound."
+  ],
+  "checks": [
+    {
+      "name": "Existing power and energy/hull invariants",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Weighted mix offline zero clipping",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Weighted sound current game observation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No newmodel/material/damage changes; only bounded audio weight",
+    "JEV text triage not hearing/visual acceptance"
+  ]
+}

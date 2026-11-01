@@ -1,0 +1,34 @@
+{
+  "task": "Feeding swimmer versus flowerboat paddle clearance repair",
+  "target": "Preserve freely rowed five boats and feeding/breathing child with plausible safe interaction",
+  "visual_observations": {
+    "source": "Actual production CPU triangle distance survey; no GPU visual observation",
+    "remaining": [
+      "Flowerboat2 paddle vs feeder right calf clearance only0.001875m at86.573s",
+      "No sampled intersection but margin insufficient for outline"
+    ],
+    "completed": [
+      "Dock-ship actual closest1.232m, prior AABB0.077m was loose"
+    ]
+  },
+  "checks": [
+    {
+      "name": "feeder paddle world clearance>=0.25m",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "GPU new traffic observation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Repair swimmer local continuous path only",
+    "Keep boat lanes identities two paddles feeding/breathing",
+    "Do not teleport or weaken threshold"
+  ],
+  "evidence_revision": {
+    "fine_sha256": "ab7d0e19dffebfbf959396f82e4b2ff44b3b011a2551f017d37e622f567921e9"
+  }
+}

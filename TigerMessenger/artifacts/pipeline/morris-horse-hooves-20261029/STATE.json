@@ -1,0 +1,53 @@
+{
+  "status": "V13 hoof improvement rendered, parent integration review",
+  "report": {
+    "eye_surface_x": 0.15942001342773438,
+    "revision": "tiger-workflow-horse-v13",
+    "workflow": "V12 explicit neck/skull loft retained; flat-soled tapered hoof shells; selected flattened mane clumps",
+    "skin_vertices": 7471,
+    "skin_triangles": 14938,
+    "unweighted_vertices": 0,
+    "non_normalized_vertices": 0,
+    "bones": [
+      "root",
+      "chest",
+      "neck",
+      "tail",
+      "tail.mid",
+      "tail.tip",
+      "front.R_upper",
+      "front.R_lower",
+      "front.R_cannon",
+      "front.R_hoof",
+      "hind.R_upper",
+      "hind.R_lower",
+      "hind.R_cannon",
+      "hind.R_hoof",
+      "front.L_upper",
+      "front.L_lower",
+      "front.L_cannon",
+      "front.L_hoof",
+      "hind.L_upper",
+      "hind.L_lower",
+      "hind.L_cannon",
+      "hind.L_hoof"
+    ],
+    "weights": "normalized segment-distance candidate weights, not production hand painting",
+    "validation": "structural audit and neutral component images only; production gait/nav pending",
+    "totalTriangles": 154918,
+    "finite": {
+      "poses": 16,
+      "finiteSamples": 182944,
+      "bones": 22,
+      "scope": "finite evaluated deformation only, not gait/grounding/appearance acceptance"
+    },
+    "hoofBaseY": -0.005,
+    "hoofCrownY": 0.235
+  },
+  "observations": [
+    "Actual hoof close: flat sole, tapered coronary top, toe bevel/wedge rather than ball",
+    "Actual side: head/neck and cloth unchanged from V12, small broad mane clumps among existing locks",
+    "Hoof shell remains stylized; target anatomy/mane and textiles not fully matched"
+  ],
+  "runtimeChanged": false
+}

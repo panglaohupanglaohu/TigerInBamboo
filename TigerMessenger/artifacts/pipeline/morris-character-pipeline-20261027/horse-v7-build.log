@@ -1,0 +1,31 @@
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/build_morris_horse_v7.py:12: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(n);m.use_nodes=True;c=[int(h[i:i+2],16)/255 for i in (0,2,4)];c=[((v+.055)/1.055)**2.4 if v>.04045 else v/12.92 for v in c];m.diffuse_color=(*c,1);m.node_tree.nodes['Principled BSDF'].inputs['Base Color'].default_value=(*c,1);m.node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value=.84;return m
+Info: Saved as "horse-v7.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+23:12:39 | INFO: Starting glTF 2.0 export
+23:12:39 | INFO: Extracting primitive: brocade
+23:12:39 | INFO: Primitives created: 3
+23:12:39 | INFO: Extracting primitive: Sphere.004
+23:12:39 | INFO: Primitives created: 1
+23:12:39 | INFO: Extracting primitive: Sphere.005
+23:12:39 | INFO: Primitives created: 1
+23:12:39 | INFO: Extracting primitive: Sphere.010
+23:12:39 | INFO: Primitives created: 1
+23:12:39 | INFO: Extracting primitive: Sphere.011
+23:12:39 | INFO: Primitives created: 1
+23:12:39 | INFO: Extracting primitive: Mesh
+23:12:39 | INFO: Primitives created: 1
+23:12:39 | INFO: Extracting primitive: Sphere
+23:12:39 | INFO: Primitives created: 5
+23:12:39 | INFO: Extracting primitive: continuous tail volume
+23:12:39 | INFO: Primitives created: 1
+23:12:39 | INFO: Finished glTF 2.0 export in 0.1607351303100586 s
+00:05.052  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-character-pipeline-20261027/horse-v7-side.png'
+00:05.226  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-character-pipeline-20261027/horse-v7-front.png'
+00:05.434  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-character-pipeline-20261027/horse-v7-back.png'
+
+{"eye_surface_x": 0.1620924472808838, "revision": "tiger-workflow-horse-v7", "workflow": "new anatomical metaball union, voxel remesh, smoothing, decimation, real armature", "skin_vertices": 8861, "skin_triangles": 17718, "unweighted_vertices": 0, "non_normalized_vertices": 0, "bones": ["root", "chest", "neck", "tail", "tail.mid", "tail.tip", "front.R_upper", "front.R_lower", "front.R_cannon", "front.R_hoof", "hind.R_upper", "hind.R_lower", "hind.R_cannon", "hind.R_hoof", "front.L_upper", "front.L_lower", "front.L_cannon", "front.L_hoof", "hind.L_upper", "hind.L_lower", "hind.L_cannon", "hind.L_hoof"], "weights": "normalized segment-distance candidate weights, not production hand painting", "validation": "structural audit and neutral component images only; production gait/nav pending"}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

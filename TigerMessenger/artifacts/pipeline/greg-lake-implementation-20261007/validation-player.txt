@@ -1,0 +1,12 @@
+✔ real V7 promenade overlap no longer steals support from feet on the coral rim (8.789167ms)
+✔ feet below rim retain lower promenade and entrance/water are not captured (5.857167ms)
+✔ production collision substeps keep a standing player on the actual new rim (10.718417ms)
+✔ all three real bank midpoints stay supported through gravity instead of falling to old V7 terrain (86.053375ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1177.798125

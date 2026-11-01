@@ -1,0 +1,35 @@
+{
+  "task": "Bookshop original plaza train rescue and original heavy-trooper medical lifecycle",
+  "observations": [
+    "Normal game actual UI fleet assault produced10 injured residents. Existing train collected1, reached Hard to Find, treated and restored1, returned and collected next patient: second trip in transit,8waiting. live-resident-v1.json saved; final camera and trooper-medical additions loaded later, not same complete sortie.",
+    "Production CPU resident controller:3 original identities,2 trips,all100health,18seconds treatment,maximum0.24m/0.1s. Existing ramp builder provides ramp foot/top/porch world route. Original two wagon cargo hidden/restored.",
+    "Production real original troop/model browser CPU:7 casualties hoisted into original carriers; next assembly6 available,after24second treatment at actual designated medic and return18 available. No new troop/aircraft UUIDs. Healing patients reserved through transport and return.",
+    "Final normal game reload starts clean and exposes18 assigned/18ready plus follow-rescue-train camera. Final full casualty transport game journey not yet verified.",
+    "Prior cover-bombing path test in normal game timed out with0/2 cover salvos. Record this known separate flight issue; do not call all combat complete."
+  ],
+  "checks": [
+    {
+      "name": "Original resident rescue treatment return CPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Normal game actual resident healed and next rescue trip",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Actual original troop medical and second-sortie recount CPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Final complete game troop medical flight visual acceptance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No new models, no publication, preserve other changes. Compact text triage is not visual acceptance. Missing full-game evidence remains a gap."
+  ]
+}

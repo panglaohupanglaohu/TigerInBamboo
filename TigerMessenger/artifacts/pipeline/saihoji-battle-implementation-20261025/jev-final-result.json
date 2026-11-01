@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "6f28018380674d17fcec9e963c7e474a270c65b340ce76f432fd0adc5701e2a2",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.96
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.6,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.31,
+        "review": 0.68
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.77
+    }
+  },
+  "usage": {
+    "input_tokens": 813,
+    "output_tokens": 91,
+    "cost_usd": 0.000342,
+    "credits_remaining_usd": 4.915243
+  },
+  "elapsed_ms": 1769,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Full evacuation, medical and reset plus ground close-up/shield-block evidence",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "traditional wounded medical transport",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

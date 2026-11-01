@@ -1,0 +1,67 @@
+{
+  "status": "doubled-area-production-r56-integrated-target-not-fully-matched",
+  "actualFormalRevision": "morris-area2-r56",
+  "area": {
+    "previousRatio": 7,
+    "currentRatio": 14,
+    "relative": 2,
+    "radius": 82.3164625090267,
+    "rootScaled": false
+  },
+  "layout": {
+    "routeLength": 227.77801931241984,
+    "bridge": [
+      8,
+      32
+    ],
+    "castle": [
+      14,
+      5
+    ],
+    "musicCourt": [
+      30,
+      12
+    ],
+    "newLowRidges": 3,
+    "irregularCoast": true,
+    "riverMouth": "shore radius times1.025, railway inner side"
+  },
+  "vegetation": {
+    "planes": 17,
+    "cypresses": 16,
+    "hollyhocks": 51,
+    "animalsResized": false,
+    "outerClumpsHaveGrassGaps": true
+  },
+  "verified": [
+    "normal r56 current geometry visually inspected",
+    "normal bridge-front view shows actual cross-creek arch",
+    "15 landscape interface checks",
+    "5 expanded full factory checks",
+    "11 expanded patrol deterministic checks",
+    "normal prior r53 brown mount and accelerate, rider visible",
+    "music decoded and completed normal play-through"
+  ],
+  "evidence": [
+    "normal-r56-overview.png",
+    "normal-r56-bridge.png",
+    "component-r56-bare.png",
+    "normal-r56.json",
+    "factory-checks.json",
+    "patrol-checks-r56.json",
+    "../oskar-morris-area2-20261027/geometry-r3-checks.json"
+  ],
+  "rejected": [
+    "r53 flat large foreland",
+    "r55 erroneous spherical-slope checkerboard rock carpet",
+    "initial river near railway0.59m"
+  ],
+  "remaining": [
+    "target foreground terraces and flora silhouette/detail not fully matched",
+    "normal final whole-route riding and real train swept clearance not fully witnessed",
+    "horse and princess anatomy still below approved reference; per-leg IK absent",
+    "subjective music listening acceptance pending"
+  ],
+  "review": "review.html",
+  "noCommitPushPublish": true
+}

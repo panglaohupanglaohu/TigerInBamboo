@@ -1,0 +1,31 @@
+{
+  "revision": "moon-coast-r4d-20261025",
+  "status": "normal-scene-verified",
+  "scope": "User confirmed city-facing pine forest OUTER sea coast, rounded actual coastline; small crescent fix separate.",
+  "implemented": [
+    "Real curved bank r64..78 across20..70degrees",
+    "12degree actual source-surface endpoint collars",
+    "Original source colour/normal inheritance and inner overlap",
+    "Finite old shell removal with matching surface/depth/distance ownership",
+    "Indexed physical support and protected track/actor footprints",
+    "Production normal coastline and overhead inspection views"
+  ],
+  "verification": {
+    "tests": 8,
+    "normalAudit": "normal-coast-final.json",
+    "normalScreenshot": "normal-coast-final.png",
+    "sameCameraComponentBefore": "before-rounded-coast-final.png",
+    "sameCameraComponentAfter": "after-rounded-coast-final.png",
+    "consoleErrors": 0,
+    "installedShells": 1,
+    "bankVertices": 3597,
+    "bankTriangles": 6912,
+    "normalProtectedSites": 0,
+    "jevFinal": "jev-r4d-final-result.json"
+  },
+  "limits": [
+    "No full walking/boating navigation traversal claimed",
+    "Other coast sectors unchanged; original terrain, sea level, moon, forest, train and ship placements preserved"
+  ],
+  "next": "User review; rounded outer coast and separate FPS remote clearance normal UI verified."
+}

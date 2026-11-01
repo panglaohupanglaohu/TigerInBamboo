@@ -1,0 +1,184 @@
+{
+  "captureMethod": "Historical shell Playwright launch of independent headless Chrome using actual bare game ?autostart=1. Browser closed in finally. This was not CUA and must not be described as an approved CUA capture. No repetition after root clarified CUA-only restriction.",
+  "at": "2026-10-06T00:58:29.041Z",
+  "readOnlyOperations": "Read __tm live curves and geometry only; no manual update, player move, terrain edit or curve changes. Normal game loop was running.",
+  "offlineAnalysis": "Node THREE exact terrain triangles / oriented box triangle overlap plus radial raycasting; Python branch grouping.",
+  "sourceHashes": {
+    "global-tram-samples.json": "bfc1e9d6c66e9ec8284020eedf8d0140104a355bc3b38318960185305347c2c9",
+    "actual-final-terrain.json": "acc725413e20075cb6e38386bf77fc17e236ff302e5990a70dac27d706f24a0c",
+    "global-tram-terrain-audit.json": "87bec0295bfc47905875d0ea66a25e983a6d4735b4d8b9ee6f48a3941544c35b"
+  },
+  "branches": {
+    "red": {
+      "A": {
+        "uWindow": [
+          0.62,
+          0.69
+        ],
+        "samples": 154,
+        "indices": [
+          1632,
+          1785
+        ],
+        "actualU": [
+          0.6306027820710973,
+          0.6897217928902627
+        ],
+        "localBounds": [
+          [
+            51.37409769555087,
+            143.6824616762183
+          ],
+          [
+            -99.40170420600657,
+            -16.312303796675078
+          ],
+          [
+            58.6298071576735,
+            118.23591230034356
+          ]
+        ],
+        "railBuriedSamples": 95,
+        "bodyEnvelopeContactSamples": 50,
+        "maxTerrainAboveRail": 52.252007375686304
+      },
+      "B": {
+        "uWindow": [
+          0.875,
+          0.97
+        ],
+        "samples": 246,
+        "indices": [
+          2265,
+          2510
+        ],
+        "actualU": [
+          0.875193199381762,
+          0.9698608964451314
+        ],
+        "localBounds": [
+          [
+            11.617187050092948,
+            120.10796223650775
+          ],
+          [
+            -67.53127378124312,
+            -56.59286550329297
+          ],
+          [
+            -66.2655135988507,
+            113.21773871358187
+          ]
+        ],
+        "railBuriedSamples": 198,
+        "bodyEnvelopeContactSamples": 31,
+        "maxTerrainAboveRail": 34.36388823994355
+      }
+    },
+    "blue": {
+      "A": {
+        "uWindow": [
+          0.62,
+          0.69
+        ],
+        "samples": 150,
+        "indices": [
+          1678,
+          1827
+        ],
+        "actualU": [
+          0.6336858006042296,
+          0.6899546827794562
+        ],
+        "localBounds": [
+          [
+            54.5888629354735,
+            143.77533231404334
+          ],
+          [
+            -99.99600629487676,
+            -19.16088476397746
+          ],
+          [
+            62.686825052332225,
+            121.37409321996141
+          ]
+        ],
+        "railBuriedSamples": 83,
+        "bodyEnvelopeContactSamples": 35,
+        "maxTerrainAboveRail": 45.686534323800345
+      },
+      "B": {
+        "uWindow": [
+          0.875,
+          0.97
+        ],
+        "samples": 252,
+        "indices": [
+          2317,
+          2568
+        ],
+        "actualU": [
+          0.875,
+          0.9697885196374623
+        ],
+        "localBounds": [
+          [
+            7.876532191619358,
+            122.48427414243537
+          ],
+          [
+            -70.90988412674163,
+            -59.282669038051424
+          ],
+          [
+            -69.11608751473506,
+            112.01321306102008
+          ]
+        ],
+        "railBuriedSamples": 191,
+        "bodyEnvelopeContactSamples": 27,
+        "maxTerrainAboveRail": 30.94350565372602
+      }
+    }
+  },
+  "bodyEnvelope": {
+    "red": {
+      "min": [
+        -3.4900000095367694,
+        -0.49999999999997147,
+        -1.7200000286102366
+      ],
+      "max": [
+        3.490000009536761,
+        2.5220000743866247,
+        1.720000028610247
+      ],
+      "halfLength": 3.4900000095367694,
+      "halfWidth": 1.720000028610247,
+      "topAboveRail": 2.6420000743866248,
+      "bottomAboveRail": -0.37999999999997147
+    },
+    "blue": {
+      "min": [
+        -3.490000009536753,
+        -0.4999999999999716,
+        -1.7200000286102437
+      ],
+      "max": [
+        3.490000009536766,
+        2.5220000743866247,
+        1.7200000286102366
+      ],
+      "halfLength": 3.490000009536766,
+      "halfWidth": 1.7200000286102437,
+      "topAboveRail": 2.6420000743866248,
+      "bottomAboveRail": -0.3799999999999716
+    }
+  },
+  "caveats": [
+    "Branch A/B are numeric arc parameter windows, not asserted geographical names.",
+    "Do not merge these branches by XZ proximity; retain world coordinates/tangents or full 3D frame.",
+    "Union body box is conservative; future cargo/robot loading and complete dynamic extrema are unverified."
+  ]
+}

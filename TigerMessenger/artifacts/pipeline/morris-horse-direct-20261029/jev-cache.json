@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "c5b9d4aa417bfc84f32f8f1bbf3240c57df81d17b339b9ca7d7e5cd9b5cf9cc0",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.75
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.96,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.97,
+        "lighting": 0,
+        "navigation": 0,
+        "review": 0.02
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.94
+    }
+  },
+  "usage": {
+    "input_tokens": 666,
+    "output_tokens": 91,
+    "cost_usd": 0.00028,
+    "credits_remaining_usd": 4.888167
+  },
+  "elapsed_ms": 2161,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "target horse silhouette",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "cloth border contact",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

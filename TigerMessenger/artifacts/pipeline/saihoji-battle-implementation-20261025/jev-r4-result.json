@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "e93cf7f68124402f7c4eccae5a6d757d80a87154403ebd7e6542beb4b37fd1b1",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.96
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.75,
+      "probabilities": {
+        "dressing": 0.07,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.13,
+        "review": 0.8
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.66
+    }
+  },
+  "usage": {
+    "input_tokens": 910,
+    "output_tokens": 91,
+    "cost_usd": 0.000383,
+    "credits_remaining_usd": 4.91762
+  },
+  "elapsed_ms": 1850,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "actual moss heavy deployment and tree/terrain clearance",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional casualty treatment and whole withdrawal/reset",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

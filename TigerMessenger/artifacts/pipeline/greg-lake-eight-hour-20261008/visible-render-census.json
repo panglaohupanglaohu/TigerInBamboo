@@ -1,0 +1,1386 @@
+{
+  "note": "CPU visible source render-batch census, no camera frustum or GPU performance assertion",
+  "totalBatches": 1181,
+  "branches": [
+    {
+      "name": "swamp-warship-repair",
+      "draws": 96,
+      "meshes": 96,
+      "triangles": 164716
+    },
+    {
+      "name": "swamp-warship-depart",
+      "draws": 66,
+      "meshes": 66,
+      "triangles": 98204
+    },
+    {
+      "name": "moebius-cyber-ink-tiger",
+      "draws": 59,
+      "meshes": 59,
+      "triangles": 71260
+    },
+    {
+      "name": "v2-entry-stone-cheeks",
+      "draws": 32,
+      "meshes": 32,
+      "triangles": 192
+    },
+    {
+      "name": "swamp-ancient-world-tree",
+      "draws": 22,
+      "meshes": 30,
+      "triangles": 14592
+    },
+    {
+      "name": "swamp-giant-flower",
+      "draws": 19,
+      "meshes": 19,
+      "triangles": 1460
+    },
+    {
+      "name": "swamp-giant-flower",
+      "draws": 19,
+      "meshes": 19,
+      "triangles": 1460
+    },
+    {
+      "name": "swamp-giant-flower",
+      "draws": 19,
+      "meshes": 19,
+      "triangles": 1460
+    },
+    {
+      "name": "swamp-giant-flower",
+      "draws": 19,
+      "meshes": 19,
+      "triangles": 1460
+    },
+    {
+      "name": "swamp-giant-flower",
+      "draws": 19,
+      "meshes": 19,
+      "triangles": 1460
+    },
+    {
+      "name": "v2-entry-lamps",
+      "draws": 15,
+      "meshes": 15,
+      "triangles": 2496
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 14,
+      "meshes": 44,
+      "triangles": 42480
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 14,
+      "meshes": 43,
+      "triangles": 43728
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 14,
+      "meshes": 44,
+      "triangles": 48024
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 14,
+      "meshes": 49,
+      "triangles": 53664
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 14,
+      "meshes": 45,
+      "triangles": 41232
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-glow-flower",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 100
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 7992
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 7992
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "draws": 14,
+      "meshes": 14,
+      "triangles": 7992
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 12,
+      "meshes": 46,
+      "triangles": 48192
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 12,
+      "meshes": 45,
+      "triangles": 47064
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 12,
+      "meshes": 40,
+      "triangles": 39840
+    },
+    {
+      "name": "swamp-towering-tree",
+      "draws": 12,
+      "meshes": 39,
+      "triangles": 37920
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "draws": 11,
+      "meshes": 11,
+      "triangles": 5672
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "draws": 11,
+      "meshes": 11,
+      "triangles": 5672
+    },
+    {
+      "name": "swamp-native-doll",
+      "draws": 10,
+      "meshes": 10,
+      "triangles": 12000
+    },
+    {
+      "name": "swamp-rim-palm",
+      "draws": 10,
+      "meshes": 10,
+      "triangles": 96
+    },
+    {
+      "name": "swamp-native-doll",
+      "draws": 10,
+      "meshes": 10,
+      "triangles": 2320
+    },
+    {
+      "name": "swamp-repair-barge",
+      "draws": 9,
+      "meshes": 9,
+      "triangles": 164
+    },
+    {
+      "name": "swamp-mushroom",
+      "draws": 8,
+      "meshes": 8,
+      "triangles": 290
+    },
+    {
+      "name": "swamp-mushroom",
+      "draws": 8,
+      "meshes": 8,
+      "triangles": 290
+    },
+    {
+      "name": "swamp-mushroom",
+      "draws": 8,
+      "meshes": 8,
+      "triangles": 290
+    },
+    {
+      "name": "swamp-mushroom",
+      "draws": 8,
+      "meshes": 8,
+      "triangles": 290
+    },
+    {
+      "name": "swamp-mushroom",
+      "draws": 8,
+      "meshes": 8,
+      "triangles": 290
+    },
+    {
+      "name": "swamp-rim-palm",
+      "draws": 8,
+      "meshes": 8,
+      "triangles": 84
+    },
+    {
+      "name": "moebius-beluga-whale",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 9792
+    },
+    {
+      "name": "moebius-beluga-whale",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 9792
+    },
+    {
+      "name": "swamp-bird",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 7744
+    },
+    {
+      "name": "swamp-bird",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 7744
+    },
+    {
+      "name": "swamp-bird",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 7744
+    },
+    {
+      "name": "swamp-bird",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 7744
+    },
+    {
+      "name": "swamp-longtail-monkey",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 23560
+    },
+    {
+      "name": "swamp-longtail-monkey",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 23560
+    },
+    {
+      "name": "swamp-longtail-monkey",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 23560
+    },
+    {
+      "name": "moebius-beluga-whale",
+      "draws": 6,
+      "meshes": 6,
+      "triangles": 9792
+    },
+    {
+      "name": "greg-coral-understory",
+      "draws": 5,
+      "meshes": 5,
+      "triangles": 53832
+    },
+    {
+      "name": "swamp-mushroom",
+      "draws": 4,
+      "meshes": 4,
+      "triangles": 166
+    },
+    {
+      "name": "swamp-shell",
+      "draws": 4,
+      "meshes": 4,
+      "triangles": 256
+    },
+    {
+      "name": "swamp-shell",
+      "draws": 4,
+      "meshes": 4,
+      "triangles": 256
+    },
+    {
+      "name": "swamp-shell",
+      "draws": 4,
+      "meshes": 4,
+      "triangles": 256
+    },
+    {
+      "name": "greg-natural-cliff",
+      "draws": 3,
+      "meshes": 3,
+      "triangles": 12219
+    },
+    {
+      "name": "swamp-native-doll",
+      "draws": 3,
+      "meshes": 3,
+      "triangles": 2320
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 384
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 384
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 384
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 384
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 384
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 384
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 384
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 384
+    },
+    {
+      "name": "swamp-rooted-algae-batches",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8784
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "swamp-underground-waterline",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 87
+    },
+    {
+      "name": "swamp-fish-0",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8448
+    },
+    {
+      "name": "swamp-fish-1",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 9152
+    },
+    {
+      "name": "swamp-fish-2",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8448
+    },
+    {
+      "name": "swamp-fish-3",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 9152
+    },
+    {
+      "name": "swamp-fish-4",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8448
+    },
+    {
+      "name": "swamp-fish-5",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 9152
+    },
+    {
+      "name": "swamp-fish-6",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8448
+    },
+    {
+      "name": "swamp-fish-7",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 9152
+    },
+    {
+      "name": "swamp-fish-8",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8448
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "swamp-eel",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 6568
+    },
+    {
+      "name": "swamp-tube-worms",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 13440
+    },
+    {
+      "name": "swamp-tube-worms",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 11200
+    },
+    {
+      "name": "swamp-pink-hanger",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 4824
+    },
+    {
+      "name": "swamp-pink-hanger",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 4824
+    },
+    {
+      "name": "swamp-pink-hanger",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 4824
+    },
+    {
+      "name": "swamp-glow-lizard",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 19072
+    },
+    {
+      "name": "swamp-glow-lizard",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 19072
+    },
+    {
+      "name": "swamp-glow-lizard",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 19072
+    },
+    {
+      "name": "swamp-glow-ribbonfish",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8672
+    },
+    {
+      "name": "swamp-glow-ribbonfish",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8672
+    },
+    {
+      "name": "swamp-glow-ribbonfish",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 8672
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "Mesh",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 40
+    },
+    {
+      "name": "greg-coral-outer-cliff",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 2698
+    },
+    {
+      "name": "greg-swamp-three-bank-path",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 1904
+    },
+    {
+      "name": "greg-swamp-dry-service-shelf",
+      "draws": 2,
+      "meshes": 2,
+      "triangles": 248
+    },
+    {
+      "name": "swamp-sinkhole-wall",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 704
+    },
+    {
+      "name": "v2-entrance-tread",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 84
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 10
+    },
+    {
+      "name": "swamp-moon-shaft",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 16
+    },
+    {
+      "name": "swamp-moon-shaft",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 16
+    },
+    {
+      "name": "swamp-moon-shaft",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 16
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "Sprite",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "swamp-lake-floor",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 384
+    },
+    {
+      "name": "swamp-water-volume",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 11872
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "Mesh",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 30
+    },
+    {
+      "name": "v2-bed-pebbles",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 2560
+    },
+    {
+      "name": "v2-underwater-grass",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 6660
+    },
+    {
+      "name": "v2-entry-fronds",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 3072
+    },
+    {
+      "name": "greg-coral-rim-rock-batch",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 1540
+    },
+    {
+      "name": "greg-shore-dock-walk",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 36
+    },
+    {
+      "name": "greg-shore-dock-piles",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 136
+    },
+    {
+      "name": "greg-shore-dock-board-lines",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "greg-coral-monkey-perch-branches",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 5324
+    },
+    {
+      "name": "greg-coral-monkey-perch-ink",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 0
+    },
+    {
+      "name": "tiger-lapping-water-column",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 32
+    },
+    {
+      "name": "tiger-drink-contact-ripple",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 80
+    },
+    {
+      "name": "tiger-drink-contact-ripple",
+      "draws": 1,
+      "meshes": 1,
+      "triangles": 80
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "entry": "/TigerMessenger/",
+  "mode": "front-shore-fixed-camera",
+  "frames": 4568,
+  "bgm": {
+    "owner": "batian",
+    "revision": 1,
+    "listener": {
+      "x": -104.07873510743117,
+      "y": -48.960188586749126,
+      "z": 127.13060383710577
+    },
+    "requests": [
+      {
+        "key": "infiltration",
+        "active": true,
+        "inRange": false,
+        "distance": 261.23036967884457
+      },
+      {
+        "key": "storm",
+        "active": false,
+        "inRange": null,
+        "distance": null
+      },
+      {
+        "key": "cue",
+        "active": false,
+        "inRange": null,
+        "distance": null
+      },
+      {
+        "key": "canyon",
+        "active": false,
+        "inRange": null,
+        "distance": null
+      },
+      {
+        "key": "citadelElder",
+        "active": false,
+        "inRange": null,
+        "distance": 250.98368972087243
+      },
+      {
+        "key": "swamp",
+        "active": false,
+        "inRange": null,
+        "distance": null
+      },
+      {
+        "key": "batian",
+        "active": true,
+        "inRange": null,
+        "distance": null
+      }
+    ],
+    "elements": [
+      {
+        "key": "batian",
+        "source": "http://localhost:8931/TigerMessenger/music/Hitman.ogg",
+        "paused": false,
+        "volume": 0.5,
+        "currentTime": 74.131618,
+        "readyState": 4,
+        "networkState": 1,
+        "mediaError": null
+      }
+    ]
+  },
+  "version": "apostles-oskar-wfc-16-wide-crown",
+  "built": 9,
+  "roots": [
+    "back-left",
+    "back-right",
+    "back-tower",
+    "front-left",
+    "front-right",
+    "bay-1",
+    "bay-2",
+    "bay-3",
+    "bay-4"
+  ],
+  "railClearance": [
+    {
+      "id": "back-left",
+      "minRail": 15.15
+    },
+    {
+      "id": "back-right",
+      "minRail": 14.88
+    },
+    {
+      "id": "back-tower",
+      "minRail": 13.74
+    },
+    {
+      "id": "front-left",
+      "minRail": 14.92
+    },
+    {
+      "id": "front-right",
+      "minRail": 15.44
+    },
+    {
+      "id": "bay-1",
+      "minRail": 19.27
+    },
+    {
+      "id": "bay-2",
+      "minRail": 17.33
+    },
+    {
+      "id": "bay-3",
+      "minRail": 32.37
+    },
+    {
+      "id": "bay-4",
+      "minRail": 42.66
+    }
+  ],
+  "collisionSurfaces": 9,
+  "cloudSurfaces": 9,
+  "draw": {
+    "frame": 4588,
+    "calls": 7583,
+    "triangles": 6143105,
+    "points": 0,
+    "lines": 62416
+  },
+  "waves": [
+    {
+      "mass": "back-left",
+      "name": "apostle-foam",
+      "time": 0,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    },
+    {
+      "mass": "back-right",
+      "name": "apostle-foam",
+      "time": 293.18760000014305,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    },
+    {
+      "mass": "back-tower",
+      "name": "apostle-foam",
+      "time": 293.18760000014305,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    },
+    {
+      "mass": "front-left",
+      "name": "apostle-foam",
+      "time": 0,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    },
+    {
+      "mass": "front-right",
+      "name": "apostle-foam",
+      "time": 293.18760000014305,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    },
+    {
+      "mass": "bay-1",
+      "name": "apostle-foam",
+      "time": 0,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    },
+    {
+      "mass": "bay-2",
+      "name": "apostle-foam",
+      "time": 293.18760000014305,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    },
+    {
+      "mass": "bay-3",
+      "name": "apostle-foam",
+      "time": 293.18760000014305,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    },
+    {
+      "mass": "bay-4",
+      "name": "apostle-foam",
+      "time": 293.18760000014305,
+      "animation": {
+        "revision": "readable-surf-2",
+        "period": 5.2,
+        "fronts": 2,
+        "width": 3.8,
+        "waterLift": 0.2,
+        "geometryAllocatedPerFrame": false
+      }
+    }
+  ]
+}

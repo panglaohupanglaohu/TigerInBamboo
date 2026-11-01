@@ -1,0 +1,33 @@
+ecology counts [ 22, 22, 22 ] rejected { support: 0, path: 6, story: 0, spacing: 176, living: 19 }
+✔ default factory admits three habitat-specific plants only on real dry support (11.923916ms)
+✔ plant crowns clear route and original tiger/ship anchors do not move (0.109375ms)
+✔ three instanced species carry rooted geometry at constrained world scale (0.051917ms)
+✔ repeat, toggle and dispose are reversible and do not accumulate geometry (19.900667ms)
+✔ missing rock shelves fail closed instead of planting on invisible theoretical terrain (23.2865ms)
+✔ all actual plant envelopes pass independent living-path audit (2.782333ms)
+✔ spherical placement does not change deterministic habitat choices (18.968917ms)
+✔ actual rotated default factory supports all five shelf corners outside the entire walkway (452.38075ms)
+✔ missing real corbel support produces no floating replacement and no scene mutation (143.931916ms)
+✔ installation is idempotent, disabled does nothing, disposal frees both batches and permits reinstall (133.075208ms)
+✔ full two-world-unit route and its headroom reject plant roots and crowns (19.102083ms)
+✔ protects authored tiger stairs, actual worksite, living roots and full ship-whale transit (0.936167ms)
+✔ three-level landmark lines reject tall obstruction but permit low foliage below the view (0.118583ms)
+✔ sphere transforms do not change the local guards or mutate any actor or add meshes (9.0885ms)
+✔ post-placement translation, rotation and uniform scale preserve all zones and candidate decisions (31.950375ms)
+✔ screen ink retains CSS width across depth, viewport aspect and DPR (0.997459ms)
+✔ local visual pass leaves actor identity, animation and collision geometry intact (1.644083ms)
+✔ instanced crown inks keep authored transforms and ignore raycasts (1.183208ms)
+✔ wall and bark hooks expand against the actual Three.js basic shader (0.450083ms)
+✔ comparison flag produces no lake mutation (0.091333ms)
+✔ three reachable bank levels use default placed scale and preserve story anchors (0.683917ms)
+✔ every 0.1 world unit from original entry tread through all layers has a top-facing radial support (254.488709ms)
+✔ actual V7 shore sampler cannot preempt the new intended bank surfaces (200.545084ms)
+✔ waymark full footprints stand on stone corbels outside the promised two-world-unit walking lane (2.030375ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1004.045833

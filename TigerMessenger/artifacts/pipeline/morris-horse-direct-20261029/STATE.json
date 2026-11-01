@@ -1,0 +1,20 @@
+{
+  "status": "V11 rejected after actual bare/dressed side inspection; no runtime changes",
+  "revision": "tiger-workflow-horse-v11",
+  "observations": [
+    "Four limbs now readable in slight depth stagger",
+    "Bare horse reveals upper head/crest still overly inflated; jaw and neck turn resemble a rounded seahorse rather than target horse",
+    "Shortening cloth without synchronizing gold borders creates floating ornament/border regression; do not integrate",
+    "22 bone contract and no unweighted skin points preserved, not art acceptance"
+  ],
+  "remaining": [
+    "Replace inflated field-union neck/head with anatomical loft or sculpt shape",
+    "Redesign skull/cheek/muzzle and shoulder-neck transition",
+    "Repair cloth/border alignment before any runtime promotion"
+  ],
+  "files": [
+    "horse-v11-side.png",
+    "horse-v11-bare-side.png",
+    "horse-v11-bare-threequarter.png"
+  ]
+}

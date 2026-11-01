@@ -1,0 +1,29 @@
+{
+  "recorded_at_utc": "2026-10-20T23:19:02.510043+00:00",
+  "status": "implemented_cpu_verified_normal_entry_loaded",
+  "sources": [
+    {
+      "path": "src/gameplay/robotOps/baseDefense.js",
+      "sha256": "a8c40fc0d81745ba52f1293d9d9b46685b0f2221bb7e561a8ce22ad60ae9ea07",
+      "served_matches_disk": true,
+      "backup": "artifacts/pipeline/bookshop-patrol-defense-20261021/source-before/baseDefense.js"
+    },
+    {
+      "path": "src/gameplay/robotOps/panel.js",
+      "sha256": "7b376e760adbf021e22de890b060cb9b757bd1ef55a11114e8267cede7e924b2",
+      "served_matches_disk": true,
+      "backup": "artifacts/pipeline/bookshop-patrol-defense-20261021/source-before/panel.js"
+    }
+  ],
+  "normal_game": {
+    "final_source_reloaded": true,
+    "panel_visible": true,
+    "local_intruders": 0,
+    "shotsFired": 0,
+    "errors": [],
+    "limit": "No local patrol targets in sampled run. Patrol firing verified in production CPU fixture only."
+  },
+  "cpu_evidence": "cpu-verification.json",
+  "jev": "jev-decision.json",
+  "no_commit_publish": true
+}

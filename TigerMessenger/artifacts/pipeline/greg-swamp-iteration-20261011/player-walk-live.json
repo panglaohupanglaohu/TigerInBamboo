@@ -1,0 +1,118 @@
+{
+  "method": "normal default production; initial rim placement only, then 9 seconds actual KeyW input and normal physics/camera updates",
+  "completed": true,
+  "shots": [
+    {
+      "time": "2026-10-10T21:56:33.250Z",
+      "position": [
+        -111.73730282101829,
+        -56.374831902730094,
+        -74.48433766786209
+      ],
+      "velocity": [
+        2.7755575615628914e-17,
+        0,
+        2.7755575615628914e-17
+      ],
+      "fade": {
+        "enabled": true,
+        "version": 4,
+        "mode": "clean-aperture",
+        "nearRadius": 2.2,
+        "materials": 1026,
+        "meshes": 1062,
+        "active": true,
+        "weight": 0.9999226755227392
+      },
+      "camera": [
+        -112.4560404617644,
+        -55.85856244562249,
+        -80.47423622221356
+      ]
+    },
+    {
+      "time": "2026-10-10T21:56:36.395Z",
+      "position": [
+        -115.4867660199996,
+        -64.34193178542405,
+        -61.112540629223446
+      ],
+      "velocity": [
+        0.3432314179475671,
+        -5.211893717417518,
+        4.838689744185362
+      ],
+      "fade": {
+        "enabled": true,
+        "version": 4,
+        "mode": "clean-aperture",
+        "nearRadius": 2.2,
+        "materials": 1026,
+        "meshes": 1062,
+        "active": true,
+        "weight": 0.9999999999997652
+      },
+      "camera": [
+        -119.05374560976871,
+        -61.04715922777552,
+        -65.88396095594892
+      ]
+    },
+    {
+      "time": "2026-10-10T21:56:39.518Z",
+      "position": [
+        -109.1226816350859,
+        -79.6510965300207,
+        -54.40515555654914
+      ],
+      "velocity": [
+        4.204323376226644,
+        -5.746599481285241,
+        -0.019558647720544373
+      ],
+      "fade": {
+        "enabled": true,
+        "version": 4,
+        "mode": "clean-aperture",
+        "nearRadius": 2.2,
+        "materials": 1026,
+        "meshes": 1062,
+        "active": true,
+        "weight": 1
+      },
+      "camera": [
+        -115.39267261088364,
+        -77.01757511884914,
+        -54.719706272970875
+      ]
+    },
+    {
+      "time": "2026-10-10T21:56:42.635Z",
+      "position": [
+        -95.77204655362945,
+        -90.5482131831425,
+        -61.97373209114331
+      ],
+      "velocity": [
+        4.764436692870262,
+        -1.5836448210802465,
+        -5.048972093945501
+      ],
+      "fade": {
+        "enabled": true,
+        "version": 4,
+        "mode": "clean-aperture",
+        "nearRadius": 2.2,
+        "materials": 1026,
+        "meshes": 1062,
+        "active": true,
+        "weight": 1
+      },
+      "camera": [
+        -101.54394606690248,
+        -92.1031220961119,
+        -58.71370439091551
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "round": "four-pine-source-r3-final",
+  "observations": [
+    "Root GPU inspected actual source-factory candidate. Root revision1 pairs overlap and crowns block pond; r2 moved2/4 clear of moon/pond; r3 moved5 left rear. Main view now distinguishes all4tree silhouettes, small original pond and floating moon. IDs1/2/4/5 only; no3.",
+    "Existing original pine1, lake group/shape/deep patch/path and moon centre untouched. Three source-derived curved pines are component proposals only. Root-envelope estimates all positive; no actual game terrain/full-body navigation validation.",
+    "Built-in final art target four-pine-target-v2 viewed: four curved main trees and no upright3, conservative source-like small pond, moon clearly raised. Art morphology is not exact source survey; use source audit for positions."
+  ],
+  "checks": [
+    {
+      "name": "Actual source component GPU main-view comparison",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No3 and four source curved pines",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No source pond/moon transforms changed",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Actual full gameplay support/navigation before placement",
+      "required": true,
+      "passed": null
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "2c81d9d2f13eec0f5991470f7f4bd75ae05d7936c8cce0a3fed5136cd4d167f8",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.82
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.71,
+      "probabilities": {
+        "dressing": 0.12,
+        "geometry": 0.09,
+        "lighting": 0,
+        "navigation": 0.02,
+        "review": 0.77
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.51
+    }
+  },
+  "usage": {
+    "input_tokens": 669,
+    "output_tokens": 91,
+    "cost_usd": 0.000281,
+    "credits_remaining_usd": 4.901716
+  },
+  "elapsed_ms": 1140,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "current normal game fruit inspection",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

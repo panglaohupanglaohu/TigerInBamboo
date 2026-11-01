@@ -1,0 +1,62 @@
+{
+  "palettesMatch": true,
+  "paletteSwatches": 15,
+  "menuLanes": [
+    "base",
+    "build",
+    "terrain",
+    "fusion"
+  ],
+  "equalToSource": {
+    "position": true,
+    "color": true,
+    "aGlow": true
+  },
+  "triangles": 13847,
+  "skirtVertices": 1984,
+  "waveVertices": 1984,
+  "modernWaveVertices": 3472,
+  "flags": {
+    "waves": true,
+    "shorewaves": false,
+    "reflection": true,
+    "ao": true,
+    "bounce": true,
+    "shadows": true,
+    "shorelines": false,
+    "grid": false,
+    "lightonly": false,
+    "backlit": false,
+    "watervol": false
+  },
+  "lighting": {
+    "active": true,
+    "mode": "day",
+    "ambient": 0.5,
+    "hemi": 0.95,
+    "sun": 2.7,
+    "fill": 0.45,
+    "exposure": 1.08,
+    "background": "6aa8b0",
+    "fogRemoved": true,
+    "otherLightsOff": true,
+    "restored": true,
+    "timeUnchanged": true
+  },
+  "lightingStopped": true,
+  "flagsAfterExercise": {
+    "waves": true,
+    "shorewaves": true,
+    "reflection": true,
+    "ao": true,
+    "bounce": true,
+    "shadows": true,
+    "shorelines": false,
+    "grid": false,
+    "lightonly": false,
+    "backlit": true,
+    "watervol": true
+  },
+  "nightUniform": 1,
+  "errors": []
+}

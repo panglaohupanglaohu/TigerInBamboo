@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "ec63680a6f1cb68d8aa68188ba0f0dfd2e380505eedd0a1ba5eb56b970ba57a8",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.97
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.86,
+      "probabilities": {
+        "navigation": 0.89,
+        "review": 0.09,
+        "geometry": 0.02,
+        "dressing": 0,
+        "lighting": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.95
+    }
+  },
+  "usage": {
+    "input_tokens": 1000,
+    "output_tokens": 91,
+    "cost_usd": 0.00042,
+    "credits_remaining_usd": 4.960297
+  },
+  "elapsed_ms": 1948,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Production boarding and continuous playable navigation",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Independent actual target visual score >95",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,54 @@
+{
+  "revision": "internal-fluorescence-1",
+  "status": "CPU7/7 passed; shader/GPU review pending",
+  "userCorrection": "Keep accepted bird multicolour skin and green lizard skin; pink-purple light emitted internally only from bird head / lizard torso. No whole-body aureole.",
+  "files": [
+    "src/world/swampInternalGlow.js",
+    "src/world/moebiusSwamp.js only bird/lizard builders and helper import",
+    "tests/world/swampBirdColourGlow.test.mjs"
+  ],
+  "implementation": {
+    "material": "MeshBasicMaterial.onBeforeCompile localized additive radiance in linear RGB, not unsupported emissive property",
+    "emissionColour": "#F4A5EC",
+    "bird": {
+      "region": "head",
+      "center": [
+        0,
+        0.14,
+        0.43
+      ],
+      "radius": [
+        0.21,
+        0.2,
+        0.25
+      ],
+      "strength": 0.95
+    },
+    "lizard": {
+      "region": "torso",
+      "center": [
+        0,
+        0.18,
+        0
+      ],
+      "radius": [
+        0.24,
+        0.15,
+        0.48
+      ],
+      "strength": 0.85
+    },
+    "mask": "ellipsoid .82→1.28 feather + view-facing center brightness + protect dark eye ink",
+    "oldHalos": "objects/animation references retained but visibility false",
+    "newDraws": 0,
+    "newPointLights": 0,
+    "animationResources": "none"
+  },
+  "preserved": "bird skin vertices unchanged from approved multicolour version; lizard full green vertex colour/position/normal and rig hashes exactly equal original fine-ink baseline. All RNG and flight/crawl animation hooks unchanged.",
+  "tests": {
+    "passed": 7,
+    "log": "validation-internal-fluorescence.txt",
+    "limits": "CPU verifies source hook injection into actual Three ShaderLib.basic, masks/uniforms, colour buffers/geometry and formal bird colour persistence; not real GPU shader compilation."
+  },
+  "rollback": "before-internal-fluorescence/builders-v3-not-adopted.json contains prior bird and lizard functions; v3 ring explicitly not adopted. Restore only relevant function hunks and helper import, not whole shared file."
+}

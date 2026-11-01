@@ -1,0 +1,120 @@
+{
+  "time": "2026-10-10T21:17:45.460Z",
+  "station": "rim",
+  "method": "same camera and same simulation phase, eight manual renders ABBA; not full-game FPS",
+  "timerExtension": true,
+  "timedOut": false,
+  "material": {
+    "type": "MeshToonMaterial",
+    "transparent": false,
+    "depthWrite": true,
+    "depthTest": true
+  },
+  "restored": true,
+  "rows": [
+    {
+      "order": 0,
+      "cpuMs": 279.10000002384186,
+      "frame": {
+        "frame": 205,
+        "calls": 6413,
+        "triangles": 5649895,
+        "points": 0,
+        "lines": 201332
+      },
+      "gpuMs": 10.587208,
+      "disjoint": false
+    },
+    {
+      "order": -1000,
+      "cpuMs": 26.200000047683716,
+      "frame": {
+        "frame": 206,
+        "calls": 6413,
+        "triangles": 5649895,
+        "points": 0,
+        "lines": 201332
+      },
+      "gpuMs": 4.941,
+      "disjoint": false
+    },
+    {
+      "order": -1000,
+      "cpuMs": 23.899999976158142,
+      "frame": {
+        "frame": 207,
+        "calls": 6413,
+        "triangles": 5649895,
+        "points": 0,
+        "lines": 201332
+      },
+      "gpuMs": 4.344291,
+      "disjoint": false
+    },
+    {
+      "order": 0,
+      "cpuMs": 23.299999952316284,
+      "frame": {
+        "frame": 208,
+        "calls": 6413,
+        "triangles": 5649895,
+        "points": 0,
+        "lines": 201332
+      },
+      "gpuMs": 4.452749,
+      "disjoint": false
+    },
+    {
+      "order": 0,
+      "cpuMs": 23.700000047683716,
+      "frame": {
+        "frame": 209,
+        "calls": 6413,
+        "triangles": 5649895,
+        "points": 0,
+        "lines": 201332
+      },
+      "gpuMs": 5.421874,
+      "disjoint": false
+    },
+    {
+      "order": -1000,
+      "cpuMs": 23,
+      "frame": {
+        "frame": 210,
+        "calls": 6413,
+        "triangles": 5649895,
+        "points": 0,
+        "lines": 201332
+      },
+      "gpuMs": 7.041208,
+      "disjoint": false
+    },
+    {
+      "order": -1000,
+      "cpuMs": 24.100000023841858,
+      "frame": {
+        "frame": 211,
+        "calls": 6413,
+        "triangles": 5649895,
+        "points": 0,
+        "lines": 201332
+      },
+      "gpuMs": 7.870874,
+      "disjoint": false
+    },
+    {
+      "order": 0,
+      "cpuMs": 24.100000023841858,
+      "frame": {
+        "frame": 212,
+        "calls": 6413,
+        "triangles": 5649895,
+        "points": 0,
+        "lines": 201332
+      },
+      "gpuMs": 10.042374,
+      "disjoint": false
+    }
+  ]
+}

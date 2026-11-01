@@ -1,0 +1,30 @@
+✔ actual actor transaction installs in live scene, preserves dynamic visibility and exposes one loop/support handle (38.25025ms)
+✔ default legacy root scope never silently hides a global tram system and protected actor roots cannot be supplied (10.636833ms)
+✔ every post-construction stage and real route rejection rolls back scene/materials and releases candidate exactly once (42.496666ms)
+✔ factory-owned constructor rollback is not disposed twice, and missing actual inputs fail before construction (4.212666ms)
+✔ active horse action rejects uninstall atomically; retry when idle restores actor and original visual scene (5.709083ms)
+✔ update errors remain errors, elapsed contract is explicit, and a harness candidate cannot be double-installed (8.049333ms)
+✔ default real candidate factory rejects an unsupported live ocean shader without a partial scene or borrowed-resource disposal (87.763125ms)
+✔ static candidate rail report follows actual candidate presence; preserved global tram is not called a static candidate (8.913542ms)
+✔ visibility hot path performs zero UUID searches after binding, including post-culling and thrown updates (12.204584ms)
+ℹ {"enforcementCalls":200,"baselineRecursiveSearchVisits":159800,"cachedRecursiveSearchVisits":0,"cachedTraversals":0}
+✔ refresh rebinds replaced identities and changed/missing report UUIDs after recollection (6.844458ms)
+✔ staged startup publishes only a completed runtime and rolls back checkpoint interruption (21.325667ms)
+✔ retired architectural owners hide late window fragments but preserve mixed terrain and actor owners (5.742708ms)
+✔ radial default actually moves all fifteen editable houses around the preserved tower and external anchors (134.863875ms)
+✔ ring streets, three radial stair alleys and stable waterfront anchors have actual supported and clear body samples (1538.449959ms)
+✔ actual radial and upper-anchor stair treads are at least 28cm with no riser over 20cm (40.025417ms)
+✔ oriented houses have real podium support and all legal authored geometry remains finite (38.917334ms)
+✔ radial factory disposal releases exactly its retained owned resources (31.212417ms)
+✔ post-placement radial wings use sampled support, reject actual overlap, connect doors and roll back resources (1490.568459ms)
+✔ all fifteen conservative oriented building envelopes are disjoint (32.944708ms)
+✔ upper light follows actual radial and axial bell chamber through independent transformed parents, no extra light (136.766375ms)
+✔ missing legacy lamp is a no-op instead of creating another light (45.772417ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3396.979083

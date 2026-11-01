@@ -1,0 +1,33 @@
+{
+  "scope": "Morris target-led terrain and horse actual iteration triage",
+  "observations": [
+    "Target actually viewed: rear summit and broken rock shoulders; creek descends in small cascades; no flat summit disc or central road-isolated cone.",
+    "GPU r7/r8 inspected: rear summit improved but court outer wall remained; r9 stone pillar shape rejected; r10 changed embedded outcrops to low irregular rock.",
+    "GPU bare r11 inspected: road loop cut around a cone and upper creek was a deep canyon; r12 lowered hairpin interior into a broad meadow bench and raised upstream creek, original bridge height retained.",
+    "r13 source adds short cascade reaches, current GPU pending. Fixed castle(14,5), court(30,12), bridge(8,32), real 3.2m road and rail keepouts retained.",
+    "Horse v3/v4/v5 images actually viewed. v4 throat concavity and navy gold cloth improve silhouette, v5 wavy mane improves but white fetlock clumps cover hoof so rejected; v6 removes clumps and stray forelock, current render pending.",
+    "Walk/trot/canter now have separate stance/swing duty and diagonal contacts, airborne canter not forcibly grounded. One GPU frame is insufficient motion acceptance."
+  ],
+  "checks": [
+    {
+      "name": "route bridge castle and rail interface 13 checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "new final normal GPU and patrol",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "horse target full appearance and gait",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "terrain target full appearance",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

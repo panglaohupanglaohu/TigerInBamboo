@@ -1,0 +1,2517 @@
+{
+  "greg": {
+    "version": 1,
+    "scope": "moonlit-lake-only",
+    "palette": {
+      "ink": "#263e49",
+      "water": "#75adb2",
+      "waterDeep": "#386675",
+      "stone": "#b5bcb0",
+      "stoneShade": "#778e90",
+      "wall": "#6e9193",
+      "bark": "#739187",
+      "foliage": "#7da294",
+      "foliageShade": "#507e7c",
+      "flower": "#cc8c91",
+      "warm": "#ead4ac",
+      "path": "#d3d1b8"
+    },
+    "changedMeshes": 323,
+    "outlineDraws": 11,
+    "preservedStoryActors": true
+  },
+  "canopyPresent": false,
+  "stats": {
+    "swamp-sinkhole-wall": 1,
+    "v2-entrance-tread": 8,
+    "(unnamed)": 1003,
+    "v2-rim-bowed-root": 60,
+    "v2-curved-rim-branch": 223,
+    "outline": 617,
+    "v2-rim-foliage-lobes": 9,
+    "v2-cupped-petal": 35,
+    "swamp-lake-floor": 1,
+    "swamp-underground-waterline": 1,
+    "line": 33,
+    "swamp-water-volume": 1,
+    "world-tree-trunk": 1,
+    "v2-world-tree-branch": 7,
+    "v2-floor-root": 6,
+    "v2-world-tree-leaflets": 1,
+    "v2-central-crown-batch": 1,
+    "v2-barge-float": 2,
+    "v2-mooring-post": 4,
+    "tiger-torso": 1,
+    "Tiger_Broad_Nasal_Bridge": 1,
+    "Tiger_Fine_Whiskers": 1,
+    "Tiger_Heavy_Brow_n19": 1,
+    "Tiger_Heavy_Brow_n21": 1,
+    "Tiger_Ivory_Chin": 1,
+    "Tiger_Round_Ear_Inner_n15": 1,
+    "Tiger_Round_Ear_Inner_n17": 1,
+    "Tiger_Round_Pupil_n19": 1,
+    "Tiger_Round_Pupil_n21": 1,
+    "Tiger_Whisker_Follicles": 1,
+    "tiger-tail-brush-1": 1,
+    "tiger-tail-brush-2": 1,
+    "tiger-tail-brush-3": 1,
+    "tiger-tail-brush-4": 1,
+    "tiger-tail-brush-5": 1,
+    "tiger-tail-brush-6": 1,
+    "tiger-tail-brush-tip": 2,
+    "v2-bank-ferns": 1,
+    "v2-bed-pebbles": 1,
+    "v2-underwater-grass": 1,
+    "v2-entry-fronds": 1,
+    "v2-bank-rock-shelves": 1,
+    "greg-bank-waymarks": 1,
+    "greg-bank-walking-slab-batch": 1,
+    "greg-ecology-fold-fan": 1,
+    "greg-ecology-cup-fern": 1,
+    "greg-ecology-lantern-sedge": 1,
+    "greg-dry-service-shelf-batch": 1
+  },
+  "shells": [
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-glow-flower",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "swamp-underground-waterline",
+      "parent": "moebius-swamp-zone",
+      "sourceGeometry": "CircleGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-bird",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-bird",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-bird",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-bird",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-bird",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-bird",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-bird",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    },
+    {
+      "source": "",
+      "parent": "swamp-bird",
+      "sourceGeometry": "BufferGeometry",
+      "sameGeometry": true,
+      "planar": true,
+      "side": 2,
+      "ink": "MeshBasicMaterial"
+    }
+  ],
+  "doubleSided": [
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-cupped-petal",
+      "parent": "swamp-giant-flower",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "CylinderGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "CylinderGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "moebius-swamp-zone",
+      "type": "CylinderGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-flower",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "swamp-underground-waterline",
+      "parent": "moebius-swamp-zone",
+      "type": "CircleGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-underground-waterline",
+      "type": "RingGeometry",
+      "ink": 0
+    },
+    {
+      "name": "swamp-water-volume",
+      "parent": "moebius-swamp-zone",
+      "type": "CylinderGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-world-tree-leaflets",
+      "parent": "swamp-ancient-world-tree",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-lotus-leaf-boat",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-lotus-leaf-boat",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-lotus-leaf-boat",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-lotus-leaf-boat",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-lotus-leaf-boat",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-bird",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-bird",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-bird",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-bird",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-bird",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-bird",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-bird",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-bird",
+      "type": "BufferGeometry",
+      "ink": 1
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-ribbonfish",
+      "type": "PlaneGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-ribbonfish",
+      "type": "PlaneGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "swamp-glow-ribbonfish",
+      "type": "PlaneGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "blender-v6-render",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-torso",
+      "parent": "tiger-body",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-body",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Broad_Nasal_Bridge",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Fine_Whiskers",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Heavy_Brow_n19",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Heavy_Brow_n21",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Ivory_Chin",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Round_Ear_Inner_n15",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Round_Ear_Inner_n17",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Round_Pupil_n19",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Round_Pupil_n21",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "Tiger_Whisker_Follicles",
+      "parent": "tiger-head",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-tail-brush-1",
+      "parent": "TigerTailBase",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-tail-brush-2",
+      "parent": "TigerTail-2",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-tail-brush-3",
+      "parent": "TigerTail-3",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-tail-brush-4",
+      "parent": "TigerTailMid",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-tail-brush-5",
+      "parent": "TigerTail-5",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-tail-brush-6",
+      "parent": "TigerTail-6",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-tail-brush-tip",
+      "parent": "TigerTail-7",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "tiger-tail-brush-tip",
+      "parent": "TigerTailTip",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "",
+      "parent": "",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-bank-ferns",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-underwater-grass",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-entry-fronds",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "v2-bank-rock-shelves",
+      "parent": "moebius-swamp-zone",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "greg-ecology-fold-fan",
+      "parent": "greg-swamp-rooted-ecology",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "greg-ecology-cup-fern",
+      "parent": "greg-swamp-rooted-ecology",
+      "type": "BufferGeometry",
+      "ink": 0
+    },
+    {
+      "name": "greg-ecology-lantern-sedge",
+      "parent": "greg-swamp-rooted-ecology",
+      "type": "BufferGeometry",
+      "ink": 0
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "stage": "deadline-delivered-r7-with-explicit-remaining-gaps",
+  "version": "root-r7-upper-shoulders",
+  "owner": "root; Oskar worker out-of-credits, existing work preserved",
+  "ownedFiles": [
+    "src/world/citadel/targetFinalMountainFinish.js",
+    "src/world/citadel/targetSoftMountainGeometry.js",
+    "tests/world/citadelSoftMountains.test.mjs",
+    "src/world/citadel/targetCliffShoulderGeometry.js",
+    "src/world/citadel/mountainStudy.js",
+    "src/world/citadel/targetEastCrossingStartupSupport.js",
+    "tools/pipeline/citadel_surface_review.js",
+    "index.html"
+  ],
+  "formalEntry": "/TigerMessenger/?autostart=1",
+  "formalChain": "strict original terrain -> exact west/rear cuts -> soft geometry -> surface consumers; support replays same order",
+  "backup": "source-before/targetFinalMountainFinish.js",
+  "constraints": [
+    "Do not change preliminary targetTerrainHeight: rail planning uses it",
+    "Do not edit architecture,rail,harbor,other regions,player save",
+    "Fixed city support domains/front shore/paths; no unconstrained global smoothing"
+  ],
+  "next": "Review r7 delivery. Further mountain improvement requires rear semantic patch remesh/control cage and renewed exact-cut/foundation/rail validation. No temporary automatic optimization remains.",
+  "actualEvidence": [
+    "Actually viewed assets/concepts/citadel-style-v2/target-v2.png",
+    "3/3 synthetic shared-geometry/protected-byte/orientation/determinism tests passed",
+    "Root identified iframe disables standalone city defaults; waiting top-level normal-entry baseline, no use of iframe geometry as production",
+    "Top-level actual-final-before.json captured strictInstalled/runtime true,123608tri; actual-rails-before.json red/blue1200each captured",
+    "Root viewed same-camera candidate-r2 after/before: external bow creates extra accordion folds; rejected visually",
+    "r3 displacement-field smoothing added with final orientation hard guard; initial9 backoff passes still failed, increasing bounded backoff, not installed",
+    "r3 actual original startup artifact + old final finish + new shape had158436tri but fresh game failed REAR_SHIP_CUT_OPEN_CONTOUR; rejected ordering",
+    "Moved new soft pass AFTER exact west/rear ship/headland cuts and BEFORE all surface samplers and plants; strict support replay mirrors same order",
+    "New cliff pass locks cut collars and open/nonmanifold boundary vertices; rear pass also locks exact cut collars; shared field smoothing plus sequential incident-face commit hard guard passes candidate CPU",
+    "Old legacy support tests initially failed because replay wrongly applied new pass to old reports. Replay is now conditional on mountainStudy.softMountain, preserving old fixture semantics.",
+    "Fresh top-level r5 strictInstalled/runtime true,144616tri; front/rear GPU screenshots actually viewed; error logs empty",
+    "Actual r5 geometry exported52MB, finite attributes; red/blue1200each curves byte-equivalent before/after",
+    "6/6 shape tests and new uncut legacy foundation rejection1/1 passed; saved original adapter+test retreat fixture1/1 passed; current adapter matching fixture rerun pending",
+    "Current adapter same legacy clipped retreat fixture1/1 passed,35.8s; prior replay failure no longer reproduced, original and current results retained. Browser21 restored mode normal and marked handoff.",
+    "final-tests-r5 12/12 pass; r6 wall-direction averaging and1.6m bow GPU candidates not promoted because insufficient visual improvement; current source restored exact r5",
+    "Actual r5 support finalized/installed,3915ground+5926sea samples missing0; sourceDeck pass; landmarks ok; player navigation installed. Whole support accepted:false/approach:false, full ride/navigation unverified.",
+    "Before seam probe open16942/skinny12458; approximate welding adds nonmanifold edges, rejected.",
+    "Actual captured r5 same-light rear comparison shows extra cut-cap corrugation: not accepted as final quality.",
+    "R7 upper16m candidate actual GPU rear inspected: fewer added deep-wall corrugations and rounded upper shoulder; wrapper r7 now mounted, fresh standalone pending.",
+    "Fresh r7 formal default standalone strict/runtime true,144616tri; root viewed front/rear GPU, saved current screenshots; runtime error logs empty.",
+    "R7 exported current geometry finite, same local-to-chart frame, red/blue1200each curves equal before. Strict support finalized/installed,3915ground+5926sea missing0,sourceDeckpass,landmarkOK/playernav installed; wholeSupportAccepted false and approach false retained, no whole ride acceptance.",
+    "R7 affected run12/13: only obsolete r5 negative expectation failed because r7 gallery foundation no longer unresolved. Replaced with positive real strict replay/commit/rollback test1/1 passed, file upper-shoulder-replay-r7.txt. This improves actual structural support and is not weakening a geometry guard.",
+    "Current13/13 full affected suite passed; actual captured r7 rear/saddle same-light GPU viewed and saved, no candidate recomputation. Source frozen r7; delivery index prepared.",
+    "Delivery index actually opened:4/4 images complete1280x720, URLs correct; screenshot delivery-page.png saved, tab26 marked handoff. Source manifest current hashes all match."
+  ],
+  "pending": [
+    "Legacy tall rear cliffs/skinny strips not fully target matched",
+    "Full dynamic train ride, walking/climbing and performance acceptance not performed"
+  ],
+  "productionModified": true,
+  "updatedUTC": "2026-10-22T19:56:00Z",
+  "automationDeadlineUTC": "2026-10-22T19:56:00Z",
+  "temporaryAutomationDeleted": true
+}

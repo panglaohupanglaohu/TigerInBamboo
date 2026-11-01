@@ -1,0 +1,13 @@
+rooted algae geometry {"clumps":26,"blades":110,"drawCalls":2,"triangles":3080,"maxY":13.173719359676443}
+actual factory algae {"clumps":26,"blades":122,"oldMeshDraws":244,"newMeshDraws":2,"triangles":3416,"bedY":10.400000023841859}
+✔ 26 legacy clumps preserve random consumption, exact placements and all original blade parameters (2.92625ms)
+✔ two instanced curved leaf batches are surface rooted, finite and clear of lake bed volume after sphere transforms (5.485125ms)
+✔ real factory refreshes attachment after V2 lake-floor replacement without changing water or walkable identity (878.495958ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 946.22225

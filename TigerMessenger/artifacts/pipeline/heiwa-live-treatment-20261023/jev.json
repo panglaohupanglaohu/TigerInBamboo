@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "7a30ff54d76e8f166034e1d4b7cd28435cb20e69fda4b5b9b1c0ddb339ef816c",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.9
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.64,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.02,
+        "lighting": 0,
+        "navigation": 0.27,
+        "review": 0.71
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.71
+    }
+  },
+  "usage": {
+    "input_tokens": 648,
+    "output_tokens": 91,
+    "cost_usd": 0.000273,
+    "credits_remaining_usd": 4.928089
+  },
+  "elapsed_ms": 2027,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "actual normal gameplay bedside visual",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

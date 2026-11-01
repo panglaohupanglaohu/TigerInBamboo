@@ -1,0 +1,109 @@
+{
+  "batch": "r07",
+  "utc": "2026-10-04T09:45:12.361283+00:00",
+  "test": "TigerMessenger/tools/pipeline/test_sea_stack_shore_contact.mjs",
+  "exitCode": 0,
+  "passed": true,
+  "elapsedSeconds": 11.345392,
+  "stdout": "{\n  \"passed\": true,\n  \"scope\": \"eight production seed/dimension fixtures on inclined triangulated spherical ocean; not full-world collision audit\",\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"foamTriangles\": 122,\n      \"talus\": 6,\n      \"misses\": 0,\n      \"maxAnchorError\": 4.6386422208888334e-7,\n      \"maxFootprint\": 8.450414197457691,\n      \"limit\": 8.724552759219087\n    },\n    {\n      \"seed\": 1,\n      \"foamTriangles\": 124,\n      \"talus\": 5,\n      \"misses\": 0,\n      \"maxAnchorError\": 4.792766692546246e-7,\n      \"maxFootprint\": 11.092879717864903,\n      \"limit\": 11.68887844991855\n    },\n    {\n      \"seed\": 2,\n      \"foamTriangles\": 118,\n      \"talus\": 5,\n      \"misses\": 0,\n      \"maxAnchorError\": 9.629666190349995e-7,\n      \"maxFootprint\": 13.518212455716165,\n      \"limit\": 14.020930067982595\n    },\n    {\n      \"seed\": 3,\n      \"foamTriangles\": 124,\n      \"talus\": 5,\n      \"misses\": 0,\n      \"maxAnchorError\": 4.778199890892454e-7,\n      \"maxFootprint\": 8.064936609030125,\n      \"limit\": 8.854599952697756\n    },\n    {\n      \"seed\": 4,\n      \"foamTriangles\": 120,\n      \"talus\": 4,\n      \"misses\": 0,\n      \"maxAnchorError\": 9.507531367261568e-7,\n      \"maxFootprint\": 10.604151823200862,\n      \"limit\": 11.549689017060329\n    },\n    {\n      \"seed\": 5,\n      \"foamTriangles\": 122,\n      \"talus\": 6,\n      \"misses\": 0,\n      \"maxAnchorError\": 4.801294682041379e-7,\n      \"maxFootprint\": 12.843529300601162,\n      \"limit\": 13.517019377388031\n    },\n    {\n      \"seed\": 6,\n      \"foamTriangles\": 116,\n      \"talus\": 4,\n      \"misses\": 0,\n      \"maxAnchorError\": 9.463811108390008e-7,\n      \"maxFootprint\": 7.89764931480746,\n      \"limit\": 8.22003555976625\n    },\n    {\n      \"seed\": 10,\n      \"foamTriangles\": 114,\n      \"talus\": 5,\n      \"misses\": 0,\n      \"maxAnchorError\": 4.845345304982374e-7,\n      \"maxFootprint\": 8.613912161376286,\n      \"limit\": 8.806829125094435\n    }\n  ]\n}\n",
+  "stderr": "",
+  "scope": "pure Node fixture tests; not full-world runtime or visual validation",
+  "sourceSha256": {
+    "seaStackCoastalGeometry.js": "b24e83fe2c5dd5e887171fb7b99bf4a3dbf58fe74280c298b190ec4ffae37de5",
+    "seaStackShoreContact.js": "f1d2a9bdcb89d47bbcc5528eb7a3dee33c4d7bd2acbc7d51c2824c9a907e6edf",
+    "seaStackLighting.js": "580fa38b9d55cf7f73ca488beffb49f3faf0cf45e013e0d4a697b14855e13308",
+    "seaStackSurfaceContract.js": "7c705ac98a6567a0e00d81ecddba74db8cbcf15c1c17ce75e7e4687d0b2a9860"
+  },
+  "parameters": {
+    "landformRevision": 9,
+    "grid": [
+      26,
+      44,
+      26
+    ],
+    "foamWidthMeters": [
+      0.24,
+      0.54
+    ],
+    "talusRadiusMeters": [
+      0.55,
+      1.09
+    ]
+  },
+  "results": [
+    {
+      "seed": 0,
+      "foamTriangles": 122,
+      "talus": 6,
+      "misses": 0,
+      "maxAnchorError": 4.6386422208888334e-07,
+      "maxFootprint": 8.450414197457691,
+      "limit": 8.724552759219087
+    },
+    {
+      "seed": 1,
+      "foamTriangles": 124,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 4.792766692546246e-07,
+      "maxFootprint": 11.092879717864903,
+      "limit": 11.68887844991855
+    },
+    {
+      "seed": 2,
+      "foamTriangles": 118,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 9.629666190349995e-07,
+      "maxFootprint": 13.518212455716165,
+      "limit": 14.020930067982595
+    },
+    {
+      "seed": 3,
+      "foamTriangles": 124,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 4.778199890892454e-07,
+      "maxFootprint": 8.064936609030125,
+      "limit": 8.854599952697756
+    },
+    {
+      "seed": 4,
+      "foamTriangles": 120,
+      "talus": 4,
+      "misses": 0,
+      "maxAnchorError": 9.507531367261568e-07,
+      "maxFootprint": 10.604151823200862,
+      "limit": 11.549689017060329
+    },
+    {
+      "seed": 5,
+      "foamTriangles": 122,
+      "talus": 6,
+      "misses": 0,
+      "maxAnchorError": 4.801294682041379e-07,
+      "maxFootprint": 12.843529300601162,
+      "limit": 13.517019377388031
+    },
+    {
+      "seed": 6,
+      "foamTriangles": 116,
+      "talus": 4,
+      "misses": 0,
+      "maxAnchorError": 9.463811108390008e-07,
+      "maxFootprint": 7.89764931480746,
+      "limit": 8.22003555976625
+    },
+    {
+      "seed": 10,
+      "foamTriangles": 114,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 4.845345304982374e-07,
+      "maxFootprint": 8.613912161376286,
+      "limit": 8.806829125094435
+    }
+  ],
+  "maxAnchorError": 9.629666190349995e-07,
+  "minimumEnvelopeMargin": 0.19291696371814915
+}

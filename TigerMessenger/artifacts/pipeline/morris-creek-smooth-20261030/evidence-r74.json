@@ -1,0 +1,21 @@
+{
+  "task": "Creek valley correction r74",
+  "observations": [
+    "Prior inspected r72 normal scene had floating upper water ribbon; rejected.",
+    "r74 water clamped below natural valley floor then smoothed downhill, physical bed enforced after sightline cuts.",
+    "Seeded irregular bank stone placement; castle r6 production integration seen in prior normal scene.",
+    "Current r74 formal GPU image inspected and saved: upper water remains a visually straight ribbon; target appearance rejected. Center-bed numeric check does not establish finished valley appearance."
+  ],
+  "checks": [
+    {
+      "name": "current physical center bed and downhill",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current formal visual no floating",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

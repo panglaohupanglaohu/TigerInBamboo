@@ -1,0 +1,26 @@
+{
+  "version": "continuous-arch-r3-crown075",
+  "goal": "Triage raised arch underside with current production deck curve",
+  "observations": [
+    "Prior bridge image inspection established need for smooth continuous arch; this round does not claim a newly viewed GPU result.",
+    "Details derives deck crown from real deckY and raises underside arch rise from1.58 to2.08 when crown increases0.25to0.75. Actual production report now deckCrown0.75,archRise2.08,minCoreThickness0.612699m,196masonry,52voussoirs,5materialbatches.",
+    "64 fixture checks plus5actual-endpoint0.75candidate checks and5current production checks pass.Original endpoint heights1.678670764/-0.233563691 retained."
+  ],
+  "checks": [
+    {
+      "name": "74 finitegeometry,exactbankends,3.2mwidth,wateropening,8mspanandpositivecorechecks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Current normal-game GPU form,bank contact and full mounted bridge crossing",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Only independent Details source modified",
+    "Parent owns Landscape deck and physical radial slope report",
+    "Do not call this a visual acceptance or unchanged old slope"
+  ]
+}

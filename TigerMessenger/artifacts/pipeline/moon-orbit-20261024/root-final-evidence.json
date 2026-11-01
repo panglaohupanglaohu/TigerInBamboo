@@ -1,0 +1,33 @@
+{
+  "iteration": "moon-orbit-coral-final",
+  "observations": [
+    "Fresh normal game moon positions differ at two observed moments; same radius7.46768, period180, original size,5 real trees configured.",
+    "CPU cycle vertex minimum gap .3094m is sampled approximation, not continuous triangle collision proof. Smooth height envelope5.6 to15.79m.",
+    "Normal apostles close view shows pale coral band between grey layers; wider view remains mostly limestone and grass.",
+    "Only16.54percent rock colour vertices changed; all other geometry/normal/placement/vegetation/foam bytes unchanged.",
+    "Actual normal clouds6 runtime version2 glError0 GPU failures0.",
+    "Initial unversioned sound preview used stale cache. Replaced final versioned WAV with9event peak .308930695 clipped0 tail0; shared worldSfx import-map avoids duplicate bus."
+  ],
+  "checks": [
+    {
+      "name": "actual moon moves around lake centre",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal apostles coral visible",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "10 related regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "all camera views/full navigation",
+      "required": false,
+      "passed": null
+    }
+  ]
+}

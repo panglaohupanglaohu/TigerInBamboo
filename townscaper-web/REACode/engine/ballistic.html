@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Ballistic LUT（弹道查找表 + 表达式调参）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #3a3d42; overflow: hidden;
+    font: 12px/1.45 -apple-system, "PingFang SC", sans-serif; color: #cdd2d8; }
+  #app { display: flex; height: 100%; }
+  #view { flex: 1 1 auto; display: block; min-width: 0; }
+  #panel { flex: 0 0 300px; width: 300px; background: #2b2d31; border-left: 1px solid #1d1f22; padding: 10px 12px;
+    box-sizing: border-box; overflow-y: auto; }
+  #panel h3 { margin: 2px 0 8px; font-size: 12px; font-weight: 600; color: #e6eaef;
+    letter-spacing: .02em; }
+  .grp { margin-bottom: 12px; }
+  .grp > .t { color: #8f979f; font-size: 11px; text-transform: none; margin: 8px 0 4px;
+    border-bottom: 1px solid #3a3d42; padding-bottom: 3px; }
+  label { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
+  label > span:first-child { width: 88px; color: #a8b0b8; flex: none; }
+  input[type=number], input[type=text] { background: #232528; border: 1px solid #3f4348;
+    color: #dfe4ea; border-radius: 3px; padding: 2px 5px; width: 100%; font: 11px ui-monospace, monospace; }
+  input[type=range] { width: 100%; }
+  input:focus { outline: 1px solid #4b8ef8; }
+  .expr { font: 11px ui-monospace, monospace; }
+  .stat { font: 11px ui-monospace, monospace; color: #9fe6c8; }
+  .stat.bad { color: #f08a7a; }
+  #hint { position: fixed; left: 12px; bottom: 8px; color: #8d959d; font: 11px ui-monospace, monospace; }
+  button { background: #3a3f46; color: #d7dce2; border: 1px solid #4a5058; border-radius: 3px;
+    padding: 3px 9px; font: 11px inherit; cursor: pointer; }
+  button:hover { background: #464c55; }
+</style>
+</head>
+<body>
+<div id="app">
+  <canvas id="view"></canvas>
+  <div id="panel">
+    <h3>Trajectory Utility (Script)</h3>
+    <div class="grp">
+      <div class="t">Bounds</div>
+      <label><span>Min Y</span><input id="minY" type="number" step="0.5" value="-3" /></label>
+      <label><span>Max Y</span><input id="maxY" type="number" step="0.5" value="3" /></label>
+      <label><span>Max Z</span><input id="maxZ" type="number" step="0.5" value="7" /></label>
+    </div>
+    <div class="grp">
+      <div class="t">Settings</div>
+      <label style="display:block"><span style="display:block;margin-bottom:2px">Cost Function</span>
+        <input id="cost" class="expr" type="text" value="minDist + time * impactSpeed" /></label>
+      <label style="display:block"><span style="display:block;margin-bottom:2px">Valid Function</span>
+        <input id="valid" class="expr" type="text" value="minDist < 0.2" /></label>
+      <div id="exprErr" class="stat bad"></div>
+      <label><span>Min Speed</span><input id="minSpeed" type="number" step="0.5" value="2" /></label>
+      <label><span>Max Speed</span><input id="maxSpeed" type="number" step="0.5" value="12" /></label>
+      <label><span>Drag</span><input id="drag" type="number" step="0.1" value="2" /></label>
+      <label><span>Start Offset</span><input id="offset" type="number" step="0.05" value="0.1" /></label>
+      <label><span>Gravity</span><input id="gravity" type="number" step="0.1" value="9.8" /></label>
+      <label><span>Max Valid R</span><input id="maxR" type="number" step="0.5" value="5.5" /></label>
+      <label><span>H 采样 dt</span><input id="dt" type="number" step="0.005" value="0.0333" /></label>
+      <label><span>角度档</span><input id="angleSteps" type="number" step="1" value="3" /></label>
+      <label><span>速度档</span><input id="speedSteps" type="number" step="1" value="21" /></label>
+    </div>
+    <div class="grp">
+      <div class="t">Preset 表达式（点一下现场换）</div>
+      <div id="presets" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+    </div>
+    <div class="grp">
+      <div class="t">Stats</div>
+      <div id="stats" class="stat"></div>
+    </div>
+    <div class="grp">
+      <div class="t">操作</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button id="audit">积分器自检</button>
+        <button id="reset">复位</button>
+      </div>
+      <div id="auditOut" class="stat" style="margin-top:6px"></div>
+    </div>
+  </div>
+</div>
+<div id="hint">拖动画布移动目标 · 青色=烘好的弧 白色=当前最优（原文 987267068495003648）</div>
+<script type="module">
+import { bakeLUT, pickArc, closestOnArc, compileExpr, validateIntegrator, DEFAULT_PARAMS } from '../src/ballistic.js';
+
+const cv = document.getElementById('view');
+const ctx = cv.getContext('2d');
+const statsEl = document.getElementById('stats');
+const errEl = document.getElementById('exprErr');
+let dpr = Math.min(devicePixelRatio || 1, 2);
+let W = 0, H = 0;
+
+const ui = {
+  minY: -3, maxY: 3, maxZ: 7,
+  minSpeed: 2, maxSpeed: 12, drag: 2, offset: 0.1, gravity: 9.8, maxR: 5.5,
+  dt: 0.0333, angleSteps: 3, speedSteps: 21,
+  costExpr: 'minDist + time * impactSpeed', validExpr: 'minDist < 0.2',
+};
+const target = { z: 3.1, y: 1.0 };
+
+let lut = null;
+let pick = null;
+let dirty = true;
+
+function rebuild() {
+  try {
+    lut = bakeLUT({
+      gravity: ui.gravity, drag: ui.drag, startOffset: ui.offset,
+      minSpeed: ui.minSpeed, maxSpeed: ui.maxSpeed,
+      speedSteps: Math.max(2, ui.speedSteps | 0), angleSteps: Math.max(2, ui.angleSteps | 0),
+      dt: ui.dt, bounds: { minY: ui.minY, maxY: ui.maxY, minZ: 0, maxZ: ui.maxZ },
+      maxValidRadius: ui.maxR,
+    });
+  } catch (e) { errEl.textContent = '烘 LUT 失败: ' + e.message; return; }
+  repick();
+  dirty = true;
+}
+
+function repick() {
+  try {
+    compileExpr(ui.costExpr); compileExpr(ui.validExpr);
+    errEl.textContent = '';
+  } catch (e) { errEl.textContent = e.message; return; }
+  pick = pickArc(lut, target, { costExpr: ui.costExpr, validExpr: ui.validExpr });
+  const s = lut.stats;
+  statsEl.innerHTML = [
+    `弧 ${s.arcs} · 采样 ${s.samples}（${s.samplesPerArc}/条）`,
+    `烘制 ${s.ms}ms · 数据 ${s.payloadKB}KB`,
+    `最远射程 ${s.maxRange} · 越界 ${s.outOfBounds}`,
+    `合法弧 ${pick.valid} / ${lut.arcs.length}`,
+    `最近距 ${pick.best ? pick.best.minDist.toFixed(4) : '—'}`,
+    `代价 ${pick.best ? pick.best.cost.toFixed(3) : '—'}`,
+    `出界剔除 ${pick.rejected}（半径 ${ui.maxR}）`,
+  ].join('<br>');
+  dirty = true;
+}
+
+/* ---- 手动输入绑定 ---- */
+const bind = (id, key, after = repick) => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    const v = el.type === 'text' ? el.value : parseFloat(el.value);
+    ui[key] = v;
+    (key === 'costExpr' || key === 'validExpr') ? repick() : rebuild();
+  });
+  return el;
+};
+['minY', 'maxY', 'maxZ'].forEach((k) => bind(k, k));
+bind('minSpeed', 'minSpeed'); bind('maxSpeed', 'maxSpeed'); bind('drag', 'drag');
+bind('offset', 'offset'); bind('gravity', 'gravity'); bind('maxR', 'maxR');
+bind('dt', 'dt'); bind('angleSteps', 'angleSteps'); bind('speedSteps', 'speedSteps');
+bind('cost', 'costExpr'); bind('valid', 'validExpr');
+
+const prests = [
+  'minDist + time * impactSpeed', 'minDist', 'minDist + time',
+  'minDist + 0.1 * impactSpeed', 'time * impactSpeed', 'apex * 0.2 + minDist',
+];
+const pbox = document.getElementById('presets');
+for (const p of prests) {
+  const b = document.createElement('button');
+  b.textContent = p.length > 22 ? p.slice(0, 20) + '…' : p;
+  b.title = p;
+  b.onclick = () => { ui.costExpr = p; document.getElementById('cost').value = p; repick(); };
+  pbox.appendChild(b);
+}
+
+document.getElementById('audit').onclick = () => {
+  const v = validateIntegrator({ dt: ui.dt });
+  document.getElementById('auditOut').innerHTML =
+    `最差射程误差 ${v.worstPct}%<br>` + v.rows.slice(0, 3).map((r) =>
+      `v${r.speed} @${r.angle}° 烘 ${r.baked} / 解析 ${r.exact}（${r.errPct}%）`).join('<br>');
+};
+document.getElementById('reset').onclick = () => { target.z = 3.1; target.y = 1.0; repick(); };
+
+/* ---- 坐标：世界 (z,y) → 画布 ---- */
+function mapper() {
+  const pad = 46;
+  const zMax = Math.max(ui.maxZ, 1);
+  const yMin = ui.minY, yMax = ui.maxY;
+  const zSpan = zMax, ySpan = Math.max(0.5, yMax - yMin);
+  // 两个方向同一个比例尺（否则抛物线形状会失真），再按整段 Y 范围垂直居中。
+  // 第一版把 y=0 钉在画布底边，于是 minY=-3 的那半截被画到画布外面去了。
+  const s = Math.min((W - pad * 2) / zSpan, (H - pad * 2) / ySpan);
+  const totalH = ySpan * s;
+  const oy0 = (H - totalH) / 2 + yMax * s;
+  const ox = pad;
+  return {
+    s,
+    X: (z) => ox + z * s,
+    Y: (y) => oy0 - y * s,
+    invX: (x) => (x - ox) / s,
+    invY: (y) => (oy0 - y) / s,
+  };
+}
+
+function resize() {
+  W = cv.clientWidth; H = cv.clientHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  dirty = true;
+}
+
+function draw() {
+  if (!lut || !pick) return;
+  const m = mapper();
+  ctx.fillStyle = '#3a3d42';
+  ctx.fillRect(0, 0, W, H);
+
+  // 地面
+  ctx.strokeStyle = '#4d5157';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(m.X(0), m.Y(0)); ctx.lineTo(m.X(ui.maxZ), m.Y(0)); ctx.stroke();
+
+  // 网格（每 1 单位）
+  ctx.strokeStyle = '#42464b';
+  for (let z = 1; z <= ui.maxZ; z++) {
+    ctx.beginPath(); ctx.moveTo(m.X(z), m.Y(ui.minY)); ctx.lineTo(m.X(z), m.Y(ui.maxY)); ctx.stroke();
+  }
+  for (let y = Math.ceil(ui.minY); y <= ui.maxY; y++) {
+    ctx.beginPath(); ctx.moveTo(m.X(0), m.Y(y)); ctx.lineTo(m.X(ui.maxZ), m.Y(y)); ctx.stroke();
+  }
+
+  // 边界框（Bounds 三项）
+  ctx.strokeStyle = 'rgba(120,200,160,0.28)';
+  ctx.setLineDash([4, 4]);
+  ctx.strokeRect(m.X(0), m.Y(ui.maxY), (m.X(ui.maxZ) - m.X(0)), (m.Y(ui.minY) - m.Y(ui.maxY)));
+  ctx.setLineDash([]);
+
+  // 地面以下（Min Y=-3）这片永远没有轨迹 —— 帧里的空区就是它，标出来免得看着像画坏了
+  if (ui.minY < 0) {
+    ctx.fillStyle = 'rgba(0,0,0,0.13)';
+    ctx.fillRect(m.X(0), m.Y(0), m.X(ui.maxZ) - m.X(0), m.Y(ui.minY) - m.Y(0));
+    ctx.fillStyle = 'rgba(196,210,204,0.62)';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.fillText('地面以下（Min Y ' + ui.minY + '）：恒空，无轨迹', m.X(0.12), m.Y(0) + 17);
+  }
+
+  // 所有弧
+  const bestId = pick.best ? pick.best.arc.id : -1;
+  for (const a of lut.arcs) {
+    if (a.id === bestId) continue;
+    ctx.strokeStyle = a.inBounds ? 'rgba(96,216,208,0.34)' : 'rgba(150,110,110,0.22)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i < a.pts.length; i++) {
+      const p = a.pts[i];
+      if (i === 0) ctx.moveTo(m.X(p.z), m.Y(p.y)); else ctx.lineTo(m.X(p.z), m.Y(p.y));
+    }
+    ctx.stroke();
+    // 采样点（帧里那些亮点）
+    ctx.fillStyle = 'rgba(120,230,220,0.5)';
+    for (const p of a.pts) ctx.fillRect(m.X(p.z) - 0.5, m.Y(p.y) - 0.5, 1.2, 1.2);
+  }
+
+  // 最优弧：白亮 + 粗，只画到最近点
+  if (pick.best) {
+    const a = pick.best.arc;
+    ctx.strokeStyle = 'rgba(255,255,255,0.92)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i < a.pts.length; i++) {
+      const p = a.pts[i];
+      if (i === 0) ctx.moveTo(m.X(p.z), m.Y(p.y)); else ctx.lineTo(m.X(p.z), m.Y(p.y));
+    }
+    ctx.stroke();
+    const at = pick.best.at;
+    if (at) {
+      ctx.strokeStyle = '#ffd45e';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(m.X(at.z), m.Y(at.y), 4, 0, 7); ctx.stroke();
+      // 目标到最近点的虚线
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = 'rgba(255,212,94,0.6)';
+      ctx.beginPath();
+      ctx.moveTo(m.X(target.z), m.Y(target.y)); ctx.lineTo(m.X(at.z), m.Y(at.y)); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // 目标
+  ctx.strokeStyle = '#ffe066';
+  ctx.lineWidth = 1.4;
+  const tx = m.X(target.z), ty = m.Y(target.y);
+  ctx.beginPath(); ctx.arc(tx, ty, 7, 0, 7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(tx - 11, ty); ctx.lineTo(tx + 11, ty);
+  ctx.moveTo(tx, ty - 11); ctx.lineTo(tx, ty + 11); ctx.stroke();
+
+  // 左上角标注
+  ctx.fillStyle = 'rgba(205,210,216,0.85)';
+  ctx.font = '11px ui-monospace, monospace';
+  ctx.fillText(`目标 (${target.z.toFixed(2)}, ${target.y.toFixed(2)})`, 14, 20);
+  ctx.fillText(`合法弧 ${pick.valid} · 最近 ${pick.best ? pick.best.minDist.toFixed(3) : '—'}`, 14, 36);
+}
+
+function loop() {
+  if (dirty) { draw(); dirty = false; }
+  requestAnimationFrame(loop);
+}
+
+/* ---- 拖目标 ---- */
+let dragging = false;
+function toWorld(ev) {
+  const r = cv.getBoundingClientRect();
+  const m = mapper();
+  return { z: m.invX(ev.clientX - r.left), y: m.invY(ev.clientY - r.top) };
+}
+cv.addEventListener('pointerdown', (e) => { dragging = true; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener('pointerup', () => { dragging = false; });
+cv.addEventListener('pointermove', (e) => {
+  if (!dragging) return;
+  const w = toWorld(e);
+  target.z = Math.min(ui.maxZ, Math.max(0.15, w.z));
+  target.y = Math.min(ui.maxY, Math.max(0, w.y));
+  repick();
+});
+
+addEventListener('resize', resize);
+resize();
+rebuild();
+loop();
+
+// 给截图脚本一个稳定入口
+window.__ballistic = { get lut() { return lut; }, get pick() { return pick; }, ui, target, rebuild, repick };
+</script>
+</body>
+</html>

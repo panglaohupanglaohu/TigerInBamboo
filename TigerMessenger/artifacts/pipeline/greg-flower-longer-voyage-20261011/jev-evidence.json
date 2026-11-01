@@ -1,0 +1,38 @@
+{
+  "task": "Longer flower boat production routes",
+  "target": "Five freely paddled flowerboats, ten children, two oars per boat, no stems",
+  "visual_observations": {
+    "source": "CPU actual factory route data; fresh GPU unavailable",
+    "completed": [
+      "One-way world travel now 1/1.5/3/1.5/3m; three routes enlarged",
+      "Safe baseline kept; failed greedy candidate retained"
+    ],
+    "remaining": [
+      "Actual dynamic whale/longboat traffic interaction and rendered strokes unverified"
+    ]
+  },
+  "checks": [
+    {
+      "name": "40s continuous roots walls cups paddles quay clearance",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "identities and stroke/recovery invariant",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "production GPU dynamic traffic",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not relax existing clearance thresholds",
+    "Startup planning about 1.2s, no FPS improvement claim"
+  ],
+  "evidence_revision": {
+    "cpu_sha256": "645dc652b23d8134fc3e30ba1427cd8073f194a83f1ccbee4a1d62827e22a7f4"
+  }
+}

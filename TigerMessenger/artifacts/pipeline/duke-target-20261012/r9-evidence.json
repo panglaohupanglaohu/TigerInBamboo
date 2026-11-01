@@ -1,0 +1,32 @@
+{
+ "target": "DUKE coastal steam freight ship concept sheet 2026-10-12 (side, deck plan, 3/4 bow, cutaway, crane detail)",
+ "candidate": "duke-r9",
+ "version": "duke-r9",
+ "changes": "bendDukeToPlanet: hull/deck/rails bent to sea curvature (R=160.63); waterline at local y=-0.3 (ride .13 instead of .9); bow name moved to one line 杜 Duke, z=half-11, clear of water; strokeText optional for test canvas",
+ "observations": [
+  "in-game r8e: bow/stern floated ~2.6 m above sea due to planet curvature, whole red bottom exposed",
+  "in-game r9: hull sits in the water along its full length, thin red boot-top, matches side elevation",
+  "name readable in 3/4 bow view and above waterline"
+ ],
+ "checks": [
+  {
+   "name": "in-game render at wharf (hot-swapped module)",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "bookshopJakubPass/Raised tests",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "full reload render",
+   "required": false,
+   "passed": null
+  }
+ ],
+ "constraints": [
+  "additive; robots/rails/story untouched",
+  "no keys or images sent"
+ ]
+}

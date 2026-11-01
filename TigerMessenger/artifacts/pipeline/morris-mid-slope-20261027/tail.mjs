@@ -1,0 +1,1 @@
+import{createMorrisTerrain}from'../../../src/world/morrisLandscape.js';const t=createMorrisTerrain(160,a=>22*Math.sqrt(7)*(1+.055*Math.sin(a*3+.7)+.028*Math.cos(a*7))),r=t.route;console.log(JSON.stringify(r.points.filter(p=>p.s>=r.report.marks.eastEnd).filter((p,j,a)=>!j||p.h<a[j-1].h-1e-6).map(p=>[p.x,p.z,p.h,p.s])));

@@ -1,0 +1,24 @@
+{
+  "goal": "Triage compact modular castle candidate before normal-game integration",
+  "version": "morris-castle-20261026-r1",
+  "observations": [
+    "V2 concept has cream keep and wings but weak open court hierarchy. New source candidate has three real masses 10.5/7/5.5m, hipped russet roofs, real arched gate void, continuous 14x10m foundation, open east music-court exit.",
+    "This is a project design inferred from existing Oskar modular massing research, not the author private generator. GPU visual and full gameplay navigation remain untested."
+  ],
+  "checks": [
+    {
+      "name": "Seven geometry and raycast support/clearance checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Normal-game GPU silhouette and gameplay navigation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Keep existing castle seat and music elder court",
+    "Do not change island terrain or other modules"
+  ]
+}

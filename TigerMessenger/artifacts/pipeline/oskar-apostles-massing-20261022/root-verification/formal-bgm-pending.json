@@ -1,0 +1,177 @@
+{
+  "entry": "/TigerMessenger/",
+  "mode": "front-shore-fixed-camera",
+  "frames": 1794,
+  "bgm": {
+    "owner": "batian",
+    "revision": 1,
+    "listener": {
+      "x": -104.0787351074313,
+      "y": -48.96018858674907,
+      "z": 127.13060383710571
+    },
+    "requests": [
+      {
+        "key": "infiltration",
+        "active": true,
+        "inRange": false,
+        "distance": 261.23036967884457
+      },
+      {
+        "key": "storm",
+        "active": false,
+        "inRange": null,
+        "distance": null
+      },
+      {
+        "key": "cue",
+        "active": false,
+        "inRange": null,
+        "distance": null
+      },
+      {
+        "key": "canyon",
+        "active": false,
+        "inRange": null,
+        "distance": null
+      },
+      {
+        "key": "citadelElder",
+        "active": false,
+        "inRange": null,
+        "distance": 250.9836897208725
+      },
+      {
+        "key": "swamp",
+        "active": false,
+        "inRange": null,
+        "distance": null
+      },
+      {
+        "key": "batian",
+        "active": true,
+        "inRange": null,
+        "distance": null
+      }
+    ],
+    "elements": [
+      {
+        "key": "batian",
+        "source": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Hitman.mp3",
+        "paused": false,
+        "volume": 0.4975688764070461,
+        "currentTime": 0,
+        "readyState": 0,
+        "networkState": 3,
+        "mediaError": 4
+      }
+    ]
+  },
+  "version": "apostles-oskar-wfc-16-wide-crown",
+  "built": 9,
+  "roots": [
+    "back-left",
+    "back-right",
+    "back-tower",
+    "front-left",
+    "front-right",
+    "bay-1",
+    "bay-2",
+    "bay-3",
+    "bay-4"
+  ],
+  "railClearance": [
+    {
+      "id": "back-left",
+      "minRail": 15.15
+    },
+    {
+      "id": "back-right",
+      "minRail": 14.88
+    },
+    {
+      "id": "back-tower",
+      "minRail": 13.74
+    },
+    {
+      "id": "front-left",
+      "minRail": 14.92
+    },
+    {
+      "id": "front-right",
+      "minRail": 15.44
+    },
+    {
+      "id": "bay-1",
+      "minRail": 19.27
+    },
+    {
+      "id": "bay-2",
+      "minRail": 17.33
+    },
+    {
+      "id": "bay-3",
+      "minRail": 32.37
+    },
+    {
+      "id": "bay-4",
+      "minRail": 42.66
+    }
+  ],
+  "collisionSurfaces": 9,
+  "cloudSurfaces": 9,
+  "draw": {
+    "frame": 1814,
+    "calls": 12375,
+    "triangles": 8926051,
+    "points": 0,
+    "lines": 259265
+  },
+  "waves": [
+    {
+      "mass": "back-left",
+      "name": "apostle-foam",
+      "time": 176.82880000019074
+    },
+    {
+      "mass": "back-right",
+      "name": "apostle-foam",
+      "time": 212.29710000014305
+    },
+    {
+      "mass": "back-tower",
+      "name": "apostle-foam",
+      "time": 212.29710000014305
+    },
+    {
+      "mass": "front-left",
+      "name": "apostle-foam",
+      "time": 176.82880000019074
+    },
+    {
+      "mass": "front-right",
+      "name": "apostle-foam",
+      "time": 212.29710000014305
+    },
+    {
+      "mass": "bay-1",
+      "name": "apostle-foam",
+      "time": 176.82880000019074
+    },
+    {
+      "mass": "bay-2",
+      "name": "apostle-foam",
+      "time": 212.29710000014305
+    },
+    {
+      "mass": "bay-3",
+      "name": "apostle-foam",
+      "time": 212.29710000014305
+    },
+    {
+      "mass": "bay-4",
+      "name": "apostle-foam",
+      "time": 212.29710000014305
+    }
+  ]
+}

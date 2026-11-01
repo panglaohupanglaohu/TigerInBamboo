@@ -1,0 +1,25 @@
+{
+  "asset": "霸天",
+  "version": "low-flight-target-v1",
+  "observations": [
+    "Generated target reviewed: spherical crystal city, pink towers, cream elevated track, right swamp retained. Black-grey crystal wide wing craft and large water shadow.",
+    "Reference is new formal game screenshot; target is concept art, not completed game rendering."
+  ],
+  "checks": [
+    {
+      "name": "70m length and finite moving geometry CPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "final low-altitude full-game GPU after shader revision",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "65m base altitude with tower tip clearance",
+    "black-grey crystal",
+    "preserve original squad"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "scope": "Morris production r43 compact integration triage",
+  "observations": [
+    "Normal game DOM confirms princess reference-loft-v2 and horse tiger-workflow-horse-v2 loaded; screenshots actually viewed.",
+    "Normal close approach E dialogue shown; after three further E presses dialogue closes, normal downhill patrol speed 1.25 resumes.",
+    "Normal terrain has 9 plane trees and 41 hollyhock clumps under existing keepouts, not the unrestricted factory 10 and 48.",
+    "Actually viewed r6 terrain overview and route: target gap remains, broad steep court wall and sparse cliff layer variation. Do not accept visual target match.",
+    "Neutral CPU hoof minima -0.00304m all four; rider and reins remain visible through skin upgrade and restore. This is not moving hoof contact acceptance."
+  ],
+  "checks": [
+    {
+      "name": "normal GLB loading and E conversation resume",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full normal route bridge court and return loop",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "terrain target visual match",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "final mane cloth and gait polish",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

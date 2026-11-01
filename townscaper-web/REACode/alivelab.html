@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<title>Alive Lab — 草卡片 / 网格 WFC / 完美环 / 道具进出场 / 相机拖影 / 色容体</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1b2124; color: #dfe6e6; overflow: hidden;
+    font: 11px/1.5 ui-monospace, Menlo, monospace; }
+  #grid { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 8px; padding: 8px; height: calc(100% - 34px); box-sizing: border-box; }
+  .cell { position: relative; background: #10151a; border: 1px solid #2b363b; border-radius: 3px; overflow: hidden; }
+  .cell h2 { position: absolute; left: 8px; top: 6px; margin: 0; z-index: 3;
+    font: 600 11px/1.4 ui-monospace, Menlo, monospace; color: #cfe3e6; letter-spacing: .02em; }
+  .cell .sub { position: absolute; left: 8px; top: 22px; z-index: 3; color: #7f9aa1; font-size: 10px; }
+  .cell canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .hud { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; color: #c3d3d8;
+    white-space: pre-wrap; font-size: 10px; line-height: 1.42; text-shadow: 0 1px 2px #000;
+    padding: 14px 8px 6px; background: linear-gradient(rgba(9,13,16,0), rgba(9,13,16,.92) 42%); }
+  .hud b { color: #e6d9a8; font-weight: 600; }
+  .hud i { color: #8fd0a8; font-style: normal; }
+  .hud s { color: #e08b7a; text-decoration: none; }
+  #topbar { position: fixed; left: 12px; bottom: 4px; z-index: 9; color: #556a71; font-size: 9px; }
+</style>
+</head>
+<body>
+<div id="topbar">1590669875869286400 · 1164926304640229376 · 1313837640366596096 · 1246074663546916873 · 1727315611959865407 · 1710031224838771027</div>
+<div id="grid">
+  <div class="cell">
+    <h2>① 草卡片（边上成丛，中间留白）</h2>
+    <div class="sub">1590669875869286400 · 宽高比 1:3，侧看变淡不变没</div>
+    <canvas id="cv-grass"></canvas>
+    <div class="hud" id="hud-grass"></div>
+  </div>
+  <div class="cell">
+    <h2>② 不规则网格上的 WFC：交互速度 + 确定性</h2>
+    <div class="sub">1164926304640229376 · 同 seed 正着解 / 倒着解，逐格必须相等</div>
+    <canvas id="cv-wfc"></canvas>
+    <div class="hud" id="hud-wfc"></div>
+  </div>
+  <div class="cell">
+    <h2>③ 完美环 → 不用腿 / 缺口 → 要腿</h2>
+    <div class="sub">1313837640366596096 · 左：整圈（空心）右：切开一片</div>
+    <canvas id="cv-loop"></canvas>
+    <div class="hud" id="hud-loop"></div>
+  </div>
+  <div class="cell">
+    <h2>④ 道具进出场：弹簧 + 错峰</h2>
+    <div class="sub">1246074663546916873 · 出现 7% 过冲 / 0.57s 落定，消失 0.30s</div>
+    <canvas id="cv-prop"></canvas>
+    <div class="hud" id="hud-prop"></div>
+  </div>
+  <div class="cell">
+    <h2>⑤ 轨道相机的拖影（v = ω × r）</h2>
+    <div class="sub">1727315611959865407 · 单帧内切向多次采样，不是叠上一帧</div>
+    <canvas id="cv-smear"></canvas>
+    <div class="hud" id="hud-smear"></div>
+  </div>
+  <div class="cell">
+    <h2>⑥ 色容体：每特征一个盒子</h2>
+    <div class="sub">1710031224838771027 · 横=色相 竖=明度；最后一列是该特征竖起来的"体"</div>
+    <canvas id="cv-gamut"></canvas>
+    <div class="hud" id="hud-gamut"></div>
+  </div>
+</div>
+
+<script type="module">
+import { buildQuadGrid } from './src/quadgrid.js';
+import { Town } from './src/town.js';
+import { placeCards, viewAlphaRaw, audit as auditGrass } from './src/grasscards.js';
+import { makeDemoTown, analyse, audit as auditLoop } from './src/looptown.js';
+import { audit as auditProp, scaleAt, staggerAt, springTrack } from './src/propanim.js';
+import { audit as auditSmear, velocityField, smearLengthPx, smear } from './src/smear.js';
+import { audit as auditGamut, FEATURES, sample as gamutSample } from './src/colorgamut.js';
+import { solve as solveWFC, determinism as detWFC } from './src/gridwfc.js';
+
+const $ = (id) => document.getElementById(id);
+const dpr = Math.min(2, window.devicePixelRatio || 1);
+function fit(cv) {
+  const r = cv.parentElement.getBoundingClientRect();
+  const W = Math.max(1, Math.round(r.width * dpr));
+  const H = Math.max(1, Math.round(r.height * dpr));
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const g = cv.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { g, w: r.width, h: r.height };
+}
+
+/* ------------------------------------------------------------ 岛（①② 共用） */
+
+const grid = buildQuadGrid({ radius: 9, hexSize: 1, seed: 20261101 });
+const town = new Town(grid);
+for (const c of grid.cells) {
+  const n = Math.sin(c.cx * 0.62) * Math.cos(c.cz * 0.55) * 0.5 + 0.5;
+  const h = Math.max(1, Math.min(4, Math.round(1 + n * 3.2)));
+  town.fill(c, h);
+}
+const grass = auditGrass({ town, grid, seed: 1590669 });
+const grassSmall = placeCards(town, grid, { seed: 1590669, perEdge: 4, perInner: 2 });
+const CAM_AZ = 0.7;
+const camDir = { x: Math.cos(CAM_AZ), z: Math.sin(CAM_AZ) };
+
+function bounds(cells) {
+  let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;
+  for (const c of cells) for (const p of c.pts) {
+    x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x);
+    z0 = Math.min(z0, p.z); z1 = Math.max(z1, p.z);
+  }
+  return { x0, x1, z0, z1 };
+}
+const B = bounds(grid.cells);
+
+function makeView(cells, W, H, pad = 18) {
+  const b = bounds(cells);
+  const s = Math.min((W - pad * 2) / (b.x1 - b.x0), (H - pad * 2) / (b.z1 - b.z0));
+  const ox = pad + (W - pad * 2 - (b.x1 - b.x0) * s) / 2 - b.x0 * s;
+  const oz = pad + (H - pad * 2 - (b.z1 - b.z0) * s) / 2 - b.z0 * s;
+  return { s, X: (x) => ox + x * s, Z: (z) => oz + z * s };
+}
+
+const HEIGHT_COLOR = ['#5c7a4c', '#6b8850', '#86935a', '#a3965f', '#b9a877'];
+
+function drawCells(g, view) {
+  for (const c of grid.cells) {
+    const top = town.top(c);
+    g.beginPath();
+    c.pts.forEach((p, i) => (i ? g.lineTo(view.X(p.x), view.Z(p.z)) : g.moveTo(view.X(p.x), view.Z(p.z))));
+    g.closePath();
+    g.fillStyle = HEIGHT_COLOR[Math.min(HEIGHT_COLOR.length - 1, Math.max(0, top - 1))];
+    g.fill();
+    g.strokeStyle = 'rgba(16,21,26,.45)';
+    g.lineWidth = 0.7;
+    g.stroke();
+  }
+}
+
+function drawCards(g, view, cards, { alphaFloor = 0.22, widthScale = 1, tint = '#dfe9a8' } = {}) {
+  for (const c of cards) {
+    const a = alphaFloor + (1 - alphaFloor) * Math.min(1, viewAlphaRaw(c, camDir) * 1.6);
+    const px = view.X(c.x);
+    const pz = view.Z(c.z);
+    const len = Math.max(2, c.h * view.s * 0.62);
+    const half = Math.max(0.7, (c.w * view.s * 0.5) * widthScale * Math.max(0.25, Math.abs(Math.cos(c.rot - CAM_AZ)) + 0.25));
+    g.save();
+    g.translate(px, pz);
+    g.rotate(c.rot);
+    g.globalAlpha = a;
+    g.fillStyle = tint;
+    g.fillRect(-half, -len, half * 2, len);
+    g.restore();
+  }
+  g.globalAlpha = 1;
+}
+
+const cvGrass = $('cv-grass');
+function renderGrass() {
+  const { g, w, h } = fit(cvGrass);
+  g.clearRect(0, 0, w, h);
+  const view = makeView(grid.cells, w, h * 0.62);
+  drawCells(g, view);
+  drawCards(g, view, grassSmall.cards, { tint: '#e4edb0' });
+  const st = grass.stats;
+  $('hud-grass').innerHTML =
+    `${st.cards} 张卡（草 <b>${st.blade}</b> / 灌木 ${st.shrub}）· 覆盖 <b>${(st.cellCoverage * 100).toFixed(0)}%</b> 的格子` +
+    ` · ${st.ms.toFixed(1)}ms · ${grass.triangles} 三角\n` +
+    `侧看：有下限 α ${grass.alpha[0].mean.toFixed(2)}（波动 ${grass.alphaSpread.toFixed(3)}）` +
+    ` / 无下限会硬剔除 <s>${(grass.cullShareRange[0] * 100).toFixed(1)}~${(grass.cullShareRange[1] * 100).toFixed(1)}%</s> 的卡`;
+}
+
+const wfcGrid = buildQuadGrid({ radius: 9, hexSize: 1, seed: 5 });
+const wfc = solveWFC(wfcGrid, { seed: 3 });
+const wfcDet = detWFC(wfcGrid, { seed: 7 });
+const TILE_NAMES = ['grass', 'grassRock', 'rock', 'grassPath', 'pathCross', 'pathEnd', 'sand', 'sandRock'];
+const TILE_COLOR = {
+  grass: '#6c8a4e', grassRock: '#828d5b', rock: '#9aa7ad', grassPath: '#8aa25f',
+  pathCross: '#cbb98a', pathEnd: '#c2b184', sand: '#d8c79a', sandRock: '#b3ad9c',
+};
+
+const cvWfc = $('cv-wfc');
+function renderWfc() {
+  const { g, w, h } = fit(cvWfc);
+  g.clearRect(0, 0, w, h);
+  const b = bounds(wfcGrid.cells);
+  const pad = 16;
+  const sc = Math.min((w - pad * 2) / (b.x1 - b.x0), (h - pad * 2) / (b.z1 - b.z0));
+  const ox = pad + (w - pad * 2 - (b.x1 - b.x0) * sc) / 2 - b.x0 * sc;
+  const oz = pad + (h - pad * 2 - (b.z1 - b.z0) * sc) / 2 - b.z0 * sc;
+  for (const c of wfcGrid.cells) {
+    const t = wfc.tiles[c.id];
+    g.beginPath();
+    c.pts.forEach((p, i) => (i ? g.lineTo(ox + p.x * sc, oz + p.z * sc) : g.moveTo(ox + p.x * sc, oz + p.z * sc)));
+    g.closePath();
+    g.fillStyle = TILE_COLOR[TILE_NAMES[t]] || '#33424a';
+    g.fill();
+    g.strokeStyle = 'rgba(16,21,26,.35)';
+    g.lineWidth = 0.6;
+    g.stroke();
+  }
+  const rockCount = (wfc.counts.rock || 0) + (wfc.counts.grassRock || 0) + (wfc.counts.sandRock || 0);
+  $('hud-wfc').innerHTML =
+    `<b>${wfc.cells}</b> 格 ${wfc.ms.toFixed(0)}ms（<i>${Math.round(wfc.cellsPerSec).toLocaleString()} 格/秒</i>）` +
+    ` · 决策 ${wfc.decisions} 回溯 ${wfc.backtracks} · 接口不符 <b>${wfc.mismatches}</b>\n` +
+    `确定性：正/倒遍历逐格差 <b>${wfcDet.diff}</b> 格；换 seed 差 ${wfcDet.diffSeed} 格` + ` · 岩类 <s>${rockCount}</s> 块：边界锁 0 + 传播链把 rock 一路消掉（跟 1670794… 同一个 bug）`;
+}
+
+/* ------------------------------------------------------------ ③ 完美环 */
+
+const loopAudit = auditLoop({ grid: buildQuadGrid({ radius: 8, hexSize: 1, seed: 99 }), level: 3 });
+const loopGrid = buildQuadGrid({ radius: 8, hexSize: 1, seed: 99 });
+const closedDemo = makeDemoTown(loopGrid, { gap: false, level: 3 });
+const openDemo = makeDemoTown(loopGrid, { gap: true, level: 3 });
+const closedRes = analyse(closedDemo.town, loopGrid, { loopRule: true });
+const openRes = analyse(openDemo.town, loopGrid, { loopRule: true });
+
+const cvLoop = $('cv-loop');
+function drawLoopHalf(g, x0, w, h, demo, res) {
+  const view = makeView(loopGrid.cells, w, h * 0.66, 12);
+  // 只有第 3 层是实心的：画成"悬空的环"
+  for (const c of demo.ring) {
+    const solid = demo.town.isSolid(c, 3);
+    g.beginPath();
+    c.pts.forEach((p, i) => (i ? g.lineTo(view.X(p.x) + x0, view.Z(p.z)) : g.moveTo(view.X(p.x) + x0, view.Z(p.z))));
+    g.closePath();
+    if (solid) {
+      g.fillStyle = '#c9805e';
+      g.fill();
+      g.strokeStyle = '#f0b28a';
+      g.lineWidth = 0.8;
+      g.stroke();
+    }
+  }
+  // 腿：从需要落地的柱子往下画到画面底
+  const legs = new Set(res.legCells.map((l) => l.cell));
+  g.strokeStyle = 'rgba(190,210,220,.75)';
+  g.lineWidth = 1;
+  for (const id of legs) {
+    const c = loopGrid.cells[id];
+    const px = view.X(c.cx) + x0;
+    g.beginPath();
+    g.moveTo(px, view.Z(c.cz));
+    g.lineTo(px, h * 0.66 + 18);
+    g.stroke();
+  }
+  g.fillStyle = '#7f9aa1';
+  g.font = '10px ui-monospace, Menlo, monospace';
+  g.fillText(demo.gapCells && demo.gapCells.length ? '缺口 → ' + res.legs + ' 条腿' : '整圈 → ' + res.legs + ' 条腿',
+    x0 + 8, h * 0.66 + 36);
+}
+
+function renderLoop() {
+  const { g, w, h } = fit(cvLoop);
+  g.clearRect(0, 0, w, h);
+  drawLoopHalf(g, 0, w / 2 - 4, h, closedDemo, closedRes);
+  drawLoopHalf(g, w / 2 + 4, w / 2 - 4, h, openDemo, openRes);
+  $('hud-loop').innerHTML =
+    `整圈（空心 ${closedRes.floating.map((f) => f.hollow).join('/')}）：<i>${closedRes.legs}</i> 条腿 / 总长 ${closedRes.legLength}` +
+    `　缺口（空心 0）：<s>${openRes.legs}</s> 条腿 / 总长 ${openRes.legLength}\n` +
+    `不开这条规则时整圈要 <s>${loopAudit.closedNoRule.legs}</s> 条腿（${loopAudit.closedNoRule.legLength}）` +
+    ` · 围出的空洞 ${loopAudit.enclosedRegions} 块 / ${loopAudit.enclosedCells} 格`;
+}
+
+/* ------------------------------------------------------------ ④ 道具 */
+
+const propAudit = auditProp({ propCount: 400, vertsPerProp: 24 });
+const PROPS = 22;
+let propT = 0;
+let propPhase = 0;
+let propLast = performance.now();
+
+const cvProp = $('cv-prop');
+function renderProp(now) {
+  const dt = Math.min(0.05, (now - propLast) / 1000);
+  propLast = now;
+  propT += dt;
+  if (propT > 2.6) { propT = 0; propPhase++; }
+  const { g, w, h } = fit(cvProp);
+  g.clearRect(0, 0, w, h);
+  const groundY = h * 0.62;
+  g.strokeStyle = 'rgba(110,130,138,.5)';
+  g.beginPath();
+  g.moveTo(10, groundY);
+  g.lineTo(w - 10, groundY);
+  g.stroke();
+  for (let i = 0; i < PROPS; i++) {
+    const delay = staggerAt(i, PROPS, 0.2);
+    const entry = { delay, hideAt: 1.9 };
+    const s = Math.max(0, scaleAt(entry, propT));
+    const bw = 12;
+    const bh = 26;
+    const x = 16 + i * ((w - 32) / PROPS);
+    const y = groundY - bh * s;
+    g.globalAlpha = 0.35 + 0.65 * Math.min(1, s);
+    g.fillStyle = s > 0 ? '#d9b57a' : '#33424a';
+    g.fillRect(x, y, bw, bh * s);
+    // 屋顶
+    g.fillStyle = '#c9603f';
+    g.beginPath();
+    g.moveTo(x - 2, y);
+    g.lineTo(x + bw / 2, y - 8 * s);
+    g.lineTo(x + bw + 2, y);
+    g.closePath();
+    g.fill();
+    g.globalAlpha = 1;
+  }
+  const st = propAudit.spring;
+  $('hud-prop').innerHTML =
+    `出现：${st.settleTime.toFixed(2)}s 落定 / 过冲 <b>${(st.overshoot * 100).toFixed(1)}%</b>` +
+    ` · 消失：${propAudit.disappear.settleTime.toFixed(2)}s / 过冲 0% · 错峰铺满 ${propAudit.staggerTotal.toFixed(2)}s\n` +
+    `400 道具 = <b>${propAudit.geom.vertices}</b> 顶点：每帧重建 ${propAudit.cost.perFrameRebuild.toFixed(3)}ms` +
+    ` · 只写实例 ${propAudit.cost.perFrameUniform.toFixed(3)}ms · <s>道具增删重烤 ${propAudit.rebake.ms.toFixed(2)}ms</s>`;
+}
+
+/* ------------------------------------------------------------ ⑤ 拖影 */
+
+const smearAudit = auditSmear({ size: 288, omegas: [0, 0.6, 1.2, 2.4], samples: 6 });
+let smearAng = 0;
+const smearOmega = 2.4;
+
+const cvSmear = $('cv-smear');
+let smearLiveMs = 0;
+function renderSmear(now) {
+  const { g, w, h } = fit(cvSmear);
+  smearAng += smearOmega * 0.016;
+  g.clearRect(0, 0, w, h);
+  const cx = w / 2;
+  const cy = h / 2;
+  const R = Math.min(w, h) * 0.29;
+  // 1) 先画**一帧干净**的岛（这一步之后才上拖影，不然量的是"已经糊过的图再糊一遍"）
+  g.save();
+  g.translate(cx, cy);
+  g.rotate(smearAng);
+  g.beginPath();
+  for (let i = 0; i < 9; i++) {
+    const t = (i / 9) * Math.PI * 2;
+    const r = R * (0.62 + 0.32 * Math.abs(Math.sin(i * 2.3)));
+    const px = Math.cos(t) * r;
+    const py = Math.sin(t) * r * 0.72;
+    i ? g.lineTo(px, py) : g.moveTo(px, py);
+  }
+  g.closePath();
+  g.fillStyle = '#71915a';
+  g.fill();
+  g.strokeStyle = '#eaf3cf';
+  g.lineWidth = 2.2;
+  for (let i = 0; i < 12; i++) {
+    const t = (i / 12) * Math.PI * 2;
+    g.beginPath();
+    g.moveTo(Math.cos(t) * R * 0.34, Math.sin(t) * R * 0.25);
+    g.lineTo(Math.cos(t) * R * 0.82, Math.sin(t) * R * 0.6);
+    g.stroke();
+  }
+  g.restore();
+
+  // 2) 真的走一遍 smear()：按 v = ω × r 的切向场采样 5 次
+  const cv = cvSmear;
+  const img = g.getImageData(0, 0, cv.width, cv.height);
+  const vel = velocityField(cv.width, cv.height, smearOmega, 1 / 60);
+  const out = smear({ data: img.data, w: cv.width, h: cv.height }, vel, { samples: 5, maxPx: 26 });
+  smearLiveMs = out.ms;
+  g.putImageData(new ImageData(out.data, cv.width, cv.height), 0, 0);
+
+  const row = smearAudit.rows[3];
+  $('hud-smear').innerHTML =
+    `ω=${smearOmega} rad/s → 外圈单帧位移 <b>${smearLengthPx(smearOmega, cv.width / 2).toFixed(1)}px</b>` +
+    ` · 本帧真跑 smear() ${smearLiveMs.toFixed(1)}ms（${cv.width}² × 5 采样）\n` +
+    `合成测试图（${smearAudit.size}²）：外圈锐度 p95 ${smearAudit.baseBand.p95.toFixed(0)} → ` +
+    `<b>${row.bandP95.toFixed(0)}</b>（−${(row.bandDrop * 100).toFixed(0)}% @ ${row.rimPx.toFixed(1)}px）`;
+}
+
+/* ------------------------------------------------------------ ⑥ 色容体 */
+
+const gamut = auditGamut();
+const cvGamut = $('cv-gamut');
+function renderGamut() {
+  const { g, w, h } = fit(cvGamut);
+  g.clearRect(0, 0, w, h);
+  const rows = FEATURES.length;
+  const rowH = (h - 58) / rows;
+  const nu = 9;
+  for (let r = 0; r < rows; r++) {
+    const f = FEATURES[r];
+    const y = 34 + r * rowH;
+    g.fillStyle = '#8fa6ad';
+    g.font = '9px ui-monospace, Menlo, monospace';
+    g.fillText(f.name, 8, y + rowH * 0.62);
+    for (let i = 0; i < nu; i++) {
+      const c = gamutSample(f, i / (nu - 1), 0.5, 0.5);
+      g.fillStyle = `rgb(${c.rgb.join(',')})`;
+      g.fillRect(46 + i * 12, y + 2, 11, rowH - 6);
+    }
+    // 最后一列：把"体"竖起来（同一色相，明度从低到高）
+    const nv = 4;
+    for (let j = 0; j < nv; j++) {
+      const c = gamutSample(f, 0.5, j / (nv - 1), 0.85);
+      g.fillStyle = `rgb(${c.rgb.join(',')})`;
+      g.fillRect(46 + nu * 12 + 10, y + 2 + j * ((rowH - 6) / nv), 12, (rowH - 6) / nv - 0.5);
+    }
+  }
+  $('hud-gamut').innerHTML =
+    `平均"体量" ΔE <b>${gamut.meanExtent.toFixed(0)}</b> · 每特征能分辨 4–11 种（18 个采样里）\n` +
+    `特征最小色差 <b>${gamut.separation.minDE.toFixed(1)}</b>（${gamut.separation.pair.join(' × ')}）` +
+    ` vs 单色板 ${gamut.flat.minDE.toFixed(1)} → <s>体越大，相邻特征越容易糊</s>`;
+}
+
+/* --------------------------------------------------------------- 启动 */
+
+let lastFrame = performance.now();
+function tick(now) {
+  if (now - lastFrame > 33) {
+    lastFrame = now;
+    renderProp(now);
+    renderSmear(now);
+  }
+  requestAnimationFrame(tick);
+}
+
+window.__alive = {
+  grass: { stats: grass.stats, alpha: grass.alpha, alphaSpread: grass.alphaSpread, cullShareRange: grass.cullShareRange, triangles: grass.triangles },
+  wfc: { cells: wfc.cells, ms: wfc.ms, perSec: wfc.cellsPerSec, decisions: wfc.decisions, backtracks: wfc.backtracks, mismatches: wfc.mismatches, counts: wfc.counts, detDiff: wfcDet.diff, detSeedDiff: wfcDet.diffSeed },
+  loop: loopAudit,
+  prop: {
+    spring: propAudit.spring,
+    disappear: propAudit.disappear,
+    geom: propAudit.geom,
+    perFrameRebuild: propAudit.cost.perFrameRebuild,
+    perFrameUniform: propAudit.cost.perFrameUniform,
+    rebake: propAudit.rebake,
+    stagger: propAudit.staggerTotal,
+  },
+  smear: { rows: smearAudit.rows, baseBand: smearAudit.baseBand, size: smearAudit.size },
+  gamut: { rows: gamut.rows, separation: gamut.separation, flat: gamut.flat, meanExtent: gamut.meanExtent },
+};
+
+renderGrass();
+renderWfc();
+renderLoop();
+renderGamut();
+renderProp(performance.now());
+renderSmear(performance.now());
+requestAnimationFrame(tick);
+window.addEventListener('resize', () => { renderGrass(); renderWfc(); renderLoop(); renderGamut(); });
+</script>
+</body>
+</html>

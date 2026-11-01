@@ -1,0 +1,27 @@
+{
+  "scope": "Morris all horses shared locomotion and tail corrective iteration",
+  "observations": [
+    "Source confirmed only seed0 white horse loaded skinned asset; other rideable horses remained legacy. The seed branch has been removed.",
+    "Source confirmed legacy tail lift sign folded tail forward and skinned adapter ignored lift X, forwarding only tiny Z sway. Root/mid/tip bones now receive lift and delayed lateral wave.",
+    "Actually viewed GPU V7 brown run: tail lifts visibly but croup bulges under leg rotation. V8 torso weights improved but lower croup still over-influenced; V9 weight mask is being checked.",
+    "Source gait stance direction was backwards: local hoof moved forward during support. Shared stance now travels front to rear with speed/cadence calibrated excursion; front recovery folds back, hind recovery folds forward.",
+    "Actual three loaded V8 models preserve three coat/fabric palettes; identical leg angles under same input over 1440 frames; measured running tail lateral range .353m and higher than walk. These CPU checks do not replace GPU/riding verification."
+  ],
+  "checks": [
+    {
+      "name": "all horse factory uses same asset and controller",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "final V9 normal brown riding and white patrol",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "target full natural gait visual acceptance",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

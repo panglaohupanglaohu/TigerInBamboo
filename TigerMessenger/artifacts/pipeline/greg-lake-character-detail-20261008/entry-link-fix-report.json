@@ -1,0 +1,41 @@
+{
+  "revision": "side-tread-link-2",
+  "scope": "swampSpatialPlan entry link only; tiger/stairs unchanged",
+  "actualAttachment": {
+    "treadGroupIndex": 1,
+    "treadTopInnerY": 35.40199997425079,
+    "sideOffsetInner": -3.75,
+    "bankY": 34.8,
+    "bridgeWidthWorld": 2,
+    "bridgeThicknessInner": 0.65,
+    "endOverlapInner": 0.7
+  },
+  "asyncFix": "Read rendered flat tread faces, then repeat after tiger.swampTigerV2Ready; mutate current live batch geometry and route; sampler retains mesh reference.",
+  "cpuTests": {
+    "passed": 6,
+    "files": [
+      "tests/world/swampEntryLinkClearance.test.mjs",
+      "tests/world/swampSpatialPlan.test.mjs"
+    ],
+    "fullCycle": "601 frames at 30Hz; actual root.update in spherical placement; visible head/neck/torso triangles clipped to conservative enclosing prism for sloped slab; 1803 group samples, zero intersections.",
+    "player": "Actual narrow tread centreline to side attachment then all bank layers sampled with player footprint; real top-facing geometry and runtime radial sampler."
+  },
+  "shortAudit": {
+    "firstCollisions": {},
+    "lastCollisions": {},
+    "conservativeMinClearanceWorld": {
+      "head": 0.3653763159363663,
+      "torso": 0.37089490779486667,
+      "neck": 0.4530104561898298
+    }
+  },
+  "unchanged": [
+    "three bank heights 34.8/30.8/26.8",
+    "76 slab parts and 2 render meshes",
+    "original eight stair groups",
+    "tiger story and movement",
+    "marker and corbel footprints"
+  ],
+  "gpuStatus": "Pending root-agent in-scene verification; CPU proof does not assert final visual acceptance.",
+  "rollback": "Restore entry-link-before/src/world/swampSpatialPlan.js only; dispose/rebuild scene."
+}

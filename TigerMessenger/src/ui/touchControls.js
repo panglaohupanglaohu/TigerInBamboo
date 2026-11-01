@@ -108,7 +108,9 @@ export function createTouchControls({
   document.body.appendChild(root);
 
   const elToggle = root.querySelector("#touch-toggle");
-  document.querySelector("#touch-toggle-slot")?.appendChild(elToggle);
+  // Touch devices keep the toggle in the top-level touch layer so the build HUD
+  // cannot cover it; desktop keeps the centred controls-dock placement.
+  if (!isCoarsePointer()) document.querySelector("#touch-toggle-slot")?.appendChild(elToggle);
   const elPad = root.querySelector("#touch-pad");
   const elMove = root.querySelector("#touch-move");
   const elKnob = root.querySelector("#touch-move-knob");

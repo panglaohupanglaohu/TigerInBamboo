@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "undefinedExactlyMatches065": true,
+  "sourceUnchanged": true,
+  "results": [
+    {
+      "amplitude": 0,
+      "vertices": 150,
+      "sourceBoundarySamples": 78,
+      "interiorSamples": 72,
+      "maxDisplacement": 0,
+      "maxScaledError": 0,
+      "positionHash": "fb87dc636a336940b58ba9427ad9e782fa0f8b9cde143d6a5db474fb938c4b23"
+    },
+    {
+      "amplitude": 0.22,
+      "vertices": 150,
+      "sourceBoundarySamples": 78,
+      "interiorSamples": 72,
+      "maxDisplacement": 0.16374766134720647,
+      "maxScaledError": 6.152589166012401e-7,
+      "positionHash": "b79293ed58577e6146ffe588ea28e218c17e6a96da8d46ad63bd1ef983332daf"
+    },
+    {
+      "amplitude": 0.65,
+      "vertices": 150,
+      "sourceBoundarySamples": 78,
+      "interiorSamples": 72,
+      "maxDisplacement": 0.48379990273539497,
+      "maxScaledError": 0,
+      "positionHash": "b54e7ac1dd26cf9bb4603aea3c59cdacb59f8fcfd3e66bf0f7a72ee947bbbefa"
+    }
+  ],
+  "visualImprovementVerified": false
+}

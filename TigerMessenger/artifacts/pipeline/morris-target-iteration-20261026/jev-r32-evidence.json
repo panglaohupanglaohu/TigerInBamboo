@@ -1,0 +1,37 @@
+{
+  "task": "Morris road creek bridge and tall tree target iteration",
+  "evidence_revision": "morris-route-r32-component",
+  "observations": [
+    "Actually viewed r31 and r32 production component, not normal game acceptance: plane tree now broad branching small palmate leaves, hanging seeds and bark colors; tall narrow cypress, flowers smaller. R32 plane sample20.46m tall and21.68m wide; cypress sample22.89m tall and2.71m wide; conservative mounted courier envelope is below half plane tree height.",
+    "R32 bridge component actually viewed: continuous smooth coping/parapets, real arch and flowing water below, replacing jagged rotated box-stone silhouette.52 wedge arch stones204 masonry pieces in5 merged stone batches.26 advisor geometry/production parameter ray checks passed.",
+    "Road has actual five-column slight crossfall, blended vertex edge color, scattered low gravel outside clear width; shoulders widened6.5m.7 route support/grade/clearance checks pass;6 height/finite-geometry/road checks pass.",
+    "Current component has no legacy game keepouts and is not substituted for normal placement. Formal normal entry loading; old elder tree and full mounted route checks still required. Exact target foliage/material match remains gap."
+  ],
+  "checks": [
+    {
+      "name": "component current geometry visually inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "13 route and height checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "advisor26 bridge checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current normal final visual check",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "text only JEV does not see images",
+    "preserve path footprint, original bridge8m/3.2m passage, riding and other scenes",
+    "no commit push release"
+  ]
+}

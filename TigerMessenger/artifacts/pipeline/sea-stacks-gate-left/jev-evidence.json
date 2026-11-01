@@ -1,0 +1,51 @@
+{
+  "task": "Bad North researched coastal module pass and approved gate-left placement",
+  "target": "Blue-grey Australian Twelve Apostles inspired sea cliffs with directional ledges; clear entire Bookshop plaza",
+  "visual_observations": {
+    "source": "Primary assistant inspected final after-hero.png and after-overview.png; plaza view checked for clear footprint",
+    "image_sha256": "9d4de90e9743c5c77723a32696381c3ff9a07fd1959ca713c2999542d720ed23",
+    "completed": [
+      "Gate-left placement visible in fixed overview",
+      "Directional shelf and flatter fractured crown visible",
+      "Wet base meets sea without old protruding foot plate",
+      "No rocks occupy Bookshop circular plaza"
+    ],
+    "remaining": [
+      "Cliff faces still broad and relatively smooth",
+      "Seven accepted groups; one candidate excluded by protected geometry",
+      "Only three legal macro module chains; not full 3D island WFC"
+    ]
+  },
+  "checks": [
+    {
+      "name": "100 seed closed mesh and socket checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Actual runtime and shader errors zero",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "46800 railway sample probes zero hits",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Accepted stack bottom rings below water",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "All accepted rock vertices outside Bookshop hemisphere",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "No claim of original Bad North engine recreation",
+    "No change to citadel castle",
+    "No claim of continuous swept rail collision validation"
+  ]
+}

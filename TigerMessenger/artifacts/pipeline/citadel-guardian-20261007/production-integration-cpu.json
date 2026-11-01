@@ -1,0 +1,177 @@
+{
+  "report": {
+    "version": "citadel-plaza-guardian-1",
+    "phase": "idle",
+    "awakenings": 1,
+    "strikes": 2,
+    "damage": 1800,
+    "disabled": 1,
+    "moves": 158,
+    "blockedMoves": 0,
+    "leaseWaits": 0,
+    "restorations": 1,
+    "events": [
+      {
+        "time": 0.05,
+        "type": "phase",
+        "phase": "waiting"
+      },
+      {
+        "time": 0.05,
+        "type": "phase",
+        "phase": "awakening"
+      },
+      {
+        "time": 2.0500000000000007,
+        "type": "phase",
+        "phase": "mounted"
+      },
+      {
+        "time": 2.6999999999999984,
+        "type": "lightning-hit",
+        "uuid": "f52cc03a-ef65-4330-91d8-8e4259502d5f",
+        "accepted": true,
+        "damage": 1200,
+        "health": 600,
+        "disabled": false,
+        "recoveryHealth": null
+      },
+      {
+        "time": 5.949999999999987,
+        "type": "lightning-hit",
+        "uuid": "f52cc03a-ef65-4330-91d8-8e4259502d5f",
+        "accepted": true,
+        "damage": 600,
+        "health": 0,
+        "disabled": true,
+        "recoveryHealth": 450
+      },
+      {
+        "time": 9.950000000000006,
+        "type": "phase",
+        "phase": "returning-horse"
+      },
+      {
+        "time": 11.450000000000028,
+        "type": "phase",
+        "phase": "returning-statue"
+      },
+      {
+        "time": 13.450000000000056,
+        "type": "phase",
+        "phase": "idle"
+      }
+    ],
+    "movement": "four-wheel supported, bounded plaza arc",
+    "actualSceneVerified": false,
+    "lastSupport": {
+      "samples": 4,
+      "gaps": [
+        -6.107924605679527e-9,
+        -6.107895555476874e-9,
+        -6.107915145133e-9,
+        -6.1079061143396985e-9
+      ],
+      "ok": true
+    },
+    "targetCount": 0,
+    "lease": false,
+    "lastTarget": {
+      "uuid": "f52cc03a-ef65-4330-91d8-8e4259502d5f",
+      "formationIndex": 0
+    }
+  },
+  "night": {
+    "active": false,
+    "returning": false,
+    "night": false,
+    "activationPhase": 0.82,
+    "queueSpacing": 0,
+    "elapsed": 0,
+    "returnElapsed": 0,
+    "insideHorse": 8,
+    "groups": [
+      {
+        "name": "ladder-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 0,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "route-patrol",
+            "terraceIndex": 0,
+            "duration": 12
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 12
+      },
+      {
+        "name": "mountain-stair-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 0,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "route-patrol",
+            "terraceIndex": 0,
+            "duration": 18
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 18
+      }
+    ],
+    "torchBearers": 4,
+    "torchQueueIndices": [
+      "stairs:0",
+      "stairs:3",
+      "stairs:0",
+      "stairs:3"
+    ],
+    "equipmentRole": "torch-flank-shield-spear",
+    "javelinsActive": 0,
+    "javelinPhases": [],
+    "thrownTargetCount": 0,
+    "assistanceLinksVisible": 0,
+    "ropesVisible": 0,
+    "descentRopes": 0,
+    "descentOrder": [
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier",
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier"
+    ]
+  },
+  "health": 450
+}

@@ -1,0 +1,53 @@
+✔ entrance bridge closes the rim gap outside the stair head only (0.565834ms)
+✔ without the guard, stepping off the rim inward falls into the crater (the reported bug) (75.399958ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 0 (664.743542ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 0.9 (537.825083ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 2 (530.921125ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 3.1 (514.877375ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 4 (504.995ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 5.2 (623.238083ms)
+✔ full rim lap at radius 38.8 counter-clockwise completes, through the entrance, without dropping (200.722917ms)
+✔ full rim lap at radius 38.8 clockwise completes, through the entrance, without dropping (194.900542ms)
+✔ full rim lap at radius 39.4 counter-clockwise completes, through the entrance, without dropping (199.424083ms)
+✔ full rim lap at radius 39.4 clockwise completes, through the entrance, without dropping (197.497958ms)
+✔ full rim lap at radius 39.9 counter-clockwise completes, through the entrance, without dropping (201.572875ms)
+✔ full rim lap at radius 39.9 clockwise completes, through the entrance, without dropping (201.015041ms)
+✔ authored bank route (entry link, three terraces, flights) is still walkable with the guard on (183.312208ms)
+✔ swampEdgeGuard=0 style disable leaves physics untouched (59.684917ms)
+✔ real V7 promenade overlap no longer steals support from feet on the coral rim (10.657ms)
+✔ feet below rim retain lower promenade and entrance/water are not captured (6.881958ms)
+✔ production collision substeps keep a standing player on the actual new rim (12.948166ms)
+✔ all three real bank midpoints stay supported through gravity instead of falling to old V7 terrain (190.996083ms)
+✔ real lower tread remains available beneath an upper terrace, late quay registration stays dynamic (2.693ms)
+✖ production controller and gravity can descend actual entrance stairs with guard and steer active (2320.350833ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 21
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7332.048166
+
+✖ failing tests:
+
+test at TigerMessenger/tests/world/swampStairNavigation.test.mjs:18:1
+✖ production controller and gravity can descend actual entrance stairs with guard and steer active (2320.350833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampStairNavigation.test.mjs:34:124)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

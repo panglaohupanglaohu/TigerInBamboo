@@ -1,0 +1,81 @@
+{
+  "goal": "Remove source-proven redundant square main-island green apron while retaining original circular island, real hills, rail, actors, and R4d moon coast.",
+  "revision": "main-island-edge-cleanup-r1-20261026",
+  "visual_observations": [
+    {
+      "source": "Human supplied screenshot viewed by advisor; sha256 e0f8b0147304aef6f9f7437772a7f81a208ebed6d81dcbab51f78dddb1a78deb",
+      "observation": "Broad flat green slab with a right angle beside rail. Actual platforms source is halfwidth72 square; actual hills main island radius72. Only outside-circle low apron is masked; no screenshot-specific angular guess."
+    }
+  ],
+  "checks": [
+    {
+      "name": "actual square apron has removable area",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "interior circular island retained",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "source-proven northwestern square corner removed",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "actor footprint retained",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "rail support retained over entire sampled curve",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "raised bookshop and camp retained",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "R4d bank ownership retained",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "cleared support is absent rather than water floor",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "finite antipode and distant scope",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "source geometry and existing bank remain untouched",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "visible depth distance all compose R4d and cleanup",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "dispose restores hooks and material",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Actual GPU integrated same-camera scene review",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Scope new independent module only. Existing moon-coast ownership composed, not replaced. Shared finite nearest-texel mask for visible/depth/distance/support. No source vertices or sea modified.",
+    "Node uses real buildWorld/buildHills plus R4d source. Browser integration remains root responsibility."
+  ]
+}

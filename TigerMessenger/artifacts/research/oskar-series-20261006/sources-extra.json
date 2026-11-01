@@ -1,0 +1,173 @@
+[
+  {
+    "id": "1590669875869286400",
+    "topic": "放置草丛",
+    "author": "OskSta",
+    "date": "Thu Nov 10 11:37:06 +0000 2022",
+    "url": "https://x.com/OskSta/status/1590669875869286400",
+    "text": "An early look at grass billboards. I really like how they add a completely new kind of shape and detail frequency.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FhMwp-iWAAUnKqV.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FhMwp-iWAAUnKqV.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1582757294672314368",
+    "topic": "移动光源与茂密植被（同一链接两个关注点）",
+    "author": "OskSta",
+    "date": "Wed Oct 19 15:35:19 +0000 2022",
+    "url": "https://x.com/OskSta/status/1582757294672314368",
+    "text": "I'm seeing if my light volume approach can work with point lights too. The low resolution is noticeable for sure. Especially when you move em around like this. But if you keep em big and soft and somewhat still I think it's gonna be good.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FfcUj__XgAAYoM7.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FfcUj__XgAAYoM7.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1579474420749725696",
+    "topic": "大地势生成",
+    "author": "OskSta",
+    "date": "Mon Oct 10 14:10:21 +0000 2022",
+    "url": "https://x.com/OskSta/status/1579474420749725696",
+    "text": "I'm back on the island generation",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/Fetrat3XoAEjANH.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/Fetrat3XoAEjANH.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1579478470098243584",
+    "topic": "复杂地势生成",
+    "author": "OskSta",
+    "date": "Mon Oct 10 14:26:27 +0000 2022",
+    "url": "https://x.com/OskSta/status/1579478470098243584",
+    "text": "To make the cliffs look more organic, I'm doing some pretty radical cage deformation on the cells.",
+    "replyingTo": "1579474420749725696",
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FetumNKXkAI3ERh.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FetumNKXkAI3ERh.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1534809424619089921",
+    "topic": "构建城堡",
+    "author": "NXTBLD",
+    "date": "Thu Jun 09 08:07:36 +0000 2022",
+    "url": "https://x.com/NXTBLD/status/1534809424619089921",
+    "text": "What can the AEC industry learn from the games sector? \n@OskSta explores the technology, design and aesthetics behind Townscaper, the digital town building toy. \n\nLondon, 21 June. Book your place now. \nhttps://nxtbld.com/tickets-2022/?utm_campaign=meetedgar&utm_medium=social&utm_source=meetedgar.com\n\n#NXTBLD #townscaper",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "video",
+        "url": "https://video.twimg.com/ext_tw_video/1534809282973147136/pu/vid/1280x720/9gnvoPxMenBscH4z.mp4?tag=12",
+        "thumbnail": "https://pbs.twimg.com/ext_tw_video_thumb/1534809282973147136/pu/img/L8AkAzLegjPRd4yW.jpg",
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1482011744843223042",
+    "topic": "崖壁地形",
+    "author": "OskSta",
+    "date": "Fri Jan 14 15:28:29 +0000 2022",
+    "url": "https://x.com/OskSta/status/1482011744843223042",
+    "text": "Ok, I stumbled on a pretty cool art style now. Here, I'm creating pixel thin lines from contrasts in my procedural normal map. I should probably move to a bespoke contrast texture (to get more deliberate control over the lines). But I gotta say this looks pretty promising.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FJEo5JOXEAwNgOX.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FJEo5JOXEAwNgOX.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1479185088839659530",
+    "topic": "旧城地势生成",
+    "author": "OskSta",
+    "date": "Thu Jan 06 20:16:21 +0000 2022",
+    "url": "https://x.com/OskSta/status/1479185088839659530",
+    "text": "So, this is not the style I'm going for with this, but I though it was interesting. Now properly UV mapped, I can procedurally paint my procedural islands in world space. Here, I'm just painting the normals back on in blotches, transforming a low poly look to a sculpted clay look",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FIcd2TWX0AYuk3p.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FIcd2TWX0AYuk3p.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1458921394855718917",
+    "topic": "球面分布",
+    "author": "OskSta",
+    "date": "Thu Nov 11 22:15:40 +0000 2021",
+    "url": "https://x.com/OskSta/status/1458921394855718917",
+    "text": "I'm exploring the Half Edge data structure. Feels like a really lightweight, powerful and versatile way of representing topology. A big thanks to everyone suggesting I look into it.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/FD8ghMeWUAIaam-.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/FD8ghMeWUAIaam-.jpg",
+        "width": 640,
+        "height": 640
+      }
+    ],
+    "code": 200
+  },
+  {
+    "id": "1384958097542819845",
+    "topic": "整个场景连接",
+    "author": "OskSta",
+    "date": "Wed Apr 21 19:51:56 +0000 2021",
+    "url": "https://x.com/OskSta/status/1384958097542819845",
+    "text": "I wrote a script to trace topologically straight lines across the Townscaper grid. I think I'll use it for a thing in the gamepad controls and possibly some drag-to-paint mode.",
+    "replyingTo": null,
+    "media": [
+      {
+        "type": "gif",
+        "url": "https://video.twimg.com/tweet_video/EzhbXsYXIAIJFaX.mp4",
+        "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/EzhbXsYXIAIJFaX.jpg",
+        "width": 512,
+        "height": 512
+      }
+    ],
+    "code": 200
+  }
+]

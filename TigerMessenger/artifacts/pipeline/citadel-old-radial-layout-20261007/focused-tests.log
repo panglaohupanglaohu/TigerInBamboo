@@ -1,0 +1,39 @@
+✔ radial default actually moves all fifteen editable houses around the preserved tower and external anchors (81.769167ms)
+✔ ring streets, three radial stair alleys and stable waterfront anchors have actual supported and clear body samples (1246.866958ms)
+✔ actual radial and upper-anchor stair treads are at least 28cm with no riser over 20cm (26.508208ms)
+✔ oriented houses have real podium support and all legal authored geometry remains finite (28.765875ms)
+✔ radial factory disposal releases exactly its retained owned resources (23.634416ms)
+✔ post-placement radial wings use sampled support, reject actual overlap, connect doors and roll back resources (1232.390625ms)
+✔ all fifteen conservative oriented building envelopes are disjoint (22.633792ms)
+✔ default session does not solve; exposes ordinary protected picking and edits without rebuilding (61.861ms)
+✔ roof rebuild preserves entity colours, deleted IDs and ordinary undo history; roof undo/redo is separate (135.989375ms)
+✔ constraint contradictions and malformed solves have zero factory/scene changes (27.867458ms)
+✔ staged geometry is validated even with unchanged entity snapshot, and failed validation releases only staged resources (80.427375ms)
+✔ factory and commit failures restore old scene/editor and preserve both histories atomically (368.134083ms)
+✔ full JSON roundtrip preserves roof roles, occupancy, colours and replayable solver provenance (89.981666ms)
+✔ invalid snapshots are completely rejected before asset creation: missing maps, versions, roles, IDs and fabricated provenance (44.062333ms)
+✔ rejected full import and roof undo do not consume history or alter active entity colours (106.48925ms)
+✔ close owns current asset exactly once; replaced source materials and editor clones are each released once (46.005458ms)
+✔ entity history remains capped at 100 and async callback contracts are rejected (47.127458ms)
+✔ occupancy plus WFC solve commits atomically, clearing only the deleted plot lock and recording separate histories (64.053208ms)
+✔ atomic occupancy/roof failures preserve scene, colour, locks and both histories (91.972458ms)
+✔ iframe/VM plain records work for edits, roof roles, locks and full snapshots; class and custom prototypes fail (113.099292ms)
+✔ actual 15 plots yield geometric same-street and slope neighbors, not all-to-all adjacency (1.681125ms)
+✔ hard roof observation propagates before collapse; double setbacks remain compatible (1.697ms)
+✔ contradiction is atomic, retains lock identities, returns no partial solution and never falls back (2.956708ms)
+✔ fixed seed, stable IDs and input ordering reproduce exactly and successful solutions obey every active edge (0.856958ms)
+✔ deletion removes active constraints but retains stable null slots and hidden geometry roles for saving (0.618708ms)
+✔ historical axial triangular plot constraints exercise shared-core finite backtracking, not relabeling (0.302917ms)
+✔ undersized footprints ban unbuildable variants and an empty geometric domain fails explicitly (1.113083ms)
+✔ invalid input and unknown IDs are rejected without changing factory or invoking a fallback (0.317042ms)
+✔ all 75 ID-role combinations generate actual bounded roofs, preserve public geometry and match geometric domain dimensions (211.775084ms)
+✔ historical axial bounded backtracking exhaustion returns failure with no fallback or partial assignments (0.612583ms)
+✔ explicit axial rollback reproduces the saved pre-radial factory report (65.7125ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2724.381333

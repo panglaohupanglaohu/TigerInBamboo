@@ -1,0 +1,14 @@
+<!doctype html><html><head><script type="importmap">{"imports":{"three":"/vendor/three.module.js","three/addons/":"/vendor/jsm/"}}</script><link rel="icon" href="data:,"><style>body{margin:0}</style></head><body><script type="module">
+import * as T from 'three';
+import {AirshipEscortManager} from '/src/world/airshipEscort.js';
+const scene=new T.Scene();scene.background=new T.Color('#8fc6ec');
+const ship=new T.Group();ship.position.set(0,160,0);scene.add(ship);
+const hull=new T.Mesh(new T.SphereGeometry(2.4,20,12),new T.MeshStandardMaterial({color:0xf0802a}));hull.scale.set(1.5,.7,.7);ship.add(hull);
+const escort=new AirshipEscortManager(scene,ship,{count:9});
+scene.add(new T.HemisphereLight(0xffffff,0x445566,2.4));const sun=new T.DirectionalLight(0xffffff,3);sun.position.set(30,220,50);scene.add(sun);
+const camera=new T.PerspectiveCamera(48,1200/850,.1,2000);camera.position.set(16,166,24);camera.up.set(0,1,0);camera.lookAt(0,160,0);camera.updateMatrixWorld(true);
+const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(1200,850);document.body.append(renderer.domElement);
+window.airshipTest={scene,camera,renderer,ship,escort};
+let last=performance.now();
+renderer.setAnimationLoop(now=>{const dt=Math.min(.05,(now-last)/1000);last=now;escort.update(dt,now/1000);renderer.render(scene,camera);});
+</script></body></html>

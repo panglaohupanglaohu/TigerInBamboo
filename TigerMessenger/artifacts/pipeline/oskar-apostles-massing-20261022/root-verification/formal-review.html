@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>十二门徒 · 正式入口验收</title>
+<style>body{margin:0;background:#d7e6e8;font:13px system-ui}iframe{border:0;width:100vw;height:100vh}aside{position:fixed;right:12px;top:12px;z-index:10;background:#fffffff0;padding:12px;max-width:410px;border-radius:8px}button{margin:3px;padding:6px}pre{font-size:10px;max-height:100px;overflow:auto;white-space:pre-wrap}</style>
+<iframe id="game" src="../../../../?autostart=1&amp;timeOfDay=0.5"></iframe>
+<aside>正式游戏原入口 · 仅本页可选固定观察相机，不修改生产源码或存档<br>
+<button id="export">导出本区真实桥轨</button><button id="observe">查看十二门徒</button><button id="close">近看前岸</button><button id="normal">恢复游戏镜头</button><pre id="status">等待正式游戏构建</pre></aside>
+<pre id="export-status"></pre><script>
+const game=document.querySelector('#game'),status=document.querySelector('#status');
+let active=false,close=false,hooked=null,frames=0;
+function roots(t){const a=[];t.scene.traverse(o=>{if(o.isMesh&&o.userData.apostleMass)a.push(o)});return a;}
+function pose(t){const T=t.THREE,all=roots(t),selected=close?all.filter(o=>o.userData.apostleMass==='front-right'):all;if(!selected.length)return;
+ const box=new T.Box3();for(const r of selected)box.union(new T.Box3().setFromObject(r));const c=box.getCenter(new T.Vector3()),u=c.clone().normalize();let side=new T.Vector3(0,1,0).cross(u);if(side.lengthSq()<.01)side.set(1,0,0);side.normalize();const forward=u.clone().cross(side).normalize(),span=box.getSize(new T.Vector3()).length();
+ const distance=close?48:Math.max(90,span*.72);t.camera.up.copy(u);t.camera.position.copy(c).addScaledVector(u,distance*.72).addScaledVector(forward,distance).addScaledVector(side,distance*.20);t.camera.lookAt(c);t.camera.updateMatrixWorld(true);
+}
+document.querySelector('#observe').onclick=()=>{close=false;active=true};document.querySelector('#close').onclick=()=>{close=true;active=true};document.querySelector('#normal').onclick=()=>{active=false;hooked?.cameraRig.snapToPlayer()};
+document.querySelector('#export').onclick=async()=>{try{const m=await import('./export-rail-context.js');const data=m.exportRailContext(game.contentWindow.__tm);let el=document.querySelector('#rail-export');if(!el){el=document.createElement('script');el.type='application/json';el.id='rail-export';document.body.append(el)}el.textContent=JSON.stringify(data);document.querySelector('#export-status').textContent=JSON.stringify(data.summary)}catch(e){document.querySelector('#export-status').textContent=String(e)}};
+function update(){try{const t=game.contentWindow.__tm;if(t?.scene&&t?.renderer){
+ if(hooked!==t){hooked=t;const original=t.renderer.render;t.renderer.render=function(s,c){if(s===t.scene&&c===t.camera){if(active)pose(t);frames++;}return original.call(this,s,c)};}
+ const all=roots(t),waves=[];for(const r of all)r.traverse(o=>{const m=o.material;for(const a of Array.isArray(m)?m:[m]){const clock=a?.uniforms?.uTime??a?.uniforms?.time;if(clock&&/foam/i.test(o.name))waves.push({mass:r.userData.apostleMass,name:o.name,time:clock.value,animation:o.userData.shoreAnimation})}});
+ status.textContent=JSON.stringify({entry:game.contentWindow.location.pathname,mode:active?(close?'front-shore-fixed-camera':'overview-fixed-camera'):'normal-game-camera',frames,bgm:t.bgm?.snapshot?.(),version:t.scene.userData.twelveApostlesTarget?.version,built:t.scene.userData.twelveApostlesTarget?.built,roots:all.map(o=>o.userData.apostleMass),railClearance:t.scene.userData.twelveApostlesTarget?.masses?.map(m=>({id:m.id,minRail:m.minRail})),collisionSurfaces:t.scene.userData.seaStackCollisionSurfaces?.length,cloudSurfaces:t.scene.userData.seaStackCloudSurfaces?.length,draw:t.renderer.info.render,waves},null,2);
+ }}catch(e){status.textContent=String(e)}requestAnimationFrame(update)}update();
+</script>

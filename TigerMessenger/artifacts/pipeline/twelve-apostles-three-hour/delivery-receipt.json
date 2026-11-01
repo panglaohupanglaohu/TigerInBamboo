@@ -1,0 +1,59 @@
+{
+  "preparedAtUTC": "2026-10-04T11:08:25.223969+00:00",
+  "deadlineUTC": "2026-10-04T11:12:05Z",
+  "status": "delivered; three-hour batch with documented remaining visual and performance issues, not fully satisfied",
+  "files": [
+    {
+      "path": "review.html",
+      "bytes": 10498,
+      "sha256": "13e11a669c0c6b48bb971715a3c33a2438e38e6b8ca53ceaa3a93d9b8394cf5c"
+    },
+    {
+      "path": "live.html",
+      "bytes": 2614,
+      "sha256": "883ae19cbaab80be691d0c2337e53b650949be82f05e587b930c32a1c9746813"
+    },
+    {
+      "path": "progress.json",
+      "bytes": 8820,
+      "sha256": "623ffc955710bf390e6087df9416e83d38b136ca4948ea46cb2093ab82ec8db6"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 6039,
+      "sha256": "eb8501ca9a1de5ab8cab59acae544a7ebde58e9adc2ed975ccde9dfdc7e8c0ac"
+    },
+    {
+      "path": "r10-checks.json",
+      "bytes": 491402,
+      "sha256": "6c4496beadb109ce5c2db051fb50d3c729c72ec6a50803989476e93efe94a7a6"
+    },
+    {
+      "path": "r10-test-suite.json",
+      "bytes": 1863,
+      "sha256": "c009fc503a0a9b8f5e7c65bec73ef8b951ea2a13345f4f578966aaf611f611ac"
+    },
+    {
+      "path": "r10-performance.json",
+      "bytes": 1246,
+      "sha256": "4bf7101ce32910dad438dc27bc08b06388ada58a4bc4a5d83a163dd938b09cbb"
+    },
+    {
+      "path": "legacy-final-conditions-performance.json",
+      "bytes": 1235,
+      "sha256": "186a4bfa150bbe9ab1ea8d81f8a3f882dad0fb46359f94f5cbf6cfd55cbe3971"
+    },
+    {
+      "path": "r10-independent-vegetation-audit.json",
+      "bytes": 24660,
+      "sha256": "b2c9b78dff894b326e35870660878745fc7747b3b2cf7bed87d84bd811c09009"
+    },
+    {
+      "path": "delivery-review-ui.jpg",
+      "bytes": 69282,
+      "sha256": "ded9e41bb0ad809bd9e36445de584715b347e0a655923e8e31db145008c1fc8c"
+    }
+  ],
+  "oneShotReminder": "Deleted to avoid duplicate delivery notification; weekly maintenance unchanged.",
+  "deliveredAtUTC": "2026-10-04T11:12:24.059060+00:00"
+}

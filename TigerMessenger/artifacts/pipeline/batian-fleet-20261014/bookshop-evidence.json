@@ -1,0 +1,46 @@
+{
+  "version": "bookshop-only-validation",
+  "observations": [
+    "Automatic attacks disabled; only the existing bookshop target is registered in formal main.",
+    "Five original aircraft object identities preserved across complete CPU phase cycle; no aircraft constructor or clone used.",
+    "CPU phases: assemble transit blockade pincer cannon guard withdraw return dock idle.",
+    "Device shutdown, repair towing and regional counterfire are incomplete prototypes; smoke/pulses/reactions are not proof of full combat fidelity.",
+    "Formal game CUA manually launched one bookshop battle. DOM audit recorded all phases through return/dock and final idle, same five aircraft UUIDs, energy retreat,18 shots in old clock version.",
+    "Discovered and fixed legacy automatic raid conflict, robot-bookshop building misclassification, wall-clock fire cadence and incomplete dock repair reset.",
+    "Post-fix CPU gives12 shots and identical outcome at1x/4x wall-clock with equal simulation steps. Latest fixes not yet rerun for a full formal GPU cycle.",
+    "Full-world wide view snapshots approximately12-13FPS, not a controlled battle performance comparison."
+  ],
+  "checks": [
+    {
+      "name": "original five aircraft reused",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "unknown destination rejected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "CPU closed-loop and energy withdrawal",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "formal initial-version bookshop cycle audit",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "post-fix full formal GPU and visual attacks",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "do not damage buildings",
+    "exclude tiger fox courier from combat reactions",
+    "manual bookshop launch only",
+    "no other region fights"
+  ]
+}

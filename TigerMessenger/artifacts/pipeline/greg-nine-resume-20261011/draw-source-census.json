@@ -1,0 +1,1256 @@
+{
+  "branchCandidates": [
+    {
+      "tree": "325caac3-5826-44a8-b0e5-3e934024681b",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    },
+    {
+      "tree": "f4e9f49e-91af-4987-917e-e151f9e3df2a",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    },
+    {
+      "tree": "0273fecb-9bba-498d-a690-7f358f03a27f",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    },
+    {
+      "tree": "4cf216e4-f042-4497-9a69-09fe852f64ab",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    },
+    {
+      "tree": "9f8e9538-c0a8-4c65-80e8-a85dd57f63d3",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    },
+    {
+      "tree": "5bab97b7-0833-4bcb-96d4-7a77982acef0",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    },
+    {
+      "tree": "842fec8d-e5bb-4303-9e29-cc61b802333e",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    },
+    {
+      "tree": "8baf37d6-26cf-44b4-8317-5f83918d82fe",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    },
+    {
+      "tree": "a89d4075-749b-4652-ba60-697ab756d473",
+      "groups": [],
+      "source": 0,
+      "renderGroups": 0
+    }
+  ],
+  "note": "CPU scene-graph counts, not camera-visible draw calls or GPU cost; original factories, update time6s.",
+  "swamp": {
+    "name": "moebius-swamp-zone",
+    "meshes": 2962,
+    "visible": 903,
+    "outline": 193,
+    "tris": 1183660,
+    "outlineTris": 216466,
+    "topMaterialCounts": [
+      28,
+      21,
+      20,
+      18,
+      17,
+      16,
+      13,
+      12,
+      10,
+      10,
+      10,
+      9
+    ],
+    "topGeometryCounts": [
+      9,
+      5,
+      5,
+      5,
+      5,
+      4,
+      4,
+      2,
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  "meshNames": [
+    {
+      "name": "(unnamed)",
+      "count": 550,
+      "tris": 242356
+    },
+    {
+      "name": "swamp-fine-animal-ink",
+      "count": 54,
+      "tris": 193804
+    },
+    {
+      "name": "swamp-floating-leaf",
+      "count": 18,
+      "tris": 180
+    },
+    {
+      "name": "swamp-glow-flower-petal-batch",
+      "count": 16,
+      "tris": 160
+    },
+    {
+      "name": "swamp-glow-flower-ink-batch",
+      "count": 16,
+      "tris": 160
+    },
+    {
+      "name": "greg-coral-trunk-render-batch",
+      "count": 11,
+      "tris": 49232
+    },
+    {
+      "name": "greg-coral-fan-crown",
+      "count": 10,
+      "tris": 306504
+    },
+    {
+      "name": "swamp-boy-head-hair",
+      "count": 10,
+      "tris": 11200
+    },
+    {
+      "name": "flower-paddle-shaft",
+      "count": 10,
+      "tris": 320
+    },
+    {
+      "name": "flower-paddle-blade",
+      "count": 10,
+      "tris": 1400
+    },
+    {
+      "name": "swamp-monkey-arm",
+      "count": 10,
+      "tris": 9980
+    },
+    {
+      "name": "greg-rim-root-render-batch",
+      "count": 9,
+      "tris": 10368
+    },
+    {
+      "name": "swamp-small-fish-anatomy",
+      "count": 9,
+      "tris": 39424
+    },
+    {
+      "name": "swamp-boy-body-limbs",
+      "count": 9,
+      "tris": 8640
+    },
+    {
+      "name": "swamp-boy-play-arm",
+      "count": 9,
+      "tris": 2160
+    },
+    {
+      "name": "v2-entrance-tread",
+      "count": 8,
+      "tris": 672
+    },
+    {
+      "name": "swamp-bird-wing",
+      "count": 8,
+      "tris": 5632
+    },
+    {
+      "name": "v2-floor-root",
+      "count": 6,
+      "tris": 2880
+    },
+    {
+      "name": "swamp-giant-flower-petal-batch",
+      "count": 5,
+      "tris": 4200
+    },
+    {
+      "name": "swamp-flower-boat-cup",
+      "count": 5,
+      "tris": 15360
+    },
+    {
+      "name": "swamp-stamen-glow-pool",
+      "count": 5,
+      "tris": 140
+    },
+    {
+      "name": "swamp-monkey-anatomy",
+      "count": 5,
+      "tris": 48920
+    },
+    {
+      "name": "swamp-bird-anatomy",
+      "count": 4,
+      "tris": 9856
+    },
+    {
+      "name": "swamp-lizard-anatomy",
+      "count": 4,
+      "tris": 38144
+    },
+    {
+      "name": "swamp-moon-shaft",
+      "count": 3,
+      "tris": 48
+    },
+    {
+      "name": "swamp-beluga-continuous-body",
+      "count": 3,
+      "tris": 9408
+    },
+    {
+      "name": "swamp-beluga-rounded-fins",
+      "count": 3,
+      "tris": 4224
+    },
+    {
+      "name": "swamp-beluga-side-eyes",
+      "count": 3,
+      "tris": 2112
+    },
+    {
+      "name": "swamp-pink-clinging-anatomy",
+      "count": 3,
+      "tris": 7236
+    },
+    {
+      "name": "swamp-ribbon-fish-smooth-anatomy",
+      "count": 3,
+      "tris": 13008
+    },
+    {
+      "name": "swamp-soft-tube-worm-anatomy",
+      "count": 2,
+      "tris": 12320
+    },
+    {
+      "name": "tiger-tail-brush-tip",
+      "count": 2,
+      "tris": 88
+    },
+    {
+      "name": "swamp-sinkhole-wall",
+      "count": 1,
+      "tris": 690
+    },
+    {
+      "name": "swamp-falling-leaf",
+      "count": 1,
+      "tris": 10
+    },
+    {
+      "name": "swamp-lake-floor",
+      "count": 1,
+      "tris": 384
+    },
+    {
+      "name": "swamp-algae-curved-light",
+      "count": 1,
+      "tris": 4680
+    },
+    {
+      "name": "swamp-algae-curved-shade",
+      "count": 1,
+      "tris": 4104
+    },
+    {
+      "name": "swamp-underground-waterline",
+      "count": 1,
+      "tris": 87
+    },
+    {
+      "name": "swamp-water-volume",
+      "count": 1,
+      "tris": 11872
+    },
+    {
+      "name": "greg-lake-outline",
+      "count": 1,
+      "tris": 680
+    }
+  ],
+  "topChildren": [
+    {
+      "name": "swamp-warship-repair",
+      "meshes": 95,
+      "visible": 95,
+      "outline": 13,
+      "tris": 164776,
+      "outlineTris": 33238,
+      "topMaterialCounts": [
+        10,
+        8,
+        7,
+        6,
+        5,
+        3,
+        3,
+        2,
+        2,
+        2,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-warship-depart",
+      "meshes": 66,
+      "visible": 66,
+      "outline": 0,
+      "tris": 98204,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        10,
+        8,
+        7,
+        6,
+        5,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "moebius-cyber-ink-tiger",
+      "meshes": 72,
+      "visible": 41,
+      "outline": 0,
+      "tris": 8376,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        12,
+        9,
+        6,
+        4,
+        3,
+        2,
+        2,
+        2,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-ancient-world-tree",
+      "meshes": 188,
+      "visible": 23,
+      "outline": 7,
+      "tris": 23104,
+      "outlineTris": 728,
+      "topMaterialCounts": [
+        6,
+        6,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-opposite-drinking-stair",
+      "meshes": 18,
+      "visible": 18,
+      "outline": 0,
+      "tris": 216,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        18
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "v2-entry-stone-cheeks",
+      "meshes": 16,
+      "visible": 16,
+      "outline": 0,
+      "tris": 192,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "meshes": 15,
+      "visible": 15,
+      "outline": 1,
+      "tris": 8204,
+      "outlineTris": 20,
+      "topMaterialCounts": [
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "meshes": 15,
+      "visible": 15,
+      "outline": 1,
+      "tris": 8204,
+      "outlineTris": 20,
+      "topMaterialCounts": [
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "meshes": 15,
+      "visible": 15,
+      "outline": 1,
+      "tris": 8204,
+      "outlineTris": 20,
+      "topMaterialCounts": [
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "v2-entry-lamps",
+      "meshes": 15,
+      "visible": 15,
+      "outline": 0,
+      "tris": 2496,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        4,
+        4,
+        4,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-repair-barge",
+      "meshes": 29,
+      "visible": 13,
+      "outline": 2,
+      "tris": 228,
+      "outlineTris": 52,
+      "topMaterialCounts": [
+        5,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-giant-flower",
+      "meshes": 26,
+      "visible": 12,
+      "outline": 0,
+      "tris": 1460,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        6,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-giant-flower",
+      "meshes": 26,
+      "visible": 12,
+      "outline": 0,
+      "tris": 1460,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        6,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-giant-flower",
+      "meshes": 26,
+      "visible": 12,
+      "outline": 0,
+      "tris": 1460,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        6,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-giant-flower",
+      "meshes": 26,
+      "visible": 12,
+      "outline": 0,
+      "tris": 1460,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        6,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-giant-flower",
+      "meshes": 26,
+      "visible": 12,
+      "outline": 0,
+      "tris": 1460,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        6,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "meshes": 12,
+      "visible": 12,
+      "outline": 1,
+      "tris": 5884,
+      "outlineTris": 20,
+      "topMaterialCounts": [
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-lotus-leaf-boat",
+      "meshes": 12,
+      "visible": 12,
+      "outline": 1,
+      "tris": 5884,
+      "outlineTris": 20,
+      "topMaterialCounts": [
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-native-doll",
+      "meshes": 10,
+      "visible": 10,
+      "outline": 5,
+      "tris": 12000,
+      "outlineTris": 6000,
+      "topMaterialCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-rim-palm",
+      "meshes": 18,
+      "visible": 10,
+      "outline": 1,
+      "tris": 96,
+      "outlineTris": 24,
+      "topMaterialCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-native-doll",
+      "meshes": 12,
+      "visible": 10,
+      "outline": 0,
+      "tris": 2320,
+      "outlineTris": 0,
+      "topMaterialCounts": [
+        9,
+        1
+      ],
+      "topGeometryCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-towering-tree",
+      "meshes": 161,
+      "visible": 9,
+      "outline": 3,
+      "tris": 37440,
+      "outlineTris": 576,
+      "topMaterialCounts": [
+        3,
+        3,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-towering-tree",
+      "meshes": 163,
+      "visible": 9,
+      "outline": 3,
+      "tris": 38856,
+      "outlineTris": 576,
+      "topMaterialCounts": [
+        3,
+        3,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-towering-tree",
+      "meshes": 175,
+      "visible": 9,
+      "outline": 3,
+      "tris": 42984,
+      "outlineTris": 576,
+      "topMaterialCounts": [
+        3,
+        3,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-towering-tree",
+      "meshes": 195,
+      "visible": 9,
+      "outline": 3,
+      "tris": 47784,
+      "outlineTris": 576,
+      "topMaterialCounts": [
+        3,
+        3,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-towering-tree",
+      "meshes": 159,
+      "visible": 9,
+      "outline": 3,
+      "tris": 36024,
+      "outlineTris": 576,
+      "topMaterialCounts": [
+        3,
+        3,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "swamp-mushroom",
+      "meshes": 8,
+      "visible": 8,
+      "outline": 4,
+      "tris": 290,
+      "outlineTris": 145,
+      "topMaterialCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "name": "swamp-mushroom",
+      "meshes": 8,
+      "visible": 8,
+      "outline": 4,
+      "tris": 290,
+      "outlineTris": 145,
+      "topMaterialCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "name": "swamp-mushroom",
+      "meshes": 8,
+      "visible": 8,
+      "outline": 4,
+      "tris": 290,
+      "outlineTris": 145,
+      "topMaterialCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "name": "swamp-mushroom",
+      "meshes": 8,
+      "visible": 8,
+      "outline": 4,
+      "tris": 290,
+      "outlineTris": 145,
+      "topMaterialCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "topGeometryCounts": [
+        2,
+        2,
+        2,
+        2
+      ]
+    }
+  ],
+  "classicBoat": {
+    "name": "fisher-boat",
+    "meshes": 70,
+    "visible": 70,
+    "outline": 0,
+    "tris": 82474,
+    "outlineTris": 0,
+    "topMaterialCounts": [
+      10,
+      8,
+      7,
+      5,
+      4,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "topGeometryCounts": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "coralBoat": {
+    "name": "fisher-boat",
+    "meshes": 66,
+    "visible": 66,
+    "outline": 0,
+    "tris": 98204,
+    "outlineTris": 0,
+    "topMaterialCounts": [
+      10,
+      8,
+      7,
+      6,
+      5,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "topGeometryCounts": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  }
+}

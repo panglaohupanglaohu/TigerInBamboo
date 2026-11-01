@@ -1,0 +1,32 @@
+{
+  "version": "bomb-audio-clear-feedback-20261015",
+  "observations": [
+    "Formal main now connects dedicated bomb latch, moving falling whistle and heavy explosion to arsenal. Existing aircraft smoke-bomb sound unchanged. Latch at release, whistle position follows projectile, idempotent stop before actual impact explosion and on disposal. Recalled future releases make no new sounds; already falling bombs continue. Muting and original SFX bus compression/spatial attenuation remain in charge; whistle max2 and blast max2, existing global budgets retained.",
+    "CPU scheduler hooks test confirms release, moving position, no premature explosion, whistle stop before blast, cancel/dispose cleanup. Actual bomber lead hit fixture still passes with14 existing fleet members.",
+    "Same actual audio synthesis module rendered in browser OfflineAudioContext to5.5s WAV and loaded in browser audio element. Peak0.71373 (below clipping), RMS0.08753; early fall RMS0.01984, late fall0.06347, blast0.22144, final tail0. No claim of subjective listening or full-game audio mix acceptance. Formal game reload pending.",
+    "User said first preview unclear. Increased latch transient and whistle tone/wind presence with mild overtone, clearer blast crack; no change to blast overall loudness. Same-source strengthened browser render: early-fallRMS0.07306 vsold0.01984; late0.16726 vsold0.06347; blast0.21747 vsold0.22144; peak0.75155 and zero PCM clipping. Actual audio player switched to playing; strengthened5.5s WAV saved. User has closed normal game tab26; only audition tab31 remains, so full-game subjective mix is not claimed and closed game was not forcibly reopened. Formal source hooks updated, scheduler regression passes."
+  ],
+  "checks": [
+    {
+      "name": "Bomb audio event synchronization and lifecycle",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Same-source offline WAV render nonzero and no clipping",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full battle subjective audio mix",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Text only no images keys or full chat",
+    "JEV not listening or visual acceptance",
+    "No external licensed samples or BGM replacement",
+    "No publication or commit"
+  ]
+}

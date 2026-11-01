@@ -1,0 +1,72 @@
+<!--
+  fusion.html — 第 7 步：地形和房子放进同一个体素场。
+
+  src/lighting.js   一个 buildVoxelField()，地形和房子都往里写
+  src/terrainmesh.js 台地：一格落差 = 软坡，两格以上 = 断崖
+  src/townmesh.js    Townscaper 的房子，整块抬到台地顶上
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fusion · 地形 + 房子共用一个体素场</title>
+<style>
+  :root {
+    --bg: #0f1417;
+    --panel: rgba(18, 24, 28, 0.86);
+    --line: rgba(255, 255, 255, 0.14);
+    --ink: #e9eeea;
+    --muted: #9db0ad;
+    --accent: #7fd1b9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font: 13px/1.55 -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; overflow: hidden; }
+  #view { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+  #view:active { cursor: grabbing; }
+  .panel { position: fixed; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 14px; backdrop-filter: blur(8px); }
+  #stats { top: 14px; left: 14px; max-width: 320px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+  #stats b { color: var(--accent); font-weight: 600; }
+  #ctl { top: 14px; right: 14px; width: 214px; }
+  #ctl h2 { margin: 0 0 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  #ctl label { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; }
+  #ctl input { accent-color: var(--accent); }
+  #ctl .hint { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; line-height: 1.6; }
+  #ctl a { color: var(--accent); text-decoration: none; }
+  #toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    padding: 7px 14px; border-radius: 999px; background: rgba(10, 14, 16, .86);
+    border: 1px solid var(--line); opacity: 0; transition: opacity .2s; }
+  #toast.show { opacity: 1; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="view"></canvas>
+
+<div id="stats" class="panel"></div>
+
+<div id="ctl" class="panel">
+  <h2>第 7 步 · 融合</h2>
+  <label><input type="checkbox" id="ao" checked> 共享体素场 AO</label>
+  <label><input type="checkbox" id="softslopes" checked> 一格落差做成软坡</label>
+  <label><input type="checkbox" id="slice"> 看体素场切片</label>
+  <label><input type="checkbox" id="houses" checked> 房子</label>
+  <label><input type="checkbox" id="terrain" checked> 地形</label>
+  <label><input type="checkbox" id="wire"> 线框</label>
+  <label><input type="checkbox" id="shadows" checked> 投影</label>
+  <div class="hint">
+    拖动 = 旋转，滚轮 = 缩放。<br>
+    关掉「共享体素场 AO」：台地不再给房子的墙压暗，这正是两块网格各烘一遍时丢掉的那部分。<br>
+    <a href="index.html">← 回到 index</a> · <a href="pipeline.html">管线</a>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module" src="src/fusion.js"></script>
+</body>
+</html>

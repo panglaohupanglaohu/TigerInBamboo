@@ -1,0 +1,173 @@
+{
+  "passed": 8,
+  "checks": [
+    "island exactly uses original elder direction",
+    "same original elder instrument and music-key references",
+    "elder collider follows original actor to castle shoulder",
+    "original source terrain positions not modified",
+    "old overlap rendering depth and physics have same owner",
+    "new actual geometry supports elder",
+    "collar source sampler does not recurse through new owner",
+    "cyan local sea uses original ocean geometry"
+  ],
+  "ensemble": {
+    "anchor": [
+      -69.7,
+      142.01,
+      27.71
+    ],
+    "elderOriginalUuid": "5ccc9f10-ce18-4a56-b5d8-431d7a2b4cf6",
+    "movedCount": 7,
+    "moved": [
+      {
+        "uuid": "5ccc9f10-ce18-4a56-b5d8-431d7a2b4cf6",
+        "name": "music-elder",
+        "originalWorld": [
+          -69.7,
+          142.01,
+          27.71
+        ],
+        "newWorld": [
+          -51.02535190262017,
+          160.1979282343879,
+          35.2247130734807
+        ],
+        "newLocal": [
+          25,
+          9.875669707246084,
+          5
+        ],
+        "originalParent": "d290e0e9-3a30-4598-a299-12808b9a4e5d",
+        "sameModel": true
+      },
+      {
+        "uuid": "0519e6a7-71d3-4c3e-bcce-78a78681e45a",
+        "name": "IcosahedronGeometry",
+        "originalWorld": [
+          -74.1516772259396,
+          141.0695293919609,
+          24.71722574197983
+        ],
+        "newWorld": [
+          -55.51704659701909,
+          159.3389910653145,
+          32.247848199262656
+        ],
+        "newLocal": [
+          20.466224242218267,
+          10.551906663188356,
+          2.0398649143951206
+        ],
+        "originalParent": "0ec83dfc-a5f4-4bfb-96db-daec89ad76d2",
+        "sameModel": true
+      },
+      {
+        "uuid": "408318fa-c5ef-49ca-8fd1-01d857b4e339",
+        "name": "IcosahedronGeometry",
+        "originalWorld": [
+          -65.85622873842883,
+          145.03389241889354,
+          25.719000572404138
+        ],
+        "newWorld": [
+          -45.069965571380834,
+          158.91951855796472,
+          32.3942178986753
+        ],
+        "newLocal": [
+          29.692770922089657,
+          5.672276268197971,
+          2.6714714390760577
+        ],
+        "originalParent": "0ec83dfc-a5f4-4bfb-96db-daec89ad76d2",
+        "sameModel": true
+      },
+      {
+        "uuid": "2434112f-700e-4178-b110-736e7b8a982b",
+        "name": "IcosahedronGeometry",
+        "originalWorld": [
+          -69.87097949509682,
+          143.778198993591,
+          19.79677752361077
+        ],
+        "newWorld": [
+          -50.438240869151514,
+          160.42155856281988,
+          27.010103386954466
+        ],
+        "newLocal": [
+          25.299022877995426,
+          8.401268529068881,
+          -3.1000770783746816
+        ],
+        "originalParent": "0ec83dfc-a5f4-4bfb-96db-daec89ad76d2",
+        "sameModel": true
+      },
+      {
+        "uuid": "f635fd55-f25a-48c6-964c-edf82f4140a6",
+        "name": "IcosahedronGeometry",
+        "originalWorld": [
+          -72.52429300600994,
+          143.22921793983713,
+          24.56467988913235
+        ],
+        "newWorld": [
+          -53.871925491570394,
+          161.46254166322575,
+          32.08825085290394
+        ],
+        "newLocal": [
+          22.86216285568253,
+          11.688124419729542,
+          1.5817718270448555
+        ],
+        "originalParent": "0ec83dfc-a5f4-4bfb-96db-daec89ad76d2",
+        "sameModel": true
+      },
+      {
+        "uuid": "b578d171-0b44-4a76-8349-2f867a3d8c4d",
+        "name": "IcosahedronGeometry",
+        "originalWorld": [
+          -69.56585221880528,
+          145.60088556707035,
+          23.581644819933974
+        ],
+        "newWorld": [
+          -50.271281970034806,
+          162.52575577105674,
+          30.84990103810571
+        ],
+        "newLocal": [
+          26.515097501384002,
+          10.851938784137014,
+          0.32263310190750527
+        ],
+        "originalParent": "0ec83dfc-a5f4-4bfb-96db-daec89ad76d2",
+        "sameModel": true
+      },
+      {
+        "uuid": "797135b7-fe4d-4be9-ae22-28494888c384",
+        "name": "BufferGeometry",
+        "originalWorld": [
+          -69.54386270423616,
+          142.22343149170425,
+          28.010722478095136
+        ],
+        "newWorld": [
+          -50.86265391852933,
+          160.3979926766041,
+          35.52282727792388
+        ],
+        "newLocal": [
+          25.24510853029641,
+          10.033400984663638,
+          5.2653509872931625
+        ],
+        "originalParent": "0ec83dfc-a5f4-4bfb-96db-daec89ad76d2",
+        "sameModel": true
+      }
+    ],
+    "originalInstrumentAndMusicKeysPreserved": true,
+    "interactionUsesOriginalWorldPosition": true
+  }
+}

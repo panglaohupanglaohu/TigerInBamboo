@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "f2b3f66ed8b0fd890735cf6153e1e8ff129bfc9c6ea59c533232d9088fb5620d",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.73,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.06,
+        "lighting": 0.03,
+        "navigation": 0.13,
+        "review": 0.78
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.71
+    }
+  },
+  "usage": {
+    "input_tokens": 968,
+    "output_tokens": 91,
+    "cost_usd": 0.000407,
+    "credits_remaining_usd": 4.938601
+  },
+  "elapsed_ms": 1671,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Final batched normal-game GPU and withdrawal observation",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

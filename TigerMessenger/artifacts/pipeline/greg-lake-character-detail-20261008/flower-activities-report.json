@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "status": "implemented; CPU passed; awaiting root GPU",
+  "scope": [
+    "swampFlowerActivities.js",
+    "moebiusSwamp.js narrow boat and activity hooks",
+    "swampFlowerBoys.test.mjs"
+  ],
+  "identities": {
+    "flowerBoats": 5,
+    "samePassengerRefs": 10,
+    "aboard": 8,
+    "shore": 1,
+    "whaleFeeder": 1,
+    "separateOriginalSwimmer": 1,
+    "paddles": 10
+  },
+  "shore": {
+    "local": [
+      -30.92478484999939,
+      40,
+      25.60625279070032
+    ],
+    "support": "9-point actual rim patch plus every low foot vertex ray checked",
+    "animation": "same seated anatomy, small playful hop up to .32 local; no invented run rig",
+    "minBodyRadius": 39.72150898678366,
+    "protectedPathRadius": [
+      35.4,
+      39.4
+    ],
+    "minFootClearance": -9.098897635340109e-09
+  },
+  "feeder": {
+    "ref": "lotuses[0].userData.feeder === passengers[1]",
+    "waterYRange": [
+      24.625,
+      24.735
+    ],
+    "action": "prone swimming beside original adult whale orbit; food arc follows real hand and mouth; original whale transforms unchanged"
+  },
+  "paddles": {
+    "perBoat": 2,
+    "meshesPerBoat": 2,
+    "grip": "real animated right palm; one-passenger boats use both actual palms",
+    "material": "muted timber #88756e"
+  },
+  "tests": {
+    "passed": 4,
+    "samples": 65,
+    "gripTolerance": 1e-06,
+    "legacySwimmerCount": 1
+  },
+  "unchanged": [
+    "original flower cup and vein geometry",
+    "boy anatomy/material and roster refs",
+    "original RNG calls/order",
+    "whale and original swimmer orbits",
+    "repair ship and animal identities"
+  ],
+  "backup": "flower-activities-before",
+  "GPURequired": [
+    "swimmer shape/whale spacing",
+    "shore vegetation occlusion",
+    "paddle trajectory and flower rim overlap"
+  ]
+}

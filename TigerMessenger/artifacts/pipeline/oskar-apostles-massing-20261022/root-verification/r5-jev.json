@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "6d53e5d003218693a6e84bf9296809e106d298df623c96fe4d8cbed685b94336",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.93
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.45,
+      "probabilities": {
+        "dressing": 0.02,
+        "geometry": 0.56,
+        "lighting": 0.04,
+        "navigation": 0.01,
+        "review": 0.37
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.9
+    }
+  },
+  "usage": {
+    "input_tokens": 749,
+    "output_tokens": 91,
+    "cost_usd": 0.000315,
+    "credits_remaining_usd": 4.933749
+  },
+  "elapsed_ms": 3832,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "final surf material in fresh formal rendering",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

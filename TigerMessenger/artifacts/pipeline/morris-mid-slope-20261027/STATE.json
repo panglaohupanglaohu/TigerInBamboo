@@ -1,0 +1,35 @@
+{
+  "status": "source-integrated-awaiting-parent-normal-game-validation",
+  "checks": 21,
+  "batch": "morris-mid-slope-20261027",
+  "scope": "only four owned source files; no main/island/cache registration changes",
+  "musicCourt": {
+    "x": 30,
+    "z": 12,
+    "radialHeight": 7.2,
+    "localFloorY": 4.0482855747050905,
+    "routeS": 161.6625813083366,
+    "entry": [
+      30,
+      15.5
+    ],
+    "approachWidth": 3.2
+  },
+  "bridgeTree": {
+    "position": [
+      -2,
+      1.5718700794902247,
+      33
+    ],
+    "height": 18.331310916468503,
+    "roadCenterDistance": 9.694853054247252
+  },
+  "normal_gpu_verified": false,
+  "complete_riding_verified": false,
+  "rail_feasibility": "measurement-only; no speculative crossing",
+  "failures_retained": [
+    "two-Dubins looping candidate rejected",
+    "court protector caused abrupt terrain side step; removed court-only protection so road shoulders blend smoothly",
+    "24percent branch slope target failed; final28percent measured explicitly and normal ride pending"
+  ]
+}

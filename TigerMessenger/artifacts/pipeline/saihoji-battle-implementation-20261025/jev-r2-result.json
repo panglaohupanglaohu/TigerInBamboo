@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "d2dccdf9c118fc0a1ae66d2b0f3e52edb0d4f033ae5022495c0edcec0e0e86a8",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.52,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.37,
+        "review": 0.62
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.61
+    }
+  },
+  "usage": {
+    "input_tokens": 794,
+    "output_tokens": 91,
+    "cost_usd": 0.000334,
+    "credits_remaining_usd": 4.918365
+  },
+  "elapsed_ms": 1877,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "fresh full first sortie after changes",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "command heavy moss deployment/recovery",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

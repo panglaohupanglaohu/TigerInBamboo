@@ -1,0 +1,55 @@
+{
+  "task": "Ship fittings and swamp foliage continuation",
+  "target": "Raked narrowing bow, integrated bulbous nose, rounded stern, dark teal topsides and red-brown lower hull, name 李/LeeBai",
+  "visual_observations": {
+    "source": "User target and before screenshot inspected; new GPU frame unavailable",
+    "completed": [
+      "Closed loft with projecting lower nose and tapered stern",
+      "Conforming bilingual hull names",
+      "Production hull vertex palette now dark teal/red-brown",
+      "Four rubbing rails, 18 portholes and 104 rivets attached to real indexed hull normals",
+      "368 existing foliage pieces now varied in scale; 461 total and 5 draws retained"
+    ],
+    "remaining": [
+      "Actual sea occlusion and camera proportions unverified",
+      "Ship equipment and lighting still need same-camera target comparison"
+    ]
+  },
+  "checks": [
+    {
+      "name": "closed hull and real quay clearance",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "retained root transforms and animation",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "fresh production GPU review",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "actual hull fittings surface clearance",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "foliage envelopes and deterministic rebuild 4/4",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Do not alter Duke or unloading anchors",
+    "No GPU pass or score claim from CPU projection"
+  ],
+  "evidence_revision": {
+    "target-v1.png": "a09e98d4fddf906a8238b3239e4f92556adb4cdae04cd1cfaf06461a5a410fab",
+    "hull-palette-cpu.json": "c98c1eeae1d4612f3995cc0fdbe9ac2aa1b732e78ace369accefbd4b5c2442a5",
+    "foliage_source_sha256": "c021f6f5da1d2ac2105c5b4d640cab50c62d739d572d2ceec1bd29bee7b306b5",
+    "fittings_source_sha256": "b6d42819408508f848a15b381c10f0e6095ca0cacbbedfe1b34beaa8f6c23d9b"
+  }
+}

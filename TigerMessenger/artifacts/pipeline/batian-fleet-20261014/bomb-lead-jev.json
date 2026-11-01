@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "4cad57155dbe786b9c6f9f1c0679c8343627ce656f3fddf6f2439e40ab2c0c2c",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.81
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.75,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0.03,
+        "navigation": 0.16,
+        "review": 0.8
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.68
+    }
+  },
+  "usage": {
+    "input_tokens": 925,
+    "output_tokens": 91,
+    "cost_usd": 0.000389,
+    "credits_remaining_usd": 4.944612
+  },
+  "elapsed_ms": 2308,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Actual Bookshop latest lead release and GPU pass",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,22 @@
+<!doctype html><html><head><script type="importmap">{"imports":{"three":"/TigerMessenger/vendor/three.module.js","three/addons/":"/TigerMessenger/vendor/jsm/"}}</script><link rel="icon" href="data:,"><style>body{margin:0}</style></head><body><script type="module">
+import * as T from 'three';
+import {createMorrisIsland} from '/TigerMessenger/src/world/morrisIsland.js?v=castle-birds-r1';
+import {createMorrisPrincessPatrol} from '/TigerMessenger/src/world/morrisPrincessPatrol.js?v=castle-patrol-check-r3';
+import {morrisViewer} from '/TigerMessenger/src/world/morrisViewer.js';
+const R=160,scene=new T.Scene();scene.background=new T.Color('#d7e8e5');
+const moon=new T.Vector3(16.049543663303087,159.9266122553161,-4.012385915825772);
+const anchor=new T.Vector3(-69.7,142.01,27.71);
+const island=createMorrisIsland({scene,R,anchor,awayFrom:{position:moon.clone(),radius:32},preservedRegions:[{name:'moon-lake-test',frame:new T.Matrix4().makeTranslation(-moon.x,-moon.y,-moon.z),radius:32}]});
+const camera=new T.PerspectiveCamera(48,1200/850,.1,1200);
+island.root.updateWorldMatrix(true,true);
+const view=island.root.localToWorld(new T.Vector3(0,150,190));
+camera.position.copy(view);camera.up.set(0,1,0).transformDirection(island.root.matrixWorld);camera.lookAt(island.root.localToWorld(new T.Vector3(0,3,0)));camera.updateMatrixWorld(true);morrisViewer.camera=camera;
+scene.add(new T.HemisphereLight(0xffffff,0x7e8d76,2));
+const sun=new T.DirectionalLight(0xffffff,3);sun.position.set(60,280,90);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-110;sun.shadow.camera.right=110;sun.shadow.camera.top=110;sun.shadow.camera.bottom=-110;sun.shadow.camera.far=500;scene.add(sun);
+const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(1200,850);renderer.shadowMap.enabled=true;morrisViewer.renderer=renderer;document.body.append(renderer.domElement);
+const player=new T.Vector3().copy(island.root.position).multiplyScalar(1.7);
+const patrol=createMorrisPrincessPatrol({island,player,isStarted:()=>true});
+island.princessPatrol=patrol;
+window.castleTest={island,patrol,scene,camera,renderer,moon,anchor,T};
+renderer.setAnimationLoop(()=>{island.update(1/60,performance.now()/1000);patrol.update(1/60,performance.now()/1000);const restore=morrisViewer.beginTownRender?.({scene,camera,renderer});try{renderer.render(scene,camera);}finally{restore?.();}});
+</script></body></html>

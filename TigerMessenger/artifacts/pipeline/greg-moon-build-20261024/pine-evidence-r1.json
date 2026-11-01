@@ -1,0 +1,27 @@
+{
+  "iteration": "greg-moon-companion-pines-r1",
+  "observations": [
+    "Author study read: Greg team TEAM and VISUAL_RULES; one prior actual runtime overview and approved Greg target v2 viewed. This is project inference, not new GDC viewing.",
+    "Before: thin curved sticks and round crown clusters blend with original forest. Target: four thick independent curved trunks, horizontal supporting arms, flattened irregular needle plates; old landmark pine untouched.",
+    "Implemented custom shallow solid crowns with yellow-green top/deep green bottom and thin back-face hull. No sphere or icosahedron crown geometry. All branchlet starts exactly share authored arm endpoint.",
+    "Actual CPU probe: four distinct trunk signatures, finite vertices, upper and underside normals, four merged material meshes each, double-dispose once per owned geometry/material.",
+    "Production camera, crescent overlap, original forest occlusion and player clearance not checked by this asset-only CPU probe. Root integration must verify."
+  ],
+  "source_sha256": "a72fe9e4859b92404de6d9d13b20259365a55db3f0ce9d160ccae82e1d89dbba",
+  "checks": [
+    {
+      "name": "four actual production factories CPU geometry and disposal",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal game visual and player route clearance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Only src/assets/moonLakePineCompanions.js owned; no old scene, original pine, lake or moon modifications.",
+    "No FPS claims; retain static batching and stable create/dispose interface."
+  ]
+}

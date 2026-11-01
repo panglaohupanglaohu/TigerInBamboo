@@ -1,0 +1,75 @@
+{
+  "at": "2026-10-08T03:23:28.552Z",
+  "topAreaWorld": 385.3854975462647,
+  "protectedRibbonAreaWorld": 225.96927212383162,
+  "remainingAreaWorld": 159.41622542243306,
+  "routeRadius": 37.4,
+  "protectedRadii": [
+    35.4,
+    39.4
+  ],
+  "tigerSample": {
+    "seconds": 6,
+    "poses": 180,
+    "radial": [
+      35.85799726124007,
+      38.52192059184446
+    ],
+    "modes": {
+      "patrol": 180
+    }
+  },
+  "weather": {
+    "hookPresent": true,
+    "replacedOpaque": true,
+    "frame": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      25,
+      0,
+      1
+    ],
+    "ys": [
+      10,
+      40
+    ],
+    "sampled": 93092,
+    "strongCoverage": 0.07608602242942465,
+    "anyCoverage": 0.11900055858720406,
+    "meanMoss": 0.054609105559213666,
+    "maxMoss": 0.78,
+    "closeCameraAngles": [
+      [
+        -2.7015926535898025,
+        38.40000000000018
+      ],
+      [
+        -2.7015926535898025,
+        38.500000000000185
+      ],
+      [
+        -2.7015926535898025,
+        38.600000000000186
+      ]
+    ],
+    "material": {
+      "coralWeathering": {
+        "version": 2,
+        "exterior": false,
+        "frame": "inner",
+        "animated": false
+      }
+    }
+  }
+}

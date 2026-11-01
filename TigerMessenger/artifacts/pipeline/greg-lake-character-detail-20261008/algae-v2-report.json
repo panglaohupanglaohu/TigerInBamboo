@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "scope": [
+    "src/world/swampAlgaeClumps.js",
+    "swampV2Art.js only standalone v2-underwater-grass block and import",
+    "tests/world/swampAlgaeClumps.test.mjs"
+  ],
+  "observation": "Actually inspected algae-rooted-v1.jpg; broad foreground spears include separate90-leaf v2-underwater-grass. Both independent layers now documented and changed.",
+  "shape": [
+    "Cubic arching midribs turn sideways and down at tip.",
+    "Broader rounded terminal shoulders; gentle transverse fold and18 longitudinal segments.",
+    "Original122 leaves use uneven coherent local flow directions derived from existing parameters without consuming RNG.",
+    "Separate90 leaves keep original base/angle/height parameters and blue-green palette; leaf tops curve rather than remaining straight cones."
+  ],
+  "randomLayer": {
+    "clumps": 26,
+    "blades": 122,
+    "originalClumpAndBladeParametersPreserved": true,
+    "exactRandomConsumption": true,
+    "actualFloorAttached": 122,
+    "drawCalls": 2,
+    "triangles": 8784
+  },
+  "separateV2Layer": {
+    "clumps": 30,
+    "blades": 90,
+    "drawCalls": 1,
+    "triangles": 6660,
+    "baseY": 10.5,
+    "actualFloorY": 10.400000023841859,
+    "attachment": "thin0.092-local petioles connect preserved original bases to real bed",
+    "maximumInnerY": 13.861444473266602,
+    "colorFamily": [
+      "#254C59",
+      "#5B978A"
+    ]
+  },
+  "CPU": "4/4 tests pass: exact26-clump random/position contract; true sphere transforms; full geometry floor clearance; actual full factory; separate30-by3 base/color/material contract.",
+  "unchanged": "Water mesh, collision/walk mesh registration, story plants, roots, animals and tracks, rest of V2 code.",
+  "GPU": {
+    "checkedBy": "parent in-app browser real factory",
+    "shaderErrors": [],
+    "screenshots": [
+      "algae-curved-v2.jpg",
+      "overview-rim-colour-algae-v2.jpg"
+    ],
+    "limitation": "Local factory only; not a new full-game performance pass. Plants remain simpler than accepted illustration."
+  },
+  "backups": [
+    "algae-v2-before",
+    "water-grass-before/original-water-grass-builder.txt"
+  ]
+}

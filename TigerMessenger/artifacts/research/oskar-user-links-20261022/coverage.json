@@ -1,0 +1,344 @@
+{
+  "date": "2026-10-22",
+  "scope": "18 user supplied posts; author text via public mirror; historical sampled media is not continuous viewing",
+  "browser_blockers": [
+    "X direct HTTP403",
+    "IAB AX and screenshot timed out twice",
+    "Native app access rejected by tool safety boundary; no bypass attempted"
+  ],
+  "primary_images_reviewed_by_root": [
+    "1764958522398146667/contact-sheet.jpg",
+    "1991101097818403263-sheet.jpg",
+    "1769641473895432220/contact-sheet.jpg"
+  ],
+  "posts": [
+    {
+      "id": "1991101097818403263",
+      "source": "https://x.com/OskSta/status/1991101097818403263",
+      "topic_summary": "岸浪循环顶点着色器，入向、出向、时间偏移",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Wed Nov 19 11:07:49 +0000 2025",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1991101097818403263",
+      "historical_visual_coverage": {
+        "method": "FFmpeg decodes entire public clip; model views 12 chronological frames and one detail. Not continuous playback viewing.",
+        "duration_seconds": 14.462560386473431,
+        "sample_count": 12,
+        "ledger": "artifacts/research/oskar-five-gifs-20261005/coverage.json"
+      }
+    },
+    {
+      "id": "1852334860137849222",
+      "source": "https://x.com/OskSta/status/1852334860137849222",
+      "topic_summary": "云树共享 impostor 表示",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Fri Nov 01 13:00:20 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1852334860137849222",
+      "historical_visual_coverage": {
+        "method": "FFmpeg decodes entire public clip; model views 12 chronological frames and one detail. Not continuous playback viewing.",
+        "duration_seconds": 7.080445917445014,
+        "sample_count": 12,
+        "ledger": "artifacts/research/oskar-five-gifs-20261005/coverage.json"
+      }
+    },
+    {
+      "id": "1849730611964973481",
+      "source": "https://x.com/OskSta/status/1849730611964973481",
+      "topic_summary": "重叠波浪独立周期",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Fri Oct 25 08:31:58 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1849730611964973481",
+      "historical_visual_coverage": {
+        "method": "FFmpeg decodes entire public clip; model views 12 chronological frames and one detail. Not continuous playback viewing.",
+        "duration_seconds": 18.06140878988561,
+        "sample_count": 12,
+        "ledger": "artifacts/research/oskar-five-gifs-20261005/coverage.json"
+      }
+    },
+    {
+      "id": "1849732997945110651",
+      "source": "https://x.com/OskSta/status/1849732997945110651",
+      "topic_summary": "岸线推出并平滑；水掩码补岩周泡沫",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Fri Oct 25 08:41:27 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1849732997945110651",
+      "historical_visual_coverage": null
+    },
+    {
+      "id": "1849427564034498642",
+      "source": "https://x.com/OskSta/status/1849427564034498642",
+      "topic_summary": "octagonal impostors 树表示",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Thu Oct 24 12:27:46 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1849427564034498642",
+      "historical_visual_coverage": {
+        "method": "FFmpeg decodes entire public clip; model views 12 chronological frames and one detail. Not continuous playback viewing.",
+        "duration_seconds": 10.021002100210021,
+        "sample_count": 12,
+        "ledger": "artifacts/research/oskar-five-gifs-20261005/coverage.json"
+      }
+    },
+    {
+      "id": "1798310423554658732",
+      "source": "https://x.com/OskSta/status/1798310423554658732",
+      "topic_summary": "无正文媒体帖，主题待画面核实",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Wed Jun 05 11:06:30 +0000 2024",
+      "body_empty": true,
+      "mirror": "https://api.fxtwitter.com/status/1798310423554658732",
+      "historical_visual_coverage": null
+    },
+    {
+      "id": "1795831296952041691",
+      "source": "https://x.com/OskSta/status/1795831296952041691",
+      "topic_summary": "沿河有向移动速度",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Wed May 29 14:55:20 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1795831296952041691",
+      "historical_visual_coverage": {
+        "duration_seconds": 17.94,
+        "sample_count": 16,
+        "sample_times_seconds": [
+          0,
+          1.11,
+          2.22,
+          3.36,
+          4.47,
+          5.58,
+          6.72,
+          7.83,
+          8.97,
+          10.08,
+          11.19,
+          12.33,
+          13.44,
+          14.55,
+          15.69,
+          16.8
+        ],
+        "ledger": "artifacts/research/oskar-add-planet-20261006/coverage.json",
+        "method": "Historical discrete samples, not continuous viewing; archive symlinks preserved"
+      }
+    },
+    {
+      "id": "1791049306213912823",
+      "source": "https://x.com/OskSta/status/1791049306213912823",
+      "topic_summary": "低分辨率 cubemap 高程顶点光照",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Thu May 16 10:13:25 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1791049306213912823",
+      "historical_visual_coverage": null
+    },
+    {
+      "id": "1786014232594485497",
+      "source": "https://x.com/OskSta/status/1786014232594485497",
+      "topic_summary": "山体法线/光照与纹理混合成本",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Thu May 02 12:45:50 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1786014232594485497",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 7.05,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1786014232594485497/samples.json"
+      }
+    },
+    {
+      "id": "1783792917183606829",
+      "source": "https://x.com/OskSta/status/1783792917183606829",
+      "topic_summary": "纹理测试，不能推导完整 shader",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Fri Apr 26 09:39:07 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1783792917183606829",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 7.26,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1783792917183606829/samples.json"
+      }
+    },
+    {
+      "id": "1781405550061687016",
+      "source": "https://x.com/OskSta/status/1781405550061687016",
+      "topic_summary": "地面投影、手工岸线UV与无缝 patch 混合",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Fri Apr 19 19:32:34 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1781405550061687016",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 15.09,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1781405550061687016/samples.json"
+      }
+    },
+    {
+      "id": "1769691526924292506",
+      "source": "https://x.com/OskSta/status/1769691526924292506",
+      "topic_summary": "河流深度优先、其余广度优先求解",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Mon Mar 18 11:45:13 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1769691526924292506",
+      "historical_visual_coverage": null
+    },
+    {
+      "id": "1769641473895432220",
+      "source": "https://x.com/OskSta/status/1769641473895432220",
+      "topic_summary": "球面模块单元尺寸/形状松弛",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Mon Mar 18 08:26:20 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1769641473895432220",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 24.78,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1769641473895432220/samples.json"
+      }
+    },
+    {
+      "id": "1768627849529893109",
+      "source": "https://x.com/OskSta/status/1768627849529893109",
+      "topic_summary": "地景上球结果",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Fri Mar 15 13:18:33 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1768627849529893109",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 6.87,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1768627849529893109/samples.json"
+      }
+    },
+    {
+      "id": "1764958522398146667",
+      "source": "https://x.com/OskSta/status/1764958522398146667",
+      "topic_summary": "二叉树矩形装箱与碰撞查询",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Tue Mar 05 10:17:57 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1764958522398146667",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 22.2,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1764958522398146667/samples.json"
+      }
+    },
+    {
+      "id": "1758250248483278925",
+      "source": "https://x.com/OskSta/status/1758250248483278925",
+      "topic_summary": "水反射结果，算法未公开",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Thu Feb 15 22:01:40 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1758250248483278925",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 15.51,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1758250248483278925/samples.json"
+      }
+    },
+    {
+      "id": "1751945034851570056",
+      "source": "https://x.com/OskSta/status/1751945034851570056",
+      "topic_summary": "受阴影遮罩的朝日反向网格亮边",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Mon Jan 29 12:27:00 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1751945034851570056",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 8.46,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1751945034851570056/samples.json"
+      }
+    },
+    {
+      "id": "1751932427272909032",
+      "source": "https://x.com/OskSta/status/1751932427272909032",
+      "topic_summary": "先预留局部网格，再强制大模块",
+      "continuous_playback_verified_this_round": false,
+      "mirror_status": 200,
+      "author_handle": "OskSta",
+      "date": "Mon Jan 29 11:36:54 +0000 2024",
+      "body_empty": false,
+      "mirror": "https://api.fxtwitter.com/status/1751932427272909032",
+      "historical_visual_coverage": {
+        "method": "AVFoundation public stream; source video not saved",
+        "duration_seconds": 18.81,
+        "sample_count": 12,
+        "ledger": "TigerMessenger/artifacts/research/oskar-series-20261006/1751932427272909032/samples.json"
+      }
+    }
+  ],
+  "summary": {
+    "author_texts_checked": 18,
+    "historically_sampled_clips": 14,
+    "continuous_viewing_completed_this_round": 0,
+    "clips_without_visual_coverage": [
+      "1849732997945110651",
+      "1798310423554658732",
+      "1791049306213912823",
+      "1769691526924292506"
+    ]
+  },
+  "followup_six_methods": {
+    "report": "../oskar-six-methods-20261022/LEARNING.md",
+    "new_visual_sources": [
+      "1769691526924292506",
+      "1849732997945110651"
+    ],
+    "total_posts_with_visual_samples": 16,
+    "still_no_visual_samples": [
+      "1798310423554658732",
+      "1791049306213912823"
+    ],
+    "continuous_playback_verified": false
+  }
+}

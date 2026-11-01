@@ -1,0 +1,88 @@
+✔ authored old city retains palette through initial and scheduled 1.5/5s palace sweeps (87.487541ms)
+✔ material, own-object and ancestor ownership protect shared vertex buffers; unprotected legacy still recolours (1.347541ms)
+✔ actual building materials use separate target albedo roles without emission, unlit or tone-mapping overrides (83.103291ms)
+✔ all legacy style entrypoints preserve target buildings and custom wall colours, including roof-name matching (48.392709ms)
+✔ 15 stable old-city entities hide only residential groups and restore at the identical transform (54.77ms)
+✔ wall colour is clone-on-write and never mutates or disposes shared source materials (35.013792ms)
+✔ snapshot import validates the complete schema, identity set and versions before atomic application (27.434042ms)
+✔ injected constraint rejection keeps scene, colour ownership, snapshots and history unchanged (27.958416ms)
+✔ nearest visible protected face blocks editing; hidden ancestors and unrendered planes are ignored (27.070125ms)
+✔ real ray picking maps a roof to its house and does not bypass a protected mesh (32.537958ms)
+✔ history is capped at 100, disposed editor restores source state and rejects edits (24.750125ms)
+{
+  expandedSupportProbes: 891,
+  maxGap: 0.14050525709754602,
+  entry: [ 0, 1.2, 7.370000000000001 ],
+  approach: [ 0, 0.3, 14.75 ]
+}
+{
+  expandedJointStart: [ 61.91750734673737, 12.3, 41.46025243617793 ],
+  maxTransverse: 0.15909051895147286,
+  maxVertical: 0.10000002384184903
+}
+✔ new-city main has bounded finite real geometry and target dome height (33.631958ms)
+✔ actual entry and rear arch leave a traversable nave, including near its sides (16.559375ms)
+✔ every owned geometry/material disposes exactly once and detaches only this asset (11.030375ms)
+✔ v2 expanded front and rear arches match masonry, voussoirs and reported opening without raising the hall (15.844458ms)
+✔ v2 keeps r38 footprints, entrance/step endpoints and dome height while using square pale-framed windows (27.374917ms)
+✔ expanded-1 cuts threshold-crossing faces, preserves step elevations and updates real ports (37.031833ms)
+✔ expanded actual footprints retain sampled frozen-r17 support (477.409125ms)
+✔ expanded landing and real four-step path pass unchanged transverse .3 and vertical .42 gates (641.601583ms)
+{"r32HouseSpacing":{"minimumAxisSeparation":0.40662079674015317,"changedHouse":"new-city-stair-house-1-1","foundationProbeCount":12,"rays":2880,"bodyCollisions":0,"publicFootprintOverlaps":0,"publicMeshes":431,"checkedTriangles":3734,"geometryCollisions":0}}
+✔ stairs supply finite detailed geometry, 36 true treads, six safe flank houses and endpoints (31.471625ms)
+✔ actual every tread and landing support the full 5.6m corridor with standing clearance (20.172334ms)
+✔ main hall entry and new staircase join without changing existing main geometry (29.26425ms)
+✔ optional terrain samples report obstruction or missing support, never alter terrain (10.085292ms)
+✔ dispose only removes owned candidate resources and is idempotent (8.855583ms)
+✔ sampled tall foundations have real recessed arches and retained load-bearing backs inside the old envelope (52.834334ms)
+✔ missing facade terrain never invents an open arcade or through passage (41.028792ms)
+✔ house relocation accepts only explicit known IDs and finite local XZ offsets (5.890417ms)
+✔ r32 six full house envelopes are separated, resampled and clear of actual surveyed stairs and bridge (525.512208ms)
+✔ v4 inherits powder-blue palette and square windows; thin cornices remain inside unchanged residential envelopes (23.137125ms)
+✔ v5 lowers flank hierarchy with true setback terraces while preserving route and house support footprints (12.54825ms)
+✔ old city finite scale and deterministic authored layout (87.552125ms)
+✔ entry is a real open arch and central stairs ascend (37.215583ms)
+✔ dispose releases owned resources once (27.427917ms)
+✔ second version keeps bell chamber and supporting arcade genuinely open (27.789792ms)
+✔ v10 redistributes residential plots while retaining r30 public routes, palette and 33m tower (33.231333ms)
+✔ each house owns bevel walls, roof and two batched window materials under a stable ID (24.933208ms)
+✔ side and rear windows are mounted on their owner and absent within adjacent house envelopes (26.419583ms)
+✔ four real stepped roof roles stay inside their original plots and expose open deck beside smaller upper volumes (27.360708ms)
+✔ all additional upper walls recolour and undo with their residential entity while deck and support stay original (30.765ms)
+✔ v9 twelve adjacent inset residential bodies have real connected through arcades and supported open front galleries (31.269958ms)
+✔ v10 keeps sparse square windows, protected public geometry and authored roof roles (31.118208ms)
+✔ v9 actual same-level neighbours share open side arches, continuous floors and solid supporting jambs (42.199042ms)
+✔ v10 retains protected v8 public meshes and all 20 tower windows while residential plinths follow moved houses (60.953125ms)
+✔ v10 actual tower-flank redistribution stays supported on existing decks and preserves public front strips and upward sightlines (24.647541ms)
+✔ default session does not solve; exposes ordinary protected picking and edits without rebuilding (58.3695ms)
+✔ roof rebuild preserves entity colours, deleted IDs and ordinary undo history; roof undo/redo is separate (120.152208ms)
+✔ constraint contradictions and malformed solves have zero factory/scene changes (24.479417ms)
+✔ staged geometry is validated even with unchanged entity snapshot, and failed validation releases only staged resources (73.759208ms)
+✔ factory and commit failures restore old scene/editor and preserve both histories atomically (313.363958ms)
+✔ full JSON roundtrip preserves roof roles, occupancy, colours and replayable solver provenance (72.117708ms)
+✔ invalid snapshots are completely rejected before asset creation: missing maps, versions, roles, IDs and fabricated provenance (34.611041ms)
+✔ rejected full import and roof undo do not consume history or alter active entity colours (91.0145ms)
+✔ close owns current asset exactly once; replaced source materials and editor clones are each released once (32.813833ms)
+✔ entity history remains capped at 100 and async callback contracts are rejected (31.955ms)
+✔ occupancy plus WFC solve commits atomically, clearing only the deleted plot lock and recording separate histories (47.008458ms)
+✔ atomic occupancy/roof failures preserve scene, colour, locks and both histories (61.694084ms)
+✔ iframe/VM plain records work for edits, roof roles, locks and full snapshots; class and custom prototypes fail (93.723916ms)
+✔ actual 15 plots yield geometric same-street and slope neighbors, not all-to-all adjacency (2.134417ms)
+✔ hard roof observation propagates before collapse; double setbacks remain compatible (2.577834ms)
+✔ contradiction is atomic, retains lock identities, returns no partial solution and never falls back (2.318083ms)
+✔ fixed seed, stable IDs and input ordering reproduce exactly and successful solutions obey every active edge (1.359916ms)
+✔ deletion removes active constraints but retains stable null slots and hidden geometry roles for saving (0.833541ms)
+✔ real triangular plot constraints exercise shared-core finite backtracking, not relabeling (0.378417ms)
+✔ undersized footprints ban unbuildable variants and an empty geometric domain fails explicitly (0.982041ms)
+✔ invalid input and unknown IDs are rejected without changing factory or invoking a fallback (0.392792ms)
+✔ all 75 ID-role combinations generate actual bounded roofs, preserve public geometry and match geometric domain dimensions (202.043083ms)
+✔ bounded backtracking exhaustion returns failure with no fallback or partial assignments (0.662416ms)
+✔ v10 factory preserves r33 stable IDs, authored roof roles and protected routes while exposing the approved new plot layout (36.501334ms)
+ℹ tests 68
+ℹ suites 0
+ℹ pass 68
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1327.976375

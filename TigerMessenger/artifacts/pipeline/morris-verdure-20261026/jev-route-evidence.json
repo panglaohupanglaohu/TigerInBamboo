@@ -1,0 +1,33 @@
+{
+  "task": "Morris mountain approach and height hierarchy",
+  "evidence_revision": "route-r20-r21-component-review",
+  "observations": [
+    "Root actually viewed current component: yellow road is now a real two-dimensional switchback route crossing the creek once and turning back twice toward castle; actual terrain shoulders are reshaped, not a decal on old steep land.",
+    "Measured authored route about160m long and3.2m wide; minimum curvature radius about5.6m, inner width4m; about15.2percent maximum actual radial grade. Local rail survey shows over15m center clearance; current runtime survey still required.",
+    "New original clustered flower/leaves, detailed castle, taller branched trees and small wildlife remain. Front plane tree relocated to left meadow to preserve the bridge view. Existing musician/pine ensemble preserved; final return avoids original pine roots.",
+    "Bridge side camera is still partly occluded by steep bank. R22 widens the actual creek pool beneath bridge, preserves the water bed and moves the inspection camera closer along the creek. This remains component evidence, not normal game acceptance."
+  ],
+  "checks": [
+    {
+      "name": "actual component route and bridge inspection",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "12 existing geometry checks after route integration",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "final normal game GPU and bridge-side review",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "four height layers and coherent tree/animal scale",
+    "do not add a princess or unrelated character",
+    "JEV text triage does not inspect images"
+  ],
+  "next_revision": "route-r22"
+}

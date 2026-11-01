@@ -1,0 +1,42 @@
+{
+  "task": "Citadel next iteration triage after actual GPU",
+  "target": "Continuous exterior-cliff lower railway and upper walkway; compact tower-centered old city and blue dome new city",
+  "visual_observations": {
+    "source": "Root and independent advisor viewed actual screenshot at12:31; Jev text only",
+    "image_sha256": "352469a4e3438e6c5070fac2c32b5660c04ca675700707313b3af9edee841cde",
+    "completed": [
+      "Shared upper walkway/lower railway actual GPU visible",
+      "Independent temporary bridge removed"
+    ],
+    "remaining": [
+      "Gallery to land gaps especially new shore",
+      "Old-city street groups too sparse",
+      "New-city rear shoulder too wide",
+      "Visible highland-gate landmark dominates left frame; preserve its identity",
+      "GPU frame had roughly10000drawcalls; runtime lookup caching not yet benchmarked"
+    ]
+  },
+  "checks": [
+    {
+      "name": "finite cargo and upper-walk geometry checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "continuous actual player/train/boat/editor",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "visual90",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No score inflation",
+    "Current visible-frame independent score57; full scene unknown",
+    "No hiding existing highland gate to game score",
+    "Small infill and terrain contact candidates require actualGPU"
+  ]
+}

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Atlas Order (shelf vs best-short-side vs radial)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #2b3f49; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 12px; color: #e6eff3;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 12px; color: #dbe8ee;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">同一批 sprite，三种摆放：货架 / best-short-side（我们的）/ 径向（原文，大块居中）</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * atlasorder.html — 验证 `spritepack.js` 的三种摆放策略。
+ *
+ * 原文（1478114309263839244）只说了一句审美：「喜欢**径向**而不是方向性排序，
+ * 中间那一大块连贯的东西会很好看」。所以这里要能量出两件事：
+ *   ① 大块离中心多远（bigOffset，越小越"居中"）
+ *   ② 填充率掉了多少（换成居中要付的代价）
+ */
+import { SpriteAtlas, radialPack } from '../engine/spritepack.js';
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const hud = document.getElementById('hud');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+
+const SIZE = 256;
+
+// 同一批精灵：模拟图集里的树/云/灌木/碎屑（大中小混杂）
+let seed = 20260101;
+const rnd = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+// 尺寸要挑到"总面积 ≈ 图集的 55%"：太高三种都放不下，比较就失真了。
+// 踩过的坑：第一版 46 块、总面积 114% → SpriteAtlas 自动扩容到 512²，
+// 但指标仍按 256² 算，填充率算出 1.142（>1）这种没法看的数。
+const items = [];
+for (let i = 0; i < 24; i++) {
+  const k = i < 2 ? 80 : i < 8 ? 48 : i < 20 ? 24 : 16;
+  items.push({ key: 'a' + i, w: Math.round(k * (0.8 + rnd() * 0.4)), h: Math.round(k * (0.8 + rnd() * 0.4)) });
+}
+const area = items.reduce((a, b) => a + b.w * b.h, 0);
+
+// ① 货架式：按顺序一行行填
+function shelfPack(list, size) {
+  const out = [];
+  let x = 0, y = 0, rowH = 0;
+  for (const it of list) {
+    if (x + it.w + 2 > size) { x = 0; y += rowH + 2; rowH = 0; }
+    if (y + it.h + 2 > size) break;
+    out.push({ ...it, x, y });
+    x += it.w + 2;
+    rowH = Math.max(rowH, it.h + 2);
+  }
+  return out;
+}
+
+// ② best-short-side：直接用引擎里的 SpriteAtlas
+function treePack(list, size) {
+  const atlas = new SpriteAtlas(size);
+  for (const it of list) atlas.insert(it.key, it.w, it.h, 1);
+  // 图集可能会自动扩容；指标必须按**实际**尺寸算，否则填充率会大于 1
+  treePack.size = atlas.size;
+  return list.map((it) => {
+    const s = atlas.slots.get(it.key);
+    return s ? { ...it, x: s.x, y: s.y } : null;
+  }).filter(Boolean);
+}
+
+const shelf = shelfPack(items, SIZE);
+const tree = treePack(items, SIZE);
+const radial = radialPack(items, { size: SIZE, gap: 1 });
+
+function metrics(list, name) {
+  const used = list.reduce((a, b) => a + b.w * b.h, 0);
+  const big = [...list].sort((a, b) => b.w * b.h - a.w * a.h)[0];
+  const off = big ? Math.hypot(big.x + big.w / 2 - SIZE / 2, big.y + big.h / 2 - SIZE / 2) : 0;
+  return {
+    name,
+    count: list.length,
+    occupancy: +(used / (SIZE * SIZE)).toFixed(3),
+    bigOffset: +off.toFixed(1),
+    bigSize: big ? big.w + '×' + big.h : '-',
+  };
+}
+
+const rows = [
+  { name: '货架', data: shelf, tint: '#d8c98a' },
+  { name: 'best-short-side', data: tree, tint: '#9fc6d8' },
+  { name: '径向', data: radial.placed, tint: '#c9a8d8' },
+].map((r) => ({ ...r, m: metrics(r.data, r.name) }));
+
+function resize() {
+  cv.width = innerWidth * dpr;
+  cv.height = innerHeight * dpr;
+  cv.style.width = innerWidth + 'px';
+  cv.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+addEventListener('resize', resize);
+
+function draw() {
+  const W = innerWidth, H = innerHeight;
+  ctx.fillStyle = '#2b3f49';
+  ctx.fillRect(0, 0, W, H);
+
+  const scale = Math.min((W / 3 - 60) / SIZE, (H - 150) / SIZE);
+  const gap = (W - scale * SIZE * 3) / 4;
+
+  rows.forEach((row, i) => {
+    const ox = gap + i * (scale * SIZE + gap);
+    const oy = 70;
+
+    // 图集底板
+    ctx.fillStyle = '#1f2f37';
+    ctx.fillRect(ox, oy, scale * SIZE, scale * SIZE);
+    ctx.strokeStyle = 'rgba(220,235,240,0.25)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(ox + 0.5, oy + 0.5, scale * SIZE - 1, scale * SIZE - 1);
+
+    // 中心十字（看"大块是否居中"）
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.beginPath();
+    ctx.moveTo(ox + scale * SIZE / 2, oy);
+    ctx.lineTo(ox + scale * SIZE / 2, oy + scale * SIZE);
+    ctx.moveTo(ox, oy + scale * SIZE / 2);
+    ctx.lineTo(ox + scale * SIZE, oy + scale * SIZE / 2);
+    ctx.stroke();
+
+    const bigKey = [...row.data].sort((a, b) => b.w * b.h - a.w * a.h)[0];
+    for (const it of row.data) {
+      const isBig = it === bigKey;
+      ctx.fillStyle = isBig ? '#f2d95e' : row.tint;
+      ctx.globalAlpha = isBig ? 0.95 : 0.55;
+      ctx.fillRect(ox + it.x * scale, oy + it.y * scale, it.w * scale - 1, it.h * scale - 1);
+      ctx.globalAlpha = 1;
+    }
+
+    // 标题 + 指标
+    ctx.fillStyle = '#eef4f7';
+    ctx.font = '600 15px -apple-system, "PingFang SC", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(row.name, ox + scale * SIZE / 2, oy - 18);
+
+    const m = row.m;
+    ctx.font = '400 12px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = '#cfdcd2';
+    const lines = [
+      `放进 ${m.count}/${items.length}  填充 ${(m.occupancy * 100).toFixed(1)}%`,
+      `最大块 ${m.bigSize}  离中心 ${m.bigOffset}px`,
+    ];
+    lines.forEach((t, k) => ctx.fillText(t, ox + scale * SIZE / 2, oy + scale * SIZE + 22 + k * 16));
+  });
+
+  hud.textContent =
+    `SIZE ${SIZE}²   共 ${items.length} 块   总面积 ${area}px²（理论上限 ${((area / (SIZE * SIZE)) * 100).toFixed(1)}%）\n` +
+    rows.map((r) => `${r.name.padEnd(15)} 填充 ${(r.m.occupancy * 100).toFixed(1)}%   大块离中心 ${r.m.bigOffset}px`).join('\n');
+}
+
+resize();
+
+window.__worldStats = { kind: 'atlasorder' };
+window.__atlasorder = {
+  get rows() { return rows.map((r) => r.m); },
+  get all() { return rows.map((r) => ({ ...r.m, name: r.name })); },
+};
+</script>
+</body>
+</html>

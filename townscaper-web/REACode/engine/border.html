@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Engine — Bad North 边境线（三角化 + 沿边行走）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #b9c3c4; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 16px; top: 14px; z-index: 5;
+    font: 12px/1.65 ui-monospace, Menlo, monospace; color: #2c3a3d;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5); white-space: pre;
+  }
+  #hint {
+    position: fixed; left: 16px; bottom: 14px; z-index: 5;
+    font: 11px/1.5 ui-monospace, Menlo, monospace; color: rgba(44,58,61,.7);
+  }
+</style>
+</head>
+<body>
+<div id="hud"></div>
+<div id="hint">T 显隐三角网 · L 直线对照 · ←/→ 换 seed · ↑/↓ 节点密度</div>
+<canvas id="cv"></canvas>
+
+<script type="module">
+import { buildBorder } from '../src/borderpath.js';
+
+/**
+ * border.html — 复现 x.com/OskSta/status/1097458505315946496（2019-02-18）：
+ *
+ *   "The Viking frontier in @BadNorthGame is dripping with funky math:
+ *    1. Triangulate (with some added padding) 2. Walk on triangle edges along..."
+ *
+ * 画面（18 帧）：一层完整的 Delaunay 三角网 → 边一条条被抽掉 → 只剩一条深色线在网里
+ * 蜿蜒绕行 → 分出岔路 → 接上地名词条。留意线是**贴着徽记外侧**过去的，不穿圆心。
+ *
+ * 实现要点见 src/borderpath.js：不是在节点图上跑 A*（那会连成一串直线段），
+ * 而是在"边图"上跑 —— 每条三角边是一个节点，同一三角形内的两条边互为邻居。
+ */
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const hud = document.getElementById('hud');
+
+let W = 0, H = 0, dpr = 1;
+function resize() {
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+addEventListener('resize', resize);
+
+let seed = 7;
+let showTris = true;
+let showStraight = true;
+let density = 1;
+let data = null;
+let revealAt = 0;      // 路径"长出来"的进度（0..1）
+
+const PAL = {
+  bg: '#b9c3c4',
+  tri: 'rgba(54,74,78,0.20)',
+  edgeHot: 'rgba(34,52,56,0.85)',
+  node: '#c9d3d2',
+  nodeRim: '#4d6b6e',
+  path: '#12333a',
+  pathGlow: 'rgba(18,51,58,0.16)',
+  straight: 'rgba(178,84,72,0.75)',
+};
+
+function rebuild() {
+  data = buildBorder({ w: 16, h: 10 * density, seed, padding: 1.0 });
+  revealAt = 0;
+  animate();
+}
+
+function animate() {
+  revealAt = Math.min(1, revealAt + 0.085);
+  draw();
+  if (revealAt < 1) requestAnimationFrame(animate);
+}
+
+function draw() {
+  if (!data) return;
+  ctx.fillStyle = PAL.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // 世界 → 屏幕：等比铺满，留 8% 边距
+  const pad = Math.min(W, H) * 0.08;
+  const sx = (W - pad * 2) / 16;
+  const sy = (H - pad * 2) / (10 * density);
+  const k = Math.min(sx, sy);
+  const ox = (W - 16 * k) / 2;
+  const oy = (H - 10 * density * k) / 2;
+  const X = (x) => ox + x * k;
+  const Y = (y) => oy + y * k;
+
+  const { pts, tris, nodes, route } = data;
+
+  // --- 三角网 ---
+  if (showTris) {
+    ctx.strokeStyle = PAL.tri;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (const t of tris) {
+      ctx.moveTo(X(pts[t[0]][0]), Y(pts[t[0]][1]));
+      ctx.lineTo(X(pts[t[1]][0]), Y(pts[t[1]][1]));
+      ctx.lineTo(X(pts[t[2]][0]), Y(pts[t[2]][1]));
+      ctx.closePath();
+    }
+    ctx.stroke();
+  }
+
+  // --- 直线对照 ---
+  if (showStraight && route.path.length) {
+    const a = route.path[0], b = route.path[route.path.length - 1];
+    ctx.save();
+    ctx.setLineDash([7, 6]);
+    ctx.strokeStyle = PAL.straight;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(X(a[0]), Y(a[1])); ctx.lineTo(X(b[0]), Y(b[1])); ctx.stroke();
+    ctx.restore();
+  }
+
+  // --- 节点徽记 ---
+  for (const n of nodes) {
+    ctx.beginPath();
+    ctx.arc(X(n.x), Y(n.y), n.r * k * 0.82, 0, Math.PI * 2);
+    ctx.fillStyle = PAL.node;
+    ctx.fill();
+    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = PAL.nodeRim;
+    ctx.stroke();
+    // 内圈小点：参考帧里徽记是"盾牌 + 图案"，这里用两个同心圆近似
+    ctx.beginPath();
+    ctx.arc(X(n.x), Y(n.y), n.r * k * 0.34, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(77,107,110,0.55)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // --- 边境线（按 revealAt 逐段长出） ---
+  if (route.path.length > 1) {
+    const n = route.path.length;
+    const upto = Math.max(2, Math.ceil(n * revealAt));
+    ctx.beginPath();
+    ctx.moveTo(X(route.path[0][0]), Y(route.path[0][1]));
+    for (let i = 1; i < upto; i++) ctx.lineTo(X(route.path[i][0]), Y(route.path[i][1]));
+    ctx.strokeStyle = PAL.pathGlow;
+    ctx.lineWidth = 7; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.strokeStyle = PAL.path;
+    ctx.lineWidth = 2.4;
+    ctx.stroke();
+
+    // 端点
+    for (const p of [route.path[0], route.path[upto - 1]]) {
+      ctx.beginPath();
+      ctx.arc(X(p[0]), Y(p[1]), 3.4, 0, Math.PI * 2);
+      ctx.fillStyle = PAL.path; ctx.fill();
+    }
+  }
+
+  const s = data.stats;
+  hud.textContent =
+    'Bad North 边境线 · seed ' + seed + ' · 节点密度 ×' + density.toFixed(1) + '\n' +
+    '节点 ' + s.nodes + '   三角 ' + s.tris + '   边节点 ' + s.edgeNodes + '\n' +
+    '路径 ' + route.path.length + ' 段   绕行比 ' + s.detour + '   转折 ' + s.turns + '\n' +
+    '最小余量 ' + s.clearance + '（>0 = 没压进任何徽记）';
+  window.__border = { stats: s, route, nodes, tris, pts };
+}
+
+addEventListener('keydown', (e) => {
+  if (e.key === 't' || e.key === 'T') { showTris = !showTris; draw(); }
+  if (e.key === 'l' || e.key === 'L') { showStraight = !showStraight; draw(); }
+  if (e.key === 'ArrowRight') { seed = (seed * 7919 + 13) % 100000; rebuild(); }
+  if (e.key === 'ArrowLeft') { seed = (seed * 31 + 7) % 100000; rebuild(); }
+  if (e.key === 'ArrowUp') { density = Math.min(2, density + 0.25); rebuild(); }
+  if (e.key === 'ArrowDown') { density = Math.max(0.5, density - 0.25); rebuild(); }
+});
+
+window.__worldStats = { kind: 'border' };
+resize();
+rebuild();
+console.log('[border] ready');
+</script>
+</body>
+</html>

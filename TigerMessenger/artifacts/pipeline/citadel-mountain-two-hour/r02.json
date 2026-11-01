@@ -1,0 +1,1017 @@
+{
+  "time": "2026-09-28T02:14:32.116Z",
+  "round": "2",
+  "report": {
+    "study": {
+      "round": 2,
+      "version": 1,
+      "target": "citadel-mountain-two-hour/approved-target.png",
+      "surfaces": [
+        "citadel-oskar-grid-mountain-surface",
+        "citadel-coastal-cliff-seal",
+        "highland-ravine-wall-west",
+        "citadel-backdrop-ridge-near",
+        "citadel-backdrop-ridge-mid",
+        "new-city-rock-shoulder",
+        "old-shore-blender-rock-support"
+      ],
+      "geometryChanged": false,
+      "shader": "world-anchored blue-grey rock, mineral wash, strata and joint relief"
+    },
+    "invalid": 0,
+    "inventory": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "vertices": 10953,
+        "index": 53580,
+        "visible": true,
+        "bounds": [
+          [
+            -291.99759738076557,
+            -360.3096895076649,
+            -256.94646434684466
+          ],
+          [
+            254.25162570107804,
+            216.8125963069813,
+            328.82697276969617
+          ]
+        ],
+        "material": [
+          {
+            "name": "citadel-blue-grey-geology",
+            "color": "ffffff",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "citadel-coastal-cliff-seal",
+        "vertices": 1026,
+        "visible": true,
+        "bounds": [
+          [
+            -136.64881349787132,
+            -125.54245730919058,
+            -89.236376697471
+          ],
+          [
+            108.5432303069533,
+            111.82218047661001,
+            154.14174454872833
+          ]
+        ],
+        "material": [
+          {
+            "name": "citadel-blue-grey-geology",
+            "color": "ffffff",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-0-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -117.43937649049803,
+            10.05012748891579,
+            18.98617883560316
+          ],
+          [
+            -111.70462350950196,
+            16.08034696715671,
+            25.11782116439683
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-0-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -116.10116934642438,
+            10.727698890282594,
+            19.16982422500526
+          ],
+          [
+            -110.96283065357558,
+            16.130775565789943,
+            24.66377577499474
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-0-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -116.15626711538542,
+            11.785874709968537,
+            19.71530249022116
+          ],
+          [
+            -111.84373288461457,
+            16.320599746103962,
+            24.32629750977881
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-1-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -109.36944068629914,
+            19.418394724854235,
+            7.801409217928898
+          ],
+          [
+            -104.39096460908334,
+            24.766892286444765,
+            13.208831534327313
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-1-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -109.36474785665362,
+            20.025516587855517,
+            7.169402229573818
+          ],
+          [
+            -104.90403327247688,
+            24.8177704234435,
+            12.014452645694465
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-1-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -108.85329676589275,
+            20.974608427592184,
+            7.964144786324658
+          ],
+          [
+            -105.10948276532216,
+            24.99667858370679,
+            12.030526357942446
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-2-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -102.04883752727531,
+            9.162644655997523,
+            -4.959710670052579
+          ],
+          [
+            -96.94396545501127,
+            14.615691551448204,
+            0.5631729448494552
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-2-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -102.68826874542751,
+            9.789203084160105,
+            -4.27526174907669
+          ],
+          [
+            -98.1143033492054,
+            14.675133123285601,
+            0.6732419909436514
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-2-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -101.92493143194142,
+            10.769822476233854,
+            -4.095416864952596
+          ],
+          [
+            -98.08606764333565,
+            14.870513731211869,
+            0.05779160291966433
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-3-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -97.7581750675139,
+            17.67136274406351,
+            -18.378247750461508
+          ],
+          [
+            -92.79895308537145,
+            23.428390003877663,
+            -12.60098471492277
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-3-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -96.95751632884169,
+            18.32772815059317,
+            -17.20411760543716
+          ],
+          [
+            -92.5140534139241,
+            23.486024597347974,
+            -12.027689903555935
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-3-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -96.88323907575628,
+            19.354234129770784,
+            -17.16380962172779
+          ],
+          [
+            -93.15390415464411,
+            23.683518618170435,
+            -12.819307830021895
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-4-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            29.949887939915094,
+            -3.241420608545922,
+            -3.707632048922277
+          ],
+          [
+            34.56717452269564,
+            2.0773474333913664,
+            1.6782167597781377
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-4-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            31.041888761905348,
+            -2.784175698959643,
+            -4.007138957024153
+          ],
+          [
+            35.178974931931776,
+            1.9814380088820367,
+            0.8185789595663591
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-4-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            31.15815789957403,
+            -1.7592529110138737,
+            -3.317747050565493
+          ],
+          [
+            34.630356163089985,
+            2.240459485920382,
+            0.7324100058788615
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-5-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -14.584945217010313,
+            -3.9054555397728157,
+            -26.915983509005066
+          ],
+          [
+            6.165179355318724,
+            22.74681553573708,
+            -0.5238897540762436
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-5-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -11.53901840946989,
+            11.189324490580956,
+            -20.52577825536721
+          ],
+          [
+            -4.080361899595503,
+            19.705427448170436,
+            -11.840192618166567
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-5-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -10.604416458153437,
+            11.686983216741423,
+            -20.436796432931953
+          ],
+          [
+            -2.8935147487871133,
+            20.410029501200082,
+            -11.520225520122862
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-6-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -88.13888207592989,
+            11.781893460644083,
+            -47.306751442004604
+          ],
+          [
+            -83.21314324715317,
+            17.31143513279113,
+            -41.58774775758943
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-6-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -88.44236034641388,
+            12.419429617048959,
+            -46.17047758898253
+          ],
+          [
+            -84.0288983370397,
+            17.37389897638627,
+            -41.04625026593023
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-6-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -87.86714585478906,
+            13.417556633263697,
+            -46.16349656127239
+          ],
+          [
+            -84.16299026494407,
+            17.57577196017149,
+            -41.86280580150031
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-7-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -66.84220567442124,
+            17.313125743664838,
+            -52.98433757266277
+          ],
+          [
+            -62.05691431653375,
+            22.681952354084128,
+            -47.489150802975935
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-7-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -65.75641926237648,
+            17.9143047171664,
+            -52.29831704941952
+          ],
+          [
+            -61.46879818745489,
+            22.724773380582544,
+            -47.37462968281766
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-7-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -65.8092818281709,
+            18.852860248476954,
+            -52.05075279143229
+          ],
+          [
+            -62.21074273616673,
+            22.89021784927203,
+            -47.91837235110902
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-8-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -39.76138756824701,
+            5.3660903720333115,
+            -52.419371192145704
+          ],
+          [
+            -34.59473209652179,
+            11.048225061620142,
+            -46.58186417874237
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-8-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -39.20303763469003,
+            5.997561365053996,
+            -53.03954065644071
+          ],
+          [
+            -34.57371431231497,
+            11.088754068599455,
+            -47.809134350163
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-8-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -38.925235745465194,
+            6.982675078960993,
+            -52.186843482387985
+          ],
+          [
+            -35.03991084058243,
+            11.2556403546925,
+            -47.79703821944285
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-9-canopy-0",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -17.33443955471324,
+            -1.9438425801627086,
+            -46.09409504373938
+          ],
+          [
+            -11.5289855361668,
+            4.344962822911383,
+            -39.675150810124514
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6b6d54",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-9-canopy-1",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -18.077580794636912,
+            -1.2493247111978005,
+            -45.93076622104554
+          ],
+          [
+            -12.875893971873223,
+            4.385444953946489,
+            -40.1793921632403
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6d6f55",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-mountain-vegetation-9-canopy-2",
+        "vertices": 240,
+        "visible": true,
+        "bounds": [
+          [
+            -17.176826327540848,
+            -0.16653070418405488,
+            -45.433640353347435
+          ],
+          [
+            -12.811124916666953,
+            4.562650946932734,
+            -40.60659430191223
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6e7056",
+            "emission": 0
+          }
+        ]
+      },
+      {
+        "name": "highland-ravine-wall-west",
+        "vertices": 3846,
+        "visible": true,
+        "bounds": [
+          [
+            -146.98555670266487,
+            -86.51116541491643,
+            -52.78807124026957
+          ],
+          [
+            -26.257331311422554,
+            70.13846567736762,
+            101.669389661238
+          ]
+        ],
+        "material": [
+          {
+            "name": "citadel-blue-grey-geology",
+            "color": "ffffff",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "citadel-backdrop-ridge-near",
+        "vertices": 8640,
+        "visible": true,
+        "bounds": [
+          [
+            -3.1396263178126,
+            -146.55856860923348,
+            -111.43045466937112
+          ],
+          [
+            165.17288524367558,
+            43.4842538440892,
+            78.55355915169118
+          ]
+        ],
+        "material": [
+          {
+            "name": "citadel-blue-grey-geology",
+            "color": "ffffff",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "citadel-backdrop-ridge-mid",
+        "vertices": 9600,
+        "visible": true,
+        "bounds": [
+          [
+            -4.86328366474416,
+            -163.098624888634,
+            -119.75038071349066
+          ],
+          [
+            165.86195298880995,
+            30.376724110247345,
+            72.00479517342443
+          ]
+        ],
+        "material": [
+          {
+            "name": "citadel-blue-grey-geology",
+            "color": "ffffff",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "new-city-rock-shoulder",
+        "vertices": 8922,
+        "visible": true,
+        "bounds": [
+          [
+            -18.032373485917912,
+            -96.08440915832685,
+            20.117816224796872
+          ],
+          [
+            93.42191484582213,
+            31.120388894756864,
+            149.99084532507678
+          ]
+        ],
+        "material": [
+          {
+            "name": "citadel-blue-grey-geology",
+            "color": "758b8c",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "mountain-cypress-geometry",
+        "vertices": 2622,
+        "visible": true,
+        "bounds": [
+          [
+            -127.95220217087424,
+            -101.81856296201835,
+            -111.23829146014488
+          ],
+          [
+            98.74605974533712,
+            112.3790840878118,
+            108.6378352223519
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "676850",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "mountain-cypress-geometry",
+        "vertices": 3591,
+        "visible": true,
+        "bounds": [
+          [
+            -127.94916410883917,
+            -101.81856296201835,
+            -111.2342164673285
+          ],
+          [
+            98.74302168330203,
+            112.3708004726995,
+            108.63376022953551
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "686a52",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "mountain-cypress-geometry",
+        "vertices": 1767,
+        "visible": true,
+        "bounds": [
+          [
+            -126.59999651110319,
+            -98.76481359750208,
+            -109.29097957975922
+          ],
+          [
+            97.26869005358364,
+            111.73419588357388,
+            106.90116711027682
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6a6c53",
+            "emission": 1
+          }
+        ]
+      },
+      {
+        "name": "mountain-cypress-geometry",
+        "vertices": 1140,
+        "visible": true,
+        "bounds": [
+          [
+            -123.51325740777685,
+            -97.53036690192712,
+            -105.32362995961624
+          ],
+          [
+            93.59700908624363,
+            104.90821552711026,
+            102.83851109364943
+          ]
+        ],
+        "material": [
+          {
+            "name": "",
+            "color": "6a6c53",
+            "emission": 1
+          }
+        ]
+      }
+    ],
+    "render": {
+      "frame": 270,
+      "calls": 4187,
+      "triangles": 1611890,
+      "points": 0,
+      "lines": 1487
+    },
+    "memory": {
+      "geometries": 5240,
+      "textures": 107
+    },
+    "bay": {
+      "version": 1,
+      "separationArc": 34,
+      "sharedMeshes": 12,
+      "sharedVertices": 10422,
+      "footbridgeMeshes": 13,
+      "rotation": [
+        0.029610261964884133,
+        -0.09529860078967871,
+        0.03588947600216732,
+        0.9943607768743647
+      ],
+      "target": "citadel-bay-layout/approved-target.png"
+    }
+  },
+  "errors": [],
+  "warnings": [
+    "[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface",
+    "[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate",
+    "[citadel] alignReleasedLighting 跳过: Cannot read properties of undefined (reading 'supports')"
+  ]
+}

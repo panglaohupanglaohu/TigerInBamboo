@@ -1,0 +1,17 @@
+{"outerCliff":{"version":1,"renderDraws":2,"cracks":41,"roots":7,"depthInner":[6.355419508566815,10.597598723818523],"walkable":false,"entrance":"same angular endpoints as existing rim","triangles":2698,"topAnchorCount":193},"minRadius":38.660296115026206,"minY":29.402400970458984,"maxY":40,"topBytesUnchanged":true,"walkwayWidthWorld":2}
+✔ production outer cliff attaches to the real rim, closes its shell and preserves original walking geometry byte for byte (931.911333ms)
+✔ actual rendered wall crown produces one closed-thickness coral rim without moving actors (0.637583ms)
+✔ 720-angle patrol samples and lateral footprints have real upward rim support outside the stair opening (765.779834ms)
+✔ entrance slot and entire lake interior remain free of new rim triangles (145.401125ms)
+✔ rim support remains at the correct radius after actual spherical placement and radial sampling (6.307084ms)
+✔ toggle, invalid input and dispose do not leave geometry or alter caller footing registrations (0.866458ms)
+✔ rim colour-only change preserves all geometry, exterior geology and random state (1.729083ms)
+✔ shared top colours form smooth warm-to-cool gradients without repeated five-sector bands (1.31825ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1909.677209

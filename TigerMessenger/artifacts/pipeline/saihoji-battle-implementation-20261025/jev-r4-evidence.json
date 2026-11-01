@@ -1,0 +1,45 @@
+{
+  "task": "Saihoji R3 actual combat and R4 existing heavy adapter triage",
+  "observations": {
+    "source": "Normal default entry R3 actual DOM saved normal-r3-ongoing.json, plus current source and 14 focused tests",
+    "actual": [
+      "Original two boats physically arrived; actual Kun rise and whaleLock revealed ambush without chapter progression",
+      "Actual counterfire: five arrows, four javelins intercepted by production shield, nine contacts, no injected hit",
+      "At late sample all50 traditional soldiers dead, flagship still attacking energy63; withdrawal/treatment not verified"
+    ],
+    "source_changes": [
+      "Generalized existing command troop controller with moss site adapter; existing roster/haulers, same shields/guns/swords/medical, no new soldier or aircraft models",
+      "Moss insertion waits actual ambush AND accepted fleet contact; original ground provider owns drop height, refreshed during Kun movement",
+      "Traditional strikes now reuse original soldier health ledger; no bookshop pistol creation in moss; friendly blast not double-counted",
+      "14 focused tests pass including no insertion before actual contact and existing roster UUID preservation; new adapter GPU pending"
+    ]
+  },
+  "checks": [
+    {
+      "name": "normal actual Kun reveal and shield arrow/javelin interception",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "14 focused contact/readiness/tactics/adapter tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "actual moss heavy deployment and tree/terrain clearance",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional casualty treatment and whole withdrawal/reset",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "Keep actual first flagship strike gate",
+    "Do not run legacy aircraft owner",
+    "No fake battle stage, hits or GPU claim"
+  ],
+  "evidence_revision": "r4-candidate"
+}

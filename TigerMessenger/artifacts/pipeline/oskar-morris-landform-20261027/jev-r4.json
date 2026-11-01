@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "b2195066fe674b76b967be4c6d495bf37bdf1a3017ff866b3e54afd994d7b166",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.87
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.44,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.33,
+        "lighting": 0,
+        "navigation": 0.12,
+        "review": 0.55
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.93
+    }
+  },
+  "usage": {
+    "input_tokens": 984,
+    "output_tokens": 91,
+    "cost_usd": 0.000414,
+    "credits_remaining_usd": 4.900258
+  },
+  "elapsed_ms": 1543,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "current same-camera candidate images reviewed",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "normal complete route riding",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

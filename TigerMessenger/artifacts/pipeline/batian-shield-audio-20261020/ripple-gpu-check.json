@@ -1,0 +1,32 @@
+{
+  "recorded_at_utc": "2026-10-20T15:41:08.170427+00:00",
+  "scope": "Real WebGL2 isolated actual arsenal/ripple module, not full game",
+  "single": {
+    "intercepts": 1,
+    "audioAccepted": 1,
+    "visibleEffectObjects": 3,
+    "drawCalls": 9,
+    "observed": "Three concentric cyan rings clearly visible on curved shield at freeze .25s"
+  },
+  "afterBurst": {
+    "totalInterceptionsIncludingSingle": 13,
+    "audioAccepted": 13,
+    "audioSkipped": 0,
+    "effects": 0,
+    "voices": 0,
+    "drawCalls": 3,
+    "warningsErrors": []
+  },
+  "sourceChange": "per-ring scratch vectors remove per-vertex/frame clones; shape/material/lifetime unchanged",
+  "fullGamePreviousSortieEnd": {
+    "phase": "idle",
+    "energy": 100,
+    "soundAccepted": 39,
+    "effects": 0,
+    "pending": 0
+  },
+  "limits": [
+    "Does not certify full-game close-up wave readability or subjective sound quality",
+    "No FPS comparison"
+  ]
+}

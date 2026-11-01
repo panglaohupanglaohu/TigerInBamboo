@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';import * as T from 'three';import {installCrystalColossus} from '../../../src/assets/crystalColossus.js';import {createBatianFleet} from '../../../src/world/batianFleet.js';
+const scene=new T.Scene(),flagship=installCrystalColossus(scene),squad=new T.Group();scene.add(squad);
+const make=(kind,parent=scene,visible=true)=>{const g=new T.Group();g.userData.kind=kind;g.visible=visible;parent.add(g);return g;};
+squad.userData.members=Array.from({length:5},()=>make('moebius-aircraft',squad));const escorts=Array.from({length:3},()=>make('gate-pod-craft',squad)),scouts=Array.from({length:3},()=>make('triple-gate-scout')),transports=Array.from({length:3},()=>make('socco-craft',scene,false));
+const targets=[{id:'bookshop',dir:new T.Vector3(.7,-.4,.6).normalize(),safeRadius:179},{id:'apostles',dir:new T.Vector3(-.4,.2,.8).normalize(),safeRadius:202}];let ready=false;
+const fleet=createBatianFleet({scene,flagship,squad,escorts,scouts,transports,targets,auto:'campaign',autoReady:()=>ready});for(let i=0;i<100;i++)fleet.update(.1,i*.1);assert.equal(fleet.active,false);ready=true;
+const seen=new Set(),visited=new Set();let blocked=false,ownFire=false;
+for(let i=0;i<2500;i++){fleet.update(.1,10+i*.1);const s=fleet.snapshot();if(i%200===0)console.log(JSON.stringify({t:i*.1,phase:s.phase,run:s.bombingRun,release:s.bombRelease,dist:s.arrival?.distance,energy:s.energy}));if(s.target)visited.add(s.target);seen.add(s.phase);if(s.shield&&!blocked){const before=scouts[0].userData.robotHullHealth;const hit=fleet.receiveHit(scouts[0],100);assert(hit.intercepted);assert.equal(scouts[0].userData.robotHullHealth,before);blocked=true;}if(s.unitShots>0)ownFire=true;if(s.campaignFinished)break;}

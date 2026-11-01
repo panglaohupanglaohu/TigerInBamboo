@@ -1,0 +1,78 @@
+{
+  "version": "coral53-final-bridge-leaf-clearance",
+  "goal": "完成本轮珊瑚湖沼目标图并在原场景落地、验证通行与角色身份；不等于全游戏最终验收。",
+  "observations": {
+    "source": "主代理实际查看当前WebGL和正式完整游戏截图；Jev仅接收以下文字。",
+    "images": [
+      {
+        "file": "after-overview.jpg",
+        "sha256": "3923a9e7ec69812ed1f20dbdcfb46392bfaea49971eac06ca3c5b1f08494e4b4"
+      },
+      {
+        "file": "after-tiger-drink.jpg",
+        "sha256": "ed498d479fc4efda9d9e5ace6b765a6c58f5d4f51ecb1339f933f2aa23c9be12"
+      },
+      {
+        "file": "full-game-upper-final.jpg",
+        "sha256": "5725f1a82eb7d5f8fd5c38f3e9b93e37704dac207023e64b43e7e2c6ca2b8ffd"
+      },
+      {
+        "file": "full-game-middle-final.jpg",
+        "sha256": "cc87c7f3987d5b8235c3fb4cad1187a138492ce0f3f6864abd853d3134c4482a"
+      },
+      {
+        "file": "full-game-lower-final.jpg",
+        "sha256": "ddb37ec9e4acf602cb4a342d11f6fc2fadfaff1996e731ee1ceaeffa98e2de02"
+      }
+    ],
+    "seen": [
+      "珊瑚色原深坑、世界树水下根、三岸和原船/动物保留",
+      "每花舟两名黑色男娃；自然崖壁替代盆状悬台；维修码头靠岸固定",
+      "虎朝湖心下阶饮水，返岸巡游连续支持；真实玩家三岸站立与中岸/入口/坑缘键盘实走",
+      "正式场景23根穿湖柱改高位拱，三岸视线打开；桥面轨线保持，5片新叶转向/2片可恢复修剪",
+      "目标图比程序化实景细腻；完整场景仍约8–14FPS，无改前完整场景基准；码头未陆接主路"
+    ]
+  },
+  "checks": [
+    {
+      "name": "当轮湖沼79项回归",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "虎9003帧真实更新四脚承托独立4项",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "完整正式启动与三岸站立/入口和中岸及坑缘键盘行走",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "跨湖支撑正式测试3项与叶冠双向/闭体交叉0、精确回退",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "完整场景性能达标",
+      "required": false,
+      "passed": false
+    },
+    {
+      "name": "所有原剧情分支完整周期",
+      "required": false,
+      "passed": null
+    },
+    {
+      "name": "修船码头与三岸主路陆接",
+      "required": false,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "本轮没有授权重做全部城市；不要把概念图算游戏渲染",
+    "不把这些检查等同全场性能或整个游戏的最终验收",
+    "已完成的美术与通行保持，后续优先降低全场绘制负载并研究码头陆接"
+  ]
+}

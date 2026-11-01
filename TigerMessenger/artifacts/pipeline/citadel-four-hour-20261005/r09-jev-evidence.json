@@ -1,0 +1,37 @@
+{
+  "version": "r09-remesh",
+  "goal": "Target terrain first, cities then rail; final >95; current not accepted",
+  "visual_observations": {
+    "source": "root viewed actual GPU PNG",
+    "sha256": "cd917bb0c1b985817b6f698742c313819c4c6e5cb4bc25dc6d3f990e89c3e8db",
+    "differences": [
+      "Wide benches and steep breaks now exist, but repeated contour tiers look artificial.",
+      "Rear saddle too wide and continuous.",
+      "Old buildings buried; their relocation is next phase, not completed.",
+      "Current camera too high, image washed cyan.",
+      "Clouds remain narrow ribbons; target billows absent."
+    ]
+  },
+  "checks": [
+    {
+      "name": "actual GPU sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "terrain visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "new city and rail gameplay",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No false 95 score",
+    "Candidate opt-in only; keep original rollback",
+    "Prioritize silhouette and authored topology before automated module selection"
+  ]
+}

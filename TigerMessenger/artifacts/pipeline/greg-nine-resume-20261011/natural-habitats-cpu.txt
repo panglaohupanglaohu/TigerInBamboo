@@ -1,0 +1,298 @@
+✖ actual rendered wall crown produces one closed-thickness coral rim without moving actors (0.60325ms)
+✖ 720-angle patrol samples and lateral footprints have real upward rim support outside the stair opening (0.938ms)
+✖ entrance slot and entire lake interior remain free of new rim triangles (0.624875ms)
+✖ rim support remains at the correct radius after actual spherical placement and radial sampling (0.889959ms)
+✖ toggle, invalid input and dispose do not leave geometry or alter caller footing registrations (0.090625ms)
+file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRimColour.test.mjs:8
+const mesh=report.walkMeshes[0],p=mesh.geometry.attributes.position,c=mesh.geometry.attributes.color;
+                            ^
+
+TypeError: Cannot read properties of undefined (reading '0')
+    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRimColour.test.mjs:8:29
+
+Node.js v24.19.0
+✖ TigerMessenger/tests/world/swampCoralRimColour.test.mjs (2069.543666ms)
+understory statistics {"plants":461,"rimPlants":93,"rimAngularCoverage":0.5111111111111111,"vines":175,"counts":{"fern":91,"fan":46,"pendant":324},"triangles":50506,"drawCalls":5,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":247,"overlapping":220,"ratio":0.8906882591093117}
+irregular rim habitats {"plants":93,"clusters":7,"heroes":24,"heightRange":[0.5090022751270726,9.979990917779523]}
+vertical rim accents {"changed":68,"tall":6,"low":69,"requested":68,"unchangedForSafety":0}
+supported rim habitat stones 41
+✖ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (0.917125ms)
+✔ lush understory and rim stones use five instanced batches within triangle budget, not per-plant mesh draws (9.802875ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (13.50025ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (11.634166ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.262ms)
+✖ target understory blades keep coherent teal planes with dark roots, soft outer light and restrained midrib contrast (0.147833ms)
+✖ erosion revision preserves accepted rock-shoulder anchors; attached wall growth follows the revised surface (1.921625ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (3.37725ms)
+✔ upright rim accents grow only vertically at existing rooted points with low fern skirts retained (2.745292ms)
+✔ rim habitat stones are actual supported low shoulders outside the patrol ribbon (84.436708ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (178.0495ms)
+✔ natural pockets embed in actual clipped wall and taper back into it (30.191209ms)
+✔ soil plants root on real pocket caps; root seams stay against the wall (24.047291ms)
+✖ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (9.546ms)
+✔ protected paths, story worksite, original tree and swimming domain remain unchanged (8.935125ms)
+✔ spherical placement preserves attachment and dispose exactly restores old visuals (60.60575ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 12
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2513.033792
+
+✖ failing tests:
+
+test at TigerMessenger/tests/world/swampCoralRim.test.mjs:24:1
+✖ actual rendered wall crown produces one closed-thickness coral rim without moving actors (0.60325ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRim.test.mjs:25:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/world/swampCoralRim.test.mjs:33:1
+✖ 720-angle patrol samples and lateral footprints have real upward rim support outside the stair opening (0.938ms)
+  TypeError: Cannot read properties of undefined (reading 'length')
+      at Raycaster.intersectObjects (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/vendor/three.core.js:34709:32)
+      at localHit (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRim.test.mjs:21:14)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRim.test.mjs:38:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at TigerMessenger/tests/world/swampCoralRim.test.mjs:45:1
+✖ entrance slot and entire lake interior remain free of new rim triangles (0.624875ms)
+  TypeError: Cannot read properties of undefined (reading 'length')
+      at Raycaster.intersectObjects (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/vendor/three.core.js:34709:32)
+      at localHit (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRim.test.mjs:21:14)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRim.test.mjs:46:42)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at TigerMessenger/tests/world/swampCoralRim.test.mjs:50:1
+✖ rim support remains at the correct radius after actual spherical placement and radial sampling (0.889959ms)
+  TypeError: meshes is not iterable
+      at sampleGroundRadius (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/swampGround.js:19:24)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRim.test.mjs:56:18)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at TigerMessenger/tests/world/swampCoralRim.test.mjs:61:1
+✖ toggle, invalid input and dispose do not leave geometry or alter caller footing registrations (0.090625ms)
+  TypeError: report.dispose is not a function
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralRim.test.mjs:64:66)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at TigerMessenger/tests/world/swampCoralRimColour.test.mjs:1:1
+✖ TigerMessenger/tests/world/swampCoralRimColour.test.mjs (2069.543666ms)
+  'test failed'
+
+test at TigerMessenger/tests/world/swampCoralUnderstory.test.mjs:15:1
+✖ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (0.917125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'c48f9b' !== 'b493a2'
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralUnderstory.test.mjs:20:240)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'c48f9b',
+    expected: 'b493a2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/world/swampCoralUnderstory.test.mjs:82:1
+✖ target understory blades keep coherent teal planes with dark roots, soft outer light and restrained midrib contrast (0.147833ms)
+  AssertionError [ERR_ASSERTION]: cool green/teal range
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralUnderstory.test.mjs:88:11)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/world/swampCoralUnderstory.test.mjs:96:1
+✖ erosion revision preserves accepted rock-shoulder anchors; attached wall growth follows the revised surface (1.921625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      {
+        pocket: 0,
+        position: [
+          9.150300230371542,
+  ...
+      {
+  -     pocket: 10,
+  -     position: [
+  -       -24.28590428057182,
+  -       34.024,
+  -       -16.316843196822642
+  -     ],
+  -     scale: 1.47,
+  -     source: 'shoulder',
+  -     type: 'fan'
+  -   },
+  -   {
+  -     pocket: 10,
+  -     position: [
+  -       -24.64779180018119,
+  -       34.024,
+  -       -16.094008360041343
+  -     ],
+  -     scale: 1.79,
+  -     source: 'shoulder',
+  -     type: 'fern'
+  -   },
+  -   {
+  -     pocket: 10,
+  -     position: [
+  -       -23.930378325991757,
+  -       34.024,
+  -       -16.606540592405228
+  -     ],
+  -     scale: 1.15,
+  -     source: 'shoulder',
+  -     type: 'fern'
+  -   },
+  -   {
+  -     pocket: 10,
+  -     position: [
+  -       -25.036341978889443,
+  -       34.024,
+  -       -16.038316546957073
+  -     ],
+  -     scale: 1.47,
+  -     source: 'shoulder',
+  -     type: 'fan'
+  -   },
+  -   {
+  -     pocket: 11,
+  -     position: [
+  -       -23.360102247339945,
+  -       29.024,
+  -       -9.645804234924348
+  -     ],
+  -     scale: 1.79,
+  -     source: 'shoulder',
+  -     type: 'fan'
+  -   },
+  -   {
+  -     pocket: 11,
+  -     position: [
+  -       -23.336309481100688,
+  -       29.024,
+  -       -9.977567715451503
+  -     ],
+  -     scale: 1.15,
+  -     source: 'shoulder',
+  -     type: 'fern'
+  -   },
+  -   {
+  -     pocket: 11,
+  -     position: [
+  -       -23.4307216513808,
+  -       29.024,
+  -       -9.28524798532334
+  -     ],
+  -     scale: 1.47,
+  -     source: 'shoulder',
+  -     type: 'fern'
+  -   },
+  -   {
+  -     pocket: 11,
+  -     position: [
+  -       -23.47657058127727,
+  -       29.024,
+  -       -10.266258823326382
+  -     ],
+  -     scale: 1.79,
+  -     source: 'shoulder',
+  -     type: 'fan'
+  -   },
+  -   {
+        pocket: 12,
+        position: [
+          -9.716868661031487,
+          37.224000000000004,
+          -30.417524042542617
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampCoralUnderstory.test.mjs:100:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 0 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 0 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 0 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 0 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 1 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 1 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 1 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 1 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 3 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 3 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 3 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 3 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 4 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 4 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 4 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 4 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 5 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 5 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 5 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 5 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 6 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 6 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 6 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 6 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 7 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 7 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 7 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 7 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 8 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 8 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 8 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 8 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 12 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 12 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 12 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 12 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 13 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 13 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 13 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 13 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 15 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 15 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 15 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 15 } ],
+    expected: [ { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 0 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 0 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 0 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 0 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 1 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 1 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 1 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 1 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 3 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 3 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 3 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 3 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 4 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 4 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 4 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 4 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 5 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 5 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 5 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 5 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 6 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 6 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 6 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 6 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 7 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 7 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 7 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 7 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 8 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 8 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 8 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 8 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 10 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 10 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 10 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 10 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 11 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 11 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 11 }, { type: 'fan', position: [Array], scale: 1.79, source: 'shoulder', pocket: 11 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 12 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 12 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 12 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 12 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 13 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 13 }, { type: 'fern', position: [Array], scale: 1.15, source: 'shoulder', pocket: 13 }, { type: 'fan', position: [Array], scale: 1.47, source: 'shoulder', pocket: 13 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 15 }, { type: 'fern', position: [Array], scale: 1.47, source: 'shoulder', pocket: 15 }, { type: 'fern', position: [Array], scale: 1.79, source: 'shoulder', pocket: 15 }, { type: 'fan', position: [Array], scale: 1.15, source: 'shoulder', pocket: 15 } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/world/swampNaturalCliff.test.mjs:46:1
+✖ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (9.546ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(band.triangles>150)
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampNaturalCliff.test.mjs:50:39)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,0 +1,41 @@
+{
+  "task": "Repair freighter boiler house, hull and connected handling rails",
+  "version": "freighter-structural-repair-v2",
+  "goal": "Correct visible structural defects and provide separate new unloading concept.",
+  "observations": {
+    "author": "Codex inspected actual game renders and generated illustration separately",
+    "images": {
+      "TigerMessenger/artifacts/pipeline/bookshop-freighter-repair/after-plaza.png": "615515a8c29fa07e7c20ed3a2321312e979565a3fdf04c1b14fce85d21176be7",
+      "TigerMessenger/artifacts/pipeline/bookshop-freighter-repair/after-overview.png": "0207a9e22c70fa6ecc96710a61f06b73cfb06a855476ed2c2fb93ed619df1bf8",
+      "TigerMessenger/artifacts/pipeline/bookshop-freighter-repair/unloading-concept-v2.png": "1fec83458603072ea9f9a43bc36546d9bb8de10e12b83260f0b0843678fab62d"
+    },
+    "seen": [
+      "Engine house now visibly supports funnel, hull has deeper tapered submerged body.",
+      "Double-chord lattice span visibly joins factory runway to existing harbor crane; harbor cantilever extends over ship.",
+      "Old unanchored plaza rope removed for relocated berth.",
+      "Generated diagram adds detailed robot unloading as concept only; live game remains stylized and does not implement the full illustrated marine logistics."
+    ]
+  },
+  "checks": [
+    {
+      "name": "18441 track probes including new handling bridge and repaired ship",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No page errors and visual renders inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full manual boarding and unloading playthrough",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not confuse concept image with actual gameplay",
+    "No art acceptance score",
+    "No full autonomous marine logistics claim"
+  ]
+}

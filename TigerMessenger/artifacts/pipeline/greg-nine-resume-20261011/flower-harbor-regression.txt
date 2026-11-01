@@ -1,0 +1,34 @@
+✔ ?swampHarborDeparture=original restores the full departure galley as well (2447.778042ms)
+✔ formal-page ocean pruning detached both warships; harbor pass re-attaches A, keeps B out of render but animated (2751.701375ms)
+✔ target composition: ship, pier and both workers sit in the lower-left of the overview frame (2.28925ms)
+✔ spare sail is furled while the mast lies on deck and set once the monkeys raise it (610.953292ms)
+✔ harbor pass leaves ship, repair actors, departure and escort choreography exactly as before (4308.163291ms)
+✔ pier keeps clear of the repair ship oars, the departing ship, its escort and every lotus boat (1512.282916ms)
+✔ rim leaves fill gaps only: off the walking ribbon, out of the overview centre, through living-path clearance (8.268209ms)
+✔ ?swampHarbor=0 is a no-op and installation is idempotent (2316.880334ms)
+✔ enlarged repair monkeys keep feet on their perches and the live hoist rope / mallet contacts (3216.917916ms)
+✖ far-shore longboat stays clear of lotus boats, whales, the world tree and the bank walkway (3445.382459ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25750.591667
+
+✖ failing tests:
+
+test at TigerMessenger/tests/world/swampHarborScene.test.mjs:144:1
+✖ far-shore longboat stays clear of lotus boats, whales, the world tree and the bank walkway (3445.382459ms)
+  AssertionError [ERR_ASSERTION]: lotus -0.25731042561034556
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampHarborScene.test.mjs:161:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

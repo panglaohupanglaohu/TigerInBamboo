@@ -1,0 +1,38 @@
+✔ two connected same-side closed banks leave the loaded rail corridor open (127.849958ms)
+✔ large final-surface meadows and clustered broadleaf roots replace needle planting (67.121708ms)
+✔ missing ocean and real protected volumes reject instead of filling their gap (14.523416ms)
+✔ normal seating generator replaces old columns and vegetation and publishes final contracts (241.440084ms)
+✔ perimeter relaxation moves real shared vertices without altering levels or reversing faces (0.954042ms)
+✔ default target build: authored mesas and bay stacks replace the columns and keep rail clearance (1215.22475ms)
+✔ soft main shoulders are real inclined faces, while sea stacks retain steep mass (14.507708ms)
+✔ every clump is supported by the final rock surface, not an old shelf level (203.301084ms)
+✖ shore fronts reuse geometry and update time without disturbing the coast (0.785709ms)
+✔ cap and final shoulder row share every split rim edge with no fold-midpoint crack (0.068792ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1722.7475
+
+✖ failing tests:
+
+test at TigerMessenger/tests/world/twelveApostlesSoftShoulders.test.mjs:8:1
+✖ shore fronts reuse geometry and update time without disturbing the coast (0.785709ms)
+  AssertionError [ERR_ASSERTION]: ribbon seated on actual sphere, not tangent approximation
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/twelveApostlesSoftShoulders.test.mjs:8:523)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

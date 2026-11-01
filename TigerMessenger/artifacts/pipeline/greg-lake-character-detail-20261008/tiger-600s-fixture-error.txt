@@ -1,0 +1,12 @@
+{"progress":120,"issues":{}}
+file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/vendor/three.core.js:4098
+		this.x = v.x;
+		           ^
+
+TypeError: Cannot read properties of undefined (reading 'x')
+    at Vector3.copy (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/vendor/three.core.js:4098:14)
+    at Group.updateSwamp [as update] (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/moebiusSwamp.js:2503:12)
+    at wrap.userData.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/moebiusSwamp.js:3304:19)
+    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/greg-lake-character-detail-20261008/tiger-600s-audit.mjs:11:16
+
+Node.js v24.19.0

@@ -1,0 +1,4062 @@
+[
+  [
+    "src/main.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisPrincessPatrol.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "vendor/three.module.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "vendor/three.core.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisPrincess.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisOrganicMesh.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "vendor/jsm/utils/BufferGeometryUtils.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisPrincessAsset.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "vendor/jsm/loaders/GLTFLoader.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/morrisHorseRide.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/morrisHorseSurface.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/morrisIslandPresentation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/params.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/lightingQuality.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/worldSfx.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/sourceRangePolicy.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/morrisBirdSound.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/robotWeaponSamples.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/batianBombSound.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/bombMixFocus.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/batianShieldSound.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/sfx.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/hud.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/bgmOwnership.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/batianBgm.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/audio/morrisGardenBgm.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/vanguardTrooper.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/lowPoly.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/toon.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/battleOptimization.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/battleVanguardData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/battleSoccoData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/vanguardOptimizedRig.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianDestination.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianFleet.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiLandingHold.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianWithdrawalRules.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianBookshopAssault.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiAssaultSite.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianTrooperTactics.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianCasualtyTransport.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianSwampTreatment.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianTroopRenderBatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopTownSite.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/factoryMaterials.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihoji.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/saihojiPineOptimized.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/saihojiPineData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/geometryMerge.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planet.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/canyon.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/worldScale.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/sphereMath.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianHeavyFlight.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/batianWeaponBay.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianArsenal.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/ridgeFlowClouds.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/ridgeCloudField.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/waterV8/officialOcean.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaLevel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/batianBombTrajectory.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalCityLayout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/crystalColossus.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/batianPalette.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/startupTasks.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampPlayerSupport.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampGround.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampEdgeGuard.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampGregVisuals.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCoralCanopy.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCoralRim.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCoralOuterCliff.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCoralWeathering.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/constants.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/characterScale.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCavityClearance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampWalkwaySteer.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCameraProfile.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampOcclusionFade.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampInkPost.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampHandInk.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampWaterMarks.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampPaintWater.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moebiusSwamp.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampWarshipRowing.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampTigerEncounter.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampGroundRayIndex.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampOppositeLanding.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampFlowerActivities.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampActivitySolids.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampInternalGlow.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampV2Art.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampGlowFlowerRenderBatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampFlowerRenderBatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moebiusPalette.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampAlgaeClumps.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCoralPerches.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCoralTrunkDetail.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCoralTrunkBatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampRimRootBatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCoralUnderstory.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampGregLivingPaths.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampNaturalCliff.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampGregEcology.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampGregHabitation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/swampTigerV2.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/tigerCoralGait.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/tigerTargetV1.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/tigerFaceAnatomy.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/tigerSkinV3.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampSpatialPlan.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampWaterShore.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampFaunaGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moebiusTiger.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/moebiusTiger.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/localLightRegistry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/tigerGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/moebiusTigerGeometryData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/blenderTopology.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/tigerAnatomy.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/moebiusTigerAnatomyData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/harbor.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/warshipV6.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/warshipV6Data.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/swampRowerStyle.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelVisualTheme.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampTreeRoots.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampWaterfalls.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampRimFlowers.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampFloatingDebris.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampWhaleCalves.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampHarborScene.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampMonkeyRepair.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampTargetPass.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampAirHaze.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelRange.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/horseTerrace.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/newPlazaLayout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/layoutRelease.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-horse-terrace/masonryData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/mangaWaterfall.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/odysseyCitadel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/fixedRidgeHighlight.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/highlandLightVolumes.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldCityShelves.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/compositionFrame.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldCityOrientation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/newCityOrientation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/westCity.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/ashleyPalette.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/materialOwnership.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/compactNewCity.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-compact-foundations/compactFoundationsR05.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/holyCityStyleV2.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/historicStone.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/cityColourStudy.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/historicRelief.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/processionalParapets.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-processional-parapets/processionalParapets.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/middleTerraces.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-middle-terraces/middleTerracesR01.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/plazaEdgeGarden.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/statueGarden.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/highlandCitadelDesign.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/westMassifBlender.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-west-massif/westMassifR02.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/towerShell.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/continuousStairs.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/westCityLayout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelTown.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/moduleFamilies.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/decoratePass.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/wfcTownWiring.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/townPassagePairSelection.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/townModulePrototypes.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/socketVocabulary.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/wfcTownSelection.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/socketCompiler.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/orientationGroup.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/moduleSchema.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/compatibilityTable.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/core/bitSet.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/solver.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/core/priorityQueue.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/core/trail.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/rng.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/core/stableRng.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/waveState.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/entropy.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/propagator.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/backtracker.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/conflictExplain.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/wfcGraphAdapter.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/wfcIncremental.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/faceLayerGraph.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/townPassageGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/cornerAssembly.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/cornerGraphAdapter.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/cornerPrototypes.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/cageDeform.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/gridMigration.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/graph/irregularQuadGrid.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-plaza-edge/plazaEdgeR02.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-plaza-edge/plazaEdgeR03.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-plaza-edge/plazaEdgeR01.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/citadelGarden.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-cypress/citadelCypressData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/leafyShrub.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/upperTowerPortal.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCastleSilhouette.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/castleFacadeWfc.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/graph/rectGrid2d.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/simpleTiledModel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/claudeHouses.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/claudeCitadelHousesData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/towerInteriorStairs.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/newCityLighting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/newCityBackdrop.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/processionalDetails.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/roundTowerProfiles.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mainGate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/citadelPortalBlenderData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/plazaStatue.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/relicMetal.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-statue/citadelStatueData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/plazaPaving.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborWatergate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborStairProfile.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mergedCellPatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/citadelWatchtower.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/citadelElderTree.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/citadelTrojanHorse.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelBlueprint.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/highlandHeroClouds.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/clouds/heroCloudCatalog.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/clouds/cloudImpostorSystem.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/clouds/impostorAtlasBuilder.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/clouds/cloudImpostorMaterial.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/clouds/cloudClusterCompiler.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/highlandSlopeGrass.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/stencilWindows.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/sunRig.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelBuildingProps.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/moduleCatalog.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/propPlacement.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/snowMassif.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/harborBroadleafTree.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/citadelMoat.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/canalSystem.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelInfiltration.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/tranquilizer.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/combatEvents.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/navonaPlaza.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampCameraOcclusion.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityProductionOptions.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/citadelPlazaGuardian.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/fleetHullDamage.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/citadelGuardianStorm.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/citadelGuardianAtmosphere.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastCrossingStartupSupport.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetFinalMountainFinish.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCliffShoulderGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/newCityRidgeCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityRelease.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetSoftMountainGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainRockSurfaceFinish.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityCliffField.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityPlacement.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetWestRailHeadlandRetreat.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetShipHeadlandClip.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/guardMountainDisplacement.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetHorseSideRadialCliff.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainSurfaceIndex.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetRearShipVolumeClip.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityRuntime.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetTowerLight.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityDetailCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCliffTransitStructure.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCliffRailGallery.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetDoubleDeckBridge.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetArchitecturePalette.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityBayBridge.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityTransitLinks.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetWaterfallRailReach.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetOldCityWaterfall.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetOldCityWaterfrontStairs.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/warshipClearance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityStairRoute.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetForestCompanions.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityTerraceLinks.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityPlayerSupport.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetOldCityRoofSession.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityEntityEditor.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetOldCityRoofWfc.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/partialObservation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetBenchTurf.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetLandscapePalette.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainTurfGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetFrontBayRailCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityForestClearance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityPlaza.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetStreetDressing.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetRockAppearance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCitySunShadow.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainCloudBanksCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainCirculatingCloudBanks.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainCanopyCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCanopyAppearance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetOldCityWaterSupply.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetBridgeStairConnector.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetBayWaterAppearance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetOldCity.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetOldCityRadialLayout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityStairs.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityMain.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityEnclosure.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityLandmarkIntegration.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityPatrolSupport.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityLandmarksCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/targetCityPresentation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastCliffRemeshPreview.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/surveyEastCliffLiveVegetation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/tramSystem.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainRailCoast.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/coastalTramRoute.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/bayLayoutMath.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/citadelRailStartup.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/citadelRailSplice.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCliffTransitRelease.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCliffShoreRoute.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetUserMarkedProductionRelease.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetUserMarkedTransitRelease.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetUserMarkedTransitPlan.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetTerrainCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetNewCityRetreatField.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetOldShoreApronField.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCoastalCliffCutField.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetRailCliffField.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetTerrainHeightfield.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastGlobalCrossingRelease.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastCliffProductionRelease.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastCliffAlignmentCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetSphericalShoreArcCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastGlobalCrossingCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetGlobalRailApproachSupport.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/logistics.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/freightBoarding.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/freightInterlocking.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopLoadingYards.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopSteamClouds.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/factoryArchitecture.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopSurfaceWarp.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateSite.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/gate-of-sighs/gateSiteData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateTargetThirty.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackTerraces.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackConnectedLandscape.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/twelveApostlesTarget.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/apostleShoreFoam.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackMeadowVegetation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackLighting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackSurfaceContract.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackShoreContact.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackVegetation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackHabitat.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackCoastalTree.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackScrubGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackCoastalGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackWfc.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seaStackSurfaceSmoothing.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateSeaStacks.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/coastalTramStructures.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/freightTrain.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/freightMotion.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/freightSteam.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/hills.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/hexGrassSurface.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/lake.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moonOrb.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/moonLakeAncientPine.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moonLakeShore.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastCliffVegetationRefresh.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastCliffCompanionRefresh.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/moonLakePresentation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/citadelTargetPicking.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotGreeting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/runtime.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/deployment.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/baseDefense.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/weaponEffects.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/robotArticulation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/beetleStance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/combat.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/navigation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopPedestrians.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopMedicalTrain.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/saveState.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/handlingRig.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/effects.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/panel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bookshopRobots.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/robotSurfaceDetail.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/robotOps/renderBatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/canalJunctionTarget.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/canalJunctionEditable.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/junctionEditableCells.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/junctionScenePicking.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/canal-junction/junctionFoundationData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/canal-junction/junctionTargetData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/playerWalls.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/playerGround.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetCityPlayerNavigation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/levelNewCityPlaza.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/radialHeightIndex.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateApproachRailings.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateTarget.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/gate-of-sighs/gateTargetData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateLighting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateHeroes.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/gate-heroes/gateHeroesData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/romanWorldArmor.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/romanSoldierEquipment.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/romanEquipmentData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "vendor/jsm/misc/Timer.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/stage.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/tools/perfProbe.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/tools/sceneCensus.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/input.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/camera.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisViewer.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/devPanel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/dragPanel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/debugViewMode.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/wfcFailurePanel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/story/storyEngine.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/buildingCatalog.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bookshop.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bookshopGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/bookshopGeometryData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bookshopArt.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/bookshopArtGeometryData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bookshopPath.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/bookshopPathData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/ancient.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/hydrangea.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/fox.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/moebiusTower.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/moebiusAirship.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/moebiusAircraft.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/tram.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bubblePod.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/flock.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/airshipEscort.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/longWingGlider.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moebiusCity.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citySeaLake.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/startingCamp.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/equatorialClouds.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/abandonedGate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateDressing.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/gate-of-sighs/gateDressingData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/terrain/mossyGround.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seasonPalette.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seasonBands.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/platforms.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/sphereShell.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/terrain/sphereShell.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/messenger.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/agentMessenger.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/story/storyCatalog.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/story/rescueCampaign.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/story/rescueState.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/story/escortMotion.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/collision.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/gameplay/tigerCompanion.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/story/storyLLM.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/story/storyboardPanel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/story/storyboardLevelPanel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/mapEditor.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/citadelEditorPanel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelLevelsSave.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/citadelSceneEdit.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelEditFx.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/crystalCityEditorPanel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelTerraceBirds.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/birdVortex.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateTargetLayout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/postprocessing/miniBloom.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/sceneDistanceCulling.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/idleLightCulling.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/lightPool.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/lightingDirector.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/lightingState.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/lightingTheme.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/lightingBounce.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/presetLoader.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/lighting/localLightBridge.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/ao/voxelAoRenderer.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/ao/voxelVolume.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/debug/g8Overlay.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/debug/v6G8Layers.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/debug/v6G8Export.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/constraintSolver.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/wfc/migrateCatalog.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/presentationMesh.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/visualTheme.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/themePresets/themePresetLoader.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/resourceRegistry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/pipeline.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/topology.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/irregularSkeleton.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/terrainGenerator.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/surfaceProvider.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/terrainUvCompiler.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/moduleResolver.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/surfaceGraph.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/clusterGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/moduleFrame.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/familyBuilders.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/terrainExtract.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/environment.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/sceneLookup.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/dayNight.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopAtmosphere.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopJakubPass.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopJakubHarbor.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/dukeSteam.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bookshopWorker.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/dukeFreighter.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopJakubRelief.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/tramRide.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/airshipRide.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/airshipSummonShortcut.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/aircraftRide.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/scoutAircraftRide.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/bubblePodRide.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/boatRide.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/weather.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/seasonWeatherBias.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/elderMusic.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/foxNpc.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/touchControls.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/minimap.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/ui/shotHarnessPanel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/player.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/agentMessenger.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/humanCourier.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/courierExpedition.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/courierWasteland.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/courierExpeditionHair.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/courierExpeditionFace.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/courierMoebius.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/characters/courierBlenderV2.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/controller.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/player/animation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/quest/questSystem.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/quest/npc.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/quest/letterJournal.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/quest/memoryBridge.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/questAdapter.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/saveSchema.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/registry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/messengerIsland.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/mainIslandEdgeCleanup.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moonCoastOwnership.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisElderPlacement.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisIsland.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisLandscape.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisLandformProfile.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisRoute30.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisFlora.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisLandscapeDetails.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisCastle.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisIslandSite.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisHorse.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisHorseAsset.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisBotany.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/morrisWildlife.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/townscaperTargetMaterials.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetAtmosphere.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/bayLayout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/baySurfaceSampling.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateMeetingConnection.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopRobotBase.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopHarborRunway.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopWarmLighting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopGroundSampler.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopBasePlaza.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopBaseServices.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopAirshipDock.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopFreightSpurs.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bookshopFactoryCompounds.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/factoryTargetDetail.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/factoryTargetV21.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/bookshopFacadeDetails.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/factoryWorkcells.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopFactoryBase.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopHarborDetail.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/bookshopFreighterHull.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalCorePlacement.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/swampBridgeClearance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/highlandGate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/highlandGateWarp.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/highlandGateMerge.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/highlandStoneTexture.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/highlandGateLandscape.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/highlandGateMonument.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/highlandGateStoneFinish.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalV9.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/crystalV9CliffsData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateTargetGreenery.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalSunsetClouds.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalRenderBatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalLakeV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateMoebiusTerrain.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateMoebiusV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalV7Layout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalV7Runtime.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/crystalV7ShoresData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/clipCrystalShoreFromLake.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiShoreStonesData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/frontHarborCoast.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-front-coast/frontCoastOpenWater.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/releasedLighting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/terracePlanting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oceanSurface.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/newCityGuardPosts.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/newCityPublicSupport.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/shrubGrounding.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/rockShoulder.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-rock-shoulder/rockShoulderR02.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainStudy.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetEastCliffStartupTerrain.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainTerraceIntegration.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainLandform.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainRelease.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainRockGeometry.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainRockNormals.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainCrags.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainSummits.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainPlanting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainTurfTail.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainWoodland.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainHabitat.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainGroundcover.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainTurfInset.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainGrass.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainLightField.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/upperRockTerraces.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-upper-rock-terraces/upperRockTerracesR01.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/masterTerrainCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/masterTerrainR09.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/masterTerrainR08.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/masterTerrainR07.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/masterTerrainR06.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/masterTerrainR02.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/masterTerrainR03.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/masterTerrainR04.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/masterTerrainR05.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborSeabedCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborWaterPlan.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldCityParcelCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-master-terrain/oldCityParcelOwnershipR05.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/integratedFrontGate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-landing-support/landingSupportR03.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/clipExteriorBox.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborArchitecture.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/frontHarborFinish.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-front-harbor-finish/frontHarborFinishR06.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/frontHarborCargo.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/retainingPlanting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/plazaRetainingWall.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-plaza-retaining/plazaRetainingR02.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-plaza-retaining/plazaRetainingR04.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-plaza-retaining/plazaRetainingR01.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/mountainForest.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldShoreArcades.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-shore-arcades/shoreArcadesR01.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldCitySupport.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-old-city-support/oldCitySupportR02.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldTownPlinth.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldCityCoastalSlope.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-old-city-slope/oldCityCoastalR03.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/shorePlanting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/tierLighting.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldShoreApproach.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-old-shore/oldShoreRockR03.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/frontHarborApproach.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-watergate/watergateR01.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborCurtain.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-harbor-curtain/harborCurtainR01.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/frontStrataBlender.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-front-strata/frontStrataData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/frontCoastalSlope.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/westCoastalSlope.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/perimeterOceanAlignment.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/canopyGrounding.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/crystalMotherPort.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/crystalMotherPortData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/boardingGate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/nature.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moonLakeSceneGarden.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/moonLakeGarden.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/moonLakePineCompanions.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/mossyGround.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/messenger/loadCitadel.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborTreeRailClearance.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/oldHarborOceanGrade.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/commonSurfaceFrame.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborSeabed.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/cliffBlenderRefinement.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/models/optimized/citadel-cliff/citadelCliffData.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborOceanAlignment.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborBoardingLanding.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborReflections.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/harborStairWalls.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiPhalanx.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiFleetContact.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiBattleTrigger.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/marchSeparation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "assets/navigation/citadelRedArrival.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/warshipDockConnector.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/warshipNavigation.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/projectileOcclusion.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/newCityAssaultRoute.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/garrisonAdmission.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/warshipRouteComposition.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/terrainRayIndex.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/garrisonEvacuationRoutes.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/soccoBerth.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/soccoGroundRoutes.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/whaleMaw.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiAmbush.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/romanShipCarryPose.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/warshipCrewContinuity.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/warshipWaterRoutes.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/staticMeshRaycast.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/riderProjection.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/romanSoldierCombatPose.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/vanguardAssault.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gateHaulerCraft.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadelTacticalGraph.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/messenger/loadMoebius.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/gatePodCraft.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/messenger/loadTraffic.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/junctionHarbor.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/frontHarborBerth.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/installFrontBoarding.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/boardingCandidate.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/boardingRoute.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/canalLakeLink.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/canalBoats.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/waterV8/curvedWaterCompiler.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/waterV8/waterSemantics.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/waterV8/waterRouteFleet.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/messenger/updateIsland.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/messenger/swampBgm.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/runtime.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/planetCompilerV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/landmarkManifest.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/landformChainV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/geodesicGrid.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/graph/halfEdgeGraph.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/barycentric.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/terrainTiles.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/sphericalWfc.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/forceModulePatch.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/planetFieldComposer.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/terrainSemanticBake.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/terrainPatchBlendingV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/field/marchingCubes.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/field/marchingCubesTables.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/schema.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/surfaceProviderV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/navigationV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/terrainRoutesV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/clouds/heroCloudCompiler.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/hydrologyFieldV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/semanticFieldV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/climateFieldV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/ecologyFieldV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/fieldDependencyGraphV10.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/planetValidatorsV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/chartSeamValidator.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/globalConstraints.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/profileValidators.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/vegetationCompilerV9.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/planet/vegetationCompilerV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/combatSurfaceV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/landformGameplayContracts.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/procgen/three/bufferGeometryAdapter.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/cloudTerrainRemap.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/terrain/semanticTerrainMaterial.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/water/curvedWaterMaterial.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/render/vegetation/vegetationRuntime.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/waterV8/waterSurfaceEvents.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/snapshotCommitV8.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/messenger/bookshopLayout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/refineOceanCoast.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/coastalCliffSkirt.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/scoutDefense.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/tripleGateScout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/planetV8/tripleGateScoutPlacement.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/core/officialOceanOcclusionPruning.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/citadel/targetHillside.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/sceneApi.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/scenes/saihojiGarden.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiPineLayout.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/saihojiTargetGarden.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/assets/leviathanIsland.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ],
+  [
+    "src/world/worldStructure.js",
+    200,
+    "application/javascript; charset=utf-8"
+  ]
+]

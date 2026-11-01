@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-08",
+  "scope": [
+    "current buildSwampBird",
+    "current buildLongTailMonkey",
+    "current buildGlowLizard"
+  ],
+  "helper": "coralFineActorBatch in src/world/moebiusSwamp.js",
+  "sourceSHA256": "1b843bd49ed15cb8633719320da5c949f5b9b43e1d0e0283ee89b603cdc97d38",
+  "before": "animal-ink-before/moebiusSwamp.js",
+  "geometryContract": "animal-ink-before/geometry-contract.json",
+  "contour": {
+    "color": "#435968",
+    "screenMaxCSSPixels": 0.85,
+    "actualPartMinimumRadiusFraction": 0.06,
+    "maxLocalExpansion": 0.006,
+    "tailRule": "per-ring radius of original taper, not the whole tail bounding box",
+    "seamRule": "average normals at coincident points within each original anatomical piece",
+    "shader": "no stochastic width or discard; projected shell limited both by real part radius and CSS pixel width"
+  },
+  "preserved": [
+    "All original coloured body geometry position/normal/color attributes hash-identical",
+    "Arm and wing pivots, userdata interfaces and RNG consumption unchanged",
+    "Historical snapshots not modified",
+    "Whale and other builders continue using their original outline helper",
+    "No additional draw calls: bird 3, monkey 3, lizard 1 outline draws as before"
+  ],
+  "validation": {
+    "cpuPassed": 3,
+    "cpuFailed": 0,
+    "log": "validation-animal-ink.txt",
+    "gpu": "pending root agent refreshed portraits; CPU shader-source assertions are not GPU compilation evidence"
+  },
+  "rollback": "Restore only the three builder call sites and remove the new dedicated helper using animal-ink-before as reference. Do not overwrite concurrent changes to the entire source file."
+}

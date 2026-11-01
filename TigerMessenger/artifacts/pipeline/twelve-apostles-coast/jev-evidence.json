@@ -1,0 +1,56 @@
+{
+  "task": "Finalize authored Twelve Apostles coastal geometry at gate-left",
+  "target": "Blue-grey irregular sea stacks with directional ledges; protect Bookshop plaza and railway",
+  "visual_observations": {
+    "source": "Primary inspected final runtime overview, coast, side, plaza, rail plus isolated white model",
+    "image_sha256": "0a638a1a371dcefccf8fa2b6eb563e2c0445687c8240623f5c9c2e1b92119d2b",
+    "completed": [
+      "Three distinct silhouettes rather than equal concentric shelves",
+      "Directional ledges and sparse supported shrubs",
+      "Eight groups in approved gate-left sector",
+      "Bookshop circular plaza unobstructed"
+    ],
+    "remaining": [
+      "Stylized smooth cliff surfaces; not photorealism",
+      "Spherical radial up fans out in wide overview",
+      "Three WFC chains, authored lateral composition rather than complete Bad North engine"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Runtime and shader errors zero",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "All coordinates finite",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "46800 railway samples clear",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Whole Bookshop plaza clear",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "All shrubs rooted",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Seven mesh and regression tests passed",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "No claim all conference videos watched",
+    "No full-weather long-duration review",
+    "Rail validation is sampled, not continuous swept collision"
+  ]
+}

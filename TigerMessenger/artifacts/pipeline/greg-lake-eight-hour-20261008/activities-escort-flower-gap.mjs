@@ -1,0 +1,5 @@
+import * as T from 'three';
+const ctx=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}}),measureText:()=>({width:10})},{get:(o,k)=>o[k]??(()=>{})});const el=()=>({style:{},addEventListener(){},removeEventListener(){},getContext:()=>ctx});globalThis.document={getElementById:()=>null,querySelector:()=>null,createElement:el,createElementNS:el};globalThis.location={search:''};globalThis.localStorage={getItem:()=>null};globalThis.window={addEventListener(){},localStorage,location};
+const {createMoebiusSwampPlacement}=await import('../../../src/world/moebiusSwamp.js');const root=createMoebiusSwampPlacement({seed:7711,scale:.5}),inner=root.userData.inner;root.updateMatrixWorld(true);
+
+let minimum=Infinity,at=null;for(let f=0;f<=5400;f++){const t=f/30;root.userData.update(1/30,t,{});const w=inner.userData.shipyard.escort;for(const r of inner.userData.flowerBoyActivities.navigation.records){const gap=Math.hypot(r.boat.position.x-w.position.x,r.boat.position.z-w.position.z)-r.radius-4.65*w.scale.x;if(gap<minimum){minimum=gap;at={t,boat:r.index};}}}console.log(JSON.stringify({minimum,at}));

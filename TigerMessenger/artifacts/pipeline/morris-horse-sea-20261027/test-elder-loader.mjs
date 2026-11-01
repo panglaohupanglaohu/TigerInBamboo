@@ -1,0 +1,2 @@
+import{resolve as base}from'../morris-ecology-20261026/loader.mjs';
+export async function resolve(s,c,n){if(s.endsWith('/audio/sfx.js')||s==='../audio/sfx.js')return{url:'data:text/javascript,'+encodeURIComponent('export const isMuted=()=>false;export const isMusicBoxPlaying=()=>false;export const toggleMusicBox=()=>{globalThis.elderToggles++;return true;};'),shortCircuit:true};if(s==='../ui/hud.js')return{url:'data:text/javascript,'+encodeURIComponent('export const showToast=()=>{};'),shortCircuit:true};return base(s,c,n);}

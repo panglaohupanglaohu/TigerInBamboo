@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>REACode 成果总览</title>
+<style>
+  :root {
+    --bg: #eef4f3; --ink: #1d2f36; --muted: #5d7279; --card: #ffffff; --line: #d6e2e1;
+    --accent: #2f7f8a; --game: #d9663f; --engine: #4f7fb8; --both: #7b5fb0; --partial: #c99a2e;
+    --ref: #6f8f6a; --todo: #a7b3b5; --na: #c9d1d2;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: .01em; }
+  h2 { font-size: 18px; margin: 40px 0 14px; }
+  .sub { color: var(--muted); margin: 0 0 18px; max-width: 760px; }
+  .warn { display: none; background: #fff4df; border: 1px solid #ecd19a; padding: 12px 14px; border-radius: 10px; margin: 0 0 18px; }
+  .warn code { background: #fbe7bf; padding: 1px 5px; border-radius: 4px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; min-width: 120px; }
+  .stat b { display: block; font-size: 24px; line-height: 1.1; }
+  .stat span { color: var(--muted); font-size: 13px; }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+  a.card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    overflow: hidden; color: inherit; text-decoration: none; transition: transform .12s, box-shadow .12s; }
+  a.card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(30, 60, 70, .12); }
+  .shot { aspect-ratio: 16 / 9; background: #6aa8b0 center / cover no-repeat; position: relative; }
+  .tag { position: absolute; left: 10px; top: 10px; background: rgba(255,255,255,.92); border-radius: 999px; padding: 2px 10px;
+    font-size: 12px; font-weight: 600; }
+  .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .body h3 { margin: 0; font-size: 17px; }
+  .body p { margin: 0; color: var(--muted); font-size: 14px; }
+  .body ul { margin: 4px 0 0; padding-left: 18px; font-size: 13.5px; color: #33474e; }
+  .body .go { margin-top: auto; padding-top: 8px; color: var(--accent); font-weight: 600; font-size: 14px; }
+  .docs { display: flex; flex-wrap: wrap; gap: 10px; }
+  .docs a { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 9px 14px; color: var(--ink); text-decoration: none; font-size: 14px; }
+  .docs a:hover { border-color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f5f9f8; font-weight: 600; }
+  td code { font-size: 12.5px; background: #eef4f3; padding: 1px 5px; border-radius: 4px; }
+  footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
+  @media (max-width: 600px) { main { padding: 20px 16px 48px; } h1 { font-size: 22px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>REACode · 成果总览 <a href="index.html" style="font-size:15px;color:var(--accent);text-decoration:none;font-weight:600;margin-left:10px">← 回到场景</a></h1>
+  <p class="sub">素材是 Oskar Stålberg（@OskSta）的 237 段 GIF/视频和每段对应的原文说明。先读原文、再看画面，学到的东西落进两套代码：
+    <b>Townscaper 复刻</b>（可玩的建城游戏）和 <b>engine</b>（地形、水、光照的实验场）。下面每个入口都能直接打开验证。</p>
+
+  <div class="warn" id="filewarn">现在是直接双击打开的（<code>file://</code>），模块化页面会被浏览器拦下。请在本目录运行 <code>./start.sh</code>（或双击「启动.command」），它会起本地服务并自动打开这一页。只有「旧版单文件」可以直接双击。</div>
+
+  <div class="stats" id="stats"></div>
+
+  <h2>可以直接运行的成果</h2>
+  <div class="grid">
+    <a class="card" href="index.html">
+      <div class="shot" style="background-image:url(screenshot-game.png)"><span class="tag" style="color:var(--game)">Townscaper · 新版</span></div>
+      <div class="body">
+        <h3>Townscaper 复刻 + 学习导航（index.html）</h3>
+        <p>主场景。右侧「学习导航」里能逐项开关学到的技术、播放对应原片、跳到其他页面。</p>
+        <ul>
+          <li>网格：三角六边形 → 合并 → 细分 → 方形松弛（1147881669350891521）</li>
+          <li>陡坡双坡顶 + 山墙，屋顶陶土色、墙才是调色板色</li>
+          <li>悬空用钢架，两侧有支撑变拱；围合空地变后院</li>
+          <li>分层 AO + 彩色反弹光；扁平中间色倒影</li>
+          <li>岸浪：每顶点烘焙入/出/时间偏移的循环顶点着色器</li>
+        </ul>
+        <span class="go">打开 index.html（场景 + 学习导航）→</span>
+      </div>
+    </a>
+    <a class="card" href="fusion.html">
+      <div class="shot" style="background-image:url(screenshot-fusion.png)"><span class="tag" style="color:var(--partial, #c99a2e)">第 7 步 · 融合</span></div>
+      <div class="body">
+        <h3>台地上长房子：地块和房子共用一个体素场（fusion.html）</h3>
+        <p>同一张不规则网格：地块是 Town 的列，房子是另一份 Town，两者写进同一个 buildVoxelField()，AO 由贴图在顶点着色器里采样。</p>
+        <ul>
+          <li>一格落差做软坡、两格以上做崖（1447488323845509121）</li>
+          <li>共享体素场：关掉 AO，墙角就不再被台地压暗（931196707236392960）</li>
+          <li>岸浪同时绕地形走；可切「纯台阶体素」对照</li>
+        </ul>
+        <span class="go">打开 fusion.html →</span>
+      </div>
+    </a>
+    <a class="card" href="spherefusion.html">
+      <div class="shot" style="background-image:url(screenshot-sphere.png)"><span class="tag" style="color:var(--partial, #c99a2e)">第 8 步 · 球面</span></div>
+      <div class="body">
+        <h3>同一套台地管线放到星球上（spherefusion.html）</h3>
+        <p>球极投影 Delaunay + 三角形松弛的格，每格沿自己的法线挤出体素高度。没有 +Y 了，软坡规则照样成立。</p>
+        <ul>
+          <li>5508 陆地格 / 7860 面，一格落差做软坡、关掉就变 1609 侧台阶崖</li>
+          <li>重合顶点合并法线：跨格平滑，但崖角保住（同 engine/normalsmooth.js 思路）</li>
+          <li>河网用流量累积刻出（235 格河 + 16 格湖），村子的房子沿各自法线起墙</li>
+          <li>岸线一道细白带 —— 参考片里那条</li>
+        </ul>
+        <span class="go">打开 spherefusion.html →</span>
+      </div>
+    </a>
+    <a class="card" href="compare.html">
+      <div class="shot" style="background-image:url(screenshot.png)"><span class="tag">新旧对比</span></div>
+      <div class="body">
+        <h3>新版 vs 旧版，左右并排</h3>
+        <p>同一屏里看学习前后的差别：网格形态、屋顶、配色、水面。也可以把任一侧换成 engine 页面。</p>
+        <span class="go">打开 compare.html →</span>
+      </div>
+    </a>
+    <a class="card" href="learn.html">
+      <div class="shot" style="background-image:url(learn/thumbs/1991101097818403263.jpg)"><span class="tag">学习笔记</span></div>
+      <div class="body">
+        <h3>237 段视频：原文 → 学到什么 → 代码在哪</h3>
+        <p>按主题、按状态筛选；点缩略图播放原视频。每条标明是用在了 Townscaper、engine、两边都用，还是还没做。</p>
+        <span class="go">打开 learn.html →</span>
+      </div>
+    </a>
+    <a class="card" href="engine/world.html">
+      <div class="shot" style="background-image:url(screenshot-mesa.png)"><span class="tag" style="color:var(--engine)">engine</span></div>
+      <div class="body">
+        <h3>台地岛 + 岸浪 + 逆光边</h3>
+        <p>engine/world.html：台地、河流、水体切片、逆光描边。按 W 看浪的线框，R 换岛，D 制图稿。</p>
+        <span class="go">打开 engine/world.html →</span>
+      </div>
+    </a>
+    <a class="card" href="engine/terrain.html">
+      <div class="shot" style="background-image:url(screenshot-terrain.png)"><span class="tag" style="color:var(--engine)">engine</span></div>
+      <div class="body">
+        <h3>同一套四边形网格读成地形</h3>
+        <p>engine/terrain.html：体素场按地貌渲染（岩层、台地）。</p>
+        <span class="go">打开 engine/terrain.html →</span>
+      </div>
+    </a>
+    <a class="card" href="engine/demo.html">
+      <div class="shot" style="background-image:url(screenshot-island.png)"><span class="tag" style="color:var(--engine)">engine</span></div>
+      <div class="body">
+        <h3>Bad North 式岛屿生成</h3>
+        <p>engine/demo.html：噪声高度场 → 台地量化 → 材质分类 → 导航网格。R 换一座岛。</p>
+        <span class="go">打开 engine/demo.html →</span>
+      </div>
+    </a>
+    <a class="card" href="Townscaper.html">
+      <div class="shot" style="background-image:url(screenshot-close.png)"><span class="tag">旧版 · 单文件</span></div>
+      <div class="body">
+        <h3>Townscaper 旧版（学习前的基线）</h3>
+        <p>单个 HTML，双击即可运行，不需要服务器。保留作对照。</p>
+        <span class="go">打开 Townscaper.html →</span>
+      </div>
+    </a>
+  </div>
+
+  <h2>Townscaper 与 engine 各用了哪些</h2>
+  <table>
+    <thead><tr><th>主题</th><th>Townscaper（src/）</th><th>engine/</th></tr></thead>
+    <tbody>
+      <tr><td>岸浪</td><td><code>src/shore.js</code> 重叠浪带、蓝线→黄线再退回、钢架腿泡沫圈</td><td><code>engine/waves.js</code>、<code>shorefield.js</code></td></tr>
+      <tr><td>海面 / 倒影</td><td><code>src/scene.js</code> 扁平中间色倒影、极弱漂移、海面接收投影</td><td><code>engine/watervol.js</code> 平面叠层采样 SDF</td></tr>
+      <tr><td>网格</td><td><code>src/quadgrid.js</code> 三角→合并→细分→方形松弛</td><td><code>engine/relax.js</code> 防蘑菇化松弛（地形用）</td></tr>
+      <tr><td>建筑</td><td><code>src/townmesh.js</code> 双坡顶/山墙/拱/钢架/后院/门窗</td><td><code>engine/roofs.js</code> 台地上的小房子</td></tr>
+      <tr><td>光照</td><td><code>src/townmesh.js</code> 分层 AO + 彩色反弹；<code>scene.js</code> 白天/黄昏/夜晚</td><td><code>engine/backlit.js</code>、<code>outline.js</code></td></tr>
+      <tr><td>地形</td><td>—</td><td><code>engine/mesa.js</code>、<code>rivers.js</code>、<code>islands.js</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>文档</h2>
+  <div class="docs">
+    <a href="GUIDE.md">GUIDE.md · 接手指南（给其他 LLM）</a>
+    <a href="LEARNING.md">LEARNING.md · 本轮学习记录（Townscaper）</a>
+    <a href="STUDY-INDEX.md">STUDY-INDEX.md · engine 学习索引</a>
+    <a href="ENGINE.md">ENGINE.md · 引擎说明</a>
+    <a href="README.md">README.md · 逆向与玩法说明</a>
+  </div>
+
+  <footer>停止服务：<code>./start.sh --stop</code> 或双击「停止.command」。视频播放需要通过 start.sh 启动（它会把 <code>REA-agent/gifs</code> 链接到本目录的 <code>gifs/</code>）。</footer>
+</main>
+<script src="learn/data.js"></script>
+<script>
+  if (location.protocol === 'file:') document.getElementById('filewarn').style.display = 'block';
+  const L = window.LEARN;
+  if (L) {
+    const count = {};
+    for (const it of L.items) count[it.status] = (count[it.status] || 0) + 1;
+    const order = ['game', 'both', 'engine', 'partial', 'ref', 'todo', 'na'];
+    const el = document.getElementById('stats');
+    el.innerHTML = `<div class="stat"><b>${L.items.length}</b><span>段视频 / 原文</span></div>` +
+      order.filter((k) => count[k]).map((k) =>
+        `<a class="stat" href="learn.html#status=${k}" style="text-decoration:none;color:inherit"><b>${count[k]}</b><span><i class="dot" style="background:var(--${k})"></i>${L.labels[k]}</span></a>`).join('');
+  }
+</script>
+</body>
+</html>

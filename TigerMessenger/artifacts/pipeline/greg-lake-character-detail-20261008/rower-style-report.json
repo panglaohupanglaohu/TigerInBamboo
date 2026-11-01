@@ -1,0 +1,46 @@
+{
+  "scope": "Only lake ship crews via createFisherBoat({crewStyle:swamp-coral}); unrelated fleets retain saved original visuals.",
+  "files": [
+    "src/assets/swampRowerStyle.js",
+    "src/assets/warshipV6.js",
+    "src/assets/harbor.js",
+    "src/world/moebiusSwamp.js (only shipA/shipB factory options)"
+  ],
+  "source": "Real warshipV6 saved Blender node rig, not obsolete harbor crewShared builder.",
+  "findings": "Visible heavy blue silhouette came mainly from blue cloth/crest solid meshes; there was no shared adjustable outline thickness on the saved crew.",
+  "changes": [
+    "Six instanced template batches: soft oval tunic, seated cloth skirt, small head, low dull-gold cap, paired arms/sleeves, paired legs.",
+    "Original hand/finger and forearm geometry retained verbatim for grip; skin material muted.",
+    "Fine gray-blue reverse shells .00065 boat-local baked in existing template draw; no separate per-person outlines.",
+    "Three tall blue ornamental crest layers replaced by low cap rendering; all source nodes/slots remain for pose and state interface."
+  ],
+  "palette": {
+    "cloth": "#A7B9B6",
+    "fold": "#879F9F",
+    "skirt": "#8DA4A3",
+    "headwear": "#B8AC86",
+    "skin": "#D8B7A0",
+    "ink": "#435968"
+  },
+  "perBoat": {
+    "crewSlots": 26,
+    "beforeDynamicBatches": 59,
+    "afterDynamicBatches": 55,
+    "staticBatchesUnchanged": 11,
+    "robeBatches": 6,
+    "originalGripBatches": 2
+  },
+  "validation": {
+    "testsPassed": 3,
+    "rigChecks": "All original nodes positions/quaternions/scales/visibility exact across121 moving/idle frames +40 sedated frames, original identity/boarding state retained.",
+    "shipAndGrip": "Actual static geometry arrays exact; original hands/forearms use shared original BufferGeometry references.",
+    "factory": "Real seed7711 lake produces two styled boats/52 slots; default new boat unchanged."
+  },
+  "beforeEvidence": "rower-style-before captures real current source before this batch. Older original-rover historical visual evidence unavailable; not fabricated.",
+  "GPU": "Parent captured repair-crew-coral-v1.jpg; delivery audit visually checked against repair-monkey-raised-tail-v4.jpg. Local factory scene, not a full gameplay acceptance.",
+  "rollback": "Remove only crewStyle arguments from lake factory to restore saved source visuals; do not restore whole snapshot moebiusSwamp over concurrent creature changes.",
+  "evidenceImages": {
+    "before": "repair-monkey-raised-tail-v4.jpg",
+    "after": "repair-crew-coral-v1.jpg"
+  }
+}

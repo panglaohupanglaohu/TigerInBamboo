@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Engine — 走廊墙面（涂鸦壁纸 generator）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1d1f22; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 16px; top: 14px; z-index: 5; pointer-events: none;
+    font: 12px/1.7 ui-monospace, Menlo, monospace; color: #e6e2da; white-space: pre;
+    text-shadow: 0 1px 3px rgba(0,0,0,.7);
+  }
+  #hint {
+    position: fixed; left: 16px; bottom: 14px; z-index: 5; pointer-events: none;
+    font: 11px/1.6 ui-monospace, Menlo, monospace; color: rgba(230,226,218,.6);
+  }
+</style>
+</head>
+<body>
+<div id="hud"></div>
+<div id="hint">拖动旋转 · 滚轮缩放 · R 换种子（重画壁纸） · G 灰度/彩色 · F 看一张平面贴图</div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { makeDoodleWall } from '../src/doodlewall.js';
+
+/**
+ * 走廊 —— 复现 x.com/OskSta/status/1897266928961700215（"Yet another hallway design"）
+ * 与 1890018647655272491（同一套的灰度版）。
+ *
+ * 页面只做两件事：① 用 doodlewall.js 现场画一张壁纸；② 把它贴到一条三面围合的
+ * 走廊上（左右墙 + 地板 + 台阶），看看在透视里"像不像"。
+ * 壁纸本身是 canvas 画出来的，所以贴图随时可以重画 —— 这正是关键：
+ * 参考帧里的涂鸦不是手绘资源，而是可复现的 generator。
+ */
+
+const hud = document.getElementById('hud');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#1d1f22');
+
+const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, 0.02, 80);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.92));
+const key = new THREE.DirectionalLight(0xfff6e6, 0.35);
+key.position.set(1.2, 3, 0.6);
+scene.add(key);
+
+const state = { seed: 7, gray: false, flat: false };
+let world = new THREE.Group();
+scene.add(world);
+let wallTex = null;
+
+/** 走廊尺寸：宽 2.2、高 3.0、长 16（参考帧里墙高约等于 2.2 个 panel 宽）。 */
+const HALL = { w: 2.2, h: 3.0, len: 16 };
+
+function rebuild() {
+  world.traverse((o) => {
+    if (o.geometry) o.geometry.dispose();
+    if (o.material && o.material.map && o.material.map !== wallTex) o.material.map.dispose();
+  });
+  scene.remove(world);
+  world = new THREE.Group();
+  scene.add(world);
+
+  if (wallTex) wallTex.dispose();
+  const W = makeDoodleWall({ width: 1024, height: 640, seed: state.seed, gray: state.gray });
+  wallTex = new THREE.CanvasTexture(W.canvas);
+  wallTex.wrapS = THREE.RepeatWrapping;
+  wallTex.wrapT = THREE.ClampToEdgeWrapping;
+  // 走廊长 16、墙高 3.0；贴图里"墙"占上面 62%，所以纵向 repeat 要让一张图正好贴满墙高
+  wallTex.repeat.set(HALL.len / 4.2, 1);
+  wallTex.colorSpace = THREE.SRGBColorSpace;
+
+  const wallMat = new THREE.MeshBasicMaterial({ map: wallTex });
+  const plainMat = new THREE.MeshBasicMaterial({ color: 0xf2f0ea });
+  const stepMat = new THREE.MeshBasicMaterial({ color: 0xe7e4dc });
+  const floorMat = new THREE.MeshBasicMaterial({ color: 0xd8d2c6 });
+
+  // 左右墙：法线朝内，所以右墙要翻 180°
+  const wallGeo = new THREE.PlaneGeometry(HALL.len, HALL.h);
+  const left = new THREE.Mesh(wallGeo, wallMat);
+  left.rotation.y = Math.PI / 2;
+  left.position.set(-HALL.w / 2, HALL.h / 2, 0);
+  world.add(left);
+  const right = new THREE.Mesh(wallGeo, wallMat);
+  right.rotation.y = -Math.PI / 2;
+  right.position.set(HALL.w / 2, HALL.h / 2, 0);
+  world.add(right);
+
+  // 地板
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, HALL.len), floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  world.add(floor);
+
+  // 天花板（压暗一点，走廊才有"通道"感）
+  const ceil = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, HALL.len), plainMat);
+  ceil.rotation.x = Math.PI / 2;
+  ceil.position.y = HALL.h;
+  world.add(ceil);
+
+  // 台阶：走廊尽头往上走三级（参考帧里扶手廊道 + 台阶是同一个转角）
+  const steps = 3, sw = HALL.w, sd = 0.42, sh = 0.20;
+  for (let i = 0; i < steps; i++) {
+    const st = new THREE.Mesh(new THREE.BoxGeometry(sw, sh * (i + 1), sd), stepMat);
+    st.position.set(0, (sh * (i + 1)) / 2, 3.0 + i * sd);
+    world.add(st);
+  }
+  // 台阶后面的墙（封口）
+  const end = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, HALL.h), plainMat);
+  end.position.set(0, HALL.h / 2, 3.0 + steps * sd);
+  end.rotation.y = Math.PI;
+  world.add(end);
+
+  // 平面贴图预览（看一眼 generator 本身长什么样）
+  if (state.flat) {
+    const pv = new THREE.Mesh(new THREE.PlaneGeometry(4, 2.5), wallMat);
+    pv.position.set(0, 1.6, -1.2);
+    pv.rotation.y = Math.PI;
+    world.add(pv);
+  }
+
+  camera.position.set(0.0, 1.55, -2.6);
+  camera.lookAt(0.15, 1.15, 2.2);
+
+  state.info = { seed: state.seed, gray: state.gray, ...W.stats };
+  hud.textContent =
+    `走廊壁纸 · seed ${state.info.seed} · ${state.gray ? '灰度' : '彩色'}\n` +
+    `段落 ${state.info.panels}   平均宽 ${state.info.panelWidthAvg}px\n` +
+    `墨线占比 ${state.info.inkPct}%   护墙板 ${state.info.wainscotPct}% 高，竖条间距 ${state.info.flutePitch}px\n` +
+    `贴图 ${W.width}×${W.height}   motive 6 种（鱼/猫头鹰/花/四叶草/甲虫/羊头）`;
+  window.__hall = { state, rebuild, stats: state.info, canvas: W.canvas };
+  window.__worldStats = { kind: 'hallway', ...state.info };
+}
+
+const cam = { yaw: 0.0, pitch: 0.0, dist: 0 };
+let drag = null;
+renderer.domElement.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY }; });
+addEventListener('pointerup', () => { drag = null; });
+addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  cam.yaw -= (e.clientX - drag.x) * 0.004;
+  cam.pitch = Math.max(-0.5, Math.min(0.6, cam.pitch - (e.clientY - drag.y) * 0.004));
+  drag = { x: e.clientX, y: e.clientY };
+});
+addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  if (k === 'r') { state.seed = (state.seed * 7919 + 13) % 100000; rebuild(); }
+  if (k === 'g') { state.gray = !state.gray; rebuild(); }
+  if (k === 'f') { state.flat = !state.flat; rebuild(); }
+});
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+function frame() {
+  // 视角：眼睛位置固定，只绕竖轴转一点（走廊里不能自由飞）
+  const base = new THREE.Vector3(0.0, 1.55, -2.6);
+  camera.position.copy(base).add(new THREE.Vector3(Math.sin(cam.yaw) * 0.6, cam.pitch * 0.9, 0));
+  camera.lookAt(0.15 + Math.sin(cam.yaw) * 1.4, 1.15 + cam.pitch * 1.6, 2.2);
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+rebuild();
+frame();
+console.log('[hallway] ready');
+</script>
+</body>
+</html>

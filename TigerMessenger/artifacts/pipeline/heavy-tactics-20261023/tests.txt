@@ -1,0 +1,17 @@
+✔ default trooper and deployed squad use exactly 1.5 linear scale with explicit scales preserved (16.223708ms)
+✔ casualties visibly unload one by one, wait for Heiwa, heal and remain reserved until carrier returns (6.5445ms)
+✔ real assault evacuation hands casualties to medical ownership and next sortie excludes them (8.150125ms)
+✔ front shields intercept actual front segment, not rear shots or distant misses, and drain then break (35.370875ms)
+✔ rear guns fire through clear lanes and stop when an ally or wall blocks the trajectory (37.395416ms)
+✔ close combat switches off gun, animates blade and requires actual swept blade contact (4.249875ms)
+✔ withdrawal boards gun section first while shield section covers, then releases the rear guard (5.654125ms)
+✔ lost or exhausted front rank is replaced by a healthy gunner without new soldiers (6.29025ms)
+✔ shield recovery waits for quiet and a broken shield cannot intercept until restored (4.116917ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 174.357333

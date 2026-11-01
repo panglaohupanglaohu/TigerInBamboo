@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "53391e7d2bcba6b94541183f2d373c20acdafe5d1637ccc8ccd914e89c48c378",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.94
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.41,
+      "probabilities": {
+        "dressing": 0.04,
+        "geometry": 0.34,
+        "lighting": 0,
+        "navigation": 0.08,
+        "review": 0.53
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.88
+    }
+  },
+  "usage": {
+    "input_tokens": 725,
+    "output_tokens": 91,
+    "cost_usd": 0.000305,
+    "credits_remaining_usd": 4.911669
+  },
+  "elapsed_ms": 1151,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "normal game GPU installed and empty site",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "hoof seating",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

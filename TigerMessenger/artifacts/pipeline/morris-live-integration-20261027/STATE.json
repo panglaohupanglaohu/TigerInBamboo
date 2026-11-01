@@ -1,0 +1,52 @@
+{
+  "status": "current-production-integrated-partially-verified",
+  "productionRevision": "morris-live-r45",
+  "princess": "reference-loft-v2",
+  "horse": "tiger-workflow-horse-v2",
+  "normalPrevious": "r43: new GLBs loaded; E talk and resume; 259.7m travel; two bridge passes; uphill return; rider visible",
+  "normalFinal": "r45 new GLBs loaded; real support correction active; normal E dialogue shown then resumed downhill patrol; screenshot actually viewed; errors empty; latest r45 actual bridgePasses=1",
+  "plantsNormal": {
+    "planeTrees": 9,
+    "hollyhockClumps": 41
+  },
+  "terrain": "Oskar r6 current component and r43 normal overview viewed; court wall and mountain layers remain below target",
+  "sourceHashes": "source-hashes.json",
+  "pending": [
+    "complete moving four-leg foot planting and character cloth/hair/ornament polish",
+    "terrain target match",
+    "cross-rail access bridge vehicle clearance",
+    "horse sea crossing and mounted elder E final normal verification",
+    "complete final r45 round trip, moving hoof visual polish"
+  ],
+  "noCommitOrPublication": true,
+  "normalFinalSnapshot": {
+    "bridgePasses": 1,
+    "courtVisits": 1,
+    "dialogue": -1,
+    "direction": -1,
+    "hoofSupport": {
+      "clearanceBefore": 0.10711273165438227,
+      "method": "lowest skinned hoof to actual support; no per-leg IK",
+      "rootCorrection": 0.09860639470472482
+    },
+    "horseAsset": "loaded",
+    "horseLocal": [
+      10.109970066176729,
+      -1.976566935579592,
+      42.05119218908129
+    ],
+    "horseOccupied": true,
+    "horseRevision": "tiger-workflow-horse-v2",
+    "meetings": 1,
+    "revision": "normal-route-patrol-r1",
+    "riderAsset": "loaded",
+    "riderRevision": "reference-loft-v2",
+    "riderVisible": true,
+    "routeDistance": 48.83560383770096,
+    "routeLength": 181.2638010233845,
+    "routeSource": "current installed island route and raycast bridge support",
+    "speed": 1.2499999696608115,
+    "state": "downhill-patrol",
+    "travelled": 129.42819718568362
+  }
+}

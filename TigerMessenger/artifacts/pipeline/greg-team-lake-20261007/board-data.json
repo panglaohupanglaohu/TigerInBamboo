@@ -1,0 +1,1790 @@
+{
+  "kind": "measured planning diagram, not GPU",
+  "scale": 0.5,
+  "levels": [
+    {
+      "id": 1,
+      "innerY": 34.8,
+      "heightFromRim": -2.6000000000000014,
+      "waterClearance": 4.899999999999999,
+      "width": 2,
+      "angleStart": 0.5,
+      "angleEnd": 0.08,
+      "radius": 13.529999999999998
+    },
+    {
+      "id": 2,
+      "innerY": 30.8,
+      "heightFromRim": -4.6,
+      "waterClearance": 2.9000000000000004,
+      "width": 2,
+      "angleStart": -0.66,
+      "angleEnd": -0.95,
+      "radius": 12.129999999999999
+    },
+    {
+      "id": 3,
+      "innerY": 26.8,
+      "heightFromRim": -6.6,
+      "waterClearance": 0.9000000000000004,
+      "width": 2,
+      "angleStart": -1.74,
+      "angleEnd": -2.03,
+      "radius": 10.729999999999999
+    }
+  ],
+  "route": [
+    [
+      29.461700292033942,
+      34.8,
+      16.09500022456967
+    ],
+    [
+      29.104555531578914,
+      34.8,
+      15.899891152698425
+    ],
+    [
+      28.747410771123885,
+      34.8,
+      15.704782080827178
+    ],
+    [
+      28.390266010668856,
+      34.8,
+      15.509673008955932
+    ],
+    [
+      28.033121250213828,
+      34.8,
+      15.314563937084685
+    ],
+    [
+      27.6759764897588,
+      34.8,
+      15.11945486521344
+    ],
+    [
+      27.31883172930377,
+      34.8,
+      14.924345793342193
+    ],
+    [
+      26.961686968848742,
+      34.8,
+      14.729236721470947
+    ],
+    [
+      26.604542208393713,
+      34.8,
+      14.5341276495997
+    ],
+    [
+      26.247397447938685,
+      34.8,
+      14.339018577728455
+    ],
+    [
+      25.890252687483656,
+      34.8,
+      14.14390950585721
+    ],
+    [
+      25.533107927028627,
+      34.8,
+      13.948800433985962
+    ],
+    [
+      25.1759631665736,
+      34.8,
+      13.753691362114717
+    ],
+    [
+      24.81881840611857,
+      34.8,
+      13.55858229024347
+    ],
+    [
+      24.46167364566354,
+      34.8,
+      13.363473218372224
+    ],
+    [
+      24.104528885208513,
+      34.8,
+      13.168364146500977
+    ],
+    [
+      23.747384124753484,
+      34.8,
+      12.973255074629732
+    ],
+    [
+      23.747384124753484,
+      34.8,
+      12.973255074629732
+    ],
+    [
+      24.186811565317853,
+      34.8,
+      12.134321007118865
+    ],
+    [
+      24.596613186202386,
+      34.8,
+      11.280523913734442
+    ],
+    [
+      24.976287031665947,
+      34.8,
+      10.41290958915111
+    ],
+    [
+      25.32536804872491,
+      34.8,
+      9.532540752423932
+    ],
+    [
+      25.64342865678491,
+      34.8,
+      8.640495745290442
+    ],
+    [
+      25.930079271373582,
+      34.8,
+      7.73786721133685
+    ],
+    [
+      26.18496878133285,
+      34.8,
+      6.825760757646269
+    ],
+    [
+      26.40778497888618,
+      34.8,
+      5.905293600568323
+    ],
+    [
+      26.59825494205406,
+      34.8,
+      4.977593197268795
+    ],
+    [
+      26.756145368949298,
+      34.8,
+      4.043795864735594
+    ],
+    [
+      26.881262863542673,
+      34.8,
+      3.105045387932542
+    ],
+    [
+      26.973454172548873,
+      34.8,
+      2.162491618805813
+    ],
+    [
+      26.953006801106966,
+      34.8,
+      1.8474816486183108
+    ],
+    [
+      26.901109370047283,
+      34.675,
+      1.2197914671180865
+    ],
+    [
+      26.8346434965552,
+      34.55,
+      0.5954913729748139
+    ],
+    [
+      26.753738242981814,
+      34.425,
+      -0.025081636950931543
+    ],
+    [
+      26.658530441024492,
+      34.3,
+      -0.6415947221340139
+    ],
+    [
+      26.549164568522396,
+      34.175,
+      -1.2537193769001156
+    ],
+    [
+      26.425792622164344,
+      34.05,
+      -1.8611316054659983
+    ],
+    [
+      26.288573986203886,
+      33.925,
+      -2.46351209341137
+    ],
+    [
+      26.13767529727854,
+      33.8,
+      -3.0605463754916324
+    ],
+    [
+      25.973270305432116,
+      33.675,
+      -3.651924999703325
+    ],
+    [
+      25.795539731441206,
+      33.55,
+      -4.237343687516739
+    ],
+    [
+      25.604671120548694,
+      33.425,
+      -4.816503490192806
+    ],
+    [
+      25.400858692709026,
+      33.3,
+      -5.389110941104114
+    ],
+    [
+      25.184303189451814,
+      33.175,
+      -5.954878203982599
+    ],
+    [
+      24.955211717471972,
+      33.05,
+      -6.513523217019306
+    ],
+    [
+      24.713797589056288,
+      32.925,
+      -7.064769832744402
+    ],
+    [
+      24.460280159457884,
+      32.8,
+      -7.608347953618499
+    ],
+    [
+      24.194884661331418,
+      32.675,
+      -8.143993663269246
+    ],
+    [
+      23.917842036343473,
+      32.55,
+      -8.671449353310035
+    ],
+    [
+      23.629388764073756,
+      32.425,
+      -9.19046384568073
+    ],
+    [
+      23.32976668832408,
+      32.3,
+      -9.700792510453143
+    ],
+    [
+      23.01922284095323,
+      32.175,
+      -10.202197379047167
+    ],
+    [
+      22.698009263357026,
+      32.05,
+      -10.694447252806416
+    ],
+    [
+      22.366382825713806,
+      31.924999999999997,
+      -11.177317806885265
+    ],
+    [
+      22.024605044116658,
+      31.8,
+      -11.650591689402347
+    ],
+    [
+      21.67294189571438,
+      31.674999999999997,
+      -12.114058615818573
+    ],
+    [
+      21.311663631984263,
+      31.55,
+      -12.567515458500903
+    ],
+    [
+      20.941044590260205,
+      31.425,
+      -13.0107663314362
+    ],
+    [
+      20.56136300364051,
+      31.299999999999997,
+      -13.443622670062686
+    ],
+    [
+      20.17290080940023,
+      31.175,
+      -13.865903306189594
+    ],
+    [
+      19.775943456033378,
+      31.05,
+      -14.277434537978827
+    ],
+    [
+      19.37077970905071,
+      30.925,
+      -14.678050194965582
+    ],
+    [
+      19.165211536126076,
+      30.8,
+      -14.874214828875502
+    ],
+    [
+      18.800190096948356,
+      30.8,
+      -15.332985760073113
+    ],
+    [
+      18.424189358893415,
+      30.8,
+      -15.78280223748744
+    ],
+    [
+      18.03742890614949,
+      30.8,
+      -16.223401568586123
+    ],
+    [
+      17.640134606571248,
+      30.8,
+      -16.6545264436443
+    ],
+    [
+      17.232538479773112,
+      30.8,
+      -17.075925086013317
+    ],
+    [
+      16.81487856162994,
+      30.8,
+      -17.48735139915813
+    ],
+    [
+      16.387398765264244,
+      30.8,
+      -17.888565110377517
+    ],
+    [
+      15.950348738601075,
+      30.8,
+      -18.2793319111232
+    ],
+    [
+      15.503983718573798,
+      30.8,
+      -18.65942359383586
+    ],
+    [
+      15.048564382065887,
+      30.8,
+      -19.028618185218225
+    ],
+    [
+      14.584356693675801,
+      30.8,
+      -19.386700075867317
+    ],
+    [
+      14.111631750393814,
+      30.8,
+      -19.733460146190204
+    ],
+    [
+      13.841970537954548,
+      30.8,
+      -19.8702444798472
+    ],
+    [
+      13.29902844620268,
+      30.675,
+      -20.13286911867238
+    ],
+    [
+      12.751585845876566,
+      30.55,
+      -20.380842965337333
+    ],
+    [
+      12.200034047493812,
+      30.425,
+      -20.61410459618588
+    ],
+    [
+      11.644764634021662,
+      30.3,
+      -20.832602950201355
+    ],
+    [
+      11.086169188439955,
+      30.175,
+      -21.036297304606258
+    ],
+    [
+      10.524639022684857,
+      30.050000000000004,
+      -21.22515724334402
+    ],
+    [
+      9.960564908158258,
+      29.925,
+      -21.399162618496696
+    ],
+    [
+      9.394336807986141,
+      29.8,
+      -21.558303504696674
+    ],
+    [
+      8.82634361120687,
+      29.675,
+      -21.702580146595647
+    ],
+    [
+      8.256972869068862,
+      29.55,
+      -21.83200289945842
+    ],
+    [
+      7.686610533614301,
+      29.425000000000004,
+      -21.9465921629539
+    ],
+    [
+      7.11564069872386,
+      29.3,
+      -22.04637830822026
+    ],
+    [
+      6.54444534379454,
+      29.175000000000004,
+      -22.131401598285322
+    ],
+    [
+      5.973404080220482,
+      29.049999999999997,
+      -22.2017121019282
+    ],
+    [
+      5.402893900843875,
+      28.925,
+      -22.257369601072
+    ],
+    [
+      4.83328893254026,
+      28.8,
+      -22.29844349180193
+    ],
+    [
+      4.2649601920999975,
+      28.675,
+      -22.325012679107317
+    ],
+    [
+      3.698275345564194,
+      28.55,
+      -22.33716546545
+    ],
+    [
+      3.13359847117094,
+      28.425,
+      -22.334999433265608
+    ],
+    [
+      2.5712898260639583,
+      28.3,
+      -22.318621321508186
+    ],
+    [
+      2.0117056169130008,
+      28.175000000000004,
+      -22.288146896352345
+    ],
+    [
+      1.4551977745916653,
+      28.05,
+      -22.243700816170936
+    ],
+    [
+      0.9021137330550062,
+      27.924999999999997,
+      -22.185416490909827
+    ],
+    [
+      0.3527962125557627,
+      27.8,
+      -22.11343593598485
+    ],
+    [
+      -0.19241699266569331,
+      27.675,
+      -22.027909620829515
+    ],
+    [
+      -0.7331932220860177,
+      27.550000000000004,
+      -21.928996312225216
+    ],
+    [
+      -1.2692051518706915,
+      27.425,
+      -21.816862912549205
+    ],
+    [
+      -1.800130992988918,
+      27.3,
+      -21.69168429307832
+    ],
+    [
+      -2.3256546843518215,
+      27.175,
+      -21.55364312248981
+    ],
+    [
+      -2.845466080858024,
+      27.05,
+      -21.402929690703242
+    ],
+    [
+      -3.359261136234753,
+      26.925,
+      -21.23974172821042
+    ],
+    [
+      -3.6138092329871925,
+      26.8,
+      -21.153533577810975
+    ],
+    [
+      -4.123914637929559,
+      26.8,
+      -21.060031530343686
+    ],
+    [
+      -4.631611679386211,
+      26.8,
+      -20.954230438061263
+    ],
+    [
+      -5.136603862612761,
+      26.8,
+      -20.836192088733284
+    ],
+    [
+      -5.638596272500281,
+      26.8,
+      -20.70598541667954
+    ],
+    [
+      -6.1372957458055355,
+      26.8,
+      -20.563686462512432
+    ],
+    [
+      -6.632411042358124,
+      26.8,
+      -20.409378328729318
+    ],
+    [
+      -7.123653015144568,
+      26.8,
+      -20.243151131180678
+    ],
+    [
+      -7.6107347791699524,
+      26.8,
+      -20.065101946442553
+    ],
+    [
+      -8.0933718789986,
+      26.8,
+      -19.875334755123866
+    ],
+    [
+      -8.571282454875847,
+      26.8,
+      -19.673960381141804
+    ],
+    [
+      -9.044187407333983,
+      26.8,
+      -19.461096427000747
+    ],
+    [
+      -9.511810560186113,
+      26.8,
+      -19.236867205112475
+    ]
+  ],
+  "worldTree": [
+    -8,
+    -7
+  ],
+  "dock": [
+    -6.455017679273978,
+    25.02,
+    12.423073160867256
+  ],
+  "palette": {
+    "ink": "#263e49",
+    "water": "#75adb2",
+    "waterDeep": "#386675",
+    "stone": "#b5bcb0",
+    "stoneShade": "#778e90",
+    "wall": "#6e9193",
+    "bark": "#739187",
+    "foliage": "#7da294",
+    "foliageShade": "#507e7c",
+    "flower": "#cc8c91",
+    "warm": "#ead4ac",
+    "path": "#d3d1b8"
+  },
+  "ecology": [
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        24.955093383789062,
+        28,
+        -1.440009355545044
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3,
+      "pathDistanceLocal": 24.964047812414087,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        11.931597709655762,
+        27.908601760864258,
+        22.124804178873696
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.908601760864258,
+      "pathDistanceLocal": 43.756731936669425,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        1.5413581132888794,
+        28.136899948120117,
+        26.691202799479164
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.136899948120117,
+      "pathDistanceLocal": 47.239391952807345,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        0.1840827663739494,
+        28.136899948120117,
+        25.97975985209147
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.136899948120117,
+      "pathDistanceLocal": 46.2444992386154,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -1.3313024044036865,
+        28.136899948120117,
+        26.293930689493813
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.136899948120117,
+      "pathDistanceLocal": 46.25985592937258,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -11.09933058420817,
+        27.817834854125977,
+        22.073888778686523
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.8178348541259766,
+      "pathDistanceLocal": 41.341247922379594,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -11.90358829498291,
+        27.817834854125977,
+        20.9565798441569
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.8178348541259766,
+      "pathDistanceLocal": 40.26454751310501,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -13.16130510965983,
+        27.817834854125977,
+        21.338876088460285
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.8178348541259766,
+      "pathDistanceLocal": 40.739535518861196,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -20.987525304158527,
+        28.227113723754883,
+        13.788818677266438
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.227113723754883,
+      "pathDistanceLocal": 34.96266518568897,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -21.123111724853516,
+        28.227113723754883,
+        12.394845008850098
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.227113723754883,
+      "pathDistanceLocal": 33.695512050176,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -22.55887794494629,
+        28.227113723754883,
+        11.54350694020589
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.227113723754883,
+      "pathDistanceLocal": 33.4313834572884,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -25.837186177571613,
+        27.728328704833984,
+        1.4938936233520508
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.7283287048339844,
+      "pathDistanceLocal": 26.38716228728895,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -24.857179005940754,
+        27.728328704833984,
+        0.7166051069895426
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.7283287048339844,
+      "pathDistanceLocal": 25.17183724017347,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -24.087841669718422,
+        27.728328704833984,
+        -0.35055236021677555
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.7283287048339844,
+      "pathDistanceLocal": 23.856939689041873,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -23.346909205118813,
+        28.315757751464844,
+        -11.740278879801432
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.3157577514648438,
+      "pathDistanceLocal": 15.735589948718427,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -22.426145553588867,
+        28.315757751464844,
+        -12.738141377766926
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.3157577514648438,
+      "pathDistanceLocal": 14.457298699993544,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -22.676658630371094,
+        28.315757751464844,
+        -13.985065778096516
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.3157577514648438,
+      "pathDistanceLocal": 14.173730734702847,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -13.89830716451009,
+        27.640701293945312,
+        -21.154324213663735
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.6407012939453125,
+      "pathDistanceLocal": 4.787274155444633,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -12.47882048288981,
+        27.640701293945312,
+        -21.265776316324867
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.6407012939453125,
+      "pathDistanceLocal": 3.5943873000809003,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -11.588019688924152,
+        27.640701293945312,
+        -22.64599545796712
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 2.6407012939453125,
+      "pathDistanceLocal": 3.9915911352074804,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        -1.423409064610799,
+        28.402217864990234,
+        -24.63527234395345
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.4022178649902344,
+      "pathDistanceLocal": 2.7929067061359043,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "lantern-sedge",
+      "speciesIndex": 2,
+      "position": [
+        0.7187252839406331,
+        28.402217864990234,
+        -24.727275848388672
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 3.4022178649902344,
+      "pathDistanceLocal": 2.5484662674776266,
+      "radiusLocal": 0.34,
+      "radius": 0.34,
+      "height": 1.6099999999999999
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        11.821338017781574,
+        33.073036193847656,
+        26.170836130777992
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 8.073036193847656,
+      "pathDistanceLocal": 17.787825091315216,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        10.7074613571167,
+        33.073036193847656,
+        25.658768335978188
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 8.073036193847656,
+      "pathDistanceLocal": 18.19235643037426,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        9.388500213623047,
+        33.073036193847656,
+        25.564329147338867
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 8.073036193847656,
+      "pathDistanceLocal": 19.097452538958404,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        8.390386899312336,
+        33.073036193847656,
+        26.313702901204426
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 8.073036193847656,
+      "pathDistanceLocal": 20.342195358312946,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -2.7699151039123535,
+        31.355545043945312,
+        27.787399927775063
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.3555450439453125,
+      "pathDistanceLocal": 43.523250909522694,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -3.9142258167266846,
+        31.355545043945312,
+        27.229654947916664
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.3555450439453125,
+      "pathDistanceLocal": 43.8561063925892,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -5.21464474995931,
+        31.355545043945312,
+        26.638633728027344
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.3555450439453125,
+      "pathDistanceLocal": 44.30672047939358,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -17.556567509969074,
+        33.01441192626953,
+        24.437622706095375
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 8.014411926269531,
+      "pathDistanceLocal": 42.86546565515062,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -18.48206075032552,
+        33.01441192626953,
+        23.50401941935221
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 8.014411926269531,
+      "pathDistanceLocal": 43.52267239200064,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -19.390673319498696,
+        33.01441192626953,
+        22.57587178548177
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 8.014411926269531,
+      "pathDistanceLocal": 44.193916411188724,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -24.7735907236735,
+        31.417036056518555,
+        11.188987414042154
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.417036056518555,
+      "pathDistanceLocal": 46.385679897648004,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -24.674975077311196,
+        31.417036056518555,
+        9.67211373647054
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.417036056518555,
+      "pathDistanceLocal": 45.24394750690481,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -25.882927576700844,
+        31.417036056518555,
+        9.082210222880045
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.417036056518555,
+      "pathDistanceLocal": 45.71324169689823,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -28.385897954305012,
+        32.95016098022461,
+        -2.8303597768147783
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.950160980224609,
+      "pathDistanceLocal": 49.50351996194073,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -28.070780436197914,
+        32.95016098022461,
+        -4.035294373830159
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.950160980224609,
+      "pathDistanceLocal": 48.93066954744727,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -27.963751475016274,
+        32.95016098022461,
+        -5.264252662658691
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.950160980224609,
+      "pathDistanceLocal": 48.58308264846198,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -23.28131675720215,
+        31.48394203186035,
+        -16.72374407450358
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.483942031860352,
+      "pathDistanceLocal": 31.949303916881863,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -21.998254140218098,
+        31.48394203186035,
+        -16.7875493367513
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.483942031860352,
+      "pathDistanceLocal": 30.672875201548933,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -20.64471181233724,
+        31.48394203186035,
+        -17.220664978027344
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.483942031860352,
+      "pathDistanceLocal": 29.267248159829656,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -12.049473126729328,
+        32.88071823120117,
+        -26.68121337890625
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.880718231201172,
+      "pathDistanceLocal": 33.63492551923747,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -10.950166066487629,
+        32.88071823120117,
+        -27.352219263712563
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.880718231201172,
+      "pathDistanceLocal": 32.86326694512155,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        -9.893708229064941,
+        32.88071823120117,
+        -28.192275365193684
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.880718231201172,
+      "pathDistanceLocal": 32.23421375234307,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        2.7737069129943848,
+        31.55579948425293,
+        -27.814847946166992
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.55579948425293,
+      "pathDistanceLocal": 8.601989807842443,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        3.9609516461690264,
+        31.55579948425293,
+        -27.553042093912758
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.55579948425293,
+      "pathDistanceLocal": 7.609201270203091,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        5.170283476511637,
+        31.55579948425293,
+        -27.463687260945637
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.55579948425293,
+      "pathDistanceLocal": 6.823278602806849,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        16.235949198404946,
+        32.80656814575195,
+        -22.600886662801106
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.806568145751953,
+      "pathDistanceLocal": 8.520475340410302,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        16.989691416422524,
+        32.80656814575195,
+        -21.604752858479817
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.806568145751953,
+      "pathDistanceLocal": 7.3245335172983,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        18.118703842163086,
+        32.80656814575195,
+        -21.092028935750324
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 7.806568145751953,
+      "pathDistanceLocal": 6.535045314585126,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "cup-fern",
+      "speciesIndex": 1,
+      "position": [
+        26.256477991739906,
+        31.632112503051758,
+        -11.858772595723469
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 6.632112503051758,
+      "pathDistanceLocal": 3.6264884543515787,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 0.9600000000000001
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        8.310252984364826,
+        37.4348030090332,
+        30.368043899536133
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 12.434803009033203,
+      "pathDistanceLocal": null,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        7.051100571950276,
+        37.4348030090332,
+        30.989794413248696
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 12.434803009033203,
+      "pathDistanceLocal": null,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        5.805202960968018,
+        37.4348030090332,
+        31.825237274169922
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 12.434803009033203,
+      "pathDistanceLocal": null,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -7.742528120676676,
+        35.35057830810547,
+        29.530412673950195
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 10.350578308105469,
+      "pathDistanceLocal": 35.57743724600786,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -8.345631122589111,
+        35.35057830810547,
+        28.449567794799805
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 10.350578308105469,
+      "pathDistanceLocal": 35.62973313229643,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -9.373164494832356,
+        35.35057830810547,
+        27.480981826782227
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 10.350578308105469,
+      "pathDistanceLocal": 36.15860722397187,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -10.640458424886067,
+        35.35057830810547,
+        27.27234649658203
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 10.350578308105469,
+      "pathDistanceLocal": 37.242284176888916,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -22.73688189188639,
+        37.462223052978516,
+        22.981968561808266
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 12.462223052978516,
+      "pathDistanceLocal": null,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -23.506258010864258,
+        37.462223052978516,
+        21.782715479532875
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 12.462223052978516,
+      "pathDistanceLocal": null,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -24.51461855570475,
+        37.462223052978516,
+        20.818705240885414
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 12.462223052978516,
+      "pathDistanceLocal": null,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -30.431513468424477,
+        35.326812744140625,
+        8.328012943267822
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 10.326812744140625,
+      "pathDistanceLocal": 54.37767206189545,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -30.7613836924235,
+        35.326812744140625,
+        7.000280698140462
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 10.326812744140625,
+      "pathDistanceLocal": 54.83504528902212,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -31.051132837931313,
+        35.326812744140625,
+        5.6654140154520665
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 10.326812744140625,
+      "pathDistanceLocal": 55.2836504063892,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -30.187593460083008,
+        37.482295989990234,
+        -7.915872414906819
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 12.482295989990234,
+      "pathDistanceLocal": null,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    },
+    {
+      "species": "fold-fan",
+      "speciesIndex": 0,
+      "position": [
+        -29.72709782918294,
+        37.482295989990234,
+        -9.19130261739095
+      ],
+      "zone": "rock-crevice",
+      "supportName": "v2-bank-rock-shelves",
+      "rootSupportSamples": 5,
+      "waterClearanceLocal": 12.482295989990234,
+      "pathDistanceLocal": null,
+      "radiusLocal": 0.42,
+      "radius": 0.42,
+      "height": 1.21
+    }
+  ],
+  "habitation": [
+    29.56784964690934,
+    34.18,
+    4.166757403276901
+  ]
+}

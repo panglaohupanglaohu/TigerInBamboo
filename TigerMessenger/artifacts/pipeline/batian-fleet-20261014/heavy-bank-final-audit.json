@@ -1,0 +1,305 @@
+{
+  "phase": "pincer",
+  "age": 23.353199999809267,
+  "energy": 40.97881800004015,
+  "shield": true,
+  "wingNodes": 2,
+  "heat": 12.330360000038148,
+  "target": "bookshop",
+  "cycle": 1,
+  "shots": 12,
+  "retreatReason": null,
+  "arrival": {
+    "distance": 116.5166635471505,
+    "altitude": 40.500000000000085,
+    "visible": true,
+    "inRange": true
+  },
+  "safeRadius": 186.8857733396333,
+  "flagshipPosition": [
+    61.72938636848409,
+    -54.004733736873284,
+    182.95688451812865
+  ],
+  "members": 14,
+  "roles": [
+    "attack",
+    "attack",
+    "attack",
+    "attack",
+    "attack",
+    "guard",
+    "jammer",
+    "guard",
+    "scout",
+    "scout",
+    "scout",
+    "transport",
+    "transport",
+    "transport"
+  ],
+  "wingDamage": 0,
+  "events": [
+    {
+      "phase": "assemble",
+      "time": 83.636,
+      "energy": 100,
+      "shots": 0
+    },
+    {
+      "phase": "transit",
+      "time": 91.66240000009537,
+      "energy": 100,
+      "shots": 0
+    },
+    {
+      "phase": "blockade",
+      "time": 108.32680000019074,
+      "energy": 95.15,
+      "shots": 0
+    },
+    {
+      "phase": "pincer",
+      "time": 126.33340000009537,
+      "energy": 72.02,
+      "shots": 5
+    }
+  ],
+  "blockedHits": 72,
+  "unitShots": 6,
+  "fireLog": [
+    {
+      "time": 108.37660000014306,
+      "type": "ion",
+      "role": "scout",
+      "source": "triple-gate-scout-aircraft",
+      "point": [
+        -32.90333989546548,
+        -93.91209814371312,
+        132.7512252559861
+      ]
+    },
+    {
+      "time": 111.86860000014305,
+      "type": "ion",
+      "role": "flagship",
+      "source": "crystal-city-colossus",
+      "point": [
+        -32.90333989546548,
+        -93.91209814371312,
+        132.7512252559861
+      ]
+    },
+    {
+      "time": 111.86860000014305,
+      "type": "ion",
+      "role": "scout",
+      "source": "triple-gate-scout-aircraft",
+      "point": [
+        -32.90333989546548,
+        -93.91209814371312,
+        132.7512252559861
+      ]
+    },
+    {
+      "time": 114.40890000009537,
+      "type": "rain",
+      "role": "flagship",
+      "source": "crystal-city-colossus",
+      "point": [
+        -63.10758760667492,
+        -103.33803006220539,
+        113.41059719911487
+      ]
+    },
+    {
+      "time": 114.8705,
+      "type": "ion",
+      "role": "scout",
+      "source": "triple-gate-scout-aircraft",
+      "point": [
+        -63.358714667887114,
+        -101.09298790229056,
+        115.27088420663172
+      ]
+    },
+    {
+      "time": 128.0125,
+      "type": "cannon",
+      "role": "flagship",
+      "source": "crystal-city-colossus",
+      "point": [
+        -90.96145631444088,
+        -76.72488621805118,
+        115.5876960292498
+      ]
+    },
+    {
+      "time": 132.66840000009537,
+      "type": "traction",
+      "role": "flagship",
+      "source": "crystal-city-colossus",
+      "point": [
+        -29.40134323263912,
+        -133.36694515781815,
+        95.38194459848293
+      ]
+    },
+    {
+      "time": 143.5315,
+      "type": "rain",
+      "role": "flagship",
+      "source": "crystal-city-colossus",
+      "point": [
+        -29.40134323263912,
+        -133.36694515781815,
+        95.38194459848293
+      ]
+    },
+    {
+      "time": 143.5315,
+      "type": "rain",
+      "role": "attack",
+      "source": "moebius-aircraft",
+      "point": [
+        -29.40134323263912,
+        -133.36694515781815,
+        95.38194459848293
+      ]
+    },
+    {
+      "time": 143.5315,
+      "type": "rain",
+      "role": "attack",
+      "source": "moebius-aircraft",
+      "point": [
+        -29.40134323263912,
+        -133.36694515781815,
+        95.38194459848293
+      ]
+    },
+    {
+      "time": 149.60690000009538,
+      "type": "ion",
+      "role": "flagship",
+      "source": "crystal-city-colossus",
+      "point": [
+        -102.08357627158459,
+        -109.1168211353028,
+        73.62987981064421
+      ]
+    },
+    {
+      "time": 149.60690000009538,
+      "type": "ion",
+      "role": "jammer",
+      "source": "gate-pod-escort-pod-41-7",
+      "point": [
+        -102.08357627158459,
+        -109.1168211353028,
+        73.62987981064421
+      ]
+    }
+  ],
+  "flight": {
+    "bankDegrees": 0.3872991123240709,
+    "attackSpeed": 9,
+    "turnLimit": 0.11
+  },
+  "bay": {
+    "openness": 1
+  },
+  "arsenal": {
+    "cannon": 1,
+    "rain": 4,
+    "ion": 6,
+    "traction": 1,
+    "robotHits": 10,
+    "robotsShattered": 3,
+    "shieldImpacts": 72,
+    "lastImpact": {
+      "point": [
+        -29.377061043606318,
+        -132.3816634041905,
+        96.76709088724242
+      ],
+      "type": "rain",
+      "age": 0
+    },
+    "activeSteamJets": 8,
+    "factoriesStopped": 2,
+    "robotsBlinking": 1,
+    "activeIon": true,
+    "activeEffects": 232,
+    "pendingProjectiles": 5
+  },
+  "beamActive": true,
+  "types": [
+    "moebius-aircraft",
+    "moebius-aircraft",
+    "moebius-aircraft",
+    "moebius-aircraft",
+    "moebius-aircraft",
+    "gate-pod-escort-pod-55-2",
+    "gate-pod-escort-pod-41-7",
+    "gate-pod-escort-pod-08-9",
+    "triple-gate-scout-aircraft",
+    "triple-gate-scout-aircraft",
+    "triple-gate-scout-aircraft",
+    "vanguard-hauler-0",
+    "vanguard-hauler-1",
+    "vanguard-hauler-2"
+  ],
+  "route": [
+    {
+      "id": "bookshop",
+      "label": "书店镇"
+    },
+    {
+      "id": "apostles",
+      "label": "十二门徒"
+    },
+    {
+      "id": "citadel",
+      "label": "高山圣城"
+    },
+    {
+      "id": "old-port",
+      "label": "旧港湾"
+    },
+    {
+      "id": "swamp",
+      "label": "湖沼"
+    },
+    {
+      "id": "moss",
+      "label": "苔庭"
+    },
+    {
+      "id": "moon-lake",
+      "label": "月湖"
+    },
+    {
+      "id": "gate",
+      "label": "叹息之门"
+    }
+  ],
+  "completedTargets": [],
+  "campaignFinished": false,
+  "objectsReused": [
+    "8c8de94b-93d6-40f1-991f-c6fbfada4ec8",
+    "cafb1230-bb5e-4bd2-99d8-c77e3866f749",
+    "2dc1aad0-d659-410c-a363-82d5c2c590a4",
+    "063ada68-03c2-423a-a62a-40db7d78dca6",
+    "f66e9338-fae3-4405-ae56-9d4810d34c46",
+    "03859f21-5431-4e51-8842-82b28265fe18",
+    "0a61cf67-5db0-4d57-bfdb-286d66008b30",
+    "ab0abcb7-46f8-4d7b-bddc-0c190bc9ba7c",
+    "9f1cdc45-a651-4d52-8a04-82dcef50d8be",
+    "267b6c98-0c89-413c-99cd-02193f47b662",
+    "a966bc23-ddc6-40cb-a348-becb82571329",
+    "be9f04f1-09cb-4dda-b8a3-7ac978d790bc",
+    "26e88d72-7e81-407b-83f4-7a04df1584ca",
+    "09d146ab-4627-4c0f-88b9-91df39ed766a"
+  ]
+}

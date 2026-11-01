@@ -1,0 +1,30 @@
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/build_morris_princess_v12.py:11: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.diffuse_color=(*[((int(h[i:i+2],16)/255+.055)/1.055)**2.4 if int(h[i:i+2],16)/255>.04045 else int(h[i:i+2],16)/255/12.92 for i in (0,2,4)],1);m.use_nodes=True
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/build_morris_princess_v12.py:11: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.diffuse_color=(*[((int(h[i:i+2],16)/255+.055)/1.055)**2.4 if int(h[i:i+2],16)/255>.04045 else int(h[i:i+2],16)/255/12.92 for i in (0,2,4)],1);m.use_nodes=True
+Info: Saved as "princess-v12-standing.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+02:43:27 | INFO: Starting glTF 2.0 export
+02:43:27 | INFO: Extracting primitive: SM_Finger
+02:43:27 | INFO: Primitives created: 2
+02:43:27 | INFO: Extracting primitive: SM_Finger.004
+02:43:27 | INFO: Primitives created: 2
+02:43:27 | INFO: Extracting primitive: SM_Antique_Belt
+02:43:27 | INFO: Primitives created: 3
+02:43:27 | INFO: Extracting primitive: SM_Almond_Eye
+02:43:27 | INFO: Primitives created: 8
+02:43:27 | INFO: Extracting primitive: SM_Cloak_Front_Border
+02:43:27 | INFO: Primitives created: 2
+02:43:27 | INFO: Extracting primitive: Sphere.065
+02:43:27 | INFO: Primitives created: 2
+02:43:27 | INFO: Finished glTF 2.0 export in 0.04323387145996094 s
+00:01.321  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-rebuild-20261028/princess-v12-standing-front.png'
+00:01.587  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-rebuild-20261028/princess-v12-standing-side.png'
+00:01.885  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-rebuild-20261028/princess-v12-standing-back.png'
+00:02.128  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-rebuild-20261028/princess-v12-standing-head.png'
+
+REBUILT standing 97222
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

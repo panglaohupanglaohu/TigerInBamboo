@@ -1,0 +1,40 @@
+{
+  "version": "airship-city-steam-ripples-final-20261015",
+  "observations": [
+    "Actual controller CPU route fixed: old closest109.157m, new0.065m. Formal normal game Q/F boarded airship, native W inputs: city distances199,183,130,61,26m; entered city and kept moving. New screenshots saved.",
+    "Actual Bookshop formal GPU pass shows soft charcoal smoke and warm flash amid crane occlusion; live counts activeSoftSmoke152 shieldImpacts75. Independent GPU using the exact formal arsenal module showed initial 1px wavelets too faint; changed to3 circular64-segment0.28m wide bands, screenshot now visibly shows wavelet and soft smoke/fire. Independent GPU is NOT full game acceptance.",
+    "CPU moving shield surface max equation error0.0181,12 grey steam sprites,fire preserved,shared texture disposal once; damage regression passes. Final wider wave code reloaded in ordinary game, final full-game impact closeup not yet captured."
+  ],
+  "checks": [
+    {
+      "name": "CPU actual controller reaches city",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Manual formal W flight crosses boundary and enters city",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Formal smoke GPU and exact-source isolated wavelet GPU observed",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "CPU damage smoke resource and moving surface checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full-game final widened ripple closeup",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Text only; no images or full chat",
+    "No publication or commit",
+    "JEV does not inspect images"
+  ]
+}

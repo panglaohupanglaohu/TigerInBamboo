@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-06T12:27:34.848515+08:00",
+  "release": "user-marked-transit-release-1",
+  "walking": "stacked-connected",
+  "accepted": false,
+  "gpuPending": false,
+  "files": {
+    "src/world/tramSystem.js": "12cb234f70ca3dcffb9d5e258ce94a5856e90c8380cb11ceacf2d5dd7ba97d15",
+    "src/world/citadel/targetUserMarkedProductionRelease.js": "f44e0611fe66fa306fce60e740ffd6e855034d5cf305b8974c7b8bbe4dd92052",
+    "src/world/citadel/targetUserMarkedTransitRelease.js": "6e016032df6541fef3b21ef9a2645a809c5c39453e99b3c0f8ced744e1f6d93e",
+    "src/world/citadel/targetUserMarkedTransitPlan.js": "d88f8e7b76f28b64d680ea931143d8216ede37a798cef17a5163495a2436d1d4",
+    "src/world/citadel/targetCliffTransitStructure.js": "fb176a2f4ff9f0ebcbc6b6c34d37cb8dcc8fd8914110e20e549f2f5fb2b632bc",
+    "src/world/citadel/targetCityDetailCandidate.js": "3abf41ee36a39445bea4572360a6b451c590ef8c1197fa84a94f33a0c744a0a7",
+    "src/world/citadel/targetCityRuntime.js": "ad6b09114e1bccd95a72abfcd7a6cb6e61cb1db1f6f1c5b34a65a01d0c327721",
+    "src/world/citadel/targetTerrainCandidate.js": "d1a3b2d9df95563c4bcf1fce960ea52922920c546bd4888b0415870e07889383",
+    "src/ui/targetCityPresentation.js": "5b18d4823b602c42876a8fbaf7a69d5b9bf0669ba7eb7d262497c0d849aef858"
+  },
+  "gpuEvidence": "marked-stacked-live-front-day.png"
+}

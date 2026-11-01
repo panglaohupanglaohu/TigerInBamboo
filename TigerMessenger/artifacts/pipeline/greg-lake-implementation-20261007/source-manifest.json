@@ -1,0 +1,97 @@
+{
+  "purpose": "current scoped source snapshot hashes, not a claim that each full file changed only in this batch",
+  "files": [
+    {
+      "file": "src/main.js",
+      "sha256": "75b39dbae07fac52b613fe01c23fb85b533ef75e198401753117392b738a61a5"
+    },
+    {
+      "file": "src/scenes/messengerIsland.js",
+      "sha256": "c051ff03f51bb0aaa3248a05d475c0b0c572ccaf327ed1bba7c5e9e7c55cd520"
+    },
+    {
+      "file": "src/world/moebiusSwamp.js",
+      "sha256": "f569b7b09bc06f40307dc1c2ac190620e4f6354d1176368349835f8ede799fe0"
+    },
+    {
+      "file": "src/assets/characters/tigerTargetV1.js",
+      "sha256": "def418ee719bd9dddda8f36de8da5a54d99ccf26acfb198fd6f34bfb107096ab"
+    },
+    {
+      "file": "src/assets/characters/swampTigerV2.js",
+      "sha256": "f2a8ce03dc796ca2ab57b63d9ba0f8864a011b831c3e28fdd756260a52603d2f"
+    },
+    {
+      "file": "src/world/swampSpatialPlan.js",
+      "sha256": "13095ebd4eb794c3de6bec3df7678327e2ecd5cba5e34fc68ab15a770310ec14"
+    },
+    {
+      "file": "src/world/swampCameraOcclusion.js",
+      "sha256": "31278c2d924f393a6ab54b61c4a605fdf9f76e8f014feafddab95f801137c38d"
+    },
+    {
+      "file": "src/world/swampGregEcology.js",
+      "sha256": "af632f482b0bb5ff3f04a4efbe5cba9523f2c8a81540560e6925d5a553fe659f"
+    },
+    {
+      "file": "src/world/swampBridgeClearance.js",
+      "sha256": "2f8ae7716039de3c510164ab53ce859dadf9b5f5cd2f0948a16595db8bb489e2"
+    },
+    {
+      "file": "src/world/swampCoralCanopy.js",
+      "sha256": "6d622e075e8b478ff6fa837bc0912d012b1be803a41e7175433796b701154a0f"
+    },
+    {
+      "file": "src/world/swampNaturalCliff.js",
+      "sha256": "e98a57274e57df40e610b53eb61d72df8a6af75bab13391df17ce4e14d635a29"
+    },
+    {
+      "file": "src/world/swampV2Art.js",
+      "sha256": "2a3fbab4d6bf42a276bc17aef70864041b9a9c431addb6284822b408639c2575"
+    },
+    {
+      "file": "src/world/swampGregVisuals.js",
+      "sha256": "9dba42a6fe0201d255544067cb3249c28cf41c863d4958747304300edce0176e"
+    },
+    {
+      "file": "src/world/swampPlayerSupport.js",
+      "sha256": "fd175b19801b9cad0b0094591a6bfc0e760df00a2aed77881cf30c2870cf0c09"
+    },
+    {
+      "file": "src/world/swampCoralRim.js",
+      "sha256": "e1638dd38ad4e22383675b4ccfd2082aecb391f6a8ce275fcd027d3533b08714"
+    },
+    {
+      "file": "src/world/swampWaterShore.js",
+      "sha256": "af4c84808074203241d9a2f83245418498b93a16a9b1f952354d534cb91d8506"
+    },
+    {
+      "file": "src/world/swampCoralPerches.js",
+      "sha256": "e862e9ab0356bda6a53b22e4cf58e1743ef7f741c2d5b28c786edff1ce418231"
+    },
+    {
+      "file": "src/world/swampGregHabitation.js",
+      "sha256": "86732b9d2be57c93475ce76a62de6e29c2c193cfbbc303efd7872b1ea8e37245"
+    },
+    {
+      "file": "src/world/swampGregLivingPaths.js",
+      "sha256": "d411d9a1ccdeeb548cee2c4d6b68c6fb477e34c43eff9f625a89383c4002752d"
+    },
+    {
+      "file": "src/world/swampGround.js",
+      "sha256": "b889847c03217a8672f434364db1c364791f9a42aba6381a8f01eab876ff7364"
+    },
+    {
+      "file": "src/world/citadel/targetShipHeadlandClip.js",
+      "sha256": "9eb6848b37d39de40626e39f0e17772ddd2b4687b34146392b5b8d352d7ef24d"
+    },
+    {
+      "file": "src/world/citadel/targetRearShipVolumeClip.js",
+      "sha256": "2773cd537aa1d13577379933e471caa896f3b8887878570ef5803350a6ba4d16"
+    },
+    {
+      "file": "src/world/citadel/targetWestRailHeadlandRetreat.js",
+      "sha256": "898a4aa03f33232df4d5efdb71c3f615cf3c750db26ce9854f042abd20b33ed3"
+    }
+  ]
+}

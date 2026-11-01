@@ -1,0 +1,98 @@
+{
+  "at": "2026-10-08T10:59:46.705470+08:00",
+  "target": "artifacts/pipeline/greg-lake-current-target-20261008/target-v2.png",
+  "observation": "Actual overview-first-t0.jpg showed flat ring, low foliage clumps, weak trunk scars and evenly spaced wall lines. Target has varied upright vegetation, hanging colonies, coherent eroded stone and old bark.",
+  "round": 2,
+  "files": {
+    "swampCoralTrunkDetail.js": "10e91019186a0b850209ebe88922af42ecbcbdf96134da12333432c3aaa8c627",
+    "swampCoralTrunkBatch.js": "1ccb2c69b00d51fc3cd02c3403d9a57a56d87fb9a2a4807ee294ed6beedcb32d",
+    "swampNaturalCliff.js": "597030e4cdef9f201a7f1c9f3988a4c5097876d7a847cede26fa11e1dc0d7daf",
+    "swampCoralOuterCliff.js": "db338fb1c828cb9a59d4f9c849f1ec555a707770a71070bd2f21e7b1d87df36f",
+    "swampCoralUnderstory.js": "2273a817254baa549483bd87cb6f0f4482c41648af488910690cb14349a07e25",
+    "swampCoralWeathering.js": "44f767da0bb0d7e41cc469765a718b3eb2d78e62ed90d13eb499f3e3efa8cb1f"
+  },
+  "recovery": "environment-before/src/world contains all 5 prior production modules; new Weathering helper can remain unused after restoring 3 importers. Do not restore unrelated modules.",
+  "changes": [
+    "old root/limb swell sculpted into original closed trunk skin; branch anchors and protected band preserved",
+    "same six large geological shoulders wider; original wall collision vertices exact",
+    "object-attached weathering, dry/wet separation, sparse moss and mineral fields; regular old horizontal shader courses disabled",
+    "raised arching fan leaves and medium-height plants arranged in seven unequal habitats; deeper green leaf backs",
+    "same 4 understory instanced batches, 11 tree render batches, 3 inner cliff draws, 2 outer cliff draws"
+  ],
+  "checks": {
+    "localTests": "27/27 environment-round2-tests.txt",
+    "localVertices": "all generated rim leaves clear forbidden radius35.4–39.4; maxY52.968 under bridge budget55",
+    "localCounts": {
+      "fern": 95,
+      "fan": 50,
+      "pendant": 363,
+      "rimPlants": 93,
+      "triangles": 53140
+    },
+    "formal": {
+      "elapsedMs": 29435.330584,
+      "understory": {
+        "version": 7,
+        "counts": {
+          "fern": 103,
+          "fan": 58,
+          "pendant": 417
+        },
+        "draws": 4,
+        "triangles": 63092,
+        "actualVertexChecks": 168396,
+        "rimCrossings": 0,
+        "envelopeEscapes": 0,
+        "envelopeViolations": 1
+      },
+      "violations": [
+        {
+          "source": "cliff",
+          "type": "pendant",
+          "position": [
+            18.933560274041742,
+            39.622,
+            -26.877455333947935
+          ],
+          "envelope": {
+            "position": [
+              18.933560274041742,
+              38.66651543086469,
+              -26.877455333947935
+            ],
+            "radius": 1.2421299398758971,
+            "height": 1.2421299398758971
+          },
+          "triangleEdgeHits": 0,
+          "rootCandidates": [],
+          "reasons": [
+            "existing-root"
+          ],
+          "actualHits": 0,
+          "actualReasons": {}
+        }
+      ]
+    },
+    "protectedMeshesHashSameAsFormalBaseline": true
+  },
+  "GPUHistory": [
+    {
+      "round": 1,
+      "result": "initial shader compile failed: crackPhase redefinition",
+      "fix": "cw-prefixed identifiers plus lexical scope; composed existing-wall shader regression test added"
+    },
+    {
+      "round": 1,
+      "result": "root reload shaderErrors[]; overview-first-t0.jpg; visible effect too weak, prompted round2"
+    }
+  ],
+  "GPUCurrent": "pending root same-camera overview and middle-bank close bark",
+  "notChanged": [
+    "tiger/courier/fauna/animation",
+    "walk mesh vertices",
+    "underwater roots",
+    "dock geometry",
+    "tiger stair geometry"
+  ],
+  "skillAvailability": "AGENTS referenced threejs-game-director SKILL.md missing at configured path and searched local skill roots; no claim of using it."
+}

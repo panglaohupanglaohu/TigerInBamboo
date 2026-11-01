@@ -1,0 +1,31 @@
+{
+  "scope": "candidate .75 crown derived from current real production bank endpoints; not a GPU test",
+  "passed": 5,
+  "checks": [
+    "actual production endpoints retained by0.75 crown candidate",
+    "arch crown follows higher deck with positive physical thickness",
+    "candidate preserves3.2m full walk corridor above actual graded deck",
+    "water level passage stays clear beneath raised arch",
+    "candidate actual geometry remains finite and8m length"
+  ],
+  "report": {
+    "revision": "continuous-arch-r3",
+    "archBarrel": true,
+    "solidParapets": true,
+    "closedArchCore": true,
+    "continuousCoping": true,
+    "deckCrown": 0.75,
+    "archRise": 2.08,
+    "minimumCoreThickness": 0.6126992666817159,
+    "walkWidth": 3.2,
+    "span": 8,
+    "archStones": 52,
+    "masonryPieces": 196,
+    "mergedStoneBatches": 5,
+    "terrainBankContactVerified": false
+  },
+  "bankEndpoints": [
+    1.6786707639694214,
+    -0.23356369137763977
+  ]
+}

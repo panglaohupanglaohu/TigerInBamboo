@@ -1,0 +1,47 @@
+{
+  "status": "source-ready-parent-cache-GPU-pending",
+  "source_hashes": {
+    "morrisLandscape.js": "f690a9995898f4900fd3c3b20955dd4fa85987142f8a7df7f741a934322315f3",
+    "morrisMountainRoute.js": "3f0c3eedda89f42df416741251b84f594bcb90646f4506decee1ef3fd212f11b",
+    "morrisLandscapeDetails.js": "cbce0d65bf23472561f6c06e04d0ec07d1a330b4a216c7424b177a8a13c2ebcd"
+  },
+  "changed": [
+    "morrisMountainRoute.js",
+    "morrisLandscape.js"
+  ],
+  "unchanged": [
+    "morrisLandscapeDetails.js",
+    "castle anchors and original actors",
+    "bridge centre and orientation",
+    "actual mouth beyond coast and river geometry"
+  ],
+  "route_query": "morris-route-replan-final-r1",
+  "route_length_m": 247.09570845579114,
+  "before_length_m": 227.77801931241984,
+  "west_return_radius_m": 9,
+  "east_ellipse_m": [
+    5.1,
+    4.55
+  ],
+  "minimum_measured_centreline_radius_m": 3.9999999999984808,
+  "checks": {
+    "geometry": 15,
+    "actual_route_comparison": 5,
+    "patrol_controller": 11,
+    "support": "no buried/floating road core or premature castle intrusion",
+    "saved_rail": "minimum road centre14.796m, no cover after production protection"
+  },
+  "rejected": [
+    "support-first-checks.json",
+    "support-second-checks.json"
+  ],
+  "evidence_scope": "source factory and headless controller; current real game GPU and riding not yet accepted",
+  "visual_acceptance": false,
+  "normal_navigation_acceptance": false,
+  "pending": [
+    "parent current normal GPU wider mountain route and approach view",
+    "normal game current GLB complete riding and train envelopes"
+  ],
+  "skill_status": "Oskar skill read; old AGENTS director skill absolute path absent, searched personal/project paths with no match; no loading claim",
+  "jev": "first request TimeoutError preserved; exact retry succeeded jev-1.14.0; exact repeat cache_hit=true"
+}

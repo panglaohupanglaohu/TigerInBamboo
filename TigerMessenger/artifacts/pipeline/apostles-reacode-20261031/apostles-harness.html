@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/jsm/"}}</script>
+<style>html,body{margin:0;background:#9fd0e6;overflow:hidden}</style></head><body><script type="module">
+import * as T from 'three';
+const q=new URLSearchParams(location.search);
+const W=+(q.get('w')||1280),H=+(q.get('h')||720),mode=q.get('mode')||'new';
+window.__h={ready:false,err:null};
+try{
+ const scene=new T.Scene();scene.background=new T.Color('#9fd0e6');
+ const renderer=new T.WebGLRenderer({antialias:true});renderer.setSize(W,H);renderer.shadowMap.enabled=true;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;document.body.append(renderer.domElement);
+ const camera=new T.PerspectiveCamera(42,W/H,.5,2000);
+ scene.add(new T.HemisphereLight(0xeaf6ff,0x6f8d8a,1.6));
+ const sun=new T.DirectionalLight(0xfff1dc,2.6);sun.position.set(-60,320,-140);sun.target.position.set(0,160,0);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);const sc=sun.shadow.camera;sc.left=sc.bottom=-120;sc.right=sc.top=120;sc.near=10;sc.far=600;scene.add(sun,sun.target);
+ const ocean=new T.Mesh(new T.SphereGeometry(160,256,192),new T.MeshStandardMaterial({color:0x2f8fa8,roughness:.35,metalness:0}));ocean.name='planet-v8-curved-ocean';ocean.receiveShadow=true;scene.add(ocean);
+ const curve={getLength:()=>Math.PI*2*161,getPointAt:u=>new T.Vector3(Math.sin(u*Math.PI*2)*161,Math.cos(u*Math.PI*2)*161,0),getTangentAt:u=>new T.Vector3(Math.cos(u*Math.PI*2),-Math.sin(u*Math.PI*2),0)};
+ const railPoints=Array.from({length:2024},(_,i)=>curve.getPointAt(i/2024));
+ const railPath=new T.CatmullRomCurve3(Array.from({length:200},(_,i)=>{const u=-.12+.24*i/199;return curve.getPointAt((u+1)%1).multiplyScalar(165.5/161);}));
+ const rail=new T.Mesh(new T.TubeGeometry(railPath,400,.9,6,false),new T.MeshStandardMaterial({color:0x8a5a3c}));scene.add(rail);
+ const parent=new T.Group();parent.name='apostle-parent';scene.add(parent);
+ const args={parent,radius:160,railCurves:{red:curve},railPoints,waterAt:p=>p.clone().normalize().multiplyScalar(160),referencePoint:new T.Vector3(0,160,8)};
+ const t0=performance.now();let result;
+ if(mode==='old'){const m=await import('./src/world/twelveApostlesTarget.js?v='+Date.now());result=m.buildTwelveApostlesTarget(args);}
+ else{const m=await import('./src/world/apostlesReacode.js?v='+Date.now());result=m.buildTwelveApostlesReacode(args);}
+ const buildMs=performance.now()-t0;
+ const views={overview:[[0,215,-120],[0,158,-5]],bay:[[10,178,-70],[0,160,-25]],close:[[-30,172,-62],[-40,162,-36]],back:[[60,185,-40],[30,165,30]]};
+ const setView=v=>{const [e,a]=views[v]||views.overview;camera.position.set(...e);camera.up.copy(camera.position).normalize();camera.lookAt(...a);camera.updateMatrixWorld();};
+ setView(q.get('view')||'overview');
+ const frame=()=>{renderer.render(scene,camera);return renderer.info.render;};
+ const info=frame();
+ let tris=0,meshes=0;scene.traverse(o=>{if(!(o.isMesh)||o===ocean||o===rail)return;meshes++;const g=o.geometry,n=g.index?g.index.count/3:g.attributes.position.count/3;tris+=n*(o.isInstancedMesh?o.count:1);});
+ window.__h={ready:true,T,scene,camera,renderer,result,frame,setView,stats:{mode,buildMs:Math.round(buildMs),drawCalls:info.calls,trianglesRendered:info.triangles,objects:meshes,trianglesTotal:Math.round(tris),report:result.report}};
+}catch(e){window.__h.err=String(e.stack||e);}
+</script></body></html>

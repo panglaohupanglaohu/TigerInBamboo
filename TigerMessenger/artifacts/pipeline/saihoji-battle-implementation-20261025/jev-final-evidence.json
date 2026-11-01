@@ -1,0 +1,30 @@
+{
+  "task": "Saihoji R9 deadline evidence triage",
+  "observations": {
+    "actual": "normal-r9-final.json at21:15UTC: fight/50concealed originally,34living now,191actual traditional shieldcontacts(21arrow/170javelin),Kun risen.18original heavy ground/sweep,9shield/9gun roles,25gunbursts,17swordswings/7swordhits,144friendlyfireholds,shieldBlocks0. In-range116m,energy50. No consoleerrors. Full recovery/medical/reset not verified.",
+    "tests": "21regressions pass; git diff check clean.",
+    "limits": "No complete ground combat/recovery/reset proof. Traditional injured physical boarding/highland medical not implemented. No subjective sound/FPS claim."
+  },
+  "checks": [
+    {
+      "name": "actual first strike and defender counterfire",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full evacuation, medical and reset plus ground close-up/shield-block evidence",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "traditional wounded medical transport",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "Text only, no image/voice acceptance",
+    "No release/commit/push"
+  ],
+  "evidence_revision": "r9-final-2115"
+}

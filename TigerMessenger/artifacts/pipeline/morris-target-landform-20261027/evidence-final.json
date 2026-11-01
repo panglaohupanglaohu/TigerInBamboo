@@ -1,0 +1,26 @@
+{
+  "scope": "Morris current r47 actual target iteration final text triage",
+  "observations": [
+    "Actually viewed r14 bare model and normal r47 terrain: summit disc and road-inner cone removed; asymmetric ridges and lower benches visible; court outer wall still too continuous.",
+    "Actually viewed horse V6 front/side renders and normal r47 loaded skin: shorter muzzle and curved throat, waved ivory mane, navy gold cloth; still simplified compared with target.",
+    "13 interface checks, 11 patrol factory checks, 10 neutral actual GLB tests and three gait speed checks passed. Normal r47 rider remains visible and moving. No whole normal loop or exact gait match claimed.",
+    "Console errors empty in current r47 normal game; source backups and model V1-V6 retained."
+  ],
+  "checks": [
+    {
+      "name": "normal actual model load and terrain render",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "terrain target appearance accepted",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "horse target full shape and gait accepted",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>苔庭触发条件回归</title><script type="importmap">{"imports":{"three":"/TigerMessenger/vendor/three.module.js"}}</script><h1>正式苔庭场景逻辑回归（受控输入，非完整游戏战争验收）</h1><pre id="result">检查中</pre><script type="module">
+import * as T from 'three';import {saihojiGardenScene} from '/TigerMessenger/src/scenes/saihojiGarden.js';
+try{
+const scene=new T.Scene();scene.userData.batianCommandMode=true;const squad=new T.Group();squad.name='moebius-aircraft-squad';squad.userData.members=[];scene.add(squad);const phalanx=new T.Group();phalanx.name='saihoji-phalanx-battle';phalanx.userData.campaignStatus={managed:true,discoveryAllowed:true};phalanx.userData.saihojiAmbush={state:{stage:'concealed'}};scene.add(phalanx);
+const garden=saihojiGardenScene.load({scene,planetRadius:160,options:{}}),dir=garden.group.position.clone().normalize();squad.userData._patrolCenter=dir.clone().multiplyScalar(200);let t=0;const checks=[];
+function step(n){for(let i=0;i<n;i++){t+=.1;garden.update(.1,t);}}
+function check(name,value){if(!value)throw Error(name);checks.push({name,passed:true,lift:garden.whaleLift01(),gate:garden.group.userData.batianBattleTrigger});}
+step(200);check('near patrol plus story signal never starts battle',garden.whaleLift01()<.01&&!squad.userData.whaleLock?.active);
+const s={cycle:1,target:'bookshop',phase:'pincer',flagshipPosition:dir.clone().multiplyScalar(210).toArray(),fireLog:[{role:'flagship'}],arrival:{visible:true}};scene.userData.batianFleet={active:true,snapshot:()=>s};step(100);check('flagship fighting bookshop leaves moss peaceful',garden.whaleLift01()<.01);
+s.target='moss';s.phase='transit';step(100);check('transit through moss never starts battle',garden.whaleLift01()<.01);
+s.phase='pincer';s.fireLog=[{role:'attack'}];step(100);check('escorts without flagship strike cannot start battle',garden.whaleLift01()<.01);
+s.fireLog=[{role:'flagship',type:'rain'}];step(250);check('actual flagship attack on moss reveals whale',garden.whaleLift01()>.9&&squad.userData.whaleLock.active);
+let beam=null;scene.traverse(o=>{if(o.name.includes('beam')&&o.type==='Group')beam=o;});check('old independent pulse disabled in command mode',!squad.userData.groundPulse&&!scene.getObjectByName('saihoji-suction-beam').visible);
+s.phase='withdraw';step(300);check('retreat releases whale lock and returns whale',garden.whaleLift01()<.03&&!squad.userData.whaleLock.active);
+garden.dispose();document.querySelector('#result').textContent=JSON.stringify({passed:true,checks,scope:'Production saihojiGarden module with controlled fleet/campaign inputs; no complete fleet flight or combat visual claim'},null,2);
+}catch(e){document.querySelector('#result').textContent=JSON.stringify({passed:false,error:e.stack},null,2);}
+</script>

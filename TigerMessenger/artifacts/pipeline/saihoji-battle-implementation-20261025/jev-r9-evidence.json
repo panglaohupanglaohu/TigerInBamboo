@@ -1,0 +1,32 @@
+{
+  "task": "Saihoji R9 blockade flight correction",
+  "observations": {
+    "source": "Actual R8 normal-r8-mid/out-of-range plus production flight branches",
+    "actual": "R8 preserved original50alive,50covered, holdtrue energy70; flagship then distance183 (out of gate) with unreleased prepared bombing run, so no counterfire/deployment. Do not claim success.",
+    "cause": "Holding next bomb retained the transit-prepared straight run; flagship kept following its exit indefinitely instead of heavy circuit.",
+    "repair": "During real deployment hold, clear only a prepared unfired run with no pending strike so existing heavy circuit owns flight. Preserve queued/released ordnance; no position jumps/hits/health edits. First strike, actual contact and60s/emergency bounds retained."
+  },
+  "checks": [
+    {
+      "name": "six focused policy/production-snapshot regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "R9 real blockade range/contact/ground combat",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional wounded evacuation/treatment and full reset",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No claim from prior R7 screenshot about new build",
+    "No instant stage/position or fake hits",
+    "No new models/scenes"
+  ],
+  "evidence_revision": "r9"
+}

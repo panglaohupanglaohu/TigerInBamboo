@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Portrait（分层插槽的头像生成器）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #22384d; overflow: hidden;
+    font: 12px/1.45 -apple-system, "PingFang SC", sans-serif; color: #e9eef3; }
+  #wrap { display: flex; height: 100%; }
+  #stage { flex: 1 1 auto; min-width: 0; padding: 12px 14px; box-sizing: border-box; overflow-y: auto; }
+  #panel { flex: 0 0 300px; width: 300px; background: #1b2b3b; border-left: 1px solid #132131; padding: 12px; box-sizing: border-box; overflow-y: auto; }
+  h3 { margin: 0 0 10px; font-size: 12px; color: #fff; font-weight: 600; }
+  #grid { display: grid; gap: 10px; }
+  .face { background: #2f5f8c; border-radius: 3px; overflow: hidden; }
+  .face canvas { display: block; width: 100%; height: auto; }
+  .t { color: #8fa6bb; font-size: 11px; margin: 12px 0 5px; border-bottom: 1px solid #24384c; padding-bottom: 3px; }
+  .t:first-child { margin-top: 0; }
+  .stat { font: 11px ui-monospace, monospace; color: #b8dcc8; }
+  .stat b { color: #fff; }
+  table { border-collapse: collapse; font: 11px ui-monospace, monospace; width: 100%; }
+  td, th { text-align: left; padding: 2px 4px; border-bottom: 1px solid #223447; }
+  th { color: #8fa6bb; font-weight: 500; }
+  input[type=range] { width: 100%; }
+  button { background: #2a4055; color: #e9eef3; border: 1px solid #37536e; border-radius: 3px;
+    padding: 4px 10px; font: 11px inherit; cursor: pointer; }
+  button:hover { background: #334d66; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="stage"><div id="grid"></div></div>
+  <div id="panel">
+    <h3>Portrait Generator</h3>
+    <div class="t">数量</div>
+    <input id="count" type="range" min="4" max="36" value="24" />
+    <div class="stat" id="countV">24 张</div>
+    <div class="t">操作</div>
+    <button id="reseed">换一批 seed</button>
+    <div class="t">剪影多样性</div>
+    <div class="stat" id="div"></div>
+    <div class="t">层级（绘制顺序）</div>
+    <div id="slots"></div>
+    <div class="t">说明</div>
+    <div style="font:11px/1.6 ui-monospace,monospace;color:#8fa6bb">
+      SLOTS 是纯数据：顺序 + 每个槽的可选变体。生成器只做"抽一个变体"，
+      所以换一套素材就是另一种内容（原文 "content agnostic"）。<br>
+      剪影多样性 = 1 − 两两 IoU 均值。太低说明换了等于没换。
+    </div>
+  </div>
+</div>
+<script type="module">
+import { SLOTS, samplePortrait, drawPortrait, silhouetteDiversity } from '../src/portrait.js';
+
+const grid = document.getElementById('grid');
+let baseSeed = 1;
+let count = 24;
+
+function render() {
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = `repeat(${Math.min(6, Math.ceil(Math.sqrt(count)))}, 1fr)`;
+  const specs = [];
+  for (let i = 0; i < count; i++) {
+    const spec = samplePortrait(baseSeed * 100 + i);
+    specs.push(spec);
+    const cell = document.createElement('div');
+    cell.className = 'face';
+    const cv = document.createElement('canvas');
+    cv.width = 180; cv.height = 220;
+    const g = cv.getContext('2d');
+    drawPortrait(g, spec, { x: 0, y: 0, w: 180, h: 220 });
+    cell.appendChild(cv);
+    grid.appendChild(cell);
+  }
+  const d = silhouetteDiversity(specs, { size: 64 });
+  document.getElementById('div').innerHTML =
+    `${count} 张 · 两两 ${d.pairs} 对<br>平均 IoU <b>${d.meanIoU}</b> · 多样性 <b>${d.diversity}</b><br>` +
+    `<span style="color:#8fa6bb">纯噪声≈1.0，全部相同=0</span>`;
+}
+
+function slotTable() {
+  document.getElementById('slots').innerHTML =
+    '<table><tr><th>#</th><th>槽位</th><th>变体</th></tr>' +
+    SLOTS.map((s, i) => `<tr><td>${i}</td><td>${s.key}</td><td style="color:#8fb8d8">${s.variants.length}</td></tr>`).join('') +
+    '</table>';
+}
+
+document.getElementById('count').addEventListener('input', (e) => {
+  count = +e.target.value;
+  document.getElementById('countV').textContent = count + ' 张';
+  render();
+});
+document.getElementById('reseed').onclick = () => { baseSeed++; render(); };
+
+slotTable();
+render();
+window.__portrait = { samplePortrait, drawPortrait, silhouetteDiversity, SLOTS };
+</script>
+</body>
+</html>

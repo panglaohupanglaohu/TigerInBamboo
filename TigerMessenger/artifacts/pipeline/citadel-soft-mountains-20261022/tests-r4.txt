@@ -1,0 +1,18 @@
+✔ rear shoulder morph changes real geometry but every protected support corner stays byte-identical (40.652041ms)
+✔ all final Float32 faces keep orientation and meaningful area after shape changes (29.741958ms)
+✔ shape pass is deterministic and handles actual source-to-castle transforms without touching protected data (36.941042ms)
+✔ shared cliff normals change while flat rim, positions, triangles and source remain unchanged (3.060416ms)
+✔ default off and authored edge locks preserve original shading (0.4805ms)
+✔ indexed input keeps triangle order/attributes, invalid coordinates rejected (0.914333ms)
+✔ bounded actual relief relaxation moves interior only and locks source border (1.891542ms)
+✔ startup keeps actual Mesh/frame/material identity and strict geometry; rollback before consumers restores original (6.631542ms)
+✔ wrong epoch or existing loaded consumers reject before source mutation (0.759ms)
+✔ post-consumer rollback refuses stale cache restoration and disabled mode never inspects scene (1.5125ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 178.060792

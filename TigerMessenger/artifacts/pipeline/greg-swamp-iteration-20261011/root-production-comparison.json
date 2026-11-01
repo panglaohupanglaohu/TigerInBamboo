@@ -1,0 +1,31 @@
+{
+  "fixture": {
+    "sources": 54,
+    "renderBatches": 9,
+    "savedDrawCalls": 45
+  },
+  "productionAfterFinalRoadFitting": {
+    "sources": 36,
+    "renderBatches": 9,
+    "savedDrawCalls": 27,
+    "triangles": 6912
+  },
+  "fixedDiagnosticFrame": {
+    "beforeCalls": 226,
+    "afterCalls": 224,
+    "beforeTriangles": 1391909,
+    "afterTriangles": 1391909,
+    "sameWorldCameraTarget": [
+      -111.98373746393268,
+      -56.87973684461127,
+      -70.3881663385385
+    ]
+  },
+  "limits": [
+    "one camera frame, not complete-game FPS proof",
+    "foliage obscures roots, root material visual fidelity not accepted",
+    "real road fitting hides 18 roots, fixture saving not production actual",
+    "renderer.info reset before individual diagnostic render"
+  ],
+  "date": "2026-10-11"
+}

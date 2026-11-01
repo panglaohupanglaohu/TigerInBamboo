@@ -1,0 +1,32 @@
+{
+  "task": "Morris additional winding uphill approach",
+  "evidence_revision": "morris-route-r25-20261026",
+  "observations": [
+    "Actually viewed current normal game r25 at same mountain-route camera. Upper approach now bends inward toward mountain shoulder then reverses toward castle. Bridge and castle positions retained.",
+    "Route length160.30m,width3.2m, actual radial max grade15.17percent, minimum center radius5.60m, separate road center clearance3.80m; one stream crossing.",
+    "11 local checks passed:7 route ground support/grade/clearance,3 new uphill turn and castle footprint,1 original pine model/collider clearance. Console errors empty.",
+    "No complete player walk verification; no FPS/audio claim."
+  ],
+  "checks": [
+    {
+      "name": "current normal r25 visual and DOM audit",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "11 geometry and support checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "complete actual player walk",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Keep original bridge/castle/court/music and all other scenes",
+    "JEV text only; not visual or navigation acceptance",
+    "no commit push publication"
+  ]
+}

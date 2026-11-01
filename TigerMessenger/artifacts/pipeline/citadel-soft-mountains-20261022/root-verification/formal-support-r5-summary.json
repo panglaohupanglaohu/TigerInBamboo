@@ -1,0 +1,44 @@
+{
+  "standalone": true,
+  "installed": true,
+  "supportStatus": "finalized",
+  "supportInstalled": true,
+  "samples": {
+    "ground": 3915,
+    "sea": 5926,
+    "missingGround": 0,
+    "missingSea": 0
+  },
+  "supportAccepted": false,
+  "supportSections": {
+    "sourceDeck": {
+      "pass": true,
+      "accepted": null,
+      "status": null,
+      "installed": null
+    },
+    "cityStructure": {
+      "pass": null,
+      "accepted": null,
+      "status": null,
+      "installed": null
+    },
+    "approach": {
+      "pass": null,
+      "accepted": false,
+      "status": null,
+      "installed": false
+    },
+    "exclusionPlan": {
+      "pass": null,
+      "accepted": null,
+      "status": null,
+      "installed": null
+    }
+  },
+  "landmarksOK": true,
+  "landmarkFailureCount": 0,
+  "playerNavigationInstalled": true,
+  "completeNavigationVerified": false,
+  "continuousRideVerified": false
+}

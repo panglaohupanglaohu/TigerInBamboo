@@ -1,0 +1,119 @@
+{
+  "scope": "Final normal entry actual game; first sortie manually recalled during cover-bomb pending; second assembly while medical carriers reserved",
+  "before": {
+    "phase": "idle",
+    "ground": {
+      "aboard": 0,
+      "active": false,
+      "assigned": 18,
+      "blastResidentHits": 8,
+      "controllers": 0,
+      "deployed": 18,
+      "friendlyBlastHits": 0,
+      "ground": 0,
+      "heldFor": 0,
+      "liveProjectiles": 0,
+      "medical": {
+        "carriers": [
+          {
+            "id": "3ae2f329-4242-47df-a53b-5cd834014226",
+            "patients": 6,
+            "stage": "return",
+            "treatment": 24.033700000047673
+          },
+          {
+            "id": "88273fdd-8454-4254-8cfe-1e7c250dc6e9",
+            "patients": 4,
+            "stage": "return",
+            "treatment": 24.01640000009537
+          },
+          {
+            "id": "3ca8530f-ba2e-41d2-a73d-bf618a8383ec",
+            "patients": 6,
+            "stage": "return",
+            "treatment": 24.048299999952327
+          }
+        ],
+        "healed": 16,
+        "patients": 16,
+        "rescued": 16,
+        "returned": 0
+      },
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "rappelling": 0,
+      "ready": 0,
+      "recovered": 18,
+      "renderBatch": {
+        "batches": 45,
+        "instances": 0,
+        "sourceMeshes": 1215
+      },
+      "residentHits": 32,
+      "residentShots": 213,
+      "residentsDown": 11,
+      "robotKills": 3,
+      "stage": "done",
+      "trooperRobotHits": 2,
+      "trooperShots": 27,
+      "troopersDown": 16
+    }
+  },
+  "second": {
+    "ground": {
+      "aboard": 0,
+      "active": true,
+      "assigned": 0,
+      "blastResidentHits": 0,
+      "controllers": 0,
+      "deployed": 0,
+      "friendlyBlastHits": 0,
+      "ground": 0,
+      "heldFor": 0,
+      "liveProjectiles": 0,
+      "medical": {
+        "carriers": [
+          {
+            "id": "3ae2f329-4242-47df-a53b-5cd834014226",
+            "patients": 6,
+            "stage": "return",
+            "treatment": 24.033700000047673
+          },
+          {
+            "id": "88273fdd-8454-4254-8cfe-1e7c250dc6e9",
+            "patients": 4,
+            "stage": "return",
+            "treatment": 24.01640000009537
+          },
+          {
+            "id": "3ca8530f-ba2e-41d2-a73d-bf618a8383ec",
+            "patients": 6,
+            "stage": "return",
+            "treatment": 24.048299999952327
+          }
+        ],
+        "healed": 16,
+        "patients": 16,
+        "rescued": 16,
+        "returned": 0
+      },
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "rappelling": 0,
+      "ready": 0,
+      "recovered": 0,
+      "renderBatch": {
+        "batches": 45,
+        "instances": 0,
+        "sourceMeshes": 1215
+      },
+      "residentHits": 0,
+      "residentShots": 0,
+      "residentsDown": 0,
+      "robotKills": 0,
+      "stage": "suppression",
+      "trooperRobotHits": 0,
+      "trooperShots": 0,
+      "troopersDown": 0
+    },
+    "phase": "assemble"
+  }
+}

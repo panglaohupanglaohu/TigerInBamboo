@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "bbe9f2ac9617397499279c655fa1c0020ec20136b0a4c0ca1941956c6dfd59d8",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.97
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.59,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.14,
+        "lighting": 0,
+        "navigation": 0.67,
+        "review": 0.19
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.92
+    }
+  },
+  "usage": {
+    "input_tokens": 872,
+    "output_tokens": 91,
+    "cost_usd": 0.000367,
+    "credits_remaining_usd": 4.895313
+  },
+  "elapsed_ms": 1227,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "foreground rock visual match",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "final normal whole route and railway vehicle clearance",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

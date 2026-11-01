@@ -1,0 +1,24 @@
+understory statistics {"plants":456,"rimPlants":43,"rimAngularCoverage":0.39861111111111114,"vines":180,"counts":{"fern":61,"fan":34,"pendant":361},"triangles":29028,"drawCalls":4,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":280,"overlapping":278,"ratio":0.9928571428571429}
+irregular rim habitats {"plants":43,"clusters":7,"heroes":8,"heightRange":[0.5090022751270726,4.503454983737533]}
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (1.358458ms)
+✔ lush understory uses four instanced batches within triangle budget, not per-plant mesh draws (7.922125ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (11.583417ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (7.489542ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.193166ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (1.135792ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (32.07675ms)
+✔ natural pockets embed in actual clipped wall and taper back into it (30.95825ms)
+✔ soil plants root on real pocket caps; root seams stay against the wall (22.434166ms)
+✔ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (8.7745ms)
+✔ protected paths, story worksite, original tree and swimming domain remain unchanged (6.613834ms)
+✔ spherical placement preserves attachment and dispose exactly restores old visuals (51.848333ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 854.919875

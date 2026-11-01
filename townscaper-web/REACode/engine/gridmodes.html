@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — 三种网格对照（方块 / 六边 / 三角）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #2f4f52; overflow: hidden; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<script type="module">
+import { squareLattice, hexLattice, triLattice, irregularTriFromCells, latticeStats, quadDegreeStats } from '../src/gridmodes.js';
+import { buildGrid } from '../src/grid.js';
+
+const cv = document.getElementById('view');
+const ctx = cv.getContext('2d');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+
+// 第四张是从**引擎真实网格**派生的不规则三角网（原文 1447496205282549761）。
+// 前三种是 Cambridge 演讲里用来对照的规则网格，只有这第四张才是"我们的底图长什么样"。
+const engineGrid = buildGrid({ radius: 4.2, hexSize: 0.62, jitter: 0.22, relaxPasses: 3 });
+
+const modes = [
+  { lat: squareLattice(12, 1), fill: '#f2dd8e' },
+  { lat: hexLattice(9, 9, 0.62), fill: '#e9dcc0' },
+  { lat: triLattice(12, 1), fill: '#d9e4c3' },
+  { lat: irregularTriFromCells(engineGrid.cells), fill: '#cfd9e8', irregular: true },
+].map((m) => ({ ...m, stats: latticeStats(m.lat) }));
+
+function resize() {
+  cv.width = innerWidth * dpr;
+  cv.height = innerHeight * dpr;
+  cv.style.width = innerWidth + 'px';
+  cv.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+function bounds(lat) {
+  let mnX = Infinity, mxX = -Infinity, mnZ = Infinity, mxZ = -Infinity;
+  for (const [x, z] of lat.verts) {
+    mnX = Math.min(mnX, x); mxX = Math.max(mxX, x);
+    mnZ = Math.min(mnZ, z); mxZ = Math.max(mxZ, z);
+  }
+  return { mnX, mxX, mnZ, mxZ, w: mxX - mnX, h: mxZ - mnZ };
+}
+
+// 斜投影：和参考片一样是俯视略带角度，线框与填色两种画法分开
+function project(x, z, box, ox, oy, scale) {
+  const cx = (box.mnX + box.mxX) / 2, cz = (box.mnZ + box.mxZ) / 2;
+  const sx = (x - cx) * scale;
+  const sy = (z - cz) * scale * 0.62;
+  return [ox + sx - sy * 0.45, oy + sy * 0.9 - sy * 0.15];
+}
+
+function drawLattice(m, ox, oy, w, h, wire) {
+  const box = bounds(m.lat);
+  const scale = Math.min(w / box.w, h / box.h) * 0.78;
+  ctx.save();
+  ctx.lineJoin = 'round';
+  for (const f of m.lat.faces) {
+    ctx.beginPath();
+    f.forEach((vi, i) => {
+      const [x, z] = m.lat.verts[vi];
+      const [px, py] = project(x, z, box, ox + w / 2, oy + h / 2, scale);
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    });
+    ctx.closePath();
+    if (wire) {
+      ctx.strokeStyle = 'rgba(226,240,180,0.55)';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = m.fill;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(70,80,60,0.35)';
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+function label(text, x, y, size = 15, color = '#f2f0e4', weight = 600) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.font = `${weight} ${size}px -apple-system, "PingFang SC", sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function draw() {
+  const W = innerWidth, H = innerHeight;
+  ctx.fillStyle = '#2f4f52';
+  ctx.fillRect(0, 0, W, H);
+
+  const cols = 4;
+  const cellW = W / cols;
+  const rowH = H * 0.52;
+
+  modes.forEach((m, i) => {
+    const ox = i * cellW;
+    // 上排：填色（参考片 0~2 / 11 / 17 帧的样子）
+    drawLattice(m, ox + 10, 30, cellW - 20, rowH - 60, false);
+    // 下排：线框（参考片切到纯网格的那几帧）
+    drawLattice(m, ox + 10, 30 + rowH, cellW - 20, H - rowH - 90, true);
+
+    const s = m.stats;
+    const dirName = m.irregular ? '不规则三角' : { square: '方块', hex: '六边', tri: '三角' }[s.name];
+    label(`${dirName}网格`, ox + cellW / 2, 22);
+    const lines = [
+      `面 ${s.faces} · 边 ${s.edges} · 顶点 ${s.verts}`,
+      `面类型 ${Object.keys(s.faceTypes).map((k) => k + '边×' + s.faceTypes[k]).join(' ')}`,
+      `主方向 ${s.majorDirs} 个 · 度数 ${degSummary(s.valence)}`,
+      `面内最小角 中位 ${s.minAngleMedian}° / p05 ${s.minAngleP05}°`,
+    ];
+    // 起点上移：第四格多两行，原来从 H-62 起会被画布底边切掉
+    lines.forEach((t, k) => label(t, ox + cellW / 2, H - 96 + k * 14, 11.5, '#cfdcd2', 400));
+    // 第四格额外一行：四边形网格的度数缺陷（原文 1147881669350891521 的 Todo①）
+    if (m.irregular) {
+      const d = quadDegreeStats(engineGrid.cells);
+      label(
+        `四边形度数 3:${d.hist[3] || 0} 4:${d.hist[4] || 0} 5:${d.five} 6:${d.six}`,
+        ox + cellW / 2, H - 96 + lines.length * 14, 11.5, '#e7c98a', 400,
+      );
+      label(
+        `6 度顶点 内部 ${d.sixPct}%（${d.six}/${d.interior}）  平均偏差 ${d.meanDefect}`,
+        ox + cellW / 2, H - 96 + (lines.length + 1) * 14, 11.5, '#e7c98a', 400,
+      );
+    }
+  });
+
+  window.__gridmodes = {
+    stats: modes.map((m) => m.stats),
+    // 给测试用：三种网格的"每面顶点数"和"主方向数"是这条帖子的核心结论
+    summary: modes.map((m) => ({ name: m.stats.name, irregular: !!m.irregular, dirs: m.stats.majorDirs, faces: m.stats.faces, verts: m.stats.verts, minAngle: m.stats.minAngleMedian })),
+    quadDegrees: quadDegreeStats(engineGrid.cells),
+  };
+}
+
+function degSummary(hist) {
+  return Object.entries(hist)
+    .sort((a, b) => Number(a[0]) - Number(b[0]))
+    .map(([k, v]) => `${k}:${v}`).join(' ');
+}
+
+addEventListener('resize', resize);
+resize();
+</script>
+</body>
+</html>

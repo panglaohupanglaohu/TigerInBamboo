@@ -1,0 +1,32 @@
+{
+  "task": "Saihoji R5 runtime start failure repair",
+  "observations": {
+    "source": "Actual normal R4 launch/end DOM plus exact production assignment order",
+    "actual": "R4 ground operation stayed inactive assigned0. Actual battle reached ambush,10 shield contacts,72 arrows, subsequent story phase done; normal-r4-end.json, no console errors. Not heavy deployment proof.",
+    "cause": "groundHeightAt published only at late combat tick (line4874), but moss ground controller begin runs at launch and correctly rejects absent terrain. Moved same original support provider publication to factory return; no fallback ground or teleport.",
+    "next": "Normal R5 tab reloading. Verify begin assigned>0 first, then natural actual contact and insertion, hold actor identity/terrain."
+  },
+  "checks": [
+    {
+      "name": "17 focused tactics/contact/medical/site regression tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "R5 actual original heavy deployment",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional injured transport to citadel",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No replacing missing terrain with sphere",
+    "No fake landing/contact evidence",
+    "Do not claim full recovery or repeat loop"
+  ],
+  "evidence_revision": "r5"
+}

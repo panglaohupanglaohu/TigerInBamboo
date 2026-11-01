@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>新旧对比</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #1d2f36; color: #e9f1f0; font: 14px/1.4 -apple-system, system-ui, "PingFang SC", sans-serif; }
+  header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 8px 14px; background: #16252b; }
+  header a { color: #9fd3d8; text-decoration: none; font-weight: 600; }
+  select { font: inherit; padding: 4px 8px; border-radius: 6px; border: 1px solid #3a5560; background: #213740; color: #e9f1f0; }
+  .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; height: calc(100% - 46px); }
+  .pane { position: relative; }
+  .pane span { position: absolute; left: 10px; bottom: 10px; z-index: 2; background: rgba(0,0,0,.55); padding: 3px 10px; border-radius: 999px; font-size: 12.5px; pointer-events: none; }
+  iframe { width: 100%; height: 100%; border: 0; display: block; background: #6aa8b0; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html">← 场景</a> <a href="overview.html">总览</a>
+  <label>左 <select id="left"></select></label>
+  <label>右 <select id="right"></select></label>
+  <span style="opacity:.7">两侧各自独立，可分别操作。</span>
+</header>
+<div class="wrap">
+  <div class="pane"><iframe id="fl" title="左侧"></iframe><span id="ll"></span></div>
+  <div class="pane"><iframe id="fr" title="右侧"></iframe><span id="lr"></span></div>
+</div>
+<script>
+const PAGES = [
+  ['Townscaper.html', 'Townscaper 旧版（学习前）'],
+  ['index.html', 'Townscaper 新版（学习后）'],
+  ['engine/world.html', 'engine · 台地岛 / 岸浪'],
+  ['engine/terrain.html', 'engine · 四边形地形'],
+  ['engine/demo.html', 'engine · 岛屿生成'],
+];
+const q = new URLSearchParams(location.search);
+for (const [side, def] of [['left', 'Townscaper.html'], ['right', 'index.html']]) {
+  const sel = document.getElementById(side);
+  for (const [v, n] of PAGES) sel.add(new Option(n, v));
+  sel.value = q.get(side) || def;
+  const frame = document.getElementById(side === 'left' ? 'fl' : 'fr');
+  const label = document.getElementById(side === 'left' ? 'll' : 'lr');
+  const load = () => {
+    frame.src = sel.value;
+    label.textContent = sel.options[sel.selectedIndex].text;
+    q.set(side, sel.value);
+    history.replaceState(null, '', '?' + q.toString());
+  };
+  sel.onchange = load;
+  load();
+}
+</script>
+</body>
+</html>

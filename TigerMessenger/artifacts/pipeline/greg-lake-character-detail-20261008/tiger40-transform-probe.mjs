@@ -1,0 +1,11 @@
+import fs from 'node:fs';import * as T from 'three';import {createHash} from 'node:crypto';
+const context=new Proxy({canvas:{width:2,height:2},createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}}),getImageData:(_,__,w=2,h=2)=>({data:new Uint8ClampedArray(w*h*4)}),createImageData:(w,h)=>({data:new Uint8ClampedArray(w*h*4)}),measureText:()=>({width:10})},{get:(o,k)=>o[k]??(()=>{})});
+function element(){const listeners={};return{width:2,height:2,style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},appendChild(){},cloneNode(){return element();},setAttribute(){},addEventListener(k,f){listeners[k]=f;},removeEventListener(){},set src(v){queueMicrotask(()=>listeners.load?.call(this));},getContext:()=>context};}
+globalThis.ImageData=class{constructor(data,width,height){this.data=data;this.width=width;this.height=height;}};
+globalThis.document={getElementById:()=>null,querySelector:()=>null,createElement:element,createElementNS:element,addEventListener(){},body:element()};globalThis.location={search:'?tour=crystal-v7&autostart=1',href:'http://localhost:8931/TigerMessenger/index.html?tour=crystal-v7&autostart=1'};
+// In-memory storage never reads, clears or writes the user's browser saves.
+globalThis.localStorage={getItem:()=>null,setItem(){},removeItem(){}};globalThis.window={addEventListener(){},removeEventListener(){},localStorage,location,innerWidth:1280,innerHeight:800};globalThis.HTMLImageElement=class{};globalThis.Image=class extends HTMLImageElement{constructor(){super();Object.assign(this,element(),{complete:true});}};
+
+const {createMoebiusSwampPlacement}=await import('../../../src/world/moebiusSwamp.js');const root=createMoebiusSwampPlacement({seed:7711,scale:.5}),tiger=root.userData.inner.userData.tiger;await tiger.userData.swampTigerV2Ready;root.updateMatrixWorld(true);const nodes=new Map();tiger.traverse(o=>{if(o.userData.blenderSourceNode)nodes.set(o.userData.blenderSourceNode,o)});
+for(const id of ['n1','n2','n6','n8','n9','n53','n67']){const o=nodes.get(id);console.log(id,'pos',o.position.toArray(),'rot',o.rotation.toArray(),'scale',o.scale.toArray(),'parent',o.parent.userData.blenderSourceNode);}
+for(const o of tiger.children)console.log('child',o.name,o.userData.blenderSourceNode);

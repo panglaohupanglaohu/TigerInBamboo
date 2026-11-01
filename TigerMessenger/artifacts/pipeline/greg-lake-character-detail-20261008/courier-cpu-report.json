@@ -1,0 +1,54 @@
+{
+  "runtimeModel": "reedbank-courier-2",
+  "styleRevision": "accepted-reedbank-target-v2",
+  "formalFactory": "src/assets/characters/humanCourier.js#buildHumanCourier",
+  "formalAdapter": "src/player/agentMessenger.js#buildAgentMessenger",
+  "animation": "src/assets/characters/humanCourier.js#animateHumanCourier (unchanged)",
+  "fittedHeight": 1.66,
+  "fittedMinY": 0,
+  "meshCountIncludingInk": 38,
+  "trianglesIncludingInk": 39844,
+  "legacyMeshCount": 65,
+  "legacyTriangles": 63968,
+  "sharedMaterialCount": 2,
+  "cpuTests": {
+    "passed": 7,
+    "files": [
+      "tests/world/courierMoebius.test.mjs",
+      "tests/world/courierExpedition.test.mjs"
+    ]
+  },
+  "gpuStatus": "Parent GPU verified mail-pod opening/closing in letter/ride poses; rear screenshot exposed bare scalp. Nape-5 fixes rear coverage, awaiting fresh rear GPU capture.",
+  "rollback": "buildHumanCourier({style: \"expedition\"}) or restore only humanCourier.js from this batch before snapshot",
+  "limitations": [
+    "Basic material uses authored two-colour geometry and does not receive dynamic scene lighting",
+    "Fan cape moves with original cape pivot; each split hem follows its thigh, no cloth physics",
+    "Pose silhouette and cape/pouch/body intersections require fresh GPU review"
+  ],
+  "target": "courier-reedbank-target-v2.png",
+  "approvalStatus": "accepted-reedbank-target-v2",
+  "acceptanceEvidence": "User explicitly accepted the reedbank target: 好吧，你使用。 Target approval is distinct from runtime GPU acceptance.",
+  "geometryRevision": "reedbank-nape-5",
+  "silhouetteChanges": [
+    "Cape radius 0.285→0.347 plus 0.082 scalloped side rise; same topology",
+    "Raised uneven curl clumps/tips and slightly widened head silhouette; same topology",
+    "Thigh and knee garment width approximately +15%; same topology"
+  ],
+  "localImprovement": {
+    "geometry": "Two curved hinged leaf shells surround three envelope compartments; oval pod enlarged by about 10%.",
+    "behavior": "Opens while inspecting bag/letter or standing holding letter. Closes while running or riding. Smooth original animation hook.",
+    "budget": "Map-roll and compass static surfaces merged into body batch; attachment references preserved. 38 meshes including outlines.",
+    "validation": "6/6 tests including open/close states, hinge parentage, envelope slot count, original held letter and all pose contracts.",
+    "gpuToCheck": [
+      "letter pose from right-front quarter",
+      "run/ride closed pouch clearance",
+      "small-distance leaf-shell readability"
+    ]
+  },
+  "latestCorrection": {
+    "scope": "Rear scalp and behind-ear existing hair volumes only. Slightly irregular nape edge.",
+    "budget": "Unchanged: 38 meshes / 39,844 triangles including outlines.",
+    "validation": "Five actual rear raycast probes hit hair colour before skin at centre and behind ears; full character suite 7/7.",
+    "unchanged": "Face, top curls, clothing, mail-pod action and runtime skeleton."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "task": "Morris road creek bridge and taller trees final target iteration",
+  "evidence_revision": "morris-route-r35-20261026",
+  "observations": [
+    "Root actually viewed final normal game r35 bridge flank, overall road and tree frame, and actual mounted courier/tree scale. Same installed production scene used, current DOM audit and console errors empty saved. Component photos labeled separately.",
+    "Bridge deck crown increased0.25 to0.75m, arch-rise2.08m, minimum core thickness0.6127m,52 wedge arch stones196 masonry pieces5 batches; continuous solid parapets/coping. Actual radial max bridge grade0.2864, distinct from road excluding bridge grade0.1517.",
+    "Current normal plane tree height range[16.36724188970402, 22.914138645585627], cypress[19.76759922180176, 27.05040077819824]. Plane has lower spreading forks, small cupped palmate leaves, hanging seeds, colored bark. Cypress closed soft scale crown and tapered base. Conservative mounted courier envelope below half plane tree height and actual rider+original horse viewed in same normal scene.",
+    "Road keeps186.4m winding footprint/3.2m passage; real5-column crossfall, blended edge colors, low gravel outside road and6.5m shoulders. Creek gets smaller bank stones and finer local moving water/foam. High foreground tree initially hid bridge in overview, corrected by lateral tree placement and higher overall camera; final normal overview actually checked for exposed bridge/road.",
+    "6 height/geometry,7 route support,9 riding controller,2 bridge riding boundary,1 old pine identity checks passed; advisor74 multi-profile/production bridge tests pass. Normal horse controls retained.",
+    "Complete actual ridden new bridge crossing and mountain circuit remain unverified; exact woven botanical/animal detail is not complete. No FPS/audio claim, no push/commit."
+  ],
+  "checks": [
+    {
+      "name": "current normal final visual and actual mounted scale",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "affected local checks and advisor bridge tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full mounted circuit",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "text only JEV not image/audio/navigation acceptance",
+    "preserve existing castle, bridge endpoints, old musician ensemble, riding and other scenes",
+    "no publication"
+  ]
+}

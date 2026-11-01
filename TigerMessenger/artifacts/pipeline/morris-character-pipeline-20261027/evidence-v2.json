@@ -1,0 +1,26 @@
+{
+  "scope": "New character V2 candidate text triage, actual GPU acceptance belongs to parent",
+  "observations": [
+    "Actually viewed parent mounted-side GPU image: V1 continuous sleeve and face improved but cloak board, long stiff locks, bell skirt remained.",
+    "V2 geometry now has continuous hair cap and back hair volume, thin waved locks, bent thigh/flank drape and shortened curved cloak; offline front and side images actually inspected.",
+    "Horse V1 GLTFLoader parsed 14 SkinnedMesh/20 bones and CPU deformation sampled 35160 finite vertices; V2 adds both-side mane and thick flowing tail.",
+    "Visibility adapter now hides only original horse body/neck/tail/legs; rider and runtime reins remain."
+  ],
+  "checks": [
+    {
+      "name": "princess V2 normal game mounted fit",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "horse V2 hoof contact and mane/cape overlap",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "CPU finite deformation and rollback",
+      "required": true,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "passed": 8,
+  "geometries": 358,
+  "triangles": 15801566,
+  "closedLeaves": 2,
+  "flora": "closed-lobed-verdure-r1",
+  "castle": {
+    "design": "independent Morris handcraft material and softened-edge refinement; original modular massing retained",
+    "revision": "morris-handcraft-r3",
+    "previousGeometry": "masonry-r2",
+    "wallBevel": 0.065,
+    "footprint": [
+      14,
+      10
+    ],
+    "size": [
+      16.917382064621265,
+      16.79896375490688,
+      10.874875691225839
+    ],
+    "mainHeights": [
+      10.5,
+      7,
+      5.5
+    ],
+    "entrance": {
+      "direction": "+Z",
+      "clearWidth": 2.6,
+      "clearHeight": 3.1
+    },
+    "eastMusicCourtOpen": true,
+    "supports": [
+      "continuous foundation",
+      "courtyard floor"
+    ],
+    "detailCounts": {
+      "masonry": 412,
+      "windowSurrounds": 60,
+      "roofTiles": 925,
+      "footings": 18
+    },
+    "detailBatches": 13,
+    "navigationVerified": false
+  },
+  "scope": "actual complete island factory structural checks; not visual or navigation acceptance"
+}

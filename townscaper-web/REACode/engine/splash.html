@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Water — 涟漪与水花（水滴落水）</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #24565a; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 14px; bottom: 12px; color: #e6f2f2;
+    font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  }
+  #title {
+    position: fixed; left: 14px; top: 12px; color: #eaf4f4;
+    font: 13px/1.6 -apple-system, "PingFang SC", sans-serif; max-width: 430px;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  }
+  #keys { position: fixed; right: 14px; top: 12px; color: #cfe3e3; text-align: right;
+    font: 11.5px/1.7 ui-monospace, Menlo, monospace; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+</style>
+</head>
+<body>
+<div id="title"><b>涟漪</b> —— 一滴水从屋檐落下，触水时炸出泡沫冠 + 三圈错开出生的细环；
+木桩周围是周期性的小环。环是独立对象，不是 shader 里的同心圆。</div>
+<div id="keys">D 手动落一滴 · 点击水面也可以</div>
+<div id="hud"></div>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { createSplash } from './splash.js';
+
+const WATER_Y = 0;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#2b6166');
+scene.fog = new THREE.Fog('#2b6166', 16, 46);
+
+const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 200);
+camera.position.set(9.2, 4.6, 10.4);
+camera.lookAt(0.2, 0.2, 0.1);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight('#cfe6e6', '#12343a', 1.0));
+const sun = new THREE.DirectionalLight('#fff3dc', 1.0);
+sun.position.set(5, 9, 4);
+scene.add(sun);
+
+// ---------- 水 ----------
+const water = new THREE.Mesh(
+  new THREE.PlaneGeometry(60, 60, 1, 1),
+  new THREE.MeshLambertMaterial({ color: '#3e7c78' }),
+);
+water.rotation.x = -Math.PI / 2;
+water.position.y = WATER_Y;
+scene.add(water);
+
+// ---------- 岸边 + 房子（只为了有"比例参照"，对应片子里的黄房子）----------
+const stone = new THREE.MeshLambertMaterial({ color: '#8d8a80' });
+const quay = new THREE.Mesh(new THREE.BoxGeometry(4.2, 1.0, 3.4), stone);
+quay.position.set(-2.6, 0.5, 0.2);
+scene.add(quay);
+
+const house = new THREE.Group();
+const body = new THREE.Mesh(new THREE.BoxGeometry(1.9, 1.5, 1.7), new THREE.MeshLambertMaterial({ color: '#f0c15a' }));
+body.position.y = 1.0;
+const roof = new THREE.Mesh(new THREE.ConeGeometry(1.55, 0.8, 4), new THREE.MeshLambertMaterial({ color: '#c9563f' }));
+roof.position.y = 2.15; roof.rotation.y = Math.PI / 4;
+house.add(body, roof);
+house.position.set(-2.6, 1.0, 0.2);
+scene.add(house);
+
+// 木桩（片子里它们周围一直有小环）
+const postMat = new THREE.MeshLambertMaterial({ color: '#6d5b46' });
+const POSTS = [[1.15, 1.15], [1.15, -0.9], [2.35, 0.25], [0.2, 1.6]];
+for (const [x, z] of POSTS) {
+  const post = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.085, 1.15, 8), postMat);
+  post.position.set(x, 0.5, z);
+  scene.add(post);
+}
+
+// ---------- 水花 ----------
+const splash = createSplash(scene, { waterY: WATER_Y, scale: 1 });
+
+// 木桩的周期小环：各自错相位，别同步（参考片里是错开的）
+const postTimers = POSTS.map(([x, z], i) => ({ x, z, t: 0, period: 1.5 + i * 0.23 }));
+
+// ---------- 落水滴 ----------
+const dropMat = new THREE.MeshLambertMaterial({ color: '#eaf6f6' });
+const drop = new THREE.Mesh(new THREE.SphereGeometry(0.075, 8, 6), dropMat);
+drop.scale.y = 2.4;            // 拉长成水柱
+drop.visible = false;
+scene.add(drop);
+
+const dropState = { active: false, y: 0, vy: 0, x: 0.55, z: 0.15, cooldown: 0.8 };
+
+function launchDrop(x = 0.55, z = 0.15) {
+  dropState.active = true;
+  dropState.y = 3.0;
+  dropState.vy = 0;
+  dropState.x = x; dropState.z = z;
+  drop.visible = true;
+}
+
+// ---------- 交互 ----------
+addEventListener('keydown', (e) => { if (e.key === 'd' || e.key === 'D') launchDrop(); });
+renderer.domElement.addEventListener('pointerdown', (e) => {
+  const r = renderer.domElement.getBoundingClientRect();
+  const nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+  const ny = -((e.clientY - r.top) / r.height) * 2 + 1;
+  const ray = new THREE.Raycaster();
+  ray.setFromCamera(new THREE.Vector2(nx, ny), camera);
+  const hit = ray.intersectObject(water)[0];
+  if (hit) launchDrop(hit.point.x, hit.point.z);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+// ---------- 主循环 ----------
+const hud = document.getElementById('hud');
+let last = performance.now(), acc = 0, fps = 0, frames = 0;
+let measured = { maxR: 0 };
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  acc += dt; frames++;
+  if (acc > 0.5) { fps = frames / acc; acc = 0; frames = 0; }
+
+  // 水滴：自由落体 + 触水
+  if (dropState.active) {
+    dropState.vy -= 9.8 * dt;
+    dropState.y += dropState.vy * dt;
+    drop.position.set(dropState.x, dropState.y, dropState.z);
+    if (dropState.y <= WATER_Y + 0.02) {
+      dropState.active = false;
+      drop.visible = false;
+      splash.impact({ x: dropState.x, z: dropState.z, strength: 1 });
+      dropState.cooldown = 1.6 + Math.random() * 0.8;
+    }
+  } else {
+    dropState.cooldown -= dt;
+    if (dropState.cooldown <= 0) launchDrop(0.55 + (Math.random() - 0.5) * 0.8, 0.15 + (Math.random() - 0.5) * 0.8);
+  }
+
+  // 木桩小环
+  for (const p of postTimers) {
+    p.t += dt;
+    if (p.t >= p.period) { p.t = 0; splash.pulse({ x: p.x, z: p.z, radius: 0.5 }); }
+  }
+
+  splash.update(dt);
+  const st = splash.stats();
+  if (st.maxRadius > measured.maxR) measured.maxR = st.maxRadius;
+
+  hud.textContent =
+    `水滴 ${dropState.active ? '下落中 y=' + dropState.y.toFixed(2) : '等待 ' + Math.max(0, dropState.cooldown).toFixed(1) + 's'}\n` +
+    `活跃环 ${st.active}（环 ${st.kinds.ring || 0} / 泡沫 ${st.kinds.foam || 0}）  最外圈 r=${st.maxRadius}\n` +
+    `本帧率 ${fps.toFixed(0)}   本轮最大 r=${measured.maxR.toFixed(2)}`;
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+window.__splash = {
+  splash,
+  impact: (x, z) => splash.impact({ x, z, strength: 1 }),
+  hideAll: () => { splash.group.visible = false; },
+  get measured() { return measured; },
+  reset: () => { measured = { maxR: 0 }; },
+};
+
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

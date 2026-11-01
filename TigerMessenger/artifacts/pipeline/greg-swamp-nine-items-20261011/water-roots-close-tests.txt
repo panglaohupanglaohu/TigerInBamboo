@@ -1,0 +1,36 @@
+✖ turquoise, see-through water keeps the ripple injection and gets pale ripple strokes (1972.682708ms)
+✔ water body deepens with inner depth and bed is turquoise (1562.896208ms)
+✔ wall stone gets grey-violet blocks after weathering; rim crown is moss green with a narrow ochre lip; dispose restores (1521.065666ms)
+✔ disabled is a no-op (1489.692916ms)
+✔ giant tree roots fan out underwater from the trunk, stay under the boat lane, one draw (1975.14375ms)
+✔ water strokes come from what disturbs the water: boats always, feeder always, whale only while surfaced (2667.267333ms)
+✔ 3–4 thin waterfalls hug the pit wall from rim to water, avoid the stair entrance and walkway, one draw (2002.4985ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6664.883458
+
+✖ failing tests:
+
+test at tests/world/swampPaintWater.test.mjs:15:1
+✖ turquoise, see-through water keeps the ripple injection and gets pale ripple strokes (1972.682708ms)
+  AssertionError [ERR_ASSERTION]: swampWaterMarks onBeforeCompile untouched
+  + actual - expected
+  
+  + [Function (anonymous)]
+  - [Function (anonymous)]
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampPaintWater.test.mjs:19:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

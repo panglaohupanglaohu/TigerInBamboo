@@ -1,0 +1,14 @@
+✔ shared subdivision stays watertight while actual sea and rail guards constrain exposed walls (21.062625ms)
+✔ exact rear ship cut plane remains fixed after added mid-wall geometry (5.524541ms)
+✔ same actual frame and rail inputs reproduce exact geometry bytes (18.725167ms)
+✔ rear shoulder morph changes real geometry but every protected support corner stays byte-identical (45.258583ms)
+✔ all final Float32 faces keep orientation and meaningful area after shape changes (30.1015ms)
+✔ shape pass is deterministic and handles actual source-to-castle transforms without touching protected data (39.630708ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 206.585375

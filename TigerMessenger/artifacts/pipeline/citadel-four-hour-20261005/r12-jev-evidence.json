@@ -1,0 +1,36 @@
+{
+  "version": "r12-remesh",
+  "goal": "Target terrain first, cities then rail; final >95; current not accepted",
+  "visual_observations": {
+    "source": "root viewed real GPU screenshot",
+    "sha256": "19c3d6389d0a77a0dcd570220332e34a3fcb0cda97d5af4f8dc73ab623612c00",
+    "differences": [
+      "Wide benches and three buildable platforms present; too regular contour tiers and overly long fore-bay cliff remain.",
+      "Sky still not target blue with billowing clouds; reduced cyan fog improves rock contrast.",
+      "Existing buildings still buried and not relocated. New cities and railway pending.",
+      "r11 sea-relative step drop was visually worse and rejected; r12 restored r10 geometry."
+    ]
+  },
+  "checks": [
+    {
+      "name": "actual GPU sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "terrain visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "new city and rail gameplay",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No false 95 score",
+    "Candidate opt-in only; keep original rollback",
+    "Prioritize silhouette and authored topology before automated module selection"
+  ]
+}

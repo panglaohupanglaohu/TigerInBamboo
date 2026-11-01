@@ -1,0 +1,36 @@
+{
+  "status": "readability-r3-normal-overview-verified",
+  "latestUserCorrection": "Original scene preserved; add FOUR new pines, original ancient pine separate",
+  "newIds": [
+    2,
+    4,
+    5,
+    6
+  ],
+  "originalForestFilteringRemoved": true,
+  "originalTreeColliderChangeRemoved": true,
+  "productionEntry": "http://localhost:8931/TigerMessenger/?autostart=1",
+  "completed": [
+    "4 authored additions + natural groundcover integrated late against real carved hills",
+    "new roots select free positions around existing props rather than altering originals",
+    "3 source terrain/rail/prop preservation tests pass",
+    "original1+3 first implementation normal GPU verified, superseded by add4 correction"
+  ],
+  "pending": [
+    "full player traversal and all-angle composition not measured; some view-dependent overlap remains"
+  ],
+  "otherChanges": [
+    "bookshop smoke height and rate variations",
+    "shield sound changed to short watery skipping; browser same-source waveform rendered, not subjective listening approval"
+  ],
+  "normalGameSource": "normal-game-installed",
+  "newTrees": 4,
+  "allNewVisible": null,
+  "sourceTerrainSamples": 1094,
+  "missingSupport": 0,
+  "runtimeErrors": 0,
+  "fullWalkthrough": false,
+  "previousVisibilityClaimCorrection": "Previous true meant Object3D.visible, not unoccluded readable screen silhouettes. User cannot identify four additions.",
+  "overviewFourIdentifiable": true,
+  "latestEvidence": "normal-four-r3-overview.png"
+}

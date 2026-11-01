@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "b9689f3533c3eb59ace1fc66b788e99c590f14e1a97598ca051c75372b7c4fd3",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.97
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.8,
+      "probabilities": {
+        "geometry": 0.03,
+        "review": 0.12,
+        "dressing": 0.01,
+        "navigation": 0.84,
+        "lighting": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.97
+    }
+  },
+  "usage": {
+    "input_tokens": 988,
+    "output_tokens": 91,
+    "cost_usd": 0.000415,
+    "credits_remaining_usd": 4.960717
+  },
+  "elapsed_ms": 1767,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Rail and production navigation WFC",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Final independent visual score >95",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

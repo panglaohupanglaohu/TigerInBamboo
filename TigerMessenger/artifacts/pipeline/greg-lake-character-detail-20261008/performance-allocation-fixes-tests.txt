@@ -1,0 +1,15 @@
+✔ same attached lake scans once across 1000 ticks, every tick retains audio request (2.275ms)
+✔ entry / exit hysteresis and ceiling remain identical (0.326166ms)
+✔ scene replacement, removed root, same-count nested replacement, and late root work (0.1115ms)
+✔ no player does not scan; moved cached root uses current transform; independent state (0.053ms)
+✔ 100 ant rounds retain 600 smoke events and one texture until controller disposal (9.857375ms)
+✔ clear destroys sprites but keeps map for reuse; independent controllers own independent maps (0.834375ms)
+✔ steam remains visually identical and lazy when no ant smoke is emitted (0.326875ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 54.44575

@@ -1,0 +1,51 @@
+{
+  "status": "r6-candidate-pending-normal-GPU",
+  "ownership": [
+    "morrisLandscape.js",
+    "morrisLandscapeDetails.js",
+    "morrisMountainRoute.js",
+    "morrisCastle.js"
+  ],
+  "source_changed": [
+    "morrisLandscape.js",
+    "morrisLandscapeDetails.js",
+    "morrisCastle.js"
+  ],
+  "target": "artifacts/pipeline/morris-actual-target-20261027/target-v1.png",
+  "target_actually_viewed": true,
+  "before_actually_viewed": "morris-terrain-ridges-20261027/component-after.png",
+  "visual_acceptance": false,
+  "normal_navigation_acceptance": false,
+  "changes": [
+    "connected asymmetric rear shelf massif",
+    "deeply embedded eroded cliff ribs instead of round isolated stones",
+    "slightly recessed main keep and stepped wings with narrower corner trim",
+    "irregular broad music-court outer shoulder",
+    "road-excluded shallow erosional valleys",
+    "hip roof tile polygons clipped at exact roof planes"
+  ],
+  "fixed": [
+    "castle base(14,5)",
+    "creek bridge(8,32)",
+    "3.2m route and open gate",
+    "lower music court(30,12) radial7.2",
+    "existing railway and actors"
+  ],
+  "pending": [
+    "r6 current image review",
+    "normal game terrain GPU and riding route",
+    "current rail envelope verification"
+  ],
+  "source_hashes": {
+    "morrisLandscape.js": "98db831dce8e712d594ddf3115a6f6e9d3251927491c1f9f2df41c618ad6756e",
+    "morrisLandscapeDetails.js": "98de3c1d7888f67be8f1f20c31a8d9c870a4b3885ed3e6b6822b40d8e965402b",
+    "morrisMountainRoute.js": "7b5e48cfecf0d1b44e2f0e79675ccd6be26af2c32ee3f9a2d7e5212ceec6d954",
+    "morrisCastle.js": "691bfa136d62025a0416e82c0c8c704bd6c9167945c8791bcc9c009b3000a35f"
+  },
+  "geometry_checks": "geometry-r6-checks.json",
+  "rejected": "round1-rejected.json",
+  "round2": "Actually reviewed three current images. Castle tile seams corrected; terrain remains below target and r3 modifies further.",
+  "round3": "Actually viewed two current images. Lower faceted rock ribs improved; mountain smooth wall and court barrel shoulder remain unacceptable.",
+  "round4": "Actually viewed two images: connected exposed rock is more legible, court-side barrel wall remains. Diagnosed road shoulder blending overrides creek bank carve.",
+  "round5": "Actually viewed current overview/route: rear exposed ridges improve; residual striped stone caps and court-side barrel wall remain. r6 removes caps and lowers irregular outer shoulder ledges, preserving musician core/road."
+}

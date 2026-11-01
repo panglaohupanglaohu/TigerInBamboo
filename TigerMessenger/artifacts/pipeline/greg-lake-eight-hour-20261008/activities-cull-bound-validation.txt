@@ -1,0 +1,10 @@
+activities-navigation {"seconds":180,"samples":1801,"spans":[3.546822136248035,3.5468267824273356,3.546817549377642,3.546823265119136,3.546828005553075],"minObstacle":1.0558917235865617,"minBoatGap":1.4666532024748613,"minEdge":1.4154846528396074,"minDirection":0.9996448436405492,"maxStemError":1.0658141036401503e-14,"maxRopeError":5.8927631492873816e-8,"minToolAxis":0.06287305826514217,"minDepartureGap":1.0580461335936402,"minWhaleGap":2.9232632977389073,"maxTailChange":0.26398947834968567,"minWhaleDirection":0.9999999999999996,"powerSamples":9641,"recoverySamples":6487,"repairPhases":["inspect","haul-rope","secure-and-check"]}
+✔ formal activities have real forward rowing, safe complete routes, attached stems and live repair contacts (3633.190833ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3732.823625

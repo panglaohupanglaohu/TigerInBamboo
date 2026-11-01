@@ -1,0 +1,74 @@
+{
+  "checkedAtUTC": "2026-10-04T11:03:46.858103+00:00",
+  "relativeLinks": 21,
+  "missing": [],
+  "http": [
+    {
+      "path": "legacy-final-conditions-performance.json",
+      "status": 200
+    },
+    {
+      "path": "manifest.json",
+      "status": 200
+    },
+    {
+      "path": "progress.json",
+      "status": 200
+    },
+    {
+      "path": "r10-albedo.png",
+      "status": 200
+    },
+    {
+      "path": "r10-base.png",
+      "status": 200
+    },
+    {
+      "path": "r10-checks.json",
+      "status": 200
+    },
+    {
+      "path": "r10-coastline.png",
+      "status": 200
+    },
+    {
+      "path": "r10-complete.png",
+      "status": 200
+    },
+    {
+      "path": "r10-dusk.png",
+      "status": 200
+    },
+    {
+      "path": "r10-foliage.png",
+      "status": 200
+    },
+    {
+      "path": "r10-hero.png",
+      "status": 200
+    },
+    {
+      "path": "r10-performance.json",
+      "status": 200
+    },
+    {
+      "path": "r10-plaza.png",
+      "status": 200
+    },
+    {
+      "path": "r10-rail.png",
+      "status": 200
+    },
+    {
+      "path": "r10-silhouette.png",
+      "status": 200
+    },
+    {
+      "path": "r10-test-suite.json",
+      "status": 200
+    }
+  ],
+  "sourceChanges": [
+    "tools/pipeline/build_twelve_apostles_review.py"
+  ]
+}

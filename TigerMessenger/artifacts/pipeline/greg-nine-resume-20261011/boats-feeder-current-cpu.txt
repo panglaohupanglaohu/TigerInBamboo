@@ -1,0 +1,14 @@
+activities-navigation {"seconds":180,"samples":1801,"spans":[1.4317766436136596,1.4317771709992206,1.431779344876001,1.4317730852341217,1.4317817317133597],"minObstacle":0.4515255507057905,"minBoatGap":3.487918718354402,"minEdge":10.302616769906969,"minDirection":0.002785285123132919,"minSignedRowAdvance":-0.00009112284639158368,"maxStemError":5.102196573270515e-15,"maxRopeError":5.8927631492873816e-8,"minToolAxis":0.06287305826514217,"minDepartureGap":0.8351836900129044,"minWhaleGap":-0.8480959186198591,"maxTailChange":0.26398947834968567,"minWhaleDirection":0.9999999999999997,"powerSamples":9641,"recoverySamples":6487,"repairPhases":["inspect","haul-rope","secure-and-check"]}
+✔ formal activities have real forward rowing, safe complete routes, attached stems and live repair contacts (7082.145417ms)
+feeder-swimming {"samples":648,"draws":9,"breathingSeconds":[4.866666666666666,4.866666666666666,4.9],"submergedSeconds":[2.1,2.1,2],"mouthMin":24.5,"mouthMax":25.14,"noseMin":24.446142845702376,"noseMax":25.1564049399892,"minWhaleMouth":0.8370776031045414,"extrema":[{"upper":[-1.6989523713454977,0.7999995674006919],"lower":[0.40006186262541826,0.88]},{"upper":[-2.5,0.7989523713454978],"lower":[0.22,0.8799381373745818]},{"upper":[-0.29999900722856826,0.29999894710368197],"lower":[0.2,0.7199981749797155]},{"upper":[-0.29999894710368197,0.29999900722856826],"lower":[0.2,0.719998279196185]}]}
+✔ same whale-feeder genuinely strokes, kicks and resurfaces every 7.2 seconds in full placement update (4232.399708ms)
+longship-validation {"seconds":52,"frames":1561,"rowers":52,"maxGrip":3.66205343881779e-15,"maxWrist":3.9968028886505635e-15,"maxElbow":0.0014155712740637426,"minHeading":0.9999002957980615,"minRecoveryBottom":25.19316545058986,"maxPowerTop":25.05762793664243,"wet":10108,"dry":64914,"span":8.950382878992533}
+✔ lake-only longships keep 52 identities, actual wet/dry blades and continuous hand/elbow contacts (7049.578584ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7210.0645

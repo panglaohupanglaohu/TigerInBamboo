@@ -1,0 +1,27 @@
+{
+  "task": "Morris r8 terrain and court clearance",
+  "observations": [
+    "Actual bare GPU r8 shows bent small benches in heightfield; substantial smooth meadow and rock target gaps remain",
+    "Actual court component view now shows clear curved path and terrace instead of camera within leaves; full elder ensemble not part of component",
+    "Actual factory geometry span12 width3.2, central arch underside1.48 to1.54m above center water, bridge radial grade15.36percent",
+    "Normal r65 current r8 profile and span12 confirmed, V17/V13 loaded moving travelled64.29m; countersbridge0/court0 at sample. Court controls focus and DOM click timeout."
+  ],
+  "checks": [
+    {
+      "name": "r8 route analytical grades finite support",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r8 deterministic controller patrol conversation resume",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal complete bridge court and elder interaction",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraint": "Compact text only; no source images chat or secrets sent; JEV does not approve art or gameplay"
+}

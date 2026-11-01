@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "5b98f3c629feb74d574da0bbe040f17c010d4506a15f2fb73b622f95d1f40bba",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.96
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.68,
+      "probabilities": {
+        "dressing": 0,
+        "review": 0.25,
+        "navigation": 0.74,
+        "geometry": 0.01,
+        "lighting": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.9
+    }
+  },
+  "usage": {
+    "input_tokens": 1289,
+    "output_tokens": 91,
+    "cost_usd": 0.000542,
+    "credits_remaining_usd": 4.958021
+  },
+  "elapsed_ms": 2883,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "完整正式游戏启动后GPU实走",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "虎全周期脚底实景复查",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

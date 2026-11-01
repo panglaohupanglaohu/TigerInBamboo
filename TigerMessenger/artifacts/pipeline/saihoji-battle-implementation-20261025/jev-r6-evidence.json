@@ -1,0 +1,35 @@
+{
+  "task": "Saihoji R6 guard/transport cooperation after actual failed sortie",
+  "observations": {
+    "source": "normal-r5-mid/end actual normal UI and source guard drain policy",
+    "actual": [
+      "Ground active and18 assigned but0 deployed; fleet had398 blocked hits while original phalanx contact count still0",
+      "Energy35 while second boat/cover unfinished; guard then consumes1.6/s plus firing and withdraws energy12 before first traditional contact",
+      "No invented damage; actual external fire is not disabled"
+    ],
+    "repair": "Moss guard now conserves same .42/s as blockade and pauses new weapons while original cover remains landing or first physical troop insertion has not landed. Existing60s bound and energy<15/wing/heat emergency retreat untouched; no restored health/energy. Actual R6 pending."
+  },
+  "checks": [
+    {
+      "name": "five site/landing cooperation tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "actual R6 insertion and shielding",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional casualty physical transport/treatment",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No free energy or fake contact",
+    "Keep first actual flagship strike requirement",
+    "Do not claim full medical or victory loop"
+  ],
+  "evidence_revision": "r6"
+}

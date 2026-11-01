@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "9e39bc9f65b80303824c50b1d464f137aa92d0d5996191c4e4f64cfc80258d8a",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.94
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.91,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.93,
+        "lighting": 0,
+        "navigation": 0,
+        "review": 0.07
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.92
+    }
+  },
+  "usage": {
+    "input_tokens": 689,
+    "output_tokens": 91,
+    "cost_usd": 0.00029,
+    "credits_remaining_usd": 4.889927
+  },
+  "elapsed_ms": 1418,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "V13 normal movement and dynamic reins",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "target appearance",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

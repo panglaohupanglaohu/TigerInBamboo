@@ -1,0 +1,3051 @@
+{
+  "revision": 1,
+  "dirty": false,
+  "target": {
+    "regionId": "left-front-coral",
+    "ix": 1,
+    "iy": 2,
+    "iz": 0
+  },
+  "world": [
+    55.19275558648608,
+    88.59089285539213,
+    -131.6390133427581
+  ],
+  "canvasClick": {
+    "x": 632.4999999999999,
+    "y": 273.5
+  },
+  "pageClick": {
+    "x": 632.4999999999999,
+    "y": 386.5
+  },
+  "actualRayHit": {
+    "ix": 1,
+    "iy": 2,
+    "iz": 1,
+    "char": "G",
+    "regionId": "left-front-coral",
+    "top": true
+  },
+  "selectedTarget": "canal-junction",
+  "snapshot": {
+    "schema": "junction-regions-v1",
+    "regions": [
+      {
+        "id": "left-front-coral",
+        "levels": [
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "left-mid-yellow",
+        "levels": [
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "left-rear-teal",
+        "levels": [
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "left-watchtower",
+        "levels": [
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ]
+        ]
+      },
+      {
+        "id": "right-front-teal",
+        "levels": [
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "right-mid-coral",
+        "levels": [
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "right-rear-yellow",
+        "levels": [
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "right-watchtower",
+        "levels": [
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ]
+        ]
+      },
+      {
+        "id": "rear-keep",
+        "levels": [
+          [
+            "0..0",
+            "0..0",
+            "0..0"
+          ],
+          [
+            "0..0",
+            "0..0",
+            "0..0"
+          ],
+          [
+            "0000",
+            "0000",
+            "0000"
+          ],
+          [
+            "0000",
+            "0000",
+            "0000"
+          ],
+          [
+            "0000",
+            "0000",
+            "0000"
+          ],
+          [
+            "0000",
+            "0000",
+            "0000"
+          ]
+        ]
+      },
+      {
+        "id": "keep-tower-left",
+        "levels": [
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ]
+        ]
+      },
+      {
+        "id": "keep-tower-right",
+        "levels": [
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ]
+        ]
+      }
+    ]
+  },
+  "wfcAudit": {
+    "revision": 1,
+    "regions": [
+      {
+        "regionId": "left-front-coral",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "a8d91b12",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 24,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "1,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "2,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "0,2,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,2,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,2,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,2,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,2,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,2,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "left-mid-yellow",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "0efbc163",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 33,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "1,2,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "2,2,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "0,3,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,3,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,3,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,3,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,3,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,3,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "left-rear-teal",
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "ba84e8ef",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 42,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "1,3,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "2,3,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "0,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "left-watchtower",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "be6dc787",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 40,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,7,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,7,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,8,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,8,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,8,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,8,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,9,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,9,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,9,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,9,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "right-front-teal",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "fc7cef19",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 24,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "1,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "2,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "0,2,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,2,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,2,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,2,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,2,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,2,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "right-mid-coral",
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "1355351d",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 33,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "1,2,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "2,2,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "0,3,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,3,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,3,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,3,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,3,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,3,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "right-rear-yellow",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "db928f69",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 42,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "1,3,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "2,3,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "0,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "right-watchtower",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "04fe5955",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 32,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,7,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,7,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,7,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "rear-keep",
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "f1cc4e8b",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 60,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,3,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,4,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,4,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,5,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,5,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "3,5,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,5,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,5,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,5,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "3,5,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,5,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,5,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,5,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "3,5,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "keep-tower-left",
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "f5a2400b",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 32,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,7,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,7,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,7,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "keep-tower-right",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "abae18ef",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "occupiedCount": 36,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,7,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,7,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,8,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,8,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,8,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,8,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      }
+    ]
+  },
+  "errors": []
+}

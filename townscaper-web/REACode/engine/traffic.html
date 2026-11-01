@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Left-handed traffic in narrow passages</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #4b4a62; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #f4eef2;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #f6eef2;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">窄道左侧通行 + 窄道点线（880853661936734211 / 886199305522085890）</div>
+<div id="hud"></div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+/**
+ * traffic.html — src/traffic.js 的验证页。
+ *
+ * 照两张参考片搭景：
+ *   880853661936734211：紫色岩壁夹出的走廊、浅沙地、两队小人相向而行。
+ *   886199305522085890：崖沿上一圈**等距白点**（点距≈1 格，见 src/traffic.js 头注释）。
+ *
+ * 键位：L 切换左侧通行（对照"原文说的 got stuck"）/ D 点线开关 / R 重来 / 空格暂停。
+ *
+ * 和片子的差别（故意）：片子里两队都是蓝色，看起来分不清谁往哪；这里红/蓝两队
+ * 上色，只为让"各走各的一侧"这件事在截图里读得出来。
+ */
+import * as THREE from 'three';
+import { createCorridor, passageDots } from '../src/traffic.js';
+
+const q = new URLSearchParams(location.search);
+const cv = document.getElementById('c');
+const hud = document.getElementById('hud');
+
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#8d87a3');
+scene.fog = new THREE.Fog('#8d87a3', 22, 44);
+
+const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 120);
+// 机位调整记录：初版 45°/58° 俯角时近侧岩壁把走廊地面整个挡住，截图里只能
+// 看到墙顶和浮在墙沿上的小方块；改成接近俯视（约 72°）才看得见窄道里面。
+camera.position.set(1.0, 14.8, 4.0);
+camera.lookAt(0, 0, 0);
+
+scene.add(new THREE.HemisphereLight(0xefe6f2, 0xb9a98f, 1.3));
+const sun = new THREE.DirectionalLight(0xfff2e0, 2.0);
+sun.position.set(-6, 9, 5);
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0xc9cbe6, 0.55);
+fill.position.set(6, 4, -6);
+scene.add(fill);
+
+const LEN = 16;          // 走廊长度（世界单位）
+const HALF_W = 1.35;     // 走廊半宽
+const ROCK_H = 1.05;
+
+// 地面：浅沙色（片子里走廊地面是暖灰/浅黄）
+scene.add(new THREE.Mesh(
+  new THREE.BoxGeometry(24, 0.5, 16),
+  new THREE.MeshStandardMaterial({ color: '#d8cbb0', roughness: 1 }),
+).translateY(-0.25));
+
+// 两侧岩壁：紫灰色块（片子里的岩壁是粉紫，明暗很平）
+function wall(zSign) {
+  const geo = new THREE.BoxGeometry(LEN + 3.0, ROCK_H, 1.2);
+  const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: '#8f81a8', roughness: 0.98 }));
+  m.position.set(0, ROCK_H / 2, zSign * (HALF_W + 0.6));
+  scene.add(m);
+  // 壁顶压一层稍亮的窄条，让"崖沿"有边（片子崖沿有高光）
+  const cap = new THREE.Mesh(
+    new THREE.BoxGeometry(LEN + 3.1, 0.12, 1.3),
+    new THREE.MeshStandardMaterial({ color: '#a99bc0', roughness: 1 }),
+  );
+  cap.position.set(0, ROCK_H, zSign * (HALF_W + 0.6));
+  scene.add(cap);
+}
+wall(1); wall(-1);
+
+// ── 窄道点线（886199305522085890）────────────────────────────────
+// 片子量出来的：点径 ≈ 0.3 格、点距 ≈ 1 格，只画在窄处。这里沿两条崖沿各撒一排。
+let dotsOn = q.get('dots') !== '0';
+const dotGroup = new THREE.Group();
+{
+  const lines = [
+    [{ x: -LEN / 2, z: -HALF_W - 0.12 }, { x: LEN / 2, z: -HALF_W - 0.12 }],
+    [{ x: -LEN / 2, z: HALF_W + 0.12 }, { x: LEN / 2, z: HALF_W + 0.12 }],
+  ];
+  const geo = new THREE.SphereGeometry(0.075, 10, 8);
+  const mat = new THREE.MeshBasicMaterial({ color: '#fbfaf6' });
+  const inst = new THREE.InstancedMesh(geo, mat, 128);
+  let n = 0;
+  const m4 = new THREE.Matrix4();
+  for (const poly of lines) {
+    for (const d of passageDots(poly, 1.0)) {
+      m4.makeTranslation(d.x, ROCK_H + 0.05, d.z);
+      inst.setMatrixAt(n++, m4);
+    }
+  }
+  inst.count = n;
+  dotGroup.add(inst);
+  dotGroup.userData.count = n;
+}
+scene.add(dotGroup);
+
+// ── 单位 ────────────────────────────────────────────────────────
+let laneOn = q.get('lanes') !== '0';
+
+function makeSim() {
+  return createCorridor({ useLanes: laneOn, nAgents: 14, length: LEN, speed: 0.045, spacing: 1.6, lane: 0.45 });
+}
+let sim = makeSim();
+
+const AGENT_GEO = new THREE.BoxGeometry(0.3, 0.42, 0.3);
+const agentMeshes = [];
+function rebuildAgents() {
+  for (const m of agentMeshes) scene.remove(m);
+  agentMeshes.length = 0;
+  const mats = [
+    new THREE.MeshStandardMaterial({ color: '#3f6fbf', roughness: 0.7 }),  // 队 0：往 +s
+    new THREE.MeshStandardMaterial({ color: '#c0524a', roughness: 0.7 }),  // 队 1：往 -s
+  ];
+  for (const a of sim.agents) {
+    const m = new THREE.Mesh(AGENT_GEO, mats[a.team]);
+    scene.add(m);
+    agentMeshes.push(m);
+  }
+}
+rebuildAgents();
+
+let paused = false;
+let acc = 0;
+let frames = 0;
+
+function syncAgents() {
+  for (let i = 0; i < sim.agents.length; i++) {
+    const a = sim.agents[i];
+    const m = agentMeshes[i];
+    m.position.set(a.s - LEN / 2, 0.22, a.t * 1.3);
+    m.visible = !a.done;
+  }
+}
+
+function stepSim() {
+  const before = sim.state.deadlocks;
+  // dt=1 一步较粗；页面里按 3 步/秒推进（片子节奏差不多）
+  sim.step(1);
+  if (sim.state.deadlocks !== before) { /* 只在 HUD 里体现 */ }
+}
+
+function frame(now) {
+  const dt = Math.min(0.1, (now - (frame.last || now)) / 1000) || 0.016;
+  frame.last = now;
+  if (!paused) {
+    acc += dt;
+    while (acc > 1 / 20) { stepSim(); acc -= 1 / 20; }
+  }
+  syncAgents();
+
+  const done = sim.agents.filter((a) => a.done).length;
+  const allDone = done === sim.agents.length;
+  hud.textContent =
+    `lanes=${laneOn ? 'LEFT' : 'none'}   dots=${dotsOn ? 'on' : 'off'}   dots n=${dotGroup.userData.count}\n` +
+    `step=${sim.state.step}  passed=${done}/${sim.agents.length}  deadlockPairs=${sim.state.deadlocks}\n` +
+    `键：L 左侧通行 / D 点线 / R 重来 / 空格暂停` +
+    (allDone ? '\n全部通过 —— R 重来' : '');
+
+  renderer.render(scene, camera);
+  frames++;
+  requestAnimationFrame(frame);
+}
+
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+resize();
+
+addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  if (k === 'l') { laneOn = !laneOn; sim = makeSim(); rebuildAgents(); }
+  else if (k === 'd') { dotsOn = !dotsOn; dotGroup.visible = dotsOn; }
+  else if (k === 'r') { sim = makeSim(); rebuildAgents(); }
+  else if (k === ' ') { paused = !paused; e.preventDefault(); }
+});
+
+requestAnimationFrame(frame);
+
+window.__worldStats = { kind: 'traffic' };
+window.__traffic = {
+  get stats() {
+    return {
+      lanes: laneOn, dots: dotsOn, dotCount: dotGroup.userData.count,
+      step: sim.state.step, deadlocks: sim.state.deadlocks,
+      passed: sim.agents.filter((a) => a.done).length, total: sim.agents.length,
+      laneOffsets: sim.agents.slice(0, 4).map((a) => +a.t.toFixed(3)),
+    };
+  },
+  set({ lanes, dots, pause }) {
+    if (lanes !== undefined && lanes !== laneOn) { laneOn = lanes; sim = makeSim(); rebuildAgents(); }
+    if (dots !== undefined) { dotsOn = dots; dotGroup.visible = dots; }
+    if (pause !== undefined) paused = pause;
+    return this.stats;
+  },
+  // 让截图脚本能"快进到第 n 步"
+  fastForward(n) { for (let i = 0; i < n; i++) sim.step(1); syncAgents(); return this.stats; },
+  reset() { sim = makeSim(); rebuildAgents(); return this.stats; },
+};
+</script>
+</body>
+</html>

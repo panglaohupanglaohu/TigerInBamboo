@@ -1,0 +1,26 @@
+{
+  "scope": "Normal production game tab36; actual UI started bookshop sortie. Counters inspected via DOM data-audit; not subjective listening or captured mix.",
+  "phase": "idle",
+  "energy": 100,
+  "completedTargets": [
+    "bookshop"
+  ],
+  "blockedHits": 192,
+  "shieldImpacts": 192,
+  "flagshipShieldAudioPlayed": 46,
+  "flagshipShieldAudioSkipped": 81,
+  "escortsOrOtherContactsNotCountedAsFlagshipAudio": 65,
+  "shots": 13,
+  "robotHits": 17,
+  "robotsShattered": 6,
+  "activeEffectsAtEnd": 0,
+  "pendingProjectilesAtEnd": 0,
+  "devWarningsAndErrors": [],
+  "limits": [
+    "Skipped contains cooldown/distance/budget/mute possibilities; not all failures.",
+    "192 overall interceptions are not192 flagship sounds.",
+    "Contact projection narrow fix applied AFTER this run; CPU checked, live rerun pending.",
+    "Ground camera screenshot observed at withdraw did not show shield; do not call shield visual accepted."
+  ],
+  "recorded_at_utc": "2026-10-20T15:03:02.826354+00:00"
+}

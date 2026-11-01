@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "near patrol plus story signal never starts battle",
+      "passed": true,
+      "lift": 0,
+      "gate": {
+        "allowed": false,
+        "reason": "flagship-idle",
+        "cycle": 0,
+        "distance": null
+      }
+    },
+    {
+      "name": "flagship fighting bookshop leaves moss peaceful",
+      "passed": true,
+      "lift": 0,
+      "gate": {
+        "allowed": false,
+        "reason": "other-target",
+        "cycle": 1,
+        "distance": null
+      }
+    },
+    {
+      "name": "transit through moss never starts battle",
+      "passed": true,
+      "lift": 0,
+      "gate": {
+        "allowed": false,
+        "reason": "not-attacking",
+        "cycle": 1,
+        "distance": null
+      }
+    },
+    {
+      "name": "escorts without flagship strike cannot start battle",
+      "passed": true,
+      "lift": 0,
+      "gate": {
+        "allowed": false,
+        "reason": "awaiting-flagship-first-strike",
+        "cycle": 1,
+        "distance": 0.5768214487282474
+      }
+    },
+    {
+      "name": "actual flagship attack on moss reveals whale",
+      "passed": true,
+      "lift": 0.9959132285615363,
+      "gate": {
+        "allowed": true,
+        "reason": "batian-attacking-saihoji",
+        "cycle": 1,
+        "distance": 0.5768214487282474
+      }
+    },
+    {
+      "name": "old independent pulse disabled in command mode",
+      "passed": true,
+      "lift": 0.9959132285615363,
+      "gate": {
+        "allowed": true,
+        "reason": "batian-attacking-saihoji",
+        "cycle": 1,
+        "distance": 0.5768214487282474
+      }
+    },
+    {
+      "name": "retreat releases whale lock and returns whale",
+      "passed": true,
+      "lift": 0.00135480852430505,
+      "gate": {
+        "allowed": false,
+        "reason": "not-attacking",
+        "cycle": 1,
+        "distance": null
+      }
+    }
+  ],
+  "scope": "Production saihojiGarden module with controlled fleet/campaign inputs; no complete fleet flight or combat visual claim"
+}

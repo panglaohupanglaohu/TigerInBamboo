@@ -1,0 +1,17 @@
+actual support differential {
+  queries: 5040,
+  indexedMeshes: 45360,
+  fallbackMeshes: 0,
+  rebuilds: 9,
+  candidateTriangles: 93041
+}
+✔ actual rotated lake rim and stairs retain all ray hits at dense edge and interior probes (2125.893083ms)
+✔ indexed/nonindexed faces, material sides, geometry edits, transforms, layers and tilted fallback match Three (0.460334ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2222.375292

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Engine — 程序化世界地图（球面噪声 · 海岸描边）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #26323a; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 16px; top: 14px; z-index: 5;
+    font: 12px/1.7 ui-monospace, Menlo, monospace; color: #d7e3e4; white-space: pre;
+  }
+  #hint {
+    position: fixed; left: 16px; bottom: 14px; z-index: 5;
+    font: 11px/1.5 ui-monospace, Menlo, monospace; color: rgba(215,227,228,.6);
+  }
+</style>
+</head>
+<body>
+<div id="hud"></div>
+<div id="hint">←/→ 换 seed · ↑/↓ 海平面 · 空格 重生成</div>
+<canvas id="cv"></canvas>
+
+<script type="module">
+import { buildWorldMap, paintEquirect, paintSphere, poleStretch } from './worldmap.js';
+
+/**
+ * worldmap.html — 复现 x.com/OskSta/status/1783792917183606829（2024-04-26）"Texture test!"
+ *
+ * 参考画面：一颗球在转，球面上陆地/海洋两色 + 一条 1px 海岸描边；帧与帧之间大陆形状
+ * 整体换掉 —— 是**贴图重新生成**，不是球在转。极区没有横向拉伸的条纹。
+ *
+ * 长宽比 / 拉伸的量化在 worldmap.js 里（`poleStretch`）：分别在赤道带和极区量
+ * "同色连续长度 水平/垂直"，两者之比就是拉伸程度。
+ */
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const hud = document.getElementById('hud');
+
+let W = 0, H = 0, dpr = 1;
+let seed = 7, seaLevel = 0.52, lon = 0;
+
+function resize() {
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  regenerate();
+}
+
+let map = null;
+function regenerate() {
+  map = buildWorldMap({ w: 512, h: 256, seed, seaLevel });
+  draw();
+}
+
+function draw() {
+  if (!map) return;
+  ctx.fillStyle = '#26323a';
+  ctx.fillRect(0, 0, W, H);
+
+  // 球：占左侧 62%
+  const R = Math.min(W * 0.30, H * 0.42);
+  paintSphere(map, ctx, W * 0.34, H * 0.46, R, { lon, lat: 0.32 });
+
+  // 等距柱状图：右下角一条
+  const ew = W * 0.44, eh = ew * 0.5;
+  const ex = W * 0.60, ey = H * 0.52;
+  const tmp = document.createElement('canvas');
+  tmp.width = map.w; tmp.height = map.h;
+  const tctx = tmp.getContext('2d');
+  paintEquirect(map, tctx);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(tmp, ex, ey, ew, eh);
+  ctx.strokeStyle = 'rgba(215,227,228,.35)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(ex + .5, ey + .5, ew - 1, eh - 1);
+
+  const s = map.stats;
+  const st = poleStretch(map);
+  hud.textContent =
+    'World map · seed ' + seed + ' · 海平面 ' + seaLevel.toFixed(2) + '\n' +
+    '陆地占比 ' + s.landPct + '%    海岸像素 ' + s.coastPx + '（约 ' + (s.coastPerLand * 100).toFixed(1) + '% 的陆地是岸）\n' +
+    '极点拉伸   赤道带 ' + st.equator + ' : 极区 ' + st.pole + ' → ×' + st.stretch + '（3D 采样应接近 1）';
+  window.__worldmap = { map: { stats: s }, stretch: st, seed, seaLevel };
+}
+
+addEventListener('resize', resize);
+addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') { seed = (seed * 7919 + 13) % 100000; regenerate(); }
+  if (e.key === 'ArrowLeft') { seed = (seed * 31 + 7) % 100000; regenerate(); }
+  if (e.key === 'ArrowUp') { seaLevel = Math.min(0.72, seaLevel + 0.02); regenerate(); }
+  if (e.key === 'ArrowDown') { seaLevel = Math.max(0.32, seaLevel - 0.02); regenerate(); }
+  if (e.key === ' ') { regenerate(); }
+});
+
+// 缓慢自转（参考帧里的球在动）
+let t0 = performance.now();
+function spin(now) {
+  lon += (now - t0) * 0.00018;
+  t0 = now;
+  draw();
+  requestAnimationFrame(spin);
+}
+
+window.__worldStats = { kind: 'worldmap' };
+resize();
+requestAnimationFrame(spin);
+console.log('[worldmap] ready');
+</script>
+</body>
+</html>

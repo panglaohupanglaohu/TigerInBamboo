@@ -1,0 +1,25 @@
+actual enclosure {"homes":10,"walls":50,"towers":4,"gates":3,"rejected":[],"fountain":{"built":true,"center":[0,0.08000000421654366,-15.5099999666214],"radius":1.3,"sideClearance":3.4300000190734865,"walkable":false}}
+✔ new layout retains ten identities, dome and entry, adding tapered towers and real gates (64.733834ms)
+✔ real ring floor preserves two supported return paths and excludes fountain center (45.584459ms)
+✔ missing or steep terrain refuses walls rather than unsupported foundations (54.986375ms)
+✔ new owned geometry and materials release exactly once; legacy stays default (45.19225ms)
+✔ actual radial terrain supports the proposed enclosure and fountain court (440.358916ms)
+✔ rearranged homes do not collide with each other, the nave, walls or towers (33.309041ms)
+✔ legacy factory is byte-equivalent to this change source-before for all geometry and window modes (221.113084ms)
+✔ new-city main has bounded finite real geometry and target dome height (35.988167ms)
+✔ actual entry and rear arch leave a traversable nave, including near its sides (20.746208ms)
+✔ every owned geometry/material disposes exactly once and detaches only this asset (13.828166ms)
+✔ v2 expanded front and rear arches match masonry, voussoirs and reported opening without raising the hall (17.705917ms)
+✔ courtyard extension retains r38 core footprints, entry/steps and dome height with real open rear court (26.857292ms)
+✔ expanded-1 cuts threshold-crossing faces, preserves step elevations and updates real ports (46.34125ms)
+✔ radial surrounding houses and rear court have actual terrain seated foundations (411.916083ms)
+✔ rear court keeps a real open axis and gate, solid side boundaries and supported access steps (36.386ms)
+✔ actual radial entrance walk keeps three-foot .3 spread and .42 vertical support gates (659.028ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1333.486416

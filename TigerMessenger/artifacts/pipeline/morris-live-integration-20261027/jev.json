@@ -1,0 +1,55 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "2530725accc8b79834ccce53e860dc1529c3048bc9c50181dcad2eddd9f5c97b",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.97
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.74,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.1,
+        "lighting": 0,
+        "navigation": 0.79,
+        "review": 0.1
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.94
+    }
+  },
+  "usage": {
+    "input_tokens": 772,
+    "output_tokens": 91,
+    "cost_usd": 0.000325,
+    "credits_remaining_usd": 4.898699
+  },
+  "elapsed_ms": 1375,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "full normal route bridge court and return loop",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "terrain target visual match",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "final mane cloth and gait polish",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

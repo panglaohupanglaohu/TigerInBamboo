@@ -1,0 +1,78 @@
+{
+  "status": "integrated-current-normal-GPU-checked",
+  "revision": "morris-route-r30-20261026",
+  "route": {
+    "actualRoadMaxRadialGrade": 0.15165953226522158,
+    "bridgeCenter": [
+      8,
+      32
+    ],
+    "bridgeCrossings": 1,
+    "design": "winding pre-bridge meadow and uphill shoulder with opposing contour bends, cross-stream bridge, two hairpins and final castle turn",
+    "finalTurnRadius": 7.6,
+    "hairpinCenterRadius": 6,
+    "keys": [
+      [
+        0,
+        1.75
+      ],
+      [
+        55.95355003475069,
+        4
+      ],
+      [
+        63.95355003475064,
+        4.4
+      ],
+      [
+        83.36691913190782,
+        5.6
+      ],
+      [
+        102.21489314038423,
+        9.5
+      ],
+      [
+        148.06548317924958,
+        11.3
+      ],
+      [
+        166.91345718772604,
+        11.8
+      ],
+      [
+        186.40784867301772,
+        10.946204291414205
+      ]
+    ],
+    "length": 186.40784867301772,
+    "marks": {
+      "bridgeBack": 63.95355003475064,
+      "bridgeFront": 55.95355003475069,
+      "eastEnd": 166.91345718772604,
+      "eastStart": 148.06548317924958,
+      "gate": 186.40784867301772,
+      "westEnd": 102.21489314038423,
+      "westStart": 83.36691913190782
+    },
+    "meadowTurnRadius": 4,
+    "minimumDesignedInnerRadius": 2.4,
+    "surface": "real graded ground shoulders plus raycast-supported winding road mesh",
+    "width": 3.2
+  },
+  "approachLength": 55.95355003475069,
+  "localChecks": 14,
+  "normalEvidence": [
+    "normal-bridge-before-r30.png",
+    "normal-overview-r30.png",
+    "normal-audit-r30.json"
+  ],
+  "missing": [
+    "complete actual player walk and horse circuit"
+  ],
+  "notes": [
+    "near bank lowered only in narrow bridge view corridor; high flowers reserved away from bridge sightline",
+    "route protected plateau lifted to meet real .2m castle foundation, prior .13m burial corrected",
+    "castle bridge original elder ensemble music and other scenes preserved"
+  ]
+}

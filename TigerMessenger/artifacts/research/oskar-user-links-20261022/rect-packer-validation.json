@@ -1,0 +1,12 @@
+{
+  "seed": 176495,
+  "requested": 128,
+  "accepted": 111,
+  "candidate_attempts": 4544,
+  "linear_item_tests": 102936,
+  "tree_item_tests": 43984,
+  "tree_node_bounds_tests": 18924,
+  "combined_validation_ms": 22.813,
+  "checks": "query parity incl. split/crossing/contact; all placements bounded/nonoverlapping; deterministic seed",
+  "scope": "Independent 2D exercise; combined validation timing is NOT a tree speedup benchmark"
+}

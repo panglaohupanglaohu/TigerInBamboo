@@ -1,0 +1,17 @@
+{
+  "batch": "r07",
+  "utc": "2026-10-04T09:45:12.363978+00:00",
+  "test": "TigerMessenger/tools/pipeline/test_sea_stack_surface_contract.mjs",
+  "exitCode": 0,
+  "passed": true,
+  "elapsedSeconds": 0.04288,
+  "stdout": "PASS duplicate cleanup; shared resource safety; exclusive geometry cleanup; revision propagation; water geometry/transform invalidation; idempotency; stale refusal; invisible exclusion; unchanged placement and surfaces\n",
+  "stderr": "",
+  "scope": "pure Node fixture tests; not full-world runtime or visual validation",
+  "sourceSha256": {
+    "seaStackCoastalGeometry.js": "b24e83fe2c5dd5e887171fb7b99bf4a3dbf58fe74280c298b190ec4ffae37de5",
+    "seaStackShoreContact.js": "f1d2a9bdcb89d47bbcc5528eb7a3dee33c4d7bd2acbc7d51c2824c9a907e6edf",
+    "seaStackLighting.js": "580fa38b9d55cf7f73ca488beffb49f3faf0cf45e013e0d4a697b14855e13308",
+    "seaStackSurfaceContract.js": "7c705ac98a6567a0e00d81ecddba74db8cbcf15c1c17ce75e7e4687d0b2a9860"
+  }
+}

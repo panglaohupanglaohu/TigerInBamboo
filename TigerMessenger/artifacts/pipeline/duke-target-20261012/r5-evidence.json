@@ -1,0 +1,27 @@
+{
+ "target": "DUKE coastal steam freight ship concept sheet 2026-10-12 (side, deck plan, 3/4 bow, cutaway, crane detail)",
+ "candidate": "duke-r5",
+ "version": "duke-r5",
+ "changes": "ride height 1.2 -> 0.45 m",
+ "observations": [
+  "in-game: red band reduced to a thin boot-top, closer to the 3/4 bow view",
+  "copper cowl vents read slightly toy-like at close range",
+  "crane jib and rigging visible"
+ ],
+ "checks": [
+  {
+   "name": "in-game render at wharf",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "courier boarding/gangway walk",
+   "required": false,
+   "passed": null
+  }
+ ],
+ "constraints": [
+  "additive; robots/rails/story untouched",
+  "no keys or images sent"
+ ]
+}

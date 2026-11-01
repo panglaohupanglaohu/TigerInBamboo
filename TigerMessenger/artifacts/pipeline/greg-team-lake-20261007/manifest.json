@@ -1,0 +1,145 @@
+{
+  "scope": "Final first-pass lake source, role docs and CPU evidence; no GPU acceptance",
+  "files": [
+    {
+      "path": ".codex/agents/greg_visual_rules.toml",
+      "sha256": "5407e83f440c791d0bed0db036f8729be059f245f6c148556f272288eb75da12"
+    },
+    {
+      "path": ".codex/agents/greg_team_lead.toml",
+      "sha256": "f6480b275272ed1af5b88e216efbeff8a331453eeedbeaf79931687c9e71eea6"
+    },
+    {
+      "path": ".codex/agents/greg_place_observation.toml",
+      "sha256": "d97fca99884dee1d688e46f5910f610b273efd4db93e8405519e99417eff3f5f"
+    },
+    {
+      "path": ".codex/agents/greg_living_paths.toml",
+      "sha256": "a6dd187188e4c84cebfe15ba3f57b5d5b86941af50089eed86d00ef3f8d39b80"
+    },
+    {
+      "path": ".codex/agents/greg_alien_ecology.toml",
+      "sha256": "99714b5f6491eb5bc5b03171b4c54db782ec5cd9bf2ca0cc45efdf29b278c19a"
+    },
+    {
+      "path": ".codex/agents/greg_habitation.toml",
+      "sha256": "f43713d131cfa342c087d471d41d9189bed4a1e315ab53289c8e92c267eee92b"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/LEAD_SPATIAL_AUDIT.md",
+      "sha256": "721585e5e7b4819d18fe78a80f9661d1355c0eef31692931310ae9dae58457ac"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/ECOLOGY.md",
+      "sha256": "cd75c0fcfa688296c9edda1edea5a227c3e92886da65733e8d6da5ecfc3caaa8"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/GDC_SABLE_TIMELINE.md",
+      "sha256": "cf8d673a354a8daf8110cab42c2a15ba1394724f0eff670eb907c157056da8c0"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/LIVING_PATHS.md",
+      "sha256": "d93193b37c4b81f281c5909641a5a15a024856b3b4084fb8eca30c057605483e"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/TODOS.md",
+      "sha256": "18301e88d7321b0c46e79f5e4925745b35050df784ea904c4b44d39b9afc02eb"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/RESULTS.md",
+      "sha256": "43e4bd24973766dba14c5f0e6eeb343663cba91a7d5bcf4f53ab0caa712c0c28"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/VISUAL_RULES.md",
+      "sha256": "bd760e2e1b207c96f8f3a9eff4109bf29780d561ffe7626d57f6d7cb33d5834a"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/PLAN.md",
+      "sha256": "df09d4c21fdd83127024689b9afef79b04aba143933e02ec467389d34cc27e66"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/HABITATION.md",
+      "sha256": "e1e67c4c351268f649f78ddcf8506155652ebb1ee93729e59fb5cfd4086cc00f"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/PLACE_OBSERVATION.md",
+      "sha256": "cea6f751a8ce3df8d42b5dfbc8b5357656d6c7619e82ffc517a7a3214868513e"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/TEAM.md",
+      "sha256": "d1626d7f19d795f8004d6e12b591723e506463dfa1458e288ba18579b0fa31f6"
+    },
+    {
+      "path": "TigerMessenger/docs/greg-team/LEADER_REVIEW.md",
+      "sha256": "3690259d54b903d4ee3660b4287ae04b9498c792e14c42732cf8776cfa872a35"
+    },
+    {
+      "path": "TigerMessenger/src/world/swampGregEcology.js",
+      "sha256": "af632f482b0bb5ff3f04a4efbe5cba9523f2c8a81540560e6925d5a553fe659f"
+    },
+    {
+      "path": "TigerMessenger/src/world/swampGregVisuals.js",
+      "sha256": "2badfa3d92ce1a986ecc4656122300369b29b0c43f79c870538177ca2a6ab9e0"
+    },
+    {
+      "path": "TigerMessenger/src/world/swampGregHabitation.js",
+      "sha256": "86732b9d2be57c93475ce76a62de6e29c2c193cfbbc303efd7872b1ea8e37245"
+    },
+    {
+      "path": "TigerMessenger/src/world/swampGregLivingPaths.js",
+      "sha256": "d411d9a1ccdeeb548cee2c4d6b68c6fb477e34c43eff9f625a89383c4002752d"
+    },
+    {
+      "path": "TigerMessenger/src/world/swampSpatialPlan.js",
+      "sha256": "3ac65514effd4f570a8c726713c5b7c4e9ddf7952d3708647e0a5ea47373afc9"
+    },
+    {
+      "path": "TigerMessenger/src/world/swampV2Art.js",
+      "sha256": "f63d1715b4b4e363ca4f12528e13c3437aa03bc93917e7a473627919f5a82f54"
+    },
+    {
+      "path": "TigerMessenger/tests/world/swampGregHabitation.test.mjs",
+      "sha256": "c815a3c4a07b5b77b3e899f8443473e9e2ab9fb6ac43e5e3cfc0abbef0ab3fdb"
+    },
+    {
+      "path": "TigerMessenger/tests/world/swampGregEcology.test.mjs",
+      "sha256": "b1fa148976609123e4940c404bbe7e56b3c154880c574a3139deb0745fd9e33f"
+    },
+    {
+      "path": "TigerMessenger/tests/world/swampGregLivingPaths.test.mjs",
+      "sha256": "fb71a8d1a3379ef227037277fef63c1b92e78f4062cab9d41e8e48911b1fe1aa"
+    },
+    {
+      "path": "TigerMessenger/tests/world/swampGregVisuals.test.mjs",
+      "sha256": "f6652a52aacce8c6b38d87539abcfd8220b122cd9d78fb2526d0ab7e7e2797e4"
+    },
+    {
+      "path": "TigerMessenger/tests/world/swampSpatialPlan.test.mjs",
+      "sha256": "c77e43dab36c72b9ae1e604faa848430ab3d0ac792cbced34115de82a0df7fba"
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/greg-team-lake-20261007/lake-plan-board.png",
+      "sha256": "de16047fef6a6f8fe2b3c9914df80188eaef454739ee4487236f819e477fda62"
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/greg-team-lake-20261007/board-data.json",
+      "sha256": "4ff6854398f76ec56b09259029a37c17815c95383f773b67ca255b7ad25ced0a"
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/greg-team-lake-20261007/lake-integration-tests.log",
+      "sha256": "78e36ec258871565d34c3930853bcae3ccda53f9531b02928432f51052697f30"
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/greg-team-lake-20261007/world-cpu-profile.json",
+      "sha256": "e0c80b357709898fd6ea824f0873fc90776a02c2f12f2b830f866c71005398c9"
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/greg-team-lake-20261007/scene-integration-audit.json",
+      "sha256": "d0ad6d8daf3fa6d2178b8564a9c0202ba3a00bbaa71a6690acc36c354495cb35"
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/greg-team-lake-20261007/combination-audit.json",
+      "sha256": "debd0975d7b52965190d92edecb2644a0b71d614c83de4037afe6b8ff4cd7535"
+    }
+  ]
+}

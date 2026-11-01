@@ -1,0 +1,48 @@
+{
+  "status": "deadline closed; target incomplete NO-SHIP; V13 opt-in candidate saved; default V5 retained",
+  "reference": "approved f40c1dd2 threeview",
+  "standing": "princess-v13-standing.glb",
+  "mounted": "princess-v13-mounted.glb",
+  "changes": [
+    "new adult face with integral nose and recessed almond eyes",
+    "new long hair and leaf circlet",
+    "standing/mounted separate garments",
+    "packed red/gold and ivory/moss UV botanical textures"
+  ],
+  "remaining": [
+    "face/nose/eyes likeness and scalp flow still below approved target",
+    "hair and botanical embroidery still too regular/coarse",
+    "V13 normal full traversal and dynamic mouth contact not fully inspected"
+  ],
+  "musicRequest": "Instrumental confirmed; source still not obtained, no listening claimed",
+  "mountedTriangles": 99766,
+  "lastIteration": "planar synchronized grouped S-waves replace helical feather-like back locks; candidate-only mouth endpoint follows source rosette",
+  "browserEvidence": [
+    "webgl-v8-head.png",
+    "webgl-v8-mounted-side.png",
+    "webgl-v10-head.png",
+    "webgl-v11-horse-side.png",
+    "webgl-v11-grip-gap.png",
+    "webgl-v12-grip.png",
+    "normal-v12-a.png",
+    "normal-v12-a.json",
+    "normal-v12-b.json",
+    "normal-v13-a.png",
+    "normal-v13-a.json"
+  ],
+  "normalReviewUrl": "http://localhost:8931/TigerMessenger/?autostart=1&tour=morris&princessReview=v13",
+  "normalMeeting": "V13 developer move-to-princess + E: meetings1 conversation speed0; subsequent E closes dialogue and speed1.25 resumed, travelled132.242m",
+  "delivery": {
+    "review": "review.html",
+    "qa": "QA.md",
+    "http": "delivery-http.json",
+    "allTenReviewImagesLoaded": true,
+    "sources": "source-hashes-v13.json",
+    "defaultModel": "V5 unchanged",
+    "candidateVerdict": "NO-SHIP",
+    "deadlineUtc": "2026-10-28 19:36",
+    "automationDeletePending": false,
+    "automationDeleted": true,
+    "closedAtUtc": "2026-10-28 19:36:40"
+  }
+}

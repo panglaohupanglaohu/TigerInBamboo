@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-10",
+  "mode": "built-in image_gen",
+  "team": "Greg research team layout review; root image generation",
+  "output": "target-v3-current-courier.png",
+  "reference": "courier-current-user-reference.png",
+  "layoutSources": [
+    "../swamp-target-20261010/r8/middle.jpg",
+    "../greg-lake-character-detail-20261008/current-lake-target-base-20261008.png"
+  ],
+  "styleSource": "../greg-lake-current-target-20261008/target-v2.png",
+  "finalEditPrompt": "Use case: precise-object-edit / style-consistent character correction.\nImage 1 is the environmental target illustration to edit. Image 2 is the USER'S CURRENT ACCEPTED COURIER three-view identity and clothing reference, overriding the earlier caped reedbank walker.\nChange ONLY the SINGLE dark-curly-haired teenage courier standing on the RIGHT cream bank in image 1 (the figure closer to the viewer, not the blond child farther back). Match image 2's design: tousled black curls with bronze-rim goggles resting atop head, naturally proportioned young face, cream/off-white waist-length utility jacket with BLUE-GRAY shoulder yoke and shoulder patches, brass small fasteners, raised CORAL inner collar (not a scarf), rolled shirt/jacket sleeves, cream center shirt, blue-gray belted cargo trousers with side pockets and rolled cuffs, brown lace-up ankle boots, dark fingerless gloves, diagonal brown leather strap, rectangular brown leather mail satchel with small envelopes and a cylindrical brass flask attached. Keep the SAME figure location, SAME human scale relative to the path, same calm standing three-quarter pose. Fine Moebius-style line drawing, constrained flat colors and detail appropriate for a small environment figure; identity readable at this small scale. Remove the previous green petal cape, coral scarf and leaf-shaped bag COMPLETELY. Do not enlarge the character into a foreground portrait.\nKeep EVERYTHING ELSE unchanged: original framing, ancient tree and submerged roots, lush leaves, pink blossoms, weathered cliff, three tiered right bank paths, both wooden longboats and two working repair monkeys at the left dock, five flowerboats and two oars per boat, exactly eight children aboard + one swimmer + one blond child on the bank, three horizontal pale aquatic belugas, tiger drinking on lower-right steps, tiny species and all water ripples. No text, no labels, no UI, no collage. Only replace the courier appearance according to the supplied updated three-view reference.",
+  "validation": "Visually reviewed image tool output. Concept image only, not a game integration. Updated courier reference supersedes reedbank cape/scarf/pod-bag target for this scene. Small-scale clothing detail cannot be assessed as a model match.",
+  "knownLimitations": [
+    "Single concept view simplifies three bank elevation transitions.",
+    "Second longboat includes deployed cream sail rather than fully furled sail.",
+    "Independent original swimmer is not clearly depicted; ten flowerboat children are the dominant illustration grouping."
+  ]
+}

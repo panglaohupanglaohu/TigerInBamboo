@@ -1,0 +1,25 @@
+{
+  "asset": "Batian colour target v2",
+  "observations": [
+    "Generated edit visually reviewed: blue-charcoal large main planes, violet shadow faces, warm sand highlights, turquoise thin facets, small coral lamps.",
+    "Prior geography, aircraft silhouette, low-flight view and large blue-violet cast shadow retained.",
+    "Target concept only; production materials unchanged this turn."
+  ],
+  "checks": [
+    {
+      "name": "new image visually inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "game colour matching target",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "black-grey crystal identity",
+    "do not attribute palette as authored by Moebius",
+    "preserve prior target v1"
+  ]
+}

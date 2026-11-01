@@ -1,0 +1,1382 @@
+{
+  "readiness": {
+    "sceneReadyWallMs": 58546.89999997616,
+    "startedAt": "2026-10-04T17:56:17.940Z",
+    "actualReadyWallMs": 76732.19999998808
+  },
+  "lighting": {
+    "weather": 0,
+    "weatherLocked": true,
+    "phase": 0.5,
+    "flashIntensity": 0,
+    "directorEnabled": false,
+    "tramY": 153.6026852586141,
+    "moebiusTarget": 0,
+    "lights": [
+      {
+        "name": "light-pool-2",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "light-pool-3",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "light-pool-4",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "light-pool-5",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "light-pool-6",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "light-pool-7",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "AmbientLight",
+        "color": "f3fff7",
+        "intensity": 0.9,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "HemisphereLight",
+        "color": "ffffff",
+        "groundColor": "f0e6e0",
+        "intensity": 0.45,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "DirectionalLight",
+        "color": "fff6e0",
+        "intensity": 1.6,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "DirectionalLight",
+        "color": "75cfc3",
+        "intensity": 0.28,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ffe8b0",
+        "intensity": 0.35,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "osk-v5-ambient-floor",
+        "type": "AmbientLight",
+        "color": "ffffff",
+        "intensity": 0.25,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "osk-v5-sky-ground-fill",
+        "type": "HemisphereLight",
+        "color": "d8f2ef",
+        "groundColor": "b6a790",
+        "intensity": 0.96,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "osk-v5-key-sun",
+        "type": "DirectionalLight",
+        "color": "ffe2b9",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "tarn-elder-tree-zone-fill",
+        "type": "PointLight",
+        "color": "ffffff",
+        "intensity": 1.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "tarn-companion-zone-fill",
+        "type": "PointLight",
+        "color": "ffffff",
+        "intensity": 1.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bubble-interior-light",
+        "type": "PointLight",
+        "color": "8effd8",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bubble-interior-light",
+        "type": "PointLight",
+        "color": "ffd98e",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bubble-interior-light",
+        "type": "PointLight",
+        "color": "ffa8d9",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bubble-interior-light",
+        "type": "PointLight",
+        "color": "ffd98e",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "citadel-svarbova-ambient",
+        "type": "AmbientLight",
+        "color": "8eb9e5",
+        "intensity": 0.34,
+        "visible": true,
+        "layers": 2
+      },
+      {
+        "name": "citadel-svarbova-sun",
+        "type": "DirectionalLight",
+        "color": "78aee0",
+        "intensity": 0.62,
+        "visible": true,
+        "layers": 2
+      },
+      {
+        "name": "infiltration-torch-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 0.75,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "infiltration-torch-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 0.75,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "infiltration-torch-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 0.75,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "infiltration-torch-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 0.75,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 5.12,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 5.12,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff2d55",
+        "intensity": 0.036000000000000004,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff2d55",
+        "intensity": 0.036000000000000004,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 0.7397128625141249,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 2.8996181605380498,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 0.7397128625141249,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 2.8996181605380498,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 0.7397128625141249,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 2.8996181605380498,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 0.7397128625141249,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 2.8996181605380498,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 0.7397128625141249,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 2.8996181605380498,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.350762883294776,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "citadel-svarbova-ambient",
+        "type": "AmbientLight",
+        "color": "ffffff",
+        "intensity": 0.62,
+        "visible": false,
+        "layers": 2
+      },
+      {
+        "name": "citadel-svarbova-sun",
+        "type": "DirectionalLight",
+        "color": "fff4e6",
+        "intensity": 0.95,
+        "visible": false,
+        "layers": 2
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.68,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 13.44,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 8.64,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 7.36,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "leviathan-eye-light-L",
+        "type": "PointLight",
+        "color": "ffcf8a",
+        "intensity": 0.8650461278934674,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "leviathan-eye-light-R",
+        "type": "PointLight",
+        "color": "ffcf8a",
+        "intensity": 0.8650461278934674,
+        "visible": false,
+        "layers": 1
+      }
+    ],
+    "isolation": {
+      "method": "review-only: seek red tram to maximum positive-Y route point and suspend tramSystem.update; other world updates remain active",
+      "progress": 0.0025,
+      "tramY": 153.6026852586141,
+      "persisted": false,
+      "wavesAndGrass": "not modified",
+      "settled": true,
+      "ambientReset": {
+        "selector": "unique unnamed AmbientLight directly under main scene, setupEnvironment source",
+        "before": "ffffff",
+        "after": "f3fff7"
+      },
+      "fadeSimulationSeconds": 18.02620000000009
+    },
+    "weatherPolicy": "review iframe forces weather=0 and weatherLocked=true; not persisted"
+  },
+  "at": "2026-10-04T17:58:10.845Z",
+  "round": "r04",
+  "url": "http://localhost:8931/TigerMessenger/?citadelRidgePass=3&citadelTurfPass=2&citadelWoodlandPass=2&citadelRockSurfacePass=1&citadelSurfaceIndex=1&autostart=1&timeOfDay=0.5",
+  "ready": true,
+  "view": "overview",
+  "clock": 0.5,
+  "hideClouds": false,
+  "hidePlants": false,
+  "camera": {
+    "position": [
+      85.7501824962782,
+      286.10738253317794,
+      10.94174857439593
+    ],
+    "quaternion": [
+      0.3155750978685415,
+      0.7624679406844583,
+      0.4815569434060868,
+      -0.29522518065207237
+    ],
+    "aspect": 2.413127413127413,
+    "zoom": 1,
+    "fov": 55
+  },
+  "errors": [],
+  "report": null,
+  "performance": null
+}

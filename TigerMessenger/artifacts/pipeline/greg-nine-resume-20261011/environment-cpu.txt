@@ -1,0 +1,51 @@
+✖ turquoise, see-through water keeps the ripple injection and gets pale ripple strokes (1966.337875ms)
+✔ water body deepens with inner depth and bed is turquoise (1583.796167ms)
+✖ wall stone gets grey-violet blocks after weathering; rim crown is moss green with a narrow ochre lip; dispose restores (1536.251292ms)
+✔ disabled is a no-op (1504.666792ms)
+✔ giant tree roots fan out underwater from the trunk, stay under the boat lane, one draw (1988.791584ms)
+✔ water strokes come from what disturbs the water: boats always, feeder always, whale only while surfaced (2674.254209ms)
+✔ 3–4 thin waterfalls hug the pit wall from rim to water, avoid the stair entrance and walkway, one draw (2005.225667ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 5
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6708.842458
+
+✖ failing tests:
+
+test at TigerMessenger/tests/world/swampPaintWater.test.mjs:15:1
+✖ turquoise, see-through water keeps the ripple injection and gets pale ripple strokes (1966.337875ms)
+  AssertionError [ERR_ASSERTION]: turquoise, saturated
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampPaintWater.test.mjs:24:44)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/world/swampPaintWater.test.mjs:43:1
+✖ wall stone gets grey-violet blocks after weathering; rim crown is moss green with a narrow ochre lip; dispose restores (1536.251292ms)
+  AssertionError [ERR_ASSERTION]: outer soil mostly green
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampPaintWater.test.mjs:66:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

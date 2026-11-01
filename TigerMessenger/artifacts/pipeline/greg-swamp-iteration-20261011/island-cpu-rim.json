@@ -1,0 +1,164 @@
+{
+  "time": "2026-10-10T21:23:10.606Z",
+  "station": "rim",
+  "method": "60 real production frames; opt-in section CPU wall timings, not GPU timings",
+  "cpu": {
+    "enabled": true,
+    "samples": 60,
+    "means": {
+      "lightingWeather": 0.06499999761581421,
+      "physicsAndRide": 2.166666656732561,
+      "audio": 0.06999999880790712,
+      "sceneUpdates": 55.11000001231829,
+      "robotsAndGuardian": 6.128333328167597,
+      "cameraWaterAndStory": 0.14999999602635705,
+      "questsAndUI": 0.11333333651224782,
+      "cullingAndLights": 0.11166666150093081,
+      "render": 31.34666666984558
+    }
+  },
+  "scenes": [
+    {
+      "id": "messenger",
+      "samples": 63,
+      "meanMs": 55.165079372269766,
+      "maxMs": 62.89999997615814
+    },
+    {
+      "id": "saihoji",
+      "samples": 63,
+      "meanMs": 0.01587301776522682,
+      "maxMs": 0.10000002384185791
+    }
+  ],
+  "subsystems": [
+    {
+      "id": "moebiusSwamp.userData",
+      "samples": 63,
+      "meanMs": 42.41269840702178,
+      "maxMs": 48.90000009536743
+    },
+    {
+      "id": "moebius-swamp-placement.story",
+      "samples": 63,
+      "meanMs": 42.41269840702178,
+      "maxMs": 48.90000009536743
+    },
+    {
+      "id": "saihojiPhalanx",
+      "samples": 63,
+      "meanMs": 6.636507940670801,
+      "maxMs": 8.300000071525574
+    },
+    {
+      "id": "canalBoats",
+      "samples": 63,
+      "meanMs": 1.6222222210868957,
+      "maxMs": 2.100000023841858
+    },
+    {
+      "id": "canalJunctionCitadel",
+      "samples": 63,
+      "meanMs": 0.8269841216859364,
+      "maxMs": 1
+    },
+    {
+      "id": "odysseyCitadel",
+      "samples": 63,
+      "meanMs": 0.742857157237946,
+      "maxMs": 1.2000000476837158
+    },
+    {
+      "id": "gateBirdVortex",
+      "samples": 63,
+      "meanMs": 0.5206349236624581,
+      "maxMs": 0.8999999761581421
+    },
+    {
+      "id": "birdVortex",
+      "samples": 63,
+      "meanMs": 0.5206349236624581,
+      "maxMs": 0.8999999761581421
+    },
+    {
+      "id": "tramSystem",
+      "samples": 63,
+      "meanMs": 0.07142857332078237,
+      "maxMs": 0.20000004768371582
+    },
+    {
+      "id": "moebius",
+      "samples": 63,
+      "meanMs": 0.041269841648283456,
+      "maxMs": 0.20000004768371582
+    },
+    {
+      "id": "oldHarbor",
+      "samples": 63,
+      "meanMs": 0.014285717691693987,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "highlandGateFlock",
+      "samples": 63,
+      "meanMs": 0.014285712015061151,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "escort",
+      "samples": 63,
+      "meanMs": 0.012698413833739266,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "flock",
+      "samples": 63,
+      "meanMs": 0.009523802333407931,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "citadelRange",
+      "samples": 63,
+      "meanMs": 0.00634920597076416,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "citySeaLake",
+      "samples": 63,
+      "meanMs": 0.0047619058972313295,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "waterRouteFleet",
+      "samples": 63,
+      "meanMs": 0,
+      "maxMs": 0
+    },
+    {
+      "id": "canalJunctionBox.userData",
+      "samples": 63,
+      "meanMs": 0,
+      "maxMs": 0
+    },
+    {
+      "id": "terraceBirds",
+      "samples": 63,
+      "meanMs": 0,
+      "maxMs": 0
+    }
+  ],
+  "perf": {
+    "fps": 10.4,
+    "frameMs": 95.78,
+    "samples": 60,
+    "windowFull": true,
+    "hitches": 2,
+    "worstMs": 336.6,
+    "calls": 6848,
+    "triangles": 5785815,
+    "programs": 384,
+    "geometries": 2782,
+    "textures": 112,
+    "bootMs": 28774
+  }
+}

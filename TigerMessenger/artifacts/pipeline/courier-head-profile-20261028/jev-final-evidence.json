@@ -1,0 +1,49 @@
+{
+  "task": "Courier head/neck and Morris princess profile refinement plus island editor blocking",
+  "target": "Original courier side reference without goggles; distinct chin and recessed throat. Princess shorter jaw and narrower neck. Island clicks do not edit distant castles.",
+  "visual_observations": {
+    "source": "Original courier side reference and actual WebGL side/head closeup, normal H courier view; princess v4 actual WebGL head side and normal-game moving patrol loaded",
+    "completed": [
+      "Six goggle parts removed",
+      "Courier chin now projects ahead of throat; original joint/body preserved",
+      "Princess v3 normal game loaded and moving",
+      "Expanded route 247.0957m confirmed in normal DOM audit"
+    ],
+    "remaining": [
+      "Simplified courier head and princess hair/face still differ from illustrated targets",
+      "Full new-route traversal and rail vehicle envelope not accepted"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Courier loader, six animation states and restore, 3 tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Morris occludes castles behind; hidden/behind exceptions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "New princess GLB loaded in normal game",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Refreshed normal island ground clicks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Princess v4 real GLB 200 finite poses and restore, normal game v4 visible moving",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "No release or push",
+    "Keep prior source assets",
+    "Jev text only, not visual acceptance"
+  ]
+}

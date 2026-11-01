@@ -1,0 +1,10 @@
+Front strata baseline changed citadel-oskar-grid-mountain-surface 155
+Old-city coastal source changed; continuing with slope update { hash: 2028752367, expected: 3381302665 }
+Old-city coastal source changed; continuing with slope update { hash: 2125320883, expected: 2915253182 }
+[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface
+[citadel] applyCitadelHarborSeabed 跳过: Harbor seabed requires the original planet and city
+[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate
+[ELDER] 已放到指定落点 r=160.6
+[CLOUD-RIDGE] kept= 11 dropped= 12 rings= {"1":6,"2":2,"0.25":4,"center":1} maxH= 42.75 maxScore= 1.13 threshold= 0.35
+{"name":"formal-first-10s","seconds":10,"frames":200,"wallSeconds":15.6140095,"allocations":{"texture":0,"geometry":1577,"material":274},"disposals":{"texture":0,"geometry":221,"material":0},"canvas":0,"before":{"objects":42675,"geometry":16134,"material":7417,"texture":135},"after":{"objects":47277,"geometry":16824,"material":7621,"texture":135},"error":null}
+{"name":"formal-next-10s","seconds":10,"frames":200,"wallSeconds":14.553973416000002,"allocations":{"texture":0,"geometry":887,"material":108},"disposals":{"texture":0,"geometry":231,"material":4},"canvas":0,"before":{"objects":47277,"geometry":16824,"material":7621,"texture":135},"after":{"objects":49977,"geometry":17154,"material":7683,"texture":135},"error":null}

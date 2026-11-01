@@ -1,0 +1,49 @@
+{
+  "version": "rear-ship-volume-clip-1",
+  "x": 18,
+  "z": -10,
+  "removedTriangles": 17733,
+  "capTriangles": 614,
+  "openCapEndpoints": 0,
+  "sourceTriangles": 138321,
+  "outputTriangles": 123608,
+  "closedCutContours": true,
+  "horseSide": {
+    "version": "horse-side-radial-cliff-1",
+    "enabled": true,
+    "movedVertices": 64732,
+    "maxDisplacement": 20.266504547392625,
+    "topSupportFixed": true,
+    "visualVerified": false,
+    "displacementGuard": {
+      "rounds": 46,
+      "constrainedAssignments": 63674,
+      "remainingInvalid": 0,
+      "movedCorners": 64732,
+      "maxDisplacement": 20.266504547392625,
+      "rule": "shared source-point weights; positive source-facing area and >=2% original area"
+    },
+    "newlyDegenerate": 0,
+    "orientationReversals": 0,
+    "afterTriangles": 123608,
+    "beforeTriangles": 123608,
+    "columns": 16069
+  },
+  "hullContactsBefore": 470,
+  "hullContactsAfter": 0,
+  "within10mAfter": 0,
+  "railAudit": {
+    "red": {
+      "poses": 1024,
+      "triangleHits": 0,
+      "radialBuriedProbes": 0,
+      "failures": []
+    },
+    "blue": {
+      "poses": 1058,
+      "triangleHits": 0,
+      "radialBuriedProbes": 0,
+      "failures": []
+    }
+  }
+}

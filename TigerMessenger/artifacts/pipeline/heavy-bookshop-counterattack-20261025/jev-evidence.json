@@ -1,0 +1,31 @@
+{
+  "task": "Bookshop real heavy troopers counterattack repair",
+  "observations": {
+    "user_image": "Bookshop plaza has several fallen original heavy troopers among standing residents; user did not see attacks. Prior Saihoji numbers are not bookshop acceptance.",
+    "source_causes": [
+      "Robot defense aimed at root soles below shield; now shared real torso aim point.",
+      "Insertion forbade ground movement until every trooper landed; now ground assembles during insertion and descending troopers raise shields.",
+      "Actual civilian attackers were incorrectly reclassified robot=true; preserve target identity and damage routing.",
+      "Guns blocked by nearest ally/wall only retried same target; now bounded alternative clear candidates and actual gun orientation."
+    ],
+    "validation": "16 meaningful policy/controller tests pass, gitdiffcheck clean. Normal entry fresh browser loading; DOM currently timed out during boot. No GPU combat acceptance yet."
+  },
+  "checks": [
+    {
+      "name": "torso ray shield and insertion/civilian/alternate lanes regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal bookshop GPU shield/gun/sword combat",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No robot damage nerf or fake immortality",
+    "Keep all original actors, normal entry",
+    "Text only no image upload"
+  ],
+  "evidence_revision": "heavy-bookshop-r1"
+}

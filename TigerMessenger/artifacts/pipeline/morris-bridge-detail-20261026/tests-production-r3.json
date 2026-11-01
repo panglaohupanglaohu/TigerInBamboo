@@ -1,0 +1,35 @@
+{
+  "passed": 5,
+  "checks": [
+    "production bridge location remains existing route crossing",
+    "production bridge deck unaltered 24x2 strips",
+    "actual production deck walking clearance3.2m",
+    "production stream water level has genuine transverse arch opening",
+    "production detail envelope preserves8m length"
+  ],
+  "report": {
+    "revision": "continuous-arch-r3",
+    "archBarrel": true,
+    "solidParapets": true,
+    "closedArchCore": true,
+    "continuousCoping": true,
+    "deckCrown": 0.25,
+    "archRise": 1.58,
+    "minimumCoreThickness": 0.6675664222272383,
+    "walkWidth": 3.2,
+    "span": 8,
+    "archStones": 52,
+    "masonryPieces": 204,
+    "mergedStoneBatches": 5,
+    "terrainBankContactVerified": false
+  },
+  "bridgePosition": [
+    8,
+    0.11283774446924322,
+    32
+  ],
+  "deckEndpoints": [
+    1.6786707639694214,
+    -0.23356369137763977
+  ]
+}

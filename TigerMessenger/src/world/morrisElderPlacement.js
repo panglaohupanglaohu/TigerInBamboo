@@ -22,25 +22,33 @@ export function moveMorrisElderEnsemble({ensemble,island}){
 /** New authored island owns its overlap, including visible/depth/distance/support. */
 export function installMorrisGroundOwnership({island,hills,platforms=[]}){
  const root=island.root;root.updateWorldMatrix(true,true);const inv=root.matrixWorld.clone().invert(),radius=island.report.radius;
- const owns=p=>{const q=p.clone().applyMatrix4(inv);return q.y> -45&&q.y<80&&Math.hypot(q.x,q.z)<radius*(1+.055*Math.sin(Math.atan2(q.z,q.x)*3+.7)+.028*Math.cos(Math.atan2(q.z,q.x)*7));};
- const compile=base=>shader=>{base?.(shader);shader.uniforms.morrisGroundFrame={value:inv};shader.uniforms.morrisGroundRadius={value:radius};shader.vertexShader='varying vec3 morrisOriginalWorld;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\n morrisOriginalWorld=(modelMatrix*vec4(transformed,1.)).xyz;');shader.fragmentShader='uniform mat4 morrisGroundFrame;uniform float morrisGroundRadius;varying vec3 morrisOriginalWorld;\n'+shader.fragmentShader;shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>',`#include <clipping_planes_fragment>
- {vec3 morrisOwnedPoint=(morrisGroundFrame*vec4(morrisOriginalWorld,1.)).xyz;
+ const owns=p=>{if(island.preservation?.containsWorld(p))return false;const q=p.clone().applyMatrix4(inv);return q.y> -45&&q.y<80&&Math.hypot(q.x,q.z)<radius*(1+.055*Math.sin(Math.atan2(q.z,q.x)*3+.7)+.028*Math.cos(Math.atan2(q.z,q.x)*7));};
+ const regions=island.preservation?.regions??[];
+ const protectedUniforms=regions.map((_,i)=>`uniform mat4 morrisPreservedFrame${i};uniform float morrisPreservedRadius${i};`).join('\n');
+ const protectedTest=regions.map((_,i)=>`{vec3 p=(morrisPreservedFrame${i}*vec4(morrisOriginalWorld,1.)).xyz;if(abs(p.y)<80.&&length(p.xz)<morrisPreservedRadius${i})morrisProtected=true;}`).join('\n');
+ const compile=base=>shader=>{base?.(shader);regions.forEach((r,i)=>{shader.uniforms['morrisPreservedFrame'+i]={value:r.frame};shader.uniforms['morrisPreservedRadius'+i]={value:r.radius};});shader.uniforms.morrisGroundFrame={value:inv};shader.uniforms.morrisGroundRadius={value:radius};shader.vertexShader='varying vec3 morrisOriginalWorld;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\n morrisOriginalWorld=(modelMatrix*vec4(transformed,1.)).xyz;');shader.fragmentShader=protectedUniforms+'\n'+'uniform mat4 morrisGroundFrame;uniform float morrisGroundRadius;varying vec3 morrisOriginalWorld;\n'+shader.fragmentShader;shader.fragmentShader=shader.fragmentShader.replace('#include <clipping_planes_fragment>',`#include <clipping_planes_fragment>
+ {bool morrisProtected=false;${protectedTest}
+ vec3 morrisOwnedPoint=(morrisGroundFrame*vec4(morrisOriginalWorld,1.)).xyz;
  float morrisOwnedAngle=atan(morrisOwnedPoint.z,morrisOwnedPoint.x);float morrisOwnedEdge=morrisGroundRadius*(1.+.055*sin(morrisOwnedAngle*3.+.7)+.028*cos(morrisOwnedAngle*7.));
- if(morrisOwnedPoint.y> -45.&&morrisOwnedPoint.y<80.&&length(morrisOwnedPoint.xz)<morrisOwnedEdge*.998)discard;}`);};
+ if(!morrisProtected&&morrisOwnedPoint.y> -45.&&morrisOwnedPoint.y<80.&&length(morrisOwnedPoint.xz)<morrisOwnedEdge*.998)discard;}`);};
  const targets=[hills.mesh,hills.skirt,...platforms.filter(p=>p.mesh?.userData.authoredMainIslandShell).map(p=>p.mesh)].filter(Boolean);
- for(const mesh of targets){const wrap=base=>{const m=base.clone();m.onBeforeCompile=compile(base.onBeforeCompile?.bind(base));m.customProgramCacheKey=()=>`morris-user-elder-overlap-r1:${base.customProgramCacheKey?.()??''}`;return m;};mesh.material=Array.isArray(mesh.material)?mesh.material.map(wrap):wrap(mesh.material);mesh.customDepthMaterial=wrap(mesh.customDepthMaterial??new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,side:T.DoubleSide}));mesh.customDistanceMaterial=wrap(mesh.customDistanceMaterial??new T.MeshDistanceMaterial({side:T.DoubleSide}));}
+ for(const mesh of targets){const wrap=base=>{const m=base.clone();m.onBeforeCompile=compile(base.onBeforeCompile?.bind(base));m.customProgramCacheKey=()=>`morris-user-elder-overlap-preserved-${regions.length}:${base.customProgramCacheKey?.()??''}`;return m;};mesh.material=Array.isArray(mesh.material)?mesh.material.map(wrap):wrap(mesh.material);mesh.customDepthMaterial=wrap(mesh.customDepthMaterial??new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,side:T.DoubleSide}));mesh.customDistanceMaterial=wrap(mesh.customDistanceMaterial??new T.MeshDistanceMaterial({side:T.DoubleSide}));}
  const prior=hills.sampleRadius;hills.sampleRadius=p=>owns(p)?-Infinity:prior?.(p);for(const p of platforms){if(!p.mesh?.userData.authoredMainIslandShell)continue;const old=p.topHeightAt;p.topHeightAt=function(position){return owns(position)?-Infinity:old?.call(this,position);};p.mat=p.mesh.material;}
  island.report.originalGroundOwnership={mode:'user-selected elder overlap only; old source geometry retained',meshes:targets.length,shadowMasks:true,supportMasks:true};return{owns};
 }
-export function applyMorrisSeaPalette(ocean,root,radius,curves=[]){
+export function applyMorrisSeaPalette(ocean,root,radius,curves=[],preservation=null){
  const m=ocean?.material;if(!m?.isShaderMaterial||m.userData.morrisSeaPalette)return null;root.updateWorldMatrix(true,true);m.uniforms.uMorrisSeaFrame={value:root.matrixWorld.clone().invert()};
  const extent=radius*1.1,size=256,data=new Uint8Array(size*size),points=curves.filter(c=>c?.getSpacedPoints).flatMap(c=>c.getSpacedPoints(1200)).map(p=>p.clone().applyMatrix4(m.uniforms.uMorrisSeaFrame.value)).filter(p=>Math.hypot(p.x,p.z)<extent+4);
  for(let j=0;j<size;j++)for(let i=0;i<size;i++){const x=((i+.5)/size*2-1)*extent,z=((j+.5)/size*2-1)*extent,a=Math.atan2(z,x),edge=radius*(1+.055*Math.sin(a*3+.7)+.028*Math.cos(a*7));if(Math.hypot(x,z)>edge*.98)continue;if(points.some(p=>(p.x-x)**2+(p.z-z)**2<2.5**2))data[j*size+i]=255;}
  const texture=new T.DataTexture(data,size,size,T.RedFormat,T.UnsignedByteType);texture.minFilter=texture.magFilter=T.NearestFilter;texture.generateMipmaps=false;texture.needsUpdate=true;m.uniforms.uMorrisDryRail={value:texture};
- m.fragmentShader='uniform mat4 uMorrisSeaFrame;uniform sampler2D uMorrisDryRail;\n'+m.fragmentShader;m.fragmentShader=m.fragmentShader.replace('float alpha = uOpacity',`
+ const regions=preservation?.regions??[];regions.forEach((r,i)=>{m.uniforms['morrisSeaPreservedFrame'+i]={value:r.frame};m.uniforms['morrisSeaPreservedRadius'+i]={value:r.radius};});
+ const declarations=regions.map((_,i)=>`uniform mat4 morrisSeaPreservedFrame${i};uniform float morrisSeaPreservedRadius${i};`).join('\n');
+ const tests=regions.map((_,i)=>`{vec3 p=(morrisSeaPreservedFrame${i}*vec4(vRadial*160.72,1.)).xyz;if(abs(p.y)<80.&&length(p.xz)<morrisSeaPreservedRadius${i})mr=0.;}`).join('\n');
+ m.fragmentShader=declarations+'\n'+'uniform mat4 uMorrisSeaFrame;uniform sampler2D uMorrisDryRail;\n'+m.fragmentShader;m.fragmentShader=m.fragmentShader.replace('float alpha = uOpacity',`
  {vec3 mp=(uMorrisSeaFrame*vec4(vRadial*160.72,1.)).xyz;
  vec2 railUV=mp.xz/${(extent*2).toFixed(3)}+.5;if(all(greaterThanEqual(railUV,vec2(0.)))&&all(lessThan(railUV,vec2(1.)))&&mp.y> -45.&&texture2D(uMorrisDryRail,railUV).r>.5)discard;
  float mr=(1.-smoothstep(${(radius+22).toFixed(2)},${(radius+100).toFixed(2)},length(mp.xz)))*step(-60.,mp.y);
+ ${tests}
  vec3 mw=mix(vec3(.23,.52,.60),vec3(.56,.78,.79),1.-depth*.6);
  mw*=mix(.32,1.,uNight);mw+=vec3(.02,.028,.028)*sin(ripplePhase)*.16;
  mw=mix(mw,vec3(.90,.96,.94)*mix(.4,1.,uNight),clamp(shorelineFoam*.45,0.,.55));color=mix(color,mw,mr);}

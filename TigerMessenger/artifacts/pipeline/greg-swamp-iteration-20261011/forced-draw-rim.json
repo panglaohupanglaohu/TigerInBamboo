@@ -1,0 +1,608 @@
+{
+  "time": "2026-10-10T18:00:09.812Z",
+  "station": "rim",
+  "method": "one manual production scene render, not full frame FPS",
+  "frame": {
+    "frame": 135,
+    "calls": 7112,
+    "triangles": 5811109,
+    "points": 0,
+    "lines": 215396
+  },
+  "forcedNodes": 66,
+  "outsideNodes": 56,
+  "actualForcedCallbacks": 66,
+  "entries": [
+    {
+      "name": "tiger_skin",
+      "parent": "tiger_rig",
+      "grandparent": "tiger-v3-skin",
+      "outside": true,
+      "triangles": 13936,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-ink-outline",
+      "parent": "tiger_rig",
+      "grandparent": "tiger-v3-skin",
+      "outside": true,
+      "triangles": 13936,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "sky-background",
+      "parent": "",
+      "outside": false,
+      "triangles": 2976,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "manga-waterfall-mist-particles",
+      "parent": "holy-old-town-waterfall",
+      "grandparent": "highland-town-foundation-platform",
+      "outside": true,
+      "triangles": 30,
+      "instances": 96,
+      "callbacks": 1
+    },
+    {
+      "name": "bird-vortex-triple-gate",
+      "parent": "bird-vortex-triple-gate",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 10,
+      "instances": 250,
+      "callbacks": 1
+    },
+    {
+      "name": "bird-vortex-triple-gate",
+      "parent": "bird-vortex-triple-gate",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 10,
+      "instances": 250,
+      "callbacks": 1
+    },
+    {
+      "name": "bird-vortex-triple-gate",
+      "parent": "bird-vortex-triple-gate",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 8,
+      "instances": 250,
+      "callbacks": 1
+    },
+    {
+      "name": "bird-vortex-triple-gate",
+      "parent": "bird-vortex-triple-gate",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 8,
+      "instances": 250,
+      "callbacks": 1
+    },
+    {
+      "name": "bird-vortex-triple-gate",
+      "parent": "bird-vortex-triple-gate",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 8,
+      "instances": 250,
+      "callbacks": 1
+    },
+    {
+      "name": "bird-vortex-triple-gate",
+      "parent": "bird-vortex-triple-gate",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 8,
+      "instances": 250,
+      "callbacks": 1
+    },
+    {
+      "name": "swamp-floating-lily-leaves",
+      "parent": "moebius-swamp-zone",
+      "grandparent": "moebius-swamp-placement",
+      "outside": false,
+      "triangles": 14,
+      "instances": 50,
+      "callbacks": 1
+    },
+    {
+      "name": "greg-lake-outline",
+      "parent": "world-tree-trunk",
+      "grandparent": "swamp-ancient-world-tree",
+      "outside": false,
+      "triangles": 680,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "ear_L",
+      "parent": "tiger_rig",
+      "grandparent": "tiger-v3-skin",
+      "outside": true,
+      "triangles": 624,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "ear_R",
+      "parent": "tiger_rig",
+      "grandparent": "tiger-v3-skin",
+      "outside": true,
+      "triangles": 624,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "swamp-floating-twigs",
+      "parent": "moebius-swamp-zone",
+      "grandparent": "moebius-swamp-placement",
+      "outside": false,
+      "triangles": 36,
+      "instances": 12,
+      "callbacks": 1
+    },
+    {
+      "name": "LineSegments",
+      "parent": "",
+      "outside": true,
+      "triangles": 366.6666666666667,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "nose",
+      "parent": "tiger_rig",
+      "grandparent": "tiger-v3-skin",
+      "outside": true,
+      "triangles": 360,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "manga-waterfall-box-foam",
+      "parent": "holy-old-town-waterfall",
+      "grandparent": "highland-town-foundation-platform",
+      "outside": true,
+      "triangles": 12,
+      "instances": 28,
+      "callbacks": 1
+    },
+    {
+      "name": "citadel-harbor-gold-streaks",
+      "parent": "citadel-harbor-reflections",
+      "grandparent": "highland-west-city",
+      "outside": true,
+      "triangles": 288,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "tiger-v3-whiskers",
+      "parent": "tiger-v3-whiskers",
+      "grandparent": "head",
+      "outside": true,
+      "triangles": 140,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "freight-highland-steam",
+      "parent": "red-freight-locomotive",
+      "grandparent": "christchurch-tram-system",
+      "outside": false,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "freight-highland-steam",
+      "parent": "blue-freight-locomotive",
+      "grandparent": "christchurch-tram-system",
+      "outside": true,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "highland-hero-cloud-impostors",
+      "parent": "castleContainer",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "citadel-ridge-flow-clouds",
+      "parent": "castleContainer",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "planet-v8-cloud-impostors",
+      "parent": "planet-v9-runtime",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "crystal-v10-lake",
+      "parent": "",
+      "outside": false,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "factory-highland-steam-clouds",
+      "parent": "locust-bookshop-court",
+      "grandparent": "bookshop-steampunk-robots",
+      "outside": false,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "factory-highland-steam-clouds",
+      "parent": "ant-bookshop-court",
+      "grandparent": "bookshop-steampunk-robots",
+      "outside": false,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "factory-highland-steam-clouds",
+      "parent": "beetle-bookshop-court",
+      "grandparent": "bookshop-steampunk-robots",
+      "outside": false,
+      "triangles": 2,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "christchurch-tram-system",
+      "parent": "christchurch-tram-system",
+      "grandparent": "",
+      "outside": false,
+      "triangles": 0.6666666666666666,
+      "instances": 1,
+      "callbacks": 1
+    },
+    {
+      "name": "christchurch-tram-system",
+      "parent": "christchurch-tram-system",
+      "grandparent": "",
+      "outside": true,
+      "triangles": 0.6666666666666666,
+      "instances": 1,
+      "callbacks": 1
+    }
+  ]
+}

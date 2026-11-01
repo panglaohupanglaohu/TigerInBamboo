@@ -1,0 +1,46 @@
+{
+  "version": "r21-colour-flow-clouds-and-facing",
+  "goal": "Target citadel final >95, currently not accepted",
+  "visual_observations": {
+    "source": "root and independent advisor inspected actual r21 views earlier in this active work; no new image or video recorded in this research turn",
+    "sha256": "0bc34f25ae6aa5473741d0b9857b5d3ef9fd93db4f9fe9014ec10efb6e58814e",
+    "differences": [
+      "Warm-gray rock, yellow-green grass, teal canopy and pale cyan sea are now explicit material changes; terrain geometry unchanged.",
+      "8 moving cloud banks have visible floating thickness; new-city front bank remains thin and overlaps platform visually.",
+      "76 facing-layout boxes pass nine-point support sampling after four invalid candidates excluded. They are proxy buildings, not final architecture.",
+      "Legacy buildings remain partly buried; actual new main and waterfall modules passed CPU tests but are not yet GPU integrated."
+    ]
+  },
+  "checks": [
+    {
+      "name": "r21 application and shader sample errors empty",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "original statue and horse retained",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "final architecture and rail connectivity",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "new module real GPU and support",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "final target similarity >95",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "User accepted mountain shape; retain baseline, priority palette/city facing/model subtasks",
+    "No invented score or continuous work claim",
+    "Research current 24 public media posts separately from runtime acceptance"
+  ]
+}

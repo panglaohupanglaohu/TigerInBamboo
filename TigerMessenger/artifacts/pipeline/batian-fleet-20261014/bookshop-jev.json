@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "d42758bdfcdbc80bf770bc13f208181022cdb88d8fab9ffbc3e3c1a9cb0fec2e",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.88
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.84,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.03,
+        "lighting": 0.01,
+        "navigation": 0.09,
+        "review": 0.87
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.65
+    }
+  },
+  "usage": {
+    "input_tokens": 902,
+    "output_tokens": 91,
+    "cost_usd": 0.000379,
+    "credits_remaining_usd": 4.951582
+  },
+  "elapsed_ms": 1445,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "post-fix full formal GPU and visual attacks",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

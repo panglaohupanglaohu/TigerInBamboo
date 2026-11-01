@@ -1,0 +1,19 @@
+✔ outside the swamp camera the frame is rendered directly, unchanged (0.86225ms)
+✔ without WebGL2 (no multisampled depth target) it never takes over the render (0.058666ms)
+✔ in the swamp camera: scene goes to the offscreen target, the ink quad to the screen, fade marker only while offscreen (0.68575ms)
+✔ the pass is off unless enabled (default off since 2026-10-10) (0.064875ms)
+✔ occlusion fade marks surviving dithered fragments with alpha 0 only for opaque materials and only while marked (0.622792ms)
+✔ default (no ?swampInk=1) renders directly even in the swamp camera (0.052125ms)
+✔ clean view aperture clears its centre and near lens, retains off-axis leaves and plants behind the player (0.629167ms)
+✔ opening and release ease in real seconds independently of frame rate with exact lens position (1.313583ms)
+✔ shader inserts a clean local opening without Bayer pixels, material transparency or geometry changes (0.4615ms)
+✔ ink shell shares the exact aperture and instanced surfaces calculate world points after instance transform (1.134458ms)
+✔ legacy and disabled comparison flags preserve the previous behavior (1.0225ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60.836334

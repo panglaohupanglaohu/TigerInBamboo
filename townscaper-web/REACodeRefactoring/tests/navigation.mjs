@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import {World} from '../src/core/world.js';
+import {buildMixedGrid} from '../src/core/grid.js';
+import {buildLayeredNav} from '../src/world/layerednav.js';
+import {leftLaneTarget} from '../src/world/traffic.js';
+import {buildFlowField} from '../src/badnorth/flowfield.js';
+function row(n) {return Array.from({length:n},(_,id)=>({id,n:4,cx:id,cz:0,pts:[{x:id-.5,z:-.5},{x:id+.5,z:-.5},{x:id+.5,z:.5},{x:id-.5,z:.5}],edgeNeighbors:[id>0?id-1:-1,id+1<n?id+1:-1,-1,-1]}));}
+const cells=row(5),w=new World({cells});
+for(const c of cells)w.setSolid(c,1,true,{rock:true});
+w.setSolid(cells[2],3,true,{rock:true});
+let nav=buildLayeredNav(w),start=nav.at(cells[0],1),goal=nav.at(cells[4],1);
+assert.equal(nav.layers[2].length,2,'tunnel and roof share one column');
+assert.equal(nav.search(start,goal).path.length,5,'path runs through the tunnel');
+assert.ok(nav.search(start,goal).path.every(id=>nav.nodes[id].floor===1));
+assert.equal(nav.search(start,nav.at(cells[2],3)).path.length,0,'roof disconnected without stairs');
+assert.equal(buildLayeredNav(w,{headroom:2}).search(0,4).path.length,0,'low lintel blocks tall actors');
+w.setSolid(cells[2],2,true,{rock:true});nav=buildLayeredNav(w);assert.equal(nav.search(nav.at(cells[0],1),nav.at(cells[4],1)).path.length,0,'closing the tunnel blocks traversal');
+const s=new World({cells:row(2)});s.fill(s.cells[0],1,{rock:true});s.fill(s.cells[1],2,{rock:true});nav=buildLayeredNav(s);
+assert.equal(nav.search(0,1).path.length,2,'step up');assert.equal(nav.search(1,0).path.length,2,'step down');
+assert.equal(buildLayeredNav(s,{maxStep:0}).search(0,1).path.length,0);
+const sea=new World({cells:row(3)});assert.equal(buildLayeredNav(sea).nodes.length,0,'no invented sea floor');
+const g=buildMixedGrid({radius:3,mergeRate:.55,seed:5});const mix=new World(g);for(const c of g.cells)mix.fill(c,1,{rock:true});nav=buildLayeredNav(mix);assert.equal(nav.nodes.length,g.cells.length);for(const p of nav.portals)assert.ok(p.width>0);
+const a=cells[1],b=cells[2];const forward=leftLaneTarget(a,b),reverse=leftLaneTarget(b,a);assert.ok(forward.z<0&&reverse.z>0,'opposite directions use opposite lanes');
+const flowWorld={cells:row(3)};const fnav={walk:new Uint8Array([1,1,1]),hgt:new Int8Array([1,1,1]),cost:(a,b)=>a.id===2||b.id===2?Infinity:a.id<b.id?3:1};
+const field=buildFlowField(flowWorld,fnav,[{cell:flowWorld.cells[1]}]);assert.equal(field.dist[0],3,'directed cost is reversed from target');assert.equal(field.dist[2],Infinity,'blocked navigation edge stays blocked');
+console.log('PASS: layered tunnel, roof separation, clearance, closure, bidirectional steps, sea, mixed polygons, left traffic, directed flow and stairs');

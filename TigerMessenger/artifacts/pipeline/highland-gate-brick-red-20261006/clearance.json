@@ -1,0 +1,18 @@
+{
+  "version": "old-city-rear-stepped-stone-gate-4",
+  "placement": {
+    "version": "old-city-rear-rail-1",
+    "requestedChart": [
+      -174,
+      0,
+      -42
+    ],
+    "railCurveUnchanged": true
+  },
+  "railU": 0.8095,
+  "stations": 311,
+  "rays": 3732,
+  "failures": [],
+  "geometryMeshes": 327,
+  "scope": "finite ray probes of production dual rail freight-width and 5.36m top; not complete dynamic vehicle sweep"
+}

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Triangulated Sphere (stereographic)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #5a6b78; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #eef4f7;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.4); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #eef4f7;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">球极投影上的 Delaunay → 用三角形松弛（1338825080844021760 + 1338829205157646336）</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * sphere.html — 这一页不是引擎的一部分，是 sphere.js 的可视化验证页。
+ *
+ * 用法：`?n=600&phase=relaxed`，或按空格逐阶段推进。
+ * 阶段：random → spaced → triangulated → relaxed
+ *
+ * 为什么用 Canvas2D 而不是 three：原文这两条片子的画面本身就是**投影平面**
+ * 的线框（灰底 + 白线），不是 3D 渲染。照着它的视角画，才能一眼比出
+ * 「点是否均匀」「有没有细长三角」这两件事。
+ */
+import { buildSphere, project, delaunay2D, relaxOnce, triangleStats, randomSpherePoints } from './sphere.js';
+
+const canvas = document.getElementById('c');
+const hud = document.getElementById('hud');
+const ctx = canvas.getContext('2d');
+const q = new URLSearchParams(location.search);
+const COUNT = Number(q.get('n') || 600);
+
+let W = 0, H = 0, scale = 1, cx = 0, cy = 0;
+function resize() {
+  W = canvas.width = Math.floor(canvas.clientWidth * devicePixelRatio);
+  H = canvas.height = Math.floor(canvas.clientHeight * devicePixelRatio);
+  // 投影平面：r=1 的圆占屏幕短边的 0.86，留一圈边
+  const lim = 1.6;
+  scale = (Math.min(W, H) * 0.5) / lim;
+  cx = W * 0.5; cy = H * 0.52;
+  resize.dirty = true;
+}
+
+const sx = (X) => cx + X * scale;
+const sy = (Y) => cy + Y * scale;
+
+// --- 状态机 ------------------------------------------------------------
+let state = null;      // {points, tris, stats}
+let phase = q.get('phase') || 'auto';
+const PHASES = ['random', 'spaced', 'triangulated', 'relaxed'];
+let phaseIdx = 0;
+let lastAdvance = 0;
+let perf = [];
+
+let rngState = 20260101;
+const rng = () => ((rngState = (rngState * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+
+let points = randomSpherePoints(COUNT, rng);
+
+function setPhase(name) {
+  const t0 = performance.now();
+  if (name === 'random') {
+    points = randomSpherePoints(COUNT, rng);
+    state = { points, tris: [], stats: { tris: 0, meanMinAngle: 0, worstMinAngle: 0, slivers: 0, sliverPct: 0 } };
+  } else if (name === 'spaced') {
+    // 2. space out：逐轮按三角邻接做松弛（没有邻接关系的第一轮就退回 O(n²) 排斥）
+    let p = points;
+    for (let i = 0; i < 4; i++) {
+      const tris = delaunay2D(project(p));
+      p = relaxOnce(p, tris, 0.7);
+    }
+    points = p;
+    state = { points, tris: [], stats: { tris: 0, meanMinAngle: 0, worstMinAngle: 0, slivers: 0, sliverPct: 0 } };
+  } else if (name === 'triangulated') {
+    const tris = delaunay2D(project(points));
+    state = { points, tris, stats: triangleStats(points, tris) };
+  } else {
+    // 4. relax using the triangles：每轮重算三角网再松弛
+    let p = points;
+    for (let i = 0; i < 6; i++) {
+      const tris = delaunay2D(project(p));
+      p = relaxOnce(p, tris, 0.75);
+    }
+    const tris = delaunay2D(project(p));
+    points = p;
+    state = { points, tris, stats: triangleStats(p, tris) };
+  }
+  perf.push(`${name} ${(performance.now() - t0).toFixed(0)}ms`);
+}
+
+function draw() {
+  if (resize.dirty) { resize.dirty = false; }
+  ctx.fillStyle = '#5a6b78';
+  ctx.fillRect(0, 0, W, H);
+
+  if (!state) return;
+  const proj = project(state.points);
+
+  // 三角网
+  if (state.tris.length) {
+    ctx.strokeStyle = 'rgba(240,245,248,0.55)';
+    ctx.lineWidth = 1 * devicePixelRatio;
+    ctx.beginPath();
+    for (const [a, b, c] of state.tris) {
+      const A = proj[a], B = proj[b], C = proj[c];
+      // 投影到无穷远的边不画（会横贯整个画面）
+      if (!finiteEdge(A, B) || !finiteEdge(B, C) || !finiteEdge(C, A)) continue;
+      ctx.moveTo(sx(A[0]), sy(A[1]));
+      ctx.lineTo(sx(B[0]), sy(B[1]));
+      ctx.lineTo(sx(C[0]), sy(C[1]));
+      ctx.closePath();
+    }
+    ctx.stroke();
+  }
+
+  // 点：小白方块（原文就是这么画的）
+  const s = 3 * devicePixelRatio;
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  for (const P of proj) {
+    if (Math.abs(P[0]) > 1.55 || Math.abs(P[1]) > 1.55) continue;
+    ctx.fillRect(sx(P[0]) - s / 2, sy(P[1]) - s / 2, s, s);
+  }
+
+  const st = state.stats;
+  hud.textContent =
+    `phase ${phase}   n ${COUNT}\n` +
+    (st.tris
+      ? `tris ${st.tris}   mean min-angle ${st.meanMinAngle}°   worst ${st.worstMinAngle}°\n` +
+        `slivers(<15°) ${st.slivers}  (${st.sliverPct}%)`
+      : `tris —   （还没三角化）`) +
+    `\n${perf.slice(-3).join('   ')}`;
+}
+
+function finiteEdge(A, B) {
+  const lim = 40;
+  return Math.abs(A[0]) < lim && Math.abs(A[1]) < lim && Math.abs(B[0]) < lim && Math.abs(B[1]) < lim;
+}
+
+addEventListener('keydown', (e) => {
+  if (e.key === ' ') {
+    phaseIdx = (phaseIdx + 1) % PHASES.length;
+    phase = PHASES[phaseIdx];
+    setPhase(phase);
+    lastAdvance = performance.now();
+  }
+});
+
+resize();
+addEventListener('resize', resize);
+
+// ?phase= 指定则固定；否则自动轮播，节奏照原文（0.1s 点 / 2.2s 网 / 3.9s 近景）
+if (phase === 'auto') {
+  phase = 'random';
+  phaseIdx = 0;
+  setPhase(phase);
+  const step = (now) => {
+    const wait = phase === 'random' ? 1800 : phase === 'spaced' ? 1400 : phase === 'triangulated' ? 2600 : 1e9;
+    if (now - lastAdvance > wait && phaseIdx < PHASES.length - 1) {
+      phaseIdx++;
+      phase = PHASES[phaseIdx];
+      setPhase(phase);
+      lastAdvance = now;
+    }
+    draw();
+    requestAnimationFrame(step);
+  };
+  lastAdvance = performance.now();
+  requestAnimationFrame(step);
+} else {
+  if (phase === 'auto') phase = 'relaxed';
+  setPhase(phase);
+  draw();
+}
+
+// 基线：**没经过 spacing 的纯随机点**直接三角化，用来量化流水线到底改善了什么
+function rawBaseline() {
+  const r = randomSpherePoints(COUNT, (() => { let x = 20260101; return () => ((x = (x * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff); })());
+  const tris = delaunay2D(project(r));
+  return triangleStats(r, tris);
+}
+
+// 供截图脚本读取
+window.__sphere = {
+  rawBaseline,
+  get stages() { return state; },
+  setPhase,
+  get summary() { return { phase, stats: state.stats, perf }; },
+};
+</script>
+</body>
+</html>

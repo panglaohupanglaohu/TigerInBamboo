@@ -1,0 +1,263 @@
+{
+  "status": "Read-only cross-module CPU/source audit complete; no gameplay code changed",
+  "timestamp": "2026-10-07T23:02:51.672Z",
+  "formalExecution": {
+    "probe": "final-integration-probe.json",
+    "stdout": "validation-final-integration.txt",
+    "script": "final-integration-probe.mjs",
+    "url": "http://localhost:8931/TigerMessenger/index.html?tour=crystal-v7&autostart=1",
+    "elapsedMs": 32824.970167,
+    "limitations": "CPU DOM/image shim and empty in-memory storage; real generator reached final messenger island yield. Did not execute WebGL, actual browser save replay, audio or complete game runtime loop."
+  },
+  "observed": {
+    "modules": {
+      "swampV2Round": 54,
+      "gregLakeVisuals": {
+        "present": true,
+        "ok": null,
+        "version": 3,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "swampWaterShore": {
+        "present": true,
+        "ok": true,
+        "version": 1,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "gregCoralRim": {
+        "present": true,
+        "ok": true,
+        "version": 1,
+        "shapeRevision": null,
+        "topColourVersion": 2
+      },
+      "gregShoreDock": {
+        "present": true,
+        "ok": true,
+        "version": 1,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "gregSpatialPlan": {
+        "present": true,
+        "ok": null,
+        "version": 2,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "gregCoralCanopy": {
+        "present": true,
+        "ok": true,
+        "version": 4,
+        "shapeRevision": "rounded-fan-4",
+        "topColourVersion": null
+      },
+      "gregTrunkDetail": {
+        "present": true,
+        "ok": null,
+        "version": 2,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "gregTrunkBatch": {
+        "present": true,
+        "ok": null,
+        "version": 1,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "gregNaturalCliff": {
+        "present": true,
+        "ok": true,
+        "version": 6,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "gregUnderstory": {
+        "present": true,
+        "ok": true,
+        "version": 6,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "gregCoralPerches": {
+        "present": true,
+        "ok": true,
+        "version": 3,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "gregBridgeClearance": {
+        "present": true,
+        "ok": true,
+        "version": 1,
+        "shapeRevision": null,
+        "topColourVersion": null
+      },
+      "rootedAlgae": {
+        "present": true,
+        "ok": null,
+        "version": 2,
+        "shapeRevision": null,
+        "topColourVersion": null
+      }
+    },
+    "tiger": 38,
+    "courier": {
+      "runtimeModel": "reedbank-courier-2",
+      "geometryRevision": "reedbank-hair-7"
+    },
+    "identityEntries": 19,
+    "counts": {
+      "whale-adult": 1,
+      "whale-young": 1,
+      "whale-escort": 1,
+      "tiger": 1,
+      "monkey-canopy": 3,
+      "monkey-repair": 2,
+      "glow-bird": 4,
+      "lizard-rim": 2,
+      "lizard-underwater": 1,
+      "lizard-carrier": 1,
+      "ribbonfish": 3,
+      "fish": 9,
+      "eel": 1,
+      "pink-hanger": 3,
+      "tube-worms": 11,
+      "fireflies": 46,
+      "flower-boys": 10,
+      "swimmer": 1,
+      "rowers": 52
+    },
+    "countsUnchanged": true,
+    "portraitClasses": 13,
+    "rowersAdditional": 52,
+    "uniqueBuilderLabels": 14,
+    "flowerBoats": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "feederIsSecondExistingBoy": true,
+    "storyRefsStableAfter90Updates": true,
+    "bridgeRemovedPiers": 23,
+    "bridgeRemainingBidirectionalIntersections": 0
+  },
+  "constructionOrder": [
+    "createCatalogObject(moebiusSwamp,seed7711,scale.5) -> createMoebiusSwampPlacement -> createMoebiusSwampZone builds all original identities and update closure.",
+    "applySwampV2Art round54 after base identities: original shore/wall/stairs rebuilt, waterShore -> rim+outerCliff -> shoreDock reuses barge -> spatialPlan -> canopy -> GregVisuals -> trunk detail/batch -> ecology/livingPaths -> habitation -> naturalCliff -> understory -> perches.",
+    "rootedAlgae.refreshAttachment after final floor replacement; ordinary lizards update after actual rim exists.",
+    "Placement applies sphere fit; official crystalV7 shores scales towering trees Y by .55. Trunk render batches remain parented to same tree as semantic source meshes, so follow transform. V10 extra .42 scale is bypassed by swampV2KeepCanopy.",
+    "finishSwampV2Art disposes/reinstalls understory and perches using final trunks; road-bound roots query actual promenade.",
+    "relocateCrystalCore then installSwampBridgeClearance; lake external piers modified only after final formal transforms.",
+    "wrapper.userData.update delegates inner.update; original creatures/story arrays retained. Tiger target model arrives asynchronously; CPU probes explicitly awaited swampTigerV2Ready."
+  ],
+  "reviewDifferences": [
+    {
+      "fact": "review.js calls same createMoebiusSwampPlacement({scale:.5,seed:7711}) and buildHumanCourier, so builders and default local art modules match.",
+      "source": "artifacts/pipeline/greg-lake-character-detail-20261008/review.js"
+    },
+    {
+      "fact": "review does not run full city finish, Y*.55 formal tree change, final root road matching, global relocation or external bridge clearance. Formal evidence is necessary for attachments and occlusion.",
+      "source": "src/world/crystalV7Runtime.js:63"
+    },
+    {
+      "fact": "review.html variant=before currently means current model with text pointing to historical creatures page; it is not a historical environment geometry rollback.",
+      "source": "artifacts/pipeline/greg-lake-character-detail-20261008/review.js:4"
+    },
+    {
+      "fact": "creatures.js uses standalone builders for portraits: it cannot validate formal inline fish/firefly population, rowers, worker scales/tail lifts or interactions. This audit counted actual formal objects.",
+      "source": "artifacts/pipeline/greg-lake-character-detail-20261008/creatures.js:7"
+    }
+  ],
+  "uncoveredRisks": [
+    {
+      "priority": "P1 validation scope",
+      "topic": "All simultaneous story branches",
+      "finding": "90-frame integration probe verifies identity/reference stability, not every ship departure/escort handoff/water delivery/raid/fruit/nectar interaction with player and persisted state. Tiger 600s separately covers drink+greet+return.",
+      "evidence": [
+        "tiger-water-return-report.json",
+        "monkey-deck-tail-report.json",
+        "fauna-implementation-report.json"
+      ]
+    },
+    {
+      "priority": "P1 visual validation",
+      "topic": "Full scene at latest source",
+      "finding": "No GPU was operated by this agent in this audit. Formal latest canopy/understory visibility, courier interactions and tiger water-return need parent screenshots; existing screenshot names alone are not proof this probe saw them.",
+      "evidence": [
+        "formal-middle-env5-canopy4.jpg",
+        "courier-face-close-v7.jpg",
+        "compare-tiger-v38.jpg"
+      ]
+    },
+    {
+      "priority": "P1 environment/configuration",
+      "topic": "Browser saved maps and query flags",
+      "finding": "Probe uses empty in-memory storage without touching user saves. Actual saved overrides/duplicates/custom seeds or swampV2=0/gregLake*=0 flags can change module availability. Formal URL defaults were tested, arbitrary rollback combinations were not.",
+      "evidence": [
+        "final-integration-probe.json"
+      ]
+    },
+    {
+      "priority": "P2 upstream warning",
+      "topic": "Non-lake city startup diagnostics",
+      "finding": "Formal CPU stdout reports front strata/old-city terrain hash changes and skipped master terrain/seabed/parcel candidates; no lake failure occurred. Citadel boarding file:// fetch is unsupported by Node shim, so that subsystem is not validated here. Not modified by this audit.",
+      "evidence": [
+        "validation-final-integration.txt"
+      ]
+    },
+    {
+      "priority": "P2 attachment mutation",
+      "topic": "Runtime tree resizing or reinstallation",
+      "finding": "Current formal order reattaches perches/understory after tree scaling. Later future runtime edits to source geometry or installer re-entry without dispose can invalidate cached roots/perches/batches. This audit covered current startup order only.",
+      "evidence": [
+        "final-integration-probe.json"
+      ]
+    },
+    {
+      "priority": "P2 metadata",
+      "topic": "Historical reports",
+      "finding": "Several early reports retain CPU passed/GPU pending or intermediate failure notes. Prefer latest validation files and latest dated source hashes, rather than treating historical status as current. Inventory refreshed without changing counts.",
+      "evidence": [
+        "creature-inventory.json",
+        "validation-understory-performance-v6.txt",
+        "validation-courier-v7-integration.txt"
+      ]
+    }
+  ],
+  "sourceFiles": [
+    {
+      "file": "src/world/moebiusSwamp.js",
+      "sha256": "4a5068881cb0167e2b7303d250422e67946a446b26dc67105ed42bc66f7967ec"
+    },
+    {
+      "file": "src/world/swampV2Art.js",
+      "sha256": "635174f1cbc961f6877730195f31e441537deda275abe441fd7c9f1880db87bb"
+    },
+    {
+      "file": "src/world/moebiusTiger.js",
+      "sha256": "dc8a11a851364b4a2ea6b9086e76936febc4803dd5d1da442fa5a503d7007d74"
+    },
+    {
+      "file": "src/assets/characters/tigerTargetV1.js",
+      "sha256": "26a76be30be4d0ae426e442b37e90bc4215cc8a5f7f5d06819aef54fc56ac558"
+    },
+    {
+      "file": "src/assets/characters/courierMoebius.js",
+      "sha256": "b8309999cf61a145a5cb340737a82bf57f13efbb539a108020ffff3e575d9492"
+    },
+    {
+      "file": "src/scenes/messengerIsland.js",
+      "sha256": "c051ff03f51bb0aaa3248a05d475c0b0c572ccaf327ed1bba7c5e9e7c55cd520"
+    }
+  ],
+  "metadataEdits": [
+    "creature-inventory.json verification hash/time/method/source line numbers and verification notes only; ids/labels/counts retained"
+  ],
+  "rollback": "Only audit artifacts/metadata changed this turn. Inventory pre-edit copy: before-final-inventory-metadata.json. No runtime rollback required."
+}

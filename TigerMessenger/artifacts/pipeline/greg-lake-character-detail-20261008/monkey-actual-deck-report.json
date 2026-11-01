@@ -1,0 +1,35 @@
+{
+  "scope": "Only repair-worker tail posture in buildLongTailMonkey and mkTop call",
+  "cause": "Mast pivot z rotation and worker y yaw do not cancel; the flat coil tilted below actual deck despite local foot-plane check.",
+  "previousWorker1": {
+    "minimumTailShipY": 0.458715762,
+    "actualDeckShipY": 0.663000021
+  },
+  "correction": "Only mkTop sets tailRise:true. Coil rises beside hip. Ordinary three hanging tails and other repair worker flat coil unchanged.",
+  "arcLength": 2.6755539735778635,
+  "validation": {
+    "testsPassed": 7,
+    "samples": 65,
+    "timeSeconds": [
+      0,
+      16
+    ],
+    "stepSeconds": 0.25,
+    "allTailAndCapVertices": true,
+    "minimumTailAboveActualDeck": [
+      0.07639989121675084,
+      0.1672371857625381
+    ],
+    "minimumTailAboveWorkerHorizontalFootPlane": [
+      0.07939988823923849,
+      0.03023719233444333
+    ]
+  },
+  "screenRingAudit": "No pink actor geometry hit in prior lower-U screenshot region under reconstructed current camera at t0. Do not assign the old ring to another creature without fresh GPU evidence.",
+  "GPU": "Pending root re-render of raisedCoil=true worker1",
+  "evidence": [
+    "repair-tail-audit.mjs",
+    "repair-tail-audit.json",
+    "validation-monkey-actual-deck.txt"
+  ]
+}

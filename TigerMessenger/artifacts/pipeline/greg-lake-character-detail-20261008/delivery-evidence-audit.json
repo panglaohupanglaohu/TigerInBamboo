@@ -1,0 +1,644 @@
+{
+  "scope": "Delivery metadata/links only; no production model/source/render edited; no CPU/GPU suite rerun",
+  "atUTC": "2026-10-07T23:56:06.705633+00:00",
+  "portraitClasses": 13,
+  "identityEntries": 19,
+  "rowerSlots": 52,
+  "changes": [
+    "index：补六张第7轮信使侧/背/持信/骑乘/跳跃/步行证据与局部测试边界",
+    "index：将虎进行中表述改为已接入第38轮及其行为",
+    "index：修正合成W位移2.674为实存JSON的3.7626；不以旧69项数量冒充最新统计",
+    "index：补正式步行/600秒虎CPU/性能GPU证据链接，保留FPS未通过与目标差距",
+    "static-pairs：明确13张静态快照的归档依赖范围及虎34→38；不是实时最新冻结画面",
+    "static-pairs：明确桨手52为双船槽位，截图主要展示一船；相机/相位不同不是像素差异实验",
+    "comparisons.json：保留initialAudit，修正7类旧原型保留标签、12条肖像pending、旧line/hash当当前的问题",
+    "comparisons.json：补现存13类截图引用、虎旧模块映射真实说明、当前variant=before警示、桨手本批实际改变来源",
+    "rower-style-report：将过时GPU pending改成已存局部截图事实，不冒称完整游戏通过",
+    "最新用户纠正：长尾猴v2保留为旧快照，明确待脱肩/颜色v3修正与重拍，不宣称全图最终一致",
+    "07:30 monkey arms-v3 actual-view checked and replaced old pink-v2 gallery path; removed pending recapture warning.",
+    "07:30 rejected misnamed bird v2 screenshot (actual lizard); current bird/lizard older portraits explicitly mark internal-glow v4 pending.",
+    "Current source hash/snapshot finalization paused pending bird/lizard v4 source freeze.",
+    "用户明确pinkHanger为辣椒猴：当前inventory/creatures options/static pairs/comparisons均正名，长尾猴独立；内部key及历史日志不改。",
+    "鸟v4正确图实际view与parentGPU一致，已替换旧鸟图；蜥v4青白发光仍待v5，保持验收中。",
+    "Latest user corrections: ribbonFish current label荧色蝾螈, four legs pending; bird v4 is intermediate, new pale-green body/head-pink v6 pending. Two new modules make final manifest 26 sources, pending freeze.",
+    "26-source final recovery snapshot created; old 0718 archive retained; all archive hashes verified.",
+    "Inventory and comparisons current factory hash/source lines refreshed; original CPU probe timestamp/hash retained separately.",
+    "Bird v6 and lizard v5 actual image id/pixels checked and latest gallery paths installed.",
+    "Formal buildingCatalog visible labels corrected to辣椒猴/荧色蝾螈/荧光雀 only; IDs/factory references byte-unchanged.",
+    "荧色蝾螈 replaced old portrait by actual-view verified four-leg top image."
+  ],
+  "htmlLinks": [
+    {
+      "owner": "index.html",
+      "url": "./review.html?view=courier",
+      "exists": true,
+      "bytes": 2933
+    },
+    {
+      "owner": "index.html",
+      "url": "./review.html?view=tiger",
+      "exists": true,
+      "bytes": 2933
+    },
+    {
+      "owner": "index.html",
+      "url": "./review.html?view=overview",
+      "exists": true,
+      "bytes": 2933
+    },
+    {
+      "owner": "index.html",
+      "url": "./creatures.html",
+      "exists": true,
+      "bytes": 930
+    },
+    {
+      "owner": "index.html",
+      "url": "./full-game-review.html",
+      "exists": true,
+      "bytes": 2457
+    },
+    {
+      "owner": "index.html",
+      "url": "../greg-lake-approved-coral-flower-20261007/01-overview-final.png",
+      "exists": true,
+      "bytes": 2751187
+    },
+    {
+      "owner": "index.html",
+      "url": "./overview-canopy-ink-v3.jpg",
+      "exists": true,
+      "bytes": 141471
+    },
+    {
+      "owner": "index.html",
+      "url": "./courier-reedbank-target-v2.png",
+      "exists": true,
+      "bytes": 2776007
+    },
+    {
+      "owner": "index.html",
+      "url": "./courier-front-v7.jpg",
+      "exists": true,
+      "bytes": 114977
+    },
+    {
+      "owner": "index.html",
+      "url": "./compare-tiger-v38.jpg",
+      "exists": true,
+      "bytes": 50324
+    },
+    {
+      "owner": "index.html",
+      "url": "./courier-side-v7.jpg",
+      "exists": true,
+      "bytes": 111853
+    },
+    {
+      "owner": "index.html",
+      "url": "./courier-back-v7.jpg",
+      "exists": true,
+      "bytes": 113859
+    },
+    {
+      "owner": "index.html",
+      "url": "./courier-letter-v7.jpg",
+      "exists": true,
+      "bytes": 115875
+    },
+    {
+      "owner": "index.html",
+      "url": "./courier-ride-v7.jpg",
+      "exists": true,
+      "bytes": 114483
+    },
+    {
+      "owner": "index.html",
+      "url": "./courier-jump-v7.jpg",
+      "exists": true,
+      "bytes": 114614
+    },
+    {
+      "owner": "index.html",
+      "url": "./courier-walk-v7.jpg",
+      "exists": true,
+      "bytes": 114744
+    },
+    {
+      "owner": "index.html",
+      "url": "./RESULTS.md",
+      "exists": true,
+      "bytes": 25643
+    },
+    {
+      "owner": "index.html",
+      "url": "./formal-middle-walk-final.jpg",
+      "exists": true,
+      "bytes": 135642
+    },
+    {
+      "owner": "index.html",
+      "url": "./formal-middle-walk-final.json",
+      "exists": true,
+      "bytes": 215
+    },
+    {
+      "owner": "index.html",
+      "url": "./tiger-600s-after-summary.json",
+      "exists": true,
+      "bytes": 8112
+    },
+    {
+      "owner": "index.html",
+      "url": "./performance-allocation-audit.md",
+      "exists": true,
+      "bytes": 9303
+    },
+    {
+      "owner": "index.html",
+      "url": "./static-pairs.js",
+      "exists": true,
+      "bytes": 2623
+    },
+    {
+      "owner": "creatures.html",
+      "url": "./index.html",
+      "exists": true,
+      "bytes": 6725
+    },
+    {
+      "owner": "creatures.html",
+      "url": "./creatures.js",
+      "exists": true,
+      "bytes": 4352
+    },
+    {
+      "owner": "review.html",
+      "url": "../greg-lake-implementation-20261007/index.html",
+      "exists": true,
+      "bytes": 8634
+    },
+    {
+      "owner": "review.html",
+      "url": "?variant=after",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?variant=after&view=overview",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?variant=after&view=upper",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?variant=after&view=middle",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?variant=after&view=lower",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?variant=after&view=under",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?view=tiger",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?view=dock",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?view=bird",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?view=monkey",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?view=lizard",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "review.html",
+      "url": "?view=courier",
+      "exists": true,
+      "bytes": 2933,
+      "resolution": "query-only URL resolves to its current HTML document"
+    },
+    {
+      "owner": "full-game-review.html",
+      "url": "./full-game-review.js",
+      "exists": true,
+      "bytes": 10505
+    }
+  ],
+  "portraits": [
+    {
+      "id": "whale",
+      "image": "compare-whale.jpg",
+      "exists": true,
+      "bytes": 42922,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "7661a1df90acee9d9acce50daa84af2e9c868ec8df46dfa6feed40df06cbf101"
+    },
+    {
+      "id": "nativeDoll",
+      "image": "compare-nativeDoll-fauna-v1.jpg",
+      "exists": true,
+      "bytes": 42210,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "18bdba0e7feef9336317ec256ba5817fbf283e6a58ece4b70b072c9b6e8c1a25"
+    },
+    {
+      "id": "lotusLeafBoat",
+      "image": "compare-lotusLeafBoat.jpg",
+      "exists": true,
+      "bytes": 48966,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "07e0d40919b66394800eed44abcb6b620a53c4566b8cfd31b2380a1769823412"
+    },
+    {
+      "id": "swampEel",
+      "image": "compare-swampEel-fauna-v1.jpg",
+      "exists": true,
+      "bytes": 31940,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "dd459b5ccc82b26832ad25ea60f5b74cca05fc909519d42e7cd8828bb034e689"
+    },
+    {
+      "id": "tubeWormCluster",
+      "image": "compare-tubeWormCluster-fauna-v1.jpg",
+      "exists": true,
+      "bytes": 40210,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "9d08ebef32276f08b0beadc5c9b250c5e2136e6607f1db3aa7522d5f2852fb83"
+    },
+    {
+      "id": "pinkHanger",
+      "image": "compare-pinkHanger-fauna-v2.jpg",
+      "exists": true,
+      "bytes": 34628,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "b11c958f4a3bc7e427e35908a7b733f3ac88af71a3899bc45f68d4834358b31a",
+      "displayName": "辣椒猴",
+      "note": "用户纠正物种名称；旧截图内可能保留当时UI旧称，外部当前标签已更正。"
+    },
+    {
+      "id": "swampBird",
+      "image": "compare-swampBird-green-head-v6.jpg",
+      "exists": true,
+      "bytes": 57545,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "be3bd1ae95dca9f27988e18cc5d7a679eacfaca0416fc6b8be2e7078da086895",
+      "acceptance": "parent_gpu_and_delivery_image_reviewed_latest",
+      "note": "Latest human colour/glow scope reflected; source/final screenshot reviewed, not user final acceptance."
+    },
+    {
+      "id": "longTailMonkey",
+      "image": "compare-longTailMonkey-arms-v3.jpg",
+      "exists": true,
+      "bytes": 36665,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "e6621929dd3d2ef93fb29758049820c9ede2e6e6b0159c6a4bea6180d9b6b9c3",
+      "acceptance": "parent_gpu_reviewed_arms_v3",
+      "note": "v3 screenshot actually viewed; visible shoulders/arms continuous. Parent confirmed darker colour. Not a claim of user final acceptance."
+    },
+    {
+      "id": "glowLizard",
+      "image": "compare-glowLizard-internal-v5.jpg",
+      "exists": true,
+      "bytes": 60196,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "771c85c06979117912be3904d693cc1bd4cdbb46d6ca4f6d63d60b6a5440ef23",
+      "acceptance": "parent_gpu_and_delivery_image_reviewed_latest",
+      "note": "Latest human colour/glow scope reflected; source/final screenshot reviewed, not user final acceptance."
+    },
+    {
+      "id": "ribbonFish",
+      "image": "compare-salamander-four-legs-top-v2.jpg",
+      "exists": true,
+      "bytes": 32366,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "ab90562b8a8da196085dd0e39c6bf5864b3299c05dd9dfe6a7affe6a7a468e15",
+      "displayName": "荧色蝾螈",
+      "acceptance": "parent_gpu_and_delivery_top_view_reviewed",
+      "note": "Actually viewed: correct ribbonFish id, visible four legs, UI荧色蝾螈."
+    },
+    {
+      "id": "fishSchool",
+      "image": "compare-fishSchool-fauna-v1.jpg",
+      "exists": true,
+      "bytes": 50153,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "fbf4c76a9b7e58fdeaf5fbb31f4815ae0650399334aa97dc2821ab2e567d8651"
+    },
+    {
+      "id": "fireflies",
+      "image": "compare-fireflies-fauna-v2.jpg",
+      "exists": true,
+      "bytes": 40477,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "8b028977c86bf339f80310c1e80df30ef67cd2f1932e620c8be1d1483a9f9096"
+    },
+    {
+      "id": "tiger",
+      "image": "compare-tiger-v38.jpg",
+      "exists": true,
+      "bytes": 50324,
+      "visuallyViewed": true,
+      "contentMatchesLabel": true,
+      "sha256": "27b8781b15fb0a8541186d85c469ae674456c98a171a29abe7fc1303151a5575"
+    }
+  ],
+  "rowerImages": [
+    {
+      "path": "repair-monkey-raised-tail-v4.jpg",
+      "bytes": 169000,
+      "visuallyViewed": true
+    },
+    {
+      "path": "repair-crew-coral-v1.jpg",
+      "bytes": 151274,
+      "visuallyViewed": true
+    }
+  ],
+  "missingOrZeroLinks": [],
+  "historicalBoundary": "review variant=before is CURRENT builder; portraits use separate archived builder with current shared dependencies; tiger archived appearance + current base; static image is its captured iteration, not a claim of current exact version",
+  "backup": "delivery-metadata-before",
+  "remainingLimits": [
+    "Static portrait images may precede later shared shader/detail changes; latest interactive portrait builder is linked.",
+    "Rower pair uses different camera/animation instant, not pixel-locked comparison.",
+    "No full renderer or native keyboard acceptance was repeated."
+  ],
+  "localImageIntegrity": [
+    {
+      "file": "courier-back-v7.jpg",
+      "bytes": 113859,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "courier-front-v7.jpg",
+      "bytes": 114977,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "courier-jump-v7.jpg",
+      "bytes": 114614,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "courier-letter-v7.jpg",
+      "bytes": 115875,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "courier-ride-v7.jpg",
+      "bytes": 114483,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "courier-side-v7.jpg",
+      "bytes": 111853,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "courier-walk-v7.jpg",
+      "bytes": 114744,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "repair-crew-coral-v1.jpg",
+      "bytes": 151274,
+      "dimensions": [
+        1280,
+        720
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "repair-monkey-raised-tail-v4.jpg",
+      "bytes": 169000,
+      "dimensions": [
+        1280,
+        800
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-fireflies-fauna-v2.jpg",
+      "bytes": 40477,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-longTailMonkey-arms-v3.jpg",
+      "bytes": 36665,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-glowLizard-internal-v5.jpg",
+      "bytes": 60196,
+      "dimensions": [
+        1857,
+        1909
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-pinkHanger-fauna-v2.jpg",
+      "bytes": 34628,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-tiger-v38.jpg",
+      "bytes": 50324,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-lotusLeafBoat.jpg",
+      "bytes": 48966,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-fishSchool-fauna-v1.jpg",
+      "bytes": 50153,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-nativeDoll-fauna-v1.jpg",
+      "bytes": 42210,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-swampEel-fauna-v1.jpg",
+      "bytes": 31940,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-whale.jpg",
+      "bytes": 42922,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-tubeWormCluster-fauna-v1.jpg",
+      "bytes": 40210,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-swampBird-green-head-v6.jpg",
+      "bytes": 57545,
+      "dimensions": [
+        1857,
+        1909
+      ],
+      "decodeVerified": true
+    },
+    {
+      "file": "compare-salamander-four-legs-top-v2.jpg",
+      "bytes": 32366,
+      "dimensions": [
+        1265,
+        712
+      ],
+      "decodeVerified": true
+    }
+  ],
+  "allLocalImagesValid": true,
+  "verifiedFiles": 22,
+  "sourceFilesExist": {
+    "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js": true,
+    "src/world/moebiusSwamp.js": true,
+    "artifacts/pipeline/greg-lake-character-detail-20261008/before/src/assets/characters/swampTigerV2.js": true,
+    "artifacts/pipeline/greg-lake-character-detail-20261008/before/src/assets/characters/tigerTargetV1.js": true,
+    "src/assets/characters/swampTigerV2.js": true,
+    "src/assets/characters/tigerTargetV1.js": true
+  },
+  "allFinalImagesAccepted": false,
+  "pendingUserCorrections": [
+    "Feeder articulated swimming/breathing and flower activity GPU acceptance pending root; source and gait/layout changed since last snapshot, final hash lock intentionally deferred."
+  ],
+  "rejectedEvidence": [
+    {
+      "file": "compare-swampBird-colour-glow-v2.jpg",
+      "reason": "Actually viewed: screenshot dropdown and JSON identify glowLizard; not a bird portrait. Excluded from bird gallery.",
+      "sha256": "cd618e6183ae533a157c8d4e7b1b1f232d170ad0a23ab2f7ce1a66dd0ce099aa"
+    }
+  ],
+  "sourceSnapshot": "current-source-snapshot-075606.tgz"
+}

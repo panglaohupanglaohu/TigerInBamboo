@@ -1,0 +1,204 @@
+{
+  "ok": true,
+  "version": 1,
+  "removedPiers": 23,
+  "removedGatePiers": 2,
+  "removedGenericPiers": 21,
+  "retainedPiers": 149,
+  "spanWorld": 43.54875696136663,
+  "retainedBearingCenters": [
+    [
+      37.52992582781327,
+      86.72767895843515,
+      -24.342402473034586
+    ],
+    [
+      -46.665727604863775,
+      85.98878562646833,
+      -2.059608411040819
+    ]
+  ],
+  "archBottomInnerY": 67.78321838378906,
+  "bankSightlineInnerY": 33,
+  "bankClearanceWorld": 17.39160919189453,
+  "leafClearance": {
+    "anchorDiagnostics": [
+      {
+        "instance": 33,
+        "anchor": [
+          -47.9160074139469,
+          77.7425550825792,
+          1.8693020170715737
+        ],
+        "contacts": []
+      },
+      {
+        "instance": 34,
+        "anchor": [
+          -48.18233789588097,
+          78.72561441456745,
+          1.659043626205591
+        ],
+        "contacts": []
+      },
+      {
+        "instance": 29,
+        "anchor": [
+          -42.80001827396697,
+          74.83911479285086,
+          -12.195145873000628
+        ],
+        "contacts": []
+      },
+      {
+        "instance": 30,
+        "anchor": [
+          -43.06508886630843,
+          75.94012470775093,
+          -12.058853239805321
+        ],
+        "contacts": []
+      },
+      {
+        "instance": 15,
+        "anchor": [
+          32.154501901396756,
+          73.4135799361406,
+          -10.017467382457111
+        ],
+        "contacts": []
+      },
+      {
+        "instance": 21,
+        "anchor": [
+          32.991869744648504,
+          78.8028224569776,
+          -14.302014708238238
+        ],
+        "contacts": []
+      },
+      {
+        "instance": 22,
+        "anchor": [
+          32.86081285842103,
+          79.38480369188613,
+          -14.22754568837112
+        ],
+        "contacts": []
+      }
+    ],
+    "affectedInstances": [
+      33,
+      34,
+      29,
+      30,
+      15,
+      21,
+      22
+    ],
+    "changedInstances": [
+      {
+        "instance": 33,
+        "source": "v2-rim-foliage-lobes",
+        "trimmed": false,
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "degrees": 10,
+        "scale": 1
+      },
+      {
+        "instance": 34,
+        "source": "v2-rim-foliage-lobes",
+        "trimmed": false,
+        "axis": [
+          1,
+          -1,
+          1
+        ],
+        "degrees": 20,
+        "scale": 1
+      },
+      {
+        "instance": 29,
+        "source": "v2-rim-foliage-lobes",
+        "trimmed": false,
+        "axis": [
+          -1,
+          1,
+          -1
+        ],
+        "degrees": 45,
+        "scale": 0.85
+      },
+      {
+        "instance": 30,
+        "source": "v2-rim-foliage-lobes",
+        "trimmed": true,
+        "degrees": 0,
+        "scale": 0
+      },
+      {
+        "instance": 15,
+        "source": "v2-rim-foliage-lobes",
+        "trimmed": false,
+        "axis": "x",
+        "degrees": -20,
+        "scale": 1
+      },
+      {
+        "instance": 21,
+        "source": "v2-rim-foliage-lobes",
+        "trimmed": true,
+        "degrees": 0,
+        "scale": 0
+      },
+      {
+        "instance": 22,
+        "source": "v2-rim-foliage-lobes",
+        "trimmed": false,
+        "axis": [
+          -1,
+          1,
+          0
+        ],
+        "degrees": 45,
+        "scale": 1
+      }
+    ],
+    "trimmedInstances": [
+      30,
+      21
+    ],
+    "visibleInstancesBefore": 366,
+    "visibleInstancesAfter": 364,
+    "unresolvedInstances": [],
+    "remainingBidirectionalIntersections": 0,
+    "candidateInstances": 28,
+    "installMs": 79.26033299999835,
+    "instanceCountBefore": 366,
+    "instanceCountAfter": 366,
+    "branchesChanged": false,
+    "anchorTranslationsChanged": false
+  },
+  "spandrelPosts": 26,
+  "renderMeshesAdded": 1,
+  "modifiedBatches": 5,
+  "deckAndRoutesChanged": false,
+  "cutRadiusInner": 36,
+  "matrixHashes": {
+    "before": "2bc4379e53c93a5d78c3f78ef87181cff4139d79d61ae8e9e3a25c005cf81b2b",
+    "changed": "beaffadb62c516f8fa7b53c5e8788851e7d382a1063336df0e7afa83c9687dc3",
+    "restored": "2bc4379e53c93a5d78c3f78ef87181cff4139d79d61ae8e9e3a25c005cf81b2b"
+  },
+  "externalEdgeCrossings": 0,
+  "explicitlyExcludedTrimmedProbes": 2,
+  "visibleCrownCounts": {
+    "rimSlots": 366,
+    "rimVisible": 364,
+    "centralVisible": 7,
+    "totalVisible": 371
+  }
+}

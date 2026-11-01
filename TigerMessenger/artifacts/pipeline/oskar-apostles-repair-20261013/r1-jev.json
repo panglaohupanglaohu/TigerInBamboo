@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "32402e603cf536b331308ae57e84c59a700062a9978884e27e4f8665db22ebff",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.88
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.99,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.01,
+        "review": 0.99
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.46
+    }
+  },
+  "usage": {
+    "input_tokens": 729,
+    "output_tokens": 91,
+    "cost_usd": 0.000307,
+    "credits_remaining_usd": 4.953023
+  },
+  "elapsed_ms": 1688,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "fresh GPU same camera",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

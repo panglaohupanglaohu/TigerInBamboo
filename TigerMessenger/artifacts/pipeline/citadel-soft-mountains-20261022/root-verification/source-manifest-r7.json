@@ -1,0 +1,55 @@
+{
+  "scope": "Current touched files, includes preserved pre-existing dirty edits; not a clean Git patch",
+  "files": [
+    {
+      "path": "src/world/citadel/targetFinalMountainFinish.js",
+      "sha256": "6962999de1e96eff41c0682b275176f5144a7aa4b70eb489ee84d39f2efad6db",
+      "bytes": 1906
+    },
+    {
+      "path": "src/world/citadel/targetSoftMountainGeometry.js",
+      "sha256": "936374c0304eeaadedf612f7dbd64a64221cec3b48a23855380610a76f993c6f",
+      "bytes": 6870
+    },
+    {
+      "path": "tests/world/citadelSoftMountains.test.mjs",
+      "sha256": "86c718295d293a5b5ae83e685aa76fec601b304802bd035197682683fc9e551b",
+      "bytes": 2476
+    },
+    {
+      "path": "src/world/citadel/targetCliffShoulderGeometry.js",
+      "sha256": "0601a2eefacf8d8a469ea46d5575536198cdddf21109ea033ae7573bcf3733af",
+      "bytes": 10475
+    },
+    {
+      "path": "src/world/citadel/mountainStudy.js",
+      "sha256": "16cb26ed815524858a4cb0488e46d937ffd7dc3ffe1bb51aa8d861292fe84b6a",
+      "bytes": 18725
+    },
+    {
+      "path": "src/world/citadel/targetEastCrossingStartupSupport.js",
+      "sha256": "50994073a065325dbd4eb1313c82c4fe9c7158b96daca16b4da13ca7f5de3e94",
+      "bytes": 13865
+    },
+    {
+      "path": "tools/pipeline/citadel_surface_review.js",
+      "sha256": "a83fda0c79600fd34095251a36ca3e3cfef633635e01a8aa8a94eb285855b18b",
+      "bytes": 5193
+    },
+    {
+      "path": "index.html",
+      "sha256": "afbdb4fcabde5ad527811b0f9c7105a9eeda86c2df133bc1bc4bb3d4285fdb8f",
+      "bytes": 56502
+    },
+    {
+      "path": "tests/world/citadelCliffShoulders.test.mjs",
+      "sha256": "efcad11b7df55076fac491d3a0e970dd3f111c6ffc1f1ea1c71b9bb76a0275c7",
+      "bytes": 2653
+    },
+    {
+      "path": "tests/world/targetEastCrossingStartupSupport.test.mjs",
+      "sha256": "f08e95045ca26012c31e384590c8bb2afd708ad465034a53fec09614ec465f4c",
+      "bytes": 8743
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+FRONT_RAIL_AUDIT {"version":"target-front-bay-rail-1","accepted":false,"tramConnected":false,"controls":[[-59,68],[-64,115],[47,120],[83,96]],"attempts":[{"contraction":1,"controls":[[-59,68],[-64,115],[47,120],[83,96]],"samples":331,"seaMisses":0,"buried":0}],"supports":[],"failures":["world-grade-or-curvature"],"limitations":["Static visual candidate only; no boarding, production track splice or navigation.","Piers follow sampled terrain/seabed; finite footprint samples are not continuous load-bearing proof.","Finite surface/grade/curvature samples; separate city/ship swept clearance required."],"actualControls":[[-59,68],[-64,115],[47,120],[83,96]],"contraction":1,"heightFit":{"method":"constant radial shell fitted above maximum actual sampled sea radius","measuredSeaRadius":[160.3338563842857,160.4936454965744],"railRadius":166.4936454965744,"minimumSampledRadialClearance":6},"audit":{"samples":331,"worstCurvature":{"index":26,"t":0.07878787878787878,"x":-58.1150117149456,"z":78.3333001641762,"radius":24.359053884041746},"maxWorldGrade":0.001294204171683448,"minWorldCurvatureRadius":24.359053884041746,"maxGaugeError":2.2426505097428162e-14,"gauge":1.75,"gradeLimit":0.04,"radiusLimit":25},"status":"rejected"}
+✔ assembles true models with final triangle evidence without mutating frozen scene (1916.368792ms)
+✔ flow remains aligned with sampled curved ocean after animated updates (1828.862791ms)
+✔ apply is idempotent and disposal releases only owned resources once (1808.520625ms)
+✔ missing actual ocean never substitutes a nominal water height (129.321083ms)
+✔ front rail audits actual frozen city surfaces without changing terrain (1583.712417ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7356.854667

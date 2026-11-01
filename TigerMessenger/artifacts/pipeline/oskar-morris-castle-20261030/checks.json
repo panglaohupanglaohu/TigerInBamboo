@@ -1,0 +1,87 @@
+{
+  "passed": true,
+  "scope": "factory finite geometry, old foundation footprint and central entrance ray; not normal game ride",
+  "report": {
+    "design": "Oskar target-guided stepped keep and recessed asymmetric wings; existing three-part identity and passage retained",
+    "revision": "oskar-reference-slender-keep-r6",
+    "previousGeometry": "masonry-r2",
+    "wallBevel": 0.1,
+    "footprint": [
+      14,
+      10
+    ],
+    "size": [
+      14,
+      16.68636322170496,
+      10
+    ],
+    "mainHeights": [
+      13.2,
+      4.8,
+      7.1,
+      6.1,
+      8.5
+    ],
+    "masses": [
+      {
+        "x": -0.35,
+        "z": -2.3,
+        "w": 3.45,
+        "d": 4.35,
+        "h": 13.2,
+        "name": "keep"
+      },
+      {
+        "x": -4.8,
+        "z": -0.6,
+        "w": 3.2,
+        "d": 5.5,
+        "h": 4.8,
+        "name": "long-low-west-wing"
+      },
+      {
+        "x": -2.5,
+        "z": -0.4,
+        "w": 1.8,
+        "d": 4.7,
+        "h": 7.1,
+        "name": "west-stair-tower"
+      },
+      {
+        "x": 4.65,
+        "z": -1.1,
+        "w": 3.4,
+        "d": 5.1,
+        "h": 6.1,
+        "name": "short-east-wing"
+      },
+      {
+        "x": 2.15,
+        "z": -1.25,
+        "w": 1.65,
+        "d": 4.25,
+        "h": 8.5,
+        "name": "east-stair-tower"
+      }
+    ],
+    "reference": "user tapestry crop: slender central tower and five staggered overlapping volumes",
+    "entrance": {
+      "direction": "+Z",
+      "clearWidth": 2.6,
+      "clearHeight": 3.1
+    },
+    "eastMusicCourtOpen": true,
+    "supports": [
+      "continuous foundation",
+      "courtyard floor"
+    ],
+    "detailCounts": {
+      "masonry": 471,
+      "windowSurrounds": 108,
+      "roofTiles": 1046,
+      "footings": 30
+    },
+    "detailBatches": 13,
+    "navigationVerified": false
+  }
+}

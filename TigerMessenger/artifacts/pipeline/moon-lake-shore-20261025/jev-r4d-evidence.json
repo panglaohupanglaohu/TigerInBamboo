@@ -1,0 +1,26 @@
+{
+  "task": "Moon forest city-facing outer sea shore corner smoothing",
+  "observations": {
+    "scope": "User confirmed outer seacoast with city/rail/sailing ship and moon-pine panorama. Not small crescent pond.",
+    "repair": "Real curved bank r64..78 with old source surface/colour/normal collars; geometric overlap .7m and .006 seating bias removes inner seam. Bounded original shell cleanup, same surface/depth/distance mask and spatial support index. End transitions widened from4 to12degrees after actual component image showed abrupt joins.",
+    "actual": "Normal R4d game inspection opened by normal HUD. DOM confirms installed1shell3597vertices6912triangles; screenshot normal-coast-final.png actually inspected, curved outer beach, original rail/sailing ship/pines retained, no consoleerror. No full walking or boating traversal claimed."
+  },
+  "checks": [
+    {
+      "name": "real bank, finite CPU GPU mask, ghost floor and track actor protection tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "R4d normal final GPU view and installed audit",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Keep original terrain trees moon rail and actors; no global sea change",
+    "No fabricated navigation or FPS",
+    "Text only no images/secrets"
+  ],
+  "evidence_revision": "r4d-normal-final"
+}

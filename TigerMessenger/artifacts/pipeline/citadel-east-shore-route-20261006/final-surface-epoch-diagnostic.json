@@ -1,0 +1,164 @@
+{
+  "before": {
+    "position": 227010524,
+    "index": 1617888706,
+    "vertices": 34612,
+    "indexCount": 207660,
+    "triangles": 69220,
+    "indexed": true,
+    "positionType": "Float32Array",
+    "indexType": "Uint16Array",
+    "localBounds": {
+      "min": [
+        -91,
+        -159.79254150390625,
+        -72
+      ],
+      "max": [
+        195,
+        42.99868392944336,
+        107
+      ]
+    },
+    "castleBounds": {
+      "min": [
+        -142.99999999999997,
+        -159.79254150390628,
+        -72.00000000000001
+      ],
+      "max": [
+        142.99999999999997,
+        42.99868392944333,
+        107
+      ]
+    },
+    "sourceToCastle": [
+      1,
+      -5.551115123125783e-17,
+      5.551115123125783e-17,
+      0,
+      0,
+      1.0000000000000002,
+      -2.7755575615628914e-17,
+      0,
+      5.551115123125783e-17,
+      -5.551115123125783e-17,
+      1.0000000000000002,
+      0,
+      -52.000000000000014,
+      -2.842170943040401e-14,
+      -7.105427357601002e-15,
+      1.0000000000000002
+    ],
+    "refinement": null,
+    "surfaceNormals": null
+  },
+  "after": {
+    "position": 2638422502,
+    "index": null,
+    "vertices": 331512,
+    "indexCount": 0,
+    "triangles": 110504,
+    "indexed": false,
+    "positionType": "Float32Array",
+    "indexType": null,
+    "localBounds": {
+      "min": [
+        -91,
+        -159.79254150390625,
+        -72
+      ],
+      "max": [
+        195,
+        42.99868392944336,
+        107
+      ]
+    },
+    "castleBounds": {
+      "min": [
+        -142.99999999999997,
+        -159.79254150390628,
+        -72.00000000000001
+      ],
+      "max": [
+        142.99999999999997,
+        42.99868392944333,
+        107
+      ]
+    },
+    "sourceToCastle": [
+      1,
+      -5.551115123125783e-17,
+      5.551115123125783e-17,
+      0,
+      0,
+      1.0000000000000002,
+      -2.7755575615628914e-17,
+      0,
+      5.551115123125783e-17,
+      -5.551115123125783e-17,
+      1.0000000000000002,
+      0,
+      -52.000000000000014,
+      -2.842170943040401e-14,
+      -7.105427357601002e-15,
+      1.0000000000000002
+    ],
+    "refinement": {
+      "refined": 2669,
+      "sourceTriangles": 69220,
+      "triangles": 110504,
+      "maxOffset": 0.2193362385370818,
+      "reliefAmplitude": 0.22,
+      "reliefCandidate": true
+    },
+    "surfaceNormals": {
+      "version": 1,
+      "method": "constrained source-corner fans with affine normal transport",
+      "positionChanged": false,
+      "cornerFanConstraints": true,
+      "rawAffineNormals": true,
+      "mixedSubdivisionSoftEdges": 1540,
+      "cannotLinkPairs": 6944,
+      "constraintRejectedSoftJoins": 610,
+      "sourceFaces": 69220,
+      "softEdges": 100358,
+      "angleFallbackEdges": 100358,
+      "semanticEdges": 0,
+      "protectedFaces": 0,
+      "unmatchedEdges": 0,
+      "subdivisionMismatchEdges": 0,
+      "nonManifoldEdges": 0,
+      "sharpEdges": 3472,
+      "smoothedCorners": 203389,
+      "interpolatedVertices": 331512,
+      "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+      "creaseAngleDeg": 42,
+      "protectionBounds": "shore-and-geometric-feature-edges-only",
+      "pass": 4,
+      "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+      "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+      "reasonCounts": {
+        "shoreAttributeFaces": 0,
+        "callbackProtectedFaces": 0,
+        "openEdges": 0,
+        "nonManifoldEdges": 0,
+        "subdivisionMismatchEdges": 0,
+        "protectedFaceEdges": 0,
+        "mixedSemanticEdges": 0,
+        "semanticBoundaryEdges": 0,
+        "sharpAngleEdges": 3472,
+        "windingEdges": 0,
+        "crestFoldEdges": 0
+      }
+    }
+  },
+  "options": {
+    "detail": 0.35,
+    "pass": 4,
+    "bump": 0.12,
+    "relief": 0.22
+  },
+  "radius": 160,
+  "productionMatch": "awaiting live epoch comparison"
+}

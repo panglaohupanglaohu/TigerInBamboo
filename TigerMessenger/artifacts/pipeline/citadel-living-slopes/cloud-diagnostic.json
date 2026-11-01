@@ -1,0 +1,80 @@
+{
+  "transform": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    -52,
+    0,
+    0,
+    1
+  ],
+  "parent": "castleContainer",
+  "pos": [
+    25.520845413208008,
+    1.4031082391738892,
+    -23.15046501159668
+  ],
+  "actual": [
+    152.48229057401838,
+    53.760004847077354,
+    80.31616969870063
+  ],
+  "expected": [
+    122.47171210474868,
+    60.24079729817731,
+    122.28478307995942
+  ],
+  "alpha": 0.29973554611206055,
+  "count": 384,
+  "layers": 1,
+  "cameraLayers": 3,
+  "visible": true,
+  "attributes": [
+    "position",
+    "uv",
+    "iPos",
+    "iSize",
+    "iAlpha",
+    "iRot"
+  ],
+  "hits": [
+    {
+      "name": "citadel-oskar-grid-mountain-surface",
+      "distance": 40.26120068402447,
+      "point": [
+        169.15425611161754,
+        59.63796578757463,
+        89.09770366102465
+      ]
+    }
+  ],
+  "stats": {
+    "particles": 384,
+    "spawnCells": 29,
+    "nx": 31,
+    "nz": 22,
+    "step": 8,
+    "validCells": 68,
+    "samples": 682,
+    "spawnBounds": {
+      "minX": -74,
+      "maxX": 46,
+      "minZ": -53,
+      "maxZ": -5
+    },
+    "source": "final rendered rock surfaces",
+    "method": "cached terrain field and wind advection; project shader",
+    "active": 351,
+    "unsupported": 28,
+    "alphaSum": 77.68813616142143
+  }
+}

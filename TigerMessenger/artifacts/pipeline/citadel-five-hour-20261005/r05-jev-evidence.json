@@ -1,0 +1,45 @@
+{
+  "task": "Highland Citadel r04/r05 grounded-vegetation and material triage",
+  "target": "Connected main ridge, broad lower shoulder, lower saddle; retain city and rail boundaries.",
+  "visual_observations": {
+    "source": "Primary and advisor actual r04 six views; primary actual r05 bay and old-town views. Text-only evidence for Jev, not image viewing.",
+    "images": {
+      "r04-bay-ridge-day-noCloud-plants.png": "ed62830f270cf6441941511dc093cf35784cc8605151eeeb8cf19f4a7680c372",
+      "r04-old-mountain-day-noCloud-plants.png": "e57ac556e094a1aeb3f748fbf77441080146719489c479a2d97896a2c7fcaa52",
+      "r05-bay-ridge-day-noCloud-plants.png": "0626a169d469523223744c36a681d6ede3c22c28ede7f80937b260d9e622ca6a",
+      "r05-old-mountain-day-noCloud-plants.png": "52b3565269b3742813f1e57ddf9dbdbb768f43b6a72578e858a204848f7efbd0"
+    },
+    "completed": [
+      "r04 restores green lower slopes and smaller cypresses; advisor57/100 vs baseline55.",
+      "All74814 actual grass endpoints have gaps no more than2mm and burial no more than2cm.",
+      "1539 actual terrace grid rays,100 exact original Raycaster matches, prove left7x4m gentle core exists."
+    ],
+    "remaining": [
+      "Green still reads as narrow diagonal strips, actual core habitat accepts34 of40 before slope/protection clipping. Diagnose final turf coverage before further landform growth.",
+      "r05 warm palette makes mountain gray-green too similar to city; independent palette2 candidate now loading.",
+      "Shared2.5D local occlusion has no canopy/character casters; real GPU/off comparison still pending."
+    ]
+  },
+  "checks": [
+    {
+      "name": "514 walkable meshes and rail curves unchanged;23049 rail probes clear",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "all actual r04 root endpoints and GPU/link check passed",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r05/r06 shared light actual shader/off visual comparison",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Preserve fixed roads/foundations/rail/harbor.",
+    "Current opt-in only; not final visual acceptance.",
+    "Investigate habitat and conservative whole-face exclusion on measured terrace; do not fill coastal cliff blindly."
+  ]
+}

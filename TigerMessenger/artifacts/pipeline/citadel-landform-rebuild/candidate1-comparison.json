@@ -1,0 +1,23 @@
+{
+  "candidate": 1,
+  "fixedStructuresUnchanged": true,
+  "beforeWalk": {
+    "meshes": 514,
+    "vertices": 59267,
+    "hash": 3924031306
+  },
+  "afterWalk": {
+    "meshes": 514,
+    "vertices": 59267,
+    "hash": 3924031306
+  },
+  "beforeRailHits": 0,
+  "afterRailHits": 0,
+  "plantCheck": {
+    "count": 208,
+    "missing": 0,
+    "maxGap": -0.05800952945017457
+  },
+  "visualAccepted": false,
+  "reason": "isolated narrow peaks and sawtooth transitions remain in bay-ridge view"
+}

@@ -1,0 +1,68 @@
+{
+  "authorized_window": {
+    "start_utc": "2026-10-20T14:35:02Z",
+    "deadline_utc": "2026-10-20T18:35:02Z",
+    "deadline_beijing": "2026-10-21 02:35:02"
+  },
+  "scope": "Finish Batian shield interception, bomb/weapon mix and audio-event synchronization; repair evidenced combat presentation defects without unrelated world redesign.",
+  "source_ownership": "Root owns src/audio/batianShieldSound.js, targeted worldSfx.js/main.js callback and batianArsenal.js shield audio integration. Preserve others' existing edits. Read-only media diagnostics in src/audio/bgmOwnership.js added with before snapshot; no BGM selection/routing behavior changed. src/world/batianFleet.js only passes existing amount to shieldImpact for sound weighting; saved before-impact-weight backup.",
+  "completed": [
+    "Shield callback wired to actual flagship ripple hit",
+    "Shared-source offline single/burst WAV, peak0.572701, no clipping",
+    "Real-three CPU intercept/miss/escort callback checks",
+    "JEV compact text actual invocation saved",
+    "8931 serves current synth and main callback",
+    "Real browser bus: current AudioContext running; near accepted/immediate duplicate rejected/far1000m rejected; moved pan+.75→-.7412; afterTail voices0; actual M mutedtrue rejected/unmutedfalse accepted",
+    "Normal production bookshop UI sortie completed with219 shield interceptions,11 weapon events,8 robots mechanically shattered; no new visual screenshot or subjective listening claim",
+    "After fix actual browser burst accepts16/16 at70ms spacing, max3 voices, no residual voices after tail; near/far/pan and bomb coexistence unchanged",
+    "Actual new-counter normal game bookshop sortie:192 shield contacts,46 flagship sounds accepted/81 skipped;13 attacks,6 robots shattered; idle end100energy,0effects/0pending;console warnings/errors empty",
+    "Fixed sound contact projection to exact current ellipsoid surface shared with ripple center; moved/rotated/scaled real-three CPU error0 versus old point error0.196m;3 ripple geometries disposed; existing bomb sync6 checks pass",
+    "Fresh normal game after contact projection fix: attack phase32 accepted flagship sounds/99 total interceptions, shield enabled; later39 accepted/164 total, returned with0 effects/0pending. Follow-camera real GPU shield outer envelope seen; camera restored. No audio errors. Five nonaudio citadel source warnings saved, other sources untouched.",
+    "Real browser OfflineAudioContext stress preview24 shield hits cap3 +fall/explosion+synthetic engine;6.5s peak0.7061935 no clipping; downloadedWAV saved to production-artifact directory. Not actual Hitman/game recording.",
+    "Existing mix-focus regression passed smooth recovery, inaudible no duck, mute reset, no BGM restart/ownership change",
+    "Ripple hot loop profiling12frames/3rings:18432 Vector3 clones before,0 after scratch reuse; every Float32 position,visibility,opacity exactly identical at all sampled frames; geometry cleanup test3/3",
+    "Actual GPU isolated production ripple: three cyan circular wavefronts visible; single1 audio, burst total13/13 audio accepted, final effects0 voices0 draw3, logs empty. Clearly labeled fixture, not full gameplay.",
+    "Last full-game sortie subsequently reached idle100energy with0effects/0pending and39 audio accepts",
+    "Real combined production bus:4voices max (3shield+1fall), BGM volume controller .5→.255fall→.1545blast→.49857recovered→0stop, owner released/voices0;13ownership regressions pass",
+    "Added readyState/networkState/mediaError to existing BGM diagnostics only, preserved preexisting dirty source backup. ActualHitman content did NOT load (ready0/network2/currentTime0; HEAD TLS timeout), so no actual music playback/masking approval",
+    "Real browser100 sustained shield hits accepted100, voicecap3,0additional sound buffers after warmup,606created sources606ended,0pending sources/voices;logs empty. Short silent fading tails counted separately (peak23sources), not falsely called3total audio nodes.",
+    "Prepared provisional human review index.html with bothWAV previews, actualgame link, scoped evidence and honest BGM/near-wave gaps; provisional source/backup/media hash manifest saved",
+    "Actual defense powers are9/24/100 per projectile; forwarded existing power only to shield audio envelope/timbre, low pressure stronger/deeper for heavy cannon. CPU real fleet confirms powers unchanged and same energy drain/hull nodes. Browser weighted24hit mix peak.827925/no clipping; old default-v1 mix preserved.",
+    "Fresh normal game weighted-version bookshop sortie:200 interceptions,50 flagship audio accepts95 skipped/55other contacts;17 attacks,7 robot mechanical shatters; idle100energy with0effect/0projectile, errorlogs empty; normal camera restored. No new closeup/readability or subjective claim.",
+    "Weighted100hit browser test also100/100 accepted,cap3,0additional buffers,606created606ended,0pending/voices;6production source hashes match provisional manifest; authored review10HTTPtargets200"
+  ],
+  "pending": [
+    "Hitman remote media did not load; no actual BGM masking or subjective hearing acceptance. Volume ducking/recovery and ownership verified separately.",
+    "Individual ripple closeup readability confirmed in isolated GPU fixture, not clearly resolved in sampled normal-game view."
+  ],
+  "limits": [
+    "No commit/publish/external messages",
+    "No new aircraft, no architectural damage or tiger/fox damage changes",
+    "Existing normal production URL; no command-v7 deliverable",
+    "JEV text only/cache, no images/chat/keys; not visual/audio acceptance",
+    "No fabricated live tests/FPS or listening claims"
+  ],
+  "backups": "source-before/ (worldSfx.js, batianArsenal.js, main.js)",
+  "continuation": "Read latest state/evidence before edits; on deadline save delivery and gaps, delete temporary heartbeat and notify. Routine silence.",
+  "automation_id": "automation",
+  "browser": {
+    "browser": "2",
+    "bus_tab": "35",
+    "game_tab": null,
+    "normal_game": "http://localhost:8931/TigerMessenger/?autostart=1",
+    "game_phase_at_handoff": "Weighted source full sortie verified idle; root-created tab37 closed to avoid idle GPU load",
+    "bus_tab_page": "index.html latest weighted fullgame and lifecycle evidence"
+  },
+  "last_checkpoint": {
+    "utc": "2026-10-20T18:37:32.377275+00:00",
+    "result": "Deadline delivery saved; temporary automation deleted successfully. Final review and authored link check retained. No subjective acceptance or full-game closeup claim.",
+    "evidence": [
+      "delivery-manifest.json",
+      "links-preflight.json",
+      "jev-decision-final-cache.json"
+    ]
+  },
+  "status": "completed_with_validation_gaps",
+  "finalized_at_utc": "2026-10-20T18:37:03.647534+00:00",
+  "automation_deleted": true
+}

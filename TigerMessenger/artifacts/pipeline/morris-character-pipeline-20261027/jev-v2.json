@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "1face2daf40798b10cd7f200984a25ee7e9bb93a797730f3a2cd53e278aff4b2",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.9
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.24,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.39,
+        "lighting": 0,
+        "navigation": 0.37,
+        "review": 0.23
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.77
+    }
+  },
+  "usage": {
+    "input_tokens": 725,
+    "output_tokens": 91,
+    "cost_usd": 0.000305,
+    "credits_remaining_usd": 4.899509
+  },
+  "elapsed_ms": 2015,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "princess V2 normal game mounted fit",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "horse V2 hoof contact and mane/cape overlap",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

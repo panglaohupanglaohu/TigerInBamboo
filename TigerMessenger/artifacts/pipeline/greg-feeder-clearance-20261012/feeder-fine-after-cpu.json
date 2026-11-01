@@ -1,0 +1,64 @@
+{
+  "seed": 7711,
+  "departure": "original",
+  "sampleSpan": [
+    86.55,
+    86.6
+  ],
+  "step": 0.001,
+  "buildAndMeasureMs": 786.6101669999998,
+  "worldScale": 0.5,
+  "method": "BVH triangle AABB squared-distance pruning; exact vertex-to-triangle, nine edge-to-edge distances and triangle SAT for intersections",
+  "pairs": [
+    {
+      "boat": 2,
+      "actor": "feeding-child",
+      "samples": 51,
+      "minimumSurfaceDistanceInner": 3.141493612999036,
+      "minimumSurfaceDistanceWorld": 1.570746806499518,
+      "triangleTests": 32647,
+      "closest": {
+        "time": 86.55,
+        "boatMesh": "flower-paddle-blade",
+        "actorMesh": "swamp-boy-head-hair",
+        "boatTriangle": [
+          [
+            2.4438073276437176,
+            24.86494672114034,
+            -11.029242695228366
+          ],
+          [
+            2.4280984087215716,
+            24.850181604321094,
+            -11.082543160229848
+          ],
+          [
+            2.355559546627247,
+            24.971732107860607,
+            -11.019485111229232
+          ]
+        ],
+        "actorTriangle": [
+          [
+            4.35170678406089,
+            25.481571818742882,
+            -8.582976650612414
+          ],
+          [
+            4.349422063419912,
+            25.41034070811761,
+            -8.591998350014821
+          ],
+          [
+            4.325467339657511,
+            25.420972888831525,
+            -8.517157826161485
+          ]
+        ]
+      }
+    }
+  ],
+  "containment": "not checked; positive surface distance does not exclude a closed mesh entirely contained inside another",
+  "continuous": "discrete samples only; no swept-time collision certification",
+  "GPU": "not checked; no production source modified"
+}

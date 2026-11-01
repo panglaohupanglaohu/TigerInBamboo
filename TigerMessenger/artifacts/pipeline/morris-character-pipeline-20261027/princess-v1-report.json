@@ -1,0 +1,28 @@
+{
+  "revision": "reference-loft-v1",
+  "workflow": "new continuous authored lofts/sweeps and closed drape; courier-style empty pivots; no skinning claimed",
+  "mesh_count": 6,
+  "vertices": 36603,
+  "triangles": 72056,
+  "bounds_blender": [
+    [
+      -0.5074535012245178,
+      -0.42900002002716064,
+      -0.6929999589920044
+    ],
+    [
+      0.5074535608291626,
+      0.8218470215797424,
+      0.8610000014305115
+    ]
+  ],
+  "nodes": [
+    "MorrisPrincess",
+    "body",
+    "head",
+    "cape",
+    "armL",
+    "armR"
+  ],
+  "validation": "structural and offline component render only; no game navigation acceptance"
+}

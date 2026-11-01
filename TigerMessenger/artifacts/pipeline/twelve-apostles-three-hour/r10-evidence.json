@@ -1,0 +1,54 @@
+{
+  "round": "r10",
+  "target": "Twelve Apostles final three-hour batch; genuine render improvement with fixed transit boundaries",
+  "observations": [
+    {
+      "source": "r10-hero.png",
+      "sha256": "59bed8341a5ba81a260af3c447d6e25f4ffbaeccae139e99f985277cd8c02bce",
+      "findings": [
+        "Visible authored retreat ledges, asymmetric crown, cool grey rock; long smooth rounded walls still too simple"
+      ]
+    },
+    {
+      "source": "r10-foliage.png",
+      "sha256": "fb02845802d63de75cd4e858669f26be1f73dedd7fc0564d3bf6f676b0683ef7",
+      "findings": [
+        "Organic inset turf edge and supported leafy shrubs visible; sparse planting remains"
+      ]
+    },
+    {
+      "source": "r10-base.png",
+      "sha256": "9cad87acb88eebd1403236967c979a2e7c4ffc4c3d5e6766d2f0d5870bac991a",
+      "findings": [
+        "Broken bright surf now visibly meets rock feet after ocean depth bias matching"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "Five geometry/vegetation/lighting/water/version suites pass on final source hashes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "8 positions unchanged; 46800 rail probes clear; 507 pedestrian mesh world hash unchanged",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Actual final game shader compilation and captured JS errors clean",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Independent subjective visual score 69/100; not satisfied final artwork",
+    "Rail/walk sampling is not full path connectivity proof",
+    "Local 2.5D shadows exclude cross-stack/dynamic actor casters",
+    "Actual rAF timing is browser scheduling evidence, not GPU benchmark"
+  ],
+  "proposedNext": [
+    "Deliver actual evidence at agreed deadline",
+    "Later focus authored layer breaks and fractured rock shoulders, keep current root/transport safeguards"
+  ]
+}

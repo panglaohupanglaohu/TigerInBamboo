@@ -1,0 +1,40 @@
+{
+  "recorded_at_utc": "2026-10-20T16:03:12.528096+00:00",
+  "scope": "Actual production music ownership/controller + browser HTMLAudioElement source request and worldSfx bus",
+  "foregroundPeak": 4,
+  "oneShotPeak": 4,
+  "actualMusicPlaybackVerified": false,
+  "musicLoad": {
+    "readyState": 0,
+    "networkState": 2,
+    "currentTime": 0,
+    "mediaError": null,
+    "shellHead": "TLS handshake timed out after12s"
+  },
+  "volumeEnvelope": {
+    "baseline": 0.5,
+    "duringFall": 0.2551010565398223,
+    "duringBlast": 0.15454469378452212,
+    "recovered": 0.4985696376404942,
+    "stopped": 0
+  },
+  "ownership": {
+    "during": "batian",
+    "afterStop": null
+  },
+  "voiceMixDuringFall": [
+    "batianBombFall",
+    "batianShieldHit",
+    "batianShieldHit",
+    "batianShieldHit"
+  ],
+  "afterStopVoices": 0,
+  "tests": {
+    "bgmOwnershipChecksPassed": 13
+  },
+  "limits": [
+    "Media paused=false is not evidence of playback. Current time remained0 and readyState0 throughout.",
+    "No subjective shield-versus-Hitman masking conclusion; remote music had not loaded.",
+    "No track replacement or network setting/security change performed."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "task": "Twelve Apostles shell-coral strata colour-only repair based on approved target",
+  "target": "20261012 twelve-apostles-target-v1 and 20261013 target-sheet: pale shell/peach seams among cream/cool limestone, green caps and dark wet feet",
+  "visual_observations": {
+    "source": "Oskar-method consultant actually viewed both target images, author terrain screenshot, early gate target and latest user sunset screenshot; no image sent to JEV",
+    "completed": [
+      "Live default source path is seaStackTerraces -> twelveApostlesTarget; old seaStackCoastalGeometry is fallback",
+      "Old rock palette had cream/grey only and scalar strata brightness, no coral hue",
+      "Added low frequency dry mineral warmth;16.54percent vertex colours changed; cooldown/wet foot recipe unchanged",
+      "All9 masses positions/index/normals/noncolour attrs and dressing/shore geometry/instance colours byte-identical"
+    ],
+    "remaining": [
+      "Root normal-game GPU reload: daylight and original sunset comparison to check warmth/visibility; no visual acceptance for new colours yet",
+      "Colour hexes are project proposals, not image pixel samples"
+    ]
+  },
+  "checks": [
+    {
+      "name": "all9 topology and normals byte-identical before/after",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "vegetation/shore/talus and transforms unchanged",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "warm and blue-grey vertex classes coexist, altered minority",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal game new colours visually checked",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Only src/world/twelveApostlesTarget.js owned and changed",
+    "No global illumination/time/material emissive workaround",
+    "JEV text triage not visual judgement or deployment approval"
+  ]
+}

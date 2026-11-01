@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "d5a67d8c8e87ec44555aa1bc262ab3d596e4e4ea30fa579662a7afb465847f67",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.73
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.94,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.03,
+        "lighting": 0,
+        "navigation": 0.02,
+        "review": 0.95
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.68
+    }
+  },
+  "usage": {
+    "input_tokens": 773,
+    "output_tokens": 91,
+    "cost_usd": 0.000325,
+    "credits_remaining_usd": 4.941252
+  },
+  "elapsed_ms": 2069,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Close-up shield ripple visual inspection",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,51 @@
+{
+  "image": "first-release-live-1159.png",
+  "actualViewed": true,
+  "scope": "single cropped GPU frame; old inner release only",
+  "score": 55,
+  "maxScore": 100,
+  "completeSceneScore": null,
+  "accepted": false,
+  "rubric": [
+    {
+      "name": "全景布局与两城呼应",
+      "score": 12,
+      "max": 25
+    },
+    {
+      "name": "建筑轮廓与结构细节",
+      "score": 16,
+      "max": 25
+    },
+    {
+      "name": "材质与配色",
+      "score": 13,
+      "max": 20
+    },
+    {
+      "name": "植被云水环境协调",
+      "score": 7,
+      "max": 15
+    },
+    {
+      "name": "地标与连接关系",
+      "score": 5,
+      "max": 10
+    },
+    {
+      "name": "轮廓边缘与画面完整性",
+      "score": 2,
+      "max": 5
+    }
+  ],
+  "unverified": [
+    "full new-city/right connection",
+    "full original horse",
+    "both global rail joins",
+    "new short walking bridge",
+    "new marked railway",
+    "runtime collision/navigation/editor function",
+    "boat passage",
+    "complete scene visual >=90"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "task": "Citadel r16/r17 next-step selection",
+  "target": "Preserve readable broad terraces and existing city/rail footprint; improve morphology, not just numerical overlap count",
+  "visual_observations": {
+    "source": "Root and advisor viewed real r16/r17 saved images; textual observations only for Jev",
+    "images": {
+      "r16-left-terrace-day-noCloud-plants.png": "7958c14b05191c48291175fff03f9763abaa070515a560517359a6d30e8a971e",
+      "r16-bay-ridge-day-noCloud-plants.png": "0b6db99a89b03fb45206f2a5a07f9d52863b9fa0528c2a49f25140e41447d34c",
+      "r17-left-terrace-day-noCloud-plants.png": "481119e000edf25a00e8029312b78d8e38c0a1202d4097c16f5e03c960f31634",
+      "r17-bay-ridge-day-noCloud-plants.png": "d090447728a1f9d0b292ce9fb0bc5724daada86794891eb696c4bbb19fcaf009"
+    },
+    "completed": [
+      "r16 local supported turf tail clipping visibly reduces long green strips while retaining broad terrace; 48628 grass endpoints supported, all fixed boundary hashes and rail curve hashes unchanged.",
+      "r17 3-parent nonlinear bay sampling lowers local multiple-hit rays from156 to67, but actually makes long vertical cliff pleats and a narrow grass stripe more visible. Root+independent advisor reject it."
+    ],
+    "remaining": [
+      "Source bay seam nonlinear radial collapse makes long thin faces, not merely bad normals. Full seam rebuild outside this small safe patch is not completed.",
+      "Two remaining lower turf tips: test only local height fade7-10 instead of5-9; preserve upper terrace area and default r16 until actual image+roots checked."
+    ]
+  },
+  "checks": [
+    {
+      "name": "r16 full fixed boundaries, rail23049probes0hits, grass48628 supported",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r17 actual visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "future local turf6 actual image/root acceptance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not publish numerically improved but visually worse r17.",
+    "Keep buildings/rails/harbour/footbridge fixed; preserve r16 rollback.",
+    "Future castle passage is separate default-off visual experiment; too low for player."
+  ]
+}

@@ -1,0 +1,37 @@
+✔ fine ink keeps bird/lizard surfaces and all animal pivots and behaviour references; monkey shape is separately approved (1.784917ms)
+✔ fine shells weld coincident contour normals and cap toes, wings and tail tips by their actual thickness (25.9335ms)
+✔ contour is stable at device scale, screen-capped and independent of shared brush-noise shader (2.936542ms)
+✔ bird colour correction preserves every anatomical/outline vertex, pivot and exact five RNG calls (38.971333ms)
+✖ real separated head/breast/tail and wing feather colour regions survive the final local art pass (833.490584ms)
+✔ four birds use only the existing one small attached halo each and one shared texture, with no lights (22.019291ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1009.516833
+
+✖ failing tests:
+
+test at tests/world/swampBirdColourGlow.test.mjs:22:1
+✖ real separated head/breast/tail and wing feather colour regions survive the final local art pass (833.490584ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0.51 !== 0.38
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampBirdColourGlow.test.mjs:26:269)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0.51,
+    expected: 0.38,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

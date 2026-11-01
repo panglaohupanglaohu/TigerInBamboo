@@ -1,0 +1,28 @@
+import * as T from 'three';
+import assert from 'node:assert/strict';
+import {writeFileSync} from 'node:fs';
+import {buildWorld} from '../../../src/world/platforms.js';
+import {buildHills} from '../../../src/world/hills.js';
+import {flatToWorld} from '../../../src/world/sphereMath.js';
+import {installMoonCoastOwnership} from '../../../src/world/moonCoastOwnership.js';
+import {redundantMainIslandApron,installMainIslandEdgeCleanup} from '../../../src/world/mainIslandEdgeCleanup.js';
+const scene=new T.Scene(),R=160,platforms=buildWorld(scene),hills=buildHills(scene,R),at=(x,z,h=.6)=>flatToWorld(x,h,z,R,new T.Vector3());
+const actor=at(-64,-64),rail=new T.CatmullRomCurve3([at(50,-65),at(60,-70),at(65,-75)]);
+installMoonCoastOwnership({platforms,hills,R,colliders:[{position:actor,radius:2}],trackCurves:[rail]});
+const originalGeo=platforms[0].mesh.geometry,priorSupport=hills.sampleRadius,priorMat=platforms[0].mesh.material,bank=hills.moonCoastBank;
+const api=installMainIslandEdgeCleanup({platforms,hills,R,colliders:[{position:actor,radius:2}],curves:[rail]});
+const checks=[];function check(name,f){f();checks.push({name,passed:true});}
+check('actual square apron has removable area',()=>assert(api.clearedTexels>1000));
+check('interior circular island retained',()=>assert(!api.owns(at(20,20))));
+check('source-proven northwestern square corner removed',()=>assert(api.owns(at(-60,-65))));
+check('actor footprint retained',()=>assert(!api.owns(actor)));
+check('rail support retained over entire sampled curve',()=>{for(const p of rail.getSpacedPoints(100))assert(!api.owns(p));});
+check('raised bookshop and camp retained',()=>{assert(!redundantMainIslandApron(46,22));assert(!redundantMainIslandApron(-68,36));});
+check('R4d bank ownership retained',()=>assert(!api.owns(at(60,60))));
+check('cleared support is absent rather than water floor',()=>{assert.equal(hills.sampleRadius(at(-60,-65)),-Infinity);assert.equal(platforms[0].topHeightAt(at(-60,-65)),-Infinity);});
+check('finite antipode and distant scope',()=>{assert(!api.owns(at(0,115)));assert(!api.owns(at(-60,-65).negate()));});
+check('source geometry and existing bank remain untouched',()=>{assert.equal(platforms[0].mesh.geometry,originalGeo);assert.equal(hills.moonCoastBank,bank);});
+check('visible depth distance all compose R4d and cleanup',()=>{for(const m of [platforms[0].mesh.material,platforms[0].mesh.customDepthMaterial,platforms[0].mesh.customDistanceMaterial]){const shader={uniforms:{},vertexShader:'#include <worldpos_vertex>',fragmentShader:'#include <clipping_planes_fragment>'};m.onBeforeCompile(shader);assert(shader.fragmentShader.includes('moonCoastOwned'));assert(shader.fragmentShader.includes('mainApronMask'));assert(shader.vertexShader.includes('apronWorld'));}});
+const report={revision:api.revision,clearedTexels:api.clearedTexels,texelMetres:api.texelMetres,limit:api.limit,protectedSites:api.protectedSites,coastPreserved:api.coastPreserved,checks,visualVerified:false};
+check('dispose restores hooks and material',()=>{api.dispose();assert.equal(hills.sampleRadius,priorSupport);assert.equal(platforms[0].mesh.material,priorMat);});
+writeFileSync(new URL('tests.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

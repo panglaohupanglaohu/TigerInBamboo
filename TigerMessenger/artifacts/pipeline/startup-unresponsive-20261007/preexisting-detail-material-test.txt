@@ -1,0 +1,31 @@
+✖ assembles true models with final triangle evidence without mutating frozen scene (6307.900792ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6404.673834
+
+✖ failing tests:
+
+test at tests/world/targetCityDetailCandidate.startup-baseline.test.mjs:29:1
+✖ assembles true models with final triangle evidence without mutating frozen scene (6307.900792ms)
+  AssertionError [ERR_ASSERTION]: citadel-target-old-city material contract
+      at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetCityDetailCandidate.startup-baseline.test.mjs:38:238
+      at InstancedMesh.traverse (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/vendor/three.core.js:7791:3)
+      at Group.traverse (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/vendor/three.core.js:7797:18)
+      at Group.traverse (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/vendor/three.core.js:7797:18)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetCityDetailCandidate.startup-baseline.test.mjs:38:142)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

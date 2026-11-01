@@ -1,0 +1,277 @@
+{
+  "version": "target-old-city-11-three-street-clusters",
+  "rollback": {
+    "streetInfill": false
+  },
+  "before": {
+    "meshes": 268,
+    "triangles": 25312,
+    "materials": 9,
+    "geometries": 268
+  },
+  "after": {
+    "meshes": 274,
+    "triangles": 25828,
+    "materials": 9,
+    "geometries": 274
+  },
+  "bounds": {
+    "min": [
+      -19.800000111262005,
+      -1.9073486257070726e-7,
+      -13.705
+    ],
+    "max": [
+      19.800000111262,
+      33.000000005960466,
+      16.65
+    ],
+    "size": [
+      39.600000222524,
+      33.000000196695325,
+      30.354999999999997
+    ]
+  },
+  "modules": [
+    {
+      "id": "street-infill-upper-0",
+      "cluster": "upper-left",
+      "attachedTo": null,
+      "colour": "yellow",
+      "position": [
+        -16.65,
+        8.3,
+        -10.9
+      ],
+      "width": 4.55,
+      "depth": 4.35,
+      "height": 3.45,
+      "roofY": 12.4,
+      "polygon": [
+        [
+          -19.004999999999995,
+          -13.155
+        ],
+        [
+          -14.294999999999998,
+          -13.155
+        ],
+        [
+          -14.294999999999998,
+          -8.645000000000001
+        ],
+        [
+          -19.004999999999995,
+          -8.645000000000001
+        ]
+      ],
+      "support": {
+        "mesh": "terrace-2--1-deck",
+        "top": 8.3
+      },
+      "publicAccess": false
+    },
+    {
+      "id": "street-infill-upper-1",
+      "cluster": "upper-left",
+      "attachedTo": null,
+      "colour": "teal",
+      "position": [
+        -11.9,
+        8.3,
+        -10.9
+      ],
+      "width": 4.55,
+      "depth": 4.35,
+      "height": 4.1,
+      "roofY": 13.05,
+      "polygon": [
+        [
+          -14.255,
+          -13.155
+        ],
+        [
+          -9.545,
+          -13.155
+        ],
+        [
+          -9.545,
+          -8.645000000000001
+        ],
+        [
+          -14.255,
+          -8.645000000000001
+        ]
+      ],
+      "support": {
+        "mesh": "terrace-2--1-deck",
+        "top": 8.3
+      },
+      "publicAccess": false
+    },
+    {
+      "id": "street-infill-house-1--1-1--1",
+      "cluster": "middle-left",
+      "attachedTo": "house-1--1-1",
+      "colour": "teal",
+      "position": [
+        -12.98,
+        7.15,
+        0.2200000000000002
+      ],
+      "width": 1.8,
+      "depth": 1.45,
+      "height": 1.98,
+      "roofY": 9.780000000000001,
+      "polygon": [
+        [
+          -13.96,
+          -0.5849999999999997
+        ],
+        [
+          -12,
+          -0.5849999999999997
+        ],
+        [
+          -12,
+          1.0250000000000001
+        ],
+        [
+          -13.96,
+          1.0250000000000001
+        ]
+      ],
+      "support": {
+        "mesh": "house-1--1-1-stone-residential-arcade",
+        "top": 7.15
+      },
+      "publicAccess": false
+    },
+    {
+      "id": "street-infill-house-1--1-1-1",
+      "cluster": "middle-left",
+      "attachedTo": "house-1--1-1",
+      "colour": "teal",
+      "position": [
+        -9.219999999999999,
+        7.15,
+        0.2200000000000002
+      ],
+      "width": 1.8,
+      "depth": 1.45,
+      "height": 1.98,
+      "roofY": 9.780000000000001,
+      "polygon": [
+        [
+          -10.2,
+          -0.5849999999999997
+        ],
+        [
+          -8.239999999999998,
+          -0.5849999999999997
+        ],
+        [
+          -8.239999999999998,
+          1.0250000000000001
+        ],
+        [
+          -10.2,
+          1.0250000000000001
+        ]
+      ],
+      "support": {
+        "mesh": "house-1--1-1-stone-residential-arcade",
+        "top": 7.15
+      },
+      "publicAccess": false
+    },
+    {
+      "id": "street-infill-house-0-1-1--1",
+      "cluster": "lower-right",
+      "attachedTo": "house-0-1-1",
+      "colour": "blue",
+      "position": [
+        9.02,
+        3.15,
+        10.719999999999999
+      ],
+      "width": 1.8,
+      "depth": 1.45,
+      "height": 1.98,
+      "roofY": 5.78,
+      "polygon": [
+        [
+          8.04,
+          9.915
+        ],
+        [
+          10,
+          9.915
+        ],
+        [
+          10,
+          11.524999999999999
+        ],
+        [
+          8.04,
+          11.524999999999999
+        ]
+      ],
+      "support": {
+        "mesh": "house-0-1-1-stone-residential-arcade",
+        "top": 3.15
+      },
+      "publicAccess": false
+    },
+    {
+      "id": "street-infill-house-0-1-1-1",
+      "cluster": "lower-right",
+      "attachedTo": "house-0-1-1",
+      "colour": "blue",
+      "position": [
+        12.98,
+        3.15,
+        10.719999999999999
+      ],
+      "width": 1.8,
+      "depth": 1.45,
+      "height": 1.98,
+      "roofY": 5.78,
+      "polygon": [
+        [
+          12,
+          9.915
+        ],
+        [
+          13.96,
+          9.915
+        ],
+        [
+          13.96,
+          11.524999999999999
+        ],
+        [
+          12,
+          11.524999999999999
+        ]
+      ],
+      "support": {
+        "mesh": "house-0-1-1-stone-residential-arcade",
+        "top": 3.15
+      },
+      "publicAccess": false
+    }
+  ],
+  "checks": {
+    "testsPassed": 47,
+    "testsFailed": 0,
+    "moduleSupportProbes": 54,
+    "existingPublicGeometryByteEquivalent": true,
+    "existing15PlotFootprintsUnchanged": true,
+    "meshDelta": 6,
+    "trianglesDelta": 516,
+    "materialsDelta": 0
+  },
+  "gpuValidated": false,
+  "visualAccepted": false
+}

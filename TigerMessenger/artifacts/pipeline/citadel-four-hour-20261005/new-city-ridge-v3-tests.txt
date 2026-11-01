@@ -1,0 +1,233 @@
+{
+  "passed": true,
+  "sourceUnchanged": true,
+  "defaultDisabled": true,
+  "deterministic": true,
+  "closedOrientedEdges": 20904,
+  "connectedVertices": 6970,
+  "volume": 62065.78253341686,
+  "minArea": 0.4105848105320941,
+  "minThickness": 8.999999046325684,
+  "maxY": 26,
+  "protectedChecks": 105,
+  "railChecks": 304,
+  "prismProbes": 383,
+  "seaMaxError": 0,
+  "tiltedError": 9.86022996585234e-9,
+  "candidate": {
+    "anchorRailAudit": [
+      {
+        "x": -24,
+        "z": -9,
+        "crestY": 19,
+        "frontWidth": 20,
+        "backWidth": 17,
+        "nearestPlanarRail": 72.00694410957877,
+        "nearestSpatialRail": 73.35529974037323,
+        "closestPlanarRail": [
+          48,
+          5,
+          -8
+        ]
+      },
+      {
+        "x": 8,
+        "z": -15,
+        "crestY": 21,
+        "frontWidth": 20,
+        "backWidth": 19,
+        "nearestPlanarRail": 40.607881008493905,
+        "nearestSpatialRail": 43.64630568559039,
+        "closestPlanarRail": [
+          48,
+          5,
+          -8
+        ]
+      },
+      {
+        "x": 34,
+        "z": -19,
+        "crestY": 26,
+        "frontWidth": 18,
+        "backWidth": 22,
+        "nearestPlanarRail": 17.804493814764854,
+        "nearestSpatialRail": 27.53179979587241,
+        "closestPlanarRail": [
+          48,
+          5,
+          -8
+        ]
+      },
+      {
+        "x": 60,
+        "z": -11,
+        "crestY": 17,
+        "frontWidth": 20,
+        "backWidth": 17,
+        "nearestPlanarRail": 12.36931687685298,
+        "nearestSpatialRail": 17.233687939614086,
+        "closestPlanarRail": [
+          48,
+          5,
+          -8
+        ]
+      }
+    ],
+    "revision": "new-city-continuous-ridge-candidate-v2",
+    "coordinateSpace": "final castle local",
+    "mode": "authored-continuous-heightfield-not-WFC",
+    "anchors": [
+      {
+        "x": -24,
+        "z": -9,
+        "crestY": 19,
+        "frontWidth": 20,
+        "backWidth": 17
+      },
+      {
+        "x": 8,
+        "z": -15,
+        "crestY": 21,
+        "frontWidth": 20,
+        "backWidth": 19
+      },
+      {
+        "x": 34,
+        "z": -19,
+        "crestY": 26,
+        "frontWidth": 18,
+        "backWidth": 22
+      },
+      {
+        "x": 60,
+        "z": -11,
+        "crestY": 17,
+        "frontWidth": 20,
+        "backWidth": 17
+      }
+    ],
+    "grid": [
+      84,
+      40
+    ],
+    "vertices": 6970,
+    "triangles": 13936,
+    "protectionFootprints": 1,
+    "protectedReservations": [],
+    "externalHorseMeasured": false,
+    "railProbes": 1200,
+    "footprintPadding": 4.02554121544172,
+    "maximumCellDiameter": 2.02554121544172,
+    "oceanSamples": 3485,
+    "oldOverlapSamples": 697,
+    "protectedSamples": 260,
+    "railSamples": 661,
+    "minOldOverlapBurial": 18.504330937534355,
+    "maxCrestY": 26,
+    "peakCeilingY": 27,
+    "geometryClosed": true,
+    "oldMassifMutated": false,
+    "oldJoin": "submerged overlap; not topologically welded; actual visual seam acceptance pending",
+    "survey": {
+      "revision": "new-city-continuous-ridge-candidate-v2",
+      "status": "proposal-needs-real-scene-review",
+      "castleMatrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        160,
+        0,
+        1
+      ],
+      "oldMassif": {
+        "min": [
+          -27,
+          -10,
+          -40
+        ],
+        "max": [
+          -3,
+          20,
+          30
+        ]
+      },
+      "city": {
+        "min": [
+          21,
+          18,
+          1
+        ],
+        "max": [
+          27,
+          24,
+          7
+        ]
+      },
+      "blueDome": {
+        "min": [
+          21,
+          18,
+          1
+        ],
+        "max": [
+          27,
+          24,
+          7
+        ]
+      },
+      "peakCeilingY": 27,
+      "anchors": [
+        {
+          "x": -14,
+          "z": -31,
+          "crestY": 13,
+          "frontWidth": 18,
+          "backWidth": 22
+        },
+        {
+          "x": 5.040000000000001,
+          "z": -36,
+          "crestY": 16,
+          "frontWidth": 21,
+          "backWidth": 24
+        },
+        {
+          "x": 23.400000000000006,
+          "z": -37,
+          "crestY": 21,
+          "frontWidth": 17,
+          "backWidth": 19
+        },
+        {
+          "x": 37.68,
+          "z": -36,
+          "crestY": 26.5,
+          "frontWidth": 17,
+          "backWidth": 18
+        },
+        {
+          "x": 54,
+          "z": -29,
+          "crestY": 15,
+          "frontWidth": 17,
+          "backWidth": 14
+        }
+      ]
+    },
+    "defaultEnabled": false
+  },
+  "actualSceneClearanceVerified": false,
+  "visualJoinVerified": false
+}
+Actual tilted castle frame / dome bounds ocean footprint regression passed
+Opposite hemisphere railway does not cut terrain; near railway clearance retained

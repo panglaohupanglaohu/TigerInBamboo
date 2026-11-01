@@ -1,0 +1,39 @@
+{
+  "task": "Approved separated citadel bay and exposed coastal freight railway",
+  "version": "bay-layout-v1-final-clouds",
+  "goal": "Separate old/new cities and route railway outside new city, preserving footbridge and alighting.",
+  "observations": {
+    "author": "Codex actual render inspection",
+    "images": {
+      "TigerMessenger/artifacts/pipeline/citadel-bay-layout/after.png": "8a5f6c264eca7e98b48e2aa2cfb740c828097df558fbb03757ba6207c2f76578"
+    },
+    "seen": [
+      "Actual scene now has a wider open bay, an exposed coastal railway in front of the new-city plaza, and a separate rear pedestrian bridge.",
+      "Hillside houses were retained with their original old mountain instead of floating after new-city relocation.",
+      "The low-poly mountains and building density still differ from the painted target; this pass addresses layout, not full art fidelity.",
+      "Final render includes freshly baked ridge cloud terrain; steep coastline and sparse massing remain visible limitations."
+    ]
+  },
+  "checks": [
+    {
+      "name": "2880 rail clearance probes and 7 pedestrian anchors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Both station alight rules resolve exits",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Manual full train and story playthrough",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No art acceptance score",
+    "Do not claim Godot synchronization",
+    "Preserve approved target and previous source snapshots"
+  ]
+}

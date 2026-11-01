@@ -1,0 +1,8 @@
+import fs from 'node:fs';import crypto from 'node:crypto';
+const context=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}}),measureText:()=>({width:10})},{get:(o,k)=>o[k]??(()=>{})});const element=()=>({style:{},addEventListener(){},removeEventListener(){},getContext:()=>context});globalThis.document={getElementById:()=>null,querySelector:()=>null,createElement:element,createElementNS:element};globalThis.location={search:'?gregLakeRim=0'};globalThis.localStorage={getItem:()=>null};globalThis.window={addEventListener(){},localStorage,location};
+const {createMoebiusSwampPlacement}=await import('../../../src/world/moebiusSwamp.js');const {installSwampCoralRim}=await import('../../../src/world/swampCoralRim.js');
+const root=createMoebiusSwampPlacement({scale:.5,seed:7711}),inner=root.userData.inner,report=installSwampCoralRim(inner,{enabled:true});
+const hash=a=>crypto.createHash('sha256').update(new Uint8Array(a.buffer,a.byteOffset,a.byteLength)).digest('hex');
+const mesh=report.walkMeshes[0],outer=[];inner.getObjectByName('greg-coral-outer-cliff').traverse(o=>{if(o.geometry)outer.push({name:o.name,attributes:Object.fromEntries(Object.entries(o.geometry.attributes).map(([k,v])=>[k,hash(v.array)]))});});
+const record={positions:hash(mesh.geometry.attributes.position.array),normals:hash(mesh.geometry.attributes.normal.array),count:mesh.geometry.attributes.position.count,outer,renderMeshes:report.renderMeshes,triangles:report.triangles};
+fs.writeFileSync(new URL(process.argv[2]||'before-rim-colour-v2/geometry-hashes.json',import.meta.url),JSON.stringify(record,null,2));console.log(JSON.stringify(record));

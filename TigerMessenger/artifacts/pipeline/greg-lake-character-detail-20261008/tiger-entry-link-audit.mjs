@@ -1,0 +1,33 @@
+import fs from 'node:fs';
+import * as THREE from 'three';
+const context=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}}),getImageData:()=>({data:new Uint8ClampedArray(16)}),measureText:()=>({width:10})},{get:(o,k)=>o[k]??(()=>{})});
+function element(){const listeners={};return{width:2,height:2,style:{},addEventListener(k,f){listeners[k]=f;},removeEventListener(){},set src(v){queueMicrotask(()=>listeners.load?.call(this));},getContext:()=>context};}
+globalThis.document={getElementById:()=>null,querySelector:()=>null,createElement:element,createElementNS:element};globalThis.location={search:''};globalThis.localStorage={getItem:()=>null};globalThis.window={addEventListener(){},localStorage,location};
+const {createMoebiusSwampPlacement}=await import('../../../src/world/moebiusSwamp.js');
+const root=createMoebiusSwampPlacement({seed:7711,scale:.5}),inner=root.userData.inner,tiger=inner.userData.tiger;await tiger.userData.swampTigerV2Ready;root.updateMatrixWorld(true);
+const batch=inner.getObjectByName('greg-bank-walking-slab-batch'),segment=batch.userData.segments.find(p=>p.name==='greg-bank-entry-link');
+const frameInverse=inner.matrixWorld.clone().invert(),toInner=frameInverse.clone().multiply(batch.matrixWorld),slab=[];
+for(let i=segment.firstTriangle*3;i<(segment.firstTriangle+segment.triangleCount)*3;i++)slab.push(new THREE.Vector3().fromBufferAttribute(batch.geometry.attributes.position,i).applyMatrix4(toInner));
+const u=new THREE.Vector3().crossVectors(slab[1].clone().sub(slab[0]),slab[2].clone().sub(slab[0])).setY(0).normalize(),v=new THREE.Vector3(-u.z,0,u.x),project=p=>new THREE.Vector3(p.dot(u),p.y,p.dot(v)),box=new THREE.Box3().setFromPoints(slab.map(project));
+const slabInnerBounds=new THREE.Box3().setFromPoints(slab),nodes=new Map();tiger.traverse(n=>{if(n.userData.blenderSourceNode)nodes.set(n.userData.blenderSourceNode,n);});
+const visible=m=>{for(let n=m;n&&n!==tiger;n=n.parent)if(!n.visible)return false;return true;};
+const head=[];nodes.get('n8').traverse(m=>{if(m.isMesh&&!m.userData.isOutline&&visible(m))head.push(m);});
+const groups={head,torso:[nodes.get('n2')],neck:[nodes.get('n6')]};
+function clip(poly,axis,value,greater){const out=[];for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length],da=(a[axis]-value)*(greater?1:-1),db=(b[axis]-value)*(greater?1:-1);if(da>=-1e-8)out.push(a);if((da<0&&db>0)||(da>0&&db<0)){const t=da/(da-db);out.push(a.clone().lerp(b,t));}}return out;}
+function inspect(meshes){let lo=Infinity,hi=-Infinity,overlapTriangles=0,clippedTriangles=0,lowest=null,highest=null;const bounds=new THREE.Box3(),meshHits={};
+ for(const mesh of meshes){if(!visible(mesh))continue;const p=mesh.geometry.attributes.position,idx=mesh.geometry.index,transform=frameInverse.clone().multiply(mesh.matrixWorld),points=[];for(let i=0;i<p.count;i++){const pt=new THREE.Vector3().fromBufferAttribute(p,i).applyMatrix4(transform);bounds.expandByPoint(pt);points.push(project(pt));}
+  const localBox=new THREE.Box3().setFromPoints(points);if(localBox.max.x<box.min.x||localBox.min.x>box.max.x||localBox.max.z<box.min.z||localBox.min.z>box.max.z)continue;
+  for(let i=0,n=idx?idx.count:p.count;i<n;i+=3){let poly=[0,1,2].map(j=>points[idx?idx.getX(i+j):i+j]);for(const[axis,value,greater]of [['x',box.min.x,true],['x',box.max.x,false],['z',box.min.z,true],['z',box.max.z,false]]){poly=clip(poly,axis,value,greater);if(poly.length<3)break;}if(poly.length<3)continue;clippedTriangles++;
+   let a=Infinity,b=-Infinity;for(const point of poly){if(point.y<lo){lo=point.y;lowest=point;}if(point.y>hi){hi=point.y;highest=point;}a=Math.min(a,point.y);b=Math.max(b,point.y);}if(a<box.max.y-1e-6&&b>box.min.y+1e-6){overlapTriangles++;const name=mesh.name||mesh.userData.blenderSourceNode;meshHits[name]=(meshHits[name]||0)+1;}
+  }
+ }
+ const signedClearance=lo===Infinity?null:lo>=box.max.y?lo-box.max.y:hi<=box.min.y?box.min.y-hi:-Math.min(hi-box.min.y,box.max.y-lo);
+ const unproject=q=>q?u.clone().multiplyScalar(q.x).addScaledVector(v,q.z).setY(q.y).toArray():null;
+ return {bbox:{min:bounds.min.toArray(),max:bounds.max.toArray()},overlapTriangles,meshHits,clippedTriangles,footprintY:lo===Infinity?null:[lo,hi],signedVerticalClearanceInner:signedClearance,signedVerticalClearanceWorld:signedClearance===null?null:signedClearance*.5,lowest:unproject(lowest),highest:unproject(highest)};
+}
+const frames=[],firstCollisions={},lastCollisions={},minClearances={};const oldRandom=Math.random;Math.random=()=>.5;tiger.userData.forceDrink=true;
+const started=performance.now();
+try{for(let i=0;i<=326;i++){const t=i/30;root.userData.update(1/30,t,{});root.updateMatrixWorld(true);const record={t,mode:tiger.userData._mode,tigerPosition:tiger.position.toArray(),parts:{}};for(const[name,meshes]of Object.entries(groups)){const result=inspect(meshes);record.parts[name]=result;if(result.overlapTriangles){firstCollisions[name]??={t,mode:record.mode,...result};lastCollisions[name]={t,mode:record.mode,...result};}const clearance=result.signedVerticalClearanceWorld;if(clearance!==null&&(!minClearances[name]||clearance<minClearances[name].clearanceWorld))minClearances[name]={t,mode:record.mode,clearanceWorld:clearance,...result};}frames.push(record);}}finally{Math.random=oldRandom;}
+const stairDatum=[33.67,32,30,28,26.96].map(r=>{const point=new THREE.Vector3(Math.cos(.5)*r,55,Math.sin(.5)*r),ray=new THREE.Raycaster(inner.localToWorld(point.clone()),new THREE.Vector3(0,-1,0).transformDirection(inner.matrixWorld)),hit=ray.intersectObjects(inner.userData.tigerWalkSurfaces,false)[0],y=hit?inner.worldToLocal(hit.point).y:null;return {radius:r,stairY:y,slabUndersideMinusStairInner:y===null?null:box.min.y-y};});
+const report={stairDatum,round:inner.userData.swampV2Round,tigerRound:tiger.userData.tigerTargetRound,seed:7711,scale:.5,frame:'inner swamp local; multiply lengths by .5 for world units',method:'30 Hz actual root.update forceDrink; actual batch segment triangles; each visible head/torso/neck triangle clipped to exact slab horizontal footprint, then compared to actual slab underside/top; excludes decorative outline shells',durationMs:performance.now()-started,slab:{segment,bounds:{min:slabInnerBounds.min.toArray(),max:slabInnerBounds.max.toArray()},orientedBounds:{min:box.min.toArray(),max:box.max.toArray()},u:u.toArray(),v:v.toArray()},firstCollisions,lastCollisions,minClearances,frames};
+fs.writeFileSync(new URL('tiger-entry-link-audit.json',import.meta.url),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({round:report.round,tigerRound:report.tigerRound,durationMs:report.durationMs,slab:report.slab,firstCollisions,lastCollisions,minClearances},null,2));

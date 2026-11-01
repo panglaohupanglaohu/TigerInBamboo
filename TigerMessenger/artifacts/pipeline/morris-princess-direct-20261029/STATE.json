@@ -1,0 +1,22 @@
+{
+  "status": "NO-SHIP after three actual close-view comparisons",
+  "method": "Direct Morris Blender Python surface work; GitHub Blender skills not used",
+  "changes": [
+    "shorter rounder oval face than V14",
+    "small close-fitting ear with partial front visibility instead of big ring",
+    "eyes use eyeball plus skin orbital surface; final outer boundary raycast to actual face",
+    "mouth moved into muzzle surface",
+    "nose integrated into facial surface"
+  ],
+  "remaining": [
+    "eyes still protruding and eyelid transitions visibly artificial",
+    "nose still dark/pinched in front light",
+    "forehead scalp/hair cap and lower face not approved target likeness"
+  ],
+  "rejected": [
+    "rejected-a eye occluded",
+    "rejected-b raised orbital collar"
+  ],
+  "production": "runtime untouched",
+  "source": "tools/pipeline/build_morris_princess_v15.py"
+}

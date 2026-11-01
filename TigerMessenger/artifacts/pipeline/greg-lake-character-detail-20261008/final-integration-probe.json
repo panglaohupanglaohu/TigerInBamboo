@@ -1,0 +1,328 @@
+{
+  "timestamp": "2026-10-07T23:02:51.672Z",
+  "formalURL": "http://localhost:8931/TigerMessenger/index.html?tour=crystal-v7&autostart=1",
+  "reached": true,
+  "entries": {
+    "whale-adult": 1,
+    "whale-young": 1,
+    "whale-escort": 1,
+    "tiger": 1,
+    "monkey-canopy": 3,
+    "monkey-repair": 2,
+    "glow-bird": 4,
+    "lizard-rim": 2,
+    "lizard-underwater": 1,
+    "lizard-carrier": 1,
+    "ribbonfish": 3,
+    "fish": 9,
+    "eel": 1,
+    "pink-hanger": 3,
+    "tube-worms": 11,
+    "fireflies": 46,
+    "flower-boys": 10,
+    "swimmer": 1,
+    "rowers": 52
+  },
+  "identityEntries": 19,
+  "modules": {
+    "swampV2Round": 54,
+    "gregLakeVisuals": {
+      "present": true,
+      "ok": null,
+      "version": 3,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "swampWaterShore": {
+      "present": true,
+      "ok": true,
+      "version": 1,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "gregCoralRim": {
+      "present": true,
+      "ok": true,
+      "version": 1,
+      "shapeRevision": null,
+      "topColourVersion": 2
+    },
+    "gregShoreDock": {
+      "present": true,
+      "ok": true,
+      "version": 1,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "gregSpatialPlan": {
+      "present": true,
+      "ok": null,
+      "version": 2,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "gregCoralCanopy": {
+      "present": true,
+      "ok": true,
+      "version": 4,
+      "shapeRevision": "rounded-fan-4",
+      "topColourVersion": null
+    },
+    "gregTrunkDetail": {
+      "present": true,
+      "ok": null,
+      "version": 2,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "gregTrunkBatch": {
+      "present": true,
+      "ok": null,
+      "version": 1,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "gregNaturalCliff": {
+      "present": true,
+      "ok": true,
+      "version": 6,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "gregUnderstory": {
+      "present": true,
+      "ok": true,
+      "version": 6,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "gregCoralPerches": {
+      "present": true,
+      "ok": true,
+      "version": 3,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "gregBridgeClearance": {
+      "present": true,
+      "ok": true,
+      "version": 1,
+      "shapeRevision": null,
+      "topColourVersion": null
+    },
+    "rootedAlgae": {
+      "present": true,
+      "ok": null,
+      "version": 2,
+      "shapeRevision": null,
+      "topColourVersion": null
+    }
+  },
+  "courier": {
+    "runtimeModel": "reedbank-courier-2",
+    "geometryRevision": "reedbank-hair-7"
+  },
+  "tigerRound": 38,
+  "lotusBoatCount": 5,
+  "boysPerBoat": [
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "feederIsExistingSecondBoy": true,
+  "rowersPerShip": [
+    26,
+    26
+  ],
+  "sameRefsAfter90Updates": true,
+  "formalTreeScales": [
+    [
+      1,
+      0.55,
+      1
+    ],
+    [
+      1,
+      0.55,
+      1
+    ],
+    [
+      1,
+      0.55,
+      1
+    ]
+  ],
+  "bridge": {
+    "ok": true,
+    "removedPiers": 23,
+    "leaf": {
+      "anchorDiagnostics": [
+        {
+          "instance": 33,
+          "anchor": [
+            -47.9160074139469,
+            77.7425550825792,
+            1.8693020170715737
+          ],
+          "contacts": []
+        },
+        {
+          "instance": 34,
+          "anchor": [
+            -48.18233789588097,
+            78.72561441456745,
+            1.659043626205591
+          ],
+          "contacts": []
+        },
+        {
+          "instance": 29,
+          "anchor": [
+            -42.80001827396697,
+            74.83911479285086,
+            -12.195145873000628
+          ],
+          "contacts": []
+        },
+        {
+          "instance": 30,
+          "anchor": [
+            -43.06508886630843,
+            75.94012470775093,
+            -12.058853239805321
+          ],
+          "contacts": []
+        },
+        {
+          "instance": 15,
+          "anchor": [
+            32.154501901396756,
+            73.4135799361406,
+            -10.017467382457111
+          ],
+          "contacts": []
+        },
+        {
+          "instance": 21,
+          "anchor": [
+            32.991869744648504,
+            78.8028224569776,
+            -14.302014708238238
+          ],
+          "contacts": []
+        },
+        {
+          "instance": 22,
+          "anchor": [
+            32.86081285842103,
+            79.38480369188613,
+            -14.22754568837112
+          ],
+          "contacts": []
+        }
+      ],
+      "affectedInstances": [
+        33,
+        34,
+        29,
+        30,
+        15,
+        21,
+        22
+      ],
+      "changedInstances": [
+        {
+          "instance": 33,
+          "source": "v2-rim-foliage-lobes",
+          "trimmed": false,
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "degrees": 10,
+          "scale": 1
+        },
+        {
+          "instance": 34,
+          "source": "v2-rim-foliage-lobes",
+          "trimmed": false,
+          "axis": [
+            1,
+            -1,
+            1
+          ],
+          "degrees": 20,
+          "scale": 1
+        },
+        {
+          "instance": 29,
+          "source": "v2-rim-foliage-lobes",
+          "trimmed": false,
+          "axis": [
+            -1,
+            1,
+            -1
+          ],
+          "degrees": 45,
+          "scale": 0.85
+        },
+        {
+          "instance": 30,
+          "source": "v2-rim-foliage-lobes",
+          "trimmed": true,
+          "degrees": 0,
+          "scale": 0
+        },
+        {
+          "instance": 15,
+          "source": "v2-rim-foliage-lobes",
+          "trimmed": false,
+          "axis": "x",
+          "degrees": -20,
+          "scale": 1
+        },
+        {
+          "instance": 21,
+          "source": "v2-rim-foliage-lobes",
+          "trimmed": true,
+          "degrees": 0,
+          "scale": 0
+        },
+        {
+          "instance": 22,
+          "source": "v2-rim-foliage-lobes",
+          "trimmed": false,
+          "axis": [
+            -1,
+            1,
+            0
+          ],
+          "degrees": 45,
+          "scale": 1
+        }
+      ],
+      "trimmedInstances": [
+        30,
+        21
+      ],
+      "visibleInstancesBefore": 366,
+      "visibleInstancesAfter": 364,
+      "unresolvedInstances": [],
+      "remainingBidirectionalIntersections": 0,
+      "candidateInstances": 28,
+      "installMs": 67.90141600000061,
+      "instanceCountBefore": 366,
+      "instanceCountAfter": 366,
+      "branchesChanged": false,
+      "anchorTranslationsChanged": false
+    }
+  },
+  "elapsedMs": 32824.970167,
+  "factorySHA256": "4a5068881cb0167e2b7303d250422e67946a446b26dc67105ed42bc66f7967ec",
+  "uniqueInventoryBuilderLabels": 14,
+  "portraitSelectorClasses": 13,
+  "portraitSelectorExcludes": "rowers"
+}

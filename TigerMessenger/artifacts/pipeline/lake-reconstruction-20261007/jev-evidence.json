@@ -1,0 +1,46 @@
+{
+  "asset": "lake-reconstruction-round-51",
+  "target": "Blue-green humid jungle with clear pale whale, three reachable banks, preserved story",
+  "observations": {
+    "author": "root visual review",
+    "basis": "Same camera real WebGL snapshots, NOT generated concept images",
+    "before": {
+      "file": "before-upper.png",
+      "sha256": "514ff95f497cfe5156c3f4f32c8aa75d3ead219de5157aadc1ffe00309aea8b4",
+      "notes": "Gray-green wall and trunk have weak separation; circular water exceeds basin in prior overview."
+    },
+    "after": {
+      "file": "after-upper.png",
+      "sha256": "a764c55903e3043f129e670b88602070afd407cab06c91b0a760a21b1786f7c7",
+      "notes": "Blue wall and teal trunk separate. Pale whale and ship remain visible; long straight trunks and bright light shafts still dominate. Root-to-water structure and story overlap still need work."
+    }
+  },
+  "checks": [
+    {
+      "name": "28 focused lake CPU regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "8 exact shore and story envelope retention checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Upper and overview GPU shaders no reported errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full spherical world traversal and complete story collision acceptance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No deletion of tiger/whale/ship story",
+    "No claim all X profile GIFs covered: only 3 supplied clips sampled",
+    "No spreading changes to Crystal City before lake passes",
+    "Preserve blue-green reference; no generic pink desert reskin"
+  ]
+}

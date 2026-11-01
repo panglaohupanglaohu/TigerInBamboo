@@ -1,0 +1,27 @@
+{
+ "target": "DUKE coastal steam freight ship concept sheet 2026-10-12 (side, deck plan, 3/4 bow, cutaway, crane detail)",
+ "candidate": "duke-r6",
+ "version": "duke-r6",
+ "changes": "rebuild from measured side+top views after user feedback that r3 ignored the deck plan",
+ "observations": [
+  "deckhouse moved aft-of-centre, narrow dark block per top view",
+  "masts at fore/main/stern positions measured from side view",
+  "hatches fore and aft of deckhouse per deck plan"
+ ],
+ "checks": [
+  {
+   "name": "studio sheet render side/top/3-4",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "in-game render at wharf",
+   "required": true,
+   "passed": null
+  }
+ ],
+ "constraints": [
+  "additive; robots/rails/story untouched",
+  "no keys or images sent"
+ ]
+}

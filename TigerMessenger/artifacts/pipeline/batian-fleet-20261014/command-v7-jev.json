@@ -1,0 +1,39 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "6cca4946ca86310e9669c41ec9ab545d7f5205872d65c3890929a118f08f5122",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.11
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.89,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.02,
+        "lighting": 0.02,
+        "navigation": 0.04,
+        "review": 0.91
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.89
+    }
+  },
+  "usage": {
+    "input_tokens": 901,
+    "output_tokens": 91,
+    "cost_usd": 0.000379,
+    "credits_remaining_usd": 4.948933
+  },
+  "elapsed_ms": 1660,
+  "cache_hit": false,
+  "next_step": "review",
+  "hard_gate_blockers": [],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

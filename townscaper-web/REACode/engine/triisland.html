@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Engine — 三角网格上的岛 / 塔（triisland.js）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #22303a; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 16px; top: 14px; z-index: 5; pointer-events: none;
+    font: 12px/1.7 ui-monospace, Menlo, monospace; color: #d9e6e6; white-space: pre;
+    text-shadow: 0 1px 2px rgba(0,0,0,.55);
+  }
+  #hint {
+    position: fixed; left: 16px; bottom: 14px; z-index: 5; pointer-events: none;
+    font: 11px/1.6 ui-monospace, Menlo, monospace; color: rgba(217,230,230,.62);
+  }
+</style>
+</head>
+<body>
+<div id="hud"></div>
+<div id="hint">拖动旋转 · 滚轮缩放 · R 换岛 · W 线框 · G 重播生长 · P 换调色板 · T 切"塔/岛"</div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { buildTriIsland, extrudePrisms, planHouses } from '../src/triisland.js';
+import { PALETTES, mixPalette, wallColor, meanSaturation } from '../src/palette.js';
+
+/**
+ * 三角网格岛 / 塔 —— 复现三条同源推文：
+ *   1654401054828638214「岛在生成」（一个三角形 → 细分 → 近等边圆盘）
+ *   1447483550257799171「又回到程序化岛生成」（铺满细三角网的叠层岛 + 房屋）
+ *   1258005604066627586「这个放到 Townscaper 里，三角形版」（三角棱柱堆成的塔）
+ *
+ * 三者的共同点：**格子是三角形**。所以这一页只做一件事 —— 把四边形格子的
+ * 那条管线（格点 → 高度 → 挤出 → 盖房）整体搬到三角形上，看看结果像不像。
+ */
+
+const hud = document.getElementById('hud');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#2b3f49');
+scene.fog = new THREE.Fog('#2b3f49', 9, 34);
+
+const camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.1, 200);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// 平光：这一页的重点是几何，不是光照。半球光足够看出顶面/侧面。
+scene.add(new THREE.HemisphereLight(0xdfefff, 0x4b4a3f, 0.85));
+const sun = new THREE.DirectionalLight(0xfff2dd, 0.95);
+sun.position.set(-5, 9, 6);
+scene.add(sun);
+
+// DoubleSide：三角棱柱的侧墙一旦绕向不统一就会"看穿"，而这一页只想验证拓扑，
+// 不值得为绕向再花时间 —— 开双面即可，代价是背面多画一遍。
+const material = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
+const wireMat = new THREE.LineBasicMaterial({ color: 0x9fc6c8, transparent: true, opacity: 0.55 });
+
+let group = new THREE.Group();
+scene.add(group);
+let wire = null;
+let state = { seed: 7, wire: true, mode: 'island', reveal: 1, info: null };
+// 调色板状态（x.com/OskSta/status/1200520827898343425）：
+//   from → to 之间做一个 1.2 秒的插值，所以切换是"渐变"而不是"跳变"
+const PAL_ORDER = ['vivid', 'stone', 'blush', 'debug'];
+let palIndex = 0;
+let palFrom = PALETTES.vivid;
+let palTo = PALETTES.vivid;
+let palT = 1;          // 1 = 已经在 palTo 上
+let palCurrent = PALETTES.vivid;
+// 6 个墙色槽位共用的材质：所有房子按 id % 6 分到槽位，
+// 过渡时只要改这 6 个材质的颜色 —— 和参考帧"整城一起变"一致
+const wallMats = Array.from({ length: 6 }, () => new THREE.MeshLambertMaterial({ color: 0xffffff }));
+
+function disposeGroup(g) {
+  g.traverse((o) => {
+    if (o.geometry) o.geometry.dispose();
+    if (o.material && o.material !== material && o.material !== wireMat) o.material.dispose();
+  });
+  scene.remove(g);
+}
+
+/**
+ * 把 extrudePrisms 的输出装成 BufferGeometry。
+ *
+ * 注意法线：三角形棱柱的顶面和侧面必须分开算（不能顶点共享），
+ * 否则顶面法线会被侧墙拉歪，整座岛看起来像被"抹圆"了。
+ * 这里顶面和侧墙本来就是两段独立的数组，天然不共享 —— 正好。
+ */
+function buildGeometry(pt, cells) {
+  // 台阶高度必须**远小于格子边长**（格子约 0.45 世界单位）。
+  // 踩过的坑：第一版 step=1.0，一层台地就有两个格子那么高，画面上全是一条条深沟，
+  // 岛看起来像"碎掉的盘子"而不是台地。
+  const g = extrudePrisms(pt, cells, { step: 0.34 });
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(g.top.length + g.side.length);
+  pos.set(g.top, 0); pos.set(g.side, g.top.length);
+  const col = new Float32Array(g.topCol.length + g.sideCol.length);
+  col.set(g.topCol, 0); col.set(g.sideCol, g.topCol.length);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+  return { geo, tris: g.topTris + g.sideTris };
+}
+
+/** 塔模式：只保留中心附近的格子，并且层层堆高（照 1258005604066627586 的样子）。 */
+function towerCells(cells) {
+  const maxR = 1.35;
+  return cells.map((c) => ({ ...c })).filter((c) => Math.hypot(c.cx, c.cy) < maxR);
+}
+
+function rebuild(seed = state.seed) {
+  disposeGroup(group);
+  group = new THREE.Group();
+
+  const isl = buildTriIsland({ seed, relaxPasses: 2 });
+  let cells = state.mode === 'tower' ? towerCells(isl.cells) : isl.cells;
+  // 生长：按 buildTriIsland 给的 order（由内向外）截断
+  if (state.reveal < 1) {
+    const cut = Math.max(1, Math.round(cells.length * state.reveal));
+    const allowed = new Set(isl.order.slice(0, cut));
+    cells = cells.filter((c) => allowed.has(c.id));
+  }
+  const { geo, tris } = buildGeometry(isl.pts, cells);
+  const mesh = new THREE.Mesh(geo, material);
+  group.add(mesh);
+
+  // 房屋：三角棱柱 + 尖顶（尖顶是四棱锥，绕 y 转 45° 才坐得正）
+  const houses = planHouses(cells, seed, { maxTowers: state.mode === 'tower' ? 6 : 14 });
+  const houseGeo = new THREE.CylinderGeometry(0.215, 0.235, 1, 3);  // 三棱柱 = 三角房子
+  const roofGeo = new THREE.ConeGeometry(0.235, 0.16, 3);
+  const roofMat = new THREE.MeshLambertMaterial({ color: 0xb4562f });
+  roofMat.userData.palRoof = true;
+  houses.forEach((h, hi) => {
+    const body = new THREE.Mesh(houseGeo, wallMats[hi % wallMats.length]);
+    const hh = 0.20 + h.extra * 0.10;
+    body.scale.y = hh;
+    body.position.set(h.cx, h.level * 0.34 + 0.08 + hh / 2, h.cy);
+    group.add(body);
+    const roof = new THREE.Mesh(roofGeo, roofMat);
+    roof.position.set(h.cx, h.level * 0.34 + 0.08 + hh + 0.09, h.cy);
+    roof.material = roofMat;
+    group.add(roof);
+  });
+  applyPalette(palCurrent, roofMat);
+
+  // 线框：把岛面那层细三角网画出来（参考帧最显眼的就是这层浅色细线）
+  const edges = new THREE.EdgesGeometry(geo, 20);
+  wire = new THREE.LineSegments(edges, wireMat);
+  wire.visible = state.wire;
+  group.add(wire);
+
+  // 水面：一个大的暗蓝盘子，边上一圈岸线
+  const water = new THREE.Mesh(
+    new THREE.CircleGeometry(9, 48).rotateX(-Math.PI / 2),
+    new THREE.MeshBasicMaterial({ color: 0x2f5b6b }),
+  );
+  water.position.y = 0.02;
+  group.add(water);
+
+  scene.add(group);
+
+  state.info = { ...isl.stats, tris, houses: houses.length, mode: state.mode, seed, shown: cells.length };
+  updateHud();
+  window.__triisland = {
+    ...state, island: isl, rebuild, nextPalette,
+    get palette() { return palCurrent.label || PAL_ORDER[palIndex]; },
+    get paletteStats() { return { label: palCurrent.label, saturation: meanSaturation(palCurrent) }; },
+    set: (k, v) => { state[k] = v; rebuild(); },
+  };
+  window.__worldStats = { kind: 'triisland', ...state.info };
+}
+
+function updateHud() {
+  const i = state.info;
+  if (!i) return;
+  hud.textContent =
+    `三角网格岛 · seed ${i.seed} · ${i.mode}\n` +
+    `顶点 ${i.verts}  三角形 ${i.tris}  每顶点 ${i.trisPerVert} 面\n` +
+    `最小角 中位 ${i.minAngleMedian}° / 最差 ${i.minAngleWorst}°\n` +
+    `面积变异系数 ${i.areaCV}   边界格 ${i.boundary}\n` +
+    `层数分布 ${JSON.stringify(i.levels)}\n` +
+    `顶面 ${i.tris} 三角  房屋 ${i.houses}  已生长 ${i.shown}/${i.tris === undefined ? '?' : i.tris}`;
+}
+
+/** 把一套调色板刷到材质上（过渡时每帧调用）。 */
+function applyPalette(pal, roofMat) {
+  wallMats.forEach((m, i) => m.color.set(pal.walls[i % pal.walls.length]));
+  if (roofMat) roofMat.color.set(pal.roof);
+  palCurrent = pal;
+}
+
+/** 切到下一套调色板：设置 from/to，然后由 frame() 推进 t。 */
+function nextPalette() {
+  palFrom = palCurrent;
+  palIndex = (palIndex + 1) % PAL_ORDER.length;
+  palTo = PALETTES[PAL_ORDER[palIndex]];
+  palT = 0;
+}
+
+/**
+ * 生长动画：从中心往外一格一格长（参考帧 1654401054828638214 就是这个过程）。
+ *
+ * 实现上偷了个懒：直接按 order 截断重建几何，而不是在 shader 里做裁剪。
+ * 276 格重建一次不到 1ms，60fps 完全够，不值得为此写一套 attribute 方案。
+ */
+let growing = 0;
+function grow() {
+  cancelAnimationFrame(growing);
+  state.reveal = 0.02;
+  const t0 = performance.now();
+  const tick = () => {
+    const t = Math.min(1, (performance.now() - t0) / 2400);
+    // ease-out：刚开始快、后面慢，像"逐渐填满"
+    state.reveal = 0.02 + 0.98 * (1 - (1 - t) ** 3);
+    rebuild();
+    if (t < 1) growing = requestAnimationFrame(tick);
+  };
+  growing = requestAnimationFrame(tick);
+}
+
+// ---- camera ----
+const cam = { yaw: 0.72, pitch: 0.52, dist: 15.0, target: new THREE.Vector3(0, 1.2, 0) };
+function updateCamera() {
+  const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+  camera.position.set(
+    Math.sin(cam.yaw) * cp * cam.dist + cam.target.x,
+    sp * cam.dist + cam.target.y,
+    Math.cos(cam.yaw) * cp * cam.dist + cam.target.z,
+  );
+  camera.lookAt(cam.target);
+}
+updateCamera();
+
+let drag = null;
+renderer.domElement.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY }; });
+addEventListener('pointerup', () => { drag = null; });
+addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  cam.yaw -= (e.clientX - drag.x) * 0.008;
+  cam.pitch = Math.max(0.12, Math.min(1.35, cam.pitch + (e.clientY - drag.y) * 0.006));
+  drag = { x: e.clientX, y: e.clientY };
+  updateCamera();
+});
+addEventListener('wheel', (e) => {
+  cam.dist = Math.max(5, Math.min(30, cam.dist + e.deltaY * 0.01));
+  updateCamera();
+}, { passive: true });
+
+addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  if (k === 'r') { state.seed = (state.seed * 7919 + 13) % 100000; rebuild(); }
+  if (k === 'w') { state.wire = !state.wire; if (wire) wire.visible = state.wire; }
+  if (k === 't') { state.mode = state.mode === 'island' ? 'tower' : 'island'; rebuild(); }
+  if (k === 'g') grow();
+  if (k === 'p') nextPalette();
+});
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+rebuild();
+
+let t0 = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - t0) / 1000);
+  t0 = now;
+  // 调色板过渡：1.2 秒走完（参考帧实测约 1.5 秒，这里稍快一点）
+  if (palT < 1) {
+    palT = Math.min(1, palT + dt / 1.2);
+    const pal = palT >= 1 ? palTo : mixPalette(palFrom, palTo, 0.5 - 0.5 * Math.cos(palT * Math.PI));
+    let roofMat = null;
+    group.traverse((o) => { if (o.material && o.material.userData.palRoof) roofMat = o.material; });
+    applyPalette(pal, roofMat);
+    if (palT >= 1) state.info && (state.info.palette = palTo.label);
+  }
+  // 极慢自转，方便看侧面
+  cam.yaw += dt * 0.06;
+  updateCamera();
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+console.log('[triisland] ready');
+</script>
+</body>
+</html>

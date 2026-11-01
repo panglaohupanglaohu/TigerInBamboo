@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "2ca87814e0d7117dae0a185222d2ded5ac04720a93e407d8c4b33ba1bff383e2",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.82
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.9,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0.05,
+        "navigation": 0.02,
+        "review": 0.92
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.63
+    }
+  },
+  "usage": {
+    "input_tokens": 873,
+    "output_tokens": 91,
+    "cost_usd": 0.000367,
+    "credits_remaining_usd": 4.94726
+  },
+  "elapsed_ms": 1474,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Latest Bookshop ion response visual",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

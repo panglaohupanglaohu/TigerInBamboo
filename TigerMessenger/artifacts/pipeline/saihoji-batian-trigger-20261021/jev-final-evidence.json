@@ -1,0 +1,34 @@
+{
+  "task": "Saihoji battle starts only when Batian fleet actually attacks it",
+  "observations": [
+    "Found old patrol proximity and campaign discovery signal raised whale and enabled independent suction beam. Replaced whale and phalanx discovery/firing eligibility with shared actual Batian target=moss, combat phase, flagship present within145 ground metres, actual flagship strike in current sortie. Bounded fire-log rollover falls back to actual shots minus escort shots.",
+    "Production saihojiGarden controlled browser scenario passed7 cases: near patrol+story signal blocked, bookshop attack blocked, transit blocked, escort-only strike blocked, flagship actual strike reveals whale lift0.9959, old command-mode pulse disabled, withdrawal returns whale lift0.00135 and releases lock. This uses controlled fleet inputs, not a complete game battle.",
+    "Pure shared gate CPU passed negative/positive phase/visibility/hemisphere and bounded-log-counter cases. Legacy retaliation callback cannot start another mission under Batian command. Existing transport/siege models retained.",
+    "Normal production game actual UI: idle gate=false flagship-idle; selecting moss and assembly gate=false not-attacking. Actual pincer at100.44m,9shots/3escortshots -> gate=true batian-attacking-saihoji. HUD shows moss responding. Later dock energy12 -> gate=false not-attacking. Error log empty. Screenshot saved normal-game-attack.jpg. No claim of balanced full war or all defensive visuals."
+  ],
+  "checks": [
+    {
+      "name": "Shared production trigger positive/negative CPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Actual garden module under controlled browser inputs",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Whole-game autonomous moss attack visual acceptance",
+      "required": false,
+      "passed": null
+    },
+    {
+      "name": "Normal entry actual launch moss, attack gate and end gate",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Preserve other edits and backups, no commit/publication/new models. JEV receives text only and does not verify images or gameplay."
+  ]
+}

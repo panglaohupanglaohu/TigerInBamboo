@@ -1,0 +1,30 @@
+{
+  "passed": 11,
+  "scope": "actual factory/controller deterministic simulation, not normal browser complete ride",
+  "snapshot": {
+    "revision": "right-bank-court-patrol-r2",
+    "state": "downhill-patrol",
+    "routeDistance": 144.3698096721808,
+    "routeLength": 200.2809990549113,
+    "direction": -1,
+    "speed": 1.249999987238799,
+    "travelled": 842.0351856023807,
+    "bridgePasses": 4,
+    "courtVisits": 4,
+    "meetings": 1,
+    "dialogue": -1,
+    "horseLocal": [
+      9.789420832316395,
+      1.592569285489062,
+      33.6141214215912
+    ],
+    "riderVisible": true,
+    "hoofSupport": null,
+    "horseAsset": "not-loaded-in-headless",
+    "horseRevision": "continuous-organic-horse-r2",
+    "riderAsset": "not-loaded-in-headless",
+    "riderRevision": "mounted-botanical-r1",
+    "horseOccupied": true,
+    "routeSource": "current installed island route and raycast bridge support"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "passed": 7,
+  "checks": [
+    "two-dimensional mountain route has real hairpins and bounded width",
+    "single creek crossing and meaningful elder and rail clearance",
+    "actual radial grade is below16percent and road supplies physics",
+    "road endpoints reach outer meadow and existing gate",
+    "castellated shoulder remains horizontal and original four layers remain",
+    "route raycast support follows each physical road stage",
+    "trees and horses keep deliberate grazing and view hierarchy"
+  ],
+  "route": {
+    "design": "continuous winding approach, cross-stream bridge, two six-metre hairpins and final castle turn",
+    "length": 156.4596533389585,
+    "width": 3.2,
+    "hairpinCenterRadius": 6,
+    "finalTurnRadius": 7.6,
+    "minimumDesignedInnerRadius": 4,
+    "bridgeCenter": [
+      8,
+      32
+    ],
+    "bridgeCrossings": 1,
+    "keys": [
+      [
+        0,
+        1.75
+      ],
+      [
+        29.847711798008216,
+        4
+      ],
+      [
+        37.8477117980082,
+        4.4
+      ],
+      [
+        57.26108089516526,
+        5.6
+      ],
+      [
+        76.10905490364152,
+        9.5
+      ],
+      [
+        118.11728784519036,
+        11.3
+      ],
+      [
+        136.96526185366682,
+        11.8
+      ],
+      [
+        156.4596533389585,
+        10.946204291414205
+      ]
+    ],
+    "marks": {
+      "bridgeFront": 29.847711798008216,
+      "bridgeBack": 37.8477117980082,
+      "westStart": 57.26108089516526,
+      "westEnd": 76.10905490364152,
+      "eastStart": 118.11728784519036,
+      "eastEnd": 136.96526185366682,
+      "gate": 156.4596533389585
+    },
+    "actualRoadMaxRadialGrade": 0.151659509792735,
+    "surface": "real graded ground shoulders plus raycast-supported winding road mesh"
+  }
+}

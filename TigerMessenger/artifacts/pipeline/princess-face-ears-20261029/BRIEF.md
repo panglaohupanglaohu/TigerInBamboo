@@ -1,0 +1,2 @@
+# V14 face and ear correction
+User approved close reference compared actual front. Priority: taper cheek/jaw into oval, avoid flat wide lower face, remove pinched dark Gaussian nose. Give ears attached helix/concha/antihelix forms, visibly reveal ears by tucking side hair behind. Preserve all earlier assets, garment and pivot contract. Orthographic head/front and head/profile actual renders required. Not target-match acceptance or runtime promotion.

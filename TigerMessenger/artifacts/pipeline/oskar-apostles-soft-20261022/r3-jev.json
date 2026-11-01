@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "edce6625ec9607211714ef99588959254eacd784217b863d171da686e9d05441",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.82
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.59,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.06,
+        "lighting": 0,
+        "navigation": 0.67,
+        "review": 0.27
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.74
+    }
+  },
+  "usage": {
+    "input_tokens": 793,
+    "output_tokens": 91,
+    "cost_usd": 0.000334,
+    "credits_remaining_usd": 4.935417
+  },
+  "elapsed_ms": 2215,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "latest GPU same camera final",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "full game rail passage",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

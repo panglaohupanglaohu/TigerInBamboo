@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "e17a6469077be31616f547ea3703e1c6e0ce7aed99eccb4c9342fb347f0cce3b",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.97
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.88,
+      "probabilities": {
+        "navigation": 0.01,
+        "dressing": 0,
+        "geometry": 0.91,
+        "review": 0.08,
+        "lighting": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.95
+    }
+  },
+  "usage": {
+    "input_tokens": 846,
+    "output_tokens": 91,
+    "cost_usd": 0.000356,
+    "credits_remaining_usd": 4.963788
+  },
+  "elapsed_ms": 1758,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "terrain visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "new city and rail gameplay",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

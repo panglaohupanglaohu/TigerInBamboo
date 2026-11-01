@@ -1,0 +1,201 @@
+Front strata baseline changed citadel-oskar-grid-mountain-surface 155
+Old-city coastal source changed; continuing with slope update { hash: 2028752367, expected: 3381302665 }
+Old-city coastal source changed; continuing with slope update { hash: 2125320883, expected: 2915253182 }
+[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface
+[citadel] applyCitadelHarborSeabed 跳过: Harbor seabed requires the original planet and city
+[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate
+[ELDER] 已放到指定落点 r=160.6
+[CLOUD-RIDGE] kept= 11 dropped= 12 rings= {"1":6,"2":2,"0.25":4,"center":1} maxH= 42.75 maxScore= 1.13 threshold= 0.35
+Citadel boarding installation failed [TypeError: fetch failed] {
+  [cause]: Error: not implemented... yet...
+      at makeNetworkError (node:internal/deps/undici/undici:11806:35)
+      at schemeFetch (node:internal/deps/undici/undici:13359:34)
+      at mainFetch (node:internal/deps/undici/undici:13207:30)
+      at fetching (node:internal/deps/undici/undici:13176:7)
+      at fetch (node:internal/deps/undici/undici:13040:20)
+      at fetch (node:internal/deps/undici/undici:17708:10)
+      at fetch (node:internal/bootstrap/web/exposed-window-or-worker:83:12)
+      at installFrontBoarding (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/installFrontBoarding.js:11:26)
+      at holdAtReleasedPort (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:25:2)
+      at dockFrontHarborPatrol (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:33:47)
+}
+pixel [ 0, 0 ] [
+  {
+    name: 'v7-quay-course-2-0',
+    parent: 'crystal-v7-shores',
+    d: 0.9505434950606891,
+    point: [ 18.14423471384957, 33.246826687932696, -18.139719075087225 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 9.266909413619954,
+    point: [ 3.151578884275949, 30.052467840092504, -11.684944788353956 ]
+  },
+  {
+    name: 'world-tree-trunk',
+    parent: 'swamp-ancient-world-tree',
+    d: 13.443089970792567,
+    point: [ -4.37719490814672, 28.448375446417117, -8.44358875121327 ]
+  }
+]
+pixel [ -0.5, 0 ] [
+  {
+    name: 'v7-quay-course-2-0',
+    parent: 'crystal-v7-shores',
+    d: 1.417950446248471,
+    point: [ 18.371261845964995, 33.21726538220753, -16.494928533860044 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 6.402005919534042,
+    point: [ 13.145896186815776, 31.83001176384778, -8.12030514115256 ]
+  },
+  {
+    name: 'swamp-sinkhole-wall',
+    parent: 'moebius-swamp-zone',
+    d: 25.07722688135713,
+    point: [ -6.433512351870604, 26.631982168908507, 23.259350075197677 ]
+  }
+]
+pixel [ 0.5, 0 ] [
+  {
+    name: 'v7-quay-course-2-0',
+    parent: 'crystal-v7-shores',
+    d: 0.9697376428665929,
+    point: [ 17.988970943063663, 33.26704375624553, -19.26459300050982 ]
+  },
+  {
+    name: 'greg-understory-pendant',
+    parent: 'greg-coral-understory',
+    d: 14.69854526258578,
+    point: [ -8.469400394888083, 28.384331376939087, -24.74495253260807 ]
+  },
+  {
+    name: 'swamp-sinkhole-wall',
+    parent: 'moebius-swamp-zone',
+    d: 14.871333222440954,
+    point: [ -8.802400035585876, 28.322878559334754, -24.813927214827647 ]
+  }
+]
+pixel [ 0, 0.5 ] [
+  {
+    name: 'v7-quay-coping-2-0',
+    parent: 'crystal-v7-shores',
+    d: 0.8008182580993509,
+    point: [ 18.386358257390015, 33.752083951206316, -18.2608280818672 ]
+  },
+  {
+    name: 'world-tree-trunk',
+    parent: 'swamp-ancient-world-tree',
+    d: 13.57357339214485,
+    point: [ -5.083620575350537, 35.987402726897756, -8.425354609842877 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 13.827445601668263,
+    point: [ -5.550111580713477, 36.03183208537354, -8.229864024151105 ]
+  }
+]
+pixel [ 0, -0.5 ] [
+  {
+    name: 'v7-quay-course-2-0',
+    parent: 'crystal-v7-shores',
+    d: 1.0780110799146396,
+    point: [ 18.104344929754944, 32.627625685399835, -18.099839019330076 ]
+  },
+  {
+    name: 'greg-bank-walking-slab-batch',
+    parent: 'greg-swamp-three-bank-path',
+    d: 3.079618584823781,
+    point: [ 14.848480694346932, 30.79999923706049, -16.65593456932098 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 7.344213402758097,
+    point: [ 7.911585367883333, 26.906085839158266, -13.579573484543467 ]
+  }
+]
+pixel [ -0.5, 0.5 ] [
+  {
+    name: 'v7-quay-coping-2-0',
+    parent: 'crystal-v7-shores',
+    d: 1.1594774152494833,
+    point: [ 18.57318923004371, 33.82509478205566, -16.95870450440475 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 7.906124014262116,
+    point: [ 11.09805498892024, 35.06540486385785, -5.793895490989531 ]
+  },
+  {
+    name: 'v7-quay-course-2-1',
+    parent: 'crystal-v7-shores',
+    d: 17.023106891651604,
+    point: [ 0.9966409186346112, 36.74147987571615, 9.293506985305477 ]
+  }
+]
+pixel [ 0.5, 0.5 ] [
+  {
+    name: 'v7-quay-coping-2-0',
+    parent: 'crystal-v7-shores',
+    d: 0.8167244636069847,
+    point: [ 18.254755810613318, 33.700655894024294, -19.17803086531372 ]
+  },
+  {
+    name: 'v7-arcade-pier.009',
+    parent: 'crystal-v7-shores',
+    d: 16.20493813675522,
+    point: [ -11.950017681597998, 35.37227360379944, -24.84070097034718 ]
+  },
+  {
+    name: 'v7-quay-course-2-1',
+    parent: 'crystal-v7-shores',
+    d: 17.61477037808069,
+    point: [ -14.717308571609422, 35.52542331906005, -25.35950159630916 ]
+  }
+]
+pixel [ -0.5, -0.5 ] [
+  {
+    name: 'v7-quay-course-2-0',
+    parent: 'crystal-v7-shores',
+    d: 1.6218365131586308,
+    point: [ 18.346688996337065, 32.43551696138593, -16.259509503965944 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 5.583716762140402,
+    point: [ 14.655135677728282, 29.5617201017821, -9.864221696940604 ]
+  },
+  {
+    name: 'swamp-underground-waterline',
+    parent: 'moebius-swamp-zone',
+    d: 11.87260552344449,
+    point: [ 8.79535024299173, 24.999999999999943, 0.28733541416671216 ]
+  }
+]
+pixel [ 0.5, -0.5 ] [
+  {
+    name: 'v7-quay-course-2-0',
+    parent: 'crystal-v7-shores',
+    d: 1.0710374911972453,
+    point: [ 17.94430439609276, 32.754491521836144, -19.315166144548723 ]
+  },
+  {
+    name: 'greg-bank-walking-slab-batch',
+    parent: 'greg-swamp-three-bank-path',
+    d: 3.6685420648043996,
+    point: [ 13.303495004857297, 30.67499923706049, -20.37663685607101 ]
+  },
+  {
+    name: 'greg-bank-walking-slab-batch',
+    parent: 'greg-swamp-three-bank-path',
+    d: 3.824680211638612,
+    point: [ 13.024532116583316, 30.54999923706049, -20.440442737877685 ]
+  }
+]

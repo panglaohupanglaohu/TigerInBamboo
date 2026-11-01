@@ -1,0 +1,26 @@
+{
+ "target": "DUKE coastal steam freight ship concept sheet 2026-10-12 (side, deck plan, 3/4 bow, cutaway, crane detail)",
+ "candidate": "duke-r7",
+ "version": "duke-r7",
+ "changes": "lower hull: deck 3.0, keel -2.6, red below -0.5; deckhouse 6.8x2.5x20; masts/hatches re-placed",
+ "observations": [
+  "side silhouette length/height ratio close to target",
+  "funnel white/red/black with copper dome cluster around it"
+ ],
+ "checks": [
+  {
+   "name": "studio sheet render side/top/3-4",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "in-game render at wharf",
+   "required": true,
+   "passed": null
+  }
+ ],
+ "constraints": [
+  "additive; robots/rails/story untouched",
+  "no keys or images sent"
+ ]
+}

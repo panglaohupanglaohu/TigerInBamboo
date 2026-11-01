@@ -1,0 +1,87 @@
+{
+  "game": {
+    "report": {
+      "revision": "morris-townscaper-lake-20261031",
+      "radius": 67.21111019268565,
+      "areaReductionRatio": 0.6666666666666666,
+      "castlePatrol": {
+        "active": true,
+        "revision": "castle-39-68.8",
+        "courtDistance": 68.78279146597849
+      },
+      "castleBirds": {
+        "sit": 19,
+        "takeoff": 0,
+        "fly": 6,
+        "land": 0,
+        "perches": 23
+      },
+      "castleBirdRoot": "morris-townscaper-gulls",
+      "site": {
+        "from": [
+          -0.43399402459481606,
+          0.8842394753616905,
+          0.17253908782671956
+        ],
+        "to": [
+          -0.6578431354423494,
+          0.7091135627316687,
+          0.25377226858224394
+        ],
+        "awayFrom": [
+          0.09982301071839211,
+          0.994692202110437,
+          -0.02495575267959803
+        ],
+        "chordBefore": 92.76753143219808,
+        "chordAfter": 111.92405455906393,
+        "requiredClearance": 111.92405455906393
+      }
+    },
+    "moonCentreChord": 137.34870758497811,
+    "moonProtected": true,
+    "patrol": {
+      "revision": "castle-court-patrol-r3",
+      "state": "castle-stop",
+      "routeDistance": 0,
+      "routeLength": 545.6053764030594,
+      "routeRevision": "castle-39-68.8",
+      "direction": 1,
+      "speed": 0,
+      "travelled": 0,
+      "bridgePasses": 0,
+      "courtVisits": 0,
+      "meetings": 0,
+      "dialogue": -1,
+      "horseLocal": [
+        -14.680148012270068,
+        2.4229391668825153,
+        63.372244352582904
+      ],
+      "riderVisible": true,
+      "hoofSupport": {
+        "clearanceBefore": -2.3544019355935006,
+        "rootCorrection": -0.12,
+        "method": "lowest skinned hoof to actual support; no per-leg IK"
+      },
+      "horseAsset": "loaded",
+      "horseRevision": "tiger-workflow-horse-v13",
+      "riderAsset": "loaded",
+      "riderRevision": "reference-rebuilt-v17",
+      "horseOccupied": true,
+      "routeSource": "current installed island route and raycast bridge support"
+    },
+    "castleCells": 38,
+    "flockRoots": 3,
+    "flockBirds": 33,
+    "menus": {
+      "collapse": true,
+      "palette": true,
+      "tools": true,
+      "topright": true,
+      "learn": true
+    }
+  },
+  "errors": [],
+  "renderer": "Chrome headless SwiftShader full-page boot"
+}

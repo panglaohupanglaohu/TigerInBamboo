@@ -1,0 +1,366 @@
+{
+  "passed": true,
+  "cases": 18,
+  "results": [
+    {
+      "seed": 0,
+      "radius": 8.16,
+      "height": 28,
+      "vertices": 4810,
+      "triangles": 9616,
+      "baseCount": 382,
+      "shelfCount": 124,
+      "terraceAreas": [
+        9.015294882856864,
+        5.918719086914052,
+        4.7349752176513675
+      ],
+      "maximumDisplacement": 0.2856005803360998,
+      "minAreaRatio": 0.2196648203301958,
+      "minNormalAgreement": 0.20244185513939733,
+      "volumeRatio": 0.9973462415941609,
+      "roughnessRatio": 0.7316101952775849,
+      "roughEdges": 12878
+    },
+    {
+      "seed": 1,
+      "radius": 10.88,
+      "height": 41,
+      "vertices": 4828,
+      "triangles": 9652,
+      "baseCount": 389,
+      "shelfCount": 117,
+      "terraceAreas": [
+        8.134689503382106,
+        15.993679472912255,
+        7.302806749099975
+      ],
+      "maximumDisplacement": 0.38080093720480895,
+      "minAreaRatio": 0.20058307635407122,
+      "minNormalAgreement": 0.21152587544674398,
+      "volumeRatio": 0.9975971078969512,
+      "roughnessRatio": 0.9044441064866219,
+      "roughEdges": 12492
+    },
+    {
+      "seed": 2,
+      "radius": 13.600000000000001,
+      "height": 54,
+      "vertices": 4980,
+      "triangles": 9952,
+      "baseCount": 370,
+      "shelfCount": 115,
+      "terraceAreas": [
+        6.576330924723036,
+        36.81955554495923,
+        15.971140175096664
+      ],
+      "maximumDisplacement": 0.4760013951074416,
+      "minAreaRatio": 0.20132819401017832,
+      "minNormalAgreement": 0.2031398294958703,
+      "volumeRatio": 0.9976287756227028,
+      "roughnessRatio": 0.8215594177330584,
+      "roughEdges": 13399
+    },
+    {
+      "seed": 3,
+      "radius": 8.16,
+      "height": 39,
+      "vertices": 4804,
+      "triangles": 9600,
+      "baseCount": 387,
+      "shelfCount": 131,
+      "terraceAreas": [
+        8.15677693287168,
+        7.0909240715232755,
+        6.684110235172454
+      ],
+      "maximumDisplacement": 0.28560122315840114,
+      "minAreaRatio": 0.27388056216837153,
+      "minNormalAgreement": 0.20184803931271425,
+      "volumeRatio": 0.9975955788332966,
+      "roughnessRatio": 0.8395384527802396,
+      "roughEdges": 12549
+    },
+    {
+      "seed": 4,
+      "radius": 10.88,
+      "height": 52,
+      "vertices": 5054,
+      "triangles": 10104,
+      "baseCount": 373,
+      "shelfCount": 134,
+      "terraceAreas": [
+        7.683716024658025,
+        20.52660827871575,
+        10.529131174903611
+      ],
+      "maximumDisplacement": 0.38080162722419475,
+      "minAreaRatio": 0.21797152573435152,
+      "minNormalAgreement": 0.20206991274699568,
+      "volumeRatio": 0.9993476129076763,
+      "roughnessRatio": 0.8149288459767763,
+      "roughEdges": 13431
+    },
+    {
+      "seed": 5,
+      "radius": 13.600000000000001,
+      "height": 37,
+      "vertices": 4732,
+      "triangles": 9460,
+      "baseCount": 267,
+      "shelfCount": 154,
+      "terraceAreas": [
+        16.60864780797749,
+        34.95702584695588,
+        18.435699503319213
+      ],
+      "maximumDisplacement": 0.47600075098130384,
+      "minAreaRatio": 0.2016878411628183,
+      "minNormalAgreement": 0.2118873483352324,
+      "volumeRatio": 0.99886696120868,
+      "roughnessRatio": 0.9337764694984279,
+      "roughEdges": 12206
+    },
+    {
+      "seed": 6,
+      "radius": 8.16,
+      "height": 50,
+      "vertices": 4838,
+      "triangles": 9672,
+      "baseCount": 262,
+      "shelfCount": 91,
+      "terraceAreas": [
+        1.315262506555456,
+        8.519040959887478,
+        6.734731557904183
+      ],
+      "maximumDisplacement": 0.2856016111474412,
+      "minAreaRatio": 0.3764374040998987,
+      "minNormalAgreement": 0.20214177010623863,
+      "volumeRatio": 0.9978984357143703,
+      "roughnessRatio": 0.7711113150621481,
+      "roughEdges": 12699
+    },
+    {
+      "seed": 10,
+      "radius": 8.16,
+      "height": 28,
+      "vertices": 5046,
+      "triangles": 10088,
+      "baseCount": 372,
+      "shelfCount": 136,
+      "terraceAreas": [
+        4.633498320468215,
+        16.228877480355834,
+        5.326848050916528
+      ],
+      "maximumDisplacement": 0.28560055946578966,
+      "minAreaRatio": 0.2998661717720971,
+      "minNormalAgreement": 0.2029202647166619,
+      "volumeRatio": 0.9979610648537495,
+      "roughnessRatio": 0.8748436237574376,
+      "roughEdges": 13187
+    },
+    {
+      "seed": 1,
+      "radius": 12,
+      "height": 48,
+      "vertices": 4828,
+      "triangles": 9652,
+      "baseCount": 387,
+      "shelfCount": 117,
+      "terraceAreas": [
+        9.895634239742407,
+        19.45599951171866,
+        8.88371629925167
+      ],
+      "maximumDisplacement": 0.4200016280330321,
+      "minAreaRatio": 0.20172648523360234,
+      "minNormalAgreement": 0.20305948491572462,
+      "volumeRatio": 0.9975841851822671,
+      "roughnessRatio": 0.8808385380039594,
+      "roughEdges": 12522
+    },
+    {
+      "seed": 2,
+      "radius": 12,
+      "height": 48,
+      "vertices": 4980,
+      "triangles": 9952,
+      "baseCount": 370,
+      "shelfCount": 116,
+      "terraceAreas": [
+        5.120000731007826,
+        28.665725741087556,
+        12.434289054870739
+      ],
+      "maximumDisplacement": 0.4200014338999302,
+      "minAreaRatio": 0.2016597363408134,
+      "minNormalAgreement": 0.20048346353175864,
+      "volumeRatio": 0.9976358794551985,
+      "roughnessRatio": 0.8222226979938898,
+      "roughEdges": 13401
+    },
+    {
+      "seed": 3,
+      "radius": 12,
+      "height": 48,
+      "vertices": 4804,
+      "triangles": 9600,
+      "baseCount": 386,
+      "shelfCount": 134,
+      "terraceAreas": [
+        17.127151933515705,
+        16.846651667121392,
+        14.642830161604568
+      ],
+      "maximumDisplacement": 0.42000126093358403,
+      "minAreaRatio": 0.20123171032721854,
+      "minNormalAgreement": 0.22552423112388814,
+      "volumeRatio": 0.9976055902121456,
+      "roughnessRatio": 0.8330203953768929,
+      "roughEdges": 12503
+    },
+    {
+      "seed": 7,
+      "radius": 12,
+      "height": 48,
+      "vertices": 4674,
+      "triangles": 9344,
+      "baseCount": 381,
+      "shelfCount": 90,
+      "terraceAreas": [
+        10.330676261947076,
+        8.265253145312869,
+        8.060927371614412
+      ],
+      "maximumDisplacement": 0.42000161252311136,
+      "minAreaRatio": 0.29986590996183726,
+      "minNormalAgreement": 0.2125539601120584,
+      "volumeRatio": 0.9976903680503061,
+      "roughnessRatio": 0.8016063909940333,
+      "roughEdges": 12471
+    },
+    {
+      "seed": 11,
+      "radius": 12,
+      "height": 48,
+      "vertices": 5146,
+      "triangles": 10288,
+      "baseCount": 385,
+      "shelfCount": 130,
+      "terraceAreas": [
+        13.529566782107736,
+        17.217134523586168,
+        13.355400475000364
+      ],
+      "maximumDisplacement": 0.42000141663352963,
+      "minAreaRatio": 0.20016438351227417,
+      "minNormalAgreement": 0.20569986765241358,
+      "volumeRatio": 0.9976413496578518,
+      "roughnessRatio": 0.855452406209569,
+      "roughEdges": 13522
+    },
+    {
+      "seed": 23,
+      "radius": 12,
+      "height": 48,
+      "vertices": 4716,
+      "triangles": 9432,
+      "baseCount": 367,
+      "shelfCount": 110,
+      "terraceAreas": [
+        16.676574621291394,
+        14.872587114251019,
+        11.520001392364534
+      ],
+      "maximumDisplacement": 0.42000137399393406,
+      "minAreaRatio": 0.20159344114929165,
+      "minNormalAgreement": 0.20188295896842867,
+      "volumeRatio": 0.9974696054172126,
+      "roughnessRatio": 0.9507884751636799,
+      "roughEdges": 12554
+    },
+    {
+      "seed": 41,
+      "radius": 12,
+      "height": 48,
+      "vertices": 4792,
+      "triangles": 9584,
+      "baseCount": 255,
+      "shelfCount": 134,
+      "terraceAreas": [
+        7.402740659625522,
+        32.05120211486809,
+        14.08000089917839
+      ],
+      "maximumDisplacement": 0.4200014732884936,
+      "minAreaRatio": 0.29986552861342675,
+      "minNormalAgreement": 0.2218415289138421,
+      "volumeRatio": 0.997716971756561,
+      "roughnessRatio": 0.7928312400570446,
+      "roughEdges": 12607
+    },
+    {
+      "seed": 97,
+      "radius": 12,
+      "height": 48,
+      "vertices": 4876,
+      "triangles": 9744,
+      "baseCount": 382,
+      "shelfCount": 131,
+      "terraceAreas": [
+        7.198413455415562,
+        30.10559905471797,
+        14.049688157916535
+      ],
+      "maximumDisplacement": 0.4200016644061812,
+      "minAreaRatio": 0.20056942853508583,
+      "minNormalAgreement": 0.22336194820049537,
+      "volumeRatio": 0.9971023162643436,
+      "roughnessRatio": 0.7865977197049767,
+      "roughEdges": 13062
+    },
+    {
+      "seed": 19,
+      "radius": 6,
+      "height": 26,
+      "vertices": 4922,
+      "triangles": 9840,
+      "baseCount": 379,
+      "shelfCount": 126,
+      "terraceAreas": [
+        2.584164175025336,
+        3.941094011410371,
+        3.747082812185834
+      ],
+      "maximumDisplacement": 0.2100008398567558,
+      "minAreaRatio": 0.21864177332124152,
+      "minNormalAgreement": 0.2002016119508538,
+      "volumeRatio": 0.9972462118551543,
+      "roughnessRatio": 0.8563211076477857,
+      "roughEdges": 12842
+    },
+    {
+      "seed": 53,
+      "radius": 17,
+      "height": 82,
+      "vertices": 4834,
+      "triangles": 9664,
+      "baseCount": 381,
+      "shelfCount": 160,
+      "terraceAreas": [
+        22.70056397259623,
+        79.57836619342714,
+        25.003899237889073
+      ],
+      "maximumDisplacement": 0.595002984200433,
+      "minAreaRatio": 0.2185622737113022,
+      "minNormalAgreement": 0.2077234677225831,
+      "volumeRatio": 0.9978953994153641,
+      "roughnessRatio": 0.7433011958374666,
+      "roughEdges": 13089
+    }
+  ]
+}

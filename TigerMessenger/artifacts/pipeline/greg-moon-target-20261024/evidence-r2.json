@@ -1,0 +1,25 @@
+{
+  "iteration": "greg-moon-target-r2",
+  "observations": [
+    "User changed advisor to Greg team; wants a target image for review before implementation.",
+    "Actual screenshot has small ringed pool centrally, floating crescent behind-left, original large curved pine on right, original thin forest around; four additions currently too round-lobed and merge with forest.",
+    "Target must preserve actual scene footprint and original objects; only redesign the four additional pines and their visual composition.",
+    "Greg public-study rules: readable large color masses, fine structural lines, distance hierarchy, moving viewpoints; no claim of reproducing private engine.",
+    "Image will be an AI concept proposal, not runtime proof.",
+    "Root viewed generated v1 then v2; four numbered additions have broad flat needle foliage and curved trunks. Original large right pine remains separate.",
+    "V1 pine1 crossed crescent; V2 moves only pine1 left, visibly clear crescent inner curve and tips.",
+    "Small pool/ring/deep patch and general old woodland retained conceptually. AI illustration is not geometrically exact survey; pine1 shifted from source root neighbourhood and requires future real terrain/path validation before implementation."
+  ],
+  "checks": [
+    {
+      "name": "current screenshot and lake source read",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "new target visually reviewed",
+      "required": true,
+      "passed": true
+    }
+  ]
+}

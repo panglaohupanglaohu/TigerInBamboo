@@ -1,0 +1,55 @@
+{
+  "status": "accepted-candidate-integration-formal-verification-by-parent",
+  "source_hashes": {
+    "morrisLandscape.js": "1953546003d9d0fe45e5552f3d4dbd5595c8380afedc3ade1a3cd9517b9388a8",
+    "morrisLandscapeDetails.js": "cbce0d65bf23472561f6c06e04d0ec07d1a330b4a216c7424b177a8a13c2ebcd",
+    "morrisMountainRoute.js": "44c7f22c3496dffd69aa0d2e7430a317037cc4a8278394c641246a855c83aefe",
+    "morrisCastle.js": "691bfa136d62025a0416e82c0c8c704bd6c9167945c8791bcc9c009b3000a35f"
+  },
+  "changed": [
+    "morrisLandscape.js",
+    "morrisLandscapeDetails.js",
+    "morrisMountainRoute.js"
+  ],
+  "castle": "latest source preserved",
+  "target": "artifacts/pipeline/morris-actual-target-20261027/target-v1.png",
+  "target_actually_viewed": true,
+  "geometry_checks": "geometry-r3-checks.json",
+  "preserved": [
+    "bridge8,32",
+    "court30,12",
+    "castle14,5",
+    "all original postbridge route",
+    "latest r14 real fractures and canFace protections"
+  ],
+  "changes": [
+    "new curved outer meadow approach from(-43,56)",
+    "broader rear-left summit kernel and offset descending shoulders",
+    "real exposed rock slope region widened with mountain",
+    "expansion inferred from actual passed coastline, no root scaling",
+    "continued downstream creek from old55,16 to actual enlarged low coast78,6",
+    "new creek follows rail-safe southeastern meadow to edge(angle)*1.025 mouth",
+    "new lowland hummocks and shallow coastal coves replace flat outer skirt",
+    "three actual connected5to7m foreground stone/grass shoulders replace skirt",
+    "irregular exposed-rock triangles with lower palette contrast"
+  ],
+  "visual_acceptance": false,
+  "normal_navigation_acceptance": false,
+  "pending": [
+    "parent r56 formal GPU verification",
+    "full expanded-route riding and current train/world envelopes"
+  ],
+  "envelope": "envelope-r2-final-checks.json",
+  "measurements": "outer-landform-r2-measurements.json",
+  "r54_actual_view": "Viewed actual bare current island. Low outer hummocks still read as broad skirt, rejected as target match.",
+  "rock_coverage": "rock-coverage-checks.json",
+  "r55_actual_view": "Actually viewed bare GPU: continuous height shoulders present, but local-Y slope classification mistook sphere curvature for cliff, carpeting grass crowns with tiles. Rejected; r3 uses real radial slopes and shared continuous faces.",
+  "current_bare_view": "artifacts/pipeline/morris-double-area-20261027/component-r56-bare.png",
+  "remaining_visual_gaps": [
+    "foreground still broad quiet grass areas relative to reference dense layered planting and stone edges",
+    "three foreground spur crowns visible but terrace silhouettes simpler than target",
+    "castle silhouette preserved but material/vegetation composition remains game-detail approximation"
+  ],
+  "candidate_integration_accepted": true,
+  "acceptance_scope": "current bare geometry accepted as integration candidate; not target artistic match"
+}

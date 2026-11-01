@@ -1,0 +1,39 @@
+{
+  "task": "Oskar coastal target concept triage 2026-10-12",
+  "target": "Review three generated concept images against saved runtime references and current source; not implementation acceptance.",
+  "visual_observations": {
+    "source": "Oskar method advisor actually viewed all generated tool images. JEV receives only these text observations.",
+    "completed": [
+      "Twelve Apostles broad staggered connected grass terraces and blue-grey cliffs, visible elevated railway and ocean channels; distant original city towers retained.",
+      "Old harbor preserves left old town pale tower, small galley red cream sail, two broadleaf trees and diagonal supported staircase; readable stylized material blocks.",
+      "Navona image explicitly says reintroduction proposal, not current scene; two fountain dry/flood views match retired source identity."
+    ],
+    "remaining": [
+      "Twelve Apostles railroad-to-rock intersections and exact two-bank topology not proven by image; pale cliff sunfaces warmer than blue-grey material target.",
+      "Old harbor target enhances shore and facade detail beyond older runtime snapshot; current full-game GPU comparison unavailable.",
+      "Navona reintroduction is optional design requiring user decision; source currently hides old basin, and bridge clearance/site hydraulics are not verified."
+    ]
+  },
+  "checks": [
+    {
+      "name": "all three artifacts exist and visually inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current production source integration and GPU validation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not call generated art current screenshots or deployed geometry",
+    "Do not silently restore retired Navona",
+    "No production edits permitted in this batch"
+  ],
+  "evidence_revision": {
+    "twelve-apostles-target-v1.png": "9c83cdc93bd19cf42779e6e85918f413038945fcc874c1f828a0a60a90b3e2fc",
+    "old-harbor-target-v1.png": "2672591e9bb5944ab7de38290475236538ad363663c05802c6dfba0b1978f16d",
+    "navona-reintroduction-proposal-v1.png": "54e02a35543513327665d01b560eca45f8e5c902ee68084151c4c7c6dd8423be"
+  }
+}

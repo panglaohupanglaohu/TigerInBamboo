@@ -1,0 +1,31 @@
+{
+  "task": "Morris r7 wide benches and normal r64",
+  "observations": [
+    "Actual component overview and bare viewed: lower staggered rear mountain benches, still large smooth front meadow and unrefined cliffs",
+    "Formal normal entry r64 loaded actual r7 island and254 railway guard samples; princessV17 horseV13 both loaded visible moving travelled16.6m",
+    "Court-view button attempts timed out, current audit still princess view; no court visit evidence this round"
+  ],
+  "checks": [
+    {
+      "name": "latest numerical route grades support finite",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "deterministic patrol and E resume",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "actual normal current GLB visible moving",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal complete bridge and court route",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraint": "Compact textual facts only; source/images not transmitted; no FPS or acceptance inferred"
+}

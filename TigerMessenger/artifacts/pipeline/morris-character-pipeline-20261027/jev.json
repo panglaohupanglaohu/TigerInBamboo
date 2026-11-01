@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "8c45c3c807cfc8ea2dcd721b77a117f0f9a2b97732ac1e72e4d2511a7e9e114e",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.93
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.56,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.65,
+        "lighting": 0,
+        "navigation": 0.01,
+        "review": 0.34
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.59
+    }
+  },
+  "usage": {
+    "input_tokens": 731,
+    "output_tokens": 91,
+    "cost_usd": 0.000308,
+    "credits_remaining_usd": 4.901054
+  },
+  "elapsed_ms": 1827,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "game mounted silhouette and reins alignment",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "game horse gait and hoof contact",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,237 @@
+{
+  "method": "initial entrance placement only; real KeyW 12 seconds normal production physics",
+  "completed": true,
+  "points": [
+    {
+      "at": "2026-10-11T06:55:51.925Z",
+      "inner": [
+        36.95957431272808,
+        40.991660624225574,
+        20.19110747060995
+      ],
+      "onGround": true,
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 0,
+        "allowedNetworkDrops": 0,
+        "rescues": 0,
+        "lastBlock": null,
+        "active": true,
+        "refR": 145.6408701965115
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": true,
+        "steeredSteps": 1068
+      }
+    },
+    {
+      "at": "2026-10-11T06:55:54.106Z",
+      "inner": [
+        25.88266406855739,
+        39.99999999999994,
+        31.38271370259511
+      ],
+      "onGround": true,
+      "velocity": [
+        -2.589978423356058,
+        0.6032197866743891,
+        3.0313276705637513
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 0,
+        "allowedNetworkDrops": 36,
+        "rescues": 0,
+        "lastBlock": null,
+        "active": true,
+        "refR": 145.62684351381122
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": true,
+        "steeredSteps": 1068
+      }
+    },
+    {
+      "at": "2026-10-11T06:55:56.258Z",
+      "inner": [
+        8.817466531332443,
+        40,
+        39.88314772697538
+      ],
+      "onGround": true,
+      "velocity": [
+        -3.037142158228458,
+        -1.9022837337255813,
+        6.19836033505842
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 0,
+        "allowedNetworkDrops": 36,
+        "rescues": 0,
+        "lastBlock": null,
+        "active": true,
+        "refR": 145.63892087787056
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": true,
+        "steeredSteps": 1068
+      }
+    },
+    {
+      "at": "2026-10-11T06:55:58.404Z",
+      "inner": [
+        -11.596706259482048,
+        40,
+        39.20366642863261
+      ],
+      "onGround": true,
+      "velocity": [
+        -0.6560872318800193,
+        -4.481017796185563,
+        5.493048312641335
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 0,
+        "allowedNetworkDrops": 36,
+        "rescues": 0,
+        "lastBlock": null,
+        "active": true,
+        "refR": 145.641544963032
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": true,
+        "steeredSteps": 1068
+      }
+    },
+    {
+      "at": "2026-10-11T06:56:00.556Z",
+      "inner": [
+        -28.6184980509791,
+        39.99999999999994,
+        29.216465850918166
+      ],
+      "onGround": true,
+      "velocity": [
+        1.7851291421387083,
+        -5.915074016695929,
+        3.538243633492196
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 0,
+        "allowedNetworkDrops": 36,
+        "rescues": 0,
+        "lastBlock": null,
+        "active": true,
+        "refR": 145.64265231530948
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": true,
+        "steeredSteps": 1068
+      }
+    },
+    {
+      "at": "2026-10-11T06:56:02.725Z",
+      "inner": [
+        -38.97451941779647,
+        40,
+        12.41453285633649
+      ],
+      "onGround": true,
+      "velocity": [
+        3.8087608395689356,
+        -5.967779265024217,
+        0.7597522367331814
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 0,
+        "allowedNetworkDrops": 36,
+        "rescues": 0,
+        "lastBlock": null,
+        "active": true,
+        "refR": 145.64312012140437
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": true,
+        "steeredSteps": 1068
+      }
+    },
+    {
+      "at": "2026-10-11T06:56:04.891Z",
+      "inner": [
+        -40.120521644298776,
+        39.99999999999994,
+        -7.981251955691995
+      ],
+      "onGround": true,
+      "velocity": [
+        4.964758361157831,
+        -4.559162976148024,
+        -2.294641123076201
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 0,
+        "allowedNetworkDrops": 36,
+        "rescues": 0,
+        "lastBlock": null,
+        "active": true,
+        "refR": 145.64332701982914
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": true,
+        "steeredSteps": 1068
+      }
+    }
+  ]
+}

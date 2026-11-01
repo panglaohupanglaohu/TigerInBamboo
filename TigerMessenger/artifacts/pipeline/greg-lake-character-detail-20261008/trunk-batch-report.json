@@ -1,0 +1,38 @@
+{
+  "revision": "tree-local-batch-1",
+  "status": "CPU verified, parent GPU pending",
+  "files": [
+    "src/world/swampCoralTrunkBatch.js",
+    "src/world/swampCoralTrunkDetail.js (import, final install, dispose only)",
+    "tests/world/swampCoralTrunkBatch.test.mjs"
+  ],
+  "geometry": "Same existing organic source geometry. Indexed triangles concatenated per original parent tree and original shadow/layer/render-order states; no new shapes or normals recomputation.",
+  "sourceInterface": "Original mesh names, objects, geometry, materials, mesh.visible, node transforms and raycast functions preserved. Only owned bark material.visible disabled. Batch raycast is inert to prevent duplicate hits.",
+  "shader": "barkLocal attribute retains original source geometry position exactly; existing bark shader uses barkLocal for angle/height, transformed position only for rendered coordinates/distance. No fragment shader/color changes.",
+  "measurements": {
+    "sourceMeshes": 285,
+    "renderBatches": 11,
+    "savedPotentialDraws": 274,
+    "trianglesBefore": 49232,
+    "trianglesAfter": 49232,
+    "verticesChecked": 41071,
+    "maxWorldPositionError": 1.914631004167569e-06,
+    "maxWorldNormalError": 4.5159051043268005e-08,
+    "additionalBatchBuffersBytes": 1773948
+  },
+  "tests": {
+    "dedicated": "3/3 pass",
+    "relatedSuites": "26/26 pass including organic, actual branch embedding, perches, 20-second actor/repair animation, V7 relocation, underwater roots, understory real attachments and player support route",
+    "formalBridgeStartup": "1/1 pass, 23 removed piers / 5 rotated leaf crowns / 2 reversible trim / 371 visible crowns / zero measured leaf intersections",
+    "rebuild": "Explicit rebuild recreates batch geometry from current local sources; V7 parent *.55 and spherical placement already inherited exactly through common parent, no per-frame rebuild.",
+    "rollback": "detail.dispose invokes batch.dispose first, restores original material visibility and then original geometry/material refs; double dispose and reinstall have no batch leaks."
+  },
+  "constraints": [
+    "Potential draw saving depends on current camera; no FPS success claimed.",
+    "Source geometry remains allocated for exact semantic raycasts; combined rendering adds 1.69 MiB vertex/index buffers.",
+    "Dynamic edits to source-local transforms or source geometry require batch.rebuild(); current trees are static within each parent.",
+    "Existing outlines remain unmodified. No other lake/world batching in this task."
+  ],
+  "rollback": "?gregTrunkBatch=0 disables batching only. Source snapshot trunk-batch-before/src/world/swampCoralTrunkDetail.js; batch installer report.dispose() restores render visibility.",
+  "GPU": "Parent notified to check same-view bark detail and real frame metrics."
+}

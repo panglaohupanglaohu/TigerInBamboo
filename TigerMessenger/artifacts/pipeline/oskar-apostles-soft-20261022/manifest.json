@@ -1,0 +1,28 @@
+{
+  "version": "apostles-oskar-wfc-12-sealed-shoulders",
+  "files": [
+    {
+      "path": "src/world/twelveApostlesTarget.js",
+      "sha256": "8770074bcdf1210eba977e5961c300fbbb32f1a85118437b59a1b3f844e3f19c"
+    },
+    {
+      "path": "src/world/apostleShoreFoam.js",
+      "sha256": "9a114105e4efef5166bc50c640eb2c751a140d88c1ceed2762a7a0fed8066b5a"
+    },
+    {
+      "path": "tests/world/twelveApostlesSoftShoulders.test.mjs",
+      "sha256": "0e0161f6d849a0913d9edb1b5a9fee4d9817641929708e3ee0dd3c73fa96daa9"
+    }
+  ],
+  "source_before": "source-before/twelveApostlesTarget.js",
+  "cpu_checks": "tests.txt",
+  "geometry_before": "geometry-before.json",
+  "geometry_after": "geometry-after.json",
+  "browser_owned_by": "root agent; no browser interaction from Oskar worker",
+  "gpu_evidence": "../oskar-apostles-20261022/root-verification/after-close-r3.png and after-bare-close-r3.png (root reported viewed; not CPU evidence)",
+  "not_verified_here": [
+    "actual train journey through official complete scene",
+    "all climbing paths with characters",
+    "latest complete game GPU and final coastline animation"
+  ]
+}

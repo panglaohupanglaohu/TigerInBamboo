@@ -1,0 +1,101 @@
+{
+  "ok": true,
+  "minimumVertexGap": 0.3094277115030484,
+  "clearanceScope": "sampled actual vertices only; triangle interiors and unsampled moments remain approximations",
+  "scope": "actual production moon factory + original ancient pine/four new tree factories; CPU only",
+  "period": 180,
+  "initialXZ": [
+    -6.225,
+    4.125
+  ],
+  "frameRateIndependent": true,
+  "periodicXZ": true,
+  "parentSphereTransformPreserved": true,
+  "haloUsesCurrentMoon": true,
+  "reflectionUsesCurrentMoon": true,
+  "report": {
+    "period": 180,
+    "radius": 7.467680362736477,
+    "centre": [
+      0,
+      0
+    ],
+    "baselineHeight": 5.6,
+    "peakHeight": 15.786690531939621,
+    "obstacleCount": 5,
+    "sampledVertices": 11056,
+    "clearanceMethod": "one-time obstacle vertex envelope; finite sampling approximation, not exact triangle collision",
+    "clearanceMargin": 0.22,
+    "continuous": true,
+    "minimumHeight": 5.599999999999998,
+    "clearanceRadius": 3.6308626474837715,
+    "rawPeakHeight": 15.786690531939623
+  },
+  "largestStepPerQuarterSecond": 0.18025761071988042,
+  "samples": [
+    {
+      "t": 22.5,
+      "position": [
+        -7.318555185280767,
+        5.400710642871886,
+        -1.4849242404917486
+      ]
+    },
+    {
+      "t": 45,
+      "position": [
+        -4.125000000000002,
+        7.9716945644926485,
+        -6.225
+      ]
+    },
+    {
+      "t": 67.5,
+      "position": [
+        1.4849242404917482,
+        8.339104256544866,
+        -7.318555185280767
+      ]
+    },
+    {
+      "t": 90,
+      "position": [
+        6.224999999999999,
+        12.075207597565113,
+        -4.125000000000002
+      ]
+    },
+    {
+      "t": 112.5,
+      "position": [
+        7.318555185280767,
+        15.907212150662998,
+        1.4849242404917478
+      ]
+    },
+    {
+      "t": 135,
+      "position": [
+        4.125000000000003,
+        11.89048828920827,
+        6.224999999999999
+      ]
+    },
+    {
+      "t": 157.5,
+      "position": [
+        -1.4849242404917409,
+        5.892114101635041,
+        7.318555185280768
+      ]
+    },
+    {
+      "t": 180,
+      "position": [
+        -6.225,
+        5.7296526231662135,
+        4.125000000000001
+      ]
+    }
+  ]
+}

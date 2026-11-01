@@ -1,0 +1,22 @@
+Front strata baseline changed citadel-oskar-grid-mountain-surface 155
+Old-city coastal source changed; continuing with slope update { hash: 2028752367, expected: 3381302665 }
+Old-city coastal source changed; continuing with slope update { hash: 2125320883, expected: 2915253182 }
+[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface
+[citadel] applyCitadelHarborSeabed 跳过: Harbor seabed requires the original planet and city
+[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate
+[ELDER] 已放到指定落点 r=160.6
+[CLOUD-RIDGE] kept= 11 dropped= 12 rings= {"1":6,"2":2,"0.25":4,"center":1} maxH= 42.75 maxScore= 1.13 threshold= 0.35
+Citadel boarding installation failed [TypeError: fetch failed] {
+  [cause]: Error: not implemented... yet...
+      at makeNetworkError (node:internal/deps/undici/undici:11806:35)
+      at schemeFetch (node:internal/deps/undici/undici:13359:34)
+      at mainFetch (node:internal/deps/undici/undici:13207:30)
+      at fetching (node:internal/deps/undici/undici:13176:7)
+      at fetch (node:internal/deps/undici/undici:13040:20)
+      at fetch (node:internal/deps/undici/undici:17708:10)
+      at fetch (node:internal/bootstrap/web/exposed-window-or-worker:83:12)
+      at installFrontBoarding (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/installFrontBoarding.js:11:26)
+      at holdAtReleasedPort (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:25:2)
+      at dockFrontHarborPatrol (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:33:47)
+}
+{"timestamp":"2026-10-08T03:37:09.844Z","kind":"production-loadSteps-camera-authored-ray-probe","points":31,"poses":124,"renderedFrames":372,"remainingCentrelineIntersections":0,"minimumGap":0.11419867668696583}

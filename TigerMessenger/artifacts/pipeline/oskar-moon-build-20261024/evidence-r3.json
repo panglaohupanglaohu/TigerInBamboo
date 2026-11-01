@@ -1,0 +1,60 @@
+{
+  "task": "Four added Moon Lake pines readability r3: geometry/placement after actual GPU feedback",
+  "target": "Original ancient pine plus NEW 2/4/5/6, no straight3; lake/deep/path/moon unchanged",
+  "visual_observations": {
+    "source": "Consultant actually viewed normal-game-four-added.png and normal-game-low-view.png; r3 source not GPU reviewed yet",
+    "completed": [
+      "older actual scene shows new trees exist but are hidden among old grove, dark and plate-like",
+      "r3 keeps entire original scene: nearer four new root candidates, warmgray wood and mediumgreen thick offset crown clusters",
+      "spread pose trunk now visibly curved; relative scales1.2/1.25/1.45/1.3 below original old pine",
+      "CPU20static material batches18419triangles; all4reseat/colliders/dispose passed"
+    ],
+    "remaining": [
+      "Root is rebooting normal game to visually assess new four silhouettes; do not equate count/visible to readability",
+      "Actual hills and railway support/whole-crown path checks by Root still required"
+    ]
+  },
+  "checks": [
+    {
+      "name": "syntax imports and production module CPU construction",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "four distinct branch signatures and 4new sites/colliders",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "four new root envelopes outside original4.7 path",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "reseat +2, idempotent, null rejection and same collider references",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "dispose retains original object and handles double call",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal game GPU/navigation acceptance",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "r3 readable four silhouettes in actual GPU scene",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not claim full deployment; Root owns lake and main integration",
+    "No source lake or original pine modified by consultant",
+    "No image or secret sent to JEV",
+    "Latest user four NEW pines correction supersedes original1+3 interpretation"
+  ]
+}

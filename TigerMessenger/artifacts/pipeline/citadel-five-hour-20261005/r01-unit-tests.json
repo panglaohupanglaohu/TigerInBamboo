@@ -1,0 +1,16 @@
+{
+  "scope": "Node deterministic geometry tests, not actual full-scene visual or collision approval",
+  "candidateQuery": "citadelRidgePass=1",
+  "defaultPass": 0,
+  "passedTests": 9,
+  "tests": [
+    "7 existing ridge/landform tests",
+    "2 new local continuity and rotated fixed-boundary candidate tests"
+  ],
+  "sources": {
+    "src/world/citadel/mountainLandform.js": "4f4ba806c3bec705d853eb3d6ad8d1d1d0eb4520181605fc362b9628be1d09ed",
+    "tests/world/citadelEastShoulder.test.mjs": "748fb916a1ec703ca5c4b2667afcbc505c2e5f097fcb58fcc0d43b371dcf9967",
+    "tests/world/citadelRidgeStructure.test.mjs": "706c73bdb6cea0204a70b28ca65c3d04405c1d074aa795bd6c07c271abb98383",
+    "tests/world/citadelLandformRebuild.test.mjs": "c7124121ab6660062024aa215367c71527a5416bfc21d07d6a95bbe0c2a52ab3"
+  }
+}

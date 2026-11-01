@@ -1,0 +1,3979 @@
+{
+  "revision": 5,
+  "dirty": true,
+  "target": {
+    "regionId": "left-mid-yellow",
+    "ix": 0,
+    "iy": 1,
+    "iz": 1
+  },
+  "world": [
+    52.761492992555844,
+    84.4846169291213,
+    -133.4032299441663
+  ],
+  "canvasClick": {
+    "x": 733.4777718550656,
+    "y": 4.649009122916287
+  },
+  "pageClick": {
+    "x": 733.4777718550656,
+    "y": 160.64900912291628
+  },
+  "actualRayHit": {
+    "ix": 0,
+    "iy": 1,
+    "iz": 2,
+    "char": "3",
+    "regionId": "left-mid-yellow",
+    "top": false
+  },
+  "selectedTarget": "canal-junction",
+  "snapshot": {
+    "schema": "junction-regions-v1",
+    "regions": [
+      {
+        "id": "left-front-coral",
+        "levels": [
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "left-mid-yellow",
+        "levels": [
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "left-rear-teal",
+        "levels": [
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "left-watchtower",
+        "levels": [
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ]
+        ]
+      },
+      {
+        "id": "right-front-teal",
+        "levels": [
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "CCC"
+          ],
+          [
+            "CCC",
+            "CCC",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "right-mid-coral",
+        "levels": [
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "DDD"
+          ],
+          [
+            "DDD",
+            "DDD",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "right-rear-yellow",
+        "levels": [
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "333"
+          ],
+          [
+            "333",
+            "333",
+            "..."
+          ]
+        ]
+      },
+      {
+        "id": "right-watchtower",
+        "levels": [
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ]
+        ]
+      },
+      {
+        "id": "rear-keep",
+        "levels": [
+          [
+            "0..0",
+            "0..0",
+            "0..0"
+          ],
+          [
+            "0..0",
+            "0..0",
+            "0..0"
+          ],
+          [
+            "0000",
+            "0000",
+            "0000"
+          ],
+          [
+            "0000",
+            "0000",
+            "0000"
+          ],
+          [
+            "0000",
+            "0000",
+            "0000"
+          ],
+          [
+            "0000",
+            "0000",
+            "0000"
+          ]
+        ]
+      },
+      {
+        "id": "keep-tower-left",
+        "levels": [
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ]
+        ]
+      },
+      {
+        "id": "keep-tower-right",
+        "levels": [
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ],
+          [
+            "00",
+            "00"
+          ]
+        ]
+      }
+    ]
+  },
+  "wfcAudit": {
+    "revision": 5,
+    "regions": [
+      {
+        "regionId": "left-front-coral",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "a8d91b12",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 3,
+          "consumed": [
+            {
+              "version": 1,
+              "axis": "x",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r90",
+              "key": "body.passage@r90",
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "0,0,2"
+            },
+            {
+              "version": 1,
+              "axis": "x",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r90",
+              "key": "body.passage@r90",
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "1,0,2"
+            },
+            {
+              "version": 1,
+              "axis": "x",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r90",
+              "key": "body.passage@r90",
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "2,0,2"
+            }
+          ],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 24,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "1,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "2,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "0,2,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,2,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,2,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,2,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,2,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,2,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "left-mid-yellow",
+        "enabled": true,
+        "ok": true,
+        "pairCandidate": {
+          "version": "junction-pair-v1",
+          "active": true,
+          "fixedOutsideCells": 27,
+          "cells": [
+            "0,0,1",
+            "0,1,1",
+            "1,0,1",
+            "1,1,1",
+            "2,0,1",
+            "2,1,1"
+          ]
+        },
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "da496c05",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 6,
+          "consumed": [
+            {
+              "version": 2,
+              "axis": "x",
+              "half": "lower",
+              "cellHeight": 1.7,
+              "clearWidth": 1.056,
+              "clearHeight": 2.3,
+              "springHeight": 1.9,
+              "crownThickness": 1.1,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerHeightFits": true,
+              "playerWidthFits": true,
+              "playerTraversable": false,
+              "scope": "two-storey candidate; final capsule and gameplay acceptance required",
+              "family": "body",
+              "variant": "passage2.lower.x",
+              "rot": "r0",
+              "key": "body.passage2.lower.x@r0",
+              "pair": true,
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "0,0,1"
+            },
+            {
+              "version": 2,
+              "axis": "x",
+              "half": "lower",
+              "cellHeight": 1.7,
+              "clearWidth": 1.056,
+              "clearHeight": 2.3,
+              "springHeight": 1.9,
+              "crownThickness": 1.1,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerHeightFits": true,
+              "playerWidthFits": true,
+              "playerTraversable": false,
+              "scope": "two-storey candidate; final capsule and gameplay acceptance required",
+              "family": "body",
+              "variant": "passage2.lower.x",
+              "rot": "r0",
+              "key": "body.passage2.lower.x@r0",
+              "pair": true,
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "1,0,1"
+            },
+            {
+              "version": 2,
+              "axis": "x",
+              "half": "lower",
+              "cellHeight": 1.7,
+              "clearWidth": 1.056,
+              "clearHeight": 2.3,
+              "springHeight": 1.9,
+              "crownThickness": 1.1,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerHeightFits": true,
+              "playerWidthFits": true,
+              "playerTraversable": false,
+              "scope": "two-storey candidate; final capsule and gameplay acceptance required",
+              "family": "body",
+              "variant": "passage2.lower.x",
+              "rot": "r0",
+              "key": "body.passage2.lower.x@r0",
+              "pair": true,
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "2,0,1"
+            },
+            {
+              "version": 2,
+              "axis": "x",
+              "half": "upper",
+              "cellHeight": 1.7,
+              "clearWidth": 1.056,
+              "clearHeight": 2.3,
+              "springHeight": 1.9,
+              "crownThickness": 1.1,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerHeightFits": true,
+              "playerWidthFits": true,
+              "playerTraversable": false,
+              "scope": "two-storey candidate; final capsule and gameplay acceptance required",
+              "family": "body",
+              "variant": "passage2.upper.x",
+              "rot": "r0",
+              "key": "body.passage2.upper.x@r0",
+              "pair": true,
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "0,1,1"
+            },
+            {
+              "version": 2,
+              "axis": "x",
+              "half": "upper",
+              "cellHeight": 1.7,
+              "clearWidth": 1.056,
+              "clearHeight": 2.3,
+              "springHeight": 1.9,
+              "crownThickness": 1.1,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerHeightFits": true,
+              "playerWidthFits": true,
+              "playerTraversable": false,
+              "scope": "two-storey candidate; final capsule and gameplay acceptance required",
+              "family": "body",
+              "variant": "passage2.upper.x",
+              "rot": "r0",
+              "key": "body.passage2.upper.x@r0",
+              "pair": true,
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "1,1,1"
+            },
+            {
+              "version": 2,
+              "axis": "x",
+              "half": "upper",
+              "cellHeight": 1.7,
+              "clearWidth": 1.056,
+              "clearHeight": 2.3,
+              "springHeight": 1.9,
+              "crownThickness": 1.1,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerHeightFits": true,
+              "playerWidthFits": true,
+              "playerTraversable": false,
+              "scope": "two-storey candidate; final capsule and gameplay acceptance required",
+              "family": "body",
+              "variant": "passage2.upper.x",
+              "rot": "r0",
+              "key": "body.passage2.upper.x@r0",
+              "pair": true,
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "2,1,1"
+            }
+          ],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 33,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "passage2.lower.x",
+            "rot": "r0",
+            "key": "body.passage2.lower.x@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage2.lower.x",
+            "rot": "r0",
+            "key": "body.passage2.lower.x@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "passage2.lower.x",
+            "rot": "r0",
+            "key": "body.passage2.lower.x@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "passage2.upper.x",
+            "rot": "r0",
+            "key": "body.passage2.upper.x@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "passage2.upper.x",
+            "rot": "r0",
+            "key": "body.passage2.upper.x@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "passage2.upper.x",
+            "rot": "r0",
+            "key": "body.passage2.upper.x@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "1,2,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "2,2,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "0,3,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,3,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,3,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,3,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,3,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,3,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch",
+          "body.passage2-cross-storey"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "left-rear-teal",
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "ba84e8ef",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 3,
+          "consumed": [
+            {
+              "version": 1,
+              "axis": "x",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r90",
+              "key": "body.passage@r90",
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "0,0,1"
+            },
+            {
+              "version": 1,
+              "axis": "x",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r90",
+              "key": "body.passage@r90",
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "1,0,1"
+            },
+            {
+              "version": 1,
+              "axis": "x",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r90",
+              "key": "body.passage@r90",
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "2,0,1"
+            }
+          ],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 42,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "1,3,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "2,3,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "0,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "left-watchtower",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "be6dc787",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 2,
+          "consumed": [
+            {
+              "version": 1,
+              "axis": "x",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r90",
+              "key": "body.passage@r90",
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "0,0,1"
+            },
+            {
+              "version": 1,
+              "axis": "x",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r90",
+              "key": "body.passage@r90",
+              "openings": [
+                "E",
+                "W"
+              ],
+              "cell": "1,0,1"
+            }
+          ],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 40,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r90",
+            "key": "body.passage@r90"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,7,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,7,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,8,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,8,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,8,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,8,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,9,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,9,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,9,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,9,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "right-front-teal",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "fc7cef19",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 6,
+          "consumed": [
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "1,0,0"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "2,0,0"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "1,0,1"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "2,0,1"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "1,0,2"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "2,0,2"
+            }
+          ],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 24,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "1,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "2,1,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w1@r0"
+          },
+          "0,2,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,2,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,2,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,2,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,2,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,2,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "right-mid-coral",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "1355351d",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 6,
+          "consumed": [
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "1,0,0"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "2,0,0"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "1,0,1"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "2,0,1"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "1,0,2"
+            },
+            {
+              "version": 1,
+              "axis": "z",
+              "clearWidth": 1.056,
+              "clearHeight": 1.4280000000000002,
+              "springHeight": 0.9520000000000001,
+              "crownThickness": 0.2719999999999998,
+              "throughDepth": 1.6,
+              "playerHeight": 1.66,
+              "playerDiameter": 0.7,
+              "playerTraversable": false,
+              "scope": "visual-structure experiment; clearance is not certified for player traversal",
+              "playerHeightFits": false,
+              "playerWidthFits": true,
+              "family": "body",
+              "variant": "passage",
+              "rot": "r0",
+              "key": "body.passage@r0",
+              "openings": [
+                "N",
+                "S"
+              ],
+              "cell": "2,0,2"
+            }
+          ],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 33,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "passage",
+            "rot": "r0",
+            "key": "body.passage@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "1,2,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "2,2,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "0,3,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,3,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,3,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,3,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,3,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,3,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "right-rear-yellow",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "db928f69",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 0,
+          "consumed": [],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 42,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "1,3,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "2,3,2": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w1@r0"
+          },
+          "0,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,4,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "2,4,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "right-watchtower",
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "04fe5955",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 0,
+          "consumed": [],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 32,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,7,0": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "0,7,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          },
+          "1,7,1": {
+            "family": "flat",
+            "variant": "flat",
+            "rot": "r0",
+            "key": "flat.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "rear-keep",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "f1cc4e8b",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 0,
+          "consumed": [],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 60,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,0,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,1,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,2,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,3,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,3,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "2,4,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "3,4,2": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,5,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,5,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "3,5,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,5,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,5,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,5,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "3,5,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,5,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,5,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "2,5,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "3,5,2": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "keep-tower-left",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "f5a2400b",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 0,
+          "consumed": [],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 32,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,7,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,7,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,7,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      },
+      {
+        "regionId": "keep-tower-right",
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "abae18ef",
+        "topology": "legacy-grid",
+        "topologyHash": null,
+        "passage": {
+          "enabled": true,
+          "selected": 0,
+          "consumed": [],
+          "scope": "fixed occupancy; solver-selected rotated arch solid",
+          "playerTraversable": false
+        },
+        "occupiedCount": 36,
+        "assignment": {
+          "0,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,0,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,1,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,2,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,3,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,4,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,5,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,6,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,7,0": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,7,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "1,7,1": {
+            "family": "body",
+            "variant": "body",
+            "rot": "r0",
+            "key": "body.plain@r0"
+          },
+          "0,8,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,8,0": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "0,8,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          },
+          "1,8,1": {
+            "family": "terrace",
+            "variant": "terrace",
+            "rot": "r0",
+            "key": "terrace.w0@r0"
+          }
+        },
+        "geometryConsumers": [
+          "roof-slope-versus-flat",
+          "enclosed-garden",
+          "body.passage-through-arch"
+        ],
+        "adjacencyBuilders": [
+          "wall",
+          "corner",
+          "suspended-arch",
+          "decoration"
+        ],
+        "scope": "fixed region occupancy; local role compatibility, not global city generation"
+      }
+    ]
+  },
+  "gpu": {
+    "programs": 281,
+    "failed": [],
+    "glErrors": [],
+    "note": "Current linked programs and error queue sample; not GPU timing or proof of all frames"
+  },
+  "passageClearance": {
+    "ok": true,
+    "passages": 23,
+    "probes": 207,
+    "blocked": [],
+    "foundationSupport": [
+      {
+        "region": "left-front-coral",
+        "cell": "0,0,2",
+        "foundation": "court-left-support",
+        "delta": -9.536742018312339e-8,
+        "supported": true
+      },
+      {
+        "region": "left-front-coral",
+        "cell": "1,0,2",
+        "foundation": "court-left-support",
+        "delta": -9.53674206272126e-8,
+        "supported": true
+      },
+      {
+        "region": "left-front-coral",
+        "cell": "2,0,2",
+        "foundation": "court-left-support",
+        "delta": -9.53674206272126e-8,
+        "supported": true
+      },
+      {
+        "region": "left-mid-yellow",
+        "cell": "0,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536745970706306e-8,
+        "supported": true
+      },
+      {
+        "region": "left-mid-yellow",
+        "cell": "1,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536745970706306e-8,
+        "supported": true
+      },
+      {
+        "region": "left-mid-yellow",
+        "cell": "2,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536746015115227e-8,
+        "supported": true
+      },
+      {
+        "region": "left-rear-teal",
+        "cell": "0,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536744904892203e-8,
+        "supported": true
+      },
+      {
+        "region": "left-rear-teal",
+        "cell": "1,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.53674206272126e-8,
+        "supported": true
+      },
+      {
+        "region": "left-rear-teal",
+        "cell": "2,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536744904892203e-8,
+        "supported": true
+      },
+      {
+        "region": "left-watchtower",
+        "cell": "0,0,1",
+        "foundation": "irregular-quay",
+        "delta": -2.700000023841846,
+        "supported": false
+      },
+      {
+        "region": "left-watchtower",
+        "cell": "1,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536744860483282e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "1,0,0",
+        "foundation": "court-right-support",
+        "delta": -9.536747835880988e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "2,0,0",
+        "foundation": "court-right-support",
+        "delta": -9.536747880289909e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "1,0,1",
+        "foundation": "court-right-support",
+        "delta": -9.536744993710045e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "2,0,1",
+        "foundation": "court-right-support",
+        "delta": -9.536745038118966e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "1,0,2",
+        "foundation": "court-right-support",
+        "delta": -9.536747835880988e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "2,0,2",
+        "foundation": "court-right-support",
+        "delta": -9.536745038118966e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "1,0,0",
+        "foundation": "court-right-support",
+        "delta": -9.536745038118966e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "2,0,0",
+        "foundation": "court-right-support",
+        "delta": -9.536745038118966e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "1,0,1",
+        "foundation": "court-right-support",
+        "delta": -9.536742195948023e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "2,0,1",
+        "foundation": "court-right-support",
+        "delta": -9.536745038118966e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "1,0,2",
+        "foundation": "court-right-support",
+        "delta": -9.536745038118966e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "2,0,2",
+        "foundation": "court-right-support",
+        "delta": -9.536745038118966e-8,
+        "supported": true
+      }
+    ],
+    "fixedFoundationSupported": 22,
+    "playerTraversable": false,
+    "limitation": "sampled actual interior aperture triangles, not a capsule sweep or certification of external approach routes"
+  },
+  "errors": []
+}

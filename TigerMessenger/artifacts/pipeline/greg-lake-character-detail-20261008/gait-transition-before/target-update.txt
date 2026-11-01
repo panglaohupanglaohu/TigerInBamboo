@@ -1,0 +1,51 @@
+ tiger.userData.update=function(dt,t,runtime){body.position.x=bodyRestXZ[0];body.position.z=bodyRestXZ[1];legIds.forEach((id,i)=>nodes.get(id).position.copy(legRest[i]));oldUpdate.call(this,dt,t,runtime);const swamp=tiger.parent;
+  drinkBlend+=(Number(!!tiger.userData._drinking)-drinkBlend)*Math.min(1,dt*4);tiger.rotation.x=0;
+  const distance=Math.hypot(tiger.position.x-previousRoot.x,tiger.position.z-previousRoot.z);previousRoot.copy(tiger.position);
+  if(tiger.userData._walking&&distance<1)stridePhase+=distance/tigerStrideLength(tiger.scale.z);
+  const swingPhases=[],walking=!!tiger.userData._walking&&!tiger.userData._drinking,footPhases=[];
+  for(let i=0;i<4;i++){
+   const step=sampleTigerWalk(stridePhase,i,walking),travel=step.travel;footPhases.push(step.phase);
+   const leg=nodes.get(legIds[i]);leg.rotation.x=0;
+   if(walking){leg.position.z=legRest[i].z+travel;leg.position.y=legRest[i].y+TIGER_WALK.clearance*step.swing;}
+   if(i<2)leg.position.z-=.95*drinkBlend;
+   swingPhases.push(step.swing);
+  }
+  tiger.userData.targetGait={phase:stridePhase%1,footPhases,swing:swingPhases,stance:swingPhases.map(s=>s<.001),distance,speed:dt>0?distance/dt:0,strideLength:tigerStrideLength(tiger.scale.z)};
+  // Small weight transfer follows footfalls; the ground solver below retains sole contact.
+  body.rotation.z=walking?.022*Math.sin(stridePhase*Math.PI*2):0;
+  body.position.y+=walking?.025*Math.cos(stridePhase*Math.PI*4):0;
+  const mode=tiger.userData._mode,groundMode=!tiger.userData._companion&&['patrol','to-steps','descend','drink','ascend'].includes(mode);
+  const waterReturning=mode==='ascend'&&!!tiger.userData._waterReturning;
+  let initialFeet=[];
+  if(groundMode&&!waterReturning&&swamp?.userData.tigerWalkSurfaces){
+   swamp.updateWorldMatrix(true,false);inverseFrame.copy(swamp.matrixWorld).invert();groundSurfaces=[...swamp.userData.tigerWalkSurfaces,...(swamp.userData.gregCoralRim?.walkMeshes||[])];for(const step of groundSurfaces)step.updateWorldMatrix(true,false);
+   initialFeet=paws.map(p=>support(swamp,p));
+  }
+  const grounded=groundMode&&!waterReturning&&initialFeet.length===4&&initialFeet.every(f=>f.height!==null);
+  if(!grounded||!swamp?.userData.tigerWalkSurfaces){
+   const supportKind=waterReturning||['greet-meet','greet-stay'].includes(mode)?'water-supported':mode==='greet-jump'?'airborne':tiger.userData._companion?'external':'unsupported';
+   tiger.userData.tigerTargetSupport={time:t,mode,grounded:false,supportKind,waterHeight:supportKind==='water-supported'?25.15:null,pitch:0,feet:initialFeet.map(p=>({height:p.height,foot:p.foot.toArray(),samplesSupported:p.samplesSupported}))};
+   tiger.userData.updateTargetForelimbs?.(drinkBlend,swingPhases);tiger.userData.updateTargetHindlimbs?.(drinkBlend,swingPhases);
+   tiger.userData.updateTargetDrinkDetails?.(dt,t,0);return;
+  }
+  const fore=initialFeet[0],rear=initialFeet[2];
+  const span=Math.hypot(fore.foot.x-rear.foot.x,fore.foot.z-rear.foot.z);
+  const slope=fore.height!==null&&rear.height!==null?Math.atan2(rear.height-fore.height,Math.max(.1,span)):0;
+  const pitch=THREE.MathUtils.lerp(THREE.MathUtils.clamp(slope,-1.1,1.1),THREE.MathUtils.clamp(slope,0,.22),drinkBlend);tiger.rotation.x=pitch;
+  // Front limbs remain substantially upright as the back inclines down the steps.
+  for(const id of ['n52','n59','n66','n73']){const leg=nodes.get(id);if(leg)leg.rotation.x-=pitch*.8;}
+  const feet=paws.map(p=>support(swamp,p)).filter(p=>p.height!=null);if(feet.length)tiger.position.y+=Math.max(...feet.map(p=>p.height+.015-p.foot.y));
+  // Each limb settles independently on its sampled tread; avoid dangling forefeet.
+  tiger.updateWorldMatrix(true,true);
+  paws.forEach((paw,i)=>{const f=support(swamp,paw);if(f.height==null)return;const from=tiger.worldToLocal(swamp.localToWorld(f.foot.clone())),to=f.foot.clone();to.y=f.height+.015+TIGER_WALK.clearance*tiger.scale.y*swingPhases[i];const delta=tiger.worldToLocal(swamp.localToWorld(to)).sub(from);nodes.get(legIds[i]).position.add(delta);});
+  // Reach beyond the forefeet rather than folding the face between them.
+  body.position.y-=.25*drinkBlend;body.rotation.x+=.16*drinkBlend;
+  head.position.z+=.40*drinkBlend;
+  head.rotation.x=THREE.MathUtils.lerp(head.rotation.x,.98-pitch-body.rotation.x,drinkBlend);
+  tiger.updateWorldMatrix(true,true);const nose=nodes.get('n25'),a=nose.geometry.attributes.position;let min=Infinity,best=new THREE.Vector3();
+  for(let i=0;i<a.count;i++){nosePoint.fromBufferAttribute(a,i);nose.localToWorld(nosePoint);swamp.worldToLocal(nosePoint);if(nosePoint.y<min){min=nosePoint.y;best.copy(nosePoint);}}
+  const torsoLift=drinkBlend<.01?clearTorso(swamp):0;
+  if(drinkBlend>.8){const from=tiger.worldToLocal(swamp.localToWorld(best.clone())),to=best.clone();to.y=25.12;tiger.worldToLocal(swamp.localToWorld(to));body.position.add(to.sub(from));}
+  tiger.updateWorldMatrix(true,true);tiger.userData.updateTargetForelimbs?.(drinkBlend,swingPhases);tiger.userData.updateTargetHindlimbs?.(drinkBlend,swingPhases);
+  updateNeck();tiger.userData.updateTargetDrinkDetails?.(dt,t,drinkBlend);tiger.userData.tigerTargetSupport={time:t,mode,grounded:true,supportKind:'real-ground',pitch,drinkBlend,torsoLift,feet:paws.map(p=>support(swamp,p)).map(p=>({height:p.height,foot:p.foot.toArray(),samplesSupported:p.samplesSupported})),noseBefore:min};
+ };

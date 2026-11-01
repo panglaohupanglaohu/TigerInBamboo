@@ -1,0 +1,46 @@
+{
+  "version": "r18-blue-sky-and-stepped-massing",
+  "goal": "Target terrain first, cities then rail; final >95; current not accepted",
+  "visual_observations": {
+    "source": "root inspected real r18 dressed and proxy-only screenshots",
+    "sha256": "1d6a427c01af109cbb830276565a61c824600d526dcebc3ef90058e603d198cd",
+    "differences": [
+      "Local noon sky changed from turquoise to target-like light blue; holyDayBlend is1 at panorama, shader sample-clean and errors empty.",
+      "Clouds still thin ribbons instead of large white billows; sea/rock/grass transitions remain unlike target.",
+      "Stepped proxy old tower now breaks mountain silhouette; 68 disposable proxy meshes are not final city buildings.",
+      "Both city groups still too narrow relative to target; terrace graph and city support expansion remain unresolved."
+    ]
+  },
+  "checks": [
+    {
+      "name": "actual GPU sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "terrain visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "new city and rail gameplay",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "sampled existing bay water not filled and building cores remain flat",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "sampled z=-43 land connection above sea (37.27m minimum); not full route verification",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "No false 95 score",
+    "Candidate opt-in only; keep original rollback",
+    "Prioritize silhouette and authored topology before automated module selection"
+  ]
+}

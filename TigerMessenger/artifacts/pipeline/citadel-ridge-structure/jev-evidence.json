@@ -1,0 +1,51 @@
+{
+  "task": "Citadel mountain ridge structure review",
+  "target": "Approved Istanbul highland target; connected ridge, shoulders, saddles, protected city and routes",
+  "visual_observations": {
+    "source": "Assistant inspected r04-old-mountain.png and final-night.png directly; text only",
+    "image_sha256": "8b587213db8286d18f21952f855fdef0cbf679a220810632f5b761e8c3eec011",
+    "completed": [
+      "Broader summits, lower eastern peak, connected slopes and saddle",
+      "Existing city buildings retained and vegetation resampled on new rock"
+    ],
+    "remaining": [
+      "Some escarpments remain steep and faceted",
+      "Target foliage density and natural cliff variation not fully matched"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Rail clearance 23049 probes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Walk mesh hash unchanged",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "1000 city meshes inventory unchanged",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "215 vegetation roots supported",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Four boundary and ridge tests",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Art review, not automatic acceptance",
+    "Do not claim full WFC implementation or hydraulic erosion",
+    "Preserve existing navigation and city geometry"
+  ],
+  "evidence_revision": {
+    "clearance-1.json": "04e410934dcc4732cf88a26b6c3e90842b35cbffa0c7ab5e97a68630a95521b0"
+  }
+}

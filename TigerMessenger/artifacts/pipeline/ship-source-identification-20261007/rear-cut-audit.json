@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "cutX": -91,
+  "keepX": -90,
+  "rearRadialCut": true,
+  "radialPolicy": {
+    "x": [
+      18,
+      26,
+      98,
+      106
+    ],
+    "z": [
+      -26,
+      -22
+    ],
+    "radiusMapping": "min(r,128+.05*r)",
+    "note": "monotone radial compression preserves submerged thickness; actual sea radius160"
+  },
+  "beforeTriangles": 138321,
+  "afterTriangles": 145551,
+  "movedVertices": 41932,
+  "maxDrop": 94.76151395542007,
+  "rejectedProtectedFaces": 0,
+  "seaMisses": 0,
+  "shipBoxes": 0,
+  "railBoxes": 0,
+  "clearanceVerified": false,
+  "railUnchanged": true,
+  "normalPolicy": {
+    "unchanged": "original corner normals preserved; split corners barycentrically interpolated",
+    "changed": "shared-edge semantic fans; no position relaxation",
+    "preservedCorners": 392214,
+    "changedTriangles": 14813
+  },
+  "shipClearances": [],
+  "hullContactsBefore": 470,
+  "hullContactsAfter": 0,
+  "within10mAfter": 0,
+  "railAudit": {
+    "red": {
+      "poses": 332,
+      "triangleHits": 0,
+      "radialBuriedProbes": 0,
+      "failures": []
+    },
+    "blue": {
+      "poses": 364,
+      "triangleHits": 0,
+      "radialBuriedProbes": 0,
+      "failures": []
+    }
+  }
+}

@@ -18,7 +18,7 @@ export function createMorrisCastle({root,position=new T.Vector3()}={}){
  function detailBox(p,s,color,rotation=0){detail(new T.BoxGeometry(...s),p,color,rotation);}
  function softenedWall(p,size,color,name){const[w,h,d]=size,b=.10,shape=new T.Shape();shape.moveTo(-w/2+b,-h/2+b);shape.lineTo(w/2-b,-h/2+b);shape.lineTo(w/2-b,h/2-b);shape.lineTo(-w/2+b,h/2-b);shape.closePath();const g=new T.ExtrudeGeometry(shape,{depth:d-2*b,bevelEnabled:true,bevelThickness:b,bevelSize:b,bevelSegments:2,curveSegments:1,steps:1});g.translate(0,0,-d/2+b);return mesh(g,color,name,p);}
  // Highland palette: wallLight d8e1e8, wallMid a9bdcf, wallShadow 7898b5, band 6685a0, roof 5d7790, windowDark 13243a.
- const stone=0xd8e1e8,shade=0xa9bdcf,plinth=0x7898b5,trim=0x6685a0,slate=0x5d7790,dark=0x13243a,pale=0xe3ebf1;
+ const stone=0xeadcbf,shade=0xd2c09c,plinth=0xb8a47f,trim=0xc9b38b,slate=0xb4532f,dark=0x3a2a1f,pale=0xf3e9d3;
  function roof(x,y,z,w,d,h,name){
   const p=[-w/2,0,-d/2,w/2,0,-d/2,w/2,0,d/2,-w/2,0,d/2,-w*.12,h,0,w*.12,h,0];
   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setIndex([0,4,1,1,4,5,1,5,2,2,5,3,3,5,4,3,4,0,0,1,2,0,2,3]);g.computeVertexNormals();const m=mesh(g,slate,name,[x,y,z]);
@@ -30,7 +30,7 @@ export function createMorrisCastle({root,position=new T.Vector3()}={}){
   const clip=(poly,A,B)=>{const out=[];for(let j=0;j<poly.length;j++){const a=poly[j],b=poly[(j+1)%poly.length],da=value(A,a)-value(B,a),db=value(A,b)-value(B,b),ina=da<=1e-8,inb=db<=1e-8;if(ina)out.push(a);if(ina!==inb){const t=da/(da-db);out.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t]);}}return out;};
   for(let iz=0;iz<nz;iz++)for(let ix=0;ix<nx;ix++){
    const x0=-w/2+ix*w/nx+.009,x1=-w/2+(ix+1)*w/nx-.009,z0=-d/2+iz*d/nz+.006,z1=-d/2+(iz+1)*d/nz-.006;
-   for(let f=0;f<planes.length;f++){let poly=[[x0,z0],[x1,z0],[x1,z1],[x0,z1]];for(let k=0;k<planes.length&&poly.length;k++)if(k!==f)poly=clip(poly,planes[f],planes[k]);if(poly.length<3)continue;const pts=[],idx=[],n=poly.length;for(const lift of[.012,.044])for(const[a,b]of poly)pts.push(a,value(planes[f],[a,b])+lift,b);for(let j=1;j<n-1;j++)idx.push(n,n+j+1,n+j,0,j,j+1);for(let j=0;j<n;j++){const k=(j+1)%n;idx.push(j,k,n+j,k,n+k,n+j);}const tg=new T.BufferGeometry();tg.setAttribute('position',new T.Float32BufferAttribute(pts,3));tg.setIndex(idx);tg.computeVertexNormals();detail(tg,[x,y,z],[0x5d7790,0x667f98,0x54708a][(ix+iz*5)%3]);}
+   for(let f=0;f<planes.length;f++){let poly=[[x0,z0],[x1,z0],[x1,z1],[x0,z1]];for(let k=0;k<planes.length&&poly.length;k++)if(k!==f)poly=clip(poly,planes[f],planes[k]);if(poly.length<3)continue;const pts=[],idx=[],n=poly.length;for(const lift of[.012,.044])for(const[a,b]of poly)pts.push(a,value(planes[f],[a,b])+lift,b);for(let j=1;j<n-1;j++)idx.push(n,n+j+1,n+j,0,j,j+1);for(let j=0;j<n;j++){const k=(j+1)%n;idx.push(j,k,n+j,k,n+k,n+j);}const tg=new T.BufferGeometry();tg.setAttribute('position',new T.Float32BufferAttribute(pts,3));tg.setIndex(idx);tg.computeVertexNormals();detail(tg,[x,y,z],[0xb4532f,0xc0643c,0xa44a2a][(ix+iz*5)%3]);}
    detailCounts.roofTiles++;
   }
   return m;
@@ -54,11 +54,11 @@ export function createMorrisCastle({root,position=new T.Vector3()}={}){
    const width=.67+.08*Math.sin(row*4+col),u=-span/2+col*.78+(row%2)*.39,y=.42+row*.42;
    if(u-width/2<-span/2+.18||u+width/2>span/2-.18||openings.some(o=>Math.abs(u-o.u)<width/2+o.w/2&&Math.abs(y-o.y)<.21+o.h/2))continue;
    const depth=.035+.035*(.5+.5*Math.sin(row*13+col*7)),p=front?[a.x+u,y,a.z+out+depth/2]:[a.x+(side==='right'?1:-1)*(out+depth/2),y,a.z-(side==='right'?1:-1)*u];
-   detailBox(p,[width,.35,depth],[stone,pale,0xcad8e3,0xbccedb][(col+row*3)%4],angle);detailCounts.masonry++;
+   detailBox(p,[width,.35,depth],[stone,pale,0xe0d0ae,0xd6c4a0][(col+row*3)%4],angle);detailCounts.masonry++;
   }
  }
  const foundation=box([0,.1,0],[14,.2,10],shade,'castle-continuous-foundation');supports.push(foundation);
- const court=box([0,.235,2.1],[5.4,.07,5.2],0xc5d1d8,'castle-open-courtyard-floor');supports.push(court);
+ const court=box([0,.235,2.1],[5.4,.07,5.2],0xe2d4b4,'castle-open-courtyard-floor');supports.push(court);
  const masses=[
   {x:-.35,z:-2.3,w:3.45,d:4.35,h:13.2,name:'keep'},
   {x:-4.8,z:-.6,w:3.2,d:5.5,h:4.8,name:'long-low-west-wing'},
@@ -83,9 +83,9 @@ export function createMorrisCastle({root,position=new T.Vector3()}={}){
  const arch=new T.Shape();arch.moveTo(-r,spring);arch.absarc(0,spring,r,Math.PI,0,true);arch.lineTo(r,3.4);arch.lineTo(-r,3.4);arch.closePath();
  mesh(new T.ExtrudeGeometry(arch,{depth:.7,bevelEnabled:false,curveSegments:16}),stone,'castle-open-arch-crown',[0,gateY,z-.35]);
  for(const sign of[-1,1]){
-  const door=box([sign*1.48,1.12,z-.15],[.12,1.7,1.1],0x33506e,'castle-folded-open-slate-door');door.rotation.y=sign*.22;
+  const door=box([sign*1.48,1.12,z-.15],[.12,1.7,1.1],0x6b4a2e,'castle-folded-open-slate-door');door.rotation.y=sign*.22;
   box([sign*2.05,3.75,z],[1.75,.3,1],trim,'castle-gate-cap');
-  for(let row=0;row<7;row++)detailBox([sign*2.05,.5+row*.44,z+.39],[1.38,.37,.09],[0xc4d3df,0xb4c7d6,0xd3e0ea][row%3]);
+  for(let row=0;row<7;row++)detailBox([sign*2.05,.5+row*.44,z+.39],[1.38,.37,.09],[0xe6d8ba,0xd9c8a4,0xeee3c8][row%3]);
  }
  // Individual wedge voussoirs project forward but never narrow the 2.6m arch.
  for(let i=0;i<13;i++){

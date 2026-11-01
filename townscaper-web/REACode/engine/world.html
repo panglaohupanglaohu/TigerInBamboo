@@ -1,0 +1,1016 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Engine — Mesa / World</title>
+<style>
+#snap {
+  position: fixed; right: 18px; bottom: 52px; width: 192px;
+  display: none; flex-direction: column; gap: 4px;
+  font: 11px/1.3 ui-monospace, monospace; color: #9fb6c0;
+}
+#snap.on { display: flex; }
+#snap img {
+  width: 192px; height: 192px; image-rendering: auto;
+  background: #0f1c24; border: 1px solid #2b4753;
+}
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #295263; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 14px; bottom: 12px; color: #cfe3ec;
+    font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.45); pointer-events: none; white-space: pre;
+  }
+  #hint {
+    position: fixed; right: 14px; bottom: 12px; color: #9fb9c6;
+    font: 12px/1.5 -apple-system, "PingFang SC", sans-serif; pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="hud"></div>
+<div id="hint">R 换岛 · D 制图稿 · W 线框 · S 岛快照 · T/N/L 贴图/法线/顶点光 · G 沉积线 · B 色块 · E 田野线 · V 树/云 · P 点光源 · K 坡向条纹 · J 崖肩渗漏 · H 面阴影 · Y 体素顶点阴影 · M 海岸等值线 · F 蝴蝶 · O 河道路线 · Q 雪 · 4 雾 · 5 法线混合 · 7 视线 · Z 瀑布 · U 坡面草 · I 风旗 · A 拓扑线 · C 笼形 · X 顶点草 · 拖动旋转 · 滚轮缩放</div>
+<div id="snap"><span>64² snapshot</span><img alt=""></div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { TownMesh } from '../src/mesh.js';
+import { repairInvertedCells } from '../src/grid.js';
+import { buildMesa, MESA_PALETTE } from './mesa.js';
+import { buildHouseRoofs } from './roofs.js';
+import { OutlinePass } from './outline.js';
+import { buildShoreWaves, makeShoreWaveMaterial, makeOceanWaves } from './waves.js';
+import { createBacklitRim } from './backlit.js';
+import { carveRivers, paintRivers } from './rivers.js';
+import { relaxCellAreas } from './relax.js';
+import { createWaterVolume } from './watervol.js';
+import { createBirds } from './birds.js';
+import { createButterflies } from './butterflies.js';
+import { createFlags } from './flags.js';
+import { createWaterfalls } from './waterfall.js';
+import { createSnow } from './snow.js';
+import { createFogLayer } from './fog.js';
+import { createLineOfSight } from './los.js';
+import { makeWindField, windStats } from '../src/wind.js';
+import { buildNavGraph } from '../src/navgraph.js';
+import { deformCages } from './cage.js';
+import { traceStraightLine, edgeMid } from '../src/topoline.js';
+import { dualCells, pickFoliageSites } from '../src/dual.js';
+import { createFlatReflection } from './reflection.js';
+import { createIslandSnapshot } from './snapshot.js';
+import { checkMesh, formatMeshReport } from './meshcheck.js';
+import { makeSurfaceMaterial } from './surface.js';
+import { smoothTerrainNormals } from './normalsmooth.js';
+import { createHeightLookup, attachVertexLookup } from './vertexlight.js';
+import { createBlotch, attachBlotch } from './blotch.js';
+import { createImpostors, makeBlobTree, makeBlobCloud } from './impostor.js';
+import { createPointLightVolume } from './lightvol.js';
+import { createSurfaceShadow, attachSurfaceShadow } from './surfaceshadow.js';
+import { createVoxelSunShadow } from './voxelshadow.js';
+import { createCoastContour } from './contour.js';
+
+const SEA = '#295263';
+const canvas = document.getElementById('view');
+const hud = document.getElementById('hud');
+
+// ?readback=1 keeps the drawing buffer so a test harness can sample pixels
+// with gl.readPixels; it costs performance, so it is opt-in.
+const readback = new URLSearchParams(location.search).has('readback');
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  powerPreference: 'high-performance',
+  preserveDrawingBuffer: readback,
+});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.06;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// 阴影"按需更新"：地图只在岛/太阳/样式变化时重烘一次，不是每帧。
+// 原文明说 "if I only update them on command after a regeneration" —— 这对移动端
+// 是能不能开阴影的分水岭（每帧一次 2048² 的深度 pass 太贵）。
+renderer.shadowMap.autoUpdate = false;
+renderer.shadowMap.needsUpdate = true;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(SEA).convertSRGBToLinear();
+
+const camera = new THREE.PerspectiveCamera(26, 1, 0.4, 340);
+
+// ---- lights: one warm key, one cool fill, a soft sky --------------------
+const ambient = new THREE.AmbientLight(0xfff6e8, 0.9);
+scene.add(ambient);
+
+const hemi = new THREE.HemisphereLight(0xe2f4ff, 0xc9c3b4, 1.2);
+scene.add(hemi);
+
+const sun = new THREE.DirectionalLight(0xfff3e0, 2.9);
+sun.position.set(13, 10, 15);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.near = 1;
+sun.shadow.camera.far = 90;
+sun.shadow.camera.left = -26;
+sun.shadow.camera.right = 26;
+sun.shadow.camera.top = 26;
+sun.shadow.camera.bottom = -26;
+sun.shadow.bias = -0.0012;
+sun.shadow.radius = 3;
+scene.add(sun);
+scene.add(sun.target);
+
+const fill = new THREE.DirectionalLight(0xbcd8ea, 0.7);
+fill.position.set(-12, 7, -9);
+scene.add(fill);
+
+// 点光源：在岛上慢慢绕圈。位置每帧写进 volume（lightvol.js）
+const pointLight = new THREE.Vector3(2.5, 6.6, 1.5);
+let lightTick = 0;
+let lightParked = null;   // 测试用：把点光源钉在一个位置，方便前后对比
+
+// One clock for every looping shader: the shore band and the ocean are meant
+// to breathe together, and a single uniform keeps them from drifting apart.
+const clock = { value: 0 };
+
+// ---- water: a flat plane that catches the island's shadow ---------------
+const waterMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#24485a'),
+  roughness: 0.92,
+  metalness: 0,
+  // translucent so the flat reflection reads through it; an opaque plane
+  // hides everything below the waterline
+  transparent: true,
+  opacity: 0.88,
+});
+makeOceanWaves(waterMaterial, { amp: 0.034, period: 8.0, timeRef: clock });
+const water = new THREE.Mesh(new THREE.PlaneGeometry(1500, 1500, 380, 380), waterMaterial);
+water.rotation.x = -Math.PI / 2;
+water.position.y = -0.035;
+water.receiveShadow = true;
+scene.add(water);
+
+// ---- water volume: a stack of slices, not a mirror ----------------------
+const snapshot = createIslandSnapshot(renderer, scene, { size: 64, upscale: 3 });
+const waterVolume = createWaterVolume({ colour: '#2d6b7d', planes: 7, top: -0.05, bottom: -1.7, extent: 120 });
+scene.add(waterVolume.group);
+
+// ---- the island --------------------------------------------------------
+// Texture layer (surface.js): projected patches + every-other-texel lines.
+// Kept behind a switch so a broken shader can be isolated in one keypress.
+const opts = { swirl: true, density: true, segments: true, field: true, surface: true, smoothNormals: true, vertexLight: true, sediment: true, blotch: true, trees: true, lightvol: false, streak: true, bleed: true, shadow: true, voxelShadow: false, contour: false, butterflies: true, route: false, cage: false, topo: false, dual: false, flags: true, slopeGrass: true, waterfalls: true, snow: true, fog: true, los: false, normalBlend: 0.95 };
+
+// Clip 4 is the same geometry rendered "edge first": flat grey faces, no
+// colour, no shadow, a heavier line. Same engine, different read.
+const draftMaterial = new THREE.MeshLambertMaterial({ color: 0xd9dadc, flatShading: false });
+let style = 'color';
+let material = null;   // per-build: the surface material carries per-island uniforms
+// 调试视角（原文 1313841094069817344）：0 正常 / 1 纯贴图 / 2 纯光照。
+// 不换材质，只换标准材质最后一步的输出 —— 换材质会把 6 层 onBeforeCompile 链全丢掉。
+let viewMode = 0;
+const VIEW_NAMES = ['shaded', 'texture-only', 'light-only'];
+function setViewMode(m) {
+  viewMode = ((m % 3) + 3) % 3;
+  if (material && material.userData.surfaceUniforms) {
+    material.userData.surfaceUniforms.uViewMode.value = viewMode;
+  }
+  hud.dataset.view = VIEW_NAMES[viewMode];
+  return VIEW_NAMES[viewMode];
+}
+
+function applyStyle(next) {
+  style = next;
+  const draft = style === 'draft';
+  for (const m of [world.land, world.roofs]) m.material = draft ? draftMaterial : material;
+  water.visible = !draft;
+  waterVolume.group.visible = !draft;
+  scene.background = new THREE.Color(draft ? '#8a8b8d' : SEA);
+  if (draft) scene.background = new THREE.Color('#8a8b8d');
+  else scene.background = new THREE.Color(SEA).convertSRGBToLinear();
+  renderer.shadowMap.enabled = !draft;
+  outline.material.uniforms.uStrength.value = draft ? 1.5 : 0.8;
+  // Normal-contrast lines (1482011744843223042) by default: at 1.0 the depth term
+  // dominates every silhouette, which drags the amber rim onto the whole outline
+  // instead of leaving it on the plateau lips. 0.3 keeps a hint of the depth edge
+  // without that.
+  outline.material.uniforms.uDepthMix.value = draft ? 0.75 : 0.3;
+  // 线宽交给 setThickness：它会把 CSS 像素乘上当前 DPR（4k 屏幕上也一样粗）
+  outline.setThickness(draft ? 1.05 : 0.85);
+  outline.material.uniforms.uGlow.value.setRGB(0, 0, 0);
+  if (!draft) outline.material.uniforms.uGlow.value.set('#ffb45e').convertSRGBToLinear().multiplyScalar(1.30);
+  sun.castShadow = !draft;
+  for (const m of [world.land, world.roofs]) { m.castShadow = !draft; m.receiveShadow = !draft; }
+  // 阴影是"按需"更新，开关样式之后必须显式重烘一次，否则会留着旧图/空图
+  renderer.shadowMap.needsUpdate = true;
+}
+
+let world = null;
+let seed = 7;
+
+function build(nextSeed) {
+  seed = nextSeed;
+  if (world) {
+    scene.remove(world.land, world.roofs, world.waves);
+    if (world.rim) { scene.remove(world.rim.mesh); world.rim.dispose(); }
+    if (world.birds) { scene.remove(world.birds.group); world.birds.dispose(); }
+    if (world.butterflies) { scene.remove(world.butterflies.group); world.butterflies.dispose(); }
+    if (world.flags) { scene.remove(world.flags.group); world.flags.dispose(); }
+    if (world.waterfalls) { scene.remove(world.waterfalls.group); world.waterfalls.dispose(); }
+    if (world.snow) { scene.remove(world.snow.group); world.snow.dispose(); }
+    if (world.fog) { scene.remove(world.fog.group); world.fog.dispose(); }
+    if (world.los) { scene.remove(world.los.group); world.los.dispose(); }
+    if (world.topo) { scene.remove(world.topo.line); world.topo.line.geometry.dispose(); world.topo.line.material.dispose(); }
+    if (world.route) { scene.remove(world.route.group); world.route.line.geometry.dispose(); world.route.line.material.dispose(); world.route.dots.geometry.dispose(); world.route.dots.material.dispose(); }
+    if (world.reflection) { scene.remove(world.reflection.mesh); world.reflection.dispose(); }
+    if (world.lookup) world.lookup.dispose();
+    if (world.blotch) world.blotch.dispose();
+    if (world.impostors) { scene.remove(world.impostors.group); world.impostors.dispose(); }
+    if (world.lightVol) world.lightVol.dispose();
+    if (world.shadow) world.shadow.dispose();
+    if (world.contour) { scene.remove(world.contour.mesh); world.contour.dispose(); }
+    world.land.geometry.dispose();
+    world.roofs.geometry.dispose();
+  }
+
+  const { town, grid, houses } = buildMesa({ seed, radius: 19, hexSize: 0.46, towers: 4, caves: 3, houses: 6 });
+
+  // rivers: depth-first wiggle, then breadth-first levelling of the banks
+  // Mushrooming fix: tall columns pull their own footprint in, so peaks come
+  // out steep instead of fat. Small step on purpose — this is a relax, not a
+  // remesh, and an aggressive step folds quads inside out.
+  const relaxed = relaxCellAreas(grid, (c) => town.top(c), { passes: 3, strength: 0.18 });
+  // 反转/塌陷体检（grid.js，原文 1302686201401442309）：松弛会把小格子推成
+  // 反向或几乎重合，那种 patch 在山体网格里会塌成一个点，邻居被拉出细长触手。
+  // 所以每次几何松弛之后都要过一遍。
+  const gridRepair = repairInvertedCells(grid);
+  // 笼形变形（cage.js，原文 1579478470098243584）：位移只依赖顶点基准坐标，
+  // 共享顶点的格子拿到同一个位移 → 不裂缝。变形会改变绕向，所以之后必须再体检。
+  let cage = null;
+  let cageRepair = null;
+  if (opts.cage) {
+    cage = deformCages(grid, town, { amount: 0.085, freq: 0.42, lift: 0.22, seed: seed + 4 });
+    cageRepair = repairInvertedCells(grid);
+  }
+  const rivers = carveRivers(town, grid, { seed: seed + 17, count: 3, wiggle: 0.5, depth: 2 });
+  paintRivers(town, grid, rivers.cells, 15);
+  town.version++;
+
+  // 河道导航图（src/navgraph.js，原文 1795831296952041691）：
+  // 顺流 0.35 / 逆流 1.35 的边权，路径就是"沿河更快"的那条。
+  // 这里只算一次，用来画那条黄线（参考片里就是一条黄折线 + 白点）。
+  const nav = buildNavGraph(town, grid, rivers);
+  const navStat = nav.stats()[0] || null;
+  const townMesh = new TownMesh(town, { levelHeight: 0.42, mode: 'terrain' });
+  townMesh.rebuild();
+
+  // Voxel-normal smoothing (normalsmooth.js): the terrain mesh splits verts per
+  // quad, so computeVertexNormals() gives flat faces. Average by position
+  // within one voxel to rebuild the smooth field, keeping corners hard.
+  let normals = null;
+  if (opts.smoothNormals) {
+    normals = smoothTerrainNormals(townMesh.geometry, { radius: 0.7, blend: 0.95, hardLo: 0.28, hardHi: 0.72 });
+  }
+
+  // Texture layer + one-lookup vertex lighting, both on the land material.
+  const landMaterial = makeSurfaceMaterial({
+    roughness: 0.92,
+    strength: opts.surface ? 0.9 : 0.0,
+    scale: 1.0,
+    base: 0.0,
+    // 沉积线抖动（surface.js 的 sWarp）：关掉就是上一轮的直水平线
+    sedAmp: opts.sediment ? 0.24 : 0.0,
+    // 坡面草（1063115611289645057）：只标"能走"的坡带
+    slopeGrass: opts.slopeGrass ? 0.85 : 0.0,
+    // 抽象田野（1714613599035863191）：0.62 的强度、线距 ≈0.44 世界单位
+    fieldAmt: opts.field ? 1.0 : 0.0,
+    fieldFreq: 13.5,
+  });
+  let lookup = null;
+  if (opts.vertexLight) {
+    lookup = createHeightLookup(town, grid, { res: 24, strength: 0.55, levelHeight: 0.42 });
+    attachVertexLookup(landMaterial, lookup);
+  }
+  // 大笔触色块（blotch.js）：贴图 + 离边缘距离场，边缘处自己收住
+  let blotch = null;
+  if (opts.blotch) {
+    blotch = createBlotch({
+      town, grid, seed: seed + 5, scale: 0.05, strength: 1.0,
+      levelHeight: 0.42,
+      // 崖肩受控渗漏 1696896119794479541：0.14 世界单位 ≈ 崖面的 1/3 格
+      bleed: opts.bleed ? 0.14 : 0,
+      // 坡向条纹 1786014232594485497：陡面上的"烘进去的光"
+      streak: opts.streak ? 0.75 : 0,
+      // 漩涡 1703750394164199473：把 uv 按低频角度场旋转，笔触被拉成弧形
+      swirl: opts.swirl ? 2.3 : 0.0,
+      // 可变密度 + 高度分段线 1704246032626762189
+      density: opts.density ? 0.55 : 0.0,
+      segments: opts.segments ? 0.12 : 0.0,
+    });
+    attachBlotch(landMaterial, blotch);
+  }
+
+  // 贴图空间的面阴影（surfaceshadow.js，原文 1705195380457996629）：
+  // 投射高度与 z 测试高度是两个独立参数 —— 阈值调大以后，只有崖和屋顶投影，
+  // 一级台阶不投，于是画面只剩"草-崖交界"和"屋檐下"两种影子。
+  let shadow = null;
+  if (opts.shadow) {
+    shadow = createSurfaceShadow(town, grid, houses, {
+      res: 40,
+      levelHeight: 0.42,
+      castLv: 1.55,   // 阈值尺：1.5~2 级 → 一级台阶不算投影体
+      testLv: 0.14,   // 空间尺：在接收面之上多高处做测试
+      reach: 0.85,    // 空间尺：影子最长伸 0.85 世界单位（≈2 格）
+      strength: 0.42,
+    });
+    shadow.setSun(new THREE.Vector3(13, 12, 15));
+    attachSurfaceShadow(landMaterial, shadow);
+  }
+  // 平滑/硬法线的混合**已经**由 surface.js 的 uNormalMix 提供（normalsmooth.js 会存 aFlatNormal）。
+  // 这里只是把句柄拿出来，让 5 键能在运行时切档 —— 之前只能在构造函数里定死 1.0。
+  const normalMix = landMaterial.userData.surfaceUniforms
+    ? landMaterial.userData.surfaceUniforms.uNormalMix
+    : null;
+  if (normalMix) normalMix.value = opts.normalBlend;
+  material = landMaterial;
+  if (landMaterial.userData.surfaceUniforms) landMaterial.userData.surfaceUniforms.uViewMode.value = viewMode;
+
+  // 逐顶点体素阴影（voxelshadow.js，原文 1190191289922465793）。
+  // 必须在建材质之后、lightvol 之前：它直接改 geometry 的 color，
+  // 之后 lightvol 会把这份"已带阴影的底色"当成 baseColors。
+  let voxelShadow = null;
+  if (opts.voxelShadow) {
+    voxelShadow = createVoxelSunShadow({
+      town, grid, geometry: townMesh.geometry,
+      levelHeight: 0.42,
+      sun: new THREE.Vector3(13, 12, 15),
+      res: 64, ny: 24, steps: 10, strength: 0.24,
+    });
+    voxelShadow.apply();
+  }
+
+  const land = new THREE.Mesh(townMesh.geometry, landMaterial);
+
+  // 点光源体积（lightvol.js）：6 方向可见度体积 + 一个移动的点光源
+  let lightVol = null;
+  if (opts.lightvol) {
+    lightVol = createPointLightVolume({ town, grid, geometry: townMesh.geometry, levelHeight: 0.42, radius: 4.0 });
+    lightVol.update(pointLight);
+  }
+
+  // Flat-colour reflection under the waterline: mirrored geometry, no lighting,
+  // one in-between tone. See engine/reflection.js for why it is not a mirror.
+  const reflection = createFlatReflection(land, town, { seaHex: '#2d6b7d', opacity: 0.58, surfaceY: -0.03 });
+  scene.add(reflection.mesh);
+  land.castShadow = true;
+  land.receiveShadow = true;
+  scene.add(land);
+
+  // Shore waves: geometry carries the baked in/out directions and phase, the
+  // shader only walks the phase. No simulation runs per frame.
+  const waveGeo = buildShoreWaves(town, grid, { width: 1.15, rings: 9, smoothPasses: 2 });
+  const waves = new THREE.Mesh(waveGeo, makeShoreWaveMaterial({ period: 3.4, inAmp: 0.22, outAmp: 0.1, lift: 0.07, cycles: 3 }));
+  waves.material.uniforms.uTime = clock;
+  waves.renderOrder = 2;
+  // a light effect, not geometry: keep it out of the normal/edge pass
+  waves.userData.overlayOnly = true;
+  waves.frustumCulled = false;
+  scene.add(waves);
+
+  const roofGeo = buildHouseRoofs(town, houses, {
+    levelHeight: 0.42,
+    wallHex: '#eae3d3',
+    roofHex: '#bf8a7a',
+    rows: 7,
+  });
+  const roofs = new THREE.Mesh(roofGeo, material);
+  roofs.castShadow = true;
+  roofs.receiveShadow = true;
+  scene.add(roofs);
+
+  // Inverted-hull rim, visible only when the camera looks into the sun.
+  const rim = createBacklitRim(land, { colour: '#ffd9a8', width: 0.03, strength: 2.1 });
+  rim.mesh.userData.overlayOnly = true;
+  scene.add(rim.mesh);
+
+  // 拓扑直线（src/topoline.js，原文 1384958097542819845）：
+  // 每格"入边 → 对边"，只在边界处换边，所以格内永远笔直。
+  // 画成浅色细线铺在岛面上，和参考片里那张青灰底网格上的白线一个意思。
+  let topo = null;
+  if (opts.topo) {
+    let ts = (seed * 7919 + 31) | 0;
+    const trnd = () => { ts = (Math.imul(ts, 1103515245) + 12345) | 0; return ((ts >>> 8) & 0xffff) / 0xffff; };
+    const land = grid.cells.filter((c) => town.top(c) > 0);
+    const lines = [];
+    for (let k = 0; k < 22 && land.length; k++) {
+      const c = land[(trnd() * land.length) | 0];
+      lines.push(traceStraightLine(grid, {
+        start: c.id, entryEdge: (trnd() * 4) | 0, maxCells: 90, turnChance: 0.34, rng: trnd,
+      }));
+    }
+    const pos = [];
+    for (const l of lines) {
+      for (const seg of l.perCell) {
+        const cell = grid.cells[seg.id];
+        const y = town.top(cell) * 0.42 + 0.05;
+        const a = edgeMid(cell, seg.enter);
+        const b = edgeMid(cell, seg.exit);
+        // 每格两段：入边中点 → 格心 → 出边中点。格心必须用它自己那格的 y，
+        // 否则跨台阶的那一段会插进崖面里（片子里线是贴着地面走的）
+        pos.push(a[0], y, a[1], cell.cx, y, cell.cz, cell.cx, y, cell.cz, b[0], y, b[1]);
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    const m = new THREE.LineBasicMaterial({ color: '#eaf3c9', transparent: true, opacity: 0.85, depthWrite: false });
+    const line = new THREE.LineSegments(g, m);
+    line.userData.overlayOnly = true;
+    line.renderOrder = 4;
+    // 统计用：格子数 / 拐弯数 / 每拐一次穿多少格
+    const cellsInLines = lines.reduce((a, l) => a + l.cells.length, 0);
+    const turns = lines.reduce((a, l) => a + l.turns, 0);
+    const statInfo = {
+      lines: lines.length, cells: cellsInLines, turns,
+      cellsPerTurn: turns ? +(cellsInLines / turns).toFixed(2) : cellsInLines,
+      segs: pos.length / 6,
+    };
+    topo = { line, stats: statInfo };
+    window.__topo = topo;
+    scene.add(line);
+  }
+
+  // 瀑布（engine/waterfall.js，原文 1007587812462530561）：
+  // 只在河床掉 ≥2 级的地方生成"竖缎带 + 泡沫圈"，一级台阶不出瀑布。
+  let waterfalls = null;
+  if (opts.waterfalls) {
+    waterfalls = createWaterfalls(town, grid, rivers, { minDrop: 2, levelHeight: 0.42, width: 0.17 });
+    scene.add(waterfalls.group);
+  }
+
+  // 河道路线可视化：黄折线贴地 + 节点白点。参考片里那条线就是导航图本身，
+  // 不是装饰 —— 线走到哪里，说明寻路选了哪里（所以它会为了走河道而绕路）。
+  let route = null;
+  if (navStat && navStat.path.length > 1) {
+    const pts = navStat.path.map((id) => {
+      const c = grid.cells[id];
+      // +0.16 而不是 +0.06：河道被削在台地之间，贴着河床画会整个被崖壁挡住
+      // （实测在 30° 俯角下一格都看不见）。抬到崖肩之上才读得出来 ——
+      // 参考片是接近俯视的机位，所以那条线看起来一直贴着河。
+      return new THREE.Vector3(c.cx, town.top(c) * 0.42 + 0.16, c.cz);
+    });
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
+    const lineMat = new THREE.LineBasicMaterial({ color: '#ffe14d', transparent: true, opacity: 0.95, depthWrite: false });
+    const line = new THREE.Line(lineGeo, lineMat);
+    line.userData.overlayOnly = true;
+    line.renderOrder = 4;
+    const dotGeo = new THREE.SphereGeometry(0.045, 6, 4);
+    const dotMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
+    const dots = new THREE.InstancedMesh(dotGeo, dotMat, pts.length);
+    const dm = new THREE.Matrix4();
+    pts.forEach((p, i) => { dm.makeTranslation(p.x, p.y + 0.02, p.z); dots.setMatrixAt(i, dm); });
+    dots.instanceMatrix.needsUpdate = true;
+    dots.frustumCulled = false;
+    dots.userData.overlayOnly = true;
+    route = { group: new THREE.Group(), line, dots, stat: navStat };
+    route.group.add(line, dots);
+    route.group.visible = opts.route;
+    scene.add(route.group);
+  }
+
+  // Birds: perched on the roofs, a few always in the air.
+  // Perch height by measurement, not by formula: drop a ray from above onto the
+  // land + roofs and sit the bird on the first hit. Cached per cell because the
+  // flock reuses a handful of perches.
+  const ray = new THREE.Raycaster();
+  const down = new THREE.Vector3(0, -1, 0);
+  const perchCache = new Map();
+  const groundAt = (cell) => {
+    if (perchCache.has(cell.id)) return perchCache.get(cell.id);
+    ray.set(new THREE.Vector3(cell.cx, 40, cell.cz), down);
+    ray.far = 80;
+    const hits = ray.intersectObjects([land, roofs], false);
+    const y = hits.length ? hits[0].point.y : town.top(cell) * 0.42;
+    perchCache.set(cell.id, y);
+    return y;
+  };
+  const birds = createBirds({ town, grid, houses, count: 16, seed: seed + 3, groundAt });
+  scene.add(birds.group);
+
+  // 蝴蝶（butterflies.js，原文 1273520600221433857）：绕着"可能的落点"晃，
+  // 换落点造成漂移，世界空间噪声让一群蝴蝶一起走但不互相跟随。
+  // 高度用同一个 groundAt 射线：落点必须贴在草地/屋顶上，不能悬空。
+  let butterflies = null;
+  if (opts.butterflies) {
+    butterflies = createButterflies({ town, grid, count: 16, seed: seed + 9, groundAt, scale: 1, avoid: houses });
+    scene.add(butterflies.group);
+  }
+
+  // 风场 + 旗子（src/wind.js + engine/flags.js，原文 926903893866541057 /
+   // 926890207298899969）：场只吃世界坐标；旗面是"沿被风吹走的虚拟粒子轨迹"
+  // 扫出来的带子，所以杆顶几乎不动、越往外越飘。
+  const wind = makeWindField({ seed: seed + 12 });
+  let flags = null;
+  if (opts.flags) {
+    flags = createFlags({
+      town, grid, houses, wind, count: 7, seed: seed + 31,
+      groundAt, poleHeight: 1.0, clothW: 0.62, clothH: 0.28,
+    });
+    scene.add(flags.group);
+  }
+
+  // 雪（engine/snow.js，原文 943230624369868800 / 823848950553780226）：
+  // 粒子被**风场**吹着走，靠近地面时按"离地高度"压暗（粒子也有接触 AO）。
+  let snow = null;
+  if (opts.snow) {
+    snow = createSnow({ wind, town, grid, count: 1800, seed: seed + 41, box: 24, top: 15 });
+    scene.add(snow.group);
+  }
+
+  // 雾（engine/fog.js，原文 906207980802252801 "for background effects, subtlety is key"）：
+  // 贴水面的一圈软片，用同一套风场平流；厚度 ≈ 岛高的 1/5，浓度压到 0.22。
+  let fog = null;
+  if (opts.fog) {
+    fog = createFogLayer({ wind, count: 12, radius: 26, top: 1.35, density: 0.12, seed: seed + 61 });
+    scene.add(fog.group);
+  }
+
+  // 廉价视线（engine/los.js，原文 810878197134950401）：只沿射线走，不逐三角形求交。
+  // 高度查询用一张 0.5 单位的顶面栅格，比 raycaster 便宜两个数量级。
+  const hres = 0.5;
+  let hminX = Infinity, hmaxX = -Infinity, hminZ = Infinity, hmaxZ = -Infinity;
+  for (const c of grid.cells) {
+    hminX = Math.min(hminX, c.minX); hmaxX = Math.max(hmaxX, c.maxX);
+    hminZ = Math.min(hminZ, c.minZ); hmaxZ = Math.max(hmaxZ, c.maxZ);
+  }
+  const hw = Math.ceil((hmaxX - hminX) / hres) + 1;
+  const hh = Math.ceil((hmaxZ - hminZ) / hres) + 1;
+  const hgrid = new Float32Array(hw * hh);
+  for (const c of grid.cells) {
+    const t = town.top(c);
+    if (!t) continue;
+    const i0 = Math.max(0, Math.floor((c.minX - hminX) / hres));
+    const i1 = Math.min(hw - 1, Math.ceil((c.maxX - hminX) / hres));
+    const j0 = Math.max(0, Math.floor((c.minZ - hminZ) / hres));
+    const j1 = Math.min(hh - 1, Math.ceil((c.maxZ - hminZ) / hres));
+    for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) hgrid[j * hw + i] = t;
+  }
+  const heightAtXZ = (x, z) => {
+    const fi = (x - hminX) / hres, fj = (z - hminZ) / hres;
+    if (fi < 0 || fj < 0 || fi >= hw - 1 || fj >= hh - 1) return null;
+    const i = fi | 0, j = fj | 0, tx = fi - i, tz = fj - j;
+    const v = (hgrid[j * hw + i] * (1 - tx) + hgrid[j * hw + i + 1] * tx) * (1 - tz)
+            + (hgrid[(j + 1) * hw + i] * (1 - tx) + hgrid[(j + 1) * hw + i + 1] * tx) * tz;
+    return v > 0.02 ? v * 0.42 : null;      // 0 = 水，视线到此为止
+  };
+  const los = createLineOfSight({ heightAt: heightAtXZ, levelHeight: 0.42, rays: 96, step: 0.35, maxR: 20 });
+
+  // --- impostor 树 / 云（impostor.js）：8 方位烘焙 + 实例化 billboard -----
+  // 原文 1849427564034498642 的树、1852334860137849222 的云，共用一条管线。
+  // 先烘进图集，再摆实例 —— 顺序不能反，billboard 的 uv 直接来自图集里的矩形。
+  let impostors = null;
+  let treeCount = 0;
+  let shrubCount = 0;
+  if (opts.trees) {
+    // 顶点格灌木要额外 8 个 64² 槽位：树×2（96²）+ 云（128²）+ 灌木（64²）
+    // 一共 323,712 px²，超过 512²=262,144 → 打包器会**自动翻倍到 1024**，
+    // 但烘焙用的 RT 还是 512，于是最后登记的灌木被烘到画布外面 → 全程不可见
+    // （截图里 40 个实例存在、一个像素都没有）。所以开了顶点草就直接给 1024。
+    impostors = createImpostors(renderer, { atlas: opts.dual ? 1024 : 512 });
+    const t1 = makeBlobTree(seed + 1, { height: 1.15, canopy: '#7d9270' });
+    const t2 = makeBlobTree(seed + 7, { height: 1.45, canopy: '#88997a' });
+    // leaf：视角调制 alpha + 球面叶片遮罩（1205420678859632640），树给足，云只给一点点
+    impostors.addObject('treeA', { geometry: t1.mesh, height: t1.height, tile: 96, leaf: 0.8 });
+    impostors.addObject('treeB', { geometry: t2.mesh, height: t2.height, tile: 96, leaf: 0.8 });
+    // 顶点格铺灌木（src/dual.js，原文 959752525867036672）：
+    // 每个顶点一瓣，一瓣一株 —— 天然不重叠，这是"对偶网格作为植被落点"的意义。
+    if (opts.dual) {
+      // 这个块在 `rnd` 声明之前（rnd 是给后面的树挑位置用的），所以自带一个
+      let ds = (seed * 2654435761) | 0;
+      const drnd = () => { ds = (Math.imul(ds, 1103515245) + 12345) | 0; return ((ds >>> 8) & 0xffff) / 0xffff; };
+      const dual = dualCells(grid, town);
+      const sites = pickFoliageSites(dual, town, grid, { limit: 26, spacing: 1.8 });
+      // 尺寸按"一瓣一株"量：顶点格中位面积 0.083 世界单位²（≈0.29 边长），
+      // 所以一丛草的高度取 0.9 左右，缩放到 ~1.0 —— 再小就只剩几个像素，
+      // 在整岛视图里根本看不见（第一版 0.62×0.55 就只有 3px）。
+      // 矮一点、胖一点：它要读成"草丛/灌木"，不是第二棵小树
+      const sh = makeBlobTree(seed + 21, { height: 0.38, canopy: '#5f7f55' });
+      impostors.addObject('shrub', { geometry: sh.mesh, height: sh.height, tile: 64, leaf: 0.85 });
+      for (const site of sites) {
+        const anchorCell = grid.cells[site.ids[0]];
+        const y = groundAt ? groundAt(anchorCell) : site.top * 0.42;
+        impostors.place('shrub', site.cx, y, site.cz, 0.85 + drnd() * 0.25);
+      }
+      shrubCount = sites.length;
+      window.__dual = dual.stats;
+    }
+    const cl = makeBlobCloud(seed + 11, { size: 3.6 });
+    // drift：云跟着风飘（impostor 的顶点着色器里按实例相位偏 centre）。
+    // 树不给 drift —— 树是钉在地上的，飘起来会像气球。
+    impostors.addObject('cloud', { geometry: cl.mesh, height: cl.height, tile: 128, leaf: 0.3, drift: 0.75 });
+
+    let s = (seed * 1103515245 + 12345) | 0;
+    const rnd = () => { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+    const wet = new Set(rivers.cells);
+    const order = grid.cells.filter((c) => town.top(c) > 0 && !wet.has(c.id));
+    for (let i = order.length - 1; i > 0; i--) { const j = (rnd() * (i + 1)) | 0; const t = order[i]; order[i] = order[j]; order[j] = t; }
+    const chosen = [];
+    for (const c of order) {
+      if (chosen.length >= 46) break;
+      if (houses.some((h) => (h.cell.cx - c.cx) ** 2 + (h.cell.cz - c.cz) ** 2 < 1.2)) continue;
+      if (chosen.some((p) => (p.x - c.cx) ** 2 + (p.z - c.cz) ** 2 < 2.2)) continue;
+      chosen.push({ x: c.cx, z: c.cz });
+      impostors.place(rnd() < 0.5 ? 'treeA' : 'treeB', c.cx, town.top(c) * 0.42, c.cz, 0.8 + rnd() * 0.35);
+    }
+    treeCount = chosen.length;
+    // 云：一圈低云，和树同一套 impostor（原文那朵"fluffy cloud"）
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2 + 0.7;
+      const r = 11 + rnd() * 11;
+      impostors.place('cloud', Math.cos(a) * r * 1.35, 13.5 + rnd() * 3.2, Math.sin(a) * r * 1.35, 0.5 + rnd() * 0.3);
+    }
+    const treeGroup = impostors.finalize();
+    scene.add(treeGroup);
+  }
+
+  // Manifold audit of what the mesher actually produced (1677242779162877952:
+  // "making sure the graph stays manifold and delauney-ish along the way").
+  const meshCheck = checkMesh(townMesh.geometry);
+  window.__meshCheck = meshCheck;
+  console.log('[mesh]', formatMeshReport(meshCheck));
+  if (meshCheck.samples.length) console.log('[mesh] worst edges', meshCheck.samples);
+
+  world = { land, roofs, waves, rim, birds, butterflies, flags, wind, waterfalls, snow, fog, los, normalMix, heightAtXZ, nav, route, topo, cage, reflection, town, grid, houses, rivers, relaxed, lookup, normals, meshCheck, blotch, impostors, lightVol, shadow, voxelShadow, contour: null };
+
+  // 海岸线等值线（contour.js + src/march.js，原文 1120036868966502401）：
+  // 不规则四边形上跑 marching squares，输出应当是首尾相接的一整圈。
+  if (opts.contour) {
+    const contour = createCoastContour(town, grid, { iso: 0.5, levelHeight: 0.42 });
+    scene.add(contour.mesh);
+    world.contour = contour;
+  }
+
+  // frame it
+  let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity, maxH = 0;
+  for (const c of grid.cells) {
+    if (town.top(c) === 0) continue;
+    minX = Math.min(minX, c.minX); maxX = Math.max(maxX, c.maxX);
+    minZ = Math.min(minZ, c.minZ); maxZ = Math.max(maxZ, c.maxZ);
+    maxH = Math.max(maxH, town.top(c));
+  }
+  const size = Math.max(maxX - minX, maxZ - minZ);
+  target.set((minX + maxX) / 2, maxH * 0.42 * 0.42, (minZ + maxZ) / 2);
+  const halfFov = (camera.fov * Math.PI) / 360;
+  dist = (size * 0.5) / Math.tan(halfFov) * 1.25;
+
+  stats = {
+    cells: grid.cells.length,
+    land: grid.cells.filter((c) => town.top(c) > 0).length,
+    maxTop: maxH,
+    houses: houses.length,
+    tris: (townMesh.geometry.getAttribute('position').count + roofGeo.getAttribute('position').count) / 3,
+    normals,
+    heightMap: lookup ? lookup.size : 0,
+    trees: treeCount,
+    butterflies: butterflies ? butterflies.stats().count : 0,
+    route: navStat ? { steps: navStat.steps, riverCells: navStat.riverCells, speedup: navStat.speedup, upDown: navStat.upDownRatio } : null,
+    cage: cage ? { moved: cage.moved, maxShift: cage.maxShift, repaired: cageRepair ? cageRepair.caught : null } : null,
+    topo: topo ? topo.stats : null,
+    shrubs: shrubCount,
+    flags: flags ? flags.stats().count : 0,
+    wind: windStats(wind, town, grid),
+    waterfalls: waterfalls ? waterfalls.stats() : null,
+    snow: snow ? snow.stats() : null,
+    atlas: impostors ? impostors.stats : null,
+    viewMode: VIEW_NAMES[viewMode],
+    gridHealth: grid.health,
+    gridRepair,
+    lightVol: lightVol ? lightVol.stats : null,
+    blotch: blotch ? { bleed: blotch.bleed, streak: blotch.streak } : null,
+    shadow: shadow ? shadow.stats : null,
+    voxelShadow: voxelShadow ? voxelShadow.stats : null,
+    contour: world.contour ? { segs: world.contour.segs, corners: world.contour.corners } : null,
+  };
+  hud.textContent =
+    `seed ${seed}   land ${stats.land}/${stats.cells}\n` +
+    `max height ${stats.maxTop}   houses ${stats.houses}\n` +
+    `${Math.round(stats.tris).toLocaleString()} tris`;
+  // 岛变了 → 阴影图必须重烘一次（只有这一次，之后每帧不再重算）
+  renderer.shadowMap.needsUpdate = true;
+  window.__worldStats = stats;
+  stats.riverCells = rivers.cells.length;
+  stats.meshOk = meshCheck.ok;
+  stats.nonManifold = meshCheck.nonManifoldEdges;
+  stats.degenerate = meshCheck.degenerateTriangles;
+}
+
+// ---- camera rig: slow orbit, same as the clips -------------------------
+const target = new THREE.Vector3(0, 2, 0);
+let yaw = 0.62;
+let pitch = 0.40;
+let dist = 26;
+let autoRotate = true;
+let wire = false;
+let stats = null;
+
+function updateCamera() {
+  const x = Math.cos(yaw) * Math.cos(pitch) * dist;
+  const z = Math.sin(yaw) * Math.cos(pitch) * dist;
+  const y = Math.sin(pitch) * dist;
+  camera.position.set(target.x + x, target.y + y, target.z + z);
+  camera.lookAt(target);
+  sun.target.position.copy(target);
+  sun.position.set(target.x + 13, 12, target.z + 15);
+  if (world && world.rim) {
+    world.rim.setSun(new THREE.Vector3().subVectors(sun.position, target).normalize());
+  }
+}
+
+// ---- the outline pass --------------------------------------------------
+const outline = new OutlinePass(renderer, {
+  color: '#1b2a33',
+  thickness: 0.8,
+  strength: 0.85,
+  fade: 0.5,
+});
+// Set it here, not in applyStyle(): that only runs when the user presses D, so
+// the value stayed at the constructor default of 1.0 and depth edges dominated
+// every silhouette (which is what dragged the amber rim around the whole island).
+outline.material.uniforms.uDepthMix.value = 0.3;
+outline.material.uniforms.uGlow.value.set('#ffb45e').convertSRGBToLinear().multiplyScalar(1.15);
+
+// Flip one of the three layers and rebuild, keeping the same island so the
+// before/after shots are comparable.
+function setOpt(name, value) {
+  opts[name] = value;
+  build(seed);
+  applyStyle(style);
+}
+
+function resize() {
+  const w = canvas.clientWidth || innerWidth;
+  const h = canvas.clientHeight || innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  outline.setSize(w, h);
+}
+addEventListener('resize', resize);
+
+// ---- input -------------------------------------------------------------
+let dragging = false;
+let lastX = 0, lastY = 0;
+canvas.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; lastY = e.clientY; autoRotate = false; });
+addEventListener('pointerup', () => { dragging = false; });
+addEventListener('pointermove', (e) => {
+  if (!dragging) return;
+  yaw -= (e.clientX - lastX) * 0.006;
+  pitch = Math.min(1.15, Math.max(0.06, pitch + (e.clientY - lastY) * 0.004));
+  lastX = e.clientX;
+  lastY = e.clientY;
+});
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  dist = Math.min(70, Math.max(8, dist * (1 + Math.sign(e.deltaY) * 0.08)));
+}, { passive: false });
+addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') build((Math.random() * 1e6) | 0);
+  if (e.key === 'd' || e.key === 'D') applyStyle(style === 'draft' ? 'color' : 'draft');
+  // 1/2/3：正常 / 纯贴图 / 纯光照（调试视角）
+  if (e.key === '1') setViewMode(0);
+  if (e.key === '2') setViewMode(1);
+  if (e.key === '3') setViewMode(2);
+  // S: bake the island into a 64² texture, sharpen it back up, show the result.
+  if (e.key === 's' || e.key === 'S') shootSnapshot();
+  // T / N / L flip the three layers added from the 2024 notes, one at a time:
+  // T = projected texture patches, N = voxel-smoothed normals, L = height lookup.
+  if (e.key === 't' || e.key === 'T') setOpt('surface', !opts.surface);
+  if (e.key === 'n' || e.key === 'N') setOpt('smoothNormals', !opts.smoothNormals);
+  if (e.key === 'l' || e.key === 'L') setOpt('vertexLight', !opts.vertexLight);
+  // G = 沉积线抖动（"把世界弄歪再撤销"），B = 大笔触色块 + 边缘收口
+  if (e.key === 'g' || e.key === 'G') setOpt('sediment', !opts.sediment);
+  if (e.key === 'b' || e.key === 'B') setOpt('blotch', !opts.blotch);
+  // V = impostor 树/云
+  if (e.key === 'v' || e.key === 'V') setOpt('trees', !opts.trees);
+  // K = 坡向条纹（山体贴图），J = 崖肩受控渗漏
+  if (e.key === 'k' || e.key === 'K') setOpt('streak', !opts.streak);
+  if (e.key === 'j' || e.key === 'J') setOpt('bleed', !opts.bleed);
+  // 6 = 漩涡，8 = 可变密度，9 = 高度分段线
+  if (e.key === '6') setOpt('swirl', !opts.swirl);
+  if (e.key === '8') setOpt('density', !opts.density);
+  if (e.key === '9') setOpt('segments', !opts.segments);
+  // E = 抽象田野（波纹细线）
+  if (e.key === 'e' || e.key === 'E') setOpt('field', !opts.field);
+  // P = 点光源体积（含半球 AO）
+  if (e.key === 'p' || e.key === 'P') setOpt('lightvol', !opts.lightvol);
+  // H = 贴图空间面阴影（投射高度 / z 测试高度解耦）
+  if (e.key === 'h' || e.key === 'H') setOpt('shadow', !opts.shadow);
+  // Y = 逐顶点体素阴影（沿太阳方向打射线，块状、低对比）
+  if (e.key === 'y' || e.key === 'Y') setOpt('voxelShadow', !opts.voxelShadow);
+  // M = 海岸线等值线（不规则四边形上的 marching squares，自检用）
+  if (e.key === 'm' || e.key === 'M') setOpt('contour', !opts.contour);
+  // F = 蝴蝶（绕落点打转 + 世界空间噪声）
+  if (e.key === 'f' || e.key === 'F') setOpt('butterflies', !opts.butterflies);
+  // Q = 雪（被风场吹着走，近地压暗）
+  if (e.key === 'q' || e.key === 'Q') setOpt('snow', !opts.snow);
+  // 4 雾 / 5 平滑↔硬法线 / 7 廉价视线
+  if (e.key === '4') setOpt('fog', !opts.fog);
+  if (e.key === '5') {
+    const steps = [0.95, 0.6, 0.2, 0.0];
+    const i = steps.indexOf(opts.normalBlend);
+    opts.normalBlend = steps[(i + 1) % steps.length];
+    if (world && world.normalMix) world.normalMix.value = opts.normalBlend;
+  }
+  if (e.key === '7') {
+    opts.los = !opts.los;
+    if (world) {
+      world.los.setVisible(opts.los);
+      if (opts.los && !world.los.group.visible) { /* noop */ }
+      if (opts.los) {
+        scene.add(world.los.group);
+        // 从**岛心那块平地**起算。原来取"最高的一格"，结果站在塔顶往哪儿都是墙，
+        // 96 条射线 72 条第一步就断（reach 只有 2.45）。平地上才是参考片那种大扇形。
+        let best = null, bestD = Infinity;
+        for (const c of world.grid.cells) {
+          if (world.town.top(c) < 2) continue;
+          let same = 0;
+          for (const nid of c.edgeNeighbors) {
+            if (nid >= 0 && world.town.top(world.grid.cells[nid]) === world.town.top(c)) same++;
+          }
+          if (same < 3) continue;                       // 四邻同高 = 平地，不是塔尖
+          const d = Math.hypot(c.cx, c.cz);
+          if (d < bestD) { bestD = d; best = c; }
+        }
+        if (best) world.los.cast(best.cx, best.cz);
+      } else {
+        scene.remove(world.los.group);
+      }
+    }
+  }
+  // Z = 瀑布（河床掉级的竖缎带 + 泡沫）
+  if (e.key === 'z' || e.key === 'Z') setOpt('waterfalls', !opts.waterfalls);
+  // U = 坡面草（按坡度标出可走的斜坡）
+  if (e.key === 'u' || e.key === 'U') setOpt('slopeGrass', !opts.slopeGrass);
+  // I = 风旗（风场 + 沿粒子轨迹的旗面）
+  if (e.key === 'i' || e.key === 'I') setOpt('flags', !opts.flags);
+  // A = 拓扑直线（入边→对边，格内笔直）
+  if (e.key === 'a' || e.key === 'A') setOpt('topo', !opts.topo);
+  // C = 笼形变形（顶点位移跟高度走，让崖面不那么规整）
+  if (e.key === 'c' || e.key === 'C') setOpt('cage', !opts.cage);
+  // X = 顶点格铺灌木（对偶网格：一瓣一株）
+  if (e.key === 'x' || e.key === 'X') setOpt('dual', !opts.dual);
+  // O = 河道导航路线（黄线 + 白点），只切可见性，不重建
+  if (e.key === 'o' || e.key === 'O') { opts.route = !opts.route; if (world && world.route) world.route.group.visible = opts.route; }
+  // W mirrors the debug shot in the reference: the ocean grid and the shore
+  // band shown as wireframe, which is how the tweet reveals what is animated.
+  if (e.key === 'w' || e.key === 'W') {
+    wire = !wire;
+    waterMaterial.wireframe = wire;
+    if (world && world.waves) world.waves.material.wireframe = wire;
+  }
+  if (e.key === ' ') autoRotate = !autoRotate;
+});
+canvas.addEventListener('dblclick', () => { autoRotate = !autoRotate; });
+
+resize();
+build(seed);
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  if (autoRotate) yaw += dt * 0.075;
+  clock.value += dt;
+  // 点光源绕岛；体积光照每 4 帧重算一次（70k 顶点，每帧算会掉帧，
+  // 而原文明说这个做法"保持大、软、别动太快"就好）
+  if (world && world.lightVol) {
+    if (lightParked) pointLight.copy(lightParked);
+    else pointLight.set(Math.cos(clock.value * 0.35) * 6.0, 6.6, Math.sin(clock.value * 0.35) * 6.0);
+    if ((lightTick++ & 3) === 0) world.lightVol.update(pointLight);
+  }
+  waterVolume.update(clock.value);
+  if (world && world.birds) world.birds.update(dt, clock.value);
+  if (world && world.butterflies) world.butterflies.update(dt, clock.value);
+  if (world && world.flags) world.flags.update(dt, clock.value);
+  if (world && world.waterfalls) world.waterfalls.update(dt, clock.value);
+  if (world && world.snow) world.snow.update(dt, clock.value);
+  if (world && world.fog) world.fog.update(dt, clock.value, camera);
+  // 云的风时钟：同一套 clock，云和雪/旗同步（926903893866541057 的风场本来是共享的）
+  if (world && world.impostors) world.impostors.setWindTime(clock.value);
+  updateCamera();
+  outline.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/**
+ * Campaign-map thumbnail: the island at 64×64, unsharp-masked back to a crisp
+ * silhouette. Sprites and water are hidden so only the land is baked.
+ */
+function shootSnapshot() {
+  if (!world) return;
+  // Fit the island, do not assume it is centred on the origin.
+  let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+  for (const c of world.grid.cells) {
+    if (world.town.top(c) === 0) continue;
+    if (c.minX < minX) minX = c.minX;
+    if (c.maxX > maxX) maxX = c.maxX;
+    if (c.minZ < minZ) minZ = c.minZ;
+    if (c.maxZ > maxZ) maxZ = c.maxZ;
+  }
+  if (!Number.isFinite(minX)) return;
+  const half = Math.max(maxX - minX, maxZ - minZ) * 0.5 * 1.06;
+  snapshot.setCentre((minX + maxX) / 2, (minZ + maxZ) / 2);
+  const hide = [water, waterVolume.group, world.waves, world.reflection && world.reflection.mesh,
+                world.birds && world.birds.group, world.rim && world.rim.mesh];
+
+  // The campaign map in the reference shows a flat white island, not a lit
+  // render: at this size surface detail is noise, only the silhouette matters.
+  // Swap in an unlit white material for the bake and put the real one back.
+  const white = new THREE.MeshBasicMaterial({ color: 0xf4f2ec });
+  const previous = world.land.material;
+  const previousRoofs = world.roofs.material;
+  world.land.material = white;
+  world.roofs.material = white;
+  const { dataUrl } = snapshot.shoot({ half, height: 60, hide, amount: 2.0 });
+  world.land.material = previous;
+  world.roofs.material = previousRoofs;
+  white.dispose();
+  const box = document.getElementById('snap');
+  box.classList.add('on');
+  box.querySelector('img').src = dataUrl;
+  // stash for tests / download
+  window.__lastSnapshot = dataUrl;
+}
+
+window.__engine = {
+  build,
+  get stats() { return stats; },
+  get world() { return world; },
+  get outline() { return outline; },
+  get scene() { return scene; },
+  get renderer() { return renderer; },
+  // 当前帧的绘制统计（renderer.info 是"上一帧"的值，测试脚本会连读两帧）
+  get calls() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles }; },
+  get renderer() { return renderer; },
+  // 当前帧的绘制统计（renderer.info 是"上一帧"的值，测试脚本会连读两帧）
+  get calls() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles }; },
+  get camera() { return camera; },
+  get clock() { return clock; },
+  shootSnapshot,
+  get snapshot() { return snapshot; },
+  get water() { return waterMaterial; },
+  setSeed(s) { build(s); },
+  setOpt,
+  // 面阴影 A/B：投射高度（层）与 z 测试（世界单位）
+  setShadow({ castLv, reach, strength } = {}) {
+    if (!world || !world.shadow) return null;
+    if (castLv !== undefined) world.shadow.setCast(castLv);
+    if (reach !== undefined) world.shadow.setReach(reach);
+    if (strength !== undefined) world.shadow.setStrength(strength);
+    return world.shadow.stats;
+  },
+  get shadowStats() { return world && world.shadow ? world.shadow.stats : null; },
+  get voxelShadowStats() { return world && world.voxelShadow ? world.voxelShadow.stats : null; },
+  setBounces(n) { if (world && world.lightVol) world.lightVol.setBounces(n); },
+  // 彩色反弹 A/B（原文 1237305125070426112）
+  setColorBounce(v) { if (world && world.lightVol) world.lightVol.setColorBounce(v); },
+  // billboard 锚定中心顶点的鼓出量（0 = 退回平面卡片）
+  setBend(v) { if (world && world.impostors) world.impostors.setBend(v); },
+  // 平滑/硬法线在**光照里**的混合比（原文 929417420921556993）：
+  // 1 = 全平滑（默认），0 = 全硬（每格一块平的法线）
+  setNormalMix(v) {
+    if (!material) return null;
+    material.userData.surfaceUniforms.uNormalMix.value = Math.max(0, Math.min(1, v));
+    return material.userData.surfaceUniforms.uNormalMix.value;
+  },
+  get normalMix() { return material ? material.userData.surfaceUniforms.uNormalMix.value : null; },
+
+  // 测试用：钉住点光源（不给坐标就恢复绕圈）
+  parkLight(x, y, z) {
+    lightParked = (x === undefined) ? null : new THREE.Vector3(x, y, z);
+    if (lightParked && world && world.lightVol) world.lightVol.update(lightParked);
+  },
+  get opts() { return { ...opts }; },
+  applyStyle,
+  stopRotate() { autoRotate = false; },
+  setViewMode,
+  get viewMode() { return VIEW_NAMES[viewMode]; },
+  focus(x, z, height, d, p, yawV) {
+    target.set(x, height, z);
+    dist = d;
+    if (p !== undefined) pitch = p;
+    if (yawV !== undefined) yaw = yawV;
+    updateCamera();
+    // 太阳跟着 target 走，所以换视点就要重烘阴影
+    renderer.shadowMap.needsUpdate = true;
+  },
+};
+</script>
+</body>
+</html>

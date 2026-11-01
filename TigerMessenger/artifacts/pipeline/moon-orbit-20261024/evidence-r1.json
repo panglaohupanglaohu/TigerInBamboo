@@ -1,0 +1,23 @@
+{
+  "iteration": "moon-orbit-r1",
+  "observations": [
+    "User asked moon to orbit around existing lake centre. Production moon factory now moves XZ on 180second cycle at radius7.46768, preserving original initial bearing, size3.4m and base height5.6m.",
+    "Actual CPU production geometry: five already-seated trees supplied via setOrbitObstacles. One-time deduplicated vertex envelope, angular dilation plus averaging, linear interpolation; no per-frame raycast or geometry scan.",
+    "Envelope peak15.7867m plus bob0.22; user-facing explanation required: moon slowly rises over existing tall crown and lowers afterwards. Root explicitly approved peak near15.7 to preserve trees and moon size.",
+    "CPU actual world parent translation/rotation/scale, periodicXZ, render-rate-independent position, current-position halo and reflection pass. Largest quarter-second movement0.1803m; sampled actual tree vertices min sphere gap0.3094m over half-second full cycle.",
+    "Vertex and time sampling approximate collision boundary, not exact triangle continuous collision; old woodland can naturally obscure moon. No GPU run completed by asset agent."
+  ],
+  "checks": [
+    {
+      "name": "actual factory orbit/bindings/parent transform and sampled vertices CPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal game current geometry supply and orbit GPU view",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "source_sha256": "f351f128058fda7c0fb397b1339b7d27aee79a342291da11c9a63be9cb3e8ab7"
+}

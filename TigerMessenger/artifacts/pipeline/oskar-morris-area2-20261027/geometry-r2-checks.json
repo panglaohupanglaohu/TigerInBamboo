@@ -1,0 +1,123 @@
+{
+  "passed": 15,
+  "checks": [
+    "castle bridge four layers retained; target rear summit at(-13,-18), fixed castle and bridge",
+    "mandatory logical route stages ordered bridge before farm gate before castle",
+    "road omission ends exactly at eight metre bridge banks no former0.3m gap",
+    "both unchanged bridge banks meet real road height within3cm",
+    "raised bridge crown and underside retained",
+    "farm gate is on straight far-bank route and passage is truly open",
+    "castle entry meets actual courtyard within4.1cm",
+    "real music court floor below castle and approach uses its outer edge",
+    "no self crossings or alternative road shortcut within full road width",
+    "road crosses authored stream only at designated bridge",
+    "actual source road radial grade remains bounded excluding raised bridge",
+    "saved real railway survey clears complete3.2m road ribbon",
+    "actual source meshes finite",
+    "outer meadow extended inside enlarged coast",
+    "expanded creek reaches new low coast rather than terminating in meadow"
+  ],
+  "measurements": {
+    "castleStep": 0.040000000000009805,
+    "courtFloorY": 3.9083329685090575,
+    "castleFloorY": 9.875669707246084,
+    "minimumMusicCourtCentreDistance": 6.679542740880438,
+    "largestFinalPerSegmentDrop": 0.01409650911179483,
+    "minimumSeparateCentrelineDistance": 3.7031128711775096,
+    "roadMaxRadialGrade": 0.14846434036785147,
+    "savedRailCentreDistance": 17.764600246062336
+  },
+  "route": {
+    "revision": "morris-area2-outer-meadow-r1-20261027",
+    "expansion": 1.4142135623730951,
+    "outerMeadowExtended": true,
+    "design": "continuous flower path to actual bridge, straight open farm-gate landing, graded opposing shoulder turns and existing castle portal",
+    "length": 227.77801931241984,
+    "width": 3.2,
+    "hairpinCenterRadius": 6,
+    "finalTurnRadius": 8.5,
+    "eastTurnRadius": 4.55,
+    "farmGateS": 111.63786939797673,
+    "bridgeDeckHalfLength": 4,
+    "mandatorySequence": [
+      "flower path",
+      "bridge deck",
+      "open farm gate",
+      "mountain approach",
+      "music court outer shoulder",
+      "castle gate"
+    ],
+    "minimumDesignedInnerRadius": 2.4,
+    "meadowTurnRadius": 4,
+    "bridgeCenter": [
+      8,
+      32
+    ],
+    "bridgeCrossings": 1,
+    "keys": [
+      [
+        0,
+        1.75
+      ],
+      [
+        102.63786939797677,
+        4
+      ],
+      [
+        110.63786939797673,
+        4.4
+      ],
+      [
+        133.02843863852559,
+        5.6
+      ],
+      [
+        151.87641264700204,
+        6.4
+      ],
+      [
+        193.88464558855182,
+        7.4
+      ],
+      [
+        208.17679959737194,
+        8
+      ],
+      [
+        227.77801931241984,
+        10.946204291414205
+      ]
+    ],
+    "marks": {
+      "bridgeFront": 102.63786939797677,
+      "bridgeBack": 110.63786939797673,
+      "westStart": 133.02843863852559,
+      "westEnd": 151.87641264700204,
+      "eastStart": 193.88464558855182,
+      "eastEnd": 208.17679959737194,
+      "gate": 227.77801931241984
+    }
+  },
+  "bridge": {
+    "revision": "continuous-arch-r3",
+    "archBarrel": true,
+    "solidParapets": true,
+    "closedArchCore": true,
+    "continuousCoping": true,
+    "deckCrown": 0.7499999999999999,
+    "archRise": 2.08,
+    "minimumCoreThickness": 0.6126992666817159,
+    "walkWidth": 3.2,
+    "span": 8,
+    "archStones": 52,
+    "masonryPieces": 196,
+    "mergedStoneBatches": 5,
+    "terrainBankContactVerified": false
+  },
+  "farmGate": [
+    8.772737244157206,
+    1.9746155997602841,
+    27.060073163346203
+  ],
+  "scope": "real terrain/landscape factories and source road formula; not normal-game GPU or riding traversal"
+}

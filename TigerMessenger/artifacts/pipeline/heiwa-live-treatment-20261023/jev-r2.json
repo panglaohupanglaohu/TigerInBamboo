@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "0c2ad7248e628118662fafad37b942d52d98fc81ad8f2d4986b7d1b435fffa5d",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.9
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.66,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.1,
+        "lighting": 0.01,
+        "navigation": 0.15,
+        "review": 0.73
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.73
+    }
+  },
+  "usage": {
+    "input_tokens": 755,
+    "output_tokens": 91,
+    "cost_usd": 0.000318,
+    "credits_remaining_usd": 4.927771
+  },
+  "elapsed_ms": 1988,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "final open-berth actual game visual",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

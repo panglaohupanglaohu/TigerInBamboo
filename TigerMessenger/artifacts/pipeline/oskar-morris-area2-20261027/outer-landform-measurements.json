@@ -1,0 +1,72 @@
+{
+  "radius": 82.3164625090267,
+  "routeLength": 227.77801931241984,
+  "landformSites": [
+    {
+      "x": -42,
+      "z": 43,
+      "radialHeight": 3.979376215068568,
+      "roadDistance": 13.038404810405298
+    },
+    {
+      "x": 45,
+      "z": 43,
+      "radialHeight": 2.987672303942202,
+      "roadDistance": 21.660818079142228
+    },
+    {
+      "x": -40,
+      "z": -40,
+      "radialHeight": 4.153358987553271,
+      "roadDistance": 60.37017574924488
+    },
+    {
+      "x": 0,
+      "z": 63,
+      "radialHeight": 3.824203011377473,
+      "roadDistance": 15.471394247776878
+    },
+    {
+      "x": 51,
+      "z": -31,
+      "radialHeight": 2.4500003431098945,
+      "roadDistance": 54.190518715739955
+    },
+    {
+      "x": -15,
+      "z": 55,
+      "radialHeight": 2.3223095817372004,
+      "roadDistance": 5.091692606500324
+    },
+    {
+      "x": 26,
+      "z": 52,
+      "radialHeight": 1.804524060724723,
+      "roadDistance": 9.509505572369559
+    }
+  ],
+  "mouth": {
+    "x": 36.24363859602682,
+    "z": 72.48727719205363,
+    "h": -0.6,
+    "coastRadius": 79.06657527087903,
+    "radiusRatio": 1.025
+  },
+  "coreAnchors": {
+    "castle": {
+      "x": 14,
+      "z": 5
+    },
+    "musicCourt": {
+      "x": 30,
+      "z": 12,
+      "radialHeight": 7.2,
+      "rx": 7,
+      "rz": 6
+    },
+    "bridge": [
+      8,
+      32
+    ]
+  }
+}

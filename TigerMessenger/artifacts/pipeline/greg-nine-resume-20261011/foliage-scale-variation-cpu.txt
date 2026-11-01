@@ -1,0 +1,15 @@
+{"counts":{"fern":91,"fan":46,"pendant":324},"relocations":241,"wallPatches":16,"draws":5,"rockWarmVertices":16,"rockCoolVertices":24}
+{"cliffWarmVertices":2190,"cliffCoolVertices":4755,"rimCoralFraction":1}
+{"varied":368,"factorRange":[0.6601523853219884,0.9994862962541281],"counts":{"fern":91,"fan":46,"pendant":324}}
+✔ current scene keeps exact accepted species counts, route, draw budget, and actual cliff attachments (9.242916ms)
+✔ unequal wall intervals form overlapping dense patches separated by genuine bare rock windows (0.414ms)
+✔ current actual cliff caps and broad rim carry coral colour while rock sides remain cool, without moving walking surfaces (1.066583ms)
+✔ non-rim leaf scale variation is deterministic, anchored, and never expands accepted envelopes (155.410042ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3953.011792

@@ -1,0 +1,287 @@
+{
+  "passed": true,
+  "cases": 13,
+  "report": [
+    {
+      "case": "curved relief surface",
+      "positionHash": "0fe0fd7a5c612d956373336d545634ce16579e8907fca5ea174481824be4afef",
+      "maximumNormalDifference": 0.4979085842118015,
+      "sharedMax": 0,
+      "sharedSamples": 605,
+      "audit": {
+        "version": 1,
+        "method": "source-corner shading interpolation with conservative hard fallback",
+        "positionChanged": false,
+        "sourceFaces": 72,
+        "softEdges": 96,
+        "angleFallbackEdges": 96,
+        "semanticEdges": 0,
+        "protectedFaces": 0,
+        "unmatchedEdges": 24,
+        "subdivisionMismatchEdges": 0,
+        "nonManifoldEdges": 0,
+        "sharpEdges": 0,
+        "smoothedCorners": 150,
+        "interpolatedVertices": 1944,
+        "sourceTJunctions": "unmatched source edges remain hard; no topological repair",
+        "creaseAngleDeg": 42,
+        "protectionBounds": "unspecified",
+        "pass": 1,
+        "facePolicy": "shore attribute then protectedFace callback",
+        "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+        "reasonCounts": {
+          "shoreAttributeFaces": 0,
+          "callbackProtectedFaces": 0,
+          "openEdges": 24,
+          "nonManifoldEdges": 0,
+          "subdivisionMismatchEdges": 0,
+          "protectedFaceEdges": 0,
+          "mixedSemanticEdges": 0,
+          "semanticBoundaryEdges": 0,
+          "sharpAngleEdges": 0,
+          "windingEdges": 0,
+          "crestFoldEdges": 0
+        }
+      }
+    },
+    {
+      "case": "mismatched subdivision hard fallback",
+      "audit": {
+        "version": 1,
+        "method": "source-corner shading interpolation with conservative hard fallback",
+        "positionChanged": false,
+        "sourceFaces": 2,
+        "softEdges": 0,
+        "angleFallbackEdges": 0,
+        "semanticEdges": 0,
+        "protectedFaces": 0,
+        "unmatchedEdges": 4,
+        "subdivisionMismatchEdges": 1,
+        "nonManifoldEdges": 0,
+        "sharpEdges": 0,
+        "smoothedCorners": 0,
+        "interpolatedVertices": 30,
+        "sourceTJunctions": "unmatched source edges remain hard; no topological repair",
+        "creaseAngleDeg": 42,
+        "protectionBounds": "unspecified",
+        "pass": 1,
+        "facePolicy": "shore attribute then protectedFace callback",
+        "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+        "reasonCounts": {
+          "shoreAttributeFaces": 0,
+          "callbackProtectedFaces": 0,
+          "openEdges": 4,
+          "nonManifoldEdges": 0,
+          "subdivisionMismatchEdges": 1,
+          "protectedFaceEdges": 0,
+          "mixedSemanticEdges": 0,
+          "semanticBoundaryEdges": 0,
+          "sharpAngleEdges": 0,
+          "windingEdges": 0,
+          "crestFoldEdges": 0
+        }
+      }
+    },
+    {
+      "case": "shore",
+      "normalHash": "d949d961666d90d9e6b015de4edb7925c8acc470c5c336ea0c476b1ecc1fc331"
+    },
+    {
+      "case": "explicit-protection",
+      "normalHash": "d949d961666d90d9e6b015de4edb7925c8acc470c5c336ea0c476b1ecc1fc331"
+    },
+    {
+      "case": "material",
+      "audit": {
+        "version": 1,
+        "method": "source-corner shading interpolation with conservative hard fallback",
+        "positionChanged": false,
+        "sourceFaces": 2,
+        "softEdges": 0,
+        "angleFallbackEdges": 0,
+        "semanticEdges": 1,
+        "protectedFaces": 0,
+        "unmatchedEdges": 4,
+        "subdivisionMismatchEdges": 0,
+        "nonManifoldEdges": 0,
+        "sharpEdges": 0,
+        "smoothedCorners": 0,
+        "interpolatedVertices": 54,
+        "sourceTJunctions": "unmatched source edges remain hard; no topological repair",
+        "creaseAngleDeg": 42,
+        "protectionBounds": "unspecified",
+        "pass": 1,
+        "facePolicy": "shore attribute then protectedFace callback",
+        "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+        "reasonCounts": {
+          "shoreAttributeFaces": 0,
+          "callbackProtectedFaces": 0,
+          "openEdges": 4,
+          "nonManifoldEdges": 0,
+          "subdivisionMismatchEdges": 0,
+          "protectedFaceEdges": 0,
+          "mixedSemanticEdges": 0,
+          "semanticBoundaryEdges": 1,
+          "sharpAngleEdges": 0,
+          "windingEdges": 0,
+          "crestFoldEdges": 0
+        }
+      }
+    },
+    {
+      "case": "semantic",
+      "audit": {
+        "version": 1,
+        "method": "source-corner shading interpolation with conservative hard fallback",
+        "positionChanged": false,
+        "sourceFaces": 2,
+        "softEdges": 0,
+        "angleFallbackEdges": 0,
+        "semanticEdges": 1,
+        "protectedFaces": 0,
+        "unmatchedEdges": 4,
+        "subdivisionMismatchEdges": 0,
+        "nonManifoldEdges": 0,
+        "sharpEdges": 0,
+        "smoothedCorners": 0,
+        "interpolatedVertices": 54,
+        "sourceTJunctions": "unmatched source edges remain hard; no topological repair",
+        "creaseAngleDeg": 42,
+        "protectionBounds": "unspecified",
+        "pass": 1,
+        "facePolicy": "shore attribute then protectedFace callback",
+        "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+        "reasonCounts": {
+          "shoreAttributeFaces": 0,
+          "callbackProtectedFaces": 0,
+          "openEdges": 4,
+          "nonManifoldEdges": 0,
+          "subdivisionMismatchEdges": 0,
+          "protectedFaceEdges": 0,
+          "mixedSemanticEdges": 1,
+          "semanticBoundaryEdges": 0,
+          "sharpAngleEdges": 0,
+          "windingEdges": 0,
+          "crestFoldEdges": 0
+        }
+      }
+    },
+    {
+      "case": "sharp cliff",
+      "audit": {
+        "version": 1,
+        "method": "source-corner shading interpolation with conservative hard fallback",
+        "positionChanged": false,
+        "sourceFaces": 2,
+        "softEdges": 0,
+        "angleFallbackEdges": 0,
+        "semanticEdges": 0,
+        "protectedFaces": 0,
+        "unmatchedEdges": 4,
+        "subdivisionMismatchEdges": 0,
+        "nonManifoldEdges": 0,
+        "sharpEdges": 1,
+        "smoothedCorners": 0,
+        "interpolatedVertices": 54,
+        "sourceTJunctions": "unmatched source edges remain hard; no topological repair",
+        "creaseAngleDeg": 42,
+        "protectionBounds": "unspecified",
+        "pass": 1,
+        "facePolicy": "shore attribute then protectedFace callback",
+        "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+        "reasonCounts": {
+          "shoreAttributeFaces": 0,
+          "callbackProtectedFaces": 0,
+          "openEdges": 4,
+          "nonManifoldEdges": 0,
+          "subdivisionMismatchEdges": 0,
+          "protectedFaceEdges": 0,
+          "mixedSemanticEdges": 0,
+          "semanticBoundaryEdges": 0,
+          "sharpAngleEdges": 1,
+          "windingEdges": 0,
+          "crestFoldEdges": 0
+        }
+      }
+    },
+    {
+      "case": "nonuniform spherical transform",
+      "orthogonalityErrors": [
+        0,
+        5.551115123125783e-17
+      ]
+    },
+    {
+      "case": "actual material source and default shader regression",
+      "defaultShaderUnchanged": true,
+      "defaultKey": "citadel-mountain-study-13-v1",
+      "candidateKey": "citadel-mountain-study-13-v1-surface1-bump0.12",
+      "gpuCompileTested": false
+    },
+    {
+      "case": "rotated walkway normal-only protection",
+      "pass1Protected": 32,
+      "pass2Protected": 0,
+      "positionsUnchanged": true,
+      "geometricRefinementUnchanged": true,
+      "pass2Key": "citadel-mountain-study-13-v1-surface2-bump0.12",
+      "actualSceneCauseProven": false
+    },
+    {
+      "case": "pass3 proximity-unlocked shading only",
+      "positionHash": "aa7f76b9d32168c0e4b502dc95f9f468e77189c59890f8080450dd1ffa856fa7",
+      "callbackCalls": 0,
+      "geometryRefined": 0,
+      "audit": {
+        "version": 1,
+        "method": "source-corner shading interpolation with conservative hard fallback",
+        "positionChanged": false,
+        "sourceFaces": 72,
+        "softEdges": 96,
+        "angleFallbackEdges": 96,
+        "semanticEdges": 0,
+        "protectedFaces": 0,
+        "unmatchedEdges": 24,
+        "subdivisionMismatchEdges": 0,
+        "nonManifoldEdges": 0,
+        "sharpEdges": 0,
+        "smoothedCorners": 150,
+        "interpolatedVertices": 216,
+        "sourceTJunctions": "unmatched source edges remain hard; no topological repair",
+        "creaseAngleDeg": 42,
+        "protectionBounds": "unspecified",
+        "pass": 3,
+        "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+        "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+        "reasonCounts": {
+          "shoreAttributeFaces": 0,
+          "callbackProtectedFaces": 0,
+          "openEdges": 24,
+          "nonManifoldEdges": 0,
+          "subdivisionMismatchEdges": 0,
+          "protectedFaceEdges": 0,
+          "mixedSemanticEdges": 0,
+          "semanticBoundaryEdges": 0,
+          "sharpAngleEdges": 0,
+          "windingEdges": 0,
+          "crestFoldEdges": 0
+        }
+      }
+    },
+    {
+      "case": "pass3 shoreline and real hard boundaries",
+      "shoreProtected": 2,
+      "measuredCreaseAngle": 90,
+      "openEdges": 4,
+      "semanticBoundaryEdges": 1,
+      "nonManifoldEdges": 1
+    },
+    {
+      "case": "pass3 narrow measured crest-fold rule",
+      "foldDegrees": 25,
+      "gentle10DegreesUnblocked": true,
+      "distantFoldUnblocked": true,
+      "crestFoldEdges": 1
+    }
+  ]
+}

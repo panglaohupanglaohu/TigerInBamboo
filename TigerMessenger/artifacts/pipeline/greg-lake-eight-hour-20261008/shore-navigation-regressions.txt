@@ -1,0 +1,56 @@
+Front strata baseline changed citadel-oskar-grid-mountain-surface 155
+Old-city coastal source changed; continuing with slope update { hash: 2028752367, expected: 3381302665 }
+Old-city coastal source changed; continuing with slope update { hash: 2125320883, expected: 2915253182 }
+[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface
+[citadel] applyCitadelHarborSeabed 跳过: Harbor seabed requires the original planet and city
+[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate
+[ELDER] 已放到指定落点 r=160.6
+[CLOUD-RIDGE] kept= 11 dropped= 12 rings= {"1":6,"2":2,"0.25":4,"center":1} maxH= 42.75 maxScore= 1.13 threshold= 0.35
+Citadel boarding installation failed [TypeError: fetch failed] {
+  [cause]: Error: not implemented... yet...
+      at makeNetworkError (node:internal/deps/undici/undici:11806:35)
+      at schemeFetch (node:internal/deps/undici/undici:13359:34)
+      at mainFetch (node:internal/deps/undici/undici:13207:30)
+      at fetching (node:internal/deps/undici/undici:13176:7)
+      at fetch (node:internal/deps/undici/undici:13040:20)
+      at fetch (node:internal/deps/undici/undici:17708:10)
+      at fetch (node:internal/bootstrap/web/exposed-window-or-worker:83:12)
+      at installFrontBoarding (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/installFrontBoarding.js:11:26)
+      at holdAtReleasedPort (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:25:2)
+      at dockFrontHarborPatrol (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:33:47)
+}
+✖ formal relocated lake keeps decks and outer bearings while removing both measured near-bank obstructions (30459.521ms)
+✔ real V7 promenade overlap no longer steals support from feet on the coral rim (9.57775ms)
+✔ feet below rim retain lower promenade and entrance/water are not captured (6.003875ms)
+✔ production collision substeps keep a standing player on the actual new rim (12.335125ms)
+✔ all three real bank midpoints stay supported through gravity instead of falling to old V7 terrain (98.886ms)
+✔ three reachable bank levels use default placed scale and preserve story anchors (0.579583ms)
+✔ every 0.1 world unit from original entry tread through all layers has a top-facing radial support (336.945625ms)
+✔ actual V7 shore sampler cannot preempt the new intended bank surfaces (1636.263125ms)
+✔ waymark full footprints stand on stone corbels outside the promised two-world-unit walking lane (2.01325ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31282.3385
+
+✖ failing tests:
+
+test at tests/world/swampBridgeFormalStartup.test.mjs:17:1
+✖ formal relocated lake keeps decks and outer bearings while removing both measured near-bank obstructions (30459.521ms)
+  AssertionError [ERR_ASSERTION]: formal scene must install after relocateCrystalCore
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampBridgeFormalStartup.test.mjs:21:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

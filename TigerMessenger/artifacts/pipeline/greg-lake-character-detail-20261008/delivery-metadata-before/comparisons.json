@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-08",
+  "purpose": "真实几何前后肖像数据与恢复边界，不用目标概念图替代实机。",
+  "renderContract": [
+    "同相机、同光照、同背景、同显示尺度和动画相位；成幼比例另标。",
+    "普通/维修猴可共用模型肖像但身份与数量分开。",
+    "未改变模型标原型保留；换珊瑚背景不等于角色造型重构。",
+    "肖像脱离原环境只验证形象，不能证明路线、遮挡或行为完成验收。"
+  ],
+  "baseline": {
+    "original": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+    "originalDate": "2026-10-07施工前",
+    "currentBatchBefore": "artifacts/pipeline/greg-lake-character-detail-20261008/before/",
+    "limitation": "当前批次无moebiusSwamp.js快照，普通动物用上批before；旧工厂绝对路径依赖须browser importmap，当前依赖不能冒称历史冻结。"
+  },
+  "items": [
+    {
+      "id": "whale",
+      "status": "model_factory_changed",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 297,
+        "export": "SWAMP_COMPONENT_BUILDERS.whale",
+        "bodySHA256": "10d08f3015a3d47b3beedcd62f29bc52706e86b4b0d8abf5f53ef7941fc299dd"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 343,
+        "export": "SWAMP_COMPONENT_BUILDERS.whale",
+        "bodySHA256": "ace579a1c4739acff7c3fae905645bba156cf21ddb5ddf410d64b28a605f809e"
+      },
+      "label": "2026-10-07改前原型 → 当前真实模型",
+      "gpu": "pending_parent_portrait_render"
+    },
+    {
+      "id": "nativeDoll",
+      "status": "model_factory_retained",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 467,
+        "export": "SWAMP_COMPONENT_BUILDERS.nativeDoll",
+        "bodySHA256": "89ea3138047744b786111f456daed28abe50467c5e7d0640f961be4610de01cd"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 489,
+        "export": "SWAMP_COMPONENT_BUILDERS.nativeDoll",
+        "bodySHA256": "89ea3138047744b786111f456daed28abe50467c5e7d0640f961be4610de01cd"
+      },
+      "label": "原型保留，不能标成新造型",
+      "gpu": "pending_parent_portrait_render",
+      "note": "该导出只代表仍保留的泳者。当前花船男孩请取lotusLeafBoat.passengers。",
+      "retainedMeaning": "造型函数正文相同；不表示全局常量、色板、shader、布局与环境像素完全相同。"
+    },
+    {
+      "id": "lotusLeafBoat",
+      "status": "model_factory_changed",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 492,
+        "export": "SWAMP_COMPONENT_BUILDERS.lotusLeafBoat",
+        "bodySHA256": "a98959ae34d93fa1f926f6ad018f4b757a8b9470020743b2e3323f8468002727"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 582,
+        "export": "SWAMP_COMPONENT_BUILDERS.lotusLeafBoat",
+        "bodySHA256": "dd16c42a9918ce4953bc2e05217c3024909cd37aa4714d37dd82530777142e9c"
+      },
+      "label": "2026-10-07改前原型 → 当前真实模型",
+      "gpu": "pending_parent_portrait_render",
+      "beforeChildHook": "boat.children.filter(o=>o.name==='swamp-native-doll')",
+      "afterChildHook": "boat.userData.passengers",
+      "note": "原舟2–3个锥体娃娃、撑杆、叶碗；现固定两名具肢体男孩和薄壁八瓣花杯。旧喂鲸者为另加的娃娃，现复用舟内男孩；不声称人数完全相同。"
+    },
+    {
+      "id": "swampEel",
+      "status": "model_factory_retained",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 552,
+        "export": "SWAMP_COMPONENT_BUILDERS.swampEel",
+        "bodySHA256": "1c9209e23eb8e7945939d48c972f0361b68a6c73096ccb7a4b49c96eab6a100a"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 666,
+        "export": "SWAMP_COMPONENT_BUILDERS.swampEel",
+        "bodySHA256": "1c9209e23eb8e7945939d48c972f0361b68a6c73096ccb7a4b49c96eab6a100a"
+      },
+      "label": "原型保留，不能标成新造型",
+      "gpu": "pending_parent_portrait_render",
+      "retainedMeaning": "造型函数正文相同；不表示全局常量、色板、shader、布局与环境像素完全相同。"
+    },
+    {
+      "id": "tubeWormCluster",
+      "status": "model_factory_retained",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 586,
+        "export": "SWAMP_COMPONENT_BUILDERS.tubeWormCluster",
+        "bodySHA256": "496ba6fdea74dec53fb92c4ce07b6f8d7d419f7140caedd70ff9cbae649151c1"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 700,
+        "export": "SWAMP_COMPONENT_BUILDERS.tubeWormCluster",
+        "bodySHA256": "496ba6fdea74dec53fb92c4ce07b6f8d7d419f7140caedd70ff9cbae649151c1"
+      },
+      "label": "原型保留，不能标成新造型",
+      "gpu": "pending_parent_portrait_render",
+      "retainedMeaning": "造型函数正文相同；不表示全局常量、色板、shader、布局与环境像素完全相同。"
+    },
+    {
+      "id": "pinkHanger",
+      "status": "model_factory_retained",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 637,
+        "export": "SWAMP_COMPONENT_BUILDERS.pinkHanger",
+        "bodySHA256": "3f0ac6d10d85cfd120d54ba5a0b4d30645beb5dcbfb81c413808ff6f9fe9bcb1"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 751,
+        "export": "SWAMP_COMPONENT_BUILDERS.pinkHanger",
+        "bodySHA256": "3f0ac6d10d85cfd120d54ba5a0b4d30645beb5dcbfb81c413808ff6f9fe9bcb1"
+      },
+      "label": "原型保留，不能标成新造型",
+      "gpu": "pending_parent_portrait_render",
+      "retainedMeaning": "造型函数正文相同；不表示全局常量、色板、shader、布局与环境像素完全相同。"
+    },
+    {
+      "id": "swampBird",
+      "status": "model_factory_changed",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 668,
+        "export": "SWAMP_COMPONENT_BUILDERS.swampBird",
+        "bodySHA256": "de15701efac40dd37483753d73f825ccfd8aa75d44fa0dddb9e30102da4cd82c"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 782,
+        "export": "SWAMP_COMPONENT_BUILDERS.swampBird",
+        "bodySHA256": "77d165d51db6345a3f9ecefc85ad5aa43be769c5183cb7f049f716abfd9dd79b"
+      },
+      "label": "2026-10-07改前原型 → 当前真实模型",
+      "gpu": "pending_parent_portrait_render",
+      "arguments": "(seededRandom,0xd8ffe0) 或 (seededRandom,0xfff0b8)"
+    },
+    {
+      "id": "longTailMonkey",
+      "status": "model_factory_changed",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 716,
+        "export": "SWAMP_COMPONENT_BUILDERS.longTailMonkey",
+        "bodySHA256": "8388e40e54e564a8e7883724088dbfecbd797ea8be44373e887573a9084b812a"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 830,
+        "export": "SWAMP_COMPONENT_BUILDERS.longTailMonkey",
+        "bodySHA256": "417ecd143a27def335d38038aa6d3c88b9392c683033c5d25c5c3105a8cb47f6"
+      },
+      "label": "2026-10-07改前原型 → 当前真实模型",
+      "gpu": "pending_parent_portrait_render"
+    },
+    {
+      "id": "glowLizard",
+      "status": "model_factory_changed",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 764,
+        "export": "SWAMP_COMPONENT_BUILDERS.glowLizard",
+        "bodySHA256": "3e49617cf1487dc9367621d40a1fdf2734a0bcb4c20379d3fe5a97af9b948ef1"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 864,
+        "export": "SWAMP_COMPONENT_BUILDERS.glowLizard",
+        "bodySHA256": "576acd8769b138cf6847cf371f99547495f27969fe015296abd20030d403ca8e"
+      },
+      "label": "2026-10-07改前原型 → 当前真实模型",
+      "gpu": "pending_parent_portrait_render"
+    },
+    {
+      "id": "ribbonFish",
+      "status": "model_factory_retained",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 795,
+        "export": "SWAMP_COMPONENT_BUILDERS.ribbonFish",
+        "bodySHA256": "43d841628ed9132becf906035788e4a168862431f4a262216ca9f9d7250b207f"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 904,
+        "export": "SWAMP_COMPONENT_BUILDERS.ribbonFish",
+        "bodySHA256": "43d841628ed9132becf906035788e4a168862431f4a262216ca9f9d7250b207f"
+      },
+      "label": "原型保留，不能标成新造型",
+      "gpu": "pending_parent_portrait_render",
+      "retainedMeaning": "造型函数正文相同；不表示全局常量、色板、shader、布局与环境像素完全相同。"
+    },
+    {
+      "id": "fishSchool",
+      "status": "model_factory_retained",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 3252,
+        "export": "SWAMP_COMPONENT_BUILDERS.fishSchool",
+        "bodySHA256": "a6df24790c0eedeed5d300191b69dd6bb0e741f259f14664009e1c0238a21c83"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 3393,
+        "export": "SWAMP_COMPONENT_BUILDERS.fishSchool",
+        "bodySHA256": "a6df24790c0eedeed5d300191b69dd6bb0e741f259f14664009e1c0238a21c83"
+      },
+      "label": "原型保留，不能标成新造型",
+      "gpu": "pending_parent_portrait_render",
+      "retainedMeaning": "造型函数正文相同；不表示全局常量、色板、shader、布局与环境像素完全相同。"
+    },
+    {
+      "id": "fireflies",
+      "status": "model_factory_retained",
+      "before": {
+        "file": "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusSwamp.js",
+        "line": 3288,
+        "export": "SWAMP_COMPONENT_BUILDERS.fireflies",
+        "bodySHA256": "c1023f1534511965ef91a3e015474aecfdfc30013da4a197b266415ba331b00e"
+      },
+      "after": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 3429,
+        "export": "SWAMP_COMPONENT_BUILDERS.fireflies",
+        "bodySHA256": "c1023f1534511965ef91a3e015474aecfdfc30013da4a197b266415ba331b00e"
+      },
+      "label": "原型保留，不能标成新造型",
+      "gpu": "pending_parent_portrait_render",
+      "retainedMeaning": "造型函数正文相同；不表示全局常量、色板、shader、布局与环境像素完全相同。"
+    }
+  ],
+  "tiger": {
+    "status": "recoverable_recent_batch_before",
+    "before": [
+      "artifacts/pipeline/greg-lake-character-detail-20261008/before/src/assets/characters/swampTigerV2.js",
+      "artifacts/pipeline/greg-lake-character-detail-20261008/before/src/assets/characters/tigerTargetV1.js"
+    ],
+    "after": [
+      "src/assets/characters/swampTigerV2.js",
+      "src/assets/characters/tigerTargetV1.js"
+    ],
+    "hook": "inner.userData.tiger; await tiger.userData.swampTigerV2Ready",
+    "renderer": "当前本批 review.html 的 importmap 只映射 three；variant=before 尚未映射旧虎模块，不能据标签称已渲染历史模型。肖像页须单独实现 before 模块映射并等待 ready。",
+    "olderSnapshot": [
+      "artifacts/pipeline/greg-lake-implementation-20261007/before/moebiusTiger.js",
+      "artifacts/pipeline/greg-lake-implementation-20261007/before/tigerTargetV1.js"
+    ],
+    "limitation": "旧runtime仍引用当前基础tiger factory；最可靠对照是2026-10-08本批细化前，不自称最早历史虎完整恢复。"
+  },
+  "rowers": {
+    "status": "no_independent_historical_crew_snapshot_in_these_two_batches",
+    "after": "src/assets/harbor.js createFisherBoat → src/assets/warshipV6.js createWarshipV6",
+    "hook": "shipyard.dock/departure.userData.crew.userData.rows",
+    "label": "沿用正式船员，未做独立前后造型重构",
+    "warning": "旧moebiusSwamp.js引用当前harbor，加载得到今天V6船员，不是历史船员模型。"
+  }
+}

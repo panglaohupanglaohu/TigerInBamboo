@@ -1,0 +1,18 @@
+Browser tab: 22, Title: "高山圣城 · 五小时实景验收", URL: "http://localhost:8931/TigerMessenger/artifacts/pipeline/citadel-five-hour-20261005/live.html?citadelRidgePass=1&citadelTurfPass=0".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~	34 text {
+  "name": "citadel-oskar-grid-mountain-surface",
+  "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/citadel-oskar-grid-mountain-surface[0]",
+  "world": [
+    126.44409986726643,
+    67.11533826409897,
+    145.83686307009373
+  ],
+  "castleLocal": [
+    43.09367152801078,
+    16.86152572457092,
+    -31.51543728146688
+  ],
+  "faceIndex": 19766
+}
+The focused UI element is 28 AXWebArea TigerMessenger · 二次元, URL: localhost:8931/TigerMessenger/?citadelRidgePass=1&citadelTurfPass=0&autostart=1&timeOfDay=0.5

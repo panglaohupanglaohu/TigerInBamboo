@@ -1,0 +1,24 @@
+{
+  "task": "V16 direct Morris head correction",
+  "observations": [
+    "Actual front/profile rendered inspected",
+    "V15 raised skin eye collars removed; almond eye surfaces sampled directly onto facial BVH",
+    "Iris radius .0055, thin eyelid edge, face128 circumference8 loft samples",
+    "Broader lower nose ridge removes black cone but now profile nose too flat",
+    "Small close skull ears preserved; face short oval, lips meet face surface",
+    "Not target accepted: eyes simplified, nose profile too flat, scalp cap persists"
+  ],
+  "checks": [
+    {
+      "name": "actual close head front/profile",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "target likeness",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "export": "standing only, mounted waits parent visual review"
+}

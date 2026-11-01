@@ -1,0 +1,9 @@
+{
+  "beforeVertexCount": 14556,
+  "afterVertexCount": 632,
+  "afterTriangleCount": 546,
+  "minimumBoundarySampleRadialSlope": 0.552852480861468,
+  "nearlyHorizontalBoundaryVertices": 0,
+  "rule": "radial slope>1 only; continuous shared vertices; grass crowns excluded",
+  "scope": "same actual heightfield factory coverage; boundary vertices can extend to gentler transition; GPU still required"
+}

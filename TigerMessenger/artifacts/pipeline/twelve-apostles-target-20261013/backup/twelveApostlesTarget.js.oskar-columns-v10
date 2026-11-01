@@ -1,0 +1,203 @@
+import * as THREE from 'three';
+// Twelve Apostles, target sheet 2026-10-13 - Oskar-advisor redo (project method, not the author's private code).
+// Each mass is a field of jointed limestone COLUMNS on a jittered, rotated quad lattice:
+//  - macro form: hand-authored lobes (headland / shoulder / tower) -> cell heights; horizontal lobe
+//    combinations give shoulders and saddles, vertical ones give steps (no concentric cake tiers);
+//  - constraints carve cells (rail clearance, protected volumes, town margin) - rails never move;
+//  - every exposed wall is cut into vertical joint strips (per-strip inset = columns) and a few
+//    block rows (subtle strata), with a wave-cut notch / cave mouths at the waterline,
+//    a green drape lip under the grass rim, talus blocks, and broken rim blocks without grass;
+//  - grass tables are the real cap faces; bush drifts root on them (rims, wall feet, a few meadow clumps).
+export const twelveApostlesTargetEnabled=()=>new URLSearchParams(globalThis.location?.search||'').get('apostlesTarget')!=='0';
+
+const C=hex=>new THREE.Color(hex);
+const PAL={
+ rock:[C(0xe2dbc8),C(0xd6d3c6),C(0xc4cacb),C(0xe6e0d0),C(0xcbcfcc),C(0xd9d4c3),C(0xbcc3c6)],
+ rockTop:C(0xcfcfc6),shade:C(0x8f9ca6),wet:C(0x4f5961),deep:C(0x313b44),cave:C(0x4c5861),
+ grass:C(0x9abb57),grassDrape:C(0x82a64a),
+ bush:[0x3c6a39,0x46773f,0x335d33,0x527f45],talus:[0xb9bcb8,0xa9aeac,0xc4c4bc]
+};
+// lateral d: + seaward, - landward; s: metres along the rail from the reference point.
+// lobes: [x (lateral, + seaward), z (along), radiusX, radiusZ, topHeight, rotation]
+export const APOSTLE_MASSES=[
+ {id:'back-left',  s:-48,d:-36,cell:4.1,lobes:[[0,0,21,18,11,.2],[-5,-6,15,13,17,.1],[-3,11,8.5,8,25,0],[9,-12,6,5,7,0]]},
+ {id:'back-right', s:26, d:-42,cell:4.1,lobes:[[0,0,26,23,12,.3],[-4,-5,19,15,19,.2],[-8,-11,12,10,26,0],[-12,-15,8,7,35,.1],[6,15,9,8,24,0]]},
+ {id:'back-tower', s:60, d:-24,cell:2.8,lobes:[[0,0,8.5,8,25,0],[3,-7,10,8,11,.4]]},
+ {id:'front-left', s:-52,d:36, cell:4.1,lobes:[[0,0,24,19,9,.15],[-8,-3,16,13,15,.1],[14,-13,6,5,5.5,0],[11,15,5,5.5,12,0],[-14,9,7,6,21,0]]},
+ {id:'front-right',s:56, d:38, cell:4.1,lobes:[[0,0,20,19,10,-.2],[-8,3,13,12,17,-.1],[-12,-7,6.5,6,23,0],[12,-12,5.5,6,6,0]]},
+ {id:'bay-1',s:-14,d:26,cell:2.1,spire:true,lobes:[[0,0,6.5,5.5,11,.3],[3.5,3,3,3,6,0]]},
+ {id:'bay-2',s:12, d:22,cell:2.0,spire:true,lobes:[[0,0,4.6,4.2,8.5,0]]},
+ {id:'bay-3',s:6, d:38,cell:2.0,spire:true,generated:{seed:31,rx:5,rz:4.4,h:10}},
+ {id:'bay-4',s:-8,d:48,cell:1.9,spire:true,generated:{seed:47,rx:3.9,rz:3.5,h:7}},
+];
+
+function rng(seed){let s=seed>>>0||1;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};}
+const hash=(a,b,c=0)=>{let h=Math.imul(a|0,374761393)^Math.imul(b|0,668265263)^Math.imul(c|0,2147483647);h=Math.imul(h^(h>>>13),1274126177);return((h^(h>>>16))>>>0)/4294967296;};
+const BASE=-5;
+
+// macro height field: max over lobes of a blocky (superellipse) footprint with a noisy rim
+function makeHeight(lobes,seed){
+ const r=rng(seed),L=lobes.map(([cx,cz,rx,rz,h,rot=0])=>({cx,cz,rx,rz,h,c:Math.cos(rot),s:Math.sin(rot),ph:[r()*6.28,r()*6.28,r()*6.28]}));
+ return(x,z)=>{let best=0;for(const l of L){const dx=x-l.cx,dz=z-l.cz,u=dx*l.c+dz*l.s,v=-dx*l.s+dz*l.c,a=Math.atan2(v,u);
+   const f=Math.pow(Math.abs(u)/l.rx,2.6)+Math.pow(Math.abs(v)/l.rz,2.6),thr=1+.13*Math.sin(3*a+l.ph[0])+.09*Math.sin(5*a+l.ph[1])+.06*Math.sin(8*a+l.ph[2]);
+   if(f<thr&&l.h>best)best=l.h;}return best;};
+}
+
+// turquoise shallows: a sheet whose alpha falls off with distance from the nearest rock column
+function shallowSheet(cells,ext,cs,bend){const n=Math.ceil(ext*2/2.2),st=ext*2/n,pos=[],col=[],idx=[],c0=new THREE.Color(0x46cbbf);
+ for(let a=0;a<=n;a++)for(let b=0;b<=n;b++){const x=-ext+a*st,z=-ext+b*st;let d=Infinity;for(const c of cells)d=Math.min(d,Math.hypot(x-c.cx,z-c.cz));
+  const al=Math.max(0,Math.min(1,1-(d-cs*.55)/8));pos.push(x,.24-bend(x,z),z);col.push(c0.r,c0.g,c0.b,.5*al*al);}
+ for(let a=0;a<n;a++)for(let b=0;b<n;b++){const i0=a*(n+1)+b;idx.push(i0,i0+1,i0+n+2,i0,i0+n+2,i0+n+1);}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,4));g.setIndex(idx);return g;}
+
+// Rim smoothing along semantic edges: a lattice vertex lying on exactly one height boundary
+// (two boundary edges) is pulled toward the midpoint of its two boundary neighbours; junctions and
+// interior vertices stay fixed. Shared vertices move once, so walls, caps and tiers stay crack-free.
+function relaxRims(cells,vert,vk,hAt,iters=3,k=.55){
+ const lvl=(i,j)=>hAt(i,j)??-1,bnd=new Map();
+ const add=(a,b)=>{(bnd.get(a)||bnd.set(a,[]).get(a)).push(b);(bnd.get(b)||bnd.set(b,[]).get(b)).push(a);};
+ const seen=new Set();for(const c of cells.values()){const{i,j}=c;
+  // edges: bottom (i,j)-(i+1,j) vs cell (i,j-1); right (i+1,j)-(i+1,j+1) vs (i+1,j); top vs (i,j+1); left vs (i-1,j)
+  const E=[[[i,j],[i+1,j],[i,j-1]],[[i+1,j],[i+1,j+1],[i+1,j]],[[i,j+1],[i+1,j+1],[i,j+1]],[[i,j],[i,j+1],[i-1,j]]];
+  for(const[a,b,n]of E){if(lvl(...n)===c.h)continue;const ka=vk(...a),kb=vk(...b),key=ka<kb?ka+'|'+kb:kb+'|'+ka;if(seen.has(key))continue;seen.add(key);add(ka,kb);}}
+ const parse=key=>key.split(',').map(Number);
+ for(let it=0;it<iters;it++){const moves=[];for(const[key,nb]of bnd){if(nb.length!==2)continue;const v=vert(...parse(key)),a=vert(...parse(nb[0])),b=vert(...parse(nb[1]));moves.push([v,(a[0]+b[0])/2,(a[1]+b[1])/2]);}
+  for(const[v,x,z]of moves){v[0]+=(x-v[0])*k;v[1]+=(z-v[1])*k;}}
+}
+
+// Constraint-generated stack sample (compared against the hand-assembled masses): a base table plus
+// 0-2 sub-blocks chosen by rule - a vertical combination (smaller, 1.25-1.6x higher block set inside
+// the base -> a step) or a horizontal one (lower shoulder pushed past the rim -> a ledge/shoulder).
+export function sampleApostleLobes({seed,rx,rz,h}){const r=rng(seed),L=[[0,0,rx,rz,h,r()*1.2]],n=Math.floor(r()*3);
+ for(let k=0;k<n;k++){const a=r()*6.28;if(r()<.55){const f=.4+r()*.2;L.push([Math.cos(a)*rx*.35,Math.sin(a)*rz*.35,rx*f,rz*f,h*(1.25+r()*.35),r()]);}
+  else{const f=.45+r()*.2;L.push([Math.cos(a)*rx*.95,Math.sin(a)*rz*.95,rx*f,rz*f,h*(.45+r()*.25),r()]);}}
+ return L;}
+
+export function buildTwelveApostlesTarget({parent,radius=160,railCurves,railPoints,waterAt,protectedBoxes=[],plazaMargin=()=>Infinity,referencePoint,masses=APOSTLE_MASSES,clearance=10}){
+ let nearest=null;for(const[name,curve]of Object.entries(railCurves||{})){if(!curve?.getPointAt)continue;const length=curve.getLength(),count=Math.ceil(length/2);for(let i=0;i<count;i++){const u=i/count,p=curve.getPointAt(u),dd=p.distanceToSquared(referencePoint);if(!nearest||dd<nearest.dd)nearest={name,curve,length,u,dd};}}
+ if(!nearest)throw new Error('twelve apostles need the actual rail curves');
+ const report={version:'apostles-oskar-columns-10',railSource:nearest.name,masses:[],railUnchanged:true,triangles:0},rocks=[];
+ const _sz=new THREE.Vector3();protectedBoxes=protectedBoxes.filter(e=>e.box.getSize(_sz).length()<25);
+ parent.updateWorldMatrix(true,false);const parentInv=parent.matrixWorld.clone().invert();
+ const rockMat=new THREE.MeshStandardMaterial({vertexColors:true,flatShading:true,roughness:.95,metalness:0,side:THREE.DoubleSide});
+ const bushMat=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.9});
+ const talusMat=new THREE.MeshStandardMaterial({color:0xffffff,flatShading:true,roughness:.95});
+ const foamMat=new THREE.MeshBasicMaterial({color:0xf2f7f5,transparent:true,opacity:.8,depthWrite:false,side:THREE.DoubleSide});
+ const shoalMat=new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,depthWrite:false,side:THREE.DoubleSide});
+ const bushGeo=new THREE.IcosahedronGeometry(1,1),talusGeo=new THREE.DodecahedronGeometry(1,0);
+ for(const[mi,m]of masses.entries()){
+  const seed=7300+mi*101;
+  const u=THREE.MathUtils.euclideanModulo(nearest.u+m.s/nearest.length,1),p=nearest.curve.getPointAt(u),t=nearest.curve.getTangentAt(u).normalize(),up0=p.clone().normalize(),lat=new THREE.Vector3().crossVectors(up0,t).normalize();
+  const dir=p.clone().addScaledVector(lat,m.d).normalize(),water=waterAt(dir);if(!water){report.masses.push({id:m.id,rejected:'no-water'});continue;}
+  const Y=water.clone().normalize(),X=lat.clone().addScaledVector(Y,-lat.dot(Y)).normalize(),Z=new THREE.Vector3().crossVectors(X,Y);
+  const frame=new THREE.Matrix4().makeBasis(X,Y,Z).setPosition(water),Rw=water.length();
+  const bend=(x,z)=>(x*x+z*z)/(2*Rw);
+  const toWorld=(x,y,z)=>new THREE.Vector3(x,y-bend(x,z),z).applyMatrix4(frame);
+  const nearRail=railPoints.filter(q=>q.distanceTo(water)<110);
+  const why=(x,z,h)=>{for(const y of[0,h*.5,h]){const w=toWorld(x,y,z);if(nearRail.some(q=>q.distanceToSquared(w)<(clearance+1.5)**2))return'rail';if(protectedBoxes.some(e=>e.box.distanceToPoint(w)<2))return'protected';if(plazaMargin(w.clone().normalize())<6)return'town';}return null;};
+  // ---- lattice
+  const lobes=m.lobes||sampleApostleLobes(m.generated);
+  const cs=m.cell,rot=hash(seed,1)*Math.PI,rc=Math.cos(rot),rs=Math.sin(rot),Hf=makeHeight(lobes,seed);
+  const ext=Math.max(...lobes.map(([cx,cz,rx,rz])=>Math.hypot(cx,cz)+Math.max(rx,rz)*1.35)),N=Math.ceil(ext/cs)+1;
+  const V=new Map(),vk=(i,j)=>i+','+j;
+  const vert=(i,j)=>{const k=vk(i,j);let v=V.get(k);if(!v){const gx=i*cs+(hash(i,j,seed)-.5)*.56*cs,gz=j*cs+(hash(j,i,seed+7)-.5)*.56*cs;v=[gx*rc-gz*rs,gx*rs+gz*rc];V.set(k,v);}return v;};
+  const cells=new Map(),drop={rail:0,protected:0,town:0};
+  for(let i=-N;i<N;i++)for(let j=-N;j<N;j++){const q=[vert(i,j),vert(i+1,j),vert(i+1,j+1),vert(i,j+1)],cx=(q[0][0]+q[1][0]+q[2][0]+q[3][0])/4,cz=(q[0][1]+q[1][1]+q[2][1]+q[3][1])/4;
+   let h=Hf(cx,cz);if(h<=0)continue;
+   if(m.spire)h+=(hash(i,j,seed+3)-.5)*1.6;
+   let bad=null;for(const[x,z]of[...q,[cx,cz]]){bad=why(x,z,h);if(bad)break;}
+   if(bad){drop[bad]++;continue;}
+   cells.set(vk(i,j),{i,j,q,cx,cz,h,grass:true});}
+  if(!cells.size){report.masses.push({id:m.id,rejected:'all-cells-dropped',drop});continue;}
+  const hAt=(i,j)=>cells.get(vk(i,j))?.h??null;
+  if(!m.spire){const cut=[];for(const c of cells.values()){const nb=[hAt(c.i,c.j-1),hAt(c.i+1,c.j),hAt(c.i,c.j+1),hAt(c.i-1,c.j)];const open=nb.filter(n=>n===null).length;
+    if(open===1&&hash(c.i,c.j,seed+15)<.24)cut.push(c);}
+   for(const c of cut){if(hash(c.j,c.i,seed+16)<.7)cells.delete(vk(c.i,c.j));else{c.h=Math.max(3.5,c.h*.4);c.grass=false;}}}
+  relaxRims(cells,vert,vk,hAt,2,.38);
+  let minRail=Infinity;for(const c of cells.values())for(const[x,z]of c.q)for(const y of[0,c.h])for(const q of nearRail)minRail=Math.min(minRail,q.distanceTo(toWorld(x,y,z)));
+  // broken rim blocks: rim columns that lost their turf and dropped a little
+  for(const c of cells.values()){const nb=[hAt(c.i,c.j-1),hAt(c.i+1,c.j),hAt(c.i,c.j+1),hAt(c.i-1,c.j)];const rim=nb.some(n=>n===null||n<c.h-2.5);
+   if(rim&&hash(c.i,c.j,seed+11)<(m.spire?.2:.11)){c.newH=Math.max(c.h*.62,c.h-(1.2+hash(c.i,c.j,seed+12)*2.4));c.grass=hash(c.i,c.j,seed+13)<.6;}}
+  for(const c of cells.values())if(c.newH!==undefined)c.h=c.newH;
+  // ---- geometry
+  const P=[],Cc=[],bushes=[],talus=[],foamEdges=[];const r=rng(seed+5);
+  const push=(v,col)=>{P.push(v[0],v[1],v[2]);Cc.push(col.r,col.g,col.b);};
+  const tri=(a,b,c,ca,cb,cc)=>{push(a,ca);push(b,cb);push(c,cc);};
+  const quad=(a,b,c,d,ca,cb=ca,cc=ca,cd=ca)=>{tri(a,b,c,ca,cb,cc);tri(a,c,d,ca,cc,cd);};
+  const tmp=new THREE.Color();
+  const strata=(y,ph)=>1+.05*Math.sin(y*1.35+ph)+.025*Math.sin(y*3.1+ph*2);
+  const rockCol=(base,y,depth,ph,cave=false)=>{if(cave)return PAL.cave.clone();const c=base.clone().lerp(PAL.shade,Math.min(.55,Math.max(0,depth)*.22)).multiplyScalar(strata(y,ph));
+   if(y<2.4){const w=Math.min(1,(2.4-y)/2.2);c.lerp(y<-.4?PAL.deep:PAL.wet,w);}return c;};
+  for(const c of cells.values()){
+   const{i,j,q,cx,cz,h}=c;
+   const capCol=c.grass?PAL.grass.clone().multiplyScalar(.98+hash(i,j,seed+21)*.04):PAL.rockTop.clone().multiplyScalar(.95+hash(i,j,seed+22)*.07);
+   const top=q.map(([x,z])=>[x,h,z]);quad(top[0],top[1],top[2],top[3],capCol);
+   const nbs=[[i,j-1],[i+1,j],[i,j+1],[i-1,j]];
+   for(let e=0;e<4;e++){
+    const nb=cells.get(vk(...nbs[e])),A=q[e],B=q[(e+1)%4];const sea=!nb;const y0=sea?BASE:nb.h;
+    if(!sea&&nb.h>=h)continue;
+    // bushes at the foot of a higher wall live on the lower neighbour; handled when that wall is built
+    let ex=B[0]-A[0],ez=B[1]-A[1];const len=Math.hypot(ex,ez);ex/=len;ez/=len;let nx=ez,nz=-ex;const mx=(A[0]+B[0])/2-cx,mz=(A[1]+B[1])/2-cz;if(nx*mx+nz*mz<0){nx=-nx;nz=-nz;}
+    const es=hash(i*7+e,j*13+e,seed+31),ph=es*6.28;
+    // vertical rows: wave-cut notch, block rows (strata), drape lip
+    const drapeH=c.grass?.55+es*.7:.25;const ys=[y0];let notchTop=null;
+    if(sea){notchTop=.8+hash(i,j+e,seed+33)*1.3;ys.push(notchTop);}
+    let y=ys[ys.length-1];const yLip=h-drapeH;
+    while(y+2.2<yLip){y+=2.4+hash(i+e,j,Math.round(y*10)+seed)*2.6;if(y<yLip-.7)ys.push(y);}
+    if(yLip-ys[ys.length-1]>.35)ys.push(yLip);ys.push(h);
+    const rows=ys.length-1,nseg=Math.max(1,Math.round(len/2.1));
+    const ts=[0];{let acc=0;const ws=[];for(let k=0;k<nseg;k++){const w=.45+hash(i+k,j+e,seed+41)*1.3;ws.push(w);acc+=w;}let run=0;for(let k=0;k<nseg-1;k++){run+=ws[k];ts.push(run/acc);}}ts.push(1);
+    const depth=[],cols=[],kind=[];
+    for(let k=0;k<nseg;k++){const endF=(k===0||k===nseg-1)?.45:1,segD=(.2+Math.pow(hash(i*3+k,j*5+e,seed+51),1.6)*2.2)*endF,base=PAL.rock[Math.floor(hash(i+k,j-e,seed+52)*PAL.rock.length)];
+     const cave=sea&&hash(i+k,j+e*3,seed+53)<.06;depth.push([]);cols.push([]);kind.push([]);
+     for(let b=0;b<rows;b++){const isLip=b===rows-1,isNotch=sea&&b===0;let d;
+      if(isLip)d=0;else if(isNotch)d=segD*.5+.2+(cave?1.6:0);else{const brk=1+Math.floor(hash(k,i*7+j+e,seed+58)*Math.max(1,rows-2)),stepBack=b>=brk&&hash(k,j*7+i,seed+59)<.45?.9+hash(b,k,seed+60)*1.2:0;d=Math.max(.05,segD+stepBack+(hash(k+b*17,i+j,seed+54)-.4)*.6);if(sea){const ym=(ys[b]+ys[b+1])/2,f=1-Math.min(1,Math.max(0,ym/(h*.55)));d-=f*(.6+hash(k,j+b,seed+57)*1.1);}}
+      depth[k].push(d);kind[k].push(isLip?(c.grass&&hash(k,b+i,seed+55)<.8?'drape':'lip'):isNotch&&cave?'cave':'rock');
+      cols[k].push(base.clone().multiplyScalar(.86+hash(k*5+b,j+i,seed+56)*.2));}}
+    const pt=(tt,d,yy)=>[A[0]+(B[0]-A[0])*tt-nx*d,yy,A[1]+(B[1]-A[1])*tt-nz*d];
+    const colFor=(k,b,yy,d)=>{const kd=kind[k][b];if(kd==='drape')return PAL.grassDrape.clone().multiplyScalar(.96+hash(k,b,seed)*.06);if(kd==='lip')return rockCol(PAL.rockTop,yy,0,ph);return rockCol(cols[k][b],yy,d,ph,kd==='cave');};
+    for(let k=0;k<nseg;k++)for(let b=0;b<rows;b++){const d=depth[k][b],ya=ys[b],yb=ys[b+1];
+     quad(pt(ts[k],d,ya),pt(ts[k+1],d,ya),pt(ts[k+1],d,yb),pt(ts[k],d,yb),colFor(k,b,ya,d),colFor(k,b,ya,d),colFor(k,b,yb,d),colFor(k,b,yb,d));}
+    // joint returns between strips (vertical fractures) and to the lattice corners
+    for(let k=0;k<=nseg;k++)for(let b=0;b<rows;b++){const dl=k===0?0:depth[k-1][b],dr=k===nseg?0:depth[k][b];if(Math.abs(dl-dr)<1e-3)continue;
+     const ya=ys[b],yb=ys[b+1],kk=Math.min(k,nseg-1),cA=colFor(kk,b,ya,Math.max(dl,dr)+.8).multiplyScalar(.8),cB=colFor(kk,b,yb,Math.max(dl,dr)+.8).multiplyScalar(.8);
+     quad(pt(ts[k],dl,ya),pt(ts[k],dr,ya),pt(ts[k],dr,yb),pt(ts[k],dl,yb),cA,cA,cB,cB);}
+    // ledges / overhang soffits between rows, and the joint floor on a lower turf table
+    for(let k=0;k<nseg;k++){for(let b=0;b+1<rows;b++){const d0=depth[k][b],d1=depth[k][b+1];if(Math.abs(d0-d1)<1e-3)continue;const yy=ys[b+1],cl=colFor(k,b,yy,Math.max(d0,d1)).multiplyScalar(d0<d1?1.04:.7);
+      quad(pt(ts[k],d0,yy),pt(ts[k+1],d0,yy),pt(ts[k+1],d1,yy),pt(ts[k],d1,yy),cl);}
+     if(!sea){const d0=depth[k][0],cl=nb.grass?PAL.grass.clone().multiplyScalar(.9):PAL.rockTop;quad(pt(ts[k],0,y0),pt(ts[k+1],0,y0),pt(ts[k+1],d0,y0),pt(ts[k],d0,y0),cl);}}
+    // vegetation drifts: along the turf rim, and at the foot of this wall on the lower table
+    if(c.grass&&hash(i,j+e,seed+61)<(m.spire?.12:.3)){const tt=.2+hash(j,i+e,seed+62)*.6,inset=.55+hash(i+e,j,seed+63)*.7;bushes.push([A[0]+(B[0]-A[0])*tt-nx*inset,h,A[1]+(B[1]-A[1])*tt-nz*inset,ex,ez]);}
+    if(!sea&&nb.grass&&hash(i+e,j,seed+64)<(m.spire?.12:.4)){const tt=.15+hash(i,j*3+e,seed+65)*.7,out=.7+hash(e,i+j,seed+66)*.5;bushes.push([A[0]+(B[0]-A[0])*tt+nx*out,y0,A[1]+(B[1]-A[1])*tt+nz*out,ex,ez]);}
+    if(sea){foamEdges.push({A,B,nx,nz,ex,ez,len});
+     for(let k=0;k<nseg;k++)if(hash(i+k,j+e,seed+71)<.16){const n=1+Math.floor(hash(k,i,seed+72)*3);for(let s=0;s<n;s++){const tt=(ts[k]+ts[k+1])/2+(hash(s,k+i,seed+73)-.5)*.3,out=.4+hash(s+k,j,seed+74)*1.9,sz=.45+hash(s,j+k,seed+75)*.9;
+       const x=A[0]+(B[0]-A[0])*tt+nx*out,z=A[1]+(B[1]-A[1])*tt+nz*out;if(!why(x,z,1))talus.push([x,-.35+hash(s,k,seed+76)*.5,z,sz]);}}}
+   }
+   if(c.grass&&hash(i,j,seed+81)<.05)bushes.push([cx+(hash(i,j,seed+82)-.5)*cs*.5,h,cz+(hash(j,i,seed+83)-.5)*cs*.5,1,0]);
+  }
+  for(let k=0;k<P.length;k+=3)P[k+1]-=bend(P[k],P[k+2]);
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(P,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(Cc,3));geo.computeVertexNormals();geo.computeBoundingBox();geo.computeBoundingSphere();
+  const maxH=Math.max(...[...cells.values()].map(c=>c.h));geo.userData.twelveApostles={id:m.id,height:maxH};
+  const rock=new THREE.Mesh(geo,rockMat);rock.name='g30-far-mountain';rock.castShadow=rock.receiveShadow=true;
+  rock.userData.apostleMass=m.id;rock.userData.seaStack={height:maxH,radius:geo.boundingSphere.radius,detailId:'apostle-'+m.id,seaAnchor:water.toArray(),worldUp:Y.toArray(),placement:'apostles-oskar-columns',waterSupport:'rendered-ocean-triangle'};
+  parent.add(rock);parentInv.clone().multiply(frame).decompose(rock.position,rock.quaternion,rock.scale);rock.updateWorldMatrix(true,false);
+  let tris=P.length/9;
+  // bush drifts: 2-5 small rounded clumps per root, rooted on the turf they sit on
+  const blobs=[];for(const[x,y,z,ex,ez]of bushes){const n=3+Math.floor(r()*4);for(let s=0;s<n;s++){const along=(r()-.5)*2.8,side=(r()-.5)*1.1,rad=.38+r()*.45;const bx=x+ex*along-ez*side,bz=z+ez*along+ex*side;blobs.push([bx,y,bz,rad]);}}
+  if(blobs.length){const inst=new THREE.InstancedMesh(bushGeo,bushMat,blobs.length);inst.name='apostle-bushes';const mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),col=new THREE.Color();
+   blobs.forEach(([x,y,z,s],k)=>{qq.setFromEuler(new THREE.Euler(0,r()*6.28,0));mm.compose(new THREE.Vector3(x,y-bend(x,z)+s*.55,z),qq,new THREE.Vector3(s,s*.85,s));inst.setMatrixAt(k,mm);inst.setColorAt(k,col.setHex(PAL.bush[k%PAL.bush.length]));});
+   inst.instanceMatrix.needsUpdate=true;inst.castShadow=true;rock.add(inst);tris+=blobs.length*bushGeo.index?.count/3||blobs.length*80;}
+  if(talus.length){const inst=new THREE.InstancedMesh(talusGeo,talusMat,talus.length);inst.name='apostle-talus';const mm=new THREE.Matrix4(),qq=new THREE.Quaternion(),col=new THREE.Color();
+   talus.forEach(([x,y,z,s],k)=>{qq.setFromEuler(new THREE.Euler(r()*3,r()*6.28,r()*3));mm.compose(new THREE.Vector3(x,y-bend(x,z),z),qq,new THREE.Vector3(s,s*.65,s*.85));inst.setMatrixAt(k,mm);inst.setColorAt(k,col.setHex(PAL.talus[k%PAL.talus.length]));});
+   inst.instanceMatrix.needsUpdate=true;inst.castShadow=true;rock.add(inst);tris+=talus.length*36;}
+  // surf: strips hugging every sea-facing wall, extended past the ends so corners close; shallows beyond
+  const strip=(o0,o1,y,ext)=>{const pts=[];for(const f of foamEdges){const w=(hash(Math.round(f.A[0]*10),Math.round(f.A[1]*10),seed)-.5)*.5,a=[f.A[0]-f.ex*ext,f.A[1]-f.ez*ext],b=[f.B[0]+f.ex*ext,f.B[1]+f.ez*ext];
+    const at=([x,z],o)=>{const X1=x+f.nx*o,Z1=z+f.nz*o;return[X1,y-bend(X1,Z1),Z1];};const p0=at(a,o0),p1=at(b,o0),p2=at(b,o1+w),p3=at(a,o1+w);pts.push(...p0,...p1,...p2,...p0,...p2,...p3);}
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.computeVertexNormals();return g;};
+  const foam=new THREE.Mesh(strip(-.6,1.15,.3,.5),foamMat);foam.name='apostle-foam';foam.renderOrder=2;rock.add(foam);
+  const shoal=new THREE.Mesh(shallowSheet([...cells.values()],ext+9,cs,bend),shoalMat);shoal.name='apostle-shallows';shoal.renderOrder=1;rock.add(shoal);
+  rocks.push(rock);report.triangles+=Math.round(tris);
+  report.masses.push({id:m.id,s:m.s,d:m.d,source:m.lobes?'hand-assembled':'constraint-generated',lobes:lobes.length,height:+maxH.toFixed(1),minRail:+minRail.toFixed(2),cells:cells.size,dropped:drop,bushes:blobs.length,talus:talus.length,triangles:Math.round(tris)});
+ }
+ report.built=rocks.length;return{rocks,report};
+}

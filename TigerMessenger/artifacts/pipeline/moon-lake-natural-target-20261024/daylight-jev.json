@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "78b13c476a816baa6585e8f46bb3be641311e8b6b0a63901e756a98aae93fe3c",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.89
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.35,
+      "probabilities": {
+        "dressing": 0.16,
+        "geometry": 0.48,
+        "lighting": 0,
+        "navigation": 0,
+        "review": 0.36
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.93
+    }
+  },
+  "usage": {
+    "input_tokens": 678,
+    "output_tokens": 91,
+    "cost_usd": 0.000285,
+    "credits_remaining_usd": 4.925985
+  },
+  "elapsed_ms": 1782,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Exact crescent outline and simplified vegetation in corrected image",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,77 @@
+{
+  "applied": {
+    "project": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger",
+    "archive": "/Users/panglaohu/Downloads/TigerMessenger-Archive",
+    "retention_days": 7,
+    "files": 524,
+    "bytes": 482209058,
+    "tracked_cold_bytes_kept": 2026222538,
+    "applied": true,
+    "moved_files": 524,
+    "offloaded_bytes": 482209058
+  },
+  "verification": {
+    "checked_links_and_original_http_urls": 2225,
+    "failures": [],
+    "checked_at": 1791703336.188792
+  },
+  "allocated_bytes_not_following_links": {
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger": 9959559168,
+    "/Users/panglaohu/Downloads/TigerMessenger-Archive": 1315602432
+  },
+  "archive_over90_days": 0,
+  "tracked_old_count": 2163,
+  "tracked_old_bytes": 2467301197,
+  "largest_tracked_old": [
+    {
+      "path": "assets/models/optimized/batch-candidates-v1/equatorialClouds.blend",
+      "bytes": 72553531,
+      "modified_at": 1788772478.4569983
+    },
+    {
+      "path": "assets/models/optimized/batch-candidates-v2/equatorialClouds.blend",
+      "bytes": 72552161,
+      "modified_at": 1788772554.8682344
+    },
+    {
+      "path": "artifacts/world-migration/import-repair/original-world-v1.before.glb",
+      "bytes": 65172612,
+      "modified_at": 1788872809.9256992
+    },
+    {
+      "path": "assets/models/optimized/batch-candidates-v1/saihoji.blend",
+      "bytes": 52582003,
+      "modified_at": 1788772470.6700928
+    },
+    {
+      "path": "assets/models/optimized/batch-candidates-v2/saihoji.blend",
+      "bytes": 51757994,
+      "modified_at": 1788772538.2146456
+    },
+    {
+      "path": "assets/models/optimized/citadel-mountain-forest/mountain-forest-layout-r02.blend",
+      "bytes": 21522747,
+      "modified_at": 1789251871.2309654
+    },
+    {
+      "path": "assets/models/optimized/citadel-mountain-forest/mountain-forest-layout-r03.blend",
+      "bytes": 21446146,
+      "modified_at": 1789254910.0489073
+    },
+    {
+      "path": "artifacts/pipeline/citadel-compact-ascent/before-common-frame.glb",
+      "bytes": 21324328,
+      "modified_at": 1789288272.9719434
+    },
+    {
+      "path": "assets/models/optimized/batch-candidates-v1/moebiusSwamp.blend",
+      "bytes": 19035109,
+      "modified_at": 1788772455.63447
+    },
+    {
+      "path": "assets/models/optimized/batch-candidates-v2/moebiusSwamp.blend",
+      "bytes": 18975906,
+      "modified_at": 1788772501.042947
+    }
+  ]
+}

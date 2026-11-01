@@ -1,0 +1,24 @@
+✔ eastern candidate preserves main summit and saddle, with bounded continuous target changes (250.81625ms)
+✔ candidate 1 geometry retains protected rail, structure and fixed shore vertices on a rotated chart (19.421125ms)
+✔ candidate 2 geometry retains protected rail, structure and fixed shore vertices on a rotated chart (10.953125ms)
+✔ candidate 3 geometry retains protected rail, structure and fixed shore vertices on a rotated chart (10.675042ms)
+✔ candidate 4 geometry retains protected rail, structure and fixed shore vertices on a rotated chart (11.680375ms)
+✔ candidate 5 geometry retains protected rail, structure and fixed shore vertices on a rotated chart (10.608083ms)
+✔ candidate 6 geometry retains protected rail, structure and fixed shore vertices on a rotated chart (11.150833ms)
+✔ forward shoulder is local, bounded, lower than the summit and continuous (386.319333ms)
+✔ authored meadow benches flatten real target height locally without filling the main saddle (4.391625ms)
+✔ lower shoulder preserves lower sheets, fixed nodes and incident face orientation (0.64575ms)
+✔ pass4 final geometry differs from pass3 only inside the bounded lower shoulder (43.794208ms)
+✔ lower shoulder honors swept safeY restriction before topology checks (0.249ms)
+✔ summit candidate is a bounded subtraction from complete pass3 and retains west crest (51.739833ms)
+✔ summit subtraction respects safeY and original high-cap cutoff (0.199458ms)
+✔ actual-silhouette candidate leaves west crest, cuts observed rear rim and stays bounded (0.137125ms)
+✔ pass6 full final geometry has local downward-only change and preserved face orientation (53.474084ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 921.963125

@@ -1,0 +1,30 @@
+{
+  "scope": [
+    "src/world/swampCoralCanopy.js new material hook only",
+    "src/world/swampGregVisuals.js only fanVeins delegate and import",
+    "tests/world/swampCoralCanopy.test.mjs"
+  ],
+  "observed": "Viewed overview-bark-v2.jpg. Actual curved polar UVs are correct; old veins were extinguished between12–38 world units, including broad leaves still large on screen. Old edge had only0.11 fixed opacity.",
+  "change": "Five sparse radial veins with derivative-based thin width; rounded perimeter derivative-based edge, both fading when projected footprint becomes too small. Muted plum blue-gray #626478, no opaque black hull.",
+  "cacheKey": "greg-lake-fan-veins-v3-screen",
+  "materialReport": "material.userData.gregCanopyInk version3",
+  "actualGeometry": {
+    "renderMeshes": 10,
+    "instances": 373,
+    "triangles": 147708,
+    "note": "Actual factory/test has373 instances;147708/396=373. No instance count changed this batch."
+  },
+  "unchanged": "Vertex positions/normals/UVs/indices, every instance matrix, exact branch attachments, crown envelopes and bridge clearance, non-canopy materials, texture object count and draw calls.",
+  "validation": "7/7 CPU tests pass, including byte-exact geometry/UV/index/instance matrices across actual palette install, stem anchor/envelope, sphere placement, one shared material, formal/fixture shader equivalence and rollback.",
+  "GPU": "Pending parent; CPU does not prove rendered line appearance.",
+  "backup": "canopy-ink-before/",
+  "parentGPU": {
+    "checked": "real factory overview and trunkMiddle",
+    "shaderErrors": [],
+    "screenshots": [
+      "overview-canopy-ink-v3.jpg",
+      "canopy-middle-ink-v3.jpg"
+    ],
+    "limitation": "Veins now visible but actual real-time models remain less detailed than the accepted illustration."
+  }
+}

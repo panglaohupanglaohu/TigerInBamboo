@@ -1,0 +1,81 @@
+{
+  "status": "composition-proposal-not-implemented",
+  "coordinateFrame": "moonLake local XZ; terrain support not verified",
+  "fixed": {
+    "lakeCentre": [
+      0,
+      0
+    ],
+    "lakeRadius": 3.5,
+    "walkingRing": [
+      3.8,
+      4.7
+    ],
+    "moonCentre": [
+      -6.225,
+      5.6,
+      4.125
+    ],
+    "moonRadius": 3.4
+  },
+  "trees": [
+    {
+      "id": 1,
+      "existing": true,
+      "position": [
+        9.3,
+        -0.4565145089466398,
+        1.5
+      ],
+      "relativeScale": 1
+    },
+    {
+      "id": 2,
+      "existing": false,
+      "position": [
+        -13,
+        -0.7851250820827147,
+        5
+      ],
+      "relativeScale": 0.55
+    },
+    {
+      "id": 4,
+      "existing": false,
+      "position": [
+        0,
+        -0.5922663872167959,
+        -11.5
+      ],
+      "relativeScale": 0.65
+    },
+    {
+      "id": 5,
+      "existing": false,
+      "position": [
+        -16,
+        -1.2921948235539844,
+        -10
+      ],
+      "relativeScale": 0.45
+    }
+  ],
+  "constraints": [
+    "asymmetric open arc, no uniform tree ring",
+    "keep lake and moon fixed; no tree camera following",
+    "preserve walking clearances and water",
+    "at selected camera viewpoints show crescent tips and readable outer arc",
+    "foreground branch, middle moon/water, distant tree separation",
+    "bright daytime, natural shrubs without planters",
+    "candidate tree positions require actual terrain and full crown envelope checks",
+    "multi-view AI target is not deterministic 3D projection proof",
+    "no upright tree3 replacement",
+    "moon and lake ratio from current source factories takes priority over AI outline",
+    "existing specialized pine1 remains; trees2/4/5 are candidate source-derived curved trees only"
+  ],
+  "revision": "four-pines-source-r3",
+  "deletedConceptTreeIds": [
+    3
+  ],
+  "navigationVerified": false
+}

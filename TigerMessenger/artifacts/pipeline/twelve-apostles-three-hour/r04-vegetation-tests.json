@@ -1,0 +1,728 @@
+{
+  "passed": true,
+  "measured": true,
+  "scope": "final generated surfaces, approved eight dimensions/seeds; rays and per-face turf support, not declared audit zero",
+  "results": [
+    {
+      "seed": 0,
+      "offsetVector": [
+        0,
+        0.001,
+        0
+      ],
+      "radius": 8.16,
+      "height": 28,
+      "geometryRevision": "coastal-97aeb3d0-4810",
+      "grassRoots": 10,
+      "shrubRoots": 0,
+      "turfTriangles": 2789,
+      "turfArea": 28.11238159316345,
+      "minSupportNormalY": 0.4108967144701909,
+      "areaWeightedSupportNormalY": 0.9256510419698265,
+      "supportSlopeAreas": {
+        "0.4-0.6": 0.907362659486663,
+        "0.6-0.78": 2.6105371743311685,
+        "0.78-0.9": 2.3592709729158363,
+        "0.9-1": 22.235210786429786
+      },
+      "eligibleRockArea": 104.24036876149908,
+      "rootRayMisses": 0,
+      "rootMaxSurfaceError": 1.7763568394002505e-15,
+      "grassInstanceOffsetMaxError": 4.781738492099632e-7,
+      "shrubInstanceOffsetMaxError": 0,
+      "unsupportedTurfTriangles": 0,
+      "unsupportedTurfVertices": 0,
+      "turfOffsetMaxError": 4.434351724711197e-7,
+      "turfOverheadPenetrationSamples": 0,
+      "turfOverheadExamples": [],
+      "smoothNormalExamples": [],
+      "turfNormalDistanceMax": 0.001000046730041504,
+      "turfSupportMaxPlaneError": 4.7634438926982825e-7,
+      "sourceFaceNormalDisagreement": 0.0000022656079350369396,
+      "smoothNormalMaxError": 4.123200936602418e-8,
+      "crossFaceMatchedEdges": 639,
+      "sharedEdgeMaxGap": 0.00003159046173095703,
+      "degenerateTurfTriangles": 0,
+      "rawTriangleBoundaryEdges": 952,
+      "internalUncoveredBoundaryProbes": 0,
+      "faceNormalThresholdBoundaries": 56,
+      "normalThresholdExamples": [
+        {
+          "position": [
+            0.10459174300762532,
+            -5.313034254983878,
+            -4.528928448294441
+          ],
+          "fromFace": 1160,
+          "toFace": 1721,
+          "faceNormalY": 0.11809265105037293,
+          "smoothNormalY": 0.8829870608536063
+        },
+        {
+          "position": [
+            0.12812894240717365,
+            -5.339284136077303,
+            -4.402990748064412
+          ],
+          "fromFace": 1160,
+          "toFace": 1721,
+          "faceNormalY": 0.11809265105037293,
+          "smoothNormalY": 0.8209936589346456
+        },
+        {
+          "position": [
+            4.39023712825116,
+            -5.342793718396515,
+            -4.332364734727143
+          ],
+          "fromFace": 1742,
+          "toFace": 1741,
+          "faceNormalY": 0.2926524313072222,
+          "smoothNormalY": 0.8646473343414864
+        }
+      ],
+      "uncoveredExamples": [],
+      "revisionMatches": true,
+      "deterministic": true,
+      "turfCoverageOfEligibleArea": 0.2696880481829866,
+      "supportSlopeAreaFractions": {
+        "0.4-0.6": 0.03227626433853335,
+        "0.6-0.78": 0.09286076192726465,
+        "0.78-0.9": 0.08392284250614963,
+        "0.9-1": 0.7909401312280524
+      },
+      "sparseInterpretation": "surface-constrained roots"
+    },
+    {
+      "seed": 1,
+      "offsetVector": [
+        0,
+        0.001,
+        0
+      ],
+      "radius": 10.88,
+      "height": 41,
+      "geometryRevision": "coastal-d6dd7d94-4828",
+      "grassRoots": 18,
+      "shrubRoots": 5,
+      "turfTriangles": 4103,
+      "turfArea": 47.35582104706996,
+      "minSupportNormalY": 0.4001538378272586,
+      "areaWeightedSupportNormalY": 0.9073436565778144,
+      "supportSlopeAreas": {
+        "0.4-0.6": 2.3624382479636994,
+        "0.6-0.78": 6.266563535113075,
+        "0.78-0.9": 6.438769855557777,
+        "0.9-1": 32.28804940843528
+      },
+      "eligibleRockArea": 172.8961379967233,
+      "rootRayMisses": 0,
+      "rootMaxSurfaceError": 1.7763568394002505e-15,
+      "grassInstanceOffsetMaxError": 5.080458327127615e-7,
+      "shrubInstanceOffsetMaxError": 2.2809299806483364e-7,
+      "unsupportedTurfTriangles": 0,
+      "unsupportedTurfVertices": 0,
+      "turfOffsetMaxError": 8.159428569456603e-7,
+      "turfOverheadPenetrationSamples": 0,
+      "turfOverheadExamples": [],
+      "smoothNormalExamples": [],
+      "turfNormalDistanceMax": 0.0010004043579101562,
+      "turfSupportMaxPlaneError": 8.936251617644442e-7,
+      "sourceFaceNormalDisagreement": 0.0000059711760992398055,
+      "smoothNormalMaxError": 4.1084922295793694e-8,
+      "crossFaceMatchedEdges": 808,
+      "sharedEdgeMaxGap": 0,
+      "degenerateTurfTriangles": 0,
+      "rawTriangleBoundaryEdges": 929,
+      "internalUncoveredBoundaryProbes": 0,
+      "faceNormalThresholdBoundaries": 96,
+      "normalThresholdExamples": [
+        {
+          "position": [
+            -3.8067185685890563,
+            4.580858422691858,
+            -4.340814880963494
+          ],
+          "fromFace": 2386,
+          "toFace": 2973,
+          "faceNormalY": 0.35562861043772276,
+          "smoothNormalY": 0.8844480132207981
+        },
+        {
+          "position": [
+            -3.9612745937713663,
+            4.569102835909601,
+            -4.340814885151289
+          ],
+          "fromFace": 2386,
+          "toFace": 2973,
+          "faceNormalY": 0.35562861043772276,
+          "smoothNormalY": 0.8826075372198705
+        },
+        {
+          "position": [
+            -4.115830640694813,
+            4.557347268698324,
+            -4.340814881259667
+          ],
+          "fromFace": 2386,
+          "toFace": 2973,
+          "faceNormalY": 0.35562861043772276,
+          "smoothNormalY": 0.8807670424905478
+        }
+      ],
+      "uncoveredExamples": [],
+      "revisionMatches": true,
+      "deterministic": true,
+      "turfCoverageOfEligibleArea": 0.27389750630501325,
+      "supportSlopeAreaFractions": {
+        "0.4-0.6": 0.0498869662847894,
+        "0.6-0.78": 0.13232931868891767,
+        "0.78-0.9": 0.13596575274574746,
+        "0.9-1": 0.6818179622805427
+      },
+      "sparseInterpretation": "surface-constrained roots"
+    },
+    {
+      "seed": 2,
+      "offsetVector": [
+        0,
+        0.001,
+        0
+      ],
+      "radius": 13.600000000000001,
+      "height": 54,
+      "geometryRevision": "coastal-6a2fcb05-4980",
+      "grassRoots": 37,
+      "shrubRoots": 40,
+      "turfTriangles": 7404,
+      "turfArea": 84.4411815308556,
+      "minSupportNormalY": 0.4050319749746229,
+      "areaWeightedSupportNormalY": 0.939508742690699,
+      "supportSlopeAreas": {
+        "0.4-0.6": 2.7095540838621237,
+        "0.6-0.78": 4.223071123295604,
+        "0.78-0.9": 8.797747914531907,
+        "0.9-1": 68.71080840916568
+      },
+      "eligibleRockArea": 275.16954400019256,
+      "rootRayMisses": 0,
+      "rootMaxSurfaceError": 3.552713678800501e-15,
+      "grassInstanceOffsetMaxError": 8.949541942470527e-7,
+      "shrubInstanceOffsetMaxError": 9.587791134336362e-7,
+      "unsupportedTurfTriangles": 0,
+      "unsupportedTurfVertices": 0,
+      "turfOffsetMaxError": 8.970298305257737e-7,
+      "turfOverheadPenetrationSamples": 0,
+      "turfOverheadExamples": [],
+      "smoothNormalExamples": [],
+      "turfNormalDistanceMax": 0.0010004050458087281,
+      "turfSupportMaxPlaneError": 9.679070861710881e-7,
+      "sourceFaceNormalDisagreement": 0.00005904355368879788,
+      "smoothNormalMaxError": 4.166235754711365e-8,
+      "crossFaceMatchedEdges": 958,
+      "sharedEdgeMaxGap": 0,
+      "degenerateTurfTriangles": 0,
+      "rawTriangleBoundaryEdges": 1377,
+      "internalUncoveredBoundaryProbes": 0,
+      "faceNormalThresholdBoundaries": 109,
+      "normalThresholdExamples": [
+        {
+          "position": [
+            -1.8108215162127463,
+            2.372818968026715,
+            -10.887941190040857
+          ],
+          "fromFace": 377,
+          "toFace": 376,
+          "faceNormalY": 0.346876559386738,
+          "smoothNormalY": 0.8266458411700769
+        },
+        {
+          "position": [
+            -0.9725901520978391,
+            2.2760326068075436,
+            -10.887089384333358
+          ],
+          "fromFace": 1173,
+          "toFace": 381,
+          "faceNormalY": 0.38518691500760077,
+          "smoothNormalY": 0.8188410904379153
+        },
+        {
+          "position": [
+            -1.1020911968480527,
+            2.2955493570156515,
+            -10.887089384333358
+          ],
+          "fromFace": 1173,
+          "toFace": 381,
+          "faceNormalY": 0.38518691500760077,
+          "smoothNormalY": 0.8468216040185798
+        }
+      ],
+      "uncoveredExamples": [],
+      "revisionMatches": true,
+      "deterministic": true,
+      "turfCoverageOfEligibleArea": 0.3068696495379464,
+      "supportSlopeAreaFractions": {
+        "0.4-0.6": 0.03208806455262622,
+        "0.6-0.78": 0.050011985227284554,
+        "0.78-0.9": 0.10418788267804054,
+        "0.9-1": 0.8137120675420453
+      },
+      "sparseInterpretation": "surface-constrained roots"
+    },
+    {
+      "seed": 3,
+      "offsetVector": [
+        0,
+        0.001,
+        0
+      ],
+      "radius": 8.16,
+      "height": 39,
+      "geometryRevision": "coastal-2a35cdf8-4804",
+      "grassRoots": 16,
+      "shrubRoots": 0,
+      "turfTriangles": 2191,
+      "turfArea": 27.87080394636234,
+      "minSupportNormalY": 0.40679504518063797,
+      "areaWeightedSupportNormalY": 0.9544015283764462,
+      "supportSlopeAreas": {
+        "0.4-0.6": 0.7833017767590661,
+        "0.6-0.78": 1.564174486069094,
+        "0.78-0.9": 0.928465123457755,
+        "0.9-1": 24.594862560076443
+      },
+      "eligibleRockArea": 89.33344592145004,
+      "rootRayMisses": 0,
+      "rootMaxSurfaceError": 4.440892098500626e-16,
+      "grassInstanceOffsetMaxError": 4.7651972944513535e-7,
+      "shrubInstanceOffsetMaxError": 0,
+      "unsupportedTurfTriangles": 0,
+      "unsupportedTurfVertices": 0,
+      "turfOffsetMaxError": 4.782698729286286e-7,
+      "turfOverheadPenetrationSamples": 0,
+      "turfOverheadExamples": [],
+      "smoothNormalExamples": [],
+      "turfNormalDistanceMax": 0.0010004043579101562,
+      "turfSupportMaxPlaneError": 4.922131827123088e-7,
+      "sourceFaceNormalDisagreement": 2.0474992779018208e-7,
+      "smoothNormalMaxError": 4.028907402399032e-8,
+      "crossFaceMatchedEdges": 539,
+      "sharedEdgeMaxGap": 0,
+      "degenerateTurfTriangles": 0,
+      "rawTriangleBoundaryEdges": 718,
+      "internalUncoveredBoundaryProbes": 0,
+      "faceNormalThresholdBoundaries": 26,
+      "normalThresholdExamples": [
+        {
+          "position": [
+            3.261419588670511,
+            3.575898826916132,
+            -4.356560898626324
+          ],
+          "fromFace": 1418,
+          "toFace": 1425,
+          "faceNormalY": 0.29168972740728316,
+          "smoothNormalY": 0.8156087407829329
+        },
+        {
+          "position": [
+            3.590973369662897,
+            3.5606476890410916,
+            -3.885405978849459
+          ],
+          "fromFace": 2275,
+          "toFace": 2276,
+          "faceNormalY": 0.2898955927386125,
+          "smoothNormalY": 0.8284962790597772
+        },
+        {
+          "position": [
+            3.394556858472325,
+            3.5831827817784516,
+            -4.163640000648117
+          ],
+          "fromFace": 2275,
+          "toFace": 2276,
+          "faceNormalY": 0.2898955927386125,
+          "smoothNormalY": 0.8438213419802958
+        }
+      ],
+      "uncoveredExamples": [],
+      "revisionMatches": true,
+      "deterministic": true,
+      "turfCoverageOfEligibleArea": 0.3119862181390478,
+      "supportSlopeAreaFractions": {
+        "0.4-0.6": 0.028104742807797678,
+        "0.6-0.78": 0.05612233106297775,
+        "0.78-0.9": 0.03331318053273943,
+        "0.9-1": 0.8824597455964858
+      },
+      "sparseInterpretation": "surface-constrained roots"
+    },
+    {
+      "seed": 4,
+      "offsetVector": [
+        0,
+        0.001,
+        0
+      ],
+      "radius": 10.88,
+      "height": 52,
+      "geometryRevision": "coastal-d813d154-5054",
+      "grassRoots": 26,
+      "shrubRoots": 20,
+      "turfTriangles": 4243,
+      "turfArea": 55.764651930461326,
+      "minSupportNormalY": 0.4065921507862837,
+      "areaWeightedSupportNormalY": 0.9608246276780844,
+      "supportSlopeAreas": {
+        "0.4-0.6": 1.442086308360802,
+        "0.6-0.78": 3.262164677757523,
+        "0.78-0.9": 1.3788812953641458,
+        "0.9-1": 49.68151964897897
+      },
+      "eligibleRockArea": 162.58480657895458,
+      "rootRayMisses": 0,
+      "rootMaxSurfaceError": 8.881784197001252e-16,
+      "grassInstanceOffsetMaxError": 8.728842166721532e-7,
+      "shrubInstanceOffsetMaxError": 6.141514736261946e-7,
+      "unsupportedTurfTriangles": 0,
+      "unsupportedTurfVertices": 0,
+      "turfOffsetMaxError": 8.436198642982826e-7,
+      "turfOverheadPenetrationSamples": 0,
+      "turfOverheadExamples": [],
+      "smoothNormalExamples": [],
+      "turfNormalDistanceMax": 0.0010004972418803208,
+      "turfSupportMaxPlaneError": 9.190696318622836e-7,
+      "sourceFaceNormalDisagreement": 0.000003849529782051775,
+      "smoothNormalMaxError": 4.122454844585334e-8,
+      "crossFaceMatchedEdges": 1000,
+      "sharedEdgeMaxGap": 0,
+      "degenerateTurfTriangles": 0,
+      "rawTriangleBoundaryEdges": 756,
+      "internalUncoveredBoundaryProbes": 0,
+      "faceNormalThresholdBoundaries": 72,
+      "normalThresholdExamples": [
+        {
+          "position": [
+            -1.4497063976272262,
+            21.816884622904364,
+            -5.8188917295664835
+          ],
+          "fromFace": 1118,
+          "toFace": 1120,
+          "faceNormalY": 0.23574562905380403,
+          "smoothNormalY": 0.9060204051285626
+        },
+        {
+          "position": [
+            -1.462277723584741,
+            21.745463804915687,
+            -5.863267664472397
+          ],
+          "fromFace": 1118,
+          "toFace": 1120,
+          "faceNormalY": 0.23574562905380403,
+          "smoothNormalY": 0.86905160812802
+        },
+        {
+          "position": [
+            -1.4748489914694531,
+            21.674042258277275,
+            -5.907643812597861
+          ],
+          "fromFace": 1118,
+          "toFace": 1120,
+          "faceNormalY": 0.23574562905380403,
+          "smoothNormalY": 0.8320822426038332
+        }
+      ],
+      "uncoveredExamples": [],
+      "revisionMatches": true,
+      "deterministic": true,
+      "turfCoverageOfEligibleArea": 0.3429880879021795,
+      "supportSlopeAreaFractions": {
+        "0.4-0.6": 0.025860222532350558,
+        "0.6-0.78": 0.05849879026996261,
+        "0.78-0.9": 0.02472679820692891,
+        "0.9-1": 0.8909141889907599
+      },
+      "sparseInterpretation": "surface-constrained roots"
+    },
+    {
+      "seed": 5,
+      "offsetVector": [
+        0,
+        0.001,
+        0
+      ],
+      "radius": 13.600000000000001,
+      "height": 37,
+      "geometryRevision": "coastal-e069ef57-4732",
+      "grassRoots": 29,
+      "shrubRoots": 35,
+      "turfTriangles": 7935,
+      "turfArea": 85.08144151371924,
+      "minSupportNormalY": 0.4024148095318132,
+      "areaWeightedSupportNormalY": 0.9339885858932728,
+      "supportSlopeAreas": {
+        "0.4-0.6": 2.5928008252548516,
+        "0.6-0.78": 4.94376553158609,
+        "0.78-0.9": 14.57532995209579,
+        "0.9-1": 62.969545204782364
+      },
+      "eligibleRockArea": 269.6992793099559,
+      "rootRayMisses": 0,
+      "rootMaxSurfaceError": 3.552713678800501e-15,
+      "grassInstanceOffsetMaxError": 9.057430027806528e-7,
+      "shrubInstanceOffsetMaxError": 9.392440495068033e-7,
+      "unsupportedTurfTriangles": 0,
+      "unsupportedTurfVertices": 0,
+      "turfOffsetMaxError": 8.349689283307024e-7,
+      "turfOverheadPenetrationSamples": 0,
+      "turfOverheadExamples": [],
+      "smoothNormalExamples": [],
+      "turfNormalDistanceMax": 0.0010004043579101562,
+      "turfSupportMaxPlaneError": 9.432471251014096e-7,
+      "sourceFaceNormalDisagreement": 0.000003442989282009812,
+      "smoothNormalMaxError": 4.161965709445416e-8,
+      "crossFaceMatchedEdges": 1147,
+      "sharedEdgeMaxGap": 0,
+      "degenerateTurfTriangles": 0,
+      "rawTriangleBoundaryEdges": 1403,
+      "internalUncoveredBoundaryProbes": 0,
+      "faceNormalThresholdBoundaries": 70,
+      "normalThresholdExamples": [
+        {
+          "position": [
+            -3.5967497293056283,
+            -8.13302966333871,
+            -5.455994754148025
+          ],
+          "fromFace": 1266,
+          "toFace": 1275,
+          "faceNormalY": 0.37071142151048964,
+          "smoothNormalY": 0.8353760401658055
+        },
+        {
+          "position": [
+            -5.552045486893445,
+            -8.17613203867077,
+            -5.458048171309654
+          ],
+          "fromFace": 1267,
+          "toFace": 1264,
+          "faceNormalY": 0.33940880182739946,
+          "smoothNormalY": 0.8387252343361599
+        },
+        {
+          "position": [
+            -5.584815643753797,
+            -8.162864178446318,
+            -5.45091611793441
+          ],
+          "fromFace": 1267,
+          "toFace": 1264,
+          "faceNormalY": 0.33940880182739946,
+          "smoothNormalY": 0.8816272486525537
+        }
+      ],
+      "uncoveredExamples": [],
+      "revisionMatches": true,
+      "deterministic": true,
+      "turfCoverageOfEligibleArea": 0.3154678118955525,
+      "supportSlopeAreaFractions": {
+        "0.4-0.6": 0.030474340574457318,
+        "0.6-0.78": 0.058106273749357146,
+        "0.78-0.9": 0.17131033152212805,
+        "0.9-1": 0.7401090541540558
+      },
+      "sparseInterpretation": "surface-constrained roots"
+    },
+    {
+      "seed": 6,
+      "offsetVector": [
+        0,
+        0.001,
+        0
+      ],
+      "radius": 8.16,
+      "height": 50,
+      "geometryRevision": "coastal-35e166cf-4838",
+      "grassRoots": 10,
+      "shrubRoots": 5,
+      "turfTriangles": 1921,
+      "turfArea": 22.000036400580537,
+      "minSupportNormalY": 0.4046147025452924,
+      "areaWeightedSupportNormalY": 0.939538987759273,
+      "supportSlopeAreas": {
+        "0.4-0.6": 0.7940934192040172,
+        "0.6-0.78": 1.3321804710504728,
+        "0.78-0.9": 2.680979287005232,
+        "0.9-1": 17.19278322332084
+      },
+      "eligibleRockArea": 98.86224236424066,
+      "rootRayMisses": 0,
+      "rootMaxSurfaceError": 3.552713678800501e-15,
+      "grassInstanceOffsetMaxError": 4.156125669076891e-7,
+      "shrubInstanceOffsetMaxError": 2.4990400705243283e-7,
+      "unsupportedTurfTriangles": 0,
+      "unsupportedTurfVertices": 0,
+      "turfOffsetMaxError": 7.956787323451162e-7,
+      "turfOverheadPenetrationSamples": 0,
+      "turfOverheadExamples": [],
+      "smoothNormalExamples": [],
+      "turfNormalDistanceMax": 0.0010004043579101562,
+      "turfSupportMaxPlaneError": 9.206034641533883e-7,
+      "sourceFaceNormalDisagreement": 0.00001699845791702792,
+      "smoothNormalMaxError": 3.941575709455208e-8,
+      "crossFaceMatchedEdges": 382,
+      "sharedEdgeMaxGap": 0,
+      "degenerateTurfTriangles": 0,
+      "rawTriangleBoundaryEdges": 648,
+      "internalUncoveredBoundaryProbes": 0,
+      "faceNormalThresholdBoundaries": 30,
+      "normalThresholdExamples": [
+        {
+          "position": [
+            -2.309030156725483,
+            4.95043344827038,
+            -1.0897455663328635
+          ],
+          "fromFace": 3473,
+          "toFace": 3475,
+          "faceNormalY": 0.3994492174156089,
+          "smoothNormalY": 0.8013198449319698
+        },
+        {
+          "position": [
+            1.088153012197345,
+            22.957094433745144,
+            -1.2072774238762214
+          ],
+          "fromFace": 3845,
+          "toFace": 3858,
+          "faceNormalY": 0.2604364833514055,
+          "smoothNormalY": 0.8131037615892389
+        },
+        {
+          "position": [
+            -0.039155850306085996,
+            23.78962018507572,
+            -1.099423713240852
+          ],
+          "fromFace": 5102,
+          "toFace": 3865,
+          "faceNormalY": 0.3586680123026446,
+          "smoothNormalY": 0.8351995221444827
+        }
+      ],
+      "uncoveredExamples": [],
+      "revisionMatches": true,
+      "deterministic": true,
+      "turfCoverageOfEligibleArea": 0.22253224157636692,
+      "supportSlopeAreaFractions": {
+        "0.4-0.6": 0.036095095696435424,
+        "0.6-0.78": 0.06055355758481014,
+        "0.78-0.9": 0.1218624932336242,
+        "0.9-1": 0.7814888534851314
+      },
+      "sparseInterpretation": "surface-constrained roots"
+    },
+    {
+      "seed": 10,
+      "offsetVector": [
+        0,
+        0.001,
+        0
+      ],
+      "radius": 8.16,
+      "height": 28,
+      "geometryRevision": "coastal-b1005427-5046",
+      "grassRoots": 14,
+      "shrubRoots": 0,
+      "turfTriangles": 2243,
+      "turfArea": 31.27039602665959,
+      "minSupportNormalY": 0.4117646331092401,
+      "areaWeightedSupportNormalY": 0.954322020803486,
+      "supportSlopeAreas": {
+        "0.4-0.6": 1.2363396044459591,
+        "0.6-0.78": 0.7017243411169614,
+        "0.78-0.9": 2.0896259876938275,
+        "0.9-1": 27.242706093402866
+      },
+      "eligibleRockArea": 101.8233091676845,
+      "rootRayMisses": 0,
+      "rootMaxSurfaceError": 8.881784197001252e-16,
+      "grassInstanceOffsetMaxError": 4.2207646553441433e-7,
+      "shrubInstanceOffsetMaxError": 0,
+      "unsupportedTurfTriangles": 0,
+      "unsupportedTurfVertices": 0,
+      "turfOffsetMaxError": 4.6654370910916704e-7,
+      "turfOverheadPenetrationSamples": 0,
+      "turfOverheadExamples": [],
+      "smoothNormalExamples": [],
+      "turfNormalDistanceMax": 0.0010001212216907184,
+      "turfSupportMaxPlaneError": 4.616711160206066e-7,
+      "sourceFaceNormalDisagreement": 6.796087372862303e-7,
+      "smoothNormalMaxError": 4.034656378203696e-8,
+      "crossFaceMatchedEdges": 573,
+      "sharedEdgeMaxGap": 0,
+      "degenerateTurfTriangles": 0,
+      "rawTriangleBoundaryEdges": 753,
+      "internalUncoveredBoundaryProbes": 0,
+      "faceNormalThresholdBoundaries": 42,
+      "normalThresholdExamples": [
+        {
+          "position": [
+            2.1735040435975717,
+            1.3735636116387722,
+            -5.451274851172601
+          ],
+          "fromFace": 341,
+          "toFace": 340,
+          "faceNormalY": 0.3999928628933922,
+          "smoothNormalY": 0.8512846803618583
+        },
+        {
+          "position": [
+            2.1823435702298166,
+            1.3486373700891847,
+            -5.4648834217539
+          ],
+          "fromFace": 343,
+          "toFace": 340,
+          "faceNormalY": 0.3999928628933922,
+          "smoothNormalY": 0.8011319885442407
+        },
+        {
+          "position": [
+            2.17013427361759,
+            1.3775676458267758,
+            -5.448570095451362
+          ],
+          "fromFace": 343,
+          "toFace": 340,
+          "faceNormalY": 0.3999928628933922,
+          "smoothNormalY": 0.8591009597227934
+        }
+      ],
+      "uncoveredExamples": [],
+      "revisionMatches": true,
+      "deterministic": true,
+      "turfCoverageOfEligibleArea": 0.30710449583958155,
+      "supportSlopeAreaFractions": {
+        "0.4-0.6": 0.03953706257483651,
+        "0.6-0.78": 0.02244053258931246,
+        "0.78-0.9": 0.06682441712322146,
+        "0.9-1": 0.8711979877126304
+      },
+      "sparseInterpretation": "surface-constrained roots"
+    }
+  ],
+  "issues": []
+}

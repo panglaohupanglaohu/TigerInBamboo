@@ -1,0 +1,103 @@
+{
+  "revision": "morris-ecology-r1-20261026",
+  "style": "Arts and Crafts / William Morris inspired original geometry",
+  "site": {
+    "method": "closest safe enlarged footprint to installed moon garden; colliders/landmarks/land shell/rail survey",
+    "lat": 75,
+    "lon": -15,
+    "minimumClearance": null,
+    "envelope": 70.15408379511177,
+    "moonCentreDistance": 0.7227499471175642,
+    "moonEdgeDistance": 0,
+    "obstacles": 0,
+    "routeSamples": 0,
+    "candidates": 2304,
+    "otherObjectsMoved": false,
+    "nearestSafeCandidates": [
+      {
+        "lat": 75,
+        "lon": -15,
+        "clearance": null,
+        "moonDistance": 0.7227499471175642
+      },
+      {
+        "lat": 75,
+        "lon": -10,
+        "clearance": null,
+        "moonDistance": 2.890449411551959
+      },
+      {
+        "lat": 75,
+        "lon": -20,
+        "clearance": null,
+        "moonDistance": 4.334573510184329
+      },
+      {
+        "lat": 75,
+        "lon": -5,
+        "clearance": null,
+        "moonDistance": 6.49814663548419
+      },
+      {
+        "lat": 75,
+        "lon": -25,
+        "clearance": null,
+        "moonDistance": 7.9381459662134075
+      },
+      {
+        "lat": 75,
+        "lon": 0,
+        "clearance": null,
+        "moonDistance": 10.093474267965266
+      }
+    ]
+  },
+  "flowers": 4640,
+  "curledLeafClumps": 343,
+  "horses": 3,
+  "planarAreaRatio": 7,
+  "linearScale": 2.6457513110645907,
+  "radius": 58.206528843421,
+  "diameter": 116.413057686842,
+  "pathWidth": 3.2,
+  "layers": [
+    {
+      "name": "花草坪",
+      "range": "前场径向约1.4–2m"
+    },
+    {
+      "name": "溪流缓丘",
+      "range": "中场约2–7m"
+    },
+    {
+      "name": "城堡山肩",
+      "range": "城基径向7.5m"
+    },
+    {
+      "name": "背景高山",
+      "range": "主峰径向约27m"
+    }
+  ],
+  "stream": "authored descending radial levels, carved real bed",
+  "streamLevels": [
+    5,
+    3.7,
+    2.1,
+    1.35,
+    0.9,
+    0.35,
+    -0.6
+  ],
+  "bridge": "real curved deck and stone parapets",
+  "farmGate": "open wooden rails between stone posts",
+  "castle": "cream stone keep and offset wings with russet gables",
+  "wholeNavigationVerified": false,
+  "planeTrees": 6,
+  "cypresses": 10,
+  "hollyhockClumps": 24,
+  "rabbits": 8,
+  "robins": 4,
+  "cuckoos": 3,
+  "oldSceneMoved": false,
+  "navigationTraversalVerified": false
+}

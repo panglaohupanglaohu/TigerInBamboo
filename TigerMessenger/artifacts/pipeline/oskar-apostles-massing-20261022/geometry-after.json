@@ -1,0 +1,681 @@
+{
+  "version": "apostles-oskar-wfc-14-shared-contours",
+  "built": 9,
+  "report": {
+    "version": "apostles-oskar-wfc-14-shared-contours",
+    "railSource": "red",
+    "input": {
+      "radius": 160,
+      "referencePoint": [
+        0,
+        160,
+        8
+      ]
+    },
+    "masses": [
+      {
+        "id": "back-left",
+        "s": -48,
+        "d": -36,
+        "source": "hand-assembled",
+        "lobes": 4,
+        "grid": {
+          "seed": 90840,
+          "hexRadius": 7,
+          "triSize": 6,
+          "vertices": 659,
+          "quads": 609,
+          "hash": "ff016c96"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 3,
+          "continuousShoulders": true,
+          "sharedContourCurves": true,
+          "rimInset": 2.2,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 226307,
+              "ok": true,
+              "reason": "solved",
+              "observations": 40,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "0353728b",
+          "pins": 4,
+          "bans": 3901,
+          "levelHistogram": [
+            502,
+            16,
+            123,
+            18,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 19,
+        "rimSeamAudit": {
+          "segments": 440,
+          "missingCapEdges": 0
+        },
+        "minRail": 16.17,
+        "dropped": {
+          "rail": 9,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 60,
+        "rejectedBushes": 36,
+        "talus": 31,
+        "triangles": 14816
+      },
+      {
+        "id": "back-right",
+        "s": 26,
+        "d": -42,
+        "source": "hand-assembled",
+        "lobes": 6,
+        "grid": {
+          "seed": 6477,
+          "hexRadius": 8,
+          "triSize": 6.4,
+          "vertices": 863,
+          "quads": 806,
+          "hash": "d8ca121e"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 9,
+          "continuousShoulders": true,
+          "sharedContourCurves": true,
+          "rimInset": 2.2,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 229438,
+              "ok": true,
+              "reason": "solved",
+              "observations": 75,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "b67c0d77",
+          "pins": 4,
+          "bans": 5071,
+          "levelHistogram": [
+            654,
+            8,
+            68,
+            73,
+            39,
+            2,
+            19
+          ]
+        },
+        "height": 42,
+        "rimSeamAudit": {
+          "segments": 688,
+          "missingCapEdges": 0
+        },
+        "minRail": 17.29,
+        "dropped": {
+          "rail": 16,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 88,
+        "rejectedBushes": 37,
+        "talus": 31,
+        "triangles": 24880
+      },
+      {
+        "id": "back-tower",
+        "s": 60,
+        "d": -24,
+        "source": "hand-assembled",
+        "lobes": 2,
+        "grid": {
+          "seed": 34426,
+          "hexRadius": 6,
+          "triSize": 4.2,
+          "vertices": 489,
+          "quads": 446,
+          "hash": "f1c6dd73"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 2,
+          "continuousShoulders": true,
+          "sharedContourCurves": true,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 232569,
+              "ok": true,
+              "reason": "solved",
+              "observations": 27,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "fd005065",
+          "pins": 1,
+          "bans": 2894,
+          "levelHistogram": [
+            401,
+            5,
+            26,
+            57,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 19,
+        "rimSeamAudit": {
+          "segments": 300,
+          "missingCapEdges": 0
+        },
+        "minRail": 15.88,
+        "dropped": {
+          "rail": 19,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 31,
+        "rejectedBushes": 28,
+        "talus": 13,
+        "triangles": 9914
+      },
+      {
+        "id": "front-left",
+        "s": -52,
+        "d": 36,
+        "source": "hand-assembled",
+        "lobes": 5,
+        "grid": {
+          "seed": 51142,
+          "hexRadius": 7,
+          "triSize": 6,
+          "vertices": 661,
+          "quads": 611,
+          "hash": "51402280"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 2,
+          "continuousShoulders": true,
+          "sharedContourCurves": true,
+          "rimInset": 2.2,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 235700,
+              "ok": true,
+              "reason": "solved",
+              "observations": 65,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "d8a30d47",
+          "pins": 2,
+          "bans": 3885,
+          "levelHistogram": [
+            468,
+            9,
+            101,
+            83,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 19,
+        "rimSeamAudit": {
+          "segments": 516,
+          "missingCapEdges": 0
+        },
+        "minRail": 15.74,
+        "dropped": {
+          "rail": 14,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 117,
+        "rejectedBushes": 68,
+        "talus": 33,
+        "triangles": 21834
+      },
+      {
+        "id": "front-right",
+        "s": 56,
+        "d": 38,
+        "source": "hand-assembled",
+        "lobes": 4,
+        "grid": {
+          "seed": 73883,
+          "hexRadius": 6,
+          "triSize": 6,
+          "vertices": 491,
+          "quads": 448,
+          "hash": "10c598de"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 9,
+          "continuousShoulders": true,
+          "sharedContourCurves": true,
+          "rimInset": 2.2,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 238831,
+              "ok": true,
+              "reason": "solved",
+              "observations": 69,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "812511fe",
+          "pins": 2,
+          "bans": 2856,
+          "levelHistogram": [
+            312,
+            14,
+            96,
+            69,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 19,
+        "rimSeamAudit": {
+          "segments": 464,
+          "missingCapEdges": 0
+        },
+        "minRail": 16.77,
+        "dropped": {
+          "rail": 1,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 71,
+        "rejectedBushes": 23,
+        "talus": 26,
+        "triangles": 16158
+      },
+      {
+        "id": "bay-1",
+        "s": -14,
+        "d": 26,
+        "source": "hand-assembled",
+        "lobes": 2,
+        "grid": {
+          "seed": 50677,
+          "hexRadius": 5,
+          "triSize": 2.6,
+          "vertices": 347,
+          "quads": 311,
+          "hash": "4b78567f"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 0,
+          "continuousShoulders": true,
+          "sharedContourCurves": false,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 241962,
+              "ok": true,
+              "reason": "solved",
+              "observations": 29,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "140a0322",
+          "pins": 1,
+          "bans": 2045,
+          "levelHistogram": [
+            263,
+            9,
+            75,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 12.5,
+        "rimSeamAudit": {
+          "segments": 128,
+          "missingCapEdges": 0
+        },
+        "minRail": 19.41,
+        "dropped": {
+          "rail": 0,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 35,
+        "rejectedBushes": 13,
+        "talus": 12,
+        "triangles": 6058
+      },
+      {
+        "id": "bay-2",
+        "s": 12,
+        "d": 22,
+        "source": "hand-assembled",
+        "lobes": 1,
+        "grid": {
+          "seed": 17820,
+          "hexRadius": 4,
+          "triSize": 2.4,
+          "vertices": 227,
+          "quads": 198,
+          "hash": "df290eee"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 0,
+          "continuousShoulders": true,
+          "sharedContourCurves": false,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 245093,
+              "ok": true,
+              "reason": "solved",
+              "observations": 18,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "c5b1df76",
+          "pins": 1,
+          "bans": 1337,
+          "levelHistogram": [
+            172,
+            4,
+            51,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 12.5,
+        "rimSeamAudit": {
+          "segments": 94,
+          "missingCapEdges": 0
+        },
+        "minRail": 17.27,
+        "dropped": {
+          "rail": 0,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 23,
+        "rejectedBushes": 7,
+        "talus": 14,
+        "triangles": 4632
+      },
+      {
+        "id": "bay-3",
+        "s": 6,
+        "d": 38,
+        "source": "constraint-generated",
+        "lobes": 1,
+        "grid": {
+          "seed": 95439,
+          "hexRadius": 4,
+          "triSize": 2.4,
+          "vertices": 225,
+          "quads": 196,
+          "hash": "a8a46283"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 0,
+          "continuousShoulders": true,
+          "sharedContourCurves": false,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 248224,
+              "ok": true,
+              "reason": "solved",
+              "observations": 8,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "e68eb215",
+          "pins": 1,
+          "bans": 1342,
+          "levelHistogram": [
+            165,
+            60,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 6.5,
+        "rimSeamAudit": {
+          "segments": 70,
+          "missingCapEdges": 0
+        },
+        "minRail": 32.19,
+        "dropped": {
+          "rail": 0,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 27,
+        "rejectedBushes": 2,
+        "talus": 12,
+        "triangles": 3780
+      },
+      {
+        "id": "bay-4",
+        "s": -8,
+        "d": 48,
+        "source": "constraint-generated",
+        "lobes": 2,
+        "grid": {
+          "seed": 62582,
+          "hexRadius": 4,
+          "triSize": 2.3,
+          "vertices": 229,
+          "quads": 200,
+          "hash": "a08198dd"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 2,
+          "continuousShoulders": true,
+          "sharedContourCurves": false,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 251355,
+              "ok": true,
+              "reason": "solved",
+              "observations": 19,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "b86ac7ac",
+          "pins": 1,
+          "bans": 1347,
+          "levelHistogram": [
+            188,
+            3,
+            26,
+            12,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 19,
+        "rimSeamAudit": {
+          "segments": 122,
+          "missingCapEdges": 0
+        },
+        "minRail": 42.37,
+        "dropped": {
+          "rail": 0,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 37,
+        "rejectedBushes": 28,
+        "talus": 8,
+        "triangles": 5656
+      }
+    ],
+    "railUnchanged": true,
+    "triangles": 107728,
+    "levels": [
+      0,
+      6.5,
+      12.5,
+      19,
+      26,
+      34,
+      42
+    ],
+    "maxStep": 2,
+    "built": 9
+  },
+  "geometry": [
+    {
+      "id": "back-left",
+      "triangles": 8900,
+      "area": 3816.450937621294,
+      "steepArea": 1532.622920126474,
+      "shoulderArea": 996.0537819556156,
+      "degenerate": 0,
+      "rootMiss": 0
+    },
+    {
+      "id": "back-right",
+      "triangles": 16724,
+      "area": 7047.478151879305,
+      "steepArea": 2487.4575792706164,
+      "shoulderArea": 2424.160704468821,
+      "degenerate": 0,
+      "rootMiss": 0
+    },
+    {
+      "id": "back-tower",
+      "triangles": 6966,
+      "area": 1864.0761837177376,
+      "steepArea": 1384.326268023002,
+      "shoulderArea": 83.78635296764901,
+      "degenerate": 0,
+      "rootMiss": 0
+    },
+    {
+      "id": "front-left",
+      "triangles": 11286,
+      "area": 4770.602462545497,
+      "steepArea": 1622.0290372394816,
+      "shoulderArea": 1532.9966525557386,
+      "degenerate": 0,
+      "rootMiss": 0
+    },
+    {
+      "id": "front-right",
+      "triangles": 9542,
+      "area": 4263.695593131973,
+      "steepArea": 1511.075235637931,
+      "shoulderArea": 1326.1186369557417,
+      "degenerate": 0,
+      "rootMiss": 0
+    },
+    {
+      "id": "bay-1",
+      "triangles": 2826,
+      "area": 832.8436729176308,
+      "steepArea": 673.6147597065575,
+      "shoulderArea": 30.904997559489924,
+      "degenerate": 0,
+      "rootMiss": 0
+    },
+    {
+      "id": "bay-2",
+      "triangles": 2288,
+      "area": 579.0128169318583,
+      "steepArea": 489.21071949350613,
+      "shoulderArea": 16.106634917513574,
+      "degenerate": 0,
+      "rootMiss": 0
+    },
+    {
+      "id": "bay-3",
+      "triangles": 1188,
+      "area": 418.82404930045266,
+      "steepArea": 330.4639650372223,
+      "shoulderArea": 25.24356552757934,
+      "degenerate": 0,
+      "rootMiss": 0
+    },
+    {
+      "id": "bay-4",
+      "triangles": 2408,
+      "area": 540.2006212653735,
+      "steepArea": 469.5848774149283,
+      "shoulderArea": 16.53713459600512,
+      "degenerate": 0,
+      "rootMiss": 0
+    }
+  ]
+}

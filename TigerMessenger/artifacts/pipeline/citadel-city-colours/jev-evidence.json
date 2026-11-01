@@ -1,0 +1,54 @@
+{
+  "task": "Citadel old and new city palette review",
+  "target": "Approved Istanbul study: warm stone, brick roofs, lead blue dome, teal banners",
+  "visual_observations": {
+    "source": "Assistant inspected after-final-new.png and night-new.png; text observations only",
+    "image_sha256": "246436b25a4cdbc0451165d7111fed02862b51cb5c38dc9dde19d64102986dc9",
+    "completed": [
+      "Blue grey main dome, warm stone and brick small roofs separated",
+      "Historic surface variation and night entrance/window lights preserved"
+    ],
+    "remaining": [
+      "Mountain macrostructure and building density still simpler than target"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Geometry and local transforms unchanged",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Outside materials unchanged",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Walk mesh unchanged",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Repeated application idempotent",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Browser errors absent",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Semantic classification and shared material isolation tests",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Review palette scope only, not full scene approval",
+    "Preserve railway and pedestrian geometry"
+  ],
+  "evidence_revision": {
+    "verification.json": "5ee54aab0a9f5aba2405cfeb004de1991b0f2f05cf6fe09be391bc0494207da9"
+  }
+}

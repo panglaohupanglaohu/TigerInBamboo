@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';import {saihojiBattleTrigger as gate} from '../../../src/world/saihojiBattleTrigger.js';
+const hub={x:0,y:1,z:0},s={cycle:1,target:'moss',phase:'pincer',flagshipPosition:[0,210,0],arrival:{visible:true},fireLog:[{role:'flagship',type:'rain'}]},fleet={active:true,snapshot:()=>s},checks=[];
+function check(name,value){assert.ok(value,name);checks.push(name);}
+check('no fleet never triggers',!gate(null,hub).allowed);fleet.active=false;check('idle does not trigger despite old shots',!gate(fleet,hub).allowed);fleet.active=true;
+s.target='bookshop';check('bookshop raid does not trigger moss',!gate(fleet,hub).allowed);s.target='moss';
+for(const p of ['assemble','transit','withdraw','return','dock','idle']){s.phase=p;check(p+' does not start battle',!gate(fleet,hub).allowed);}s.phase='pincer';s.fireLog=[];check('arrival without flagship strike waits',!gate(fleet,hub).allowed);s.fireLog=[{role:'attack'}];check('escorts alone cannot start battle',!gate(fleet,hub).allowed);s.fireLog=[{role:'flagship'}];check('flagship actual strike at moss triggers',gate(fleet,hub).allowed);s.flagshipPosition=[0,-210,0];check('opposite hemisphere blocked',!gate(fleet,hub).allowed);s.flagshipPosition=[0,210,0];s.arrival.visible=false;check('hidden flagship blocked',!gate(fleet,hub).allowed);
+s.arrival.visible=true;s.fireLog=[];s.shots=30;s.unitShots=29;check('sortie counters retain first strike after bounded log rolls over',gate(fleet,hub).allowed);s.unitShots=30;check('escort-only counters remain blocked',!gate(fleet,hub).allowed);
+console.log(JSON.stringify({passed:true,checks,scope:'production shared trigger CPU; not complete game visual acceptance'},null,2));

@@ -1,0 +1,208 @@
+{
+  "pass": true,
+  "report": {
+    "revision": "target-terrain-r04",
+    "status": "terrain-only candidate; city and routes not rebuilt",
+    "defaultEnabled": false,
+    "mesh": {
+      "revision": "target-terrain-heightfield-1",
+      "grid": [
+        169,
+        106
+      ],
+      "stepActual": [
+        1.6923076923076923,
+        1.6886792452830188
+      ],
+      "validCells": 17030,
+      "invalidCells": 884,
+      "invalidSamples": 884,
+      "boundaryEdges": 550,
+      "components": 1,
+      "vertices": 34612,
+      "triangles": 69220,
+      "minArea": 1.4288825189192182,
+      "domainPolicy": "omit whole cells touching null; cap resulting boundary; no analytic sea-curve clipping",
+      "closed": true,
+      "empty": false,
+      "coordinateSpace": "caller chart",
+      "sceneMutation": false
+    },
+    "platforms": [
+      {
+        "id": "old-city-platform",
+        "center": [
+          -55,
+          9
+        ],
+        "radii": [
+          31,
+          30
+        ],
+        "height": 17
+      },
+      {
+        "id": "new-city-platform",
+        "center": [
+          74,
+          33
+        ],
+        "radii": [
+          29,
+          37
+        ],
+        "height": 12
+      },
+      {
+        "id": "new-city-plaza",
+        "center": [
+          62,
+          76
+        ],
+        "radii": [
+          30,
+          22
+        ],
+        "height": 3
+      }
+    ],
+    "ridges": [
+      {
+        "id": "old-main",
+        "a": [
+          -103,
+          -27,
+          31
+        ],
+        "b": [
+          -82,
+          -35,
+          43
+        ],
+        "width": 31
+      },
+      {
+        "id": "old-rear",
+        "a": [
+          -82,
+          -35,
+          43
+        ],
+        "b": [
+          -50,
+          -33,
+          31
+        ],
+        "width": 29
+      },
+      {
+        "id": "old-right-shoulder",
+        "a": [
+          -50,
+          -33,
+          31
+        ],
+        "b": [
+          -29,
+          -29,
+          33
+        ],
+        "width": 25
+      },
+      {
+        "id": "central-saddle",
+        "a": [
+          -29,
+          -34,
+          30
+        ],
+        "b": [
+          -3,
+          -41,
+          12
+        ],
+        "width": 13
+      },
+      {
+        "id": "bay-rear-join",
+        "a": [
+          -3,
+          -41,
+          12
+        ],
+        "b": [
+          32,
+          -37,
+          24
+        ],
+        "width": 15
+      },
+      {
+        "id": "new-rear",
+        "a": [
+          32,
+          -32,
+          24
+        ],
+        "b": [
+          77,
+          -29,
+          34
+        ],
+        "width": 27
+      },
+      {
+        "id": "new-east",
+        "a": [
+          77,
+          -29,
+          34
+        ],
+        "b": [
+          111,
+          -4,
+          26
+        ],
+        "width": 26
+      },
+      {
+        "id": "old-coastal-terraces",
+        "a": [
+          -107,
+          -4,
+          30
+        ],
+        "b": [
+          -91,
+          42,
+          23
+        ],
+        "width": 28
+      },
+      {
+        "id": "new-coastal-terraces",
+        "a": [
+          109,
+          -5,
+          26
+        ],
+        "b": [
+          111,
+          62,
+          19
+        ],
+        "width": 23
+      }
+    ],
+    "retired": [],
+    "oldSourceGeometryReplaced": true,
+    "worldSaveModified": false
+  },
+  "checks": [
+    "finite closed domain-clipped geometry",
+    "3 buildable platforms with <.3m relief",
+    "open bay",
+    "low central saddle",
+    "default off"
+  ]
+}

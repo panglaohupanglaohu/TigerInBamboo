@@ -1,0 +1,114 @@
+{
+  "revision": "morris-creek-valley-r12-20261030",
+  "main": {
+    "count": 506,
+    "maxRadialGrade": 0.14000000000000415,
+    "maxGroundGap": 0.05000000000000071,
+    "unsupported": 0,
+    "offBridgeWaterCross": [],
+    "offBridgeWaterCrossCount": 0
+  },
+  "branch": {
+    "count": 134,
+    "maxRadialGrade": 0.0992131786484521,
+    "maxGroundGap": 0.040000000000000036,
+    "unsupported": 0,
+    "offBridgeWaterCross": [],
+    "offBridgeWaterCrossCount": 0
+  },
+  "route": {
+    "revision": "morris-right-bank-court-branch-r3-20261030",
+    "expansion": 1.4142135623730951,
+    "length": 122.39326679834437,
+    "width": 3.2,
+    "bridgeCenter": [
+      24,
+      34
+    ],
+    "bridgeCrossings": 1,
+    "farmGateS": 57.36926398124993,
+    "keys": [
+      [
+        0,
+        2.2
+      ],
+      [
+        43.36926398124989,
+        4.6
+      ],
+      [
+        55.36926398124993,
+        4.7
+      ],
+      [
+        83.69145962611087,
+        6.2
+      ],
+      [
+        105.76826177714482,
+        8
+      ],
+      [
+        122.39326679834437,
+        10.727510234945743
+      ]
+    ],
+    "branch": {
+      "junctionS": 37.36926398124989,
+      "junction": [
+        33.7959035689882,
+        35.47446178499037
+      ],
+      "length": 32.85464748764242,
+      "end": [
+        30,
+        15.5
+      ],
+      "width": 3.2,
+      "bank": "right/east; no stream crossing"
+    },
+    "patrolLength": 188.10256177362902,
+    "patrolCourtS": 70.22391146889231,
+    "mandatorySequence": [
+      "right flower path",
+      "right bridge end",
+      "bridge deck",
+      "left bridge end",
+      "open gate",
+      "left mountain road",
+      "castle gate"
+    ],
+    "marks": {
+      "bridgeFront": 43.36926398124989,
+      "bridgeBack": 55.36926398124993,
+      "farmGate": 61.36926398124995,
+      "westStart": 83.69145962611087,
+      "westEnd": 105.76826177714482,
+      "gate": 122.39326679834437,
+      "eastEnd": 37.36926398124989
+    },
+    "actualRoadMaxRadialGrade": 0.14112967320467615,
+    "surface": "real graded ground shoulders plus raycast-supported winding road mesh"
+  },
+  "finiteIssues": [],
+  "missingCourt": false,
+  "bridge": {
+    "revision": "continuous-arch-r3",
+    "archBarrel": true,
+    "solidParapets": true,
+    "closedArchCore": true,
+    "continuousCoping": true,
+    "deckCrown": 0.7499999999999999,
+    "archRise": 2.08,
+    "minimumCoreThickness": 0.6126992666817159,
+    "walkWidth": 3.2,
+    "span": 12,
+    "archStones": 52,
+    "masonryPieces": 208,
+    "mergedStoneBatches": 5,
+    "terrainBankContactVerified": false,
+    "authoredLocalSpan": 8
+  },
+  "groundTri": 122880,
+  "passed": true
+}

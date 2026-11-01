@@ -1,0 +1,38 @@
+{
+  "module": "src/world/swampCoralUnderstory.js",
+  "version": 5,
+  "sourceObservation": "overview-env-v4.jpg and root critique: broad empty coral rim and pointed pyramidal crowns.",
+  "changes": [
+    "Add outer-facing crown/skirt pairs in seven unequal habitats on actual rim surfaces at radius39.72–39.9.",
+    "Round fan lobes and increase curved sampling from4 to8; flatten fan arches, widen radial leaf sheets, keep grounded bases.",
+    "Shift rejected candidates by at most.36rad beside protected original bowed roots; no collision constraint weakened.",
+    "Every actual leaf vertex remains outside radius35.4–39.4 walking ribbon and below innerY55."
+  ],
+  "statistics": {
+    "plants": 495,
+    "rimPlants": 83,
+    "rimHabitats": 7,
+    "rimHeroCrowns": 20,
+    "rimLeafHeightRange": [
+      0.5090022751270726,
+      3.404684903499485
+    ],
+    "angularSilhouetteCoverage": 0.49027777777777776,
+    "fern": 89,
+    "fan": 46,
+    "pendant": 360,
+    "vines": 180,
+    "drawCalls": 4,
+    "triangles": 37084,
+    "maximumLeafInnerY": 52.96792840873817
+  },
+  "validation": "7/7 swampCoralUnderstory tests pass including real surface attachments, protected actor transforms/route, full leaf vertices, V7 shortened-tree spherical reinstall/disposal.",
+  "GPU": "Pending root review; angular coverage is geometric silhouette, not pixel coverage.",
+  "notChanged": [
+    "swampNaturalCliff.js (root ownership)",
+    "swampCoralTrunkDetail.js (A ownership)",
+    "swampSpatialPlan.js",
+    "animal identity/story code"
+  ],
+  "rollback": "Restore only understory module/test from environment-round4-before; do not restore moebiusSwamp or other agents files."
+}

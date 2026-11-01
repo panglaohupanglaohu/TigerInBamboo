@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-06T08:53:34.718Z",
+  "scope": "Actual ordinary homepage live canopy plus current city/statue/horse triangles; candidate terrain and rails detached, survey only",
+  "applied": false,
+  "treesBefore": 297,
+  "treesAfterProposed": 294,
+  "unchanged": 278,
+  "moves": 16,
+  "allMovedScale": 0.8,
+  "retired": 3,
+  "retiredRoots": [
+    [
+      97.07191467285155,
+      4.267288208007812,
+      54.96978378295897
+    ],
+    [
+      80.28338623046875,
+      -0.8598863482475279,
+      89.63872528076172
+    ],
+    [
+      79.07476043701169,
+      -2.531556129455566,
+      91.51370239257812
+    ]
+  ],
+  "retiredReason": "changed-cliff-landscape-no-joint-placement-within-budget",
+  "zeroScaleInstanceSlotsUntouched": 308,
+  "readyForExplicitPreview": true,
+  "failures": [],
+  "unsupported": [],
+  "turfFacesBefore": 56529,
+  "turfFacesKept": 54731,
+  "turfFacesRemovedProposed": 1798,
+  "turfMaximumGap": 56.90792704400648,
+  "placementCacheAndNavigationRefreshImplemented": false,
+  "movingActorsAndFutureStructureNotValidated": true,
+  "gpuBefore": "survey-before.png",
+  "glErrorBefore": 0,
+  "fullReportArchive": false,
+  "note": "Reduced summary from live DOM, full first-survey JSON not persisted by the earlier capture UI revision. Source UI now includes complete survey in capture state."
+}

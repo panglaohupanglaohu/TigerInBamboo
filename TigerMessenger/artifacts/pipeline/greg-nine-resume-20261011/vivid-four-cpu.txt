@@ -1,0 +1,85 @@
+✔ screen ink retains CSS width across depth, viewport aspect and DPR (0.6605ms)
+✔ local visual pass leaves actor identity, animation and collision geometry intact (1.501875ms)
+✔ instanced crown inks keep authored transforms and ignore raycasts (1.107041ms)
+✔ wall and bark hooks expand against the actual Three.js basic shader (0.7875ms)
+✔ comparison flag produces no lake mutation (0.091417ms)
+✔ wall waterline is converted to mesh-local height, including transformed parents (0.447958ms)
+✔ environment palette retains authored face contrast without mutating shared colour buffers (0.285ms)
+✖ approved coral, violet and ivory planes remain semantic colors in shader uniforms (0.58425ms)
+✖ neutral leaf buffers stay shared and water retains its animation material and geometry (0.38875ms)
+✖ turquoise, see-through water keeps the ripple injection and gets pale ripple strokes (1973.567333ms)
+✔ water body deepens with inner depth and bed is turquoise (1708.620167ms)
+✔ wall stone stays grey-violet after weathering; authored coral rim colours and ripple hook survive; dispose restores (1731.657958ms)
+✔ disabled is a no-op (1616.048542ms)
+✔ giant tree roots fan out underwater from the trunk, stay under the boat lane, one draw (2001.68825ms)
+✔ root meadow has real bottom attachment, leaves clear swimming space, reinstall does not duplicate and dispose restores (1720.331583ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 12
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7166.581333
+
+✖ failing tests:
+
+test at tests/world/swampGregVisuals.test.mjs:96:1
+✖ approved coral, violet and ivory planes remain semantic colors in shader uniforms (0.58425ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'e2977f' !== 'c99588'
+  
+      at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampGregVisuals.test.mjs:107:12
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampGregVisuals.test.mjs:104:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'e2977f',
+    expected: 'c99588',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/world/swampGregVisuals.test.mjs:114:1
+✖ neutral leaf buffers stay shared and water retains its animation material and geometry (0.38875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '41b8b9' !== '80b9bb'
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampGregVisuals.test.mjs:129:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '41b8b9',
+    expected: '80b9bb',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/world/swampPaintWater.test.mjs:15:1
+✖ turquoise, see-through water keeps the ripple injection and gets pale ripple strokes (1973.567333ms)
+  AssertionError [ERR_ASSERTION]: restrained turquoise
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampPaintWater.test.mjs:24:44)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,0 +1,26 @@
+{
+  "target": "Two broad grass mesas framing an open-water bay; pale horizontally layered limestone, rear-right stepped peak, sparse shrubs; actual rail unchanged.",
+  "version": "apostles-oskar-wfc-5",
+  "observations": {
+    "source": "Viewed supplied target and existing oskar-wfc-final-overview.jpg; latter is historical not fresh GPU.",
+    "before": "Continuous cliff columns have false grass horizontal seams at every discrete WFC level, repetitive strips and random vertical stone colour.",
+    "change": "Only exposed terrace segments receive grass lip and shrubs. Continuous walls use limestone. Colour random across cliff reduced with horizontal band cohesion.",
+    "pending": "Fresh same-camera GPU review by root requested."
+  },
+  "checks": [
+    {
+      "name": "six CPU tests rail clearance/WFC/finite geometry",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "fresh GPU same camera",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not change global grass, moon lake pine or rails.",
+    "JEV text triage only; no visual acceptance."
+  ]
+}

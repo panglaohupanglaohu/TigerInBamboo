@@ -1,0 +1,52 @@
+{
+  "task": "Gate of Sighs blue-grey sea stacks and taller central crystal architecture",
+  "version": "gate-sea-stacks-final-v1",
+  "goal": "Implement user supplied coastal reference and height hierarchy in live Web world.",
+  "observations": {
+    "author": "Codex inspected actual before and after renders",
+    "images": {
+      "TigerMessenger/artifacts/pipeline/gate-sea-stacks/target.png": "19e286d5248c84a598dbf2f0f1e18ec708eff9f416d7424e2fa4a30c0173a249",
+      "TigerMessenger/artifacts/pipeline/gate-sea-stacks/after-coast.png": "7907cf59795a3fe8e56885665e46de12313e5aa543e854def1d49e00ef8f6a6c",
+      "TigerMessenger/artifacts/pipeline/gate-sea-stacks/after-overview.png": "13ce8f5fc8a1d7c6234502df0032b6b2eeebddfacd22e4c782ddde38b28e37c4",
+      "TigerMessenger/artifacts/pipeline/gate-sea-stacks/crystal-after.png": "d5a7632739796f23e9eff0ec09114b80d5b37fa7a0ebe3636890d0c9815df8c4"
+    },
+    "seen": [
+      "21 sea stacks now have broad broken crowns, blue-grey layered faces, dark vertical cracks and sparse shrubs.",
+      "A final low-frequency mottling correction removed the dense noise moire visible in the preceding pass.",
+      "Central crystal visibly rises above side crystals; all 12 cluster height ratios exceed 1.38.",
+      "Geometry remains stylized and noticeably more regular than target; spherical water and limited foam do not match painted surf."
+    ]
+  },
+  "checks": [
+    {
+      "name": "6624 local red/blue rail clearance probes including fallen blocks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Finite deterministic closed geometry across 27 seeds",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No page or shader errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "12 crystal clusters central height dominance",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full manual story and train playthrough",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Text-only triage, not image acceptance",
+    "No art score or claim of target fidelity",
+    "No Godot/Blender synchronization claimed"
+  ]
+}

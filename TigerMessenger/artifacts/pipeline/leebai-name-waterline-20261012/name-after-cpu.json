@@ -1,0 +1,58 @@
+{
+  "source": "actual native canvas alpha, actual name UV triangles, production matrixWorld at time0; authority officialOceanLevelAt and exact radial intersection of compiled ocean triangle cell",
+  "textureSize": [
+    1024,
+    1024
+  ],
+  "worldScale": 5,
+  "reports": [
+    {
+      "side": -1,
+      "chinese": {
+        "pixels": 93569,
+        "alpha": 90812.29411764658,
+        "aboveAuthority": 90812.29411764658,
+        "aboveMesh": 90812.29411764658,
+        "minAuthority": 3.581413857063012,
+        "minMesh": 3.7218071917073416,
+        "aboveAuthorityRatio": 1,
+        "aboveMeshRatio": 1
+      },
+      "english": {
+        "pixels": 25149,
+        "alpha": 24035.807843136998,
+        "aboveAuthority": 24035.807843136998,
+        "aboveMesh": 24035.807843136998,
+        "minAuthority": 2.67015009397187,
+        "minMesh": 2.8402301642754253,
+        "aboveAuthorityRatio": 1,
+        "aboveMeshRatio": 1
+      }
+    },
+    {
+      "side": 1,
+      "chinese": {
+        "pixels": 93569,
+        "alpha": 90812.29411764658,
+        "aboveAuthority": 90812.29411764658,
+        "aboveMesh": 90812.29411764658,
+        "minAuthority": 3.618518411688683,
+        "minMesh": 3.839719236104827,
+        "aboveAuthorityRatio": 1,
+        "aboveMeshRatio": 1
+      },
+      "english": {
+        "pixels": 25149,
+        "alpha": 24035.807843136998,
+        "aboveAuthority": 24035.807843136998,
+        "aboveMesh": 24035.807843136998,
+        "minAuthority": 2.6682694107875307,
+        "minMesh": 2.878248465982068,
+        "aboveAuthorityRatio": 1,
+        "aboveMeshRatio": 1
+      }
+    }
+  ],
+  "waveBoundWorld": 0.067,
+  "GPU": "not checked; does not measure camera occlusion or readability"
+}

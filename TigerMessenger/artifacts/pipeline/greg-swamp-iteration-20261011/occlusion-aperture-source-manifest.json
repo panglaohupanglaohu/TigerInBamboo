@@ -1,0 +1,13 @@
+{
+  "file": "src/world/swampOcclusionFade.js",
+  "SHA256": "aa1ba2448892febff51b9f2f37eff9c34e151d9e8d1764314b1d6cbf964f757d",
+  "before": "artifacts/pipeline/greg-swamp-iteration-20261011/source-before/occlusion-aperture/swampOcclusionFade.js",
+  "beforeSHA256": "2ea2e47268ca0707c8617b72ea38537733a5ec1f8d59105fce400f29f21f7a35",
+  "mode": "clean-aperture",
+  "CPU": "11/11",
+  "GPU": "pending root agent",
+  "v3Before": "artifacts/pipeline/greg-swamp-iteration-20261011/source-before/occlusion-near-refinement/swampOcclusionFade.js",
+  "v3BeforeSHA256": "df0fce49d94e29049392aaaeaae2f09dada71fda2f3c55fd4202fe914e512376",
+  "version": 4,
+  "nearRadius": 2.2
+}

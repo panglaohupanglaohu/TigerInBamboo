@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>战役地图 · REACode 重构版</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #6f98a3; font: 14px/1.5 -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  #ui { position: fixed; left: 16px; top: 16px; width: 360px; background: rgba(255,255,255,.94); color: #1d2f36; border-radius: 14px; padding: 12px 14px; box-shadow: 0 6px 24px rgba(0,0,0,.25); }
+  h1 { font-size: 16px; margin: 0 0 4px; }
+  p { margin: 4px 0; font-size: 12.5px; color: #4d6369; }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  button { border: 1px solid #c9d8d7; background: #fff; border-radius: 8px; padding: 4px 9px; cursor: pointer; font: inherit; font-size: 12.5px; }
+  button.on { background: #2f7f8a; color: #fff; border-color: #2f7f8a; }
+  nav a { color: #2f7f8a; font-weight: 600; text-decoration: none; margin-right: 10px; font-size: 12.5px; }
+  code { font-size: 11.5px; background: #eef4f3; padding: 0 4px; border-radius: 4px; }
+  @media (max-width: 600px) { #ui { left: 8px; right: 8px; width: auto; } }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <nav><a href="index.html">← 首页</a><a href="pipeline.html">管线</a></nav>
+  <h1>Bad North 战役地图</h1>
+  <p>1042732450730913793：1 大小不一的节点散开 → 2 剔除边界外 → 3 起点到终点随机游走 → 4 再走几条 → 5 再挑一些节点。938405900573986816：分成几片区域。911913981731885056：每个岛存成 64² 小图，放大时"收脆"。</p>
+  <div class="row" id="steps">
+    <button data-s="1">1 散开</button><button data-s="2">2 剔除 + 三角网</button><button data-s="3">3 主路</button><button data-s="4">4 支路 + 节点 + 分区</button><button data-s="5" class="on">5 地图</button>
+  </div>
+  <div class="row"><button id="reseed">换一张</button></div>
+  <p>1078792665980915714：节点之间的连线来自 Delaunay 三角网（去掉太长的边）。</p>
+  <p>源码：<code>src/campaign/campaign.js</code></p>
+</div>
+<script type="module">
+import { generateCampaign, islandSnapshot } from './src/campaign/campaign.js';
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let seed = 4, step = 5, C = generateCampaign({ seed }), snaps = new Map();
+const COLS = ['#f2c14e', '#7fd1c8', '#e98fa6', '#8fbf5a', '#b39ddb', '#f0a35e'];
+function draw() {
+  const DPR = Math.min(2, devicePixelRatio), W = innerWidth, H = innerHeight;
+  cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const wide = W > 800;
+  // 地图横过来放（长边沿屏幕宽）
+  const s = Math.min((W - (wide ? 420 : 40)) / 28, (H - 60) / 8);
+  const P = (x, y) => [ (wide ? 400 : 20) + (y + 13.5) * s, H / 2 + x * s ];
+  ctx.fillStyle = step === 5 ? '#6f98a3' : '#3a4247'; ctx.fillRect(0, 0, W, H);
+  if (step === 1) { for (const p of C.spread) { ctx.strokeStyle = '#ddd'; ctx.beginPath(); ctx.arc(...P(p.x, p.y), p.r * s, 0, 7); ctx.stroke(); } return; }
+  const show = step >= 3 ? new Set(C.used) : null;
+  if (step >= 2 && step < 5) {
+    for (const p of C.nodes) { ctx.strokeStyle = show && !show.has(p.id) ? 'rgba(255,255,255,.25)' : '#eee'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(...P(p.x, p.y), p.r * s * 0.8, 0, 7); ctx.stroke(); }
+  }
+  if (step === 2) {   // 1078792665980915714 节点三角网（白）
+    ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = 1;
+    for (const [a, b] of C.steps.tri) { ctx.beginPath(); ctx.moveTo(...P(C.nodes[a].x, C.nodes[a].y)); ctx.lineTo(...P(C.nodes[b].x, C.nodes[b].y)); ctx.stroke(); }
+  }
+  if (step === 3 || step === 4) {
+    for (const e of C.edges) {
+      if (step === 3 && e.kind !== 'main') continue;
+      ctx.strokeStyle = e.kind === 'main' ? '#3fd6d0' : e.kind === 'branch' ? '#f2c14e' : '#e98fa6'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(...P(C.nodes[e.a].x, C.nodes[e.a].y)); ctx.lineTo(...P(C.nodes[e.b].x, C.nodes[e.b].y)); ctx.stroke();
+    }
+    if (step === 4) for (const i of C.used) { const p = C.nodes[i]; ctx.fillStyle = COLS[C.region.get(i)]; ctx.beginPath(); ctx.arc(...P(p.x, p.y), 5, 0, 7); ctx.fill(); }
+  }
+  if (step === 5) {
+    // 点线航路
+    ctx.fillStyle = 'rgba(20,30,35,.7)';
+    for (const e of C.edges) {
+      const [ax, ay] = P(C.nodes[e.a].x, C.nodes[e.a].y), [bx, by] = P(C.nodes[e.b].x, C.nodes[e.b].y);
+      const n = Math.max(2, Math.hypot(bx - ax, by - ay) / 9 | 0);
+      for (let k = 1; k < n; k++) { ctx.beginPath(); ctx.arc(ax + (bx - ax) * k / n, ay + (by - ay) * k / n, 1.6, 0, 7); ctx.fill(); }
+    }
+    for (const i of C.used) {
+      const p = C.nodes[i];
+      if (!snaps.has(i)) snaps.set(i, islandSnapshot(seed * 1000 + i));
+      const sz = p.r * s * 2.6, [x, y] = P(p.x, p.y);
+      ctx.drawImage(snaps.get(i), x - sz / 2, y - sz / 2, sz, sz);
+      if (i === C.start || i === C.end) { ctx.fillStyle = i === C.start ? '#3fd6d0' : '#d6503c'; ctx.beginPath(); ctx.arc(x, y - sz * 0.45, 5, 0, 7); ctx.fill(); }
+    }
+  }
+}
+document.querySelectorAll('#steps button').forEach((b) => (b.onclick = () => { step = +b.dataset.s; document.querySelectorAll('#steps button').forEach((x) => x.classList.toggle('on', x === b)); draw(); }));
+document.getElementById('reseed').onclick = () => { seed++; C = generateCampaign({ seed }); snaps = new Map(); draw(); };
+addEventListener('resize', draw); draw();
+window.campaign = () => ({ nodes: C.nodes.length, used: C.used.length, main: C.main.length, edges: C.edges.length, tri: C.steps.tri.length });
+</script>
+</body>
+</html>

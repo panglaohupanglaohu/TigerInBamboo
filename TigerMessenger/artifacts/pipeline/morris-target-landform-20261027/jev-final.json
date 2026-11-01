@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "ea225935c40b4a1b412e245ca8d82278b4552ceffc96f598f339664483903001",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.92
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.96,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.97,
+        "lighting": 0,
+        "navigation": 0,
+        "review": 0.03
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.97
+    }
+  },
+  "usage": {
+    "input_tokens": 733,
+    "output_tokens": 91,
+    "cost_usd": 0.000308,
+    "credits_remaining_usd": 4.897641
+  },
+  "elapsed_ms": 1181,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "terrain target appearance accepted",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "horse target full shape and gait accepted",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

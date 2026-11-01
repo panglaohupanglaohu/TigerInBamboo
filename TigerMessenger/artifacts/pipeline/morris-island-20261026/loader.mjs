@@ -1,0 +1,1 @@
+const root=new URL('../../../',import.meta.url);export async function resolve(s,c,n){if(s==='three')return {url:new URL('vendor/three.module.js',root).href,shortCircuit:true};if(s.startsWith('three/addons/'))return {url:new URL('vendor/jsm/'+s.slice(13),root).href,shortCircuit:true};return n(s,c);}

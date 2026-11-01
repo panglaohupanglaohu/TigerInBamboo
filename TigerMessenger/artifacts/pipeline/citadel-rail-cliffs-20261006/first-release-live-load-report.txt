@@ -1,0 +1,504 @@
+{
+  "at": "2026-10-06T04:02:45.229Z",
+  "view": "全景",
+  "timeOfDay": 0.6222222222222291,
+  "daySpeed": 0.4,
+  "installed": true,
+  "oldCity": "target-old-city-10-tower-centred-terraces",
+  "newStairs": "target-new-city-stairs-5-stepped-flanks",
+  "rock": {
+    "version": "target-continuous-rock-5",
+    "meshes": 2,
+    "palette": {
+      "mtBase": "#bdc7d0",
+      "mtShade": "#7894b4",
+      "mtChalk": "#e5ddd0",
+      "mtVerdure": "#88aa7b",
+      "trRose": "#c3b8b7"
+    },
+    "detailGain": 0.09,
+    "geometryChanged": false,
+    "paletteMethod": "actual sun exposure plus continuous castle-chart broad strata and regional interpolation; no per-face random colours",
+    "sourceEvidence": "1712088611934371876 shows a palette authoring tool, not a disclosed rock shader",
+    "sunBound": true,
+    "shaderPatches": [
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      }
+    ],
+    "suppressedDecorations": [
+      {
+        "name": "citadel-study-fractured-buttresses",
+        "uuid": "f1d7afe8-3660-4628-a9d5-70369eca3c63"
+      }
+    ]
+  },
+  "clouds": "citadel-cloud-banks-candidate-12",
+  "landmarks": true,
+  "navigation": {
+    "providerAvailable": true,
+    "installedIntoPlayer": true,
+    "completeNavigationVerified": false,
+    "adapter": {
+      "version": "target-city-player-navigation-1",
+      "installed": true,
+      "continuousRouteVerified": false,
+      "legacyProxyRemoved": 1,
+      "terrainQueries": 37380,
+      "terrainHits": 0,
+      "scope": "candidate public floors/walls and actual final terrain; remaining world uses original collision",
+      "limitations": [
+        "Finite body rays retain provider limitations; continuous bookshop-to-city journey not yet tested.",
+        "No ceiling collision or spawn-inside recovery; neither tram routing nor moving-actor avoidance is implemented.",
+        "Terrain fallback samples actual upward-facing triangles only; private roofs never become an airborne landing target."
+      ],
+      "legacyProxyAmbiguous": false
+    }
+  },
+  "tram": {
+    "routeIntegrated": true,
+    "controlsChanged": false,
+    "railIsStatic": false,
+    "candidateRailPresent": false,
+    "geometryAndVehiclesShareRoute": true,
+    "releaseVersion": "cliff-transit-inner-1",
+    "continuousRouteVerified": false
+  },
+  "terrain": {
+    "revision": "target-terrain-r09-asymmetric-shoulder",
+    "aprons": true,
+    "saddle": true,
+    "valleyBenches": true,
+    "railCliff": {
+      "version": "target-new-city-rail-cliff-1",
+      "samples": 85,
+      "changedQueries": 237,
+      "protectedQueries": 0,
+      "maxDrop": 101.71093033612772,
+      "scope": {
+        "x": [
+          80,
+          143
+        ],
+        "z": [
+          70,
+          102
+        ]
+      },
+      "trackChanged": false,
+      "limits": [
+        "Only measured upper south-east track branch selected by 3D chart envelope. Other global segments remain unaudited by this local cut.",
+        "Actual source mesh and vehicle envelope must be tested after remeshing.",
+        "2.4m cliff transition; plateau cores stay fixed."
+      ],
+      "maxDropPoint": {
+        "x": 134.53846153846155,
+        "z": 74.91509433962266,
+        "before": 5.085979147619927,
+        "after": -96.6249511885078,
+        "sea": -93.6249511885078,
+        "edge": 99.77394457373232,
+        "railPlaneCap": -70.1782270195553
+      }
+    },
+    "newCityRetreat": {
+      "version": "target-new-city-coastal-retreat-1",
+      "built": true,
+      "visualReviewed": false,
+      "changedQueries": 1607,
+      "protectedQueries": 991,
+      "maxDrop": 159.70509948980887,
+      "edge": [
+        [
+          -58,
+          108
+        ],
+        [
+          -40,
+          92
+        ],
+        [
+          -28,
+          91
+        ],
+        [
+          -10,
+          98
+        ],
+        [
+          15,
+          104
+        ],
+        [
+          40,
+          104
+        ],
+        [
+          60,
+          99
+        ],
+        [
+          80,
+          92
+        ],
+        [
+          100,
+          82
+        ],
+        [
+          107,
+          80
+        ]
+      ],
+      "transitionWidth": 3.8,
+      "railChanged": false,
+      "scope": "new-city eastern exterior only; old city and reserved construction cores fixed",
+      "limitations": [
+        "Authored castle-chart envelope; not a global railway clearance guarantee.",
+        "Final mesh, foundations, turf and current actors require runtime re-sampling."
+      ],
+      "maxDropPoint": {
+        "x": 136.23076923076923,
+        "z": -9.518867924528301,
+        "before": 10.838206197373577,
+        "after": -148.8668932924353,
+        "sea": -145.8668932924353,
+        "edge": 98.00658131950537
+      }
+    },
+    "status": "terrain-only candidate; city and routes not rebuilt",
+    "defaultEnabled": false,
+    "mesh": {
+      "revision": "target-terrain-heightfield-1",
+      "grid": [
+        169,
+        106
+      ],
+      "stepActual": [
+        1.6923076923076923,
+        1.6886792452830188
+      ],
+      "validCells": 17030,
+      "invalidCells": 884,
+      "invalidSamples": 884,
+      "boundaryEdges": 550,
+      "components": 1,
+      "vertices": 34612,
+      "triangles": 69220,
+      "minArea": 1.4288777931360528,
+      "domainPolicy": "omit whole cells touching null; cap resulting boundary; no analytic sea-curve clipping",
+      "closed": true,
+      "empty": false,
+      "coordinateSpace": "caller chart",
+      "sceneMutation": false
+    },
+    "platforms": [
+      {
+        "id": "old-city-platform",
+        "center": [
+          -55,
+          9
+        ],
+        "radii": [
+          31,
+          30
+        ],
+        "height": 17
+      },
+      {
+        "id": "new-city-platform",
+        "center": [
+          74,
+          33
+        ],
+        "radii": [
+          29,
+          37
+        ],
+        "height": 12
+      },
+      {
+        "id": "new-city-plaza",
+        "center": [
+          62,
+          76
+        ],
+        "radii": [
+          30,
+          22
+        ],
+        "height": 3
+      }
+    ],
+    "ridges": [
+      {
+        "id": "old-main",
+        "a": [
+          -103,
+          -27,
+          31
+        ],
+        "b": [
+          -82,
+          -35,
+          43
+        ],
+        "width": 31
+      },
+      {
+        "id": "old-rear",
+        "a": [
+          -82,
+          -35,
+          43
+        ],
+        "b": [
+          -50,
+          -33,
+          31
+        ],
+        "width": 29
+      },
+      {
+        "id": "old-right-shoulder",
+        "a": [
+          -50,
+          -33,
+          31
+        ],
+        "b": [
+          -29,
+          -29,
+          33
+        ],
+        "width": 25
+      },
+      {
+        "id": "central-saddle",
+        "a": [
+          -29,
+          -34,
+          30
+        ],
+        "b": [
+          -3,
+          -41,
+          12
+        ],
+        "width": 13
+      },
+      {
+        "id": "bay-rear-join",
+        "a": [
+          -3,
+          -41,
+          12
+        ],
+        "b": [
+          32,
+          -37,
+          24
+        ],
+        "width": 15
+      },
+      {
+        "id": "new-rear",
+        "a": [
+          32,
+          -32,
+          24
+        ],
+        "b": [
+          77,
+          -29,
+          34
+        ],
+        "width": 27
+      },
+      {
+        "id": "new-east",
+        "a": [
+          77,
+          -29,
+          34
+        ],
+        "b": [
+          111,
+          -4,
+          26
+        ],
+        "width": 26
+      },
+      {
+        "id": "old-coastal-terraces",
+        "a": [
+          -107,
+          -4,
+          30
+        ],
+        "b": [
+          -91,
+          42,
+          23
+        ],
+        "width": 28
+      },
+      {
+        "id": "new-coastal-terraces",
+        "a": [
+          109,
+          -5,
+          26
+        ],
+        "b": [
+          111,
+          62,
+          19
+        ],
+        "width": 23
+      }
+    ],
+    "retired": [
+      "citadel-coastal-cliff-seal",
+      "highland-ravine-wall-west",
+      "citadel-backdrop-ridge-near",
+      "citadel-backdrop-ridge-mid",
+      "new-city-rock-shoulder",
+      "old-shore-blender-rock-support"
+    ],
+    "oldSourceGeometryReplaced": true,
+    "worldSaveModified": false,
+    "coastalCliffCut": {
+      "version": "target-coastal-cliff-cut-1",
+      "cutIds": [
+        "old-global-exterior-toe"
+      ],
+      "changedQueries": 1549,
+      "protectedConflicts": 0,
+      "maxDrop": 151.55166196265276,
+      "status": "authored-field-not-mesh-validated",
+      "examples": [],
+      "railClearanceVerified": false
+    },
+    "oldShoreApron": {
+      "version": "target-old-shore-landward-apron-4-contact",
+      "accepted": false,
+      "installed": false,
+      "status": "built-field-needs-mesh-audit",
+      "maxGap": 32,
+      "railSetback": 2.4,
+      "walkwayHeight": 6.9,
+      "vehicleTop": 5.71,
+      "profile": "stepped-rock-link",
+      "bridgeExclusion": {
+        "maxChartX": -47
+      },
+      "eligibleStations": 30,
+      "rejections": {
+        "bridgeAndWaterfall": 11,
+        "missingSurface": 0,
+        "gapTooWide": 0,
+        "alreadyJoined": 0
+      },
+      "changedQueries": 209,
+      "maxRaise": 30.14410378058229,
+      "segments": 29
+    }
+  },
+  "gpuProgramCount": 175,
+  "gpuFailures": [],
+  "oldMaterials": [
+    {
+      "name": "terrace-0--1",
+      "color": "f3dfc6",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-stone-residential-arcade",
+      "color": "f3dfc6",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-walls",
+      "color": "ef958f",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-cornice",
+      "color": "fff6e7",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-drip-edge",
+      "color": "ff9b58",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-roof",
+      "color": "f57b45",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-roof-eaves",
+      "color": "ff9b58",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-ridge",
+      "color": "ff9b58",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-windows-glass",
+      "color": "3e627b",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-windows-trim",
+      "color": "fff6e7",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-base",
+      "color": "fff6e7",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-1-stone-residential-arcade",
+      "color": "f3dfc6",
+      "type": "MeshStandardMaterial"
+    }
+  ],
+  "glError": 0,
+  "camera": {
+    "position": [
+      54.80601173944599,
+      276.5043389269115,
+      8.882659050320584
+    ],
+    "quaternion": [
+      0.27981895661088346,
+      0.778874308503205,
+      0.4265185412920083,
+      -0.3648809353871315
+    ],
+    "fov": 35
+  }
+}

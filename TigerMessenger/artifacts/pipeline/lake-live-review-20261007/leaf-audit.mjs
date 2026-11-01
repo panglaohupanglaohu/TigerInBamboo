@@ -1,0 +1,9 @@
+import * as T from 'three';
+const context=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}}),measureText:()=>({width:10})},{get:(o,k)=>o[k]??(()=>{})});
+const element=()=>({style:{},addEventListener(){},removeEventListener(){},getContext:()=>context});
+globalThis.document={getElementById:()=>null,querySelector:()=>null,createElement:element,createElementNS:element};
+globalThis.location={search:''};globalThis.localStorage={getItem:()=>null};globalThis.window={addEventListener(){},localStorage,location};
+const {createMoebiusSwampPlacement}=await import('../../../src/world/moebiusSwamp.js');
+const wrapper=createMoebiusSwampPlacement({scale:.5,seed:7711}),inner=wrapper.userData.inner;wrapper.updateMatrixWorld(true);
+const stats={},shells=[],doubleSided=[];inner.traverseVisible(o=>{if(o.isMesh||o.isLine){const name=o.name||'(unnamed)',key=o.userData.isOutline?'outline':o.isLine?'line':name;stats[key]=(stats[key]||0)+1;}if(o.isMesh&&o.userData.isOutline){const source=o.parent;let planar=false;if(source.geometry){source.geometry.computeBoundingBox();const s=source.geometry.boundingBox.getSize(new T.Vector3());planar=Math.min(s.x,s.y,s.z)<1e-5;}if(planar||source.material?.side===T.DoubleSide)shells.push({source:source.name,parent:source.parent?.name,sourceGeometry:source.geometry?.type,sameGeometry:o.geometry===source.geometry,planar,side:source.material?.side,ink:o.material?.name||o.material?.type});}if(o.isMesh&&o.material?.side===T.DoubleSide)doubleSided.push({name:o.name,parent:o.parent?.name,type:o.geometry.type,ink:o.children.filter(c=>c.visible&&c.userData.isOutline).length});});
+console.log(JSON.stringify({greg:inner.userData.gregLakeVisuals,canopyPresent:!!inner.getObjectByName('swamp-canopy-ceiling'),stats,shells,doubleSided},null,2));

@@ -1,0 +1,1 @@
+Reference: approved princess riding side exec-1d38052e. Correct inflated toy neck/head, joint silhouette and rigid mane/tail. Preserve 22-bone contract, seat, scale and identity. New candidate only; no runtime edits. Actual side/front/threequarter comparison before integration.

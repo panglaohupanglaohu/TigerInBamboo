@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "packaged Hitman starts through real ownership",
+    "mute pauses without rewind",
+    "unmute resumes same position",
+    "tram retains priority",
+    "tram release resumes",
+    "one play-through stays ended in this battle",
+    "new battle restarts at zero",
+    "local format/load error selects original official MP3 once",
+    "rejected play uses backoff rather than frame-loop retry",
+    "play failures capped at three attempts per battle",
+    "one pending play promise despite 500 frames",
+    "ending battle relinquishes owner even during load"
+  ],
+  "count": 12
+}

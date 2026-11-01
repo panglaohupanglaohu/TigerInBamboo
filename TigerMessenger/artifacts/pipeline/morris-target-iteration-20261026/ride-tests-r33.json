@@ -1,0 +1,15 @@
+{
+  "passed": 9,
+  "checks": [
+    "normal F claims nearest horse",
+    "W moves actual model",
+    "Shift accelerates",
+    "canter gait and knees",
+    "A turns",
+    "release decelerates",
+    "rider pelvis aligns to saddle",
+    "safe dismount and ride flags reset",
+    "camera restored"
+  ],
+  "reference": "Original procedural animation inspired by requested riding feel, no copied game animation"
+}

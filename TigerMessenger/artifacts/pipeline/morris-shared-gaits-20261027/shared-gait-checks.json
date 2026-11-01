@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "horses": 3,
+  "revision": "tiger-workflow-horse-v7",
+  "report": [
+    {
+      "speed": 0,
+      "gait": "mounted-idle",
+      "tailRangeX": 0.1075580375364599,
+      "tailRangeY": 0.0187729992876855,
+      "tailRangeZ": 0.03980296267985928,
+      "tailMeanY": 0.5777725933635748,
+      "tailMeanZ": -0.9808993920557542,
+      "airborneFrames": 0
+    },
+    {
+      "speed": 1.1,
+      "gait": "walk",
+      "tailRangeX": 0.13610909553814618,
+      "tailRangeY": 0.030102693191531693,
+      "tailRangeZ": 0.05616912536891994,
+      "tailMeanY": 0.5997731446667851,
+      "tailMeanZ": -1.0160790680399077,
+      "airborneFrames": 0
+    },
+    {
+      "speed": 3.2,
+      "gait": "trot",
+      "tailRangeX": 0.24087823587734325,
+      "tailRangeY": 0.17272063047083697,
+      "tailRangeZ": 0.16300835363506216,
+      "tailMeanY": 0.7586093715811265,
+      "tailMeanZ": -1.1957808042559717,
+      "airborneFrames": 7
+    },
+    {
+      "speed": 6,
+      "gait": "canter",
+      "tailRangeX": 0.3533727642287081,
+      "tailRangeY": 0.29583993869845504,
+      "tailRangeZ": 0.12226676532728176,
+      "tailMeanY": 0.9991947945111974,
+      "tailMeanZ": -1.31195508340531,
+      "airborneFrames": 132
+    }
+  ],
+  "scope": "three actual factory horses and real loaded skeletal asset, identical gait controls and measured tail motion; no visual acceptance"
+}

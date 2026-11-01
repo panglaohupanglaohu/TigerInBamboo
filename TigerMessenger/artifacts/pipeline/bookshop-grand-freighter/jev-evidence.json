@@ -1,0 +1,40 @@
+{
+  "task": "Fivefold original steam freighter at seaward plaza berth",
+  "version": "grand-freighter-v1",
+  "goal": "Preserve original ship, enlarge 5x, moor alongside public plaza without obstructing railway.",
+  "observations": {
+    "author": "Codex actual render inspection",
+    "images": {
+      "TigerMessenger/artifacts/pipeline/bookshop-grand-freighter/after-overview.png": "dc95a14743d57a88ae10b856cbed195a79c450d1d910018e14ecb6e20fd45993",
+      "TigerMessenger/artifacts/pipeline/bookshop-grand-freighter/after-plaza.png": "5ac026f183c9c9b172ff96e4c143c907a7446044ac4796e10a9644f6cc41f8fc",
+      "TigerMessenger/artifacts/pipeline/bookshop-grand-freighter/reference-berth.png": "421fa2416d009b12da2a36b5c474326a6e95cd8e3b8fce1f6ff98632a3bbd29c"
+    },
+    "seen": [
+      "Large original freighter is now visibly moored outside the public plaza with receiving crane and quay.",
+      "Initial berth intersected offshore railway; final oblique berth has open water between hull and world route.",
+      "Hull and cargo are uniformly scaled fivefold; it remains a stylized stationary scenery ship, not a new boardable transport."
+    ]
+  },
+  "checks": [
+    {
+      "name": "18441 local red and blue track clearance probes against ship, quay and crane",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Live scale 5 on all axes and no page errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Manual full train and quay walking regression",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Text triage only, no visual approval",
+    "Do not alter existing world rail",
+    "No boarding functionality claim"
+  ]
+}

@@ -1,5 +1,7 @@
 import {connectedSeaStackLandscapeEnabled,planConnectedSeaStackBanks,buildConnectedSeaStackBank} from './seaStackConnectedLandscape.js';
 import {twelveApostlesTargetEnabled,buildTwelveApostlesTarget} from './twelveApostlesTarget.js?v=shell-coral-20261024';
+import {apostlesReacodeEnabled,buildTwelveApostlesReacodeSteps} from './apostlesReacode.js?v=apostles-r4b';
+import {morrisViewer} from './morrisViewer.js';
 import {plantConnectedSeaStackMeadow} from './seaStackMeadowVegetation.js';
 import {createCoastalMaterial} from './seaStackLighting.js';
 import {finishStartupSteps} from '../core/startupTasks.js';
@@ -85,16 +87,26 @@ export function* seatTerracedSeaStacksSteps(scene, radius=160, railCurves={}, pr
     const extra=[];scene.traverse(o=>{if(o.isMesh&&o.geometry&&/freighter|shipwreck|gate.*(?:walk|pier|deck)|highland-gate/.test(o.name))extra.push(o);});
     for(const o of extra){o.geometry.computeBoundingBox();protectedBoxes.push({mesh:o,box:o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld)});}
     // 2026-10-13 target sheet (Oskar-method authored mesas, bay stacks). ?apostlesTarget=0 keeps the connected banks.
-    if(twelveApostlesTargetEnabled()){
-      yield '正在按目标图构建十二门徒岩群…';
+    // 2026-10-31: REACodeRefactoring pipeline (same composition / rail clearance). ?apostlesReacode=0 keeps the 10-13 target build.
+    if(apostlesReacodeEnabled()||twelveApostlesTargetEnabled()){
       let target=null;
-      try{target=buildTwelveApostlesTarget({parent:rocks[0].parent,radius,railCurves,railPoints,waterAt,protectedBoxes,plazaMargin,referencePoint});}
-      catch(error){console.warn('[twelve-apostles-target] falling back to connected banks',error);target=null;}
+      if(apostlesReacodeEnabled()){
+        const parent=rocks[0].parent;
+        try{target=yield* buildTwelveApostlesReacodeSteps({parent,radius,railCurves,railPoints,waterAt,protectedBoxes,plazaMargin,referencePoint});}
+        catch(error){console.warn('[twelve-apostles-reacode] falling back to the target build',error);target=null;for(const o of [...parent.children])if(/^apostle-reacode-/.test(o.name)){o.traverse(x=>x.geometry?.dispose?.());o.removeFromParent();}}
+      }
+      if(!target?.rocks.length&&twelveApostlesTargetEnabled()){
+        yield '正在按目标图构建十二门徒岩群…';
+        try{target=buildTwelveApostlesTarget({parent:rocks[0].parent,radius,railCurves,railPoints,waterAt,protectedBoxes,plazaMargin,referencePoint});}
+        catch(error){console.warn('[twelve-apostles-target] falling back to connected banks',error);target=null;}
+      }
       if(target&&target.rocks.length){
         const discarded=new Set(),oldParents=new Set(rocks.map(r=>r.parent)),retired=[];
         for(const old of rocks){old.visible=false;old.traverse(o=>{if(o.geometry)discarded.add(o.geometry);});retired.push({name:old.name,detailId:old.userData.seaStack?.detailId});for(const child of [...old.children])old.remove(child);old.removeFromParent();}
         for(const oldParent of oldParents)for(const child of [...oldParent.children])if(child.userData.stackOwner){child.traverse(o=>{if(o.geometry)discarded.add(o.geometry);});child.removeFromParent();}
-        scene.userData.twelveApostlesTarget={...target.report,retired};scene.userData.seaStackTerraceAudit=target.report.masses;
+        scene.userData.twelveApostlesTarget={...target.report,retired};
+        // REACode masses are editable from the lake build menu (dropdown 十二门徒 · …)
+        if(target.editor)morrisViewer.apostles=target.editor;scene.userData.seaStackTerraceAudit=target.report.masses;
         try{publishSeaStackSurfaceContract(scene,target.rocks,ocean);}catch(error){console.warn('[twelve-apostles-target] surface contract skipped',error);}
         const live=new Set();scene.traverse(o=>{if(o.geometry)live.add(o.geometry);});for(const geometry of discarded)if(!live.has(geometry))geometry.dispose();
         scene.userData.seaStackCollisionSurfaces=target.rocks;scene.userData.seaStackCloudSurfaces=target.rocks;

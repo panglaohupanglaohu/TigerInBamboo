@@ -1,0 +1,182 @@
+{
+ "parts": 225,
+ "triangles": 34216,
+ "height_m": 1.8285,
+ "joints": {
+  "body": [
+   0.0,
+   0.0,
+   0.97
+  ],
+  "head": [
+   0.0,
+   0.0,
+   1.505
+  ],
+  "legL": [
+   0.082,
+   0.0,
+   0.97
+  ],
+  "kneeL": [
+   0.086,
+   -0.004,
+   0.545
+  ],
+  "armL": [
+   0.172,
+   0.0,
+   1.445
+  ],
+  "elbowL": [
+   0.198,
+   0.012,
+   1.175
+  ],
+  "handL": [
+   0.214,
+   0.0,
+   0.93
+  ],
+  "legR": [
+   -0.082,
+   0.0,
+   0.97
+  ],
+  "kneeR": [
+   -0.086,
+   -0.004,
+   0.545
+  ],
+  "armR": [
+   -0.172,
+   0.0,
+   1.445
+  ],
+  "elbowR": [
+   -0.198,
+   0.012,
+   1.175
+  ],
+  "handR": [
+   -0.214,
+   0.0,
+   0.93
+  ],
+  "letter": [
+   -0.222,
+   -0.05,
+   0.83
+  ]
+ },
+ "audit_overlapping_face_pairs": {
+  "idle": {
+   "forearm_hand_L_vs_torso": 0,
+   "upperarm_L_vs_gear": 0,
+   "leg_L_vs_gear": 0,
+   "leg_vs_leg": 0,
+   "forearm_hand_R_vs_torso": 0,
+   "upperarm_R_vs_gear": 0,
+   "leg_R_vs_gear": 0
+  },
+  "idle_detail": [
+   "thigh_Lxpelvis:39",
+   "thigh_Rxpelvis:39"
+  ],
+  "walk": {
+   "forearm_hand_L_vs_torso": 0,
+   "upperarm_L_vs_gear": 0,
+   "leg_L_vs_gear": 0,
+   "leg_vs_leg": 0,
+   "forearm_hand_R_vs_torso": 0,
+   "upperarm_R_vs_gear": 0,
+   "leg_R_vs_gear": 0
+  },
+  "walk_detail": [
+   "thigh_Lxpelvis:46",
+   "thigh_Rxpelvis:44"
+  ],
+  "walk_b": {
+   "forearm_hand_L_vs_torso": 0,
+   "upperarm_L_vs_gear": 0,
+   "leg_L_vs_gear": 0,
+   "leg_vs_leg": 0,
+   "forearm_hand_R_vs_torso": 0,
+   "upperarm_R_vs_gear": 0,
+   "leg_R_vs_gear": 0
+  },
+  "walk_b_detail": [
+   "thigh_Lxpelvis:44",
+   "thigh_Rxpelvis:46",
+   "holster_dropxpelvis:8"
+  ],
+  "run": {
+   "forearm_hand_L_vs_torso": 0,
+   "upperarm_L_vs_gear": 0,
+   "leg_L_vs_gear": 0,
+   "leg_vs_leg": 0,
+   "forearm_hand_R_vs_torso": 0,
+   "upperarm_R_vs_gear": 0,
+   "leg_R_vs_gear": 0
+  },
+  "run_detail": [
+   "thigh_Lxpelvis:50",
+   "thigh_Rxpelvis:48"
+  ],
+  "run_b": {
+   "forearm_hand_L_vs_torso": 0,
+   "upperarm_L_vs_gear": 0,
+   "leg_L_vs_gear": 0,
+   "leg_vs_leg": 0,
+   "forearm_hand_R_vs_torso": 0,
+   "upperarm_R_vs_gear": 0,
+   "leg_R_vs_gear": 0
+  },
+  "run_b_detail": [
+   "thigh_Lxpelvis:48",
+   "thigh_Rxpelvis:50"
+  ],
+  "letter": {
+   "forearm_hand_L_vs_torso": 0,
+   "upperarm_L_vs_gear": 0,
+   "leg_L_vs_gear": 0,
+   "leg_vs_leg": 0,
+   "forearm_hand_R_vs_torso": 0,
+   "upperarm_R_vs_gear": 0,
+   "leg_R_vs_gear": 0
+  },
+  "letter_detail": [
+   "thigh_Lxpelvis:39",
+   "thigh_Rxpelvis:39"
+  ],
+  "ride": {
+   "forearm_hand_L_vs_torso": 0,
+   "upperarm_L_vs_gear": 0,
+   "leg_L_vs_gear": 0,
+   "leg_vs_leg": 0,
+   "forearm_hand_R_vs_torso": 0,
+   "upperarm_R_vs_gear": 0,
+   "leg_R_vs_gear": 0
+  },
+  "ride_detail": [
+   "thigh_Lxpelvis:54",
+   "thigh_Lxbelt:4",
+   "thigh_Rxpelvis:54",
+   "thigh_Rxbelt:4",
+   "holster_dropxpelvis:7"
+  ],
+  "jump": {
+   "forearm_hand_L_vs_torso": 0,
+   "upperarm_L_vs_gear": 0,
+   "leg_L_vs_gear": 0,
+   "leg_vs_leg": 0,
+   "forearm_hand_R_vs_torso": 0,
+   "upperarm_R_vs_gear": 0,
+   "leg_R_vs_gear": 0
+  },
+  "jump_detail": [
+   "thigh_Lxpelvis:45",
+   "thigh_Rxpelvis:42"
+  ]
+ }
+}

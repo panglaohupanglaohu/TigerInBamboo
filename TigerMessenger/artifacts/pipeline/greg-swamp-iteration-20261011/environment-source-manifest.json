@@ -1,0 +1,35 @@
+{
+  "scope": "environment-only",
+  "files": [
+    {
+      "file": "TigerMessenger/src/world/swampCoralUnderstory.js",
+      "before": "TigerMessenger/artifacts/pipeline/greg-swamp-iteration-20261011/source-before/environment/swampCoralUnderstory.js",
+      "beforeSHA256": "fe87cb01a7741ac46c054225e56b1c2f4c4ba8cd42624e32d21bf28a422cf3da",
+      "currentSHA256": "3135ecbe617b490a8c2885ebe47cea8af09b8b35ae94ac7dcd3ae56ade29e61e",
+      "currentBytes": 22248
+    },
+    {
+      "file": "TigerMessenger/src/world/swampCoralCanopy.js",
+      "before": "TigerMessenger/artifacts/pipeline/greg-swamp-iteration-20261011/source-before/environment/swampCoralCanopy.js",
+      "beforeSHA256": "1c73ab97d6f5ae7c65dfaab635617455ab15e1be1564d0f8b6c0fcaaed2c9f19",
+      "currentSHA256": "faac159423267340c735da5b22ceb47a5ae48e008dade90cc904b4f832be1aa6",
+      "currentBytes": 13351,
+      "canopyCorrectionBefore": "TigerMessenger/artifacts/pipeline/greg-swamp-iteration-20261011/source-before/canopy-correction/swampCoralCanopy.js",
+      "canopyCorrectionBeforeSHA256": "5c3258912172fc8811cc93fa68296875f234c3c7202854d9617855d63b0cce66"
+    },
+    {
+      "file": "TigerMessenger/src/world/swampGregVisuals.js",
+      "before": "TigerMessenger/artifacts/pipeline/greg-swamp-iteration-20261011/source-before/environment/swampGregVisuals.js",
+      "beforeSHA256": "c31a4332c927597cd2a42972c4fe9a36e0d506c9ad28624b336442619b911bec",
+      "currentSHA256": "8fce66d4bfef0835cbdeb2fefff0a12f83f03bcd4c10b8948a1bff681a158b30",
+      "currentBytes": 14769
+    },
+    {
+      "file": "TigerMessenger/src/world/swampCoralWeathering.js",
+      "before": "TigerMessenger/artifacts/pipeline/greg-swamp-iteration-20261011/source-before/environment/swampCoralWeathering.js",
+      "beforeSHA256": "5e10bf08b67a4d5da81897fb2a03697990f8c623fbe2f8410d0e0acd9cd485f0",
+      "currentSHA256": "3c10a45e793e0a3aef186a8595e724a268064f59d9fb08cd1e0d1810046ca5b3",
+      "currentBytes": 5523
+    }
+  ]
+}

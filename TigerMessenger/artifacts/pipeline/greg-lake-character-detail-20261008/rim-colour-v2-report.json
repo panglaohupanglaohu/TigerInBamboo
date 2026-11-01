@@ -1,0 +1,44 @@
+{
+  "version": "rim-top-colour-2",
+  "scope": "only existing top-face vertex colours in swampCoralRim.js",
+  "method": "two continuous deterministic XZ value-noise fields; outer coral soil blends radially into cooler inner cliff stone, with a small muted wet-grey contribution",
+  "noAddedDraws": true,
+  "unchanged": [
+    "all4620 vertex positions and normals SHA256",
+    "all outer-cliff positions/colours/normals SHA256",
+    "entrance slot, walkMeshes, actual topY40 and support interfaces",
+    "1540 triangles and one rim render mesh"
+  ],
+  "randomCalls": {
+    "before": 40,
+    "after": 40,
+    "note": "existing Three.js UUID allocation only; no extra RNG consumption"
+  },
+  "CPU": {
+    "passed": 8,
+    "failed": 0,
+    "topSamples": 386,
+    "innerUniqueColours": 193,
+    "outerUniqueColours": 193,
+    "continuity": "shared top vertices exactly same colour; adjacent sampled colour deltas <.055",
+    "stripeCheck": "no identical repeated colour bands at sector offsets5,7,35",
+    "geometry": "position/normal and all exterior hashes identical to before",
+    "support": "720-angle ring,2world width,entrance slot and actual spherical sampler tests pass",
+    "log": "validation-rim-colour-v2.txt"
+  },
+  "GPU": {
+    "checkedBy": "parent in-app browser real factory",
+    "shaderErrors": [],
+    "screenshots": [
+      "algae-curved-v2.jpg",
+      "overview-rim-colour-algae-v2.jpg"
+    ],
+    "limitation": "Local factory only; not a new full-game performance pass. Plants remain simpler than accepted illustration."
+  },
+  "backup": "before-rim-colour-v2/swampCoralRim.js.txt; restore only top colour generation and topTint quad argument, not entire shared file",
+  "files": [
+    "src/world/swampCoralRim.js",
+    "tests/world/swampCoralRimColour.test.mjs",
+    "tests/fixtures/swampRimColourGeometry.json"
+  ]
+}

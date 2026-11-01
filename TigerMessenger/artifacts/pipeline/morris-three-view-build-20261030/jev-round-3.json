@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "4cf9c7a2c552f38aab1cd54216bc868cde2abb4eabee849ffb4c359c5f4a264e",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.93
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.85,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0,
+        "navigation": 0.88,
+        "review": 0.11
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.65
+    }
+  },
+  "usage": {
+    "input_tokens": 722,
+    "output_tokens": 91,
+    "cost_usd": 0.000304,
+    "credits_remaining_usd": 4.882454
+  },
+  "elapsed_ms": 2156,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "normal complete bridge and court route",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

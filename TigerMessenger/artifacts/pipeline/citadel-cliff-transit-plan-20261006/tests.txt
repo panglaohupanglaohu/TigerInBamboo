@@ -1,0 +1,16 @@
+✔ diagnostic produces finite world-space lower lanes, never autoaccepts or installs (2.453125ms)
+✔ actual bridge pier triangles reject envelope and missing sea cannot pass (1.773875ms)
+✔ terrain intrusion, sharp corner and steep grade remain explicit failures (0.53275ms)
+✔ radial lower deck is near-zero world grade and solves real upper/sea bounds without moving bridge (0.974416ms)
+✔ real-rail default grade and curve radius gates reject tight radial bends (0.62825ms)
+✔ nonfinite water/matrix/path and zero sampling step reject before generating a plan (0.241417ms)
+✔ shore search returns finite uninstalled candidates and rejects obstructed approaches (4.31025ms)
+✔ explicit lower radius respects the measured upper/lower corridor bounds (1.117125ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 87.730459

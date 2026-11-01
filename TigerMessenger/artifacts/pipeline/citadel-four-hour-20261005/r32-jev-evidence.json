@@ -1,0 +1,53 @@
+{
+  "version": "r32-models-original-landmarks-editor",
+  "goal": "Citadel target v3 >95 visual and all hard checks; not yet accepted",
+  "visual_observations": {
+    "source": "root inspected r32 old-city near and plaza/full panoramas; independent advisor r29 score 53/100 not reapplied to r32",
+    "sha256": "e9697fa6ce0e735ea29a765760ad219d765ca747463535603f559c8de5c41e87",
+    "differences": [
+      "Actual original statue and horse migrated successfully into sampled paved plaza. Night activation and daylight return tested.",
+      "Pastel old-city houses remain row-like; near walls show shadow stripes, some trees penetrate house geometry.",
+      "Three wide arch bridge and corrected shared stair corner landings connect; finite path audit passed.",
+      "Cloud shells move around hills but have isolated blobs rather than target connected distant banks.",
+      "Rail, production navigation and WFC integration remain incomplete; no final visual acceptance."
+    ]
+  },
+  "checks": [
+    {
+      "name": "r32 app shader GL sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Original horse night/day migration behavior and actor identity",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Finite route collision/support audit",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Old-city entity editing UI undo redo JSON roundtrip",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Rail and production navigation WFC",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Final independent visual score >95",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No concept or CPU tests counted as final visual acceptance",
+    "Keep r17 mountain geometry",
+    "No source code, private data, images or credentials in request",
+    "Continue user authorized five hour window through 2026-10-06 07:13 Asia Shanghai"
+  ]
+}

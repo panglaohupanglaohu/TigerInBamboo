@@ -1,0 +1,42 @@
+{
+  "task": "citadel-vegetation",
+  "target": "Add visibly readable supported turf, cypress and shrubs without moving the accepted landform or protected city structures.",
+  "visual_observations": {
+    "source": "Actual runtime overview and bare-ridge PNG inspected by primary agent",
+    "image_sha256": "7d2bfa0e9c797e349c0760adb2a5ed4d90acc1419f6570b77844fc12c130a1f2",
+    "completed": [
+      "Middle shoulder now reads denser cypress groups and low scrub",
+      "Supported patch turf added to selected upward faces"
+    ],
+    "remaining": [
+      "Groundcover remains subdued at overview distance",
+      "Existing angular cypress silhouette retained"
+    ]
+  },
+  "checks": [
+    {
+      "name": "618 roots supported",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "23049 railway probes clear",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "514 protected meshes hash unchanged",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Two groundcover tests passed",
+      "passed": true,
+      "required": true
+    }
+  ],
+  "constraints": [
+    "No claim of original Oskar vegetation shader",
+    "Three pre-existing runtime warnings remain unchanged"
+  ]
+}

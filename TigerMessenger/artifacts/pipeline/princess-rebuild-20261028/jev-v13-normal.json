@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "256499f10a4200f76e11598aba9fca46f1bed3682243f6ac39b2ffc376909f30",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.94
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.79,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.83,
+        "lighting": 0,
+        "navigation": 0.01,
+        "review": 0.16
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.92
+    }
+  },
+  "usage": {
+    "input_tokens": 780,
+    "output_tokens": 91,
+    "cost_usd": 0.000328,
+    "credits_remaining_usd": 4.889599
+  },
+  "elapsed_ms": 1380,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "target appearance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "target likeness and complete dynamic contact acceptance",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

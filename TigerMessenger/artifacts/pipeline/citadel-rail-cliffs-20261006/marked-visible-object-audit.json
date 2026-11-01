@@ -1,0 +1,471 @@
+{
+  "at": "2026-10-06T04:45:59.735Z",
+  "view": "全景",
+  "render": {
+    "frame": 1271,
+    "calls": 10220,
+    "triangles": 4261199,
+    "points": 0,
+    "lines": 87727
+  },
+  "samples": [
+    {
+      "screen": [
+        0.12,
+        0.65
+      ],
+      "hits": [
+        {
+          "path": "Scene/highland-gate/highland-merged-decoration",
+          "distance": 179.03283311383768,
+          "point": [
+            143.3746724656037,
+            123.93955518333122,
+            -21.651492832720308
+          ],
+          "castlePoint": [
+            -94.77333570641443,
+            8.50347206388099,
+            80.24688434459449
+          ]
+        },
+        {
+          "path": "Scene/highland-gate/highland-Gate_stone.016_solid",
+          "distance": 179.14054406146673,
+          "point": [
+            143.42795774412568,
+            123.84776812312539,
+            -21.669862996321985
+          ],
+          "castlePoint": [
+            -94.83035388359097,
+            8.467677359115525,
+            80.16280512705912
+          ]
+        },
+        {
+          "path": "Scene/highland-gate/highland-Gate_edge.016_solid",
+          "distance": 201.7806134215239,
+          "point": [
+            154.62814145954832,
+            104.55478579255751,
+            -25.531139749078314
+          ],
+          "castlePoint": [
+            -106.81516614712078,
+            0.9438869139304413,
+            62.48995609321383
+          ]
+        },
+        {
+          "path": "Scene/highland-gate/highland-Gate_edge.016_solid",
+          "distance": 201.79929066949893,
+          "point": [
+            154.63738121077398,
+            104.53886977174345,
+            -25.534325164381798
+          ],
+          "castlePoint": [
+            -106.82505318885286,
+            0.9376800557436125,
+            62.475376624459486
+          ]
+        }
+      ]
+    },
+    {
+      "screen": [
+        0.17,
+        0.72
+      ],
+      "hits": [
+        {
+          "path": "Scene/highland-gate/highland-merged-decoration",
+          "distance": 175.9552021231493,
+          "point": [
+            129.57590937965782,
+            119.23774353174328,
+            -16.354486863649598
+          ],
+          "castlePoint": [
+            -83.12053969668973,
+            -1.6628922010513345,
+            81.4421042130256
+          ]
+        },
+        {
+          "path": "Scene/highland-gate/highland-Gate_brick.016_solid",
+          "distance": 176.0586870966693,
+          "point": [
+            129.61988398673978,
+            119.14524993528421,
+            -16.369329649455956
+          ],
+          "castlePoint": [
+            -83.16942558778979,
+            -1.7038632122392126,
+            81.36061381090343
+          ]
+        },
+        {
+          "path": "Scene/highland-gate/highland-Gate_rock.016_solid",
+          "distance": 183.89391171869227,
+          "point": [
+            132.9493618078428,
+            112.14222254198484,
+            -17.493131075436693
+          ],
+          "castlePoint": [
+            -86.87075462705016,
+            -4.805927837944295,
+            75.19067837537155
+          ]
+        },
+        {
+          "path": "Scene/highland-gate/highland-Gate_stone.016_solid",
+          "distance": 188.013838078524,
+          "point": [
+            134.7000714685565,
+            108.45988303697791,
+            -18.08404956743511
+          ],
+          "castlePoint": [
+            -88.81699150102538,
+            -6.437058844121422,
+            71.94639619259159
+          ]
+        }
+      ]
+    },
+    {
+      "screen": [
+        0.23,
+        0.58
+      ],
+      "hits": [
+        {
+          "path": "Scene/castleContainer/citadel-continuous-mountain-terrain-system/citadel-oskar-grid-mountain-surface",
+          "distance": 207.2945247484885,
+          "point": [
+            155.28679112949013,
+            95.25585029535962,
+            4.0227894379536195
+          ],
+          "castlePoint": [
+            -84.50157962076328,
+            5.2374544115880886,
+            41.41846147050911
+          ]
+        },
+        {
+          "path": "Scene/castleContainer/citadel-continuous-mountain-terrain-system/citadel-oskar-grid-mountain-surface",
+          "distance": 275.11570462972566,
+          "point": [
+            188.1613932053888,
+            35.95623123596875,
+            2.4327711218422223
+          ],
+          "castlePoint": [
+            -112.14821832799359,
+            -15.296758440008514,
+            -17.00860341589711
+          ]
+        },
+        {
+          "path": "Scene/sky-background",
+          "distance": 2205.1269235288005,
+          "point": [
+            1123.685530863164,
+            -1651.5539280015935,
+            -42.81494048865668
+          ],
+          "castlePoint": [
+            -898.8983598507536,
+            -599.6460906728315,
+            -1679.6881810282714
+          ]
+        }
+      ]
+    },
+    {
+      "screen": [
+        0.4,
+        0.56
+      ],
+      "hits": [
+        {
+          "path": "Scene/castleContainer/citadel-continuous-mountain-terrain-system/citadel-oskar-grid-mountain-surface",
+          "distance": 201.56300856182986,
+          "point": [
+            130.9634552678968,
+            94.61451512483988,
+            50.64127747764017
+          ],
+          "castlePoint": [
+            -32.91861192204292,
+            5.560772335460483,
+            31.200227070374766
+          ]
+        },
+        {
+          "path": "Scene/castleContainer/citadel-continuous-mountain-terrain-system/citadel-oskar-grid-mountain-surface",
+          "distance": 304.84176227725834,
+          "point": [
+            169.98572383737383,
+            1.4160932029206634,
+            72.0379518913818
+          ],
+          "castlePoint": [
+            -49.78576050058554,
+            -26.432427518814386,
+            -65.53877970003778
+          ]
+        },
+        {
+          "path": "Scene/sky-background",
+          "distance": 2216.70098105788,
+          "point": [
+            892.3519532736121,
+            -1723.8396415650059,
+            468.1255086978344
+          ],
+          "castlePoint": [
+            -362.02436083539743,
+            -618.6790598535038,
+            -1856.3365503557939
+          ]
+        }
+      ]
+    },
+    {
+      "screen": [
+        0.72,
+        0.61
+      ],
+      "hits": [
+        {
+          "path": "Scene/castleContainer/citadel-target-city-detail-candidate/citadel-target-new-city-stairs/new-city-stair-house-2-1/new-city-stair-house-2-1-foundation-batched-stone",
+          "distance": 186.35764008556384,
+          "point": [
+            62.21907839528953,
+            124.4827753584808,
+            116.41712176449496
+          ],
+          "castlePoint": [
+            63.565032128091374,
+            5.350343299106696,
+            56.403920511292554
+          ]
+        },
+        {
+          "path": "Scene/castleContainer/citadel-target-city-detail-candidate/citadel-target-new-city-stairs/new-city-stair-house-2-1/new-city-stair-house-2-1-foundation-batched-stone",
+          "distance": 186.35764008556384,
+          "point": [
+            62.21907839528953,
+            124.4827753584808,
+            116.41712176449496
+          ],
+          "castlePoint": [
+            63.565032128091374,
+            5.350343299106696,
+            56.403920511292554
+          ]
+        },
+        {
+          "path": "Scene/castleContainer/citadel-target-city-detail-candidate/citadel-target-new-city-stairs/new-city-stair-house-2-1/new-city-stair-house-2-1-foundation-batched-trim",
+          "distance": 186.35764008556384,
+          "point": [
+            62.21907839528953,
+            124.4827753584808,
+            116.41712176449496
+          ],
+          "castlePoint": [
+            63.565032128091374,
+            5.350343299106696,
+            56.403920511292554
+          ]
+        },
+        {
+          "path": "Scene/castleContainer/citadel-continuous-mountain-terrain-system/citadel-oskar-grid-mountain-surface",
+          "distance": 186.69245812972457,
+          "point": [
+            62.23239702541281,
+            124.20964696642307,
+            116.61032274337244
+          ],
+          "castlePoint": [
+            63.67923576215951,
+            5.23778426737445,
+            56.10999685277432
+          ]
+        }
+      ]
+    },
+    {
+      "screen": [
+        0.86,
+        0.74
+      ],
+      "hits": [
+        {
+          "path": "Scene/castleContainer/citadel-mountain-canopy-candidate/citadel-canopy-broadleaf-0",
+          "distance": 169.48171211873472,
+          "point": [
+            28.794719858207053,
+            147.65851948240703,
+            115.86965942438856
+          ],
+          "castlePoint": [
+            85.30167226148286,
+            -0.10698697081005545,
+            90.35003363729653
+          ]
+        },
+        {
+          "path": "Scene/castleContainer/citadel-mountain-canopy-candidate/citadel-canopy-broadleaf-1",
+          "distance": 172.43445683240185,
+          "point": [
+            28.341545862984653,
+            145.4137415208985,
+            117.73360861298485
+          ],
+          "castlePoint": [
+            86.78781527177178,
+            -1.2935606915249307,
+            88.09124566531524
+          ]
+        },
+        {
+          "path": "Scene/castleContainer/citadel-mountain-canopy-candidate/citadel-canopy-broadleaf-1",
+          "distance": 172.50559392921525,
+          "point": [
+            28.330628060906406,
+            145.35966065625982,
+            117.77851460613448
+          ],
+          "castlePoint": [
+            86.82361921334254,
+            -1.3221474532778072,
+            88.03682727353892
+          ]
+        },
+        {
+          "path": "Scene/castleContainer/citadel-mountain-canopy-candidate/citadel-canopy-broadleaf-0",
+          "distance": 174.3796018766921,
+          "point": [
+            28.043013738982204,
+            143.93497544025837,
+            118.96150058421597
+          ],
+          "castlePoint": [
+            87.76682429283271,
+            -2.075225961079212,
+            86.60325037420007
+          ]
+        }
+      ]
+    }
+  ],
+  "visibleRoots": [
+    {
+      "name": "robot-operations-live",
+      "meshCount": 4266,
+      "triangles": 2958084
+    },
+    {
+      "name": "castleContainer-canal-junction",
+      "meshCount": 3360,
+      "triangles": 60512
+    },
+    {
+      "name": "vanguard-squad",
+      "meshCount": 2889,
+      "triangles": 104220
+    },
+    {
+      "name": "moebius-swamp-placement",
+      "meshCount": 2132,
+      "triangles": 1371760
+    },
+    {
+      "name": "saihoji-phalanx-battle",
+      "meshCount": 2046,
+      "triangles": 194442
+    },
+    {
+      "name": "bookshop-steampunk-robots",
+      "meshCount": 1907,
+      "triangles": 1147583
+    },
+    {
+      "name": "moebius-metropolis",
+      "meshCount": 1093,
+      "triangles": 815490
+    },
+    {
+      "name": "castleContainer",
+      "meshCount": 1072,
+      "triangles": 644813
+    },
+    {
+      "name": "christchurch-tram-system",
+      "meshCount": 629,
+      "triangles": 345744
+    },
+    {
+      "name": "cyber-megalithic-twin-gates",
+      "meshCount": 513,
+      "triangles": 647243
+    },
+    {
+      "name": "leviathanGroup",
+      "meshCount": 452,
+      "triangles": 116682
+    },
+    {
+      "name": "old-harbor-scene",
+      "meshCount": 442,
+      "triangles": 100154
+    },
+    {
+      "name": "citadel-trojan-horse",
+      "meshCount": 412,
+      "triangles": 16800
+    },
+    {
+      "name": "highland-gate",
+      "meshCount": 343,
+      "triangles": 91595
+    },
+    {
+      "name": "crystal-v7-shores",
+      "meshCount": 332,
+      "triangles": 8508
+    },
+    {
+      "name": "city-sea-lake",
+      "meshCount": 283,
+      "triangles": 28372
+    },
+    {
+      "name": "moebius-aircraft-squad",
+      "meshCount": 280,
+      "triangles": 44010
+    },
+    {
+      "name": "flock-root",
+      "meshCount": 276,
+      "triangles": 2392
+    },
+    {
+      "name": "moebius-airship",
+      "meshCount": 262,
+      "triangles": 3688
+    },
+    {
+      "name": "Group",
+      "meshCount": 227,
+      "triangles": 42693
+    }
+  ]
+}

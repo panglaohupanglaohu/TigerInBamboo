@@ -1,0 +1,55 @@
+{
+  "scope": "HTTP delivery check only; not GPU or visual validation",
+  "files": [
+    {
+      "source": "src/world/bookshopFactoryBase.js",
+      "sha256": "6bd7335b4006b9f318fe115d9f5e8bed05eb8855c09020ab2d8f6575d3217c1e",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/bookshopFreighterHull.js",
+      "sha256": "16c14423603ae53a3eb29ccb7e06488de194ab663c6d927932d36f8955548bbb",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/bookshopHarborDetail.js",
+      "sha256": "b6d42819408508f848a15b381c10f0e6095ca0cacbbedfe1b34beaa8f6c23d9b",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/swampFlowerActivities.js",
+      "sha256": "21a40dc33a0389a3a10b0f06d02a01992793f1fd89e7f21559a6c30b3558b5b5",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/swampCoralUnderstory.js",
+      "sha256": "c021f6f5da1d2ac2105c5b4d640cab50c62d739d572d2ceec1bd29bee7b306b5",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/swampNaturalCliff.js",
+      "sha256": "66b51ad6e86e4c50e8fc0b4d91f15db50b357708dc356076c259a810ce23608b",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/swampCoralRim.js",
+      "sha256": "56dbbbab4a4ec3b372601f2f4d856655b7a14d8f7a738e4cae31e6df044a765b",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/swampGregVisuals.js",
+      "sha256": "f673e58aa31f20f023f07b15d3cc69a2900a237c69f7cb89ba21764c377692fe",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/swampAirHaze.js",
+      "sha256": "dba4f0bbe59311359d0b61a6c2a54acdeea7a31ac9acb71990987196a2c1c77a",
+      "served_bytes_match": true
+    },
+    {
+      "source": "src/world/swampPaintWater.js",
+      "sha256": "3b2fb989dbba05e4574fe26ee1f0b65023fa962b441a5b3129c1a146de912166",
+      "served_bytes_match": true
+    }
+  ]
+}

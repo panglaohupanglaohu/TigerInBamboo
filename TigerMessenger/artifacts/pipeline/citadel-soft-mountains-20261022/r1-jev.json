@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "57914134c3c788f0c2b71d6f68a8d6c36bb56e183c4e221afbfc2d5d5fedf190",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.93
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.79,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.12,
+        "lighting": 0,
+        "navigation": 0.05,
+        "review": 0.83
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.71
+    }
+  },
+  "usage": {
+    "input_tokens": 737,
+    "output_tokens": 91,
+    "cost_usd": 0.00031,
+    "credits_remaining_usd": 4.932456
+  },
+  "elapsed_ms": 7710,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "real top-level terrain baseline and protected-support audit",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "same-camera current GPU and rail route",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

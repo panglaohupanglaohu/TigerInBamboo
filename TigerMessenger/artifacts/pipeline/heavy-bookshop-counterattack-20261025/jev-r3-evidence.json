@@ -1,0 +1,35 @@
+{
+  "task": "Bookshop real heavy troopers counterattack repair",
+  "observations": {
+    "user_image": "Bookshop plaza has several fallen original heavy troopers among standing residents; user did not see attacks. Prior Saihoji numbers are not bookshop acceptance.",
+    "source_causes": [
+      "Robot defense aimed at root soles below shield; now shared real torso aim point.",
+      "Insertion forbade ground movement until every trooper landed; now ground assembles during insertion and descending troopers raise shields.",
+      "Actual civilian attackers were incorrectly reclassified robot=true; preserve target identity and damage routing.",
+      "Guns blocked by nearest ally/wall only retried same target; now bounded alternative clear candidates and actual gun orientation."
+    ],
+    "validation": "R1 normal bookshop actual18landed,32gunbursts,12robot hits,66shieldblocks;18eventuallydown,16killedbyresidentfire/2byrobots; medical rescued18/healed0 at capture. Camera too high, screenshot only HUD proof not ground close-up.",
+    "repair_r2": "Withdraw at one third casualties(6/18), not60percent(11/18). Civilian pistol body damage40percent through armor; robot fire and bomb damage unchanged, shield energy fullcost. No restored health or invulnerability. R2 GPU pending.",
+    "camera": "Normal entry Q/F/C actually boarded and toggled, pilot-down15.png inspected: plaza/rails visible lowerframe, ship hidden. Node production numeric relative down15degrees. Verified C returns exterior in Node; actual normal screenshot for pilot completed.",
+    "r2_actual": "Normal bookshop real R2:29gunbursts/11robot hits/1swordhit/72shieldblocks; returned for ground-force-losses,18recovered,2of18survive,16down(12robots), no friendly bomb hits. Retreat improved but still severe losses; do not claim invulnerable/winning army.",
+    "r3_repair": "Discovered .16s shot duration versus up to.2s real sim steps: zero-length firing geometry then hidden on arrival before render. Initialize nonzero muzzle streak plus flash; keep arrival streak through one rendered frame before recycling; apply hit once.18focused tests pass, including real controller .2s step renderability. Fresh normal GPU R3 pending."
+  },
+  "checks": [
+    {
+      "name": "torso ray shield and insertion/civilian/alternate lanes regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "R3 projectile visible GPU and moon-shore normal integration",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No robot damage nerf or fake immortality",
+    "Keep all original actors, normal entry",
+    "Text only no image upload"
+  ],
+  "evidence_revision": "heavy-bookshop-r3"
+}

@@ -1,0 +1,20 @@
+{
+  "revision": "r81",
+  "status": "first-pass-production-GPU-verified",
+  "references": "three user supplied images retained locally",
+  "leafTexture": {
+    "size": 512,
+    "cardsPerClump": 1,
+    "previousCardsPerClump": 6,
+    "ratio": 0.16666666666666666
+  },
+  "tree": "tapestry-painted-fan-r5",
+  "performance": "No FPS or overall GPU time improvement measured",
+  "targetComplete": false,
+  "remaining": [
+    "Tree silhouette still differs from supplied tapestry",
+    "Ground motif coverage and near-ground depth need refinement",
+    "River banks remain simple; not full approved island target",
+    "No complete current mounted route/E interaction replay"
+  ]
+}

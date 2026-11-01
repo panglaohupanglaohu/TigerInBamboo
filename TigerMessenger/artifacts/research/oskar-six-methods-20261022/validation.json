@@ -1,0 +1,18 @@
+{
+  "both_skills_quick_validate": "passed",
+  "mirrors_identical": {
+    "references/six-methods.md": true,
+    "references/implementation-recipes.md": true,
+    "scripts/six-methods-study.py": true
+  },
+  "mechanism_check": "passed; CPU fixtures only",
+  "source_hashes": {
+    "src/world/highlandShoreWaves.js": "27fea13c5203f6aa28453269410aa44f6ef27efe25b341220eebc25970d01ba2",
+    "src/render/clouds/cloudImpostorMaterial.js": "35340b9f3fc00c7ff54d2a45c8594d333fd2979e20f7bc5413be57e04f20af0e",
+    "src/world/backlitHighlight.js": "45f9864f2c00089f6b734a35e351e1618145d348bb7646ab027f29bff5c87cb4",
+    "src/procgen/graph/irregularQuadGrid.js": "24b352a958e40febb50b108b35e0f7c9979df850073d5142f111dc773c2c388b",
+    "src/procgen/wfc/propagator.js": "956604990807c9ad17937843d5173227007b603b5d30994f16eddb28bf6111fb"
+  },
+  "production_changes": false,
+  "visual_limits": "Actual source chronological sample interpretation; no new continuous viewing or production GPU acceptance"
+}

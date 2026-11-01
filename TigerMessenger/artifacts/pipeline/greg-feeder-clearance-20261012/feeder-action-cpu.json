@@ -1,0 +1,19 @@
+{
+  "seed": 7711,
+  "maxStepInner": 0.40042696718420645,
+  "maxStepWorld": 0.20021348359210323,
+  "maxMouthError": 9.592326932761353e-14,
+  "feedingFrames": 29,
+  "surfaceFrames": 557,
+  "underwaterFrames": 44,
+  "stages": [
+    "surface-swim",
+    "submerged-swim",
+    "feeding"
+  ],
+  "identity": "whale-feeder",
+  "boats": 5,
+  "children": 10,
+  "paddles": 10,
+  "GPU": "not checked"
+}

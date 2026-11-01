@@ -1,0 +1,20 @@
+✔ shared subdivision stays watertight while actual sea and rail guards constrain exposed walls (18.77975ms)
+✔ rear ship cut keeps its safe half-space and anchored edges after rounding (5.688042ms)
+✔ same actual frame and rail inputs reproduce exact geometry bytes (19.002334ms)
+✔ rear shoulder morph changes real geometry but every protected support corner stays byte-identical (33.607292ms)
+✔ all final Float32 faces keep orientation and meaningful area after shape changes (31.712125ms)
+✔ shape pass is deterministic and handles actual source-to-castle transforms without touching protected data (35.6905ms)
+✔ off never inspects scene dependencies (0.480334ms)
+✔ strict real final install and actual meshes feed support transaction with rollback/finalize cleanup (20636.239916ms)
+✔ source identity, strict report, city terrain binding and ocean transform/wave failures reject (23966.009916ms)
+✔ unversioned terrain mutation after prepare and city replacement after commit automatically rollback before publish/finalize (21032.267791ms)
+✔ new clipped west retreat replays exact bytes before real support commit and rollback (33966.458292ms)
+✔ uncut legacy mountain with unresolved gallery foundations is rejected before rail activation (26792.750667ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126954.146125

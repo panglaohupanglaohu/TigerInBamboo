@@ -1,0 +1,115 @@
+<!doctype html>
+<meta charset="utf-8">
+<body style="margin:0;background:#000">
+<video id="v" muted playsinline preload="auto" style="display:none"></video>
+<canvas id="c"></canvas>
+<script>
+const S = 96;                     // 灰度采样边长
+const v = document.getElementById('v');
+const c = document.getElementById('c');
+const ctx = c.getContext('2d', { willReadFrequently: true });
+
+window.load = (src) => new Promise((res, rej) => {
+  v.src = src; v.load();
+  v.addEventListener('loadedmetadata', () => {
+    c.width = S; c.height = S;
+    res({ w: v.videoWidth, h: v.videoHeight, dur: v.duration });
+  }, { once: true });
+  v.addEventListener('error', () => rej(new Error('decode ' + (v.error && v.error.code))), { once: true });
+});
+
+window.run = () => new Promise((resolve) => {
+  const frames = [];
+  ctx.imageSmoothingEnabled = true;
+  const grab = () => {
+    ctx.drawImage(v, 0, 0, S, S);
+    const d = ctx.getImageData(0, 0, S, S).data;
+    const g = new Float32Array(S * S);
+    for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+      g[p] = (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114) / 255;
+    }
+    frames.push({ t: v.currentTime, g });
+  };
+
+  const onFrame = () => {
+    grab();
+    if (v.ended) return finish();
+    v.requestVideoFrameCallback(onFrame);
+  };
+
+  function finish() {
+    const n = frames.length;
+    if (n < 8) return resolve({ frames: n, note: 'not enough frames' });
+
+    // ---- 平均帧间隔 ----
+    let dt = 0;
+    for (let i = 1; i < n; i++) dt += frames[i].t - frames[i - 1].t;
+    dt /= (n - 1);
+
+    // ---- 帧间差随 lag 的曲线：循环会在 lag≈周期 处出现极小值 ----
+    const lagMax = Math.min(n - 3, Math.round(9 / dt));   // 最多看 9 秒
+    const curve = [];
+    for (let lag = 1; lag <= lagMax; lag++) {
+      let sum = 0, cnt = 0;
+      for (let i = 0; i + lag < n; i++) {
+        const a = frames[i].g, b = frames[i + lag].g;
+        let d = 0;
+        for (let p = 0; p < a.length; p += 3) d += Math.abs(a[p] - b[p]);
+        sum += d / (a.length / 3); cnt++;
+      }
+      curve.push({ lag, sec: +(lag * dt).toFixed(3), diff: +(sum / cnt).toFixed(5) });
+    }
+
+    // ---- 曲线局部极小（排除 lag 太小和趋势性下降） ----
+    const mins = [];
+    for (let i = 2; i < curve.length - 2; i++) {
+      const { diff } = curve[i];
+      if (diff < curve[i - 2].diff && diff < curve[i + 2].diff && diff < 0.9 * curve[2].diff) {
+        mins.push({ sec: curve[i].sec, diff: curve[i].diff });
+      }
+    }
+    mins.sort((a, b) => a.diff - b.diff);
+
+    // ---- 单个像素的时间序列自相关：找重复频率 ----
+    // 取画面中央偏下的水面色块，避开岛体
+    const probe = [];
+    const px0 = Math.round(S * 0.62), py0 = Math.round(S * 0.78);
+    for (const f of frames) {
+      let s = 0;
+      for (let y = py0; y < py0 + 10; y++) for (let x = px0; x < px0 + 10; x++) s += f.g[y * S + x];
+      probe.push(s / 100);
+    }
+    const mean = probe.reduce((a, b) => a + b, 0) / probe.length;
+    const dev = probe.map((x) => x - mean);
+    let bestHz = 0, bestR = 0, spectrum = [];
+    for (let k = 1; k < Math.min(n / 2, 120); k++) {
+      let re = 0, im = 0;
+      for (let i = 0; i < n; i++) {
+        const ang = (2 * Math.PI * k * i) / n;
+        re += dev[i] * Math.cos(ang);
+        im -= dev[i] * Math.sin(ang);
+      }
+      const amp = Math.hypot(re, im) / n;
+      const hz = k / (n * dt);
+      spectrum.push({ hz: +hz.toFixed(3), amp: +amp.toFixed(5) });
+      if (hz > 0.08 && amp > bestR) { bestR = amp; bestHz = hz; }
+    }
+    spectrum.sort((a, b) => b.amp - a.amp);
+
+    resolve({
+      frames: n,
+      fps: +(1 / dt).toFixed(2),
+      spanSec: +(frames[n - 1].t - frames[0].t).toFixed(2),
+      bestLoopPeriods: mins.slice(0, 4),
+      waterProbeDominantHz: +bestHz.toFixed(3),
+      waterProbePeriodSec: bestHz ? +(1 / bestHz).toFixed(2) : null,
+      topSpectrum: spectrum.slice(0, 4),
+      curveSample: curve.filter((_, i) => i % Math.max(1, Math.round(curve.length / 24)) === 0),
+    });
+  }
+
+  v.currentTime = 0;
+  v.play().then(() => v.requestVideoFrameCallback(onFrame));
+  setTimeout(finish, 60000);
+});
+</script>

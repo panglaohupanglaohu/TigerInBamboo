@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Triangle Flow Field (fluid pathfinding + 3×100 crowd)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #4a5a68; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #eef4f7;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.55); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #dee9ef;
+    font: 13px/1.55 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.55);
+  }
+  #keys { position: fixed; right: 16px; top: 14px; color: #c2cfd7;
+    font: 11px/1.7 ui-monospace, Menlo, monospace; text-align: right;
+    text-shadow: 0 1px 2px rgba(0,0,0,.55); }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">三角图流体寻路 + 三组流场（810157485638189056 / 816743289500106752）<br>
+  棕色=走廊实体 · 白虚线=三角网 · 箭头=逐三角形流向 · 点=士兵（三色三组，目标交叉）</div>
+<div id="keys">空格 暂停 · F 切 流体/离散 · M 关网格 · R 重置人群</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * triflow.html — src/triflow.js 的可视化验证页。
+ *
+ * 照 810157485638189056 的样子画：棕色实心走廊 + 白色虚线三角网 + 逐三角形箭头。
+ * 那条片子最值钱的信息是"网格是规则的、箭头钉在三角形上、点在三角形内用重心坐标"，
+ * 这三件事在这里都能直接看出来。
+ *
+ * 按 F 切流体/离散：箭头会从"六个方向择一"变成"连续梯度"，单位走出来的折线也直了。
+ */
+import { makeMask, TriField, FlowField, Crowd, walk, CORRIDOR_SPEC } from '../src/triflow.js';
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hud = document.getElementById('hud');
+const q = new URLSearchParams(location.search);
+
+const GRID_W = Number(q.get('gw') || 132);
+const GRID_H = Number(q.get('gh') || 96);
+const MASK = makeMask(GRID_W, GRID_H);
+const FIELD = new TriField(GRID_W, GRID_H, MASK);
+
+const SPAWNS = [[0.14, 0.18], [0.86, 0.44], [0.32, 0.78]];
+// 目标交叉：每组去另一组的出发地，必须横穿整张图（片子里三团是互相穿插着走的）
+const GOALS = [SPAWNS[2], SPAWNS[0], SPAWNS[1]];
+
+let MODE = q.get('mode') === 'discrete' ? 'discrete' : 'fluid';
+let SHOW_MESH = q.get('mesh') !== '0';
+let paused = false;
+
+const FL_F = GOALS.map(p => new FlowField(FIELD, [FIELD.locate(p[0] * GRID_W, p[1] * GRID_H)], { mode: 'fluid', iters: 40, lambda: 0.5 }));
+const FL_D = GOALS.map(p => new FlowField(FIELD, [FIELD.locate(p[0] * GRID_W, p[1] * GRID_H)], { mode: 'discrete' }));
+const flows = () => (MODE === 'fluid' ? FL_F : FL_D);
+
+let crowd = new Crowd(FIELD, FL_F, { groups: 3, per: 100, seed: 3 });
+
+// ---------------- 视口 ----------------
+let W = 0, H = 0, DPR = 1, view = { s: 1, ox: 0, oy: 0 };
+function resize() {
+  DPR = Math.min(2, devicePixelRatio || 1);
+  W = canvas.clientWidth; H = canvas.clientHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const s = Math.min(W / GRID_W, H / GRID_H) * 0.96;
+  view = { s, ox: (W - GRID_W * s) / 2, oy: (H - GRID_H * s) / 2 };
+}
+addEventListener('resize', resize);
+
+const X = x => view.ox + x * view.s;
+const Y = y => view.oy + y * view.s;
+
+// ---------------- 地形 ----------------
+// 走廊实体：逐三角形填棕色（比逐格填更贴片子里"面是三角的"观感）
+const BG = '#4a5a68';
+const LAND = '#a98b74';
+const EDGE = 'rgba(255,255,255,0.55)';
+
+function drawLand() {
+  ctx.fillStyle = LAND;
+  for (let t = 0; t < FIELD.n; t++) {
+    const v = FIELD.tris[t].v;
+    ctx.beginPath();
+    ctx.moveTo(X(v[0][0]), Y(v[0][1]));
+    ctx.lineTo(X(v[1][0]), Y(v[1][1]));
+    ctx.lineTo(X(v[2][0]), Y(v[2][1]));
+    ctx.closePath();
+    ctx.fill();
+  }
+  if (!SHOW_MESH) return;
+  // 白色虚线三角网：片子里最显眼的一层
+  ctx.save();
+  ctx.setLineDash([3, 3]);
+  ctx.strokeStyle = EDGE;
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  for (let t = 0; t < FIELD.n; t++) {
+    const v = FIELD.tris[t].v;
+    ctx.moveTo(X(v[0][0]), Y(v[0][1]));
+    ctx.lineTo(X(v[1][0]), Y(v[1][1]));
+    ctx.lineTo(X(v[2][0]), Y(v[2][1]));
+    ctx.closePath();
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+// ---------------- 箭头 ----------------
+// 箭头钉在**三角形重心**上（原文就是逐三角形的），每 N 个取一个，否则糊成一片。
+const ARROW_EVERY = 3;
+function drawArrows() {
+  const fl = flows()[0];   // 只画第一组的场，画三张会看不出方向
+  ctx.strokeStyle = 'rgba(40,48,58,.55)';
+  ctx.fillStyle = 'rgba(40,48,58,.55)';
+  ctx.lineWidth = 1;
+  for (let t = 0; t < FIELD.n; t += ARROW_EVERY) {
+    if (!isFinite(fl.dist[t]) || fl.dist[t] > 1e8) continue;
+    const c = FIELD.cent[t];
+    let dx, dy;
+    if (MODE === 'fluid') {
+      const g = FIELD.gradAt(t, fl.vphi);
+      const L = Math.hypot(g[0], g[1]);
+      if (L < 1e-9) continue;
+      dx = -g[0] / L; dy = -g[1] / L;
+    } else {
+      dx = fl.dir[t * 2]; dy = fl.dir[t * 2 + 1];
+      if (!dx && !dy) continue;
+    }
+    const x0 = X(c[0]), y0 = Y(c[1]);
+    const len = 7;
+    const x1 = x0 + dx * len, y1 = y0 + dy * len;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    // 箭头尖
+    const a = Math.atan2(dy, dx);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x1 - 3 * Math.cos(a - 0.45), y1 - 3 * Math.sin(a - 0.45));
+    ctx.lineTo(x1 - 3 * Math.cos(a + 0.45), y1 - 3 * Math.sin(a + 0.45));
+    ctx.closePath(); ctx.fill();
+  }
+}
+
+// ---------------- 目标 + 士兵 ----------------
+const GROUP_COL = ['#f2f4f5', '#8fd4e8', '#f0c07a'];
+const GOAL_COL = ['#e0503f', '#3f7fd0', '#48a86a'];
+
+function drawGoalsAndCrowd() {
+  for (let g = 0; g < 3; g++) {
+    const t = FIELD.locate(GOALS[g][0] * GRID_W, GOALS[g][1] * GRID_H);
+    if (t < 0) continue;
+    const c = FIELD.cent[t];
+    ctx.strokeStyle = GOAL_COL[g];
+    ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(X(c[0]), Y(c[1]), 9, 0, Math.PI * 2); ctx.stroke();
+  }
+  // 士兵：白/蓝/橙三色，跟片子里三团能分辨出来一致
+  for (const a of crowd.agents) {
+    ctx.fillStyle = a.done ? 'rgba(90,100,110,.55)' : GROUP_COL[a.g];
+    ctx.beginPath();
+    ctx.arc(X(a.x), Y(a.y), a.done ? 1.2 : 1.7, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// ---------------- 指标（一次算好，别每帧算） ----------------
+let metrics = null;
+function computeMetrics() {
+  const R = (fl) => {
+    let s = 7, ok = 0, ratio = 0, curv = 0, rev = 0;
+    const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    let n = 0;
+    for (let i = 0; i < 200; i++) {
+      let x, y, t = 0;
+      do { x = rnd() * GRID_W; y = rnd() * GRID_H; } while (FIELD.locate(x, y) < 0 && ++t < 300);
+      if (FIELD.locate(x, y) < 0) continue;
+      n++;
+      const w = walk(FIELD, fl, [x, y]);
+      if (w.reach) { ok++; ratio += w.ratio; curv += w.curv; rev += w.rev; }
+    }
+    return { n, ok, ratio: ratio / ok, curv: curv / ok, rev: rev / ok };
+  };
+  const a = R(FL_F[0]), b = R(FL_D[0]);
+  let cells = 0;
+  for (const v of MASK) cells += v;
+  let deg = 0, full = 0;
+  for (let t = 0; t < FIELD.n; t++) {
+    let c = 0;
+    for (let k = 0; k < 3; k++) if (FIELD.nbr[t * 3 + k] >= 0) c++;
+    deg += c; if (c === 3) full++;
+  }
+  metrics = { a, b, cells, deg: deg / FIELD.n, full: full / FIELD.n, initRatio: a.ratio };
+  return metrics;
+}
+
+// ---------------- 主循环 ----------------
+let last = performance.now();
+let simT = 0, firstArrive = null;
+
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  if (!paused) {
+    // 一帧最多推进 2 个子步，帧率掉了也不会让模拟跳步
+    for (let k = 0; k < 2; k++) {
+      crowd.step(1 / 120);
+      simT += 1 / 120;
+      if (firstArrive === null && crowd.arrived > 0) firstArrive = simT;
+    }
+  }
+
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, W, H);
+  drawLand();
+  drawArrows();
+  drawGoalsAndCrowd();
+
+  const m = metrics || computeMetrics();
+  hud.textContent =
+    `走廊 ${m.cells} 格 → 三角形 ${FIELD.n} 个 · 平均度 ${m.deg.toFixed(2)} · 全邻接 ${(m.full * 100).toFixed(1)}%\n` +
+    `路径 200 条（同一目标）：流体 绕路比 ${m.a.ratio.toFixed(3)} 曲率 ${m.a.curv.toFixed(3)} 折返 ${m.a.rev.toFixed(2)}/条\n` +
+    `                        离散 绕路比 ${m.b.ratio.toFixed(3)} 曲率 ${m.b.curv.toFixed(3)} 折返 ${m.b.rev.toFixed(2)}/条\n` +
+    `人群 3×100：到达 ${crowd.arrived}/300 · 首达 ${firstArrive ? firstArrive.toFixed(2) : '-'}s · 模拟时长 ${simT.toFixed(1)}s · 最小间距 ${crowd.minSep.toFixed(2)} 格\n` +
+    `模式 ${MODE === 'fluid' ? '流体（-∇φ，φ 由 40 次拉普拉斯平滑得到）' : '离散（逐三角形指向最省邻居）'}`;
+
+  requestAnimationFrame(frame);
+}
+
+addEventListener('keydown', (e) => {
+  if (e.code === 'Space') { paused = !paused; e.preventDefault(); }
+  if (e.key === 'f' || e.key === 'F') MODE = MODE === 'fluid' ? 'discrete' : 'fluid';
+  if (e.key === 'm' || e.key === 'M') SHOW_MESH = !SHOW_MESH;
+  if (e.key === 'r' || e.key === 'R') {
+    crowd = new Crowd(FIELD, FL_F, { groups: 3, per: 100, seed: (Math.random() * 999) | 0 });
+    simT = 0; firstArrive = null;
+  }
+});
+
+resize();
+computeMetrics();
+requestAnimationFrame(frame);
+window.__triflow = {
+  get crowd() { return crowd; },
+  metrics: () => metrics || computeMetrics(),
+  FIELD, FL_F, FL_D,
+};
+</script>
+</body>
+</html>

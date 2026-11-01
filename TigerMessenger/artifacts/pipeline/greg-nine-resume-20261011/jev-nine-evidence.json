@@ -1,0 +1,57 @@
+{
+  "asset": "swamp nine-item production iteration",
+  "version": "2026-10-11-latest-observed",
+  "target": "Open stone shore, readable teal roots, cliff dock, soft Moebius palette, continuous actor/boat interaction",
+  "sources": [
+    {
+      "file": "environment-middle-after-continued.jpg",
+      "sha256": "15f0b0f79762b73a1347d12fcf3dd8b2a77f73bb8c4c2f1cd7991790fac93ea2"
+    },
+    {
+      "file": "opposite-stair-open-gpu.jpg",
+      "sha256": "1a824fcf08c3df5f01bf6a52170cc3e777e4f022bd7f945c6bed72c61e89b3c1"
+    },
+    {
+      "file": "boat-gpu-voyage.jpg",
+      "sha256": "1f41b3bc2687ae0f5304d5915f631d24da76d763464ed94a96a1e53fdbaf4b19"
+    }
+  ],
+  "visual_observations": [
+    "Actual production GPU: opposite stair remains occluded behind upper wall despite 48 main-wall rays passing; fix must inspect all visible cliff meshes.",
+    "Water and thin falls integrated; roots too pale in previous image. New dark-teal root colour source passes tests but not yet inspected in latest GPU.",
+    "Boat full normal-runtime cycle observed from patrol/eye-contact to carrier/meeting/return; transition camera occlusion prevents full V3 contact acceptance.",
+    "Raised crowns open central view; silhouette, lush planting and fine ink still differ substantially from target.",
+    "Full game around 14-15 FPS; first manual draw census accumulates previous frame and cannot be used as one-frame proof."
+  ],
+  "checks": [
+    {
+      "name": "courier real stair descent",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "all visible opposite shore stairs open GPU",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "V3 swim/boat/whale contact GPU",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "all monkey tool contacts GPU",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "30 FPS full game",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "Retain all species and identities, 10 children, five two-oar flowerboats, 52 rowers, two-metre paths and track clearance.",
+    "Do not hide geometry for performance; no image inputs, no automatic acceptance."
+  ]
+}

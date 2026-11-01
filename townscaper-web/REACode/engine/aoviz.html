@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — AO 五档对照（flat / up normal / voxel AO / directional AO）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #2b3138; overflow: hidden; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<script type="module">
+import { buildMesa } from './mesa.js';
+import { buildVoxelAO } from '../src/voxelao.js';
+
+const cv = document.getElementById('view');
+const ctx = cv.getContext('2d');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+const LEVEL = 0.42;
+
+const { town, grid } = buildMesa({ seed: 7, radius: 9, hexSize: 0.46, towers: 2, caves: 2, houses: 2 });
+const ao = buildVoxelAO(town, grid);
+
+const land = grid.cells.filter((c) => town.top(c) > 0);
+let mnX = Infinity, mxX = -Infinity, mnZ = Infinity, mxZ = -Infinity, maxH = 0;
+for (const c of land) {
+  mnX = Math.min(mnX, c.cx); mxX = Math.max(mxX, c.cx);
+  mnZ = Math.min(mnZ, c.cz); mxZ = Math.max(mxZ, c.cz);
+  maxH = Math.max(maxH, town.top(c));
+}
+const cx0 = (mnX + mxX) / 2, cz0 = (mnZ + mxZ) / 2;
+const span = Math.max(mxX - mnX, mxZ - mnZ) || 1;
+
+// 画家算法：远的先画（这条投影下，cx+cz 越大越靠前）
+const sorted = [...land].sort((a, b) => (a.cx + a.cz) - (b.cx + b.cz));
+
+const MODES = [
+  { key: 'flat', name: '① flat（平涂）' },
+  { key: 'upNormal', name: '② up normal（上向明暗）' },
+  { key: 'voxelAo', name: '③ vertex voxel AO' },
+  { key: 'dirAo', name: '④ directional AO（带方向色）' },
+];
+
+function resize() {
+  cv.width = innerWidth * dpr;
+  cv.height = innerHeight * dpr;
+  cv.style.width = innerWidth + 'px';
+  cv.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+function draw() {
+  ctx.fillStyle = '#2b3138';
+  ctx.fillRect(0, 0, innerWidth, innerHeight);
+  const W = innerWidth / 4;
+  // 岛小、面板窄：比例要给足，否则四档看起来只是四个小灰块（第一版就是这样）
+  const s = Math.min(W * 0.92, innerHeight * 0.95) / span;
+  const ox0 = W / 2, oy0 = innerHeight * 0.58;
+
+  MODES.forEach((m, i) => {
+    const ox = W * i + ox0;
+    const proj = (x, z, h) => [
+      ox + (x - cx0 - (z - cz0)) * s * 0.82,
+      oy0 + (x - cx0 + (z - cz0)) * s * 0.46 - h * LEVEL * s * 1.0,
+    ];
+
+    // 地面阴影底板，让"岛"悬起来的错觉少一点
+    ctx.save();
+    ctx.beginPath();
+    const ring = [];
+    for (const c of land) ring.push(proj(c.cx, c.cz, 0));
+    ctx.globalAlpha = 0.10;
+    ctx.fillStyle = '#000';
+    for (const r of ring) ctx.fillRect(r[0] - 1, r[1] - 1, 2, 2);
+    ctx.restore();
+
+    for (const cell of sorted) {
+      const h = town.top(cell);
+      const top = ao.faceShading(cell, 'top');
+      const fx = ao.faceShading(cell, '+x');
+      const fz = ao.faceShading(cell, '+z');
+
+      const quad = (pts, shade) => {
+        ctx.beginPath();
+        pts.forEach((p, k) => (k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+        ctx.closePath();
+        ctx.fillStyle = shade;
+        ctx.fill();
+      };
+
+      // 面（+x / +z）用的水平四点，从格子四角取
+      const p0 = cell.pts[0], p1 = cell.pts[1], p2 = cell.pts[2], p3 = cell.pts[3];
+      const sideX = [proj(p1.x, p1.z, h), proj(p2.x, p2.z, h), proj(p2.x, p2.z, 0), proj(p1.x, p1.z, 0)];
+      const sideZ = [proj(p2.x, p2.z, h), proj(p3.x, p3.z, h), proj(p3.x, p3.z, 0), proj(p2.x, p2.z, 0)];
+      const topQuad = [proj(p0.x, p0.z, h), proj(p1.x, p1.z, h), proj(p2.x, p2.z, h), proj(p3.x, p3.z, h)];
+
+      const base = 0.86;
+      const shadeOf = (f, side) => {
+        let v = base;
+        if (m.key === 'upNormal') v *= side ? f.upNormal : 1.0;
+        else if (m.key === 'voxelAo') v *= f.ao;
+        else if (m.key === 'dirAo') v *= f.ao;
+        return v;
+      };
+      const tintOf = (f, side, which) => {
+        if (m.key !== 'dirAo') return null;
+        // 参考片第 4 帧：朝左偏粉、朝右偏绿（方向色不是贴图，是 AO 的方向）
+        const k = side ? 0.5 : 0.15;
+        if (which === 'x') return [v => v * (1 + 0.30 * k), v => v * (1 - 0.12 * k), v => v * (1 - 0.05 * k)];
+        if (which === 'z') return [v => v * (1 - 0.16 * k), v => v * (1 + 0.22 * k), v => v * (1 - 0.02 * k)];
+        return null;
+      };
+
+      const paint = (f, side, which) => {
+        const v = shadeOf(f, side);
+        const t = tintOf(f, side, which);
+        const g = Math.round(255 * v * 0.94);
+        if (!t) return `rgb(${g},${g},${g})`;
+        return `rgb(${Math.round(255 * t[0](v))},${Math.round(255 * t[1](v))},${Math.round(255 * t[2](v))})`;
+      };
+
+      quad(sideX, paint(fx, true, 'x'));
+      quad(sideZ, paint(fz, true, 'z'));
+      quad(topQuad, paint(top, false, 'top'));
+    }
+
+    // 标题
+    ctx.fillStyle = '#eef1f4';
+    ctx.font = '600 13px -apple-system, "PingFang SC", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(m.name, ox, 30);
+  });
+
+  const st = ao.stats();
+  window.__aoviz = { modes: MODES.map((m) => m.key), stats: st, cells: land.length, maxH };
+}
+
+addEventListener('resize', resize);
+resize();
+</script>
+</body>
+</html>

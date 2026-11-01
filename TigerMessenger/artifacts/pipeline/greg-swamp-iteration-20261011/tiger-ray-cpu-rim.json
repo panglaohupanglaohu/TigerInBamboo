@@ -1,0 +1,301 @@
+{
+  "surfaces": [
+    {
+      "name": "v2-entrance-tread",
+      "box": true,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "box": true,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "box": true,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "box": true,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "box": true,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "box": true,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "box": true,
+      "triangles": 84
+    },
+    {
+      "name": "v2-entrance-tread",
+      "box": true,
+      "triangles": 84
+    },
+    {
+      "name": "greg-coral-rim-rock-batch",
+      "box": true,
+      "triangles": 1540
+    }
+  ],
+  "noseEquivalence": {
+    "vertices": 924,
+    "maxError": 7.367063884561176e-14,
+    "skinV3": true,
+    "mode": "patrol",
+    "support": {
+      "time": 39.881600000023845,
+      "mode": "patrol",
+      "grounded": true,
+      "supportKind": "real-ground",
+      "pitch": 0,
+      "drinkBlend": 0,
+      "torsoLift": 0,
+      "feet": [
+        {
+          "height": 39.99999999999994,
+          "foot": [
+            28.069342769311234,
+            40.01499999999993,
+            24.042107513589624
+          ],
+          "samplesSupported": 17
+        },
+        {
+          "height": 39.99999999999994,
+          "foot": [
+            28.616274179267023,
+            40.15755252749119,
+            24.602638723543656
+          ],
+          "samplesSupported": 17
+        },
+        {
+          "height": 40,
+          "foot": [
+            28.848467436462485,
+            40.014999999999986,
+            23.395395421588052
+          ],
+          "samplesSupported": 17
+        },
+        {
+          "height": 40,
+          "foot": [
+            29.69654788956518,
+            40.01499999999993,
+            23.300306772964408
+          ],
+          "samplesSupported": 17
+        }
+      ],
+      "noseBefore": 41.16361483403402
+    }
+  },
+  "time": "2026-10-10T21:32:12.148Z",
+  "station": "rim",
+  "method": "60 real production frames; opt-in section CPU wall timings, not GPU timings",
+  "cpu": {
+    "enabled": true,
+    "samples": 60,
+    "means": {
+      "lightingWeather": 0.06166666150093078,
+      "physicsAndRide": 2.246666663885117,
+      "audio": 0.07333333293596907,
+      "sceneUpdates": 60.55000000198683,
+      "robotsAndGuardian": 6.2066666742165895,
+      "cameraWaterAndStory": 0.15999999443689986,
+      "questsAndUI": 0.12833332816759754,
+      "cullingAndLights": 0.12999999920527142,
+      "render": 27.03333333730698
+    }
+  },
+  "scenes": [
+    {
+      "id": "messenger",
+      "samples": 63,
+      "meanMs": 60.72539683561477,
+      "maxMs": 72.60000002384186
+    },
+    {
+      "id": "saihoji",
+      "samples": 63,
+      "meanMs": 0.026984122064378526,
+      "maxMs": 0.10000002384185791
+    }
+  ],
+  "subsystems": [
+    {
+      "id": "moebiusSwamp.userData",
+      "samples": 63,
+      "meanMs": 45.89047618707021,
+      "maxMs": 49.39999997615814
+    },
+    {
+      "id": "moebius-swamp-placement.story",
+      "samples": 63,
+      "meanMs": 45.89047618707021,
+      "maxMs": 49.39999997615814
+    },
+    {
+      "id": "moebius-cyber-ink-tiger.update",
+      "samples": 63,
+      "meanMs": 43.72698412433503,
+      "maxMs": 46.5
+    },
+    {
+      "id": "saihojiPhalanx",
+      "samples": 63,
+      "meanMs": 6.546031739976671,
+      "maxMs": 8.299999952316284
+    },
+    {
+      "id": "canalBoats",
+      "samples": 63,
+      "meanMs": 1.693650800084311,
+      "maxMs": 2.600000023841858
+    },
+    {
+      "id": "canalJunctionCitadel",
+      "samples": 63,
+      "meanMs": 0.8158730003568861,
+      "maxMs": 1
+    },
+    {
+      "id": "odysseyCitadel",
+      "samples": 63,
+      "meanMs": 0.7523809538947211,
+      "maxMs": 1.2999999523162842
+    },
+    {
+      "id": "gateBirdVortex",
+      "samples": 63,
+      "meanMs": 0.5238095219173129,
+      "maxMs": 1.100000023841858
+    },
+    {
+      "id": "birdVortex",
+      "samples": 63,
+      "meanMs": 0.5238095219173129,
+      "maxMs": 1.100000023841858
+    },
+    {
+      "id": "flowerActivities",
+      "samples": 63,
+      "meanMs": 0.27936508542015437,
+      "maxMs": 0.7000000476837158
+    },
+    {
+      "id": "tiger-neck",
+      "samples": 63,
+      "meanMs": 0.12380952683706133,
+      "maxMs": 0.30000007152557373
+    },
+    {
+      "id": "ray.intersectObjects",
+      "samples": 27302,
+      "meanMs": 0.09776573143689311,
+      "maxMs": 1
+    },
+    {
+      "id": "tramSystem",
+      "samples": 63,
+      "meanMs": 0.07936508314950126,
+      "maxMs": 0.20000004768371582
+    },
+    {
+      "id": "shipRepair",
+      "samples": 63,
+      "meanMs": 0.06825396560487293,
+      "maxMs": 0.20000004768371582
+    },
+    {
+      "id": "moebius",
+      "samples": 63,
+      "meanMs": 0.04444444747198196,
+      "maxMs": 0.19999992847442627
+    },
+    {
+      "id": "escort",
+      "samples": 63,
+      "meanMs": 0.020634921770247203,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "highlandGateFlock",
+      "samples": 63,
+      "meanMs": 0.015873015873015872,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "citySeaLake",
+      "samples": 63,
+      "meanMs": 0.014285713907272096,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "oldHarbor",
+      "samples": 63,
+      "meanMs": 0.012698413833739266,
+      "maxMs": 0.30000007152557373
+    },
+    {
+      "id": "swamp-lotus-leaf-boat.paddles",
+      "samples": 315,
+      "meanMs": 0.007936508314950125,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "flock",
+      "samples": 63,
+      "meanMs": 0.007936507936507936,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "citadelRange",
+      "samples": 63,
+      "meanMs": 0.00634920218634227,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "waterRouteFleet",
+      "samples": 63,
+      "meanMs": 0.0015873019657437763,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "canalJunctionBox.userData",
+      "samples": 63,
+      "meanMs": 0.0015873000735328311,
+      "maxMs": 0.09999990463256836
+    },
+    {
+      "id": "terraceBirds",
+      "samples": 63,
+      "meanMs": 0,
+      "maxMs": 0
+    }
+  ],
+  "perf": {
+    "fps": 10.3,
+    "frameMs": 97.07,
+    "samples": 60,
+    "windowFull": true,
+    "hitches": 10,
+    "worstMs": 343.7,
+    "calls": 6171,
+    "triangles": 5360965,
+    "programs": 388,
+    "geometries": 2765,
+    "textures": 112,
+    "bootMs": 28711
+  }
+}

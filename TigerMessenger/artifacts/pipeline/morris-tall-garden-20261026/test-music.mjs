@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import {createBgmOwnership} from '../../../src/audio/bgmOwnership.js';
+import {createMorrisGardenBgm} from '../../../src/audio/morrisGardenBgm.js';
+class Media {constructor(){this._volume=0;this.paused=true;this.currentTime=0;this.readyState=4;this.duration=62.47;this.ended=false;this.events={};}get volume(){return this._volume;}set volume(v){this._volume=v;}play(){this.paused=false;return Promise.resolve();}pause(){this.paused=true;}addEventListener(k,f){this.events[k]=f;}}
+const own=createBgmOwnership();let media,now=0;const music=createMorrisGardenBgm(own,(key,url)=>{media=new Media();media.src=url;return own.wrap(key,media);});
+let center={x:0,y:160,z:0},listener={x:0,y:170,z:0};const tick=(opts={})=>{now+=.2;return music.update({center,listener,now,...opts});};const checks=[];const check=(name,f)=>{f();checks.push(name);};
+check('outside region never starts',()=>{tick({listener:{x:200,y:0,z:0}});assert.equal(media,undefined);});
+for(let i=0;i<30;i++)tick();await new Promise(setImmediate);
+check('island entry claims existing music bus and fades in',()=>{assert.equal(own.owner,'morrisGarden');assert.equal(media.paused,false);assert.ok(media.volume>.25&&media.volume<=.32);assert.equal(media.loop,false);});
+media.currentTime=7;
+own.request('musicBox',true);tick();
+check('elder interactive music preempts without restarting island score',()=>{assert.equal(own.owner,'musicBox');assert.equal(media.paused,true);assert.equal(media.currentTime,7);});
+own.request('musicBox',false);tick();await new Promise(setImmediate);
+check('music resumes at saved position when elder stops',()=>{assert.equal(media.paused,false);assert.equal(media.currentTime,7);});
+own.request('tram',true);tick();
+check('tram has priority',()=>assert.equal(media.paused,true));own.request('tram',false);tick();await new Promise(setImmediate);
+own.request('batian',true);tick();check('combat has priority',()=>assert.equal(media.paused,true));own.request('batian',false);tick();await new Promise(setImmediate);
+tick({muted:true});check('M silences immediately',()=>{assert.equal(media.volume,0);assert.equal(media.paused,true);});for(let i=0;i<20;i++)tick();await new Promise(setImmediate);
+check('unmute resumes inside',()=>{assert.equal(media.paused,false);assert.ok(media.volume>.2);});
+const before=media.volume;tick({listener:{x:90,y:160,z:0}});check('exit begins gradual fade',()=>assert.ok(media.volume>0&&media.volume<before));for(let i=0;i<60;i++)tick({listener:{x:90,y:160,z:0}});
+check('exit completes and releases music ownership',()=>{assert.equal(media.paused,true);assert.equal(own.owner,null);assert.equal(media.volume,0);});
+for(let i=0;i<10;i++)tick();await new Promise(setImmediate);const beforeEndAttempts=music.snapshot().attempts;media.ended=true;tick();check("frame observes media end without restarting before ended event",()=>{assert.equal(music.snapshot().attempts,beforeEndAttempts);assert.equal(music.snapshot().done,true);});media.events.ended();tick();
+check('one play per visit does not restart on ended',()=>{assert.equal(own.owner,null);assert.equal(music.snapshot().done,true);});
+tick({listener:{x:90,y:160,z:0}});media.ended=true;tick();await new Promise(setImmediate);check('reenter allows new play-through',()=>{assert.equal(media.currentTime,0);assert.equal(music.snapshot().done,false);});
+console.log(JSON.stringify({passed:checks.length,checks},null,2));

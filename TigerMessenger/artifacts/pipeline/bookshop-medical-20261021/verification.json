@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "scope": "production medical controller CPU lifecycle, not complete game visual acceptance",
+  "stages": [
+    "pickup",
+    "transport",
+    "treatment",
+    "return",
+    "idle"
+  ],
+  "snapshot": {
+    "stage": "idle",
+    "patients": [],
+    "waiting": 0,
+    "collected": 3,
+    "delivered": 3,
+    "recovered": 3,
+    "trips": 2
+  },
+  "highestStep": 0.24000000000000593,
+  "firstTreatmentTime": 9.8,
+  "firstHealthyTime": 27.8,
+  "originalActorUUIDsPreserved": true
+}

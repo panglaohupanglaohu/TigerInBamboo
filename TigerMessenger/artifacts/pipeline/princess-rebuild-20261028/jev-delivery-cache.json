@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "8c8b24c1a85c5fce2ffd839f575e11c3bb4945a09da7ab8bffc4fe6286999a92",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.93
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.26,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.25,
+        "lighting": 0,
+        "navigation": 0.41,
+        "review": 0.34
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.82
+    }
+  },
+  "usage": {
+    "input_tokens": 671,
+    "output_tokens": 91,
+    "cost_usd": 0.000282,
+    "credits_remaining_usd": 4.889317
+  },
+  "elapsed_ms": 1484,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "target visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "full traversal and dynamic reins acceptance",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

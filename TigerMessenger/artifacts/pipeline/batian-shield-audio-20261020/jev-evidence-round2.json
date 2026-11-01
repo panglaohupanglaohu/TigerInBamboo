@@ -1,0 +1,38 @@
+{
+  "task": "Batian shield interception sound",
+  "observations": [
+    "Production main connects shieldHit callback; arsenal invokes only actual flagship ripple contact, not missed shots or escorts.",
+    "Sound has firm impact, low pressure and crystal resonance; not literal dripping or bomb rumble.",
+    "Shared-source offline WAV rendered 4.5seconds; peak .5727, clipped samples0; two singles and six rapid hits.",
+    "CPU real-three interception/ripple/callback checks passed; no new live game audio capture.",
+    "New real browser bus evidence: near accepted, immediate duplicate rejected,1000m rejected, moving pan+.75 to-.7412, max3 voices, tail cleanup0, M mute/unmute confirmed.",
+    "First burst accepted6/16; enabled equal-priority oldest shield voice recycling within same cap3; latest browser rerun in progress.",
+    "Normal bookshop sortie completed219 intercepted hits and11 attacks, but sound acceptance counters were added afterwards and not yet verified in game."
+  ],
+  "checks": [
+    {
+      "name": "shield contact callback and miss exclusion",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "offline waveform no clipping",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "live game mixed audio audition",
+      "required": false,
+      "passed": null
+    },
+    {
+      "name": "real browser isolated bus baseline",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Text triage only; cannot hear audio or certify live mix.",
+    "Keep collision, damage, shield energy, models and BGM rules unchanged."
+  ]
+}

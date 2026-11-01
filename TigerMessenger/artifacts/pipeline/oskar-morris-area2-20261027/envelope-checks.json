@@ -1,0 +1,53 @@
+{
+  "scope": "saved actual rail/obstacle world positions projected through original anchored island frame; CPU model of current Island rail depression, not fresh GPU/world survey",
+  "railSamples": 170,
+  "newAreaRailSamples": 69,
+  "minimumRoadCentreToRail": {
+    "distance": 17.764600246062336,
+    "routeS": 205.26452476582003,
+    "rail": [
+      42.77239899880157,
+      -5.360249342631846,
+      6.325807501154202
+    ]
+  },
+  "minimumCreekCentreToRail": {
+    "distance": 0.5902752551100163,
+    "creek": [
+      57.935324862296305,
+      14.590479672072394
+    ],
+    "rail": [
+      57.93322867596336,
+      -11.30777732083024,
+      15.18075120518072
+    ]
+  },
+  "minimumNewMouthToRail": {
+    "distance": 20.670411640163632,
+    "rail": [
+      64.32413387350681,
+      -14.754467589429481,
+      21.49956783475102
+    ]
+  },
+  "rawTerrainRailCoverSamples": 148,
+  "maxRawHeightAboveRail": 15.878835674059813,
+  "afterProductionRailKeepoutCoverSamples": 0,
+  "nearbySavedObstacles": 34,
+  "minimumRoadEdgeToSavedObstacle": {
+    "distance": -29.297836377094747,
+    "routeS": 228.10170387909133,
+    "obstacle": [
+      34.35328725948337,
+      -18.52168394212947,
+      -66.3606641007813
+    ],
+    "radius": 106
+  },
+  "passed": false,
+  "limitations": [
+    "saved obstacles unlabelled; cannot identify all current landmark actor envelopes",
+    "normal train envelope and current world navigation still require real game check"
+  ]
+}

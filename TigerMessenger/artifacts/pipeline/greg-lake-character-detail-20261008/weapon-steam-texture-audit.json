@@ -1,0 +1,18 @@
+{
+  "method": "Actual createWeaponEffects ant shot, 20 rounds, each followed by 2 simulated seconds update, then actual effects.dispose. DOM/audio APIs stubbed; no renderer. Each steam material.map has dispose event listener.",
+  "beforeDispose": {
+    "created": 120,
+    "disposed": 0,
+    "active": 0,
+    "pending": 0,
+    "children": 1
+  },
+  "afterDispose": {
+    "created": 120,
+    "disposed": 0,
+    "active": 0,
+    "children": 1
+  },
+  "uniqueTextures": 120,
+  "textureType": "CanvasTexture"
+}

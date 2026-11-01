@@ -1,0 +1,40 @@
+{
+  "revision": "salamander-four-limbs-1 / pale-green-bird-head-1",
+  "status": "CPU9/9 passed, frozen for GPU",
+  "viewedReference": "/var/folders/3r/lv0k4zt11352vnhcc_194qdw0000gn/T/codex-clipboard-cb44f832-2c84-4c16-a3ee-6f408e9d7463.png",
+  "birdLatestOverride": "Uniform original pale green D8FFE0 head/body/wings/tail; grey beak/black eyes retained. Only head uses pink internal mix emission, no visible whole-bird halo. Overrides previous multicolour proposal.",
+  "salamander": {
+    "identity": "Existing ribbonFish builder/key and swamp-glow-ribbonfish runtime object name retained for animation identity. Display-name metadata belongs to other agent.",
+    "count": 3,
+    "legs": 4,
+    "toesPerFoot": 3,
+    "legsGrouping": "front left/right at x1.04; rear left/right at x-.92; merged in original skin/outline batch, 0 extra draw calls",
+    "skin": "Original C3CBB0 body and D9D5B4 tail retained; exact original body/tail/head/eye prefix vertex positions/normals/colours unchanged",
+    "animation": "All added limb vertices share original baseX/baseZ and swim deformation; one random phase call and authored orbit/radius/speed/wave unchanged",
+    "light": "Only local head region; pink-purple emission default enabled .45; original body halo hidden",
+    "api": [
+      "actor.userData.headLight -> {enabled,intensity}",
+      "actor.userData.setHeadLight(false)",
+      "actor.userData.setHeadLight(true,.7)",
+      "actor.userData.salamanderLimbs -> 4 descriptors containing pair/side/toes/vertex range/anchor"
+    ],
+    "helper": "swampInternalGlow strength now owns persistent uniform, setStrength updates shader after compilation without reallocating."
+  },
+  "validation": {
+    "passed": 9,
+    "log": "validation-salamander-bird-final.txt",
+    "files": [
+      "tests/world/swampSalamander.test.mjs",
+      "tests/world/swampBirdColourGlow.test.mjs",
+      "tests/world/swampAnimalInk.test.mjs"
+    ],
+    "formalFactoryChecks": "3 actual animals; light off survives real update t0,.5,2,8,22; original paths exact; limbs follow authored vertex deformation; bird4 formal colours and original motion preserved"
+  },
+  "separateLegacyTestFailures": {
+    "log": "validation-salamander-v1.txt",
+    "tests": "swampRemainingFauna.test.mjs two failures",
+    "reason": "The old native swimmer selector name+parent now also selects existing flower boys reparented by concurrent authored feeding/shore-hop change. It includes two extra objects and selects last boy lacking coralSwimLimbs. Not caused by salamander changes. Parent notified; no B actor edits or fixture baseline overwrite performed."
+  },
+  "rollback": "before-salamander/buildRibbonFish.js.txt and swampInternalGlow.js.txt; apply only owned function/helper hunks. Previous bird-v3 saved as not adopted.",
+  "gpu": "Pending root real rendered four legs and head-light on/off; CPU source checks are not GPU approval."
+}

@@ -1,0 +1,23 @@
+{
+  "iteration": "shield-water-bowl-r1",
+  "observations": [
+    "User asked a little metal singing-bowl colour atop existing watery shield hit.",
+    "Production shared synth retains three wet skips and adds three quiet inharmonic sine modes 630/1690/3090Hz, 0.34/0.26/0.17s decay; first-mode amplitude0.033-0.041 versus wet0.31-0.43.",
+    "Voice duration0.28 to0.40 covers final0.36s source; original3voice budget/spatial routing/mute/event unchanged.",
+    "Actual browser same-production-source offline 48kHz 9event render peak0.8368887901 clipped0 tail0 duration4.4s.",
+    "This is a waveform check, not subjective hearing or fresh live shield-hit recording."
+  ],
+  "checks": [
+    {
+      "name": "browser waveform render no clipping or leftover tail",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "subjective audio acceptance",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "supersededWaveformCheck": "Unversioned browser synth was cached: old peak0.8369 is superseded by explicit-version render in browser-audio-check.json; source implementation itself remains."
+}

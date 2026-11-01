@@ -1,0 +1,28 @@
+{
+  "task": "FPS HUD no longer covers remote controls",
+  "observations": {
+    "status": "normal-game-verified",
+    "placement": "desktop left220/top8, pointer events none, layer12",
+    "normal_check": "normal-clearance.json",
+    "screenshot": "normal-remote-open.png",
+    "observed": "Remote opened through normal button; FPS rectangle has no intersection with toggle, left move, right look or five action buttons.",
+    "narrow_screen": "CSS hides FPS while remote open below700px; not visually tested in a resized viewport."
+  },
+  "checks": [
+    {
+      "name": "actual normal open menu DOM rectangle intersection",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "actual screenshot inspected",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Keep FPS measurement unchanged; layout only",
+    "No fabricated performance claims"
+  ],
+  "evidence_revision": "hud2"
+}

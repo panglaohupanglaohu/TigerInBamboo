@@ -1,0 +1,23 @@
+function buildRibbonFish(rnd) {
+  const g = new THREE.Group();
+  g.name = "swamp-glow-ribbonfish";
+  const skin=0xc3cbb0,geometry=faunaTube([[-1.9,0,0],[-.9,.02,0],[.8,.02,0],[1.9,.01,0]],u=>.012+.10*Math.pow(Math.sin(Math.PI*u),.6)+.065*Math.exp(-Math.pow((u-.90)/.12,2)),36,10);geometry.scale(1,1.65,.58);
+  const pieces=[{geometry,color:skin},coralEllipsoid([1.84,.016,0],[.13,.10,.064],skin),coralEllipsoid([-1.92,0,0],[.26,.135,.013],0xd9d5b4)];
+  for(const side of[-1,1])pieces.push(coralEllipsoid([1.78,.045,side*.060],[.023,.025,.012],0x435968));
+  const bodyMesh=coralFineActorBatch(pieces);bodyMesh.name='swamp-ribbon-fish-smooth-anatomy';
+  const pos=bodyMesh.geometry.attributes.position,baseX=new Float32Array(pos.count),baseZ=new Float32Array(pos.count);
+  for(let i=0;i<pos.count;i++){baseX[i]=pos.getX(i);baseZ[i]=pos.getZ(i);}
+  bodyMesh.geometry.computeBoundingSphere();bodyMesh.geometry.boundingSphere.radius+=.35;
+  // The outline follows the same animated positions, never a stale flat sheet.
+  for(const child of bodyMesh.children)if(child.userData.isOutline){child.geometry.setAttribute('position',pos);child.geometry.boundingSphere=bodyMesh.geometry.boundingSphere.clone();}
+  g.add(bodyMesh);
+  const halo = glowSprite(0xd8ddb9, .8, .24);
+  g.add(halo);
+  g.userData.halo = halo;
+  g.userData.bodyMesh = bodyMesh;
+  g.userData.baseX = baseX;
+  g.userData.baseZ = baseZ;
+  g.userData.coralFaunaVersion=1;
+  g.userData.phase = rnd() * Math.PI * 2;
+  return g;
+}

@@ -1,0 +1,21 @@
+{
+  "task": "Existing bookshop plaza steam train rescues injured residents to Hard to Find",
+  "observations": [
+    "Existing engine plus two wagons reused; cargo temporarily hidden. Pedestrian controller yields while patient awaits pickup, travels, receives18second treatment and returns. Existing ramp route shared by builder instead of floating straight to raised shop. CPU3 original identities,2 trips,max2patients,0.24m per0.1s,18seconds before health100; complete game observation pending."
+  ],
+  "checks": [
+    {
+      "name": "Production controller lifecycle and capacity CPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Normal game rescue route visual verification",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No publication, no new vehicles or residents. Text decision is not visual acceptance. Preserve other in-progress changes."
+  ]
+}

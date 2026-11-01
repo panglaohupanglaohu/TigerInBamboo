@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Info Graph（动态节点图 + 局部信息共享）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #b9c9c2; overflow: hidden;
+    font: 12px/1.45 -apple-system, "PingFang SC", sans-serif; color: #24312c; }
+  #app { display: flex; height: 100%; }
+  #view { flex: 1 1 auto; display: block; min-width: 0; }
+  #panel { flex: 0 0 268px; width: 268px; background: #2f3a36; color: #dfe8e3; border-left: 1px solid #24312c;
+    padding: 10px 12px; box-sizing: border-box; overflow-y: auto; }
+  .t { color: #8fa79d; font-size: 11px; margin: 10px 0 4px; border-bottom: 1px solid #3f4b46;
+    padding-bottom: 3px; }
+  .t:first-child { margin-top: 0; }
+  label { display: flex; gap: 6px; align-items: center; margin: 4px 0; }
+  label > span:first-child { width: 92px; color: #a9bdb4; flex: none; }
+  input[type=range] { width: 100%; }
+  .stat { font: 11px ui-monospace, monospace; color: #a8e6c4; }
+  .stat b { color: #fff; }
+  .warn { color: #ffbd8a; }
+  button { background: #3d4a45; color: #dbe5e0; border: 1px solid #4d5c56; border-radius: 3px;
+    padding: 3px 9px; font: 11px inherit; cursor: pointer; }
+  button:hover { background: #4a5952; }
+  #hint { position: fixed; left: 12px; bottom: 8px; color: #3c4a44; font: 11px ui-monospace, monospace; }
+</style>
+</head>
+<body>
+<div id="app">
+  <canvas id="view"></canvas>
+  <div id="panel">
+    <div class="t">Group</div>
+    <label><span>人数</span><input id="count" type="range" min="8" max="60" value="24" /></label>
+    <div class="stat" id="countV" style="margin:-2px 0 6px 90px">24</div>
+    <label><span>连边半径</span><input id="radius" type="range" min="8" max="34" value="19" /></label>
+    <div class="stat" id="radiusV" style="margin:-2px 0 6px 90px">1.9</div>
+    <label><span>聚拢系数</span><input id="coh" type="range" min="0" max="40" value="15" /></label>
+    <div class="stat" id="cohV" style="margin:-2px 0 6px 90px">1.5</div>
+    <label><span>扩散跳数</span><input id="hops" type="range" min="1" max="4" value="2" /></label>
+    <div class="stat" id="hopsV" style="margin:-2px 0 6px 90px">2</div>
+
+    <div class="t">Show</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px">
+      <button id="btnShare">共享：开</button>
+      <button id="btnReset">重来</button>
+      <button id="btnAB">跑 A/B</button>
+    </div>
+
+    <div class="t">Live</div>
+    <div class="stat" id="stats"></div>
+
+    <div class="t">A/B（10 秒，同 seed）</div>
+    <div class="stat" id="ab"></div>
+  </div>
+</div>
+<div id="hint">蓝点=单位 · 白线=相邻边（每帧重建）· 头顶小方块=该单位掌握的信息量（原文 883447205176238083）</div>
+<script type="module">
+import {
+  makeUnit, buildGraph, spreadInfo, stepUnits, cohesion, simulateAB, componentCount,
+} from '../src/infograph.js';
+
+const cv = document.getElementById('view');
+const ctx = cv.getContext('2d');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+let W = 0, H = 0;
+
+const cfg = { count: 24, radius: 1.9, cohGain: 1.5, hops: 2, share: true };
+const target = { x: 9.0, z: 1.6 };
+let units = [];
+let graph = null;
+let t0 = performance.now();
+let acc = 0;
+let frameN = 0;
+
+function seedUnits() {
+  units = [];
+  for (let i = 0; i < cfg.count; i++) {
+    const a = (i / cfg.count) * Math.PI * 2;
+    const r = 1.0 + ((i * 37) % 11) / 16;
+    units.push(makeUnit(i, Math.cos(a) * r, Math.sin(a) * r, 1.5 + ((i * 13) % 7) / 20));
+  }
+  t0 = performance.now();
+  acc = 0;
+  frameN = 0;
+}
+
+/* 世界 → 屏幕 */
+const WORLD = { x0: -5.0, x1: 11.0, z0: -4.6, z1: 4.6 };
+function mapper() {
+  const s = Math.min(W / (WORLD.x1 - WORLD.x0), H / (WORLD.z1 - WORLD.z0)) * 0.94;
+  const cx = W / 2 - ((WORLD.x0 + WORLD.x1) / 2) * s;
+  const cy = H / 2 - ((WORLD.z0 + WORLD.z1) / 2) * s;
+  return { s, X: (x) => cx + x * s, Y: (z) => cy + z * s };
+}
+
+function resize() {
+  const r = cv.getBoundingClientRect();
+  W = r.width; H = r.height;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function draw() {
+  const m = mapper();
+  // 地面
+  const grd = ctx.createLinearGradient(0, 0, 0, H);
+  grd.addColorStop(0, '#bccdc5');
+  grd.addColorStop(1, '#a9bdb4');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  // 目标旗
+  const tx = m.X(target.x), ty = m.Y(target.z);
+  ctx.strokeStyle = 'rgba(70,96,86,0.5)';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx, ty - 34); ctx.stroke();
+  ctx.fillStyle = 'rgba(214,72,60,0.9)';
+  ctx.beginPath();
+  ctx.moveTo(tx, ty - 34); ctx.lineTo(tx + 26, ty - 28); ctx.lineTo(tx, ty - 20);
+  ctx.closePath(); ctx.fill();
+
+  // 边
+  if (graph) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.42)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < units.length; i++) {
+      for (const j of units[i].neighbors) {
+        if (j < i) continue;
+        const a = units[i], b = units[j];
+        ctx.beginPath();
+        ctx.moveTo(m.X(a.x), m.Y(a.z));
+        ctx.lineTo(m.X(b.x), m.Y(b.z));
+        ctx.stroke();
+      }
+    }
+  }
+
+  // 单位：尺寸跟着世界比例走（否则缩放一变，人就变成地图上的一个像素点）
+  const us = m.s;                    // 1 世界单位 = us 像素
+  const bodyH = Math.max(9, us * 0.62);
+  for (const u of units) {
+    const x = m.X(u.x), y = m.Y(u.z);
+    const w2 = bodyH * 0.20;
+    ctx.fillStyle = 'rgba(40,60,52,0.16)';
+    ctx.beginPath(); ctx.ellipse(x, y + bodyH * 0.06, w2 * 1.3, bodyH * 0.11, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#3f76b5';
+    ctx.strokeStyle = '#eef4f8';
+    ctx.lineWidth = Math.max(1, bodyH * 0.055);
+    ctx.beginPath();
+    ctx.moveTo(x - w2, y); ctx.lineTo(x - w2 * 0.78, y - bodyH * 0.62);
+    ctx.lineTo(x + w2 * 0.78, y - bodyH * 0.62); ctx.lineTo(x + w2, y);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y - bodyH * 0.78, bodyH * 0.17, 0, 7); ctx.fill(); ctx.stroke();
+
+    // 信息量：头顶小方块（原文里的那个气泡）
+    if (u.info > 0.02) {
+      const bs = bodyH * (0.24 + u.info * 0.22);
+      const by = y - bodyH * (1.12 + u.info * 0.22);
+      ctx.fillStyle = 'rgba(255,222,120,' + (0.35 + u.info * 0.6).toFixed(2) + ')';
+      ctx.strokeStyle = 'rgba(120,90,20,0.55)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(x - bs / 2, by - bs / 2, bs, bs, bs * 0.22);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = 'rgba(60,48,14,0.9)';
+      ctx.font = 'bold ' + Math.max(6, bodyH * 0.24).toFixed(0) + 'px ui-monospace, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(u.info > 0.85 ? '!' : u.info > 0.4 ? '?' : '·', x, by + bodyH * 0.08);
+      ctx.textAlign = 'left';
+    }
+  }
+
+  // 角落统计
+  ctx.fillStyle = 'rgba(36,49,44,0.78)';
+  ctx.font = '11px ui-monospace, monospace';
+  ctx.fillText(`共享 ${cfg.share ? '开' : '关'} · ${cfg.count} 人 · 边 ${graph ? graph.edges : 0} · 连通块 ${graph ? graph.components : 0} · 孤立 ${graph ? graph.isolated : 0}`, 14, 22);
+}
+
+function updateStats() {
+  const c = cohesion(units);
+  const info = units.reduce((s, u) => s + u.info, 0) / units.length;
+  document.getElementById('stats').innerHTML = [
+    `平均两两距离 <b>${c.meanPairDist}</b>`,
+    `离质心最远 <b>${c.radius}</b>`,
+    `紧凑度 ${c.tight}`,
+    `平均信息量 ${info.toFixed(2)}`,
+    `帧 ${frameN} · ${((performance.now() - t0) / 1000).toFixed(1)}s`,
+  ].join('<br>');
+}
+
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  // 固定步长积分，保证 A/B 可比
+  acc += dt;
+  let guard = 0;
+  while (acc >= 1 / 60 && guard++ < 4) {
+    acc -= 1 / 60;
+    frameN++;
+    graph = buildGraph(units, cfg.radius);
+    if (cfg.share) {
+      // 信息源：离目标最近的 3 个人"看见了路"
+      const order = units.slice().sort((a, b) =>
+        Math.hypot(a.x - target.x, a.z - target.z) - Math.hypot(b.x - target.x, b.z - target.z));
+      const src = new Array(units.length).fill(0);
+      for (const u of order.slice(0, 3)) src[u.id] = 1;
+      spreadInfo(units, { hops: cfg.hops, decay: 0.55, sources: src });
+    } else {
+      for (const u of units) u.info *= 0.86;   // 没有共享就只剩自己记得的，逐渐淡忘
+    }
+    stepUnits(units, { target, dt: 1 / 60, share: cfg.share, cohGain: cfg.cohGain, noise: 0.32 });
+  }
+  draw();
+  if (frameN % 6 === 0) updateStats();
+  requestAnimationFrame(loop);
+}
+
+/* 控件 */
+const bindR = (id, key, scale) => {
+  const el = document.getElementById(id);
+  const out = document.getElementById(id + 'V');
+  el.addEventListener('input', () => {
+    cfg[key] = parseFloat(el.value) * scale;
+    if (out) out.textContent = cfg[key];
+    if (key === 'count') seedUnits();
+  });
+};
+bindR('count', 'count', 1); bindR('radius', 'radius', 0.1);
+bindR('coh', 'cohGain', 0.1); bindR('hops', 'hops', 1);
+
+document.getElementById('btnShare').onclick = (e) => {
+  cfg.share = !cfg.share;
+  e.target.textContent = '共享：' + (cfg.share ? '开' : '关');
+};
+document.getElementById('btnReset').onclick = () => seedUnits();
+document.getElementById('btnAB').onclick = () => {
+  const r = simulateAB({ count: cfg.count, seed: 11, radius: cfg.radius, cohGain: cfg.cohGain });
+  const q = r.report;
+  document.getElementById('ab').innerHTML = [
+    `平均两两距离 ${q.plainMeanDist} → <b>${q.shareMeanDist}</b>（<span class="ok">−${q.distDropPct}%</span>）`,
+    `离质心最远 ${q.plainRadius} → <b>${q.shareRadius}</b>（<span class="ok">−${q.radiusDropPct}%</span>）`,
+    `边数 ${q.plainEdges} → ${q.shareEdges}`,
+    `连通块 ${q.plainComps} → ${q.shareComps}`,
+  ].join('<br>');
+};
+
+addEventListener('resize', () => { resize(); draw(); });
+resize();
+seedUnits();
+requestAnimationFrame(loop);
+
+window.__info = { get units() { return units; }, get graph() { return graph; }, cfg, simulateAB, buildGraph, spreadInfo, cohesion, seedUnits };
+</script>
+</body>
+</html>

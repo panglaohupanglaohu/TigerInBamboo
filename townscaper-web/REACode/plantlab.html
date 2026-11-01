@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<title>Plant Lab — 点采样台阶 / 崖沿植被 / 平铺重复打散 / 距离场逐件生长</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #10171a; color: #dfe6e6; overflow: hidden;
+    font: 11px/1.5 ui-monospace, Menlo, monospace; }
+  #grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 8px; padding: 8px; height: calc(100% - 16px); box-sizing: border-box; }
+  .cell { position: relative; background: #0b1013; border: 1px solid #26333a; border-radius: 3px; overflow: hidden; }
+  .cell h2 { position: absolute; left: 8px; top: 6px; margin: 0; z-index: 3;
+    font: 600 11px/1.4 ui-monospace, Menlo, monospace; color: #cfe3e6; }
+  .cell .sub { position: absolute; left: 8px; top: 22px; z-index: 3; color: #7f9aa1; font-size: 10px; }
+  .cell canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+  .hud { position: absolute; left: 8px; bottom: 4px; right: 8px; z-index: 3; color: #9fb6bd;
+    white-space: pre-wrap; font-size: 10px; line-height: 1.4; text-shadow: 0 1px 2px #000;
+    background: linear-gradient(transparent, rgba(6,10,12,.9) 30%); padding-top: 10px; }
+  .hud b { color: #e6d9a8; font-weight: 600; }
+  .hud i { color: #8fd0a8; font-style: normal; }
+  .hud s { color: #e08b7a; text-decoration: none; }
+  #topbar { position: fixed; left: 12px; bottom: 2px; z-index: 9; color: #4d6167; font-size: 9px; }
+</style>
+</head>
+<body>
+<div id="topbar">1241046107125399552 · 1590669875869286400 · 1707490274425884929 · 1290997501332525056 · 1105131621391495176 · 1061229717582475264</div>
+<div id="grid">
+  <div class="cell">
+    <h2>① 每两个像素一条线：三种采样方式</h2>
+    <div class="sub">1241046107125399552 · 左=双线性 / 中=最近邻 / 右=最近邻 + UV 按 2 texel 台阶（原文做法）</div>
+    <canvas id="cv-tex"></canvas>
+    <div class="hud" id="hud-tex"></div>
+  </div>
+  <div class="cell">
+    <h2>② 只长在边上的东西：草带 / 崖沿灌木 / 花园带</h2>
+    <div class="sub">1590669875869286400 · 1707490274425884929 · 1290997501332525056 · 绿=草卡片 橙=崖沿灌木 深绿=花园球</div>
+    <canvas id="cv-plant"></canvas>
+    <div class="hud" id="hud-plant"></div>
+  </div>
+  <div class="cell">
+    <h2>③ 同一张贴图，四套设置打散平铺重复</h2>
+    <div class="sub">1061229717582475264 · 左=单套（周期 P 的自相关峰 = 1.000）/ 右=四套（缩放/翻转/相位各不同）</div>
+    <canvas id="cv-rep"></canvas>
+    <div class="hud" id="hud-rep"></div>
+  </div>
+  <div class="cell">
+    <h2>④ 距离场逐件生长 / 擦除</h2>
+    <div class="sub">1105131621391495176 · 阈值从 −R 走到 0（生长）/ 0 走回 −R（擦除），层间错开 55%</div>
+    <canvas id="cv-df"></canvas>
+    <div class="hud" id="hud-df"></div>
+  </div>
+</div>
+
+<script type="module">
+import { bakeAtlas, drawQuad, edgeWidths, audit as auditTex } from './src/texelsnap.js';
+import { findRims, placeGrassBand, placeRimShrubs, placeGardenPath, renderPlan, stats } from './src/edgeplant.js';
+import { makeCanyon } from './src/bouncegi.js';
+import { audit as auditRep, makePeriodicTexture, tileField, tileSingle, autocorrX, peakCorr } from './src/repeatbreak.js';
+import { buildOrnament, makeTimeline, renderFrame, inkCoverage, audit as auditDF } from './src/dfgrow.js';
+
+const out = {};
+window.__plantlab = out;
+
+function fit(cv) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const r = cv.getBoundingClientRect();
+  cv.width = Math.max(1, Math.round(r.width * dpr));
+  cv.height = Math.max(1, Math.round(r.height * dpr));
+  return { w: cv.width, h: cv.height, ctx: cv.getContext('2d') };
+}
+function bufToCanvas(img) {
+  const t = document.createElement('canvas');
+  t.width = img.w; t.height = img.h;
+  const id = t.getContext('2d').createImageData(img.w, img.h);
+  id.data.set(img.data);
+  t.getContext('2d').putImageData(id, 0, 0);
+  return t;
+}
+/** float 0..1 灰度 → RGBA */
+function grayToRGBA(src, w, h) {
+  const d = new Uint8ClampedArray(w * h * 4);
+  for (let i = 0; i < w * h; i++) {
+    const v = Math.max(0, Math.min(1, src[i])) * 255;
+    d[i * 4] = v; d[i * 4 + 1] = v; d[i * 4 + 2] = v; d[i * 4 + 3] = 255;
+  }
+  return { w, h, data: d };
+}
+
+// ---------- ① 采样三态 ----------
+const atlas = bakeAtlas({ size: 128, corner: 32 });
+function drawTex() {
+  const cv = document.getElementById('cv-tex');
+  const { w, h, ctx } = fit(cv);
+  ctx.fillStyle = '#0b1013'; ctx.fillRect(0, 0, w, h);
+  const tile = Math.floor(Math.min((w - 40) / 3, h - 96));
+  const modes = [['bilinear', '双线性'], ['point', '最近邻'], ['snap', '2 texel 台阶']];
+  modes.forEach(([mode, label], i) => {
+    const img = drawQuad(atlas, { w: 160, h: 160, mode, pxPerTexel: 9 });
+    const c = bufToCanvas(img);
+    const dx = 12 + i * (tile + 8);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(c, dx, 66, tile, tile);
+    ctx.fillStyle = '#7f9aa1';
+    ctx.font = '10px ui-monospace, Menlo, monospace';
+    ctx.fillText(label, dx, 60);
+  });
+}
+function hudTex() {
+  const a = auditTex({ pxPerTexel: 6 });
+  out.texAudit = a;
+  const g = Object.fromEntries(a.rows.map((r) => [r.mode, r]));
+  document.getElementById('hud-tex').innerHTML =
+    `10–90% 边缘宽度 <b>${g.bilinear.edgeMedianPx}px</b> → <i>${g.point.edgeMedianPx}px</i> → <i>${g.snap.edgeMedianPx}px</i>` +
+    `（参考片实测 <b>1.0px</b>）· 放大 1.3% 的漂移 ${g.bilinear.zoomJitter} / ${g.point.zoomJitter} / <i>${g.snap.zoomJitter}</i>\n` +
+    `图集 ${a.atlasSize}²，植物只占 ${a.corner}² 角落（${a.plantTexels} texel）—— 关键不是分辨率，是采样`;
+}
+
+// ---------- ② 边缘植被 ----------
+const field = makeCanyon({ res: 96, span: 16 });
+const rims = findRims(field);
+const grass = placeGrassBand(field, rims, { islandWidth: 16 });
+const shrubs = placeRimShrubs(field, rims, { islandWidth: 16 });
+const garden = placeGardenPath(field, { islandWidth: 16 });
+out.plants = { rims, grass, shrubs, garden };
+function drawPlant() {
+  const cv = document.getElementById('cv-plant');
+  const { w, h, ctx } = fit(cv);
+  const size = Math.min(w, h - 26);
+  const img = renderPlan(field, [
+    { items: garden.shrubs },
+    { items: shrubs },
+    { items: grass },
+  ], { w: size, h: size });
+  const c = bufToCanvas(img);
+  ctx.fillStyle = '#0b1013'; ctx.fillRect(0, 0, w, h);
+  ctx.drawImage(c, (w - size) / 2, 20, size, size);
+}
+function hudPlant() {
+  const g = stats(grass, rims, { islandWidth: 16, pitch: field.pitch, originHalf: (field.res * field.pitch) / 2 });
+  const s = stats(shrubs, rims, { islandWidth: 16, pitch: field.pitch, originHalf: (field.res * field.pitch) / 2 });
+  out.plantStats = { g, s, garden: { shrubs: garden.shrubs.length, pathWidth: +garden.pathWidth.toFixed(3) } };
+  document.getElementById('hud-plant').innerHTML =
+    `崖沿格 <b>${rims.length}</b> · 草卡片 <b>${g.count}</b>（中位尺寸 ${g.sizeMedian} = 岛宽 <i>${(g.sizeOverIsland * 100).toFixed(1)}%</i>，参考 1/18≈5.6%）边缘覆盖 ${g.rimCoverage}%\n` +
+    `崖沿灌木 <b>${s.count}</b>（${(s.sizeOverIsland * 100).toFixed(1)}%，参考 1/30≈3.3%）· 花园带 ${garden.shrubs.length} 颗球，带宽 ${garden.pathWidth}`;
+}
+
+// ---------- ③ 重复打散 ----------
+const tex = makePeriodicTexture({ size: 64, period: 16 });
+function drawRep() {
+  const cv = document.getElementById('cv-rep');
+  const { w, h, ctx } = fit(cv);
+  ctx.fillStyle = '#0b1013'; ctx.fillRect(0, 0, w, h);
+  const half = Math.floor(w / 2) - 6;
+  const size = Math.min(half, h - 96);
+  const a = tileSingle(tex, { w: 96, h: 96, worldW: 4 });
+  const b = tileField(tex, { w: 96, h: 96, worldW: 4 });
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(bufToCanvas(grayToRGBA(a.data, a.w, a.h)), 10, 66, size, size);
+  ctx.drawImage(bufToCanvas(grayToRGBA(b.data, b.w, b.h)), half + 2, 66, size, size);
+  ctx.fillStyle = '#7f9aa1'; ctx.font = '10px ui-monospace, Menlo, monospace';
+  ctx.fillText('单套', 10, 60);
+  ctx.fillText('四套（同贴图）', half + 2, 60);
+}
+function hudRep() {
+  const r = auditRep({});
+  out.repAudit = r;
+  document.getElementById('hud-rep').innerHTML =
+    `自相关峰 <b>${r.rows[0].peak}</b> (lag ${r.rows[0].lag}) → <i>${r.rows[1].peak}</i> (lag ${r.rows[1].lag})` +
+    ` —— 原来那个强周期峰被摊掉了 · 低频结构 std ${r.rows[0].std} → ${r.rows[1].std}（还在）`;
+}
+
+// ---------- ④ 距离场动画 ----------
+const orn = buildOrnament({ w: 260, h: 160 });
+const tl = makeTimeline(orn, { growMs: 900, eraseMs: 220, holdMs: 500 });
+out.df = { orn, tl };
+let dfT = 0, dfLast = 0;
+function drawDF(now) {
+  const cv = document.getElementById('cv-df');
+  const { w, h, ctx } = fit(cv);
+  if (!dfLast) dfLast = now;
+  dfT += (now - dfLast);
+  dfLast = now;
+  if (dfT > tl.total + 300) dfT = 0;
+  const t = Math.min(dfT, tl.total);
+  const frame = renderFrame(orn, tl, t, { stroke: 1.2 });
+  const c = bufToCanvas(frame);
+  ctx.fillStyle = '#0b1013'; ctx.fillRect(0, 0, w, h);
+  const scale = Math.min((w - 20) / frame.w, (h - 96) / frame.h);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(c, 10, 56, frame.w * scale, frame.h * scale);
+  // 时间条
+  const bw = w - 20;
+  ctx.fillStyle = '#1d282d'; ctx.fillRect(10, 56 + frame.h * scale + 8, bw, 4);
+  ctx.fillStyle = '#8fd0a8';
+  ctx.fillRect(10, 56 + frame.h * scale + 8, bw * (t / tl.total), 4);
+  ctx.fillStyle = '#7f9aa1'; ctx.font = '9px ui-monospace, Menlo, monospace';
+  ctx.fillText(`t=${Math.round(t)}ms / ${tl.total}ms  墨量 ${inkCoverage(frame).toFixed(1)}%`, 10, 56 + frame.h * scale + 26);
+  out.dfT = t;
+  requestAnimationFrame(drawDF);
+}
+function hudDF() {
+  const a = auditDF({ samples: 18 });
+  out.dfAudit = a;
+  document.getElementById('hud-df').innerHTML =
+    `${a.pieces} 件 / ${a.layers} 层 · 生长 ${a.growMs}ms · 擦除 <b>${a.eraseMs}ms</b>（比 <i>${a.eraseOverGrow}</i>:1，参考片实测 4.1:1）\n` +
+    `满格墨量 <b>${a.peakInk}%</b>（参考片 15.5%）· 曲线 ${a.curve.slice(0, 10).map((c) => c.ink.toFixed(0)).join('/')}…`;
+}
+
+function build() {
+  drawTex(); hudTex();
+  drawPlant(); hudPlant();
+  drawRep(); hudRep();
+  hudDF();
+  requestAnimationFrame(drawDF);
+  out.ready = true;
+}
+window.__plantlab.redraw = build;
+setTimeout(build, 30);
+window.addEventListener('resize', () => { clearTimeout(window.__rt); window.__rt = setTimeout(() => { drawTex(); drawPlant(); drawRep(); }, 250); });
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+root batch initial {"sources":54,"draws":9,"saved":45,"triangles":10368,"bytes":340200,"checked":6318,"maxError":6.782273295250113e-8}
+root batch final supported {"sources":54,"draws":9,"saved":45}
+✔ 54 semantic bank roots render in nine parent-local draws with identical world vertices and triangle count (5.635042ms)
+✔ root raycasts preserve exact original semantic hits and render batches cannot intercept them (0.679417ms)
+✔ batch bark shader retains original fragment code and source-local grain with actual projection (0.264666ms)
+✔ root road deformation, hidden root and spherical parent changes rebuild exact draws without shared geometry (14.459ms)
+✔ shared unrelated material stays visible and mismatched material roots never merge (0.308625ms)
+✔ production finish road fitting refreshes root render copies and retains source geometry nodes (161.310916ms)
+✔ dispose is idempotent and comparison flag leaves source rendering unchanged (0.23225ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2088.092041

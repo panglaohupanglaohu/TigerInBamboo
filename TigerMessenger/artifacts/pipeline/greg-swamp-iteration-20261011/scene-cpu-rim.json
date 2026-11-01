@@ -1,0 +1,48 @@
+{
+  "time": "2026-10-10T21:21:31.509Z",
+  "station": "rim",
+  "method": "60 real production frames; opt-in section CPU wall timings, not GPU timings",
+  "cpu": {
+    "enabled": true,
+    "samples": 60,
+    "means": {
+      "lightingWeather": 0.04166666865348815,
+      "physicsAndRide": 2.17499999801318,
+      "audio": 0.045000002781550086,
+      "sceneUpdates": 56.56499999165534,
+      "robotsAndGuardian": 6.32000000079473,
+      "cameraWaterAndStory": 0.15666667222976696,
+      "questsAndUI": 0.1433333297570547,
+      "cullingAndLights": 0.10166666706403096,
+      "render": 31.679999999205272
+    }
+  },
+  "scenes": [
+    {
+      "id": "messenger",
+      "samples": 61,
+      "meanMs": 56.5491803220061,
+      "maxMs": 66.20000004768372
+    },
+    {
+      "id": "saihoji",
+      "samples": 61,
+      "meanMs": 0.014754097969805608,
+      "maxMs": 0.10000002384185791
+    }
+  ],
+  "perf": {
+    "fps": 10.2,
+    "frameMs": 97.7,
+    "samples": 60,
+    "windowFull": true,
+    "hitches": 3,
+    "worstMs": 343.6,
+    "calls": 6855,
+    "triangles": 5832617,
+    "programs": 399,
+    "geometries": 2786,
+    "textures": 112,
+    "bootMs": 28642
+  }
+}

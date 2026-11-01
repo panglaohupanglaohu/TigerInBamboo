@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "ab543feded2fca08118ed6b4cd0ef3f46a7b7b7d6dea86ada253e3047d667008",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.69,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.04,
+        "lighting": 0,
+        "navigation": 0.21,
+        "review": 0.75
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.51
+    }
+  },
+  "usage": {
+    "input_tokens": 770,
+    "output_tokens": 91,
+    "cost_usd": 0.000324,
+    "credits_remaining_usd": 4.941577
+  },
+  "elapsed_ms": 2377,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Latest contact change live sync",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

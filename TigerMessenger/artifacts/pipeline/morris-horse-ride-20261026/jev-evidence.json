@@ -1,0 +1,39 @@
+{
+  "task": "Morris bridge-before-walking view, original horse riding, two object target sheets",
+  "evidence_revision": "morris-route-r30-20261026",
+  "observations": [
+    "Actually viewed current normal game: broad pre-bridge reverse bends, exposed actual arch flank and creek from a 1.7m walking-eye camera on the pre-bridge route. Near bank and plant sight corridor were corrected after real failure, not camera-only acceptance.",
+    "Road length186.41m; pre-bridge55.95m;width3.2m;max actual radial grade0.1517;14 geometry/physical-support/clearance checks pass.",
+    "Original horse rider added via normal F; actual normal setup used explicit test-start UI to move courier near existing horse, not claimed walked arrival. F mounts, W moves, Shift peak5.7916m/s and6.2997m travel, A changes yaw, S reverses, F dismounts.11 local controller/bridge-side boundary checks pass; normal console errors empty.",
+    "Existing legs now have knee articulation; original procedural walk/trot/canter, smooth acceleration/deceleration, speed-limited steering and rider pelvis-to-saddle pose. Ghost of Tsushima requested as feel reference only; no copied animation assets or full observed-video claim.",
+    "Two generated object target sheets visually reviewed, using actual overview/bridge/castle/horse identities plus accepted Morris verdure language; proposals explicitly distinct from runtime evidence.",
+    "Complete mounted uphill loop, actual normal full bridge crossing and multi-angle animation acceptance remain unverified. No FPS/audio judgement, no commit/push."
+  ],
+  "checks": [
+    {
+      "name": "current normal bridge view and horse F/movement test",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "25 local affected checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "two target sheets actually generated and inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full mounted mountain circuit",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "JEV compact text only not image/audio/navigation verification",
+    "preserve original identities, other regions and original music",
+    "do not publish or push"
+  ]
+}

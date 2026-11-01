@@ -1,0 +1,45 @@
+{
+  "task": "Saihoji R8 coordinated opening after actual ground proof",
+  "observations": {
+    "source": "normal-r7-insertion/ground JSON and actual screenshot inspection",
+    "actual": [
+      "Normal R7 actually reached9 shield contacts, Kun rise,6 rappelling, then18 original heavy troops ground with9 shield and9 gun roles",
+      "Gun/sword hits remained0 because flagship had already killed all50 original defenders before ground troops landed",
+      "Screenshot shows real Kun/boats/ropes but framing too wide; no close shield/weapon visual acceptance"
+    ],
+    "repair": [
+      "After actual flagship first strike, bounded cover now spans combat phases until first actual heavy landing, preventing same-frame bomb queue and premature wipeout",
+      "First real strike still required; troop insertion still requires actual physical contact; emergency retreats unchanged; no revived actors/extra energy",
+      "Re-evaluate hold immediately after pending opening fires before queuing next weapon; closer moss-only observer camera"
+    ],
+    "tests": "20 focused tests pass; actual production snapshot cycle regression retained; no new actors or scene"
+  },
+  "checks": [
+    {
+      "name": "R7 actual18 original troops landed,9shield/9gun",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "20 focused tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "R8 actual live enemy ground gun/sword combat",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional injured physical evacuation/treatment and full reset",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No injected hits/stages",
+    "Do not describe quiet formation as actual attack proof",
+    "Preserve original terrain/tree/rail and actors"
+  ],
+  "evidence_revision": "r8"
+}

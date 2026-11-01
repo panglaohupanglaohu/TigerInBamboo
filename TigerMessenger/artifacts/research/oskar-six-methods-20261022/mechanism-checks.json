@@ -1,0 +1,161 @@
+{
+  "scope": "Self-authored CPU mechanism exercises only; no author source, rendering, performance or production acceptance",
+  "triangle_hex": {
+    "cells": 37,
+    "six_neighbor_reciprocity": true,
+    "six_rotations": true
+  },
+  "river_wfc": {
+    "cells": [
+      [
+        -2,
+        0
+      ],
+      [
+        -2,
+        1
+      ],
+      [
+        -2,
+        2
+      ],
+      [
+        -1,
+        -1
+      ],
+      [
+        -1,
+        0
+      ],
+      [
+        -1,
+        1
+      ],
+      [
+        -1,
+        2
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        -2
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        -2
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        2,
+        0
+      ]
+    ],
+    "river_masks": [
+      1,
+      0,
+      0,
+      34,
+      24,
+      0,
+      0,
+      6,
+      17,
+      0,
+      0,
+      0,
+      0,
+      9,
+      34,
+      48,
+      0,
+      12,
+      4
+    ],
+    "heights": [
+      0,
+      1,
+      2,
+      0,
+      0,
+      1,
+      2,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "source": 0,
+    "sink": 18,
+    "river_cells": 10,
+    "observations": 42,
+    "backtracks": 29,
+    "checks": "reciprocal ports, source-outlet connectivity, no isolated cycles, mismatch rejection, height step <=1"
+  },
+  "shore_wave": {
+    "periodic_samples": 301,
+    "opposing_direction_counterexample_length": 0.0
+  },
+  "tree_cloud_impostor": {
+    "view_index_wrap_checks": 361,
+    "note": "View interpolation is project exercise; author encoding unproven; not a GPU stability check"
+  },
+  "binary_tree_packer": {
+    "seed": 176495,
+    "requested": 128,
+    "accepted": 111,
+    "candidate_attempts": 4544,
+    "linear_item_tests": 102936,
+    "tree_item_tests": 43984,
+    "tree_node_bounds_tests": 18924,
+    "combined_validation_ms": 23.232,
+    "checks": "query parity incl. split/crossing/contact; all placements bounded/nonoverlapping; deterministic seed",
+    "scope": "Independent 2D exercise; combined validation timing is NOT a tree speedup benchmark"
+  },
+  "inverted_hull": {
+    "normal_only_does_not_encode_shadow": true,
+    "occluded_light_alpha": 0,
+    "note": "Mathematical masking counterexample, not a rendered hull or shadow-map test"
+  }
+}

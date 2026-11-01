@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "45621021be2afb155e14612d6e8ca80b4884fa78d1ec767264427c6399a3e329",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.82
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.99,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0,
+        "navigation": 0,
+        "review": 0.99
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.65
+    }
+  },
+  "usage": {
+    "input_tokens": 880,
+    "output_tokens": 91,
+    "cost_usd": 0.00037,
+    "credits_remaining_usd": 4.947627
+  },
+  "elapsed_ms": 1494,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Latest stronger bombing rendered acceptance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

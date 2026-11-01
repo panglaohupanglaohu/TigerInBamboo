@@ -1,0 +1,252 @@
+{
+  "seed": 7711,
+  "departure": "original",
+  "sampleSpan": [
+    0,
+    150
+  ],
+  "step": 0.25,
+  "buildAndMeasureMs": 9812.801625,
+  "worldScale": 0.5,
+  "method": "BVH triangle AABB squared-distance pruning; exact vertex-to-triangle, nine edge-to-edge distances and triangle SAT for intersections",
+  "pairs": [
+    {
+      "boat": 0,
+      "actor": "feeding-child",
+      "samples": 601,
+      "minimumSurfaceDistanceInner": 3.889711193127377,
+      "minimumSurfaceDistanceWorld": 1.9448555965636884,
+      "triangleTests": 77155,
+      "closest": {
+        "time": 128.25,
+        "boatMesh": "swamp-flower-boat-cup",
+        "actorMesh": "swamp-boy-head-hair",
+        "boatTriangle": [
+          [
+            -1.9213844656620767,
+            25.600019110998883,
+            -1.5030988589864958
+          ],
+          [
+            -1.9212135587533095,
+            25.572419611118974,
+            -1.50313285448432
+          ],
+          [
+            -2.0617523593965186,
+            25.616492034595304,
+            -1.67953269635197
+          ]
+        ],
+        "actorTriangle": [
+          [
+            1.055384160862784,
+            25.491697742224147,
+            -4.0169286531306465
+          ],
+          [
+            1.0281823158399546,
+            25.4291190340792,
+            -4.038446834098991
+          ],
+          [
+            1.0752463416263167,
+            25.40836076076085,
+            -3.978097448590582
+          ]
+        ]
+      }
+    },
+    {
+      "boat": 1,
+      "actor": "feeding-child",
+      "samples": 601,
+      "minimumSurfaceDistanceInner": 11.269680132898898,
+      "minimumSurfaceDistanceWorld": 5.634840066449449,
+      "triangleTests": 157385,
+      "closest": {
+        "time": 126.25,
+        "boatMesh": "flower-paddle-blade",
+        "actorMesh": "swamp-boy-head-hair",
+        "boatTriangle": [
+          [
+            -9.258304416180666,
+            24.773944750647253,
+            0.44380094053175867
+          ],
+          [
+            -9.317462272264363,
+            24.76651348380345,
+            0.3537851990048697
+          ],
+          [
+            -9.320211235955872,
+            24.802932216901986,
+            0.37833237976890943
+          ]
+        ],
+        "actorTriangle": [
+          [
+            1.3213587906920634,
+            25.453711642101567,
+            -3.4784353524224505
+          ],
+          [
+            1.264120717544452,
+            25.467801898149396,
+            -3.531475384689703
+          ],
+          [
+            1.3325375364151295,
+            25.38831696238096,
+            -3.498363078914061
+          ]
+        ]
+      }
+    },
+    {
+      "boat": 2,
+      "actor": "feeding-child",
+      "samples": 601,
+      "minimumSurfaceDistanceInner": 1.750318587095746,
+      "minimumSurfaceDistanceWorld": 0.875159293547873,
+      "triangleTests": 54713,
+      "closest": {
+        "time": 140.75,
+        "boatMesh": "flower-paddle-blade",
+        "actorMesh": "swamp-feeder-arm--1-lower",
+        "boatTriangle": [
+          [
+            3.5493736627714956,
+            24.699599033746143,
+            -11.668958914865215
+          ],
+          [
+            3.5718885417603783,
+            24.786095094419345,
+            -11.646387194130316
+          ],
+          [
+            3.557871277356444,
+            24.777077485949256,
+            -11.663398094238635
+          ]
+        ],
+        "actorTriangle": [
+          [
+            3.6043460107205347,
+            25.008227872626822,
+            -9.899576311786712
+          ],
+          [
+            3.6297513389568956,
+            25.042622349491392,
+            -9.915936148755543
+          ],
+          [
+            3.6736149116209726,
+            25.031965297809208,
+            -9.890620737285998
+          ]
+        ]
+      }
+    },
+    {
+      "boat": 3,
+      "actor": "feeding-child",
+      "samples": 601,
+      "minimumSurfaceDistanceInner": 9.188201052591102,
+      "minimumSurfaceDistanceWorld": 4.594100526295551,
+      "triangleTests": 105982,
+      "closest": {
+        "time": 19.25,
+        "boatMesh": "flower-paddle-blade",
+        "actorMesh": "swamp-feeder-arm--1-lower",
+        "boatTriangle": [
+          [
+            -8.458638702246516,
+            25.542656458028915,
+            -9.713808775003734
+          ],
+          [
+            -8.480194491009563,
+            25.59847905518098,
+            -9.663557124747582
+          ],
+          [
+            -8.474533068597905,
+            25.55419586513153,
+            -9.670796781399929
+          ]
+        ],
+        "actorTriangle": [
+          [
+            0.3766175957661653,
+            25.327756079964374,
+            -7.193936101598774
+          ],
+          [
+            0.38261529102947434,
+            25.36611365213336,
+            -7.21899434364734
+          ],
+          [
+            0.401445862007027,
+            25.35126231533281,
+            -7.246354710300321
+          ]
+        ]
+      }
+    },
+    {
+      "boat": 4,
+      "actor": "feeding-child",
+      "samples": 601,
+      "minimumSurfaceDistanceInner": 3.4879187335176915,
+      "minimumSurfaceDistanceWorld": 1.7439593667588458,
+      "triangleTests": 50522,
+      "closest": {
+        "time": 99.5,
+        "boatMesh": "flower-paddle-blade",
+        "actorMesh": "swamp-boy-head-hair",
+        "boatTriangle": [
+          [
+            12.349017958137846,
+            25.624594473432673,
+            -7.0688823857328
+          ],
+          [
+            12.405097237069233,
+            25.620826128735818,
+            -7.014596505540553
+          ],
+          [
+            12.393161672835905,
+            25.635301778502736,
+            -7.05574821417313
+          ]
+        ],
+        "actorTriangle": [
+          [
+            9.028097235216773,
+            25.482869940186557,
+            -5.972640684292042
+          ],
+          [
+            9.022279288088962,
+            25.506131281581748,
+            -5.9328276637168
+          ],
+          [
+            9.051157297291704,
+            25.418321750287507,
+            -5.9521264961341
+          ]
+        ]
+      }
+    }
+  ],
+  "containment": "not checked; positive surface distance does not exclude a closed mesh entirely contained inside another",
+  "continuous": "discrete samples only; no swept-time collision certification",
+  "GPU": "not checked; no production source modified"
+}

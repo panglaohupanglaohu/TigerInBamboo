@@ -1,0 +1,32 @@
+✔ authored excavation with no tread below never lands on the removed planet shell (0.620125ms)
+✔ finite actual tread still catches the descending traveller in an excavation (0.102875ms)
+✔ entrance bridge closes the rim gap outside the stair head only (0.597208ms)
+✔ without the guard, stepping off the rim inward falls into the crater (the reported bug) (69.800917ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 0 (654.086542ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 0.9 (538.8455ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 2 (533.286791ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 3.1 (516.08ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 4 (488.396292ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 5.2 (621.724042ms)
+✔ full rim lap at radius 38.8 counter-clockwise completes, through the entrance, without dropping (212.792375ms)
+✔ full rim lap at radius 38.8 clockwise completes, through the entrance, without dropping (195.356625ms)
+✔ full rim lap at radius 39.4 counter-clockwise completes, through the entrance, without dropping (198.241541ms)
+✔ full rim lap at radius 39.4 clockwise completes, through the entrance, without dropping (196.034166ms)
+✔ full rim lap at radius 39.9 counter-clockwise completes, through the entrance, without dropping (198.44125ms)
+✔ full rim lap at radius 39.9 clockwise completes, through the entrance, without dropping (198.948875ms)
+✔ authored bank route (entry link, three terraces, flights) is still walkable with the guard on (178.905167ms)
+✔ swampEdgeGuard=0 style disable leaves physics untouched (56.387125ms)
+✔ real V7 promenade overlap no longer steals support from feet on the coral rim (10.472209ms)
+✔ feet below rim retain lower promenade and entrance/water are not captured (7.21525ms)
+✔ production collision substeps keep a standing player on the actual new rim (13.126334ms)
+✔ all three real bank midpoints stay supported through gravity instead of falling to old V7 terrain (191.957333ms)
+✔ real lower tread remains available beneath an upper terrace, late quay registration stays dynamic (1.773167ms)
+✔ production controller and gravity can enter from the outer rim and descend actual stairs with guard and steer active (2257.915167ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7299.142292

@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "topologyBefore": "17ce2a5eb7dce9f789e8d14aa2cb93402f7a000ed93115e3841974ebdd827b1d",
+  "topologyAfter": "17ce2a5eb7dce9f789e8d14aa2cb93402f7a000ed93115e3841974ebdd827b1d",
+  "allNonColourAttributesIdentical": true,
+  "placementsIdentical": true,
+  "childrenAndDressingIdentical": true,
+  "changed": 41040,
+  "unchanged": 207042,
+  "warm": 27603,
+  "cool": 74331,
+  "colourChangedFraction": 0.16542917261228143,
+  "coverageNote": "vertex classification only, not measured rendered area or target RGB sampling",
+  "masses": [
+    {
+      "id": "back-left",
+      "vertices": 35208,
+      "changed": 4905,
+      "fraction": 0.13931492842535786,
+      "positionHash": "8c9dcfe4f6740251a7bc41ccf3059447d249cdedd548d932fda57b7da3635573"
+    },
+    {
+      "id": "back-right",
+      "vertices": 71586,
+      "changed": 14895,
+      "fraction": 0.20807141061101334,
+      "positionHash": "30a376460cf99594daf14d536dbc173c3fd48807935118340e9cd39e42eb9762"
+    },
+    {
+      "id": "back-tower",
+      "vertices": 22299,
+      "changed": 3429,
+      "fraction": 0.1537737118256424,
+      "positionHash": "ecddbdbe2f281708cf09f8c4c4bb3593f93a9368033422a453ebb4ff5afc991e"
+    },
+    {
+      "id": "front-left",
+      "vertices": 49680,
+      "changed": 8496,
+      "fraction": 0.17101449275362318,
+      "positionHash": "9e82827280988d749476e87f67c9b92f0fd4f0f4d3da5d9a48b5df66bbc5251e"
+    },
+    {
+      "id": "front-right",
+      "vertices": 43179,
+      "changed": 7137,
+      "fraction": 0.16528868199819358,
+      "positionHash": "a4acfaa1970e44e590a097209e2c46f65b93ada556b4eefc60b419733fcfeda9"
+    },
+    {
+      "id": "bay-1",
+      "vertices": 8478,
+      "changed": 960,
+      "fraction": 0.11323425336164189,
+      "positionHash": "b575178b577f3b61bfede5fdcf64efccc604a2ea88b549df97d9732cca70605f"
+    },
+    {
+      "id": "bay-2",
+      "vertices": 6864,
+      "changed": 384,
+      "fraction": 0.055944055944055944,
+      "positionHash": "55b520cd95a01613ec6ca50e523881e8fd28a62608ac36e71097c6e7b975a13a"
+    },
+    {
+      "id": "bay-3",
+      "vertices": 3564,
+      "changed": 0,
+      "fraction": 0,
+      "positionHash": "33cea18906ea406cd00b104cedfe955c26a32eee05084031b8f6f6bbd5393e05"
+    },
+    {
+      "id": "bay-4",
+      "vertices": 7224,
+      "changed": 834,
+      "fraction": 0.11544850498338871,
+      "positionHash": "5257f00a1f33cddb16677ae16d8ea0c625f4d3e9e53781890a5b39de2f03728b"
+    }
+  ]
+}

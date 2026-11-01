@@ -1,0 +1,5006 @@
+{
+  "seed": 7711,
+  "departure": "original",
+  "proxyCreated": false,
+  "period": {
+    "from": 0,
+    "to": 150,
+    "step": 0.25,
+    "frames": 601
+  },
+  "coordinates": "inner local; multiply by measured uniform world scale to world metres",
+  "innerWorldScale": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "boundsMethod": "current visible mesh geometry bounding boxes transformed through actual matrixWorld; signed axis-separation lower bound, negative value is possible contact not proof of triangle intersection",
+  "pairs": [
+    {
+      "boat": 0,
+      "actor": "whale-0",
+      "minSignedMeshAABBGap": 0.3676471124632661,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 148.75,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -5.165824160055373,
+        25.135698724837763,
+        0.4157916182186583
+      ],
+      "actorPosition": [
+        3.358579980427307,
+        24.5936011034774,
+        -6.508533660340872
+      ]
+    },
+    {
+      "boat": 0,
+      "actor": "whale-1",
+      "minSignedMeshAABBGap": 1.1160646842671427,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 62.5,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-continuous-body"
+      ],
+      "boatPosition": [
+        -3.513741389902135,
+        25.026711324454443,
+        0.08717192330033377
+      ],
+      "actorPosition": [
+        2.0165812974663595,
+        23.13,
+        -6.3429370767155575
+      ]
+    },
+    {
+      "boat": 0,
+      "actor": "escort-whale",
+      "minSignedMeshAABBGap": 1.4864534941905712,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 66.5,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -3.738831108886564,
+        25.181459619391028,
+        0.13194505217634855
+      ],
+      "actorPosition": [
+        2.5197922290461165,
+        24.159746195589438,
+        4.331734529816931
+      ]
+    },
+    {
+      "boat": 0,
+      "actor": "original-longship",
+      "minSignedMeshAABBGap": 0.8477987925275317,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 63.5,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "f457b86b-df71-4d6e-8eed-4ae23451d516"
+      ],
+      "boatPosition": [
+        -3.505850185937563,
+        25.01822154299337,
+        0.08560226523826503
+      ],
+      "actorPosition": [
+        8.271939201449799,
+        25.050536784892902,
+        10.18576675690607
+      ]
+    },
+    {
+      "boat": 0,
+      "actor": "original-dock-ship",
+      "minSignedMeshAABBGap": 0.15434346296382984,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 47,
+      "parts": [
+        "flower-paddle-blade",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ],
+      "boatPosition": [
+        -5.455710222619405,
+        25.133760075703414,
+        0.4734535411936377
+      ],
+      "actorPosition": [
+        -6.455017679273978,
+        24.970310488962973,
+        12.423073160867256
+      ]
+    },
+    {
+      "boat": 0,
+      "actor": "repair-barge",
+      "minSignedMeshAABBGap": 12.293969977822748,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 47,
+      "parts": [
+        "flower-paddle-blade",
+        "3ab031a7-9700-436e-86b5-430a5b1c8949"
+      ],
+      "boatPosition": [
+        -5.455710222619405,
+        25.133760075703414,
+        0.4734535411936377
+      ],
+      "actorPosition": [
+        -11.516575774226522,
+        26.34,
+        18.887862744503238
+      ]
+    },
+    {
+      "boat": 0,
+      "actor": "feeding-child",
+      "minSignedMeshAABBGap": -0.28701117074791593,
+      "overlapSamples": 9,
+      "overlapTimes": [
+        128.5,
+        128.75,
+        129,
+        129.25,
+        129.5,
+        129.75,
+        130,
+        130.25,
+        130.5
+      ],
+      "atTime": 129,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-feeder-leg-1-lower"
+      ],
+      "boatPosition": [
+        -3.5073871593887014,
+        25.010370097876525,
+        0.08590798826603063
+      ],
+      "actorPosition": [
+        -0.3657948214205362,
+        25.120015098325077,
+        -2.3605547146717285
+      ]
+    },
+    {
+      "boat": 1,
+      "actor": "whale-0",
+      "minSignedMeshAABBGap": 6.800732642934721,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 90.25,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -14.756913058093497,
+        25.138816358417106,
+        -0.2001337729309245
+      ],
+      "actorPosition": [
+        3.0922855747852913,
+        21.6,
+        -6.292594456884965
+      ]
+    },
+    {
+      "boat": 1,
+      "actor": "whale-1",
+      "minSignedMeshAABBGap": 8.574918794547896,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 60.75,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -14.949777821778445,
+        25.169757776046737,
+        0.2276766933057206
+      ],
+      "actorPosition": [
+        1.7256596707767886,
+        23.13,
+        -5.75419082890482
+      ]
+    },
+    {
+      "boat": 1,
+      "actor": "escort-whale",
+      "minSignedMeshAABBGap": 9.451456027806278,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 92,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -14.755041175073366,
+        25.16809810500531,
+        -0.20428596295403656
+      ],
+      "actorPosition": [
+        2.003704243731176,
+        24.411641287838876,
+        5.981873875135311
+      ]
+    },
+    {
+      "boat": 1,
+      "actor": "original-longship",
+      "minSignedMeshAABBGap": 9.19391747961813,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 89.5,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "f457b86b-df71-4d6e-8eed-4ae23451d516"
+      ],
+      "boatPosition": [
+        -14.759204564659896,
+        25.06985258799159,
+        -0.19505077864091214
+      ],
+      "actorPosition": [
+        8.27615154836772,
+        25.015566256928135,
+        10.189649527429212
+      ]
+    },
+    {
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "minSignedMeshAABBGap": -0.627277141266724,
+      "overlapSamples": 601,
+      "overlapTimes": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1,
+        1.25,
+        1.5,
+        1.75,
+        2,
+        2.25,
+        2.5,
+        2.75,
+        3,
+        3.25,
+        3.5,
+        3.75,
+        4,
+        4.25,
+        4.5,
+        4.75,
+        5,
+        5.25,
+        5.5,
+        5.75,
+        6,
+        6.25,
+        6.5,
+        6.75,
+        7,
+        7.25,
+        7.5,
+        7.75,
+        8,
+        8.25,
+        8.5,
+        8.75,
+        9,
+        9.25,
+        9.5,
+        9.75,
+        10,
+        10.25,
+        10.5,
+        10.75,
+        11,
+        11.25,
+        11.5,
+        11.75,
+        12,
+        12.25,
+        12.5,
+        12.75,
+        13,
+        13.25,
+        13.5,
+        13.75,
+        14,
+        14.25,
+        14.5,
+        14.75,
+        15,
+        15.25,
+        15.5,
+        15.75,
+        16,
+        16.25,
+        16.5,
+        16.75,
+        17,
+        17.25,
+        17.5,
+        17.75,
+        18,
+        18.25,
+        18.5,
+        18.75,
+        19,
+        19.25,
+        19.5,
+        19.75,
+        20,
+        20.25,
+        20.5,
+        20.75,
+        21,
+        21.25,
+        21.5,
+        21.75,
+        22,
+        22.25,
+        22.5,
+        22.75,
+        23,
+        23.25,
+        23.5,
+        23.75,
+        24,
+        24.25,
+        24.5,
+        24.75,
+        25,
+        25.25,
+        25.5,
+        25.75,
+        26,
+        26.25,
+        26.5,
+        26.75,
+        27,
+        27.25,
+        27.5,
+        27.75,
+        28,
+        28.25,
+        28.5,
+        28.75,
+        29,
+        29.25,
+        29.5,
+        29.75,
+        30,
+        30.25,
+        30.5,
+        30.75,
+        31,
+        31.25,
+        31.5,
+        31.75,
+        32,
+        32.25,
+        32.5,
+        32.75,
+        33,
+        33.25,
+        33.5,
+        33.75,
+        34,
+        34.25,
+        34.5,
+        34.75,
+        35,
+        35.25,
+        35.5,
+        35.75,
+        36,
+        36.25,
+        36.5,
+        36.75,
+        37,
+        37.25,
+        37.5,
+        37.75,
+        38,
+        38.25,
+        38.5,
+        38.75,
+        39,
+        39.25,
+        39.5,
+        39.75,
+        40,
+        40.25,
+        40.5,
+        40.75,
+        41,
+        41.25,
+        41.5,
+        41.75,
+        42,
+        42.25,
+        42.5,
+        42.75,
+        43,
+        43.25,
+        43.5,
+        43.75,
+        44,
+        44.25,
+        44.5,
+        44.75,
+        45,
+        45.25,
+        45.5,
+        45.75,
+        46,
+        46.25,
+        46.5,
+        46.75,
+        47,
+        47.25,
+        47.5,
+        47.75,
+        48,
+        48.25,
+        48.5,
+        48.75,
+        49,
+        49.25,
+        49.5,
+        49.75,
+        50,
+        50.25,
+        50.5,
+        50.75,
+        51,
+        51.25,
+        51.5,
+        51.75,
+        52,
+        52.25,
+        52.5,
+        52.75,
+        53,
+        53.25,
+        53.5,
+        53.75,
+        54,
+        54.25,
+        54.5,
+        54.75,
+        55,
+        55.25,
+        55.5,
+        55.75,
+        56,
+        56.25,
+        56.5,
+        56.75,
+        57,
+        57.25,
+        57.5,
+        57.75,
+        58,
+        58.25,
+        58.5,
+        58.75,
+        59,
+        59.25,
+        59.5,
+        59.75,
+        60,
+        60.25,
+        60.5,
+        60.75,
+        61,
+        61.25,
+        61.5,
+        61.75,
+        62,
+        62.25,
+        62.5,
+        62.75,
+        63,
+        63.25,
+        63.5,
+        63.75,
+        64,
+        64.25,
+        64.5,
+        64.75,
+        65,
+        65.25,
+        65.5,
+        65.75,
+        66,
+        66.25,
+        66.5,
+        66.75,
+        67,
+        67.25,
+        67.5,
+        67.75,
+        68,
+        68.25,
+        68.5,
+        68.75,
+        69,
+        69.25,
+        69.5,
+        69.75,
+        70,
+        70.25,
+        70.5,
+        70.75,
+        71,
+        71.25,
+        71.5,
+        71.75,
+        72,
+        72.25,
+        72.5,
+        72.75,
+        73,
+        73.25,
+        73.5,
+        73.75,
+        74,
+        74.25,
+        74.5,
+        74.75,
+        75,
+        75.25,
+        75.5,
+        75.75,
+        76,
+        76.25,
+        76.5,
+        76.75,
+        77,
+        77.25,
+        77.5,
+        77.75,
+        78,
+        78.25,
+        78.5,
+        78.75,
+        79,
+        79.25,
+        79.5,
+        79.75,
+        80,
+        80.25,
+        80.5,
+        80.75,
+        81,
+        81.25,
+        81.5,
+        81.75,
+        82,
+        82.25,
+        82.5,
+        82.75,
+        83,
+        83.25,
+        83.5,
+        83.75,
+        84,
+        84.25,
+        84.5,
+        84.75,
+        85,
+        85.25,
+        85.5,
+        85.75,
+        86,
+        86.25,
+        86.5,
+        86.75,
+        87,
+        87.25,
+        87.5,
+        87.75,
+        88,
+        88.25,
+        88.5,
+        88.75,
+        89,
+        89.25,
+        89.5,
+        89.75,
+        90,
+        90.25,
+        90.5,
+        90.75,
+        91,
+        91.25,
+        91.5,
+        91.75,
+        92,
+        92.25,
+        92.5,
+        92.75,
+        93,
+        93.25,
+        93.5,
+        93.75,
+        94,
+        94.25,
+        94.5,
+        94.75,
+        95,
+        95.25,
+        95.5,
+        95.75,
+        96,
+        96.25,
+        96.5,
+        96.75,
+        97,
+        97.25,
+        97.5,
+        97.75,
+        98,
+        98.25,
+        98.5,
+        98.75,
+        99,
+        99.25,
+        99.5,
+        99.75,
+        100,
+        100.25,
+        100.5,
+        100.75,
+        101,
+        101.25,
+        101.5,
+        101.75,
+        102,
+        102.25,
+        102.5,
+        102.75,
+        103,
+        103.25,
+        103.5,
+        103.75,
+        104,
+        104.25,
+        104.5,
+        104.75,
+        105,
+        105.25,
+        105.5,
+        105.75,
+        106,
+        106.25,
+        106.5,
+        106.75,
+        107,
+        107.25,
+        107.5,
+        107.75,
+        108,
+        108.25,
+        108.5,
+        108.75,
+        109,
+        109.25,
+        109.5,
+        109.75,
+        110,
+        110.25,
+        110.5,
+        110.75,
+        111,
+        111.25,
+        111.5,
+        111.75,
+        112,
+        112.25,
+        112.5,
+        112.75,
+        113,
+        113.25,
+        113.5,
+        113.75,
+        114,
+        114.25,
+        114.5,
+        114.75,
+        115,
+        115.25,
+        115.5,
+        115.75,
+        116,
+        116.25,
+        116.5,
+        116.75,
+        117,
+        117.25,
+        117.5,
+        117.75,
+        118,
+        118.25,
+        118.5,
+        118.75,
+        119,
+        119.25,
+        119.5,
+        119.75,
+        120,
+        120.25,
+        120.5,
+        120.75,
+        121,
+        121.25,
+        121.5,
+        121.75,
+        122,
+        122.25,
+        122.5,
+        122.75,
+        123,
+        123.25,
+        123.5,
+        123.75,
+        124,
+        124.25,
+        124.5,
+        124.75,
+        125,
+        125.25,
+        125.5,
+        125.75,
+        126,
+        126.25,
+        126.5,
+        126.75,
+        127,
+        127.25,
+        127.5,
+        127.75,
+        128,
+        128.25,
+        128.5,
+        128.75,
+        129,
+        129.25,
+        129.5,
+        129.75,
+        130,
+        130.25,
+        130.5,
+        130.75,
+        131,
+        131.25,
+        131.5,
+        131.75,
+        132,
+        132.25,
+        132.5,
+        132.75,
+        133,
+        133.25,
+        133.5,
+        133.75,
+        134,
+        134.25,
+        134.5,
+        134.75,
+        135,
+        135.25,
+        135.5,
+        135.75,
+        136,
+        136.25,
+        136.5,
+        136.75,
+        137,
+        137.25,
+        137.5,
+        137.75,
+        138,
+        138.25,
+        138.5,
+        138.75,
+        139,
+        139.25,
+        139.5,
+        139.75,
+        140,
+        140.25,
+        140.5,
+        140.75,
+        141,
+        141.25,
+        141.5,
+        141.75,
+        142,
+        142.25,
+        142.5,
+        142.75,
+        143,
+        143.25,
+        143.5,
+        143.75,
+        144,
+        144.25,
+        144.5,
+        144.75,
+        145,
+        145.25,
+        145.5,
+        145.75,
+        146,
+        146.25,
+        146.5,
+        146.75,
+        147,
+        147.25,
+        147.5,
+        147.75,
+        148,
+        148.25,
+        148.5,
+        148.75,
+        149,
+        149.25,
+        149.5,
+        149.75,
+        150
+      ],
+      "atTime": 61,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ],
+      "boatPosition": [
+        -14.956370241688482,
+        25.182124907930042,
+        0.24229992557196944
+      ],
+      "actorPosition": [
+        -6.455017679273978,
+        24.970151522428647,
+        12.423073160867256
+      ]
+    },
+    {
+      "boat": 1,
+      "actor": "repair-barge",
+      "minSignedMeshAABBGap": 8.190020112595446,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 139.5,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "3ab031a7-9700-436e-86b5-430a5b1c8949"
+      ],
+      "boatPosition": [
+        -15.987995912283228,
+        25.18537022119722,
+        2.530640474080745
+      ],
+      "actorPosition": [
+        -11.516575774226522,
+        26.34,
+        18.887862744503238
+      ]
+    },
+    {
+      "boat": 1,
+      "actor": "feeding-child",
+      "minSignedMeshAABBGap": 7.377843694830925,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 19.75,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-feeder-leg-1-lower"
+      ],
+      "boatPosition": [
+        -15.169987634028502,
+        25.18723868014098,
+        0.7161436410705944
+      ],
+      "actorPosition": [
+        -1.1244286842283486,
+        25.061651822117497,
+        -5.047822653567614
+      ]
+    },
+    {
+      "boat": 2,
+      "actor": "whale-0",
+      "minSignedMeshAABBGap": -0.6427099199403887,
+      "overlapSamples": 17,
+      "overlapTimes": [
+        146,
+        146.25,
+        146.5,
+        146.75,
+        147,
+        147.25,
+        147.5,
+        147.75,
+        148,
+        148.25,
+        148.5,
+        148.75,
+        149,
+        149.25,
+        149.5,
+        149.75,
+        150
+      ],
+      "atTime": 149.75,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-continuous-body"
+      ],
+      "boatPosition": [
+        -0.9325727141769555,
+        25.011133723819903,
+        -14.38030355488371
+      ],
+      "actorPosition": [
+        3.575505889722401,
+        24.544815519553524,
+        -6.643570071235795
+      ]
+    },
+    {
+      "boat": 2,
+      "actor": "whale-1",
+      "minSignedMeshAABBGap": 0.2187436575118813,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 121.5,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -0.024557612139562757,
+        25.130143031164316,
+        -14.849781537414867
+      ],
+      "actorPosition": [
+        6.057385058388918,
+        24.692675661704328,
+        -7.661151778833015
+      ]
+    },
+    {
+      "boat": 2,
+      "actor": "escort-whale",
+      "minSignedMeshAABBGap": 8.015221282771442,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 16.75,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -0.38914698020895533,
+        25.072564785880562,
+        -14.661275112147857
+      ],
+      "actorPosition": [
+        10.957119617075088,
+        24.22585508968403,
+        0.08661342004768446
+      ]
+    },
+    {
+      "boat": 2,
+      "actor": "original-longship",
+      "minSignedMeshAABBGap": 7.244562071686396,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 119.25,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "f457b86b-df71-4d6e-8eed-4ae23451d516"
+      ],
+      "boatPosition": [
+        -0.8385605804478333,
+        25.01896683289829,
+        -14.428911366337028
+      ],
+      "actorPosition": [
+        8.13860840882687,
+        24.98459132591483,
+        5.95331940378232
+      ]
+    },
+    {
+      "boat": 2,
+      "actor": "original-dock-ship",
+      "minSignedMeshAABBGap": 13.460669188201809,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 117,
+      "parts": [
+        "flower-paddle-blade",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ],
+      "boatPosition": [
+        -0.9406643871180227,
+        25.1851754898899,
+        -14.376119855428547
+      ],
+      "actorPosition": [
+        -6.455017679273978,
+        24.970080198081277,
+        12.423073160867256
+      ]
+    },
+    {
+      "boat": 2,
+      "actor": "repair-barge",
+      "minSignedMeshAABBGap": 25.625904387600382,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 117,
+      "parts": [
+        "flower-paddle-blade",
+        "3ab031a7-9700-436e-86b5-430a5b1c8949"
+      ],
+      "boatPosition": [
+        -0.9406643871180227,
+        25.1851754898899,
+        -14.376119855428547
+      ],
+      "actorPosition": [
+        -11.516575774226522,
+        26.34,
+        18.887862744503238
+      ]
+    },
+    {
+      "boat": 2,
+      "actor": "feeding-child",
+      "minSignedMeshAABBGap": -0.8055305796934071,
+      "overlapSamples": 56,
+      "overlapTimes": [
+        83,
+        83.25,
+        83.5,
+        83.75,
+        84,
+        84.25,
+        84.5,
+        84.75,
+        85,
+        85.25,
+        85.5,
+        85.75,
+        86,
+        86.25,
+        86.5,
+        86.75,
+        87,
+        87.25,
+        87.5,
+        87.75,
+        88,
+        88.25,
+        88.5,
+        88.75,
+        89,
+        89.25,
+        89.5,
+        89.75,
+        90,
+        90.25,
+        90.5,
+        90.75,
+        91,
+        91.25,
+        91.5,
+        91.75,
+        92,
+        92.25,
+        142.75,
+        143,
+        143.25,
+        143.5,
+        143.75,
+        144,
+        144.25,
+        144.5,
+        144.75,
+        145,
+        145.25,
+        145.5,
+        145.75,
+        146,
+        146.25,
+        146.5,
+        146.75,
+        147
+      ],
+      "atTime": 87,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-feeder-arm-1-lower"
+      ],
+      "boatPosition": [
+        -0.3772844936853097,
+        25.18731588219113,
+        -14.66740846414655
+      ],
+      "actorPosition": [
+        2.9882725352085515,
+        25.12006040326053,
+        -10.457389734191246
+      ]
+    },
+    {
+      "boat": 3,
+      "actor": "whale-0",
+      "minSignedMeshAABBGap": 4.382047281661096,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 31,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -11.310172447683435,
+        25.109865149799678,
+        -12.968650699155177
+      ],
+      "actorPosition": [
+        2.7692788797323296,
+        21.6,
+        -5.902931504322847
+      ]
+    },
+    {
+      "boat": 3,
+      "actor": "whale-1",
+      "minSignedMeshAABBGap": 5.720633578253468,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 62.25,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        -11.298069714296071,
+        25.189813494724245,
+        -12.978583155757239
+      ],
+      "actorPosition": [
+        1.965168053667269,
+        23.13,
+        -6.262391632642046
+      ]
+    },
+    {
+      "boat": 3,
+      "actor": "escort-whale",
+      "minSignedMeshAABBGap": 8.275596423426876,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 93.25,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-continuous-body"
+      ],
+      "boatPosition": [
+        -11.334031572903942,
+        25.143236120420635,
+        -12.949070021118981
+      ],
+      "actorPosition": [
+        4.0205551480585795,
+        24.4602174285821,
+        1.9972101609433892
+      ]
+    },
+    {
+      "boat": 3,
+      "actor": "original-longship",
+      "minSignedMeshAABBGap": 7.572119972742672,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 93.25,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "f457b86b-df71-4d6e-8eed-4ae23451d516"
+      ],
+      "boatPosition": [
+        -11.334031572903942,
+        25.143236120420635,
+        -12.949070021118981
+      ],
+      "actorPosition": [
+        8.135421616138162,
+        25.05851128137178,
+        5.957055353608661
+      ]
+    },
+    {
+      "boat": 3,
+      "actor": "original-dock-ship",
+      "minSignedMeshAABBGap": 10.282281340853329,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 78.5,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ],
+      "boatPosition": [
+        -13.617101074384282,
+        25.07507186268737,
+        -11.075403303266302
+      ],
+      "actorPosition": [
+        -6.455017679273978,
+        25.069967900281785,
+        12.423073160867256
+      ]
+    },
+    {
+      "boat": 3,
+      "actor": "repair-barge",
+      "minSignedMeshAABBGap": 22.515168407659615,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 144.5,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "3ab031a7-9700-436e-86b5-430a5b1c8949"
+      ],
+      "boatPosition": [
+        -13.617101074384282,
+        25.091401272791266,
+        -11.075403303266302
+      ],
+      "actorPosition": [
+        -11.516575774226522,
+        26.34,
+        18.887862744503238
+      ]
+    },
+    {
+      "boat": 3,
+      "actor": "feeding-child",
+      "minSignedMeshAABBGap": 4.8927294501559535,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 131.75,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-feeder-leg-1-lower"
+      ],
+      "boatPosition": [
+        -11.689622210418804,
+        25.02856977949338,
+        -12.657244326693291
+      ],
+      "actorPosition": [
+        -1.0823458769763477,
+        25.120759387766498,
+        -3.8235358267518222
+      ]
+    },
+    {
+      "boat": 4,
+      "actor": "whale-0",
+      "minSignedMeshAABBGap": -0.41546553181626855,
+      "overlapSamples": 16,
+      "overlapTimes": [
+        2.25,
+        3.5,
+        3.75,
+        4,
+        4.25,
+        4.5,
+        4.75,
+        5,
+        5.25,
+        5.5,
+        5.75,
+        6,
+        6.25,
+        6.5,
+        6.75,
+        7
+      ],
+      "atTime": 4,
+      "parts": [
+        "flower-paddle-shaft",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        15.75628539611367,
+        25.159808012075207,
+        -9.377604732351147
+      ],
+      "actorPosition": [
+        7.005239394710731,
+        24.504591850281525,
+        -3.805609117275216
+      ]
+    },
+    {
+      "boat": 4,
+      "actor": "whale-1",
+      "minSignedMeshAABBGap": 1.3349596910754435,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 37,
+      "parts": [
+        "flower-paddle-shaft",
+        "swamp-beluga-rounded-fins"
+      ],
+      "boatPosition": [
+        15.73232498898729,
+        25.03423679119937,
+        -9.456591609153122
+      ],
+      "actorPosition": [
+        8.220037044644293,
+        23.13,
+        -4.101121728454789
+      ]
+    },
+    {
+      "boat": 4,
+      "actor": "escort-whale",
+      "minSignedMeshAABBGap": -0.19570692396374278,
+      "overlapSamples": 1,
+      "overlapTimes": [
+        121
+      ],
+      "atTime": 121,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-continuous-body"
+      ],
+      "boatPosition": [
+        17.20182745601153,
+        25.021719820707975,
+        -4.612291188429255
+      ],
+      "actorPosition": [
+        12.096236391384373,
+        24.464525279667054,
+        0.5564685537653308
+      ]
+    },
+    {
+      "boat": 4,
+      "actor": "original-longship",
+      "minSignedMeshAABBGap": -0.13556544619688538,
+      "overlapSamples": 7,
+      "overlapTimes": [
+        93,
+        93.25,
+        119,
+        119.25,
+        119.5,
+        119.75,
+        120
+      ],
+      "atTime": 119.25,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "f457b86b-df71-4d6e-8eed-4ae23451d516"
+      ],
+      "boatPosition": [
+        16.99896855976942,
+        25.163470487328404,
+        -5.281027348092343
+      ],
+      "actorPosition": [
+        8.13860840882687,
+        24.98459132591483,
+        5.95331940378232
+      ]
+    },
+    {
+      "boat": 4,
+      "actor": "original-dock-ship",
+      "minSignedMeshAABBGap": 10.941645782445265,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 6.75,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ],
+      "boatPosition": [
+        15.466000718859208,
+        25.059017588905654,
+        -10.334545068083356
+      ],
+      "actorPosition": [
+        -6.455017679273978,
+        25.009665763404975,
+        12.423073160867256
+      ]
+    },
+    {
+      "boat": 4,
+      "actor": "repair-barge",
+      "minSignedMeshAABBGap": 21.35659845291064,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 143,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "3ab031a7-9700-436e-86b5-430a5b1c8949"
+      ],
+      "boatPosition": [
+        15.9917433647123,
+        25.174643615727295,
+        -8.601403833107392
+      ],
+      "actorPosition": [
+        -11.516575774226522,
+        26.34,
+        18.887862744503238
+      ]
+    },
+    {
+      "boat": 4,
+      "actor": "feeding-child",
+      "minSignedMeshAABBGap": 0.1884675832356919,
+      "overlapSamples": 0,
+      "overlapTimes": [],
+      "atTime": 103.25,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-feeder-leg-1-lower"
+      ],
+      "boatPosition": [
+        15.558212631170258,
+        25.014126375294456,
+        -10.030563131592462
+      ],
+      "actorPosition": [
+        11.09272395993682,
+        25.12202429330296,
+        -6.140642041777696
+      ]
+    }
+  ],
+  "narrowPhaseAllOverlapTimes": [
+    {
+      "boat": 0,
+      "actor": "feeding-child",
+      "worstBoundsTime": 129,
+      "checkedSamples": 9,
+      "trianglePairsTested": 0,
+      "surfaceIntersection": false,
+      "first": null
+    },
+    {
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "worstBoundsTime": 61,
+      "checkedSamples": 601,
+      "trianglePairsTested": 0,
+      "surfaceIntersection": false,
+      "first": null
+    },
+    {
+      "boat": 2,
+      "actor": "whale-0",
+      "worstBoundsTime": 149.75,
+      "checkedSamples": 17,
+      "trianglePairsTested": 0,
+      "surfaceIntersection": false,
+      "first": null
+    },
+    {
+      "boat": 2,
+      "actor": "feeding-child",
+      "worstBoundsTime": 87,
+      "checkedSamples": 56,
+      "trianglePairsTested": 734,
+      "surfaceIntersection": false,
+      "first": null
+    },
+    {
+      "boat": 4,
+      "actor": "whale-0",
+      "worstBoundsTime": 4,
+      "checkedSamples": 16,
+      "trianglePairsTested": 0,
+      "surfaceIntersection": false,
+      "first": null
+    },
+    {
+      "boat": 4,
+      "actor": "escort-whale",
+      "worstBoundsTime": 121,
+      "checkedSamples": 1,
+      "trianglePairsTested": 0,
+      "surfaceIntersection": false,
+      "first": null
+    },
+    {
+      "boat": 4,
+      "actor": "original-longship",
+      "worstBoundsTime": 119.25,
+      "checkedSamples": 7,
+      "trianglePairsTested": 0,
+      "surfaceIntersection": false,
+      "first": null
+    }
+  ],
+  "potentialOverlapSamples": [
+    {
+      "time": 0,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.32520631113836274,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 0.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3321411377232897,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 0.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.37636888731725193,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 0.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.41788037980627024,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 1,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.45353376839022275,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 1.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.48163784521288733,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 1.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5009176430706752,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 1.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5105787093595069,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 2,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5103425093474314,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 2.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5004513786057565,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 2.25,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.01114714457780508,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 2.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.48164333220896793,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 2.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.45509884693709424,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 3,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.42236336512878125,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 3.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3969642749178117,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 3.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.38882997024380117,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 3.5,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.21053035358749028,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 3.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.36069656047761,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 3.75,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.19643606511285228,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 4,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3117642528879738,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 4,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.41546553181626855,
+      "parts": [
+        "flower-paddle-shaft",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 4.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.2772843266779681,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 4.25,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.29445317556150563,
+      "parts": [
+        "flower-paddle-shaft",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 4.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.29380405516354813,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 4.5,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.19504511584583284,
+      "parts": [
+        "flower-paddle-shaft",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 4.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3365538003272661,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 4.75,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.23343590360174638,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.37995258248472297,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 5,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.3146151629402034,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 5.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4221468509224131,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 5.25,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.003064481096574312,
+      "parts": [
+        "flower-paddle-blade",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 5.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.46119138100511137,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 5.5,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.0020823565706926672,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 5.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4951481903082957,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 5.75,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.12711395878731224,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 6,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5221934262250052,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 6,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.2069306198273182,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 6.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5407259739427026,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 6.25,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.1665290394801442,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 6.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5494709733532019,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 6.5,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.12635851044054824,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 6.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5475712902483885,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 6.75,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.07569732601105095,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 7,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5346603110294197,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 7,
+      "boat": 4,
+      "actor": "whale-0",
+      "gap": -0.022170310798285797,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "swamp-beluga-rounded-fins"
+      ]
+    },
+    {
+      "time": 7.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5109102419199445,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 7.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.47705137555511,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 7.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.434359478032988,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 8,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.39603099534983244,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 8.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3884093985504933,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 8.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.37611765958259724,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 8.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3600839463550791,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 9,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.34387357774275173,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 9.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.34896661297564435,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 9.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.35319293141443353,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 9.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3570579578271662,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 10,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3609693781177299,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 10.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3651838496248452,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 10.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.36976976779864756,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 10.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.37458942751388946,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 11,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3793022592277282,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 11.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3833890460662204,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 11.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3861952885588913,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 11.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.38699031686985563,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 12,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4103110323104495,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 12.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.45143918140530204,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 12.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4857669911043381,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 12.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5112450843090066,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 13,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5262770755983013,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 13.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5298196317802777,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 13.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5250866490841766,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 13.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5300753081988532,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 14,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5233918257468275,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 14.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5057865363365224,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 14.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.47858689818898625,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 14.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.44360892558606935,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 15,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.40304163244765334,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 15.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.38510146092118624,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 15.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.42229682105232236,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 15.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4731451637938253,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 16,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.49440143365847344,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 16.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.41113790379474846,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 16.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3772221389393762,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 16.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3717494459537489,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 17,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3675672254192479,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "1a0aaeca-b2ca-4cfd-872f-2ff3efb69976"
+      ]
+    },
+    {
+      "time": 17.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.3719136266801151,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 17.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.39546559189050967,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 17.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4167152053285541,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 18,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4388001131715953,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 18.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4754377675576684,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 18.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5041823791381894,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 18.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5232679795009538,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 19,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5314126463180173,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 19.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5279087710270431,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 19.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5126809631134677,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 19.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.491836223613042,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 20,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5026734832523729,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 20.25,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.5032664826174695,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 20.5,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4940938885951738,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    },
+    {
+      "time": 20.75,
+      "boat": 1,
+      "actor": "original-dock-ship",
+      "gap": -0.4761511607538722,
+      "parts": [
+        "swamp-flower-boat-cup",
+        "d7f7268a-8414-4d26-b609-743708b7d895"
+      ]
+    }
+  ],
+  "snapshots": [
+    {
+      "time": 0,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -3.5007634106008227,
+            25.18672023668755,
+            0.08459044271370555
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.363361171530345,
+            25.093813323381134,
+            1.145082663709438
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            3.5741135645651196,
+            25.01000004732626,
+            -16.71042997821884
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -11.676744133629821,
+            25.023111251787405,
+            -12.667813091180673
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.15274789682098,
+            25.12929479151613,
+            -8.070643021108257
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            7.450166444603104,
+            24.57336510053852,
+            -4.602661338409877
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            4.227512878043504,
+            24.804292561998935,
+            -2.2732266335410536
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.2,
+            24.3,
+            8.35
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.5,
+            25.02,
+            8
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.02,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            7.944002900808613,
+            25.119977029131526,
+            0.16468525481894147
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 10,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -4.885258536743232,
+            25.03758274237006,
+            0.3599836458802911
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.987995912283228,
+            25.023956653666342,
+            2.530640474080745
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            1.8919836437479898,
+            25.142717107792997,
+            -15.840705499178185
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -13.224582099452748,
+            25.095413603367387,
+            -11.397535300990418
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            15.750404069739217,
+            25.16093034710808,
+            -9.3969928670903
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            5.6687470715614685,
+            24.551486525527203,
+            -3.072883629165614
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            1.6029404890708498,
+            24.692826844707763,
+            -4.8835741451867865
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            11.321149167477188,
+            24.120001762820873,
+            15.789352743533275
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            9.377218466354408,
+            25.036806681473067,
+            10.419656902125467
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.04060592426209,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 82
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            1.6331159776708546,
+            25.122297199166773,
+            -0.488309593134602
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 20,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -4.831423309166556,
+            25.072643185207006,
+            0.3492751533145917
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.159591451567906,
+            25.178509515238954,
+            0.6930829451685994
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            -0.9406643871180227,
+            25.149372828248236,
+            -14.376119855428547
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -12.637928249721892,
+            25.18125075014309,
+            -11.878989673022517
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.911542778757067,
+            25.01275594831286,
+            -5.569231524161464
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            3.1565157111468856,
+            23.4907482340069,
+            -3.6490736388976988
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            3.9550682420733745,
+            23.265785463882438,
+            -7.664485806890645
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.147104575166793,
+            24.298406764327726,
+            6.921430614957176
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.456854718155482,
+            25.050502338019182,
+            7.404707517760036
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            24.982450637661415,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            -1.1299459670358942,
+            25.119923485484726,
+            -5.203975033842667
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 30,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -3.5073871593887014,
+            25.188435608962774,
+            0.08590798826603063
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.11017224343759,
+            25.10137499894329,
+            0.5834618092631708
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            2.5945042808681054,
+            25.010325686063727,
+            -16.203935109194155
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -11.298069714296071,
+            25.02731093239179,
+            -12.978583155757239
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.55896404883867,
+            25.122045189542373,
+            -6.731527830570998
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            2.6588582817730093,
+            21.6,
+            -5.70156645537924
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            7.838023468453143,
+            23.13,
+            -6.541919519273385
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.2,
+            24.479984134819308,
+            8.135370832799826
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.5,
+            25.058551815451363,
+            8
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.067818796420223,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            3.072826639782477,
+            25.11975969693846,
+            -10.476599810569162
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 40,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -4.481548691004053,
+            25.043248019169773,
+            0.2796807647298342
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.979838540135276,
+            25.02018275921407,
+            2.512545882226829
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            3.1186582547403727,
+            25.135914067290575,
+            -16.474942441161534
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -12.836259813673925,
+            25.087881921675518,
+            -11.716223164935204
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            15.466000718859208,
+            25.166277448263003,
+            -10.334545068083356
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            4.719618682662365,
+            21.6,
+            -6.987382007266929
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            7.563267664767236,
+            23.13,
+            -3.1604375235873907
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            2.0264489950523954,
+            24.303186346518974,
+            5.877478503816218
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            7.566952675376665,
+            25.059465103681617,
+            7.2614289972635895
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            24.970411057327844,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 82
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            9.053084626282413,
+            25.119597028463424,
+            -9.034526966940078
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 50,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -5.254986602452301,
+            25.065539716280618,
+            0.4335271307171838
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.375681933264826,
+            25.17453709202563,
+            1.1724124398764784
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            -0.7728908108389241,
+            25.155517383473875,
+            -14.46286510882446
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -13.172075694473834,
+            25.184214255087493,
+            -11.440626193939273
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.621258101502605,
+            25.014920062172827,
+            -6.526171859893672
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            7.086781962097899,
+            21.6,
+            -6.101371085195275
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            3.533318727099889,
+            23.13,
+            -2.4739188654823785
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.2,
+            24.120044068795448,
+            8.715178100291052
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.5,
+            25.053073147179603,
+            8
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.062545176226706,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            11.221195593514977,
+            25.121090172480148,
+            -3.6780827906464353
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 60,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -3.8506380287633255,
+            25.189526255745804,
+            0.15418483129846297
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -14.822685327453161,
+            25.10892696125869,
+            -0.054238459123551186
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            1.7062127960058011,
+            25.011284800734348,
+            -15.744654979076246
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -11.478412569677786,
+            25.032024102008933,
+            -12.830579599267985
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.91742410513152,
+            25.11463985627385,
+            -5.549843389422314
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            7.173493725874563,
+            21.6,
+            -4.011773297722784
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            1.6520612902999696,
+            23.13,
+            -5.488114987424348
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            15.572440972126447,
+            24.295220792275686,
+            11.44143020194678
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.29967651280042,
+            25.0405591382395,
+            9.24815526330632
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            24.99206054755742,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            5.911668469602205,
+            25.119332002194895,
+            0.611780829474398
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 70,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -4.147996515415098,
+            25.049314202454703,
+            0.21333311183879955
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.72664961204252,
+            25.016972708507783,
+            1.9509250277805594
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            4.315763994684178,
+            25.12885732317681,
+            -17.093891163935243
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -12.449754586992558,
+            25.080435844329394,
+            -12.033419807017026
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            15.688110017075282,
+            25.17115635326964,
+            -9.602348837767632
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            4.884994685901158,
+            21.6,
+            -3.002117316320456
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            4.675541906596767,
+            23.13,
+            -7.787221509257856
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            14.779858518902103,
+            24.479913628544534,
+            3.0166637487022845
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            9.95727482468968,
+            25.024239500470046,
+            6.075288686859375
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.02836778501514,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 82
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            0.3273006084078247,
+            25.12197874903929,
+            -1.5189390472409343
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 80,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -5.462333971407284,
+            25.05867968116964,
+            0.4747710867459628
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.581174389466469,
+            25.17003812501339,
+            1.6282335127156087
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            0.4537838001534569,
+            25.16126975363828,
+            -15.097102050807807
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -13.617101074384282,
+            25.186582854963945,
+            -11.075403303266302
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.31648048149358,
+            25.017685196443672,
+            -7.530889025035099
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            2.7221743452883076,
+            21.6,
+            -4.175763029516487
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            8.174354389853768,
+            23.13,
+            -6.003041990263116
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.2,
+            24.30637169449206,
+            8.570570672496677
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.5,
+            25.007135103873498,
+            8
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.0326911681381,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            -0.9276840558520405,
+            25.119615407411857,
+            -7.28161497762909
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 90,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -4.27420132204907,
+            25.189984472506115,
+            0.23843680870105496
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -14.759204564659896,
+            25.11641586186929,
+            -0.19505077864091214
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            0.8140994483424604,
+            25.012870615974755,
+            -15.283398802047538
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -12.012560014429727,
+            25.037217465937257,
+            -12.392216120184743
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            17.207708782385982,
+            25.107131104353904,
+            -4.592903053690103
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            3.048579549577041,
+            21.6,
+            -6.250141297785764
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            7.022730255253627,
+            23.13,
+            -2.7494036056554587
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            2.9314455885163935,
+            24.120142769846456,
+            12.508743535961026
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            7.957929445614451,
+            24.992412082362584,
+            9.798215905713985
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            24.988505600286278,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 82
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            5.0673303050809295,
+            25.119590837139103,
+            -10.596500022775722
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 100,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -3.821068088614021,
+            25.055738439584573,
+            0.14830300450009
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.439162696058093,
+            25.01434917793916,
+            1.3132247593938413
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            4.371087250592714,
+            25.12159672559682,
+            -17.12249536942997
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -12.024445794691385,
+            25.073127971796062,
+            -12.382461712411551
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.046570073368134,
+            25.175532596640984,
+            -8.420664396618943
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            5.507512159546876,
+            21.6,
+            -6.958355458302635
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            2.9078015579539493,
+            23.13,
+            -2.7928942113491146
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.2,
+            24.292036317944685,
+            8.64804526419174
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.5,
+            24.98279576199253,
+            8
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.06469983318003,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            10.216781190896995,
+            25.11970637357367,
+            -7.849448528819146
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 110,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -5.128781795818329,
+            25.052111540430413,
+            0.4084234338549282
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.790660828229536,
+            25.165044395737006,
+            2.0929139930955305
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            1.6508895400972634,
+            25.16658930293508,
+            -15.716050773581518
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -13.609270267036662,
+            25.188339817544993,
+            -11.081829880771558
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            15.940392249915293,
+            25.021031817705673,
+            -8.770685772129603
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            7.411831544716524,
+            21.6,
+            -5.526463582731605
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            1.8579484797513595,
+            23.13,
+            -6.069799968115225
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.17935413154042,
+            24.479786740450244,
+            8.7287919121357
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.496968973124762,
+            24.980066185565043,
+            8.158849102940469
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            24.97003965829068,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            10.425816409205453,
+            25.121541131763305,
+            -1.7999001064017506
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 120,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -4.731695698867025,
+            25.189807022315794,
+            0.3294380982567958
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -14.96469702086154,
+            25.123788797796585,
+            0.26077029419821807
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            -0.2201464785348215,
+            25.015071929292898,
+            -14.748654732150541
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -12.46359914259034,
+            25.0428543372938,
+            -12.022057873869478
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            17.18733451325697,
+            25.099571976994365,
+            -4.660068017838471
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            6.680482708883673,
+            21.6,
+            -3.519248220095105
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            5.411208239756824,
+            24.74387456139567,
+            -7.779446265317771
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            7.023618302434729,
+            24.30955504568629,
+            0.09265024923212349
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            8.674677547547747,
+            24.98472861524741,
+            5.559505228937258
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.06634092527089,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 82
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            4.008078956238535,
+            25.120084022298915,
+            0.4587576658668411
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 130,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -3.5007634106008227,
+            25.06247534856055,
+            0.08459044271370555
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.172460723385402,
+            25.012330700613187,
+            0.7216294202798494
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            3.478973902929372,
+            25.11418356475429,
+            -16.66123919240126
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -11.504232085595733,
+            25.066009928238216,
+            -12.809390070164664
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.34273607699705,
+            25.179375263784756,
+            -7.444335926147577
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            4.1126893330282375,
+            21.6,
+            -3.130209888950634
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            8.362046965160097,
+            24.735888630176547,
+            -5.417197272279747
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.2,
+            24.120297835042695,
+            8.744651036816194
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.5,
+            24.995920005292895,
+            8
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            24.98551510295323,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            -0.6721748058527339,
+            25.12163960444138,
+            -2.860552516458114
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 140,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -4.801853369017252,
+            25.04588169262348,
+            0.3433933265162186
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.987995912283228,
+            25.15959118082335,
+            2.530640474080745
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            2.6304988237942832,
+            25.171438453084534,
+            -16.222545642606207
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -13.183961474735494,
+            25.18947273132213,
+            -11.43087178616608
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            15.5341760978976,
+            25.02493628480749,
+            -10.109800962666865
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            2.514555937040462,
+            24.590292784992478,
+            -4.784492695401112
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            6.387479010165532,
+            23.13,
+            -2.4437532979626426
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            11.286462369311561,
+            24.28885433929391,
+            15.802178080785088
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            9.371924471163785,
+            25.011568757363992,
+            10.421932302332593
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.03649954128369,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 80
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            0.2753937474982706,
+            25.08316047113546,
+            -9.022240135284491
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    },
+    {
+      "time": 150,
+      "boats": [
+        {
+          "index": 0,
+          "pos": [
+            -5.135405544606206,
+            25.188995158715798,
+            0.40974097940725307
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 1.047197551196625,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 1,
+          "pos": [
+            -15.174183459624606,
+            25.130993685258037,
+            0.7254507745781394
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 4.450589592585555,
+            "state": "rowing",
+            "direction": -1
+          }
+        },
+        {
+          "index": 2,
+          "pos": [
+            -0.9406643871180227,
+            25.017873190204508,
+            -14.376119855428547
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 2.6179938779914944,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 3,
+          "pos": [
+            -12.851921428369163,
+            25.048894896177117,
+            -11.703370009924692
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 6.021385919380499,
+            "state": "rowing",
+            "direction": 1
+          }
+        },
+        {
+          "index": 4,
+          "pos": [
+            16.81124628167868,
+            25.092015873268473,
+            -5.899864764932974
+          ],
+          "paddleState": {
+            "time": 120,
+            "moving": true,
+            "phase": 3.1415926535898393,
+            "state": "rowing",
+            "direction": 1
+          }
+        }
+      ],
+      "actors": [
+        {
+          "key": "whale-0",
+          "pos": [
+            3.632535093014411,
+            24.531609884578433,
+            -6.6742835560394935
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "whale-1",
+          "pos": [
+            2.380251054760866,
+            23.13,
+            -3.215216730779331
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "escort-whale",
+          "pos": [
+            16.149393285782097,
+            24.479603510300983,
+            6.942405089960615
+          ],
+          "visible": true,
+          "meshCount": 3
+        },
+        {
+          "key": "original-longship",
+          "pos": [
+            10.458100538890653,
+            25.028778186719762,
+            7.4132414407034695
+          ],
+          "visible": true,
+          "meshCount": 66
+        },
+        {
+          "key": "original-dock-ship",
+          "pos": [
+            -6.455017679273978,
+            25.0244184343052,
+            12.423073160867256
+          ],
+          "visible": true,
+          "meshCount": 82
+        },
+        {
+          "key": "repair-barge",
+          "pos": [
+            -11.516575774226522,
+            26.34,
+            18.887862744503238
+          ],
+          "visible": true,
+          "meshCount": 11
+        },
+        {
+          "key": "feeding-child",
+          "pos": [
+            6.8566126698020184,
+            25.119990171282947,
+            -10.220398989122408
+          ],
+          "visible": true,
+          "meshCount": 10
+        }
+      ]
+    }
+  ],
+  "GPU": "not tested; no source changes"
+}

@@ -1,0 +1,54 @@
+{
+  "task": "User correction: FOUR newly added independent pines, original ancient pine and entire forest unchanged",
+  "target": "Original ancient pine plus NEW 2/4/5/6, no straight3; lake/deep/path/moon unchanged",
+  "visual_observations": {
+    "source": "Accepted user target viewed; fourth arching pose verified by CPU only, Root owns actual ground and GPU",
+    "completed": [
+      "four independently authored curved trunks:lean/spread/windswept/arching",
+      "four NEW siteIds2/4/5/6; original ancient pine and forest not owned or modified",
+      "CPU20 batches16499triangles11low patches3small stones; not FPS"
+    ],
+    "remaining": [
+      "Root lateGround actual sampler integration and real GPU framing",
+      "Full body/crown path envelopes and shadows in normal game"
+    ]
+  },
+  "checks": [
+    {
+      "name": "syntax imports and production module CPU construction",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "four distinct branch signatures and 4new sites/colliders",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "four new root envelopes outside original4.7 path",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "reseat +2, idempotent, null rejection and same collider references",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "dispose retains original object and handles double call",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal game GPU/navigation acceptance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not claim full deployment; Root owns lake and main integration",
+    "No source lake or original pine modified by consultant",
+    "No image or secret sent to JEV",
+    "Latest user four NEW pines correction supersedes original1+3 interpretation"
+  ]
+}

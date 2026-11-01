@@ -1,0 +1,110 @@
+{
+  "cameraWorld": [
+    -89.65009981066255,
+    -74.53514340650155,
+    -80.48428663795767
+  ],
+  "cameraInner": [
+    19.857496616880013,
+    33.61188402475091,
+    -18.877782554175933
+  ],
+  "direction": [
+    -0.3788006817072218,
+    -0.011112807291175477,
+    0.925411556580235
+  ],
+  "near": 0.1,
+  "fov": 60,
+  "zoom": 1,
+  "occlusionEnabled": true,
+  "occlusionDistance": 1.6145186259590745,
+  "distance": 7.5,
+  "orbit": {
+    "yaw": 0,
+    "pitch": 0
+  },
+  "firstPerson": false,
+  "hits": [
+    {
+      "name": "v7-quay-course-2-0",
+      "parent": "crystal-v7-shores",
+      "distance": 0.9503755771582985,
+      "point": [
+        18.1441796455767,
+        33.24684092617241,
+        -18.140121763120778
+      ]
+    },
+    {
+      "name": "messenger-batch-cape",
+      "parent": "messenger-surface-cape",
+      "distance": 1.4236860444332897,
+      "point": [
+        17.290905555029767,
+        33.06504046358026,
+        -17.77274850343674
+      ]
+    },
+    {
+      "name": "messenger-batch-body",
+      "parent": "messenger-surface-body",
+      "distance": 1.5178018040438053,
+      "point": [
+        17.121235656009503,
+        33.02889022009856,
+        -17.699697903912035
+      ]
+    },
+    {
+      "name": "planet-v8-curved-ocean",
+      "parent": "planet-v9-runtime",
+      "distance": 9.266892229180415,
+      "point": [
+        3.151339483752082,
+        30.05243328250026,
+        -11.685022958185844
+      ]
+    },
+    {
+      "name": "world-tree-trunk",
+      "parent": "swamp-ancient-world-tree",
+      "distance": 13.44298335719817,
+      "point": [
+        -4.377229195102231,
+        28.44837980937126,
+        -8.44363212381382
+      ]
+    },
+    {
+      "name": "planet-surface",
+      "parent": "",
+      "distance": 14.599775714289501,
+      "point": [
+        -6.462669967480593,
+        28.004051191723818,
+        -7.545755131046366
+      ]
+    },
+    {
+      "name": "swamp-underground-waterline",
+      "parent": "moebius-swamp-zone",
+      "distance": 22.08428185032849,
+      "point": [
+        -19.955579184531686,
+        25.12922214845355,
+        -1.736444738752951
+      ]
+    },
+    {
+      "name": "swamp-sinkhole-wall",
+      "parent": "moebius-swamp-zone",
+      "distance": 23.726813723862325,
+      "point": [
+        -22.916700874176513,
+        24.49831902021708,
+        -0.46154732947067245
+      ]
+    }
+  ]
+}

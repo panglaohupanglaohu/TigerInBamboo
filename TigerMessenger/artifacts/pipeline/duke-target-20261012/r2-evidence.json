@@ -1,0 +1,23 @@
+{
+ "target": "DUKE coastal steam freight ship concept sheet 2026-10-12 (side, deck plan, 3/4 bow, cutaway, crane detail)",
+ "candidate": "duke-r2",
+ "visual_observations_source": "assistant viewed studio renders; text only for Jev",
+ "observations": [
+  "silhouette closer: stacked house, tall funnel, crane forward",
+  "red bottom band too tall (about 60% of hull side) vs target about 45%",
+  "hull strake/rivet detail missing"
+ ],
+ "changes": "tier brass rails and wood trim, lighter roofs, forecastle and poop houses with lit windows, funnel 11 m with copper steam drums, larger lattice crane, bigger bow name",
+ "checks": [
+  {
+   "name": "studio render side+3/4",
+   "required": true,
+   "passed": true
+  }
+ ],
+ "constraints": [
+  "additive; robots/rails/story untouched",
+  "no keys or images sent"
+ ],
+ "version": "duke-r2"
+}

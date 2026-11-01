@@ -1,0 +1,29 @@
+{
+  wallSamples: 1320,
+  gapSamples: 120,
+  maxError: 0.00000842707245496399
+}
+{ maxVolumeOverBank: -0.0174831010199199, triangles: 11872 }
+STORY_SWEEP {
+  samples: 1201,
+  vertices: 25443978,
+  retainedWet: 25191095,
+  preExistingOutsideBasin: 236691,
+  preExistingOutsideOldWater: 16192
+}
+✔ real default V2 water obeys 1440 actual wall directions and retains original outlet (142.124125ms)
+✔ real volume sections never grow beyond old shell or rendered bank, including bottom edge (2120.8855ms)
+✔ preserves real story objects, animation, materials, floor and removes old circular attachments (0.567083ms)
+✔ installation is transform invariant and disposal restores exact original resources (21.990375ms)
+✔ missing or disconnected wall fails transactionally without modifying water (12.9665ms)
+✔ water mesh local yaw is respected and nonhorizontal water fails closed (158.195458ms)
+✔ production V2 factory installs the water shore by default before Greg layers (147.517292ms)
+✔ actual visible boat/oar and whale geometry keeps its pre-existing wet basin/outlet over full cycles (10641.625125ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13743.856958

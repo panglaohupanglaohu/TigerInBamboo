@@ -1,0 +1,30 @@
+{
+  "revision": "bird-aureole-v3",
+  "status": "CPU6/6 passed, GPU pending",
+  "scope": "buildSwampBird only, plus bird dedicated tests; no other model or inventory metadata change",
+  "rootCause": "Old 1.12 central sprite lies mostly inside opaque bird geometry at comparison angles.",
+  "changes": {
+    "wing": "#80CEC1",
+    "tail": "#65B4AE",
+    "haloLocalSize": [
+      4.1,
+      1.75
+    ],
+    "haloLocalPosition": [
+      0,
+      0.08,
+      -0.08
+    ],
+    "texture": "One function-cached 64x64 RGBA DataTexture shared by all birds",
+    "alpha": "center radius<.32=0; smooth rise to .60; fade .62 to1; texture peak .72",
+    "runtime": "unchanged existing shared breathing .38–.64",
+    "depthTest": true,
+    "blend": "NormalBlending preserves mint tint against cream/white backgrounds",
+    "pointLights": 0,
+    "additionalDraws": 0
+  },
+  "preserved": "All anatomical and outline position/normal buffers, pivots, exact5RNG calls and animations; no geometry edits.",
+  "testLog": "validation-bird-aureole-v3.txt",
+  "rollback": "before-bird-colour-glow/buildSwampBird-v2.js.txt restores only previous bird function; do not overwrite shared file",
+  "limitation": "CPU establishes transparent core/resource bounds/geometry identity; actual visible glow and white-background contrast require parent GPU review."
+}

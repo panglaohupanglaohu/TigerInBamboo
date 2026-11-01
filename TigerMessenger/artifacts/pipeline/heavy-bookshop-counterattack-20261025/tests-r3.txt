@@ -1,0 +1,26 @@
+✔ default trooper and deployed squad use exactly 1.5 linear scale with explicit scales preserved (23.436708ms)
+✔ casualties visibly unload one by one, wait for Heiwa, heal and remain reserved until carrier returns (9.210375ms)
+✔ real assault evacuation hands casualties to medical ownership and next sortie excludes them (15.919833ms)
+✔ an eighteen-soldier sortie recalls at six casualties, before the old eleven-casualty threshold (0.937708ms)
+✔ front shields intercept actual front segment, not rear shots or distant misses, and drain then break (51.304916ms)
+✔ rear guns fire through clear lanes and stop when an ally or wall blocks the trajectory (64.137208ms)
+✔ close combat switches off gun, animates blade and requires actual swept blade contact (6.591042ms)
+✔ withdrawal boards gun section first while shield section covers, then releases the rear guard (12.096209ms)
+✔ lost or exhausted front rank is replaced by a healthy gunner without new soldiers (11.002708ms)
+✔ shield recovery waits for quiet and a broken shield cannot intercept until restored (7.348208ms)
+✔ rear gun cannot shoot through the back of a friendly shield even without a body on that short segment (11.699542ms)
+✔ real robot torso aim intersects the light shield instead of the soles (14.075041ms)
+✔ first landed squad forms up during insertion while descending soldiers carry shields (15.75175ms)
+✔ a civilian who retaliates retains civilian damage routing (4.867375ms)
+✔ rear gun chooses a different clear target when the nearest firing lane is blocked (23.254042ms)
+✔ moss insertion requires actual ambush and physical fleet contact; ground remains provider-owned (59.641041ms)
+✔ existing roster is assigned once and remains aboard before real contact; starts physical insertion after contact (1081.125459ms)
+✔ a short light-gun shot remains renderable even when a frame exceeds its flight duration (194.71525ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1505.386458

@@ -1,0 +1,54 @@
+{
+  "revision": "rounded-fan-4",
+  "status": "CPU verified; GPU pending root",
+  "scope": [
+    "src/world/swampCoralCanopy.js",
+    "tests/world/swampCoralCanopy.test.mjs"
+  ],
+  "observedProblem": "overview-env-v4.jpg showed near-horizontal angular fan silhouettes; the existing radial fan had 16 angular segments and extra Y compression at 0.38.",
+  "changes": [
+    "Shared closed fan increases angular samples to 32 for rounded shallow lobes",
+    "Continuous sage upper face; shallow curved top and lightly drooping edges; unchanged thin 0.012 local body",
+    "Y compression 0.38 to 0.50 while each original crown envelope remains binding",
+    "Slight polar UV curvature makes existing three shader veins naturally curve; no new line meshes"
+  ],
+  "budget": {
+    "drawCalls": 10,
+    "drawCallDelta": 0,
+    "instanceSlots": 373,
+    "formalVisibleCrowns": 371,
+    "sharedGeometries": 1,
+    "trianglesPerFan": 396,
+    "trianglesBefore": 76092,
+    "trianglesAfter": 147708,
+    "triangleDelta": 71616,
+    "preFanSphericalCrownTriangles": 1039248
+  },
+  "cpu": {
+    "canopyTests": "7/7 pass",
+    "formalSceneStartup": "1/1 pass; 30s; real relocated lake construction",
+    "bridgePiersRemoved": 23,
+    "bridgeLeafRotations": 5,
+    "bridgeReversibleTrims": 2,
+    "remainingBidirectionalIntersections": 0,
+    "externalBridgeEdgeCrossings": 0,
+    "allOriginalCrownEnvelopes": "vertex-verified",
+    "fixedAnchors": "branch centers and protected world story transforms unchanged",
+    "rollback": "dispose restores original visibility; bridge dispose restores exact matrix hash"
+  },
+  "startupLimitations": [
+    "Node full-scene harness logs existing city terrain candidate mismatches/skips and file-fetch boarding warning. The lake bridge geometry assertions pass; this is not a blanket claim of all-city startup correctness."
+  ],
+  "gpu": "Parent notified to inspect overview and close canopy; no GPU success claimed yet.",
+  "rollback": "canopy-organic-before/src/world/swampCoralCanopy.js; no integration/main change required",
+  "untouched": [
+    "swampCoralTrunkDetail.js previous round",
+    "understory",
+    "tiger",
+    "courier",
+    "bridge clearance source",
+    "main",
+    "perches",
+    "submerged roots"
+  ]
+}

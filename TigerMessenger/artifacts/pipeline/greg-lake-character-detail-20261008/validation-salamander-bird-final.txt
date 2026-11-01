@@ -1,0 +1,17 @@
+✔ fine ink keeps bird/lizard surfaces and all animal pivots and behaviour references; monkey shape is separately approved (1.832291ms)
+✔ fine shells weld coincident contour normals and cap toes, wings and tail tips by their actual thickness (26.031542ms)
+✔ contour is stable at device scale, screen-capped and independent of shared brush-noise shader (3.02575ms)
+✔ bird colour correction preserves every anatomical/outline vertex, pivot and exact five RNG calls (37.101ms)
+✔ latest pale-green bird body and feathers survive final local art pass while only head emits pink (879.942125ms)
+✔ head-only internal fluorescence replaces the visible whole-bird aureole without new resources (24.291417ms)
+✔ lizard keeps all green vertex colours and geometry while only torso has internal pink-purple emission (14.88175ms)
+✔ salamander appends exactly four 3-toed limbs, retaining original body/tail colours and one RNG phase call (29.619459ms)
+✔ head light switches after shader compilation and retains zero intensity through real factory animation (880.254ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1074.627625

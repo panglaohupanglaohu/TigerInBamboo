@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>湖沼 · 完整游戏球面验收</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#eee7df;color:#514b64;font:14px system-ui,sans-serif}body{display:flex;flex-direction:column}header{padding:10px 14px;border-bottom:1px solid #bd929e;display:flex;gap:8px;align-items:center;flex-wrap:wrap}strong{margin-right:8px}button,a{border:1px solid #bd929e;border-radius:4px;padding:7px 10px;background:#f9f3ee;color:#514b64;text-decoration:none;font:inherit;cursor:pointer}button:disabled{opacity:.4;cursor:wait}button[aria-pressed=true]{background:#bd929e;color:#fff}small{display:block;flex-basis:100%;line-height:1.6}#status{padding:8px 14px;white-space:pre-wrap;font:12px/1.6 ui-monospace,monospace;background:#faf6f0;min-height:48px}#message{padding:4px 14px;min-height:26px;color:#75495c}iframe{border:0;display:block;flex:1;width:100%;min-height:0;background:#163d4c}label{margin-left:6px}select{font:inherit;color:inherit;padding:6px}
+</style></head><body>
+<header><strong>湖沼 · 完整游戏球面验收</strong>
+<button data-view="rim" disabled>坑缘入口侧</button><button data-view="entry" disabled>原入口首阶</button><button data-view="upper" disabled>上岸</button><button data-view="middle" disabled>中岸</button><button data-view="lower" disabled>下岸</button>
+<label>朝向 <select id="heading"><option value="lake">湖心巨树</option><option value="route">沿岸下行</option></select></label>
+<button id="restore" disabled>返回本次观察前位置</button><button id="input-check" disabled>合成 W 输入 1 秒</button><a id="game-link" target="_blank" rel="noopener">打开正式游戏</a>
+<small>iframe 加载正式 index，保留完整球面、碰撞与相机。按钮只一次性调整内存玩家观察起点；随后点击游戏画面，用 WASD / 跳跃实际行走。不会持续锁位，不改地图、任务或存档，不重置章节。</small>
+</header><div id="status" role="status">正式游戏启动中，等待现有 __tm 调试接口…</div><div id="message" aria-live="polite"></div><output id="input-result" style="font:12px monospace;padding:0 14px"></output>
+<iframe id="game" title="TigerMessenger 正式完整游戏" allow="autoplay; fullscreen"></iframe>
+<script type="module" src="./full-game-review.js"></script></body></html>

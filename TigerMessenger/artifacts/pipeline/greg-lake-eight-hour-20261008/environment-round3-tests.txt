@@ -1,0 +1,60 @@
+✔ shader-only change preserves previous actual positions/normals/indices, bounds and batch budgets (7.302541ms)
+✔ source and batch share exact bark fragment; batch keeps original barkLocal and genuine world view-distance (1.5105ms)
+✔ shader LOD coefficients retain midrange ink and fade monotonically without a far constant floor (1.366625ms)
+rounded fan geometry {"trianglesPerFan":396,"totalTriangles":295416,"originalTriangles":1039248,"drawCalls":10,"domed":746}
+✔ real crown groups become fewer broad fan instances without extra draws or moved anchors (0.987917ms)
+✔ every fan vertex stays inside its original crown envelope and its stem meets the original branch anchor (5.880083ms)
+✔ shared fan has a closed domed top, drooping edge and coherent face color (0.493083ms)
+✔ placed crown surfaces retain a visible dome and tilt instead of horizontal discs (5.677916ms)
+✔ local palette pass installs shared screen-width veins without changing geometry, attachment or matrices (6.941875ms)
+✔ spherical placement preserves canopy and branch common-frame relationship (1.489333ms)
+✔ rollback restores original crown visibility and a disabled install is inert (0.74825ms)
+{"outerCliff":{"version":2,"renderDraws":2,"cracks":41,"roots":7,"depthInner":[6.355419508566815,10.597598723818523],"walkable":false,"entrance":"same angular endpoints as existing rim","triangles":2698,"topAnchorCount":193},"minRadius":38.660296115026206,"minY":29.402400970458984,"maxY":40,"topBytesUnchanged":true,"walkwayWidthWorld":2}
+✔ production outer cliff attaches to the real rim, closes its shell and preserves original walking geometry byte for byte (1046.758708ms)
+tree render batching {"sourceMeshes":285,"renderMeshes":11,"geometryBytes":1773948,"vertices":41071,"triangles":49232,"maxPositionError":0.000001914631004167569,"maxNormalError":4.5159051043268005e-8}
+✔ 285 real organic source meshes become eleven render batches with identical world triangles/normals and no extra triangles (9.778416ms)
+✔ source meshes still provide exact perch rays and no duplicate batch ray hits after spherical / V7 parent scaling (20.131458ms)
+✔ dispose restores draw visibility and trunk detail disposal/reinstall restores original source geometry without batch leaks (30.57775ms)
+organic bark {"trunks":55,"branches":230,"deformedTrunks":27,"deformedBranches":214,"moved":12432,"maxOrganicOffset":0.88108340194374}
+actual embedded branch bases preserved 211
+✔ organic shape changes real centreline without any extra triangles or draw surfaces (3.637958ms)
+✔ all structural end rings, real perch anchors, under-water roots and transforms stay fixed (5.816167ms)
+✔ walk/bridge attachment band stays unchanged and recomputed boxes remain valid after placement (5.017958ms)
+✔ branch bases that were embedded in wood remain attached to actual closed surfaces (9.213292ms)
+understory statistics {"plants":508,"rimPlants":93,"rimAngularCoverage":0.5111111111111111,"vines":180,"counts":{"fern":95,"fan":50,"pendant":363},"triangles":54652,"drawCalls":5,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":282,"overlapping":279,"ratio":0.9893617021276596}
+frond tip heights [
+  -0.8898734450340271,
+  -0.6905297636985779,
+  -0.5960623025894165,
+  -0.921288788318634,
+  -0.5823749899864197
+]
+irregular rim habitats {"plants":93,"clusters":7,"heroes":24,"heightRange":[0.5090022751270726,5.875951905030013]}
+supported rim habitat stones 36
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (4.42875ms)
+✔ lush understory and rim stones use five instanced batches within triangle budget, not per-plant mesh draws (11.000833ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (14.028583ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (11.429ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.302375ms)
+✔ erosion revision preserves accepted rock-shoulder anchors; attached wall growth follows the revised surface (4.473583ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (3.11825ms)
+✔ rim habitat stones are actual supported low shoulders outside the patrol ribbon (70.876958ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (151.755834ms)
+✔ weathering composes existing basic shader and anchors wall height to inner frame, without frame uniforms (0.840584ms)
+✔ exterior treatment retains authored thin coral soil while sharing the same geological field (0.127625ms)
+✔ actual existing lake-wall shader and weathering have distinct local declarations (1.696292ms)
+✔ natural pockets embed in actual clipped wall and taper back into it (36.322917ms)
+✔ soil plants root on real pocket caps; root seams stay against the wall (31.212792ms)
+✔ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (9.656292ms)
+✔ protected paths, story worksite, original tree and swimming domain remain unchanged (7.55825ms)
+✔ spherical placement preserves attachment and dispose exactly restores old visuals (64.371709ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2025.5745

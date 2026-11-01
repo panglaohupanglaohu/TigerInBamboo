@@ -1,0 +1,18 @@
+{
+  "round": 40,
+  "at": "2026-10-08T08:17:17.737554+08:00",
+  "source": "src/assets/characters/tigerTargetV1.js",
+  "sourceSHA256": "81759b166d413db630b35568dbbf5fc6605c7ded453beddcfb4ef357e698fc4e",
+  "CPU": "6 character tests passed, including 96 buried root vertices, finite closed skins, fixed local nose datum, four beat gait algebra",
+  "GPU": "pending root",
+  "sourceOwnership": "C geometry builder and neck; B update stance anchoring only",
+  "changes": [
+    "head group scale .93 uniform to [1.10,1.02,1.04], same pivot and nose geometry",
+    "continuous scapula crest top1.70 vs rump1.06 in body local coordinates",
+    "tucked flank bottom-.19 vs chest-.85 local",
+    "thinner raised continuous neck; flatter upper forehead",
+    "no extra mesh or draw call; material palette unchanged"
+  ],
+  "pending": "ForceDrink and waterReturn combined regression after B stance update freezes",
+  "backup": "before-tiger-round40/tigerTargetV1.js; restore only C owned geometry hunks because B owns concurrent update"
+}

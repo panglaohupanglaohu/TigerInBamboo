@@ -1,0 +1,31 @@
+{
+  "task": "Bookshop robot patrol defense: command mode idle target omission",
+  "observations": [
+    "Production command flag permanently true; old idle command-mode target set was empty, excluding existing Moebius squadron despite local aircraft.",
+    "Target selection now uses active commander units during sorties and existing squad/escort lists when idle. No civilian aircraft or bubble boat scene scan added.",
+    "Legacy assault callbacks remain suppressed in command mode to avoid restarting old parallel war.",
+    "Actual production defense CPU module in browser: idle command mode ant2/locust9/beetle20 projectiles, respective hullHealth1600/1584/1620, zero legacy retaliation. Active commander test2 flagship hits and no ordinary patrol damage. Hidden and opposite-hemisphere targets0shots.",
+    "Review panel now exposes live intrusion/defender/projectile counters. First normal-game view had no local targets; not called a successful firing visual test. Final normal-game reload pending."
+  ],
+  "checks": [
+    {
+      "name": "Idle patrol detection and actual damage for three robot kinds",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Active command callback preserved and no parallel old assault",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full-game visual firing observation",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Compact text only; JEV not visual or audio acceptance",
+    "No new aircraft or civil targets; no commit or publication"
+  ]
+}

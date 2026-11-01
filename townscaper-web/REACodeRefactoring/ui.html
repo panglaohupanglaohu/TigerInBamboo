@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UI 实验室</title>
+<style>
+  :root { --ink: #1d2124; --bg: #2f3a44; --panel: rgba(244,247,246,.96); --teal: #2f7f8a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; min-height: 100vh; }
+  #ui { position: fixed; left: 16px; top: 16px; width: min(400px, calc(100vw - 32px)); background: var(--panel); border-radius: 14px; padding: 12px 14px; box-shadow: 0 6px 24px rgba(0,0,0,.25); z-index: 5; }
+  nav a { color: var(--teal); text-decoration: none; margin-right: 10px; font-weight: 600; font-size: 13px; }
+  h1 { font-size: 17px; margin: 6px 0 8px; }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+  button { border: 1px solid #c9d8d7; background: #fff; border-radius: 8px; padding: 4px 9px; cursor: pointer; font: inherit; font-size: 12.5px; }
+  button.on { background: var(--teal); color: #fff; border-color: var(--teal); }
+  #note { font-size: 12.5px; color: #44525a; margin: 6px 0 0; }
+  #stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px 20px 20px 440px; }
+  @media (max-width: 800px) { #stage { padding: 330px 16px 20px; align-items: flex-start; } }
+  canvas { display: block; max-width: 100%; }
+  .pane { display: none; } .pane.on { display: block; }
+  /* 确认弹出 */
+  #pop { position: relative; width: 520px; max-width: 100%; height: 360px; border-radius: 16px; background: radial-gradient(ellipse at 50% 40%, #a9c58f, #7fa36b 70%, #6d8f8f 100%); overflow: hidden; }
+  .squad { position: absolute; width: 64px; height: 52px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; font-size: 26px; transition: transform .2s; }
+  .squad:hover { transform: scale(1.06); }
+  .squad.sel { box-shadow: 0 0 0 4px rgba(255,255,255,.8); }
+  .pbtn { position: absolute; width: 74px; height: 64px; margin: -32px 0 0 -37px; border-radius: 14px; border: 3px solid rgba(0,0,0,.25); color: #fff; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transform: scale(0); transition: transform .32s cubic-bezier(.3,1.7,.5,1), opacity .2s; opacity: 0; cursor: pointer; }
+  .pbtn.show { transform: scale(1); opacity: 1; }
+  .pbtn:hover { filter: brightness(1.1); }
+  .pbtn svg { width: 24px; height: 24px; }
+  /* 斜按钮 */
+  #menu { display: flex; flex-direction: column; gap: 10px; width: 240px; }
+  #menu .mb { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-radius: 10px; border: 2px solid rgba(0,0,0,.2); font: 600 18px/1 "Courier New", monospace; letter-spacing: .5px; cursor: pointer; transition: transform .18s ease; box-shadow: 0 3px 0 rgba(0,0,0,.18); }
+  #menu .mb:hover { transform: rotate(0deg) scale(1.05) !important; }
+  #menu .pair { display: flex; gap: 10px; } #menu .pair .mb { flex: 1; }
+  /* 图标 */
+  #icons { display: flex; flex-direction: column; gap: 12px; padding: 14px; background: #3a6aa0; border-radius: 16px; }
+  .ic { position: relative; width: 56px; height: 56px; border-radius: 14px; border: 3px solid rgba(0,0,0,.35); display: grid; place-items: center; cursor: pointer; transition: transform .15s; }
+  .ic svg { width: 36px; height: 36px; }
+  .ic.on::after { content: ''; position: absolute; right: -16px; top: 50%; margin-top: -8px; border: 8px solid transparent; border-right: 10px solid #fff; border-left: 0; }
+  .ic.on { transform: rotate(-4deg) scale(1.08); }
+</style>
+</head>
+<body>
+<div id="ui">
+  <nav><a href="index.html">← 首页</a><a href="pipeline.html">管线</a><a href="textures.html">贴图</a></nav>
+  <h1>UI 实验室</h1>
+  <div class="row" id="tabs">
+    <button data-t="face" class="on">头像生成器</button>
+    <button data-t="banner">旗帜生成器</button>
+    <button data-t="pop">确认弹出</button>
+    <button data-t="menu">斜按钮</button>
+    <button data-t="icons">图标</button>
+  </div>
+  <div class="row"><button id="again">换一批</button></div>
+  <p id="note"></p>
+</div>
+<div id="stage">
+  <div class="pane on" id="p-face"><canvas id="cface"></canvas></div>
+  <div class="pane" id="p-banner"><canvas id="cbanner"></canvas></div>
+  <div class="pane" id="p-pop"><div id="pop"></div></div>
+  <div class="pane" id="p-menu"><div id="menu"></div></div>
+  <div class="pane" id="p-icons"><div id="icons"></div></div>
+</div>
+<script type="module">
+/* ============================================================================================
+ * 层级部件生成器（958371606350454784 "The beginnings of a portrait generator. It currently runs on 5 examples …
+ *   but it's content agnostic"；958410200146497537 "The approach is versatile enough that I can use it for the ingame
+ *   banners too"）。
+ * 一个"部件"= 若干个变体（draw 函数）+ 若干个挂点（子部件放在哪、多大、要不要左右镜像）。
+ * 生成 = 从根开始，每个槽随机挑一个变体，按挂点递归画子部件。系统本身不知道"脸"或"旗"是什么——
+ * 换一棵部件树就换一种内容。
+ * ========================================================================================== */
+let seed = 7;
+const rng = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+const pick = (a) => a[(rng() * a.length) | 0];
+const jit = (s) => (rng() - 0.5) * 2 * s;
+
+function grow(ctx, part, x, y, s, ctxData) {
+  const v = typeof part.variants === 'function' ? part.variants(ctxData) : pick(part.variants);
+  const anchors = v.draw(ctx, x, y, s, ctxData) || {};
+  for (const child of part.children || []) {
+    const a = anchors[child.at];
+    if (!a || (child.chance !== undefined && rng() > child.chance)) continue;
+    const cs = s * (a.s ?? 1) * (1 + jit(child.scaleJit ?? 0.06));
+    if (child.mirror) {
+      ctx.save(); grow(ctx, child.part, x + a.x * s, y + a.y * s, cs, ctxData); ctx.restore();
+      ctx.save(); ctx.translate(x - a.x * s, 0); ctx.scale(-1, 1); ctx.translate(-(x - a.x * s), 0);
+      const keep = seed; seed = ctxData.mirrorSeed ?? seed; grow(ctx, child.part, x - a.x * s, y + a.y * s, cs, ctxData); seed = keep; ctx.restore();
+    } else grow(ctx, child.part, x + a.x * s, y + a.y * s, cs, ctxData);
+  }
+}
+const INK = '#1d1b1a';
+function stroke(ctx, w = 3) { ctx.lineWidth = w; ctx.strokeStyle = INK; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke(); }
+function blob(ctx, pts) {   // 闭合平滑曲线（中点二次贝塞尔）
+  ctx.beginPath();
+  const n = pts.length, m = (i) => [(pts[i % n][0] + pts[(i + 1) % n][0]) / 2, (pts[i % n][1] + pts[(i + 1) % n][1]) / 2];
+  ctx.moveTo(...m(0));
+  for (let i = 1; i <= n; i++) ctx.quadraticCurveTo(...pts[i % n], ...m(i));
+  ctx.closePath();
+}
+
+/* ---------- 脸的部件树 ---------- */
+const SKIN = ['#f3e6d4', '#f1dcc6', '#ecd3b8', '#d9b894'];
+const HAIR = ['#3a2f2a', '#5a4231', '#8a6a3a', '#2a2a2e', '#a8794a'];
+const headVariants = [
+  { name: '长脸', w: 0.72, h: 1.0 }, { name: '圆脸', w: 0.82, h: 0.9 }, { name: '蛋形', w: 0.75, h: 0.95, egg: true }, { name: '方脸', w: 0.8, h: 0.95, square: true }, { name: '窄脸', w: 0.66, h: 1.02 },
+].map((v) => ({ draw(ctx, x, y, s, d) {
+  const w = v.w * s * (1 + jit(0.06)), h = v.h * s * (1 + jit(0.04));
+  const pts = [];
+  for (let i = 0; i < 16; i++) {
+    const a = (i / 16) * Math.PI * 2;
+    let rx = Math.cos(a) * w * 0.5, ry = Math.sin(a) * h * 0.5;
+    if (v.egg && ry > 0) rx *= 0.82;
+    if (v.square) { rx = Math.sign(rx) * Math.min(Math.abs(rx) * 1.15, w * 0.5); }
+    pts.push([x + rx, y + ry + (ry > 0 ? ry * 0.12 : 0)]);
+  }
+  d.skin = pick(SKIN); d.hair = pick(HAIR); d.mirrorSeed = (rng() * 1e9) | 0;
+  blob(ctx, pts); ctx.fillStyle = d.skin; ctx.fill(); stroke(ctx, 3.2);
+  d.headW = w; d.headH = h;
+  return {
+    ear: { x: w * 0.5 / s, y: 0.02, s: 1 }, eye: { x: 0.15, y: -0.02, s: 1 }, nose: { x: 0, y: 0.0, s: 1 },
+    mouth: { x: 0, y: h * 0.33 / s, s: 1 }, hair: { x: 0, y: -h * 0.5 / s, s: 1 }, beard: { x: 0, y: h * 0.3 / s, s: 1 }, cheek: { x: 0.2, y: 0.12, s: 1 },
+  };
+} }));
+const ear = { variants: [0, 1, 2].map((k) => ({ draw(ctx, x, y, s, d) {
+  ctx.beginPath(); ctx.ellipse(x + s * 0.03, y, s * (0.07 + k * 0.015), s * (0.11 + k * 0.01), 0.2, -Math.PI * 0.6, Math.PI * 0.6); ctx.fillStyle = d.skin; ctx.fill(); stroke(ctx, 3);
+  ctx.beginPath(); ctx.arc(x + s * 0.035, y, s * 0.035, -1, 1); stroke(ctx, 2);
+} })) };
+const eye = { variants: ['dot', 'tired', 'wide', 'squint', 'stare'].map((k) => ({ draw(ctx, x, y, s) {
+  const r = s * (k === 'wide' ? 0.07 : 0.055);
+  if (k !== 'squint') { ctx.beginPath(); ctx.ellipse(x, y, r * 1.2, r, 0, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); stroke(ctx, 2.2); }
+  ctx.beginPath(); ctx.arc(x + (k === 'stare' ? r * 0.3 : 0), y + r * 0.1, r * 0.45, 0, 7); ctx.fillStyle = INK; ctx.fill();
+  if (k === 'tired' || k === 'squint') { ctx.beginPath(); ctx.moveTo(x - r * 1.3, y - r * 0.2); ctx.lineTo(x + r * 1.3, y - r * 0.2); stroke(ctx, 2.6); }
+  if (k === 'tired') { ctx.beginPath(); ctx.arc(x, y + r * 1.2, r * 1.1, 0.3, Math.PI - 0.3); ctx.strokeStyle = 'rgba(90,70,90,.35)'; ctx.lineWidth = 3; ctx.stroke(); }
+  ctx.beginPath(); ctx.moveTo(x - r * 1.4, y - r * (1.8 + jit(0.3))); ctx.lineTo(x + r * 1.2, y - r * (1.7 + jit(0.5))); stroke(ctx, 3);   // 眉毛
+} })) };
+const nose = { variants: ['long', 'hook', 'button', 'wide'].map((k) => ({ draw(ctx, x, y, s, d) {
+  const L = s * (k === 'long' ? 0.24 : k === 'button' ? 0.12 : 0.19), W = s * (k === 'wide' ? 0.09 : 0.06);
+  ctx.beginPath(); ctx.moveTo(x - W * 0.3, y - L * 0.6);
+  if (k === 'hook') ctx.quadraticCurveTo(x + W * 1.6, y, x + W * 0.4, y + L * 0.45); else ctx.lineTo(x - W * 0.2, y + L * 0.3);
+  ctx.quadraticCurveTo(x, y + L * 0.55, x + W, y + L * 0.35);
+  ctx.lineTo(x + W * 0.4, y - L * 0.6); ctx.closePath();
+  ctx.fillStyle = '#eba08a'; ctx.fill(); stroke(ctx, 2.6);
+} })) };
+const mouth = { variants: ['flat', 'frown', 'smirk', 'open'].map((k) => ({ draw(ctx, x, y, s) {
+  const w = s * (0.1 + rng() * 0.05);
+  ctx.beginPath();
+  if (k === 'flat') { ctx.moveTo(x - w, y); ctx.lineTo(x + w, y + jit(2)); }
+  else if (k === 'frown') { ctx.moveTo(x - w, y + 3); ctx.quadraticCurveTo(x, y - 5, x + w, y + 3); }
+  else if (k === 'smirk') { ctx.moveTo(x - w, y); ctx.quadraticCurveTo(x + w * 0.4, y + 3, x + w, y - 4); }
+  else { ctx.ellipse(x, y, w * 0.55, w * 0.32, 0, 0, 7); ctx.fillStyle = '#5a2b2b'; ctx.fill(); }
+  stroke(ctx, 2.8);
+} })) };
+const hair = { variants: ['bowl', 'side', 'mohawk', 'bald', 'cap', 'helmet', 'curl'].map((k) => ({ draw(ctx, x, y, s, d) {
+  const w = d.headW, h = d.headH;
+  if (k === 'bald') { ctx.beginPath(); ctx.arc(x + w * 0.15, y + h * 0.12, w * 0.07, Math.PI * 1.1, Math.PI * 1.6); ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 3; ctx.stroke(); return; }
+  if (k === 'helmet') {   // 尖顶盔 + 护鼻（1010979395719319552 第二张）
+    ctx.beginPath(); ctx.moveTo(x - w * 0.55, y + h * 0.28); ctx.quadraticCurveTo(x - w * 0.55, y - h * 0.15, x, y - h * 0.32); ctx.quadraticCurveTo(x + w * 0.55, y - h * 0.15, x + w * 0.55, y + h * 0.28); ctx.closePath();
+    ctx.fillStyle = '#c9ced3'; ctx.fill(); stroke(ctx, 3);
+    ctx.beginPath(); ctx.rect(x - w * 0.05, y + h * 0.2, w * 0.1, h * 0.35); ctx.fillStyle = '#b3b9bf'; ctx.fill(); stroke(ctx, 2.4);
+    ctx.beginPath(); ctx.moveTo(x - w * 0.56, y + h * 0.24); ctx.lineTo(x + w * 0.56, y + h * 0.24); stroke(ctx, 3); return;
+  }
+  ctx.fillStyle = k === 'cap' ? pick(['#8b7355', '#6b7f5a', '#7a5a4a']) : d.hair;
+  ctx.beginPath();
+  if (k === 'mohawk') { blob(ctx, [[x - w * 0.12, y + h * 0.15], [x - w * 0.2, y - h * 0.05], [x - w * 0.02, y - h * 0.16], [x + w * 0.2, y - h * 0.05], [x + w * 0.12, y + h * 0.15]]); }
+  else if (k === 'curl') { for (let i = 0; i < 7; i++) { const a = Math.PI * (1.05 + i * 0.15); ctx.moveTo(x + Math.cos(a) * w * 0.48 + w * 0.12, y + h * 0.5 + Math.sin(a) * h * 0.5); ctx.arc(x + Math.cos(a) * w * 0.48, y + h * 0.5 + Math.sin(a) * h * 0.5, w * 0.12, 0, 7); } }
+  else {
+    const drop = k === 'bowl' ? 0.42 : k === 'cap' ? 0.3 : 0.35;
+    ctx.moveTo(x - w * 0.53, y + h * drop);
+    ctx.bezierCurveTo(x - w * 0.6, y - h * 0.12, x + w * 0.6, y - h * 0.12, x + w * 0.53, y + h * drop);
+    if (k === 'side') ctx.quadraticCurveTo(x + w * 0.1, y + h * 0.15, x - w * 0.3, y + h * 0.32);
+    else ctx.lineTo(x - w * 0.53, y + h * drop);
+    ctx.closePath();
+  }
+  ctx.fill(); stroke(ctx, 3);
+  if (k === 'bowl' || k === 'cap') for (let i = 0; i < 6; i++) { const t = (i + 0.5) / 6; ctx.beginPath(); ctx.moveTo(x - w * 0.45 + t * w * 0.9, y + h * 0.05); ctx.lineTo(x - w * 0.48 + t * w * 0.96, y + h * (k === 'cap' ? 0.28 : 0.38)); stroke(ctx, 1.6); }
+} })) };
+const beard = { variants: ['short', 'full', 'mustache'].map((k) => ({ draw(ctx, x, y, s, d) {
+  const w = d.headW;
+  ctx.fillStyle = d.hair; ctx.beginPath();
+  if (k === 'mustache') { ctx.ellipse(x - w * 0.1, y - s * 0.03, w * 0.12, s * 0.035, 0.2, 0, 7); ctx.ellipse(x + w * 0.1, y - s * 0.03, w * 0.12, s * 0.035, -0.2, 0, 7); }
+  else { ctx.moveTo(x - w * 0.4, y - s * 0.12); ctx.quadraticCurveTo(x, y + s * (k === 'full' ? 0.42 : 0.22), x + w * 0.4, y - s * 0.12); ctx.quadraticCurveTo(x, y + s * 0.05, x - w * 0.4, y - s * 0.12); }
+  ctx.fill(); stroke(ctx, 2.6);
+} })) };
+const FACE = { variants: headVariants, children: [
+  { at: 'ear', part: ear, mirror: true }, { at: 'hair', part: hair }, { at: 'eye', part: eye, mirror: true },
+  { at: 'beard', part: beard, chance: 0.35 }, { at: 'mouth', part: mouth }, { at: 'nose', part: nose },
+] };
+
+function drawFace(ctx, x, y, s, framed) {
+  if (framed) {   // 1010979395719319552：切角方框 + 红/蓝背景 + 小人剪影
+    const r = s * 0.62, c = r * 0.28;
+    const oct = () => { ctx.beginPath(); ctx.moveTo(x - r + c, y - r); ctx.lineTo(x + r - c, y - r); ctx.lineTo(x + r, y - r + c); ctx.lineTo(x + r, y + r - c); ctx.lineTo(x + r - c, y + r); ctx.lineTo(x - r + c, y + r); ctx.lineTo(x - r, y + r - c); ctx.lineTo(x - r, y - r + c); ctx.closePath(); };
+    ctx.save(); oct(); ctx.fillStyle = pick(['#e2566a', '#3f72b8', '#d9655a', '#4a86c8']); ctx.fill(); ctx.clip();
+    ctx.fillStyle = 'rgba(30,60,110,.55)'; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.ellipse(x - r + i * r * 0.65, y + r * 0.75, r * 0.2, r * 0.45, 0, 0, 7); ctx.fill(); }
+    ctx.fillStyle = '#2a4a6a'; ctx.beginPath(); ctx.ellipse(x, y + r * 1.15, r * 0.75, r * 0.5, 0, 0, 7); ctx.fill(); stroke(ctx, 3);   // 肩
+    grow(ctx, FACE, x, y - s * 0.02, s * 0.72, {});
+    ctx.restore();
+    oct(); ctx.lineWidth = s * 0.07; ctx.strokeStyle = '#e8e6e1'; ctx.stroke(); ctx.lineWidth = 2; ctx.strokeStyle = '#6a6862'; ctx.stroke();
+  } else {
+    ctx.fillStyle = '#2f4a78'; ctx.fillRect(x - s * 0.62, y - s * 0.62, s * 1.24, s * 1.24);
+    grow(ctx, FACE, x, y, s * 0.85, {});
+  }
+}
+
+/* ---------- 旗帜的部件树（同一个生成器） ---------- */
+const BCOL = ['#7cc45a', '#8a6ee0', '#d65aa8', '#e0a43c', '#4aa0c8', '#d6503c'];
+const SYMBOLS = {
+  sun(ctx, x, y, s) { ctx.beginPath(); ctx.arc(x, y, s * 0.28, 0, 7); ctx.fill(); for (let i = 0; i < 12; i++) { const a = i / 12 * 6.283; ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * s * 0.36, y + Math.sin(a) * s * 0.36); ctx.lineTo(x + Math.cos(a) * s * 0.46, y + Math.sin(a) * s * 0.46); ctx.lineWidth = s * 0.05; ctx.strokeStyle = '#fff'; ctx.stroke(); } },
+  clover(ctx, x, y, s) { for (const a of [-1.9, -0.2, 1.5]) { ctx.beginPath(); ctx.arc(x + Math.cos(a) * s * 0.2, y + Math.sin(a) * s * 0.2, s * 0.2, 0, 7); ctx.fill(); } },
+  tower(ctx, x, y, s) { ctx.fillRect(x - s * 0.14, y - s * 0.3, s * 0.28, s * 0.62); for (let i = 0; i < 3; i++) ctx.fillRect(x - s * 0.2 + i * s * 0.15, y - s * 0.42, s * 0.1, s * 0.14); ctx.save(); ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(x - s * 0.04, y - s * 0.15, s * 0.08, s * 0.14); ctx.restore(); },
+  figure(ctx, x, y, s) { ctx.beginPath(); ctx.arc(x, y - s * 0.24, s * 0.1, 0, 7); ctx.fill(); ctx.beginPath(); ctx.roundRect(x - s * 0.13, y - s * 0.14, s * 0.26, s * 0.3, s * 0.08); ctx.fill(); ctx.fillRect(x - s * 0.1, y + s * 0.1, s * 0.07, s * 0.22); ctx.fillRect(x + s * 0.03, y + s * 0.1, s * 0.07, s * 0.22); ctx.fillRect(x - s * 0.2, y - s * 0.1, s * 0.06, s * 0.22); ctx.fillRect(x + s * 0.14, y - s * 0.1, s * 0.06, s * 0.22); },
+  fleur(ctx, x, y, s) { ctx.beginPath(); ctx.moveTo(x, y - s * 0.38); ctx.quadraticCurveTo(x + s * 0.15, y - s * 0.1, x, y + s * 0.05); ctx.quadraticCurveTo(x - s * 0.15, y - s * 0.1, x, y - s * 0.38); ctx.fill(); for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + d * s * 0.35, y - s * 0.25, x + d * s * 0.22, y + s * 0.05); ctx.quadraticCurveTo(x + d * s * 0.12, y - s * 0.05, x, y + s * 0.05); ctx.fill(); } ctx.fillRect(x - s * 0.2, y + s * 0.05, s * 0.4, s * 0.06); ctx.fillRect(x - s * 0.04, y + s * 0.1, s * 0.08, s * 0.22); },
+  dot(ctx, x, y, s) { ctx.beginPath(); ctx.arc(x, y, s * 0.06, 0, 7); ctx.fill(); },
+  diamond(ctx, x, y, s) { ctx.beginPath(); ctx.moveTo(x, y - s * 0.09); ctx.lineTo(x + s * 0.06, y); ctx.lineTo(x, y + s * 0.09); ctx.lineTo(x - s * 0.06, y); ctx.fill(); },
+};
+const symbol = (names) => ({ variants: names.map((n) => ({ draw(ctx, x, y, s) { ctx.fillStyle = '#fff'; SYMBOLS[n](ctx, x, y, s); } })) });
+const BIG = symbol(['sun', 'clover', 'tower', 'figure', 'fleur']), SMALL = symbol(['dot', 'diamond']);
+const bannerShapes = ['point', 'notch', 'swallow', 'square'].map((k) => ({ draw(ctx, x, y, s, d) {
+  const L = s * (k === 'swallow' ? 2.5 : 1.7), H = s * 0.8, x0 = x - s * 0.85, y0 = y - H / 2;
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + L * (k === 'square' ? 1 : 0.85), y0);
+  if (k === 'point') ctx.lineTo(x0 + L, y);
+  else if (k === 'notch') { ctx.lineTo(x0 + L * 0.85, y0 + H * 0.25); ctx.lineTo(x0 + L * 0.8, y0 + H * 0.25); ctx.lineTo(x0 + L * 0.8, y0 + H * 0.75); ctx.lineTo(x0 + L * 0.85, y0 + H * 0.75); }
+  else if (k === 'swallow') { ctx.lineTo(x0 + L, y0 - H * 0.05); ctx.lineTo(x0 + L * 0.45, y); ctx.lineTo(x0 + L, y0 + H * 1.05); }
+  ctx.lineTo(x0 + L * (k === 'square' ? 1 : 0.85), y0 + H); ctx.lineTo(x0, y0 + H); ctx.closePath();
+  ctx.fillStyle = pick(BCOL); ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = 'rgba(40,40,60,.85)'; ctx.stroke();
+  const two = k !== 'point' || rng() < 0.4;
+  return { a: { x: two ? -0.45 : -0.15, y: 0, s: 1 }, b: two ? { x: 0.15, y: 0, s: 0.9 } : null, c1: { x: -0.7, y: -0.26, s: 1 }, c2: { x: -0.7, y: 0.26, s: 1 }, c3: { x: two ? -0.15 : 0.3, y: -0.27, s: 1 }, c4: { x: two ? -0.15 : 0.3, y: 0.27, s: 1 } };
+} }));
+const BANNER = { variants: bannerShapes, children: [
+  { at: 'a', part: BIG, scaleJit: 0 }, { at: 'b', part: BIG, scaleJit: 0, chance: 0.9 },
+  { at: 'c1', part: SMALL, chance: 0.5 }, { at: 'c2', part: SMALL, chance: 0.5 }, { at: 'c3', part: SMALL, chance: 0.6 }, { at: 'c4', part: SMALL, chance: 0.6 },
+] };
+
+/* ---------- 画布页 ---------- */
+function setupCanvas(cv, w, h) { const DPR = Math.min(2, devicePixelRatio); cv.width = w * DPR; cv.height = h * DPR; cv.style.width = w + 'px'; cv.style.height = h + 'px'; const c = cv.getContext('2d'); c.setTransform(DPR, 0, 0, DPR, 0, 0); return c; }
+function drawFaces() {
+  const W = Math.min(760, innerWidth - 40), cols = W > 600 ? 4 : 3, cell = W / cols;
+  const ctx = setupCanvas(document.getElementById('cface'), W, cell * 2 + 10);
+  for (let i = 0; i < cols; i++) drawFace(ctx, cell * (i + 0.5), cell * 0.5, cell * 0.72, false);
+  for (let i = 0; i < cols; i++) drawFace(ctx, cell * (i + 0.5), cell * 1.5 + 10, cell * 0.72, true);
+}
+function drawBanners() {
+  const W = Math.min(760, innerWidth - 40), cols = W > 600 ? 3 : 2, cw = W / cols, ch = 110;
+  const ctx = setupCanvas(document.getElementById('cbanner'), W, ch * 4);
+  ctx.fillStyle = '#2f4a78'; ctx.fillRect(0, 0, W, ch * 4);
+  for (let j = 0; j < 4; j++) for (let i = 0; i < cols; i++) grow(ctx, BANNER, cw * i + cw * 0.42, ch * (j + 0.5), Math.min(70, cw * 0.32), {});
+}
+
+/* ---------- 确认弹出（1016680972610359298） ---------- */
+const ICON = {
+  select: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>',
+  move: '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3a6 6 0 0 0-6 6c0 4.5 6 12 6 12s6-7.5 6-12a6 6 0 0 0-6-6z"/></svg>',
+  swap: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg>',
+};
+function buildPop() {
+  const box = document.getElementById('pop'); box.innerHTML = '';
+  const squads = [{ x: 170, y: 230, c: '#e9a93a', f: '🛡' }, { x: 380, y: 200, c: '#5a8fd6', f: '⚔' }];
+  const btns = [['选择', 'select', '#c08a4a'], ['移动', 'move', '#5a8fd6'], ['交换', 'swap', '#c08a4a']].map(([t, k, c]) => {
+    const b = document.createElement('div'); b.className = 'pbtn'; b.style.background = c; b.innerHTML = ICON[k] + `<span>${t}</span>`; box.appendChild(b); return b;
+  });
+  let open = null;
+  let timers = [];
+  const later = (f, ms) => timers.push(setTimeout(f, ms));
+  const close = (now) => { timers.forEach(clearTimeout); timers = []; btns.forEach((b, i) => (now ? b.classList.remove('show') : later(() => b.classList.remove('show'), (2 - i) * 40))); open?.el.classList.remove('sel'); open = null; };
+  squads.forEach((s) => {
+    const el = document.createElement('div'); el.className = 'squad'; el.style.left = s.x - 32 + 'px'; el.style.top = s.y - 26 + 'px';
+    el.style.background = `radial-gradient(circle at 50% 40%, ${s.c}, ${s.c}aa 60%, transparent 72%)`; el.textContent = s.f; box.appendChild(el);
+    el.onclick = (e) => {
+      e.stopPropagation();
+      if (open?.s === s) return close();
+      close(true); open = { s, el }; el.classList.add('sel');
+      // 三个按钮沿上方的一段圆弧排开，依次弹出（弹簧缓动：cubic-bezier 超调）
+      btns.forEach((b, i) => { const a = -Math.PI / 2 + (i - 1) * 0.95; b.style.left = s.x + Math.cos(a) * 100 + 'px'; b.style.top = s.y + Math.sin(a) * 100 + 'px'; later(() => b.classList.add('show'), i * 60); });
+    };
+  });
+  btns.forEach((b) => (b.onclick = (e) => { e.stopPropagation(); b.animate([{ transform: 'scale(1)' }, { transform: 'scale(.85)' }, { transform: 'scale(1)' }], 160); setTimeout(() => close(), 170); }));
+  box.onclick = () => close();
+  setTimeout(() => squads[0] && box.querySelector('.squad').click(), 400);
+}
+
+/* ---------- 斜按钮（1242824460325052417 "you can make a boring list of buttons playful by just tilting them slightly"） ---------- */
+function buildMenu() {
+  const m = document.getElementById('menu'); m.innerHTML = '';
+  const rows = [[['新建', '#cdeaa8', '⌂']], [['打开', '#cdeaa8', '▤']], [['退出', '#f2c0c0', '✕']], [['存到剪贴板', '#f4eec8', '']], [['从剪贴板读', '#f4eec8', '']], [['撤销', '#f2c0c0', '↶'], ['重做', '#f2c0c0', '↷']], [['网格', '#cfe2f2', '◐']]];
+  for (const r of rows) {
+    const holder = r.length > 1 ? Object.assign(document.createElement('div'), { className: 'pair' }) : m;
+    for (const [t, c, i] of r) {
+      const b = document.createElement('div'); b.className = 'mb'; b.style.background = c;
+      b.style.transform = `rotate(${(rng() * 2 - 1) * 2.4}deg) translateX(${jit(4)}px)`;   // ±2.4°，再错开几像素
+      b.innerHTML = `<span>${t}</span><span>${i}</span>`; holder.appendChild(b);
+    }
+    if (holder !== m) m.appendChild(holder);
+  }
+}
+
+/* ---------- 图标（1201179450668441600 "Icons!"）：工具条，选中的图标歪一点、放大、旁边一个白色小三角 ---------- */
+const TOOL_ICONS = [
+  ['#b48fd6', '<svg viewBox="0 0 36 36"><path d="M6 6l20 8-8 3-3 8z" fill="#fff" stroke="#1d1b1a" stroke-width="2.4" stroke-linejoin="round"/></svg>'],
+  ['#9fd6d0', '<svg viewBox="0 0 36 36"><path d="M8 26c4 0 6-2 6-5l10-12 3 3-12 10c0 3-2 5-7 4z" fill="#fff" stroke="#1d1b1a" stroke-width="2.4" stroke-linejoin="round"/></svg>'],
+  ['#c9d68f', '<svg viewBox="0 0 36 36"><path d="M7 15l11-8 9 9-11 9z" fill="#fff" stroke="#1d1b1a" stroke-width="2.4" stroke-linejoin="round"/><path d="M27 18c2 3 2 5 0 6" stroke="#1d1b1a" stroke-width="2.4" fill="none"/></svg>'],
+  ['#e6b08a', '<svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="10" fill="#fff" stroke="#1d1b1a" stroke-width="2.4"/><circle cx="18" cy="18" r="3" fill="#1d1b1a"/></svg>'],
+  ['#8aa2c8', '<svg viewBox="0 0 36 36"><path d="M10 14h12a6 6 0 0 1 0 12h-6" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><path d="M14 9l-5 5 5 5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
+  ['#8aa2c8', '<svg viewBox="0 0 36 36"><path d="M26 14H14a6 6 0 0 0 0 12h6" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><path d="M22 9l5 5-5 5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
+  ['#8aa2c8', '<svg viewBox="0 0 36 36"><path d="M11 11l14 14M25 11L11 25" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/></svg>'],
+];
+function buildIcons() {
+  const box = document.getElementById('icons'); box.innerHTML = '';
+  TOOL_ICONS.forEach(([c, svg], i) => {
+    const b = document.createElement('div'); b.className = 'ic' + (i === 0 ? ' on' : ''); b.style.background = c; b.innerHTML = svg;
+    if (i < 4) b.onclick = () => { box.querySelectorAll('.ic').forEach((x) => x.classList.toggle('on', x === b)); b.animate([{ transform: 'rotate(-4deg) scale(1.2)' }, { transform: 'rotate(-4deg) scale(1.08)' }], 180); };
+    box.appendChild(b);
+  });
+}
+
+const NOTES = {
+  face: '958371606350454784 头像生成器 + 1010979395719319552 游戏里的头像。一个"内容无关"的层级部件生成器：头 → 耳（镜像）/ 头发 / 眼（镜像）/ 胡子 / 嘴 / 鼻，每个槽随机挑变体并带一点尺寸抖动。下排加了切角相框、红蓝背景、盔和护鼻。',
+  banner: '958410200146497537 "versatile enough that I can use it for the ingame banners too"：同一个生成器换一棵部件树——旗形（尖、缺口、燕尾、方）→ 1–2 个大徽记（太阳 / 三叶 / 塔 / 小人 / 百合）+ 小点缀。',
+  pop: '1016680972610359298 确认弹出：点一队 → 三个按钮（选择 / 移动 / 交换）沿上方圆弧依次弹出，带超调的弹簧缓动；再点一次或点空白收回。',
+  menu: '1242824460325052417 "make a boring list of buttons playful by just tilting them slightly"：每个按钮随机转 ±2.4°、错开几像素；鼠标移上去摆正放大。',
+  icons: '1201179450668441600 Icons!：粗黑描边的白色图形 + 彩色圆角底；选中的那个歪一点、放大，旁边一个白色小三角指着它。',
+};
+let tab = 'face';
+function render() {
+  document.getElementById('note').textContent = NOTES[tab];
+  if (tab === 'face') drawFaces(); else if (tab === 'banner') drawBanners(); else if (tab === 'pop') buildPop(); else if (tab === 'menu') buildMenu(); else buildIcons();
+}
+function setTab(t) {
+  tab = t;
+  document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
+  document.querySelectorAll('.pane').forEach((p) => p.classList.toggle('on', p.id === 'p-' + t));
+  render();
+}
+document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => setTab(b.dataset.t)));
+document.getElementById('again').onclick = () => { seed = (seed * 7 + 13) % 2147483647 || 1; render(); };
+addEventListener('resize', () => (tab === 'face' || tab === 'banner') && render());
+setTab(new URLSearchParams(location.search).get('t') || 'face');
+window.uiLab = { setTab };
+</script>
+</body>
+</html>

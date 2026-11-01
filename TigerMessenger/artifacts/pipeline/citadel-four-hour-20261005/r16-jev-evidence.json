@@ -1,0 +1,46 @@
+{
+  "version": "r16-valley-benches",
+  "goal": "Target terrain first, cities then rail; final >95; current not accepted",
+  "visual_observations": {
+    "source": "root and independent advisor inspected actual r16 bare image",
+    "sha256": "63a092d6e8d3e3b109503e7e15d4c0f5510e866c42cf6174f582eee7fc45a5fd",
+    "differences": [
+      "Central notch now has three real ledges, interrupting the vertical wall; independent advisor considers local improvement.",
+      "Central stair gully remains too narrow and symmetric; one ledge should spread sideways and the other remain a cliff.",
+      "Circular city benches and overall target mismatch remain; no final acceptance.",
+      "Separate fast geometry-only preview tested; stale dressing intentionally hidden and full reload required before acceptance."
+    ]
+  },
+  "checks": [
+    {
+      "name": "actual GPU sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "terrain visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "new city and rail gameplay",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "sampled existing bay water not filled and building cores remain flat",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "sampled z=-43 land connection above sea with 37.82m minimum clearance",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "No false 95 score",
+    "Candidate opt-in only; keep original rollback",
+    "Prioritize silhouette and authored topology before automated module selection"
+  ]
+}

@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# Standalone REA launcher for this folder.
+#
+# Uses only the rea-agents copy installed in this directory (never a global one).
+#
+# Two things the bare node_modules/.bin/rea symlink does not do:
+#   1. rea-agents 6.8.0 requires Node ^22.23.4 || ^24.22.1 || >=26.12.1, and the
+#      node first on PATH here is 22.22.2, which fails `rea doctor`. We therefore
+#      pick the first Node that actually satisfies that range.
+#   2. Native decompilation providers need a JDK and Ghidra. Defaults are taken
+#      from the REA toolkit at ~/Tools/REA when present; override with
+#      JAVA_HOME / GHIDRA_INSTALL_DIR / REA_NODE / REA_TOOLKIT_HOME.
+#
+# This script does not run `rea setup`, so no client MCP config is touched here.
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ENTRY="$DIR/node_modules/rea-agents/scripts/rea.mjs"
+TOOLKIT="${REA_TOOLKIT_HOME:-$HOME/Tools/REA}"
+
+if [ ! -f "$ENTRY" ]; then
+  echo "rea: $ENTRY not found. Run 'npm install' in $DIR first." >&2
+  exit 1
+fi
+
+# Node.js range required by rea-agents engines.
+node_satisfies_engines() {
+  local bin="$1" ver major
+  [ -x "$bin" ] || return 1
+  ver="$("$bin" -p 'process.versions.node' 2>/dev/null)" || return 1
+  [ -n "$ver" ] || return 1
+  major="${ver%%.*}"
+  case "$major" in
+    22) [ "$(printf '%s\n%s\n' "$ver" "22.23.4" | sort -V | head -1)" = "22.23.4" ] ;;
+    24) [ "$(printf '%s\n%s\n' "$ver" "24.22.1" | sort -V | head -1)" = "24.22.1" ] ;;
+    2[6-9]|3[0-9]|*) [ "$(printf '%s\n%s\n' "$ver" "26.12.1" | sort -V | head -1)" = "26.12.1" ] ;;
+    23|25) return 1 ;;
+    *) return 1 ;;
+  esac
+}
+
+NODE=""
+for candidate in \
+  "${REA_NODE:-}" \
+  "$DIR/.node/bin/node" \
+  "$TOOLKIT/node/bin/node" \
+  "$(command -v node 2>/dev/null || true)"
+do
+  [ -n "$candidate" ] || continue
+  if node_satisfies_engines "$candidate"; then
+    NODE="$candidate"
+    break
+  fi
+done
+
+if [ -z "$NODE" ]; then
+  echo "rea: no Node.js found in the required range (^22.23.4 || ^24.22.1 || >=26.12.1)." >&2
+  echo "     Set REA_NODE=/path/to/node, or put a compatible node in $DIR/.node/bin." >&2
+  exit 1
+fi
+
+# Native analysis toolchain (optional: static JS/Electron analysis needs none).
+if [ -z "${JAVA_HOME:-}" ] && [ -x "$TOOLKIT/java/jdk-21.0.13+9/Contents/Home/bin/java" ]; then
+  export JAVA_HOME="$TOOLKIT/java/jdk-21.0.13+9/Contents/Home"
+fi
+if [ -z "${GHIDRA_INSTALL_DIR:-}" ] && [ -d "$TOOLKIT/decompiler/ghidra_12.1.4_PUBLIC" ]; then
+  export GHIDRA_INSTALL_DIR="$TOOLKIT/decompiler/ghidra_12.1.4_PUBLIC"
+fi
+
+exec "$NODE" "$ENTRY" "$@"

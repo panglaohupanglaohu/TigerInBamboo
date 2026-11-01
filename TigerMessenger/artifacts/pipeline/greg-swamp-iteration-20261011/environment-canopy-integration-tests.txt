@@ -1,0 +1,60 @@
+central shelter crown {"leaves":21,"minY":58.79905421147776,"farFromAnchor":10.268542993527264}
+central actual angular light gaps [{"group":0,"fraction":0.16666666666666666,"radius":4.702346924146847,"heightVariation":0.6540060912410794},{"group":1,"fraction":0.16944444444444445,"radius":4.865635364294212,"heightVariation":0.7065550600743364},{"group":2,"fraction":0.16666666666666666,"radius":5.647698646439996,"heightVariation":0.6890429834709835},{"group":3,"fraction":0.16666666666666666,"radius":4.878278887919236,"heightVariation":0.6834255202138309},{"group":4,"fraction":0.16666666666666666,"radius":4.485539769040274,"heightVariation":0.7104094356629673},{"group":5,"fraction":0.17222222222222222,"radius":5.227948536914604,"heightVariation":0.722770643267296},{"group":6,"fraction":0.1638888888888889,"radius":5.0272351916257,"heightVariation":0.6730859221076031}]
+rounded fan geometry {"trianglesPerFan":396,"totalTriangles":306504,"originalTriangles":1039248,"drawCalls":10,"domed":753}
+compact central crown versus actual legacy {"before":{"reach":18.024748896754947,"minY":52.07589967403277,"maxY":85.52387307940386},"after":{"reach":10.268542993527264,"minY":58.79905421147776,"maxY":79.07007390399986},"lateralRatio":0.5696913201035463,"rimUnchanged":true}
+✔ real crown groups become fewer broad fan instances without extra draws or moved anchors (0.70725ms)
+✔ every fan vertex stays inside its declared crown envelope and its stem meets the original branch anchor (4.835791ms)
+✔ compact central shelter crown stays branch-sized with curved height above the protected walking level (0.937541ms)
+✔ central three-leaf groups keep genuine angular light gaps and non-coplanar domes (108.620417ms)
+✔ central blades use six shallow radial curves with a thin closed body, not three folded panels (0.879375ms)
+✔ shared fan has a closed domed top, drooping edge and coherent face color (0.408333ms)
+✔ placed crown surfaces retain a visible dome and tilt instead of horizontal discs (5.719334ms)
+✔ local palette pass installs shared screen-width veins without changing geometry, attachment or matrices (6.940916ms)
+✔ target foliage comparison restores the prior bright underside shader without changing its mesh (0.119125ms)
+✔ spherical placement preserves canopy and branch common-frame relationship (1.535833ms)
+✔ rollback restores original crown visibility and a disabled install is inert (13.417291ms)
+understory statistics {"plants":508,"rimPlants":93,"rimAngularCoverage":0.5111111111111111,"vines":180,"counts":{"fern":95,"fan":50,"pendant":363},"triangles":54862,"drawCalls":5,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":282,"overlapping":279,"ratio":0.9893617021276596}
+frond tip heights [
+  -0.8898734450340271,
+  -0.6905297636985779,
+  -0.5960623025894165,
+  -0.921288788318634,
+  -0.5823749899864197
+]
+irregular rim habitats {"plants":93,"clusters":7,"heroes":24,"heightRange":[0.5090022751270726,9.979990917779523]}
+vertical rim accents {"changed":68,"tall":6,"low":69,"requested":68,"unchangedForSafety":0}
+supported rim habitat stones 41
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (3.359792ms)
+✔ lush understory and rim stones use five instanced batches within triangle budget, not per-plant mesh draws (9.275875ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (15.132792ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (11.29675ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.233542ms)
+✔ target understory blades keep coherent teal planes with dark roots, soft outer light and restrained midrib contrast (0.230833ms)
+✔ erosion revision preserves accepted rock-shoulder anchors; attached wall growth follows the revised surface (7.218417ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (3.484083ms)
+✔ upright rim accents grow only vertically at existing rooted points with low fern skirts retained (2.441375ms)
+✔ rim habitat stones are actual supported low shoulders outside the patrol ribbon (89.008625ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (173.185167ms)
+✔ weathering composes existing basic shader and anchors wall height to inner frame, without frame uniforms (0.844958ms)
+✔ exterior treatment retains authored thin coral soil while sharing the same geological field (0.127083ms)
+✔ target mineral islands compose sparse bedding in the same inner frame and the comparison flag restores v4 (0.142ms)
+✔ actual existing lake-wall shader and weathering have distinct local declarations (1.647208ms)
+✔ screen ink retains CSS width across depth, viewport aspect and DPR (0.632542ms)
+✔ local visual pass leaves actor identity, animation and collision geometry intact (0.978875ms)
+✔ instanced crown inks keep authored transforms and ignore raycasts (0.821583ms)
+✔ wall and bark hooks expand against the actual Three.js basic shader (0.738ms)
+✔ comparison flag produces no lake mutation (0.102291ms)
+✔ wall waterline is converted to mesh-local height, including transformed parents (0.478084ms)
+✔ environment palette retains authored face contrast without mutating shared colour buffers (0.266791ms)
+✔ approved coral, violet and ivory planes remain semantic colors in shader uniforms (0.192833ms)
+✔ neutral leaf buffers stay shared and water retains its animation material and geometry (0.179125ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2383.402083

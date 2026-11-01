@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-08",
+  "iteration": "environment-round3",
+  "version": {
+    "understory": 4,
+    "naturalCliff": 5
+  },
+  "sourceCritiqueImage": "overview-env-v3.jpg",
+  "change": "Replace repeated low rim hedge with seven unequal habitats, upright broad-fan accents, low fern mats and conspicuous bare-rock intervals. No further density stacking.",
+  "changedFiles": {
+    "src/world/swampCoralUnderstory.js": "7e559f97596210edddbc04e449389d3240263974ccbc850465477308f6c075fd",
+    "tests/world/swampCoralUnderstory.test.mjs": "73cc430bed956d027539489d1892390c35333bb306f9fed8309ac407ae7638fa"
+  },
+  "backup": "environment-round3-before/",
+  "stats": {
+    "rimPlantsBefore": 143,
+    "rimPlantsAfter": 43,
+    "rimHabitats": 7,
+    "uprightFanAccents": 8,
+    "rimEnvelopeHeightLocal": [
+      0.5090022751270726,
+      4.503454983737533
+    ],
+    "totalPlants": 456,
+    "fern": 61,
+    "fan": 34,
+    "pendant": 361,
+    "understoryTrianglesBefore": 40240,
+    "understoryTrianglesAfter": 29028,
+    "drawCallsBefore": 4,
+    "drawCallsAfter": 4,
+    "angularRimSilhouetteCoverage": 0.39861111111111114,
+    "maxNewLeafInnerY": 52.96792840873817
+  },
+  "safety": "Nonuniform fan matrices now derive their exact conservative envelope from every transformed leaf vertex. Existing path/story exclusion checks use that envelope. Every rim leaf vertex avoids r35.4..39.4 (2world walk ribbon), stays above water and below Y55 bridge budget.",
+  "preserved": [
+    "swampSpatialPlan left to other agent",
+    "Main integration and review/index unchanged",
+    "Natural cliff v5, original tree geometry/support and new monkey untouched",
+    "18 attached cliff colonies retained"
+  ],
+  "cpu": {
+    "passed": 12,
+    "failed": 0,
+    "log": "validation-environment-round3.txt"
+  },
+  "gpu": {
+    "status": "pending_root",
+    "focus": [
+      "Does the upright/low height contrast remove the continuous low hedge?",
+      "Are bare rock intervals balanced rather than too empty?",
+      "Check fan overlap with visible bridge in full scene."
+    ]
+  },
+  "rollback": "Dispose current understory; restore only its module and test from environment-round3-before. Do not restore any shared unrelated file."
+}

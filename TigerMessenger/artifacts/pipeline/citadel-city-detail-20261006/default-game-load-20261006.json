@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-06T08:45:00+08:00",
+  "url": "http://localhost:8931/TigerMessenger/",
+  "verification": "Actual CUA browser DOM, console and screenshot inspected",
+  "startupErrorLogs": [],
+  "installed": {
+    "oldCity": "target-old-city-10-tower-centred-terraces",
+    "newCity": "target-new-city-stairs-5-stepped-flanks",
+    "rock": "target-continuous-rock-4",
+    "landmarks": true,
+    "spawn": "bookshop-unchanged"
+  },
+  "visibleEntry": "家书 · 小星球信使；从书店镇出发；开始送信",
+  "automaticCitadelCamera": false,
+  "differentEntryNeeded": false,
+  "limitations": [
+    "latest holy palette guard passed CPU47; visual late-callback colours still require city closeup",
+    "player continuous navigation not yet completed",
+    "original global railway retained; no new tram route integration",
+    "no new visual score; r47 66 is historical only"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "task": "GitHub Pages startup loading fix",
+  "observations": [
+    "Remote HEAD checks:812 module URLs return200; no missing path found.",
+    "Source startup module texts total151.8MiB, including large baked geometry JS. Many network dependencies make a failed child fetch reject main import; exact user failed URL still unobserved.",
+    "Release build bundles831 inputs, preserves source-relative GLB/audio/worker URLs, packs39 pure JSON model modules losslessly with gzip, bounded4 downloads and2 retries.",
+    "Release JS6.54MB plus compressed payloads15.00MB; source geometry numeric data not rounded.",
+    "3 automated tests passed:payload hash/JSON roundtrip,4-slot concurrency,503 retry; bundle syntax valid.",
+    "Actual local ?bundle=1 rendered the playable bookshop scene and courier; local-rendered.png saved. Online render remains pending publication.",
+    "Published release d72b7790 actually rendered in native Chrome at GitHub Pages URL; online-chrome.png saved.40 published release resources HEAD200;largest payload GET gzip hash matches. IAB external navigation timed out, so not claimed as IAB acceptance."
+  ],
+  "checks": [
+    {
+      "name": "lossless data and transport tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "actual local render",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "online render after push",
+      "required": true,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "task": "Saihoji battle r2: actual first-sortie timing repair",
+  "observations": {
+    "source": "Normal entry DOM first sortie, plus production source and five focused tests",
+    "actual": "Two physical boats delivered 50 living soldiers; all concealed only after fleet returned idle; zero arrows. No complete battle proof.",
+    "changes": [
+      "After actual flagship first strike, blockade conserves weapon ammunition until actual original defender cover readiness; 60-second bound, energy/emergency retreat unchanged",
+      "Actual arsenal impact now delegates near original blue/red actors to original damage ledger or existing stun field; no separate health",
+      "Kun reads actual cumulative physical shield/hull contacts across sorties, max with legacy counter to avoid double count; reset clears battle total",
+      "No GPU claim for these changes; normal game reloading"
+    ],
+    "root_cause": "Normal R2 fleet55.24seconds versus only first25 landed; source main passes elapsedFrame max.2 to fleet, dt max.05 to world defenders/Kun. Changed moss fleet to world dt only; fresh GPU pending."
+  },
+  "checks": [
+    {
+      "name": "five contact/readiness tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "fresh full first sortie after changes",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "command heavy moss deployment/recovery",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No instant landing, fake hits or timer damage",
+    "No competing legacy aircraft owner",
+    "Keep original 600-contact sink threshold and actual departure clearance"
+  ],
+  "evidence_revision": "r2-shared-clock"
+}

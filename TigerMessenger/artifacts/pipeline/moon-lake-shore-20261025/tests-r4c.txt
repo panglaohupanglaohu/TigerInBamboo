@@ -1,0 +1,16 @@
+✔ rounded coast mask is bounded to city-facing original shell, all other regions delegate (0.314667ms)
+✔ real curved bank joins original surface and provides indexed support; far cleared shell has no ghost floor (837.966791ms)
+✔ ground-level track and actor footprints keep original support while nearby coast rounds (803.691834ms)
+✔ surface, depth and distance shadows share finite ownership and preserve source shared material (784.5895ms)
+✔ intersecting circle crescent has one simple boundary and no outside hole (2.758958ms)
+✔ deep disc is clipped inside both lake boundary and original deep radius (3.48275ms)
+✔ shore band stays inside existing path and cannot extrude pointed broad panels (2.664417ms)
+✔ outer bank seats to real visible mesh without changing that source geometry (4.7895ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2495.265833

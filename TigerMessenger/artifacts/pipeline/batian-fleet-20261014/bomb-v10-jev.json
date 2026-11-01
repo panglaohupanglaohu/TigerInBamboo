@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "5afa8b247a1871c6ce794aae9231699902617301bbbdd2ad6958ebc1218ccb46",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.88
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.86,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.05,
+        "lighting": 0.01,
+        "navigation": 0.05,
+        "review": 0.89
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.58
+    }
+  },
+  "usage": {
+    "input_tokens": 786,
+    "output_tokens": 91,
+    "cost_usd": 0.000331,
+    "credits_remaining_usd": 4.947997
+  },
+  "elapsed_ms": 6178,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "latest bomb peak visual capture",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

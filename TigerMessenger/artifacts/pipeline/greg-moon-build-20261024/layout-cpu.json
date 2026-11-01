@@ -1,0 +1,116 @@
+{
+  "ids": [
+    2,
+    4,
+    5,
+    6
+  ],
+  "sites": [
+    {
+      "id": 2,
+      "x": -14.5,
+      "y": -0.9022164476778582,
+      "z": -4.5,
+      "yaw": 0,
+      "pathGap": 8.932226450688976
+    },
+    {
+      "id": 4,
+      "x": 0,
+      "y": -0.4091276822287283,
+      "z": -8.5,
+      "yaw": 0.05,
+      "pathGap": 2.55
+    },
+    {
+      "id": 5,
+      "x": -9,
+      "y": -0.12594823867019042,
+      "z": 7.5,
+      "yaw": 0,
+      "pathGap": 5.465374513859982
+    },
+    {
+      "id": 6,
+      "x": 7.5,
+      "y": -0.21551189941237675,
+      "z": 8,
+      "yaw": 0.15,
+      "pathGap": 4.715856099730654
+    }
+  ],
+  "placement": [
+    {
+      "id": 2,
+      "requested": [
+        -14.5,
+        -4.5
+      ],
+      "placed": [
+        -14.5,
+        -4.5
+      ],
+      "existingSceneChanged": false
+    },
+    {
+      "id": 4,
+      "requested": [
+        0,
+        -8.5
+      ],
+      "placed": [
+        0,
+        -8.5
+      ],
+      "existingSceneChanged": false
+    },
+    {
+      "id": 5,
+      "requested": [
+        -9,
+        7.5
+      ],
+      "placed": [
+        -9,
+        7.5
+      ],
+      "existingSceneChanged": false
+    },
+    {
+      "id": 6,
+      "requested": [
+        7.5,
+        8
+      ],
+      "placed": [
+        7.5,
+        8
+      ],
+      "existingSceneChanged": false
+    }
+  ],
+  "ground": {
+    "source": "final-hills-mesh",
+    "samples": 1094,
+    "missing": 0,
+    "trackRejected": 0,
+    "rootClearance": 2.1
+  },
+  "preserved": [
+    9.3,
+    -0.4565,
+    1.5
+  ],
+  "reseat": {
+    "seated": [
+      2,
+      4,
+      5,
+      6
+    ],
+    "rejected": [],
+    "groundVertices": 8517,
+    "missingGroundVertices": 0
+  },
+  "disposeLeavesOriginal": true
+}

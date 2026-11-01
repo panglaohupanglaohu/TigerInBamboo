@@ -1,0 +1,28 @@
+{
+  "iteration": "four-additions-readability-r3-root",
+  "observations": [
+    "Normal production reload: new trees visible in overview at left-back, rear-centre, front-left and front-right; original large pine retained at right.",
+    "Old version four additions clustered behind lake and blended with original forest; visible flags were not readability evidence.",
+    "New four crowns thicker and brighter, curved trunks enlarged, roots repositioned only within additions.",
+    "Side and focus1/focus4 views checked. Some original trees and moon overlap additions in certain views; no all-angle guarantee.",
+    "Inspection-only labels1-4 and individual camera buttons correspond to the actual installed four UUIDs. No new meshes or scene replacements from UI."
+  ],
+  "checks": [
+    {
+      "name": "actual hill terrain/rail/prop preservation tests 3",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal overview four identifiable additions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full player walkthrough",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "runtimeErrors": 0
+}

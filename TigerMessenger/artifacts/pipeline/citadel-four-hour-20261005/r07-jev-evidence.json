@@ -1,0 +1,39 @@
+{
+  "task": "Citadel target-led broad grass benches; geometry next-step triage, no release approval",
+  "target": "Wide grass-bearing shelves alternating with steep short cliffs; target-v3-landmarks",
+  "visual_observations": {
+    "source": "Root and independent oskar_world_advisor actually inspected latest bare screenshot; text only",
+    "image_sha256": "23b7a91e32a4ba670d842da1f36c4937d2f9b3289cf5702177569b40a4e6b989",
+    "remaining": [
+      "Left foreground remains a single rounded steep bulb without wide top terraces",
+      "Central rear wall still has thin jagged silhouettes and steep faces",
+      "New-city right-back shoulder and descending terraces incomplete"
+    ],
+    "completed": [
+      "Candidate 7 actually changes protected mountain geometry",
+      "GPU sample clean, but this is not visual acceptance"
+    ]
+  },
+  "checks": [
+    {
+      "name": "candidate terrain face orientation",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "GPU current programs",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full scene railway and root support on latest candidate",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Keep buildings/rail/bridge/plaza/statue/horse fixed",
+    "User explicitly permits old mountain shape changes",
+    "Need real wide platforms before planting"
+  ]
+}

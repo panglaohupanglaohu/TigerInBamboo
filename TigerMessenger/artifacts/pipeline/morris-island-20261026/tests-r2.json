@@ -1,0 +1,47 @@
+{
+  "passed": 7,
+  "tests": [
+    "empty ocean clear of protected scene",
+    "original scene untouched",
+    "finite vertex geometry",
+    "three unique large decorated grazing horses",
+    "flowers and curled acanthus",
+    "actual triangle ground and ocean rejection",
+    "neck and tail actually animate"
+  ],
+  "report": {
+    "revision": "morris-island-v2-20261026",
+    "style": "Arts and Crafts / William Morris inspired original geometry",
+    "site": {
+      "method": "installed collider/landmark/rail point survey",
+      "lat": -62,
+      "lon": -165,
+      "minimumClearance": 240.49463240831886,
+      "envelope": 32,
+      "obstacles": 1,
+      "routeSamples": 0,
+      "candidates": 72,
+      "otherObjectsMoved": false
+    },
+    "flowers": 919,
+    "curledLeafClumps": 83,
+    "horses": 3,
+    "pathWidth": 2.1,
+    "oldSceneMoved": false,
+    "navigationTraversalVerified": false
+  },
+  "hoofSurfaceDifferences": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ]
+}

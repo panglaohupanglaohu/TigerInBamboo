@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Engine — 白天火焰：ADD 混合 vs MAX 混合</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #cfd6d3; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 16px; top: 14px; z-index: 5;
+    font: 12px/1.7 ui-monospace, Menlo, monospace; color: #23312f;
+    text-shadow: 0 1px 0 rgba(255,255,255,.55); white-space: pre;
+  }
+  #tag { position: fixed; top: 0; left: 0; width: 100%; height: 0; z-index: 4; pointer-events: none; }
+  #tag span {
+    position: absolute; top: 74px; transform: translateX(-50%);
+    font: 600 13px/1 ui-monospace, Menlo, monospace; color: #1f2c2a;
+    letter-spacing: .04em;
+  }
+</style>
+</head>
+<body>
+<div id="hud"></div>
+<div id="tag"><span id="tagL" style="left:25%">ADD（加色）</span><span id="tagR" style="left:75%">MAX（逐通道取最大）</span></div>
+<canvas id="cv"></canvas>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+/**
+ * blendlab.html — 复现 x.com/OskSta/status/1056999668486471682（2018-10-29）：
+ *
+ *   "Works well in daylight too, largely thanks to the max blend"
+ *
+ * 前一条（1056992291108413446）在讲火焰卡片的收缩曲线，这一条在讲**混合方式**。
+ * 画面里是白天：白房子、浅灰绿的地面、很亮的水。火焰在这种底子上依然清楚 ——
+ * 换成普通的加色混合（ADD）时，浅色底子会被"加"到接近白，火焰就糊掉了。
+ *
+ * 原因很直接：
+ *   ADD   : out = dst + src        → 底色越亮，越容易饱和到 1，对比被吃掉
+ *   MAX   : out = max(dst, src)    → 只看"谁更亮"，底色亮也不影响火焰的色相
+ *
+ * 这个页面把同一个场景渲两遍，只换 blendEquation，直接并排看。
+ */
+
+THREE.ColorManagement.enabled = false;
+
+const cv = document.getElementById('cv');
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#cfd6d3');
+
+const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
+camera.position.set(3.2, 3.0, 5.6);
+camera.lookAt(0, 0.6, 0);
+
+// ---------------------------------------------------------------- 场景
+// 白天的岛：浅色地面 + 两个白盒子（对应参考帧里的房子和码头）
+const ground = new THREE.Mesh(
+  new THREE.BoxGeometry(6.4, 0.24, 4.6),
+  new THREE.MeshBasicMaterial({ color: '#b9c4b4' }),
+);
+ground.position.y = -0.12;
+scene.add(ground);
+
+const blockMat = new THREE.MeshBasicMaterial({ color: '#f2f1ea' });
+for (const [x, z, w, h, d] of [[-0.9, 0.2, 1.5, 0.9, 1.2], [0.85, -0.5, 1.2, 1.5, 1.1]]) {
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), blockMat);
+  b.position.set(x, h / 2, z);
+  scene.add(b);
+}
+
+// ---------------------------------------------------------------- 火焰
+/**
+ * 一簇火焰 = N 片 billboard quad，沿高度排布、越往上越小（参考帧里顶部收窄）。
+ * 纹理是程序化生成的：底部白热 → 中部橙 → 边缘软衰减。
+ */
+function makeFlameMaterial(equation) {
+  const mat = new THREE.MeshBasicMaterial({
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    blending: THREE.CustomBlending,
+    blendEquation: equation,
+    blendSrc: THREE.OneFactor,
+    blendDst: THREE.OneFactor,
+    blendEquationAlpha: equation,
+    blendSrcAlpha: THREE.OneFactor,
+    blendDstAlpha: THREE.OneFactor,
+  });
+  mat.onBeforeCompile = (shader) => {
+    shader.fragmentShader = shader.fragmentShader.replace(
+      '#include <opaque_fragment>',
+      `
+      vec2 p = vUv * 2.0 - 1.0;
+      // 竖向拉长一点，火焰才不是个圆饼
+      float r = length(p * vec2(1.0, 1.55));
+      // 硬度：边缘要"实"，火焰才有一片一片的卡片感（软边在 MAX 下会被背景吃掉）
+      float body = smoothstep(1.0, 0.62, r);
+      // 白天火焰必须是**白热**的：MAX 是逐通道取最大，只有比背景亮的通道才透得出来。
+      // 底色是 (0.93,0.94,0.92)，所以核心给到 1.0/1.0/0.97，边缘给橙 (1.0,0.62,0.28)。
+      // 注意别像第一版那样把顶部压暗到 0.55 —— 那样整片都低于背景，MAX 下直接消失。
+      vec3 hot = vec3(1.0, 1.0, 0.97);
+      vec3 warm = vec3(1.0, 0.62, 0.28);
+      vec3 c = mix(hot, warm, smoothstep(0.10, 0.95, vUv.y));
+      gl_FragColor = vec4(c * body, body);
+      `,
+    );
+    shader.vertexShader = shader.vertexShader.replace(
+      '#include <uv_vertex>',
+      '#include <uv_vertex>\n  vUv = uv;',
+    );
+    shader.vertexShader = 'varying vec2 vUv;\n' + shader.vertexShader;
+    shader.fragmentShader = 'varying vec2 vUv;\n' + shader.fragmentShader;
+  };
+  return mat;
+}
+
+const flames = [];
+function addFlame(x, y, z, scale, equation) {
+  const g = new THREE.Group();
+  const mat = makeFlameMaterial(equation);
+  const N = 9;
+  let s = 3;
+  const rnd = () => ((s = (Math.imul(s, 1103515245) + 12345) | 0) >>> 8) / 16777216;
+  for (let i = 0; i < N; i++) {
+    const t = i / (N - 1);
+    // 卡片沿高度排：越高越小（参考帧的"收缩"），并轻微左右错开
+    const w = scale * (1.0 - t * 0.62);
+    const h = scale * (0.95 - t * 0.45);
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+    mesh.position.set((rnd() - 0.5) * scale * 0.22, scale * (0.35 + t * 0.85), (rnd() - 0.5) * scale * 0.22);
+    g.add(mesh);
+  }
+  g.position.set(x, y, z);
+  g.userData.baseY = y;
+  g.userData.phase = rnd() * 6.28;
+  scene.add(g);
+  flames.push(g);
+  return g;
+}
+
+// 左半边一组（ADD），右半边一组（MAX）。同一个场景渲两遍，每遍只显示自己那组。
+const ADD = THREE.AddEquation;
+const MAX = THREE.MaxEquation;
+
+const groupAdd = [
+  addFlame(-0.9, 0.9, 0.2, 0.78, ADD),
+  addFlame(-1.9, 0.0, 0.9, 0.58, ADD),
+];
+const groupMax = [
+  addFlame(-0.9, 0.9, 0.2, 0.78, MAX),
+  addFlame(-1.9, 0.0, 0.9, 0.58, MAX),
+];
+
+// ---------------------------------------------------------------- 渲染
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  cv.style.width = w + 'px';
+  cv.style.height = h + 'px';
+  camera.aspect = (w / 2) / h;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+
+let t0 = performance.now();
+function frame(now) {
+  const t = (now - t0) / 1000;
+  // 火焰轻轻跳动：只动 y 和一点点缩放，别做"呼吸"（会像果冻）
+  for (const g of flames) {
+    const p = g.userData.phase;
+    g.position.y = g.userData.baseY + Math.sin(t * 7.1 + p) * 0.018;
+    const s = 1 + Math.sin(t * 9.3 + p * 1.7) * 0.03;
+    g.scale.set(s, 1 / s, s);
+  }
+
+  const w = renderer.domElement.width / renderer.getPixelRatio();
+  const h = renderer.domElement.height / renderer.getPixelRatio();
+
+  groupMax.forEach((g) => { g.visible = false; });
+  groupAdd.forEach((g) => { g.visible = true; });
+  renderer.setViewport(0, 0, w / 2, h);
+  renderer.setScissor(0, 0, w / 2, h);
+  renderer.setScissorTest(true);
+  renderer.render(scene, camera);
+
+  groupAdd.forEach((g) => { g.visible = false; });
+  groupMax.forEach((g) => { g.visible = true; });
+  renderer.setViewport(w / 2, 0, w / 2, h);
+  renderer.setScissor(w / 2, 0, w / 2, h);
+  renderer.render(scene, camera);
+
+  requestAnimationFrame(frame);
+}
+
+const hud = document.getElementById('hud');
+function updateHud() {
+  hud.textContent =
+    '白天火焰 · 同一个场景渲两遍，只换 blendEquation\n' +
+    '左：ADD   out = dst + src        右：MAX   out = max(dst, src)\n' +
+    '底色 #cfd6d3（明度 ' + (0.66 * 255).toFixed(0) + '）—— 加色在这种底子上会直接推到饱和';
+  requestAnimationFrame(updateHud);
+}
+
+window.__worldStats = { kind: 'blendlab' };
+window.__blend = {
+  setEquation(name) {
+    const eq = name === 'max' ? MAX : ADD;
+    for (const g of [...groupAdd, ...groupMax]) {
+      g.children.forEach((m) => { m.material.blendEquation = eq; m.material.needsUpdate = true; });
+    }
+  },
+  /** 关掉全部火焰，用来拍"背景参考帧"做逐像素对比。 */
+  setFlames(v) { for (const g of [...groupAdd, ...groupMax]) g.visible = v; },
+};
+
+resize();
+requestAnimationFrame(frame);
+console.log('[blendlab] ready');
+</script>
+</body>
+</html>

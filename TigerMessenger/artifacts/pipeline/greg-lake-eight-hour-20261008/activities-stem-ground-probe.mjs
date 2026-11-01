@@ -1,0 +1,6 @@
+import * as T from 'three';
+const ctx=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}}),measureText:()=>({width:10})},{get:(o,k)=>o[k]??(()=>{})});const el=()=>({style:{},addEventListener(){},removeEventListener(){},getContext:()=>ctx});globalThis.document={getElementById:()=>null,querySelector:()=>null,createElement:el,createElementNS:el};globalThis.location={search:''};globalThis.localStorage={getItem:()=>null};globalThis.window={addEventListener(){},localStorage,location};
+const {createMoebiusSwampPlacement}=await import('../../../src/world/moebiusSwamp.js');const root=createMoebiusSwampPlacement({seed:7711,scale:.5}),inner=root.userData.inner;root.updateMatrixWorld(true);
+
+const ray=new T.Raycaster(),down=new T.Vector3(0,-1,0).transformDirection(inner.matrixWorld),wall=inner.getObjectByName('swamp-sinkhole-wall'),floor=inner.getObjectByName('swamp-lake-floor');
+for(const r of inner.userData.flowerBoyActivities.navigation.records){const stem=r.boat.userData.flowerStem;if(!stem)continue;ray.set(inner.localToWorld(new T.Vector3(r.x,25,r.z)),down);const h=ray.intersectObjects([wall,floor],false)[0];console.log(r.index,'anchor',stem.userData.flowerStemAnchor.toArray(),'surface',h?inner.worldToLocal(h.point).toArray():null);}

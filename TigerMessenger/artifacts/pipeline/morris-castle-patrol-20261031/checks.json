@@ -1,0 +1,192 @@
+{
+  "geometry": {
+    "revision": "morris-townscaper-lake-20261031",
+    "radius": 67.21111019268565,
+    "diameter": 134.4222203853713,
+    "areaReductionRatio": 0.6666666666666666,
+    "expectedRadius": 67.21111019268565,
+    "lakeRatio": 0.8,
+    "migration": {
+      "from": [
+        -0.43399402459481606,
+        0.8842394753616905,
+        0.17253908782671956
+      ],
+      "to": [
+        -0.6578431354423494,
+        0.7091135627316687,
+        0.25377226858224394
+      ],
+      "awayFrom": [
+        0.09982301071839211,
+        0.994692202110437,
+        -0.02495575267959803
+      ],
+      "chordBefore": 92.76753143219808,
+      "chordAfter": 111.92405455906393,
+      "requiredClearance": 111.92405455906393
+    },
+    "centreToMoon": 137.34870758497811,
+    "moonProtected": true,
+    "seededCastle": true,
+    "solidCells": 38,
+    "patrol": {
+      "revision": "castle-court-patrol-r3",
+      "state": "castle-stop",
+      "routeDistance": 0,
+      "routeLength": 545.6053764030594,
+      "routeRevision": "castle-39-68.8",
+      "direction": 1,
+      "speed": 0,
+      "travelled": 0,
+      "bridgePasses": 0,
+      "courtVisits": 0,
+      "meetings": 0,
+      "dialogue": -1,
+      "horseLocal": [
+        -14.680148012270068,
+        2.1829391668825715,
+        63.372244352582904
+      ],
+      "riderVisible": true,
+      "hoofSupport": {
+        "clearanceBefore": -2.6134000728684725,
+        "rootCorrection": -0.12,
+        "method": "lowest skinned hoof to actual support; no per-leg IK"
+      },
+      "horseAsset": "loaded",
+      "horseRevision": "tiger-workflow-horse-v13",
+      "riderAsset": "loading",
+      "riderRevision": "mounted-botanical-r1",
+      "horseOccupied": true,
+      "routeSource": "current installed island route and raycast bridge support"
+    },
+    "routeRevision": "castle-39-68.8",
+    "castlePatrol": true,
+    "courtDistance": 68.78279146597849,
+    "routeLength": 545.6053764030594,
+    "startSupport": {
+      "radius": 176.24411507890312,
+      "height": 16.24411507890312
+    },
+    "courtSupport": {
+      "radius": 164.53506802951378,
+      "height": 4.535068029513781
+    },
+    "midpointSupport": {
+      "radius": 168.07397674477141,
+      "height": 8.073976744771414
+    },
+    "bridgeMarker": true,
+    "outerIsNotBridge": false,
+    "connectorPresent": true,
+    "castleBirds": {
+      "sit": 19,
+      "takeoff": 0,
+      "fly": 6,
+      "land": 0,
+      "perches": 23
+    },
+    "castleBirdRoot": "morris-townscaper-gulls"
+  },
+  "ride": {
+    "stopped": true,
+    "snapshot": {
+      "revision": "castle-court-patrol-r3",
+      "state": "castle-court-stop",
+      "routeDistance": 68.8214148160372,
+      "routeLength": 545.6053764030594,
+      "routeRevision": "castle-39-68.8",
+      "direction": 1,
+      "speed": 0.6500000000000001,
+      "travelled": 68.8214148160372,
+      "bridgePasses": 1,
+      "courtVisits": 1,
+      "meetings": 0,
+      "dialogue": -1,
+      "horseLocal": [
+        -1.320110573254757,
+        4.639499925905587,
+        -0.9257817152172978
+      ],
+      "riderVisible": true,
+      "hoofSupport": {
+        "clearanceBefore": -0.08549523505735124,
+        "rootCorrection": -0.09749991589203505,
+        "method": "lowest skinned hoof to actual support; no per-leg IK"
+      },
+      "horseAsset": "loaded",
+      "horseRevision": "tiger-workflow-horse-v13",
+      "riderAsset": "loaded",
+      "riderRevision": "reference-rebuilt-v17",
+      "horseOccupied": true,
+      "routeSource": "current installed island route and raycast bridge support"
+    },
+    "castle": 68.78279146597849,
+    "horse": [
+      -1.320110573254757,
+      4.639499925905587,
+      -0.9257817152172978
+    ],
+    "support": 164.53488974781766
+  },
+  "collapse": {
+    "present": true,
+    "beforeState": {
+      "hidden": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "display": [
+        "none",
+        "none",
+        "none",
+        "none",
+        "none"
+      ],
+      "hudClass": "collapsed",
+      "hudHidden": false,
+      "width": 1280
+    },
+    "before": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "collapsedVisible": true,
+    "after": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "afterState": {
+      "hidden": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "display": [
+        "none",
+        "none",
+        "none",
+        "none",
+        "none"
+      ],
+      "hudClass": "collapsed",
+      "hudHidden": false,
+      "width": 1280
+    },
+    "toggleVisible": true
+  },
+  "errors": [],
+  "renderer": "Chrome headless SwiftShader focused harness"
+}

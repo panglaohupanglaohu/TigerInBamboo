@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-06T03:43:49.907914+00:00",
+  "deadline": "2026-10-06T12:10:03+08:00",
+  "sourceIntegrated": true,
+  "gpuVerified": false,
+  "score": null,
+  "accepted": false,
+  "sha256": {
+    "src/assets/robotArticulation.js": "275c473b335f7c6b381c86b47c9102ee4ca4554d0bcb606c2aa0364c961a4a73",
+    "src/main.js": "0e9c2a1bba608ef56e38407be8d241bb0c62137f8f6db63dfae5fcf704e94a1f",
+    "src/scenes/messenger/loadTraffic.js": "e0577fa71dc624cd526bed0105a8db63922893ec2930547b605c22e15b21c1b6",
+    "src/scenes/messengerIsland.js": "0a1af647584b122692ac23693a2b4dbdbde436759d0b2496e21a872afba068f2",
+    "src/world/citadel/citadelRailSplice.js": "6a02d255fa9549dc13994aaa85436d1ca0bfbfb94a2fca1e157db1c8109092f0",
+    "src/world/citadel/citadelRailStartup.js": "b8d57044f884682a8e434fd945e321021f7a0e6f1df11269061146ce4f4414ec",
+    "src/world/citadel/coastalTramStructures.js": "08f970892921bb9fcfb14e88ea17fef90b5a8b20c2caa24207dfa5eb1bdc2127",
+    "src/world/citadel/mountainStudy.js": "1db9e60091b1fe2896ca0826d1486347459a9d471b53c930d8aa16e91e6a2e3a",
+    "src/world/citadel/targetCityDetailCandidate.js": "35d23a41094b202bafae08c566e1eed7748f5e4af514a4decb8fd2800b50436c",
+    "src/world/citadel/targetCityRelease.js": "0b1683895bf04395f2bb0ffa89882f59cf2f1b091b861c884ac43a25b6a9df07",
+    "src/world/citadel/targetCliffRailGallery.js": "df478f845fa029f6a5aea1aaf021cb3262e7ae51b686b4a630308eded093acec",
+    "src/world/citadel/targetCliffShoreRoute.js": "2bd56ba93136c01080ba073467a02f130e652d0123da931505ef4eba86d21c26",
+    "src/world/citadel/targetCliffTransitPlan.js": "726720f5e2cee362369927862e361742da083b4aa78acacf2a42d6a77ba714e1",
+    "src/world/citadel/targetCliffTransitRelease.js": "afca6c902ee8cb0396ba7f62544662f00ca9964d5785fe953186c665b47c0694",
+    "src/world/citadel/targetCliffTransitStructure.js": "b62df1ddd81ccbefd111a4cbf83b235b9a8b119cdffb0fa5851eede8e1fd95b2",
+    "src/world/citadel/targetCoastalCliffCutField.js": "7d2f9ce608eb18c2a95f162a4f2e2eeffd10c1689c44c6077c05cb6d7f999c97",
+    "src/world/citadel/targetOldCityWaterfall.js": "d7da1b564a38ccb874a61261a52ff97b2770bc0da872aad8b979c297cf214c03",
+    "src/world/citadel/targetOldShoreApronField.js": "835e458a75d740492847224fa1585337756cf5d2ec6b25773459e382016aa27f",
+    "src/world/citadel/targetTerrainCandidate.js": "d1a3b2d9df95563c4bcf1fce960ea52922920c546bd4888b0415870e07889383",
+    "src/world/citadel/targetWaterfallRailReach.js": "7eda55a347a36fa3785077bdd5b80ad22f37d788b23ab440e0d114e25efbef32",
+    "src/world/tramSystem.js": "ffe2534b447c3e5b840e20428490b7f6c5db9369d560df1bc20e984daa680412"
+  }
+}

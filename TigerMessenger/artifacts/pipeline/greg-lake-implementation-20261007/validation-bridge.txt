@@ -1,0 +1,35 @@
+✔ only intruding pier components change; high arch joins retained banks and rollback is exact (12.460542ms)
+✔ disabled patch and an unproven one-sided support span leave all geometry unchanged (0.778708ms)
+Front strata baseline changed citadel-oskar-grid-mountain-surface 155
+Old-city coastal source changed; continuing with slope update { hash: 2028752367, expected: 3381302665 }
+Old-city coastal source changed; continuing with slope update { hash: 2125320883, expected: 2915253182 }
+[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface
+[citadel] applyCitadelHarborSeabed 跳过: Harbor seabed requires the original planet and city
+[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate
+[ELDER] 已放到指定落点 r=160.6
+[CLOUD-RIDGE] kept= 11 dropped= 12 rings= {"1":6,"2":2,"0.25":4,"center":1} maxH= 42.75 maxScore= 1.13 threshold= 0.35
+actual crown / new bridge edge intersections {"leafEdgeCrossings":0,"samples":[],"leaves":[]}
+formal lake bridge report {"ok":true,"version":1,"removedPiers":23,"removedGatePiers":2,"removedGenericPiers":21,"retainedPiers":149,"spanWorld":43.54875696136663,"retainedBearingCenters":[[37.52992582781327,86.72767895843515,-24.342402473034586],[-46.665727604863775,85.98878562646833,-2.059608411040819]],"archBottomInnerY":67.78321838378906,"bankSightlineInnerY":33,"bankClearanceWorld":17.39160919189453,"leafClearance":{"anchorDiagnostics":[{"instance":33,"anchor":[-47.9160074139469,77.7425550825792,1.8693020170715737],"contacts":[]},{"instance":34,"anchor":[-48.18233789588097,78.72561441456745,1.659043626205591],"contacts":[]},{"instance":29,"anchor":[-42.80001827396697,74.83911479285086,-12.195145873000628],"contacts":[]},{"instance":30,"anchor":[-43.06508886630843,75.94012470775093,-12.058853239805321],"contacts":[]},{"instance":15,"anchor":[32.154501901396756,73.4135799361406,-10.017467382457111],"contacts":[]},{"instance":21,"anchor":[32.991869744648504,78.8028224569776,-14.302014708238238],"contacts":[]},{"instance":22,"anchor":[32.86081285842103,79.38480369188613,-14.22754568837112],"contacts":[]}],"affectedInstances":[33,34,29,30,15,21,22],"changedInstances":[{"instance":33,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[1,0,0],"degrees":10,"scale":1},{"instance":34,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[1,-1,1],"degrees":20,"scale":1},{"instance":29,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[-1,1,-1],"degrees":45,"scale":0.85},{"instance":30,"source":"v2-rim-foliage-lobes","trimmed":true,"degrees":0,"scale":0},{"instance":15,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[-1,-1,-1],"degrees":10,"scale":1},{"instance":21,"source":"v2-rim-foliage-lobes","trimmed":true,"degrees":0,"scale":0},{"instance":22,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[-1,1,0],"degrees":45,"scale":1}],"trimmedInstances":[30,21],"visibleInstancesBefore":366,"visibleInstancesAfter":364,"unresolvedInstances":[],"remainingBidirectionalIntersections":0,"candidateInstances":30,"installMs":38.97254199999952,"instanceCountBefore":366,"instanceCountAfter":366,"branchesChanged":false,"anchorTranslationsChanged":false},"spandrelPosts":26,"renderMeshesAdded":1,"modifiedBatches":5,"deckAndRoutesChanged":false,"cutRadiusInner":36}
+canopy matrix hashes {"before":"c7f29b71436a13a6f1696cfc2edbdaad69e9f7da831dcb4f4342a49d3692f74d","changed":"f9c32fc503690bbcad678fab6d79726858a08052b58928f51d15cc8b749c2347","restored":"c7f29b71436a13a6f1696cfc2edbdaad69e9f7da831dcb4f4342a49d3692f74d"}
+Citadel boarding installation failed [TypeError: fetch failed] {
+  [cause]: Error: not implemented... yet...
+      at makeNetworkError (node:internal/deps/undici/undici:11806:35)
+      at schemeFetch (node:internal/deps/undici/undici:13359:34)
+      at mainFetch (node:internal/deps/undici/undici:13207:30)
+      at fetching (node:internal/deps/undici/undici:13176:7)
+      at fetch (node:internal/deps/undici/undici:13040:20)
+      at fetch (node:internal/deps/undici/undici:17708:10)
+      at fetch (node:internal/bootstrap/web/exposed-window-or-worker:83:12)
+      at installFrontBoarding (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/installFrontBoarding.js:11:26)
+      at holdAtReleasedPort (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:25:2)
+      at dockFrontHarborPatrol (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:33:47)
+}
+✔ formal relocated lake keeps decks and outer bearings while removing both measured near-bank obstructions (31295.855875ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32047.135041

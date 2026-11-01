@@ -1,0 +1,21 @@
+{
+  "scope": "Actual production modules CPU fixture in browser; not gameplay render",
+  "passed": true,
+  "originalRosterRetained": true,
+  "deployed": 18,
+  "guardAboard": 3,
+  "trooperShots": 32,
+  "residentShots": 38,
+  "friendlyBlastHits": 6,
+  "blastResidentHits": 6,
+  "actualRobotShells": 1,
+  "robotKills": 1,
+  "recovered": 11,
+  "renderBatch": {
+    "sourceMeshes": 2025,
+    "batches": 75,
+    "groundInstances": 1350,
+    "evacuationInstances": 525
+  },
+  "cleanup": "damage leases removed; render instances disposed by controller; no replacement aircraft or troopers created in production"
+}

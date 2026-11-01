@@ -1,0 +1,33 @@
+{
+  "iteration": "cloud-form-r2-varied-solid",
+  "observations": [
+    "Root inspected screenshot showing three polished white capsules by citadel rail; production culprit mountainCirculatingCloudBanks morph used3 equal coaxial/symmetric lobes.",
+    "Changed connected shells to unequal towers, shallow base, warm white tops and blue grey underside; depthWrite true/transparent false/opacity1 retained.",
+    "User clarified reference steam only for variation, not soft/translucent appearance. Six deterministic profiles now vary widths, heights, handedness, rates and phases; no steam sprites.",
+    "Actual GPU component displays six distinct solid silhouettes and changes after30seconds; this is not production route footage.",
+    "Fresh normal-game citadel view has6 clouds, DOM reports citadel-circulating-clouds-2, GPU failures0 glError0.",
+    "Actual rail/terrain swept-envelope tests unchanged; six-profile/morph/opaque regression added and passes."
+  ],
+  "checks": [
+    {
+      "name": "normal game module version2 and six-cloud count",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "GPU six solid different shapes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "CPU route/rail/envelope and morph regressions3",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full real player transport navigation",
+      "required": false,
+      "passed": null
+    }
+  ]
+}

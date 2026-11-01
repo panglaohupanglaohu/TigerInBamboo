@@ -1,0 +1,26 @@
+feeder-swimming {"samples":648,"draws":9,"breathingSeconds":[1.5,1.5,1.5],"submergedSeconds":[4.233333333333333,4.233333333333333,4.233333333333333],"mouthMin":24.58,"mouthMax":25.190000000000005,"noseMin":24.526142845702374,"noseMax":25.216358014332044,"minWhaleMouth":0.7289210038518738,"extrema":[{"upper":[-1.6989523713454977,0.7999995674006919],"lower":[0.40006186262541826,0.88]},{"upper":[-2.5,0.7989523713454978],"lower":[0.22,0.8799381373745818]},{"upper":[-0.29999900722856826,0.29999894710368197],"lower":[0.2,0.7199981749797155]},{"upper":[-0.29999894710368197,0.29999900722856826],"lower":[0.2,0.719998279196185]}]}
+✔ same whale-feeder genuinely strokes, kicks and resurfaces every 7.2 seconds in full placement update (2157.427875ms)
+flower activities {"boys":10,"aboard":8,"shore":1,"feeding":1,"legacySwimmers":1,"paddles":10,"shorePoint":[-30.92478484999939,40,25.60625279070032],"minRadius":39.72150898678366,"minFoot":-9.098897635340109e-9,"samples":65}
+✔ every flower cup has precisely two articulated black boys, pale hair and the original separate flower center (22.948666ms)
+✔ boy anatomy and materials are shared by pose; motion uses pivots without allocating geometry (1.440125ms)
+✔ the real scene preserves passenger identities while two boys explore shore and water (948.098209ms)
+✔ two paddles stay gripped to actual palms and shore hop avoids the protected route (926.891459ms)
+pink monkey proportions {"bodyWidth":0.6520000100135803,"bodyHeight":1.3179999515414238,"tailMinY":-1.9677268266677856,"tailDepth":0.15538648515939713,"pinkVertexFraction":0.6762060506950123}
+connected monkey arms {"actors":5,"arms":10,"actualActionSamples":65}
+formal monkey roles {"ordinary":3,"repair":2,"perches":[3,4,4],"timing":[[1.741819488024339,0.7886711874976754,3.6890131201595073],[2.3627156489063053,0.8705694850068539,3.495207602158189],[2.303405241994187,0.9016269006766379,2.6675689201802015]],"phases":[3.244247385766357,0.9261486316099763,2.33875121595338]}
+repair tail coil {"arcLength":2.6755539541960665,"hangingLength":2.6755539735778635,"minY":0.18961209058761597,"minimumLeanY":0.04519672039036432}
+actual ship-space tail clearance {"samples":65,"minimumFootGaps":[0.07939988823923849,0.03023719233444333],"minimumDeckGaps":[0.07639989121675084,0.1672371857625381],"tailPose":["deck","deck"]}
+✔ climber silhouette keeps slender body, muted mauve fur and long downward tail (3.079792ms)
+✔ narrow arm fix preserves all three tail geometries, RNG consumption and exact existing pivots (59.457583ms)
+✔ shoulder-to-wrist tube is one closed component and stays connected to real shoulder through all actual actions (1450.855875ms)
+✔ formal lake still has three perch monkeys and two mast repair workers with working animation pivots (676.340333ms)
+✔ repair-only coil preserves long tail arc and stays above its footplane throughout lifting (630.360458ms)
+✔ both repair tails stay above actual ship deck through the complete mast cycle and true parent transforms (722.737375ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3687.163917

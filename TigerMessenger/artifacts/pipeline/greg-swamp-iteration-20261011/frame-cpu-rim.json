@@ -1,0 +1,34 @@
+{
+  "time": "2026-10-10T21:20:05.319Z",
+  "station": "rim",
+  "method": "60 real production frames; opt-in section CPU wall timings, not GPU timings",
+  "cpu": {
+    "enabled": true,
+    "samples": 60,
+    "means": {
+      "lightingWeather": 0.05333333810170491,
+      "physicsAndRide": 2.158333323399227,
+      "audio": 0.07500000397364301,
+      "sceneUpdates": 53.67833334207535,
+      "robotsAndGuardian": 5.904999987284343,
+      "cameraWaterAndStory": 0.1616666813691458,
+      "questsAndUI": 0.10833333134651192,
+      "cullingAndLights": 0.1066666622956594,
+      "render": 31.27166665792465
+    }
+  },
+  "perf": {
+    "fps": 10.6,
+    "frameMs": 94,
+    "samples": 60,
+    "windowFull": true,
+    "hitches": 2,
+    "worstMs": 338.4,
+    "calls": 6859,
+    "triangles": 5832665,
+    "programs": 387,
+    "geometries": 2788,
+    "textures": 112,
+    "bootMs": 28635
+  }
+}

@@ -1,0 +1,25 @@
+{
+ "target": "DUKE coastal steam freight ship concept sheet 2026-10-12 (side, deck plan, 3/4 bow, cutaway, crane detail)",
+ "candidate": "duke-r8",
+ "version": "duke-r8",
+ "changes": "aft crew cabin, forward crate stacks, lattice crane cz 16.6 jib aft",
+ "observations": [
+  "top view clutter distribution closer to deck plan"
+ ],
+ "checks": [
+  {
+   "name": "studio sheet render side/top/3-4",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "in-game render at wharf",
+   "required": true,
+   "passed": null
+  }
+ ],
+ "constraints": [
+  "additive; robots/rails/story untouched",
+  "no keys or images sent"
+ ]
+}

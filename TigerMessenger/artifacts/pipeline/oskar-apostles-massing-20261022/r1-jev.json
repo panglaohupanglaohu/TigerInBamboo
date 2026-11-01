@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "8f7b027c88606ff9ad63e052da33fe9eed933ca6f2935bcec3424096826cf1b5",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.84
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.49,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.05,
+        "lighting": 0,
+        "navigation": 0.36,
+        "review": 0.59
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.28
+    }
+  },
+  "usage": {
+    "input_tokens": 768,
+    "output_tokens": 91,
+    "cost_usd": 0.000323,
+    "credits_remaining_usd": 4.934731
+  },
+  "elapsed_ms": 1856,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "same-camera GPU target massing final",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "official railway full journey",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

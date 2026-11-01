@@ -1,0 +1,40 @@
+{
+  "scope": "Stage-specific recovery snapshots; do not apply all blindly or revert unrelated collaborators",
+  "snapshots": [
+    {
+      "path": "artifacts/pipeline/leebai-freighter-20261011/source-before/bookshopFactoryBase.js",
+      "sha256": "6b67ee2a3bcf83afd0546883b33a89c2daebd16985b7a0923b0873436e58f313",
+      "bytes": 9346
+    },
+    {
+      "path": "artifacts/pipeline/leebai-freighter-20261011/source-before/superstructure-colour/bookshopFactoryBase.js",
+      "sha256": "9499502ce7380caf5cb78c213fadb1b311ca0404fdfa21bc4f32b5de712326b8",
+      "bytes": 10044
+    },
+    {
+      "path": "artifacts/pipeline/leebai-freighter-20261011/source-before/palette/bookshopFactoryBase.js",
+      "sha256": "0902c78216c33a180857fec57000e4be7093d1aa5c7fd4030dc0525a00f4663e",
+      "bytes": 8976
+    },
+    {
+      "path": "artifacts/pipeline/leebai-freighter-fittings-20261011/source-before/bookshopHarborDetail.js",
+      "sha256": "e4d19a1524b0776891a4def1ca04a3c4881771d2fdea6f07a25a0dc4cca3ae8b",
+      "bytes": 9441
+    },
+    {
+      "path": "artifacts/pipeline/leebai-freighter-waterline-20261011/source-before/bookshopFactoryBase.js",
+      "sha256": "fa98907b51f12d3739b56a697d57462288aa12704bb68dd20736fb2a5ee637cd",
+      "bytes": 9505
+    },
+    {
+      "path": "artifacts/pipeline/greg-flower-longer-voyage-20261011/source-before/swampFlowerActivities.js",
+      "sha256": "cb3be205d40d6d058a02bfba991bbbac4b6f11b46a15832a3071d1094b0da57a",
+      "bytes": 25901
+    },
+    {
+      "path": "artifacts/pipeline/greg-feeder-clearance-20261012/source-before/swampFlowerActivities.js",
+      "sha256": "d046acc6c1beaf8c318758b835dfd96c714f29c4e11a0dd93bd9c3aebd0a654c",
+      "bytes": 28277
+    }
+  ]
+}

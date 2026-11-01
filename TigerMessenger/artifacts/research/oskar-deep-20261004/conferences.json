@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-04",
+  "owner": "oskar_world_advisor",
+  "scope": "conference research only",
+  "complete_videos_watched": 0,
+  "complete_official_transcripts_read": 0,
+  "remote_video_downloaded": false,
+  "prior_ledger": "../oskar-engine/conference-coverage.json",
+  "talks": [
+    {
+      "id": "epc2018",
+      "title": "Wave Function Collapse in Bad North",
+      "conference_year": 2018,
+      "video_url": "https://www.youtube.com/watch?v=0bcZb-SsnrA",
+      "duration_seconds_from_prior_metadata": 2261,
+      "upload_date_from_prior_metadata": "2018-07-11",
+      "video_viewed_seconds": 0,
+      "official_transcript_read": false,
+      "current_attempt_failure": "readyState=0, videoWidth=0; body empty",
+      "slides_viewed": false,
+      "current_coverage": "index and metadata only",
+      "missing": [
+        "official audiovisual content",
+        "official complete captions",
+        "slides"
+      ]
+    },
+    {
+      "id": "konsoll2018",
+      "title": "Developing The Bad North Look",
+      "conference_year": 2018,
+      "video_url": "https://www.youtube.com/watch?v=6JcFbivo8dQ",
+      "duration_seconds_from_prior_metadata": 3340,
+      "upload_date_from_prior_metadata": "2019-01-29",
+      "video_viewed_seconds": 0,
+      "official_transcript_read": false,
+      "current_attempt_failure": "body null",
+      "slides_viewed": false,
+      "current_coverage": "index and metadata only",
+      "missing": [
+        "official audiovisual content",
+        "official complete captions",
+        "slides"
+      ]
+    },
+    {
+      "id": "indiecade2019",
+      "title": "Organic Towns From Square Tiles",
+      "conference_year": 2019,
+      "video_url": "https://www.youtube.com/watch?v=1hqt8JkYRdI",
+      "duration_seconds_from_prior_metadata": 1917,
+      "upload_date_from_prior_metadata": "2020-03-17",
+      "video_viewed_seconds": 0,
+      "official_transcript_read": false,
+      "current_attempt_failure": "net::ERR_CONNECTION_CLOSED",
+      "slides_viewed": false,
+      "current_coverage": "index and metadata only",
+      "missing": [
+        "official audiovisual content",
+        "official complete captions",
+        "slides"
+      ]
+    },
+    {
+      "id": "sgc2021",
+      "title": "Beyond Townscapers",
+      "conference_year": 2021,
+      "video_url": "https://www.youtube.com/watch?v=Uxeo9c-PX-w",
+      "duration_seconds_from_prior_metadata": 3121,
+      "upload_date_from_prior_metadata": "2021-12-08",
+      "video_viewed_seconds": 0,
+      "official_transcript_read": false,
+      "current_attempt_failure": "body null",
+      "slides_viewed": false,
+      "current_coverage": "mirror text reread 00:00–21:53 and thematic close reading 18:19–51:39; no audiovisual verification",
+      "missing": [
+        "official audiovisual content",
+        "official complete captions",
+        "slides"
+      ],
+      "prior_mirror_read_range": "00:00–51:03",
+      "mirror_url": "https://lilys.ai/ko/notes/356130",
+      "mirror_verified_against_audio": false,
+      "mirror_missing_tail_seconds": 22,
+      "coverage_correction": "Previous 51:03 was the old reading endpoint, not actual mirror end. Newly read closing text reaches 51:39.",
+      "close_read_segments": [
+        "18:19–24:56",
+        "25:09–31:16",
+        "31:27–37:34",
+        "38:50–44:24",
+        "44:44–49:07",
+        "49:15–51:39"
+      ]
+    },
+    {
+      "id": "konsoll2021",
+      "title": "The Story of Townscaper",
+      "conference_year": 2021,
+      "video_url": "https://www.youtube.com/watch?v=5xrRTOikBBg",
+      "duration_seconds_from_prior_metadata": null,
+      "upload_date_from_prior_metadata": null,
+      "video_viewed_seconds": 0,
+      "official_transcript_read": false,
+      "current_attempt_failure": "official iframe fetch throttled; mirror Read More inaccessible",
+      "slides_viewed": false,
+      "current_coverage": "official index + mirror opening excerpt only",
+      "missing": [
+        "official audiovisual content",
+        "official complete captions",
+        "slides"
+      ],
+      "official_page": "https://konsoll.org/talks/the-story-of-townscaper/",
+      "official_iframe_video_id_verified": true,
+      "mirror_url": "https://glasp.co/youtube/5xrRTOikBBg",
+      "mirror_reported_upload_date_unverified": "2022-03-16",
+      "mirror_fulltext_read": false
+    }
+  ],
+  "new_primary_source_reads": [
+    {
+      "url": "https://raw.githubusercontent.com/mxgmn/WaveFunctionCollapse/master/Model.cs",
+      "scope": "returned lines 0–237 read; Gumin code, not Oskar implementation",
+      "method": "web text"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mxgmn/WaveFunctionCollapse/master/SimpleTiledModel.cs",
+      "scope": "returned lines 0–79 read; symmetry and module input",
+      "method": "web text"
+    },
+    {
+      "url": "https://github.com/mxgmn/WaveFunctionCollapse",
+      "scope": "README algorithm, constraints, navigation heuristic and references",
+      "method": "web text"
+    }
+  ],
+  "claim_boundaries": [
+    "mirror transcript is unverified secondary evidence",
+    "late experimental systems are not automatically shipped-game techniques",
+    "WFC module choice is separate from MC/MT extraction and smoothing",
+    "no bone animation or cloud simulation attributed to WFC",
+    "engineering proposals in document are project designs",
+    "historical project snapshot is not a new full-code audit"
+  ],
+  "additional_mirror_attempts": [
+    {
+      "url": "https://glasp.co/youtube/0bcZb-SsnrA",
+      "result": "web fetch error; no full transcript"
+    },
+    {
+      "url": "https://glasp.co/youtube/6JcFbivo8dQ",
+      "result": "web fetch error; no full transcript"
+    },
+    {
+      "url": "https://glasp.co/youtube/1hqt8JkYRdI",
+      "result": "web fetch error; no full transcript"
+    }
+  ],
+  "gdc_search": {
+    "queries": [
+      "site:gdcvault.com Oskar Townscaper",
+      "Building Townscaper GDC slides",
+      "Townscaper GDC Oskar slides"
+    ],
+    "official_entry": "https://gdcvault.com/",
+    "result": "exact Oskar session not located; no slides read",
+    "does_not_prove_nonexistence": true
+  }
+}

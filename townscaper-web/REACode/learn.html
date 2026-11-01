@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>学习笔记 · 237 段视频</title>
+<style>
+  :root {
+    --bg: #eef4f3; --ink: #1d2f36; --muted: #5d7279; --card: #fff; --line: #d6e2e1; --accent: #2f7f8a;
+    --game: #d9663f; --engine: #4f7fb8; --both: #7b5fb0; --partial: #c99a2e; --ref: #6f8f6a; --todo: #a7b3b5; --na: #c9d1d2;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14.5px/1.5 -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  header { position: sticky; top: 0; z-index: 2; background: rgba(238,244,243,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .bar { max-width: 1280px; margin: 0 auto; padding: 12px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  h1 { font-size: 18px; margin: 0 12px 0 0; }
+  a.back { color: var(--accent); text-decoration: none; font-weight: 600; margin-right: 8px; }
+  .chip { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 3px 11px; cursor: pointer; font: inherit; font-size: 13px; color: var(--ink); }
+  .chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chip .n { opacity: .6; margin-left: 4px; }
+  input[type=search] { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font: inherit; min-width: 220px; flex: 1; max-width: 360px; }
+  .lab { color: var(--muted); font-size: 12.5px; margin-right: 2px; }
+  main { max-width: 1280px; margin: 0 auto; padding: 18px 20px 60px; }
+  .count { color: var(--muted); margin: 0 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+  .item { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .thumb { aspect-ratio: 16/10; background: #cfdcdb center / cover no-repeat; position: relative; cursor: pointer; border: 0; padding: 0; width: 100%; }
+  .thumb::after { content: '▶'; position: absolute; right: 10px; bottom: 8px; width: 30px; height: 30px; border-radius: 50%; background: rgba(0,0,0,.55);
+    color: #fff; display: grid; place-items: center; font-size: 12px; }
+  .st { position: absolute; left: 8px; top: 8px; font-size: 12px; font-weight: 600; color: #fff; padding: 2px 9px; border-radius: 999px; }
+  .meta { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .top { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 12.5px; }
+  .top a { color: var(--muted); }
+  .txt { margin: 0; font-size: 13.5px; }
+  .note { margin: 0; font-size: 13px; background: #f4f8f7; border-left: 3px solid var(--accent); padding: 6px 8px; border-radius: 4px; }
+  .where { font-size: 12px; color: var(--muted); }
+  .where code { background: #eef4f3; padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+  dialog { border: 0; border-radius: 12px; padding: 0; max-width: min(92vw, 900px); width: 100%; background: #111; }
+  dialog::backdrop { background: rgba(0,0,0,.6); }
+  dialog video { width: 100%; display: block; max-height: 78vh; background: #000; }
+  dialog .cap { color: #e8eeee; padding: 10px 14px 14px; font-size: 13.5px; }
+  dialog .cap .err { color: #ffcf8a; }
+  dialog button { position: absolute; right: 10px; top: 8px; background: rgba(255,255,255,.15); color: #fff; border: 0; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+  @media (max-width: 600px) { .bar, main { padding-left: 16px; padding-right: 16px; } input[type=search] { min-width: 0; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="row"><a class="back" href="index.html">← 场景</a><a class="back" href="overview.html">总览</a><a class="back" href="pipeline.html">管线图</a><h1>学习笔记 · 237 段视频</h1><input type="search" id="q" placeholder="搜原文 / 笔记 / 帖子 ID…" /></div>
+    <div class="row" id="status"><span class="lab">状态</span></div>
+    <div class="row" id="projects"><span class="lab">项目</span></div>
+    <div class="row" id="topics"><span class="lab">主题</span></div>
+  </div>
+</header>
+<main>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog id="dlg"><button id="close">关闭</button><video id="vid" controls loop playsinline></video><div class="cap" id="cap"></div></dialog>
+<script src="learn/data.js"></script>
+<script>
+const L = window.LEARN;
+const ORDER = ['game', 'both', 'engine', 'partial', 'ref', 'todo', 'na'];
+const state = { status: new Set(), topic: new Set(), project: new Set(), q: '' };
+const topicName = Object.fromEntries(L.topics);
+const projName = Object.fromEntries(L.projects);
+
+// hash: #status=game,both&topic=water
+for (const part of location.hash.slice(1).split('&')) {
+  const [k, v] = part.split('=');
+  if ((k === 'status' || k === 'topic' || k === 'project') && v) v.split(',').forEach((x) => state[k].add(x));
+}
+
+function chips(el, key, entries, colour) {
+  const counts = {};
+  for (const it of L.items) counts[it[key]] = (counts[it[key]] || 0) + 1;
+  for (const [k, name] of entries) {
+    if (!counts[k]) continue;
+    const b = document.createElement('button');
+    b.className = 'chip' + (state[key].has(k) ? ' on' : '');
+    b.innerHTML = (colour ? `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--${k});margin-right:5px"></span>` : '') + `${name}<span class="n">${counts[k]}</span>`;
+    b.onclick = () => { state[key].has(k) ? state[key].delete(k) : state[key].add(k); b.classList.toggle('on'); render(); };
+    el.appendChild(b);
+  }
+}
+chips(document.getElementById('status'), 'status', ORDER.map((k) => [k, L.labels[k]]), true);
+chips(document.getElementById('projects'), 'project', L.projects, false);
+chips(document.getElementById('topics'), 'topic', L.topics, false);
+document.getElementById('q').oninput = (e) => { state.q = e.target.value.trim().toLowerCase(); render(); };
+
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+function render() {
+  const items = L.items.filter((it) =>
+    (!state.status.size || state.status.has(it.status)) &&
+    (!state.topic.size || state.topic.has(it.topic)) &&
+    (!state.project.size || state.project.has(it.project)) &&
+    (!state.q || (it.id + it.text + it.note + it.where).toLowerCase().includes(state.q)))
+    .sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status) || b.date.localeCompare(a.date));
+  document.getElementById('count').textContent = `显示 ${items.length} / ${L.items.length} 条（已学的排在前面）`;
+  const h = [];
+  for (const it of items) {
+    h.push(`<article class="item">
+      <button class="thumb" data-id="${it.id}" style="background-image:url(learn/thumbs/${it.id}.jpg)" aria-label="播放 ${it.id}">
+        <span class="st" style="background:var(--${it.status})">${L.labels[it.status]}</span></button>
+      <div class="meta">
+        <div class="top"><span>${it.date} · ${projName[it.project] || ''} · ${topicName[it.topic] || ''}</span><a href="https://x.com/OskSta/status/${it.id}" target="_blank" rel="noopener">原帖 ↗</a></div>
+        <p class="txt">${esc(it.text)}</p>
+        ${it.note ? `<p class="note">${esc(it.note)}</p>` : ''}
+        ${it.where ? `<div class="where">代码：<code>${esc(it.where)}</code></div>` : ''}
+      </div></article>`);
+  }
+  document.getElementById('grid').innerHTML = h.join('');
+  const hs = [];
+  if (state.status.size) hs.push('status=' + [...state.status].join(','));
+  if (state.topic.size) hs.push('topic=' + [...state.topic].join(','));
+  if (state.project.size) hs.push('project=' + [...state.project].join(','));
+  history.replaceState(null, '', hs.length ? '#' + hs.join('&') : location.pathname);
+}
+
+const dlg = document.getElementById('dlg');
+const vid = document.getElementById('vid');
+const cap = document.getElementById('cap');
+document.getElementById('grid').addEventListener('click', (e) => {
+  const b = e.target.closest('.thumb');
+  if (!b) return;
+  const it = L.items.find((x) => x.id === b.dataset.id);
+  cap.innerHTML = `<b>${it.date}</b> · ${esc(it.text)}${it.note ? '<br><br>学到：' + esc(it.note) : ''}`;
+  vid.poster = `learn/thumbs/${it.id}.jpg`;
+  vid.src = `gifs/${it.id}.mp4`;
+  vid.onerror = () => {
+    cap.innerHTML += `<br><br><span class="err">本地视频没找到：请用 ./start.sh 启动（会把 REA-agent/gifs 链接成 gifs/），或打开 <a style="color:#ffcf8a" href="https://x.com/OskSta/status/${it.id}" target="_blank">原帖</a>。</span>`;
+  };
+  dlg.showModal();
+  vid.play().catch(() => {});
+});
+const closeDlg = () => { vid.pause(); vid.removeAttribute('src'); vid.load(); dlg.close(); };
+document.getElementById('close').onclick = closeDlg;
+dlg.addEventListener('click', (e) => { if (e.target === dlg) closeDlg(); });
+dlg.addEventListener('cancel', (e) => { e.preventDefault(); closeDlg(); });
+render();
+</script>
+</body>
+</html>

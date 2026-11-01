@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nav — 流场（一张场喂一群）</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0f1a22; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 14px; bottom: 12px; color: #cfe3ec;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5); pointer-events: none; white-space: pre;
+  }
+  #hint {
+    position: fixed; right: 14px; bottom: 12px; color: #8fa9b6;
+    font: 12px/1.5 -apple-system, "PingFang SC", sans-serif; pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"></div>
+<div id="hint">空格：重设一群单位 · T：换目标 · 拖动旋转无关（这是俯视图）</div>
+<script type="module">
+import { buildMesa } from './mesa.js';
+import { carveRivers } from './rivers.js';
+import { buildNavGraph } from '../src/navgraph.js';
+import { buildFlowField, flowCrowd } from '../src/flowfield.js';
+
+const cvs = document.getElementById('c');
+const ctx = cvs.getContext('2d');
+const hud = document.getElementById('hud');
+let W = 0, H = 0, dpr = 1;
+
+const seed = 7;
+const { town, grid } = buildMesa({ seed, radius: 19, hexSize: 0.46, towers: 4, caves: 3, houses: 6 });
+const rivers = carveRivers(town, grid, { seed: seed + 17, count: 3, wiggle: 0.5, depth: 2 });
+const nav = buildNavGraph(town, grid, rivers);
+
+const walk = grid.cells.filter((c) => nav.adj[c.id] && nav.adj[c.id].length);
+let targetIdx = Math.floor(walk.length * 0.5);
+let field = null;
+let report = null;
+
+// 世界 → 屏幕的等比映射（俯视）
+let scale = 1, ox = 0, oy = 0;
+let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+for (const c of grid.cells) {
+  for (const p of c.pts) {
+    if (p.x < minX) minX = p.x;
+    if (p.x > maxX) maxX = p.x;
+    if (p.z < minZ) minZ = p.z;
+    if (p.z > maxZ) maxZ = p.z;
+  }
+}
+const spanX = maxX - minX, spanZ = maxZ - minZ;
+
+function resize() {
+  dpr = Math.min(2, window.devicePixelRatio || 1);
+  W = cvs.clientWidth; H = cvs.clientHeight;
+  cvs.width = Math.round(W * dpr); cvs.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  scale = Math.min((W * 0.86) / spanX, (H * 0.80) / spanZ);
+  ox = W / 2 - ((minX + maxX) / 2) * scale;
+  oy = H / 2 - ((minZ + maxZ) / 2) * scale;
+}
+const sx = (x) => ox + x * scale;
+const sy = (z) => oy + z * scale;
+
+// ---- 建场 + 计时（数字要能贴到 HUD 上）----
+function rebuild() {
+  const target = walk[targetIdx % walk.length];
+  const t0 = performance.now();
+  field = buildFlowField(nav, target.id);
+  const buildMs = performance.now() - t0;
+
+  const reach = walk.filter((c) => Number.isFinite(field.dist[c.id]));
+  const starts = reach.slice(0, 300).map((c) => c.id);
+  const t1 = performance.now();
+  const crowd = flowCrowd(field, starts);
+  const crowdMs = performance.now() - t1;
+  const t2 = performance.now();
+  for (const s of starts) nav.findPath(s, target.id);
+  const dijMs = performance.now() - t2;
+  const steps = crowd.map((c) => c.steps).sort((a, b) => a - b);
+
+  report = {
+    stats: field.stats(),
+    buildMs: +buildMs.toFixed(2),
+    crowdMs: +crowdMs.toFixed(2),
+    dijMs: +dijMs.toFixed(1),
+    speedup: +(dijMs / Math.max(0.01, crowdMs)).toFixed(0),
+    medianSteps: steps[Math.floor(steps.length / 2)] ?? 0,
+    reached: crowd.filter((c) => c.reached).length,
+    total: starts.length,
+    target,
+  };
+
+  // 单位：从"离目标最远的那批"里撒，才看得出整团在流
+  agents.length = 0;
+  const far = reach.slice().sort((a, b) => field.dist[b.id] - field.dist[a.id]).slice(0, 320);
+  for (const c of far) {
+    agents.push({ id: c.id, x: c.cx, z: c.cz, t: Math.random(), speed: 2.2 + Math.random() * 1.4 });
+  }
+}
+
+const agents = [];
+
+// ---- 画 ----
+function draw() {
+  ctx.fillStyle = '#0f1a22';
+  ctx.fillRect(0, 0, W, H);
+
+  const maxD = report ? Math.max(1, report.stats.maxDist) : 1;
+
+  // 1) 地形格：无方向的格子压暗；有方向的按"到目标的代价"上色（近处暖、远处冷）
+  for (const c of grid.cells) {
+    const d = field.dist[c.id];
+    const walkable = nav.adj[c.id] && nav.adj[c.id].length;
+    ctx.beginPath();
+    c.pts.forEach((p, i) => (i ? ctx.lineTo(sx(p.x), sy(p.z)) : ctx.moveTo(sx(p.x), sy(p.z))));
+    ctx.closePath();
+    if (!walkable) {
+      ctx.fillStyle = 'rgba(58,74,84,0.55)';
+    } else if (!Number.isFinite(d)) {
+      // 走不到目标的格子（被崖/河切开）：标出来，覆盖率掉下去就是这个
+      ctx.fillStyle = 'rgba(96,58,58,0.75)';
+    } else {
+      const k = d / maxD;
+      const r = Math.round(90 + 150 * (1 - k));
+      const g = Math.round(150 - 70 * (1 - k));
+      const b = Math.round(190 - 30 * (1 - k));
+      ctx.fillStyle = `rgba(${r},${g},${b},0.85)`;
+    }
+    ctx.fill();
+  }
+
+  // 2) 流场箭头：每格的 dir 指向代价更小的邻居
+  ctx.strokeStyle = 'rgba(20,26,30,0.55)';
+  ctx.lineWidth = 1;
+  for (const c of walk) {
+    const n = field.dir[c.id];
+    if (n < 0) continue;
+    const d = field.dist[c.id];
+    if (!Number.isFinite(d)) continue;
+    const nb = grid.cells[n];
+    const ax = sx(c.cx), ay = sy(c.cz);
+    const bx = sx(c.cx + (nb.cx - c.cx) * 0.72), by = sy(c.cz + (nb.cz - c.cz) * 0.72);
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+  }
+
+  // 3) 目标
+  if (report) {
+    const t = report.target;
+    ctx.beginPath();
+    ctx.arc(sx(t.cx), sy(t.cz), Math.max(4, scale * 0.32), 0, Math.PI * 2);
+    ctx.fillStyle = '#ffe14d'; ctx.fill();
+    ctx.strokeStyle = '#2b2b1a'; ctx.lineWidth = 1.2; ctx.stroke();
+  }
+
+  // 4) 单位（白点）：位置在格子之间插值，所以看起来是"流动"而不是"跳格"
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  const dot = Math.max(1.2, scale * 0.07);
+  for (const a of agents) {
+    ctx.beginPath(); ctx.arc(sx(a.x), sy(a.z), dot, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
+// ---- 动画：单位沿 dir 逐格前进，位置插值 ----
+let last = performance.now();
+function tick(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  for (const a of agents) {
+    const n = field.dir[a.id];
+    if (n < 0) { a.t = 0; continue; }
+    const nb = grid.cells[n];
+    a.t += dt * a.speed;
+    if (a.t >= 1) { a.id = n; a.x = nb.cx; a.z = nb.cz; a.t = 0; }
+    else {
+      const cur = grid.cells[a.id];
+      a.x = cur.cx + (nb.cx - cur.cx) * a.t;
+      a.z = cur.cz + (nb.cz - cur.cz) * a.t;
+    }
+  }
+  draw();
+  hud.textContent =
+    `目标格 #${report.target.id}   场：${report.stats.reachable}/${report.stats.walkable} 可走格（覆盖 ${(report.stats.coverage * 100).toFixed(1)}%）\n` +
+    `建场 ${report.buildMs} ms   ·   300 单位沿场 ${report.crowdMs} ms   vs   300×Dijkstra ${report.dijMs} ms （${report.speedup}×）\n` +
+    `到目标步数中位 ${report.medianSteps}   ·   到达 ${report.reached}/${report.total}`;
+  requestAnimationFrame(tick);
+}
+
+addEventListener('resize', () => { resize(); });
+resize();
+rebuild();
+requestAnimationFrame(tick);
+
+addEventListener('keydown', (e) => {
+  if (e.code === 'Space') { rebuild(); e.preventDefault(); }
+  if (e.key === 't' || e.key === 'T') { targetIdx += 37; rebuild(); }
+});
+
+window.__navflow = {
+  get report() { return report; },
+  get field() { return { ...field.stats() }; },
+  setTarget(i) { targetIdx = i; rebuild(); return report; },
+};
+</script>
+</body>
+</html>

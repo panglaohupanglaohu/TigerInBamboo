@@ -1,0 +1,95 @@
+function buildLongTailMonkey(rnd, {tailPose='hanging', tailRise=false} = {}) {
+  const g = new THREE.Group();
+  g.name = "swamp-longtail-monkey";
+  // Approved hanging-climber reference: narrow pink/mauve body, small face,
+  // grasping hands and a downward tail. Existing shoulder pivots stay exact.
+  const fur=0xc9a4bc,shade=0xb69caf,face=0xe7d0c3;
+  const pieces=[
+    coralEllipsoid([0,.56,-.025],[.18,.47,.16],fur),
+    coralEllipsoid([0,.9,.015],[.13,.23,.13],fur),
+    coralEllipsoid([0,1.12,.025],[.153,.18,.143],fur),
+    coralEllipsoid([0,1.11,.15],[.103,.111,.028],face),
+    coralEllipsoid([0,1.075,.184],[.022,.014,.018],shade)
+  ];
+  for(const side of [-1,1]){
+    pieces.push(coralEllipsoid([side*.148,1.14,.013],[.047,.064,.035],fur));
+    pieces.push(coralEllipsoid([side*.159,1.14,.042],[.023,.038,.012],face));
+    pieces.push(coralEllipsoid([side*.042,1.139,.177],[.010,.013,.009],0x435968));
+    // Folded narrow thigh and a long grasping foot keep the original perch
+    // support envelope, instead of broad seated toy haunches.
+    pieces.push(coralEllipsoid([side*.13,.23,-.08],[.074,.245,.09],shade,[.32,0,side*.23]));
+    pieces.push(coralEllipsoid([side*.153,.028,.018],[.055,.046,.16],fur));
+    for(let toe=-1;toe<=1;toe++)pieces.push(coralEllipsoid([side*.153+toe*.031,.014,.149],[.016,.023,.056],fur,[.15,0,0]));
+    const armPieces=[
+      coralEllipsoid([-side*.085,-.115,-.032],[.054,.22,.054],fur,[0,0,-side*.2]),
+      coralEllipsoid([-side*.07,-.35,.035],[.039,.19,.043],fur,[-.32,0,0]),
+      coralEllipsoid([-side*.064,-.5,.094],[.044,.064,.047],shade)
+    ];
+    for(let finger=-1;finger<=1;finger++){
+      const x=-side*.064+finger*.024;
+      const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(x,-.53,.11),new THREE.Vector3(x,-.585,.145),new THREE.Vector3(x,-.58,.18)]);
+      armPieces.push({geometry:new THREE.TubeGeometry(curve,5,.012,5,false),color:fur});
+    }
+    const arm=coralFineActorBatch(armPieces);
+    arm.position.set(side*.27,.7,.13);arm.rotation.x=-.3;
+    arm.userData.baseRotX=-.3;arm.name='swamp-monkey-arm';g.add(arm);
+    g.userData[side<0?'armL':'armR']=arm;
+  }
+  let points=[new THREE.Vector3(0,.37,-.14),new THREE.Vector3(-.13,.02,-.21),new THREE.Vector3(-.16,-.57,-.23),new THREE.Vector3(-.07,-1.25,-.2),new THREE.Vector3(.09,-1.89,-.15),new THREE.Vector3(.27,-1.95,-.12),new THREE.Vector3(.35,-1.83,-.12)];
+  const hangingLength=new THREE.CatmullRomCurve3(points).getLength();
+  if(tailPose==='deck'){
+    // The same long tail coils behind the heels. Preserve its arc length;
+    // the low coil clears the footplane even during the existing -.18 lift lean.
+    const coil=radius=>{
+      const p=[new THREE.Vector3(0,.37,-.14)];
+      for(let k=0;k<=10;k++){
+        const a=Math.PI*.5+k/10*Math.PI*1.8,r=radius*(1-.2*k/10);
+        if(tailRise){
+          // The mast worker counter-rotates around a yawed axis. A low flat
+          // loop would tilt through the deck; coil up beside the left hip.
+          const angle=-Math.PI*.5+k/10*Math.PI*1.8;
+          p.push(new THREE.Vector3(-radius+.025+Math.cos(angle)*r,.4+radius*.82+Math.sin(angle)*r*.82,-.14));
+        }else p.push(new THREE.Vector3(Math.cos(a)*r,.24+.025*Math.sin(k/10*Math.PI),-.14-radius+Math.sin(a)*r));
+      }
+      return p;
+    };
+    let low=.1,high=.8;
+    for(let i=0;i<24;i++){
+      const radius=(low+high)/2;
+      if(new THREE.CatmullRomCurve3(coil(radius)).getLength()<hangingLength)low=radius;else high=radius;
+    }
+    points=coil((low+high)/2);
+  }
+  const curve=new THREE.CatmullRomCurve3(points),tail=new THREE.TubeGeometry(curve,40,.039,8,false),position=tail.attributes.position;
+  const tailVertexStart=pieces.reduce((n,p)=>n+(p.geometry.index?.count??p.geometry.attributes.position.count),0);
+  for(let j=0;j<=40;j++){
+    const centre=curve.getPointAt(j/40),taper=1-.68*j/40;
+    for(let k=0;k<=8;k++){const i=j*9+k,v=new THREE.Vector3().fromBufferAttribute(position,i).sub(centre).multiplyScalar(taper).add(centre);position.setXYZ(i,v.x,v.y,v.z);}
+  }
+  tail.computeVertexNormals();pieces.push({geometry:tail,color:fur});
+  pieces.push(coralEllipsoid(points.at(-1).toArray(),[.013,.013,.013],fur));
+  const body=coralFineActorBatch(pieces);body.name='swamp-monkey-anatomy';g.add(body);
+  g.userData.phase=rnd()*Math.PI*2;g.userData.coralActorVersion=2;
+  g.userData.monkeyTail={pose:tailPose==='deck'?'deck':'hanging',raisedCoil:tailRise,arcLength:curve.getLength(),hangingLength,vertexStart:tailVertexStart,vertexCount:body.geometry.attributes.position.count-tailVertexStart};
+  return g;
+}
+
+/** 发光蜥蜴：薄荷绿平涂 + 细尾四足 + 微光晕，地面缓爬 */
+function buildGlowLizard(rnd) {
+  const g=new THREE.Group();g.name='swamp-glow-lizard';
+  const pieces=[
+    coralEllipsoid([0,.18,0],[.24,.15,.48],LIZARD_GLOW),
+    coralEllipsoid([0,.17,.48],[.155,.115,.27],LIZARD_GLOW),
+    coralEllipsoid([0,.135,.64],[.11,.07,.14],LIZARD_GLOW)
+  ];
+  for(const side of [-1,1]){
+    pieces.push(coralEllipsoid([side*.135,.225,.54],[.027,.033,.035],CORAL_ACTOR_INK));
+    for(const z of [-.27,.27]){
+      pieces.push(coralEllipsoid([side*.25,.105,z],[.19,.055,.075],LIZARD_GLOW,[0,side*(z>0?-.5:.5),0]));
+      pieces.push(coralEllipsoid([side*.37,.05,z-.05],[.07,.045,.12],LIZARD_GLOW));
+      for(let toe=-1;toe<=1;toe++)pieces.push(coralEllipsoid([side*(.38+toe*.045),.024,z+.04],[.019,.018,.073],LIZARD_GLOW,[0,side*toe*.2,0]));
+    }
+  }
+  const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,.15,-.34),new THREE.Vector3(.07,.13,-.65),new THREE.Vector3(.09,.1,-1.02),new THREE.Vector3(-.07,.08,-1.46)]);
+  const tail=new THREE.TubeGeometry(curve,24,.085,8,false),pos=tail.attributes.position;
+  for(let j=0;j<=24;j++){const center=curve.getPointAt(j/24),taper=1-.92*j/24;for(let i=0;i<=8;i++){const idx=j*9+i,v=new THREE.Vector3().fromBufferAttribute(pos,idx).sub(center).multiplyScalar(taper).add(center);pos.setXYZ(idx,v.x,v.y,v.z);}}

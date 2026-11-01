@@ -1,0 +1,594 @@
+{
+  "animalRelativeToV2": 0.6,
+  "animalScaleRatio": 0.45,
+  "audio": {
+    "active": [],
+    "muted": false,
+    "range": 10,
+    "source": "existing world SFX budget and live post-gain analyser",
+    "synthesis": "original, not field recording",
+    "weatherBaseGain": 0.15,
+    "weatherGain": 0.15000000596046448,
+    "weatherOriginalBaseGain": 0.6
+  },
+  "bouquetClumps": 748,
+  "bridge": "real curved deck and stone parapets",
+  "bridgeCrownRise": 0.75,
+  "bridgeDetail": {
+    "archBarrel": true,
+    "archRise": 2.08,
+    "archStones": 52,
+    "closedArchCore": true,
+    "continuousCoping": true,
+    "deckCrown": 0.7499999999999999,
+    "masonryPieces": 196,
+    "mergedStoneBatches": 5,
+    "minimumCoreThickness": 0.6126992666817159,
+    "revision": "continuous-arch-r3",
+    "solidParapets": true,
+    "span": 8,
+    "terrainBankContactVerified": false,
+    "walkWidth": 3.2
+  },
+  "bridgeMaxRadialGrade": 0.28635569960705604,
+  "castle": "Oskar advisor modular keep, stepped wings, open arch and music court",
+  "castleDesign": {
+    "design": "project Oskar-method modular massing proposal",
+    "detailBatches": 13,
+    "detailCounts": {
+      "footings": 18,
+      "masonry": 412,
+      "roofTiles": 925,
+      "windowSurrounds": 60
+    },
+    "eastMusicCourtOpen": true,
+    "entrance": {
+      "clearHeight": 3.1,
+      "clearWidth": 2.6,
+      "direction": "+Z"
+    },
+    "footprint": [
+      14,
+      10
+    ],
+    "mainHeights": [
+      10.5,
+      7,
+      5.5
+    ],
+    "navigationVerified": false,
+    "revision": "masonry-r2",
+    "size": [
+      19.977758251733704,
+      18.805304726013077,
+      18.0844727857206
+    ],
+    "supports": [
+      "continuous foundation",
+      "courtyard floor"
+    ]
+  },
+  "creekBankBoulders": 69,
+  "creekFlow": "local animated UV flow and broken bank foam",
+  "cuckoos": 3,
+  "curledLeafClumps": 1380,
+  "cypressHeightRange": [
+    19.76759922180176,
+    27.05040077819824
+  ],
+  "cypresses": 12,
+  "diameter": 116.413057686842,
+  "elderPlacement": {
+    "anchor": [
+      -69.7,
+      142.01,
+      27.71
+    ],
+    "elderOriginalUuid": "0bd4712a-6c67-4f0f-a3a8-89df3b28b19a",
+    "interactionUsesOriginalWorldPosition": true,
+    "moved": [
+      {
+        "collisionRadius": 0.8,
+        "name": "music-elder",
+        "newLocal": [
+          23,
+          9.875669707246084,
+          11
+        ],
+        "newWorld": [
+          -63.64941155992464,
+          150.5867624452731,
+          52.72686737149833
+        ],
+        "originalParent": "391802c9-d5eb-4078-b03b-7e94cfc02b13",
+        "originalWorld": [
+          -69.7,
+          142.01,
+          27.71
+        ],
+        "roadEdgeClearance": 3.3611220065496954,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "0bd4712a-6c67-4f0f-a3a8-89df3b28b19a"
+      },
+      {
+        "collisionRadius": 1.98,
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          20.27973454533096,
+          10.551906663188356,
+          9.223918948637072
+        ],
+        "newWorld": [
+          -64.86857779535936,
+          151.3372919656592,
+          49.73321682494764
+        ],
+        "originalParent": "36a9fd9d-3e7e-46ce-ab96-97137a5b0926",
+        "originalWorld": [
+          -74.1516772259396,
+          141.0695293919609,
+          24.71722574197983
+        ],
+        "roadEdgeClearance": 2.699788705128799,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "5a464091-1d36-482f-9436-1e7420e54136"
+      },
+      {
+        "collisionRadius": 1.71,
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          25.815662553253787,
+          10.62417389698677,
+          9.602882863445616
+        ],
+        "newWorld": [
+          -61.2046740095615,
+          152.43262493185313,
+          53.75458348968952
+        ],
+        "originalParent": "36a9fd9d-3e7e-46ce-ab96-97137a5b0926",
+        "originalWorld": [
+          -65.85622873842884,
+          145.03389241889354,
+          25.719000572404106
+        ],
+        "roadEdgeClearance": 2.891145585395194,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "a1b94440-e44e-4f2f-8cf4-26c0c923341e"
+      },
+      {
+        "collisionRadius": 1.53,
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          23.179413726797257,
+          10.353404611124796,
+          6.139953752975191
+        ],
+        "newWorld": [
+          -61.00913449723607,
+          153.06344042984102,
+          49.44426586659944
+        ],
+        "originalParent": "36a9fd9d-3e7e-46ce-ab96-97137a5b0926",
+        "originalWorld": [
+          -69.87097949509682,
+          143.778198993591,
+          19.79677752361077
+        ],
+        "roadEdgeClearance": 6.561956666553304,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "c57086b0-70a1-49a3-8df6-de575d5801ec"
+      },
+      {
+        "collisionRadius": 1.1700000000000002,
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          21.71729771340952,
+          11.688124419729542,
+          8.949063096226913
+        ],
+        "newWorld": [
+          -64.19312862673073,
+          152.76463454212845,
+          50.70253925948462
+        ],
+        "originalParent": "36a9fd9d-3e7e-46ce-ab96-97137a5b0926",
+        "originalWorld": [
+          -72.52429300600994,
+          143.22921793983713,
+          24.56467988913235
+        ],
+        "roadEdgeClearance": 4.953163018961099,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "a9ab2c97-44d4-492a-8013-286804b240dc"
+      },
+      {
+        "collisionRadius": 0.81,
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          23.9090585008304,
+          12.355771636504436,
+          8.193579861144503
+        ],
+        "newWorld": [
+          -62.51289867872992,
+          154.13892304888753,
+          51.75538373796413
+        ],
+        "originalParent": "36a9fd9d-3e7e-46ce-ab96-97137a5b0926",
+        "originalWorld": [
+          -69.56585221880528,
+          145.60088556707035,
+          23.581644819933977
+        ],
+        "roadEdgeClearance": 5.626026411636637,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "ebb63702-ab3f-4bfe-b59e-bb925e6ebfa2"
+      },
+      {
+        "collisionRadius": 0,
+        "name": "BufferGeometry",
+        "newLocal": [
+          23.14706511817785,
+          10.05021333541506,
+          11.159210592375898
+        ],
+        "newWorld": [
+          -63.71049576631505,
+          150.70664362152715,
+          52.97046306758784
+        ],
+        "originalParent": "36a9fd9d-3e7e-46ce-ab96-97137a5b0926",
+        "originalWorld": [
+          -69.54386270423616,
+          142.22343149170425,
+          28.010722478095136
+        ],
+        "roadEdgeClearance": 3.953609777027032,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "77dda1d7-1679-491f-a6fa-160c712a7d89"
+      },
+      {
+        "collisionRadius": 0.7058155008312209,
+        "name": "giantTreeGroup",
+        "newLocal": [
+          25.31741372398,
+          10.212908592375294,
+          13.127894968148256
+        ],
+        "newWorld": [
+          -63.3514022046582,
+          150.49997648098085,
+          55.87579291043701
+        ],
+        "originalParent": "391802c9-d5eb-4078-b03b-7e94cfc02b13",
+        "originalWorld": [
+          -65.01445330843625,
+          143.57844335398397,
+          32.54452834227476
+        ],
+        "roadEdgeClearance": 0.6014479002226394,
+        "roadNudge": 1,
+        "sameModel": true,
+        "uuid": "79460a52-7ae7-42b9-a726-5b987c953f92"
+      },
+      {
+        "collisionRadius": 0.47226585020126954,
+        "name": "giantTreeGroup",
+        "newLocal": [
+          28.112615318191235,
+          10.760692151777784,
+          12.711578126084705
+        ],
+        "newWorld": [
+          -61.3831119458025,
+          151.7571697370948,
+          57.55859921744141
+        ],
+        "originalParent": "391802c9-d5eb-4078-b03b-7e94cfc02b13",
+        "originalWorld": [
+          -62.192329190879235,
+          145.77607637195135,
+          30.96550050173939
+        ],
+        "roadEdgeClearance": 0.8179556897651432,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "2959cc4f-97e6-4f69-aaf5-75af6c53c79a"
+      },
+      {
+        "collisionRadius": 0.5034951959682138,
+        "name": "giantTreeGroup",
+        "newLocal": [
+          26.73093043204363,
+          10.69082603090933,
+          10.062726258056191
+        ],
+        "newWorld": [
+          -60.845025804438094,
+          152.4973548004766,
+          54.71378991018897
+        ],
+        "originalParent": "391802c9-d5eb-4078-b03b-7e94cfc02b13",
+        "originalWorld": [
+          -64.46337322296779,
+          145.5852136452134,
+          26.538119217204876
+        ],
+        "roadEdgeClearance": 3.5072562863289503,
+        "roadNudge": 0,
+        "sameModel": true,
+        "uuid": "60a6f35c-6fa6-4ee7-9d39-9e97fc032de8"
+      }
+    ],
+    "movedCount": 10,
+    "nearbyPropsSpacingRatio": 0.6,
+    "originalInstrumentAndMusicKeysPreserved": true
+  },
+  "facadePlants": {
+    "climbingRoseStems": 4,
+    "facadeLeafBlades": 128,
+    "facadeRoses": 32
+  },
+  "farmGate": "open wooden rails between stone posts",
+  "floraRevision": "small-layered-bouquets-r31",
+  "flowers": 6544,
+  "hollyhockClumps": 17,
+  "horsePositions": [
+    [
+      -24,
+      2.467963661456821,
+      20
+    ],
+    [
+      40,
+      -7.461379890206189,
+      26
+    ],
+    [
+      -10,
+      -1.2479804442544662,
+      37
+    ]
+  ],
+  "horses": 3,
+  "layers": [
+    {
+      "name": "外圈花草坪",
+      "range": "外围低地径向约1.4–4m"
+    },
+    {
+      "name": "环绕溪流缓丘",
+      "range": "中圈约4–9m"
+    },
+    {
+      "name": "中央山肩城堡",
+      "range": "城基径向10.5m"
+    },
+    {
+      "name": "中央错位主峰",
+      "range": "主峰径向约26m；四周连续降低"
+    }
+  ],
+  "linearScale": 2.6457513110645907,
+  "mainIslandEdgeCleanup": {
+    "clearedTexels": 231947,
+    "revision": "main-island-edge-cleanup-r1-20261026",
+    "shadowMasks": true,
+    "status": "installed"
+  },
+  "mountainRoute": {
+    "actualRoadMaxRadialGrade": 0.15165953226522158,
+    "bridgeCenter": [
+      8,
+      32
+    ],
+    "bridgeCrossings": 1,
+    "design": "winding pre-bridge meadow and uphill shoulder with opposing contour bends, cross-stream bridge, two hairpins and final castle turn",
+    "finalTurnRadius": 7.6,
+    "hairpinCenterRadius": 6,
+    "keys": [
+      [
+        0,
+        1.75
+      ],
+      [
+        55.95355003475069,
+        4
+      ],
+      [
+        63.95355003475064,
+        4.4
+      ],
+      [
+        83.36691913190782,
+        5.6
+      ],
+      [
+        102.21489314038423,
+        9.5
+      ],
+      [
+        148.06548317924958,
+        11.3
+      ],
+      [
+        166.91345718772604,
+        11.8
+      ],
+      [
+        186.40784867301772,
+        10.946204291414205
+      ]
+    ],
+    "length": 186.40784867301772,
+    "marks": {
+      "bridgeBack": 63.95355003475064,
+      "bridgeFront": 55.95355003475069,
+      "eastEnd": 166.91345718772604,
+      "eastStart": 148.06548317924958,
+      "gate": 186.40784867301772,
+      "westEnd": 102.21489314038423,
+      "westStart": 83.36691913190782
+    },
+    "meadowTurnRadius": 4,
+    "minimumDesignedInnerRadius": 2.4,
+    "surface": "real graded ground shoulders plus raycast-supported winding road mesh",
+    "width": 3.2
+  },
+  "movedScope": "original elderly musician and captured nearby props only",
+  "music": {
+    "attempts": 0,
+    "currentTime": 0,
+    "distance": 217.65070286098685,
+    "done": false,
+    "duration": null,
+    "envelope": 0,
+    "error": null,
+    "inside": false,
+    "instruments": "synthesized piano, strings, flute",
+    "mediaError": null,
+    "onePlayPerVisit": true,
+    "original": true,
+    "owner": null,
+    "paused": true,
+    "range": {
+      "enter": 66,
+      "exit": 76
+    },
+    "readyState": 0,
+    "revision": "morris-score-r15",
+    "title": "织锦花园",
+    "volume": 0
+  },
+  "navigationTraversalVerified": false,
+  "oldSceneMoved": true,
+  "originalGroundOwnership": {
+    "meshes": 3,
+    "mode": "user-selected elder overlap only; old source geometry retained",
+    "shadowMasks": true,
+    "supportMasks": true
+  },
+  "originalShoreJoin": true,
+  "pathWidth": 3.2,
+  "planarAreaRatio": 7,
+  "planeHeightRange": [
+    16.36724188970402,
+    22.914138645585627
+  ],
+  "planeTrees": 6,
+  "plantScaleRatio": 0.85,
+  "previewListening": false,
+  "protectedExistingSites": 11,
+  "protectedRailSamples": 176,
+  "rabbits": 8,
+  "radius": 58.206528843421,
+  "revision": "morris-route-r34-20261026",
+  "robins": 4,
+  "rockShoulderGroups": 8,
+  "seaPalette": {
+    "geometryChanged": false,
+    "legacyRailDryCorridor": true,
+    "revision": 1,
+    "scope": "bounded Morris coastal sea, matching citadel cyan direction"
+  },
+  "site": {
+    "automaticEmptyOceanAcceptance": false,
+    "candidates": 2304,
+    "envelope": 70.15408379511177,
+    "lat": 62.15807569871641,
+    "lon": 158.31916226225306,
+    "method": "explicit user-selected original music-elder shoreline; finite old-ground join and protected rail/actor corridors",
+    "minimumClearance": -29.013385179750586,
+    "nearestSafeCandidates": [
+      {
+        "clearance": 71.35535519896331,
+        "lat": 20,
+        "lon": 150,
+        "targetDistance": 80.23181047331748
+      },
+      {
+        "clearance": 70.60416302286335,
+        "lat": -70,
+        "lon": -80,
+        "targetDistance": 257.3299503639378
+      },
+      {
+        "clearance": 74.80114304934393,
+        "lat": -70,
+        "lon": -75,
+        "targetDistance": 260.11943079351386
+      },
+      {
+        "clearance": 73.34604667785142,
+        "lat": -65,
+        "lon": -75,
+        "targetDistance": 261.2941453145577
+      },
+      {
+        "clearance": 79.02083655517258,
+        "lat": -70,
+        "lon": -70,
+        "targetDistance": 262.81539034036115
+      },
+      {
+        "clearance": 78.59381891913544,
+        "lat": -65,
+        "lon": -70,
+        "targetDistance": 264.6066286161912
+      }
+    ],
+    "obstacles": 742,
+    "otherObjectsMoved": false,
+    "route": {
+      "bookshopDistance": 224.0113458223219,
+      "departure": [
+        -100.07376737885296,
+        -41.35911952176487,
+        117.79076498175732
+      ],
+      "destination": [
+        -67.84384769251405,
+        84.78708227731278,
+        -117.50899118439892
+      ],
+      "request": "书店镇去苔庭路上的广阔海域",
+      "saihojiDistance": 162.72725546877683
+    },
+    "routeMidpointDistance": 135.41484412363943,
+    "routeMidpointEdgeDistance": 77.20831528021846,
+    "routeSamples": 2403,
+    "userSpecifiedAnchor": true
+  },
+  "source": "normal-game-installed",
+  "stream": "authored descending radial levels, carved real bed",
+  "streamLevels": [
+    10.2,
+    7.2,
+    4.9,
+    3.2,
+    2.3,
+    1.2,
+    -0.6
+  ],
+  "style": "Arts and Crafts / William Morris inspired original geometry",
+  "terrainLayout": "central highland, asymmetric shoulders, low surrounding meadows",
+  "treeHeightPolicy": "mounted courier envelope below half high-tree height",
+  "treeRevision": "small-palmate-leaves-and-soft-cypress-r31",
+  "view": "盘山入堡",
+  "wholeNavigationVerified": false,
+  "wildlife": {
+    "cuckoos": 3,
+    "rabbits": 8,
+    "robins": 4,
+    "scheduledAt": 389.3157000000179,
+    "successfulVoices": 0
+  }
+}

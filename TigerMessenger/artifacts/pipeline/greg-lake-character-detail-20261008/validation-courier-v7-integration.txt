@@ -1,0 +1,17 @@
+✔ head refinement preserves every non-head geometry and rig transform (1.983416ms)
+✔ small side eyes remain on the real face surface after merging (0.81375ms)
+✔ hair v7 uses only six attached light arcs and preserves the original highest fit datum (9.180959ms)
+✔ formal player adapter returns articulated illustrated courier, fitted to existing player scale (77.530166ms)
+✔ walking, sprinting, jumping, mounting, dismounted boarding and delivery keep real pivots live (20.139542ms)
+✔ flat palette, fine outline shader and rigid batches are finite and below legacy geometry cost (67.493417ms)
+✔ reedbank divided hem follows thighs during riding and life-specific props are retained (18.726958ms)
+✔ leaf pod opens to inspect mail and closes for running or riding without detaching hinges (16.54375ms)
+✔ rear hair continuously covers skull from crown through ear line without new geometry batches (15.8345ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 265.301292

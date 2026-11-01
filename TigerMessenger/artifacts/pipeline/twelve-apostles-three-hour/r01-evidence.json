@@ -1,0 +1,52 @@
+{
+  "round": "r01",
+  "target": "Twelve Apostles coastal modules, continuous turf, coherent shading; approved eight positions and transport protection",
+  "observations": [
+    {
+      "source": "r01-hero-ui.png",
+      "sha256": "0f6b4bcabe3d13cc7cf21fc7e2baebeb29390c05a7412702a85c4d3944b546b4",
+      "findings": [
+        "Turf now has clustered three-dimensional scrub; top and side lighting agree in direction.",
+        "Turf is excessively dark; independent inspection found a material color multiplied with vertex color twice.",
+        "Rock walls appear too smooth and have lost readable bedding; silhouette must retain authored ledges.",
+        "No fog view remains legible, but rocky identity needs work."
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "18 geometry cases preserve closed topology/base/terraces/envelope",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "approved 8 positions unchanged relative to captured legacy",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "46800 rail sampling probes without rock hit",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "328 recorded vegetation roots supported in real scene",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "continuous grass edge near elevation cutoff",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "limitations": [
+    "Rail result is a sampling check, not a continuous collision proof.",
+    "Single-column heightfield lighting approximation, no cross-column or dynamic actor shadow integration."
+  ],
+  "proposedNext": [
+    "Clip elevation boundary instead of whole-face rejection",
+    "Avoid duplicate material tint on vertex-colored turf",
+    "Restore subtle interrupted mineral bedding independent of lighting"
+  ]
+}

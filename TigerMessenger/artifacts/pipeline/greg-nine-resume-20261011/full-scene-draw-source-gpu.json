@@ -1,0 +1,145 @@
+{
+  "method": "one normal-camera full production render; callbacks restored; this diagnostic overhead is not an FPS measure",
+  "render": {
+    "frame": 1050,
+    "calls": 4768,
+    "triangles": 7445774,
+    "points": 0,
+    "lines": 63194
+  },
+  "groups": [
+    [
+      "moebius-swamp-placement",
+      {
+        "calls": 744,
+        "triangles": 1152372
+      }
+    ],
+    [
+      "bookshop-steampunk-robots",
+      {
+        "calls": 407,
+        "triangles": 1002603
+      }
+    ],
+    [
+      "robot-operations-live",
+      {
+        "calls": 294,
+        "triangles": 155850
+      }
+    ],
+    [
+      "christchurch-tram-system",
+      {
+        "calls": 112,
+        "triangles": 266448
+      }
+    ],
+    [
+      "Group",
+      {
+        "calls": 100,
+        "triangles": 68280
+      }
+    ],
+    [
+      "flock-root",
+      {
+        "calls": 96,
+        "triangles": 832
+      }
+    ],
+    [
+      "moebius-metropolis",
+      {
+        "calls": 61,
+        "triangles": 2640
+      }
+    ],
+    [
+      "flower-hall-bubble-patrol",
+      {
+        "calls": 30,
+        "triangles": 3648
+      }
+    ],
+    [
+      "crystal-v7-shores",
+      {
+        "calls": 10,
+        "triangles": 656
+      }
+    ],
+    [
+      "castleContainer",
+      {
+        "calls": 6,
+        "triangles": 99366
+      }
+    ],
+    [
+      "bird-vortex-triple-gate",
+      {
+        "calls": 6,
+        "triangles": 13000
+      }
+    ],
+    [
+      "city-sea-lake",
+      {
+        "calls": 4,
+        "triangles": 13152
+      }
+    ],
+    [
+      "cyber-megalithic-twin-gates",
+      {
+        "calls": 4,
+        "triangles": 22768
+      }
+    ],
+    [
+      "planet-v9-runtime",
+      {
+        "calls": 2,
+        "triangles": 36624
+      }
+    ],
+    [
+      "sky-background",
+      {
+        "calls": 1,
+        "triangles": 2976
+      }
+    ],
+    [
+      "Mesh",
+      {
+        "calls": 1,
+        "triangles": 3360
+      }
+    ],
+    [
+      "planet-surface",
+      {
+        "calls": 1,
+        "triangles": 15255
+      }
+    ],
+    [
+      "rescue-objective",
+      {
+        "calls": 1,
+        "triangles": 8
+      }
+    ],
+    [
+      "crystal-v10-lake",
+      {
+        "calls": 1,
+        "triangles": 2
+      }
+    ]
+  ]
+}

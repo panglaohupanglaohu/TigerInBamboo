@@ -1,0 +1,51 @@
+{
+  "passed": 10,
+  "checks": [
+    "root uses supplied original castle seat",
+    "finite real geometry",
+    "compact original plateau footprint",
+    "three distinct massing heights",
+    "gate central passage is a real geometric void",
+    "courtyard actual floor supports entrance approach",
+    "east exit remains open to music court",
+    "physical stone relief, thick window surrounds, layered roof tiles and footings",
+    "static details share finite material batches rather than one draw per stone",
+    "gate stays clear at its exact jamb boundary"
+  ],
+  "report": {
+    "design": "project Oskar-method modular massing proposal",
+    "revision": "masonry-r2",
+    "footprint": [
+      14,
+      10
+    ],
+    "size": [
+      14.000000095367433,
+      13.300000001490117,
+      10
+    ],
+    "mainHeights": [
+      10.5,
+      7,
+      5.5
+    ],
+    "entrance": {
+      "direction": "+Z",
+      "clearWidth": 2.6,
+      "clearHeight": 3.1
+    },
+    "eastMusicCourtOpen": true,
+    "supports": [
+      "continuous foundation",
+      "courtyard floor"
+    ],
+    "detailCounts": {
+      "masonry": 412,
+      "windowSurrounds": 60,
+      "roofTiles": 925,
+      "footings": 18
+    },
+    "detailBatches": 13,
+    "navigationVerified": false
+  }
+}

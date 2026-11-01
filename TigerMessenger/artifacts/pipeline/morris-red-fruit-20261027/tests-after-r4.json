@@ -1,0 +1,25 @@
+{
+  "passed": 8,
+  "botany": {
+    "planeTrees": 10,
+    "bridgePlaneTree": [
+      -2,
+      0.1924470071635085,
+      33
+    ],
+    "cypresses": 19,
+    "hollyhockClumps": 50,
+    "planeHeightRange": [
+      16.36724188970402,
+      22.914138645585627
+    ],
+    "cypressHeightRange": [
+      19.76759922180176,
+      27.05040077819824
+    ],
+    "fruitDesign": "red peel and visible yellow flesh, user Morris setting",
+    "companionHollyhocks": 28,
+    "treeRevision": "red-fruit-companion-planting-r1"
+  },
+  "scope": "geometry/factory checks, no current normal GPU claim"
+}

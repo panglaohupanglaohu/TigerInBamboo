@@ -1,0 +1,188 @@
+{
+  "time": "2026-10-10T21:26:06.039Z",
+  "station": "rim",
+  "method": "60 real production frames; opt-in section CPU wall timings, not GPU timings",
+  "cpu": {
+    "enabled": true,
+    "samples": 60,
+    "means": {
+      "lightingWeather": 0.061666675408681225,
+      "physicsAndRide": 2.1949999968210863,
+      "audio": 0.04833333492279052,
+      "sceneUpdates": 56.04499999880791,
+      "robotsAndGuardian": 5.9150000015894575,
+      "cameraWaterAndStory": 0.13666666348775233,
+      "questsAndUI": 0.1250000019868216,
+      "cullingAndLights": 0.1150000035762787,
+      "render": 30.016666666666662
+    }
+  },
+  "scenes": [
+    {
+      "id": "messenger",
+      "samples": 62,
+      "meanMs": 56.12741935253143,
+      "maxMs": 65.70000004768372
+    },
+    {
+      "id": "saihoji",
+      "samples": 62,
+      "meanMs": 0.009677419739384805,
+      "maxMs": 0.10000002384185791
+    }
+  ],
+  "subsystems": [
+    {
+      "id": "moebiusSwamp.userData",
+      "samples": 62,
+      "meanMs": 43.748387090621456,
+      "maxMs": 49.5
+    },
+    {
+      "id": "moebius-swamp-placement.story",
+      "samples": 62,
+      "meanMs": 43.748387090621456,
+      "maxMs": 49.5
+    },
+    {
+      "id": "moebius-cyber-ink-tiger.update",
+      "samples": 62,
+      "meanMs": 41.58548386635319,
+      "maxMs": 45.700000047683716
+    },
+    {
+      "id": "saihojiPhalanx",
+      "samples": 62,
+      "meanMs": 6.366129023413504,
+      "maxMs": 7.5
+    },
+    {
+      "id": "canalBoats",
+      "samples": 62,
+      "meanMs": 1.6274193563768942,
+      "maxMs": 2.100000023841858
+    },
+    {
+      "id": "canalJunctionCitadel",
+      "samples": 62,
+      "meanMs": 0.7725806428540137,
+      "maxMs": 0.9000000953674316
+    },
+    {
+      "id": "odysseyCitadel",
+      "samples": 62,
+      "meanMs": 0.7403225841060761,
+      "maxMs": 1.3000000715255737
+    },
+    {
+      "id": "gateBirdVortex",
+      "samples": 62,
+      "meanMs": 0.5161290303353341,
+      "maxMs": 0.8999999761581421
+    },
+    {
+      "id": "birdVortex",
+      "samples": 62,
+      "meanMs": 0.5161290303353341,
+      "maxMs": 0.8999999761581421
+    },
+    {
+      "id": "flowerActivities",
+      "samples": 62,
+      "meanMs": 0.2887096616529649,
+      "maxMs": 0.6999999284744263
+    },
+    {
+      "id": "tramSystem",
+      "samples": 62,
+      "meanMs": 0.09193547694913802,
+      "maxMs": 0.20000004768371582
+    },
+    {
+      "id": "shipRepair",
+      "samples": 62,
+      "meanMs": 0.06129032565701392,
+      "maxMs": 0.19999992847442627
+    },
+    {
+      "id": "moebius",
+      "samples": 62,
+      "meanMs": 0.04193548810097479,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "escort",
+      "samples": 62,
+      "meanMs": 0.02096774116639168,
+      "maxMs": 0.20000004768371582
+    },
+    {
+      "id": "highlandGateFlock",
+      "samples": 62,
+      "meanMs": 0.014516126724981492,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "oldHarbor",
+      "samples": 62,
+      "meanMs": 0.011290325272467828,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "flock",
+      "samples": 62,
+      "meanMs": 0.008064516129032258,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "swamp-lotus-leaf-boat.paddles",
+      "samples": 310,
+      "meanMs": 0.0067741932407502205,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "citySeaLake",
+      "samples": 62,
+      "meanMs": 0.0064516144414101875,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "citadelRange",
+      "samples": 62,
+      "meanMs": 0.004838710831057641,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "canalJunctionBox.userData",
+      "samples": 62,
+      "meanMs": 0.0016129036103525469,
+      "maxMs": 0.10000002384185791
+    },
+    {
+      "id": "waterRouteFleet",
+      "samples": 62,
+      "meanMs": 0.0016129016876220703,
+      "maxMs": 0.09999990463256836
+    },
+    {
+      "id": "terraceBirds",
+      "samples": 62,
+      "meanMs": 0,
+      "maxMs": 0
+    }
+  ],
+  "perf": {
+    "fps": 10.5,
+    "frameMs": 95.11,
+    "samples": 60,
+    "windowFull": true,
+    "hitches": 2,
+    "worstMs": 341.5,
+    "calls": 5888,
+    "triangles": 5282039,
+    "programs": 384,
+    "geometries": 2620,
+    "textures": 112,
+    "bootMs": 28779
+  }
+}

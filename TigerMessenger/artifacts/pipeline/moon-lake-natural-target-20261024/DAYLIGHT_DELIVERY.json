@@ -1,0 +1,18 @@
+{
+  "deliverable": "moon-lake-daylight-v2.png",
+  "sha256": "e5429dbefb1312d209f897bb1152f21de60442e67cbb39b7b8b2630b0ebf79ed",
+  "mode": "built-in image_gen, two daylight iterations",
+  "status": "daylight vegetation concept; not implemented and not a surveyed geometry rendering",
+  "rootVisualReview": [
+    "bright sunny sky, warm daytime ground",
+    "small pond now has connected far-bank concave bite, readable C-shape",
+    "large quiet terrain colour regions; scattered low shrub groups, no pots or beds",
+    "foreground S pine and low far crescent retained in screenshot-derived composition"
+  ],
+  "limits": [
+    "generated scene not pixel-exact current geometry",
+    "no direct new-city/moon-lake road or adjacency claimed",
+    "source-style-board uses source factories but component ground, not full actual terrain; GPU inspection pending"
+  ],
+  "advisor": "Oskar independently viewed final daylight-v2 and accepted as screenshot-derived daytime vegetation concept, not exact geometry or game implementation"
+}

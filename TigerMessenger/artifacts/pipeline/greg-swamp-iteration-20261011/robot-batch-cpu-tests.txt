@@ -1,0 +1,54 @@
+✔ fire uses ammo, harms enemies only, disables at zero (2.215667ms)
+✔ walls, friends and steam block fire (0.140958ms)
+✔ skills enforce cooldown and pressure; scanner does not see through walls (0.122584ms)
+✔ movement stays clear of obstacles, low health retreats and save keeps IDs (1.1525ms)
+✔ reload cannot invent ammunition and cancelled movement does not continue (0.144042ms)
+✔ A* routes around a wall to reach the far side (0.390667ms)
+✔ group movement assigns separated destinations and can finish without a pile-up (1.8285ms)
+✔ overheat requires cooling below the release threshold and repair grants whole rounds (0.360792ms)
+✔ group retreat reaches separate repair bays (1.127209ms)
+✔ invalid combat restore preserves live state and hold is saveable (0.895ms)
+✔ Beetle can roll and fire sideways while its chassis follows the movement order (0.313042ms)
+✔ broken weapon and damaged sensor are meaningful, and repair restores parts (0.346167ms)
+✔ Locust brace holds position and cooldown begins when it folds or moves away (0.178792ms)
+✔ empty reserves request resupply; direct friendly fire remains blocked (0.068167ms)
+✔ steam prevents a scanner from discovering a new target; the previous marker stays at its last position (0.073875ms)
+✔ events created between frames have distinct cursors even at the same combat time (0.152125ms)
+✔ repair refills a partially used magazine before releasing a fully stocked unit (0.132667ms)
+✔ a teammate parking on an old waypoint triggers a safe route around it (0.602709ms)
+✔ locust keeps locomotion while tracking and firing at an offset enemy (0.179583ms)
+✔ ant keeps locomotion while tracking and firing at an offset enemy (0.117708ms)
+✔ beetle keeps locomotion while tracking and firing at an offset enemy (0.081167ms)
+✔ three same-type completed units, continuous cargo slots, capacity and no duplication (2.933709ms)
+✔ save during吊装 recovers same identities and no duplicate load (1.2925ms)
+✔ cancellation retains loaded cargo, frees reserved cargo, invalid dt ignored (0.826833ms)
+✔ three sequential batches survive round trip and replenish (1.855291ms)
+✔ shared crane serializes two trains without duplication or concurrent吊装 (5.532917ms)
+✔ corrupt save is rejected atomically without changing current production (1.120625ms)
+✔ tall receiving gantry uses its slower unloading duration without releasing a moving robot (0.892ms)
+✔ parallel factories reach the 24-unit cap only in complete shippable batches (7.8725ms)
+✔ six-slot saves expand without changing existing cargo identities (0.615125ms)
+robot batch fixture {
+  version: 1,
+  enabled: true,
+  sourceMeshes: 612,
+  batches: 204,
+  instances: 612,
+  frames: 1
+}
+✔ actual three factory clones retain authored triangles and every animated world matrix (158.363833ms)
+✔ original raycast still hits masked mesh; batch cannot duplicate collision (0.648083ms)
+✔ opt out and unknown deforming shaders never change render materials (0.171584ms)
+✔ trio bounds prevent one near robot from pulling in a distant legion (0.301791ms)
+✔ whole save preserves ownership, live trains and shipment together (3.0505ms)
+✔ reject broken train and cross-system references before touching a live scene (1.845792ms)
+✔ reject missing or resurrected deployed identities and malformed repair orders (1.378125ms)
+✔ never-greeted production robots have finite stowed cargo geometry and restore combat aim (158.282375ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 215.775958

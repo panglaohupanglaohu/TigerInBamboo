@@ -1,0 +1,1764 @@
+{
+  "buildMilliseconds": 3580.444625,
+  "formalSeed": 7711,
+  "planning": {
+    "version": 2,
+    "candidates": 42403,
+    "rejected": {
+      "obstacle": 19517,
+      "neighbor": 11870,
+      "solid": 11013
+    },
+    "examples": [
+      {
+        "index": 1,
+        "travel": 3,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -15.618109491120268,
+          1.7101625429703102
+        ],
+        "rejectedAt": [
+          -12.650579961225926,
+          1.2699711196042247
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.968906426060798,
+        "neighborGap": -1.882264792748348
+      },
+      {
+        "index": 1,
+        "travel": 3,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -15.794186060466703,
+          0.5231507310125731
+        ],
+        "rejectedAt": [
+          -12.826656530572361,
+          0.08295930764648773
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.15172528557025244,
+        "neighborGap": -1.7396233695902734
+      },
+      {
+        "index": 1,
+        "travel": 3,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -17.66274206307653,
+          0.19375967905335556
+        ],
+        "rejectedAt": [
+          -14.695212533182186,
+          -0.24643174431272985
+        ],
+        "reason": "solid",
+        "obstacleGap": 1.4070782642895787,
+        "neighborGap": 0.14664163890656534
+      },
+      {
+        "index": 1,
+        "travel": 2.5,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -15.618109491120268,
+          1.7101625429703102
+        ],
+        "rejectedAt": [
+          -13.145168216208315,
+          1.3433363568319057
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.7735354216406025,
+        "neighborGap": -1.3825863550269148
+      },
+      {
+        "index": 1,
+        "travel": 2.5,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -15.794186060466703,
+          0.5231507310125731
+        ],
+        "rejectedAt": [
+          -13.32124478555475,
+          0.15632454487416864
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.3310090907372769,
+        "neighborGap": -1.2490015843697333
+      },
+      {
+        "index": 1,
+        "travel": 2.5,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -17.398627209056876,
+          1.9742773969899614
+        ],
+        "rejectedAt": [
+          -16.904038954074487,
+          1.9009121597622805
+        ],
+        "reason": "solid",
+        "obstacleGap": 1.1979328312284705,
+        "neighborGap": 2.4158809139151027
+      },
+      {
+        "index": 1,
+        "travel": 2,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -15.618109491120268,
+          1.7101625429703102
+        ],
+        "rejectedAt": [
+          -13.639756471190706,
+          1.4167015940595866
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.5614857101344841,
+        "neighborGap": -0.8828688648940733
+      },
+      {
+        "index": 1,
+        "travel": 2,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -15.794186060466703,
+          0.5231507310125731
+        ],
+        "rejectedAt": [
+          -13.815833040537141,
+          0.22968978210184954
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.5260926495213061,
+        "neighborGap": -0.7572680631299139
+      },
+      {
+        "index": 1,
+        "travel": 2,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -16.893159587751224,
+          1.2927332063378758
+        ],
+        "rejectedAt": [
+          -16.62937918509395,
+          1.253605079816446
+        ],
+        "reason": "solid",
+        "obstacleGap": 1.460436952833131,
+        "neighborGap": 2.079810201373163
+      },
+      {
+        "index": 1,
+        "travel": 1.5,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -15.618109491120268,
+          1.7101625429703102
+        ],
+        "rejectedAt": [
+          -14.134344726173097,
+          1.4900668312872676
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.3335774125160287,
+        "neighborGap": -0.3831190276379285
+      },
+      {
+        "index": 1,
+        "travel": 1.5,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -15.706147775793486,
+          1.1166566369914417
+        ],
+        "rejectedAt": [
+          -14.222383010846315,
+          0.896560925308399
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.19862867884633473,
+        "neighborGap": -0.3441639555350967
+      },
+      {
+        "index": 1,
+        "travel": 1.5,
+        "angle": 2.9943304979527716,
+        "centre": [
+          -16.299653681772355,
+          1.2046949216646587
+        ],
+        "rejectedAt": [
+          -16.596406634761788,
+          1.2487140640012673
+        ],
+        "reason": "solid",
+        "obstacleGap": 1.4411642141638585,
+        "neighborGap": 2.0465775597183096
+      },
+      {
+        "index": 2,
+        "travel": 3,
+        "angle": 5.056000676871073,
+        "centre": [
+          4.664652600126548,
+          -16.598825745218615
+        ],
+        "rejectedAt": [
+          3.653983039949889,
+          -13.774193549669553
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -2.020546287588952,
+        "neighborGap": 4.044606426732021
+      },
+      {
+        "index": 2,
+        "travel": 3,
+        "angle": 5.056000676871073,
+        "centre": [
+          1.2750939654676725,
+          -17.811629217430607
+        ],
+        "rejectedAt": [
+          0.26442440529101363,
+          -14.986997021881544
+        ],
+        "reason": "solid",
+        "obstacleGap": 0.15548000656533278,
+        "neighborGap": 1.9537276586005548
+      },
+      {
+        "index": 2,
+        "travel": 3,
+        "angle": 6.62679700366597,
+        "centre": [
+          0.9900094594399755,
+          -13.452876319591255
+        ],
+        "rejectedAt": [
+          -1.834622736109087,
+          -14.463545879767914
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.7761238934500596,
+        "neighborGap": -0.2026562738297807
+      },
+      {
+        "index": 3,
+        "travel": 3,
+        "angle": 5.595961914206819,
+        "centre": [
+          -12.457585394340176,
+          -12.02699322951177
+        ],
+        "rejectedAt": [
+          -14.776616754428385,
+          -10.123813377020833
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 9.695068741625919,
+        "neighborGap": -0.5915919062409166
+      },
+      {
+        "index": 3,
+        "travel": 3,
+        "angle": 5.595961914206819,
+        "centre": [
+          -13.218857335336551,
+          -12.954605773547055
+        ],
+        "rejectedAt": [
+          -15.537888695424762,
+          -11.051425921056117
+        ],
+        "reason": "solid",
+        "obstacleGap": 10.676334562994198,
+        "neighborGap": 0.3642098770610197
+      },
+      {
+        "index": 3,
+        "travel": 3,
+        "angle": 4.025165587411922,
+        "centre": [
+          -6.463319395209917,
+          -12.289243361391417
+        ],
+        "rejectedAt": [
+          -4.560139542718979,
+          -9.970212001303207
+        ],
+        "reason": "obstacle",
+        "obstacleGap": 0.04041890068053333,
+        "neighborGap": -4.079917450472783
+      },
+      {
+        "index": 3,
+        "travel": 2.5,
+        "angle": 5.595961914206819,
+        "centre": [
+          -12.457585394340176,
+          -12.02699322951177
+        ],
+        "rejectedAt": [
+          -14.390111527747017,
+          -10.441010019102656
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 9.404523586456923,
+        "neighborGap": -0.2679160930892909
+      },
+      {
+        "index": 3,
+        "travel": 2.5,
+        "angle": 5.595961914206819,
+        "centre": [
+          -12.838221364838365,
+          -12.490799501529413
+        ],
+        "rejectedAt": [
+          -14.770747498245207,
+          -10.904816291120298
+        ],
+        "reason": "solid",
+        "obstacleGap": 9.899175138591692,
+        "neighborGap": 0.1893990707099441
+      },
+      {
+        "index": 3,
+        "travel": 2.5,
+        "angle": 4.025165587411922,
+        "centre": [
+          -6.082683424711728,
+          -11.825437089373775
+        ],
+        "rejectedAt": [
+          -4.496700214302614,
+          -9.892910955966933
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.051452781167908634,
+        "neighborGap": -4.059616072639794
+      },
+      {
+        "index": 3,
+        "travel": 2,
+        "angle": 5.595961914206819,
+        "centre": [
+          -12.457585394340176,
+          -12.02699322951177
+        ],
+        "rejectedAt": [
+          -10.911564487614703,
+          -13.295779797839062
+        ],
+        "reason": "solid",
+        "obstacleGap": 7.209779977633256,
+        "neighborGap": 0.24735467249187926
+      },
+      {
+        "index": 3,
+        "travel": 2,
+        "angle": 5.595961914206819,
+        "centre": [
+          -12.076949423841988,
+          -11.563186957494128
+        ],
+        "rejectedAt": [
+          -13.622970330567462,
+          -10.294400389166837
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 8.626413823784508,
+        "neighborGap": -0.35772003483444015
+      },
+      {
+        "index": 3,
+        "travel": 2,
+        "angle": 4.025165587411922,
+        "centre": [
+          -5.70204745421354,
+          -11.361630817356136
+        ],
+        "rejectedAt": [
+          -4.433260885886249,
+          -9.815609910630663
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.14317721019186558,
+        "neighborGap": -4.037645332086187
+      },
+      {
+        "index": 4,
+        "travel": 3,
+        "angle": 5.988660995905543,
+        "centre": [
+          16.336854750622596,
+          -7.4637240608867295
+        ],
+        "rejectedAt": [
+          13.46603374342597,
+          -6.5928700291233415
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -1.4087855918853507,
+        "neighborGap": 4.838244958071708
+      },
+      {
+        "index": 4,
+        "travel": 3,
+        "angle": 5.988660995905543,
+        "centre": [
+          16.440158315385183,
+          -11.257050882228036
+        ],
+        "rejectedAt": [
+          15.291829912506532,
+          -10.908709269522681
+        ],
+        "reason": "solid",
+        "obstacleGap": 1.8440117263340763,
+        "neighborGap": 3.4830060559507614
+      },
+      {
+        "index": 0,
+        "travel": 3,
+        "angle": 2.945243112740431,
+        "centre": [
+          -4.481548691004053,
+          0.27968076472983416
+        ],
+        "rejectedAt": [
+          -1.5391928497943619,
+          -0.30559020131855164
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -1.287984044667733,
+        "neighborGap": 4.1018750365825465
+      },
+      {
+        "index": 0,
+        "travel": 3,
+        "angle": 2.945243112740431,
+        "centre": [
+          -6.246962195729868,
+          0.6308433443588657
+        ],
+        "rejectedAt": [
+          -5.65849102748793,
+          0.5137891511491885
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.41428670542880686,
+        "neighborGap": 0.010486748020436143
+      },
+      {
+        "index": 0,
+        "travel": 3,
+        "angle": 2.945243112740431,
+        "centre": [
+          -6.364016388939545,
+          0.04237217611692745
+        ],
+        "rejectedAt": [
+          -3.4216605477298536,
+          -0.5428987899314583
+        ],
+        "reason": "solid",
+        "obstacleGap": 0.1906475970458914,
+        "neighborGap": 2.2240763978335645
+      },
+      {
+        "index": 0,
+        "travel": 2.5,
+        "angle": 2.945243112740431,
+        "centre": [
+          -4.481548691004053,
+          0.27968076472983416
+        ],
+        "rejectedAt": [
+          -2.029585489995977,
+          -0.20804504031048737
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.830216771670037,
+        "neighborGap": 3.6110946905558725
+      },
+      {
+        "index": 0,
+        "travel": 2.5,
+        "angle": 2.945243112740431,
+        "centre": [
+          -5.65849102748793,
+          0.5137891511491885
+        ],
+        "rejectedAt": [
+          -5.65849102748793,
+          0.5137891511491885
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.41428670542880686,
+        "neighborGap": 0.010486748020436143
+      },
+      {
+        "index": 0,
+        "travel": 2.5,
+        "angle": 2.945243112740431,
+        "centre": [
+          -5.775545220697607,
+          -0.07468201709274969
+        ],
+        "rejectedAt": [
+          -3.323582019689531,
+          -0.5624078221330713
+        ],
+        "reason": "solid",
+        "obstacleGap": 0.09487862200651098,
+        "neighborGap": 2.322705805459468
+      },
+      {
+        "index": 0,
+        "travel": 2,
+        "angle": 2.945243112740431,
+        "centre": [
+          -4.481548691004053,
+          0.27968076472983416
+        ],
+        "rejectedAt": [
+          -2.5199781301975923,
+          -0.11049987930242305
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.36793888483301873,
+        "neighborGap": 3.1210609416053563
+      },
+      {
+        "index": 0,
+        "travel": 2,
+        "angle": 2.945243112740431,
+        "centre": [
+          -5.070019859245991,
+          0.3967349579395113
+        ],
+        "rejectedAt": [
+          -5.723876712848145,
+          0.5267951726169303
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.3970599494702711,
+        "neighborGap": -0.05365455907656169
+      },
+      {
+        "index": 0,
+        "travel": 2,
+        "angle": 2.945243112740431,
+        "centre": [
+          -5.775545220697607,
+          -0.07468201709274969
+        ],
+        "rejectedAt": [
+          -3.813974659891146,
+          -0.4648626611250069
+        ],
+        "reason": "solid",
+        "obstacleGap": 0.5745591646443462,
+        "neighborGap": 1.8298075235795404
+      },
+      {
+        "index": 0,
+        "travel": 1.5,
+        "angle": 2.945243112740431,
+        "centre": [
+          -4.481548691004053,
+          0.27968076472983416
+        ],
+        "rejectedAt": [
+          -5.65849102748793,
+          0.5137891511491885
+        ],
+        "reason": "neighbor",
+        "obstacleGap": 0.41428670542880686,
+        "neighborGap": 0.010486748020436143
+      },
+      {
+        "index": 0,
+        "travel": 1.5,
+        "angle": 2.945243112740431,
+        "centre": [
+          -4.59860288421373,
+          -0.3087904035121041
+        ],
+        "rejectedAt": [
+          -3.1274249636088847,
+          -0.6014258865362969
+        ],
+        "reason": "obstacle",
+        "obstacleGap": -0.09639043367144384,
+        "neighborGap": 2.5200348196534508
+      },
+      {
+        "index": 0,
+        "travel": 1.5,
+        "angle": 2.945243112740431,
+        "centre": [
+          -5.187074052455668,
+          -0.19173621030242693
+        ],
+        "rejectedAt": [
+          -3.7158961318508226,
+          -0.48437169332661983
+        ],
+        "reason": "solid",
+        "obstacleGap": 0.4784608229393925,
+        "neighborGap": 1.9283360962972642
+      }
+    ],
+    "milliseconds": 1198.6300840000004,
+    "baseline": [
+      {
+        "index": 0,
+        "x": -4.481548691004053,
+        "z": 0.27968076472983416,
+        "angle": 2.945243112740431,
+        "travel": 1,
+        "valid": true
+      },
+      {
+        "index": 1,
+        "x": -15.618109491120268,
+        "z": 1.7101625429703102,
+        "angle": 2.9943304979527716,
+        "travel": 0.7,
+        "valid": true
+      },
+      {
+        "index": 2,
+        "x": 4.664652600126548,
+        "z": -16.598825745218615,
+        "angle": 5.056000676871073,
+        "travel": 0.7,
+        "valid": true
+      },
+      {
+        "index": 3,
+        "x": -12.457585394340176,
+        "z": -12.02699322951177,
+        "angle": 5.595961914206819,
+        "travel": 1.5,
+        "valid": true
+      },
+      {
+        "index": 4,
+        "x": 16.336854750622596,
+        "z": -7.4637240608867295,
+        "angle": 5.988660995905543,
+        "travel": 1.5,
+        "valid": true
+      }
+    ],
+    "improved": [
+      {
+        "index": 1,
+        "previousTravel": 0.7,
+        "travel": 1.5
+      },
+      {
+        "index": 2,
+        "previousTravel": 0.7,
+        "travel": 3
+      },
+      {
+        "index": 4,
+        "previousTravel": 1.5,
+        "travel": 3
+      }
+    ]
+  },
+  "coordinateUnits": {
+    "range": "inner-local units",
+    "innerLocalScale": [
+      1,
+      1,
+      1
+    ],
+    "wrapScale": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "innerWorldScale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "counts": {
+    "boats": 5,
+    "kids": 10,
+    "paddles": 10
+  },
+  "routes": [
+    {
+      "index": 0,
+      "valid": true,
+      "travelLocal": 1,
+      "travelWorld": 0.5,
+      "oneWayLocal": 2,
+      "oneWayWorld": 0.9999999999999953,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -1,
+        "max": 1
+      },
+      "rangeWorld": {
+        "min": -0.5,
+        "max": 0.5
+      },
+      "clearance": 0.41653529338602546
+    },
+    {
+      "index": 1,
+      "valid": true,
+      "travelLocal": 1.5,
+      "travelWorld": 0.75,
+      "oneWayLocal": 3,
+      "oneWayWorld": 1.4999999999999993,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -1.5,
+        "max": 1.5
+      },
+      "rangeWorld": {
+        "min": -0.75,
+        "max": 0.75
+      },
+      "clearance": 0.10152934391614443
+    },
+    {
+      "index": 2,
+      "valid": true,
+      "travelLocal": 3,
+      "travelWorld": 1.5,
+      "oneWayLocal": 6,
+      "oneWayWorld": 2.9999999999999916,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -3,
+        "max": 3
+      },
+      "rangeWorld": {
+        "min": -1.5,
+        "max": 1.5
+      },
+      "clearance": 0.15981193048611675
+    },
+    {
+      "index": 3,
+      "valid": true,
+      "travelLocal": 1.5,
+      "travelWorld": 0.75,
+      "oneWayLocal": 3,
+      "oneWayWorld": 1.5000000000000069,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -1.5,
+        "max": 1.5
+      },
+      "rangeWorld": {
+        "min": -0.75,
+        "max": 0.75
+      },
+      "clearance": 2.239041251993784
+    },
+    {
+      "index": 4,
+      "valid": true,
+      "travelLocal": 3,
+      "travelWorld": 1.5,
+      "oneWayLocal": 6,
+      "oneWayWorld": 3.0000000000000044,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -3,
+        "max": 3
+      },
+      "rangeWorld": {
+        "min": -1.5,
+        "max": 1.5
+      },
+      "clearance": 0.30819243348913417
+    }
+  ],
+  "quayGap": 2.4659795240994526,
+  "pairGap": 1.178113723927083,
+  "powerSamples": 2503,
+  "recoverySamples": 944,
+  "snapshots": [
+    {
+      "time": 0,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -3.5007634106008227,
+            25.18672023668755,
+            0.08459044271370555
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.363361171530345,
+            25.093813323381134,
+            1.145082663709438
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            3.5741135645651196,
+            25.01000004732626,
+            -16.71042997821884
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9607fee0-28cc-4188-901d-67a0c716b84b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "06200218-2567-405b-ba0a-a93e075315e1",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -11.676744133629821,
+            25.023111251787405,
+            -12.667813091180673
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "833365fe-f9cf-447e-bce4-fb9e5c9207ce",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "1f8891e0-4745-4890-a4fd-9fc2a72ecf01",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            16.15274789682098,
+            25.12929479151613,
+            -8.070643021108257
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999936,
+              "holder": "177b2492-744e-4459-9e62-1984c51a63be",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "ccc029fd-f25f-41d0-b136-9215440603e7",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 1,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -3.765944142769636,
+            25.164032601751178,
+            0.1373381699328753
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.368321226246097,
+            25.174805112971274,
+            1.1560850017206024
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.326737828634806,
+            25.055298689741893,
+            -17.099565049107653
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9607fee0-28cc-4188-901d-67a0c716b84b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "06200218-2567-405b-ba0a-a93e075315e1",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -11.811805005440569,
+            25.1023181441097,
+            -12.556971498214763
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "833365fe-f9cf-447e-bce4-fb9e5c9207ce",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "1f8891e0-4745-4890-a4fd-9fc2a72ecf01",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            16.052451399742587,
+            25.040759516468878,
+            -8.401276261879786
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "177b2492-744e-4459-9e62-1984c51a63be",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "ccc029fd-f25f-41d0-b136-9215440603e7",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 2,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -3.821068088614021,
+            25.077001300817585,
+            0.14830300450009
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.521157155840877,
+            25.180628393516415,
+            1.4951039549414307
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999936,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.371087250592714,
+            25.145515797099222,
+            -17.12249536942997
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "9607fee0-28cc-4188-901d-67a0c716b84b",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "06200218-2567-405b-ba0a-a93e075315e1",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -12.06324936031119,
+            25.17919563100025,
+            -12.35061644909885
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "833365fe-f9cf-447e-bce4-fb9e5c9207ce",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "1f8891e0-4745-4890-a4fd-9fc2a72ecf01",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            15.978394694329747,
+            25.011752509547485,
+            -8.645408502035414
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "177b2492-744e-4459-9e62-1984c51a63be",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "ccc029fd-f25f-41d0-b136-9215440603e7",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 5,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -4.181605285532483,
+            25.12372941641355,
+            0.22001831186756748
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.778340066495055,
+            25.019710647336236,
+            2.06558421692849
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            3.825704628623096,
+            25.053833054263304,
+            -16.840512027417997
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9607fee0-28cc-4188-901d-67a0c716b84b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "06200218-2567-405b-ba0a-a93e075315e1",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -12.449754586992558,
+            25.020447709936974,
+            -12.033419807017026
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "833365fe-f9cf-447e-bce4-fb9e5c9207ce",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "1f8891e0-4745-4890-a4fd-9fc2a72ecf01",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            15.520827427515044,
+            25.188095779546586,
+            -10.153805631594889
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "177b2492-744e-4459-9e62-1984c51a63be",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "ccc029fd-f25f-41d0-b136-9215440603e7",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 10,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -4.885258536743232,
+            25.03758274237006,
+            0.3599836458802911
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.987995912283228,
+            25.023956653666342,
+            2.530640474080745
+          ],
+          "state": "turn-and-rest",
+          "paddles": [
+            {
+              "stroke": "rest",
+              "bladeY": 25.41999999999996,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "right"
+            },
+            {
+              "stroke": "rest",
+              "bladeY": 25.41999999999996,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            1.8919836437479898,
+            25.142717107792997,
+            -15.840705499178185
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9607fee0-28cc-4188-901d-67a0c716b84b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "06200218-2567-405b-ba0a-a93e075315e1",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -13.224582099452748,
+            25.095413603367387,
+            -11.397535300990418
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "833365fe-f9cf-447e-bce4-fb9e5c9207ce",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999936,
+              "holder": "1f8891e0-4745-4890-a4fd-9fc2a72ecf01",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            15.750404069739217,
+            25.16093034710808,
+            -9.3969928670903
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "177b2492-744e-4459-9e62-1984c51a63be",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "ccc029fd-f25f-41d0-b136-9215440603e7",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 16.4,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -5.462333971407284,
+            25.0708739408514,
+            0.4747710867459628
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.37967591582625,
+            25.010731166889272,
+            1.1812718474172703
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            -0.12569342962733643,
+            25.105193180449813,
+            -14.797490513345705
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9607fee0-28cc-4188-901d-67a0c716b84b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "06200218-2567-405b-ba0a-a93e075315e1",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -13.238426655050532,
+            25.057818733695232,
+            -11.386173367842868
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "833365fe-f9cf-447e-bce4-fb9e5c9207ce",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.480000000000018,
+              "holder": "1f8891e0-4745-4890-a4fd-9fc2a72ecf01",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            16.520961604424212,
+            25.183231627979563,
+            -6.856805100665201
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "177b2492-744e-4459-9e62-1984c51a63be",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "ccc029fd-f25f-41d0-b136-9215440603e7",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 20,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -4.831423309166556,
+            25.072643185207006,
+            0.3492751533145917
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.159591451567906,
+            25.178509515238954,
+            0.6930829451685994
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            -0.9406643871180227,
+            25.149372828248236,
+            -14.376119855428547
+          ],
+          "state": "turn-and-rest",
+          "paddles": [
+            {
+              "stroke": "rest",
+              "bladeY": 25.41999999999996,
+              "holder": "9607fee0-28cc-4188-901d-67a0c716b84b",
+              "hand": "right"
+            },
+            {
+              "stroke": "rest",
+              "bladeY": 25.420000000000016,
+              "holder": "06200218-2567-405b-ba0a-a93e075315e1",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -12.637928249721892,
+            25.18125075014309,
+            -11.878989673022517
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "833365fe-f9cf-447e-bce4-fb9e5c9207ce",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "1f8891e0-4745-4890-a4fd-9fc2a72ecf01",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            16.911542778757067,
+            25.01275594831286,
+            -5.569231524161464
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "177b2492-744e-4459-9e62-1984c51a63be",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "ccc029fd-f25f-41d0-b136-9215440603e7",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 32.8,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -3.5007634106008227,
+            25.01670066483126,
+            0.08459044271370555
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "81607e89-289e-452c-a923-e4701132a454",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.363361171530345,
+            25.11667144166079,
+            1.145082663709438
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "d7dd9b5c-c856-4fe0-87b9-a378474b1c3b",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            3.5741135645651196,
+            25.189390005450967,
+            -16.71042997821884
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9607fee0-28cc-4188-901d-67a0c716b84b",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "06200218-2567-405b-ba0a-a93e075315e1",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -11.676744133629821,
+            25.181843004373064,
+            -12.667813091180673
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "833365fe-f9cf-447e-bce4-fb9e5c9207ce",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "1f8891e0-4745-4890-a4fd-9fc2a72ecf01",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            16.15274789682098,
+            25.060929522692838,
+            -8.070643021108257
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "177b2492-744e-4459-9e62-1984c51a63be",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "ccc029fd-f25f-41d0-b136-9215440603e7",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>湖沼重构 · 同机位实渲对照</title>
+<style>html,body{margin:0;background:#123d54;color:#e1eee7;font:14px system-ui}header{padding:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}button,a{background:#d5e7db;color:#17445e;border:0;padding:8px 12px;border-radius:4px;cursor:pointer;text-decoration:none}canvas{display:block}#status{padding:10px;white-space:pre-wrap}small{opacity:.85}</style>
+<header><strong>湖沼 · 实际工厂 WebGL 对照</strong><a data-variant="before" href="?variant=before">本批改前</a><a data-variant="after" href="?variant=after">本批改后</a><a data-view="overview" href="?variant=after&view=overview">总览</a><a data-view="upper" href="?variant=after&view=upper">上岸</a><a data-view="middle" href="?variant=after&view=middle">中岸</a><a data-view="lower" href="?variant=after&view=lower">下岸</a><a data-view="under" href="?variant=after&view=under">水下</a><label><input id="motion" type="checkbox">播放原剧情</label><small>局部工厂，scale 0.5；不等同于完整球面游戏验收</small></header><div id="status">构建中…</div>
+<script>
+const query=new URLSearchParams(location.search);
+const before=query.get('variant')==='before';
+for(const a of document.querySelectorAll('[data-view]'))a.href='?variant='+(before?'before':'after')+'&view='+a.dataset.view;
+for(const a of document.querySelectorAll('[data-variant]'))a.href='?variant='+a.dataset.variant+'&view='+(query.get('view')||'overview');
+const imports={'three':'/TigerMessenger/vendor/three.module.js','three/addons/':'/TigerMessenger/vendor/jsm/'};
+if(before) for(const name of ['moebiusSwamp.js','swampV2Art.js','swampGregVisuals.js']) imports['/TigerMessenger/src/world/'+name]=location.pathname.replace('review.html','browser-before/'+name);
+const im=document.createElement('script'); im.type='importmap';im.textContent=JSON.stringify({imports});document.head.append(im);
+const script=document.createElement('script');script.type='module';script.src='./review.js';document.head.append(script);
+</script></html>

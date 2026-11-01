@@ -1,0 +1,23 @@
+✔ storm darkens nearby rendered sky, flashes, and restores without accumulating (2.237625ms)
+✔ real articulated statue mounts original horse, strikes flagship with real hull damage and restores exact transforms (72.403375ms)
+✔ night soldiers must return before awakening, and departing fleet releases a pending lease (28.424208ms)
+✔ player-driven lead is excluded; unsupported plaza prevents mounting or floating horse movement (53.814125ms)
+✔ mechanical damage shares existing knockdown/recovery and never changes whale arrow damage (0.431958ms)
+✔ real hostile fleet membership and local city range are required; airship and hidden fleet never trigger (23.647959ms)
+✔ large delta cannot produce repeated lightning in one tick and dispose restores a mounted actor (30.514625ms)
+✔ entering hostile flagship awakens metal, waiting stays stone and exact stone materials return (30.825833ms)
+✔ radial skirt retracts real geometry while crest and all outside geometry stay fixed (14.735875ms)
+✔ off and old-city outside region remain unchanged (0.515583ms)
+✔ rear exterior is physically removed, both cut planes capped, fixed corner normals retained (3.729417ms)
+✔ actual triangles split at retreat planes, sea side clears finite hull and fixed side remains (5.094542ms)
+✔ actual protected surface refuses removal; missing ships never claims verified (1.281792ms)
+✔ fixed source corners keep authored smooth normals; new cut normals finite (1.604375ms)
+✔ rear ship cut uses world radial up, preserves public side and deterministically replays (46.053417ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 306.43825

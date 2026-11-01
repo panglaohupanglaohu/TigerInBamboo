@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "scope": "Actual production Three geometry CPU check, not gameplay GPU capture",
+  "samples": [
+    {
+      "elapsed": 0,
+      "muzzleError": 2.849101387231457e-14,
+      "groundError": 0,
+      "sourceDisplacement": 4.686613326023862
+    },
+    {
+      "elapsed": 0.25,
+      "muzzleError": 1.7763568394002505e-15,
+      "groundError": 0,
+      "sourceDisplacement": 3.355678563778169
+    },
+    {
+      "elapsed": 0.75,
+      "muzzleError": 1.9860273225978185e-15,
+      "groundError": 3.552713678800501e-15,
+      "sourceDisplacement": 0.8023303792109147
+    },
+    {
+      "elapsed": 1.5,
+      "muzzleError": 2.5121479338940403e-15,
+      "groundError": 2.842170943040401e-14,
+      "sourceDisplacement": 4.680926231701036
+    },
+    {
+      "elapsed": 3,
+      "muzzleError": 1.7763568394002505e-15,
+      "groundError": 0,
+      "sourceDisplacement": 7.221013315229307
+    }
+  ],
+  "emitterFollowsMovingRotatedParent": true,
+  "groundEndFixed": true,
+  "lifetimeSeconds": 5,
+  "disposedOnce": 1,
+  "effectsAfterExpiry": 0
+}

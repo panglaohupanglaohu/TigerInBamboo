@@ -1,0 +1,46 @@
+{
+  "task": "Highland holy city mountain study, two-hour iteration",
+  "target": "User-approved Istanbul color study; adjacent blue-grey mountains with natural crags and grounded green vegetation",
+  "visual_observations": {
+    "source": "Assistant viewed actual r00/r10/r11/r12 bay, old-town, night and live-curve rail camera screenshots. r13 rail correction currently verifying screenshots.",
+    "image_sha256": "c721ddf5ee96b4a0a9f57c2839e220d93cbee773e6bc8cf2e6bb8612d601a96c",
+    "completed": [
+      "Blue-grey fractured rock and broken strata",
+      "Legacy floating bronze vegetation replaced by raycast-grounded grey-green planting",
+      "Late old-town palette sweeps no longer override new foliage",
+      "Coast rocks moved out of live railway envelope; subsequently exposed underwater rear rail corrected via shared curve"
+    ],
+    "remaining": [
+      "Large conical peak silhouette and overall low-poly scene still differ from approved painted target",
+      "Building palette and entire-city composition are outside this mountain-first pass",
+      "Three pre-existing terrain/parcel/lighting warnings persist"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Finite rock vertices, browser JS errors and closed rock geometry",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "23,049 final rail-envelope probes, zero hits incl new vegetation; dry rear rail >=0.647m above sea",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "All 500 original walkable meshes / 30,057 vertices retain world hash 83626823",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "New vegetation raycast root validation, zero missing ground and no floating roots",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Do not claim concept-level visual parity",
+    "This is mountain-first iteration, not completion of older fleet, bridge, horse or doorway tasks",
+    "Text triage only, assistant does actual image inspection"
+  ]
+}

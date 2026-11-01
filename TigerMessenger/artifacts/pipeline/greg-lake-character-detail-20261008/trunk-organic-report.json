@@ -1,0 +1,47 @@
+{
+  "revision": "gregTrunkDetail2",
+  "status": "CPU verified; GPU pending root review",
+  "scope": [
+    "src/world/swampCoralTrunkDetail.js",
+    "tests/world/swampCoralTrunkDetail.test.mjs"
+  ],
+  "intent": "Gently curved and tapered coral wood with restrained basal flare; preserve fixed tree/branch/perch/underwater-root interfaces.",
+  "measured": {
+    "processedTrunks": 55,
+    "processedBranches": 230,
+    "actuallyDeformedTrunks": 27,
+    "actuallyDeformedBranches": 214,
+    "movedVertices": 12432,
+    "maxAddedDisplacementInner": 0.6323950384417698,
+    "maxAddedDisplacementWorldAtScaleHalf": 0.3161975192208849,
+    "extraMeshes": 0,
+    "extraDrawCalls": 0,
+    "extraTriangles": 0,
+    "originalEmbeddedBranchBasesStillEmbedded": 211
+  },
+  "protected": [
+    "All mesh transforms and cylinder end rings; first/last TubeGeometry rings",
+    "Existing perch point/root/surface unchanged to 1e-6",
+    "Two source rings around embedded branch bases",
+    "Authored inner Y38–68 protected; final placement Y38–62 verified unchanged",
+    "Original v2-floor-root vertices untouched",
+    "Nearby two-world walking ribbon protected against original and proposed vertex positions",
+    "Conservative valid recomputed boxes retain baseline center for perch ray direction"
+  ],
+  "tests": {
+    "independentTrunkTests": "4/4 pass",
+    "combinedTrunkUnderstoryPerchesTreePartsSpatial": "22/23 pass",
+    "unrelatedFailure": "swampCoralUnderstory.test.mjs:86 expects 7 supported outer-lip habitats, sees 6. Same failure with gregTrunkShape=0 baseline; both have 476 plants / 64 rim plants. No understory source/test edits made."
+  },
+  "gpu": "Not yet evaluated for this final patch. Parent has been notified to compare shape and visual attachment in same camera.",
+  "limits": [
+    "Branches/trunks protected by interface bands may deliberately remain unchanged",
+    "Bark line appearance is shader source verified only, actual near/far line contrast needs GPU review",
+    "This is moderate geometry refinement, not replacement of tree placement or tree species"
+  ],
+  "rollback": {
+    "runtimeComparison": "?gregTrunkShape=0 retains prior radial bark but disables added organic deformation",
+    "sourceBackup": "trunk-organic-before/src/world/swampCoralTrunkDetail.js",
+    "installerDispose": "restores original geometry/material; idempotent"
+  }
+}

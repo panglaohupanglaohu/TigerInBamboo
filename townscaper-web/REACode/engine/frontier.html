@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Frontier Tile Enumeration</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #33505c; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #e9f1f4;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.45); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #dbe8ee;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.45);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">只在坍缩边缘枚举 tile，再连成简化导航图（1582293326815862786）</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * frontier.html — src/frontier.js 的可视化验证页。
+ *
+ * 照参考片画：深底、节点是小点、已连通的边是黄线；第二团（另一个种子）用绿色，
+ * 因为原片里确实是两团独立生长的结构。
+ *
+ * 用法：`?cells=300&levels=4&static=1`
+ */
+import { buildGrid } from '../src/grid.js';
+import { expandFrontier } from '../src/frontier.js';
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hud = document.getElementById('hud');
+const q = new URLSearchParams(location.search);
+const MAX = Number(q.get('cells') || 300);
+const LEVELS = Number(q.get('levels') || 4);
+
+let W = 0, H = 0, scale = 1, ox = 0, oy = 0;
+function resize() {
+  W = canvas.width = Math.floor(canvas.clientWidth * devicePixelRatio);
+  H = canvas.height = Math.floor(canvas.clientHeight * devicePixelRatio);
+  const span = grid.stats ? grid.stats.radius * 2.2 : 22;
+  scale = Math.min(W, H) / span;
+  ox = W * 0.5; oy = H * 0.52;
+}
+
+// 网格：和引擎同一套 buildGrid（不规则四边形），这里只当"格子图"用
+const grid = buildGrid({ radius: 9, hexSize: 0.9, jitter: 0.22, relaxPasses: 4 });
+resize();
+addEventListener('resize', resize);
+
+// 地形高度：低频正弦，制造"台地/坡"两种区域（真实引擎里这是 town.top）
+const top = (c) => Math.max(0, Math.min(LEVELS - 1, Math.round(2 + 1.6 * Math.sin(c.cx * 0.6) * Math.cos(c.cz * 0.55))));
+
+const cx = (c) => ox + c.cx * scale;
+const cy = (c) => oy + c.cz * scale;
+
+// 两个种子：原片里黄/绿两团是分开长的
+const mid = Math.floor(grid.cells.length / 2);
+const seedA = mid;
+const seedB = grid.cells.reduce((best, c) => {
+  const d = (c.cx - grid.cells[mid].cx) ** 2 + (c.cz - grid.cells[mid].cz) ** 2;
+  return d > best.d ? { d, c } : best;
+}, { d: -1, c: grid.cells[0] }).c.id;
+
+// 先让 B（小团）占掉一块，再让 A 绕开它生长 —— 原片里就是一大一小两团，
+// 边界互不重叠。两团都只留"生长树 + 少量捷径"（简化图，不是格子图本身）。
+const runB = expandFrontier(grid, top, { levels: LEVELS, seeds: [seedB], maxCells: 220, edgeMode: 'tree' });
+const takenByB = new Uint8Array(grid.cells.length);
+for (const i of runB.order) takenByB[i] = 1;
+const runs = [
+  { name: 'A', colour: '#f2d95e', r: expandFrontier(grid, top, { levels: LEVELS, seeds: [seedA], blocked: takenByB, edgeMode: 'tree' }), k: 0 },
+  { name: 'B', colour: '#5fe0a5', r: runB, k: 0 },
+];
+
+let t0 = performance.now();
+const PER_SEC = Number(q.get('speed') || 140);
+
+function draw() {
+  ctx.fillStyle = '#33505c';
+  ctx.fillRect(0, 0, W, H);
+
+  // 底图：所有格子的小点（暗），坍缩过的点用该团的颜色提亮
+  ctx.fillStyle = 'rgba(200,225,235,0.13)';
+  for (const c of grid.cells) {
+    ctx.fillRect(cx(c) - 1, cy(c) - 1, 2 * devicePixelRatio, 2 * devicePixelRatio);
+  }
+
+  for (const run of runs) {
+    const { order, edges, candidates } = run.r;
+    // 边：已连通的画线段
+    ctx.strokeStyle = run.colour;
+    ctx.globalAlpha = 0.85;
+    ctx.lineWidth = 1.4 * devicePixelRatio;
+    ctx.beginPath();
+    for (const [a, b] of edges) {
+      const A = grid.cells[a], B = grid.cells[b];
+      if (!A || !B) continue;
+      ctx.moveTo(cx(A), cy(A));
+      ctx.lineTo(cx(B), cy(B));
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // 节点：半径随"候选数"变化（候选多的点更大 = 边缘处约束最少）
+    for (let i = 0; i < run.k && i < order.length; i++) {
+      const id = order[i];
+      const c = grid.cells[id];
+      const cand = candidates.get(id) || 1;
+      const rad = (1.6 + Math.min(cand, 64) * 0.055) * devicePixelRatio;
+      ctx.fillStyle = run.colour;
+      ctx.beginPath();
+      ctx.arc(cx(c), cy(c), rad, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  const a = runs[0].r.stats, b = runs[1].r.stats;
+  hud.textContent =
+    `tile 空间 ${a.tileSpace} 种（${LEVELS}⁴）   种子 2 个   每秒 ${PER_SEC} 格\n` +
+    `A: 坍缩 ${runs[0].k}/${a.collapsed}   平均候选 ${a.meanCandidates}   最大 ${a.maxCandidates}   边 ${a.edges}\n` +
+    `B: 坍缩 ${runs[1].k}/${b.collapsed}   平均候选 ${b.meanCandidates}   边 ${b.edges}\n` +
+    `朴素枚举 ${a.naiveTotal} 次 → 实际 ${a.evaluatedTotal} 次（省 ${(a.saving * 100).toFixed(1)}%）`;
+}
+
+let last = performance.now();
+let acc = 0;
+function loop(now) {
+  acc += (PER_SEC * (now - last)) / 1000;
+  last = now;
+  while (acc >= 1) {
+    acc -= 1;
+    let progressed = false;
+    for (const run of runs) {
+      if (run.k < run.r.order.length) { run.k++; progressed = true; }
+    }
+    if (!progressed) break;
+  }
+  draw();
+  requestAnimationFrame(loop);
+}
+
+window.__worldStats = { kind: 'frontier' };
+window.__frontier = {
+  get stats() { return { a: runs[0].r.stats, b: runs[1].r.stats, progress: [runs[0].k, runs[1].k] }; },
+  finish() { runs[0].k = runs[0].r.order.length; runs[1].k = runs[1].r.order.length; draw(); return this.stats; },
+};
+
+if (q.get('static') === '1') {
+  runs[0].k = runs[0].r.order.length;
+  runs[1].k = runs[1].r.order.length;
+  draw();
+} else {
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>

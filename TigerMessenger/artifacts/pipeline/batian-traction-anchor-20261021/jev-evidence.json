@@ -1,0 +1,30 @@
+{
+  "task": "Batian detached traction light field",
+  "observations": [
+    "Identified production batian-traction-light-field: previous 5second frustum frozen at initial muzzle and target midpoint, oriented by ground radial instead of actual endpoint vector.",
+    "Current same model/material and 5second lifespan, unit-height cone updated each frame from actual moving source belly muzzle to fixed ground action point; narrow end at muzzle.",
+    "Real Three production geometry with moving source and rotated parent: five time samples top/bottom endpoint error below1e-9, geometry disposed once and effects0 on expiry.",
+    "Existing projected shield contact and six bomb audio synchronization regressions pass. Final full-game reload pending; do not claim current gameplay visual acceptance."
+  ],
+  "checks": [
+    {
+      "name": "Moving source and fixed ground endpoint geometry",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Expiry cleanup and prior shield/bomb checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Fresh full-game exact traction view",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Compact text only; JEV not visual acceptance",
+    "No new aircraft, preserve current source and backup; no publication"
+  ]
+}

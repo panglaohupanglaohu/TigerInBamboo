@@ -1,0 +1,27 @@
+understory statistics {"plants":495,"rimPlants":83,"rimAngularCoverage":0.49027777777777776,"vines":180,"counts":{"fern":89,"fan":46,"pendant":360},"triangles":51484,"drawCalls":4,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":279,"overlapping":277,"ratio":0.992831541218638}
+frond tip heights [
+  -0.8898734450340271,
+  -0.6905297636985779,
+  -0.5960623025894165,
+  -0.921288788318634,
+  -0.5823749899864197
+]
+irregular rim habitats {"plants":83,"clusters":7,"heroes":20,"heightRange":[0.5090022751270726,3.404684903499485]}
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (2.399917ms)
+✔ lush understory uses four instanced batches within triangle budget, not per-plant mesh draws (7.303917ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (10.88925ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (10.121875ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.178667ms)
+✔ leaf-shape revision preserves every accepted attachment and count; five fronds share real root but have staggered rounded tips (4.624958ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (2.658333ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (35.048292ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 964.612833

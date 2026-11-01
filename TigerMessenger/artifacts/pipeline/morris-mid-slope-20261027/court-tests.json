@@ -1,0 +1,107 @@
+{
+  "passed": 4,
+  "checks": [
+    "court approach has full3.2m width and ends within mounted elder E range",
+    "short court approach bounded below32percent with no5cm steps",
+    "placement keeps original identity and moves every captured ensemble node",
+    "moved pine colliders and roots follow new real court terrain"
+  ],
+  "measurements": {
+    "approachMaxLocalGrade": 0.28137043409671203,
+    "approachLargestStep": 0.04091985386563124,
+    "originalPineMinimumRoadEdgeClearance": 3.057809161050845
+  },
+  "moved": [
+    {
+      "name": "music-elder",
+      "newLocal": [
+        30,
+        4.073285574705091,
+        12
+      ],
+      "roadEdgeClearance": 4.279542740880439
+    },
+    {
+      "name": "IcosahedronGeometry",
+      "newLocal": [
+        27.27973454533096,
+        6.648873310773405,
+        10.223918948637072
+      ],
+      "roadEdgeClearance": 4.696081051362928
+    },
+    {
+      "name": "IcosahedronGeometry",
+      "newLocal": [
+        32.81566255325379,
+        4.821789764445748,
+        10.602882863445616
+      ],
+      "roadEdgeClearance": 5.486839563304516
+    },
+    {
+      "name": "IcosahedronGeometry",
+      "newLocal": [
+        30.179413726797257,
+        4.743527893862984,
+        7.139953752975191
+      ],
+      "roadEdgeClearance": 8.37960597291977
+    },
+    {
+      "name": "IcosahedronGeometry",
+      "newLocal": [
+        28.71729771340952,
+        6.424789670710476,
+        9.949063096226913
+      ],
+      "roadEdgeClearance": 5.8006318222710895
+    },
+    {
+      "name": "IcosahedronGeometry",
+      "newLocal": [
+        30.9090585008304,
+        6.553387503963442,
+        9.193579861144503
+      ],
+      "roadEdgeClearance": 7.200491932629724
+    },
+    {
+      "name": "BufferGeometry",
+      "newLocal": [
+        30.14706511817785,
+        4.247829202874067,
+        12.159210592375898
+      ],
+      "roadEdgeClearance": 4.951504576948889
+    },
+    {
+      "name": "giantTreeGroup",
+      "newLocal": [
+        32.317413723979996,
+        4.427572503974256,
+        14.127894968148256
+      ],
+      "roadEdgeClearance": 3.057809161050845
+    },
+    {
+      "name": "giantTreeGroup",
+      "newLocal": [
+        35.11261531819123,
+        4.958308019236762,
+        13.711578126084705
+      ],
+      "roadEdgeClearance": 5.116368131147988
+    },
+    {
+      "name": "giantTreeGroup",
+      "newLocal": [
+        33.73093043204363,
+        4.888441898368336,
+        11.062726258056191
+      ],
+      "roadEdgeClearance": 6.635261474838492
+    }
+  ],
+  "scope": "placement function exercised with synthetic identity carriers and saved original ensemble offsets; not loading or visually validating old model geometry"
+}

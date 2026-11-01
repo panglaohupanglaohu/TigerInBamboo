@@ -1,0 +1,56 @@
+{
+  "task": "Highland Citadel mountain landform restructuring",
+  "target": "Dominant old-city rear peak, broad lower shoulders, subordinate saddle and new-city backdrop; keep transport and city fixed",
+  "visual_observations": {
+    "source": "Primary inspected overview, bay without ridge-flow clouds, new-city and rail images; candidate1 rejected and retained",
+    "image_sha256": "2c37515faa92f3fc1f0b8aea5649388eb54c5b664fcc4887411862fce94b19aa",
+    "completed": [
+      "Thin middle-bay spike replaced by connected lower shoulder",
+      "Old-town main peak and right secondary peak retain hierarchy",
+      "Rail coast remains exposed",
+      "City structures stay at original positions"
+    ],
+    "remaining": [
+      "Some steep forms remain near protected foundations",
+      "Stylized faceted relief rather than photoreal terrain",
+      "Existing candidate and lighting warnings unchanged from baseline"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Fixed structure world vertices unchanged",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "23049 rail probes without hits",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "No wet rear-coast rail samples",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Plant roots supported",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "No new page errors or warnings",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "10 regression and landform tests passed",
+      "passed": true,
+      "required": true
+    }
+  ],
+  "constraints": [
+    "Preserve sea openings and original city plan",
+    "Not a full WFC or hydraulic erosion engine",
+    "No continuous swept collision or long-duration all-weather validation"
+  ]
+}

@@ -1,0 +1,144 @@
+Front strata baseline changed citadel-oskar-grid-mountain-surface 155
+Old-city coastal source changed; continuing with slope update { hash: 2028752367, expected: 3381302665 }
+Old-city coastal source changed; continuing with slope update { hash: 2125320883, expected: 2915253182 }
+[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface
+[citadel] applyCitadelHarborSeabed 跳过: Harbor seabed requires the original planet and city
+[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate
+[ELDER] 已放到指定落点 r=160.6
+[CLOUD-RIDGE] kept= 11 dropped= 12 rings= {"1":6,"2":2,"0.25":4,"center":1} maxH= 42.75 maxScore= 1.13 threshold= 0.35
+Citadel boarding installation failed [TypeError: fetch failed] {
+  [cause]: Error: not implemented... yet...
+      at makeNetworkError (node:internal/deps/undici/undici:11806:35)
+      at schemeFetch (node:internal/deps/undici/undici:13359:34)
+      at mainFetch (node:internal/deps/undici/undici:13207:30)
+      at fetching (node:internal/deps/undici/undici:13176:7)
+      at fetch (node:internal/deps/undici/undici:13040:20)
+      at fetch (node:internal/deps/undici/undici:17708:10)
+      at fetch (node:internal/bootstrap/web/exposed-window-or-worker:83:12)
+      at installFrontBoarding (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/installFrontBoarding.js:11:26)
+      at holdAtReleasedPort (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:25:2)
+      at dockFrontHarborPatrol (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:33:47)
+}
+provider [
+  'swamp-sinkhole-wall',
+  'swamp-lake-floor',
+  'v2-entrance-tread',
+  'v2-entrance-tread',
+  'v2-entrance-tread',
+  'v2-entrance-tread',
+  'v2-entrance-tread',
+  'v2-entrance-tread',
+  'v2-entrance-tread',
+  'v2-entrance-tread',
+  'greg-coral-rim-rock-batch',
+  'greg-bank-walking-slab-batch',
+  'greg-shore-dock-walk',
+  'greg-natural-cliff-rock',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  'world-tree-trunk'
+] near [
+  'swamp-sinkhole-wall',
+  'swamp-lake-floor',
+  'greg-coral-rim-rock-batch',
+  'greg-bank-walking-slab-batch',
+  'greg-natural-cliff-rock',
+  '',
+  '',
+  '',
+  'world-tree-trunk'
+]
+providerHits [
+  {
+    name: 'greg-natural-cliff-rock',
+    d: 2.1646452985921867,
+    side: 2,
+    p: [ 20.849398531683136, 33.82319314859052, -19.304370758634203 ]
+  },
+  {
+    name: 'swamp-sinkhole-wall',
+    d: 2.9511066397490104,
+    side: 1,
+    p: [ 22.26722265422626, 34.12527698763887, -19.91478527046805 ]
+  }
+]
+sceneHits [
+  {
+    name: 'greg-natural-cliff-rock',
+    d: 2.1646452985921867,
+    side: 2,
+    p: [ 20.849398531683136, 33.82319314859052, -19.304370758634203 ]
+  },
+  {
+    name: 'swamp-sinkhole-wall',
+    d: 2.9511066397490104,
+    side: 1,
+    p: [ 22.26722265422626, 34.12527698763887, -19.91478527046805 ]
+  },
+  {
+    name: 'v7-swamp-outer-embankment',
+    d: 6.112670313100499,
+    side: 0,
+    p: [ 27.966855943817365, 35.33964982691509, -22.368643133922298 ]
+  },
+  {
+    name: 'v7-continuous-swamp-promenade',
+    d: 6.273410943613494,
+    side: 2,
+    p: [ 28.25663743908946, 35.40139112838193, -22.49340249381931 ]
+  }
+]
+camera [ 20.552578185573566, 33.75995213848597, -19.176580968778016 ] occ 2
+backHits []

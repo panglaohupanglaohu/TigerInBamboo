@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "checks": [
+    "no fleet never triggers",
+    "idle does not trigger despite old shots",
+    "bookshop raid does not trigger moss",
+    "assemble does not start battle",
+    "transit does not start battle",
+    "withdraw does not start battle",
+    "return does not start battle",
+    "dock does not start battle",
+    "idle does not start battle",
+    "arrival without flagship strike waits",
+    "escorts alone cannot start battle",
+    "flagship actual strike at moss triggers",
+    "opposite hemisphere blocked",
+    "hidden flagship blocked",
+    "sortie counters retain first strike after bounded log rolls over",
+    "escort-only counters remain blocked"
+  ],
+  "scope": "production shared trigger CPU; not complete game visual acceptance"
+}

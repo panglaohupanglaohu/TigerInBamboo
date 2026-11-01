@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "cb9184309563e4e1d113a412f45e480f5337dab166126afd9fc83a2020bc631c",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.94
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.44,
+      "probabilities": {
+        "dressing": 0.28,
+        "geometry": 0.55,
+        "lighting": 0,
+        "navigation": 0.05,
+        "review": 0.12
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.85
+    }
+  },
+  "usage": {
+    "input_tokens": 672,
+    "output_tokens": 91,
+    "cost_usd": 0.000283,
+    "credits_remaining_usd": 4.925444
+  },
+  "elapsed_ms": 7385,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Consistent exactly five major pines in hero",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

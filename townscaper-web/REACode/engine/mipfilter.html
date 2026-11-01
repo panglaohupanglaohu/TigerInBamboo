@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — custom mip filtering (A/B)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1b1d21; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #e6e9ee;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #eef1f5;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">自定义 mip 过滤 A/B：左 = box，右 = 可切换（777596437534240768）</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * mipfilter.html — src/mipcustom.js 的验证页。
+ *
+ * 照参考片 777596437534240768（一张写着自定义 mip 过滤的静图）：
+ * 一块斜插进画面深处的平面、同一张贴图、左右两侧不同过滤，近中景能看出差别。
+ *
+ * 这里用**逐像素 CPU 采样**而不是 WebGL：交给 `glGenerateMipmap` 就等于在比驱动了，
+ * 而这条片子比的正是"过滤本身"。
+ *
+ * 键位：1 box / 2 linear / 3 kaiser / 4 sharp —— 换右侧那档；空格 左右互换。
+ */
+import { buildMips, sampleTri, srgbToLinear, footprintLod } from '../src/mipcustom.js';
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const hud = document.getElementById('hud');
+
+const TEX = 192, CELL = 3, TILE = 40;   // 一格 3 像素、地面 6 次重复 → 远处必然缩小
+const W = 960, H = 620, HY = 232;      // 画布与地平线（画面里的分界）
+
+// ── 贴图：棋盘（sRGB 数值 0/1，故意不做 gamma 校正，用来暴露 box 的偏暗）
+function makeChecker() {
+  const data = new Float32Array(TEX * TEX * 3);
+  for (let y = 0; y < TEX; y++) for (let x = 0; x < TEX; x++) {
+    const on = ((x / CELL) | 0) % 2 === ((y / CELL) | 0) % 2;
+    // 颜色稍微给点差（不是纯黑白），更接近片子里的砖/砖缝
+    const v = on ? 0.86 : 0.24;
+    const i = (y * TEX + x) * 3;
+    data[i] = v * 0.97; data[i + 1] = v * 0.93; data[i + 2] = v * 0.86;
+  }
+  return { w: TEX, h: TEX, data };
+}
+
+const tex = makeChecker();
+const FILTERS = ['box', 'linear', 'kaiser', 'sharp'];
+const chains = {};
+for (const f of FILTERS) chains[f] = buildMips(tex, { filter: f });
+
+let leftF = 'box', rightF = 'linear';
+
+// ── 地面投影：屏幕像素 → 地面 uv，并用相邻像素差求 lod
+// 相机高 hc、焦距 f（像素），地平线在 HY。dy 越小越远。
+const H_CAM = 1.0, FOCAL = 420;
+function groundUV(px, py) {
+  const dy = py - HY;
+  if (dy <= 0.5) return null;
+  const depth = (H_CAM * FOCAL) / dy;        // 世界深度
+  const wx = ((px - W / 2) / FOCAL) * depth;
+  return [wx / (TILE * 1.6), depth / (TILE * 1.6)];
+}
+
+function render() {
+  const img = ctx.createImageData(W, H);
+  const px = img.data;
+
+  // 天空
+  for (let y = 0; y < HY; y++) {
+    const t = y / HY;
+    const v = 40 + t * 28;
+    for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * 4;
+      px[i] = v * 0.92; px[i + 1] = v * 0.96; px[i + 2] = v * 1.02; px[i + 3] = 255;
+    }
+  }
+
+  for (let y = HY; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const uv = groundUV(x, y);
+      if (!uv) continue;
+      const uvx = groundUV(x + 1, y), uvy = groundUV(x, y + 1);
+      const du = [uvx[0] - uv[0], uvx[1] - uv[1]];
+      const dv = [uvy[0] - uv[0], uvy[1] - uv[1]];
+      // lod 用 max(两个方向的纹理像素跨度)，和 GPU 的 max 规则一致
+      const lod = footprintLod(du, dv, TEX, TEX);
+      const f = x < W / 2 ? leftF : rightF;
+      const c = sampleTri(chains[f], uv[0] % 1 < 0 ? uv[0] % 1 + 1 : uv[0] % 1,
+        uv[1] % 1 < 0 ? uv[1] % 1 + 1 : uv[1] % 1, lod);
+      // 极轻微的距离雾，压掉远端的硬边（片子里远端也是慢慢化开的）
+      const fog = Math.min(0.55, Math.max(0, (y - HY) / (H - HY) * 0.0 + (1 - Math.min(1, 180 / (y - HY + 1))) * 0.0));
+      void fog;
+      const i = (y * W + x) * 4;
+      px[i] = c[0] * 255; px[i + 1] = c[1] * 255; px[i + 2] = c[2] * 255; px[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+
+  // 中缝
+  ctx.fillStyle = 'rgba(255,255,255,.55)';
+  ctx.fillRect(W / 2 - 1, HY, 2, H - HY);
+  ctx.font = '600 13px ui-monospace, Menlo, monospace';
+  ctx.fillStyle = 'rgba(255,255,255,.95)';
+  ctx.fillText(`left: ${leftF}`, 12, HY + 22);
+  const tw = ctx.measureText(`right: ${rightF}`).width;
+  ctx.fillText(`right: ${rightF}`, W / 2 + 12, HY + 22);
+  void tw;
+
+  hud.textContent =
+    `贴图 ${TEX}×${TEX} 棋盘(周期 ${CELL}px)，地面重复 ${TILE}×，逐像素 CPU 三线性采样\n` +
+    `左 ${leftF.padEnd(6)} 右 ${rightF.padEnd(6)}   键：1 box / 2 linear / 3 kaiser / 4 sharp / 空格 互换\n` +
+    `看两处：① 中远处（地平线上方两指宽）颜色深浅：box 会明显发暗；② 最远处：sharp 还留波纹（摩尔纹）。`;
+}
+
+function resize() {
+  cv.width = W; cv.height = H;
+  const s = Math.min(innerWidth / W, innerHeight / H);
+  cv.style.width = W * s + 'px';
+  cv.style.height = H * s + 'px';
+  cv.style.margin = `${(innerHeight - H * s) / 2}px ${(innerWidth - W * s) / 2}px`;
+  render();
+}
+addEventListener('resize', resize);
+
+addEventListener('keydown', (e) => {
+  const k = e.key;
+  if (k >= '1' && k <= '4') rightF = FILTERS[+k - 1];
+  else if (k === ' ') { const t = leftF; leftF = rightF; rightF = t; }
+  else return;
+  render();
+});
+
+resize();
+
+// 给截图脚本读的量化值
+const stat = (f) => {
+  const mips = chains[f];
+  const L = mips.map((m, l) => {
+    let mn = 1, mx = 0, sum = 0;
+    for (let i = 0; i < m.data.length; i += 3) {
+      const v = srgbToLinear(m.data[i]);
+      mn = Math.min(mn, v); mx = Math.max(mx, v); sum += v;
+    }
+    const mean = sum / (m.data.length / 3);
+    return { l, mean: +mean.toFixed(4), amp: +(mx - mn).toFixed(4) };
+  });
+  return L;
+};
+window.__mip = {
+  stats: {
+    left: leftF, right: rightF,
+    levels: { left: stat(leftF), right: stat(rightF) },
+    tex: TEX, cell: CELL,
+  },
+  set({ left, right }) {
+    if (left) leftF = left;
+    if (right) rightF = right;
+    render();
+    return this.stats;
+  },
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+{
+  "swampBird": {
+    "meshes": [
+      {
+        "name": "swamp-bird-anatomy",
+        "position": "6f9924a45f4581e57b31a5943b868a89db58f0704852c45b157c29942909c27c",
+        "normal": "98b76b7655f047e4081f601afdd0d39e75f920e77df7458ea8d0d672cb01aaa5",
+        "color": "9b80370c6a6941ad401192351f2b7ae36380ab818d7aead638a215a0f689229a",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          "XYZ"
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "swamp-bird-wing",
+        "position": "ac6eda5adf9b86effb8923f8eb5a49867f5ca0bd1252831ca5d6da1886b5ecb5",
+        "normal": "ac8ca285bbe10bece53322e422c582e2dd9f6c182e5768cc0a7aeecc3a566a87",
+        "color": "4a8bfc70a21ab636290bcdca77541ac18daaf7d9a15650142c32edf800c9aa7f",
+        "translation": [
+          -0.17,
+          0.08,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          -0.5,
+          "XYZ"
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "swamp-bird-wing",
+        "position": "4778544767028cd0d9852ab285008f397a9455d1c79cf42ec66903148a649fa2",
+        "normal": "8b579bb54dc233d79ded301dc9b2ccfa2d398919f6c5d3b78334fb9aec52cfc8",
+        "color": "4a8bfc70a21ab636290bcdca77541ac18daaf7d9a15650142c32edf800c9aa7f",
+        "translation": [
+          0.17,
+          0.08,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0.5,
+          "XYZ"
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      }
+    ],
+    "phase": 2.356194490192345,
+    "keys": [
+      "coralActorVersion",
+      "dart",
+      "halo",
+      "orbitR",
+      "orbitY",
+      "phase",
+      "speed",
+      "wingL",
+      "wingR"
+    ]
+  },
+  "longTailMonkey": {
+    "meshes": [
+      {
+        "name": "swamp-monkey-arm",
+        "position": "f72d592a10fca15ed51a4d3d76e5a6b8c4f853cf1a4fd06501889e62d403c8c0",
+        "normal": "c8eefa70d285ce013cedc37ae37050c1420581ed76070f9288872375b26c4200",
+        "color": "5a5c335d1e03483f118a14d3959029192c5df382b4a8104757d6c9f4d8cad121",
+        "translation": [
+          -0.27,
+          0.7,
+          0.13
+        ],
+        "rotation": [
+          -0.3,
+          0,
+          0,
+          "XYZ"
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "swamp-monkey-arm",
+        "position": "dd1a9aa8a189230e696081f17fbe431cea3a211972200dc6be45972e2b2d8575",
+        "normal": "800dc057df227ef4b756890c5cd8c43301626b4d5d301a544572330b40702f6d",
+        "color": "5a5c335d1e03483f118a14d3959029192c5df382b4a8104757d6c9f4d8cad121",
+        "translation": [
+          0.27,
+          0.7,
+          0.13
+        ],
+        "rotation": [
+          -0.3,
+          0,
+          0,
+          "XYZ"
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "swamp-monkey-anatomy",
+        "position": "f2933674c2713f1232f5c4e706eb5d0860a430c034b7973d6f94764f3b2dfd57",
+        "normal": "395b69dc9e223d06e8566f312f233221179ff274c66240ecb6f84d024a903abf",
+        "color": "e211bcd95041e9d461ed8e5a12d7b0bbc01508073d7def4cc885e356f07ea14e",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          "XYZ"
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      }
+    ],
+    "phase": 2.356194490192345,
+    "keys": [
+      "armL",
+      "armR",
+      "coralActorVersion",
+      "phase"
+    ]
+  },
+  "glowLizard": {
+    "meshes": [
+      {
+        "name": "swamp-lizard-anatomy",
+        "position": "a14f2aef4391265bc752da5104a324746dc53b1de2969233bdbb7e0521f2b223",
+        "normal": "65fc377f8d3ed52433cbe4fd680f0308c4fab540d8ad5a47802929249929c2ae",
+        "color": "0f2e94263f7ce7e84c22a187f5359ba6e8ef9fea4cc62530dbc0cd605390fafd",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          "XYZ"
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      }
+    ],
+    "phase": 2.356194490192345,
+    "keys": [
+      "coralActorVersion",
+      "halo",
+      "phase"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+central shelter crown {"leaves":21,"minY":58.79905421147776,"farFromAnchor":10.268542993527264}
+central actual angular light gaps [{"group":0,"fraction":0.16666666666666666,"radius":4.702346924146847,"heightVariation":0.6540060912410794},{"group":1,"fraction":0.16944444444444445,"radius":4.865635364294212,"heightVariation":0.7065550600743364},{"group":2,"fraction":0.16666666666666666,"radius":5.647698646439996,"heightVariation":0.6890429834709835},{"group":3,"fraction":0.16666666666666666,"radius":4.878278887919236,"heightVariation":0.6834255202138309},{"group":4,"fraction":0.16666666666666666,"radius":4.485539769040274,"heightVariation":0.7104094356629673},{"group":5,"fraction":0.17222222222222222,"radius":5.227948536914604,"heightVariation":0.722770643267296},{"group":6,"fraction":0.1638888888888889,"radius":5.0272351916257,"heightVariation":0.6730859221076031}]
+rounded fan geometry {"trianglesPerFan":396,"totalTriangles":306504,"originalTriangles":1039248,"drawCalls":10,"domed":753}
+compact central crown versus actual legacy {"before":{"reach":18.024748896754947,"minY":52.07589967403277,"maxY":85.52387307940386},"after":{"reach":10.268542993527264,"minY":58.79905421147776,"maxY":79.07007390399986},"lateralRatio":0.5696913201035463,"rimUnchanged":true}
+✔ real crown groups become fewer broad fan instances without extra draws or moved anchors (0.667958ms)
+✔ every fan vertex stays inside its declared crown envelope and its stem meets the original branch anchor (4.414542ms)
+✔ compact central shelter crown stays branch-sized with curved height above the protected walking level (0.829625ms)
+✔ central three-leaf groups keep genuine angular light gaps and non-coplanar domes (99.880542ms)
+✔ central blades use six shallow radial curves with a thin closed body, not three folded panels (0.796084ms)
+✔ shared fan has a closed domed top, drooping edge and coherent face color (0.355ms)
+✔ placed crown surfaces retain a visible dome and tilt instead of horizontal discs (5.3745ms)
+✔ local palette pass installs shared screen-width veins without changing geometry, attachment or matrices (5.920666ms)
+✔ target foliage comparison restores the prior bright underside shader without changing its mesh (0.136666ms)
+✔ spherical placement preserves canopy and branch common-frame relationship (1.412ms)
+✔ rollback restores original crown visibility and a disabled install is inert (11.787333ms)
+✔ screen ink retains CSS width across depth, viewport aspect and DPR (0.572875ms)
+✔ local visual pass leaves actor identity, animation and collision geometry intact (0.907583ms)
+✔ instanced crown inks keep authored transforms and ignore raycasts (0.75625ms)
+✔ wall and bark hooks expand against the actual Three.js basic shader (0.579ms)
+✔ comparison flag produces no lake mutation (0.089708ms)
+✔ wall waterline is converted to mesh-local height, including transformed parents (0.421ms)
+✔ environment palette retains authored face contrast without mutating shared colour buffers (0.24425ms)
+✔ approved coral, violet and ivory planes remain semantic colors in shader uniforms (0.16625ms)
+✔ neutral leaf buffers stay shared and water retains its animation material and geometry (0.163ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1985.330666

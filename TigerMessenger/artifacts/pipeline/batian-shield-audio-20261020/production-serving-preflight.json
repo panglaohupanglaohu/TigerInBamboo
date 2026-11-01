@@ -1,0 +1,42 @@
+{
+  "recorded_at_utc": "2026-10-20T17:57:05.646311+00:00",
+  "scope": "HTTP response source bytes only; no new gameplay, GPU or listening validation",
+  "sources": [
+    {
+      "path": "src/audio/batianShieldSound.js",
+      "http_status": 200,
+      "served_matches_disk": true,
+      "disk_matches_manifest": true
+    },
+    {
+      "path": "src/audio/worldSfx.js",
+      "http_status": 200,
+      "served_matches_disk": true,
+      "disk_matches_manifest": true
+    },
+    {
+      "path": "src/world/batianArsenal.js",
+      "http_status": 200,
+      "served_matches_disk": true,
+      "disk_matches_manifest": true
+    },
+    {
+      "path": "src/main.js",
+      "http_status": 200,
+      "served_matches_disk": true,
+      "disk_matches_manifest": true
+    },
+    {
+      "path": "src/audio/bgmOwnership.js",
+      "http_status": 200,
+      "served_matches_disk": true,
+      "disk_matches_manifest": true
+    },
+    {
+      "path": "src/world/batianFleet.js",
+      "http_status": 200,
+      "served_matches_disk": true,
+      "disk_matches_manifest": true
+    }
+  ]
+}

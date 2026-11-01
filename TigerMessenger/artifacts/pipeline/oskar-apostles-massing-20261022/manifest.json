@@ -1,0 +1,26 @@
+{
+  "version": "apostles-oskar-wfc-16-wide-crown",
+  "sources": [
+    {
+      "path": "src/world/twelveApostlesTarget.js",
+      "sha256": "e2c57e28725a30e7107580bf180e14a619ed51c8e172903fd732654a0b429a24"
+    },
+    {
+      "path": "src/world/apostleShoreFoam.js",
+      "sha256": "3e4984ee7bcac974b7a7e69846ac03ddefe98447ad4f84afe468ba9191df2585"
+    },
+    {
+      "path": "tests/world/twelveApostlesSoftShoulders.test.mjs",
+      "sha256": "94c9bc0f1d970916d50ff342e565b60752f43936abde6806b4809fad68a062c1"
+    }
+  ],
+  "before": "source-before/twelveApostlesTarget.js",
+  "scope": "Only Twelve Apostles composition; rail context belongs to root",
+  "cpu": [
+    "tests-final.txt",
+    "actual-context-geometry-r4.json",
+    "geometry-after-r4.json",
+    "composition-checks-r4.json"
+  ],
+  "gpu": "Root reported wfc16 GPU and formal normal entry verified; see root-verification"
+}

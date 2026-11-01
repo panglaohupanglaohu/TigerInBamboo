@@ -1,0 +1,17 @@
+✔ fine ink keeps bird/lizard surfaces and all animal pivots and behaviour references; monkey shape is separately approved (1.690458ms)
+✔ fine shells weld coincident contour normals and cap toes, wings and tail tips by their actual thickness (25.558667ms)
+✔ contour is stable at device scale, screen-capped and independent of shared brush-noise shader (2.397792ms)
+pink monkey proportions {"bodyWidth":0.44088611006736755,"bodyHeight":1.3179999515414238,"tailMinY":-1.9677268266677856,"tailDepth":0.15538648515939713,"pinkVertexFraction":0.6641221374045801}
+formal monkey roles {"ordinary":3,"repair":2,"perches":[3,4,4],"timing":[[1.741819488024339,0.7886711874976754,3.6890131201595073],[2.3627156489063053,0.8705694850068539,3.495207602158189],[2.303405241994187,0.9016269006766379,2.6675689201802015]],"phases":[3.244247385766357,0.9261486316099763,2.33875121595338]}
+repair tail coil {"arcLength":2.6755539541960665,"hangingLength":2.6755539735778635,"minY":0.18961209058761597,"minimumLeanY":0.04519672039036432}
+✔ approved climber silhouette is slender, pale mauve and has a long downward tail rather than broad haunches (3.225916ms)
+✔ formal lake still has three perch monkeys and two mast repair workers with working animation pivots (637.738458ms)
+✔ repair-only coil preserves long tail arc and stays above its footplane throughout lifting (427.954166ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1196.428708

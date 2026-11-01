@@ -1,0 +1,17 @@
+{"changed":823,"protectedN":5083,"version":"target-new-city-rail-cliff-1","samples":97,"changedQueries":823,"protectedQueries":73,"maxDrop":103.22448461188931,"scope":{"x":[80,143],"z":[70,102]},"trackChanged":false,"limits":["Only measured upper south-east track branch selected by 3D chart envelope. Other global segments remain unaudited by this local cut.","Actual source mesh and vehicle envelope must be tested after remeshing.","2.4m cliff transition; plateau cores stay fixed."],"maxDropPoint":{"x":135,"z":74,"before":5.862597678417357,"after":-97.36188693347195,"sea":-94.36188693347195,"edge":89.20423210398788,"railPlaneCap":-72.7458362297177}}
+{ total: 56, before: 15, after: 0 }
+{ probes: 43, contacts: [] }
+✔ measured upper south-east rail branch retreats toe only, plateaus and other terrain unchanged (74.218083ms)
+✔ actual rail centre near plaza front-right clears height cap where branch is fully covered (1.955209ms)
+✔ remeshed cliff is closed and measured vehicle envelope clears central edited segment (95.960166ms)
+✔ shared grid produces outward closed positive-volume stepped terrain (5.444125ms)
+✔ curved sea domain and inner opening remain capped without crossing null cells (0.710458ms)
+✔ invalid numbers/collapsed thickness reject; empty domain explicit (0.275417ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 238.686583

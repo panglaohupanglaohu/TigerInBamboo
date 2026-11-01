@@ -1,0 +1,1 @@
+import{createMorrisIsland}from'../../../src/world/morrisIsland.js';const i=createMorrisIsland();console.log(JSON.stringify(i.horses.map(h=>({scale:h.scale.x,position:h.position.toArray(),legs:h.userData.horse.legs.map(l=>({hip:l.position.toArray(),knee:l.userData.knee.position.toArray()}))})),null,2));

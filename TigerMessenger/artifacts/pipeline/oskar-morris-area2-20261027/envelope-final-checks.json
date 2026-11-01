@@ -1,0 +1,63 @@
+{
+  "scope": "saved actual rail/obstacle world positions projected through original anchored island frame; CPU model of current Island rail depression, not fresh GPU/world survey",
+  "railSamples": 170,
+  "newAreaRailSamples": 69,
+  "minimumRoadCentreToRail": {
+    "distance": 17.764600246062336,
+    "routeS": 204.94084019914854,
+    "rail": [
+      42.77239899880157,
+      -5.360249342631846,
+      6.325807501154202
+    ]
+  },
+  "minimumCreekCentreToRail": {
+    "distance": 26.111333218081967,
+    "creek": [
+      35.96146479786099,
+      35.857866377418546
+    ],
+    "rail": [
+      54.177990444717224,
+      -10.111069819004882,
+      17.150650769981404
+    ]
+  },
+  "minimumNewMouthToRail": {
+    "distance": 49.40361351370633,
+    "rail": [
+      77.07813937239413,
+      -26.138112552628314,
+      44.679713930298306
+    ]
+  },
+  "rawTerrainRailCoverSamples": 149,
+  "maxRawHeightAboveRail": 15.878835674059813,
+  "afterProductionRailKeepoutCoverSamples": 0,
+  "nearbySavedObstacles": 34,
+  "minimumRoadEdgeToSavedObstacle": {
+    "distance": -29.297836377094747,
+    "routeS": 227.77801931241984,
+    "obstacle": [
+      34.35328725948337,
+      -18.52168394212947,
+      -66.3606641007813
+    ],
+    "radius": 106
+  },
+  "minimumRiderToSmallSavedObstacle": {
+    "distance": 8.451217118644076,
+    "routeS": 152.11493950189447,
+    "obstacle": [
+      -5.3643556682430695,
+      1.185319071937755,
+      0.7356701784542317
+    ],
+    "radius": 1.9800000000000002
+  },
+  "railOnlyPass": true,
+  "limitations": [
+    "saved obstacles unlabelled; large site spheres overlap the user-authorized original shore site; cannot identify all current landmark actor envelopes",
+    "normal train envelope and current world navigation still require real game check"
+  ]
+}

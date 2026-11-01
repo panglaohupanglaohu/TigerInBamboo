@@ -1,0 +1,19 @@
+{
+  "round": "floating-moon-v3",
+  "observations": [
+    "User requires actual floating moon. Source moonOrb radius3.4 height5.6 yields lower edge2.2 above water. Root inspected generated v3: hero and B/C now show visible gap below crescent, plan perspective raised moon; five hero pines, daytime layout and framing retained.",
+    "Generated concept only; image does not certify measured height, identical multi-view projection or implementation."
+  ],
+  "checks": [
+    {
+      "name": "Actual source floating height constraint read",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Visible gap in hero and perspective views visually inspected",
+      "required": true,
+      "passed": true
+    }
+  ]
+}

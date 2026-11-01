@@ -1,0 +1,24 @@
+✔ default trooper and deployed squad use exactly 1.5 linear scale with explicit scales preserved (18.061333ms)
+✔ casualties visibly unload one by one, wait for Heiwa, heal and remain reserved until carrier returns (6.980625ms)
+✔ real assault evacuation hands casualties to medical ownership and next sortie excludes them (9.548917ms)
+✔ front shields intercept actual front segment, not rear shots or distant misses, and drain then break (44.23775ms)
+✔ rear guns fire through clear lanes and stop when an ally or wall blocks the trajectory (54.622291ms)
+✔ close combat switches off gun, animates blade and requires actual swept blade contact (6.145416ms)
+✔ withdrawal boards gun section first while shield section covers, then releases the rear guard (9.1725ms)
+✔ lost or exhausted front rank is replaced by a healthy gunner without new soldiers (10.706458ms)
+✔ shield recovery waits for quiet and a broken shield cannot intercept until restored (5.782958ms)
+✔ rear gun cannot shoot through the back of a friendly shield even without a body on that short segment (9.859958ms)
+✔ real robot torso aim intersects the light shield instead of the soles (13.923625ms)
+✔ first landed squad forms up during insertion while descending soldiers carry shields (12.5815ms)
+✔ a civilian who retaliates retains civilian damage routing (4.003583ms)
+✔ rear gun chooses a different clear target when the nearest firing lane is blocked (18.2465ms)
+✔ moss insertion requires actual ambush and physical fleet contact; ground remains provider-owned (49.668125ms)
+✔ existing roster is assigned once and remains aboard before real contact; starts physical insertion after contact (838.940083ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1026.406625

@@ -1,0 +1,28 @@
+{
+  "status": "production-r47-changed-target-not-accepted",
+  "changes": [
+    "rounded summit with offset shoulders, short oblique rock steps",
+    "lower switchback interior into a broad meadow bench",
+    "higher upper creek, repeated short cascade reaches, bridge stream level retained",
+    "height-sampler cut-face fracture and embedded irregular outcrops",
+    "horse V6 throat concavity, shorter head/neck, waved mane, navy/gold brocade",
+    "distinct stance/swing walk, diagonal trot and sequential canter with airborne phase"
+  ],
+  "verification": [
+    "13 route/bridge/castle/court/rail interface checks",
+    "11 patrol factory checks",
+    "10 actual GLB neutral hooves/attachment/rollback checks",
+    "3 gait speed/contact checks",
+    "r47 normal new horse loaded and princess moving, GPU images viewed, errors empty"
+  ],
+  "notAccepted": [
+    "horse target full morphology and fluid action",
+    "terrain target full rock shoulder and cliff composition",
+    "complete final normal loop and all navigation"
+  ],
+  "targets": [
+    "../morris-actual-target-20261027/target-v1.png",
+    "../morris-horse-target-20261027/riding-reference.png"
+  ],
+  "noCommitOrPublish": true
+}

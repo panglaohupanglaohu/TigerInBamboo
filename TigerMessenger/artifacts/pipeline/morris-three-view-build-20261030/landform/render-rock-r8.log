@@ -1,0 +1,6 @@
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-three-view-build-20261030/landform/render-bare.py:6: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  v=[(row['p'][j],-row['p'][j+2],row['p'][j+1]) for j in range(0,len(row['p']),3)];ix=row['ix'] or list(range(len(v)));f=[ix[j:j+3] for j in range(0,len(ix),3)];m=bpy.data.meshes.new(row['name']);m.from_pydata(v,[],f);m.update();o=bpy.data.objects.new(row['name'],m);bpy.context.collection.objects.link(o);mat=bpy.data.materials.new(row['name']);mat.diffuse_color=tuple(((row['mat']>>k)&255)/255 for k in[16,8,0])+(1,);mat.use_nodes=True;bs=mat.node_tree.nodes.get('Principled BSDF');bs.inputs['Base Color'].default_value=mat.diffuse_color;bs.inputs['Roughness'].default_value=1
+00:02.493  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-three-view-build-20261030/landform/actual-bare-r3.png'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

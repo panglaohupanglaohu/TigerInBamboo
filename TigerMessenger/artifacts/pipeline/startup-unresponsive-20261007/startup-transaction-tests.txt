@@ -1,0 +1,24 @@
+✔ incremental construction preserves sync ordering and result while servicing queued tasks (50.150916ms)
+✔ failure stays fatal and cannot publish later stages or a partial handle (0.624084ms)
+✔ startup progress persists active stage before work, records durations and completes once ready (0.231542ms)
+✔ actual actor transaction installs in live scene, preserves dynamic visibility and exposes one loop/support handle (28.658666ms)
+✔ default legacy root scope never silently hides a global tram system and protected actor roots cannot be supplied (8.072333ms)
+✔ every post-construction stage and real route rejection rolls back scene/materials and releases candidate exactly once (30.687625ms)
+✔ factory-owned constructor rollback is not disposed twice, and missing actual inputs fail before construction (2.649917ms)
+✔ active horse action rejects uninstall atomically; retry when idle restores actor and original visual scene (3.742334ms)
+✔ update errors remain errors, elapsed contract is explicit, and a harness candidate cannot be double-installed (7.037ms)
+✔ default real candidate factory rejects an unsupported live ocean shader without a partial scene or borrowed-resource disposal (65.976458ms)
+✔ static candidate rail report follows actual candidate presence; preserved global tram is not called a static candidate (6.467208ms)
+✔ visibility hot path performs zero UUID searches after binding, including post-culling and thrown updates (8.776958ms)
+ℹ {"enforcementCalls":200,"baselineRecursiveSearchVisits":159800,"cachedRecursiveSearchVisits":0,"cachedTraversals":0}
+✔ refresh rebinds replaced identities and changed/missing report UUIDs after recollection (4.269334ms)
+✔ staged startup publishes only a completed runtime and rolls back checkpoint interruption (14.754291ms)
+✔ retired architectural owners hide late window fragments but preserve mixed terrain and actor owners (4.011ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 381.64675

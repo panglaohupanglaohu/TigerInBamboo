@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Tile Placement (content-agnostic, tri/square/voxel)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #39405a; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #e8eef2;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #d7e2ea;
+    font: 13px/1.55 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  }
+  #keys { position: fixed; right: 16px; top: 14px; color: #b9c6d0;
+    font: 11px/1.6 ui-monospace, Menlo, monospace; text-align: right;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">约束式铺砖（Sudoku-solver on steroids）— 同一份求解器 · 三角 / 方阵 / 体素 三种格阵<br>
+  左=体素等距(3D) · 右上=方阵 · 右下=三角 · 半透明方块是尚未落定的候选（原文 787 里那块悬空的块）</div>
+<div id="keys">空格 暂停 · R 重解 · T 换 tile 集 · D 砸掉再修 · C 换内容(box/pipe/capsule)</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * tileplace.html — src/tileplace.js 的可视化验证页。
+ *
+ * 三个面板故意用**同一份求解器、同一个 MRV/回溯循环**，只换 Lattice 适配器：
+ * 左边的体素是原文 "Now in 3D" 那条，右上/右下是 "would work for squares or voxels too"
+ * 那两句的实证。哪天有人怀疑"内容无关"是吹的，按 T 换一套 tile 集就能看出来。
+ *
+ * 画法照片子：深蓝灰底、浅灰石块、块间留缝（不是一整块 mesh）、
+ * 未落定的格画成半透明线框 —— 就是 787 那片里天上飘的那块。
+ */
+import { Placer, SquareLattice, TriLattice, VoxelLattice, CONTENTS,
+         expandRotations, TILESET_FORT, TILESET_RUIN, TILESET_TRI } from '../src/tileplace.js';
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hud = document.getElementById('hud');
+const q = new URLSearchParams(location.search);
+
+let USE_RUIN = q.get('set') === 'ruin';
+let paused = false;
+// 内容层：求解器只认识标签，认识几何的是这一层（原文 784848286272327680 "fill it with anything"）
+const CONTENT_KEYS = ['box', 'pipe', 'capsule'];
+let CONTENT = CONTENT_KEYS.indexOf(q.get('content')) >= 0 ? q.get('content') : 'box';
+// 修复状态（原文 793806535898136576）：damaged 里的格要先塌掉再长回来，其余格全程不动
+let damaged = new Set();
+let repairInfo = null;
+
+// ---------------- 三个场景 ----------------
+// 尺寸都压到能一屏放下；格子数不算多，但足够看出"有机团"和"悬空候选"。
+const SCENES = [];
+
+function buildSquare(L, set, seed) {
+  const tiles = expandRotations(set.base, L, 4);
+  const p = new Placer(L, tiles, { joins: set.joins, strategy: 'tally', seed });
+  const ok = p.solve();
+  return { L, tiles, p, ok };
+}
+function buildTri(L, set, seed) {
+  const tiles = expandRotations(set.base, L, 3);
+  const p = new Placer(L, tiles, { joins: set.joins, strategy: 'tally', seed });
+  const ok = p.solve();
+  return { L, tiles, p, ok };
+}
+
+let SQUARE, TRI, VOX, SEED = Number(q.get('seed') || 7);
+
+function rebuild() {
+  const sqL = new SquareLattice(13, 10);
+  SQUARE = buildSquare(sqL, TILESET_FORT, SEED);
+  const triL = new TriLattice(12, 8);
+  TRI = buildTri(triL, TILESET_TRI, SEED + 1);
+  const voxL = new VoxelLattice(9, 9, 6);
+  VOX = buildSquare(voxL, USE_RUIN ? TILESET_RUIN : TILESET_FORT, SEED + 2);
+  damaged = new Set(); repairInfo = null;
+  t0 = performance.now();
+  // 三个面板各自计时（互不影响）
+  const now = t0;
+  SQUARE.t0 = now; TRI.t0 = now; VOX.t0 = now;
+}
+let t0 = performance.now();
+
+// ---------------- 布局 ----------------
+let W = 0, H = 0, DPR = 1;
+function resize() {
+  DPR = Math.min(2, devicePixelRatio || 1);
+  W = canvas.clientWidth; H = canvas.clientHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  rebuild();
+}
+addEventListener('resize', resize);
+
+// ---------------- 体素等距 ----------------
+// 投影：x 往右下、y 往左下、z 往上。只服务画图，跟求解器无关。
+// ⚠ 第一版把"半个格子宽"直接写成 box.w/2，11×11×7 的体素每个格子占了 300px，
+//   一个面板把整屏糊成灰板。改成先算包围盒再定单位尺寸 u。
+const ISO_W = 0.866, ISO_H = 0.5;
+function isoFrame(box, sx, sy, sz) {
+  const raw = (px, py, pz) => [(px - py) * ISO_W, -(px + py) * ISO_H + pz];
+  const corners = [raw(0, 0, 0), raw(sx, 0, 0), raw(0, sy, 0), raw(sx, sy, 0), raw(0, 0, sz), raw(sx, sy, sz)];
+  const xs = corners.map(c => c[0]), ys = corners.map(c => c[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const u = Math.min(box.w / (maxX - minX), box.h / (maxY - minY)) * 0.92;
+  return {
+    u,
+    ox: box.x + box.w / 2 - (minX + maxX) / 2 * u,
+    oy: box.y + box.h / 2 - (minY + maxY) / 2 * u,
+    raw,
+  };
+}
+function proj(f, x, y, z) {
+  const p = f.raw(x, y, z);
+  return [f.ox + p[0] * f.u, f.oy + p[1] * f.u];
+}
+
+/**
+ * 内容层：同一个格子按 CONTENTS 里的描述画成方块 / 管子 / 胶囊。
+ *
+ * 原文 784848286272327680 就是这一句"you can fill it with anything"——
+ * 片子里同一套摆放画出来的是一堆随意朝向的胶囊，不是方块。
+ * 这层跟求解器零耦合：求解器只认识 faces 标签，几何全在这里。
+ */
+function drawContent(f, x, y, z, kind, cell) {
+  if (CONTENT === 'capsule') {
+    // 胶囊：在格子中心画一枚有确定朝向（由格号散列）的椭圆
+    const p0 = proj(f, x + 0.5, y + 0.5, z + 0.5);
+    const h = hash01(cell);
+    const ang = h * Math.PI * 2;
+    const rlong = f.u * 0.46, rshort = f.u * 0.17;
+    ctx.save();
+    ctx.translate(p0[0], p0[1]);
+    ctx.rotate(ang * 0.5);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, rlong, rshort, ang, 0, Math.PI * 2);
+    ctx.fillStyle = kind === 'air' ? '#000' : (COL[kind] || COL.block)[0];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(20,24,30,.35)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.restore();
+    return;
+  }
+  if (CONTENT === 'pipe') {
+    // 管子：同一套方块，但面用圆角 + 亮边，视觉上读成"白管子"
+    drawBoxIso(f, x, y, z, kind, { round: true });
+    return;
+  }
+  drawBoxIso(f, x, y, z, kind);
+}
+const hash01 = (n) => {
+  let x = (n * 2654435761) >>> 0;
+  x ^= x >>> 15; x = (x * 2246822519) >>> 0; x ^= x >>> 13;
+  return (x >>> 8) / 16777216;
+};
+
+function drawVoxel(box) {
+  const { L, tiles, p } = VOX;
+  const f = isoFrame({ x: box.x, y: box.y, w: box.w * 0.94, h: box.h * 0.94 }, L.sx, L.sy, L.sz);
+  // 画家序：x+y 越大越靠近屏幕下方（越近），升序画
+  const cells = [...Array(L.nCells).keys()].sort((i, j) => {
+    const A = L.pos(i), B = L.pos(j);
+    return ((A[0] + A[1]) - (B[0] + B[1])) || (A[2] - B[2]);
+  });
+  // 修复态下：没被砸的格**立刻全画**（片子里塌的时候其余管子一根不动），只让损坏格逐格长回来
+  const order = (damaged.size && repairInfo) ? repairInfo.order : p.order;
+  const shown = new Set(order.slice(0, revealCount(order.length, VOX.t0)));
+  for (const c of cells) {
+    const [x, y, z] = L.pos(c);
+    const t = p.fixed[c];
+    const name = t >= 0 ? tiles[t].name : null;
+    const waiting = damaged.size ? damaged.has(c) : true;
+    if (!waiting) { if (name !== 'air') drawContent(f, x, y, z, name, c); continue; }
+    if (shown.has(c) && name !== 'air') drawContent(f, x, y, z, name, c);
+    else if (!shown.has(c)) drawBoxIso(f, x, y, z, 'ghost');
+  }
+  // 目标骨架：损坏格用红色线框标出来（片子里那层红骨架）
+  if (damaged.size) {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(226,96,80,.75)';
+    ctx.lineWidth = 1;
+    for (const c of damaged) {
+      if (shown.has(c)) continue;
+      const [x, y, z] = L.pos(c);
+      drawBoxIso(f, x, y, z, 'wire');
+    }
+    ctx.restore();
+  }
+}
+
+
+const COL = {
+  block: ['#dfe3e2', '#c3c9c8', '#aeb5b5'],
+  wall:  ['#e6e9e6', '#cbd1cf', '#b6bdbc'],
+  door:  ['#4a4f57', '#3d4249', '#343940'],
+  floor: ['#e9ece9', '#cfd5d3', '#b9c0bf'],
+  pillar:['#e2e6e4', '#c6ccca', '#b1b8b7'],
+  rubble:['#d5d3cc', '#bcbab4', '#a8a6a1'],
+  arch:  ['#dcdfd9', '#c2c5c0', '#adb0ab'],
+  window:['#cdd4d6', '#b7bec1', '#a3aaad'],
+  ledge: ['#eff1ef', '#d8dcda', '#c2c6c4'],
+  ghost: null,
+};
+function drawBoxIso(f, x, y, z, kind, opts = {}) {
+  const s = 1;
+  const P = (dx, dy, dz) => proj(f, x + dx * s, y + dy * s, z + dz * s);
+  const top = [P(0, 0, 1), P(1, 0, 1), P(1, 1, 1), P(0, 1, 1)];
+  const left = [P(0, 1, 1), P(1, 1, 1), P(1, 1, 0), P(0, 1, 0)];
+  const right = [P(1, 0, 1), P(1, 1, 1), P(1, 1, 0), P(1, 0, 0)];
+  const poly = (pts, fill, stroke) => {
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.closePath();
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+  };
+  if (kind === 'ghost') {
+    const g = 'rgba(226,232,235,0.10)', e = 'rgba(226,232,235,0.16)';
+    poly(top, g, e); poly(left, g, e); poly(right, g, e);
+    return;
+  }
+  if (kind === 'wire') {
+    // 红骨架：只描边不填充（片子里塌掉那一片的红色目标框）
+    poly(top, null, 'rgba(226,96,80,.75)');
+    poly(left, null, 'rgba(226,96,80,.5)');
+    poly(right, null, 'rgba(226,96,80,.5)');
+    return;
+  }
+  const c = COL[kind] || COL.block;
+  if (opts.round) {
+    // "管子"模式：亮边 + 圆角，跟方块的平涂区分开
+    ctx.lineJoin = 'round';
+    poly(left, c[2], 'rgba(255,255,255,.55)');
+    poly(right, c[1], 'rgba(255,255,255,.45)');
+    poly(top, c[0], 'rgba(255,255,255,.65)');
+    return;
+  }
+  poly(left, c[2], 'rgba(20,24,30,.28)');
+  poly(right, c[1], 'rgba(20,24,30,.28)');
+  poly(top, c[0], 'rgba(20,24,30,.22)');
+}
+
+// ---------------- 平面格阵 ----------------
+function drawSquareFlat(box) {
+  const { L, tiles, p } = SQUARE;
+  const cw = box.w / L.cols, ch = box.h / L.rows;
+  const size = Math.min(cw, ch);
+  const ox = box.x + (box.w - size * L.cols) / 2, oy = box.y + (box.h - size * L.rows) / 2;
+  const rev = new Set(p.order.slice(0, revealCount(p.order.length, SQUARE.t0)));
+  for (let y = 0; y < L.rows; y++) for (let x = 0; x < L.cols; x++) {
+    const c = L.cell(x, y);
+    const px = ox + x * size, py = oy + y * size;
+    if (!rev.has(c)) {
+      ctx.strokeStyle = 'rgba(226,232,235,.13)';
+      ctx.strokeRect(px + 1, py + 1, size - 2, size - 2);
+      continue;
+    }
+    const t = p.fixed[c], name = t >= 0 ? tiles[t].name : 'air';
+    if (name === 'air') continue;
+    const col = (COL[name] || COL.block)[0];
+    ctx.fillStyle = col;
+    ctx.fillRect(px + 1, py + 1, size - 2, size - 2);
+    ctx.strokeStyle = 'rgba(20,24,30,.35)';
+    ctx.strokeRect(px + 1, py + 1, size - 2, size - 2);
+  }
+}
+
+function drawTriFlat(box) {
+  const { L, tiles, p } = TRI;
+  const size = Math.min(box.w / L.cols, box.h / L.rows);
+  const ox = box.x + (box.w - size * L.cols) / 2, oy = box.y + (box.h - size * L.rows) / 2;
+  const rev = new Set(p.order.slice(0, revealCount(p.order.length, TRI.t0)));
+  for (let y = 0; y < L.rows; y++) for (let x = 0; x < L.cols; x++) {
+    const x0 = ox + x * size, y0 = oy + y * size, x1 = x0 + size, y1 = y0 + size;
+    for (const half of [0, 1]) {
+      const c = L.cell(x, y, half);
+      // A = TL,TR,BR；B = TL,BR,BL  （跟 TriLattice 里的对角线约定一致）
+      const pts = half === 0
+        ? [[x0, y0], [x1, y0], [x1, y1]]
+        : [[x0, y0], [x1, y1], [x0, y1]];
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0], pts[0][1]);
+      ctx.lineTo(pts[1][0], pts[1][1]);
+      ctx.lineTo(pts[2][0], pts[2][1]);
+      ctx.closePath();
+      if (!rev.has(c)) {
+        ctx.strokeStyle = 'rgba(226,232,235,.10)';
+        ctx.stroke();
+        continue;
+      }
+      const t = p.fixed[c], name = t >= 0 ? tiles[t].name : 'air';
+      if (name === 'air') { ctx.strokeStyle = 'rgba(226,232,235,.06)'; ctx.stroke(); continue; }
+      const col = name === 'fill' ? '#e2e5e3' : name === 'edge' ? '#c8cecc' : '#aeb4b3';
+      ctx.fillStyle = col; ctx.fill();
+      ctx.strokeStyle = 'rgba(20,24,30,.30)'; ctx.stroke();
+    }
+  }
+}
+
+// ---------------- 动画 ----------------
+// 求解是一次算完的，这里只是把落子顺序慢放。这就是原文动画的做法 ——
+// 片子里那块"悬空的块"之所以一直飘，是因为它**确实还没落定**，不是缓动。
+const DUR = 4200;
+// ⚠ 三个面板各用各的时间轴。第一版共用一个全局 t0，于是"砸掉再修"一点，
+//   右上/右下两块也跟着倒回 0 重新长 —— 看起来像那两个面板坏了，其实是同一个时钟。
+function revealCount(total, t0v) {
+  if (paused) return total;
+  const k = Math.min(1, (performance.now() - (t0v ?? t0)) / DUR);
+  return Math.floor(k * k * (3 - 2 * k) * total);   // smoothstep，前慢中快后慢，像片子
+}
+
+// ---------------- 砸掉再修（原文 793806535898136576） ----------------
+/**
+ * 挑一片格砸掉，就地从那里重新解。
+ * 片子的看点不是"修好"，而是**没坏的格一根管子都不动** ——
+ * 所以这里记 touched（实际被重新落子的格数），它应该几乎等于 damaged。
+ */
+function doRepair(frac = 0.22) {
+  const { L, p } = VOX;
+  let s = (SEED * 7919 + 13) >>> 0;
+  const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  // 砸成一簇，别撒胡椒面（片子里是整块塌）
+  const cx = 0.25 + rnd() * 0.5, cy = 0.25 + rnd() * 0.5;
+  const cells = [];
+  for (let c = 0; c < L.nCells; c++) {
+    const [x, y, z] = L.pos(c);
+    const dx = x / L.sx - cx, dy = y / L.sy - cy;
+    const rad = Math.sqrt(frac);
+    if (Math.sqrt(dx * dx + dy * dy) < rad && rnd() < 0.85) cells.push(c);
+  }
+  if (!cells.length) return;
+  const before = p.validate();
+  const t1 = performance.now();
+  const r = p.repair(cells);
+  const ms = performance.now() - t1;
+  damaged = new Set(cells);
+  repairInfo = { order: p.order.slice(), touched: r.touched, ms, ok: r.ok, before };
+  VOX.t0 = performance.now();   // 只重置体素面板，别动另外两块
+}
+
+// ---------------- 主循环 ----------------
+function frame() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#39405a';
+  ctx.fillRect(0, 0, W, H);
+
+  const pad = 18;
+  const leftW = W * 0.58;
+  const voxBox = { x: pad, y: pad, w: leftW - pad * 2, h: H - pad * 2 };
+  const sqBox = { x: leftW + pad, y: pad, w: W - leftW - pad * 2, h: (H - pad * 3) / 2 };
+  const triBox = { x: leftW + pad, y: pad * 2 + sqBox.h, w: W - leftW - pad * 2, h: (H - pad * 3) / 2 };
+
+  drawVoxel(voxBox);
+  drawSquareFlat(sqBox);
+  drawTriFlat(triBox);
+
+  // 分区分隔线
+  ctx.strokeStyle = 'rgba(255,255,255,.10)';
+  ctx.beginPath();
+  ctx.moveTo(leftW, pad); ctx.lineTo(leftW, H - pad);
+  ctx.moveTo(leftW + pad, sqBox.y + sqBox.h + pad / 2); ctx.lineTo(W - pad, sqBox.y + sqBox.h + pad / 2);
+  ctx.stroke();
+
+  const bench = runBench();
+  hud.textContent =
+    `体素 ${VOX.L.nCells} 格 / ${VOX.tiles.length} tile  解=${VOX.ok ? 'OK' : '✗'} 步=${VOX.p.steps} 剪枝=${VOX.p.prunes} 回溯=${VOX.p.backtracks}\n` +
+    `方阵 ${SQUARE.L.nCells} 格 / ${SQUARE.tiles.length} tile  解=${SQUARE.ok ? 'OK' : '✗'} 剪枝=${SQUARE.p.prunes}\n` +
+    `三角 ${TRI.L.nCells} 格 / ${TRI.tiles.length} tile  解=${TRI.ok ? 'OK' : '✗'} 剪枝=${TRI.p.prunes}\n` +
+    `等价性（det 模式 24 tile）：两传播器落子差异 ${bench.diff} 格 / ${bench.cells}，剪枝数 ${bench.prA}=${bench.prB}\n` +
+    `速度（体素 10×10×8，det）：T=24 tally ${bench.t24} · T=96 tally ${bench.t96a} vs bitmask ${bench.t96b}\n` +
+    (repairInfo
+      ? `修复（砸 ${damaged.size} 格 / 共 ${VOX.L.nCells}）：重新落子 ${repairInfo.touched} 格 · ${repairInfo.ms.toFixed(2)}ms · ` +
+        `自洽 ${VOX.p.validate()} 处冲突（砸之前 ${repairInfo.before}）· 内容层 ${CONTENT}`
+      : `修复：按 D 砸掉一簇再就地重解（原文 793806535898136576）· 内容层 ${CONTENT}`);
+
+  requestAnimationFrame(frame);
+}
+
+// ---------------- 页内基准 ----------------
+// 每次只算一次，缓存起来，别每帧跑（会掉帧，而且数字会抖）。
+let benchCache = null;
+function runBench() {
+  if (benchCache) return benchCache;
+  const L = new VoxelLattice(10, 10, 8);
+  const base = expandRotations(TILESET_FORT.base, L, 4);
+  const mk = (tiles, strategy, det) => new Placer(L, tiles, { joins: TILESET_FORT.joins, strategy, det });
+
+  const a = mk(base, 'tally', true), b = mk(base, 'bitmask', true);
+  const okA = a.solve(), okB = b.solve();
+  let diff = 0;
+  for (let i = 0; i < L.nCells; i++) if (a.fixed[i] !== b.fixed[i]) diff++;
+
+  const big = [];
+  for (const t of base) for (let v = 0; v < 4; v++) big.push({ ...t, weight: (t.weight ?? 1) * (1 + 0.01 * v) });
+  const time = (tiles, strategy) => {
+    const reps = 8, s = performance.now();
+    for (let i = 0; i < reps; i++) mk(tiles, strategy, true).solve();
+    return ((performance.now() - s) / reps).toFixed(1) + 'ms';
+  };
+  benchCache = {
+    diff, cells: L.nCells, prA: a.prunes, prB: b.prunes,
+    t24: time(base, 'tally'), t96a: time(big, 'tally'), t96b: time(big, 'bitmask'),
+    ok: okA && okB,
+  };
+  return benchCache;
+}
+
+// ---------------- 交互 ----------------
+addEventListener('keydown', (e) => {
+  if (e.code === 'Space') { paused = !paused; e.preventDefault(); }
+  if (e.key === 'r' || e.key === 'R') { t0 = performance.now(); benchCache = null; paused = false; }
+  if (e.key === 't' || e.key === 'T') { USE_RUIN = !USE_RUIN; benchCache = null; rebuild(); t0 = performance.now(); }
+  if (e.key === 'd' || e.key === 'D') { doRepair(); }
+  if (e.key === 'c' || e.key === 'C') { CONTENT = CONTENT_KEYS[(CONTENT_KEYS.indexOf(CONTENT) + 1) % 3]; }
+});
+
+resize();
+requestAnimationFrame(frame);
+window.__tileplace = {
+  get VOX() { return VOX; }, get SQUARE() { return SQUARE; }, get TRI() { return TRI; },
+  get damaged() { return damaged.size; }, get repairInfo() { return repairInfo; },
+  get content() { return CONTENT; },
+  bench: () => runBench(),
+  repair: (frac) => doRepair(frac),
+};
+</script>
+</body>
+</html>

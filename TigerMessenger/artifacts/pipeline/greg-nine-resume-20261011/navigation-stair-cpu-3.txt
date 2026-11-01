@@ -1,0 +1,33 @@
+✔ real lower tread remains available beneath an upper terrace, late quay registration stays dynamic (1.43325ms)
+✖ production controller and gravity can descend actual entrance stairs with guard and steer active (2168.872917ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2375.895791
+
+✖ failing tests:
+
+test at TigerMessenger/tests/world/swampStairNavigation.test.mjs:18:1
+✖ production controller and gravity can descend actual entrance stairs with guard and steer active (2168.872917ms)
+  AssertionError [ERR_ASSERTION]: {"landing":137.7250772868281,"landingNet":137.7250772868281,"net":137.7250772868281,"refR":145.30552936774114,"feet":140.85464143695737} {"drop":7.58,"local":[24.6,31.91,13.44]}
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampStairNavigation.test.mjs:34:124)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

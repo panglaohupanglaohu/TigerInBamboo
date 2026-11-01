@@ -1,0 +1,202 @@
+Front strata baseline changed citadel-oskar-grid-mountain-surface 155
+Old-city coastal source changed; continuing with slope update { hash: 2028752367, expected: 3381302665 }
+Old-city coastal source changed; continuing with slope update { hash: 2125320883, expected: 2915253182 }
+[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface
+[citadel] applyCitadelHarborSeabed 跳过: Harbor seabed requires the original planet and city
+[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate
+[ELDER] 已放到指定落点 r=160.6
+[CLOUD-RIDGE] kept= 11 dropped= 12 rings= {"1":6,"2":2,"0.25":4,"center":1} maxH= 42.75 maxScore= 1.13 threshold= 0.35
+Citadel boarding installation failed [TypeError: fetch failed] {
+  [cause]: Error: not implemented... yet...
+      at makeNetworkError (node:internal/deps/undici/undici:11806:35)
+      at schemeFetch (node:internal/deps/undici/undici:13359:34)
+      at mainFetch (node:internal/deps/undici/undici:13207:30)
+      at fetching (node:internal/deps/undici/undici:13176:7)
+      at fetch (node:internal/deps/undici/undici:13040:20)
+      at fetch (node:internal/deps/undici/undici:17708:10)
+      at fetch (node:internal/bootstrap/web/exposed-window-or-worker:83:12)
+      at installFrontBoarding (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/installFrontBoarding.js:11:26)
+      at holdAtReleasedPort (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:25:2)
+      at dockFrontHarborPatrol (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:33:47)
+}
+pixel [ 0, 0 ] [
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 7.802264115027417,
+    point: [ 3.151578884276873, 30.05246784009296, -11.684944788353391 ]
+  },
+  {
+    name: 'world-tree-trunk',
+    parent: 'swamp-ancient-world-tree',
+    d: 11.978444672200181,
+    point: [ -4.377194908145938, 28.448375446417742, -8.443588751212133 ]
+  },
+  {
+    name: 'swamp-underground-waterline',
+    parent: 'moebius-swamp-zone',
+    d: 20.956131088483147,
+    point: [ -20.562072281661557, 24.999999999999943, -1.4755284227382042 ]
+  }
+]
+pixel [ -0.5, 0 ] [
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 5.390161791887374,
+    point: [ 11.566283265566568, 31.549068977556885, -8.68370038625692 ]
+  },
+  {
+    name: 'swamp-sinkhole-wall',
+    parent: 'moebius-swamp-zone',
+    d: 24.06520027084356,
+    point: [ -8.012933955082104, 26.35109017459274, 22.695648207245878 ]
+  },
+  {
+    name: 'v7-swamp-outer-embankment',
+    parent: 'crystal-v7-shores',
+    d: 34.904572493460975,
+    point: [ -19.377109912268864, 23.33407753956692, 40.90886045264602 ]
+  }
+]
+pixel [ 0.5, 0 ] [
+  {
+    name: 'swamp-sinkhole-wall',
+    parent: 'moebius-swamp-zone',
+    d: 14.430051986795545,
+    point: [ -10.592402914322847, 27.91724444293027, -23.500984364011874 ]
+  },
+  {
+    name: 'v7-swamp-outer-embankment',
+    parent: 'crystal-v7-shores',
+    d: 27.148626882723008,
+    point: [ -35.10383805182576, 23.39382589037689, -28.57807227261346 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 29.078663828372765,
+    point: [ -38.82343523888376, 22.707399541630764, -29.348517650346103 ]
+  }
+]
+pixel [ 0, 0.5 ] [
+  {
+    name: 'v7-quay-coping-2-0',
+    parent: 'crystal-v7-shores',
+    d: 1.7383234685620241,
+    point: [ 14.023242471809482, 33.353575942291286, -16.402126709828984 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 11.664057603890473,
+    point: [ -4.2153260759131115, 35.09064673417413, -8.75896016088413 ]
+  },
+  {
+    name: 'world-tree-trunk',
+    parent: 'swamp-ancient-world-tree',
+    d: 12.129778939930183,
+    point: [ -5.071090535819835, 35.17215112659113, -8.400338250583413 ]
+  }
+]
+pixel [ 0, -0.5 ] [
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 6.183452338621649,
+    point: [ 7.159261070072446, 27.40337499992995, -13.280125320263693 ]
+  },
+  {
+    name: 'swamp-underground-waterline',
+    parent: 'moebius-swamp-zone',
+    d: 8.815616827892528,
+    point: [ 2.8777172602549683, 24.999999999999943, -11.381354452402121 ]
+  },
+  {
+    name: '',
+    parent: 'city-sea-lake',
+    d: 10.566195857969136,
+    point: [ 0.030182145951798134, 23.4015824643796, -10.118535020809638 ]
+  }
+]
+pixel [ -0.5, 0.5 ] [
+  {
+    name: 'v7-quay-coping-2-0',
+    parent: 'crystal-v7-shores',
+    d: 2.2316706098698744,
+    point: [ 14.744776107153314, 33.45963004415694, -14.047577201979546 ]
+  },
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 6.6691628072458125,
+    point: [ 9.828133537765623, 34.2754229317124, -6.704113726439708 ]
+  },
+  {
+    name: 'greg-understory-pendant',
+    parent: 'greg-coral-understory',
+    d: 27.817614149840455,
+    point: [ -13.60387975323519, 38.16337482451894, 28.29377992403527 ]
+  }
+]
+pixel [ 0.5, 0.5 ] [
+  {
+    name: 'v7-quay-coping-2-0',
+    parent: 'crystal-v7-shores',
+    d: 2.0576379613619245,
+    point: [ 13.178580345226763, 33.27287823035459, -18.49788232470354 ]
+  },
+  {
+    name: 'v7-arcade-pier.009',
+    parent: 'crystal-v7-shores',
+    d: 14.16036728347418,
+    point: [ -10.577276284827235, 34.58759461662163, -22.95153529426283 ]
+  },
+  {
+    name: 'swamp-sinkhole-wall',
+    parent: 'moebius-swamp-zone',
+    d: 17.787849542479066,
+    point: [ -17.69748414699437, 34.98164708527372, -24.286403381027686 ]
+  }
+]
+pixel [ -0.5, -0.5 ] [
+  {
+    name: 'planet-v8-curved-ocean',
+    parent: 'planet-v9-runtime',
+    d: 4.701204142310564,
+    point: [ 12.836985783023152, 29.63928332546658, -10.151988998513161 ]
+  },
+  {
+    name: 'swamp-underground-waterline',
+    parent: 'moebius-swamp-zone',
+    d: 11.09702328839019,
+    point: [ 6.877566035291423, 24.999999999999943, 0.17217569863436566 ]
+  },
+  {
+    name: '',
+    parent: 'city-sea-lake',
+    d: 13.14514894127073,
+    point: [ 4.9691880491669025, 23.514367749798907, 3.478270833258783 ]
+  }
+]
+pixel [ 0.5, -0.5 ] [
+  {
+    name: 'greg-bank-walking-slab-batch',
+    parent: 'greg-swamp-three-bank-path',
+    d: 3.1219613966297226,
+    point: [ 11.639591761739581, 30.549999237060547, -19.01648738531105 ]
+  },
+  {
+    name: 'greg-bank-walking-slab-batch',
+    parent: 'greg-swamp-three-bank-path',
+    d: 3.278099543463932,
+    point: [ 11.360628873465629, 30.42499923706049, -19.080293267117725 ]
+  },
+  {
+    name: 'greg-bank-walking-slab-batch',
+    parent: 'greg-swamp-three-bank-path',
+    d: 3.461766190279417,
+    point: [ 11.032482425502138, 30.277960660534404, -19.155348675396503 ]
+  }
+]
+cuts {"version":1,"cuts":[],"scope":"neighbour-authored-shores-only","bridgeMeshesUnchanged":true}

@@ -1,0 +1,14 @@
+{
+  "file": "src/core/buildingCatalog.js",
+  "scope": "exactly three visible label string replacements; IDs/create factory refs unchanged",
+  "labels": [
+    "沼泽·辣椒猴",
+    "沼泽·荧色蝾螈",
+    "沼泽·荧光雀"
+  ],
+  "validation": "node --check and reverse-replacement full-byte equality",
+  "backup": "catalog-names-before/buildingCatalog.js",
+  "portrait": "compare-salamander-four-legs-top-v2.jpg",
+  "portraitReview": "actually viewed correct id and four separate limbs; Pillow decode verified",
+  "snapshot": "deferred, parent GPU and concurrent tiger/layout updates active"
+}

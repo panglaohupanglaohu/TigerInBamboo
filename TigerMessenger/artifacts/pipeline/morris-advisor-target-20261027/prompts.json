@@ -1,0 +1,10 @@
+{
+  "tool": "built-in image_gen",
+  "mode": "reference-guided style/composition target, then precise gate edit",
+  "references": [
+    "morris-elder-target-20261026/target-v2.png",
+    "user original phone tapestry example"
+  ],
+  "prompt_summary": "Morris woven botanical ornament, deep petrol blue, ochre and olive; four-level central high island; continuous winding path over arched bridge through open farm gate to three-part castle; musician under pine, small white-horse princess, two grazing horses, smaller rabbits and birds; tall trees; no photorealistic bright generic fantasy garden.",
+  "gate_edit": "Change only closed gate beyond bridge into two outward-swinging open leaves, central path clear; preserve all other composition/style."
+}

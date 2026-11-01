@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Units（1 方向贴图的模糊度 + 一张图集的部件组装）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #55585f; overflow: hidden;
+    font: 12px/1.45 -apple-system, "PingFang SC", sans-serif; color: #e7eaee; }
+  #app { display: flex; height: 100%; }
+  #left, #right { flex: 1; position: relative; }
+  #left { border-right: 1px solid #3f4348; }
+  canvas { display: block; width: 100%; height: 100%; }
+  .cap { position: absolute; left: 14px; top: 12px; font: 11px/1.5 ui-monospace, monospace;
+    color: #cfd5dc; text-shadow: 0 1px 2px rgba(0,0,0,.5); pointer-events: none; }
+  .cap b { color: #fff; }
+  .tbl { position: absolute; left: 14px; bottom: 14px; font: 11px/1.6 ui-monospace, monospace;
+    background: rgba(20,22,26,.55); padding: 8px 10px; border-radius: 4px; color: #cfd5dc; }
+  .tbl table { border-collapse: collapse; }
+  .tbl td, .tbl th { padding: 1px 9px 1px 0; text-align: left; font-weight: 400; }
+  .tbl th { color: #98a2ac; }
+  .ok { color: #8ff0b8; }
+  .bad { color: #ff9a8a; }
+  .ctl { position: absolute; right: 14px; top: 12px; display: flex; gap: 6px; }
+  button { background: rgba(40,44,50,.85); color: #dfe4ea; border: 1px solid #5b6169;
+    border-radius: 3px; padding: 3px 9px; font: 11px inherit; cursor: pointer; }
+  button:hover { background: rgba(60,66,74,.9); }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="left">
+    <canvas id="cvA"></canvas>
+    <div class="cap"><b>1 方向贴图 · 翻不翻得出来</b><br>
+      左：原图（朝右） 中：水平镜像（朝左） 右：两者叠加（越像越"模糊"）</div>
+    <div class="tbl" id="tblA"></div>
+    <div class="ctl">
+      <button data-v="sword">剑尖</button>
+      <button data-v="axe">斧头</button>
+      <button data-v="spear">长矛</button>
+    </div>
+  </div>
+  <div id="right">
+    <canvas id="cvB"></canvas>
+    <div class="cap"><b>一张图集 · 32 种外观</b><br>全部由同一张 128×96 图集切块拼出，无新增贴图</div>
+    <div class="tbl" id="tblB"></div>
+  </div>
+</div>
+<script type="module">
+import { renderUnit, measureAmbiguity, compareVariants } from '../src/dirsprites.js';
+import { assemble, allVariants, atlasIdentity, buildAtlas, CELL, VARIANTS } from '../src/partsprites.js';
+
+const cvA = document.getElementById('cvA');
+const cvsB = document.getElementById('cvB');
+const gA = cvA.getContext('2d');
+const gB = cvsB.getContext('2d');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+
+let variant = 'sword';
+let rows = [];
+let metrics = null;
+
+function sizeCanvas(cv, g) {
+  const r = cv.getBoundingClientRect();
+  cv.width = Math.round(r.width * dpr);
+  cv.height = Math.round(r.height * dpr);
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { w: r.width, h: r.height };
+}
+
+function drawA() {
+  const { w, h } = sizeCanvas(cvA, gA);
+  gA.fillStyle = '#55585f';
+  gA.fillRect(0, 0, w, h);
+
+  const H = Math.min(h * 0.34, 190);
+  const slotW = w / 3;
+  const baseY = h * 0.46;
+  const r = renderUnit({ h: H, variant });
+  metrics = measureAmbiguity(r.data);
+
+  // 原图
+  gA.imageSmoothingEnabled = true;
+  const sX = Math.round(r.canvas.width * (H / (r.canvas.height - 16)));
+  gA.drawImage(r.canvas, slotW * 0.5 - r.canvas.width / 2, baseY - r.canvas.height + 8);
+  label('原图', slotW * 0.5, baseY + 26);
+
+  // 镜像
+  gA.save();
+  gA.translate(slotW * 1.5 + r.canvas.width / 2, baseY - r.canvas.height + 8);
+  gA.scale(-1, 1);
+  gA.drawImage(r.canvas, 0, 0);
+  gA.restore();
+  label('镜像', slotW * 1.5, baseY + 26);
+
+  // 叠加：红 = 只在原图，绿 = 只在镜像，白 = 两者都有
+  const ox = slotW * 2.5 - r.canvas.width / 2, oy = baseY - r.canvas.height + 8;
+  const tmp = document.createElement('canvas');
+  tmp.width = r.canvas.width; tmp.height = r.canvas.height;
+  const tg = tmp.getContext('2d');
+  const img = new ImageData(new Uint8ClampedArray(r.data.data), r.data.width, r.data.height);
+  const mir = new ImageData(new Uint8ClampedArray(r.data.data), r.data.width, r.data.height);
+  for (let y = 0; y < r.data.height; y++) {
+    for (let x = 0; x < r.data.width; x++) {
+      const i = (y * r.data.width + x) * 4;
+      const j = (y * r.data.width + (r.data.width - 1 - x)) * 4;
+      const a = r.data.data[i + 3] > 24, b = r.data.data[j + 3] > 24;
+      if (a && b) { img.data[i] = 240; img.data[i + 1] = 245; img.data[i + 2] = 250; img.data[i + 3] = 210; }
+      else if (a) { img.data[i] = 255; img.data[i + 1] = 90; img.data[i + 2] = 76; img.data[i + 3] = 220; }
+      else { img.data[i] = 0; img.data[i + 1] = 0; img.data[i + 2] = 0; img.data[i + 3] = 0; }
+    }
+  }
+  for (let y = 0; y < r.data.height; y++) {
+    for (let x = 0; x < r.data.width; x++) {
+      const i = (y * r.data.width + x) * 4;
+      const j = (y * r.data.width + (r.data.width - 1 - x)) * 4;
+      const a = r.data.data[i + 3] > 24, b = r.data.data[j + 3] > 24;
+      if (!a && b) { img.data[i] = 90; img.data[i + 1] = 240; img.data[i + 2] = 150; img.data[i + 3] = 220; }
+    }
+  }
+  tg.putImageData(img, 0, 0);
+  gA.imageSmoothingEnabled = false;
+  gA.drawImage(tmp, ox, oy);
+  label('叠加', slotW * 2.5, baseY + 26);
+
+  document.getElementById('tblA').innerHTML = renderTable();
+
+  function label(t, cx, cy) {
+    gA.fillStyle = 'rgba(224,230,236,.9)';
+    gA.font = '11px ui-monospace, monospace';
+    gA.textAlign = 'center';
+    gA.fillText(t, cx, cy);
+    gA.textAlign = 'left';
+  }
+}
+
+function renderTable() {
+  const head = '<tr><th>武器</th><th>flipDiff</th><th>mirrorIoU</th><th>massSkew</th><th>模糊度</th></tr>';
+  const body = rows.map((r) => {
+    const good = r.ambiguity >= 70;
+    return `<tr><td>${r.variant === 'sword' ? '剑尖' : r.variant === 'axe' ? '斧头' : '长矛'}</td>
+      <td>${r.flipDiff}</td><td>${r.mirrorIoU}</td><td>${r.massSkew}</td>
+      <td class="${good ? 'ok' : 'bad'}">${r.ambiguity}</td></tr>`;
+  }).join('');
+  return `<table>${head}${body}</table>
+    <div style="margin-top:4px;color:#9aa4ae">当前 <b style="color:#fff">${variant}</b>：
+    flipDiff=${metrics.flipDiff} IoU=${metrics.mirrorIoU} skew=${metrics.massSkew}
+    模糊度 <b class="${metrics.ambiguity >= 70 ? 'ok' : 'bad'}">${metrics.ambiguity}</b>/100</div>`;
+}
+
+function drawB() {
+  const { w, h } = sizeCanvas(cvsB, gB);
+  gB.fillStyle = '#4b4e55';
+  gB.fillRect(0, 0, w, h);
+
+  const all = allVariants();
+  const cols = 8, gapX = w / cols;
+  const rowsN = Math.ceil(all.length / cols);
+  const bodyH = Math.min(gapX * 0.86, (h * 0.62) / rowsN);
+  const top = h * 0.16;
+
+  let draws = 0;
+  all.forEach((v, i) => {
+    const cx = (i % cols) * gapX + gapX * 0.5;
+    const cy = top + Math.floor(i / cols) * bodyH * 1.22 + bodyH;
+    const r = assemble(gB, v.variant, cx, cy, 1, { bodyH, flipX: i % 2 === 1 });
+    draws += r.draws;
+  });
+  // 底部：图集本体
+  const atlas = buildAtlas();
+  const as = Math.min((w * 0.5) / atlas.w, (h * 0.2) / atlas.h);
+  const ax = 14, ay = h - atlas.h * as - 12;
+  gB.fillStyle = 'rgba(20,22,26,.5)';
+  gB.fillRect(ax - 6, ay - 6, atlas.w * as + 12, atlas.h * as + 12);
+  gB.imageSmoothingEnabled = false;
+  gB.drawImage(atlas.canvas, ax, ay, atlas.w * as, atlas.h * as);
+  // 格子线
+  gB.strokeStyle = 'rgba(255,255,255,.22)';
+  gB.lineWidth = 1;
+  for (const [k, c] of Object.entries(CELL)) {
+    gB.strokeRect(ax + c.x * as, ay + c.y * as, c.w * as, c.h * as);
+    gB.fillStyle = 'rgba(230,236,242,.75)';
+    gB.font = '9px ui-monospace, monospace';
+    gB.fillText(k, ax + c.x * as + 2, ay + c.y * as + 9);
+  }
+
+  const id = atlasIdentity();
+  document.getElementById('tblB').innerHTML =
+    `<table>
+      <tr><th>变体</th><td>${all.length}（2^${VARIANTS.length - 1}）</td></tr>
+      <tr><th>本帧 drawImage</th><td>${draws}</td></tr>
+      <tr><th>图集</th><td>1 张 ${id.w}×${id.h}（${(id.bytes / 1024).toFixed(1)}KB，${id.cells} 格）</td></tr>
+      <tr><th>每个变体的贴图数</th><td class="ok">1（同一个图集引用）</td></tr>
+    </table>`;
+}
+
+document.querySelectorAll('.ctl button').forEach((b) => {
+  b.onclick = () => {
+    variant = b.dataset.v;
+    rows = compareVariants({ h: 140 });
+    drawA();
+  };
+});
+
+function relayout() {
+  rows = compareVariants({ h: 140 });
+  drawA();
+  drawB();
+}
+addEventListener('resize', relayout);
+relayout();
+
+window.__units = {
+  compareVariants, measureAmbiguity, renderUnit, allVariants, assemble, atlasIdentity,
+  get rows() { return rows; }, get metrics() { return metrics; },
+};
+</script>
+</body>
+</html>

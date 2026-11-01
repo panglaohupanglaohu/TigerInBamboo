@@ -1,0 +1,43 @@
+✔ hip is real parent of knee/hock/hoof and moves downstream but not opposite leg or hatch (39.342667ms)
+✔ each link pivot rotates rigid children and all downstream links; reset exact (20.228042ms)
+✔ night belly API/rope coordinates and raised pose remain compatible with actor .72 scale (12.71875ms)
+✔ factory scale scales link pivots and rider anchors once while wheel/chassis extent stays proportional (24.602459ms)
+✔ guardian joint chain moves downstream, retains pedestal and resets (32.591625ms)
+✔ body detach preserves world and restoration returns exact base pose (18.0725ms)
+✔ all rigid links own meshes and repeated animation keeps finite geometry (209.081084ms)
+✔ real airship factory summons within rope reach and F starts boarding at several elevations (14.744375ms)
+✔ Q closes both editors and restores player camera before summoning (0.682875ms)
+✔ key-only Q works; a closed panel is untouched (0.070583ms)
+✔ typing, IME, modifiers, held Q and unrelated keys do not summon (0.081542ms)
+✔ storm darkens nearby rendered sky, flashes, and restores without accumulating (2.259625ms)
+✔ late gate binding supplies receiving architecture, budgeted lamps and day/night globes (4.905458ms)
+✔ port trees have connected branches and full volume muted crowns in four draw calls (14.474542ms)
+✔ whole canopy is kept out of finite train envelope, preserving root at final rotated harbor (17.113417ms)
+✔ clear trees retain their size; missing railway is reported unverified (5.802875ms)
+✔ an impossible root location remains explicitly unresolved rather than hiding the tree or moving railway (5.082875ms)
+✔ weathering hooks standard shader once with declared uniform and no dark grid (0.661917ms)
+✔ coping wear removes corners within the original envelope and stays finite (0.95075ms)
+✔ gate traffic/walk geometry and part identities remain identical (53.020666ms)
+✔ shared cliff normals change while flat rim, positions, triangles and source remain unchanged (1.863333ms)
+✔ default off and authored edge locks preserve original shading (0.30125ms)
+✔ indexed input keeps triangle order/attributes, invalid coordinates rejected (0.766791ms)
+✔ bounded actual relief relaxation moves interior only and locks source border (1.725208ms)
+✔ new construction shelf normal matches radial up, keeps fixed plaza and old city (0.722709ms)
+✔ new shore drops steeply outside preserved plaza, never raises outer rock into tracks (2.208083ms)
+✔ actual vehicle OBB sets finite reach, real animated curtain stays seaward, and input geometry is untouched (30.170208ms)
+✔ world rotation and waterfall yaw preserve local reach and sea footprint (16.502334ms)
+✔ two supplied lanes use their actual measured body envelopes and both travel directions (8.3875ms)
+✔ insufficient under-sill clearance and overlong cantilever reject without usable options (1.005209ms)
+✔ all receiving sea samples must exist and known land over sea is rejected (6.608666ms)
+✔ explicit selected old-shore subrange excludes a distant return branch; whole closed global route rejected (7.498ms)
+✔ no crossing and sample budget are explicit unsuccessful surveys (0.365292ms)
+✔ reject malformed geometry contracts and samplers instead of silently supplying guessed heights (0.652458ms)
+✔ all selected poses test actual stone, including a body wholly enclosed behind the curtain band (6.892083ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 320.881083

@@ -1,0 +1,22 @@
+  // 藻类簇：湖底散布的蓝绿发光藻团（高低起伏，营造水下植被层）
+  const algaeTuftMat = toonMat(ALGAE_GLOW, { flatShading: true });
+  const algaeDarkMat = toonMat(0x16527e, { flatShading: true });
+  for (let i = 0; i < 26; i++) {
+    const a = rnd() * Math.PI * 2;
+    const d = 1.5 + rnd() * 11;
+    const clump = new THREE.Group();
+    const blades = 3 + ((rnd() * 4) | 0);
+    for (let b = 0; b < blades; b++) {
+      const blade = part(
+        new THREE.ConeGeometry(0.12 + rnd() * 0.1, 1.0 + rnd() * 1.8, 4),
+        rnd() < 0.5 ? algaeTuftMat : algaeDarkMat,
+        0.008
+      );
+      blade.position.set((rnd() - 0.5) * 0.6, (0.5 + rnd() * 0.9), (rnd() - 0.5) * 0.6);
+      blade.rotation.z = (rnd() - 0.5) * 0.4;
+      clump.add(blade);
+    }
+    clump.position.set(Math.cos(a) * d, SWAMP_FLOOR_Y + 0.2, Math.sin(a) * d);
+    swampZone.add(clump);
+  }
+

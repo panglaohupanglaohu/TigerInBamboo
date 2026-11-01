@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-22",
+  "actual_study": [
+    {
+      "method": "triangle_hex",
+      "post": "https://x.com/OskSta/status/1670790425232175108",
+      "image_actually_viewed_this_round": "TigerMessenger/artifacts/research/oskar-series-20261006/1670790425232175108/contact-sheet.jpg",
+      "sha256": "d6d3ba60cb582937baa3842262d05502c20720259f5b1f48ee55acc2c9eb4ca2",
+      "view_mode": "chronological contact sheet interpreted by root; discrete visual observations, not continuous playback"
+    },
+    {
+      "method": "river_wfc",
+      "post": "https://x.com/OskSta/status/1769691526924292506",
+      "image_actually_viewed_this_round": "TigerMessenger/artifacts/research/oskar-six-methods-20261022/1769691526924292506/contact-sheet.jpg",
+      "sha256": "b17bb967337121660c53b1072b78b055a02d72592aaac081d36a9e2b8ea2e4df",
+      "view_mode": "chronological contact sheet interpreted by root; discrete visual observations, not continuous playback"
+    },
+    {
+      "method": "shore_structure",
+      "post": "https://x.com/OskSta/status/1849732997945110651",
+      "image_actually_viewed_this_round": "TigerMessenger/artifacts/research/oskar-six-methods-20261022/1849732997945110651/contact-sheet.jpg",
+      "sha256": "20641ea0179bdf8c53429342e4e391e1735a893b97ed922a810d41c03c36be41",
+      "view_mode": "chronological contact sheet interpreted by root; discrete visual observations, not continuous playback"
+    },
+    {
+      "method": "shore_vertex_loop",
+      "post": "https://x.com/OskSta/status/1991101097818403263",
+      "image_actually_viewed_this_round": "TigerMessenger/artifacts/research/oskar-five-gifs-20261005/1991101097818403263-sheet.jpg",
+      "sha256": "a48075e7c72a935a76517f650b51fe2939eb1f1f49e698a28177e99c0b93760b",
+      "view_mode": "chronological contact sheet interpreted by root; discrete visual observations, not continuous playback"
+    },
+    {
+      "method": "tree_impostor",
+      "post": "https://x.com/OskSta/status/1849427564034498642",
+      "image_actually_viewed_this_round": "TigerMessenger/artifacts/research/oskar-five-gifs-20261005/1849427564034498642-sheet.jpg",
+      "sha256": "112ddf7faa00ee5df8b3ad19c07a6648bc6ac49895e22804a32aaa9507e5fb8d",
+      "view_mode": "chronological contact sheet interpreted by root; discrete visual observations, not continuous playback"
+    },
+    {
+      "method": "cloud_shared_impostor",
+      "post": "https://x.com/OskSta/status/1852334860137849222",
+      "image_actually_viewed_this_round": "TigerMessenger/artifacts/research/oskar-five-gifs-20261005/1852334860137849222-sheet.jpg",
+      "sha256": "3f0ece2f4075c3a6240f13a55a17a9e959c079e0ea04776b5c485177bfb2ca51",
+      "view_mode": "chronological contact sheet interpreted by root; discrete visual observations, not continuous playback"
+    },
+    {
+      "method": "binary_packer",
+      "post": "https://x.com/OskSta/status/1764958522398146667",
+      "image_actually_viewed_this_round": "TigerMessenger/artifacts/research/oskar-series-20261006/1764958522398146667/contact-sheet.jpg",
+      "sha256": "cb36cebfa0e0c6e97009842bf236f530ea441f843eb58cde39e8cf49e64cbdad",
+      "view_mode": "chronological contact sheet interpreted by root; discrete visual observations, not continuous playback"
+    },
+    {
+      "method": "inverted_hull",
+      "post": "https://x.com/OskSta/status/1751945034851570056",
+      "image_actually_viewed_this_round": "TigerMessenger/artifacts/research/oskar-series-20261006/1751945034851570056/contact-sheet.jpg",
+      "sha256": "230b4a5e2f6970925cea08a5f8e92f473f35c1207460205c9c1b99eb7b780b0f",
+      "view_mode": "chronological contact sheet interpreted by root; discrete visual observations, not continuous playback"
+    }
+  ],
+  "new_stream_samples": [
+    "1769691526924292506",
+    "1849732997945110651"
+  ],
+  "raw_video_saved": false,
+  "detail_images": [
+    "oskar-series-20261006/1670790425232175108/frame-05.png",
+    "oskar-five-gifs-20261005/1849427564034498642-detail.png",
+    "oskar-series-20261006/1751945034851570056/frame-04.png"
+  ],
+  "production_code_read": [
+    "src/procgen/graph/irregularQuadGrid.js",
+    "src/procgen/wfc/propagator.js",
+    "src/world/highlandShoreWaves.js",
+    "src/world/seaStackShoreContact.js",
+    "src/render/clouds/impostorAtlasBuilder.js",
+    "src/render/clouds/cloudImpostorMaterial.js",
+    "src/assets/toon.js",
+    "src/world/backlitHighlight.js"
+  ],
+  "production_code_modified": []
+}

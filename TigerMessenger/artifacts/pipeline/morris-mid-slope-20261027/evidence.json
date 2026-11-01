@@ -1,0 +1,60 @@
+{
+  "task": "Morris actual lower music-court and bridge-tree integration",
+  "target": "Preserve island identity and bridge; lower original musician ensemble to real mid shoulder; main route skirts court then climbs castle; add one plane tree beside bridge",
+  "measurements": {
+    "castleStep": 0.040000000000009805,
+    "courtFloorY": 4.0482855747050905,
+    "castleFloorY": 9.875669707246084,
+    "minimumMusicCourtCentreDistance": 6.679542740880438,
+    "largestFinalPerSegmentDrop": 0.01409650911179483,
+    "minimumSeparateCentrelineDistance": 3.7031128711775096,
+    "roadMaxRadialGrade": 0.14846434036785147,
+    "savedRailCentreDistance": 17.764600246062336,
+    "approachMaxLocalGrade": 0.28137043409671203,
+    "approachLargestStep": 0.04091985386563124,
+    "originalPineMinimumRoadEdgeClearance": 3.057809161050845,
+    "routeLength": 181.2638010233845,
+    "bridgeTree": {
+      "position": [
+        -2,
+        1.5718700794902247,
+        33
+      ],
+      "height": 18.331310916468503,
+      "roadCenterDistance": 9.694853054247252
+    }
+  },
+  "checks": [
+    {
+      "name": "Production terrain and landscape13checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full production island roots and ray support4checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Placement function synthetic identity/offset/support4checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Normal current GPU and actual full route ride",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "observations": [
+    "No current GPU inspected by this agent. Source generated terrain floor is really lower, not a palette effect.",
+    "Main route14.846percent excludes bridge. Short court branch28.137percent is separately measured; per sample step4.092cm.",
+    "First two-Dubins candidate created a loop and was rejected. Initial overly strict24percent branch check failed; final policy accepts bounded short incline under32percent with5cm step cap, still pending normal ride.",
+    "No speculative railway crossing built; saved rail/road clearance17.765m."
+  ],
+  "constraints": [
+    "Do not count text triage as scene or riding acceptance.",
+    "Keep original castle, elder ensemble, music identity, bridge and railway.",
+    "Parent edits separate modules; no reverting other source changes."
+  ]
+}

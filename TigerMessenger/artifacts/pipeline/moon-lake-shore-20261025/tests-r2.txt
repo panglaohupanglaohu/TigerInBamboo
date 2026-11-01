@@ -1,0 +1,12 @@
+✔ intersecting circle crescent has one simple boundary and no outside hole (3.2885ms)
+✔ deep disc is clipped inside both lake boundary and original deep radius (6.607333ms)
+✔ shore band stays inside existing path and cannot extrude pointed broad panels (4.492125ms)
+✔ outer bank seats to real visible mesh without changing that source geometry (5.550542ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 81.236291

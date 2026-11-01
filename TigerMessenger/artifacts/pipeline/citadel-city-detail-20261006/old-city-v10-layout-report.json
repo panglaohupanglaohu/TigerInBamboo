@@ -1,0 +1,658 @@
+{
+  "version": "target-old-city-10-tower-centred-terraces",
+  "target": "target-v5-street-cameras.png",
+  "seed": 20261005,
+  "layout": {
+    "target": "target-v5-street-cameras.png",
+    "method": "authored tower flanks, uneven terrace positions, height falloff and three upper-wall setbacks; not WFC positioning",
+    "towerPosition": [
+      11.55,
+      8.3,
+      -11.15
+    ],
+    "towerMoved": false,
+    "existingPublicRoutesChanged": false,
+    "terrainChanged": false,
+    "changes": [
+      {
+        "id": "house-0--1-0",
+        "before": {
+          "position": [
+            -5.8,
+            0.3,
+            8.85
+          ],
+          "width": 4.85,
+          "authoredHeight": 7.6,
+          "roofY": 9.149999999999999
+        },
+        "after": {
+          "position": [
+            -5.65,
+            0.3,
+            9.4
+          ],
+          "width": 4.6,
+          "authoredHeight": 6.18,
+          "roofY": 7.7299999999999995
+        },
+        "supportTerrace": "terrace-0--1"
+      },
+      {
+        "id": "house-0--1-1",
+        "before": {
+          "position": [
+            -11.55,
+            0.3,
+            9.45
+          ],
+          "width": 6.7,
+          "authoredHeight": 7,
+          "roofY": 9.47
+        },
+        "after": {
+          "position": [
+            -11.1,
+            0.3,
+            8.9
+          ],
+          "width": 6.15,
+          "authoredHeight": 6.88,
+          "roofY": 9.35
+        },
+        "supportTerrace": "terrace-0--1"
+      },
+      {
+        "id": "house-0--1-2",
+        "before": {
+          "position": [
+            -17.3,
+            0.3,
+            8.45
+          ],
+          "width": 4.85,
+          "authoredHeight": 7,
+          "roofY": 8.55
+        },
+        "after": {
+          "position": [
+            -17.05,
+            0.3,
+            9.25
+          ],
+          "width": 4.75,
+          "authoredHeight": 5.3,
+          "roofY": 6.85
+        },
+        "supportTerrace": "terrace-0--1"
+      },
+      {
+        "id": "house-0-1-0",
+        "before": {
+          "position": [
+            5.8,
+            0.3,
+            8.85
+          ],
+          "width": 4.85,
+          "authoredHeight": 7.6,
+          "roofY": 9.149999999999999
+        },
+        "after": {
+          "position": [
+            5.55,
+            0.3,
+            8.85
+          ],
+          "width": 4.5,
+          "authoredHeight": 6.88,
+          "roofY": 8.43
+        },
+        "supportTerrace": "terrace-0-1"
+      },
+      {
+        "id": "house-0-1-1",
+        "before": {
+          "position": [
+            11.55,
+            0.3,
+            9.45
+          ],
+          "width": 6.7,
+          "authoredHeight": 8.2,
+          "roofY": 9.75
+        },
+        "after": {
+          "position": [
+            11,
+            0.3,
+            9.35
+          ],
+          "width": 6.2,
+          "authoredHeight": 7.58,
+          "roofY": 9.129999999999999
+        },
+        "supportTerrace": "terrace-0-1"
+      },
+      {
+        "id": "house-0-1-2",
+        "before": {
+          "position": [
+            17.3,
+            0.3,
+            8.45
+          ],
+          "width": 4.85,
+          "authoredHeight": 7,
+          "roofY": 8.55
+        },
+        "after": {
+          "position": [
+            17,
+            0.3,
+            8.9
+          ],
+          "width": 4.7,
+          "authoredHeight": 5.82,
+          "roofY": 7.37
+        },
+        "supportTerrace": "terrace-0-1"
+      },
+      {
+        "id": "house-1--1-0",
+        "before": {
+          "position": [
+            -5.8,
+            4.3,
+            -1.15
+          ],
+          "width": 4.85,
+          "authoredHeight": 7.6,
+          "roofY": 13.149999999999999
+        },
+        "after": {
+          "position": [
+            -5.7,
+            4.3,
+            -0.55
+          ],
+          "width": 4.6,
+          "authoredHeight": 7.2,
+          "roofY": 12.75
+        },
+        "supportTerrace": "terrace-1--1"
+      },
+      {
+        "id": "house-1--1-1",
+        "before": {
+          "position": [
+            -11.55,
+            4.3,
+            -0.5499999999999999
+          ],
+          "width": 6.7,
+          "authoredHeight": 8.2,
+          "roofY": 13.75
+        },
+        "after": {
+          "position": [
+            -11.1,
+            4.3,
+            -1.15
+          ],
+          "width": 6,
+          "authoredHeight": 6.12,
+          "roofY": 11.67
+        },
+        "supportTerrace": "terrace-1--1"
+      },
+      {
+        "id": "house-1--1-2",
+        "before": {
+          "position": [
+            -17.3,
+            4.3,
+            -1.5499999999999998
+          ],
+          "width": 4.85,
+          "authoredHeight": 7,
+          "roofY": 15.07
+        },
+        "after": {
+          "position": [
+            -17.05,
+            4.3,
+            -0.75
+          ],
+          "width": 4.8,
+          "authoredHeight": 5.72,
+          "roofY": 13.969999999999999
+        },
+        "supportTerrace": "terrace-1--1"
+      },
+      {
+        "id": "house-1-1-0",
+        "before": {
+          "position": [
+            5.8,
+            4.3,
+            -1.15
+          ],
+          "width": 4.85,
+          "authoredHeight": 8.2,
+          "roofY": 13.75
+        },
+        "after": {
+          "position": [
+            5.7,
+            4.3,
+            -1.1
+          ],
+          "width": 4.6,
+          "authoredHeight": 6.32,
+          "roofY": 11.870000000000001
+        },
+        "supportTerrace": "terrace-1-1"
+      },
+      {
+        "id": "house-1-1-1",
+        "before": {
+          "position": [
+            11.55,
+            4.3,
+            -0.5499999999999999
+          ],
+          "width": 6.7,
+          "authoredHeight": 5.8,
+          "roofY": 13.27
+        },
+        "after": {
+          "position": [
+            11.15,
+            4.3,
+            -0.5
+          ],
+          "width": 6.1,
+          "authoredHeight": 9.12,
+          "roofY": 16.49
+        },
+        "supportTerrace": "terrace-1-1"
+      },
+      {
+        "id": "house-1-1-2",
+        "before": {
+          "position": [
+            17.3,
+            4.3,
+            -1.5499999999999998
+          ],
+          "width": 4.85,
+          "authoredHeight": 6.3999999999999995,
+          "roofY": 11.95
+        },
+        "after": {
+          "position": [
+            17.1,
+            4.3,
+            -1.05
+          ],
+          "width": 4.65,
+          "authoredHeight": 7.22,
+          "roofY": 12.77
+        },
+        "supportTerrace": "terrace-1-1"
+      },
+      {
+        "id": "house-2--1-0",
+        "before": {
+          "position": [
+            -5.8,
+            8.3,
+            -11.15
+          ],
+          "width": 4.85,
+          "authoredHeight": 8.2,
+          "roofY": 22.28
+        },
+        "after": {
+          "position": [
+            -6,
+            8.3,
+            -10.6
+          ],
+          "width": 4.8,
+          "authoredHeight": 5.9,
+          "roofY": 19.98
+        },
+        "supportTerrace": "terrace-2--1"
+      },
+      {
+        "id": "house-2--1-1",
+        "before": {
+          "position": [
+            -11.55,
+            8.3,
+            -10.55
+          ],
+          "width": 6.7,
+          "authoredHeight": 5.8,
+          "roofY": 15.350000000000001
+        },
+        "after": {
+          "position": [
+            16.55,
+            8.3,
+            -10.7
+          ],
+          "width": 4.6,
+          "authoredHeight": 7.08,
+          "roofY": 16.630000000000003
+        },
+        "supportTerrace": "terrace-2-1"
+      },
+      {
+        "id": "house-2-1-0",
+        "before": {
+          "position": [
+            5.8,
+            8.3,
+            -11.15
+          ],
+          "width": 4.85,
+          "authoredHeight": 7,
+          "roofY": 16.55
+        },
+        "after": {
+          "position": [
+            6.4,
+            8.3,
+            -10.95
+          ],
+          "width": 4.8,
+          "authoredHeight": 8.72,
+          "roofY": 18.270000000000003
+        },
+        "supportTerrace": "terrace-2-1"
+      }
+    ]
+  },
+  "bounds": {
+    "min": [
+      -19.800000111262005,
+      -1.9073486257070726e-07,
+      -13.705
+    ],
+    "max": [
+      19.800000111262,
+      33.000000005960466,
+      16.65
+    ],
+    "size": [
+      39.600000222524,
+      33.000000196695325,
+      30.354999999999997
+    ]
+  },
+  "arcadeLinks": [
+    {
+      "id": "house-0--1-1--house-0--1-0",
+      "houses": [
+        "house-0--1-1",
+        "house-0--1-0"
+      ],
+      "source": "actual-same-level-body-adjacency",
+      "edgeX": -7.987499999999999,
+      "centerZ": 9.15,
+      "floorY": 0.52,
+      "width": 2,
+      "springY": 1.9000000000000001,
+      "crownY": 2.9,
+      "bodyGap": 0.07499999999999929,
+      "sharedDepth": 4.199999999999999,
+      "publicNavigationInstalled": false
+    },
+    {
+      "id": "house-0--1-2--house-0--1-1",
+      "houses": [
+        "house-0--1-2",
+        "house-0--1-1"
+      ],
+      "source": "actual-same-level-body-adjacency",
+      "edgeX": -14.424999999999999,
+      "centerZ": 9.075,
+      "floorY": 0.52,
+      "width": 2,
+      "springY": 1.9000000000000001,
+      "crownY": 2.9,
+      "bodyGap": 0.5,
+      "sharedDepth": 4.35,
+      "publicNavigationInstalled": false
+    },
+    {
+      "id": "house-0-1-0--house-0-1-1",
+      "houses": [
+        "house-0-1-0",
+        "house-0-1-1"
+      ],
+      "source": "actual-same-level-body-adjacency",
+      "edgeX": 7.8500000000000005,
+      "centerZ": 9.1,
+      "floorY": 0.52,
+      "width": 2,
+      "springY": 1.9000000000000001,
+      "crownY": 2.9,
+      "bodyGap": 0.10000000000000053,
+      "sharedDepth": 4.199999999999999,
+      "publicNavigationInstalled": false
+    },
+    {
+      "id": "house-0-1-1--house-0-1-2",
+      "houses": [
+        "house-0-1-1",
+        "house-0-1-2"
+      ],
+      "source": "actual-same-level-body-adjacency",
+      "edgeX": 14.375,
+      "centerZ": 9.125,
+      "floorY": 0.52,
+      "width": 2,
+      "springY": 1.9000000000000001,
+      "crownY": 2.9,
+      "bodyGap": 0.5500000000000003,
+      "sharedDepth": 4.25,
+      "publicNavigationInstalled": false
+    },
+    {
+      "id": "house-1--1-1--house-1--1-0",
+      "houses": [
+        "house-1--1-1",
+        "house-1--1-0"
+      ],
+      "source": "actual-same-level-body-adjacency",
+      "edgeX": -8.05,
+      "centerZ": -0.8500000000000001,
+      "floorY": 4.52,
+      "width": 2,
+      "springY": 5.9,
+      "crownY": 6.9,
+      "bodyGap": 0.09999999999999964,
+      "sharedDepth": 4.1000000000000005,
+      "publicNavigationInstalled": false
+    },
+    {
+      "id": "house-1--1-2--house-1--1-1",
+      "houses": [
+        "house-1--1-2",
+        "house-1--1-1"
+      ],
+      "source": "actual-same-level-body-adjacency",
+      "edgeX": -14.375,
+      "centerZ": -0.95,
+      "floorY": 4.52,
+      "width": 2,
+      "springY": 5.9,
+      "crownY": 6.9,
+      "bodyGap": 0.5500000000000012,
+      "sharedDepth": 4.300000000000001,
+      "publicNavigationInstalled": false
+    },
+    {
+      "id": "house-1-1-0--house-1-1-1",
+      "houses": [
+        "house-1-1-0",
+        "house-1-1-1"
+      ],
+      "source": "actual-same-level-body-adjacency",
+      "edgeX": 8.049999999999999,
+      "centerZ": -0.8,
+      "floorY": 4.52,
+      "width": 2,
+      "springY": 5.9,
+      "crownY": 6.9,
+      "bodyGap": 0.10000000000000142,
+      "sharedDepth": 4.1,
+      "publicNavigationInstalled": false
+    },
+    {
+      "id": "house-1-1-1--house-1-1-2",
+      "houses": [
+        "house-1-1-1",
+        "house-1-1-2"
+      ],
+      "source": "actual-same-level-body-adjacency",
+      "edgeX": 14.4875,
+      "centerZ": -0.775,
+      "floorY": 4.52,
+      "width": 2,
+      "springY": 5.9,
+      "crownY": 6.9,
+      "bodyGap": 0.575000000000002,
+      "sharedDepth": 4.15,
+      "publicNavigationInstalled": false
+    }
+  ],
+  "sharedFloors": [
+    {
+      "linkId": "house-0--1-1--house-0--1-0",
+      "center": [
+        -7.987499999999999,
+        0.52,
+        9.15
+      ],
+      "width": 0.19499999999999929,
+      "depth": 2.6,
+      "supportedBy": "terrace-0--1"
+    },
+    {
+      "linkId": "house-0--1-2--house-0--1-1",
+      "center": [
+        -14.424999999999999,
+        0.52,
+        9.075
+      ],
+      "width": 0.62,
+      "depth": 2.6,
+      "supportedBy": "terrace-0--1"
+    },
+    {
+      "linkId": "house-0-1-0--house-0-1-1",
+      "center": [
+        7.8500000000000005,
+        0.52,
+        9.1
+      ],
+      "width": 0.22000000000000053,
+      "depth": 2.6,
+      "supportedBy": "terrace-0-1"
+    },
+    {
+      "linkId": "house-0-1-1--house-0-1-2",
+      "center": [
+        14.375,
+        0.52,
+        9.125
+      ],
+      "width": 0.6700000000000003,
+      "depth": 2.6,
+      "supportedBy": "terrace-0-1"
+    },
+    {
+      "linkId": "house-1--1-1--house-1--1-0",
+      "center": [
+        -8.05,
+        4.52,
+        -0.8500000000000001
+      ],
+      "width": 0.21999999999999964,
+      "depth": 2.6,
+      "supportedBy": "terrace-1--1"
+    },
+    {
+      "linkId": "house-1--1-2--house-1--1-1",
+      "center": [
+        -14.375,
+        4.52,
+        -0.95
+      ],
+      "width": 0.6700000000000012,
+      "depth": 2.6,
+      "supportedBy": "terrace-1--1"
+    },
+    {
+      "linkId": "house-1-1-0--house-1-1-1",
+      "center": [
+        8.049999999999999,
+        4.52,
+        -0.8
+      ],
+      "width": 0.22000000000000142,
+      "depth": 2.6,
+      "supportedBy": "terrace-1-1"
+    },
+    {
+      "linkId": "house-1-1-1--house-1-1-2",
+      "center": [
+        14.4875,
+        4.52,
+        -0.775
+      ],
+      "width": 0.695000000000002,
+      "depth": 2.6,
+      "supportedBy": "terrace-1-1"
+    }
+  ],
+  "performance": {
+    "meshes": 268,
+    "triangles": 25312,
+    "materials": 9,
+    "geometries": 268
+  },
+  "checks": {
+    "tests": "45/45: oldCity 14, roof WFC 11, roof session 13, entity editor 7",
+    "canonicalPublicMeshesUnchangedFromV8": true,
+    "towerWindows": 20,
+    "deckSupportPoints": 135,
+    "publicFrontBodyRays": 27,
+    "stairToBellSightRays": 9,
+    "sharedArcadeBodyRays": 180,
+    "sharedArcadeFloorPoints": 300,
+    "pairwiseHouseTriangleCrossings": 0,
+    "wfc": {
+      "solveOk": true,
+      "seed": 123,
+      "edges": 23,
+      "streetEdges": 8,
+      "slopeEdges": 15,
+      "geometryBans": 0,
+      "all75IdRoleBoundsTestPassed": true,
+      "legacyLayoutAssertions": "Updated for approved layout: 23 actual edges, geometry-relative domain restriction, two real geometric triangles for bounded backtracking, protected r33 public geometry/IDs/roles preserved."
+    }
+  },
+  "limits": [
+    "GPU visual review pending; no new art score.",
+    "Finite ray/triangle checks, not continuous navigation or containment proof.",
+    "Stair-to-tower sightline checks apply to the authored default roofs, not every WFC role combination.",
+    "All physical plinth corners are checked against unchanged local terrace deck geometry; final scene terrain and external bridge clearance remain integration checks."
+  ],
+  "sourceSha256": "ce64d5d76d58db5e37e4ad41abdb855c3e8ad22e85b18bcbbddf997f391ca9ab"
+}

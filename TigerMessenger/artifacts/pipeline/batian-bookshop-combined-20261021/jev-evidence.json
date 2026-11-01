@@ -1,0 +1,32 @@
+{
+  "task": "Batian bookshop combined operation and weapon mounts",
+  "observations": [
+    "Existing SOCCO carriers and existing 27-roster reused:18 rappelling infantry,3 aboard guards. Town residents draw attached pistols only after threat and return fire. Robots use actual projectile callbacks with90HP infantry versus100 heavy shells,24medium and9light rounds.",
+    "Main normal-entry sortie before batching/final withdrawal patch:18 deployed,30 infantry shots,201 resident return shots,8 resident blast hits,4 robot kills; returnedidle100energy. Not final patched GPU acceptance.",
+    "Production CPU fixture finalcurrent:18deployed/3guards;32trooper shots/38resident shots;6friendly troop blast hits and6resident blast hits;1actualrobot shell killed1trooper;11survivors recovered. No original UUID changes.",
+    "Original rigid troop geometry now rendered with instancing:2025source meshes/75batches; no triangle/model redesign; needs final game visual retest, no promised FPS.",
+    "Weapon bay/6ion nodes now sampled from real hull underside. Allsix inside silhouette at0.08inset; central bay surface inset0.12. Shared emitter mounts used by actual weapons. Traction frustum keeps narrow end at current belly and broad end on ground.",
+    "Casualty withdrawal at60percent ground assault losses, actual friendly blast damage still possible; no building destruction or tiger/fox/player damage. Final normal-game reload in progress."
+  ],
+  "checks": [
+    {
+      "name": "Real models CPU ground combat, return fire, friendly blast and robot actual impact",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Hull surface mounted weapon geometry and prior shield/bomb regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Final batched normal-game GPU and withdrawal observation",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "Use compact text; JEV is not a visual/audio test",
+    "Preserve backups/other edits; no commit/publication; no new production aircraft or troopers"
+  ]
+}

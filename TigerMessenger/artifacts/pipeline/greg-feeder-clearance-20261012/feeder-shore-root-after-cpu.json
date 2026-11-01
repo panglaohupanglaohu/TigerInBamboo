@@ -1,0 +1,64 @@
+{
+  "seed": 7711,
+  "departure": "original",
+  "sampleSpan": [
+    0,
+    150
+  ],
+  "step": 0.25,
+  "buildAndMeasureMs": 11557.380917,
+  "worldScale": 0.5,
+  "method": "BVH triangle AABB squared-distance pruning; exact vertex-to-triangle, nine edge-to-edge distances and triangle SAT for intersections",
+  "pairs": [
+    {
+      "boat": -1,
+      "actor": "actual-shore-root",
+      "samples": 601,
+      "minimumSurfaceDistanceInner": 2.6240927284884723,
+      "minimumSurfaceDistanceWorld": 1.3120463642442362,
+      "triangleTests": 295052,
+      "closest": {
+        "time": 15.5,
+        "boatMesh": "swamp-feeder-leg--1-lower",
+        "actorMesh": "world-tree-trunk",
+        "boatTriangle": [
+          [
+            -0.2026748041735117,
+            24.978528033561094,
+            -6.366215240199987
+          ],
+          [
+            -0.2062720030051119,
+            24.9784828585144,
+            -6.403029352763529
+          ],
+          [
+            -0.19355075369891836,
+            24.86751252760991,
+            -6.410549228893956
+          ]
+        ],
+        "actorTriangle": [
+          [
+            -2.8155672422063933,
+            24.757880168230646,
+            -6.233396055834025
+          ],
+          [
+            -2.678864160210521,
+            21.13492767607751,
+            -6.187628081288372
+          ],
+          [
+            -2.9257048477877063,
+            24.72425784396013,
+            -7.170060596513821
+          ]
+        ]
+      }
+    }
+  ],
+  "containment": "not checked; positive surface distance does not exclude a closed mesh entirely contained inside another",
+  "continuous": "discrete samples only; no swept-time collision certification",
+  "GPU": "not checked; no production source modified"
+}

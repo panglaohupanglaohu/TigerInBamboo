@@ -1,0 +1,7 @@
+{
+  "executedAt": "2026-10-04T10:24:41.319538+00:00",
+  "sourceSHA256": "bed8574149230457435694fe20cd1eed126d7dd2a8451593ae58833ac22da011",
+  "testSHA256": "ff92b77c2236fd8958bb1bf806cbb03499da15373e89ce855ea11870294d5c9b",
+  "exitCode": 0,
+  "stdout": "PASS 7 checks: geometry immutable, idempotent field, surface height, revision binding, scene sun update, rotated rock chart, rebuild revision\n{\"canopyTest\":\"PASS\",\"before\":1,\"under\":0.8,\"outside\":1,\"underSunVisibility\":0.5800000000000001,\"repeatBindBuilds\":1,\"geometryUnchanged\":true}\n"
+}

@@ -1,0 +1,264 @@
+{
+  "revision": "activities-4 / navigation-2 / lake-only-rowing-1",
+  "status": "CPU passed; root GPU pending",
+  "trigger": "Root GPU departing-ship-t8-2 and t19; real flower/shore and departure/stair intersections, not projection overlap. Supersedes first-round safety claims based only on water disc radius33.",
+  "before": {
+    "report": "activities-solids-before.json",
+    "tests": 102,
+    "actualContacts": 77
+  },
+  "changes": [
+    "Five original full-size flower boats remain; routes selected using per-component conservative anatomy/paddle volumes against real bank/slab/stair/natural-cliff/world-tree triangles, not water disc radius",
+    "Fixed flower orientation with short forward/back rowing; signed power sweep follows radial direction, small sideways water drift retained",
+    "Departure longship now stays full-size on a closed in-lake loop with nine-second mooring. No wall hiding, climbing, scaling down or hidden teleport reset",
+    "Main two whale loops tightened and shifted to safe feeding pool; same identities, body meshes and feeder relation. Escort stays outside full oar spread with continuous mooring/sailing transition",
+    "Flower blade no longer stretches with shaft. Two parts per paddle, still two paddles/boat; +10 small draws across five boats, no new rowers",
+    "Four old flower-stem roots reattached to actual sloped-bed ray hits; same stem meshes and endpoint-following behavior",
+    "Escort offset finalized at5.7 inner with continuous lead; keeps outside longship strokes without swinging into nearest flower boat."
+  ],
+  "staticExactTriangles": {
+    "report": "activities-solids-full.json",
+    "actualVisibleActorTests": 2016,
+    "contacts": 0,
+    "timeRange": 82,
+    "sampleStepSeconds": 0.2,
+    "notes": "Actual root.update at30Hz; each flower full58/64/70/76/82sec cycle plus longship52sec; hull, children, paddles, instanced crew/oars and sail included"
+  },
+  "continuousConservativeVolume": {
+    "flower": {
+      "samples": 3505,
+      "points": 47028100,
+      "minY": 24.64034972378828,
+      "maxY": 27.229776557233805,
+      "maxLocalRadius": [
+        3.289502239591969,
+        5.5599090108122,
+        4.829429498938812,
+        4.6556640392762825,
+        3.9497597142959644
+      ],
+      "staticClippedPolygons": 2241,
+      "boats": 5
+    },
+    "longship": {
+      "method": "All visible mesh/instance local bounds across 52s at30Hz, scaled to actual boat2, bob included; expanded .30 inner. 720 half-degree route angles against clipped real solid triangles. Expansion exceeds combined translation plus orientation displacement between samples (<.18 inner, plus pose-sampling margin). Conservative filled hull/mast/oar box plus separate real escort-whale bounds, no centre-only circles.",
+      "bounds": {
+        "min": [
+          -5.49999980926514,
+          -0.9351655237928114,
+          -5.347038748556896
+        ],
+        "max": [
+          7.580000209808353,
+          8.039999732971197,
+          5.347038773292824
+        ]
+      },
+      "escortBounds": {
+        "min": [
+          -2.77535332702032,
+          -2.24815505755138,
+          -7.290982961654669
+        ],
+        "max": [
+          2.9745820655040442,
+          0.7613319356394268,
+          -4.109017038345332
+        ]
+      },
+      "low": 22.851844942448622,
+      "high": 33.1399997329712,
+      "polygons": 4676,
+      "samples": 720,
+      "contacts": []
+    }
+  },
+  "additionalWhaleEvidence": {
+    "whalesAgainstShore": {
+      "report": "activities-whale-solids.json",
+      "tests": 1233,
+      "contacts": 0,
+      "notes": "1233-triangle sample used earlier wider escort offset6.3. Current offset5.7 is additionally covered by latest separate actual escort bounds in720-angle expanded volume sweep."
+    },
+    "latestLongshipAgainstAllWhales": {
+      "report": "activities-animal-clearance-departure.json",
+      "tests": 105,
+      "contacts": 0
+    },
+    "priorFlowersAgainstMainWhales": {
+      "report": "activities-animal-clearance.json",
+      "flowerContacts": 0,
+      "notes": "Four historical escort/longship contacts in this file were subsequently corrected; latest departure-only file proves current0. Do not call this older file a complete pass."
+    },
+    "escortFlowerGap": {
+      "report": "activities-escort-flower-gap.json",
+      "seconds": 180,
+      "samples": 5401,
+      "proxyMinimum": {
+        "minimum": 0.2986272617072476,
+        "at": {
+          "t": 173.06666666666666,
+          "boat": 4
+        }
+      },
+      "actualMeshRadiusAndInkAllowance": 0.07176500089660197,
+      "sampledConservativeLowerBound": 0.22686226081064564,
+      "notes": "Uses actual measured flower vertex radii from complete cycles plus .02 ink allowance; no lifelong all-phase guarantee claimed."
+    }
+  },
+  "tests": {
+    "passed": 11,
+    "log": "activities-solids-regression.txt",
+    "metrics": {
+      "activities-navigation": {
+        "seconds": 180,
+        "samples": 1801,
+        "spans": [
+          1.4317766436136596,
+          1.4317771709992206,
+          1.431779344876001,
+          1.4317730852341217,
+          1.4317817317133597
+        ],
+        "minObstacle": 0.4515255507057905,
+        "minBoatGap": 3.487918718354402,
+        "minEdge": 10.302616769906969,
+        "minDirection": 0.002785285123132919,
+        "minSignedRowAdvance": -9.112284639158368e-05,
+        "maxStemError": 5.102196573270515e-15,
+        "maxRopeError": 5.8927631492873816e-08,
+        "minToolAxis": 0.06287305826514217,
+        "minDepartureGap": 0.8351836900129044,
+        "minWhaleGap": -0.8480959186198591,
+        "maxTailChange": 0.26398947834968567,
+        "minWhaleDirection": 0.9999999999999996,
+        "powerSamples": 9641,
+        "recoverySamples": 6487,
+        "repairPhases": [
+          "inspect",
+          "haul-rope",
+          "secure-and-check"
+        ]
+      },
+      "flower-solid-volumes": {
+        "samples": 3505,
+        "points": 47028100,
+        "minY": 24.64034972378828,
+        "maxY": 27.229776557233805,
+        "staticClippedPolygons": 2241,
+        "boats": 5
+      },
+      "longship-validation": {
+        "seconds": 52,
+        "frames": 1561,
+        "rowers": 52,
+        "maxGrip": 3.66205343881779e-15,
+        "maxWrist": 3.9968028886505635e-15,
+        "maxElbow": 0.0014155712740637426,
+        "minHeading": 0.9999002957980615,
+        "minRecoveryBottom": 25.19316545058986,
+        "maxPowerTop": 25.05762793664243,
+        "wet": 10108,
+        "dry": 64914,
+        "span": 8.950382878992533
+      },
+      "feeder-swimming": {
+        "samples": 648,
+        "draws": 9,
+        "breathingSeconds": [
+          1.5,
+          1.5,
+          1.5
+        ],
+        "submergedSeconds": [
+          4.233333333333333,
+          4.233333333333333,
+          4.233333333333333
+        ],
+        "mouthMin": 24.58,
+        "mouthMax": 25.190000000000005,
+        "noseMin": 24.526142845702374,
+        "noseMax": 25.216358014332044,
+        "minWhaleMouth": 0.7289210038518736,
+        "extrema": [
+          {
+            "upper": [
+              -1.6989523713454977,
+              0.7999995674006919
+            ],
+            "lower": [
+              0.40006186262541826,
+              0.88
+            ]
+          },
+          {
+            "upper": [
+              -2.5,
+              0.7989523713454978
+            ],
+            "lower": [
+              0.22,
+              0.8799381373745818
+            ]
+          },
+          {
+            "upper": [
+              -0.29999900722856826,
+              0.29999894710368197
+            ],
+            "lower": [
+              0.2,
+              0.7199981749797155
+            ]
+          },
+          {
+            "upper": [
+              -0.29999894710368197,
+              0.29999900722856826
+            ],
+            "lower": [
+              0.2,
+              0.719998279196185
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "identityContract": {
+    "flowerBoats": 5,
+    "children": 10,
+    "aboard": 8,
+    "shore": 1,
+    "feeder": 1,
+    "independentOriginalSwimmer": 1,
+    "paddles": 10,
+    "longshipRowers": 52
+  },
+  "GPUNeeded": [
+    "Overall readability of five new flower moorings",
+    "t8.2/t8.8 both paddle phases, real wrists/elbows and unchanged blade size",
+    "t19 full-size longship inside lake, no entrance-wall occlusion",
+    "Fixed-direction flower return stroke and restrained lateral drift",
+    "Escort separation and original feeder surfacing; dock-work identities"
+  ],
+  "limits": [
+    "No final GPU visual pass claimed by this agent",
+    "Longship now performs an in-lake trial voyage, not a physical passage through the staircase to another scene",
+    "Main-whale circular conservative gap can be negative because tail/body lie below boat; actual triangle checks are the evidence",
+    "Dense triangle sampling is reported as sampling. Separate expanded swept/component volumes provide conservative continuous-route evidence",
+    "No overall FPS performance claim"
+  ],
+  "rollback": "activities-solid-before preserves pre-P0 owned files; restore only relevant hunks, not concurrent shared edits. New solids module read-only geometry sampling. Root manages final shared snapshot.",
+  "hashes": {
+    "src/world/swampFlowerActivities.js": "419eabf04729507daf252b85242d47b3c4a55f344f6d320bbbee8a1ec3cf5989",
+    "src/world/swampActivitySolids.js": "0ec9c318d102dd278969e68bca3b5c706b4ba2c2b4f110fb51f925d91a3e17f3",
+    "src/world/swampWarshipRowing.js": "ee9f1e3e46352a37d31fd4462f921a7c7b24982f3f144788d021d0204b953709",
+    "src/world/moebiusSwamp.js": "e400042484d86d861e356b0022710d54e5ea7661abd72587de9712356c7939fc",
+    "src/assets/warshipV6.js": "d2aa459033bef1b36ed71aa828c8dbbfa877b5f31dfc5f4d940c2c8abedf8849",
+    "tests/world/swampActivitySolids.test.mjs": "d6f367b8eb6a52e69d26dbf0a16d8631b51a8273123130c3477aa4a7401d3413",
+    "tests/world/swampActivityNavigation.test.mjs": "dbc1c593152ad6d6a3ce223f9be043a211726a1cdba1dae0cd81e0009d9c613b",
+    "tests/world/swampWarshipRowing.test.mjs": "02ef84b0476015dec0bbb70a73ab675aff939cb66813dc3776e3209e413ed2f4",
+    "tests/world/swampFlowerBoys.test.mjs": "6308744819f55076e79d0208be073055fbacb80a07d3882bb4b060df1d153b5c"
+  }
+}

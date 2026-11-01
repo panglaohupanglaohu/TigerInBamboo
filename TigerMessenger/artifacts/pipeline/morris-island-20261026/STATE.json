@@ -1,0 +1,67 @@
+{
+  "status": "installed-and-normal-GPU-verified",
+  "revision": "morris-island-v2-20261026",
+  "report": {
+    "curledLeafClumps": 83,
+    "flowers": 919,
+    "horsePositions": [
+      [
+        -6,
+        1.3632524647802882,
+        1
+      ],
+      [
+        6,
+        1.6859412463568049,
+        -2
+      ],
+      [
+        1,
+        1.442080505803489,
+        8
+      ]
+    ],
+    "horses": 3,
+    "navigationTraversalVerified": false,
+    "oldSceneMoved": false,
+    "pathWidth": 2.1,
+    "revision": "morris-island-v2-20261026",
+    "site": {
+      "candidates": 72,
+      "envelope": 32,
+      "lat": -62,
+      "lon": -15,
+      "method": "installed collider/landmark/rail point survey",
+      "minimumClearance": 122.81635451919354,
+      "obstacles": 741,
+      "otherObjectsMoved": false,
+      "routeSamples": 2403
+    },
+    "source": "normal-game-installed",
+    "style": "Arts and Crafts / William Morris inspired original geometry",
+    "view": "岛屿全景"
+  },
+  "verification": {
+    "geometryGroundAnimationChecks": 8,
+    "allTwelveHoovesSeatedWithin5mm": true,
+    "componentGPUActuallyViewed": true,
+    "normalOverviewAndHorseAndFlowerGPUActuallyViewed": true,
+    "normalConsoleErrors": [],
+    "fullTravelOrNavigationTraversal": false,
+    "performanceAcceptance": false
+  },
+  "files": {
+    "overview": "normal-overview.png",
+    "horseDetail": "normal-horse-detail.png",
+    "flowers": "normal-flowers.png",
+    "actualSceneReport": "normal-overview-audit.json",
+    "sourceManifest": "source-manifest.json"
+  },
+  "limitations": [
+    "Original stationary grazing animation, not autonomous roaming",
+    "No full boat or airship arrival and footpath traversal performed",
+    "Static authored roots/colliders and railway survey only; moving fleet may pass nearby",
+    "Not an exact replica of the supplied tapestry reference"
+  ],
+  "commitOrPush": false
+}

@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "f7685b9d61816a2c033bbdd5728667adfdf886327da91511beff70e7687b30f9",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.62
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.89,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.91,
+        "lighting": 0,
+        "navigation": 0,
+        "review": 0.08
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.94
+    }
+  },
+  "usage": {
+    "input_tokens": 680,
+    "output_tokens": 91,
+    "cost_usd": 0.000286,
+    "credits_remaining_usd": 4.890794
+  },
+  "elapsed_ms": 2884,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "visual likeness",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "candidate real horse rein and patrol",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

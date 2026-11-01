@@ -1,0 +1,80 @@
+{
+  "revision": "r44",
+  "reviewType": "independent visual comparison, not acceptance",
+  "target": "../citadel-architecture-target-20261005/target-v3-landmarks.png",
+  "imagesViewed": [
+    "../citadel-four-hour-20261005/r44-integrated-landings-clouds-target-front-plants-terrain.png",
+    "../citadel-four-hour-20261005/r44-integrated-landings-clouds-old-city-detail-plants-terrain.png",
+    "../citadel-four-hour-20261005/r44-integrated-landings-clouds-new-city-detail-plants-terrain.png",
+    "../citadel-four-hour-20261005/r44-integrated-landings-clouds-new-plaza-detail-plants-terrain.png"
+  ],
+  "scores": [
+    {
+      "category": "全景布局与两城呼应",
+      "score": 17,
+      "maximum": 25,
+      "evidence": "两城朝湾与主厅层级可读；旧城仍显紧凑，新城侧屋分散，前湾折线栈道强烈抢景。"
+    },
+    {
+      "category": "建筑轮廓与结构细节",
+      "score": 17,
+      "maximum": 25,
+      "evidence": "拱廊、穹顶与入口已读得出；旧塔长空白杆身、重复屋顶，新城孤立高脚屋和大块实心梯侧墙仍偏离目标。"
+    },
+    {
+      "category": "材质与配色",
+      "score": 15,
+      "maximum": 20,
+      "evidence": "粉彩墙、橙顶、蓝穹顶及冷浅岩色形成明确色块；墙面与云体明暗仍较单调，草缘局部锐利。"
+    },
+    {
+      "category": "植被云水环境协调",
+      "score": 8,
+      "maximum": 15,
+      "evidence": "细高柏树带来层次，但扁圆树冠仍明显；云体有鼓起却仍呈长白条、平底和截断端部，广场前树群遮挡铺装。"
+    },
+    {
+      "category": "地标与连接关系",
+      "score": 7,
+      "maximum": 10,
+      "evidence": "雕塑、木马已在新广场清楚可见，桥梯关系较完整；前湾新增连接尺度过强，画面不能证明功能与全路连通。"
+    },
+    {
+      "category": "轮廓边缘与画面完整性",
+      "score": 3,
+      "maximum": 5,
+      "evidence": "主体轮廓完整，但密柱栈道、云端和局部草缘仍产生噪声。"
+    }
+  ],
+  "total": 67,
+  "maximum": 100,
+  "accepted": false,
+  "threshold": ">95",
+  "priorities": [
+    {
+      "rank": 1,
+      "action": "收短旧城滨水折线连接，重整为紧凑浅石承托与少量可读拱洞；保留真实通路和轨道净空。",
+      "reason": "当前密集长细柱与多折平台是全景最抢眼的目标偏差。",
+      "constraint": "不改已冻结山形，不以去掉必要承托换取干净截图。"
+    },
+    {
+      "rank": 2,
+      "action": "在现有建筑足迹内连成街沿：旧城补有节奏的共墙/拱廊和塔冠窗洞关系，新城减轻孤立房脚与巨大实心梯侧墙的视觉重量。",
+      "reason": "目标是层叠连贯城群，当前仍能读成独立楼盒加连接设施。",
+      "constraint": "入口、梯道、桥端及承托都需保留；不靠扩大地形解决。"
+    },
+    {
+      "rank": 3,
+      "action": "修环境轮廓与留白：云改为高低错落的厚团簇且消除长条截端；广场正面树冠减遮挡，保留地标环形铺装的可读空隙。",
+      "reason": "云形与广场树屏是两处近景最明显的目标差距。",
+      "constraint": "不挪原雕塑木马，不把云贴地或遮住主厅；树调整需实际避让而非只改视角。"
+    }
+  ],
+  "limits": [
+    "评分仅依据已查看四张真实PNG与目标图；未把CPU/GPU无错误、参数或接口通过计入美术分。",
+    "评阅者参与部分模块实现，故逐项列出可见缺陷；本报告不是外部盲评。",
+    "相机与目标并非精确同投影，未声称像素匹配率。",
+    "地标可见不证明原actor功能、导航、保存等硬门槛；需另行验证。",
+    "山形r17保持冻结；正在修改但未出现在r44的滨水连接不计入本次结果。"
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "passed": true,
+  "cells": 398,
+  "regions": 11,
+  "passages": 23,
+  "apertureRays": 552,
+  "solidRays": 69,
+  "chainRays": 3,
+  "foundationProbes": 23,
+  "unsupportedFoundation": [
+    {
+      "region": "left-watchtower",
+      "cell": "0,0,1",
+      "delta": -2.700000023841858
+    }
+  ],
+  "rotatedFramePassed": true,
+  "player": {
+    "height": 1.66,
+    "diameter": 0.7,
+    "openingWidth": 1.056,
+    "openingHeight": 1.4280000000000002,
+    "traversable": false
+  },
+  "foundationUnchanged": true,
+  "defaultOffEquivalent": true,
+  "solverPinnedGeometryHashes": [
+    "a2f6a45b1626bd5702f1f29c897e2f06ca4b4dd11532644500ba5a748b913dc2",
+    "492d75a8fa28e57e9c6ce6716f623a3a53819ff7a4fb8a76b343970eadd827ae",
+    "8d6b1af6656e27fff34f2b6bfdf624c6eee3c5d061fac5cf1daa888f432fc7d6"
+  ],
+  "undoRedoGeometryExact": true,
+  "saveSchemaUnchanged": true,
+  "transactionObstructionRejected": true,
+  "actualClearance": {
+    "ok": true,
+    "passages": 23,
+    "probes": 207,
+    "blocked": [],
+    "foundationSupport": [
+      {
+        "region": "left-front-coral",
+        "cell": "0,0,2",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-front-coral",
+        "cell": "1,0,2",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-front-coral",
+        "cell": "2,0,2",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-mid-yellow",
+        "cell": "0,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-mid-yellow",
+        "cell": "1,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-mid-yellow",
+        "cell": "2,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-rear-teal",
+        "cell": "0,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-rear-teal",
+        "cell": "1,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-rear-teal",
+        "cell": "2,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "left-watchtower",
+        "cell": "0,0,1",
+        "foundation": "irregular-quay",
+        "delta": -2.700000023841858,
+        "supported": false
+      },
+      {
+        "region": "left-watchtower",
+        "cell": "1,0,1",
+        "foundation": "court-left-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "1,0,0",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "2,0,0",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "1,0,1",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "2,0,1",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "1,0,2",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-front-teal",
+        "cell": "2,0,2",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "1,0,0",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "2,0,0",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "1,0,1",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "2,0,1",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "1,0,2",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      },
+      {
+        "region": "right-mid-coral",
+        "cell": "2,0,2",
+        "foundation": "court-right-support",
+        "delta": -9.536743172944284e-8,
+        "supported": true
+      }
+    ],
+    "fixedFoundationSupported": 22,
+    "playerTraversable": false,
+    "limitation": "sampled actual interior aperture triangles, not a capsule sweep or certification of external approach routes"
+  },
+  "limitation": "CPU actual triangle rays and lifecycle; browser image/GPU/player controller not validated"
+}

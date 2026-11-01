@@ -1,0 +1,2 @@
+{"ok":true,"modelsDistinct":true,"siteIds":[2,4,5,6],"rootRingGaps":[8.02838827718412,5.6000000000000005,13.117962264113206,4.7301458127346505],"draws":20,"triangles":16499,"groundcover":11,"reseat":{"seated":[2,4,5,6],"rejected":[],"groundVertices":8517,"missingGroundVertices":0},"repeatedReseatIdempotent":true,"nullSurfaceRejectsWithoutTeleport":true,"colliderReferencesStable":true,"originalPreserved":true}
+dispose restores original parent; double dispose safe

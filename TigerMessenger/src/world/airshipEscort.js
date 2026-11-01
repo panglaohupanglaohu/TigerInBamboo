@@ -1,18 +1,10 @@
 // =====================================================================
-//  AirshipEscortManager · 异星滑翔长翼鸟（Long-Wing Gliders）
-//  莫比斯航空艇的生态护航队——与峡谷 Boids 小鸟完全不同的艺术区分：
-//  - 飞艇动态尾流场吸引：速度向量叠加朝 airship.position 的磁力吸引，
-//    像被磁铁吸住一样整齐、平滑、带强空气阻力感地尾随在飞艇后方与侧面
-//  - 环绕伴飞结界：与飞艇距离锁在 6–15 单位的环形圆柱空间；
-//    <6 排斥防撞气囊，>15 强凝聚力拉回
-//  - 修长鹤身（4 棱锥 flatShading 沿 Z 极度拉长）+ 两级折叠超长双翼
-//    （身体 → 内翼 → 外翼 层级嵌套，翼长 = 身体 1.3 倍）
-//  - 低频大振幅滑翔：内翼 sin(t·3 + φ)·0.3，外翼 sin(t·3 + φ − 0.4)·0.4
-//    两级链式延迟 → 外翼羽尖丝滑 S 形波浪
-//  - 统一 MeshToonMaterial(flatShading) + 全套 addOutline() 手绘黑墨线
+//  AirshipEscortManager · REACode 海鸥伴飞
+//  飞行/尾流/环带行为沿用原护航逻辑，外观切换为莫里斯湖城堡同款
+//  REACode flying-gull 几何、上白下灰材质与实例翅膀着色器。
 // =====================================================================
 import * as THREE from "three";
-import { createLongWingGlider, createGliderGeometries, GLIDER_COLORS } from "../assets/characters/longWingGlider.js";
+import { createGullFlightFlock } from "./reaGullFlock.js?v=reacode-refactor-r1";
 export { createLongWingGlider } from "../assets/characters/longWingGlider.js";
 import { avoidCrystalPillars } from "./flock.js";
 import { sedateBirdRecord, tickBirdSedation, TRANQ_DURATION_BIRD } from "./tranquilizer.js";
@@ -51,15 +43,9 @@ const MIN_SPEED = 1.4;
 const MAX_SPEED = 5.2;
 const MAX_FORCE = 14;
 const HARD_PUSH_DIST = 1.1; // 积分后硬分离兜底
-
-// ---------- 低频滑翔扑打（规格公式） ----------
-const FLAP_SPEED = 3; // 低频：数秒一个宽幅周期
-const FLAP_INNER_AMP = 0.3; // 内翼基座：大振幅低频
-const FLAP_OUTER_AMP = 0.4; // 外翼尖端：振幅加大
-const FLAP_LAG = 0.4; // 外翼相位延迟 → 链式鞭打 S 形波浪
-
-/** 浅青灰 / 珍珠白 双色交替（粉紫黄昏结界下与橙红飞艇撞色） */
-
+// Original glider spans ~4.18 units; the REACode gull spans ~0.43.
+// Scale the gull to the glider's footprint instead of changing escort bird size.
+const GULL_SIZE_MATCH = 4.18 / 0.43;
 
 // ---------- 模块级临时向量 ----------
 const _shipPos = new THREE.Vector3();
@@ -83,18 +69,16 @@ const _shipFwd = new THREE.Vector3(); // 飞艇切向前进方向
 const _leadPoint = new THREE.Vector3(); // LEAD 模式前方目标点
 const _m4 = new THREE.Matrix4();
 const _q = new THREE.Quaternion();
+const _bankQ = new THREE.Quaternion();
+const _gullMatrix = new THREE.Matrix4();
+const _gullScale = new THREE.Vector3();
+const _zAxis = new THREE.Vector3(0, 0, 1);
 
 function clampLen(v, max) {
   const l = v.length();
   if (l > max) v.multiplyScalar(max / l);
   return v;
 }
-
-// ---------------------------------------------------------------------------
-//  异星滑翔长翼鸟 · createLongWingGlider
-//  局部约定：前进 = +Z，上 = +Y，左翼 = +X（与峡谷小鸟一致）。
-//  层级：bird → model(侧倾) → 躯干 + 内翼组 → 外翼组（两级折叠）
-// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 //  AirshipEscortManager
@@ -121,10 +105,12 @@ export class AirshipEscortManager {
       r: o.r,
     }));
 
-    this.geos = createGliderGeometries();
     this.root = new THREE.Group();
     this.root.name = "airship-escort-root";
     scene.add(this.root);
+    this.visual = createGullFlightFlock({ max: count });
+    this.visual.mesh.name = "airship-reacode-gull-escort";
+    this.root.add(this.visual.mesh);
 
     this._prevShipPos = new THREE.Vector3();
     this._shipVel = new THREE.Vector3();
@@ -141,11 +127,11 @@ export class AirshipEscortManager {
     t1.normalize();
     const t2 = new THREE.Vector3().crossVectors(up, t1).normalize();
 
-    /** @type {{ group: THREE.Group, model: THREE.Group, innerL: THREE.Group, outerL: THREE.Group, innerR: THREE.Group, outerR: THREE.Group, vel: THREE.Vector3, phaseOffset: number, maxSpeed: number, bank: number, prevTan: THREE.Vector3 }[]} */
+    /** @type {{ group: THREE.Object3D, vel: THREE.Vector3, phaseOffset: number, maxSpeed: number, bank: number, prevTan: THREE.Vector3, wing: number, scale: number }[]} */
     this.birds = [];
     for (let i = 0; i < count; i++) {
-      const bird = createLongWingGlider(GLIDER_COLORS[i % GLIDER_COLORS.length], this.geos);
-      bird.scale.setScalar(0.9 + Math.random() * 0.25);
+      const bird = new THREE.Object3D();
+      const scale = (0.9 + Math.random() * 0.25) * GULL_SIZE_MATCH;
       const ang = (i / count) * Math.PI * 2 + Math.random() * 0.6;
       const d = 8 + Math.random() * 4;
       bird.position
@@ -161,16 +147,13 @@ export class AirshipEscortManager {
 
       this.birds.push({
         group: bird,
-        model: bird.userData.model,
-        innerL: bird.userData.innerL,
-        outerL: bird.userData.outerL,
-        innerR: bird.userData.innerR,
-        outerR: bird.userData.outerR,
         vel,
-        phaseOffset: Math.random() * Math.PI * 2, // 随机相位偏置
+        phaseOffset: Math.random() * Math.PI * 2,
         maxSpeed: MAX_SPEED * (0.9 + Math.random() * 0.2),
         bank: 0,
         prevTan: vel.clone(),
+        wing: 0,
+        scale,
       });
     }
   }
@@ -360,56 +343,50 @@ export class AirshipEscortManager {
       }
     }
 
-    // ---------- 朝向 / 侧倾 / 两级折叠滑翔 ----------
+    // ---------- 朝向 / 侧倾 / REACode 海鸥扇翅 ----------
     for (let i = 0; i < n; i++) {
       const b = this.birds[i];
-      if ((b.sedateT ?? 0) > 0) continue;
       const pos = b.group.position;
-
-      if (b.vel.lengthSq() > 0.04) {
-        _up.copy(pos).normalize();
-        _fwd.copy(b.vel).normalize();
-        if (Math.abs(_fwd.dot(_up)) < 0.99) {
-          _m4.lookAt(_fwd, _origin, _up); // +Z → 速度方向
-          _q.setFromRotationMatrix(_m4);
-          b.group.quaternion.slerp(_q, 1 - Math.exp(-4.5 * dt)); // 滑翔鸟转身更徐缓
+      if ((b.sedateT ?? 0) > 0) {
+        b.bank = 0;
+        b.wing = -0.35;
+      } else {
+        if (b.vel.lengthSq() > 0.04) {
+          _up.copy(pos).normalize();
+          _fwd.copy(b.vel).normalize();
+          if (Math.abs(_fwd.dot(_up)) < 0.99) {
+            _m4.lookAt(_fwd, _origin, _up); // +Z → 速度方向
+            _q.setFromRotationMatrix(_m4);
+            b.group.quaternion.slerp(_q, 1 - Math.exp(-4.5 * dt));
+          }
         }
+
+        // 侧倾：转弯压坡，滑翔体态
+        _up.copy(pos).normalize();
+        _tan.copy(b.vel).addScaledVector(_up, -b.vel.dot(_up));
+        const turnSign = _cross.crossVectors(b.prevTan, _tan).dot(_up);
+        const bankTarget = THREE.MathUtils.clamp(
+          (turnSign * 2.2) / (_tan.lengthSq() + 0.6),
+          -0.45,
+          0.45
+        );
+        b.bank += (bankTarget - b.bank) * Math.min(1, dt * 3.5);
+        b.prevTan.copy(_tan);
+        b.wing = Math.sin(t * 7.2 + b.phaseOffset) * 0.72 + 0.05;
       }
 
-      // 侧倾：转弯压坡，滑翔体态
-      _up.copy(pos).normalize();
-      _tan.copy(b.vel).addScaledVector(_up, -b.vel.dot(_up));
-      const turnSign = _cross.crossVectors(b.prevTan, _tan).dot(_up);
-      const bankTarget = THREE.MathUtils.clamp(
-        (turnSign * 2.2) / (_tan.lengthSq() + 0.6),
-        -0.45,
-        0.45
-      );
-      b.bank += (bankTarget - b.bank) * Math.min(1, dt * 3.5);
-      b.model.rotation.z = b.bank;
-      b.prevTan.copy(_tan);
-
-      // 两级折叠滑翔（规格公式）：内翼低频大振幅，外翼延迟鞭打
-      const inner = Math.sin(t * FLAP_SPEED + b.phaseOffset) * FLAP_INNER_AMP;
-      const outer = Math.sin(t * FLAP_SPEED + b.phaseOffset - FLAP_LAG) * FLAP_OUTER_AMP;
-      b.innerL.rotation.z = inner;
-      b.outerL.rotation.z = outer;
-      b.innerR.rotation.z = -inner;
-      b.outerR.rotation.z = -outer;
+      _bankQ.setFromAxisAngle(_zAxis, b.bank);
+      _q.copy(b.group.quaternion).multiply(_bankQ);
+      _gullScale.setScalar(b.scale);
+      _gullMatrix.compose(pos, _q, _gullScale);
+      this.visual.set(i, _gullMatrix, b.wing);
     }
+    this.visual.commit(n);
   }
 
   dispose() {
     if (this.root.parent) this.root.parent.remove(this.root);
-    this.root.traverse((o) => {
-      // 描边材质为全局缓存，不可销毁；几何体由 this.geos 统一回收
-      if (o.isMesh && !o.userData.isOutline) o.material.dispose();
-    });
-    this.geos.torso.dispose();
-    this.geos.innerL.dispose();
-    this.geos.innerR.dispose();
-    this.geos.outerL.dispose();
-    this.geos.outerR.dispose();
+    this.visual?.dispose();
     this.birds.length = 0;
   }
 }

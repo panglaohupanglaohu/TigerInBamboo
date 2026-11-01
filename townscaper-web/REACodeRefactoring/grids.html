@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>网格实验室 · REACode 重构版</title>
+<style>
+  :root { --bg: #2a3238; --card: rgba(255,255,255,.94); --accent: #2f7f8a; }
+  html, body { margin: 0; height: 100%; background: var(--bg); font: 14px/1.5 -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  #ui { position: fixed; left: 16px; top: 16px; width: 380px; max-height: calc(100vh - 32px); overflow: auto; background: var(--card); color: #1d2f36; border-radius: 14px; padding: 12px 14px; box-shadow: 0 6px 24px rgba(0,0,0,.3); }
+  #ui h1 { font-size: 16px; margin: 0 0 4px; }
+  #ui p { margin: 4px 0; font-size: 12.5px; color: #4d6369; }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  button { border: 1px solid #c9d8d7; background: #fff; border-radius: 8px; padding: 4px 9px; cursor: pointer; font: inherit; font-size: 12.5px; }
+  button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  #stat { font-size: 12px; color: var(--accent); }
+  code { font-size: 11.5px; background: #eef4f3; padding: 0 4px; border-radius: 4px; }
+  nav a { color: var(--accent); font-weight: 600; text-decoration: none; margin-right: 10px; font-size: 12.5px; }
+  @media (max-width: 600px) { #ui { left: 8px; right: 8px; width: auto; max-height: 45vh; } }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <nav><a href="index.html">← 首页</a><a href="pipeline.html">管线</a><a href="planet.html">球面</a></nav>
+  <h1>网格实验室</h1>
+  <div class="row" id="tabs">
+    <button data-t="kinds" class="on">三角 / 方格 / 混合</button>
+    <button data-t="infinite">无限网格</button>
+    <button data-t="lines">直线 + 环</button>
+    <button data-t="bary">重心坐标</button>
+    <button data-t="atlas">图集打包</button>
+  </div>
+  <div class="row" id="sub"></div>
+  <p id="note"></p>
+  <div id="stat"></div>
+</div>
+<script type="module">
+import { buildMixedGrid, buildQuadGrid, traceStraight } from './src/core/grid.js';
+import { buildInfinite, verify } from './src/core/infinite.js';
+import { baryPrep } from './src/core/spatial.js';
+import { Atlas } from './src/core/atlas.js';
+
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let W, H, DPR;
+function resize() { DPR = Math.min(2, devicePixelRatio); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; draw(); }
+addEventListener('resize', () => resize());
+
+const NOTES = {
+  kinds: '1670790425232175108 "my generator also output pure triangle/hex and square grids, to illustrate why I\'m going for my mixed approach"：同一个三角点阵，合并率 0 → 纯三角；1 → 几乎全是方格；0.55 → 混合。1447496205282549761：底图就是一张不规则三角网。1471817524148940807 "Square, yet hex"。959752525867036672 / 1151770831619534848：对偶图（顶点格）——每个内部顶点周围的格子中心连成一圈。',
+  infinite: '1332410042784641026：网格由块（Patch）组成，相邻三块组成簇（Cluster），块和簇各自松弛；每个顶点 = 它在所在块和最近两个簇里的三个版本按重心坐标插值。1151137783785771008 / 1151770831619534848：无限、确定、无缝。1302686201401442309：每组松弛外圈钉住，不会翻折。',
+  lines: '1384958097542819845：在网格上追"拓扑直线"——每到一个四边形就从对边出去（手柄操作 / 拖动连刷）。1313837640366596096：有的直线会绕回起点 = "完美环"（Townscaper 里能在环上造飞岛）。点格子试试。',
+  atlas: '1764958522398146667 "A cute binary tree rect packer … using the tree properly for fast collision checks"；1765115069837221962：递归解析树的过程，板子越碎"手指"越多；1765041830461055127：也能删除矩形，用久了会碎，但仍然紧。core/atlas.js：叶子要么空要么占用，切的时候按剩余较多的方向切；删掉后兄弟也空就合并回父节点。细线 = 树的切分，色块 = 占用。',
+  bary: '974579499802202113：预先算好三角形里的两个向量，重心坐标只要 1 次减法 + 1 次点积。974564862729838592：讲课用的小工具。移动鼠标。',
+};
+let tab = 'kinds', sub = 'mixed', showDual = false, infMode = 'blend', picked = null, mouse = null;
+const cache = {};
+const grids = {
+  tri: () => buildMixedGrid({ radius: 9, hexSize: 1, mergeRate: 0, seed: 5 }),
+  square: () => buildMixedGrid({ radius: 9, hexSize: 1, mergeRate: 1, seed: 5 }),
+  mixed: () => buildMixedGrid({ radius: 9, hexSize: 1, mergeRate: 0.55, seed: 5 }),
+  townscaper: () => buildQuadGrid({ radius: 6, hexSize: 1.4, seed: 7 }),
+};
+const get = (k) => cache[k] || (cache[k] = grids[k]());
+let inf = null, infStats = null;
+
+function setTab(t) {
+  tab = t; picked = null;
+  document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
+  const s = document.getElementById('sub');
+  s.innerHTML = '';
+  const add = (label, on, fn) => { const b = document.createElement('button'); b.textContent = label; b.classList.toggle('on', on); b.onclick = () => { fn(); setTab(tab); }; s.appendChild(b); };
+  if (t === 'kinds') { for (const [k, l] of [['tri', '纯三角'], ['square', '纯方格'], ['mixed', '混合']]) add(l, sub === k, () => (sub = k)); add('对偶图', showDual, () => (showDual = !showDual)); }
+  if (t === 'infinite') {
+    if (!inf) { const t0 = performance.now(); inf = buildInfinite({ N: 4, L: 1, rings: 2 }); infStats = { ms: performance.now() - t0 }; }
+    for (const [k, l] of [['raw', '未松弛'], ['patch', '只按块'], ['cluster', '只按簇'], ['blend', '块 + 两簇插值']]) add(l, infMode === k, () => (infMode = k));
+  }
+  if (t === 'lines' || t === 'bary') sub = t === 'lines' ? 'townscaper' : 'mixed';
+  if (t === 'atlas') startAtlas(); else stopAtlas();
+  document.getElementById('note').textContent = NOTES[t];
+  draw();
+}
+document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => setTab(b.dataset.t)));
+
+function view(bounds) {
+  const [x0, z0, x1, z1] = bounds;
+  const s = Math.min((W - 40) / (x1 - x0), (H - 40) / (z1 - z0)) * 0.92;
+  const ox = W / 2 + (innerWidth > 800 ? 190 : 0) - (x0 + x1) / 2 * s, oz = H / 2 - (z0 + z1) / 2 * s;
+  return { s, P: (x, z) => [ox + x * s, oz + z * s], inv: (px, py) => [(px - ox) / s, (py - oz) / s] };
+}
+function boundsOf(pts) { let a = [1e9, 1e9, -1e9, -1e9]; for (const [x, z] of pts) { a[0] = Math.min(a[0], x); a[1] = Math.min(a[1], z); a[2] = Math.max(a[2], x); a[3] = Math.max(a[3], z); } return a; }
+let V = null;
+
+function poly(pts, fill, stroke, lw = 1) {
+  ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+}
+
+function drawGrid(g, hl = new Map()) {
+  V = view(boundsOf(g.verts.map((v) => [v.x, v.z])));
+  for (const c of g.cells) {
+    const fill = hl.get(c.id) || (c.n === 3 ? '#e9d9b0' : '#cfe2d6');
+    poly(c.pts.map((p) => V.P(p.x, p.z)), fill, '#2a3238', 1.2);
+  }
+  if (showDual && tab === 'kinds') {
+    ctx.strokeStyle = 'rgba(214,80,60,.85)'; ctx.lineWidth = 1.2;
+    for (const [vid, ids] of g.vertexCells) {
+      const v = g.verts[vid];
+      if (v.pinned || ids.length < 3) continue;
+      const cs = ids.map((i) => g.cells[i]).sort((a, b) => Math.atan2(a.cz - v.z, a.cx - v.x) - Math.atan2(b.cz - v.z, b.cx - v.x));
+      poly(cs.map((c) => V.P(c.cx, c.cz)), null, 'rgba(214,80,60,.85)', 1.2);
+    }
+  }
+  return V;
+}
+
+function draw() {
+  if (!W) return;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = '#2a3238'; ctx.fillRect(0, 0, W, H);
+  const st = document.getElementById('stat');
+  if (tab === 'kinds') {
+    const g = get(sub);
+    drawGrid(g);
+    const n3 = g.cells.filter((c) => c.n === 3).length;
+    st.textContent = `${g.cells.length} 格：三角 ${n3}，方格 ${g.cells.length - n3}`;
+  } else if (tab === 'infinite') {
+    const at = inf.versions[infMode];
+    V = view(boundsOf(inf.verts.map((v) => [v.x0, v.z0])));
+    const pal = ['#cfe2d6', '#e3d7b8', '#d6d3e8', '#e6cfcf', '#cde0e6', '#e0e3c6', '#d9cce0'];
+    for (const P of inf.patches) for (const qd of P.quads) poly(qd.map((v) => V.P(...at(v))), pal[(P.q * 7 + P.r * 3 + 1000) % pal.length], '#2a3238', 0.9);
+    // 块边界：只属于一块的边且两端都在边界上
+    ctx.strokeStyle = '#d6503c'; ctx.lineWidth = 2;
+    for (const qd of inf.quads) for (let i = 0; i < 4; i++) {
+      const a = qd[i], b = qd[(i + 1) % 4];
+      if (a.patches.length > 1 && b.patches.length > 1) { ctx.beginPath(); ctx.moveTo(...V.P(...at(a))); ctx.lineTo(...V.P(...at(b))); ctx.stroke(); }
+    }
+    // 簇：块中心三角形
+    ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.setLineDash([5, 5]); ctx.lineWidth = 1.2;
+    for (const C of inf.clusters) poly(C.patches.map((i) => V.P(...inf.patches[i].center)), null, 'rgba(255,255,255,.6)', 1.2);
+    ctx.setLineDash([]);
+    const vr = verify(inf, infMode);
+    st.textContent = `${inf.patches.length} 块 · ${inf.clusters.length} 簇 · ${vr.quads} 格 · 翻折 ${vr.flipped} · 块边界点 ${vr.border} 个，两侧算出的位置最大差 ${vr.seam.toExponential(1)} · ${infStats.ms.toFixed(0)} ms`;
+  } else if (tab === 'lines') {
+    const g = get('townscaper');
+    const hl = new Map();
+    let msg = '点一个格子';
+    if (picked) {
+      hl.set(picked.id, '#2f7f8a');
+      const lines = [];
+      for (let i = 0; i < picked.n; i++) lines.push(traceStraight(g, picked, i));
+      const colors = ['#f2c14e', '#e98fa6', '#8fc1e3', '#b6e38f'];
+      lines.forEach((L, i) => L.forEach((c) => hl.set(c.id, c === picked ? '#ffffff' : colors[i % 4])));
+      const loop = lines.some((L) => L.length && L[L.length - 1] === picked);
+      msg = `4 个方向：${lines.map((L) => L.length).join(' / ')} 格${loop ? ' · 绕回起点了：完美环！' : ''}`;
+    }
+    drawGrid(g, hl);
+    st.textContent = msg;
+  } else if (tab === 'atlas') {
+    const A = atlasState.atlas, S = Math.min(W - (W > 800 ? 440 : 40), H - 60), ox = W > 800 ? 420 : 20, oy = (H - S) / 2, k = S / A.width;
+    ctx.fillStyle = '#1f262b'; ctx.fillRect(ox, oy, S, S);
+    const walk = (n) => {
+      if (n.a) {
+        ctx.strokeStyle = 'rgba(255,255,255,.28)'; ctx.lineWidth = 1;
+        ctx.strokeRect(ox + n.x * k, oy + n.y * k, n.w * k, n.h * k);
+        walk(n.a); walk(n.b);
+      } else if (n.used) {
+        ctx.fillStyle = `hsl(${(n.x * 7 + n.y * 13) % 360}, 55%, 62%)`;
+        ctx.fillRect(ox + n.x * k + 1, oy + n.y * k + 1, n.w * k - 2, n.h * k - 2);
+      }
+    };
+    walk(A.root);
+    const used = A.rects().reduce((s, r) => s + r.w * r.h, 0);
+    let leaves = 0; const cnt = (n) => { if (n.a) { cnt(n.a); cnt(n.b); } else leaves++; }; cnt(A.root);
+    st.textContent = `${atlasState.live.length} 块 · 占用 ${(used / (A.width * A.height) * 100).toFixed(0)}% · 树叶子 ${leaves} 个（越多越碎）· 失败 ${atlasState.fail} 次`;
+  } else if (tab === 'bary') {
+    const g = get('mixed');
+    drawGrid(g);
+    if (mouse) {
+      const [x, z] = V.inv(mouse[0], mouse[1]);
+      for (const c of g.cells) {
+        if (c.n !== 3) continue;
+        const B = baryPrep(c.pts[0], c.pts[1], c.pts[2]);
+        const w = B(x, z);
+        if (w.every((k) => k >= 0)) {
+          const P = c.pts.map((p) => V.P(p.x, p.z));
+          poly(P, 'rgba(47,127,138,.35)', '#2f7f8a', 2);
+          const cols = ['#d6503c', '#3c9a5b', '#3c6fd6'];
+          P.forEach(([px, py], i) => { ctx.strokeStyle = cols[i]; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(...mouse); ctx.stroke(); ctx.fillStyle = cols[i]; ctx.beginPath(); ctx.arc(px, py, 4 + 10 * w[i], 0, 7); ctx.fill(); });
+          st.textContent = `重心坐标 = (${w.map((k) => k.toFixed(2)).join(', ')})，和 = ${(w[0] + w[1] + w[2]).toFixed(3)}`;
+          break;
+        }
+        st.textContent = '移到一个三角格上';
+      }
+    }
+  }
+}
+cv.addEventListener('pointermove', (e) => { mouse = [e.clientX, e.clientY]; if (tab === 'bary') draw(); });
+cv.addEventListener('click', (e) => {
+  if (tab !== 'lines' || !V) return;
+  const [x, z] = V.inv(e.clientX, e.clientY);
+  const g = get('townscaper');
+  let best = null, bd = 1e9;
+  for (const c of g.cells) { const d = Math.hypot(c.cx - x, c.cz - z); if (d < bd) { bd = d; best = c; } }
+  picked = best; draw();
+});
+const atlasState = { atlas: new Atlas(512, 512), live: [], fail: 0, timer: null };
+function startAtlas() {
+  if (atlasState.timer) return;
+  atlasState.timer = setInterval(() => {
+    const S = atlasState;
+    if (S.live.length > 60 || (S.live.length > 20 && Math.random() < 0.35)) {
+      const i = (Math.random() * S.live.length) | 0;
+      S.atlas.free(S.live[i]); S.live.splice(i, 1);
+    } else {
+      const w = 16 * (1 + ((Math.random() * Math.random() * 6) | 0)), h = 16 * (1 + ((Math.random() * Math.random() * 6) | 0));
+      const r = S.atlas.allocate(w, h);
+      if (r) S.live.push(r); else S.fail++;
+    }
+    if (tab === 'atlas') draw();
+  }, 90);
+}
+function stopAtlas() { clearInterval(atlasState.timer); atlasState.timer = null; }
+resize(); setTab(new URLSearchParams(location.search).get('t') || 'kinds');
+window.gridLab = { setTab };
+</script>
+</body>
+</html>

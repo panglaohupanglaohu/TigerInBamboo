@@ -1,0 +1,51 @@
+{
+  "scope": "Actual top-level baseline copy with actual rail samples; candidate, not live installation",
+  "cliff": {
+    "version": "citadel-cliff-shoulders-3-soft-rims",
+    "enabled": true,
+    "originalTriangles": 123608,
+    "triangles": 144616,
+    "subdivisionSplits": 11846,
+    "maxEdge": 9,
+    "rounds": 4,
+    "movedVertices": 15048,
+    "protectedCapVertices": 5317,
+    "softRimVertices": 853,
+    "cutCapVertices": 1495,
+    "protectedBoundaryVertices": 29160,
+    "protectedRailVertices": 3703,
+    "protectedToeVertices": 24945,
+    "maxMove": 5.315117292983009,
+    "rejected": 29503,
+    "actualSea": true,
+    "railSamples": 2400
+  },
+  "rear": {
+    "version": "citadel-soft-rear-landform-3-cut-collars",
+    "enabled": true,
+    "method": "semantic rear crown/shoulder/saddle morph and constrained shared-vertex fairing",
+    "iterations": 3,
+    "movedVertices": 2609,
+    "movedCorners": 15412,
+    "protectedVertices": 75724,
+    "uniqueVertices": 78333,
+    "rejectedMoves": 2291,
+    "maxHorizontal": 2.504425094236506,
+    "maxVertical": 2.376627138613202,
+    "trianglesUnchanged": true,
+    "indexUnchanged": true,
+    "domains": {
+      "crown": 493,
+      "shoulder": 1375,
+      "saddle": 741
+    },
+    "limits": {
+      "maxHorizontal": 3.2,
+      "maxVertical": 2.6
+    },
+    "protectedByteChanges": 0
+  },
+  "degenerate": 0,
+  "elapsedMs": 1843.448709,
+  "triangles": 144616
+}

@@ -1,0 +1,9 @@
+import fs from 'node:fs';
+import * as T from 'three';
+import {createMorrisIsland} from '../../../src/world/morrisIsland.js';
+const island=createMorrisIsland({scene:new T.Scene()}),r=island.route;
+const radius=p=>Math.hypot(p.x,160+p.y,p.z)-160;
+function rows(points,branch){let grade=0,unsupported=0,maxGap=0,waterCross=[];for(let j=0;j<points.length;j++){const p=points[j],h=island.radialHeight(p.x,p.z),onBridge=!branch&&r.isBridge(p.s);if(!onBridge){const gap=Math.abs(p.h-h);maxGap=Math.max(gap,maxGap);if(gap>.2)unsupported++;}let d=Infinity;for(let k=0;k<island.landscape.water.geometry.attributes.position.count;k+=2){const a=island.landscape.water.geometry.attributes.position;d=Math.min(d,Math.hypot(p.x-(a.getX(k)+a.getX(k+1))/2,p.z-(a.getZ(k)+a.getZ(k+1))/2));}if(!onBridge&&d<1.45)waterCross.push({s:p.s,x:p.x,z:p.z,d});if(j){const a=points[j-1];grade=Math.max(grade,Math.abs(p.h-a.h)/(p.s-a.s));}}return{count:points.length,maxRadialGrade:grade,maxGroundGap:maxGap,unsupported,offBridgeWaterCross:waterCross.slice(0,10),offBridgeWaterCrossCount:waterCross.length};}
+const geometry=[];island.root.traverse(o=>{if(o.geometry?.attributes.position){const p=o.geometry.attributes.position;for(let i=0;i<p.array.length;i++)if(!Number.isFinite(p.array[i]))geometry.push(o.name);}});
+const main=rows(r.points,false),branch=rows(r.branch,true),report={revision:island.report.revision,main,branch,route:r.report,finiteIssues:[...new Set(geometry)],missingCourt:island.landscape.musicCourt.entry==null,bridge:island.report.bridgeDetail,groundTri:island.ground.geometry.index.count/3,passed:!main.unsupported&&!branch.unsupported&&!main.offBridgeWaterCrossCount&&!branch.offBridgeWaterCrossCount&&!geometry.length};
+fs.writeFileSync(new URL('./route-checks-r1.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify({main,branch,finiteIssues:report.finiteIssues,passed:report.passed}));

@@ -1,0 +1,35 @@
+[CLOUD-RIDGE] kept= 1 dropped= 1 rings= {"center":1} maxH= 9 maxScore= 1.03 threshold= 0.35
+[CLOUD-RIDGE] kept= 1 dropped= 1 rings= {"center":1} maxH= 9 maxScore= 1.03 threshold= 0.35
+✔ yielding cloud placement preserves the exact synchronous anchors, heights and climate hash (5.729ms)
+✔ incremental construction preserves sync ordering and result while servicing queued tasks (48.972875ms)
+✔ failure stays fatal and cannot publish later stages or a partial handle (0.417375ms)
+✔ startup progress persists active stage before work, records durations and completes once ready (0.193875ms)
+✔ storm darkens nearby rendered sky, flashes, and restores without accumulating (2.150083ms)
+✔ real articulated statue mounts original horse, strikes flagship with real hull damage and restores exact transforms (64.03375ms)
+✔ night soldiers must return before awakening, and departing fleet releases a pending lease (30.281583ms)
+✔ player-driven lead is excluded; unsupported plaza prevents mounting or floating horse movement (56.27525ms)
+✔ mechanical damage shares existing knockdown/recovery and never changes whale arrow damage (0.437209ms)
+✔ real hostile fleet membership and local city range are required; airship and hidden fleet never trigger (24.5535ms)
+✔ large delta cannot produce repeated lightning in one tick and dispose restores a mounted actor (27.587833ms)
+✔ entering hostile flagship awakens metal, waiting stays stone and exact stone materials return (28.247875ms)
+{"regressionOrphanTriangles":138,"fixedConsecutiveDeletes":5,"actualSceneVerified":false}
+✔ initial and full junction rebuilds retain outline ownership (263.605ms)
+✔ five consecutive deletes leave no orphan dark shell triangles or invalid buffers (399.639209ms)
+✔ regression fixture reproduces orphan shells when initial batch ownership is absent (113.768584ms)
+✔ actual empty court and quay become buildable, real steps and unsupported sea stay excluded (90.186417ms)
+✔ same-colour side grows past original plot without shifting old cells; new roof remains pickable (41.896208ms)
+✔ erasing last new unit still picks its real floor, and undo redo save preserve old and new edits (63.581917ms)
+✔ existing eleven-region save migrates without resetting deleted cells or writing storage (22.085167ms)
+✔ spherical city transform preserves actual foundation admission and roof picking (25.11425ms)
+✔ real pointer handlers show a placement ghost, add, stack, erase, and rebuild after last deletion (36.499958ms)
+[CLOUD-RIDGE] kept= 18 dropped= 0 rings= {"center":18} maxH= 9.78 maxScore= 0.85 threshold= 0.35
+✔ deferred cloud startup reads final terrain and creates buffers only once (89.593791ms)
+✔ normal startup remains immediate, disposed pending startup cannot create cloud resources (51.225792ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 926.970916

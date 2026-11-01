@@ -1,0 +1,690 @@
+{
+  "schema": "upper-walk-continuity-cpu-1",
+  "createdAt": "2026-10-06T03:30:41.032Z",
+  "sourceHashes": {
+    "src/world/citadel/targetCityDetailCandidate.js": "35d23a41094b202bafae08c566e1eed7748f5e4af514a4decb8fd2800b50436c",
+    "src/world/citadel/targetCliffTransitStructure.js": "b62df1ddd81ccbefd111a4cbf83b235b9a8b119cdffb0fa5851eede8e1fd95b2",
+    "src/world/citadel/targetCliffRailGallery.js": "df478f845fa029f6a5aea1aaf021cb3262e7ae51b686b4a630308eded093acec",
+    "src/world/citadel/targetCityPlayerSupport.js": "2337f80323bb49e2be20ee0714045ec0a5ff0de3dbfa896b61e6f7d558af85de",
+    "src/world/citadel/targetTerrainCandidate.js": "d1a3b2d9df95563c4bcf1fce960ea52922920c546bd4888b0415870e07889383",
+    "tests/world/targetCliffTransitStructure.fixture.mjs": "0e95e824b23e17cd693a629a46f00c5f1aa1a64c49cf92730cb0d905eb5f34c8"
+  },
+  "walkwayHeight": 6.9,
+  "stepLimit": 0.1,
+  "supportTolerance": 0.06,
+  "bodyCentreOffsets": [
+    -0.4,
+    0,
+    0.4
+  ],
+  "floorOffsets": [
+    -1.8,
+    0,
+    1.8
+  ],
+  "sections": [
+    {
+      "key": "oldShore",
+      "length": 81.5840429137034,
+      "vertices": 106,
+      "startLocal": [
+        -98.65091053018756,
+        -10.162899162321422,
+        75.67423509795087
+      ],
+      "endLocal": [
+        -31.965424618971802,
+        12.947980217874399,
+        46.55345389704821
+      ]
+    },
+    {
+      "key": "central",
+      "length": 58.96351156085202,
+      "vertices": 77,
+      "startLocal": [
+        -31.965185833827178,
+        12.948003630457773,
+        46.55333007962158
+      ],
+      "endLocal": [
+        17.08408053665703,
+        12.208639665860911,
+        64.22112199964363
+      ]
+    },
+    {
+      "key": "newShore",
+      "length": 161.21145066006497,
+      "vertices": 208,
+      "startLocal": [
+        17.084279633608727,
+        12.208589083544606,
+        64.22150763896089
+      ],
+      "endLocal": [
+        125.47085947695078,
+        -50.20617146578222,
+        69.87339723946279
+      ]
+    }
+  ],
+  "seams": [
+    {
+      "from": "oldShore",
+      "to": "central",
+      "gap": 0.00026999490642687097,
+      "localA": [
+        -31.965424618971802,
+        12.947980217874399,
+        46.55345389704821
+      ],
+      "localB": [
+        -31.965185833827178,
+        12.948003630457773,
+        46.55333007962158
+      ]
+    },
+    {
+      "from": "central",
+      "to": "newShore",
+      "gap": 0.00043693918332771137,
+      "localA": [
+        17.08408053665703,
+        12.208639665860911,
+        64.22112199964363
+      ],
+      "localB": [
+        17.084279633608727,
+        12.208589083544606,
+        64.22150763896089
+      ]
+    }
+  ],
+  "queries": {
+    "ground": 20259,
+    "walls": 19020
+  },
+  "failures": [
+    {
+      "section": "oldShore",
+      "typeOfSurvey": "floor-width",
+      "index": 105,
+      "lateral": 1.8,
+      "type": "ground",
+      "world": [
+        128.41429109198648,
+        109.42486535844505,
+        46.66084596369361
+      ],
+      "local": [
+        -32.81415987925638,
+        12.763719024206292,
+        44.97684479189319
+      ],
+      "radius": 175.1243090542831,
+      "difference": 0.07784133379806235,
+      "diagnostic": {
+        "mesh": "old-city-link-treads",
+        "faceIndex": 3,
+        "instanceId": null,
+        "world": [
+          128.47139558445355,
+          109.47352545185393,
+          46.681595553978156
+        ],
+        "radius": 175.1243090542831
+      }
+    },
+    {
+      "section": "central",
+      "typeOfSurvey": "floor-width",
+      "index": 0,
+      "lateral": 1.8,
+      "type": "ground",
+      "world": [
+        128.40707060539796,
+        109.41909865781395,
+        46.694225042281595
+      ],
+      "local": [
+        -32.78377157476185,
+        12.766771196937437,
+        44.96051113517789
+      ],
+      "radius": 175.12500098544027,
+      "difference": 0.07853405494972776,
+      "diagnostic": {
+        "mesh": "old-city-link-treads",
+        "faceIndex": 3,
+        "instanceId": null,
+        "world": [
+          128.46468003971384,
+          109.46818919735595,
+          46.715174261649516
+        ],
+        "radius": 175.12500098544027
+      }
+    },
+    {
+      "section": "central",
+      "typeOfSurvey": "floor-width",
+      "index": 1,
+      "lateral": 1.8,
+      "type": "ground",
+      "world": [
+        128.23434960281722,
+        109.29057354167745,
+        47.455394536240874
+      ],
+      "local": [
+        -32.085776559215866,
+        12.83329838056434,
+        44.594304443736775
+      ],
+      "radius": 175.111012194978,
+      "difference": 0.06675392377209732,
+      "diagnostic": {
+        "mesh": "old-city-link-treads",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          128.28325235508623,
+          109.33225199881318,
+          47.473491866714525
+        ],
+        "radius": 175.111012194978
+      }
+    },
+    {
+      "section": "newShore",
+      "typeOfSurvey": "floor-width",
+      "index": 1,
+      "lateral": 1.8,
+      "type": "ground",
+      "world": [
+        88.16925495183777,
+        128.9247059249502,
+        79.09146055156194
+      ],
+      "local": [
+        19.01697781263675,
+        11.91417353640355,
+        64.06775667729097
+      ],
+      "radius": 175.14146631892203,
+      "difference": 0.06760633755209255,
+      "diagnostic": {
+        "mesh": "new-city-link-treads",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          88.20330229855546,
+          128.97449135373145,
+          79.12200242674595
+        ],
+        "radius": 175.14146631892203
+      }
+    },
+    {
+      "seam": "oldShore->central",
+      "typeOfSurvey": "floor-width",
+      "index": 2,
+      "lateral": 1.8,
+      "type": "ground",
+      "world": [
+        128.4142880321929,
+        109.42486272782804,
+        46.660860553570984
+      ],
+      "local": [
+        -32.81414666589838,
+        12.76372034364314,
+        44.97683752461989
+      ],
+      "radius": 175.12430936304634,
+      "difference": 0.07784164256131021,
+      "diagnostic": {
+        "mesh": "old-city-link-treads",
+        "faceIndex": 3,
+        "instanceId": null,
+        "world": [
+          128.4713927498084,
+          109.47352301308088,
+          46.681610232648275
+        ],
+        "radius": 175.12430936304634
+      }
+    },
+    {
+      "seam": "oldShore->central",
+      "typeOfSurvey": "floor-width",
+      "index": 3,
+      "lateral": 1.8,
+      "type": "ground",
+      "world": [
+        128.40706991614022,
+        109.4190981460702,
+        46.69422813688492
+      ],
+      "local": [
+        -32.78376874313244,
+        12.766771483077203,
+        44.96050964738536
+      ],
+      "radius": 175.12500104828618,
+      "difference": 0.07853411779564112,
+      "diagnostic": {
+        "mesh": "old-city-link-treads",
+        "faceIndex": 3,
+        "instanceId": null,
+        "world": [
+          128.4646793962481,
+          109.46818872466673,
+          46.715177374405584
+        ],
+        "radius": 175.12500104828618
+      }
+    },
+    {
+      "seam": "oldShore->central",
+      "typeOfSurvey": "floor-width",
+      "index": 4,
+      "lateral": 1.8,
+      "type": "ground",
+      "world": [
+        128.23434960281722,
+        109.29057354167745,
+        47.455394536240874
+      ],
+      "local": [
+        -32.085776559215866,
+        12.83329838056434,
+        44.594304443736775
+      ],
+      "radius": 175.111012194978,
+      "difference": 0.06675392377209732,
+      "diagnostic": {
+        "mesh": "old-city-link-treads",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          128.28325235508623,
+          109.33225199881318,
+          47.473491866714525
+        ],
+        "radius": 175.111012194978
+      }
+    },
+    {
+      "seam": "central->newShore",
+      "typeOfSurvey": "floor-width",
+      "index": 4,
+      "lateral": 1.8,
+      "type": "ground",
+      "world": [
+        88.16925495183777,
+        128.9247059249502,
+        79.09146055156194
+      ],
+      "local": [
+        19.01697781263675,
+        11.91417353640355,
+        64.06775667729097
+      ],
+      "radius": 175.14146631892203,
+      "difference": 0.06760633755209255,
+      "diagnostic": {
+        "mesh": "new-city-link-treads",
+        "faceIndex": 2,
+        "instanceId": null,
+        "world": [
+          88.20330229855546,
+          128.97449135373145,
+          79.12200242674595
+        ],
+        "radius": 175.14146631892203
+      }
+    }
+  ],
+  "gpuVerified": false,
+  "limitations": [
+    "Finite provider rays, not exact capsule or ceiling collision.",
+    "Static actual production curves and fixture terrain; no renderer, live player input, ships or future WFC edits.",
+    "Only the three public upper galleries and their mutual seams are covered here; separate tests cover city access connections."
+  ],
+  "startup": {
+    "status": "composed-before-construction",
+    "installed": false,
+    "routes": {
+      "version": "citadel-rail-splice-1",
+      "installed": false,
+      "lanes": {
+        "center": {
+          "version": "citadel-rail-splice-1",
+          "id": "center",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2617.49661699655,
+          "length": 2599.9186055218443,
+          "oldSpanLength": 307.541442060268,
+          "replacementLength": 289.9634305855622,
+          "prefixLength": 1706.6152763871255,
+          "suffixLength": 603.3398985491565,
+          "sourceInterval": [
+            0.6520028584966744,
+            0.7694973530695678
+          ],
+          "replacementInterval": [
+            0.6564110402389236,
+            0.7679389280619203
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.6520028584966744,
+              "world": [
+                -15.084820222469714,
+                99.45874833364907,
+                135.08096840610725
+              ],
+              "tangent": [
+                0.7710032708853568,
+                0.5527639588888452,
+                -0.3162371926855097
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.015158585498972069
+            },
+            {
+              "name": "end",
+              "sourceU": 0.7694973530695678,
+              "world": [
+                130.79994503040433,
+                103.03446881784288,
+                -28.027793806196367
+              ],
+              "tangent": [
+                0.4075125004255937,
+                -0.6598304310139367,
+                -0.6313139981854063
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.015378099056065912
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.23899219042296016
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 291,
+            "chordLength": 289.96966649264755,
+            "lengthRelativeError": 0.000021505839797616476,
+            "expectedArcStep": 0.9998738985709041,
+            "maxArcStepRelativeError": 0.010058755272285738,
+            "minSampleChord": 0.9899539843054223,
+            "maxSampleChord": 1.0099313854197751
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "routeStatus": "finite-candidate-needs-runtime",
+            "terrainCutRequired": true,
+            "worldDirection": "source-increasing-u-east-to-west",
+            "clearanceVerified": false
+          }
+        },
+        "red": {
+          "version": "citadel-rail-splice-1",
+          "id": "red",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2587.1163133342784,
+          "length": 2569.4059805967745,
+          "oldSpanLength": 306.8951731814619,
+          "replacementLength": 289.18484044395797,
+          "prefixLength": 1683.424989047498,
+          "suffixLength": 596.7961511053185,
+          "sourceInterval": [
+            0.6506955177743431,
+            0.7693199381761978
+          ],
+          "replacementInterval": [
+            0.655180614414427,
+            0.767729912823389
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.6506955177743431,
+              "world": [
+                -13.791729740488739,
+                98.24417661686508,
+                136.1056946817185
+              ],
+              "tangent": [
+                0.7706318692405526,
+                0.5535316583208147,
+                -0.3157993434879506
+              ],
+              "positionError": 1.6512065736091918e-12,
+              "tangentAngleDegrees": 0.01674777469392556
+            },
+            {
+              "name": "end",
+              "sourceU": 0.7693199381761978,
+              "world": [
+                131.80325382978768,
+                102.16575568228114,
+                -26.465497276037404
+              ],
+              "tangent": [
+                0.4082228804782539,
+                -0.6611888546682492,
+                -0.6294309956750828
+              ],
+              "positionError": 4.906476380504503e-13,
+              "tangentAngleDegrees": 0.01765882224792899
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.2525490939623676
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 291,
+            "chordLength": 289.19118692891783,
+            "lengthRelativeError": 0.00002194611913307753,
+            "expectedArcStep": 0.9971891049791654,
+            "maxArcStepRelativeError": 0.0006898880498559266,
+            "minSampleChord": 0.996690490085857,
+            "maxSampleChord": 0.997877053826137
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "routeStatus": "finite-candidate-needs-runtime",
+            "terrainCutRequired": true,
+            "worldDirection": "source-increasing-u-east-to-west",
+            "clearanceVerified": false
+          }
+        },
+        "blue": {
+          "version": "citadel-rail-splice-1",
+          "id": "blue",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2647.435381332443,
+          "length": 2630.048783355519,
+          "oldSpanLength": 308.1322556193916,
+          "replacementLength": 290.7456576424674,
+          "prefixLength": 1729.5164482742691,
+          "suffixLength": 609.7866774387821,
+          "sourceInterval": [
+            0.6532799480090845,
+            0.7696689098670733
+          ],
+          "replacementInterval": [
+            0.6575986191661755,
+            0.7681462483517919
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.6532799480090845,
+              "world": [
+                -16.377247466175234,
+                100.66148455092294,
+                134.03702391169878
+              ],
+              "tangent": [
+                0.7706276573218548,
+                0.5535348181289507,
+                -0.31580408307933544
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.015238870488484374
+            },
+            {
+              "name": "end",
+              "sourceU": 0.7696689098670733,
+              "world": [
+                129.77784482684757,
+                103.88804582126205,
+                -29.58635250495433
+              ],
+              "tangent": [
+                0.40816807693778273,
+                -0.6611411490384778,
+                -0.6295166415727177
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.015375437335537747
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.24974764922527048
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 292,
+            "chordLength": 290.75180522302827,
+            "lengthRelativeError": 0.000021144187021488305,
+            "expectedArcStep": 0.9991259712799567,
+            "maxArcStepRelativeError": 0.017303694942871414,
+            "minSampleChord": 0.9818374002634283,
+            "maxSampleChord": 1.0162112858385495
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "routeStatus": "finite-candidate-needs-runtime",
+            "terrainCutRequired": true,
+            "worldDirection": "source-increasing-u-east-to-west",
+            "clearanceVerified": false
+          }
+        }
+      },
+      "twinTrackClearanceVerified": false
+    },
+    "routeClearanceVerified": false
+  },
+  "pass": false,
+  "provider": {
+    "version": "target-city-player-support-2",
+    "revision": 1,
+    "disposed": false,
+    "sourceMeshes": 1024,
+    "queryInstances": 1440,
+    "indexedInstances": 8,
+    "walkableInstances": 144,
+    "terrainInstances": 1,
+    "unsupported": [],
+    "lastGround": {
+      "mesh": "newShore-cliff-gallery-continuous-walk-deck",
+      "faceIndex": 1636,
+      "instanceId": null,
+      "world": [
+        87.55242459479464,
+        129.39351428122183,
+        79.01596907236447
+      ],
+      "radius": 175.0760747758437
+    },
+    "lastWall": null,
+    "contract": {
+      "ground": "world radius or null",
+      "walls": "mutates proposed feet/velocity and returns boolean",
+      "maxStepUp": 0.4,
+      "maxDrop": 3,
+      "playerRadius": 0.35,
+      "playerHeight": 1.66,
+      "maxSweep": 8
+    },
+    "productionInstalled": false,
+    "navigationComplete": false,
+    "limitations": [
+      "Static geometry/instance transforms require refresh after changes; visibility and detachment are live.",
+      "Only registered public surfaces and explicit finalTerrain support feet; residential roofs and private terraces are excluded.",
+      "Finite 15-ray body sweep is not exact capsule contact: very small obstacles between samples, spawn-inside recovery, ceilings, moving geometry and wall sliding are not solved.",
+      "Mesh bounds only filter queries; actual double-sided triangles decide contacts, preserving true arches.",
+      "Dense geometry uses exact world BVH with face-predicate traversal; small meshes use Raycaster. Runtime still requires profiling.",
+      "World origin is the sphere centre, matching the existing player radius contract; no floating-origin support."
+    ]
+  }
+}

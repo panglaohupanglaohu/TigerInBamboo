@@ -1,0 +1,15 @@
+✔ provider supplies authored solid meshes, excludes vegetation and story objects, and returns empty far away (1.161417ms)
+✔ real camera pulls in before the lake wall on bank 1, spherical scale .5 (24.108458ms)
+✔ real camera pulls in before the lake wall on bank 2, spherical scale .5 (30.406458ms)
+✔ real camera pulls in before the lake wall on bank 3, spherical scale .5 (23.557667ms)
+✔ near cliff keeps the full safety gap and snap/first update never render behind the wall (3.6495ms)
+✔ unoccluded third person, vehicle follow offsets and first person remain available (0.254333ms)
+✔ provider follows a new spherical placement, respects hidden ancestors, refreshes and releases references only (5.350208ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2014.374917

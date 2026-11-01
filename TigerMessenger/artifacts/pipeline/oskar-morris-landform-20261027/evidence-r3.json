@@ -1,0 +1,46 @@
+{
+  "task": "Oskar target-guided Morris island massif and three-part castle",
+  "target": "Rear connected exposed rock ridges, asymmetrical soft grass shoulders, stepped keep and recessed wings; preserve current bridge stream route railway and lower music court",
+  "observations": {
+    "source": "Actually viewed approved target-v1 and current component-after before editing",
+    "before": [
+      "Continuous green mound with detached round giant stones",
+      "Current castle exposed corner strips make box-like masses"
+    ],
+    "candidate_changes": [
+      "Connected asymmetric shelf height field",
+      "Embedded angular eroded rock ribs replace spherical shoulders; no added scatter noise",
+      "Keep recessed0.25m, asymmetric wings recessed and wall corners narrowed",
+      "irregular broad music-court outer shoulder",
+      "road-excluded shallow erosional valleys",
+      "hip roof tile polygons clipped at exact roof planes",
+      "r3 rock ribs buried further, reduced vertical projection, nonshared flat normals",
+      "r3 finite3.1m soft erosion shelves in actual rear massif heightfield"
+    ],
+    "after_images": "r3 images pending",
+    "round1": "Actually viewed overview route and castle. Rejected broad green slope and isolated rounded rocks; roof tile ridge seams visible.",
+    "r2_image_review": "Actually reviewed current overview route castle. Roof seams fixed. Terrain still overly smooth and separate rocks too rounded; not accepted."
+  },
+  "checks": [
+    {
+      "name": "13 terrain bridge route court anchors checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current same-camera candidate images reviewed",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "normal complete route riding",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No character botany main/island edits",
+    "Do not count JEV as visual or navigation acceptance",
+    "No publication"
+  ]
+}

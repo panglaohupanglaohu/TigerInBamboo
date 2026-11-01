@@ -1,0 +1,49 @@
+✔ shader-only change preserves previous actual positions/normals/indices, bounds and batch budgets (7.257416ms)
+✔ source and batch share exact bark fragment; batch keeps original barkLocal and genuine world view-distance (1.43125ms)
+✔ shader LOD coefficients retain midrange ink and fade monotonically without a far constant floor (1.385167ms)
+{"outerCliff":{"version":2,"renderDraws":2,"cracks":41,"roots":7,"depthInner":[6.355419508566815,10.597598723818523],"walkable":false,"entrance":"same angular endpoints as existing rim","triangles":2698,"topAnchorCount":193},"minRadius":38.660296115026206,"minY":29.402400970458984,"maxY":40,"topBytesUnchanged":true,"walkwayWidthWorld":2}
+✔ production outer cliff attaches to the real rim, closes its shell and preserves original walking geometry byte for byte (1027.140375ms)
+tree render batching {"sourceMeshes":285,"renderMeshes":11,"geometryBytes":1773948,"vertices":41071,"triangles":49232,"maxPositionError":0.000001914631004167569,"maxNormalError":4.5159051043268005e-8}
+✔ 285 real organic source meshes become eleven render batches with identical world triangles/normals and no extra triangles (10.457459ms)
+✔ source meshes still provide exact perch rays and no duplicate batch ray hits after spherical / V7 parent scaling (17.673292ms)
+✔ dispose restores draw visibility and trunk detail disposal/reinstall restores original source geometry without batch leaks (28.20175ms)
+organic bark {"trunks":55,"branches":230,"deformedTrunks":27,"deformedBranches":214,"moved":12432,"maxOrganicOffset":0.88108340194374}
+actual embedded branch bases preserved 211
+✔ organic shape changes real centreline without any extra triangles or draw surfaces (4.255125ms)
+✔ all structural end rings, real perch anchors, under-water roots and transforms stay fixed (5.515042ms)
+✔ walk/bridge attachment band stays unchanged and recomputed boxes remain valid after placement (4.587041ms)
+✔ branch bases that were embedded in wood remain attached to actual closed surfaces (9.21725ms)
+understory statistics {"plants":498,"rimPlants":83,"rimAngularCoverage":0.49027777777777776,"vines":180,"counts":{"fern":89,"fan":46,"pendant":363},"triangles":51724,"drawCalls":4,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":282,"overlapping":279,"ratio":0.9893617021276596}
+frond tip heights [
+  -0.8898734450340271,
+  -0.6905297636985779,
+  -0.5960623025894165,
+  -0.921288788318634,
+  -0.5823749899864197
+]
+irregular rim habitats {"plants":83,"clusters":7,"heroes":20,"heightRange":[0.5090022751270726,3.404684903499485]}
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (3.34475ms)
+✔ lush understory uses four instanced batches within triangle budget, not per-plant mesh draws (8.950208ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (18.454875ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (11.421666ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.236959ms)
+✔ erosion revision preserves accepted rim and shoulder anchors; attached wall growth follows the revised surface (4.655291ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (3.268ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (40.784542ms)
+✔ weathering composes existing basic shader and anchors wall height to inner frame, without frame uniforms (0.763625ms)
+✔ exterior treatment retains authored thin coral soil while sharing the same geological field (0.122834ms)
+✔ natural pockets embed in actual clipped wall and taper back into it (39.893667ms)
+✔ soil plants root on real pocket caps; root seams stay against the wall (33.543708ms)
+✔ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (10.895959ms)
+✔ protected paths, story worksite, original tree and swimming domain remain unchanged (7.679959ms)
+✔ spherical placement preserves attachment and dispose exactly restores old visuals (60.845292ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1803.808875

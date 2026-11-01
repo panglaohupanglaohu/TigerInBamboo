@@ -1,0 +1,5 @@
+import assert from 'node:assert/strict';import{createMorrisIsland}from'../../../src/world/morrisIsland.js';
+const i=createMorrisIsland(),r=i.route,p=r.points.filter(p=>p.s>r.report.marks.westEnd&&p.s<r.report.marks.eastStart);let turn=0,last=null;for(let k=1;k<p.length;k++){const h=Math.atan2(p[k].z-p[k-1].z,p[k].x-p[k-1].x);if(last!==null){const d=Math.atan2(Math.sin(h-last),Math.cos(h-last));if(Math.abs(d)>.00001)turn+=Math.abs(d);}last=h;}
+assert.ok(p.some(p=>p.z<8),'new opposing bend must curve into upper mountain shoulder');assert.ok(turn>3,'uphill shoulder needs visibly opposing bends');
+for(const q of p){assert.ok(Number.isFinite(q.h));assert.ok(!(q.x>6&&q.x<22&&q.z>-1&&q.z<8),'uphill trail must avoid castle building footprint');}
+console.log(JSON.stringify({passed:3,checks:['upper mountain approach has real lateral bend','upper route has finite graded support','existing castle footprint remains clear'],upperShoulderHeadingVariation:turn,upperShoulderMinimumZ:Math.min(...p.map(p=>p.z))},null,2));

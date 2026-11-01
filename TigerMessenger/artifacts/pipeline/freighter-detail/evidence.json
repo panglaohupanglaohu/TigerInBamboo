@@ -1,0 +1,39 @@
+{
+  "task": "Freighter detailing and connected rigging",
+  "target": "Complete rigging, realistic connected fittings, same flank berth",
+  "visual_observations": {
+    "source": "Assistant compared before-deck.png and after-deck.png",
+    "image_sha256": "82fc342d17d0d931bac44a6fc986a0644c26c54b46dd80e8b64e2929a45c7231",
+    "completed": [
+      "Boom now pivots near mast base and is tied to mast head",
+      "Reeved lifting cable reaches hook; bow rails follow closed wooden deck",
+      "Mooring cables visibly reach quay bollards",
+      "Cabin joinery, funnel stays, vents and liferings added"
+    ],
+    "remaining": [
+      "Stylized procedural model, not photoreal target",
+      "No manual full drive/walk test"
+    ]
+  },
+  "checks": [
+    {
+      "name": "10215 track envelope ray probes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Mooring mesh endpoints through 7 bobbing phases",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Finite ship vertices and browser errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Preserve side berth, plaza, existing factory layout",
+    "Do not claim new ship sailing or cargo gameplay"
+  ]
+}

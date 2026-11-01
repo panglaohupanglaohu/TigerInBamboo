@@ -1,0 +1,31 @@
+{
+  "task": "Morris island actual r12 refinement",
+  "observations": [
+    "Root actually viewed normal game r12 overview: taller solid tapered cypresses, smaller horses and animals, integrated Oskar modular castle and preserved rail are visible.",
+    "Root actually viewed normal music court: camera is obstructed by taller plane foliage. Central hill vegetation remains sparse. These are real gaps; r13 will adjust camera, plantable slopes, cream/red flower weight and creek bank stones.",
+    "Normal game original local music decoded and played at currentTime 28.7s, duration62.47, readyState4, owner morrisGarden. Real M key produces muted state and zero volume. No subjective listening claim."
+  ],
+  "checks": [
+    {
+      "name": "actual normal r12 visual inspection and music bus observation",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r12 geometry 12 + elder support 8 + music controller12 + castle7 local checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r13 visual follow-up still needed",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "text triage only, no image acceptance",
+    "intentional old elder shore overlap is not empty ocean siting acceptance",
+    "no full walk or train traverse acceptance"
+  ],
+  "evidence_revision": "morris-r12-to-r13"
+}

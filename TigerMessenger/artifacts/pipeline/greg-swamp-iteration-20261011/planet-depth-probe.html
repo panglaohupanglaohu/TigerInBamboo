@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>正式场景地表绘制顺序诊断</title><style>body{margin:0;background:#17343b}iframe{width:100vw;height:100vh;border:0}pre{position:fixed;bottom:0;max-height:35vh;overflow:auto;background:#000c;color:white;font:11px monospace}#shots{position:fixed;inset:0;display:flex;pointer-events:none}#shots img{width:50%;object-fit:contain;align-self:start}</style><iframe id="g"></iframe><div id="shots"></div><pre id="s">loading</pre><script>
+// Local evidence page only. Changes renderOrder during synchronous samples and restores it.
+g.src='/TigerMessenger/?tour=crystal-v7&autostart=1&robotRenderBatch=0&cb='+Date.now();
+async function run(){const w=g.contentWindow,t=w?.__tm;if(!t?.swampCameraProfile){setTimeout(run,3000);return;}try{
+const ST=await w.eval("import('/TigerMessenger/artifacts/pipeline/swamp-target-20261010/stations.js')");ST.place('rim');ST.settle(true);await new Promise(r=>setTimeout(r,1500));
+const p=t.scene.getObjectByName('planet-surface'),r=t.renderer,gl=r.getContext(),ext=gl.getExtension('EXT_disjoint_timer_query_webgl2'),old=p.renderOrder,c=t.camera.clone();c.updateMatrixWorld(true);const rows=[],pending=[];
+const material={type:p.material.type,transparent:p.material.transparent,depthWrite:p.material.depthWrite,depthTest:p.material.depthTest};
+try{for(const order of [old,-1000, -1000,old,old,-1000,-1000,old]){p.renderOrder=order;r.info.reset();let query;if(ext){query=gl.createQuery();gl.beginQuery(ext.TIME_ELAPSED_EXT,query);}const start=performance.now();r.render(t.scene,c);const cpuMs=performance.now()-start;if(ext)gl.endQuery(ext.TIME_ELAPSED_EXT);const row={order,cpuMs,frame:{...r.info.render},gpuMs:null};rows.push(row);if(query)pending.push({query,row});
+if(rows.length<=2){const img=document.createElement('img');img.src=r.domElement.toDataURL('image/jpeg',.94);img.alt=order===old?'original':'planet-first';shots.append(img);}}
+}finally{p.renderOrder=old;}
+let timedOut=false;const begin=performance.now();while(pending.length){if(performance.now()-begin>12000){timedOut=true;break;}for(let i=pending.length-1;i>=0;i--){const{query,row}=pending[i];if(gl.getQueryParameter(query,gl.QUERY_RESULT_AVAILABLE)){row.disjoint=!!gl.getParameter(ext.GPU_DISJOINT_EXT);if(!row.disjoint)row.gpuMs=gl.getQueryParameter(query,gl.QUERY_RESULT)/1e6;gl.deleteQuery(query);pending.splice(i,1);}}if(pending.length)await new Promise(r=>setTimeout(r,100));}for(const{query}of pending)gl.deleteQuery(query);
+s.textContent=JSON.stringify({time:new Date().toISOString(),station:'rim',method:'same camera and same simulation phase, eight manual renders ABBA; not full-game FPS',timerExtension:!!ext,timedOut,material,restored:p.renderOrder===old,rows},null,2);
+}catch(e){s.textContent='error '+e.stack;}}run();</script>

@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "811b06c706bb87fdef6532affe644130087d0286235635fe0900fa1fdecd9bc1",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.41,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0,
+        "navigation": 0.53,
+        "review": 0.46
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.71
+    }
+  },
+  "usage": {
+    "input_tokens": 754,
+    "output_tokens": 91,
+    "cost_usd": 0.000317,
+    "credits_remaining_usd": 4.918699
+  },
+  "elapsed_ms": 3010,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "postpatch normal game shield contact",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "existing heavy deployment and recovery in moss",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

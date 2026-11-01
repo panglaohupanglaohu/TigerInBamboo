@@ -1,0 +1,106 @@
+{
+  "status": "CPU passed; GPU pending root review",
+  "version": "lake-longship-rowing-1",
+  "changes": [
+    "Navigation reuses scratch/up vectors and stable per-boat paddleMotion; identical 781-frame trace",
+    "Optional lake-only V6 posePostProcess: keeps 52 slots, original shoulders/elbows/grips and geometry; actual wet power and dry recovery blade movement",
+    "Original 26-second story retained; path speed drives stroke rate with small stroke propulsion pulse; final 15 percent of arc blends into radial exit tangent",
+    "Exit keeps original hull scale and water height instead of climbing/shrinking; existing hidden reset retained"
+  ],
+  "before": {
+    "dock": {
+      "minBladeY": 24.610007717786996,
+      "maxBladeY": 24.709999353984593,
+      "minDirection": 1,
+      "maxSpeed": 663.6888267534789,
+      "below": 7046,
+      "above": 0,
+      "rows": 26
+    },
+    "sail": {
+      "minBladeY": 24.016504666362856,
+      "maxBladeY": 25.07747975082621,
+      "minDirection": 0.20438808698073807,
+      "maxSpeed": 2.2511996109303753,
+      "below": 8164,
+      "above": 416,
+      "rows": 26
+    },
+    "fade": {
+      "minBladeY": 24.25481403332812,
+      "maxBladeY": 26.10531674904272,
+      "minDirection": 0.20304314707626775,
+      "maxSpeed": 1.5219768530563025,
+      "below": 1352,
+      "above": 3328,
+      "rows": 26
+    }
+  },
+  "navigationReuse": {
+    "byteIdentical": true,
+    "samples": 781,
+    "bytes": 1731699,
+    "fields": "five boat positions/quaternions/stem matrices/paddleMotion values"
+  },
+  "actualCPU": {
+    "seconds": 52,
+    "frames": 1561,
+    "rowers": 52,
+    "maxGrip": 4.351167857633658e-15,
+    "maxWrist": 4.782987168225453e-15,
+    "maxElbow": 0.0014094974956759584,
+    "minHeading": 0.9996240150919606,
+    "minRecoveryBottom": 25.193916229459717,
+    "maxPowerTop": 25.05755740649718,
+    "wet": 12320,
+    "dry": 63148,
+    "span": 22.122968541811815
+  },
+  "validation": {
+    "passed": 5,
+    "files": [
+      "swampWarshipRowing.test.mjs",
+      "swampActivityNavigation.test.mjs",
+      "swampRowerStyle.test.mjs"
+    ],
+    "geometryDrawChange": 0,
+    "newPerFrameGeometryMaterial": 0,
+    "postProcessAllocations": "all vectors/quaternions allocated at installation"
+  },
+  "GPUShots": [
+    {
+      "time": 2,
+      "subject": "stationary repair vessel resting oars, repair monkeys, delivery lizard"
+    },
+    {
+      "time": 8.2,
+      "subject": "departure blade waterline and real wrists/elbows"
+    },
+    {
+      "time": 8.8,
+      "subject": "other phase of same rowing cycle"
+    },
+    {
+      "time": 15.7,
+      "subject": "arc-to-exit tangent transition"
+    },
+    {
+      "time": 19,
+      "subject": "full-size hull remains on water in exit segment"
+    }
+  ],
+  "limits": [
+    "CPU is not GPU art approval; root must inspect forearm stretch and motion cadence",
+    "Departure retains hidden reset, not persistent inter-scene voyage",
+    "180-second flower clearance uses conservative discs; entrance stairs have not been triangle-swept against the full longship",
+    "No full-scene FPS claim"
+  ],
+  "rollback": "Compare activities-round2-before and revert only owned hunks. New rowing module exposes dispose to restore previous hook. Do not overwrite subsequent shared edits.",
+  "hashes": {
+    "src/world/swampFlowerActivities.js": "ba0707340749613112d6e1916cbd20395c70af142206cd923289814e80e318f9",
+    "src/world/swampWarshipRowing.js": "a883ed47cc22486c1af71b195b39f87ea61404f0437671cd725cb2b9b814c3d0",
+    "src/world/moebiusSwamp.js": "3b70aa4df3a493bf3d786acbb1c0e57f4dfcb0e3821696948f1d3556be51550c",
+    "src/assets/warshipV6.js": "d2aa459033bef1b36ed71aa828c8dbbfa877b5f31dfc5f4d940c2c8abedf8849",
+    "tests/world/swampWarshipRowing.test.mjs": "fa72cffc9c62298c6531e3428a0e6fe36977c6a6a0f31c851a15da340da7b07c"
+  }
+}

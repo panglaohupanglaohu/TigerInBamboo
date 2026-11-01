@@ -1,0 +1,35 @@
+{
+  "task": "Formal flowerboat traffic sample review",
+  "target": "Freely paddled flowerboats amongst original moving whales and longships",
+  "visual_observations": {
+    "source": "Actual production CPU survey, no new GPU observation",
+    "completed": [
+      "601 real update samples over150seconds",
+      "All707 broad phase overlaps refined through actual triangles; zero sampled surface crossing"
+    ],
+    "remaining": [
+      "Discrete 0.25s sampling is not continuous collision proof",
+      "Seven refined pairings have no certified positive minimum distance",
+      "GPU absent; shader/outline interactions not measured"
+    ]
+  },
+  "checks": [
+    {
+      "name": "discrete actual surface crossing survey",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "continuous traffic clearance and GPU",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not shorten routes from AABB false positives alone",
+    "Do not claim all traffic fully validated"
+  ],
+  "evidence_revision": {
+    "cpu_sha256": "b93c66f6de7143fee182c3132f89c74cda5825f10f7471f5a2b8c797c92acf75"
+  }
+}

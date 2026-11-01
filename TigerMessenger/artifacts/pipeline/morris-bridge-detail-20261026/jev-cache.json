@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "ef5f6f6ba7c52048b0e149ca26ea7325b40fee2b2557fb01ce7a181883ce58d7",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.61
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.66,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.09,
+        "lighting": 0,
+        "navigation": 0.18,
+        "review": 0.73
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.46
+    }
+  },
+  "usage": {
+    "input_tokens": 763,
+    "output_tokens": 91,
+    "cost_usd": 0.000321,
+    "credits_remaining_usd": 4.905079
+  },
+  "elapsed_ms": 1351,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "New normal-game GPU visual quality,real bank contacts and mounted crossing",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

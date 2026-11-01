@@ -1,0 +1,12 @@
+{
+  "unique_network_requests": 7,
+  "recorded_cache_hits": 2,
+  "input_tokens": 6452,
+  "output_tokens": 637,
+  "reported_cost_usd": 0.002713,
+  "scope": "Text-only triage. No comparison baseline for a token savings percentage. Cached usage not counted as new usage.",
+  "cache_records": [
+    "leebai-freighter-20261011/jev-batch-1624-cached.json",
+    "leebai-freighter-20261011/jev-cached.json"
+  ]
+}

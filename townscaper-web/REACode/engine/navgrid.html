@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Multi-level Nav Grid (2D vs 3D) + 600 units</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #3f4b56; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #eef4f7;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.55); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #dee9ef;
+    font: 13px/1.55 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.55);
+  }
+  #keys { position: fixed; right: 16px; top: 14px; color: #c2cfd7;
+    font: 11px/1.7 ui-monospace, Menlo, monospace; text-align: right;
+    text-shadow: 0 1px 2px rgba(0,0,0,.55); }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">多层可走面导航（797119718477991936 / 807135253215199233 / 817323301357948928）<br>
+  绿=三维节点图算出的合法路径 · 红=只按 (x,y) 算的二维最短路（会穿楼板/穿墙）</div>
+<div id="keys">1/2/3 换路线 · P 关路径 · U 单位数 600↔60 · 空格 暂停</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * navgrid.html — src/navgrid.js 的可视化验证页。
+ *
+ * 照 807135253215199233（红砖楼）和 817323301357948928（三团士兵）的样子做：
+ * 等距小村 + 多层楼板 + 楼梯，单位在多层的可走面上走。
+ *
+ * 这张图的看点只有一条：**红线和绿线差在哪**。
+ * 绿线老老实实绕到楼梯上二层；红线直接从楼下"穿"过去 ——
+ * 这就是原文 "navigating around the island is a bit more tedious than I thought" 的现场。
+ */
+import { VILLAGE, buildSolid, NavGrid, Squad } from '../src/navgrid.js';
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hud = document.getElementById('hud');
+const q = new URLSearchParams(location.search);
+
+const T = buildSolid(VILLAGE);
+const G = new NavGrid(T);
+const SX = VILLAGE.sx, SY = VILLAGE.sy, SZ = VILLAGE.sz;
+
+// 三条演示路线：地面→二层、地面→三层、岛角→三层（跨过城墙）
+const ROUTES = [
+  { name: '地面 → 房A 二层', a: [2, 3, 1], b: [4, 5, 4] },
+  { name: '地面 → 房B 三层', a: [2, 3, 1], b: [10, 10, 5] },
+  { name: '西北角 → 房B 三层', a: [2, 11, 1], b: [10, 10, 5] },
+];
+let routeIdx = 0;
+let perSquad = 200;
+let showPaths = true;
+let paused = false;
+
+let path3 = null, path2 = null, squad = null;
+function pickRoute(i) {
+  routeIdx = i % ROUTES.length;
+  const R = ROUTES[routeIdx];
+  const s = G.find(...R.a), e = G.find(...R.b);
+  path3 = G.astar(s, e);
+  path2 = G.astar2D(s, e);
+  rebuildSquad();
+}
+function rebuildSquad() {
+  // 三队用同一条路径的三个不同起点，凑成"一大团人往同一处走"的观感
+  const paths = [path3, path3, path3];
+  squad = new Squad(G, paths, { per: perSquad, rng: mulberry32(7) });
+}
+
+// ---------------- 视口与投影 ----------------
+let W = 0, H = 0, DPR = 1, view = { u: 1, ox: 0, oy: 0 };
+const ISO_W = 0.866, ISO_H = 0.5;
+// ⚠ z 必须拉高（1.8 而不是 1）。用 1:1 的时候，3 格高的楼在屏幕上只抬高 3u，
+//   而"更近的地面"每近 2 格就抬高 1u —— 于是地基一摊开，远处的楼整片被近处地面挡掉，
+//   截图里就是一块平板加几个洞。拉高 z 相当于把镜头压得更俯视，楼才立得出来。
+const ZS = 1.8;
+function resize() {
+  DPR = Math.min(2, devicePixelRatio || 1);
+  W = canvas.clientWidth; H = canvas.clientHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  // 先算投影包围盒，再定单位尺寸（踩过的坑：直接拿画布宽当格宽会画到屏幕外）
+  const raw = (x, y, z) => [(x - y) * ISO_W, -(x + y) * ISO_H + z * ZS];
+  const cs = [raw(0, 0, 0), raw(SX, 0, 0), raw(0, SY, 0), raw(SX, SY, 0), raw(0, 0, SZ)];
+  const xs = cs.map(c => c[0]), ys = cs.map(c => c[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const u = Math.min(W / (maxX - minX), H / (maxY - minY)) * 1.12;
+  // 构图：把可视中心往下压一点，让楼（低处）占住画面中部，别让远处空地吃掉上半屏
+  view = { u, ox: W / 2 - (minX + maxX) / 2 * u, oy: H * 0.62 - (minY + maxY) / 2 * u, raw };
+  buildTerrain();
+}
+const X = (x, y) => view.ox + (x - y) * ISO_W * view.u;
+const Y = (x, y, z) => view.oy + (-(x + y) * ISO_H + z * ZS) * view.u;
+
+// ---------------- 地形预渲染 ----------------
+// 2904 个体素逐帧画太贵，一次性画到离屏画布，之后每帧只 blit 一次。
+let terrain = null;
+function buildTerrain() {
+  terrain = document.createElement('canvas');
+  terrain.width = canvas.width; terrain.height = canvas.height;
+  const g = terrain.getContext('2d');
+  g.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const { solid, at } = T;
+  const cells = [];
+  for (let z = 0; z < SZ; z++) for (let y = 0; y < SY; y++) for (let x = 0; x < SX; x++) {
+    if (solid[at(x, y, z)]) cells.push([x, y, z]);
+  }
+  // ⚠ 画家序不能按 x+y+z 排。第一版这么排，结果是"离得近的地面"被画在"远一点但更高"的
+  //   楼体之后 —— 高楼整片被地面前脸盖掉，看着像地上挖了几个洞。
+  //   这个投影 sy = -(x+y)*0.5 + z，所以 (x+y) **越大越靠屏幕上方 = 越远**：要**降序**画；
+  //   同一列里 z 小的先画。方向我一开始也搞反了一次，反过来之后楼才立起来。
+  cells.sort((p, q) => (q[0] + q[1] - p[0] - p[1]) || (p[2] - q[2]));
+  for (const [x, y, z] of cells) {
+    const P = (dx, dy, dz) => [X(x + dx, y + dy), Y(x + dx, y + dy, z + dz)];
+    const top = [P(0, 0, 1), P(1, 0, 1), P(1, 1, 1), P(0, 1, 1)];
+    const left = [P(0, 1, 1), P(1, 1, 1), P(1, 1, 0), P(0, 1, 0)];
+    const right = [P(1, 0, 1), P(1, 1, 1), P(1, 1, 0), P(1, 0, 0)];
+    const poly = (pts, fill) => {
+      g.beginPath();
+      g.moveTo(pts[0][0], pts[0][1]);
+      for (let i = 1; i < pts.length; i++) g.lineTo(pts[i][0], pts[i][1]);
+      g.closePath(); g.fillStyle = fill; g.fill();
+    };
+    // 高层偏亮、偏暖，楼层才看得出分层（参考片里楼是暖砖色、地是冷灰的）
+    const lit = 0.62 + 0.13 * z;
+    const warm = z >= 2;
+    poly(left, shade(warm ? 132 : 92, lit - 0.14, warm));
+    poly(right, shade(warm ? 148 : 106, lit - 0.07, warm));
+    poly(top, shade(warm ? 182 : 138, lit + 0.06, warm));
+  }
+}
+function shade(base, k, warm) {
+  const v = Math.max(0, Math.min(255, Math.round(base * k)));
+  if (warm) return `rgb(${Math.min(255, v + 10)},${Math.round(v * 0.92)},${Math.round(v * 0.82)})`;
+  return `rgb(${Math.round(v * 0.97)},${Math.round(v * 1.0)},${Math.round(v * 1.06)})`;
+}
+
+// ---------------- 路径 ----------------
+function drawPath(path, color) {
+  if (!path || path.length < 2) return;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.2;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  path.forEach((i, k) => {
+    const [x, y, z] = G.nodes[i];
+    const px = X(x + 0.5, y + 0.5), py = Y(x + 0.5, y + 0.5, z);
+    if (k === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  });
+  ctx.stroke();
+  // 起点/终点
+  for (const [idx, col] of [[path[0], '#e8eef2'], [path[path.length - 1], '#f0c07a']]) {
+    const [x, y, z] = G.nodes[idx];
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.arc(X(x + 0.5, y + 0.5), Y(x + 0.5, y + 0.5, z), 4, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// ---------------- 单位 ----------------
+// 817 那条的"perform well in large numbers"：600 个单位不能一个个 fill。
+// 合批 = 每个颜色建一条 Path2D，最后一共 3 次 fill（不是 600 次）。
+const GROUP_COL = ['#eef3f5', '#9fd8ea', '#f2c98a'];
+let fillCalls = 0;
+function drawUnits(batched) {
+  const paths = GROUP_COL.map(() => new Path2D());
+  for (const a of squad.agents) {
+    if (a.done) continue;
+    const px = X(a.x + 0.5, a.y + 0.5), py = Y(a.x + 0.5, a.y + 0.5, a.z);
+    if (batched) {
+      const p = paths[a.g % 3];
+      p.moveTo(px + 2.2, py);
+      p.arc(px, py, 2.2, 0, Math.PI * 2);
+    } else {
+      ctx.fillStyle = GROUP_COL[a.g % 3];
+      ctx.beginPath(); ctx.arc(px, py, 2.2, 0, Math.PI * 2); ctx.fill();
+      fillCalls++;
+    }
+  }
+  if (batched) {
+    for (let i = 0; i < 3; i++) { ctx.fillStyle = GROUP_COL[i]; ctx.fill(paths[i]); fillCalls++; }
+  }
+}
+
+// ---------------- 合批自测 ----------------
+// 同一帧跑两遍，量"逐单位 fill"与"合批 3 次 fill"的耗时差，并把 fill 次数报出来。
+let bench = null;
+function runBench() {
+  const reps = 60;
+  const timeIt = (batched) => {
+    const t0 = performance.now();
+    for (let i = 0; i < reps; i++) { fillCalls = 0; drawUnits(batched); }
+    return (performance.now() - t0) / reps;
+  };
+  timeIt(true);   // 预热
+  const batched = timeIt(true);
+  const perUnit = timeIt(false);
+  fillCalls = 0; drawUnits(true);
+  const batchedCalls = fillCalls;
+  fillCalls = 0; drawUnits(false);
+  const perUnitCalls = fillCalls;
+  bench = { batched, perUnit, batchedCalls, perUnitCalls };
+  return bench;
+}
+
+// ---------------- 主循环 ----------------
+let last = performance.now(), simT = 0, frameMs = 0;
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  const t0 = performance.now();
+  if (!paused) {
+    for (let k = 0; k < 2; k++) squad.step(1 / 120);
+    simT += dt;
+  }
+  ctx.fillStyle = '#3f4b56';
+  ctx.fillRect(0, 0, W, H);
+  if (terrain) ctx.drawImage(terrain, 0, 0, W, H);
+  if (showPaths) {
+    drawPath(path2, 'rgba(226,96,80,.85)');
+    drawPath(path3, 'rgba(120,214,140,.9)');
+  }
+  fillCalls = 0;
+  drawUnits(true);
+  const calls = fillCalls;
+  frameMs = frameMs * 0.9 + (performance.now() - t0) * 0.1;
+
+  const b = bench || runBench();
+  const layers = (p) => (p ? [...new Set(p.map(i => G.nodes[i][2]))].sort().join('→') : '-');
+  hud.textContent =
+    `节点 ${G.n}（${SX}×${SY}×${SZ} 体素里算出来的可走面）· 路线「${ROUTES[routeIdx].name}」\n` +
+    `三维：${path3 ? path3.length + ' 跳' : '不可达'} · 合法 ${path3 ? (G.isPathValid(path3) ? '是' : '否') : '-'} · 楼层 ${layers(path3)}\n` +
+    `二维：${path2 ? path2.length + ' 跳' : '不可达'} · 合法 ${path2 ? (G.isPathValid(path2) ? '是' : '否') : '-'} · 楼层 ${layers(path2)}  ← 穿楼板\n` +
+    `单位 ${squad.agents.length}（${perSquad}×3）：到达 ${squad.arrived} · 模拟 ${simT.toFixed(1)}s · 每帧 ${frameMs.toFixed(2)}ms · 本帧 fill ${calls}\n` +
+    `合批自测（同帧 60 次）：合批 ${b.batched.toFixed(2)}ms / ${b.batchedCalls} 次 fill · 逐单位 ${b.perUnit.toFixed(2)}ms / ${b.perUnitCalls} 次 fill`;
+
+  requestAnimationFrame(frame);
+}
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+addEventListener('keydown', (e) => {
+  if (e.code === 'Space') { paused = !paused; e.preventDefault(); }
+  if (e.key === 'p' || e.key === 'P') showPaths = !showPaths;
+  if (e.key === 'u' || e.key === 'U') { perSquad = perSquad === 200 ? 20 : 200; rebuildSquad(); bench = null; }
+  if (e.key >= '1' && e.key <= '3') { pickRoute(Number(e.key) - 1); bench = null; }
+});
+
+addEventListener('resize', resize);
+resize();
+pickRoute(0);
+bench = runBench();
+requestAnimationFrame(frame);
+window.__navgrid = {
+  G, get path3() { return path3; }, get path2() { return path2; },
+  get squad() { return squad; }, get bench() { return bench; },
+  stats: () => ({
+    nodes: G.n,
+    p3: path3 ? path3.length : 0, p3valid: path3 ? G.isPathValid(path3) : false,
+    p2: path2 ? path2.length : 0, p2valid: path2 ? G.isPathValid(path2) : false,
+    arrived: squad.arrived, total: squad.agents.length,
+  }),
+};
+</script>
+</body>
+</html>

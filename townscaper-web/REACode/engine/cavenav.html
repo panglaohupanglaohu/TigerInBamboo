@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nav — 瑞士奶酪式体素导航（墙顶 + 拱洞）</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #b6c6cc; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 14px; bottom: 12px; color: #0f2a33;
+    font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre;
+    background: rgba(255,255,255,.72); padding: 9px 12px; border-radius: 10px;
+  }
+  #title {
+    position: fixed; left: 14px; top: 12px; color: #123039;
+    font: 13px/1.6 -apple-system, "PingFang SC", sans-serif;
+    background: rgba(255,255,255,.72); padding: 9px 12px; border-radius: 10px; max-width: 420px;
+  }
+  #keys { position: fixed; right: 14px; top: 12px; color: #123039; text-align: right;
+    font: 11.5px/1.7 ui-monospace, Menlo, monospace; background: rgba(255,255,255,.72);
+    padding: 8px 11px; border-radius: 10px; }
+</style>
+</head>
+<body>
+<div id="title"><b>瑞士奶酪式导航</b> —— 白模是「墙」，墙上有拱洞；小人既能在墙顶走，也能从洞里穿过去。
+距离色带 = 从起点出发的步数（BFS），所以能看出"洞"把两侧拉近了多少。</div>
+<div id="keys">R 重算 · 空格 换起点<br>拖动旋转 / 滚轮缩放</div>
+<div id="hud"></div>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { buildVoxelNav, buildHeightmapNav } from '../src/voxelnav.js';
+
+// ---------- 场景几何：三道墙 + 拱洞 + 一处坡道 ----------
+// 尺寸是随手定的，但比例照着参考片：墙高约 6，拱洞高 2、宽 7，间距 12。
+const nx = 56, ny = 14, nz = 56;
+const WALLS = [16, 28, 40];
+const WALL_H = 6;
+const ARCH_R = 3, ARCH_H = 2;
+const RAMP_X = 16, RAMP_Z0 = 36, RAMP_Z1 = 42;
+
+function solid(x, y, z) {
+  if (x < 0 || y < 0 || z < 0 || x >= nx || y >= ny || z >= nz) return false;
+  if (y === 0) return true;                        // 地基
+  if (WALLS.includes(x)) {
+    // 拱洞：y ≤ 2 且 |z-28| ≤ 3 的地方挖空 → 一个能钻过去的洞
+    const inArch = Math.abs(z - 28) <= ARCH_R && y <= ARCH_H;
+    if (inArch) return false;
+    // 坡道：把 x=16 那道墙在 z=36..42 处削成阶梯，供"上墙顶"
+    if (x === RAMP_X && z >= RAMP_Z0 && z <= RAMP_Z1) {
+      const step = Math.floor((z - RAMP_Z0) / 2);      // 0..2
+      return y <= Math.max(1, WALL_H - step * 2);
+    }
+    return y <= WALL_H;
+  }
+  return false;
+}
+
+// ---------- 导航 ----------
+let nav = null, hm = null, agents = [], bandMesh = null, pathLine = null;
+let startId = -1, goalId = -1;
+
+const { scene, camera, renderer, controls } = init();
+
+function init() {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#b6c6cc');
+  scene.fog = new THREE.Fog('#b6c6cc', 90, 190);
+
+  const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.5, 600);
+  camera.position.set(52, 46, 62);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+  renderer.setSize(innerWidth, innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  const controls = { yaw: -0.72, pitch: 0.62, dist: 96, target: new THREE.Vector3(nx / 2, 3, nz / 2) };
+  let dragging = false, lx = 0, ly = 0;
+  renderer.domElement.addEventListener('pointerdown', (e) => { dragging = true; lx = e.clientX; ly = e.clientY; });
+  addEventListener('pointerup', () => { dragging = false; });
+  addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    controls.yaw -= (e.clientX - lx) * 0.006;
+    controls.pitch = Math.max(0.08, Math.min(1.35, controls.pitch + (e.clientY - ly) * 0.004));
+    lx = e.clientX; ly = e.clientY;
+  });
+  renderer.domElement.addEventListener('wheel', (e) => {
+    controls.dist = Math.max(40, Math.min(190, controls.dist + e.deltaY * 0.08));
+    e.preventDefault();
+  }, { passive: false });
+
+  addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+
+  // 光：一盏斜上方主光 + 环境，够看清体块就行
+  scene.add(new THREE.HemisphereLight('#dfeef2', '#5d6b66', 1.05));
+  const sun = new THREE.DirectionalLight('#fff6e0', 1.15);
+  sun.position.set(40, 70, 20);
+  scene.add(sun);
+
+  return { scene, camera, renderer, controls };
+}
+
+// ---------- 静态体块（白模）----------
+function buildBlocks() {
+  const geo = new THREE.BoxGeometry(1, 1, 1);
+  const mat = new THREE.MeshLambertMaterial({ color: '#eef3f0' });
+  const cells = [];
+  for (let y = 1; y < ny; y++) {
+    for (let z = 0; z < nz; z++) {
+      for (let x = 0; x < nx; x++) if (solid(x, y, z)) cells.push([x, y, z]);
+    }
+  }
+  const inst = new THREE.InstancedMesh(geo, mat, cells.length);
+  const m = new THREE.Matrix4();
+  cells.forEach(([x, y, z], i) => {
+    m.makeTranslation(x + 0.5, y + 0.5, z + 0.5);
+    inst.setMatrixAt(i, m);
+  });
+  inst.instanceMatrix.needsUpdate = true;
+  inst.frustumCulled = false;
+  scene.add(inst);
+
+  // 地基一整块
+  const floor = new THREE.Mesh(new THREE.BoxGeometry(nx, 1, nz), new THREE.MeshLambertMaterial({ color: '#cfd5d2' }));
+  floor.position.set(nx / 2, 0.5, nz / 2);
+  scene.add(floor);
+  return cells.length;
+}
+
+// ---------- 距离色带：每个可站节点一个半透明小方块 ----------
+const BANDS = ['#1f5f7d', '#2f8fa8', '#57b3a6', '#97c98a', '#d8d47c', '#e9b25f', '#de8352', '#c25b4e'];
+function buildBands() {
+  if (bandMesh) { scene.remove(bandMesh); bandMesh.geometry.dispose(); bandMesh.material.dispose(); }
+  const { dist } = nav.bfs(startId);
+  let maxD = 1;
+  for (const d of dist) if (d > maxD) maxD = d;
+
+  const picks = [];
+  for (let i = 0; i < nav.nodes.length; i++) if (dist[i] >= 0) picks.push(i);
+  const geo = new THREE.BoxGeometry(0.72, 0.10, 0.72);
+  // 每个实例一个颜色必须走 instanceColor（mesh.setColorAt）；
+  // 往**几何体**上塞 color 属性是错的 —— BoxGeometry 只有 24 个顶点，
+  // 那段 N×3 的数组根本对不上，材质读到的全是同一个值（第一版整片绿）。
+  const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 1.0 });
+  const mesh = new THREE.InstancedMesh(geo, mat, picks.length);
+  const m = new THREE.Matrix4();
+  const color = new THREE.Color();
+  picks.forEach((id, i) => {
+    const n = nav.nodes[id];
+    m.makeTranslation(n.x + 0.5, n.y + 0.06, n.z + 0.5);
+    mesh.setMatrixAt(i, m);
+    const k = dist[id] / maxD;
+    color.set(BANDS[Math.min(BANDS.length - 1, Math.floor(k * BANDS.length))]);
+    mesh.setColorAt(i, color);
+  });
+  mesh.instanceMatrix.needsUpdate = true;
+  if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  mesh.frustumCulled = false;
+  scene.add(mesh);
+  bandMesh = mesh;
+  return { maxD, count: picks.length };
+}
+
+// ---------- 路径（穿过拱洞的那条）----------
+function buildPath() {
+  if (pathLine) { scene.remove(pathLine); pathLine.geometry.dispose(); pathLine.material.dispose(); }
+  const p = nav.path(startId, goalId);
+  if (!p.length) return { steps: 0, inArch: 0 };
+  const pts = p.map((id) => {
+    const n = nav.nodes[id];
+    return new THREE.Vector3(n.x + 0.5, n.y + 0.30, n.z + 0.5);
+  });
+  const g = new THREE.BufferGeometry().setFromPoints(pts);
+  const line = new THREE.Line(g, new THREE.LineBasicMaterial({ color: '#17323c', linewidth: 2 }));
+  scene.add(line);
+  pathLine = line;
+
+  // 走过洞口的那几格数出来（用于 HUD：这条路线真的穿过去了）
+  const inArch = p.filter((id) => {
+    const n = nav.nodes[id];
+    return WALLS.includes(n.x) && n.y <= ARCH_H + 1;
+  }).length;
+
+  // 小人：沿路径循环走
+  for (const a of agents) scene.remove(a.mesh);
+  agents = [];
+  const dotGeo = new THREE.SphereGeometry(0.42, 8, 6);
+  const dotMat = new THREE.MeshLambertMaterial({ color: '#ffffff' });
+  const N = 26;
+  for (let i = 0; i < N; i++) {
+    const mesh = new THREE.Mesh(dotGeo, dotMat);
+    scene.add(mesh);
+    agents.push({ mesh, t: (i / N) * (pts.length - 1), speed: 7 + (i % 5) * 0.6 });
+  }
+  return { steps: p.length - 1, inArch, pts };
+}
+
+// ---------- 主循环 ----------
+let clock = 0, last = performance.now(), hud;
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  clock += dt;
+
+  const { yaw, pitch, dist, target } = controls;
+  camera.position.set(
+    target.x + Math.sin(yaw) * Math.cos(pitch) * dist,
+    target.y + Math.sin(pitch) * dist,
+    target.z + Math.cos(yaw) * Math.cos(pitch) * dist,
+  );
+  camera.lookAt(target);
+
+  if (pathLine && agents.length) {
+    const total = pathLine.geometry.attributes.position.count - 1;
+    for (const a of agents) {
+      a.t += dt * a.speed;
+      if (a.t > total) a.t -= total;
+      const i0 = Math.floor(a.t), f = a.t - i0;
+      const p0 = new THREE.Vector3().fromBufferAttribute(pathLine.geometry.attributes.position, i0);
+      const p1 = new THREE.Vector3().fromBufferAttribute(pathLine.geometry.attributes.position, Math.min(total, i0 + 1));
+      a.mesh.position.lerpVectors(p0, p1, f);
+      a.mesh.position.y += 0.18 + Math.sin(clock * 6 + i0) * 0.05;
+    }
+  }
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+// ---------- 统计 + HUD ----------
+function rebuild(reseed = false) {
+  const t0 = performance.now();
+  nav = buildVoxelNav(solid, { nx, ny, nz });
+  const t1 = performance.now();
+  hm = buildHeightmapNav(solid, { nx, ny, nz });
+
+  const groundY = 1;
+  const idOf = (x, y, z) => nav.ids[(y * nz + z) * nx + x];
+  if (reseed || startId < 0) {
+    startId = idOf(3, groundY, 28);
+    goalId = idOf(nx - 4, groundY, 28);
+  }
+
+  // 起点/终点标记（青色 / 橙色）
+  if (!window.__markers) {
+    window.__markers = new THREE.Group();
+    const mk = (color) => new THREE.Mesh(new THREE.SphereGeometry(0.55, 10, 8), new THREE.MeshBasicMaterial({ color }));
+    const m1 = mk('#19a7a0'), m2 = mk('#e07a3f');
+    window.__markers.add(m1, m2);
+    window.__markers.userData = { m1, m2 };
+    scene.add(window.__markers);
+  }
+  {
+    const { m1, m2 } = window.__markers.userData;
+    const a = nav.nodes[startId], b = nav.nodes[goalId];
+    m1.position.set(a.x + 0.5, a.y + 0.8, a.z + 0.5);
+    m2.position.set(b.x + 0.5, b.y + 0.8, b.z + 0.5);
+  }
+
+  const bands = buildBands();
+  const p = buildPath();
+  const st = nav.stats();
+
+  // 二维对照：同一对起终点在"每列只留最高可站点"的图里能不能通、要几步
+  const ha = hm.id(3, 28), hb = hm.id(nx - 4, 28);
+  const connected2d = hm.reach(ha, hb);
+
+  hud.textContent =
+    `体素 ${st.dims}   可站节点 ${st.nodes}（架空 ${(st.elevatedShare * 100).toFixed(0)}%）   ` +
+    `连通块 ${st.components}（最大 ${(st.largestShare * 100).toFixed(1)}%）\n` +
+    `建图 ${(t1 - t0).toFixed(1)} ms   距离色带 ${bands.count} 格 / 最远 ${bands.maxD} 步\n` +
+    `3D 路径：${p.steps} 步，其中 ${p.inArch} 格是在墙体内（= 穿拱洞）\n` +
+    `2D 高度图：${hm.cells} 格，a→b ${connected2d ? '连通（只能绕坡道上墙顶）' : '不通（拱洞在高度图里不存在）'}`;
+
+  window.__cavenav = {
+    nav: st, bands, path: { steps: p.steps, inArch: p.inArch }, hm: { cells: hm.cells, connected2d },
+  };
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') rebuild(true);
+  if (e.code === 'Space') { rebuild(true); e.preventDefault(); }
+});
+
+hud = document.getElementById('hud');
+const solidCount = buildBlocks();
+rebuild();
+requestAnimationFrame(frame);
+window.__solidCount = solidCount;
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+activities-navigation {"seconds":180,"samples":1801,"spans":[1.4317766436136596,1.4317771709992206,1.431779344876001,1.4317730852341217,1.4317817317133597],"minObstacle":0.4515255507057905,"minBoatGap":3.487918718354402,"minEdge":10.302616769906969,"minDirection":0.002785285123132919,"minSignedRowAdvance":-0.00009112284639158368,"maxStemError":5.102196573270515e-15,"maxRopeError":5.8927631492873816e-8,"minToolAxis":0.06287305826514217,"minDepartureGap":0.8351836900129044,"minWhaleGap":-0.8480959186198591,"maxTailChange":0.26398947834968567,"minWhaleDirection":0.9999999999999997,"powerSamples":9641,"recoverySamples":6487,"repairPhases":["inspect","haul-rope","secure-and-check"]}
+✔ formal activities have real forward rowing, safe complete routes, attached stems and live repair contacts (8059.66175ms)
+✔ weathering composes existing basic shader and anchors wall height to inner frame, without frame uniforms (1.674917ms)
+✔ exterior treatment retains authored thin coral soil while sharing the same geological field (0.205125ms)
+✔ target mineral islands compose sparse bedding in the same inner frame and the comparison flag restores v4 (0.20075ms)
+✔ actual existing lake-wall shader and weathering have distinct local declarations (6.053416ms)
+feeder-swimming {"samples":648,"draws":9,"breathingSeconds":[4.866666666666666,4.866666666666666,4.9],"submergedSeconds":[2.1,2.1,2],"mouthMin":24.5,"mouthMax":25.14,"noseMin":24.446142845702376,"noseMax":25.1564049399892,"minWhaleMouth":0.8370776031045414,"extrema":[{"upper":[-1.6989523713454977,0.7999995674006919],"lower":[0.40006186262541826,0.88]},{"upper":[-2.5,0.7989523713454978],"lower":[0.22,0.8799381373745818]},{"upper":[-0.29999900722856826,0.29999894710368197],"lower":[0.2,0.7199981749797155]},{"upper":[-0.29999894710368197,0.29999900722856826],"lower":[0.2,0.719998279196185]}]}
+✔ same whale-feeder genuinely strokes, kicks and resurfaces every 7.2 seconds in full placement update (4885.730459ms)
+✔ ?swampHarborDeparture=original restores the full departure galley as well (2006.068417ms)
+✔ formal-page ocean pruning detached both warships; harbor pass re-attaches A, keeps B out of render but animated (2283.812208ms)
+✔ target composition: ship, pier and both workers sit in the lower-left of the overview frame (2.420375ms)
+✔ spare sail is furled while the mast lies on deck and set once the monkeys raise it (578.99275ms)
+✔ harbor pass leaves ship, repair actors, departure and escort choreography exactly as before (3560.265417ms)
+✔ pier keeps clear of the repair ship oars, the departing ship, its escort and every lotus boat (1282.146417ms)
+✔ rim leaves fill gaps only: off the walking ribbon, out of the overview centre, through living-path clearance (5.990667ms)
+✔ ?swampHarbor=0 is a no-op and installation is idempotent (1619.072084ms)
+✔ enlarged repair monkeys keep feet on their perches and the live hoist rope / mallet contacts (2467.31675ms)
+✔ far-shore longboat stays clear of lotus boats, whales, the world tree and the bank walkway (2688.775875ms)
+✔ turquoise, see-through water keeps the ripple injection and gets pale ripple strokes (2720.556542ms)
+✔ water body deepens with inner depth and bed is turquoise (1998.156167ms)
+✔ wall stone stays grey-violet after weathering; authored coral rim colours and ripple hook survive; dispose restores (1954.276875ms)
+✔ disabled is a no-op (1810.181667ms)
+raised canopy actual factory {"minimumInnerY":63.99999720464182,"clearanceWorldAtHalfScale":11.999998602320911,"liftedGroups":16,"petioleDraws":5,"maxLiftInner":5.895093559911196}
+✔ default real factory lifts leaf vertices above normal camera without moving story anchors (2666.088625ms)
+✔ swim arrives continuously after opposite-shore eye contact using existing actors (9.775459ms)
+✔ boat arrives continuously after opposite-shore eye contact using existing actors (7.531917ms)
+✔ whale arrives continuously after opposite-shore eye contact using existing actors (4.568959ms)
+✔ opposite portal retains submerged wall, attributes and material groups (13.519375ms)
+swim actual fixture max displacement at dt .1: 1.0688347112458496 skinV3 false
+[tiger-v3] fallback to classic Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/three/addons/loaders/GLTFLoader.js' imported from /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/characters/tigerSkinV3.js
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at node:internal/modules/esm/loader:632:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:362:14) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/three/addons/loaders/GLTFLoader.js'
+}
+boat actual fixture max displacement at dt .1: 1.330799417466439 skinV3 false
+[tiger-v3] fallback to classic Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/three/addons/loaders/GLTFLoader.js' imported from /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/characters/tigerSkinV3.js
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at node:internal/modules/esm/loader:632:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:362:14) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/three/addons/loaders/GLTFLoader.js'
+}
+whale actual fixture max displacement at dt .1: 1.330799417466439 skinV3 false
+[tiger-v3] fallback to classic Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/three/addons/loaders/GLTFLoader.js' imported from /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/characters/tigerSkinV3.js
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)
+    at #resolve (node:internal/modules/esm/loader:683:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)
+    at node:internal/modules/esm/loader:632:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:362:14) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/three/addons/loaders/GLTFLoader.js'
+}
+✔ actual factory tiger and carrier: swim (4897.740791ms)
+✔ actual factory tiger and carrier: boat (4180.765584ms)
+✔ actual factory tiger and carrier: whale (3700.411333ms)
+✔ giant tree roots fan out underwater from the trunk, stay under the boat lane, one draw (2813.936083ms)
+✔ root meadow has real bottom attachment, leaves clear swimming space, reinstall does not duplicate and dispose restores (2028.368417ms)
+longship-validation {"seconds":52,"frames":1561,"rowers":52,"maxGrip":3.66205343881779e-15,"maxWrist":3.9968028886505635e-15,"maxElbow":0.0014155712740637426,"minHeading":0.9999002957980615,"minRecoveryBottom":25.19316545058986,"maxPowerTop":25.05762793664243,"wet":10108,"dry":64914,"span":8.950382878992533}
+✔ lake-only longships keep 52 identities, actual wet/dry blades and continuous hand/elbow contacts (7960.35975ms)
+✔ 3–4 thin waterfalls hug the pit wall from rim to water, avoid the stair entrance and walkway, one draw (2746.410709ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21571.742041

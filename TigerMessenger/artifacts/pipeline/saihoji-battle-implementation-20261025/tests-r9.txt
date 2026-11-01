@@ -1,0 +1,29 @@
+✔ default trooper and deployed squad use exactly 1.5 linear scale with explicit scales preserved (13.260167ms)
+✔ casualties visibly unload one by one, wait for Heiwa, heal and remain reserved until carrier returns (4.888083ms)
+✔ real assault evacuation hands casualties to medical ownership and next sortie excludes them (6.811ms)
+✔ front shields intercept actual front segment, not rear shots or distant misses, and drain then break (24.489375ms)
+✔ rear guns fire through clear lanes and stop when an ally or wall blocks the trajectory (34.149958ms)
+✔ close combat switches off gun, animates blade and requires actual swept blade contact (3.493042ms)
+✔ withdrawal boards gun section first while shield section covers, then releases the rear guard (5.416125ms)
+✔ lost or exhausted front rank is replaced by a healthy gunner without new soldiers (6.253709ms)
+✔ shield recovery waits for quiet and a broken shield cannot intercept until restored (3.977334ms)
+✔ rear gun cannot shoot through the back of a friendly shield even without a body on that short segment (5.766959ms)
+✔ moss insertion requires actual ambush and physical fleet contact; ground remains provider-owned (34.275833ms)
+✔ existing roster is assigned once and remains aboard before real contact; starts physical insertion after contact (290.051959ms)
+✔ actual swept shield crossing feeds contact and single damage event (0.657708ms)
+✔ no crossing or unrelated units/target/idle generate no damage (0.110667ms)
+✔ confirmed hull contact preserves result and projectile-specific power (0.088709ms)
+✔ production fleet snapshot never calls the defender snapshot that already reads fleet cycle (6.475542ms)
+✔ only a real flagship opening strike can hold for physical landing (0.35975ms)
+✔ other regions, withdrawal and timeout never acquire landing hold (0.055792ms)
+✔ low-energy guard conserves reserve during actual landing and first physical insertion, without restoring energy (0.054292ms)
+✔ combined assault preserves the ground engagement: first actual strike then suppression/insertion cover before bombs (0.49325ms)
+✔ cover cancels only an unfired prepared straight leg, preserving real queued and released ordnance (0.091375ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 414.836208

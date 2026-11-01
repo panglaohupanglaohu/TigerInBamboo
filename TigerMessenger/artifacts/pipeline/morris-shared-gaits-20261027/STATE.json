@@ -1,0 +1,23 @@
+{
+  "status": "shared-three-horse-controller-and-v9-loaded-normal-brown-riding-confirmed",
+  "asset": "assets/models/morris-horse/horse-v9.glb",
+  "bones": 22,
+  "sourceBefore": "source-before",
+  "normal": "normal-brown-r53.json",
+  "visual": "normal-brown-r53.png",
+  "passed": [
+    "all three horses share skeletal asset and gait controller",
+    "coat and cloth palettes preserved",
+    "tail root mid tip receive lift and phase-delayed sway",
+    "stance moves front to back; recovery knee folds",
+    "croup skin finite and torso stable",
+    "normal F mount brown horse, rider visible, Shift speed5.8188mps, distance7.6098m"
+  ],
+  "limitations": [
+    "normal screenshot after key release captures walk, not proof of all three visual gaits",
+    "component frames support visual review; exact target anatomy still unfinished",
+    "per-leg IK not implemented",
+    "expanded island route traversal validated separately"
+  ],
+  "additionalFix": "brown preexisting spawn40,26 was submerged; moved same horse to dry-24,20"
+}

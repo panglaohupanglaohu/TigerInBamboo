@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "7f3017632723a9fb19ced4d4d16a96da7df94f4346aa1f4862259f40c7267b14",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.46,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.02,
+        "lighting": 0,
+        "navigation": 0.4,
+        "review": 0.57
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.78
+    }
+  },
+  "usage": {
+    "input_tokens": 861,
+    "output_tokens": 91,
+    "cost_usd": 0.000362,
+    "credits_remaining_usd": 4.906876
+  },
+  "elapsed_ms": 1339,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "final normal game GPU and bridge-side review",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,442 @@
+{
+  "scope": "Actual CPU production construction; no WebGL acceptance",
+  "seaStacks": {
+    "version": 1,
+    "retired": [
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-false-0"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-false-1"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-false-2"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-false-3"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-false-4"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-false-5"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-false-6"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "-1-false-0"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "-1-false-1"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "-1-false-2"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "-1-false-3"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "-1-false-4"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "-1-false-5"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "-1-false-6"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-true-0"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-true-1"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-true-2"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-true-3"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-true-4"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-true-5"
+      },
+      {
+        "name": "g30-far-mountain",
+        "detailId": "1-true-6"
+      }
+    ],
+    "plan": {
+      "version": "connected-coastal-plan-1",
+      "railSource": "blue",
+      "referenceStation": 0.10190114068441064,
+      "groups": [
+        {
+          "id": "coastal-bank-landward",
+          "side": -1,
+          "nodes": [
+            {
+              "anchor": [
+                60.88139516506891,
+                64.48251960074073,
+                -133.62916498189074
+              ],
+              "height": 13,
+              "width": 15,
+              "u": 0.09086860440773736
+            },
+            {
+              "anchor": [
+                65.43245726575506,
+                59.86278978547827,
+                -133.61051599266054
+              ],
+              "height": 24,
+              "width": 18,
+              "u": 0.09809681783038537
+            },
+            {
+              "anchor": [
+                76.88547475446856,
+                45.42402041688263,
+                -133.2619974371803
+              ],
+              "height": 16,
+              "width": 16,
+              "u": 0.10646632810924106
+            },
+            {
+              "anchor": [
+                91.92611386789233,
+                23.673245801862628,
+                -129.28047702468322
+              ],
+              "height": 20,
+              "width": 14,
+              "u": 0.11369454153188907
+            }
+          ]
+        },
+        {
+          "id": "coastal-bank-seaward",
+          "side": 1,
+          "nodes": [
+            {
+              "anchor": [
+                18.901643943762245,
+                57.85282589597227,
+                -148.28454000273769
+              ],
+              "height": 18,
+              "width": 15,
+              "u": 0.09086860440773736
+            },
+            {
+              "anchor": [
+                31.12934051105582,
+                32.075434866463745,
+                -154.00119431302943
+              ],
+              "height": 12,
+              "width": 18,
+              "u": 0.09809681783038537
+            },
+            {
+              "anchor": [
+                47.8782789716463,
+                16.660812565125724,
+                -152.03689616550025
+              ],
+              "height": 26,
+              "width": 16,
+              "u": 0.10646632810924106
+            },
+            {
+              "anchor": [
+                51.41699610237899,
+                8.684853014188075,
+                -151.61920468423048
+              ],
+              "height": 16,
+              "width": 14,
+              "u": 0.11369454153188907
+            }
+          ]
+        }
+      ],
+      "railUnchanged": true
+    },
+    "audit": [
+      {
+        "bank": "coastal-bank-landward",
+        "revision": "target-terrain-heightfield-1",
+        "grid": [
+          59,
+          42
+        ],
+        "stepActual": [
+          1.3412602256194492,
+          1.3392743681775272
+        ],
+        "validCells": 131,
+        "invalidCells": 2347,
+        "invalidSamples": 2407,
+        "boundaryEdges": 76,
+        "components": 1,
+        "vertices": 340,
+        "triangles": 676,
+        "minArea": 0.8983853998235258,
+        "domainPolicy": "omit whole cells touching null; cap resulting boundary; no analytic sea-curve clipping",
+        "closed": true,
+        "empty": false,
+        "coordinateSpace": "caller chart",
+        "sceneMutation": false,
+        "version": "connected-coastal-solid-1",
+        "rejectedRail": 13,
+        "rejectedProtected": 891,
+        "seaMisses": 0,
+        "railSamples": 289,
+        "modules": 4,
+        "saddlePorts": 3,
+        "flatMeadowIntent": true,
+        "clearanceMargin": 8.36,
+        "actualOcean": true,
+        "boundaryFinish": {
+          "moved": 128,
+          "maxMove": 0.3200005411200954,
+          "rejected": 0,
+          "rounds": 2,
+          "heightsUnchanged": true,
+          "trianglesUnchanged": true
+        },
+        "geometryNormals": {
+          "version": 1,
+          "enabled": true,
+          "method": "shared-edge semantic corner fans",
+          "positionsChanged": false,
+          "trianglesBefore": 676,
+          "trianglesAfter": 676,
+          "triangleReduction": 0,
+          "softEdges": 770,
+          "hardEdges": 244,
+          "openEdges": 0,
+          "nonManifoldEdges": 0,
+          "windingEdges": 0,
+          "changedCorners": 1908,
+          "maxNormalChangeDeg": 153.22929851919622,
+          "semanticBarriers": 154
+        },
+        "visualReviewed": false,
+        "roots": 10,
+        "vegetation": {
+          "surfaceRevision": "coastal-b9f132b7-2028",
+          "policy": "connected-meadows-edge-broadleaf-clusters",
+          "oldVegetationRetired": true,
+          "roots": 10,
+          "shrubCanopies": 30,
+          "smallTrees": 0,
+          "turfArea": 74.52039607341663,
+          "turfTriangles": 82,
+          "drawCalls": 2,
+          "support": "actual final face plus four root support samples; turf exactly barycentric source corners"
+        }
+      },
+      {
+        "bank": "coastal-bank-seaward",
+        "revision": "target-terrain-heightfield-1",
+        "grid": [
+          56,
+          56
+        ],
+        "stepActual": [
+          1.33798143845698,
+          1.3308116241989758
+        ],
+        "validCells": 368,
+        "invalidCells": 2768,
+        "invalidSamples": 2827,
+        "boundaryEdges": 100,
+        "components": 1,
+        "vertices": 838,
+        "triangles": 1672,
+        "minArea": 0.891498634462386,
+        "domainPolicy": "omit whole cells touching null; cap resulting boundary; no analytic sea-curve clipping",
+        "closed": true,
+        "empty": false,
+        "coordinateSpace": "caller chart",
+        "sceneMutation": false,
+        "version": "connected-coastal-solid-1",
+        "rejectedRail": 0,
+        "rejectedProtected": 829,
+        "seaMisses": 0,
+        "railSamples": 269,
+        "modules": 4,
+        "saddlePorts": 3,
+        "flatMeadowIntent": true,
+        "clearanceMargin": 8.36,
+        "actualOcean": true,
+        "boundaryFinish": {
+          "moved": 162,
+          "maxMove": 0.3200016099660452,
+          "rejected": 0,
+          "rounds": 2,
+          "heightsUnchanged": true,
+          "trianglesUnchanged": true
+        },
+        "geometryNormals": {
+          "version": 1,
+          "enabled": true,
+          "method": "shared-edge semantic corner fans",
+          "positionsChanged": false,
+          "trianglesBefore": 1672,
+          "trianglesAfter": 1672,
+          "triangleReduction": 0,
+          "softEdges": 2075,
+          "hardEdges": 433,
+          "openEdges": 0,
+          "nonManifoldEdges": 0,
+          "windingEdges": 0,
+          "changedCorners": 4182,
+          "maxNormalChangeDeg": 152.91132907447368,
+          "semanticBarriers": 295
+        },
+        "visualReviewed": false,
+        "roots": 24,
+        "vegetation": {
+          "surfaceRevision": "coastal-17715a26-5016",
+          "policy": "connected-meadows-edge-broadleaf-clusters",
+          "oldVegetationRetired": true,
+          "roots": 24,
+          "shrubCanopies": 72,
+          "smallTrees": 0,
+          "turfArea": 347.51366987554496,
+          "turfTriangles": 381,
+          "drawCalls": 2,
+          "support": "actual final face plus four root support samples; turf exactly barycentric source corners"
+        }
+      }
+    ],
+    "oldVegetationRemoved": true,
+    "railUnchanged": true
+  },
+  "cloudSurfaces": [
+    "g30-far-mountain",
+    "g30-far-mountain"
+  ],
+  "lake": {
+    "visual": {
+      "version": 1,
+      "scope": "moonlit-lake-only",
+      "palette": {
+        "ink": "#263e49",
+        "water": "#75adb2",
+        "waterDeep": "#386675",
+        "stone": "#b5bcb0",
+        "stoneShade": "#778e90",
+        "wall": "#6e9193",
+        "bark": "#739187",
+        "foliage": "#7da294",
+        "foliageShade": "#507e7c",
+        "flower": "#cc8c91",
+        "warm": "#ead4ac",
+        "path": "#d3d1b8"
+      },
+      "changedMeshes": 323,
+      "outlineDraws": 11,
+      "preservedStoryActors": true
+    },
+    "spatial": {
+      "version": 1,
+      "scope": "three reachable side-bank terraces; original tiger stair retained",
+      "levels": [
+        {
+          "id": 1,
+          "innerY": 34.8,
+          "heightFromRim": -2.6000000000000014,
+          "waterClearance": 4.899999999999999,
+          "width": 2,
+          "angleStart": 0.5,
+          "angleEnd": 0.08,
+          "radius": 13.529999999999998
+        },
+        {
+          "id": 2,
+          "innerY": 30.8,
+          "heightFromRim": -4.6,
+          "waterClearance": 2.9000000000000004,
+          "width": 2,
+          "angleStart": -0.66,
+          "angleEnd": -0.95,
+          "radius": 12.129999999999999
+        },
+        {
+          "id": 3,
+          "innerY": 26.8,
+          "heightFromRim": -6.6,
+          "waterClearance": 0.9000000000000004,
+          "width": 2,
+          "angleStart": -1.74,
+          "angleEnd": -2.03,
+          "radius": 10.729999999999999
+        }
+      ],
+      "routePoints": 120,
+      "walkMeshes": 1
+    },
+    "ecology": {
+      "counts": [
+        22,
+        22,
+        22
+      ],
+      "renderMeshes": 3,
+      "rejected": {
+        "support": 0,
+        "path": 6,
+        "story": 0,
+        "spacing": 176,
+        "living": 19
+      }
+    },
+    "living": {
+      "ready": true,
+      "frame": "inner-swamp-local",
+      "clearWidthWorld": 2,
+      "headroomWorld": 2,
+      "checked": 66,
+      "rejected": [],
+      "passed": true
+    },
+    "habitation": {
+      "ready": true,
+      "position": [
+        29.56784964690934,
+        34.18,
+        4.166757403276901
+      ],
+      "renderMeshes": 2
+    }
+  }
+}

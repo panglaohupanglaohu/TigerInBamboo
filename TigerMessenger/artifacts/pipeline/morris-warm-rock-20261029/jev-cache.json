@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "7ac1fcf52e9ce8fc168df513b6809a66b9b1d4e761e57e767ef28ad593ed1591",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 1,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0,
+        "review": 1
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.22
+    }
+  },
+  "usage": {
+    "input_tokens": 679,
+    "output_tokens": 91,
+    "cost_usd": 0.000286,
+    "credits_remaining_usd": 4.888447
+  },
+  "elapsed_ms": 3090,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "actual GPU comparison",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

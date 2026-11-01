@@ -1,0 +1,298 @@
+{
+  "passed": true,
+  "snapshot": {
+    "landing": {
+      "medical": {
+        "rescued": 0,
+        "healed": 0,
+        "returned": 0,
+        "patients": 0,
+        "carriers": []
+      },
+      "ready": 21,
+      "active": true,
+      "stage": "sweep",
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "assigned": 18,
+      "controllers": 14,
+      "heldFor": 0,
+      "deployed": 18,
+      "trooperShots": 12,
+      "trooperRobotHits": 0,
+      "residentShots": 24,
+      "residentHits": 10,
+      "residentsDown": 2,
+      "troopersDown": 0,
+      "robotKills": 0,
+      "friendlyBlastHits": 0,
+      "blastResidentHits": 0,
+      "recovered": 0,
+      "aboard": 3,
+      "rappelling": 0,
+      "ground": 18,
+      "liveProjectiles": 0,
+      "renderBatch": {
+        "sourceMeshes": 1215,
+        "batches": 45,
+        "instances": 810
+      }
+    },
+    "afterBlast": {
+      "medical": {
+        "rescued": 0,
+        "healed": 0,
+        "returned": 0,
+        "patients": 0,
+        "carriers": []
+      },
+      "ready": 16,
+      "active": true,
+      "stage": "sweep",
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "assigned": 18,
+      "controllers": 14,
+      "heldFor": 0,
+      "deployed": 18,
+      "trooperShots": 12,
+      "trooperRobotHits": 0,
+      "residentShots": 24,
+      "residentHits": 16,
+      "residentsDown": 5,
+      "troopersDown": 5,
+      "robotKills": 0,
+      "friendlyBlastHits": 6,
+      "blastResidentHits": 6,
+      "recovered": 0,
+      "aboard": 3,
+      "rappelling": 0,
+      "ground": 13,
+      "liveProjectiles": 0,
+      "renderBatch": {
+        "sourceMeshes": 1215,
+        "batches": 45,
+        "instances": 810
+      }
+    },
+    "robotDefense": {
+      "active": true,
+      "intruders": 12,
+      "defenders": 1,
+      "shotsFired": 1,
+      "movingShots": 0,
+      "transportShots": 0,
+      "weaponEffects": {
+        "locust": 0,
+        "ant": 1,
+        "beetle": 0,
+        "sentry": 0
+      }
+    },
+    "crossfire": {
+      "medical": {
+        "rescued": 0,
+        "healed": 0,
+        "returned": 0,
+        "patients": 0,
+        "carriers": []
+      },
+      "ready": 14,
+      "active": true,
+      "stage": "sweep",
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "assigned": 18,
+      "controllers": 11,
+      "heldFor": 2.849999999999998,
+      "deployed": 18,
+      "trooperShots": 32,
+      "trooperRobotHits": 0,
+      "residentShots": 38,
+      "residentHits": 31,
+      "residentsDown": 12,
+      "troopersDown": 7,
+      "robotKills": 1,
+      "friendlyBlastHits": 6,
+      "blastResidentHits": 6,
+      "recovered": 0,
+      "aboard": 3,
+      "rappelling": 0,
+      "ground": 11,
+      "liveProjectiles": 0,
+      "renderBatch": {
+        "sourceMeshes": 1215,
+        "batches": 45,
+        "instances": 810
+      }
+    },
+    "evacuation": {
+      "medical": {
+        "rescued": 0,
+        "healed": 0,
+        "returned": 0,
+        "patients": 0,
+        "carriers": []
+      },
+      "ready": 14,
+      "active": true,
+      "stage": "evacuation",
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "assigned": 18,
+      "controllers": 0,
+      "heldFor": 0,
+      "deployed": 18,
+      "trooperShots": 32,
+      "trooperRobotHits": 0,
+      "residentShots": 38,
+      "residentHits": 31,
+      "residentsDown": 12,
+      "troopersDown": 7,
+      "robotKills": 1,
+      "friendlyBlastHits": 6,
+      "blastResidentHits": 6,
+      "recovered": 18,
+      "aboard": 14,
+      "rappelling": 0,
+      "ground": 0,
+      "liveProjectiles": 0,
+      "renderBatch": {
+        "sourceMeshes": 1215,
+        "batches": 45,
+        "instances": 0
+      }
+    },
+    "medicalDispatch": {
+      "medical": {
+        "rescued": 7,
+        "healed": 0,
+        "returned": 0,
+        "patients": 7,
+        "carriers": [
+          {
+            "id": "3c8d4f6f-977a-4614-b2aa-da08942caaa7",
+            "stage": "transport",
+            "patients": 6,
+            "treatment": 0
+          },
+          {
+            "id": "6bc262f4-6f3c-4d3d-958e-d77a146059f6",
+            "stage": "transport",
+            "patients": 1,
+            "treatment": 0
+          }
+        ]
+      },
+      "ready": 0,
+      "active": false,
+      "stage": "done",
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "assigned": 18,
+      "controllers": 0,
+      "heldFor": 0,
+      "deployed": 18,
+      "trooperShots": 32,
+      "trooperRobotHits": 0,
+      "residentShots": 38,
+      "residentHits": 31,
+      "residentsDown": 12,
+      "troopersDown": 7,
+      "robotKills": 1,
+      "friendlyBlastHits": 6,
+      "blastResidentHits": 6,
+      "recovered": 18,
+      "aboard": 0,
+      "rappelling": 0,
+      "ground": 0,
+      "liveProjectiles": 0,
+      "renderBatch": {
+        "sourceMeshes": 1215,
+        "batches": 45,
+        "instances": 0
+      }
+    },
+    "secondAssembly": {
+      "medical": {
+        "rescued": 7,
+        "healed": 0,
+        "returned": 0,
+        "patients": 7,
+        "carriers": [
+          {
+            "id": "3c8d4f6f-977a-4614-b2aa-da08942caaa7",
+            "stage": "transport",
+            "patients": 6,
+            "treatment": 0
+          },
+          {
+            "id": "6bc262f4-6f3c-4d3d-958e-d77a146059f6",
+            "stage": "transport",
+            "patients": 1,
+            "treatment": 0
+          }
+        ]
+      },
+      "ready": 7,
+      "active": true,
+      "stage": "suppression",
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "assigned": 6,
+      "controllers": 0,
+      "heldFor": 0,
+      "deployed": 0,
+      "trooperShots": 0,
+      "trooperRobotHits": 0,
+      "residentShots": 0,
+      "residentHits": 0,
+      "residentsDown": 0,
+      "troopersDown": 0,
+      "robotKills": 0,
+      "friendlyBlastHits": 0,
+      "blastResidentHits": 0,
+      "recovered": 0,
+      "aboard": 7,
+      "rappelling": 0,
+      "ground": 0,
+      "liveProjectiles": 0,
+      "renderBatch": {
+        "sourceMeshes": 1215,
+        "batches": 45,
+        "instances": 0
+      }
+    },
+    "afterHealing": {
+      "medical": {
+        "rescued": 7,
+        "healed": 7,
+        "returned": 7,
+        "patients": 0,
+        "carriers": []
+      },
+      "ready": 21,
+      "active": true,
+      "stage": "suppression",
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "assigned": 18,
+      "controllers": 0,
+      "heldFor": 0,
+      "deployed": 0,
+      "trooperShots": 0,
+      "trooperRobotHits": 0,
+      "residentShots": 0,
+      "residentHits": 0,
+      "residentsDown": 0,
+      "troopersDown": 0,
+      "robotKills": 0,
+      "friendlyBlastHits": 0,
+      "blastResidentHits": 0,
+      "recovered": 0,
+      "aboard": 21,
+      "rappelling": 0,
+      "ground": 0,
+      "liveProjectiles": 0,
+      "renderBatch": {
+        "sourceMeshes": 1215,
+        "batches": 45,
+        "instances": 0
+      }
+    }
+  },
+  "scope": "Real production modules CPU fixture, actual existing model constructors; not gameplay GPU validation"
+}

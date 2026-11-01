@@ -1,0 +1,29 @@
+{
+  "status": "integrated-current-normal-F-W-Shift-A-S-F-checked",
+  "revision": "morris-route-r30-20261026",
+  "controls": {
+    "F": "mount nearby original horse / dismount safely",
+    "W": "forward",
+    "S": "reverse/brake",
+    "A/D": "steer",
+    "Shift": "accelerate"
+  },
+  "normal": {
+    "testSetup": "explicit inspection button moves courier near horse; F and movement use real normal game controller, not a walk-to-island proof",
+    "maxSpeed": 5.791588446331569,
+    "distanceTravelled": 6.343514183063792,
+    "reverseSpeed": -0.2405974196832848,
+    "consoleErrors": []
+  },
+  "localChecks": 11,
+  "animation": "original procedural articulated knee gait, walk/trot/canter, smooth acceleration/braking, neck/tail response, straddled rider pelvis aligned to actual saddle",
+  "reference": "User-requested Ghost of Tsushima feel; official PlayStation public game material consulted. No copied game animation, no full frame-by-frame action study claimed.",
+  "missing": [
+    "complete mounted uphill loop and actual normal-game full bridge crossing",
+    "close-up multi-angle animation acceptance",
+    "long route resistance/obstacle traversal"
+  ],
+  "noCommitPush": true,
+  "jevActual": "jev-result.json",
+  "jevCache": "jev-cache.json"
+}

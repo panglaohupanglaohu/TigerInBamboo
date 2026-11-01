@@ -19,29 +19,34 @@ function chunkInstances(group,name,geo,mat,entries,cell=40,opts={}){const bucket
 // The shadow pool and the lobed outline are drawn with polar curves on a canvas, so the
 // outline is authored once and reused by every instance (no per-instance triangles).
 let rosetteTex=null;
-function rosetteTexture(){
- if(rosetteTex)return rosetteTex;
+const rosetteTexCache=new Map();
+function rosetteTexture(variant=0){
+ if(rosetteTexCache.has(variant))return rosetteTexCache.get(variant);
  const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');
- // Three S-curved acanthus blades form one transparent motif, with the
- // silhouette, overlapping lobes and veins painted once for all instances.
- const blade=(angle,scale,shade)=>{
-  g.save();g.translate(256,270);g.rotate(angle);g.scale(scale,scale);
-  const center=t=>({x:37*Math.sin(t*Math.PI*1.25),y:-205*t});
-  const side=(t,sign)=>{const p=center(t),w=74*Math.pow(Math.sin(Math.PI*t),.75)*( .69+.31*Math.cos(t*Math.PI*12));return{x:p.x+sign*w,y:p.y+sign*8*Math.sin(t*Math.PI*2)};};
-  g.beginPath();g.moveTo(0,0);for(let j=1;j<=72;j++){const p=side(j/72,1);g.lineTo(p.x,p.y);}for(let j=71;j>=0;j--){const p=side(j/72,-1);g.lineTo(p.x,p.y);}g.closePath();g.fillStyle=shade;g.fill();g.strokeStyle='#344a3b';g.lineWidth=3.6;g.stroke();
-  g.beginPath();g.moveTo(0,0);for(let j=1;j<=32;j++){const p=center(j/32);g.lineTo(p.x,p.y);}g.strokeStyle='#d0be86';g.lineWidth=3.2;g.stroke();
-  for(let j=1;j<=6;j++)for(const sign of[-1,1]){const t=j/7,p=center(t-.055),q=side(t,sign);g.beginPath();g.moveTo(p.x,p.y);g.quadraticCurveTo(q.x*.65,p.y-13,q.x*.91,q.y);g.lineWidth=1.6;g.stroke();}
+ let seed=9137+variant*7919;const rnd=()=>{seed=(1664525*seed+1013904223)>>>0;return seed/4294967296;};
+ // Morris tapestry verdure: dark acanthus blades with pale veins, then
+ // red / ivory / gold blooms woven over them (target image 4).
+ const blade=(x,y,angle,scale,shade,vein)=>{
+  g.save();g.translate(x,y);g.rotate(angle);g.scale(scale,scale);
+  const center=t=>({x:30*Math.sin(t*Math.PI*1.3),y:-170*t});
+  const side=(t,sign)=>{const p=center(t),w=58*Math.pow(Math.sin(Math.PI*t),.7)*(.66+.34*Math.cos(t*Math.PI*11));return{x:p.x+sign*w,y:p.y+sign*7*Math.sin(t*Math.PI*2)};};
+  g.beginPath();g.moveTo(0,0);for(let j=1;j<=64;j++){const p=side(j/64,1);g.lineTo(p.x,p.y);}for(let j=63;j>=0;j--){const p=side(j/64,-1);g.lineTo(p.x,p.y);}g.closePath();g.fillStyle=shade;g.fill();g.strokeStyle='#1d2f22';g.lineWidth=3;g.stroke();
+  g.beginPath();g.moveTo(0,0);for(let j=1;j<=28;j++){const p=center(j/28);g.lineTo(p.x,p.y);}g.strokeStyle=vein;g.lineWidth=3;g.stroke();
+  for(let j=1;j<=5;j++)for(const sign of[-1,1]){const t=j/6,p=center(t-.05),q=side(t,sign);g.beginPath();g.moveTo(p.x,p.y);g.quadraticCurveTo(q.x*.6,p.y-10,q.x*.9,q.y);g.lineWidth=1.5;g.stroke();}
   g.restore();
  };
- for(const[a,k,col]of[[-2.2,.8,'#657958'],[2.2,.86,'#7d895b'],[-1.0,.91,'#a3a575'],[1.05,.96,'#89945e'],[0,1.07,'#b4b381']])blade(a,k,col);
- // One stylised blue flower and two cream companions are part of the
- // reusable motif, rather than extra petal meshes scattered over the island.
- const bloom=(x,y,r,color)=>{g.save();g.translate(x,y);for(let k=0;k<11;k++){g.save();g.rotate(k*Math.PI*2/11);g.beginPath();g.moveTo(-r*.10,0);g.bezierCurveTo(-r*.50,-r*.50,-r*.31,-r*1.25,0,-r);g.bezierCurveTo(r*.31,-r*1.25,r*.50,-r*.50,r*.10,0);g.closePath();g.fillStyle=color;g.fill();g.strokeStyle='#656e58';g.lineWidth=1.8;g.stroke();g.restore();}g.fillStyle='#c4b27d';g.beginPath();g.arc(0,0,r*.24,0,Math.PI*2);g.fill();g.restore();};
- bloom(300,169,45,'#a9b8c5');bloom(171,277,23,'#e1d9b0');bloom(335,329,21,'#d4c896');
- rosetteTex=new T.CanvasTexture(c);rosetteTex.colorSpace=T.SRGBColorSpace;rosetteTex.anisotropy=4;return rosetteTex;
+ const greens=[['#2c4630','#8f9a62'],['#3d5a36','#b3b07a'],['#56703f','#c9c08a'],['#6f8346','#d7cd94'],['#24402f','#7f9a6a']];
+ for(let k=0;k<9;k++){const a=k/9*Math.PI*2+rnd()*.5,r=40+rnd()*60,[f,v]=greens[(k+variant)%greens.length];blade(256+Math.cos(a)*r*.5,256+Math.sin(a)*r*.5,a+Math.PI/2+(rnd()-.5)*.6,.8+rnd()*.5,f,v);}
+ const flower=(x,y,r,petal,edge,heart,n=6)=>{g.save();g.translate(x,y);g.rotate(rnd()*6);for(let k=0;k<n;k++){g.save();g.rotate(k*Math.PI*2/n);g.beginPath();g.moveTo(0,0);g.bezierCurveTo(-r*.55,-r*.35,-r*.45,-r*1.05,0,-r);g.bezierCurveTo(r*.45,-r*1.05,r*.55,-r*.35,0,0);g.fillStyle=petal;g.fill();g.strokeStyle=edge;g.lineWidth=2;g.stroke();g.restore();}g.fillStyle=heart;g.beginPath();g.arc(0,0,r*.28,0,Math.PI*2);g.fill();g.restore();};
+ const red=['#b8322a','#7a1c1a','#e2b04a'],ivory=['#f1e8d0','#8f8a6c','#d9a531'],gold=['#e0ad35','#8c6420','#a8461f'],coral=['#cf4a35','#86241c','#f0d9a0'];
+ const mixes=[[red,red,ivory,gold],[ivory,ivory,red,gold],[gold,red,ivory,coral],[red,coral,ivory,red]][variant%4];
+ const count=[7,8,7,8][variant%4];
+ for(let k=0;k<count;k++){const a=rnd()*Math.PI*2,r=rnd()*165,[pc,ec,hc]=mixes[k%mixes.length];flower(256+Math.cos(a)*r,256+Math.sin(a)*r,22+rnd()*20,pc,ec,hc,pc===ivory[0]?10:6);}
+ for(let k=0;k<10;k++){const a=rnd()*Math.PI*2,r=rnd()*180;g.fillStyle=k%3?'#a8302a':'#e9d9a8';g.beginPath();g.arc(256+Math.cos(a)*r,256+Math.sin(a)*r,4+rnd()*4,0,Math.PI*2);g.fill();}
+ const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=4;rosetteTexCache.set(variant,tex);return tex;
 }
-function rosetteGeometry(){const d=new T.PlaneGeometry(1.8,1.8);d.rotateX(-Math.PI/2);d.translate(0,.03,0);return d;}
-function rosetteMaterial(){return new T.MeshStandardMaterial({map:rosetteTexture(),alphaTest:.12,transparent:false,side:T.DoubleSide,roughness:.9});}
+function rosetteGeometry(){const d=new T.PlaneGeometry(2.5,2.5);d.rotateX(-Math.PI/2);d.translate(0,.03,0);return d;}
+function rosetteMaterial(variant=0){return new T.MeshStandardMaterial({map:rosetteTexture(variant),alphaTest:.12,transparent:false,side:T.DoubleSide,roughness:.9});}
 export function createMorrisFlora({group,heightAt,pathDistance,random,linearScale=1,canPlant=()=>true}){
  const palette=[0xa93632,0xf2dfae,0xc35140,0xe8d3a0,0xc39743],flowerPoints=[],clumps=[],extent=19*linearScale;
  // Bouquets follow two interwoven flow fields. Each cluster has low leaves,
@@ -54,14 +59,24 @@ export function createMorrisFlora({group,heightAt,pathDistance,random,linearScal
  const greens=new T.InstancedMesh(greenGeo,greenMat,flowerPoints.length);greens.name='morris-clustered-bloom-stems-and-lance-leaves';greens.receiveShadow=true;group.add(greens);
  flowerPoints.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(0,p.yaw,0);dummy.scale.setScalar(p.scale);dummy.updateMatrix();greens.setMatrixAt(i,dummy.matrix);});greens.computeBoundingSphere();
  for(let k=0;k<5;k++){const points=flowerPoints.filter(p=>p.kind===k),petalEntries=[],heartEntries=[];points.forEach((p)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(0,p.yaw,0);dummy.scale.setScalar(p.scale);dummy.updateMatrix();petalEntries.push({matrix:dummy.matrix.clone(),x:p.x,z:p.z});dummy.position.y+=.61*p.scale;dummy.scale.set(p.scale,p.scale*.6,p.scale);dummy.updateMatrix();heartEntries.push({matrix:dummy.matrix.clone(),x:p.x,z:p.z});});chunkInstances(group,'morris-cupped-rose-and-ivory-daisy-bouquets',flowerGeometry(k===0||k===2?0:k===1||k===3?1:2),new T.MeshStandardMaterial({color:palette[k],roughness:.78,side:T.DoubleSide}),petalEntries,40);chunkInstances(group,'morris-bouquet-heart-buds',new T.SphereGeometry(.07,4,3),new T.MeshStandardMaterial({color:k===0||k===2?0x55402a:0xc09843,roughness:.8}),heartEntries,40);}
- const leafGeo=rosetteGeometry(),leafMat=rosetteMaterial(),leafPoints=[];
+ const leafGeo=rosetteGeometry(),leafPoints=[];
  const feeding=linearScale>1?[[-24,21.3],[39.3,27.1],[-8.8,37.8]]:[[-6,4],[5,1],[0,-7]];
- for(const c of clumps)if(random()<.93)leafPoints.push([c.x,c.z,c.yaw]);
- for(let i=0;i<100*linearScale**2;i++){const x=(random()-.5)*37*linearScale,z=(random()-.5)*37*linearScale;if(!canPlant(x,z)||Math.hypot(x,z)>extent||pathDistance(x,z)<1.8)continue;leafPoints.push([x,z,random()*6.28]);}
+ // Tapestry verdure carpet: a dense jittered lattice of painted motif cards.
+ for(let gx=-extent;gx<=extent;gx+=1.55)for(let gz=-extent;gz<=extent;gz+=1.55){const x=gx+(random()-.5)*1.3,z=gz+(random()-.5)*1.3;if(Math.hypot(x,z)>extent||!canPlant(x,z)||pathDistance(x,z)<1.9)continue;leafPoints.push([x,z,random()*6.28]);}
  leafPoints.push(...feeding.map(([x,z])=>[x,z,0]));
- const acanthusEntries=[];
- for(const[x,z,yaw]of leafPoints)for(let j=0;j<1;j++){dummy.position.set(x,heightAt(x,z),z);const gx=(heightAt(x+.25,z)-heightAt(x-.25,z))/.5,gz=(heightAt(x,z+.25)-heightAt(x,z-.25))/.5;dummy.quaternion.setFromUnitVectors(V(0,1,0),V(-gx,1,-gz).normalize()).multiply(new T.Quaternion().setFromAxisAngle(V(0,1,0),yaw+j*Math.PI/3+random()*.25));const scale=.90+random()*.50;dummy.scale.set(scale,.7+random()*.5,scale);dummy.updateMatrix();acanthusEntries.push({matrix:dummy.matrix.clone(),x,z});}chunkInstances(group,'morris-interwoven-lobed-acanthus-rosettes',leafGeo,leafMat,acanthusEntries,40,{cast:false});
- return{flowerCount:flowerPoints.length,bouquetClumps:clumps.length,acanthusClumps:leafPoints.length,feeding,revision:'painted-acanthus-single-card-r4-20261031',leafCardsPerClump:1,previousLeafCardsPerClump:6,textureSize:512,leafSolidThickness:0,petalSolidThickness:.008};
+ const variants=[[],[],[],[]];
+ for(const[x,z,yaw]of leafPoints){dummy.position.set(x,heightAt(x,z)+.02,z);const gx=(heightAt(x+.25,z)-heightAt(x-.25,z))/.5,gz=(heightAt(x,z+.25)-heightAt(x,z-.25))/.5;dummy.quaternion.setFromUnitVectors(V(0,1,0),V(-gx,1,-gz).normalize()).multiply(new T.Quaternion().setFromAxisAngle(V(0,1,0),yaw));const scale=.85+random()*.45;dummy.scale.set(scale,1,scale);dummy.updateMatrix();variants[Math.floor(random()*4)].push({matrix:dummy.matrix.clone(),x,z});}
+ variants.forEach((entries,k)=>{const m=new T.InstancedMesh(leafGeo,rosetteMaterial(k),entries.length);m.name='morris-tapestry-verdure-cards-'+k;m.receiveShadow=true;entries.forEach((e,i)=>m.setMatrixAt(i,e.matrix));m.computeBoundingSphere();group.add(m);});
+ // Raised blooms: one instanced head mesh (per-instance colour) + one stem mesh.
+ const starPts=[];for(let k=0;k<10;k++){const a=k/10*Math.PI*2,r=k%2?.055:.15;starPts.push(new T.Vector2(Math.cos(a)*r,Math.sin(a)*r));}const headGeo=new T.ShapeGeometry(new T.Shape(starPts),1);headGeo.rotateX(-Math.PI/2+.3);const stemG=new T.PlaneGeometry(.03,1);stemG.translate(0,.5,0);
+ const bloomPts=[];for(const[x,z]of leafPoints){const n=random()<.5?1:2;for(let j=0;j<n;j++){const xx=x+(random()-.5)*1.6,zz=z+(random()-.5)*1.6;if(!canPlant(xx,zz)||pathDistance(xx,zz)<1.7)continue;bloomPts.push([xx,zz,.22+random()*.4]);}}
+ const bloomColors=[0xb8322a,0xb8322a,0xcf4a35,0xf1e8d0,0xf1e8d0,0xe0ad35,0xd8b54a];
+ const heads=new T.InstancedMesh(headGeo,new T.MeshStandardMaterial({roughness:.75,side:T.DoubleSide}),bloomPts.length),stems=new T.InstancedMesh(stemG,new T.MeshStandardMaterial({color:0x3b5a33,roughness:.9,side:T.DoubleSide}),bloomPts.length),bc=new T.Color();
+ heads.name='morris-tapestry-raised-blooms';stems.name='morris-tapestry-bloom-stems';
+ bloomPts.forEach(([x,z,h],i)=>{const y=heightAt(x,z);dummy.quaternion.identity();dummy.rotation.set(0,random()*6.28,0);dummy.position.set(x,y,z);dummy.scale.set(1,h,1);dummy.updateMatrix();stems.setMatrixAt(i,dummy.matrix);dummy.position.set(x,y+h,z);const s=.8+random()*.6;dummy.scale.set(s,s,s);dummy.updateMatrix();heads.setMatrixAt(i,dummy.matrix);heads.setColorAt(i,bc.set(bloomColors[Math.floor(random()*bloomColors.length)]));});
+ heads.computeBoundingSphere();stems.computeBoundingSphere();group.add(heads,stems);
+ const acanthusEntries=variants.flat();
+ return{flowerCount:flowerPoints.length,bouquetClumps:clumps.length,acanthusClumps:leafPoints.length,feeding,revision:'tapestry-verdure-r5-20261030',raisedBlooms:bloomPts.length,leafCardsPerClump:1,previousLeafCardsPerClump:6,textureSize:512,leafSolidThickness:0,petalSolidThickness:.008};
 }
 
 /** Sparse climbing roses on solid facade strips; the gate opening stays clear. */
@@ -100,8 +115,7 @@ export function addPlaneTreeUnderstory({group,trees,heightAt,random}){
    else q.setFromAxisAngle(V(0,1,0),random()*6.28);
    const sc=.85+random()*.35,m=new T.Matrix4().compose(V(x,y,z),q,V(sc,sc,sc));
    buckets[tier.key].push({matrix:m,x,z});}}); });
- chunkInstances(group,'morris-plane-understory-lower-red-rosettes',rosetteGeometry(),understoryMaterial(),buckets.lower,40);
- chunkInstances(group,'morris-plane-understory-middle-red-rosettes',standingGeometry(),understoryMaterial(),buckets.middle,40);
- chunkInstances(group,'morris-plane-understory-upper-red-rosettes',standingGeometry(),understoryMaterial(),buckets.upper,40);
- return{lower:buckets.lower.length,middle:buckets.middle.length,upper:buckets.upper.length};
+ // Standing black-backed discs removed (tapestry pass r5): the plane-tree understory is woven verdure cards + companion hollyhocks.
+ chunkInstances(group,'morris-plane-understory-lower-red-rosettes',rosetteGeometry(),rosetteMaterial(0),[...buckets.lower,...buckets.middle.map(e=>({...e,matrix:e.matrix.clone().multiply(new T.Matrix4().makeTranslation(0,-0.0,0))}))].map(e=>{const p=new T.Vector3(),q=new T.Quaternion(),sc=new T.Vector3();e.matrix.decompose(p,q,sc);p.y=heightAt(p.x,p.z)+.03;return{...e,matrix:new T.Matrix4().compose(p,new T.Quaternion().setFromAxisAngle(V(0,1,0),random()*6.28),sc)};}),40,{cast:false});
+ return{lower:buckets.lower.length,middle:buckets.middle.length,upper:0};
 }

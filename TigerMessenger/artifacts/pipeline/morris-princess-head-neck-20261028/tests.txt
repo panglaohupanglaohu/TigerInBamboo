@@ -1,0 +1,4 @@
+(node:98501) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./artifacts/pipeline/morris-ecology-20261026/loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS real v4 GLB loader, pivots, 200 moving poses finite, reversible restore. Not visual or navigation acceptance.

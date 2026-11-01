@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "c8102cf956048bc51983bb6a111bdee8418195458c028409f723048a08338a85",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.46,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.5700000000000001,
+        "review": 0.43
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.69
+    }
+  },
+  "usage": {
+    "input_tokens": 798,
+    "output_tokens": 91,
+    "cost_usd": 0.000336,
+    "credits_remaining_usd": 4.916953
+  },
+  "elapsed_ms": 1611,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "actual R6 insertion and shielding",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional casualty physical transport/treatment",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

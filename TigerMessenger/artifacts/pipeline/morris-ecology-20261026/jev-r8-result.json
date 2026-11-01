@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "0c9ca1a41c412223af34e7dd9317fe4458c8131cda5f386c9c21610caab861fc",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.79
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.71,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.04,
+        "lighting": 0.03,
+        "navigation": 0.15,
+        "review": 0.77
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.55
+    }
+  },
+  "usage": {
+    "input_tokens": 774,
+    "output_tokens": 91,
+    "cost_usd": 0.000326,
+    "credits_remaining_usd": 4.909587
+  },
+  "elapsed_ms": 1371,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "normal latest r8 geometry and sea GPU",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

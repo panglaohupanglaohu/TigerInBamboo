@@ -1,0 +1,40 @@
+{
+  "task": "replan whole enlarged Morris route, not merely lengthen entry",
+  "before": "Existing6m middle return crowded old centre; east circle close to creek and music court",
+  "candidate": "West9m return moved north, east ellipse moved4m right, connecting flower path bowed inland away from creek; return to lower music court then castle; bounded6m outer meadow join replaces tight old cubic",
+  "measurements": {
+    "geometry": 15,
+    "actual_route_comparison": 5,
+    "patrol_controller": 11,
+    "support": "no buried/floating road core or premature castle intrusion",
+    "saved_rail": "minimum road centre14.796m, no cover after production protection"
+  },
+  "failures": "Early enlarged eastern candidate left near-creek road edges unsupported; rejected and narrowed/moved bank connection. Current road core supported; smallest radius4.0m. Maximum side ground difference.383m at retained castle foundation, physical road support remains raycast mesh.",
+  "checks": [
+    {
+      "name": "15 factory and support checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "11 deterministic patrol compatibility checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current GPU route view review",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "normal current GLB complete route riding",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No Island/main/player/character or other region edits",
+    "No screenshots or chats transmitted",
+    "JEV cannot accept visual/navigation"
+  ]
+}

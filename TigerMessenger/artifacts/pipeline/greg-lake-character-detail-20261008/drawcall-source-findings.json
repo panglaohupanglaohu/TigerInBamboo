@@ -1,0 +1,505 @@
+{
+  "scope": "Read-only audit. Only artifact scripts/reports created; no src edits in this turn.",
+  "method": "Read-only formal scene CPU inventory. Visible ancestor traversal, no camera frustum/occlusion or render pass simulation. Mesh groups and transparent DoubleSide two-pass estimated. These are available main-pass submissions, NOT measured GPU drawcalls. Shared geometry/material does not batch ordinary meshes.",
+  "limitations": [
+    "CPU snapshot has no formal GPU camera frustum, shadow pass, ocean-occlusion update, or actual renderer timing. Do not label 32,306 inventory as GPU measured drawcalls. Root measured 13,413 at lake entry is a different same-scene camera/time population.",
+    "CPU full startup logs unrelated city candidate skips and boarding file-fetch warning. Objects were built via real formal generator; this is not all-city runtime acceptance.",
+    "Material signatures in report are diagnostic candidates, not an exhaustive proof of shader/render-state compatibility. Sharing a material alone does not merge draws.",
+    "Nested subtree tables overlap; do not sum parent and child contributions."
+  ],
+  "inventory": {
+    "total": {
+      "objects": 16922,
+      "draws": 32306,
+      "triangles": 6209759,
+      "outlineObjects": 2595,
+      "outlineDraws": 2595,
+      "outlineTriangles": 636524,
+      "instancedObjects": 513,
+      "instances": 15632,
+      "materials": 4419
+    },
+    "lake": {
+      "objects": 1682,
+      "draws": 1689,
+      "triangles": 1026453,
+      "outlineObjects": 400,
+      "outlineDraws": 400,
+      "outlineTriangles": 236074,
+      "instancedObjects": 127,
+      "instances": 2753,
+      "materials": 990
+    },
+    "allWarships": {
+      "count": 8,
+      "draws": 580,
+      "triangles": 753792
+    }
+  },
+  "lakeDirectChildAggregates": {
+    "swamp-towering-tree": {
+      "instances": 9,
+      "draws": 368,
+      "triangles": 207216,
+      "outlineDraws": 23
+    },
+    "Group": {
+      "instances": 26,
+      "draws": 244,
+      "triangles": 1952,
+      "outlineDraws": 122
+    },
+    "swamp-glow-flower": {
+      "instances": 16,
+      "draws": 224,
+      "triangles": 1600,
+      "outlineDraws": 96
+    },
+    "swamp-giant-flower": {
+      "instances": 5,
+      "draws": 95,
+      "triangles": 7300,
+      "outlineDraws": 0
+    },
+    "swamp-warship-repair": {
+      "instances": 1,
+      "draws": 94,
+      "triangles": 160744,
+      "outlineDraws": 13
+    },
+    "swamp-lotus-leaf-boat": {
+      "instances": 5,
+      "draws": 70,
+      "triangles": 39080,
+      "outlineDraws": 10
+    },
+    "Mesh": {
+      "instances": 52,
+      "draws": 68,
+      "triangles": 4232,
+      "outlineDraws": 28
+    },
+    "swamp-warship-depart": {
+      "instances": 1,
+      "draws": 66,
+      "triangles": 98204,
+      "outlineDraws": 0
+    },
+    "moebius-cyber-ink-tiger": {
+      "instances": 1,
+      "draws": 59,
+      "triangles": 71260,
+      "outlineDraws": 13
+    },
+    "Sprite": {
+      "instances": 66,
+      "draws": 56,
+      "triangles": 0,
+      "outlineDraws": 0
+    },
+    "swamp-mushroom": {
+      "instances": 6,
+      "draws": 44,
+      "triangles": 1616,
+      "outlineDraws": 22
+    },
+    "v2-entry-stone-cheeks": {
+      "instances": 1,
+      "draws": 32,
+      "triangles": 192,
+      "outlineDraws": 0
+    },
+    "swamp-ancient-world-tree": {
+      "instances": 1,
+      "draws": 28,
+      "triangles": 9124,
+      "outlineDraws": 7
+    },
+    "swamp-bird": {
+      "instances": 4,
+      "draws": 28,
+      "triangles": 30976,
+      "outlineDraws": 12
+    },
+    "swamp-rim-palm": {
+      "instances": 2,
+      "draws": 18,
+      "triangles": 180,
+      "outlineDraws": 2
+    },
+    "moebius-beluga-whale": {
+      "instances": 3,
+      "draws": 18,
+      "triangles": 29376,
+      "outlineDraws": 6
+    },
+    "swamp-longtail-monkey": {
+      "instances": 3,
+      "draws": 18,
+      "triangles": 64776,
+      "outlineDraws": 9
+    },
+    "swamp-floating-leaf": {
+      "instances": 18,
+      "draws": 18,
+      "triangles": 180,
+      "outlineDraws": 0
+    },
+    "v2-entry-lamps": {
+      "instances": 1,
+      "draws": 15,
+      "triangles": 2496,
+      "outlineDraws": 0
+    },
+    "swamp-shell": {
+      "instances": 3,
+      "draws": 12,
+      "triangles": 768,
+      "outlineDraws": 6
+    },
+    "swamp-native-doll": {
+      "instances": 1,
+      "draws": 10,
+      "triangles": 12000,
+      "outlineDraws": 5
+    },
+    "swamp-repair-barge": {
+      "instances": 1,
+      "draws": 9,
+      "triangles": 164,
+      "outlineDraws": 2
+    },
+    "swamp-glow-lizard": {
+      "instances": 3,
+      "draws": 9,
+      "triangles": 57216,
+      "outlineDraws": 3
+    },
+    "swamp-glow-ribbonfish": {
+      "instances": 3,
+      "draws": 9,
+      "triangles": 12864,
+      "outlineDraws": 3
+    },
+    "v2-entrance-tread": {
+      "instances": 8,
+      "draws": 8,
+      "triangles": 672,
+      "outlineDraws": 0
+    },
+    "swamp-moon-shaft": {
+      "instances": 3,
+      "draws": 6,
+      "triangles": 48,
+      "outlineDraws": 0
+    },
+    "swamp-pink-hanger": {
+      "instances": 3,
+      "draws": 6,
+      "triangles": 14472,
+      "outlineDraws": 3
+    },
+    "greg-coral-understory": {
+      "instances": 1,
+      "draws": 4,
+      "triangles": 44876,
+      "outlineDraws": 0
+    },
+    "swamp-tube-worms": {
+      "instances": 2,
+      "draws": 4,
+      "triangles": 24640,
+      "outlineDraws": 2
+    },
+    "tiger-drink-contact-ripple": {
+      "instances": 2,
+      "draws": 4,
+      "triangles": 160,
+      "outlineDraws": 0
+    },
+    "swamp-underground-waterline": {
+      "instances": 1,
+      "draws": 3,
+      "triangles": 87,
+      "outlineDraws": 0
+    },
+    "greg-natural-cliff": {
+      "instances": 1,
+      "draws": 3,
+      "triangles": 12210,
+      "outlineDraws": 1
+    },
+    "swamp-water-volume": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 11872,
+      "outlineDraws": 0
+    },
+    "swamp-fish-0": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 8448,
+      "outlineDraws": 1
+    },
+    "swamp-fish-1": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 9152,
+      "outlineDraws": 1
+    },
+    "swamp-fish-2": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 8448,
+      "outlineDraws": 1
+    },
+    "swamp-fish-3": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 9152,
+      "outlineDraws": 1
+    },
+    "swamp-fish-4": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 8448,
+      "outlineDraws": 1
+    },
+    "swamp-fish-5": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 9152,
+      "outlineDraws": 1
+    },
+    "swamp-fish-6": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 8448,
+      "outlineDraws": 1
+    },
+    "swamp-fish-7": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 9152,
+      "outlineDraws": 1
+    },
+    "swamp-fish-8": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 8448,
+      "outlineDraws": 1
+    },
+    "swamp-eel": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 6568,
+      "outlineDraws": 1
+    },
+    "greg-swamp-three-bank-path": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 1904,
+      "outlineDraws": 0
+    },
+    "greg-swamp-dry-service-shelf": {
+      "instances": 1,
+      "draws": 2,
+      "triangles": 248,
+      "outlineDraws": 0
+    },
+    "swamp-sinkhole-wall": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 704,
+      "outlineDraws": 1
+    },
+    "swamp-lake-floor": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 384,
+      "outlineDraws": 0
+    },
+    "v2-bed-pebbles": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 2560,
+      "outlineDraws": 0
+    },
+    "v2-underwater-grass": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 1440,
+      "outlineDraws": 0
+    },
+    "v2-entry-fronds": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 3072,
+      "outlineDraws": 0
+    },
+    "greg-coral-rim-rock-batch": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 1540,
+      "outlineDraws": 0
+    },
+    "greg-shore-dock-walk": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 36,
+      "outlineDraws": 0
+    },
+    "greg-shore-dock-piles": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 136,
+      "outlineDraws": 0
+    },
+    "greg-shore-dock-board-lines": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 0,
+      "outlineDraws": 0
+    },
+    "greg-coral-monkey-perch-branches": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 5324,
+      "outlineDraws": 0
+    },
+    "greg-coral-monkey-perch-ink": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 0,
+      "outlineDraws": 1
+    },
+    "greg-lake-high-bridge-bearing-arches": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 1104,
+      "outlineDraws": 0
+    },
+    "tiger-lapping-water-column": {
+      "instances": 1,
+      "draws": 1,
+      "triangles": 32,
+      "outlineDraws": 0
+    },
+    "swamp-cross-tree-vine": {
+      "instances": 10,
+      "draws": 0,
+      "triangles": 0,
+      "outlineDraws": 0
+    },
+    "swamp-ripple": {
+      "instances": 12,
+      "draws": 0,
+      "triangles": 0,
+      "outlineDraws": 0
+    },
+    "swamp-falling-leaf": {
+      "instances": 60,
+      "draws": 0,
+      "triangles": 0,
+      "outlineDraws": 0
+    },
+    "v2-bank-ferns": {
+      "instances": 1,
+      "draws": 0,
+      "triangles": 0,
+      "outlineDraws": 0
+    },
+    "v2-bank-rock-shelves": {
+      "instances": 1,
+      "draws": 0,
+      "triangles": 0,
+      "outlineDraws": 0
+    },
+    "greg-swamp-rooted-ecology": {
+      "instances": 1,
+      "draws": 0,
+      "triangles": 0,
+      "outlineDraws": 0
+    }
+  },
+  "highestConcreteOutsideHotspot": {
+    "file": "src/world/crystalV9.js:48",
+    "function": "flower",
+    "cause": "288 groups of 6 indices each on every 576-triangle petal canopy; 48 canopies in 12 V9 towers",
+    "potentialDraws": 13824,
+    "exactAppearancePreservingCandidate": "Reorder triangle indices by existing materialIndex into four contiguous material groups, retaining all triangles, normals, and palette materials. Alternative face vertex colors with one material requires checking flat/shading flags.",
+    "fourGroupsDraws": 192,
+    "potentialInventorySaving": 13632,
+    "status": "Outside assigned lake scope; unchanged."
+  },
+  "lakeCandidates": [
+    {
+      "priority": 1,
+      "item": "285 bark meshes on 10 tree frames",
+      "measuredDraws": 285,
+      "candidateDraws": 10,
+      "method": "Per-tree static geometry batch after final spherical fit; add original mesh-local barkLocal attribute so bark shader remains identical. Preserve non-render semantic source meshes in explicit support/raycast lists; preserve all original references and node transforms. Rebuild only on tree fit/edit, not per frame.",
+      "tests": "Perch and branch attachment actual rays; world transformed vertex equivalence; 371 crowns and bridge clearance unchanged.",
+      "scope": "swampCoralTrunkDetail plus separate tree render-batch installer; not blanket world merge"
+    },
+    {
+      "priority": 2,
+      "item": "26 static underwater algae groups",
+      "measuredDraws": 244,
+      "candidateDraws": "~3",
+      "method": "Batch static two-color blade surfaces and their existing inverse-hull outline separately. Preserve each clump transform/placement; no actor behavior is attached to these groups in factory source.",
+      "tests": "Position/color/outline bounds equality before-after, underwater camera readability",
+      "scope": "lake-only algae creation / dedicated static render batching"
+    },
+    {
+      "priority": 3,
+      "item": "16 glow flowers",
+      "measuredDraws": 224,
+      "candidateDraws": "~20–50 depending halo batching",
+      "method": "Merge stalk/petals per compatible material or use face vertex colors; preserve 16 individual halo refs and pulse identities. Do not combine sprite materials if per-flower opacity is animated.",
+      "tests": "Halo phase, position and alpha at several times; visible petal side and outline equivalence",
+      "scope": "lake glow-flower rendering only"
+    },
+    {
+      "priority": 4,
+      "item": "32 entrance stone cheeks",
+      "measuredDraws": 32,
+      "candidateDraws": 2,
+      "method": "Merge static visible cheek geometry by two semantic colors while preserving original CPU walk/decor sources; no change to highest tread clearance.",
+      "tests": "Tiger entry support/clearance and player radial sampling",
+      "scope": "lake-only entry renderer, not route/stair shape"
+    },
+    {
+      "priority": 5,
+      "item": "5 drifting giant flowers",
+      "measuredDraws": 95,
+      "candidateDraws": "~15–25",
+      "method": "Batch fixed petals inside each individual flower group, preserve each moving group and userData.core/halo refs. Never world-merge the five separately animated groups.",
+      "tests": "Full falling/reset cycle; core and halo refs unchanged",
+      "scope": "lake giant-flower parts only"
+    },
+    {
+      "priority": 6,
+      "item": "V6 two lake ships",
+      "measuredDraws": 160,
+      "candidateDraws": "no large safe shortcut established",
+      "method": "Already 11 static groups + 55 dynamic batches per ship (repair has extra story workers). Preserve sourceId nodes,26 row identities per ship, embarked/sedated/weaponStored and mast/gangplank tracks. B owns rower-specific work. Global cross-ship batching is out of scope and needs a fleet-level transform and visibility updater.",
+      "tests": "Mast repair, boarding,52 crew identities,sedation,weapon storage,departure loop",
+      "scope": "Do not change shared harbor/warship factory in this audit."
+    }
+  ],
+  "outsideLakeUnchanged": [
+    "crystalV9 tower material groups",
+    "canal-junction editable castle 3,360 draws: editing-aware batches must preserve cell/face hit mapping",
+    "old/highland castle 2,905 draws and851outline draws",
+    "bookshop robots2,147draws: retain joint-local animation batches",
+    "global fleet and airship",
+    "shared toon/outline factory"
+  ],
+  "recommendedOrder": "GPU verify the V9 material-group hotspot in current camera, authorize that narrowly scoped render-equivalent fix separately; then lake static algae/bark/flowers. Do not remove story actors or downgrade silhouettes to chase an unsupported boat hypothesis.",
+  "artifacts": [
+    "drawcall-source-audit.mjs",
+    "drawcall-source-audit.json",
+    "drawcall-source-audit.txt"
+  ]
+}

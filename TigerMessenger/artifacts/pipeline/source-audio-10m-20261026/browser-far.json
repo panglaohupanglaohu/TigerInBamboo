@@ -1,0 +1,74 @@
+{
+  "audio": {
+    "active": [
+      {
+        "gain": 0.07860984653234482,
+        "kind": "robin",
+        "rms": 0.000003268376474025585,
+        "state": "running"
+      }
+    ],
+    "muted": false,
+    "range": 10,
+    "source": "existing world SFX budget and live post-gain analyser",
+    "synthesis": "original, not field recording",
+    "weatherBaseGain": 0.15,
+    "weatherGain": 0.15000000596046448,
+    "weatherOriginalBaseGain": 0.6
+  },
+  "last": {
+    "distance": 10.1,
+    "played": false
+  },
+  "world": {
+    "bombMix": {
+      "active": false,
+      "level": 0,
+      "music": 1,
+      "otherWeapons": 1,
+      "vehicles": 1
+    },
+    "caps": {
+      "ENGINE_SLOTS": 2,
+      "FOREGROUND_CAP": 6,
+      "ONESHOT_CAP": 8
+    },
+    "engines": [],
+    "foreground": 0,
+    "listener": {
+      "has": true,
+      "rx": 1,
+      "ry": 0,
+      "rz": 0,
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "oneShots": [
+      {
+        "cat": "event",
+        "gain": 0.07860984653234482,
+        "id": "morrisRobin",
+        "maxDistance": 10
+      }
+    ],
+    "ready": true,
+    "robotSamples": {
+      "error": null,
+      "loaded": {
+        "ant": 2,
+        "beetle": 3,
+        "locust": 2
+      }
+    },
+    "sourceRange": 10,
+    "suction": false,
+    "weather": {
+      "position": null,
+      "rain": 0,
+      "snow": 0,
+      "wind": 0.8
+    },
+    "weatherBedLevel": "25 percent of original by latest user instruction"
+  }
+}

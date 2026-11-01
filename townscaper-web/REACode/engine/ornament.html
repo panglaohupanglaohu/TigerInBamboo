@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Ornament（镜像距离场九宫格）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #55585f; font: 13px/1.4 -apple-system, "PingFang SC", sans-serif; }
+  #wrap { position: relative; width: 100%; height: 100%; }
+  canvas { display: block; }
+  #hint { position: fixed; left: 14px; bottom: 10px; color: #cfd3da; font: 12px/1.5 ui-monospace, monospace; }
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="view"></canvas></div>
+<div id="hint">距离场 + 双 cutoff + 镜像 UV：四角不变形，边被拉长而笔画粗细不变（1104771432440049664）</div>
+<script type="module">
+import { renderOrnamentTile, drawPanel, makeSwirlField } from './ornament.js';
+
+const canvas = document.getElementById('view');
+const ctx = canvas.getContext('2d');
+let dpr = Math.min(devicePixelRatio || 1, 2);
+
+function resize() {
+  canvas.width = innerWidth * dpr;
+  canvas.height = innerHeight * dpr;
+  canvas.style.width = innerWidth + 'px';
+  canvas.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+const tile = renderOrnamentTile({ size: 64, border: 0.055, center: 0.20, ink: [32, 33, 40], bg: null });
+
+// 参考片右下角那张"唯一的贴图"：放大 2 倍摆出来，证明花纹确实只有一张
+function drawTilePreview(x, y, scale = 2) {
+  const s = tile.width * scale;
+  ctx.save();
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
+  ctx.fillRect(x - 4, y - 4, s + 8, s + 8);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(tile, x, y, s, s);
+  ctx.restore();
+}
+
+// 距离场的可视化（左上一小块）：0=线上（白），1=远（黑）
+function drawFieldPreview(x, y, s) {
+  const { size, field } = makeSwirlField(64);
+  const img = ctx.createImageData(size, size);
+  for (let i = 0; i < field.length; i++) {
+    const v = 255 * (1 - Math.min(1, field[i]));
+    img.data[i * 4] = v; img.data[i * 4 + 1] = v; img.data[i * 4 + 2] = v; img.data[i * 4 + 3] = 255;
+  }
+  const off = document.createElement('canvas');
+  off.width = off.height = size;
+  off.getContext('2d').putImageData(img, 0, 0);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(off, x, y, s, s);
+}
+
+function label(text, x, y) {
+  ctx.save();
+  ctx.fillStyle = '#f1eee6';
+  ctx.font = '600 15px -apple-system, "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, innerWidth, innerHeight);
+  ctx.fillStyle = '#55585f';
+  ctx.fillRect(0, 0, innerWidth, innerHeight);
+
+  // 三个尺寸，同一个 tile：小按钮 / 中等框 / 长条
+  const panels = [
+    { x: 70, y: 60, w: 210, h: 84, text: 'Text' },
+    { x: 70, y: 180, w: 360, h: 96, text: 'Text' },
+    { x: 70, y: 310, w: 560, h: 110, text: 'Text' },
+    { x: 70, y: 450, w: 660, h: 76, text: 'Text' },
+  ];
+  for (const p of panels) {
+    drawPanel(ctx, p, { tile, fill: '#e7e2d6' });
+    label(p.text, p.x + p.w / 2, p.y + p.h / 2);
+  }
+
+  // 给测试用：导出第一块面板的像素，检查"角不变形"
+  window.__ornament = {
+    panels,
+    tileSize: tile.width,
+    // 量一下面板四角的暗像素比例，尺寸变化时应当接近
+    cornerInk(p) {
+      const d = ctx.getImageData(p.x * dpr, p.y * dpr, 26 * dpr, 26 * dpr).data;
+      let ink = 0, n = 0;
+      for (let i = 0; i < d.length; i += 4) { n++; if (d[i] < 120) ink++; }
+      return ink / n;
+    },
+  };
+
+  drawTilePreview(Math.min(innerWidth - 160, 800), 80, 2);
+  drawFieldPreview(Math.min(innerWidth - 160, 800), 250, 128);
+  ctx.save();
+  ctx.fillStyle = '#c9ced6';
+  ctx.font = '12px ui-monospace, monospace';
+  ctx.fillText('tile 64² ×2', Math.min(innerWidth - 158, 802), 70);
+  ctx.fillText('distance field', Math.min(innerWidth - 158, 802), 240);
+  ctx.restore();
+}
+
+addEventListener('resize', resize);
+resize();
+</script>
+</body>
+</html>

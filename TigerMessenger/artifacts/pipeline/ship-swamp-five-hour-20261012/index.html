@@ -1,0 +1,14 @@
+<!doctype html><meta charset="utf-8"><title>船与湖沼五小时优化</title><style>body{max-width:1060px;margin:32px auto;padding:0 20px;background:#f2eadc;color:#263f45;font:16px/1.65 sans-serif}a{color:#146d78}table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #bbb;padding:10px;text-align:left}img{width:100%}.note{padding:14px;background:#e4d6bc}</style>
+<h1>船与湖沼 · 五小时优化记录</h1><p>五小时批次已于北京时间2026年10月12日03:23截止，临时自动任务已删除。以下区分正式源码、CPU验证和实景GPU验收。</p>
+<p><a href="../leebai-freighter-20261011/review.html">检查正式李 / LeeBai</a> · <a href="../greg-nine-resume-20261011/review.html">检查正式湖沼</a> · <a href="/TigerMessenger/">进入正式游戏</a></p>
+<table><thead><tr><th>项目</th><th>本批改动</th><th>证据与限制</th></tr></thead><tbody>
+<tr><td>李 / LeeBai 船形</td><td>收尖前伸船艏、圆鼻、收拢艉、龙骨；两侧大字船名；英文浸水已按实际字形像素修正</td><td><a href="../leebai-freighter-20261011/MODEL_REVIEW.md">封闭壳、码头与字体CPU记录</a></td></tr>
+<tr><td>船色与设备</td><td>深青上壳、红褐下壳、米白驾驶舱、暖铜单烟囱；护舷、舷窗和铆钉贴新壳</td><td><a href="../leebai-freighter-spherical-palette-20261012/REVIEW.md">球面水线</a> / <a href="../leebai-freighter-fittings-20261011/REVIEW.md">附着件</a>；新GPU待验</td></tr>
+<tr><td>绿植和岩色</td><td>自然聚散、珊瑚暖顶灰紫侧；368株追加大小层次，总461株与5绘制批保留</td><td><a href="../greg-nine-resume-20261011/FOLIAGE_VARIATION.md">4项CPU检查</a>；新构图效果待实景复核</td></tr>
+<tr><td>水色</td><td>增强青绿、珊瑚色并减少白雾洗色</td><td>正式源已改；CPU通过不等于GPU颜色验收</td></tr>
+<tr><td>五花船</td><td>无固定花茎，双桨推进；世界单程1/1.5/3/1.5/3米，十孩子身份保留</td><td><a href="../greg-flower-longer-voyage-20261011/REVIEW.md">航线CPU记录</a></td></tr>
+<tr><td>喂鲸游泳者</td><td>修正桨叶近擦路径，保留游泳换气喂食</td><td><a href="../greg-feeder-clearance-20261012/REVIEW.md">150秒采样最近0.875米</a>；补测至900秒，仍不保证连续碰撞或全部相位</td></tr>
+</tbody></table>
+<p class="note">内嵌浏览器控制工具当前缺失，新GPU截图、同机位目标对照和完整场景帧率尚未验收。没有宣称90分或性能提升。目标图、CPU投影和旧实景图不能代替新游戏画面。</p>
+<details><summary>李 / LeeBai 目标图</summary><img src="../leebai-freighter-20261011/target-v1.png"></details>
+<p><a href="production-source-manifest.json">十个正式源的HTTP一致性记录</a>；<a href="jev-usage-summary.json">JEV实际用量记录</a>：紧凑文字判断与缓存，不进行看图或自动验收，没有对照节省百分比。</p>

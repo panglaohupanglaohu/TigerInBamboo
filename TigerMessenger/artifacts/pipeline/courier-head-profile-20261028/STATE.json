@@ -1,0 +1,35 @@
+{
+  "status": "implemented-normal-game-checked-target-not-fully-matched",
+  "entry": "20261028-morris-profile-route-r58",
+  "courier": "courier-head-profile.glb; goggles removed; continuous jaw/chin rebuilt; original joints/body retained",
+  "princess": "princess-v4.glb; lower face narrowed/shortened, neck narrowed/recessed, head lowered 2cm",
+  "editor": "Morris root occludes distant castles; inspection cannot edit; null selection blocks mutation",
+  "routeLength": 247.09570845579114,
+  "verification": [
+    "3 real courier adapter/animation/restore tests",
+    "real princess v4 GLB, 200 finite poses and restore",
+    "castle picking regression including foreground island passed",
+    "normal H courier and island ground click checked",
+    "normal princess v4 loaded visible moving, errors[]"
+  ],
+  "remaining": [
+    "Target hair/face/cloth still not fully matched",
+    "Complete normal new-route roundtrip and train envelope unverified"
+  ],
+  "source_hashes": {
+    "index.html": "18c1ef7babfa0d2ac9eb25a1cd46bbdd70d3d026dfbcd9f829853c27bce6edac",
+    "src/main.js": "ec107cd35fc7247ca894863f6c11787adf2e1bd2c23dbd7a0fe50bbbe491a12e",
+    "src/player/player.js": "6dc3ebf645ae1a9ff8aabeca444444eda33d833f74d561b80976ea9fd024a0a0",
+    "src/assets/characters/courierBlenderV2.js": "15365b029a806aaaefa2169549d56580b2d6b6187ffed8902bfc8845764b5b2a",
+    "src/ui/citadelTargetPicking.js": "ce6239bdb9aa9b59484210dc523b71ebafe83bd4b155d6e668583f28cf970e27",
+    "src/ui/citadelSceneEdit.js": "2215cf0dd32dad8005d6211e103bf49b8712bf910012c410ec43d2f05f64b62c",
+    "src/world/morrisPrincess.js": "fe27ab6bcb57548e07f7a0e7100e30e293da12a6e50787837ce4284a02017ca5",
+    "src/world/morrisPrincessAsset.js": "9c2201186c2bad1c93d41d43e598f66cc7e3dd153ed20697610419cbdbf4c096",
+    "src/world/morrisPrincessPatrol.js": "6c37e53f2a98d0b841732dc9e7903a3ef6e2e473931db64583832fb2c07c84c9",
+    "src/world/morrisMountainRoute.js": "3f0c3eedda89f42df416741251b84f594bcb90646f4506decee1ef3fd212f11b",
+    "src/world/morrisLandscape.js": "f690a9995898f4900fd3c3b20955dd4fa85987142f8a7df7f741a934322315f3",
+    "src/world/morrisIsland.js": "b9239fba63706501f5624de6d896bbfb126fa8af7e0e4b08de1d1c0748be0f6c",
+    "src/scenes/messengerIsland.js": "1e6e3782c10c8ec7298540bdcea34eed1f6c92cb7a4b1184a1a2ab66de6c2224",
+    "src/scenes/registry.js": "a918a288b3033a7c03d4307783c14b2161fa036d467812aa2dd4261cfff92d0b"
+  }
+}

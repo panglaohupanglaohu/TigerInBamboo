@@ -1,0 +1,80 @@
+function createLotusLeafBoat(rnd, radius = 4.2) {
+  const g = new THREE.Group();
+  g.name = "swamp-lotus-leaf-boat";
+
+  // Thin closed flower cup: the central floor remains under the old passengers.
+  // Eight lobes belong to one continuous wall; no opaque inverse hull fills it.
+  const segments = 64, rows = 12, positions = [], colors = [], indices = [];
+  const surface = (t, angle, underside = false) => {
+    const lobe = .5 + .5 * Math.cos(angle * 8);
+    const r = radius * t * (1 - .045 * t ** 6 * (1 - lobe));
+    const rise = Math.max(0, (t - .58) / .42);
+    const y = .08 + radius * (.18 * rise * rise + .055 * rise ** 3 * lobe);
+    return new THREE.Vector3(Math.cos(angle) * r, y - (underside ? radius * .012 : 0), Math.sin(angle) * r);
+  };
+  // Center is one vertex per side; ring seams share indices for a watertight cup.
+  for (let side = 0; side < 2; side++) {
+    const c = new THREE.Color(side ? 0x91afa0 : 0xcbdab6), base = positions.length / 3;
+    const center = surface(0, 0, !!side); positions.push(...center.toArray()); colors.push(c.r,c.g,c.b);
+    for (let row = 1; row <= rows; row++) for (let i = 0; i < segments; i++) {
+      const v = surface(row / rows, i / segments * Math.PI * 2, !!side);
+      positions.push(...v.toArray()); colors.push(c.r,c.g,c.b);
+    }
+    const tri = (a,b,c) => indices.push(...(side ? [a,b,c] : [a,c,b]));
+    for (let i = 0; i < segments; i++) tri(base, base + 1 + i, base + 1 + (i + 1) % segments);
+    for (let row = 1; row < rows; row++) for (let i = 0; i < segments; i++) {
+      const a = base + 1 + (row - 1) * segments + i, b = base + 1 + (row - 1) * segments + (i + 1) % segments;
+      tri(a,b,a+segments); tri(b,b+segments,a+segments);
+    }
+  }
+  const sideSize = 1 + rows * segments, rim = 1 + (rows - 1) * segments;
+  for (let i = 0; i < segments; i++) {
+    const a = rim+i,b = rim+(i+1)%segments;
+    indices.push(a,b,a+sideSize,b,b+sideSize,a+sideSize);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+  geometry.setIndex(indices); geometry.computeVertexNormals();
+  const cup = new THREE.Mesh(geometry, toonMat(0xffffff,{vertexColors:true,side:THREE.DoubleSide}));
+  cup.name='swamp-flower-boat-cup';g.add(cup);
+  const linePoints = [];
+  const lineAt = (t,a) => surface(t,a).add(new THREE.Vector3(0,.007,0));
+  for(let i=0;i<segments;i++)linePoints.push(lineAt(1,i*Math.PI*2/segments),lineAt(1,(i+1)*Math.PI*2/segments));
+  for(let i=0;i<16;i++)for(let j=1;j<12;j++)linePoints.push(lineAt(j/12,i*Math.PI/8),lineAt((j+1)/12,i*Math.PI/8));
+  const veins=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(linePoints),new THREE.LineBasicMaterial({color:CORAL_ACTOR_INK,transparent:true,opacity:.58}));
+  veins.name='swamp-flower-boat-veins';veins.raycast=()=>{};g.add(veins);
+  g.userData.flowerCup={radius,floorY:.08,flatRadius:radius*.58,version:1};
+
+  // Keep the old RNG budget, but the approved story now fixes exactly two boys.
+  const oldDollN=2+((rnd()*2)|0),oldScales=[];
+  for(let i=0;i<oldDollN;i++){oldScales.push(.85+rnd()*.4);rnd();rnd();rnd();}
+  g.userData.passengers=[];
+  for(let i=0;i<2;i++){
+    const boy=buildFlowerBoy(i===0?'play':'look',oldScales[i]*1.15),side=i===0?1:-1;
+    boy.position.set(0,.1,side*radius*.50);boy.rotation.y=i===0?0:Math.PI;
+    const rig=boy.userData.flowerBoy.rig;
+    rig.position.set(0,surface(.84,i===0?Math.PI/2:-Math.PI/2).y-.1,radius*.34);
+    g.add(boy);g.userData.passengers.push(boy);
+  }
+
+  // 一杆长篙（插画中角色的撑杆）
+  const pole = part(
+    new THREE.CylinderGeometry(0.05, 0.05, radius * 1.7, 4),
+    toonMat(0x6e4a2f, { flatShading: true }),
+    0.01
+  );
+  pole.rotation.z = Math.PI / 2 - 0.35;
+  pole.position.set(radius * 0.4, 0.7, radius * 0.2);
+  g.add(pole);
+
+  // 参考图叶舟中的粉色发光花蕊尖锥
+  const spike = buildStamenSpike(rnd);
+  spike.position.set(-radius * 0.25, 0.12, radius * 0.1);
+  spike.rotation.z = 0.12;
+  g.add(spike);
+  g.userData.halo = spike.userData.halo;
+
+  return g;
+}
+

@@ -1,0 +1,23 @@
+{
+  "fleet": {
+    "medical": {
+      "carriers": [],
+      "healed": 16,
+      "patients": 0,
+      "rescued": 16,
+      "returned": 16
+    },
+    "phase": "idle"
+  },
+  "residents": {
+    "stage": "pickup",
+    "patients": [
+      2
+    ],
+    "waiting": 9,
+    "collected": 1,
+    "delivered": 1,
+    "recovered": 1,
+    "trips": 1
+  }
+}

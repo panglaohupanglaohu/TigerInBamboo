@@ -1,0 +1,28 @@
+{
+  "revision": "reference-head-neck-v4",
+  "workflow": "new continuous authored lofts/sweeps and closed drape; courier-style empty pivots; no skinning claimed",
+  "mesh_count": 6,
+  "vertices": 34028,
+  "triangles": 67472,
+  "bounds_blender": [
+    [
+      -0.4950000047683716,
+      -0.42900002002716064,
+      -0.6929999589920044
+    ],
+    [
+      0.4950000047683716,
+      0.5350000262260437,
+      0.8440000414848328
+    ]
+  ],
+  "nodes": [
+    "MorrisPrincess",
+    "body",
+    "head",
+    "cape",
+    "armL",
+    "armR"
+  ],
+  "validation": "structural and offline component render only; no game navigation acceptance"
+}

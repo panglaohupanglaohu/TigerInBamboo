@@ -1,0 +1,61 @@
+{
+  "version": "bird-colour-glow-2",
+  "status": "CPU 6/6 passed; frozen for parent GPU",
+  "changedScope": "Only buildSwampBird body/wing/tail vertex colour choices and existing attached halo material. Existing bird colour hash expectation relaxed; all geometry/normal/rig hashes retained. No monkey/shared helper/update code changed.",
+  "palette": {
+    "headNeck": "#DD93AB",
+    "breastBelly": "#F1D59A",
+    "wings": "#72CFC0",
+    "tail": "#54B5AE",
+    "featherTips": "#B8F3D5",
+    "beak": "#8A7782",
+    "aureole": "#91EFCE"
+  },
+  "halo": {
+    "existingSpritesPerBird": 1,
+    "localSize": 1.12,
+    "staticOpacity": 0.38,
+    "runtimeBreathRange": [
+      0.38,
+      0.64
+    ],
+    "blending": "NormalBlending, retains mint tint against white; depthTest true, depthWrite false",
+    "toneMapped": false,
+    "texture": "existing shared getGlowTexture CanvasTexture",
+    "pointLights": 0,
+    "additionalDraws": 0,
+    "oldCoralHalo": {
+      "size": 0.77,
+      "opacityStatic": 0.09,
+      "runtimeRange": [
+        0.076,
+        0.128
+      ]
+    }
+  },
+  "geometry": "Every surface and outline position/normal buffer hash and node transform identical to saved pre-colour builder; no beak geometry edits. User-approved silhouette retained.",
+  "behaviour": "Exact 5 seeded RNG calls and orbitR/orbitY/dart/speed/phase identical. Existing four-bird formal placements, wing flap and global halo breathing retained.",
+  "tests": {
+    "count": 6,
+    "passed": 6,
+    "files": [
+      "tests/world/swampBirdColourGlow.test.mjs",
+      "tests/world/swampAnimalInk.test.mjs"
+    ],
+    "log": "validation-bird-colour-glow.txt",
+    "formalFactory": "Actual default createMoebiusSwampPlacement seed7711 scale.5, post art colour regions checked; 4 birds and existing resource identities stable at t0,.4,1.6,8,20.",
+    "initialFixtureFailure": "First test expected a constant halo opacity and observed .51 from original shared breathing hook. Corrected assertion to verify exact unchanged breathing law. Initial failure log retained; no animation change made."
+  },
+  "source": {
+    "file": "src/world/moebiusSwamp.js",
+    "function": "buildSwampBird",
+    "line": 833,
+    "sha256": "cadda5a1e5ca4dd7e657f92b04ce27e912d2286e31efa0083c5256a3192bd49e"
+  },
+  "gpuNeeded": [
+    "creatures white background: pink head/yellow breast/mint wings read distinctly",
+    "daytime actual 4 birds: small mint glow readable without washing silhouette",
+    "flight wing nodes and original path visually intact"
+  ],
+  "rollback": "before-bird-colour-glow/buildSwampBird.js.txt + bird-colour-glow.patch; reverse only function; do not restore entire shared file."
+}

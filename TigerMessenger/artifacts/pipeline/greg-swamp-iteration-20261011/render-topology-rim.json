@@ -1,0 +1,460 @@
+{
+  "time": "2026-10-10T20:36:47.525Z",
+  "station": "rim",
+  "method": "one manual production render; callback totals not CPU/GPU timing",
+  "frame": {
+    "frame": 130,
+    "calls": 7111,
+    "triangles": 5811029,
+    "points": 0,
+    "lines": 215396
+  },
+  "instrumented": 36450,
+  "totals": {
+    "main": 6670,
+    "other": 0,
+    "shadow": 36
+  },
+  "owners": [
+    {
+      "name": "robot-operations-live@199",
+      "main": 4005,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "bookshop-steampunk-robots@158",
+      "main": 873,
+      "other": 0,
+      "shadow": 5
+    },
+    {
+      "name": "moebius-metropolis@63",
+      "main": 759,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "moebius-swamp-placement@78",
+      "main": 364,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "christchurch-tram-system@62",
+      "main": 301,
+      "other": 0,
+      "shadow": 12
+    },
+    {
+      "name": "Group@180",
+      "main": 100,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "flock-root@189",
+      "main": 96,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "ocean-warship-1@88",
+      "main": 70,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "flower-hall-bubble-patrol@64",
+      "main": 31,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "crystal-v7-shores@79",
+      "main": 28,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "castleContainer@69",
+      "main": 6,
+      "other": 0,
+      "shadow": 12
+    },
+    {
+      "name": "crystal-v10-planted-islets@115",
+      "main": 12,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "cyber-megalithic-twin-gates@111",
+      "main": 4,
+      "other": 0,
+      "shadow": 4
+    },
+    {
+      "name": "bird-vortex-triple-gate@112",
+      "main": 6,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "city-sea-lake@65",
+      "main": 4,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "planet-v9-runtime@76",
+      "main": 2,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "Mesh@41",
+      "main": 0,
+      "other": 0,
+      "shadow": 1
+    },
+    {
+      "name": "hills@43",
+      "main": 0,
+      "other": 0,
+      "shadow": 1
+    },
+    {
+      "name": "hills-closed-skirt@44",
+      "main": 0,
+      "other": 0,
+      "shadow": 1
+    },
+    {
+      "name": "sky-background@12",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "planet-surface@40",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "rescue-objective@198",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "LineSegments@193",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "boat-wake-ring@224",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "boat-wake-ring@225",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "boat-wake-ring@226",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "boat-wake-ring@227",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "crystal-v10-lake@114",
+      "main": 1,
+      "other": 0,
+      "shadow": 0
+    }
+  ],
+  "branches": [
+    {
+      "name": "moebius-metropolis/moebius-trackside-gold-left/crystal-v9-tower",
+      "main": 503,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "moebius-metropolis/v9-legacy-spire-replacement/v9-crystal-prism",
+      "main": 169,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "bookshop-steampunk-robots/bookshop-base-circular-plaza/Line",
+      "main": 144,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "christchurch-tram-system/tram-static-sector/Mesh",
+      "main": 121,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "bookshop-steampunk-robots/bookshop-worker/Mesh",
+      "main": 113,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0036",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0033",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0015",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0030",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0012",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0054",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0051",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0048",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0009",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0006",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0003",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0018",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "bookshop-steampunk-robots/beetle-bookshop-court/bookshop-robot-beetle-articulated",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0021",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0024",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-BTL-0027",
+      "main": 108,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0031",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0028",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0010",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0034",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0016",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0013",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0007",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0004",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0001",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0019",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0022",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0025",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0052",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "bookshop-steampunk-robots/locust-bookshop-court/bookshop-robot-locust-articulated",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0049",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-LOC-0046",
+      "main": 102,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "Group/Courier/courier-blender-v2",
+      "main": 100,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "flock-root/flock-bird/Group",
+      "main": 96,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "moebius-swamp-placement/moebius-swamp-zone/swamp-warship-repair",
+      "main": 95,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "bookshop-steampunk-robots/ant-bookshop-court/ant-bookshop-factory-compound",
+      "main": 94,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "bookshop-steampunk-robots/beetle-bookshop-court/beetle-bookshop-factory-compound",
+      "main": 75,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "ocean-warship-1/blender-v6-render/Mesh",
+      "main": 70,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-ANT-0029",
+      "main": 57,
+      "other": 0,
+      "shadow": 0
+    },
+    {
+      "name": "robot-operations-live/robot-live-units/robot-unit-ANT-0017",
+      "main": 57,
+      "other": 0,
+      "shadow": 0
+    }
+  ]
+}

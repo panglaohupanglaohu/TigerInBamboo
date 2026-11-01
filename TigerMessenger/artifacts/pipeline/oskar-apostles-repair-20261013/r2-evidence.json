@@ -1,0 +1,24 @@
+{
+  "version": "apostles-oskar-wfc-8",
+  "observations": [
+    "CUA current factory GPU overview checked: two broad foreground grass-top tables, taller rear peak, thinner turf rims and paler continuous rock strata.",
+    "Still differs from target in mass proportions and sparse shrub grouping. Review uses synthetic spherical railway, not formal full scene."
+  ],
+  "checks": [
+    {
+      "name": "new factory GPU inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "formal full-game rail/visual check",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "preserve actual railway and towns",
+    "do not report 90 score",
+    "use current production generator"
+  ]
+}

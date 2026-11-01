@@ -1,0 +1,44 @@
+{
+  "task": "Highland Citadel r09-r11 actual visual iteration triage",
+  "target": "Asymmetric main crest, attached broad terraces, continuous vegetation colour and supported roots; fixed city/rail boundaries.",
+  "visual_observations": {
+    "source": "Primary and advisor actually viewed saved r09/r10/r11 PNGs. Text only for Jev.",
+    "images": {
+      "r09-bay-ridge-day-noCloud-plants.png": "7141c37e77490d8d7f34f41eaf18d296c413c12eedcff9fa563e375ad1b6dda5",
+      "r10-left-terrace-day-noCloud-plants.png": "ec4a0434e86b2a59347017f0be747a61e97d486274269bb8b4a8f9ecd81f5a9a",
+      "r11-left-terrace-day-noCloud-plants.png": "023edfcfce4a3b285a0fa604d1d3c50e608ec24513ee62d2459fbb4822347054"
+    },
+    "completed": [
+      "r09 actual east cap cut does not improve visible circular silhouette; advisor20/30 unchanged. Camera-space CPU probes locate actual rear rim near z=-44, not previously cut interior.",
+      "r11 turf3 continuous coordinate colour reduces per-face green jumps; independent vegetation specialty score12→14/25. This is not an overall score.",
+      "All50960 actual r11 grass endpoints supported, no gaps above2mm or burial beyond2cm; fixed514 walkable meshes unchanged."
+    ],
+    "remaining": [
+      "Large triangular rock creases remain after conservative normal3; explicit corner-fan normal4 test is now loading.",
+      "Long narrow turf tails remain; runtime turf3 export planned for component boundary width/inset experiment.",
+      "Do not expand green across steep cliff just to cover missing cells. No evidence of complete Oskar reproduction."
+    ]
+  },
+  "checks": [
+    {
+      "name": "r11 all fixed boundary and rail curves equal baseline,23049 rail probes0hits",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r11 all root endpoints and actual GPU/link samples clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r12 normal4 candidate actual visual/GPU verification",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Defaults unchanged; preserve previous candidate rollback.",
+    "Main cap6 follows actual camera geometric silhouette; not GPU silhouette confirmation.",
+    "Surface colour experiments cannot replace true morphology improvement."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "task": "Batian shield audio round6",
+  "observations": [
+    "Actual combined production bus peak4voices (3shield+1fall), voice cleanup0. Music controller volume .5→.255fall→.1545blast→.49857recovery→0stop; owner released.",
+    "Actual Hitman media did not load: readyState0/networkState2/currentTime0/mediaErrornull; shell HEAD TLS handshake timeout12s. paused=false must not be called playback. Cannot judge actual music masking.",
+    "Added read-only readiness/error diagnostics to existing BGM snapshot with dirty-source backup.13 ownership behavior regressions passed; no track or network changes."
+  ],
+  "checks": [
+    {
+      "name": "Combined voice budget and music controller envelope",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "BGM ownership regressions13",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Actual remote music playback and subjective mix",
+      "required": false,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No new model/scene/track/networksecurity change",
+    "JEV text only, no audio/image or listening acceptance"
+  ]
+}

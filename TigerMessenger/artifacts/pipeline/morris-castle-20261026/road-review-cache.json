@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "6d8b2f65a1a03a6dca446054a6815ecea903f8b451469021f05b62b407f531c0",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.85
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.41,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.03,
+        "lighting": 0,
+        "navigation": 0.44,
+        "review": 0.53
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.4
+    }
+  },
+  "usage": {
+    "input_tokens": 774,
+    "output_tokens": 91,
+    "cost_usd": 0.000326,
+    "credits_remaining_usd": 4.907238
+  },
+  "elapsed_ms": 1128,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Current final road curvature,radial slope,bridge banks,rail and walking validation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

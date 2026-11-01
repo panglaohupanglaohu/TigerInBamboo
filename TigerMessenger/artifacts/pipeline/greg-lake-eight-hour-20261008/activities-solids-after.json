@@ -1,0 +1,25 @@
+{
+  "method": "actual visible indexed and nonindexed triangles incl instanced crew/oars tested against actual world-space wall/stair/walking-slab triangles by BVH edge/triangle crossing; surfaces only, not volumetric containment",
+  "tests": 102,
+  "times": [
+    0,
+    2,
+    5,
+    8.2,
+    8.8,
+    11,
+    14,
+    16,
+    19,
+    21,
+    35,
+    55,
+    75,
+    95,
+    120,
+    150,
+    180
+  ],
+  "ms": 4803.682208,
+  "results": []
+}

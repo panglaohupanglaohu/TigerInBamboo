@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "bd5b12999074f10876eb52fb8180bbd7657a194464e19321de9f77ffe8e3a457",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.46,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.57,
+        "review": 0.43
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.64
+    }
+  },
+  "usage": {
+    "input_tokens": 813,
+    "output_tokens": 91,
+    "cost_usd": 0.000342,
+    "credits_remaining_usd": 4.91591
+  },
+  "elapsed_ms": 2004,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "R9 real blockade range/contact/ground combat",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional wounded evacuation/treatment and full reset",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

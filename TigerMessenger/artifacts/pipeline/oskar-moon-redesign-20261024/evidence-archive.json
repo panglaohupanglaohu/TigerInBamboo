@@ -1,0 +1,31 @@
+{
+  "task": "Archive superseded three-pine proposal after user accepted earlier four-pine target",
+  "target": "Latest user chooses exec-20631986 four pines; no further three-pine implementation",
+  "visual_observations": {
+    "source": "Consultant actually inspected source daylight board, rejected four-pine-v2, new generated v1/v2; not JEV image input",
+    "completed": [
+      "v1 clear original/low/distant roles with source small pond and floating moon",
+      "v2 simpler grass and crown masses"
+    ],
+    "remaining": [
+      "This three-pine alternative is superseded by latest user request; not accepted",
+      "Generated position/proportions not exact runtime measurements"
+    ]
+  },
+  "checks": [
+    {
+      "name": "latest-user-four-pine-choice supersedes three-pine proposal",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "three-pine production changes",
+      "required": false,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "Archive only, do not deliver as accepted target or deploy it",
+    "Text triage only, no image payload"
+  ]
+}

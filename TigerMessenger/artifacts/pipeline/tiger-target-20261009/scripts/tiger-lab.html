@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#aac8dc}</style>
+<script type="importmap">{"imports":{"three":"../vendor/three.module.js","three/addons/":"../vendor/jsm/"}}</script></head><body>
+<script type="module">
+import * as THREE from 'three';
+const params=new URLSearchParams(location.search);
+const W=+params.get('w')||1140,H=+params.get('h')||450;
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(W,H);renderer.setClearColor(0xaac8dc,1);document.body.appendChild(renderer.domElement);
+const scene=new THREE.Scene();scene.add(new THREE.AmbientLight(0xffffff,2.2));const sun=new THREE.DirectionalLight(0xffffff,1.2);sun.position.set(3,6,4);scene.add(sun);
+window.THREE=THREE;window.scene=scene;window.renderer=renderer;
+window.loadTiger=async(kind)=>{
+  const swamp=new THREE.Group();scene.add(swamp);
+  let tiger;
+  if(kind==='game'){
+    const {createMoebiusTigerModel}=await import('../src/assets/characters/moebiusTiger.js');
+    const {applySwampTigerV2}=await import('../src/assets/characters/swampTigerV2.js');
+    tiger=createMoebiusTigerModel(Math.random);swamp.add(tiger);
+    await tiger.userData.tigerAnatomy?.ready;applySwampTigerV2(tiger);await tiger.userData.swampTigerV2Ready;
+  } else {
+    const mod=await import(kind);tiger=await mod.default(swamp);
+  }
+  tiger.userData._walking=false;tiger.userData.update?.(0.016,0);
+  window.tiger=tiger;return true;
+};
+window.shot=(view,{pad=0.04,hideOutline=false}={})=>{
+  let t=window.tiger;t.updateWorldMatrix(true,true);
+  const restore=[];
+  if(view==='face'){const head=t.userData.headNode||(()=>{let h;t.traverse(o=>{if(o.userData.blenderSourceNode==='n8')h=o;});return h;})();
+    t.traverse(o=>{if(o.isMesh||o.isLine){let p=o,inside=false;while(p){if(p===head){inside=true;break;}p=p.parent;}if(!inside&&o.visible){o.visible=false;restore.push(o);}}});
+    t=head;view='front';}
+  const box=new THREE.Box3();t.traverseVisible(o=>{if(o.isMesh&&!o.userData.isOutline&&o.geometry){o.geometry.computeBoundingBox();const b=o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld);box.union(b);}});
+  const c=box.getCenter(new THREE.Vector3()),s=box.getSize(new THREE.Vector3());
+  const dirs={side:[1,0,0],front:[0,0,1],back:[0,0,-1],top:[0,1,0],left:[-1,0,0]};const d=new THREE.Vector3(...dirs[view]);
+  const span=view==='side'||view==='left'?[s.z,s.y]:view==='top'?[s.x,s.z]:[s.x,s.y];
+  const aspect=W/H;let hw=span[0]/2,hh=span[1]/2;if(hw/hh>aspect)hh=hw/aspect;else hw=hh*aspect;hw*=1+pad;hh*=1+pad;
+  const cam=new THREE.OrthographicCamera(-hw,hw,hh,-hh,0.01,1000);cam.position.copy(c).addScaledVector(d,50);if(view==='top')cam.up.set(0,0,-1);cam.lookAt(c);
+  renderer.render(scene,cam);const url=renderer.domElement.toDataURL('image/png');restore.forEach(o=>o.visible=true);return url;
+};
+window.ready=true;
+</script></body></html>

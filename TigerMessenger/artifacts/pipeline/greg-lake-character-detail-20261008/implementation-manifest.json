@@ -1,0 +1,152 @@
+{
+  "atUTC": "2026-10-07T23:56:06.705633+00:00",
+  "scope": "Current implementation checkpoint, not release or deployment",
+  "files": [
+    {
+      "path": "src/assets/characters/courierMoebius.js",
+      "bytes": 21792,
+      "sha256": "b8309999cf61a145a5cb340737a82bf57f13efbb539a108020ffff3e575d9492"
+    },
+    {
+      "path": "src/assets/characters/humanCourier.js",
+      "bytes": 7440,
+      "sha256": "3e47e86c2896b2dd40b0d6a388df86ca8633cf4328938b5ad49b08480dde4c59"
+    },
+    {
+      "path": "src/assets/characters/tigerTargetV1.js",
+      "bytes": 36094,
+      "sha256": "26a76be30be4d0ae426e442b37e90bc4215cc8a5f7f5d06819aef54fc56ac558"
+    },
+    {
+      "path": "src/assets/characters/tigerCoralGait.js",
+      "bytes": 1677,
+      "sha256": "3f9d7e1c974b82feb1175d7d0e0e1c7cb8e297a2c44a09a133552d7b13825c2f"
+    },
+    {
+      "path": "src/assets/characters/swampTigerV2.js",
+      "bytes": 15955,
+      "sha256": "97ad60a8c2568d61220faa3ab4d2d117feb518263125f4b40c7f350af1a97959"
+    },
+    {
+      "path": "src/assets/swampRowerStyle.js",
+      "bytes": 4451,
+      "sha256": "2f7d64a9a9026dfc036e97666f49daa42896640a6713cd62d7a2b4a63751e325"
+    },
+    {
+      "path": "src/assets/warshipV6.js",
+      "bytes": 11969,
+      "sha256": "29ae8064060e067538f51628af08cc2d03405db91fe66f5b8f5d9bf0d0a71f66"
+    },
+    {
+      "path": "src/world/moebiusTiger.js",
+      "bytes": 19686,
+      "sha256": "dc8a11a851364b4a2ea6b9086e76936febc4803dd5d1da442fa5a503d7007d74"
+    },
+    {
+      "path": "src/world/moebiusSwamp.js",
+      "bytes": 156203,
+      "sha256": "6d11bf86c9bd3cbc5e16c0f7854d5ebd37db59d200defb21f1e4fc0f8f02d851"
+    },
+    {
+      "path": "src/world/swampSpatialPlan.js",
+      "bytes": 11186,
+      "sha256": "2927ac770a18cbb0ebd8c7e5837c9c3de7831b40753cef5abd0e4eae840edb69"
+    },
+    {
+      "path": "src/world/swampV2Art.js",
+      "bytes": 45103,
+      "sha256": "635174f1cbc961f6877730195f31e441537deda275abe441fd7c9f1880db87bb"
+    },
+    {
+      "path": "src/world/swampCoralTrunkDetail.js",
+      "bytes": 8935,
+      "sha256": "7b40d4c6cc7f7a160d6442ddda0352236e89e2e17d5c0b45547c1e6097500535"
+    },
+    {
+      "path": "src/world/swampCoralTrunkBatch.js",
+      "bytes": 4370,
+      "sha256": "1ccb2c69b00d51fc3cd02c3403d9a57a56d87fb9a2a4807ee294ed6beedcb32d"
+    },
+    {
+      "path": "src/world/swampCoralCanopy.js",
+      "bytes": 10113,
+      "sha256": "1240d136dfe6b94a98ba65457420eb1e1909c66b233e2de2507f475a1f0f6fed"
+    },
+    {
+      "path": "src/world/swampGregVisuals.js",
+      "bytes": 13424,
+      "sha256": "54794ec03c1f4f018645ebb8805d895258a74f0e39492fc9fbb11662bc3f9c64"
+    },
+    {
+      "path": "src/world/swampNaturalCliff.js",
+      "bytes": 18325,
+      "sha256": "f9bb70f024d89be7d1926eb924f3e84861d57550fd4c42d59e6a401c077e3995"
+    },
+    {
+      "path": "src/world/swampCoralUnderstory.js",
+      "bytes": 17169,
+      "sha256": "6f13ba257ee528ced22ec09a66496343b77e1bce377c0a84c00b2e0f1ff9e62e"
+    },
+    {
+      "path": "src/world/swampCoralOuterCliff.js",
+      "bytes": 4337,
+      "sha256": "65e074ac52c2afcb12c9ad50384b0612e8cb81843d8839113054850f870af737"
+    },
+    {
+      "path": "src/world/swampCoralRim.js",
+      "bytes": 6970,
+      "sha256": "9a0933c75df47c03bd9f7148ab260dae2958d91b9e6ece566d02e37f3ab8779f"
+    },
+    {
+      "path": "src/world/swampAlgaeClumps.js",
+      "bytes": 7129,
+      "sha256": "d528a74b5fb16ac3f232dfe779f28623ca39b71dcd760db239981eb49b1bcdce"
+    },
+    {
+      "path": "src/world/swampFaunaGeometry.js",
+      "bytes": 1019,
+      "sha256": "38f03946a9020d30645699cfd91de8c0bd48e0c1f66a983a87d9b167c2956fad"
+    },
+    {
+      "path": "src/gameplay/robotOps/weaponEffects.js",
+      "bytes": 7184,
+      "sha256": "f1667ae5ac1c7684c32d62229944353cc093a403b94c60fc03e194aadf8c7db1"
+    },
+    {
+      "path": "src/scenes/messenger/swampBgm.js",
+      "bytes": 1919,
+      "sha256": "46b32a91fe63b592395a362d5ce9588a75781ca867dae6246c1f9ac9f1925bc6"
+    },
+    {
+      "path": "src/world/crystalV9.js",
+      "bytes": 8502,
+      "sha256": "2e32725cdd1fed5b459a49d7f34f7cee3f00ac51c8943b722686b89c516ac148"
+    },
+    {
+      "path": "src/world/swampInternalGlow.js",
+      "bytes": 2367,
+      "sha256": "93b4b85a7ce7d2e29f1e3000494d638575518a34b1c6bd2fdc2b66f9d8f5d07c"
+    },
+    {
+      "path": "src/world/swampFlowerActivities.js",
+      "bytes": 5346,
+      "sha256": "1002e81b9d263ed23a5a992b217feb3a50a2d9539058e534ed880dc95f712864"
+    }
+  ],
+  "snapshot": {
+    "path": "current-source-snapshot-075606.tgz",
+    "purpose": "Local recovery snapshot after latest human corrections; not a commit/release, not full repository backup",
+    "sha256": "a5ac641b60ac30661ab2e217490e962b83de6ceb543862997f0a0e5dedf9c508",
+    "files": 26,
+    "verifiedAgainstManifest": true
+  },
+  "previousSnapshots": [
+    {
+      "path": "current-source-snapshot-0718.tgz",
+      "purpose": "Local source recovery snapshot, not a commit or release",
+      "sha256": "a4b13c6b50a9f73f05af57e929c5ce205741ec3480fa5b62d8c33c55b11def55",
+      "files": 24
+    }
+  ],
+  "verification": "Every archived file SHA256 matches current source at capture; CPU/GPU evidence is tracked separately."
+}

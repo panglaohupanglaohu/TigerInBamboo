@@ -1,0 +1,27 @@
+{
+  "iteration": "greg-moon-layout-r1",
+  "observations": [
+    "Approved Greg v2 target: preserve original forest, main pine, floating crescent, lake and walking ring. Only four additive pine sites belong to this patch.",
+    "Pine1 moved left to local[-14.5,-4.5], yaw0; asset right bound2.49 yields world-local right extent below -12, leaving nominal moon left edge -9.625 clear in frontal composition. Actual projection needs GPU.",
+    "Other three sites remain rear[0,-8.5]yaw.05, front-left[-9,7.5]yaw0, front-right[7.5,8]yaw.15. Root groundcover for pine1 moved with its root.",
+    "Actual hill CPU probe supported four requested sites without relocation or rejection; 1094 support samples zero missing. Four reseat operations no missing dressing vertices; original pine unchanged; dispose exactly removed own colliders.",
+    "No GPU, user navigation or all-angle composition acceptance asserted by layout agent. Root will conduct normal scene screenshot verification."
+  ],
+  "checks": [
+    {
+      "name": "actual terrain supports four additions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "preserve original pine and remove only owned colliders",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal game visual review",
+      "required": true,
+      "passed": null
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+ecology counts [ 22, 22, 22 ] rejected { support: 0, path: 6, story: 0, spacing: 176, living: 19 }
+✔ default factory admits three habitat-specific plants only on real dry support (15.550709ms)
+✔ plant crowns clear route and original tiger/ship anchors do not move (0.140833ms)
+✔ three instanced species carry rooted geometry at constrained world scale (0.130833ms)
+✔ repeat, toggle and dispose are reversible and do not accumulate geometry (22.92925ms)
+✔ missing rock shelves fail closed instead of planting on invisible theoretical terrain (26.589625ms)
+✔ all actual plant envelopes pass independent living-path audit (3.411958ms)
+✔ spherical placement does not change deterministic habitat choices (21.746916ms)
+✔ actual rotated default factory supports all five shelf corners outside the entire walkway (535.870666ms)
+✔ missing real corbel support produces no floating replacement and no scene mutation (171.469042ms)
+✔ installation is idempotent, disabled does nothing, disposal frees both batches and permits reinstall (155.578833ms)
+✔ full two-world-unit route and its headroom reject plant roots and crowns (20.638334ms)
+✔ protects authored tiger stairs, actual worksite, living roots and full ship-whale transit (0.831667ms)
+✔ three-level landmark lines reject tall obstruction but permit low foliage below the view (0.192708ms)
+✔ sphere transforms do not change the local guards or mutate any actor or add meshes (11.180917ms)
+✔ post-placement translation, rotation and uniform scale preserve all zones and candidate decisions (35.573375ms)
+✔ screen ink retains CSS width across depth, viewport aspect and DPR (0.878417ms)
+✔ local visual pass leaves actor identity, animation and collision geometry intact (1.422083ms)
+✔ instanced crown inks keep authored transforms and ignore raycasts (1.0625ms)
+✔ wall and bark hooks expand against the actual Three.js basic shader (0.487625ms)
+✔ comparison flag produces no lake mutation (0.097583ms)
+✔ environment palette retains authored face contrast without mutating shared colour buffers (0.772792ms)
+✔ three reachable bank levels use default placed scale and preserve story anchors (0.776958ms)
+✔ every 0.1 world unit from original entry tread through all layers has a top-facing radial support (259.338833ms)
+✔ actual V7 shore sampler cannot preempt the new intended bank surfaces (234.885209ms)
+✔ waymark full footprints stand on stone corbels outside the promised two-world-unit walking lane (2.180417ms)
+✔ actual factory palms retain every leaf and transform through V2 even if children reorder (0.836875ms)
+✔ true towering trees retain six semantic trunk and root parts without converting branches by index (0.428875ms)
+✔ palette and tree reconstruction preserve tiger, dock and escort identity (0.779083ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1126.9015

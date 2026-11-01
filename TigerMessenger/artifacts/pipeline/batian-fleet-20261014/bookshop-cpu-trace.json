@@ -1,0 +1,98 @@
+[
+  {
+    "time": 200,
+    "phase": "assemble",
+    "shield": false,
+    "energy": 100,
+    "shots": 0,
+    "reason": null
+  },
+  {
+    "time": 212,
+    "phase": "transit",
+    "shield": false,
+    "energy": 100,
+    "shots": 0,
+    "reason": null
+  },
+  {
+    "time": 237,
+    "phase": "blockade",
+    "shield": false,
+    "energy": 100,
+    "shots": 0,
+    "reason": null
+  },
+  {
+    "time": 237.1,
+    "phase": "blockade",
+    "shield": true,
+    "energy": 100,
+    "shots": 0,
+    "reason": null
+  },
+  {
+    "time": 249.1,
+    "phase": "pincer",
+    "shield": true,
+    "energy": 94.9,
+    "shots": 0,
+    "reason": null
+  },
+  {
+    "time": 273.1,
+    "phase": "cannon",
+    "shield": true,
+    "energy": 68.8,
+    "shots": 6,
+    "reason": null
+  },
+  {
+    "time": 291.2,
+    "phase": "guard",
+    "shield": true,
+    "energy": 37.2,
+    "shots": 9,
+    "reason": null
+  },
+  {
+    "time": 299.6,
+    "phase": "guard",
+    "shield": false,
+    "energy": 20,
+    "shots": 11,
+    "reason": null
+  },
+  {
+    "time": 300.4,
+    "phase": "withdraw",
+    "shield": false,
+    "energy": 14.5,
+    "shots": 12,
+    "reason": "energy"
+  },
+  {
+    "time": 310.5,
+    "phase": "return",
+    "shield": false,
+    "energy": 14.5,
+    "shots": 12,
+    "reason": "energy"
+  },
+  {
+    "time": 335.5,
+    "phase": "dock",
+    "shield": false,
+    "energy": 14.5,
+    "shots": 12,
+    "reason": "energy"
+  },
+  {
+    "time": 347.6,
+    "phase": "idle",
+    "shield": false,
+    "energy": 100,
+    "shots": 12,
+    "reason": "energy"
+  }
+]

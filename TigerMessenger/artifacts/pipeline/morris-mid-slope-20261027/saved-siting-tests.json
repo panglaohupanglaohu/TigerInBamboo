@@ -1,0 +1,15 @@
+{
+  "passed": 2,
+  "checks": [
+    "new bridge tree survives saved actual siting and railway filters",
+    "tree rail center clearance above7.5m"
+  ],
+  "tree": [
+    -2,
+    1.5718700794902247,
+    33
+  ],
+  "railCentreDistance": 49.52543258248227,
+  "planeTreeCount": 7,
+  "scope": "saved actual siting point data reconstructed through production factory; not current GPU or full train envelope"
+}

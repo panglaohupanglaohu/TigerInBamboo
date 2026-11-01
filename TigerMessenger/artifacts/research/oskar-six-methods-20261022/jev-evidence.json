@@ -1,0 +1,32 @@
+{
+  "task": "User required genuine relearning of six methods, not indexing or frame counts",
+  "observations": [
+    "Root interpreted eight chronological source image sheets and detail frames. New river and shoreline media sampled from public original streams; no private media or raw video saved.",
+    "Hex primal/dual topology, observation-vs-propagation in river WFC, geometric shore wave path, shared tree/cloud representation, rectangle search-vs-tree query, and inverted hull occlusion-vs-lighting are explained with counterexamples.",
+    "Current source has opposite-direction normalization at zero in inactive fallback shore shader; tree/cloud atlas family index does not perform angular view selection; backlit shader has normal-facing mask but no scene-shadow sample. Findings are scoped, no production edits.",
+    "Independent CPU mechanism exercises passed: six-direction ports, actual finite-domain propagation/backtracking, global river connectivity and BFS heights, periodic wave path, view wrap, tree query parity and shadow counterexample. Not GPU acceptance or author source."
+  ],
+  "checks": [
+    {
+      "name": "source visual interpretation and mechanism explanations",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "self-authored deterministic mechanism checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "original private shader source obtained",
+      "required": false,
+      "passed": false
+    },
+    {
+      "name": "production GPU fixes accepted",
+      "required": false,
+      "passed": false
+    }
+  ],
+  "decision_request": "Text-only research triage. Confirm next narrow action category; do not equate CPU checks with rendering acceptance."
+}

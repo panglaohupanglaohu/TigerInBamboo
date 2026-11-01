@@ -1,0 +1,136 @@
+{
+  "audio": {
+    "active": [],
+    "muted": true,
+    "source": "existing world SFX budget and live post-gain analyser",
+    "synthesis": "original, not field recording"
+  },
+  "bridge": "real curved deck and stone parapets",
+  "castle": "cream stone keep and offset wings with russet gables",
+  "cuckoos": 3,
+  "curledLeafClumps": 342,
+  "cypresses": 10,
+  "diameter": 116.413057686842,
+  "farmGate": "open wooden rails between stone posts",
+  "flowers": 4640,
+  "hollyhockClumps": 24,
+  "horsePositions": [
+    [
+      -16,
+      0.9937646171262032,
+      4
+    ],
+    [
+      15,
+      2.41656171122861,
+      -6
+    ],
+    [
+      -7,
+      -0.2065379110776462,
+      23
+    ]
+  ],
+  "horses": 3,
+  "layers": [
+    {
+      "name": "花草坪",
+      "range": "前场径向约1.4–2m"
+    },
+    {
+      "name": "溪流缓丘",
+      "range": "中场约2–7m"
+    },
+    {
+      "name": "城堡山肩",
+      "range": "城基径向7.5m"
+    },
+    {
+      "name": "背景高山",
+      "range": "主峰径向约27m"
+    }
+  ],
+  "linearScale": 2.6457513110645907,
+  "navigationTraversalVerified": false,
+  "oldSceneMoved": false,
+  "pathWidth": 3.2,
+  "planarAreaRatio": 7,
+  "planeTrees": 6,
+  "previewListening": true,
+  "rabbits": 8,
+  "radius": 58.206528843421,
+  "revision": "morris-ecology-r2-20261026",
+  "robins": 4,
+  "site": {
+    "candidates": 2304,
+    "envelope": 70.15408379511177,
+    "lat": 20,
+    "lon": 150,
+    "method": "closest safe enlarged footprint to installed moon garden; colliders/landmarks/land shell/rail survey",
+    "minimumClearance": 71.35535519896331,
+    "moonCentreDistance": 196.3189350852021,
+    "moonEdgeDistance": 138.11240624178112,
+    "nearestSafeCandidates": [
+      {
+        "clearance": 71.35535519896331,
+        "lat": 20,
+        "lon": 150,
+        "moonDistance": 196.3189350852021
+      },
+      {
+        "clearance": 71.14368496529221,
+        "lat": -25,
+        "lon": -30,
+        "moonDistance": 261.0223986750978
+      },
+      {
+        "clearance": 75.44383813820747,
+        "lat": -30,
+        "lon": -15,
+        "moonDistance": 268.5187906342458
+      },
+      {
+        "clearance": 76.2340444509098,
+        "lat": -30,
+        "lon": -20,
+        "moonDistance": 268.56356449636235
+      },
+      {
+        "clearance": 78.64997925106242,
+        "lat": -30,
+        "lon": -25,
+        "moonDistance": 268.6726080349426
+      },
+      {
+        "clearance": 83.01011132604114,
+        "lat": -30,
+        "lon": -30,
+        "moonDistance": 268.8450138614978
+      }
+    ],
+    "obstacles": 742,
+    "otherObjectsMoved": false,
+    "routeSamples": 2403
+  },
+  "source": "normal-game-installed",
+  "stream": "authored descending radial levels, carved real bed",
+  "streamLevels": [
+    5,
+    3.7,
+    2.1,
+    1.35,
+    0.9,
+    0.35,
+    -0.6
+  ],
+  "style": "Arts and Crafts / William Morris inspired original geometry",
+  "view": "杜鹃鸟",
+  "wholeNavigationVerified": false,
+  "wildlife": {
+    "cuckoos": 3,
+    "rabbits": 8,
+    "robins": 4,
+    "scheduledAt": 415.23480000001194,
+    "successfulVoices": 17
+  }
+}

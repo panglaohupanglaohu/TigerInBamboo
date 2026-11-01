@@ -1,0 +1,46 @@
+{
+  "version": "r17-asymmetric-shoulder",
+  "goal": "Target terrain first, cities then rail; final >95; current not accepted",
+  "visual_observations": {
+    "source": "root and independent advisor inspected actual r17 bare and massing preview images",
+    "sha256": "e73eeb9ad71629c69291dfe388af389c7993065611a4407f5d87e773299a8057",
+    "differences": [
+      "Old-side saddle ledge has small asymmetric improvement, no clear global regression; whole terrain still too circular.",
+      "Actual 44 removable city proxies reveal both city groups too small/flat, old tower below mountain skyline.",
+      "New city and plaza have excessive empty rock gap; proxy is not formal buildings, WFC or gameplay.",
+      "Candidate remains far from target, no score."
+    ]
+  },
+  "checks": [
+    {
+      "name": "actual GPU sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "terrain visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "new city and rail gameplay",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "sampled existing bay water not filled and building cores remain flat",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "sampled z=-43 land connection above sea (37.27m minimum); not full route verification",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "No false 95 score",
+    "Candidate opt-in only; keep original rollback",
+    "Prioritize silhouette and authored topology before automated module selection"
+  ]
+}

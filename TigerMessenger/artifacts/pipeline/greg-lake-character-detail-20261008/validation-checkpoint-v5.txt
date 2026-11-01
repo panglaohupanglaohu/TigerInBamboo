@@ -1,0 +1,29 @@
+✔ approved expedition courier keeps height, articulated delivery/ride poses and finite geometry (111.702417ms)
+✔ formal player adapter returns articulated illustrated courier, fitted to existing player scale (69.448125ms)
+✔ walking, sprinting, jumping, mounting, dismounted boarding and delivery keep real pivots live (19.999083ms)
+✔ flat palette, fine outline shader and rigid batches are finite and below legacy geometry cost (69.817917ms)
+✔ reedbank divided hem follows thighs during riding and life-specific props are retained (14.57925ms)
+✔ leaf pod opens to inspect mail and closes for running or riding without detaching hinges (15.759667ms)
+✔ rear hair continuously covers skull from crown through ear line without new geometry batches (17.792375ms)
+understory statistics {"plants":556,"rimPlants":143,"rimAngularCoverage":0.6763888888888889,"vines":180,"counts":{"fern":120,"fan":75,"pendant":361},"triangles":40240,"drawCalls":4,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":280,"overlapping":278,"ratio":0.9928571428571429}
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (1.200209ms)
+✔ lush understory uses four instanced batches within triangle budget, not per-plant mesh draws (7.624042ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (11.733625ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (8.78075ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.395166ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (41.148625ms)
+✔ natural pockets embed in actual clipped wall and taper back into it (30.513959ms)
+✔ soil plants root on real pocket caps; root seams stay against the wall (22.6175ms)
+✔ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (8.025916ms)
+✔ protected paths, story worksite, original tree and swimming domain remain unchanged (5.612792ms)
+✔ spherical placement preserves attachment and dispose exactly restores old visuals (51.386584ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 759.49125

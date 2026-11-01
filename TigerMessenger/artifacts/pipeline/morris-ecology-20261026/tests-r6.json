@@ -1,0 +1,124 @@
+{
+  "passed": 12,
+  "checks": [
+    "7x exact projected footprint, assets not scaled7x",
+    "enlarged envelope fully clears protected original land",
+    "closest safe preferred corridor candidate selected",
+    "finite actual geometry for terrain all botanical and animal models",
+    "requested animal and plant inventory",
+    "all four landscape layers exist with high actual mountain support",
+    "stream flows by radial elevation down to sea",
+    "castle foundation is horizontal on actual plateau",
+    "bridge has actual support and both ends seat on banks",
+    "12 hooves seated on new slopes",
+    "rabbit hop trajectory retains ground support",
+    "bird flight does not jump backwards at cycle wrap"
+  ],
+  "report": {
+    "revision": "morris-ecology-r6-20261026",
+    "style": "Arts and Crafts / William Morris inspired original geometry",
+    "site": {
+      "method": "closest safe enlarged footprint along bookshop-to-Saihoji sea corridor; colliders/landmarks/land shell/rail survey",
+      "lat": 20,
+      "lon": -15,
+      "minimumClearance": 77.54445963233476,
+      "envelope": 70.15408379511177,
+      "routeMidpointDistance": 169.84817008571915,
+      "routeMidpointEdgeDistance": 111.64164124229815,
+      "obstacles": 1,
+      "routeSamples": 0,
+      "candidates": 2304,
+      "otherObjectsMoved": false,
+      "route": null,
+      "nearestSafeCandidates": [
+        {
+          "lat": 20,
+          "lon": -15,
+          "clearance": 77.54445963233476,
+          "targetDistance": 169.84817008571915
+        },
+        {
+          "lat": 20,
+          "lon": -10,
+          "clearance": 77.54445963233476,
+          "targetDistance": 169.88213150878354
+        },
+        {
+          "lat": 20,
+          "lon": -20,
+          "clearance": 77.54445963233476,
+          "targetDistance": 169.9246955989388
+        },
+        {
+          "lat": 20,
+          "lon": -5,
+          "clearance": 77.54445963233476,
+          "targetDistance": 170.02625543968972
+        },
+        {
+          "lat": 20,
+          "lon": -25,
+          "clearance": 77.54445963233474,
+          "targetDistance": 170.11097730364824
+        },
+        {
+          "lat": 20,
+          "lon": 0,
+          "clearance": 77.54445963233476,
+          "targetDistance": 170.27916738325
+        }
+      ]
+    },
+    "flowers": 4964,
+    "curledLeafClumps": 386,
+    "horses": 3,
+    "animalScaleRatio": 0.75,
+    "plantScaleRatio": 0.85,
+    "terrainLayout": "central highland, asymmetric shoulders, low surrounding meadows",
+    "planarAreaRatio": 7,
+    "linearScale": 2.6457513110645907,
+    "radius": 58.206528843421,
+    "diameter": 116.413057686842,
+    "pathWidth": 3.2,
+    "layers": [
+      {
+        "name": "外圈花草坪",
+        "range": "外围低地径向约1.4–4m"
+      },
+      {
+        "name": "环绕溪流缓丘",
+        "range": "中圈约4–9m"
+      },
+      {
+        "name": "中央山肩城堡",
+        "range": "城基径向10.5m"
+      },
+      {
+        "name": "中央错位主峰",
+        "range": "主峰径向约26m；四周连续降低"
+      }
+    ],
+    "stream": "authored descending radial levels, carved real bed",
+    "streamLevels": [
+      10.2,
+      7.2,
+      4.9,
+      3.2,
+      2.3,
+      1.2,
+      -0.6
+    ],
+    "bridge": "real curved deck and stone parapets",
+    "farmGate": "open wooden rails between stone posts",
+    "castle": "cream stone keep and offset wings with russet gables",
+    "wholeNavigationVerified": false,
+    "planeTrees": 6,
+    "cypresses": 12,
+    "hollyhockClumps": 22,
+    "rabbits": 8,
+    "robins": 4,
+    "cuckoos": 3,
+    "oldSceneMoved": false,
+    "navigationTraversalVerified": false
+  }
+}

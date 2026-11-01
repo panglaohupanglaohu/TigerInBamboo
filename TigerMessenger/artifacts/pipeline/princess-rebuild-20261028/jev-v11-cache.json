@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "a42a77f346c3a51a21554b1411cbed7b522583945edd14326b0ec819cc62bd1d",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.85
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.66,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.73,
+        "lighting": 0,
+        "navigation": 0.16,
+        "review": 0.11
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.93
+    }
+  },
+  "usage": {
+    "input_tokens": 683,
+    "output_tokens": 91,
+    "cost_usd": 0.000287,
+    "credits_remaining_usd": 4.890507
+  },
+  "elapsed_ms": 1561,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "hand rein contact",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "target appearance",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

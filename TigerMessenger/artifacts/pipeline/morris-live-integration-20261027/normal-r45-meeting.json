@@ -1,0 +1,33 @@
+{
+  "dialogue": "莫里斯公主：这里的花径通往溪桥。慢些走，能听见鸟鸣。　[E 继续]",
+  "princess": {
+    "bridgePasses": 0,
+    "courtVisits": 1,
+    "dialogue": 0,
+    "direction": -1,
+    "hoofSupport": {
+      "clearanceBefore": 0.012002608377713386,
+      "method": "lowest skinned hoof to actual support; no per-leg IK",
+      "rootCorrection": 0.0000026211104825870357
+    },
+    "horseAsset": "loaded",
+    "horseLocal": [
+      -10.248210845717333,
+      5.4720879761680274,
+      12.765065768831796
+    ],
+    "horseOccupied": true,
+    "horseRevision": "tiger-workflow-horse-v2",
+    "meetings": 1,
+    "revision": "normal-route-patrol-r1",
+    "riderAsset": "loaded",
+    "riderRevision": "reference-loft-v2",
+    "riderVisible": true,
+    "routeDistance": 100.64081287166935,
+    "routeLength": 181.2638010233845,
+    "routeSource": "current installed island route and raycast bridge support",
+    "speed": 0,
+    "state": "conversation",
+    "travelled": 77.62298815171515
+  }
+}

@@ -1,0 +1,13 @@
+patrol bounds {"version":1,"enabled":true,"meshes":40,"culledMeshes":40,"outlines":20,"skipped":0,"maxOutlineExpansion":0.012500000323960786}
+✔ actual rigid patrol has independent conservative bounds; semantic nodes and shared resources stay intact (2.02575ms)
+✔ Three object spheres follow current ancestor transforms, including nonuniform scale, and cover outline edges (0.410625ms)
+✔ URL rollback restores old forced draw without touching material or actor state (0.08675ms)
+✔ unknown displacement, shader, morph, skin and instances conservatively retain forced draw (0.398ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 99.392166

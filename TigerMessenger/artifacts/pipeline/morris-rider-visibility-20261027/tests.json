@@ -1,0 +1,19 @@
+{
+  "passed": 4,
+  "before": {
+    "visible": false,
+    "propVisible": false,
+    "entries": 2
+  },
+  "after": {
+    "visible": true,
+    "propVisible": false,
+    "entries": 1
+  },
+  "checks": [
+    "old deep rig reproduces disappeared body after200m travel",
+    "explicit ancestor flag protects all12 joint levels",
+    "near rider stays visible after travel",
+    "ordinary distant decoration still culled"
+  ]
+}

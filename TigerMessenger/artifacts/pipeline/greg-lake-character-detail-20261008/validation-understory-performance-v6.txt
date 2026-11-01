@@ -1,0 +1,34 @@
+✔ same attached lake scans once across 1000 ticks, every tick retains audio request (2.5345ms)
+✔ entry / exit hysteresis and ceiling remain identical (0.39625ms)
+✔ scene replacement, removed root, same-count nested replacement, and late root work (0.134458ms)
+✔ no player does not scan; moved cached root uses current transform; independent state (0.058708ms)
+understory statistics {"plants":495,"rimPlants":83,"rimAngularCoverage":0.49027777777777776,"vines":180,"counts":{"fern":89,"fan":46,"pendant":360},"triangles":51484,"drawCalls":4,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":279,"overlapping":277,"ratio":0.992831541218638}
+frond tip heights [
+  -0.8898734450340271,
+  -0.6905297636985779,
+  -0.5960623025894165,
+  -0.921288788318634,
+  -0.5823749899864197
+]
+irregular rim habitats {"plants":83,"clusters":7,"heroes":20,"heightRange":[0.5090022751270726,3.404684903499485]}
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (2.617084ms)
+✔ lush understory uses four instanced batches within triangle budget, not per-plant mesh draws (7.76925ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (12.50225ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (10.952125ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.236583ms)
+✔ leaf-shape revision preserves every accepted attachment and count; five fronds share real root but have staggered rounded tips (5.257334ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (2.775625ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (37.010833ms)
+✔ 100 ant rounds retain 600 smoke events and one texture until controller disposal (9.968333ms)
+✔ clear destroys sprites but keeps map for reuse; independent controllers own independent maps (0.868166ms)
+✔ steam remains visually identical and lazy when no ant smoke is emitted (0.327833ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1024.707167

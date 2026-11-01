@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-08",
+  "scope": "当前正式湖沼工厂中的动物及人物；沿用代码命名，不是生物学物种鉴定。",
+  "verification": {
+    "method": "实际 Node CPU 构造 createMoebiusSwampPlacement({seed:7711,scale:.5})、遍历节点/身份数组，并逐项读源码",
+    "locationSearch": "",
+    "factory": "src/world/moebiusSwamp.js",
+    "factorySHA256": "f569b7b09bc06f40307dc1c2ac190620e4f6354d1176368349835f8ede799fe0",
+    "gpu": "前后肖像由主代理另行截图，本清单不宣称GPU验收。",
+    "countMeaning": "工厂对象/人员槽位数量，不等于某相机同时可见数量。"
+  },
+  "entries": [
+    {
+      "id": "whale-adult",
+      "label": "成年白鲸",
+      "category": "animal",
+      "count": 1,
+      "builder": "buildBelugaWhale",
+      "hook": "inner.userData.whales[0] / inner.userData.whale",
+      "story": "主湖巡游；原花船喂食关系。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 343
+      }
+    },
+    {
+      "id": "whale-young",
+      "label": "幼白鲸",
+      "category": "animal",
+      "count": 1,
+      "builder": "buildBelugaWhale",
+      "hook": "inner.userData.whales[1]",
+      "story": "scale .55，成鲸附近巡游。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 343
+      }
+    },
+    {
+      "id": "whale-escort",
+      "label": "护航白鲸",
+      "category": "animal_story_character",
+      "count": 1,
+      "builder": "buildBelugaWhale",
+      "hook": "inner.userData.shipyard.escort",
+      "story": "scale .5，泊位绕游、出航船护送、出口领航后潜回；不是幼鲸。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 343
+      }
+    },
+    {
+      "id": "tiger",
+      "label": "成年湖沼虎",
+      "category": "animal_story_character",
+      "count": 1,
+      "builder": "createMoebiusTiger",
+      "hook": "inner.userData.tiger",
+      "story": "坑缘巡游、下阶饮水、见送信人相会与灯谜。",
+      "source": {
+        "file": "src/world/moebiusTiger.js",
+        "line": 7
+      },
+      "modelSources": [
+        "src/assets/characters/moebiusTiger.js",
+        "src/assets/characters/swampTigerV2.js",
+        "src/assets/characters/tigerTargetV1.js"
+      ],
+      "ready": "await inner.userData.tiger.userData.swampTigerV2Ready"
+    },
+    {
+      "id": "monkey-canopy",
+      "label": "普通长尾猴",
+      "category": "animal",
+      "count": 3,
+      "builder": "buildLongTailMonkey",
+      "hook": "inner.children.filter(o=>o.name==='swamp-longtail-monkey' && o.userData.perches)",
+      "story": "scale 1.3；跳枝、停留、投果、躲果，栖点已收拢至真实树干支撑。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 830
+      }
+    },
+    {
+      "id": "monkey-repair",
+      "label": "维修长尾猴",
+      "category": "animal_story_character",
+      "count": 2,
+      "builder": "buildLongTailMonkey",
+      "hook": "inner.userData.shipyard.workers",
+      "story": "workers[0]甲板立桅，workers[1]桅杆顶挥臂；scale .5/.46，保留剧情身份。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 830
+      }
+    },
+    {
+      "id": "glow-bird",
+      "label": "荧光雀",
+      "category": "animal",
+      "count": 4,
+      "builder": "buildSwampBird",
+      "hook": "inner.children.filter(o=>o.name==='swamp-bird')",
+      "story": "scale 1.25；薄荷白/暖杏黄各2，枝间飞行、翼拍及光羽袭扰。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 782
+      }
+    },
+    {
+      "id": "lizard-rim",
+      "label": "岸边荧光蜥蜴",
+      "category": "animal",
+      "count": 2,
+      "builder": "buildGlowLizard",
+      "hook": "inner.children.filter(o=>o.name==='swamp-glow-lizard' && o.userData.baseY>30)",
+      "story": "scale 1.35；沿坑缘往返爬行并避开入口。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 864
+      }
+    },
+    {
+      "id": "lizard-underwater",
+      "label": "湖底荧光蜥蜴",
+      "category": "animal",
+      "count": 1,
+      "builder": "buildGlowLizard",
+      "hook": "inner.children.find(o=>o.name==='swamp-glow-lizard' && o.userData.baseY<20)",
+      "story": "scale 1.35；水下湖底爬行。没有独立的自由游泳蜥蜴工厂，不能另列新物种。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 864
+      }
+    },
+    {
+      "id": "lizard-carrier",
+      "label": "送水蜥蜴",
+      "category": "animal_story_character",
+      "count": 1,
+      "builder": "buildGlowLizard",
+      "hook": "inner.userData.shipyard.waterLizard",
+      "story": "scale .42；背水葫芦沿维修船甲板为桨手送水；不计入岸边3只。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 864
+      }
+    },
+    {
+      "id": "ribbonfish",
+      "label": "发光带鱼",
+      "category": "animal",
+      "count": 3,
+      "builder": "buildRibbonFish",
+      "hook": "inner.children.filter(o=>o.name==='swamp-glow-ribbonfish')",
+      "story": "水下巡游、长带身体摆动。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 904
+      }
+    },
+    {
+      "id": "fish",
+      "label": "普通斑点鱼",
+      "category": "animal",
+      "count": 9,
+      "builder": "buildFishSchool",
+      "hook": "inner.children.filter(o=>/^swamp-fish-\\d+$/.test(o.name))",
+      "story": "正式工厂内联创建9鱼；导出 fishSchool 为肖像方便构造器，不能额外计数。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 1749
+      }
+    },
+    {
+      "id": "eel",
+      "label": "黄绿鳗",
+      "category": "animal",
+      "count": 1,
+      "builder": "buildSwampEel",
+      "hook": "inner.getObjectByName('swamp-eel')",
+      "story": "湖底以上蛇形巡游。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 666
+      }
+    },
+    {
+      "id": "pink-hanger",
+      "label": "粉色垂挂生物",
+      "category": "animal",
+      "count": 3,
+      "builder": "buildPinkHanger",
+      "hook": "inner.children.filter(o=>o.name==='swamp-pink-hanger')",
+      "story": "壁侧垂挂摆动；与普通猴/维修猴是独立模型及行为组。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 751
+      }
+    },
+    {
+      "id": "tube-worms",
+      "label": "管状蠕虫",
+      "category": "animal_colony",
+      "count": 11,
+      "builder": "buildTubeWormCluster",
+      "hook": "inner.children.filter(o=>o.name==='swamp-tube-worms')",
+      "story": "默认两簇6+5条；每条管体+顶球2个直接子节点，其他种子每簇4–7条。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 700
+      }
+    },
+    {
+      "id": "fireflies",
+      "label": "萤火虫",
+      "category": "animal_swarm",
+      "count": 46,
+      "builder": "buildFireflies",
+      "hook": "inner.children.filter(o=>('followK' in o.userData)&&('flicker' in o.userData))",
+      "story": "Sprite群；水面/壁间漂移闪烁，玩家靠近时环绕/尾随。正式工厂内联创建，导出组不是额外46只。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 1620
+      }
+    },
+    {
+      "id": "flower-boys",
+      "label": "花船黑肤浅发男孩",
+      "category": "human_character",
+      "count": 10,
+      "builder": "buildFlowerBoy",
+      "hook": "inner.userData.lotuses.flatMap(o=>o.userData.passengers)",
+      "story": "默认5船×2人；第一舟passengers[1]同时为feeder，不增加第三人。其他种子4或5船，即8或10人。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 565
+      },
+      "warning": "nativeDoll 导出仍是水下旧泳者；改后花船男孩必须取 lotusLeafBoat.userData.passengers。"
+    },
+    {
+      "id": "swimmer",
+      "label": "水下原住民泳者",
+      "category": "human_character",
+      "count": 1,
+      "builder": "buildNativeDoll",
+      "hook": "inner.children.find(o=>o.name==='swamp-native-doll' && !o.userData.flowerBoy)",
+      "story": "独立水下泳者，scaleArgument .95；旧极简娃娃造型保留。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 489
+      }
+    },
+    {
+      "id": "rowers",
+      "label": "两艘战船桨手",
+      "category": "human_character",
+      "count": 52,
+      "builder": "createFisherBoat → createWarshipV6",
+      "hook": "inner.userData.shipyard.dock/departure.userData.crew.userData.rows",
+      "story": "每船26个桨手槽位；送水/划桨/受袭身份。工厂存在不等于某镜头可见，正式海面遮挡可隐藏整船。",
+      "source": {
+        "file": "src/assets/harbor.js",
+        "line": 116
+      },
+      "modelSource": {
+        "file": "src/assets/warshipV6.js",
+        "line": 53
+      }
+    }
+  ],
+  "otherEcology": [
+    {
+      "label": "紫蘑菇/珊瑚形生态",
+      "category": "fungal_form",
+      "countDefault": 6,
+      "hook": "inner.children.filter(o=>o.name==='swamp-mushroom')",
+      "note": "默认坑缘4+湖底2；其他种子坑缘可能因入口净空跳过。非动物。"
+    },
+    {
+      "label": "贝壳",
+      "category": "decorative_shell",
+      "countDefault": 3,
+      "hook": "inner.children.filter(o=>o.name==='swamp-shell')",
+      "note": "没有活体行为，不能据壳断言存在3只活软体动物。"
+    },
+    {
+      "label": "世界树、根藤、巨花、花蕊、岸边植被",
+      "category": "flora",
+      "note": "存在但不在动物/人物肖像计数；花蕊不是第三个娃娃。"
+    }
+  ],
+  "excluded": [
+    "送信人由外层玩家/agentMessenger工厂创建，不计为湖沼工厂原生生物。",
+    "水果、光羽弹、水滴、气泡、食物、光池不是动物。",
+    "叶舟、维修筏、船体是道具。"
+  ],
+  "authorStatements": [],
+  "projectInference": [
+    "角色名称、分类及故事身份来自项目代码，不归为Sable作者原设。"
+  ]
+}

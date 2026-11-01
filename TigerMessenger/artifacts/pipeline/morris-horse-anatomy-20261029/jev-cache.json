@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "aad851abf0e021ea113e349742e2c95f4e4c9153727324540328f9aba8fcea8d",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.93
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.92,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.94,
+        "lighting": 0,
+        "navigation": 0.02,
+        "review": 0.04
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.93
+    }
+  },
+  "usage": {
+    "input_tokens": 700,
+    "output_tokens": 91,
+    "cost_usd": 0.000294,
+    "credits_remaining_usd": 4.888733
+  },
+  "elapsed_ms": 6669,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "target silhouette and surface acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "normal current game gait/contact",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

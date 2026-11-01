@@ -1,0 +1,43 @@
+{
+  "count": 917,
+  "failures": [
+    {
+      "route": "old",
+      "j": 48,
+      "i": 3,
+      "type": "body",
+      "diag": {
+        "reason": "geometry-contact",
+        "allowed": 0.0840110691146065,
+        "requested": 0.08471242519254421,
+        "mesh": "old-city-link-treads",
+        "instanceId": null,
+        "point": [
+          142.45261285457974,
+          95.26323152883234,
+          59.83551753667958
+        ],
+        "sampleHeight": 0.45
+      }
+    },
+    {
+      "route": "old",
+      "j": 51,
+      "i": 3,
+      "type": "body",
+      "diag": {
+        "reason": "geometry-contact",
+        "allowed": 0.0819481000184877,
+        "requested": 0.08433617369417677,
+        "mesh": "old-city-link-treads",
+        "instanceId": null,
+        "point": [
+          143.40129223092012,
+          94.51452012500619,
+          60.61094897693432
+        ],
+        "sampleHeight": 0.45
+      }
+    }
+  ]
+}

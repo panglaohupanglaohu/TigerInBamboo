@@ -1,12 +1,13 @@
+import {moonLakePreservedRegion} from '../world/morrisPreservedRegions.js';
 import {installMainIslandEdgeCleanup} from '../world/mainIslandEdgeCleanup.js';
 import {prepareMorrisElderEnsemble,moveMorrisElderEnsemble,installMorrisGroundOwnership,applyMorrisSeaPalette} from '../world/morrisElderPlacement.js?v=morris-live-r42';
 import {sfxMorrisBird,getMorrisBirdAudioStatus} from '../audio/worldSfx.js';
-import {createMorrisIsland} from '../world/morrisIsland.js?v=morris-threeview-r83';
+import {createMorrisIsland} from '../world/morrisIsland.js?v=apostles-r4';
 import {finishStartupSteps} from '../core/startupTasks.js';
 import {applyTargetLandscapePalette} from '../world/citadel/targetLandscapePalette.js';
 import {applyTownscaperTargetMaterials} from '../world/citadel/townscaperTargetMaterials.js';
 import {applyCitadelTargetOcean} from '../world/citadel/targetAtmosphere.js';
-import {seatTerracedSeaStacksSteps} from '../world/seaStackTerraces.js?v=coral-20261024';
+import {seatTerracedSeaStacksSteps} from '../world/seaStackTerraces.js?v=apostles-r4b';
 import {applyCityColourStudy} from '../world/citadel/cityColourStudy.js';
 import {applyCitadelBayLayout} from '../world/citadel/bayLayout.js';
 import {placeBookshopTown} from '../world/bookshopTownSite.js';
@@ -619,12 +620,13 @@ export const messengerIslandScene = {
     const morrisElder=camp?.landmarks?.elder||scene.getObjectByName('music-elder');
     const morrisEnsemble=prepareMorrisElderEnsemble({elder:morrisElder,camp,playZone,corridorForest,colliders,hills,R});
     const morrisProtected=(morrisEnsemble?.fixed??colliders).filter(c=>c.position).map(c=>({position:c.position.clone(),radius:Math.max(1,c.radius??1),floorRadius:morrisEnsemble?.sourceSample(c.position)??R+.6}));
-    const morrisIsland=createMorrisIsland({scene,R,obstacles:morrisObstacles,near:morrisRouteMid,anchor:morrisEnsemble?.anchor,sourceSample:morrisEnsemble?.sourceSample,protectedSites:morrisProtected,route:{departure:morrisDeparture,destination:morrisDestination},birdAudio:{play:sfxMorrisBird,status:getMorrisBirdAudioStatus},
+    const morrisMoonPreservation=moonLakePreservedRegion(moonLake);
+    const morrisIsland=createMorrisIsland({preservedRegions:[morrisMoonPreservation],scene,R,obstacles:morrisObstacles,near:morrisRouteMid,anchor:morrisEnsemble?.anchor,awayFrom:{position:moonLake.group.getWorldPosition(new THREE.Vector3()),radius:morrisMoonPreservation.radius},sourceSample:morrisEnsemble?.sourceSample,protectedSites:morrisProtected,route:{departure:morrisDeparture,destination:morrisDestination},birdAudio:{play:sfxMorrisBird,status:getMorrisBirdAudioStatus},
       curves:[tramSystem.curve,...Object.values(tramSystem.curves||{})]});
     moveMorrisElderEnsemble({ensemble:morrisEnsemble,island:morrisIsland});
     const mainIslandEdgeCleanup=installMainIslandEdgeCleanup({platforms,hills,colliders,trackCurves:[tramSystem.curve,...Object.values(tramSystem.curves||{})],R});
     installMorrisGroundOwnership({island:morrisIsland,hills,platforms});
-    morrisIsland.report.seaPalette=applyMorrisSeaPalette(scene.getObjectByName('planet-v8-curved-ocean'),morrisIsland.root,morrisIsland.report.radius,[tramSystem.curve,...Object.values(tramSystem.curves||{})]);
+    morrisIsland.report.seaPalette=applyMorrisSeaPalette(scene.getObjectByName('planet-v8-curved-ocean'),morrisIsland.root,morrisIsland.report.radius,[tramSystem.curve,...Object.values(tramSystem.curves||{})],morrisIsland.preservation);
     morrisIsland.report.mainIslandEdgeCleanup={revision:mainIslandEdgeCleanup.revision,status:mainIslandEdgeCleanup.status,clearedTexels:mainIslandEdgeCleanup.clearedTexels,shadowMasks:mainIslandEdgeCleanup.shadowMasks};
 
     messengerLandmarks = {

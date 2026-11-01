@@ -1,0 +1,14 @@
+✔ fine ink keeps bird/lizard surfaces and all animal pivots and behaviour references; monkey shape is separately approved (1.79ms)
+✔ fine shells weld coincident contour normals and cap toes, wings and tail tips by their actual thickness (25.321292ms)
+✔ contour is stable at device scale, screen-capped and independent of shared brush-noise shader (3.177459ms)
+✔ bird colour correction preserves every anatomical/outline vertex, pivot and exact five RNG calls (37.905834ms)
+✔ real separated head/breast/tail and wing feather colour regions survive the final local art pass (837.838125ms)
+✔ four birds use only the existing one small attached halo each and one shared texture, with no lights (22.495208ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1010.972584

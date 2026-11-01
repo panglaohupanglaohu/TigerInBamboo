@@ -1,0 +1,28 @@
+✔ default trooper and deployed squad use exactly 1.5 linear scale with explicit scales preserved (13.93975ms)
+✔ casualties visibly unload one by one, wait for Heiwa, heal and remain reserved until carrier returns (4.591417ms)
+✔ real assault evacuation hands casualties to medical ownership and next sortie excludes them (6.932792ms)
+✔ front shields intercept actual front segment, not rear shots or distant misses, and drain then break (23.88425ms)
+✔ rear guns fire through clear lanes and stop when an ally or wall blocks the trajectory (33.5245ms)
+✔ close combat switches off gun, animates blade and requires actual swept blade contact (3.7605ms)
+✔ withdrawal boards gun section first while shield section covers, then releases the rear guard (5.756917ms)
+✔ lost or exhausted front rank is replaced by a healthy gunner without new soldiers (5.99675ms)
+✔ shield recovery waits for quiet and a broken shield cannot intercept until restored (4.028833ms)
+✔ rear gun cannot shoot through the back of a friendly shield even without a body on that short segment (5.988417ms)
+✔ moss insertion requires actual ambush and physical fleet contact; ground remains provider-owned (33.521375ms)
+✔ existing roster is assigned once and remains aboard before real contact; starts physical insertion after contact (297.376ms)
+✔ actual swept shield crossing feeds contact and single damage event (0.645417ms)
+✔ no crossing or unrelated units/target/idle generate no damage (0.124208ms)
+✔ confirmed hull contact preserves result and projectile-specific power (0.091417ms)
+✔ production fleet snapshot never calls the defender snapshot that already reads fleet cycle (7.083167ms)
+✔ only a real flagship opening strike can hold for physical landing (0.338416ms)
+✔ other regions, withdrawal and timeout never acquire landing hold (0.058125ms)
+✔ low-energy guard conserves reserve during actual landing and first physical insertion, without restoring energy (0.051792ms)
+✔ combined assault preserves the ground engagement: first actual strike then suppression/insertion cover before bombs (0.459542ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 423.146709

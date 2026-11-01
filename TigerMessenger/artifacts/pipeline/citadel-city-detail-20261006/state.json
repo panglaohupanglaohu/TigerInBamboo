@@ -239,15 +239,13 @@
   },
   "updatedAt": "2026-10-06T18:32:00+08:00",
   "currentIteration": {
-    "round": "east-final-terrain-consumers-and-global-approach",
-    "status": "candidate-building-production-unchanged",
+    "round": "old-wings-and-aged-gate-materials",
+    "status": "default-main-source-updated",
     "visualScore": null,
     "actualPlayerWalked": false,
-    "latestDiagnosticGpu": "../citadel-east-remesh-gpu-20261006/candidate-cliff.png",
-    "diagnosticReverted": true,
-    "terrainTransactionTests": 5,
-    "terrainTransactionProductionInstalled": false,
-    "browserNote": "background tab11 previously restored daySpeed .4/player; user page untouched"
+    "eastCrossingDefault": true,
+    "oldWingsDefault": true,
+    "gateMaterialGpuVerified": false
   },
   "remainingHardGates": [
     "r48 startup/GPU and actor migration",
@@ -379,12 +377,13 @@
     "report": "acceptance-20261006-1008.md"
   },
   "browserValidation": {
-    "status": "rendered-normal-homepage",
-    "tab": "browser1/tab11",
-    "daySpeedRestored": true,
-    "daySpeed": 0.4,
-    "newGPU": true,
-    "playerCameraRestored": true
+    "lastSuccessfulTab": "11",
+    "daySpeedRestored": 0.4,
+    "weatherRestored": 1,
+    "playerCameraRestored": true,
+    "bookstoreUnmoved": true,
+    "latestAttempt": "normal no-query tab12 created then absent from session; no new default/gate-material GPU claimed",
+    "doNotReloadUserTab": true
   },
   "currentTransit": {
     "version": "user-marked-transit-release-1",
@@ -414,27 +413,30 @@
     "browserNote": "tab9 crashed/data; user manual restoration requested; do not bypass URL restriction"
   },
   "latestUserDirection": {
-    "at": "2026-10-06T12:18:00+08:00",
+    "at": "2026-10-06T20:17:43+08:00",
     "reference": "../citadel-rail-cliffs-20261006/target-v11-smooth-east-connection.png",
     "walking": "continuous upper path on same lower railway structure, including central bridge",
     "rail": "long exterior-cliff route with smooth global joins",
     "centralForcedDoubleDeck": true,
-    "independentBridge": "temporary; remove after new upper path connects both cities and passes checks"
+    "independentBridge": "temporary; remove after new upper path connects both cities and passes checks",
+    "workflow": "Direct edits in actual main scene; reduce repeated tests, screenshots, uploads and reports. Retain necessary startup, collision and access checks.",
+    "gateMaterials": "Keep v5 simplified monumental Oskar direction, add age through broad stone variation, selective mineral/rain marks, damp foot and seam moss."
   },
   "latestActualGpu": {
-    "at": "2026-10-06T15:33:00+08:00",
-    "file": "../citadel-secondary-street-clusters-20261006/live-front.png",
-    "report": "../citadel-secondary-street-clusters-20261006/live-front.json",
-    "nearView": "../citadel-secondary-street-clusters-20261006/live-plaza.png",
-    "newStairs": "target-new-city-stairs-8-secondary-clusters",
+    "at": "2026-10-06T20:03:45+08:00",
+    "file": "../citadel-old-wing-streets-20261006/live-front-day.png",
+    "report": "../citadel-old-wing-streets-20261006/live-front-day.json",
+    "nearView": "../citadel-old-wing-streets-20261006/live-old-city.png",
+    "oldCity": "target-old-city-12-wing-streets-candidate",
     "glError": 0,
     "gpuFailures": [],
     "score": null,
-    "scoreScope": "six secondary rooms/rock7 frame unscored",
     "captureTimeOfDay": 0.49,
     "captureDaySpeed": 0,
     "daySpeedRestoredAfter": 0.4,
-    "playerMoved": false
+    "weatherRestoredAfter": 1,
+    "playerMoved": false,
+    "scope": "query-enabled joint main with old wings; later gate material changes not included"
   },
   "latestShortBridge": "Superseded: independent bridge removed by stacked-connected release; retained historical evidence only.",
   "latestFrameReview": {
@@ -467,7 +469,7 @@
     "water": "v4 final wet mask and v3 fine waves GPU; no proven large visual shoreline gain",
     "mainWindows": "34 windows batched into6 meshes, factory off/main on,17 combined CPU and GPU no errors; performance not isolated"
   },
-  "gateTargetProposal": "target-v3-ancient-monument.png: user requested independent ancient monumental gate, supersedes tiny colourful v2 style; concept only not migrated",
+  "gateTargetProposal": "target-v5-simplified-aged-gate.png: simplified monumental ancient gate; user asks aged materials and direct scene work; geometry/relocation still pending",
   "pendingLatestGpu": {
     "completeLatestScreenshot": true,
     "continuousGameplayVerified": false,
@@ -475,9 +477,9 @@
     "liveTransportReadout": "verified two actual motion frames; centreError0/shared curve true; not full loop collision acceptance"
   },
   "activeOwnership": {
-    "root": "main integration and actual joint startup GPU; default-off; macro shore/cliff visual correction pending",
-    "new_city_main": "targetOldCity.js + dedicated tests/report, default-off two-wing connected infill; no terrain/rail/main edits",
-    "oskar_world_advisor": "returned, idle; local raw reshape not installed"
+    "root": "main scene integration, terrain/gate/material work",
+    "new_city_main": "returned all files; idle",
+    "oskar_world_advisor": "returned; idle"
   },
   "mainGateDiagnosis": {
     "blockingGeometry": false,
@@ -639,5 +641,67 @@
     "completeScore": null,
     "visibleScore": 58,
     "scoreReport": "../citadel-east-joint-startup-20261006/VISIBLE_PANORAMA_REVIEW.md"
+  },
+  "gateMaterialUpdate": {
+    "version": "old-city-rear-twin-roof-gate-1",
+    "reference": "exec-3e913524-38c7-4414-a6e8-49de0ad136ce.png",
+    "productionSource": true,
+    "geometryChanged": true,
+    "rearRailU": 0.8095,
+    "railCurveUnchanged": true,
+    "gpuVerified": true,
+    "evidence": "../highland-gate-brick-red-20261006/live-twin-roof.png",
+    "glError": 0,
+    "gpuFailures": [],
+    "finiteRailStations": 311,
+    "finiteRailRays": 3732,
+    "finiteRailHits": 0,
+    "continuousDynamicVerified": false,
+    "score": null,
+    "meets85": false,
+    "remaining": "large backdrop slope and surroundings/vegetation transition; current scene differs from target",
+    "daySpeedRestored": 0.4,
+    "weatherRestored": 1,
+    "playerMoved": false,
+    "automationRemainsPaused": true
+  },
+  "mainDefaultPromotion": {
+    "at": "2026-10-06T20:17:43+08:00",
+    "eastCrossing": true,
+    "oldWings": true,
+    "sourceOnlySinceLastCapture": true,
+    "rollback": "citadelEastCrossing=0 and citadelOldWingStreets=0",
+    "completeAcceptance": false,
+    "reason": "User explicitly requests direct main-scene work on the displayed candidate"
+  },
+  "latestDirectLayoutUpdate": {
+    "at": "2026-10-06T22:20:00+08:00",
+    "defaultHomepage": true,
+    "oldCity": "target-old-city-13-axial-street",
+    "newCourtyardHomes": 6,
+    "plaza": "target-plaza-4-statue-floral-inlay",
+    "evidence": [
+      "../citadel-layout-20261006/live-old-street.png",
+      "../citadel-layout-20261006/live-new-plaza.png"
+    ],
+    "glError": 0,
+    "gpuFailures": [],
+    "score": null,
+    "remaining": "new-city stair axis and enclosing house density still differ from target; full dynamic acceptance pending",
+    "restored": {
+      "daySpeed": 0.4,
+      "weather": 1,
+      "playerCamera": true,
+      "playerMoved": false
+    },
+    "automation": "PAUSED"
+  },
+  "pendingDirectFollowups": {
+    "gate": "old-city-rear-stepped-stone-gate-2",
+    "stairs": "straight lower flight to statue outer ring; no bottom return",
+    "railings": "sea-side plaza boundary; stair opening",
+    "satchel": "under-arm-side-carry; studio GPU checked",
+    "mainGpu": "blocked: crashed tab15; URL policy prohibits refresh; user manual refresh not reflected in tool inventory",
+    "imageBlaster": "prepared; missing FAL_KEY; no request submitted"
   }
 }

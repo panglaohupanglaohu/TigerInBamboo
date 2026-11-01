@@ -1,0 +1,32 @@
+{
+  "task": "Morris verdure refinement r16 actual component review",
+  "observations": [
+    "Root actually viewed current component overview: bouquet clumps and wider dark lobed acanthus cover substantially more meadow than isolated prior single flowers.",
+    "Root actually viewed close castle: actual stone offsets, window surrounds and roof tiles are visible; tower/wing hierarchy and open gate remain.",
+    "Root actually viewed close bridge: solid coping/parapet and larger stone structure are visible; flower and leaf layers frame the open path. Current creek remains a flat solid color and rear rock mass still blends into the hill; r17 adds bounded local animated flow/foam and more exposed rock shoulders.",
+    "This is isolated production component evidence, not a normal-game visit or final player navigation acceptance."
+  ],
+  "checks": [
+    {
+      "name": "current component actual visual inspection",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "12 existing geometry and6 verdure bounded/open-passage checks passed",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "final normal GPU verification remains",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "text evidence only, no image/audio acceptance",
+    "preserve existing island root, railway, actor ensemble and music",
+    "no off-scope scene changes"
+  ],
+  "evidence_revision": "r16-to-r17"
+}

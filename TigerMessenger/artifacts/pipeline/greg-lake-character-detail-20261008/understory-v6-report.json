@@ -1,0 +1,59 @@
+{
+  "version": 6,
+  "scope": "swampCoralUnderstory.js and dedicated tests only",
+  "observed": "Actually viewed overview-rim-colour-algae-v2.jpg; attached cliff streams read as repeated vertical ribbons.",
+  "changes": [
+    "Five fronds per pendant now alternate broad rounded leaves and lobed fern blades, with unequal curved midribs and staggered tips.",
+    "Curvature moves leaf belly away from root fissure then curls it back; shared origin remains exact original attachment.",
+    "Small deterministic yaw differences between neighboring plants break parallel bands without changing any attachment point.",
+    "Fine alternating lateral veins added with fwidth anti-aliasing in existing leaf material; no new mesh or draw."
+  ],
+  "preserved": {
+    "all495AcceptedAnchorRecords": "exact equality against before snapshot, including position, scale, source, surface, localSurface, pocket and colony",
+    "counts": {
+      "fern": 89,
+      "fan": 46,
+      "pendant": 360
+    },
+    "rimPlants": 83,
+    "rimHabitats": 7,
+    "vines": 180,
+    "drawCalls": 4,
+    "twoWorldRimPath": "all rendered rim leaf vertices remain outside35.4–39.4 local ribbon",
+    "maximumInnerY": 52.96792840873817
+  },
+  "triangles": 51484,
+  "triangleBudget": 60000,
+  "frondTipLocalHeights": [
+    -0.889873445,
+    -0.690529764,
+    -0.596062303,
+    -0.921288788,
+    -0.58237499
+  ],
+  "CPU": "8/8 pass: before anchor equality, original real surface attachment, shared leaf roots, full vertex envelope, bridge/rim clearance, actual sphere/V7 reinstall/disposal.",
+  "GPU": {
+    "checkedBy": "parent actual factory",
+    "shaderErrors": [],
+    "screenshots": [
+      "overview-understory-v6.jpg",
+      "understory-middle-v6.jpg"
+    ],
+    "actualFixtureCounts": {
+      "fern": 92,
+      "fan": 46,
+      "pendant": 350
+    },
+    "actualFixtureTriangles": 50584,
+    "limitation": "Different fixture seed counts are retained; middle camera is partly occluded by original tree geometry. Overall flora remains simpler than illustration."
+  },
+  "backup": "understory-v6-before/",
+  "notChanged": [
+    "cliff geometry",
+    "trunk geometry",
+    "water/grass",
+    "source fauna",
+    "route/collision",
+    "V2 integration"
+  ]
+}

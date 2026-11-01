@@ -1,0 +1,3 @@
+{"ok":true,"regions":11,"meshCount":3360,"picked":{"ix":1,"iy":2,"iz":0,"char":"G","regionId":"left-front-coral","top":true},"checks":["real modules","erase/add","region-only rebuild","foundation identity","undo/redo","no implicit storage writes","separate save schema reload","nested ray identity","bounds"]}
+PASS failed rebuild preserves displayed assembly, state, revision and undo history
+{"wfc":true,"prototypes":22,"variants":48,"cells":398,"directedCompatibleEdges":1572,"geometryConsumers":["roof-slope-versus-flat","enclosed-garden"],"notWfcGeometryConsumers":["wall","corner","arch","decoration"]}

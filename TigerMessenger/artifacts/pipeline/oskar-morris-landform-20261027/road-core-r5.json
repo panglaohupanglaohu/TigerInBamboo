@@ -1,0 +1,9 @@
+{
+  "maximum_road_to_terrain_height_difference_m": 0.27000000000001023,
+  "outside_bridge_core_bad_samples": 0,
+  "acceptable_delta_m": [
+    -0.1,
+    0.35
+  ],
+  "scope": "actual route-point core/source terrain only, no normal riding claim"
+}

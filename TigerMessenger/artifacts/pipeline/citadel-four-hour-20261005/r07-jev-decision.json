@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "208723dc98e930a2d7c5e5a93f9c08c6bf43c920fcf08d69f14b8db8c45e27a9",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.9
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.86,
+      "probabilities": {
+        "lighting": 0,
+        "navigation": 0.01,
+        "review": 0.1,
+        "dressing": 0,
+        "geometry": 0.89
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.96
+    }
+  },
+  "usage": {
+    "input_tokens": 824,
+    "output_tokens": 91,
+    "cost_usd": 0.000347,
+    "credits_remaining_usd": 4.964815
+  },
+  "elapsed_ms": 4559,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "full scene railway and root support on latest candidate",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

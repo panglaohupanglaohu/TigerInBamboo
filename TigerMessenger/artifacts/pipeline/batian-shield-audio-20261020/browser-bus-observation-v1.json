@@ -1,0 +1,32 @@
+{
+  "scope": "Observed real browser isolated bus, not full gameplay listening",
+  "before_fix": {
+    "nearAccepted": true,
+    "immediateDuplicateRejected": true,
+    "movingPan": [
+      0.75,
+      -0.7412160038948059
+    ],
+    "burstAccepted": 6,
+    "burstAttempts": 16,
+    "maxVoices": 3,
+    "afterTailVoices": 0,
+    "farRejected": true,
+    "shieldWithBombAccepted": true,
+    "mixMusicGain": 0.3768758239436344,
+    "finalMusicGainAfter2_4s": 0.9598322170184914,
+    "mutedHitAccepted": false,
+    "unmutedHitAccepted": true
+  },
+  "productionSortieBeforeCounterAddition": {
+    "blockedHits": 219,
+    "shots": 11,
+    "robotsShattered": 8,
+    "completedTargets": [
+      "bookshop"
+    ],
+    "endPhase": "idle",
+    "audioAcceptedCount": "not measured in this run"
+  },
+  "new_fix": "replaceOldest for same-priority shield voices; rerun pending"
+}

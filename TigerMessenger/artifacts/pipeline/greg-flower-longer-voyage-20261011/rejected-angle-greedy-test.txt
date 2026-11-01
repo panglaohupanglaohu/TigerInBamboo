@@ -1,0 +1,5 @@
+Rejected trial: angle-first greedy expanded voyages before reserving all five lanes.
+Production verification failed at assert.ok(n.records.every(r=>r.valid)) (swampFlowerNavigation.verify.mjs:20).
+Route index 3 was invalid; no result from this trial was accepted as success.
+Detailed reconstructed CPU planner diagnostics: rejected-angle-greedy.json.
+The subsequent protected-baseline-lane candidate passes; see flower-navigation-cpu.json.

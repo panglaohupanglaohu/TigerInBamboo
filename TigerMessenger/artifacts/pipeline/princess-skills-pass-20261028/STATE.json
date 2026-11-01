@@ -1,0 +1,21 @@
+{
+  "status": "one target-led skill pass implemented, remaining visual gaps",
+  "asset": "princess-v5.glb",
+  "entry": "20261028-princess-skills-r59",
+  "skills": [
+    "blender-director",
+    "character-artist",
+    "hair-groom",
+    "stylized-style"
+  ],
+  "triangles": 80624,
+  "normalEvidence": "normal-v5.png; DOM riderAsset loaded/riderRevision reference-skills-v5/riderVisible true/speed1.25",
+  "tests": "real GLB 200 finite poses and restore passed; output incorrectly retains old v4 label, actual test input is v5",
+  "remaining": [
+    "natural facial likeness",
+    "crown/scalp transition",
+    "fine richly layered embroidery and clothing",
+    "no full normal-route roundtrip acceptance"
+  ],
+  "sourceHash": "46ad6f29ce09b2e414e89f22904c856b278fa7e5ec974c7f4ddcf8383387069f"
+}

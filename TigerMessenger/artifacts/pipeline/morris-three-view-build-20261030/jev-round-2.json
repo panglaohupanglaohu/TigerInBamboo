@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "1941aeea597be088d6ba313b7eb9185b2f541ae25b0cf5feed2e148f27aaefe5",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.9
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.25,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.32,
+        "lighting": 0,
+        "navigation": 0.4,
+        "review": 0.27
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.89
+    }
+  },
+  "usage": {
+    "input_tokens": 711,
+    "output_tokens": 91,
+    "cost_usd": 0.000299,
+    "credits_remaining_usd": 4.882758
+  },
+  "elapsed_ms": 1470,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "formal game and rail protected navigation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

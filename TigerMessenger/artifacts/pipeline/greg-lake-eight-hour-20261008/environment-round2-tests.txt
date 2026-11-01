@@ -1,0 +1,50 @@
+✔ shader-only change preserves previous actual positions/normals/indices, bounds and batch budgets (6.6485ms)
+✔ source and batch share exact bark fragment; batch keeps original barkLocal and genuine world view-distance (1.403333ms)
+✔ shader LOD coefficients retain midrange ink and fade monotonically without a far constant floor (1.328334ms)
+{"outerCliff":{"version":2,"renderDraws":2,"cracks":41,"roots":7,"depthInner":[6.355419508566815,10.597598723818523],"walkable":false,"entrance":"same angular endpoints as existing rim","triangles":2698,"topAnchorCount":193},"minRadius":38.660296115026206,"minY":29.402400970458984,"maxY":40,"topBytesUnchanged":true,"walkwayWidthWorld":2}
+✔ production outer cliff attaches to the real rim, closes its shell and preserves original walking geometry byte for byte (1016.084125ms)
+tree render batching {"sourceMeshes":285,"renderMeshes":11,"geometryBytes":1773948,"vertices":41071,"triangles":49232,"maxPositionError":0.000001914631004167569,"maxNormalError":4.5159051043268005e-8}
+✔ 285 real organic source meshes become eleven render batches with identical world triangles/normals and no extra triangles (9.698625ms)
+✔ source meshes still provide exact perch rays and no duplicate batch ray hits after spherical / V7 parent scaling (20.699042ms)
+✔ dispose restores draw visibility and trunk detail disposal/reinstall restores original source geometry without batch leaks (30.763708ms)
+organic bark {"trunks":55,"branches":230,"deformedTrunks":27,"deformedBranches":214,"moved":12432,"maxOrganicOffset":0.88108340194374}
+actual embedded branch bases preserved 211
+✔ organic shape changes real centreline without any extra triangles or draw surfaces (3.578ms)
+✔ all structural end rings, real perch anchors, under-water roots and transforms stay fixed (5.376875ms)
+✔ walk/bridge attachment band stays unchanged and recomputed boxes remain valid after placement (4.962458ms)
+✔ branch bases that were embedded in wood remain attached to actual closed surfaces (9.286292ms)
+understory statistics {"plants":508,"rimPlants":93,"rimAngularCoverage":0.5111111111111111,"vines":180,"counts":{"fern":95,"fan":50,"pendant":363},"triangles":53140,"drawCalls":4,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":282,"overlapping":279,"ratio":0.9893617021276596}
+frond tip heights [
+  -0.8898734450340271,
+  -0.6905297636985779,
+  -0.5960623025894165,
+  -0.921288788318634,
+  -0.5823749899864197
+]
+irregular rim habitats {"plants":93,"clusters":7,"heroes":24,"heightRange":[0.5090022751270726,5.875951905030013]}
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (3.053125ms)
+✔ lush understory uses four instanced batches within triangle budget, not per-plant mesh draws (8.412542ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (14.783334ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (11.949208ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.252375ms)
+✔ erosion revision preserves accepted rock-shoulder anchors; attached wall growth follows the revised surface (4.917ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (3.352125ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (43.977292ms)
+✔ weathering composes existing basic shader and anchors wall height to inner frame, without frame uniforms (0.905583ms)
+✔ exterior treatment retains authored thin coral soil while sharing the same geological field (0.133667ms)
+✔ actual existing lake-wall shader and weathering have distinct local declarations (2.08375ms)
+✔ natural pockets embed in actual clipped wall and taper back into it (38.407625ms)
+✔ soil plants root on real pocket caps; root seams stay against the wall (31.471584ms)
+✔ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (9.830209ms)
+✔ protected paths, story worksite, original tree and swimming domain remain unchanged (7.580209ms)
+✔ spherical placement preserves attachment and dispose exactly restores old visuals (59.363125ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1798.136333

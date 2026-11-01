@@ -1,0 +1,32 @@
+{
+  "task": "Saihoji R7 startup recursion repair",
+  "observations": {
+    "source": "Actual normal R6 error screenshot normal-r6-recursion-failure.png and production factory regression",
+    "actual": "R6 normal entry failed startup with RangeError maximum call stack; browser DOM focus timed out; screenshot exposed real error. No R6 combat acceptance.",
+    "cause": "New fleet snapshot recomputed landing hold by querying defender snapshot, whose contact cycle already queries fleet snapshot, causing recursive scene traversal.",
+    "repair": "Store hold boolean during simulation update and expose only that cached scalar in snapshot. Added real createBatianFleet factory test with defender callback reading fleet cycle, proving no recursive callback; passes. R7 default tab reloaded."
+  },
+  "checks": [
+    {
+      "name": "actual production fleet snapshot recursive-read regression",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "R7 normal startup and combat",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional casualty transport and full battle cycle",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "R6 failure retained, not hidden as success",
+    "No fake hits or app-state injection",
+    "No new scene or models"
+  ],
+  "evidence_revision": "r7"
+}

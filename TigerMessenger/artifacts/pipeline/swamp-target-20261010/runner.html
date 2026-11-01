@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>swamp stations</title>
+<style>html,body{margin:0;height:100%;background:#000}iframe{position:fixed;inset:0;width:100%;height:100%;border:0}#s{position:fixed;left:4px;bottom:4px;z-index:9;font:12px monospace;color:#fff;background:#000a;padding:2px 6px}</style>
+<iframe id="g"></iframe><div id="s">loading</div>
+<script>
+// 机位检查页：iframe 里跑正式游戏，地址栏 #rim / #rim:beauty 切换机位，不必重载游戏。
+const q=new URLSearchParams(location.search);
+g.src='/TigerMessenger/index.html?tour=crystal-v7&autostart=1&cb='+(q.get('cb')||Date.now())+(q.get('extra')?'&'+q.get('extra'):'');
+let busy=false;
+async function show(){
+  const w=g.contentWindow;
+  if(!w||!w.__tm||!w.__tm.swampCameraProfile){s.textContent='loading '+new Date().toLocaleTimeString();setTimeout(show,3000);return;}
+  if(busy)return;busy=true;
+  try{
+    if(!w.ST)w.ST=await w.eval("import('/TigerMessenger/artifacts/pipeline/swamp-target-20261010/stations.js?v='+Date.now())");
+    const [st,mode]=(location.hash.slice(1)||'rim').split(':');
+    w.document.getElementById('station-sheet')?.remove();
+    if(mode==='beauty'){w.ST.place(st);w.ST.settle(true);const u=w.ST.render('beauty');const i=w.document.createElement('img');i.id='station-sheet';i.src=u;i.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:99999';w.document.body.appendChild(i);}
+    else w.ST.sheet(st);
+    s.textContent='ready '+st+(mode?':'+mode:'')+' ink='+JSON.stringify(w.__tm.swampInkPost?.report?.active);
+  }catch(e){s.textContent='error '+e.message;}
+  busy=false;
+}
+addEventListener('hashchange',show);show();
+</script>

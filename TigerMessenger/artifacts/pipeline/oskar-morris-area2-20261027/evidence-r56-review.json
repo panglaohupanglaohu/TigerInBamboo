@@ -1,0 +1,37 @@
+{
+  "task": "Morris actual area doubled with unchanged core anchors",
+  "observations": {
+    "target": "Actually viewed approvedtarget-v1: leftrear summit, four descending shoulders, prebridge side view, upperright keep and lower music court",
+    "candidate": "Only rock coverage changed: radial centre slope>1, all corner slopes>.55; no nearly-horizontal grass cover vertices;14556 prior to632 sharedvertices546triangles. Actual height kernels/path/creek intact.",
+    "images": "Actually viewed component-r56-bare. Sphere-curvature checker carpet gone; actual connected grass-crowned spurs with limited steep rock faces visible. Candidate integration accepted; target artistic match not claimed. Parent formal GPU in progress.",
+    "rail": "First downstream candidate failed0.59m railgap, rejected; final stream min26.11m, road17.76m, production depressed terrain0 railcover samples; current GPU train envelope not claimed",
+    "remaining": "Foreground broad grass and simple spur silhouettes remain compared to approved layered dense reference; normal riding/train envelope still unverified."
+  },
+  "checks": [
+    {
+      "name": "15 actual factory geometry and creek checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current enlarged bare and formal game images",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "full riding enlarged route and railway envelopes",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "saved rail full expanded sample check",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "text evidence only",
+    "JEV cannot visually accept",
+    "no submission or publication"
+  ]
+}

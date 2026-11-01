@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "8e02b33ffcc4647ba0e49ed6d19ad225185e5de26f398fea2e29030704ea4458",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.87
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.56,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.65,
+        "review": 0.35
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.31
+    }
+  },
+  "usage": {
+    "input_tokens": 669,
+    "output_tokens": 91,
+    "cost_usd": 0.000281,
+    "credits_remaining_usd": 4.93832
+  },
+  "elapsed_ms": 3147,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Normal game rescue route visual verification",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "citadel-visual-review-v1",
+  "round": "r47",
+  "reviewer": "new_city_main",
+  "reviewType": "internal-independent-review-not-external-blind",
+  "participationDisclosure": "评阅者参与过旧城、新城、廊桥及岸梯等局部模型制作；本次为同团队独立视觉复核，不是外部盲评。",
+  "inputs": {
+    "panorama": "../citadel-four-hour-20261005/r47-arches-clouds-target-front-plants-terrain.png",
+    "newCityCloseup": "../citadel-four-hour-20261005/r46-plaza-vista-new-plaza-detail-plants-terrain.png",
+    "target": "../citadel-architecture-target-20261005/target-v3-landmarks.png",
+    "rubric": "state.json",
+    "oldCityCloseup": "../citadel-four-hour-20261005/r47-arches-clouds-old-city-detail-plants-terrain.png",
+    "newCitySameRoundCloseup": "../citadel-four-hour-20261005/r47-arches-clouds-new-city-detail-plants-terrain.png"
+  },
+  "evidenceCutoff": "r47 panorama and both city closeups; r46 plaza closeup supplement; no r48 or later evidence",
+  "method": {
+    "visualOnly": true,
+    "cpuChecksCountAsArtPoints": false,
+    "pixelSimilarityClaim": false,
+    "matchingCameraClaim": false,
+    "terrainFrozen": "r17",
+    "oldCityCurrentCloseupAvailable": true,
+    "closeupIsSameRoundAsPanorama": true,
+    "hardGatesRevalidated": false,
+    "supplementalPlazaCloseupRound": "r46"
+  },
+  "rubric": [
+    {
+      "criterion": "全景布局与两城呼应",
+      "max": 25,
+      "score": 18,
+      "observed": "左右两城、湾桥、瀑布、前景铁路与新城广场关系可辨；城市体量在山前偏小，大片未被街台组织的空隙削弱了目标中紧密的两城呼应。",
+      "limit": "目标与实机机位不完全一致；不要求通过改山形修正构图。"
+    },
+    {
+      "criterion": "建筑轮廓与结构细节",
+      "max": 25,
+      "score": 15,
+      "observed": "同轮旧城近景确认一层真拱廊、屋顶露台、小亭与短塔已存在；新城主门也可看到真实贯通深度。这些改进已计分，但旧城仍是较整齐的前后排房组，新城沿坡住宅偏独立高塔，石基和拱廊未形成目标那样层层错落的公共街台。",
+      "limit": "近景确认可见几何形态，不替代遮挡后的连接、内部净空或全部屋顶验收。"
+    },
+    {
+      "criterion": "材质与配色",
+      "max": 20,
+      "score": 14,
+      "observed": "奶油石、粉蓝墙、橙顶与深蓝穹顶对应目标；新城主门有可见内廊深度，但明暗较浅，旧城大块墙面与亮橙屋顶偏平；材质与局部阴影的层次仍弱于目标。",
+      "limit": "评分看实际画面，不因材质类型、纹理数量或几何复杂度加分。"
+    },
+    {
+      "criterion": "植被云水环境协调",
+      "max": 15,
+      "score": 9,
+      "observed": "青绿海水、岸线白边、山坡树群及白云形成完整环境；树冠多为近似等大圆团，前景树遮挡焦点；云较扁平，瀑布读成细密重复线，左侧密集鸟群/粒状飞行元素抢眼。",
+      "limit": "单帧不评价运动自然度，也未据图确认左侧每个飞行元素的类型。"
+    },
+    {
+      "criterion": "地标与连接关系",
+      "max": 10,
+      "score": 7,
+      "observed": "雕塑和木马身份可辨，旧城岸阶与湾桥、前景铁路已形成可读连接；新城阶梯主轴在近景被前排房屋和树冠切断，雕塑环形基座与广场的层次偏弱。",
+      "limit": "这是视觉关系分，不是通路连通、碰撞或角色功能验收。"
+    },
+    {
+      "criterion": "轮廓边缘与画面完整性",
+      "max": 5,
+      "score": 3,
+      "observed": "两城主要轮廓清楚；画面左侧飞行元素密集，前景铁路在下缘被裁切，近景树冠遮住广场部分轮廓，主次关系与目标仍有差距。",
+      "limit": "截图不能替代全场景遮挡/穿模审计。"
+    }
+  ],
+  "total": 66,
+  "maximum": 100,
+  "requiredScore": ">95",
+  "visualAccepted": false,
+  "priorities": [
+    {
+      "rank": 1,
+      "title": "把离散房组组织成可见的连续街台与拱廊",
+      "scope": "固定 r17 山体、现有地块与公共净空；优先旧城临湾边缘，再处理新城沿阶房组基座。",
+      "actions": [
+        "在现有建筑承托包络内强化连续石质层台、可见真拱洞、短遮檐与退台，使上层彩色住宅和下层公共石基有明确层次。",
+        "让已有小塔、露台与普通屋顶在全景中形成有大小差别的轮廓；避免以零散附加装饰替代体量层次。"
+      ],
+      "acceptance": "相同全景加旧城近景中，先读到连贯街台/拱廊，再读到各栋房；保护原地块、入口、通道与已确认承托。新增结构另行通过硬检查，不能以艺术分代替。"
+    },
+    {
+      "rank": 2,
+      "title": "恢复新城门—阶梯—雕塑广场的视觉主次",
+      "scope": "保留雕塑木马身份、位置约束与通路；调整局部植被、入口明暗及铺装边界，固定山体。",
+      "actions": [
+        "降低或疏开当前近景遮住雕塑环基的大树冠，围绕基座组织低矮绿色环带，保持木马与雕塑之间的留白。",
+        "加强主门内廊、檐下与台阶立面的柔和明暗层次，让入口深度和下行轴线清楚；收敛全景左侧密集飞行元素的视觉权重。"
+      ],
+      "acceptance": "沿 r46 同机位能完整辨认雕塑环基、木马外轮廓和门到广场的视觉路径；不靠移动地标或新建大面积遮挡解决。"
+    }
+  ],
+  "notClaims": [
+    "未达到艺术目标 >95",
+    "未重新验证任何 CPU/GPU 硬门槛",
+    "不代表外部独立盲评",
+    "不代表导航、全船航线或所有几何净空完成",
+    "未改模型源码、state.json 或父线程集成"
+  ],
+  "summary": "识别元素基本齐全，但空间层次、拱廊连续性和焦点组织仍明显弱于目标。66/100 为本轮视觉判断，不含运行成功奖励。",
+  "sameRoundCloseupAddendum": "评分保持66。r47旧城近景证实已存在真拱廊与多种屋顶角色，新城近景证实门洞贯通；问题应表述为已有层次的尺度、连续性和明暗不足，不能说没有拱廊或假门洞。"
+}

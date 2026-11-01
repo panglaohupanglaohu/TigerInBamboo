@@ -1,0 +1,16 @@
+{
+  "passed": 6,
+  "checks": [
+    "dense foliage uses clustered original geometry",
+    "flora remains bounded to existing island and finite",
+    "flowers retain clear central walking strip",
+    "bridge has real barrel, masonry and bounded batch count",
+    "bridge water passage is open beneath the walkable deck",
+    "rock shoulders supply actual raycast support"
+  ],
+  "counts": {
+    "flowers": 9060,
+    "bouquets": 1013,
+    "leaves": 1902
+  }
+}

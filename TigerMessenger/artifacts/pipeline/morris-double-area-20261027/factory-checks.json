@@ -1,0 +1,361 @@
+{
+  "checks": [
+    "footprint area twice previous ratio7, no root scale",
+    "world geometry radius82.316 no actor root enlargement",
+    "three horses unchanged scale, all initial placements above sea",
+    "new outer meadows contain spread tall trees",
+    "all generated positions finite"
+  ],
+  "report": {
+    "revision": "morris-area2-r56",
+    "style": "Arts and Crafts / William Morris inspired original geometry",
+    "site": {
+      "method": "closest safe enlarged footprint along bookshop-to-Saihoji sea corridor; colliders/landmarks/land shell/rail survey",
+      "userSpecifiedAnchor": false,
+      "automaticEmptyOceanAcceptance": true,
+      "lat": 75,
+      "lon": -15,
+      "minimumClearance": null,
+      "envelope": 96.31336182229397,
+      "routeMidpointDistance": 0.7227499471175642,
+      "routeMidpointEdgeDistance": 0,
+      "obstacles": 0,
+      "routeSamples": 0,
+      "candidates": 2304,
+      "otherObjectsMoved": false,
+      "route": null,
+      "nearestSafeCandidates": [
+        {
+          "lat": 75,
+          "lon": -15,
+          "clearance": null,
+          "targetDistance": 0.7227499471175642
+        },
+        {
+          "lat": 75,
+          "lon": -10,
+          "clearance": null,
+          "targetDistance": 2.890449411551959
+        },
+        {
+          "lat": 75,
+          "lon": -20,
+          "clearance": null,
+          "targetDistance": 4.334573510184329
+        },
+        {
+          "lat": 75,
+          "lon": -5,
+          "clearance": null,
+          "targetDistance": 6.49814663548419
+        },
+        {
+          "lat": 75,
+          "lon": -25,
+          "clearance": null,
+          "targetDistance": 7.9381459662134075
+        },
+        {
+          "lat": 75,
+          "lon": 0,
+          "clearance": null,
+          "targetDistance": 10.093474267965266
+        }
+      ]
+    },
+    "flowers": 11774,
+    "bouquetClumps": 1358,
+    "floraRevision": "closed-lobed-verdure-r1",
+    "curledLeafClumps": 2569,
+    "horses": 3,
+    "animalScaleRatio": 0.45,
+    "animalRelativeToV2": 0.6,
+    "plantScaleRatio": 0.85,
+    "treeHeightPolicy": "mounted courier envelope below half high-tree height",
+    "terrainLayout": "central highland, asymmetric shoulders, low surrounding meadows",
+    "planarAreaRatio": 14,
+    "expandedAreaRatio": 2,
+    "linearScale": 3.7416573867739413,
+    "radius": 82.3164625090267,
+    "diameter": 164.6329250180534,
+    "pathWidth": 3.2,
+    "protectedExistingSites": 0,
+    "protectedRailSamples": 0,
+    "originalShoreJoin": false,
+    "layers": [
+      {
+        "name": "外圈花草坪",
+        "range": "外围低地径向约1.4–4m"
+      },
+      {
+        "name": "环绕溪流缓丘",
+        "range": "中圈约4–9m"
+      },
+      {
+        "name": "中央山肩城堡",
+        "range": "城基径向10.5m"
+      },
+      {
+        "name": "中央错位主峰",
+        "range": "后置主峰、相连石脊与宽鞍部约25m；尖圆主峰、斜向短岩阶与五组错位宽肩向四周降低"
+      }
+    ],
+    "musicCourt": {
+      "x": 30,
+      "z": 12,
+      "radialHeight": 7.2,
+      "castleHeightDifference": 3.3,
+      "routeS": 208.17679959737194,
+      "approachWidth": 3.2,
+      "entry": {
+        "x": 30,
+        "z": 15.5,
+        "y": 3.6286670674298342
+      },
+      "mode": "actual lower eastern shoulder, original musician ensemble"
+    },
+    "mountainRoute": {
+      "revision": "morris-area2-outer-meadow-r1-20261027",
+      "expansion": 1.4142135623730951,
+      "outerMeadowExtended": true,
+      "design": "continuous flower path to actual bridge, straight open farm-gate landing, graded opposing shoulder turns and existing castle portal",
+      "length": 227.77801931241984,
+      "width": 3.2,
+      "hairpinCenterRadius": 6,
+      "finalTurnRadius": 8.5,
+      "eastTurnRadius": 4.55,
+      "farmGateS": 111.63786939797673,
+      "bridgeDeckHalfLength": 4,
+      "mandatorySequence": [
+        "flower path",
+        "bridge deck",
+        "open farm gate",
+        "mountain approach",
+        "music court outer shoulder",
+        "castle gate"
+      ],
+      "minimumDesignedInnerRadius": 2.4,
+      "meadowTurnRadius": 4,
+      "bridgeCenter": [
+        8,
+        32
+      ],
+      "bridgeCrossings": 1,
+      "keys": [
+        [
+          0,
+          1.75
+        ],
+        [
+          102.63786939797677,
+          4
+        ],
+        [
+          110.63786939797673,
+          4.4
+        ],
+        [
+          133.02843863852559,
+          5.6
+        ],
+        [
+          151.87641264700204,
+          6.4
+        ],
+        [
+          193.88464558855182,
+          7.4
+        ],
+        [
+          208.17679959737194,
+          8
+        ],
+        [
+          227.77801931241984,
+          10.946204291414205
+        ]
+      ],
+      "marks": {
+        "bridgeFront": 102.63786939797677,
+        "bridgeBack": 110.63786939797673,
+        "westStart": 133.02843863852559,
+        "westEnd": 151.87641264700204,
+        "eastStart": 193.88464558855182,
+        "eastEnd": 208.17679959737194,
+        "gate": 227.77801931241984
+      },
+      "actualRoadMaxRadialGrade": 0.14846434036785147,
+      "surface": "real graded ground shoulders plus raycast-supported winding road mesh"
+    },
+    "stream": "authored descending radial levels, carved real bed",
+    "streamLevels": [
+      15.8,
+      11.8,
+      7.5,
+      4.5,
+      2.3,
+      1.2,
+      0.7,
+      0.1,
+      -0.2,
+      -0.6
+    ],
+    "creekBankBoulders": 92,
+    "bridgeDetail": {
+      "revision": "continuous-arch-r3",
+      "archBarrel": true,
+      "solidParapets": true,
+      "closedArchCore": true,
+      "continuousCoping": true,
+      "deckCrown": 0.7499999999999999,
+      "archRise": 2.08,
+      "minimumCoreThickness": 0.6126992666817159,
+      "walkWidth": 3.2,
+      "span": 8,
+      "archStones": 52,
+      "masonryPieces": 196,
+      "mergedStoneBatches": 5,
+      "terrainBankContactVerified": false
+    },
+    "bridgeCrownRise": 0.75,
+    "bridgeMaxRadialGrade": 0.2862164495366449,
+    "facadePlants": {
+      "climbingRoseStems": 4,
+      "facadeRoses": 32,
+      "facadeLeafBlades": 128
+    },
+    "creekFlow": "local animated UV flow and broken bank foam",
+    "rockShoulderGroups": 13,
+    "bridge": "real curved deck and stone parapets",
+    "farmGate": "open wooden rails between stone posts",
+    "castle": "preserved modular keep, stepped wings and open arch; independent Morris lower music shoulder",
+    "castleDesign": {
+      "design": "Oskar target-guided stepped keep and recessed asymmetric wings; existing three-part identity and passage retained",
+      "revision": "oskar-target-massing-r5",
+      "previousGeometry": "masonry-r2",
+      "wallBevel": 0.1,
+      "footprint": [
+        14,
+        10
+      ],
+      "size": [
+        16.80336552630598,
+        16.87166312623603,
+        11.082743593317028
+      ],
+      "mainHeights": [
+        10.5,
+        7,
+        5.5
+      ],
+      "entrance": {
+        "direction": "+Z",
+        "clearWidth": 2.6,
+        "clearHeight": 3.1
+      },
+      "eastMusicCourtOpen": true,
+      "supports": [
+        "continuous foundation",
+        "courtyard floor"
+      ],
+      "detailCounts": {
+        "masonry": 394,
+        "windowSurrounds": 60,
+        "roofTiles": 911,
+        "footings": 18
+      },
+      "detailBatches": 13,
+      "navigationVerified": false
+    },
+    "wholeNavigationVerified": false,
+    "planeTrees": 18,
+    "bridgePlaneTree": [
+      -2,
+      0.9043600510161127,
+      33
+    ],
+    "cypresses": 23,
+    "hollyhockClumps": 62,
+    "planeHeightRange": [
+      16.36724188970402,
+      22.914138645585627
+    ],
+    "cypressHeightRange": [
+      19.76759922180176,
+      27.05040077819824
+    ],
+    "fruitDesign": "red peel and visible yellow flesh, user Morris setting",
+    "companionHollyhocks": 31,
+    "treeRevision": "red-fruit-companion-planting-r1",
+    "rabbits": 8,
+    "robins": 4,
+    "cuckoos": 3,
+    "oldSceneMoved": false,
+    "navigationTraversalVerified": false
+  },
+  "outerTrees": [
+    [
+      -60,
+      -10.411864171615434,
+      10
+    ],
+    [
+      -53,
+      -10.50817442419833,
+      39
+    ],
+    [
+      -32,
+      -12.611700045394116,
+      61
+    ],
+    [
+      5,
+      -9.685252678152295,
+      64
+    ],
+    [
+      48,
+      -11.402186995756125,
+      48
+    ],
+    [
+      61,
+      -11.430722639608291,
+      17
+    ],
+    [
+      46,
+      -9.44809138342066,
+      -39
+    ],
+    [
+      -44,
+      -8.722210173510234,
+      -45
+    ],
+    [
+      -30,
+      -4.984596738406282,
+      42
+    ]
+  ],
+  "horsePositions": [
+    [
+      -24,
+      4.627861318262859,
+      20
+    ],
+    [
+      -24,
+      4.627861318262859,
+      20
+    ],
+    [
+      -10,
+      0.5479884421534678,
+      37
+    ]
+  ],
+  "scope": "factory checks only; actual normal GPU pending"
+}

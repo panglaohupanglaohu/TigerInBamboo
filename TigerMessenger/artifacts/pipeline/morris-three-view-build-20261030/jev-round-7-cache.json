@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "a73e0754ee5b857b5f1bc269986f9b0169831bb3a20d3cc35e5742b097b2d677",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.9
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.64,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.02,
+        "lighting": 0,
+        "navigation": 0.71,
+        "review": 0.27
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.44
+    }
+  },
+  "usage": {
+    "input_tokens": 798,
+    "output_tokens": 91,
+    "cost_usd": 0.000336,
+    "credits_remaining_usd": 4.880864
+  },
+  "elapsed_ms": 2058,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "fresh r71 normal full traversal and E",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

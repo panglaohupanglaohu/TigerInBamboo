@@ -1,0 +1,30 @@
+✔ entrance bridge closes the rim gap outside the stair head only (0.689333ms)
+✔ without the guard, stepping off the rim inward falls into the crater (the reported bug) (74.3965ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 0 (655.658958ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 0.9 (541.800291ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 2 (523.194958ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 3.1 (513.342625ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 4 (504.323416ms)
+✔ guard keeps the courier on the rim walking inward and outward at angle 5.2 (620.977625ms)
+✔ full rim lap at radius 38.8 counter-clockwise completes, through the entrance, without dropping (198.073834ms)
+✔ full rim lap at radius 38.8 clockwise completes, through the entrance, without dropping (194.306291ms)
+✔ full rim lap at radius 39.4 counter-clockwise completes, through the entrance, without dropping (198.454167ms)
+✔ full rim lap at radius 39.4 clockwise completes, through the entrance, without dropping (198.867292ms)
+✔ full rim lap at radius 39.9 counter-clockwise completes, through the entrance, without dropping (200.385583ms)
+✔ full rim lap at radius 39.9 clockwise completes, through the entrance, without dropping (199.229958ms)
+✔ authored bank route (entry link, three terraces, flights) is still walkable with the guard on (178.746917ms)
+✔ swampEdgeGuard=0 style disable leaves physics untouched (55.161667ms)
+✔ real V7 promenade overlap no longer steals support from feet on the coral rim (11.637209ms)
+✔ feet below rim retain lower promenade and entrance/water are not captured (6.743208ms)
+✔ production collision substeps keep a standing player on the actual new rim (14.030625ms)
+✔ all three real bank midpoints stay supported through gravity instead of falling to old V7 terrain (188.245042ms)
+✔ real lower tread remains available beneath an upper terrace, late quay registration stays dynamic (3.473167ms)
+✔ production controller and gravity can descend actual entrance stairs with guard and steer active (2276.551125ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7304.120667

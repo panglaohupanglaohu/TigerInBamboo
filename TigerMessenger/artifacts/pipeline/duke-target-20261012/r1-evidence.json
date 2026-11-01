@@ -1,0 +1,30 @@
+{
+ "target": "DUKE coastal steam freight ship concept sheet 2026-10-12 (side, deck plan, 3/4 bow, cutaway, crane detail)",
+ "candidate": "duke-r1",
+ "visual_observations_source": "assistant viewed studio renders; text only for Jev",
+ "observations": [
+  "side: hull reads too flat, superstructure roofs dark and blocky",
+  "funnel short vs target",
+  "crane small vs target",
+  "few copper/brass details",
+  "name too small"
+ ],
+ "changes": "New dukeFreighter.js: lofted 58x10 m hull, cream 3-tier house, white/red/black funnel, 2 masts+rigging, fwd deck crane, hatches, crates, 2 porthole rows, 杜/Duke bow name, rudder+prop",
+ "checks": [
+  {
+   "name": "module syntax",
+   "required": true,
+   "passed": true
+  },
+  {
+   "name": "studio render side+3/4",
+   "required": true,
+   "passed": true
+  }
+ ],
+ "constraints": [
+  "additive; robots/rails/story untouched",
+  "no keys or images sent"
+ ],
+ "version": "duke-r1"
+}

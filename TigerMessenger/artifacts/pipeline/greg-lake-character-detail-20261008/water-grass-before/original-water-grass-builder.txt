@@ -1,0 +1,14 @@
+ const grassVertices=[],grassColors=[];
+ for(let i=0;i<30;i++){
+  const angle=i*2.399,r=6+(i%6),x=Math.cos(angle)*r,z=Math.sin(angle)*r;
+  for(let f=0;f<3;f++){
+   const a=angle+f*2.1,height=2+(i%4)*.6;
+   const point=(t,side)=>[x+Math.cos(a)*(.6*Math.sin(t*2.2)+side*.22*Math.sin(t*Math.PI)),10.5+t*height,z+Math.sin(a)*(.6*Math.sin(t*2.2)+side*.22*Math.sin(t*Math.PI))];
+   for(let j=0;j<8;j++){const t=j/8,u=(j+1)/8,c=new THREE.Color(0x254c59).lerp(new THREE.Color(0x5b978a),u);for(const v of [point(t,-1),point(u,-1),point(t,1),point(t,1),point(u,-1),point(u,1)]){grassVertices.push(...v);grassColors.push(c.r,c.g,c.b);}}
+  }
+ }
+ const grassGeo=new THREE.BufferGeometry();grassGeo.setAttribute('position',new THREE.Float32BufferAttribute(grassVertices,3));grassGeo.setAttribute('color',new THREE.Float32BufferAttribute(grassColors,3));grassGeo.computeVertexNormals();
+ const grass=new THREE.Mesh(grassGeo,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide,fog:false}));grass.name='v2-underwater-grass';swamp.add(grass);
+
+ const barge=swamp.userData.shipyard?.barge;
+ if(barge){

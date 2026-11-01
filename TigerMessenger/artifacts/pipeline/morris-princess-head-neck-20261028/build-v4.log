@@ -1,0 +1,30 @@
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/build_morris_princess_v4.py:11: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.diffuse_color=(*[((int(h[i:i+2],16)/255+.055)/1.055)**2.4 if int(h[i:i+2],16)/255>.04045 else int(h[i:i+2],16)/255/12.92 for i in (0,2,4)],1);m.use_nodes=True
+Info: Saved as "princess-v4.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+12:16:46 | INFO: Starting glTF 2.0 export
+12:16:46 | INFO: Extracting primitive: continuous bent sleeve
+12:16:46 | INFO: Primitives created: 3
+12:16:46 | INFO: Extracting primitive: continuous bent sleeve.001
+12:16:46 | INFO: Primitives created: 3
+12:16:46 | INFO: Extracting primitive: bodice acanthus spine
+12:16:46 | INFO: Primitives created: 4
+12:16:46 | INFO: Extracting primitive: brow
+12:16:46 | INFO: Primitives created: 8
+12:16:46 | INFO: Extracting primitive: cloak embroidered border
+12:16:46 | INFO: Primitives created: 2
+12:16:46 | INFO: Extracting primitive: Sphere.034
+12:16:46 | INFO: Primitives created: 3
+12:16:46 | INFO: Finished glTF 2.0 export in 0.039012908935546875 s
+00:01.123  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-princess-head-neck-20261028/princess-v4-front.png'
+00:01.400  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-princess-head-neck-20261028/princess-v4-side.png'
+00:01.666  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-princess-head-neck-20261028/princess-v4-back.png'
+00:01.938  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-princess-head-neck-20261028/princess-v4-head-side.png'
+00:02.212  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-princess-head-neck-20261028/princess-v4-head-front.png'
+00:02.493  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/morris-princess-head-neck-20261028/princess-v4-head-quarter.png'
+
+{"revision": "reference-head-neck-v4", "workflow": "new continuous authored lofts/sweeps and closed drape; courier-style empty pivots; no skinning claimed", "mesh_count": 6, "vertices": 34028, "triangles": 67472, "bounds_blender": [[-0.4950000047683716, -0.42900002002716064, -0.6929999589920044], [0.4950000047683716, 0.5350000262260437, 0.8440000414848328]], "nodes": ["MorrisPrincess", "body", "head", "cape", "armL", "armR"], "validation": "structural and offline component render only; no game navigation acceptance"}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

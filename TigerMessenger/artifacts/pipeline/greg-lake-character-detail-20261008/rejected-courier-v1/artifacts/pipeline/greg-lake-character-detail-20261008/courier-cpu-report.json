@@ -1,0 +1,28 @@
+{
+  "runtimeModel": "moebius-courier-1",
+  "styleRevision": "coral-lake-messenger-1",
+  "formalFactory": "src/assets/characters/humanCourier.js#buildHumanCourier",
+  "formalAdapter": "src/player/agentMessenger.js#buildAgentMessenger",
+  "animation": "src/assets/characters/humanCourier.js#animateHumanCourier (unchanged)",
+  "fittedHeight": 1.66,
+  "fittedMinY": 0,
+  "meshCountIncludingInk": 30,
+  "trianglesIncludingInk": 27544,
+  "legacyMeshCount": 65,
+  "legacyTriangles": 63968,
+  "sharedMaterialCount": 2,
+  "cpuTests": {
+    "passed": 4,
+    "files": [
+      "tests/world/courierMoebius.test.mjs",
+      "tests/world/courierExpedition.test.mjs"
+    ]
+  },
+  "gpuStatus": "Root agent reports natural silhouette, palette match and 0 shader errors; back/delivery/riding views pending",
+  "rollback": "buildHumanCourier({style: \"expedition\"}) or restore only humanCourier.js from this batch before snapshot",
+  "limitations": [
+    "Basic material uses authored two-colour geometry and does not receive dynamic scene lighting",
+    "Cloth movement uses existing cape pivot, no new cloth simulation",
+    "Pose geometry and silhouette require actual GPU near/mid-distance review"
+  ]
+}

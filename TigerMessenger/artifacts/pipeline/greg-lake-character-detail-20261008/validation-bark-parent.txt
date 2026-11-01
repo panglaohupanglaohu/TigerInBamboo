@@ -1,0 +1,21 @@
+✔ shader-only change preserves previous actual positions/normals/indices, bounds and batch budgets (6.302959ms)
+✔ source and batch share exact bark fragment; batch keeps original barkLocal and genuine world view-distance (1.0935ms)
+✔ shader LOD coefficients retain midrange ink and fade monotonically without a far constant floor (1.031459ms)
+tree render batching {"sourceMeshes":285,"renderMeshes":11,"geometryBytes":1773948,"vertices":41071,"triangles":49232,"maxPositionError":0.000001914631004167569,"maxNormalError":4.5159051043268005e-8}
+✔ 285 real organic source meshes become eleven render batches with identical world triangles/normals and no extra triangles (9.729959ms)
+✔ source meshes still provide exact perch rays and no duplicate batch ray hits after spherical / V7 parent scaling (20.453792ms)
+✔ dispose restores draw visibility and trunk detail disposal/reinstall restores original source geometry without batch leaks (30.9435ms)
+organic bark {"trunks":55,"branches":230,"deformedTrunks":27,"deformedBranches":214,"moved":12432,"maxOrganicOffset":0.6323950384417698}
+actual embedded branch bases preserved 211
+✔ organic shape changes real centreline without any extra triangles or draw surfaces (4.219125ms)
+✔ all structural end rings, real perch anchors, under-water roots and transforms stay fixed (5.517292ms)
+✔ walk/bridge attachment band stays unchanged and recomputed boxes remain valid after placement (4.878625ms)
+✔ branch bases that were embedded in wood remain attached to actual closed surfaces (9.611917ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1644.183875

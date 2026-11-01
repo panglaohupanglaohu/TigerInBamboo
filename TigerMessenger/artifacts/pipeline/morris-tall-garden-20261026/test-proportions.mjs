@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';import * as T from 'three';import{createMorrisPlaneTree,createMorrisCypress}from'../../../src/world/morrisBotany.js';import{createMorrisRabbit,createMorrisBird}from'../../../src/world/morrisWildlife.js';import{createMorrisIsland}from'../../../src/world/morrisIsland.js';
+const checks=[];function check(n,f){f();checks.push(n);}
+check('plane tree has real taller geometry, not camera-only scale',()=>{const t=createMorrisPlaneTree();const b=new T.Box3().setFromObject(t).getSize(new T.Vector3());assert.ok(b.y>10.5);assert.equal(t.scale.y/t.scale.x,1.9/1.08);for(const p of t.userData.perches)assert.ok(p.y>10);});
+check('cypress has continuous opaque foliage as well as sprays',()=>{const c=createMorrisCypress({height:26});assert.ok(c.getObjectByName('cypress-continuous-tapered-foliage'));assert.ok(new T.Box3().setFromObject(c).getSize(new T.Vector3()).y>22);});
+check('rabbit and both birds are sixty percent of previous dimensions',()=>{assert.equal(createMorrisRabbit().scale.x/.75,.6);for(const k of['robin','cuckoo'])assert.equal(createMorrisBird(k).scale.x/1.2,.6);});
+const i=createMorrisIsland();check('three grazing horses reduced uniformly with articulated geometry retained',()=>{i.horses.forEach((h,k)=>{assert.ok(Math.abs(h.scale.x/(1.35+k*.06)-.45)<1e-10);assert.ok(h.userData.horse.neck);});});
+check('creek has bounded bank stones and open castle gate remains supplied',()=>{assert.ok(i.report.creekBankBoulders>30);assert.equal(i.report.castleDesign.eastMusicCourtOpen,true);assert.equal(i.report.castleDesign.entrance.clearWidth,2.6);});
+console.log(JSON.stringify({passed:checks.length,checks},null,2));

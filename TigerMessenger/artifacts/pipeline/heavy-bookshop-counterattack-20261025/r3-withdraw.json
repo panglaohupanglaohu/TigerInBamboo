@@ -1,0 +1,503 @@
+{
+  "at": "2026-10-25T01:42:06.267Z",
+  "fleet": {
+    "saihojiLandingHold": false,
+    "coverBombing": {
+      "allowed": false,
+      "passes": 0,
+      "timedOut": false
+    },
+    "groundAssault": {
+      "tactics": {
+        "shieldBlocks": 116,
+        "shieldBreaks": 3,
+        "swordSwings": 0,
+        "swordHits": 0,
+        "gunBursts": 76,
+        "friendlyFireHeld": 0,
+        "formationReplacements": 40,
+        "units": [
+          {
+            "id": 6,
+            "role": "shield",
+            "mode": "shield",
+            "energy": 16.4,
+            "moving": false,
+            "boardAllowed": false,
+            "shield": true
+          },
+          {
+            "id": 7,
+            "role": "shield",
+            "mode": "shield",
+            "energy": 41.2,
+            "moving": false,
+            "boardAllowed": false,
+            "shield": true
+          },
+          {
+            "id": 9,
+            "role": "gun",
+            "mode": "gun",
+            "energy": 91.3,
+            "moving": true,
+            "boardAllowed": false,
+            "shield": false
+          },
+          {
+            "id": 14,
+            "role": "shield",
+            "mode": "shield",
+            "energy": 70.8,
+            "moving": false,
+            "boardAllowed": false,
+            "shield": true
+          },
+          {
+            "id": 15,
+            "role": "shield",
+            "mode": "shield",
+            "energy": 42.4,
+            "moving": false,
+            "boardAllowed": false,
+            "shield": true
+          },
+          {
+            "id": 16,
+            "role": "shield",
+            "mode": "shield",
+            "energy": 30.1,
+            "moving": false,
+            "boardAllowed": false,
+            "shield": true
+          },
+          {
+            "id": 17,
+            "role": "gun",
+            "mode": "gun",
+            "energy": 100,
+            "moving": true,
+            "boardAllowed": false,
+            "shield": false
+          },
+          {
+            "id": 18,
+            "role": "gun",
+            "mode": "gun",
+            "energy": 86.8,
+            "moving": true,
+            "boardAllowed": false,
+            "shield": false
+          },
+          {
+            "id": 22,
+            "role": "shield",
+            "mode": "shield",
+            "energy": 94.2,
+            "moving": false,
+            "boardAllowed": false,
+            "shield": true
+          },
+          {
+            "id": 23,
+            "role": "shield",
+            "mode": "shield",
+            "energy": 53.2,
+            "moving": false,
+            "boardAllowed": false,
+            "shield": true
+          },
+          {
+            "id": 24,
+            "role": "gun",
+            "mode": "gun",
+            "energy": 100,
+            "moving": true,
+            "boardAllowed": false,
+            "shield": false
+          },
+          {
+            "id": 25,
+            "role": "gun",
+            "mode": "gun",
+            "energy": 77.7,
+            "moving": true,
+            "boardAllowed": true,
+            "shield": false
+          }
+        ]
+      },
+      "medical": {
+        "rescued": 0,
+        "healed": 0,
+        "returned": 0,
+        "medic": {
+          "id": "26da898b-5a1b-4775-9743-9adaba715fee",
+          "visible": true,
+          "owned": false,
+          "phase": "surface",
+          "position": [
+            1.3263838004495128,
+            24.113430852029094,
+            7.171762793810137
+          ],
+          "target": null,
+          "visibleMeshes": 10
+        },
+        "patients": 0,
+        "carriers": []
+      },
+      "ready": 12,
+      "active": true,
+      "stage": "evacuation",
+      "objective": "suppress-town-defenses-and-assault-plaza",
+      "assigned": 18,
+      "controllers": 9,
+      "heldFor": 0,
+      "deployed": 17,
+      "trooperShots": 76,
+      "trooperRobotHits": 15,
+      "residentShots": 315,
+      "residentHits": 77,
+      "residentsDown": 27,
+      "troopersDown": 6,
+      "robotKills": 2,
+      "friendlyBlastHits": 0,
+      "blastResidentHits": 19,
+      "recovered": 0,
+      "aboard": 3,
+      "rappelling": 0,
+      "ground": 12,
+      "liveProjectiles": 2,
+      "renderBatch": {
+        "sourceMeshes": 1215,
+        "batches": 45,
+        "instances": 765
+      }
+    },
+    "bombRelease": {
+      "time": 453.70060000000893,
+      "miss": 8.790332948029851,
+      "flightTime": 2.835812215401859,
+      "leadDistance": 26.459346924657016,
+      "predicted": [
+        -84.05397662692494,
+        -93.09714808398446,
+        108.82224363331535
+      ],
+      "stripCentre": [
+        -78.41099923476503,
+        -73.02354237985216,
+        126.64542557367744
+      ],
+      "releaseTarget": [
+        -82.43468046181657,
+        -86.86090767880827,
+        114.8019709578455
+      ],
+      "position": [
+        -111.9341281073098,
+        -139.67968081976582,
+        116.37259953766183
+      ]
+    },
+    "bombingRun": null,
+    "phase": "withdraw",
+    "age": 1.714,
+    "energy": 12.499336000017454,
+    "shield": false,
+    "wingNodes": 2,
+    "heat": 23.201719999998833,
+    "target": "bookshop",
+    "cycle": 1,
+    "shots": 10,
+    "retreatReason": "energy",
+    "arrival": {
+      "distance": 121.642377036487,
+      "altitude": 45.111499999984915,
+      "visible": true,
+      "inRange": true
+    },
+    "safeRadius": 187.0637523797221,
+    "flagshipPosition": [
+      62.020304611833744,
+      -132.5000209348209,
+      143.76353397287923
+    ],
+    "members": 14,
+    "roles": [
+      "attack",
+      "attack",
+      "attack",
+      "attack",
+      "attack",
+      "guard",
+      "jammer",
+      "guard",
+      "scout",
+      "scout",
+      "scout",
+      "transport",
+      "transport",
+      "transport"
+    ],
+    "wingDamage": 19.6,
+    "events": [
+      {
+        "phase": "assemble",
+        "time": 426.35560000000896,
+        "energy": 100,
+        "shots": 0
+      },
+      {
+        "phase": "transit",
+        "time": 434.44970000000296,
+        "energy": 97.05,
+        "shots": 0
+      },
+      {
+        "phase": "blockade",
+        "time": 445.05810000000895,
+        "energy": 94.32,
+        "shots": 0
+      },
+      {
+        "phase": "pincer",
+        "time": 470.041700000003,
+        "energy": 57.94,
+        "shots": 6
+      },
+      {
+        "phase": "guard",
+        "time": 495.09210000000894,
+        "energy": 34.99,
+        "shots": 8
+      },
+      {
+        "phase": "withdraw",
+        "time": 503.259200000003,
+        "energy": 13.34,
+        "shots": 10
+      }
+    ],
+    "blockedHits": 173,
+    "unitShots": 4,
+    "fireLog": [
+      {
+        "time": 445.309700000003,
+        "type": "ion",
+        "role": "scout",
+        "source": "triple-gate-scout-aircraft",
+        "point": [
+          -78.75818758891364,
+          -74.12165407911488,
+          125.7977615493276
+        ]
+      },
+      {
+        "time": 450.10460000000893,
+        "type": "ion",
+        "role": "flagship",
+        "source": "crystal-city-colossus",
+        "point": [
+          -78.75818758891364,
+          -74.12165407911488,
+          125.7977615493276
+        ]
+      },
+      {
+        "time": 450.10460000000893,
+        "type": "ion",
+        "role": "scout",
+        "source": "triple-gate-scout-aircraft",
+        "point": [
+          -78.75818758891364,
+          -74.12165407911488,
+          125.7977615493276
+        ]
+      },
+      {
+        "time": 453.70060000000893,
+        "type": "rain",
+        "role": "flagship",
+        "source": "crystal-city-colossus",
+        "point": [
+          -78.41099923476503,
+          -73.02354237985216,
+          126.64542557367744
+        ]
+      },
+      {
+        "time": 454.26129999999705,
+        "type": "ion",
+        "role": "scout",
+        "source": "triple-gate-scout-aircraft",
+        "point": [
+          -88.81051690792954,
+          -83.34181230459559,
+          112.64047381034318
+        ]
+      },
+      {
+        "time": 464.67060000000896,
+        "type": "cannon",
+        "role": "flagship",
+        "source": "crystal-city-colossus",
+        "point": [
+          -99.00091742959941,
+          -52.33810013743786,
+          122.39391591292858
+        ]
+      },
+      {
+        "time": 470.291400000006,
+        "type": "cannon",
+        "role": "flagship",
+        "source": "crystal-city-colossus",
+        "point": [
+          -62.69173206029586,
+          -128.48621780993776,
+          84.15979805600938
+        ]
+      },
+      {
+        "time": 476.132700000003,
+        "type": "traction",
+        "role": "flagship",
+        "source": "crystal-city-colossus",
+        "point": [
+          -93.34332786005022,
+          -95.63663029359547,
+          98.30570195717706
+        ]
+      },
+      {
+        "time": 497.685,
+        "type": "ion",
+        "role": "flagship",
+        "source": "crystal-city-colossus",
+        "point": [
+          -94.44617823741899,
+          -91.90154463778495,
+          100.7908816924829
+        ]
+      },
+      {
+        "time": 497.685,
+        "type": "ion",
+        "role": "jammer",
+        "source": "gate-pod-escort-pod-41-7",
+        "point": [
+          -94.44617823741899,
+          -91.90154463778495,
+          100.7908816924829
+        ]
+      }
+    ],
+    "flight": {
+      "bankDegrees": 2.8376735325484823,
+      "attackSpeed": 9,
+      "turnLimit": 0.11
+    },
+    "bay": {
+      "openness": 0
+    },
+    "arsenal": {
+      "cannon": 2,
+      "rain": 1,
+      "ion": 6,
+      "traction": 1,
+      "robotHits": 96,
+      "robotsShattered": 25,
+      "shieldImpacts": 173,
+      "shieldAudioPlayed": 33,
+      "shieldAudioSkipped": 75,
+      "lastImpact": {
+        "point": [
+          -94.44617823741899,
+          -91.90154463778495,
+          100.7908816924829
+        ],
+        "type": "ion",
+        "age": 7.288200000002981
+      },
+      "smokeStyle": "soft-steam-sprite",
+      "activeSoftSmoke": 6,
+      "activeSteamJets": 0,
+      "factoriesStopped": 2,
+      "robotsBlinking": 10,
+      "activeIon": false,
+      "activeEffects": 6,
+      "pendingProjectiles": 0
+    },
+    "beamActive": true,
+    "types": [
+      "moebius-aircraft",
+      "moebius-aircraft",
+      "moebius-aircraft",
+      "moebius-aircraft",
+      "moebius-aircraft",
+      "gate-pod-escort-pod-55-2",
+      "gate-pod-escort-pod-41-7",
+      "gate-pod-escort-pod-08-9",
+      "triple-gate-scout-aircraft",
+      "triple-gate-scout-aircraft",
+      "triple-gate-scout-aircraft",
+      "vanguard-hauler-0",
+      "vanguard-hauler-1",
+      "vanguard-hauler-2"
+    ],
+    "route": [
+      {
+        "id": "bookshop",
+        "label": "书店镇"
+      },
+      {
+        "id": "apostles",
+        "label": "十二门徒"
+      },
+      {
+        "id": "citadel",
+        "label": "高山圣城"
+      },
+      {
+        "id": "old-port",
+        "label": "旧港湾"
+      },
+      {
+        "id": "swamp",
+        "label": "湖沼"
+      },
+      {
+        "id": "moss",
+        "label": "苔庭"
+      },
+      {
+        "id": "moon-lake",
+        "label": "月湖"
+      },
+      {
+        "id": "gate",
+        "label": "叹息之门"
+      }
+    ],
+    "completedTargets": [],
+    "campaignFinished": false,
+    "objectsReused": [
+      "1730a64c-4e04-4f8c-87cb-5a4c21e91727",
+      "fd464607-417b-45b2-bc9a-532cd69bb517",
+      "24e9a3cf-e267-49b7-b08d-1d75ca75d1ab",
+      "67ef6b9e-9125-4378-bf37-1f2e2af47c6c",
+      "93e27c10-8ad9-4dee-a9fa-7e77c63eafc2",
+      "5c5e3a89-e5f6-4869-b13f-1d1641d2525d",
+      "94e2711c-f24a-49ba-ab0b-6ec83364a587",
+      "8237e13c-74cf-4f96-8fef-6116ac123936",
+      "84150697-2fae-44ff-b4e3-112be2f05965",
+      "c8df23c7-eab9-4c5e-abbf-de6d4d1622f6",
+      "083cf623-1a4a-42c8-a78f-37a800e1f40c",
+      "b091e9dd-6391-4fb0-9168-7b18f092aeb5",
+      "dc58626b-f283-411f-ad9a-ea052a2eb5e0",
+      "ed53e985-a878-4c78-a61a-73f12c7558e3"
+    ]
+  }
+}

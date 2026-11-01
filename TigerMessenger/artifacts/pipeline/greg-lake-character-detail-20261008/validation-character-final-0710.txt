@@ -1,0 +1,27 @@
+✔ head refinement preserves every non-head geometry and rig transform (2.1965ms)
+✔ small side eyes remain on the real face surface after merging (0.901584ms)
+✔ hair v7 uses only six attached light arcs and preserves the original highest fit datum (11.23475ms)
+✔ fine ink keeps bird/lizard surfaces and all animal pivots and behaviour references; monkey shape is separately approved (2.132208ms)
+✔ fine shells weld coincident contour normals and cap toes, wings and tail tips by their actual thickness (25.833209ms)
+✔ contour is stable at device scale, screen-capped and independent of shared brush-noise shader (2.640208ms)
+pink monkey proportions {"bodyWidth":0.44088611006736755,"bodyHeight":1.3179999515414238,"tailMinY":-1.9677268266677856,"tailDepth":0.15538648515939713,"pinkVertexFraction":0.6641221374045801}
+formal monkey roles {"ordinary":3,"repair":2,"perches":[3,4,4],"timing":[[1.741819488024339,0.7886711874976754,3.6890131201595073],[2.3627156489063053,0.8705694850068539,3.495207602158189],[2.303405241994187,0.9016269006766379,2.6675689201802015]],"phases":[3.244247385766357,0.9261486316099763,2.33875121595338]}
+repair tail coil {"arcLength":2.6755539541960665,"hangingLength":2.6755539735778635,"minY":0.18961209058761597,"minimumLeanY":0.04519672039036432}
+actual ship-space tail clearance {"samples":65,"minimumFootGaps":[0.07939988823923849,0.03023719233444333],"minimumDeckGaps":[0.07639989121675084,0.1672371857625381],"tailPose":["deck","deck"]}
+✔ approved climber silhouette is slender, pale mauve and has a long downward tail rather than broad haunches (3.902375ms)
+✔ formal lake still has three perch monkeys and two mast repair workers with working animation pivots (888.142ms)
+✔ repair-only coil preserves long tail arc and stays above its footplane throughout lifting (629.397042ms)
+✔ both repair tails stay above actual ship deck through the complete mast cycle and true parent transforms (766.057083ms)
+✔ adult coral character has broad temples, muscular shoulders/thighs, load-bearing soles and live thin ink (930.196917ms)
+✔ four beat stance cancels ground speed at multiple scales and speeds; stopped feet do not cycle (0.281125ms)
+✔ swing actively bends separate fore elbow and hind knee/hock while shoulder anchors and paw ends stay attached (5.86825ms)
+✔ adult muzzle extends ahead of restrained side-set eyes, without inherited smile/brow addons (0.222875ms)
+✔ round38 muzzle is wide and deep with a broad embedded nasal pad, not a detached white tube (3.961583ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2427.881833

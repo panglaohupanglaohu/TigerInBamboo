@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "f902d72556499ee3fe07dcef7815369c0cba913a69eddbff25b844f1a14a930f",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.92
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.41,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.47,
+        "lighting": 0,
+        "navigation": 0,
+        "review": 0.53
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.88
+    }
+  },
+  "usage": {
+    "input_tokens": 677,
+    "output_tokens": 91,
+    "cost_usd": 0.000285,
+    "credits_remaining_usd": 4.92627
+  },
+  "elapsed_ms": 3231,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Exact source lake crescent outline and independent final image review",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

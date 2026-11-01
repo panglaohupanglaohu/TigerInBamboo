@@ -1,0 +1,379 @@
+{
+  "code": 200,
+  "message": "OK",
+  "tweet": {
+    "url": "https://x.com/ShedworksGreg/status/1855943032069095662",
+    "id": "1855943032069095662",
+    "text": "The atmosphere of our game",
+    "raw_text": {
+      "text": "The atmosphere of our game https://t.co/46nYzdfX82",
+      "display_text_range": [
+        0,
+        26
+      ],
+      "facets": [
+        {
+          "type": "media",
+          "indices": [
+            27,
+            50
+          ],
+          "id": "1855942987504656384",
+          "display": "pic.x.com/46nYzdfX82",
+          "original": "https://t.co/46nYzdfX82",
+          "replacement": "https://x.com/ShedworksGreg/status/1855943032069095662/video/1"
+        }
+      ]
+    },
+    "author": {
+      "screen_name": "ShedworksGreg",
+      "url": "https://x.com/ShedworksGreg",
+      "id": "129175727",
+      "followers": 52460,
+      "following": 2264,
+      "likes": 56220,
+      "media_count": 2346,
+      "name": "Gregorios Kythreotis",
+      "description": "@eteogames • Creative Director on Sable • Shedworks•",
+      "raw_description": {
+        "text": "@eteogames • Creative Director on Sable • Shedworks•",
+        "facets": []
+      },
+      "location": "London",
+      "banner_url": "https://pbs.twimg.com/profile_banners/129175727/1665669459",
+      "avatar_url": "https://pbs.twimg.com/profile_images/1854467021351641103/fZdOXVn8_200x200.jpg",
+      "joined": "Sat Apr 03 12:20:34 +0000 2010",
+      "protected": false,
+      "website": {
+        "url": "http://www.eteogames.com",
+        "display_url": "eteogames.com"
+      },
+      "verification": {
+        "verified": false,
+        "verified_at": null,
+        "type": null
+      },
+      "avatar_color": null
+    },
+    "replies": 11,
+    "retweets": 72,
+    "likes": 1088,
+    "bookmarks": 118,
+    "quotes": 15,
+    "created_at": "Mon Nov 11 11:57:55 +0000 2024",
+    "created_timestamp": 1731326275,
+    "possibly_sensitive": false,
+    "views": 118421,
+    "is_note_tweet": false,
+    "community_note": null,
+    "lang": "en",
+    "replying_to": null,
+    "replying_to_status": null,
+    "media": {
+      "all": [
+        {
+          "id": "1855942987504656384",
+          "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/640x364/icaxgYS1omv2nNum.mp4?tag=12",
+          "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/1855942987504656384/pu/img/drgufGuUj7vmqbuS.jpg",
+          "duration": 25.916,
+          "width": 640,
+          "height": 364,
+          "format": "video/mp4",
+          "type": "video",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/pl/alDpfd2S3C2EMcoo.m3u8?tag=12&v=cfc",
+              "container": "m3u8"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/474x270/OO8b499kp7XncM-z.mp4?tag=12",
+              "bitrate": 256000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/640x364/icaxgYS1omv2nNum.mp4?tag=12",
+              "bitrate": 832000,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/pl/alDpfd2S3C2EMcoo.m3u8?tag=12&v=cfc",
+              "bitrate": 0,
+              "content_type": "application/x-mpegURL"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/474x270/OO8b499kp7XncM-z.mp4?tag=12",
+              "bitrate": 256000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/640x364/icaxgYS1omv2nNum.mp4?tag=12",
+              "bitrate": 832000,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ],
+      "videos": [
+        {
+          "id": "1855942987504656384",
+          "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/640x364/icaxgYS1omv2nNum.mp4?tag=12",
+          "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/1855942987504656384/pu/img/drgufGuUj7vmqbuS.jpg",
+          "duration": 25.916,
+          "width": 640,
+          "height": 364,
+          "format": "video/mp4",
+          "type": "video",
+          "formats": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/pl/alDpfd2S3C2EMcoo.m3u8?tag=12&v=cfc",
+              "container": "m3u8"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/474x270/OO8b499kp7XncM-z.mp4?tag=12",
+              "bitrate": 256000,
+              "container": "mp4",
+              "codec": "h264"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/640x364/icaxgYS1omv2nNum.mp4?tag=12",
+              "bitrate": 832000,
+              "container": "mp4",
+              "codec": "h264"
+            }
+          ],
+          "publisher": null,
+          "variants": [
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/pl/alDpfd2S3C2EMcoo.m3u8?tag=12&v=cfc",
+              "bitrate": 0,
+              "content_type": "application/x-mpegURL"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/474x270/OO8b499kp7XncM-z.mp4?tag=12",
+              "bitrate": 256000,
+              "content_type": "video/mp4"
+            },
+            {
+              "url": "https://video.twimg.com/ext_tw_video/1855942987504656384/pu/vid/avc1/640x364/icaxgYS1omv2nNum.mp4?tag=12",
+              "bitrate": 832000,
+              "content_type": "video/mp4"
+            }
+          ]
+        }
+      ]
+    },
+    "quote": {
+      "url": "https://x.com/PyotrAlexRoma/status/1855779316514332673",
+      "id": "1855779316514332673",
+      "text": "The atmosphere of my game",
+      "raw_text": {
+        "text": "The atmosphere of my game https://t.co/uky5E28Jhp",
+        "display_text_range": [
+          0,
+          25
+        ],
+        "facets": [
+          {
+            "type": "media",
+            "indices": [
+              26,
+              49
+            ],
+            "id": "1855779260432261120",
+            "display": "pic.x.com/uky5E28Jhp",
+            "original": "https://t.co/uky5E28Jhp",
+            "replacement": "https://x.com/PyotrAlexRoma/status/1855779316514332673/video/1"
+          }
+        ]
+      },
+      "author": {
+        "screen_name": "PyotrAlexRoma",
+        "url": "https://x.com/PyotrAlexRoma",
+        "id": "3038104473",
+        "followers": 8073,
+        "following": 1252,
+        "likes": 23829,
+        "media_count": 2121,
+        "name": "Bor | Goblin Town",
+        "description": "Dutch he/him working in the Japanese games industry as a programmer. Making Goblin Town in free time. 日本語おｋ\npomuya.bor@gmail.com\nhttps://discord.gg/MyAXHdG7",
+        "raw_description": {
+          "text": "Dutch he/him working in the Japanese games industry as a programmer. Making Goblin Town in free time. 日本語おｋ\npomuya.bor@gmail.com\nhttps://t.co/0KnIikTZp8",
+          "facets": [
+            {
+              "type": "url",
+              "indices": [
+                129,
+                152
+              ],
+              "original": "https://t.co/0KnIikTZp8",
+              "replacement": "https://discord.gg/MyAXHdG7",
+              "display": "discord.gg/MyAXHdG7"
+            }
+          ]
+        },
+        "location": "南房総",
+        "banner_url": "https://pbs.twimg.com/profile_banners/3038104473/1603519566",
+        "avatar_url": "https://pbs.twimg.com/profile_images/1534034863363305472/H6DGbwZK_200x200.jpg",
+        "joined": "Sun Feb 15 02:02:57 +0000 2015",
+        "protected": false,
+        "website": {
+          "url": "https://store.steampowered.com/app/3019490/I_Wont_Let_You_Level_Up_In_My_Goblin_Town/",
+          "display_url": "store.steampowered.com/app/3019490/I_…"
+        },
+        "verification": {
+          "verified": false,
+          "verified_at": null,
+          "type": null
+        },
+        "avatar_color": null
+      },
+      "replies": 6,
+      "retweets": 101,
+      "likes": 1588,
+      "bookmarks": 322,
+      "quotes": 6,
+      "created_at": "Mon Nov 11 01:07:22 +0000 2024",
+      "created_timestamp": 1731287242,
+      "possibly_sensitive": false,
+      "views": 107595,
+      "is_note_tweet": false,
+      "community_note": null,
+      "lang": "en",
+      "replying_to": null,
+      "replying_to_status": null,
+      "media": {
+        "all": [
+          {
+            "id": "1855779260432261120",
+            "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/1280x720/F7FJPNCbIR9nMuyG.mp4?tag=12",
+            "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/1855779260432261120/pu/img/EXO9FzO37i1vA_19.jpg",
+            "duration": 47.734,
+            "width": 1920,
+            "height": 1080,
+            "format": "video/mp4",
+            "type": "video",
+            "formats": [
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/pl/0JvYezYjk9vUKOMc.m3u8?tag=12&v=cfc",
+                "container": "m3u8"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/480x270/YHn0XnMqSH9Byqpf.mp4?tag=12",
+                "bitrate": 256000,
+                "container": "mp4",
+                "codec": "h264"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/640x360/-hBUc__QgZDrh24Y.mp4?tag=12",
+                "bitrate": 832000,
+                "container": "mp4",
+                "codec": "h264"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/1280x720/F7FJPNCbIR9nMuyG.mp4?tag=12",
+                "bitrate": 2176000,
+                "container": "mp4",
+                "codec": "h264"
+              }
+            ],
+            "publisher": null,
+            "variants": [
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/pl/0JvYezYjk9vUKOMc.m3u8?tag=12&v=cfc",
+                "bitrate": 0,
+                "content_type": "application/x-mpegURL"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/480x270/YHn0XnMqSH9Byqpf.mp4?tag=12",
+                "bitrate": 256000,
+                "content_type": "video/mp4"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/640x360/-hBUc__QgZDrh24Y.mp4?tag=12",
+                "bitrate": 832000,
+                "content_type": "video/mp4"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/1280x720/F7FJPNCbIR9nMuyG.mp4?tag=12",
+                "bitrate": 2176000,
+                "content_type": "video/mp4"
+              }
+            ]
+          }
+        ],
+        "videos": [
+          {
+            "id": "1855779260432261120",
+            "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/1280x720/F7FJPNCbIR9nMuyG.mp4?tag=12",
+            "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/1855779260432261120/pu/img/EXO9FzO37i1vA_19.jpg",
+            "duration": 47.734,
+            "width": 1920,
+            "height": 1080,
+            "format": "video/mp4",
+            "type": "video",
+            "formats": [
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/pl/0JvYezYjk9vUKOMc.m3u8?tag=12&v=cfc",
+                "container": "m3u8"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/480x270/YHn0XnMqSH9Byqpf.mp4?tag=12",
+                "bitrate": 256000,
+                "container": "mp4",
+                "codec": "h264"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/640x360/-hBUc__QgZDrh24Y.mp4?tag=12",
+                "bitrate": 832000,
+                "container": "mp4",
+                "codec": "h264"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/1280x720/F7FJPNCbIR9nMuyG.mp4?tag=12",
+                "bitrate": 2176000,
+                "container": "mp4",
+                "codec": "h264"
+              }
+            ],
+            "publisher": null,
+            "variants": [
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/pl/0JvYezYjk9vUKOMc.m3u8?tag=12&v=cfc",
+                "bitrate": 0,
+                "content_type": "application/x-mpegURL"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/480x270/YHn0XnMqSH9Byqpf.mp4?tag=12",
+                "bitrate": 256000,
+                "content_type": "video/mp4"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/640x360/-hBUc__QgZDrh24Y.mp4?tag=12",
+                "bitrate": 832000,
+                "content_type": "video/mp4"
+              },
+              {
+                "url": "https://video.twimg.com/ext_tw_video/1855779260432261120/pu/vid/avc1/1280x720/F7FJPNCbIR9nMuyG.mp4?tag=12",
+                "bitrate": 2176000,
+                "content_type": "video/mp4"
+              }
+            ]
+          }
+        ]
+      },
+      "twitter_card": "player",
+      "color": null,
+      "provider": "twitter",
+      "reposted_by": null
+    },
+    "twitter_card": "player",
+    "color": null,
+    "provider": "twitter",
+    "reposted_by": null
+  }
+}

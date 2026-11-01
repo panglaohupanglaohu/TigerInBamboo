@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Engine — Mesa / World</title>
+<style>
+#snap {
+  position: fixed; right: 18px; bottom: 52px; width: 192px;
+  display: none; flex-direction: column; gap: 4px;
+  font: 11px/1.3 ui-monospace, monospace; color: #9fb6c0;
+}
+#snap.on { display: flex; }
+#snap img {
+  width: 192px; height: 192px; image-rendering: auto;
+  background: #0f1c24; border: 1px solid #2b4753;
+}
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #295263; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 14px; bottom: 12px; color: #cfe3ec;
+    font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.45); pointer-events: none; white-space: pre;
+  }
+  #hint {
+    position: fixed; right: 14px; bottom: 12px; color: #9fb9c6;
+    font: 12px/1.5 -apple-system, "PingFang SC", sans-serif; pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="hud"></div>
+<div id="hint">R 换岛 · D 制图稿 · W 线框 · S 岛快照 · T/N/L 贴图/法线/顶点光 · G 沉积线 · B 色块 · V 树/云 · P 点光源 · K 坡向条纹 · J 崖肩渗漏 · 拖动旋转 · 滚轮缩放</div>
+<div id="snap"><span>64² snapshot</span><img alt=""></div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { TownMesh } from '../src/mesh.js';
+import { repairInvertedCells } from '../src/grid.js';
+import { buildMesa, MESA_PALETTE } from './mesa.js';
+import { buildHouseRoofs } from './roofs.js';
+import { OutlinePass } from './outline.js';
+import { buildShoreWaves, makeShoreWaveMaterial, makeOceanWaves } from './waves.js';
+import { createBacklitRim } from './backlit.js';
+import { carveRivers, paintRivers } from './rivers.js';
+import { relaxCellAreas } from './relax.js';
+import { createWaterVolume } from './watervol.js';
+import { createBirds } from './birds.js';
+import { createFlatReflection } from './reflection.js';
+import { createIslandSnapshot } from './snapshot.js';
+import { makeSurfaceMaterial } from './surface.js';
+import { smoothTerrainNormals } from './normalsmooth.js';
+import { createHeightLookup, attachVertexLookup } from './vertexlight.js';
+import { createBlotch, attachBlotch } from './blotch.js';
+import { createImpostors, makeBlobTree, makeBlobCloud } from './impostor.js';
+import { createPointLightVolume } from './lightvol.js';
+
+const SEA = '#295263';
+const canvas = document.getElementById('view');
+const hud = document.getElementById('hud');
+
+// ?readback=1 keeps the drawing buffer so a test harness can sample pixels
+// with gl.readPixels; it costs performance, so it is opt-in.
+const readback = new URLSearchParams(location.search).has('readback');
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  powerPreference: 'high-performance',
+  preserveDrawingBuffer: readback,
+});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.06;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(SEA).convertSRGBToLinear();
+
+const camera = new THREE.PerspectiveCamera(26, 1, 0.4, 340);
+
+// ---- lights: one warm key, one cool fill, a soft sky --------------------
+const ambient = new THREE.AmbientLight(0xfff6e8, 0.9);
+scene.add(ambient);
+
+const hemi = new THREE.HemisphereLight(0xe2f4ff, 0xc9c3b4, 1.2);
+scene.add(hemi);
+
+const sun = new THREE.DirectionalLight(0xfff3e0, 2.9);
+sun.position.set(13, 10, 15);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.near = 1;
+sun.shadow.camera.far = 90;
+sun.shadow.camera.left = -26;
+sun.shadow.camera.right = 26;
+sun.shadow.camera.top = 26;
+sun.shadow.camera.bottom = -26;
+sun.shadow.bias = -0.0012;
+sun.shadow.radius = 3;
+scene.add(sun);
+scene.add(sun.target);
+
+const fill = new THREE.DirectionalLight(0xbcd8ea, 0.7);
+fill.position.set(-12, 7, -9);
+scene.add(fill);
+
+// 点光源：在岛上慢慢绕圈。位置每帧写进 volume（lightvol.js）
+const pointLight = new THREE.Vector3(2.5, 6.6, 1.5);
+let lightTick = 0;
+let lightParked = null;   // 测试用：把点光源钉在一个位置，方便前后对比
+
+// One clock for every looping shader: the shore band and the ocean are meant
+// to breathe together, and a single uniform keeps them from drifting apart.
+const clock = { value: 0 };
+
+// ---- water: a flat plane that catches the island's shadow ---------------
+const waterMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#24485a'),
+  roughness: 0.92,
+  metalness: 0,
+  // translucent so the flat reflection reads through it; an opaque plane
+  // hides everything below the waterline
+  transparent: true,
+  opacity: 0.88,
+});
+makeOceanWaves(waterMaterial, { amp: 0.034, period: 8.0, timeRef: clock });
+const water = new THREE.Mesh(new THREE.PlaneGeometry(1500, 1500, 380, 380), waterMaterial);
+water.rotation.x = -Math.PI / 2;
+water.position.y = -0.035;
+water.receiveShadow = true;
+scene.add(water);
+
+// ---- water volume: a stack of slices, not a mirror ----------------------
+const snapshot = createIslandSnapshot(renderer, scene, { size: 64, upscale: 3 });
+const waterVolume = createWaterVolume({ colour: '#2d6b7d', planes: 7, top: -0.05, bottom: -1.7, extent: 120 });
+scene.add(waterVolume.group);
+
+// ---- the island --------------------------------------------------------
+// Texture layer (surface.js): projected patches + every-other-texel lines.
+// Kept behind a switch so a broken shader can be isolated in one keypress.
+const opts = { surface: true, smoothNormals: true, vertexLight: true, sediment: true, blotch: true, trees: true, lightvol: false, streak: true, bleed: true };
+
+// Clip 4 is the same geometry rendered "edge first": flat grey faces, no
+// colour, no shadow, a heavier line. Same engine, different read.
+const draftMaterial = new THREE.MeshLambertMaterial({ color: 0xd9dadc, flatShading: false });
+let style = 'color';
+let material = null;   // per-build: the surface material carries per-island uniforms
+
+function applyStyle(next) {
+  style = next;
+  const draft = style === 'draft';
+  for (const m of [world.land, world.roofs]) m.material = draft ? draftMaterial : material;
+  water.visible = !draft;
+  waterVolume.group.visible = !draft;
+  scene.background = new THREE.Color(draft ? '#8a8b8d' : SEA);
+  if (draft) scene.background = new THREE.Color('#8a8b8d');
+  else scene.background = new THREE.Color(SEA).convertSRGBToLinear();
+  renderer.shadowMap.enabled = !draft;
+  outline.material.uniforms.uStrength.value = draft ? 1.5 : 0.8;
+  outline.material.uniforms.uThickness.value = draft ? 1.05 : 0.85;
+  outline.material.uniforms.uGlow.value.setRGB(0, 0, 0);
+  if (!draft) outline.material.uniforms.uGlow.value.set('#ffb45e').convertSRGBToLinear().multiplyScalar(1.75);
+  sun.castShadow = !draft;
+  for (const m of [world.land, world.roofs]) { m.castShadow = !draft; m.receiveShadow = !draft; }
+}
+
+let world = null;
+let seed = 7;
+
+function build(nextSeed) {
+  seed = nextSeed;
+  if (world) {
+    scene.remove(world.land, world.roofs, world.waves);
+    if (world.rim) { scene.remove(world.rim.mesh); world.rim.dispose(); }
+    if (world.birds) { scene.remove(world.birds.group); world.birds.dispose(); }
+    if (world.reflection) { scene.remove(world.reflection.mesh); world.reflection.dispose(); }
+    if (world.lookup) world.lookup.dispose();
+    if (world.blotch) world.blotch.dispose();
+    if (world.impostors) { scene.remove(world.impostors.group); world.impostors.dispose(); }
+    if (world.lightVol) world.lightVol.dispose();
+    world.land.geometry.dispose();
+    world.roofs.geometry.dispose();
+  }
+
+  const { town, grid, houses } = buildMesa({ seed, radius: 19, hexSize: 0.46, towers: 4, caves: 3, houses: 6 });
+
+  // rivers: depth-first wiggle, then breadth-first levelling of the banks
+  // Mushrooming fix: tall columns pull their own footprint in, so peaks come
+  // out steep instead of fat. Small step on purpose — this is a relax, not a
+  // remesh, and an aggressive step folds quads inside out.
+  const relaxed = relaxCellAreas(grid, (c) => town.top(c), { passes: 3, strength: 0.18 });
+  // 反转/塌陷体检（grid.js，原文 1302686201401442309）：松弛会把小格子推成
+  // 反向或几乎重合，那种 patch 在山体网格里会塌成一个点，邻居被拉出细长触手。
+  // 所以每次几何松弛之后都要过一遍。
+  const gridRepair = repairInvertedCells(grid);
+  const rivers = carveRivers(town, grid, { seed: seed + 17, count: 3, wiggle: 0.5, depth: 2 });
+  paintRivers(town, grid, rivers.cells, 15);
+  town.version++;
+  const townMesh = new TownMesh(town, { levelHeight: 0.42, mode: 'terrain' });
+  townMesh.rebuild();
+
+  // Voxel-normal smoothing (normalsmooth.js): the terrain mesh splits verts per
+  // quad, so computeVertexNormals() gives flat faces. Average by position
+  // within one voxel to rebuild the smooth field, keeping corners hard.
+  let normals = null;
+  if (opts.smoothNormals) {
+    normals = smoothTerrainNormals(townMesh.geometry, { radius: 0.7, blend: 0.95, hardLo: 0.28, hardHi: 0.72 });
+  }
+
+  // Texture layer + one-lookup vertex lighting, both on the land material.
+  const landMaterial = makeSurfaceMaterial({
+    roughness: 0.92,
+    strength: opts.surface ? 0.9 : 0.0,
+    scale: 1.0,
+    base: 0.0,
+    // 沉积线抖动（surface.js 的 sWarp）：关掉就是上一轮的直水平线
+    sedAmp: opts.sediment ? 0.24 : 0.0,
+  });
+  let lookup = null;
+  if (opts.vertexLight) {
+    lookup = createHeightLookup(town, grid, { res: 24, strength: 0.55, levelHeight: 0.42 });
+    attachVertexLookup(landMaterial, lookup);
+  }
+  // 大笔触色块（blotch.js）：贴图 + 离边缘距离场，边缘处自己收住
+  let blotch = null;
+  if (opts.blotch) {
+    blotch = createBlotch({
+      town, grid, seed: seed + 5, scale: 0.05, strength: 1.0,
+      levelHeight: 0.42,
+      // 崖肩受控渗漏 1696896119794479541：0.14 世界单位 ≈ 崖面的 1/3 格
+      bleed: opts.bleed ? 0.14 : 0,
+      // 坡向条纹 1786014232594485497：陡面上的"烘进去的光"
+      streak: opts.streak ? 0.75 : 0,
+    });
+    attachBlotch(landMaterial, blotch);
+  }
+  material = landMaterial;
+
+  const land = new THREE.Mesh(townMesh.geometry, landMaterial);
+
+  // 点光源体积（lightvol.js）：6 方向可见度体积 + 一个移动的点光源
+  let lightVol = null;
+  if (opts.lightvol) {
+    lightVol = createPointLightVolume({ town, grid, geometry: townMesh.geometry, levelHeight: 0.42, radius: 4.0 });
+    lightVol.update(pointLight);
+  }
+
+  // Flat-colour reflection under the waterline: mirrored geometry, no lighting,
+  // one in-between tone. See engine/reflection.js for why it is not a mirror.
+  const reflection = createFlatReflection(land, town, { seaHex: '#2d6b7d', opacity: 0.58, surfaceY: -0.03 });
+  scene.add(reflection.mesh);
+  land.castShadow = true;
+  land.receiveShadow = true;
+  scene.add(land);
+
+  // Shore waves: geometry carries the baked in/out directions and phase, the
+  // shader only walks the phase. No simulation runs per frame.
+  const waveGeo = buildShoreWaves(town, grid, { width: 1.15, rings: 9, smoothPasses: 2 });
+  const waves = new THREE.Mesh(waveGeo, makeShoreWaveMaterial({ period: 3.4, inAmp: 0.22, outAmp: 0.1, lift: 0.07, cycles: 3 }));
+  waves.material.uniforms.uTime = clock;
+  waves.renderOrder = 2;
+  // a light effect, not geometry: keep it out of the normal/edge pass
+  waves.userData.overlayOnly = true;
+  waves.frustumCulled = false;
+  scene.add(waves);
+
+  const roofGeo = buildHouseRoofs(town, houses, {
+    levelHeight: 0.42,
+    wallHex: '#eae3d3',
+    roofHex: '#bf8a7a',
+    rows: 7,
+  });
+  const roofs = new THREE.Mesh(roofGeo, material);
+  roofs.castShadow = true;
+  roofs.receiveShadow = true;
+  scene.add(roofs);
+
+  // Inverted-hull rim, visible only when the camera looks into the sun.
+  const rim = createBacklitRim(land, { colour: '#ffd9a8', width: 0.03, strength: 2.1 });
+  rim.mesh.userData.overlayOnly = true;
+  scene.add(rim.mesh);
+
+  // Birds: perched on the roofs, a few always in the air.
+  // Perch height by measurement, not by formula: drop a ray from above onto the
+  // land + roofs and sit the bird on the first hit. Cached per cell because the
+  // flock reuses a handful of perches.
+  const ray = new THREE.Raycaster();
+  const down = new THREE.Vector3(0, -1, 0);
+  const perchCache = new Map();
+  const groundAt = (cell) => {
+    if (perchCache.has(cell.id)) return perchCache.get(cell.id);
+    ray.set(new THREE.Vector3(cell.cx, 40, cell.cz), down);
+    ray.far = 80;
+    const hits = ray.intersectObjects([land, roofs], false);
+    const y = hits.length ? hits[0].point.y : town.top(cell) * 0.42;
+    perchCache.set(cell.id, y);
+    return y;
+  };
+  const birds = createBirds({ town, grid, houses, count: 16, seed: seed + 3, groundAt });
+  scene.add(birds.group);
+
+  // --- impostor 树 / 云（impostor.js）：8 方位烘焙 + 实例化 billboard -----
+  // 原文 1849427564034498642 的树、1852334860137849222 的云，共用一条管线。
+  // 先烘进图集，再摆实例 —— 顺序不能反，billboard 的 uv 直接来自图集里的矩形。
+  let impostors = null;
+  let treeCount = 0;
+  if (opts.trees) {
+    impostors = createImpostors(renderer, { atlas: 512 });
+    const t1 = makeBlobTree(seed + 1, { height: 1.15, canopy: '#7d9270' });
+    const t2 = makeBlobTree(seed + 7, { height: 1.45, canopy: '#88997a' });
+    // leaf：视角调制 alpha + 球面叶片遮罩（1205420678859632640），树给足，云只给一点点
+    impostors.addObject('treeA', { geometry: t1.mesh, height: t1.height, tile: 96, leaf: 0.8 });
+    impostors.addObject('treeB', { geometry: t2.mesh, height: t2.height, tile: 96, leaf: 0.8 });
+    const cl = makeBlobCloud(seed + 11, { size: 4.6 });
+    impostors.addObject('cloud', { geometry: cl.mesh, height: cl.height, tile: 128, leaf: 0.3 });
+
+    let s = (seed * 1103515245 + 12345) | 0;
+    const rnd = () => { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+    const wet = new Set(rivers.cells);
+    const order = grid.cells.filter((c) => town.top(c) > 0 && !wet.has(c.id));
+    for (let i = order.length - 1; i > 0; i--) { const j = (rnd() * (i + 1)) | 0; const t = order[i]; order[i] = order[j]; order[j] = t; }
+    const chosen = [];
+    for (const c of order) {
+      if (chosen.length >= 46) break;
+      if (houses.some((h) => (h.cell.cx - c.cx) ** 2 + (h.cell.cz - c.cz) ** 2 < 1.2)) continue;
+      if (chosen.some((p) => (p.x - c.cx) ** 2 + (p.z - c.cz) ** 2 < 2.2)) continue;
+      chosen.push({ x: c.cx, z: c.cz });
+      impostors.place(rnd() < 0.5 ? 'treeA' : 'treeB', c.cx, town.top(c) * 0.42, c.cz, 0.8 + rnd() * 0.35);
+    }
+    treeCount = chosen.length;
+    // 云：一圈低云，和树同一套 impostor（原文那朵"fluffy cloud"）
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2 + 0.7;
+      const r = 11 + rnd() * 11;
+      impostors.place('cloud', Math.cos(a) * r, 8.0 + rnd() * 2.4, Math.sin(a) * r, 0.55 + rnd() * 0.35);
+    }
+    const treeGroup = impostors.finalize();
+    scene.add(treeGroup);
+  }
+
+  world = { land, roofs, waves, rim, birds, reflection, town, grid, houses, rivers, relaxed, lookup, normals, blotch, impostors, lightVol };
+
+  // frame it
+  let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity, maxH = 0;
+  for (const c of grid.cells) {
+    if (town.top(c) === 0) continue;
+    minX = Math.min(minX, c.minX); maxX = Math.max(maxX, c.maxX);
+    minZ = Math.min(minZ, c.minZ); maxZ = Math.max(maxZ, c.maxZ);
+    maxH = Math.max(maxH, town.top(c));
+  }
+  const size = Math.max(maxX - minX, maxZ - minZ);
+  target.set((minX + maxX) / 2, maxH * 0.42 * 0.42, (minZ + maxZ) / 2);
+  const halfFov = (camera.fov * Math.PI) / 360;
+  dist = (size * 0.5) / Math.tan(halfFov) * 1.25;
+
+  stats = {
+    cells: grid.cells.length,
+    land: grid.cells.filter((c) => town.top(c) > 0).length,
+    maxTop: maxH,
+    houses: houses.length,
+    tris: (townMesh.geometry.getAttribute('position').count + roofGeo.getAttribute('position').count) / 3,
+    normals,
+    heightMap: lookup ? lookup.size : 0,
+    trees: treeCount,
+    atlas: impostors ? impostors.stats : null,
+    gridHealth: grid.health,
+    gridRepair,
+    lightVol: lightVol ? lightVol.stats : null,
+    blotch: blotch ? { bleed: blotch.bleed, streak: blotch.streak } : null,
+  };
+  hud.textContent =
+    `seed ${seed}   land ${stats.land}/${stats.cells}\n` +
+    `max height ${stats.maxTop}   houses ${stats.houses}\n` +
+    `${Math.round(stats.tris).toLocaleString()} tris`;
+  window.__worldStats = stats;
+  stats.riverCells = rivers.cells.length;
+}
+
+// ---- camera rig: slow orbit, same as the clips -------------------------
+const target = new THREE.Vector3(0, 2, 0);
+let yaw = 0.62;
+let pitch = 0.40;
+let dist = 26;
+let autoRotate = true;
+let wire = false;
+let stats = null;
+
+function updateCamera() {
+  const x = Math.cos(yaw) * Math.cos(pitch) * dist;
+  const z = Math.sin(yaw) * Math.cos(pitch) * dist;
+  const y = Math.sin(pitch) * dist;
+  camera.position.set(target.x + x, target.y + y, target.z + z);
+  camera.lookAt(target);
+  sun.target.position.copy(target);
+  sun.position.set(target.x + 13, 12, target.z + 15);
+  if (world && world.rim) {
+    world.rim.setSun(new THREE.Vector3().subVectors(sun.position, target).normalize());
+  }
+}
+
+// ---- the outline pass --------------------------------------------------
+const outline = new OutlinePass(renderer, {
+  color: '#1b2a33',
+  thickness: 0.8,
+  strength: 0.85,
+  fade: 0.5,
+});
+
+// Flip one of the three layers and rebuild, keeping the same island so the
+// before/after shots are comparable.
+function setOpt(name, value) {
+  opts[name] = value;
+  build(seed);
+  applyStyle(style);
+}
+
+function resize() {
+  const w = canvas.clientWidth || innerWidth;
+  const h = canvas.clientHeight || innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  outline.setSize(w, h);
+}
+addEventListener('resize', resize);
+
+// ---- input -------------------------------------------------------------
+let dragging = false;
+let lastX = 0, lastY = 0;
+canvas.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; lastY = e.clientY; autoRotate = false; });
+addEventListener('pointerup', () => { dragging = false; });
+addEventListener('pointermove', (e) => {
+  if (!dragging) return;
+  yaw -= (e.clientX - lastX) * 0.006;
+  pitch = Math.min(1.15, Math.max(0.06, pitch + (e.clientY - lastY) * 0.004));
+  lastX = e.clientX;
+  lastY = e.clientY;
+});
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  dist = Math.min(70, Math.max(8, dist * (1 + Math.sign(e.deltaY) * 0.08)));
+}, { passive: false });
+addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') build((Math.random() * 1e6) | 0);
+  if (e.key === 'd' || e.key === 'D') applyStyle(style === 'draft' ? 'color' : 'draft');
+  // S: bake the island into a 64² texture, sharpen it back up, show the result.
+  if (e.key === 's' || e.key === 'S') shootSnapshot();
+  // T / N / L flip the three layers added from the 2024 notes, one at a time:
+  // T = projected texture patches, N = voxel-smoothed normals, L = height lookup.
+  if (e.key === 't' || e.key === 'T') setOpt('surface', !opts.surface);
+  if (e.key === 'n' || e.key === 'N') setOpt('smoothNormals', !opts.smoothNormals);
+  if (e.key === 'l' || e.key === 'L') setOpt('vertexLight', !opts.vertexLight);
+  // G = 沉积线抖动（"把世界弄歪再撤销"），B = 大笔触色块 + 边缘收口
+  if (e.key === 'g' || e.key === 'G') setOpt('sediment', !opts.sediment);
+  if (e.key === 'b' || e.key === 'B') setOpt('blotch', !opts.blotch);
+  // V = impostor 树/云
+  if (e.key === 'v' || e.key === 'V') setOpt('trees', !opts.trees);
+  // K = 坡向条纹（山体贴图），J = 崖肩受控渗漏
+  if (e.key === 'k' || e.key === 'K') setOpt('streak', !opts.streak);
+  if (e.key === 'j' || e.key === 'J') setOpt('bleed', !opts.bleed);
+  // P = 点光源体积（含半球 AO）
+  if (e.key === 'p' || e.key === 'P') setOpt('lightvol', !opts.lightvol);
+  // W mirrors the debug shot in the reference: the ocean grid and the shore
+  // band shown as wireframe, which is how the tweet reveals what is animated.
+  if (e.key === 'w' || e.key === 'W') {
+    wire = !wire;
+    waterMaterial.wireframe = wire;
+    if (world && world.waves) world.waves.material.wireframe = wire;
+  }
+  if (e.key === ' ') autoRotate = !autoRotate;
+});
+canvas.addEventListener('dblclick', () => { autoRotate = !autoRotate; });
+
+resize();
+build(seed);
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  if (autoRotate) yaw += dt * 0.075;
+  clock.value += dt;
+  // 点光源绕岛；体积光照每 4 帧重算一次（70k 顶点，每帧算会掉帧，
+  // 而原文明说这个做法"保持大、软、别动太快"就好）
+  if (world && world.lightVol) {
+    if (lightParked) pointLight.copy(lightParked);
+    else pointLight.set(Math.cos(clock.value * 0.35) * 6.0, 6.6, Math.sin(clock.value * 0.35) * 6.0);
+    if ((lightTick++ & 3) === 0) world.lightVol.update(pointLight);
+  }
+  waterVolume.update(clock.value);
+  if (world && world.birds) world.birds.update(dt, clock.value);
+  updateCamera();
+  outline.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/**
+ * Campaign-map thumbnail: the island at 64×64, unsharp-masked back to a crisp
+ * silhouette. Sprites and water are hidden so only the land is baked.
+ */
+function shootSnapshot() {
+  if (!world) return;
+  // Fit the island, do not assume it is centred on the origin.
+  let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+  for (const c of world.grid.cells) {
+    if (world.town.top(c) === 0) continue;
+    if (c.minX < minX) minX = c.minX;
+    if (c.maxX > maxX) maxX = c.maxX;
+    if (c.minZ < minZ) minZ = c.minZ;
+    if (c.maxZ > maxZ) maxZ = c.maxZ;
+  }
+  if (!Number.isFinite(minX)) return;
+  const half = Math.max(maxX - minX, maxZ - minZ) * 0.5 * 1.06;
+  snapshot.setCentre((minX + maxX) / 2, (minZ + maxZ) / 2);
+  const hide = [water, waterVolume.group, world.waves, world.reflection && world.reflection.mesh,
+                world.birds && world.birds.group, world.rim && world.rim.mesh];
+
+  // The campaign map in the reference shows a flat white island, not a lit
+  // render: at this size surface detail is noise, only the silhouette matters.
+  // Swap in an unlit white material for the bake and put the real one back.
+  const white = new THREE.MeshBasicMaterial({ color: 0xf4f2ec });
+  const previous = world.land.material;
+  const previousRoofs = world.roofs.material;
+  world.land.material = white;
+  world.roofs.material = white;
+  const { dataUrl } = snapshot.shoot({ half, height: 60, hide, amount: 2.0 });
+  world.land.material = previous;
+  world.roofs.material = previousRoofs;
+  white.dispose();
+  const box = document.getElementById('snap');
+  box.classList.add('on');
+  box.querySelector('img').src = dataUrl;
+  // stash for tests / download
+  window.__lastSnapshot = dataUrl;
+}
+
+window.__engine = {
+  build,
+  get stats() { return stats; },
+  get world() { return world; },
+  get outline() { return outline; },
+  get renderer() { return renderer; },
+  get camera() { return camera; },
+  get clock() { return clock; },
+  shootSnapshot,
+  get snapshot() { return snapshot; },
+  get water() { return waterMaterial; },
+  setSeed(s) { build(s); },
+  setOpt,
+  // 测试用：钉住点光源（不给坐标就恢复绕圈）
+  parkLight(x, y, z) {
+    lightParked = (x === undefined) ? null : new THREE.Vector3(x, y, z);
+    if (lightParked && world && world.lightVol) world.lightVol.update(lightParked);
+  },
+  get opts() { return { ...opts }; },
+  applyStyle,
+  stopRotate() { autoRotate = false; },
+  focus(x, z, height, d, p, yawV) {
+    target.set(x, height, z);
+    dist = d;
+    if (p !== undefined) pitch = p;
+    if (yawV !== undefined) yaw = yawV;
+    updateCamera();
+  },
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "version": "batian-hitman-local-20261022",
+  "observations": [
+    "Original official remote stalls in normal game at readyState0/time0 with batian ownership and volume0.5.",
+    "Same Hitman file supplied by root from Commons; local SHA1 equals root-verified published metadata.",
+    "12 production ownership/controller tests pass: local priority, mute/tram resume, once per battle, next battle rewind, official fallback, capped failures, pending-play limit.",
+    "No subjective listening or final game decode claim by worker."
+  ],
+  "checks": [
+    {
+      "name": "local Ogg header and published SHA1 match",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "controller lifecycle regression 12 checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current normal-game local decode and playback",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "same user-approved track",
+    "one play-through per battle",
+    "no infinite retry",
+    "no changed scene assets"
+  ]
+}

@@ -1,0 +1,44 @@
+✔ shared subdivision stays watertight while actual sea and rail guards constrain exposed walls (21.891833ms)
+✔ rear ship cut keeps its safe half-space and anchored edges after rounding (5.939209ms)
+✔ same actual frame and rail inputs reproduce exact geometry bytes (19.372042ms)
+✔ upper shoulder treatment leaves the deep box walls on their original planes (10.466041ms)
+✔ rear shoulder morph changes real geometry but every protected support corner stays byte-identical (40.730375ms)
+✔ all final Float32 faces keep orientation and meaningful area after shape changes (33.631333ms)
+✔ shape pass is deterministic and handles actual source-to-castle transforms without touching protected data (43.390042ms)
+✔ off never inspects scene dependencies (0.534917ms)
+✔ strict real final install and actual meshes feed support transaction with rollback/finalize cleanup (24400.619458ms)
+✔ source identity, strict report, city terrain binding and ocean transform/wave failures reject (25562.324833ms)
+✔ unversioned terrain mutation after prepare and city replacement after commit automatically rollback before publish/finalize (19421.159959ms)
+✔ new clipped west retreat replays exact bytes before real support commit and rollback (36002.552125ms)
+✖ uncut legacy mountain with unresolved gallery foundations is rejected before rail activation (20332.512791ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126289.125
+
+✖ failing tests:
+
+test at tests/world/targetEastCrossingStartupSupport.test.mjs:43:1
+✖ uncut legacy mountain with unresolved gallery foundations is rejected before rail activation (20332.512791ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(r.issues.some(i=>i.type==='gallery-foundation-unresolved'))
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetEastCrossingStartupSupport.test.mjs:43:460)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

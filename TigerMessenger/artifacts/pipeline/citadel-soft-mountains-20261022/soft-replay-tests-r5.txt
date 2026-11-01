@@ -1,0 +1,25 @@
+✖ rounded mountain participates in exact geometry replay and actual rail support preparation (27258.054583ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27818.823584
+
+✖ failing tests:
+
+test at tests/world/targetEastCrossingStartupSupport.test.mjs:43:1
+✖ rounded mountain participates in exact geometry replay and actual rail support preparation (27258.054583ms)
+  Error: CROSSING_CITY_STRUCTURE_UNVERIFIED
+      at validateCrossingCityStructure (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/tramSystem.js:1423:212)
+      at Object.prepareCrossingSupport (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/tramSystem.js:1449:24)
+      at createTargetEastCrossingStartupSupport (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/targetEastCrossingStartupSupport.js:79:26)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetEastCrossingStartupSupport.test.mjs:43:523)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    startupSupportReport: { version: 'east-crossing-startup-support-1', enabled: true, accepted: false, installed: false, status: 'rejected', startupOnly: true, gpuVerified: false, rayOriginRadius: 288.6477982847851, samples: { ground: 0, sea: 0, missingGround: 0, missingSea: 0 }, source: { uuid: '316c66af-2b23-4311-82c8-979fde318161', geometry: 'f7a5bb09-29f5-46f2-ad22-bc8dc466061d', positionHash: 526733971, indexHash: null, strictSourceEpoch: [Object] }, wave: { localMaximum: 0.067, actualWorldScale: [Array], worldMaximum: 0.067, origin: [Array], shaderContract: 'official ocean sin .045 + cos .022; uWaterKind=0' }, indexStats: { ground: [Object], sea: [Object], wave: [Object] }, temporaryGeometryDisposed: true, indicesReleased: true, error: 'CROSSING_CITY_STRUCTURE_UNVERIFIED' }
+  }

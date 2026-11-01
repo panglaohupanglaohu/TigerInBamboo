@@ -1,0 +1,59 @@
+{
+  "revision": "main-island-edge-cleanup-r1-20261026",
+  "clearedTexels": 245571,
+  "texelMetres": 0.2125353198989141,
+  "limit": 107.81808378824402,
+  "protectedSites": 47,
+  "coastPreserved": true,
+  "checks": [
+    {
+      "name": "actual square apron has removable area",
+      "passed": true
+    },
+    {
+      "name": "interior circular island retained",
+      "passed": true
+    },
+    {
+      "name": "source-proven northwestern square corner removed",
+      "passed": true
+    },
+    {
+      "name": "actor footprint retained",
+      "passed": true
+    },
+    {
+      "name": "rail support retained over entire sampled curve",
+      "passed": true
+    },
+    {
+      "name": "raised bookshop and camp retained",
+      "passed": true
+    },
+    {
+      "name": "R4d bank ownership retained",
+      "passed": true
+    },
+    {
+      "name": "cleared support is absent rather than water floor",
+      "passed": true
+    },
+    {
+      "name": "finite antipode and distant scope",
+      "passed": true
+    },
+    {
+      "name": "source geometry and existing bank remain untouched",
+      "passed": true
+    },
+    {
+      "name": "visible depth distance all compose R4d and cleanup",
+      "passed": true
+    },
+    {
+      "name": "dispose restores hooks and material",
+      "passed": true
+    }
+  ],
+  "visualVerified": false
+}

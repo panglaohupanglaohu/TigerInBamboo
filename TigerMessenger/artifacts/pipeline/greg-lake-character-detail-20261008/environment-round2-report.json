@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-08",
+  "iteration": "environment-round2",
+  "versions": {
+    "naturalCliff": 5,
+    "understory": 3
+  },
+  "implemented": [
+    "Warped broad strata preserve original collision wall and exact rim seam.",
+    "18 unequal curved, overlapping leaf trails attached by rays to actual visible cliff.",
+    "Wider lobed ferns; varying rim patch width and phase instead of regular rows."
+  ],
+  "files": {
+    "src/world/swampNaturalCliff.js": "53c7d305fbb65af505612a1561b8e75e0328ea1e40a40b0f9dbc8b3851a97c4c",
+    "src/world/swampCoralUnderstory.js": "94c4055b903da6c2989f2258378101012aba59bd8b91820bc81c0fe983bad0ad",
+    "tests/world/swampNaturalCliff.test.mjs": "abbec132ed5dad472b2a3dc0b8e8a58f07c7161e8d0bbd257324a1938d8a2e71",
+    "tests/world/swampCoralUnderstory.test.mjs": "94befa7b5af1809e5cb9b7fa4d5400500651329af8b4a820e312b33351d056cb"
+  },
+  "backup": "environment-round2-before/ (relative to this report)",
+  "stats": {
+    "understoryDrawCalls": 4,
+    "naturalCliffDrawCalls": 3,
+    "plants": 556,
+    "counts": {
+      "fern": 120,
+      "fan": 75,
+      "pendant": 361
+    },
+    "rimPlants": 143,
+    "attachedVineSegments": 180,
+    "understoryTriangles": 40240,
+    "understoryTriangleBudget": 60000,
+    "cliffColonies": 18,
+    "neighbourPairs": 280,
+    "overlappingEnvelopePairs": 278,
+    "rimAngularLeafSilhouetteCoverage": 0.6763888888888889,
+    "maxNewLeafInnerY": 52.96792840873817
+  },
+  "previousUnderstory": {
+    "drawCalls": 4,
+    "triangles": 28360,
+    "plants": 421
+  },
+  "cpuVerification": {
+    "passed": 11,
+    "failed": 0,
+    "log": "validation-environment-round2.txt",
+    "scope": [
+      "Actual wall/shoulder/rim/trunk attachment",
+      "Two-world rim path and existing three-bank route clearances",
+      "Ship/whale corridor, repair cast and original tree remain unchanged",
+      "Every new leaf vertex below inner Y55 bridge budget; actual max 52.968",
+      "V7 shortened tree and spherical reinstallation",
+      "Idempotent dispose restores original resources and visibility",
+      "Unequal colony lengths and overlapping neighbour envelopes"
+    ]
+  },
+  "gpuVerification": {
+    "status": "pending_root_agent",
+    "note": "Angular silhouettes and plant envelopes are geometry metrics, not rendered pixel coverage or visual approval."
+  },
+  "integration": "Existing installSwampNaturalCliff and installSwampCoralUnderstory interfaces unchanged. No edits to swampV2Art/moebiusSwamp/main/review/index.",
+  "rollback": "Dispose the owned environment reports; restore only the four files from environment-round2-before if required. Do not revert shared unrelated changes.",
+  "performance": "No additional draw batches; instanced triangles increased by 11880. Full-game FPS requires GPU measurement. This does not claim the existing 8-14 FPS bottleneck is resolved."
+}

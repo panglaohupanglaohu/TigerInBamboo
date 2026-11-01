@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>球面网格 · REACode 重构版</title>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<style>
+  :root { --bg: #26333b; --ink: #eef4f3; --muted: #a9bcc0; --card: rgba(255,255,255,.92); --accent: #2f7f8a; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 14px/1.5 -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; overflow: hidden; }
+  canvas#c { display: block; width: 100vw; height: 100vh; }
+  #ui { position: fixed; left: 16px; top: 16px; max-width: 380px; background: var(--card); color: #1d2f36; border-radius: 14px; padding: 12px 14px; box-shadow: 0 6px 24px rgba(0,0,0,.25); }
+  #ui h1 { font-size: 16px; margin: 0 0 4px; }
+  #ui p { margin: 4px 0; font-size: 12.5px; color: #4d6369; }
+  #ui .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  #ui button { border: 1px solid #c9d8d7; background: #fff; border-radius: 8px; padding: 4px 9px; cursor: pointer; font: inherit; font-size: 12.5px; }
+  #ui button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  #ui code { font-size: 11.5px; background: #eef4f3; padding: 0 4px; border-radius: 4px; }
+  #stat { font-size: 12px; color: #2f7f8a; }
+  #proj { position: fixed; right: 16px; bottom: 16px; width: 300px; height: 300px; background: #1b252b; border-radius: 12px; display: none; }
+  nav a { color: var(--accent); font-weight: 600; text-decoration: none; margin-right: 10px; font-size: 12.5px; }
+  @media (max-width: 600px) { #ui { left: 8px; right: 8px; max-width: none; } #proj { width: 200px; height: 200px; } }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<canvas id="proj" width="600" height="600"></canvas>
+<div id="ui">
+  <nav><a href="index.html">← 首页</a><a href="pipeline.html">管线</a></nav>
+  <h1>球面网格 → 小星球</h1>
+  <p>1338825080844021760：随机点 → 散开 → 三角化 → 按三角形松弛。1338829205157646336：三角化在球极投影平面上做（右下角）。1768627849529893109：放到球面上。1769641473895432220：防"蘑菇化"。</p>
+  <div class="row" id="steps">
+    <button data-s="random">1 随机点</button><button data-s="spaced">2 散开</button><button data-s="tri">3 三角化</button><button data-s="relaxed">4 松弛</button><button data-s="planet" class="on">5 星球</button>
+  </div>
+  <div class="row">
+    <button id="relax" class="on">防蘑菇化 relax</button><button id="wire">三角网</button><button id="projbtn">球极投影</button><button id="spin" class="on">自转</button>
+  </div>
+  <div id="stat"></div>
+  <p>源码：<code>src/core/trigraph.js</code> <code>src/sphere/planet.js</code></p>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { buildSphere, buildPlanet, cornerPositions, planetMesh, mushroomRatio } from './src/sphere/planet.js';
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x26333b);
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+camera.position.set(0, 5, 23);
+camera.lookAt(0, 0, 0);
+scene.add(new THREE.HemisphereLight(0xf4f1e6, 0x51606a, 1.4));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(5, 8, 6); scene.add(sun);
+
+const t0 = performance.now();
+const sphere = buildSphere({});
+const planet = buildPlanet(sphere);
+const tBuild = performance.now() - t0;
+const world = new THREE.Group(); scene.add(world);
+
+const sea = new THREE.Mesh(new THREE.IcosahedronGeometry(planet.R + 0.12, 5), new THREE.MeshStandardMaterial({ color: 0x4f9fb8, roughness: 0.4, transparent: true, opacity: 0.88 }));
+const core = new THREE.Mesh(new THREE.IcosahedronGeometry(planet.R - 0.02, 4), new THREE.MeshStandardMaterial({ color: 0x3a7c90, roughness: 1 }));
+let land = null, wire = null, dots = null;
+const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, flatShading: true });
+
+function buildLand(relax) {
+  const at = cornerPositions(planet, { relax });
+  const m = planetMesh(planet, at);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(m.position, 3));
+  g.setAttribute('normal', new THREE.Float32BufferAttribute(m.normal, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(m.color, 3));
+  if (land) { world.remove(land); land.geometry.dispose(); }
+  land = new THREE.Mesh(g, mat); world.add(land);
+  return mushroomRatio(planet, at);
+}
+function pointsOf(P, r = planet.R) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(P.flatMap((p) => [p[0] * r, p[1] * r, p[2] * r]), 3));
+  return new THREE.Points(g, new THREE.PointsMaterial({ color: 0xeef4f3, size: 4, sizeAttenuation: false }));
+}
+function wireOf(P, tris, r = planet.R + 0.01) {
+  const pos = [];
+  for (const [a, b, c] of tris) for (const [u, v] of [[a, b], [b, c], [c, a]]) if (u < v) pos.push(...P[u].map((x) => x * r), ...P[v].map((x) => x * r));
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.55 }));
+}
+
+let step = 'planet', relaxOn = true, showWire = false, spin = true, ratio = { on: 0, off: 0 };
+ratio.off = buildLand(false); ratio.on = buildLand(true);
+function show() {
+  world.clear();
+  if (step === 'planet') { world.add(core, sea, land); if (showWire) world.add(wireOf(sphere.pts, sphere.tris, planet.R + 0.13)); }
+  else {
+    const P = step === 'random' ? sphere.steps.random : step === 'spaced' ? sphere.steps.spaced : sphere.pts;
+    world.add(new THREE.Mesh(new THREE.SphereGeometry(planet.R * 0.99, 48, 32), new THREE.MeshBasicMaterial({ color: 0x4d5f78 })));
+    world.add(pointsOf(P));
+    if (step === 'tri' || step === 'relaxed') world.add(wireOf(P, sphere.tris));
+  }
+  document.querySelectorAll('#steps button').forEach((b) => b.classList.toggle('on', b.dataset.s === step));
+  const c = sphere.steps.check;
+  document.getElementById('stat').innerHTML =
+    `${sphere.pts.length} 点 · ${sphere.tris.length} 三角（球面应为 2n−4 = ${2 * sphere.pts.length - 4}）· 流形 ${c.manifold ? '✓' : '✗'} · Delaunay ${c.delaunay ? '✓' : '✗'} · ${tBuild.toFixed(0)} ms<br>` +
+    `高台（≥4 层）格子面积 / 海平面面积：relax 关 <b>${ratio.off.toFixed(2)}</b> → 开 <b>${ratio.on.toFixed(2)}</b>（越接近 1 越不"蘑菇"）`;
+}
+document.querySelectorAll('#steps button').forEach((b) => (b.onclick = () => { step = b.dataset.s; show(); }));
+document.getElementById('relax').onclick = (e) => { relaxOn = !relaxOn; e.target.classList.toggle('on', relaxOn); buildLand(relaxOn); show(); };
+document.getElementById('wire').onclick = (e) => { showWire = !showWire; e.target.classList.toggle('on', showWire); show(); };
+document.getElementById('spin').onclick = (e) => { spin = !spin; e.target.classList.toggle('on', spin); };
+const pc = document.getElementById('proj');
+document.getElementById('projbtn').onclick = (e) => {
+  const on = pc.style.display !== 'block'; pc.style.display = on ? 'block' : 'none'; e.target.classList.toggle('on', on);
+  if (!on) return;
+  const ctx = pc.getContext('2d'); ctx.fillStyle = '#1b252b'; ctx.fillRect(0, 0, 600, 600);
+  const { pts, tris } = sphere.steps.projection;
+  const S = 60;
+  ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (const [a, b, c] of tris) { const A = pts[a], B = pts[b], C = pts[c]; ctx.moveTo(300 + A[0] * S, 300 + A[1] * S); ctx.lineTo(300 + B[0] * S, 300 + B[1] * S); ctx.lineTo(300 + C[0] * S, 300 + C[1] * S); ctx.closePath(); }
+  ctx.stroke();
+};
+buildLand(true); show();
+
+// 拖动旋转
+let drag = null, rx = 0.35, ry = 0;
+canvas.addEventListener('pointerdown', (e) => { drag = [e.clientX, e.clientY]; });
+addEventListener('pointerup', () => (drag = null));
+addEventListener('pointermove', (e) => { if (!drag) return; ry += (e.clientX - drag[0]) * 0.008; rx += (e.clientY - drag[1]) * 0.008; drag = [e.clientX, e.clientY]; });
+canvas.addEventListener('wheel', (e) => { camera.position.multiplyScalar(e.deltaY > 0 ? 1.08 : 0.93); }, { passive: true });
+function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+renderer.setAnimationLoop(() => { if (spin && !drag) ry += 0.003; world.rotation.set(rx, ry, 0); renderer.render(scene, camera); });
+window.planetDemo = { sphere, planet, ratio };
+</script>
+</body>
+</html>

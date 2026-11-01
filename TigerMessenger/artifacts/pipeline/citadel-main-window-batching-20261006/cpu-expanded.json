@@ -1,0 +1,2244 @@
+{
+  "proportion": "expanded-1",
+  "before": {
+    "meshes": 317,
+    "triangles": 13338,
+    "materials": 13,
+    "geometries": 317
+  },
+  "after": {
+    "meshes": 119,
+    "triangles": 13338,
+    "materials": 13,
+    "geometries": 119
+  },
+  "windowBatching": {
+    "enabled": true,
+    "version": "main-window-batches-1",
+    "windowCount": 34,
+    "beforeMeshes": 204,
+    "afterMeshes": 6,
+    "zones": [
+      {
+        "id": "drum",
+        "windows": [
+          "drum-window-0",
+          "drum-window-1",
+          "drum-window-2",
+          "drum-window-3",
+          "drum-window-4",
+          "drum-window-5",
+          "drum-window-6",
+          "drum-window-7",
+          "drum-window-8",
+          "drum-window-9",
+          "drum-window-10",
+          "drum-window-11"
+        ],
+        "beforeMeshes": 72,
+        "batches": [
+          {
+            "name": "main-window-batch-drum-frames",
+            "materialName": "target-new-city-window",
+            "triangles": 1680,
+            "sourceFaces": [
+              {
+                "sourceName": "drum-window-0-left",
+                "windowName": "drum-window-0",
+                "firstTriangle": 0,
+                "triangleCount": 28,
+                "firstVertex": 0,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-0-right",
+                "windowName": "drum-window-0",
+                "firstTriangle": 28,
+                "triangleCount": 28,
+                "firstVertex": 84,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-0-top",
+                "windowName": "drum-window-0",
+                "firstTriangle": 56,
+                "triangleCount": 28,
+                "firstVertex": 168,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-0-sill",
+                "windowName": "drum-window-0",
+                "firstTriangle": 84,
+                "triangleCount": 28,
+                "firstVertex": 252,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-0-mullion",
+                "windowName": "drum-window-0",
+                "firstTriangle": 112,
+                "triangleCount": 28,
+                "firstVertex": 336,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-1-left",
+                "windowName": "drum-window-1",
+                "firstTriangle": 140,
+                "triangleCount": 28,
+                "firstVertex": 420,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-1-right",
+                "windowName": "drum-window-1",
+                "firstTriangle": 168,
+                "triangleCount": 28,
+                "firstVertex": 504,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-1-top",
+                "windowName": "drum-window-1",
+                "firstTriangle": 196,
+                "triangleCount": 28,
+                "firstVertex": 588,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-1-sill",
+                "windowName": "drum-window-1",
+                "firstTriangle": 224,
+                "triangleCount": 28,
+                "firstVertex": 672,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-1-mullion",
+                "windowName": "drum-window-1",
+                "firstTriangle": 252,
+                "triangleCount": 28,
+                "firstVertex": 756,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-2-left",
+                "windowName": "drum-window-2",
+                "firstTriangle": 280,
+                "triangleCount": 28,
+                "firstVertex": 840,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-2-right",
+                "windowName": "drum-window-2",
+                "firstTriangle": 308,
+                "triangleCount": 28,
+                "firstVertex": 924,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-2-top",
+                "windowName": "drum-window-2",
+                "firstTriangle": 336,
+                "triangleCount": 28,
+                "firstVertex": 1008,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-2-sill",
+                "windowName": "drum-window-2",
+                "firstTriangle": 364,
+                "triangleCount": 28,
+                "firstVertex": 1092,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-2-mullion",
+                "windowName": "drum-window-2",
+                "firstTriangle": 392,
+                "triangleCount": 28,
+                "firstVertex": 1176,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-3-left",
+                "windowName": "drum-window-3",
+                "firstTriangle": 420,
+                "triangleCount": 28,
+                "firstVertex": 1260,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-3-right",
+                "windowName": "drum-window-3",
+                "firstTriangle": 448,
+                "triangleCount": 28,
+                "firstVertex": 1344,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-3-top",
+                "windowName": "drum-window-3",
+                "firstTriangle": 476,
+                "triangleCount": 28,
+                "firstVertex": 1428,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-3-sill",
+                "windowName": "drum-window-3",
+                "firstTriangle": 504,
+                "triangleCount": 28,
+                "firstVertex": 1512,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-3-mullion",
+                "windowName": "drum-window-3",
+                "firstTriangle": 532,
+                "triangleCount": 28,
+                "firstVertex": 1596,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-4-left",
+                "windowName": "drum-window-4",
+                "firstTriangle": 560,
+                "triangleCount": 28,
+                "firstVertex": 1680,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-4-right",
+                "windowName": "drum-window-4",
+                "firstTriangle": 588,
+                "triangleCount": 28,
+                "firstVertex": 1764,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-4-top",
+                "windowName": "drum-window-4",
+                "firstTriangle": 616,
+                "triangleCount": 28,
+                "firstVertex": 1848,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-4-sill",
+                "windowName": "drum-window-4",
+                "firstTriangle": 644,
+                "triangleCount": 28,
+                "firstVertex": 1932,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-4-mullion",
+                "windowName": "drum-window-4",
+                "firstTriangle": 672,
+                "triangleCount": 28,
+                "firstVertex": 2016,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-5-left",
+                "windowName": "drum-window-5",
+                "firstTriangle": 700,
+                "triangleCount": 28,
+                "firstVertex": 2100,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-5-right",
+                "windowName": "drum-window-5",
+                "firstTriangle": 728,
+                "triangleCount": 28,
+                "firstVertex": 2184,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-5-top",
+                "windowName": "drum-window-5",
+                "firstTriangle": 756,
+                "triangleCount": 28,
+                "firstVertex": 2268,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-5-sill",
+                "windowName": "drum-window-5",
+                "firstTriangle": 784,
+                "triangleCount": 28,
+                "firstVertex": 2352,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-5-mullion",
+                "windowName": "drum-window-5",
+                "firstTriangle": 812,
+                "triangleCount": 28,
+                "firstVertex": 2436,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-6-left",
+                "windowName": "drum-window-6",
+                "firstTriangle": 840,
+                "triangleCount": 28,
+                "firstVertex": 2520,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-6-right",
+                "windowName": "drum-window-6",
+                "firstTriangle": 868,
+                "triangleCount": 28,
+                "firstVertex": 2604,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-6-top",
+                "windowName": "drum-window-6",
+                "firstTriangle": 896,
+                "triangleCount": 28,
+                "firstVertex": 2688,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-6-sill",
+                "windowName": "drum-window-6",
+                "firstTriangle": 924,
+                "triangleCount": 28,
+                "firstVertex": 2772,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-6-mullion",
+                "windowName": "drum-window-6",
+                "firstTriangle": 952,
+                "triangleCount": 28,
+                "firstVertex": 2856,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-7-left",
+                "windowName": "drum-window-7",
+                "firstTriangle": 980,
+                "triangleCount": 28,
+                "firstVertex": 2940,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-7-right",
+                "windowName": "drum-window-7",
+                "firstTriangle": 1008,
+                "triangleCount": 28,
+                "firstVertex": 3024,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-7-top",
+                "windowName": "drum-window-7",
+                "firstTriangle": 1036,
+                "triangleCount": 28,
+                "firstVertex": 3108,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-7-sill",
+                "windowName": "drum-window-7",
+                "firstTriangle": 1064,
+                "triangleCount": 28,
+                "firstVertex": 3192,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-7-mullion",
+                "windowName": "drum-window-7",
+                "firstTriangle": 1092,
+                "triangleCount": 28,
+                "firstVertex": 3276,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-8-left",
+                "windowName": "drum-window-8",
+                "firstTriangle": 1120,
+                "triangleCount": 28,
+                "firstVertex": 3360,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-8-right",
+                "windowName": "drum-window-8",
+                "firstTriangle": 1148,
+                "triangleCount": 28,
+                "firstVertex": 3444,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-8-top",
+                "windowName": "drum-window-8",
+                "firstTriangle": 1176,
+                "triangleCount": 28,
+                "firstVertex": 3528,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-8-sill",
+                "windowName": "drum-window-8",
+                "firstTriangle": 1204,
+                "triangleCount": 28,
+                "firstVertex": 3612,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-8-mullion",
+                "windowName": "drum-window-8",
+                "firstTriangle": 1232,
+                "triangleCount": 28,
+                "firstVertex": 3696,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-9-left",
+                "windowName": "drum-window-9",
+                "firstTriangle": 1260,
+                "triangleCount": 28,
+                "firstVertex": 3780,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-9-right",
+                "windowName": "drum-window-9",
+                "firstTriangle": 1288,
+                "triangleCount": 28,
+                "firstVertex": 3864,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-9-top",
+                "windowName": "drum-window-9",
+                "firstTriangle": 1316,
+                "triangleCount": 28,
+                "firstVertex": 3948,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-9-sill",
+                "windowName": "drum-window-9",
+                "firstTriangle": 1344,
+                "triangleCount": 28,
+                "firstVertex": 4032,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-9-mullion",
+                "windowName": "drum-window-9",
+                "firstTriangle": 1372,
+                "triangleCount": 28,
+                "firstVertex": 4116,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-10-left",
+                "windowName": "drum-window-10",
+                "firstTriangle": 1400,
+                "triangleCount": 28,
+                "firstVertex": 4200,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-10-right",
+                "windowName": "drum-window-10",
+                "firstTriangle": 1428,
+                "triangleCount": 28,
+                "firstVertex": 4284,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-10-top",
+                "windowName": "drum-window-10",
+                "firstTriangle": 1456,
+                "triangleCount": 28,
+                "firstVertex": 4368,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-10-sill",
+                "windowName": "drum-window-10",
+                "firstTriangle": 1484,
+                "triangleCount": 28,
+                "firstVertex": 4452,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-10-mullion",
+                "windowName": "drum-window-10",
+                "firstTriangle": 1512,
+                "triangleCount": 28,
+                "firstVertex": 4536,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-11-left",
+                "windowName": "drum-window-11",
+                "firstTriangle": 1540,
+                "triangleCount": 28,
+                "firstVertex": 4620,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-11-right",
+                "windowName": "drum-window-11",
+                "firstTriangle": 1568,
+                "triangleCount": 28,
+                "firstVertex": 4704,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-11-top",
+                "windowName": "drum-window-11",
+                "firstTriangle": 1596,
+                "triangleCount": 28,
+                "firstVertex": 4788,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-11-sill",
+                "windowName": "drum-window-11",
+                "firstTriangle": 1624,
+                "triangleCount": 28,
+                "firstVertex": 4872,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "drum-window-11-mullion",
+                "windowName": "drum-window-11",
+                "firstTriangle": 1652,
+                "triangleCount": 28,
+                "firstVertex": 4956,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              }
+            ],
+            "bounds": {
+              "min": [
+                -6.5498948097229,
+                18.149999618530273,
+                -8.089895248413086
+              ],
+              "max": [
+                6.5498948097229,
+                19.152000427246094,
+                5.009894847869873
+              ]
+            }
+          },
+          {
+            "name": "main-window-batch-drum-panes",
+            "materialName": "target-new-city-glass",
+            "triangles": 24,
+            "sourceFaces": [
+              {
+                "sourceName": "drum-window-0-recess",
+                "windowName": "drum-window-0",
+                "firstTriangle": 0,
+                "triangleCount": 2,
+                "firstVertex": 0,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-1-recess",
+                "windowName": "drum-window-1",
+                "firstTriangle": 2,
+                "triangleCount": 2,
+                "firstVertex": 6,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-2-recess",
+                "windowName": "drum-window-2",
+                "firstTriangle": 4,
+                "triangleCount": 2,
+                "firstVertex": 12,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-3-recess",
+                "windowName": "drum-window-3",
+                "firstTriangle": 6,
+                "triangleCount": 2,
+                "firstVertex": 18,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-4-recess",
+                "windowName": "drum-window-4",
+                "firstTriangle": 8,
+                "triangleCount": 2,
+                "firstVertex": 24,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-5-recess",
+                "windowName": "drum-window-5",
+                "firstTriangle": 10,
+                "triangleCount": 2,
+                "firstVertex": 30,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-6-recess",
+                "windowName": "drum-window-6",
+                "firstTriangle": 12,
+                "triangleCount": 2,
+                "firstVertex": 36,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-7-recess",
+                "windowName": "drum-window-7",
+                "firstTriangle": 14,
+                "triangleCount": 2,
+                "firstVertex": 42,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-8-recess",
+                "windowName": "drum-window-8",
+                "firstTriangle": 16,
+                "triangleCount": 2,
+                "firstVertex": 48,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-9-recess",
+                "windowName": "drum-window-9",
+                "firstTriangle": 18,
+                "triangleCount": 2,
+                "firstVertex": 54,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-10-recess",
+                "windowName": "drum-window-10",
+                "firstTriangle": 20,
+                "triangleCount": 2,
+                "firstVertex": 60,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "drum-window-11-recess",
+                "windowName": "drum-window-11",
+                "firstTriangle": 22,
+                "triangleCount": 2,
+                "firstVertex": 66,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              }
+            ],
+            "bounds": {
+              "min": [
+                -6.4261794090271,
+                18.22800064086914,
+                -7.966179847717285
+              ],
+              "max": [
+                6.4261794090271,
+                19.091999053955078,
+                4.886179447174072
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "left",
+        "windows": [
+          "blue-front--1-4.2",
+          "blue-side--1-4.2",
+          "blue-front--1-7.4",
+          "blue-side--1-7.4",
+          "blue-front--1-10.65",
+          "blue-side--1-10.65",
+          "wing-front--1-3.5",
+          "wing-side--1-3.5",
+          "wing-front--1-6.7",
+          "wing-side--1-6.7",
+          "rear-lantern-window--1"
+        ],
+        "beforeMeshes": 66,
+        "batches": [
+          {
+            "name": "main-window-batch-left-frames",
+            "materialName": "target-new-city-window",
+            "triangles": 1540,
+            "sourceFaces": [
+              {
+                "sourceName": "blue-front--1-4.2-left",
+                "windowName": "blue-front--1-4.2",
+                "firstTriangle": 0,
+                "triangleCount": 28,
+                "firstVertex": 0,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-4.2-right",
+                "windowName": "blue-front--1-4.2",
+                "firstTriangle": 28,
+                "triangleCount": 28,
+                "firstVertex": 84,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-4.2-top",
+                "windowName": "blue-front--1-4.2",
+                "firstTriangle": 56,
+                "triangleCount": 28,
+                "firstVertex": 168,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-4.2-sill",
+                "windowName": "blue-front--1-4.2",
+                "firstTriangle": 84,
+                "triangleCount": 28,
+                "firstVertex": 252,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-4.2-mullion",
+                "windowName": "blue-front--1-4.2",
+                "firstTriangle": 112,
+                "triangleCount": 28,
+                "firstVertex": 336,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-4.2-left",
+                "windowName": "blue-side--1-4.2",
+                "firstTriangle": 140,
+                "triangleCount": 28,
+                "firstVertex": 420,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-4.2-right",
+                "windowName": "blue-side--1-4.2",
+                "firstTriangle": 168,
+                "triangleCount": 28,
+                "firstVertex": 504,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-4.2-top",
+                "windowName": "blue-side--1-4.2",
+                "firstTriangle": 196,
+                "triangleCount": 28,
+                "firstVertex": 588,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-4.2-sill",
+                "windowName": "blue-side--1-4.2",
+                "firstTriangle": 224,
+                "triangleCount": 28,
+                "firstVertex": 672,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-4.2-mullion",
+                "windowName": "blue-side--1-4.2",
+                "firstTriangle": 252,
+                "triangleCount": 28,
+                "firstVertex": 756,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-7.4-left",
+                "windowName": "blue-front--1-7.4",
+                "firstTriangle": 280,
+                "triangleCount": 28,
+                "firstVertex": 840,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-7.4-right",
+                "windowName": "blue-front--1-7.4",
+                "firstTriangle": 308,
+                "triangleCount": 28,
+                "firstVertex": 924,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-7.4-top",
+                "windowName": "blue-front--1-7.4",
+                "firstTriangle": 336,
+                "triangleCount": 28,
+                "firstVertex": 1008,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-7.4-sill",
+                "windowName": "blue-front--1-7.4",
+                "firstTriangle": 364,
+                "triangleCount": 28,
+                "firstVertex": 1092,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-7.4-mullion",
+                "windowName": "blue-front--1-7.4",
+                "firstTriangle": 392,
+                "triangleCount": 28,
+                "firstVertex": 1176,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-7.4-left",
+                "windowName": "blue-side--1-7.4",
+                "firstTriangle": 420,
+                "triangleCount": 28,
+                "firstVertex": 1260,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-7.4-right",
+                "windowName": "blue-side--1-7.4",
+                "firstTriangle": 448,
+                "triangleCount": 28,
+                "firstVertex": 1344,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-7.4-top",
+                "windowName": "blue-side--1-7.4",
+                "firstTriangle": 476,
+                "triangleCount": 28,
+                "firstVertex": 1428,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-7.4-sill",
+                "windowName": "blue-side--1-7.4",
+                "firstTriangle": 504,
+                "triangleCount": 28,
+                "firstVertex": 1512,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-7.4-mullion",
+                "windowName": "blue-side--1-7.4",
+                "firstTriangle": 532,
+                "triangleCount": 28,
+                "firstVertex": 1596,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-10.65-left",
+                "windowName": "blue-front--1-10.65",
+                "firstTriangle": 560,
+                "triangleCount": 28,
+                "firstVertex": 1680,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-10.65-right",
+                "windowName": "blue-front--1-10.65",
+                "firstTriangle": 588,
+                "triangleCount": 28,
+                "firstVertex": 1764,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-10.65-top",
+                "windowName": "blue-front--1-10.65",
+                "firstTriangle": 616,
+                "triangleCount": 28,
+                "firstVertex": 1848,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-10.65-sill",
+                "windowName": "blue-front--1-10.65",
+                "firstTriangle": 644,
+                "triangleCount": 28,
+                "firstVertex": 1932,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front--1-10.65-mullion",
+                "windowName": "blue-front--1-10.65",
+                "firstTriangle": 672,
+                "triangleCount": 28,
+                "firstVertex": 2016,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-10.65-left",
+                "windowName": "blue-side--1-10.65",
+                "firstTriangle": 700,
+                "triangleCount": 28,
+                "firstVertex": 2100,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-10.65-right",
+                "windowName": "blue-side--1-10.65",
+                "firstTriangle": 728,
+                "triangleCount": 28,
+                "firstVertex": 2184,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-10.65-top",
+                "windowName": "blue-side--1-10.65",
+                "firstTriangle": 756,
+                "triangleCount": 28,
+                "firstVertex": 2268,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-10.65-sill",
+                "windowName": "blue-side--1-10.65",
+                "firstTriangle": 784,
+                "triangleCount": 28,
+                "firstVertex": 2352,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side--1-10.65-mullion",
+                "windowName": "blue-side--1-10.65",
+                "firstTriangle": 812,
+                "triangleCount": 28,
+                "firstVertex": 2436,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-3.5-left",
+                "windowName": "wing-front--1-3.5",
+                "firstTriangle": 840,
+                "triangleCount": 28,
+                "firstVertex": 2520,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-3.5-right",
+                "windowName": "wing-front--1-3.5",
+                "firstTriangle": 868,
+                "triangleCount": 28,
+                "firstVertex": 2604,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-3.5-top",
+                "windowName": "wing-front--1-3.5",
+                "firstTriangle": 896,
+                "triangleCount": 28,
+                "firstVertex": 2688,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-3.5-sill",
+                "windowName": "wing-front--1-3.5",
+                "firstTriangle": 924,
+                "triangleCount": 28,
+                "firstVertex": 2772,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-3.5-mullion",
+                "windowName": "wing-front--1-3.5",
+                "firstTriangle": 952,
+                "triangleCount": 28,
+                "firstVertex": 2856,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-3.5-left",
+                "windowName": "wing-side--1-3.5",
+                "firstTriangle": 980,
+                "triangleCount": 28,
+                "firstVertex": 2940,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-3.5-right",
+                "windowName": "wing-side--1-3.5",
+                "firstTriangle": 1008,
+                "triangleCount": 28,
+                "firstVertex": 3024,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-3.5-top",
+                "windowName": "wing-side--1-3.5",
+                "firstTriangle": 1036,
+                "triangleCount": 28,
+                "firstVertex": 3108,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-3.5-sill",
+                "windowName": "wing-side--1-3.5",
+                "firstTriangle": 1064,
+                "triangleCount": 28,
+                "firstVertex": 3192,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-3.5-mullion",
+                "windowName": "wing-side--1-3.5",
+                "firstTriangle": 1092,
+                "triangleCount": 28,
+                "firstVertex": 3276,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-6.7-left",
+                "windowName": "wing-front--1-6.7",
+                "firstTriangle": 1120,
+                "triangleCount": 28,
+                "firstVertex": 3360,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-6.7-right",
+                "windowName": "wing-front--1-6.7",
+                "firstTriangle": 1148,
+                "triangleCount": 28,
+                "firstVertex": 3444,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-6.7-top",
+                "windowName": "wing-front--1-6.7",
+                "firstTriangle": 1176,
+                "triangleCount": 28,
+                "firstVertex": 3528,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-6.7-sill",
+                "windowName": "wing-front--1-6.7",
+                "firstTriangle": 1204,
+                "triangleCount": 28,
+                "firstVertex": 3612,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front--1-6.7-mullion",
+                "windowName": "wing-front--1-6.7",
+                "firstTriangle": 1232,
+                "triangleCount": 28,
+                "firstVertex": 3696,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-6.7-left",
+                "windowName": "wing-side--1-6.7",
+                "firstTriangle": 1260,
+                "triangleCount": 28,
+                "firstVertex": 3780,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-6.7-right",
+                "windowName": "wing-side--1-6.7",
+                "firstTriangle": 1288,
+                "triangleCount": 28,
+                "firstVertex": 3864,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-6.7-top",
+                "windowName": "wing-side--1-6.7",
+                "firstTriangle": 1316,
+                "triangleCount": 28,
+                "firstVertex": 3948,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-6.7-sill",
+                "windowName": "wing-side--1-6.7",
+                "firstTriangle": 1344,
+                "triangleCount": 28,
+                "firstVertex": 4032,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side--1-6.7-mullion",
+                "windowName": "wing-side--1-6.7",
+                "firstTriangle": 1372,
+                "triangleCount": 28,
+                "firstVertex": 4116,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window--1-left",
+                "windowName": "rear-lantern-window--1",
+                "firstTriangle": 1400,
+                "triangleCount": 28,
+                "firstVertex": 4200,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window--1-right",
+                "windowName": "rear-lantern-window--1",
+                "firstTriangle": 1428,
+                "triangleCount": 28,
+                "firstVertex": 4284,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window--1-top",
+                "windowName": "rear-lantern-window--1",
+                "firstTriangle": 1456,
+                "triangleCount": 28,
+                "firstVertex": 4368,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window--1-sill",
+                "windowName": "rear-lantern-window--1",
+                "firstTriangle": 1484,
+                "triangleCount": 28,
+                "firstVertex": 4452,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window--1-mullion",
+                "windowName": "rear-lantern-window--1",
+                "firstTriangle": 1512,
+                "triangleCount": 28,
+                "firstVertex": 4536,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              }
+            ],
+            "bounds": {
+              "min": [
+                -15.741000175476074,
+                3.437999963760376,
+                -1.5839999914169312
+              ],
+              "max": [
+                -8.387499809265137,
+                16.57200050354004,
+                4.190999984741211
+              ]
+            }
+          },
+          {
+            "name": "main-window-batch-left-panes",
+            "materialName": "target-new-city-glass",
+            "triangles": 22,
+            "sourceFaces": [
+              {
+                "sourceName": "blue-front--1-4.2-recess",
+                "windowName": "blue-front--1-4.2",
+                "firstTriangle": 0,
+                "triangleCount": 2,
+                "firstVertex": 0,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-side--1-4.2-recess",
+                "windowName": "blue-side--1-4.2",
+                "firstTriangle": 2,
+                "triangleCount": 2,
+                "firstVertex": 6,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-front--1-7.4-recess",
+                "windowName": "blue-front--1-7.4",
+                "firstTriangle": 4,
+                "triangleCount": 2,
+                "firstVertex": 12,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-side--1-7.4-recess",
+                "windowName": "blue-side--1-7.4",
+                "firstTriangle": 6,
+                "triangleCount": 2,
+                "firstVertex": 18,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-front--1-10.65-recess",
+                "windowName": "blue-front--1-10.65",
+                "firstTriangle": 8,
+                "triangleCount": 2,
+                "firstVertex": 24,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-side--1-10.65-recess",
+                "windowName": "blue-side--1-10.65",
+                "firstTriangle": 10,
+                "triangleCount": 2,
+                "firstVertex": 30,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "wing-front--1-3.5-recess",
+                "windowName": "wing-front--1-3.5",
+                "firstTriangle": 12,
+                "triangleCount": 2,
+                "firstVertex": 36,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "wing-side--1-3.5-recess",
+                "windowName": "wing-side--1-3.5",
+                "firstTriangle": 14,
+                "triangleCount": 2,
+                "firstVertex": 42,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "wing-front--1-6.7-recess",
+                "windowName": "wing-front--1-6.7",
+                "firstTriangle": 16,
+                "triangleCount": 2,
+                "firstVertex": 48,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "wing-side--1-6.7-recess",
+                "windowName": "wing-side--1-6.7",
+                "firstTriangle": 18,
+                "triangleCount": 2,
+                "firstVertex": 54,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "rear-lantern-window--1-recess",
+                "windowName": "rear-lantern-window--1",
+                "firstTriangle": 20,
+                "triangleCount": 2,
+                "firstVertex": 60,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              }
+            ],
+            "bounds": {
+              "min": [
+                -15.636500358581543,
+                3.5160000324249268,
+                -1.4739999771118164
+              ],
+              "max": [
+                -8.4975004196167,
+                16.511999130249023,
+                4.08650016784668
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "right",
+        "windows": [
+          "blue-front-1-4.2",
+          "blue-side-1-4.2",
+          "blue-front-1-7.4",
+          "blue-side-1-7.4",
+          "blue-front-1-10.65",
+          "blue-side-1-10.65",
+          "wing-front-1-3.5",
+          "wing-side-1-3.5",
+          "wing-front-1-6.7",
+          "wing-side-1-6.7",
+          "rear-lantern-window-1"
+        ],
+        "beforeMeshes": 66,
+        "batches": [
+          {
+            "name": "main-window-batch-right-frames",
+            "materialName": "target-new-city-window",
+            "triangles": 1540,
+            "sourceFaces": [
+              {
+                "sourceName": "blue-front-1-4.2-left",
+                "windowName": "blue-front-1-4.2",
+                "firstTriangle": 0,
+                "triangleCount": 28,
+                "firstVertex": 0,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-4.2-right",
+                "windowName": "blue-front-1-4.2",
+                "firstTriangle": 28,
+                "triangleCount": 28,
+                "firstVertex": 84,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-4.2-top",
+                "windowName": "blue-front-1-4.2",
+                "firstTriangle": 56,
+                "triangleCount": 28,
+                "firstVertex": 168,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-4.2-sill",
+                "windowName": "blue-front-1-4.2",
+                "firstTriangle": 84,
+                "triangleCount": 28,
+                "firstVertex": 252,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-4.2-mullion",
+                "windowName": "blue-front-1-4.2",
+                "firstTriangle": 112,
+                "triangleCount": 28,
+                "firstVertex": 336,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-4.2-left",
+                "windowName": "blue-side-1-4.2",
+                "firstTriangle": 140,
+                "triangleCount": 28,
+                "firstVertex": 420,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-4.2-right",
+                "windowName": "blue-side-1-4.2",
+                "firstTriangle": 168,
+                "triangleCount": 28,
+                "firstVertex": 504,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-4.2-top",
+                "windowName": "blue-side-1-4.2",
+                "firstTriangle": 196,
+                "triangleCount": 28,
+                "firstVertex": 588,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-4.2-sill",
+                "windowName": "blue-side-1-4.2",
+                "firstTriangle": 224,
+                "triangleCount": 28,
+                "firstVertex": 672,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-4.2-mullion",
+                "windowName": "blue-side-1-4.2",
+                "firstTriangle": 252,
+                "triangleCount": 28,
+                "firstVertex": 756,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-7.4-left",
+                "windowName": "blue-front-1-7.4",
+                "firstTriangle": 280,
+                "triangleCount": 28,
+                "firstVertex": 840,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-7.4-right",
+                "windowName": "blue-front-1-7.4",
+                "firstTriangle": 308,
+                "triangleCount": 28,
+                "firstVertex": 924,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-7.4-top",
+                "windowName": "blue-front-1-7.4",
+                "firstTriangle": 336,
+                "triangleCount": 28,
+                "firstVertex": 1008,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-7.4-sill",
+                "windowName": "blue-front-1-7.4",
+                "firstTriangle": 364,
+                "triangleCount": 28,
+                "firstVertex": 1092,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-7.4-mullion",
+                "windowName": "blue-front-1-7.4",
+                "firstTriangle": 392,
+                "triangleCount": 28,
+                "firstVertex": 1176,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-7.4-left",
+                "windowName": "blue-side-1-7.4",
+                "firstTriangle": 420,
+                "triangleCount": 28,
+                "firstVertex": 1260,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-7.4-right",
+                "windowName": "blue-side-1-7.4",
+                "firstTriangle": 448,
+                "triangleCount": 28,
+                "firstVertex": 1344,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-7.4-top",
+                "windowName": "blue-side-1-7.4",
+                "firstTriangle": 476,
+                "triangleCount": 28,
+                "firstVertex": 1428,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-7.4-sill",
+                "windowName": "blue-side-1-7.4",
+                "firstTriangle": 504,
+                "triangleCount": 28,
+                "firstVertex": 1512,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-7.4-mullion",
+                "windowName": "blue-side-1-7.4",
+                "firstTriangle": 532,
+                "triangleCount": 28,
+                "firstVertex": 1596,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-10.65-left",
+                "windowName": "blue-front-1-10.65",
+                "firstTriangle": 560,
+                "triangleCount": 28,
+                "firstVertex": 1680,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-10.65-right",
+                "windowName": "blue-front-1-10.65",
+                "firstTriangle": 588,
+                "triangleCount": 28,
+                "firstVertex": 1764,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-10.65-top",
+                "windowName": "blue-front-1-10.65",
+                "firstTriangle": 616,
+                "triangleCount": 28,
+                "firstVertex": 1848,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-10.65-sill",
+                "windowName": "blue-front-1-10.65",
+                "firstTriangle": 644,
+                "triangleCount": 28,
+                "firstVertex": 1932,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-front-1-10.65-mullion",
+                "windowName": "blue-front-1-10.65",
+                "firstTriangle": 672,
+                "triangleCount": 28,
+                "firstVertex": 2016,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-10.65-left",
+                "windowName": "blue-side-1-10.65",
+                "firstTriangle": 700,
+                "triangleCount": 28,
+                "firstVertex": 2100,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-10.65-right",
+                "windowName": "blue-side-1-10.65",
+                "firstTriangle": 728,
+                "triangleCount": 28,
+                "firstVertex": 2184,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-10.65-top",
+                "windowName": "blue-side-1-10.65",
+                "firstTriangle": 756,
+                "triangleCount": 28,
+                "firstVertex": 2268,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-10.65-sill",
+                "windowName": "blue-side-1-10.65",
+                "firstTriangle": 784,
+                "triangleCount": 28,
+                "firstVertex": 2352,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "blue-side-1-10.65-mullion",
+                "windowName": "blue-side-1-10.65",
+                "firstTriangle": 812,
+                "triangleCount": 28,
+                "firstVertex": 2436,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-3.5-left",
+                "windowName": "wing-front-1-3.5",
+                "firstTriangle": 840,
+                "triangleCount": 28,
+                "firstVertex": 2520,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-3.5-right",
+                "windowName": "wing-front-1-3.5",
+                "firstTriangle": 868,
+                "triangleCount": 28,
+                "firstVertex": 2604,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-3.5-top",
+                "windowName": "wing-front-1-3.5",
+                "firstTriangle": 896,
+                "triangleCount": 28,
+                "firstVertex": 2688,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-3.5-sill",
+                "windowName": "wing-front-1-3.5",
+                "firstTriangle": 924,
+                "triangleCount": 28,
+                "firstVertex": 2772,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-3.5-mullion",
+                "windowName": "wing-front-1-3.5",
+                "firstTriangle": 952,
+                "triangleCount": 28,
+                "firstVertex": 2856,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-3.5-left",
+                "windowName": "wing-side-1-3.5",
+                "firstTriangle": 980,
+                "triangleCount": 28,
+                "firstVertex": 2940,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-3.5-right",
+                "windowName": "wing-side-1-3.5",
+                "firstTriangle": 1008,
+                "triangleCount": 28,
+                "firstVertex": 3024,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-3.5-top",
+                "windowName": "wing-side-1-3.5",
+                "firstTriangle": 1036,
+                "triangleCount": 28,
+                "firstVertex": 3108,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-3.5-sill",
+                "windowName": "wing-side-1-3.5",
+                "firstTriangle": 1064,
+                "triangleCount": 28,
+                "firstVertex": 3192,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-3.5-mullion",
+                "windowName": "wing-side-1-3.5",
+                "firstTriangle": 1092,
+                "triangleCount": 28,
+                "firstVertex": 3276,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-6.7-left",
+                "windowName": "wing-front-1-6.7",
+                "firstTriangle": 1120,
+                "triangleCount": 28,
+                "firstVertex": 3360,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-6.7-right",
+                "windowName": "wing-front-1-6.7",
+                "firstTriangle": 1148,
+                "triangleCount": 28,
+                "firstVertex": 3444,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-6.7-top",
+                "windowName": "wing-front-1-6.7",
+                "firstTriangle": 1176,
+                "triangleCount": 28,
+                "firstVertex": 3528,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-6.7-sill",
+                "windowName": "wing-front-1-6.7",
+                "firstTriangle": 1204,
+                "triangleCount": 28,
+                "firstVertex": 3612,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-front-1-6.7-mullion",
+                "windowName": "wing-front-1-6.7",
+                "firstTriangle": 1232,
+                "triangleCount": 28,
+                "firstVertex": 3696,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-6.7-left",
+                "windowName": "wing-side-1-6.7",
+                "firstTriangle": 1260,
+                "triangleCount": 28,
+                "firstVertex": 3780,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-6.7-right",
+                "windowName": "wing-side-1-6.7",
+                "firstTriangle": 1288,
+                "triangleCount": 28,
+                "firstVertex": 3864,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-6.7-top",
+                "windowName": "wing-side-1-6.7",
+                "firstTriangle": 1316,
+                "triangleCount": 28,
+                "firstVertex": 3948,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-6.7-sill",
+                "windowName": "wing-side-1-6.7",
+                "firstTriangle": 1344,
+                "triangleCount": 28,
+                "firstVertex": 4032,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "wing-side-1-6.7-mullion",
+                "windowName": "wing-side-1-6.7",
+                "firstTriangle": 1372,
+                "triangleCount": 28,
+                "firstVertex": 4116,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window-1-left",
+                "windowName": "rear-lantern-window-1",
+                "firstTriangle": 1400,
+                "triangleCount": 28,
+                "firstVertex": 4200,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window-1-right",
+                "windowName": "rear-lantern-window-1",
+                "firstTriangle": 1428,
+                "triangleCount": 28,
+                "firstVertex": 4284,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window-1-top",
+                "windowName": "rear-lantern-window-1",
+                "firstTriangle": 1456,
+                "triangleCount": 28,
+                "firstVertex": 4368,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window-1-sill",
+                "windowName": "rear-lantern-window-1",
+                "firstTriangle": 1484,
+                "triangleCount": 28,
+                "firstVertex": 4452,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              },
+              {
+                "sourceName": "rear-lantern-window-1-mullion",
+                "windowName": "rear-lantern-window-1",
+                "firstTriangle": 1512,
+                "triangleCount": 28,
+                "firstVertex": 4536,
+                "vertexCount": 84,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-window"
+              }
+            ],
+            "bounds": {
+              "min": [
+                8.387499809265137,
+                3.437999963760376,
+                -1.5839999914169312
+              ],
+              "max": [
+                15.741000175476074,
+                16.09200096130371,
+                4.190999984741211
+              ]
+            }
+          },
+          {
+            "name": "main-window-batch-right-panes",
+            "materialName": "target-new-city-glass",
+            "triangles": 22,
+            "sourceFaces": [
+              {
+                "sourceName": "blue-front-1-4.2-recess",
+                "windowName": "blue-front-1-4.2",
+                "firstTriangle": 0,
+                "triangleCount": 2,
+                "firstVertex": 0,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-side-1-4.2-recess",
+                "windowName": "blue-side-1-4.2",
+                "firstTriangle": 2,
+                "triangleCount": 2,
+                "firstVertex": 6,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-front-1-7.4-recess",
+                "windowName": "blue-front-1-7.4",
+                "firstTriangle": 4,
+                "triangleCount": 2,
+                "firstVertex": 12,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-side-1-7.4-recess",
+                "windowName": "blue-side-1-7.4",
+                "firstTriangle": 6,
+                "triangleCount": 2,
+                "firstVertex": 18,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-front-1-10.65-recess",
+                "windowName": "blue-front-1-10.65",
+                "firstTriangle": 8,
+                "triangleCount": 2,
+                "firstVertex": 24,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "blue-side-1-10.65-recess",
+                "windowName": "blue-side-1-10.65",
+                "firstTriangle": 10,
+                "triangleCount": 2,
+                "firstVertex": 30,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "wing-front-1-3.5-recess",
+                "windowName": "wing-front-1-3.5",
+                "firstTriangle": 12,
+                "triangleCount": 2,
+                "firstVertex": 36,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "wing-side-1-3.5-recess",
+                "windowName": "wing-side-1-3.5",
+                "firstTriangle": 14,
+                "triangleCount": 2,
+                "firstVertex": 42,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "wing-front-1-6.7-recess",
+                "windowName": "wing-front-1-6.7",
+                "firstTriangle": 16,
+                "triangleCount": 2,
+                "firstVertex": 48,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "wing-side-1-6.7-recess",
+                "windowName": "wing-side-1-6.7",
+                "firstTriangle": 18,
+                "triangleCount": 2,
+                "firstVertex": 54,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              },
+              {
+                "sourceName": "rear-lantern-window-1-recess",
+                "windowName": "rear-lantern-window-1",
+                "firstTriangle": 20,
+                "triangleCount": 2,
+                "firstVertex": 60,
+                "vertexCount": 6,
+                "semantic": "protected-main-window-detail",
+                "materialName": "target-new-city-glass"
+              }
+            ],
+            "bounds": {
+              "min": [
+                8.4975004196167,
+                3.5160000324249268,
+                -1.4739999771118164
+              ],
+              "max": [
+                15.636500358581543,
+                16.031999588012695,
+                4.08650016784668
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "triangles": 4828,
+    "sourceMeshesRemoved": true,
+    "gpuMeasured": false
+  },
+  "worldVerticesCompared": 14484,
+  "windowRays": 204,
+  "maxPositionError": 0.000001029256450918919,
+  "maxNormalError": 3.7037094796953547e-8,
+  "gpuMeasured": false
+}

@@ -1,0 +1,44 @@
+{
+  "task": "Sea-stack vegetation only; preserve accepted rock geometry",
+  "target": "Continuous turf regions with clustered coastal scrub inspired by documented 2022 Oskar grass experiment",
+  "visual_observations": {
+    "source": "Primary viewed runtime coast overview and vegetation closeup; advisor viewed prior same batch side and overview",
+    "image_sha256": "64c744a4cbcb80a2b6fb80e7a7bdefd862eedf9e16d7ab250a70a29cf527a0e0",
+    "completed": [
+      "Continuous muted green ledge regions replace scattered balls",
+      "Bare stone gaps retained",
+      "Supported low shrubs and tapered grass fans"
+    ],
+    "remaining": [
+      "Low vegetation reads mainly as colour patches at long distance",
+      "Turf edges follow base triangles",
+      "No author background-contrast or depth shader recreation"
+    ]
+  },
+  "checks": [
+    {
+      "name": "12 seeds geometry unchanged and turf roots plus scrub perimeter supported",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Runtime roots supported",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Runtime shader errors zero",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Rail samples and plaza remain clear",
+      "passed": true,
+      "required": true
+    }
+  ],
+  "constraints": [
+    "Vegetation only",
+    "Do not label this as original Bad North vegetation algorithm"
+  ]
+}

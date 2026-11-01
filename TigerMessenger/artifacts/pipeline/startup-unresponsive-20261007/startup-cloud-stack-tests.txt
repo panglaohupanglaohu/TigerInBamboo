@@ -1,0 +1,19 @@
+[CLOUD-RIDGE] kept= 1 dropped= 1 rings= {"center":1} maxH= 9 maxScore= 1.03 threshold= 0.35
+[CLOUD-RIDGE] kept= 1 dropped= 1 rings= {"center":1} maxH= 9 maxScore= 1.03 threshold= 0.35
+✔ yielding cloud placement preserves the exact synchronous anchors, heights and climate hash (7.091917ms)
+✔ incremental construction preserves sync ordering and result while servicing queued tasks (49.640625ms)
+✔ failure stays fatal and cannot publish later stages or a partial handle (0.445417ms)
+✔ startup progress persists active stage before work, records durations and completes once ready (0.208542ms)
+[CLOUD-RIDGE] kept= 18 dropped= 0 rings= {"center":18} maxH= 9.78 maxScore= 0.85 threshold= 0.35
+✔ deferred cloud startup reads final terrain and creates buffers only once (101.591458ms)
+✔ normal startup remains immediate, disposed pending startup cannot create cloud resources (58.410833ms)
+✔ actual coastal final triangles support denser deterministic meadow scrub and trees (3913.578416ms)
+✔ complete protected canopy boxes reject trees without planting in forbidden volume (551.641833ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4538.575417

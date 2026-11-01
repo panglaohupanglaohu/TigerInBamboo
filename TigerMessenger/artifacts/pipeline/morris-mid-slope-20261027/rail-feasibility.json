@@ -1,0 +1,8 @@
+{
+  "source": "saved actual-siting-inputs rail world points transformed by preserved Morris root frame; current normal GPU/rail ride not verified",
+  "road_minimum_horizontal_rail_center_distance": 17.764600246062336,
+  "road_half_width": 1.6,
+  "rail_cut": false,
+  "new_cross_rail_bridge_built": false,
+  "decision": "existing route does not intersect saved rail alignment; keep train geometry. A separate crossing requires intended endpoints and actual current rail/vehicle vertical envelope before construction, so no speculative bridge inserted."
+}

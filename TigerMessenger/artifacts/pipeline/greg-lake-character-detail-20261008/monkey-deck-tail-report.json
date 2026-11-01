@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-08",
+  "fix": "Repair-only long tail coils above footplane instead of piercing deck/hull.",
+  "source": "src/world/moebiusSwamp.js",
+  "api": "buildLongTailMonkey(rnd, {tailPose:'deck'})",
+  "callSites": [
+    "mkLift",
+    "mkTop"
+  ],
+  "ordinaryTailPose": "hanging, unchanged for all three ordinary monkeys",
+  "measurementsLocal": {
+    "hangingArcLength": 2.6755539735778635,
+    "deckArcLength": 2.6755539541960665,
+    "deckTailMinimumY": 0.18961209058761597,
+    "minimumYAtOriginalMinusPoint18LiftLean": 0.04519672039036432
+  },
+  "preserved": [
+    "Five identities",
+    "Random consumption",
+    "Worker positions/scales/parents",
+    "Arm pivots and original repair animation",
+    "Tail length and taper",
+    "Three ordinary hanging tails"
+  ],
+  "tests": {
+    "passed": 6,
+    "failed": 0,
+    "log": "validation-monkey-deck-tail.txt"
+  },
+  "gpu": "pending root repair camera verification",
+  "backup": "monkey-deck-tail-before/moebiusSwamp.js",
+  "rollback": "Restore only monkey builder and two worker constructor call sites; never overwrite shared whole file."
+}

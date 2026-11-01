@@ -1,0 +1,40 @@
+{
+  "task": "Feeder local smooth path repair checkpoint",
+  "target": "Swim, breathe and feed whales without paddles striking child; keep five boat lanes",
+  "visual_observations": {
+    "source": "Production CPU geometry and movement logs; fresh GPU not available",
+    "completed": [
+      "Feeder moved to equal-distance opposite side of whale nose, with smooth inward offset during dives",
+      "150seconds all-five-boat surface distance minimum0.875159worldm",
+      "Roots walls walkway minimum1.31205worldm; feeding mouth agreement retained"
+    ],
+    "remaining": [
+      "Continuous swept collision and containment not certified",
+      "Fresh GPU visual review missing"
+    ]
+  },
+  "checks": [
+    {
+      "name": "sampled paddle clearance>=0.25worldm",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "feeding breathing identity and smooth motion",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "new GPU traffic and visual review",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Original five flowerboat routes unchanged",
+    "Rejected inside-only fix retained; no weaker thresholds"
+  ],
+  "evidence_revision": {
+    "cpu_sha256": "960c6a1055f61d135664d632e975ef8bb57690ec5a01c376754bbaab90333150"
+  }
+}

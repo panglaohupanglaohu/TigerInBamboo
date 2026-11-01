@@ -1,0 +1,265 @@
+:root {
+  --ink: #12232e;
+  --panel: rgba(255, 255, 255, 0.82);
+  --panel-line: rgba(18, 35, 46, 0.09);
+  --shadow: 0 6px 22px rgba(18, 35, 46, 0.16), 0 1px 2px rgba(18, 35, 46, 0.12);
+  --accent: #e4573d;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #7fb3c8;
+  font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+#view {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+#hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.panel {
+  pointer-events: auto;
+  background: var(--panel);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+/* ---------- palette ---------- */
+#palette {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 1px 3px rgba(18, 35, 46, 0.22);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.swatch:hover { transform: scale(1.08); }
+
+.swatch.active {
+  border-color: var(--ink);
+  transform: scale(1.12);
+  box-shadow: 0 0 0 3px rgba(18, 35, 46, 0.18), 0 2px 6px rgba(18, 35, 46, 0.3);
+}
+
+/* ---------- tools ---------- */
+#tools {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+}
+
+.tool {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.tool:hover { background: rgba(18, 35, 46, 0.07); }
+.tool.active { background: var(--ink); color: #fff; }
+.tool:disabled { opacity: 0.32; cursor: default; background: transparent; }
+
+.sep {
+  width: 1px;
+  height: 20px;
+  background: var(--panel-line);
+  margin: 0 3px;
+}
+
+/* ---------- top right ---------- */
+#topright {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  display: flex;
+  gap: 2px;
+  padding: 6px;
+}
+
+#topright button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#topright button:hover { background: rgba(18, 35, 46, 0.07); }
+
+/* ---------- toast ---------- */
+#toast {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translate(-50%, 12px);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(18, 35, 46, 0.88);
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- help ---------- */
+#helpcard {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(430px, calc(100vw - 48px));
+  padding: 22px 24px 20px;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+#helpcard.hidden { display: none; }
+
+#helpcard h1 {
+  margin: 0 0 14px;
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+#helpcard h1 span {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+#helpcard p { margin: 0 0 10px; color: rgba(18, 35, 46, 0.76); }
+
+#helpcard kbd {
+  display: inline-block;
+  min-width: 17px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(18, 35, 46, 0.16);
+  border-bottom-width: 2px;
+  background: #fff;
+  font: inherit;
+  font-size: 11px;
+  text-align: center;
+}
+
+#helpclose {
+  margin-top: 6px;
+  width: 100%;
+  padding: 9px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  #palette { grid-template-columns: 1fr 1fr 1fr; }
+  .swatch { width: 24px; height: 24px; }
+}
+
+#home {
+  position: fixed; left: 16px; top: 16px; padding: 8px 12px; text-decoration: none;
+  color: #23343c; font: 600 13px/1 system-ui, -apple-system, "PingFang SC", sans-serif; z-index: 5;
+}
+#home:hover { background: #fff; }
+
+/* 场景切换（左上） */
+#scenes { position: fixed; left: 16px; top: 16px; display: flex; gap: 4px; padding: 5px; z-index: 5; }
+#scenes .scene { border: 0; background: transparent; border-radius: 10px; padding: 6px 12px; cursor: pointer; text-align: left;
+  font: 13px/1.25 -apple-system, system-ui, "PingFang SC", sans-serif; color: #23343c; }
+#scenes .scene b { display: block; font-size: 14px; }
+#scenes .scene small { color: #5e737a; font-size: 11px; }
+#scenes .scene:hover { background: rgba(255,255,255,.6); }
+#scenes .scene.active { background: #1f3139; color: #fff; }
+#scenes .scene.active small { color: #c9d8dc; }
+#palette { top: 50%; transform: translateY(-50%); }
+#scenes .gridswitch { display: flex; flex-direction: column; gap: 2px; justify-content: center; padding-right: 6px; margin-right: 2px; border-right: 1px solid rgba(31,49,57,.15); }
+#scenes .gridswitch button { border: 0; background: transparent; border-radius: 7px; padding: 3px 8px; font-size: 11.5px; cursor: pointer; color: #1f3139; white-space: nowrap; }
+#scenes .gridswitch button:hover { background: rgba(255,255,255,.6); }
+#scenes .gridswitch button.active { background: #2f7f8a; color: #fff; }
+@media (max-width: 720px) { #scenes .scene small { display: none; } }
+
+/* ---- 完整管线示例（src/ui/walkthrough.js） ---- */
+#scenes .walkbtn { margin-left: 4px; border-left: 1px solid rgba(31,49,57,.15); border-radius: 0 10px 10px 0; }
+#scenes .walkbtn b { color: #2f7f8a; }
+#walk { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); width: min(560px, calc(100vw - 32px)); padding: 14px 16px 12px; z-index: 8; font-size: 13.5px; line-height: 1.55; }
+#walk.hidden { display: none; }
+#walk .wk-head { display: flex; align-items: center; gap: 8px; }
+#walk .wk-step { color: #fff; border-radius: 999px; padding: 1px 9px; font-size: 12px; font-weight: 700; }
+#walk .wk-lane { color: #5e737a; font-size: 12px; flex: 1; }
+#walk .wk-x { border: 0; background: transparent; font-size: 15px; cursor: pointer; color: #5e737a; }
+#walk h3 { margin: 6px 0 6px; font-size: 18px; }
+#walk blockquote { margin: 4px 0; padding: 4px 10px; border-left: 3px solid #c9d8dc; color: #33474e; font-style: italic; display: flex; gap: 8px; align-items: baseline; }
+#walk blockquote span { font-style: normal; font-size: 11px; color: #7f9399; margin-left: auto; white-space: nowrap; }
+#walk blockquote.small { font-style: normal; }
+#walk .wk-play { border: 0; background: #2f7f8a; color: #fff; border-radius: 6px; padding: 0 7px; cursor: pointer; font-size: 11px; line-height: 20px; }
+#walk p { margin: 6px 0; }
+#walk .wk-note { color: #5e737a; font-size: 12.5px; }
+#walk code { display: block; font-size: 12px; color: #2f7f8a; background: #eef4f3; padding: 3px 8px; border-radius: 6px; margin: 6px 0 8px; }
+#walk .wk-dots { display: flex; gap: 6px; justify-content: center; margin: 4px 0 8px; }
+#walk .wk-dots i { width: 9px; height: 9px; border-radius: 50%; background: #d6e2e1; cursor: pointer; }
+#walk .wk-dots i.past { background: #8fbcc2; }
+#walk .wk-dots i.on { background: #1f3139; transform: scale(1.25); }
+#walk .wk-nav { display: flex; gap: 8px; justify-content: space-between; }
+#walk .wk-nav button { border: 0; border-radius: 9px; padding: 7px 14px; cursor: pointer; background: #eef4f3; color: #1f3139; font-weight: 600; }
+#walk .wk-nav .wk-next { background: #1f3139; color: #fff; }
+#walk .wk-nav button:disabled { opacity: .4; cursor: default; }
+#walk .wk-video { width: 100%; border-radius: 8px; margin-top: 8px; max-height: 220px; background: #000; }
+#walk .wk-video.hidden { display: none; }
+@media (max-width: 720px) { #walk { bottom: 8px; padding: 10px 12px; } #walk h3 { font-size: 16px; } }

@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "0499198057daeafbdd00af72e304846690eb9312af3e4b1e748e7aee7af1c479",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.46,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.57,
+        "review": 0.43
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.43
+    }
+  },
+  "usage": {
+    "input_tokens": 775,
+    "output_tokens": 91,
+    "cost_usd": 0.000326,
+    "credits_remaining_usd": 4.916627
+  },
+  "elapsed_ms": 1869,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "R7 normal startup and combat",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "traditional casualty transport and full battle cycle",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "fde6383748367a1cf4f1cdf84290915ba9029238901b9f66a773237efc3f5c4d",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.7,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0,
+        "navigation": 0.23,
+        "review": 0.76
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.3
+    }
+  },
+  "usage": {
+    "input_tokens": 847,
+    "output_tokens": 91,
+    "cost_usd": 0.000356,
+    "credits_remaining_usd": 4.893549
+  },
+  "elapsed_ms": 1385,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "current GPU route view review",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "normal current GLB complete route riding",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

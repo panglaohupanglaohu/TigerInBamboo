@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import {writeFileSync,readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import * as THREE from 'three';
+import {createBatianArsenal,shieldSegmentHit} from '../../../src/world/batianArsenal.js';
+import {synthBatianShieldHit} from '../../../src/audio/batianShieldSound.js';
+const require=createRequire(import.meta.url),{OfflineAudioContext}=require('/tmp/tigermessenger-audio-render/node_modules/web-audio-engine');
+const scene=new THREE.Scene(),aircraft=new THREE.Group();scene.add(aircraft);let hits=[];
+const arsenal=createBatianArsenal({scene,aircraft,audio:{shieldHit:p=>hits.push(p.clone())}});
+const hit=shieldSegmentHit(new THREE.Vector3(0,0,90),new THREE.Vector3(0,0,0),aircraft);
+assert.ok(hit);arsenal.shieldImpact(hit,aircraft);assert.equal(hits.length,1);assert.ok(hits[0].distanceTo(hit)<1e-6);
+assert.equal(scene.getObjectByName('batian-arsenal-live').children.length,3);
+const escort=new THREE.Group();scene.add(escort);arsenal.shieldImpact(new THREE.Vector3(0,0,6),escort);assert.equal(hits.length,1,'escorts do not spam flagship shield sound');
+arsenal.shieldImpact(new THREE.Vector3(),aircraft);assert.equal(hits.length,1,'invalid center creates no sound');
+assert.equal(shieldSegmentHit(new THREE.Vector3(80,0,90),new THREE.Vector3(80,0,0),aircraft),null,'miss produces no interception');
+arsenal.dispose();
+const main=readFileSync(new URL('../../../src/main.js',import.meta.url),'utf8');assert.match(main,/shieldHit:sfxBatianShieldHit/);
+const sr=48000,duration=4.5,ctx=new OfflineAudioContext(1,sr*duration,sr),gain=ctx.createGain();gain.gain.value=.85*.8*.9;gain.connect(ctx.destination);
+const times=[.15,1.05,2.05,2.14,2.23,2.32,2.41,2.5];times.forEach((t,i)=>synthBatianShieldHit(ctx,gain,t,i));
+const rendered=await ctx.startRendering(),data=rendered.getChannelData(0);let peak=0,sum=0,clipped=0;for(const v of data){assert.ok(Number.isFinite(v));peak=Math.max(peak,Math.abs(v));sum+=v*v;if(Math.abs(v)>=1)clipped++;}
+assert.equal(clipped,0);assert.ok(peak>.2&&peak<1);assert.ok(data.slice(sr*4).every(v=>Math.abs(v)<.00001),'tail ends cleanly');
+const b=Buffer.alloc(44+data.length*2);b.write('RIFF');b.writeUInt32LE(b.length-8,4);b.write('WAVE',8);b.write('fmt ',12);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(sr,24);b.writeUInt32LE(sr*2,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(data.length*2,40);for(let i=0;i<data.length;i++)b.writeInt16LE(Math.round(data[i]*32767),44+i*2);
+writeFileSync(new URL('batian-shield-hit.wav',import.meta.url),b);
+const result={duration,sampleRate:sr,peak,rms:Math.sqrt(sum/data.length),clippedSamples:clipped,interceptionCallback:true,rippleWaves:3,escortExcluded:true,missExcluded:true,productionWiring:true,render:'offline shared production synth; not live game capture',browserValidation:false};writeFileSync(new URL('verification.json',import.meta.url),JSON.stringify(result,null,2));console.log(result);

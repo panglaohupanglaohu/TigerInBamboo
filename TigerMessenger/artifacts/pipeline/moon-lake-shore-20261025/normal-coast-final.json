@@ -1,0 +1,1062 @@
+{
+  "source": "normal-game-installed",
+  "view": "岸线俯看",
+  "shore": {
+    "revision": "shore-r2-20261025",
+    "boundaryVertices": 392,
+    "maxOutwardWidth": 0.27,
+    "maxRadius": 3.77,
+    "pathInner": 3.8,
+    "originalCirclesPreserved": true,
+    "terrainChanged": false,
+    "collidersChanged": false,
+    "groundBinding": {
+      "source": "final-hills-mesh",
+      "seated": 392,
+      "missing": 0
+    },
+    "outerCoast": {
+      "revision": "moon-coast-r4d-20261025",
+      "status": "installed",
+      "window": {
+        "minAngle": 20,
+        "maxAngle": 70,
+        "innerRadius": 64,
+        "outerRadius": 78,
+        "edgeFadeDegrees": 12
+      },
+      "shellLimit": 107.71808378824403,
+      "protectedSites": [],
+      "terrainEdited": true,
+      "globalSeaEdited": false,
+      "raySamples": 0,
+      "triangleQueries": 0,
+      "rayMisses": 0,
+      "shells": [
+        "2395c571-59eb-4ed3-9c6d-60f42cf78a5c"
+      ],
+      "newBank": {
+        "uuid": "a2814084-5a82-490d-8668-af92ef267152",
+        "vertices": 3597,
+        "triangles": 6912
+      },
+      "indexedTriangles": 7997,
+      "shadowMasks": true,
+      "innerSeam": "source-colour-normal;geometry overlaps clipping boundary .7m with .006m seating bias",
+      "endpointFeather": "12deg original-surface collar; main curved bank r64..78"
+    }
+  },
+  "outerCoast": {
+    "revision": "moon-coast-r4d-20261025",
+    "status": "installed",
+    "window": {
+      "minAngle": 20,
+      "maxAngle": 70,
+      "innerRadius": 64,
+      "outerRadius": 78,
+      "edgeFadeDegrees": 12
+    },
+    "shellLimit": 107.71808378824403,
+    "protectedSites": [],
+    "terrainEdited": true,
+    "globalSeaEdited": false,
+    "raySamples": 0,
+    "triangleQueries": 0,
+    "rayMisses": 0,
+    "shells": [
+      "2395c571-59eb-4ed3-9c6d-60f42cf78a5c"
+    ],
+    "newBank": {
+      "uuid": "a2814084-5a82-490d-8668-af92ef267152",
+      "vertices": 3597,
+      "triangles": 6912
+    },
+    "indexedTriangles": 7997,
+    "shadowMasks": true,
+    "innerSeam": "source-colour-normal;geometry overlaps clipping boundary .7m with .006m seating bias",
+    "endpointFeather": "12deg original-surface collar; main curved bank r64..78"
+  },
+  "originalPine": "27a84c3e-9361-401c-90c7-9cf116815eeb",
+  "moon": [
+    4.5165650718453945,
+    9.201101357141269,
+    -5.947006806098864
+  ],
+  "moonOrbit": {
+    "period": 180,
+    "radius": 7.467680362736477,
+    "centre": [
+      0,
+      0
+    ],
+    "baselineHeight": 5.6,
+    "peakHeight": 15.78669053193958,
+    "obstacleCount": 5,
+    "sampledVertices": 11501,
+    "clearanceMethod": "one-time obstacle vertex envelope; finite sampling approximation, not exact triangle collision",
+    "clearanceMargin": 0.22,
+    "continuous": true,
+    "minimumHeight": 5.599999999999998,
+    "clearanceRadius": 3.6308626474837715,
+    "rawPeakHeight": 15.78669053193958
+  },
+  "garden": {
+    "version": 4,
+    "readabilityRevision": 4,
+    "target": "greg-moon-target-v2.png",
+    "layout": "Greg four NEW individually authored2/4/5/6; lean left clears floating crescent, smaller rear spread, low left windswept, right foreground arching; original ancient pine and forest retained separately",
+    "originalLakeChanged": false,
+    "originalPineChanged": false,
+    "originalForestChanged": false,
+    "moonChanged": false,
+    "surface": "caller-final-local-surface",
+    "navigationVerified": false,
+    "sites": [
+      {
+        "id": 2,
+        "role": "lean",
+        "x": -14.5,
+        "z": -4.5,
+        "yaw": 0,
+        "y": -0.9022164477765102,
+        "rootRadius": 1.55,
+        "pathGap": 8.932226450688976,
+        "model": {
+          "version": 3,
+          "displayScale": 1,
+          "id": 2,
+          "role": "lean",
+          "source": "Greg approved target v2; authored curved trunk/horizontal branches/irregular needle plates",
+          "trunk": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -0.5,
+              1.15,
+              0.06
+            ],
+            [
+              -1.65,
+              2.4,
+              0.14
+            ],
+            [
+              -2.65,
+              3.45,
+              0.2
+            ],
+            [
+              -2.35,
+              4.55,
+              0.13
+            ],
+            [
+              -1.15,
+              5.75,
+              0.1
+            ]
+          ],
+          "arms": [
+            [
+              [
+                -1.7,
+                2.45,
+                0.15
+              ],
+              [
+                -3.2,
+                2.6,
+                0.35
+              ],
+              [
+                -4.65,
+                3,
+                0.45
+              ]
+            ],
+            [
+              [
+                -2.6,
+                3.4,
+                0.2
+              ],
+              [
+                -4,
+                3.8,
+                0.1
+              ],
+              [
+                -5.25,
+                4.25,
+                0.15
+              ]
+            ],
+            [
+              [
+                -2.5,
+                4.15,
+                0.17
+              ],
+              [
+                -0.7,
+                4.25,
+                -0.3
+              ],
+              [
+                1.15,
+                4.65,
+                -0.5
+              ]
+            ],
+            [
+              [
+                -2.2,
+                4.7,
+                0.12
+              ],
+              [
+                -2.9,
+                5.4,
+                0.45
+              ],
+              [
+                -3.65,
+                5.8,
+                0.6
+              ]
+            ],
+            [
+              [
+                -1.5,
+                5.4,
+                0.1
+              ],
+              [
+                -0.7,
+                5.85,
+                0.05
+              ],
+              [
+                0.15,
+                5.95,
+                0
+              ]
+            ]
+          ],
+          "crowns": [
+            [
+              -4.45,
+              3.2,
+              0.45,
+              2.7,
+              1.6,
+              0.25
+            ],
+            [
+              -5.05,
+              4.45,
+              0.15,
+              3,
+              1.7,
+              0.25
+            ],
+            [
+              0.75,
+              4.85,
+              -0.5,
+              3,
+              1.8,
+              0.29
+            ],
+            [
+              -3.45,
+              5.95,
+              0.6,
+              3.1,
+              1.8,
+              0.28
+            ],
+            [
+              -0.35,
+              6.1,
+              0,
+              2.8,
+              1.65,
+              0.28
+            ]
+          ],
+          "rootRadius": 1.55,
+          "trunkBaseRadius": 0.75,
+          "limbCount": 30,
+          "leafPlateCount": 15,
+          "crownPrimitive": "custom irregular flattened solid; no sphere",
+          "localBounds": {
+            "min": [
+              -7.041409015655518,
+              -0.29898402094841003,
+              -1.9079862833023071
+            ],
+            "max": [
+              2.4855895042419434,
+              6.573999881744385,
+              2.016650676727295
+            ]
+          },
+          "meshes": 4,
+          "triangles": 11120
+        },
+        "worldBounds": {
+          "min": [
+            -5.1765107083472195,
+            159.87188874922666,
+            -10.586818028768727
+          ],
+          "max": [
+            4.658225109454122,
+            167.6566454606735,
+            -6.563901055936404
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "role": "spread",
+        "x": 0,
+        "z": -8.5,
+        "yaw": 0.05,
+        "y": -0.40912768223415696,
+        "rootRadius": 1.25,
+        "pathGap": 2.55,
+        "model": {
+          "version": 3,
+          "displayScale": 1,
+          "id": 4,
+          "role": "spread",
+          "source": "Greg approved target v2; authored curved trunk/horizontal branches/irregular needle plates",
+          "trunk": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -0.65,
+              0.9,
+              0.08
+            ],
+            [
+              -1.4,
+              1.7,
+              0.2
+            ],
+            [
+              -0.65,
+              2.6,
+              0.1
+            ],
+            [
+              0.15,
+              3.5,
+              -0.05
+            ],
+            [
+              -0.35,
+              4.2,
+              0
+            ]
+          ],
+          "arms": [
+            [
+              [
+                -1.3,
+                1.8,
+                0.2
+              ],
+              [
+                -2.65,
+                2,
+                0.4
+              ],
+              [
+                -3.7,
+                2.3,
+                0.45
+              ]
+            ],
+            [
+              [
+                -0.7,
+                2.6,
+                0.1
+              ],
+              [
+                1.2,
+                2.65,
+                -0.15
+              ],
+              [
+                2.7,
+                3,
+                -0.3
+              ]
+            ],
+            [
+              [
+                0.1,
+                3.4,
+                -0.05
+              ],
+              [
+                -1.4,
+                3.5,
+                0.6
+              ],
+              [
+                -2.5,
+                3.85,
+                0.8
+              ]
+            ],
+            [
+              [
+                -0.2,
+                3.95,
+                0
+              ],
+              [
+                0.75,
+                4.25,
+                -0.1
+              ],
+              [
+                1.3,
+                4.35,
+                -0.15
+              ]
+            ]
+          ],
+          "crowns": [
+            [
+              -3.45,
+              2.5,
+              0.45,
+              2.6,
+              1.6,
+              0.23
+            ],
+            [
+              2.3,
+              3.2,
+              -0.3,
+              2.9,
+              1.7,
+              0.25
+            ],
+            [
+              -2.15,
+              4,
+              0.8,
+              2.5,
+              1.6,
+              0.24
+            ],
+            [
+              0.7,
+              4.5,
+              -0.15,
+              2.6,
+              1.65,
+              0.24
+            ]
+          ],
+          "rootRadius": 1.25,
+          "trunkBaseRadius": 0.59,
+          "limbCount": 26,
+          "leafPlateCount": 12,
+          "crownPrimitive": "custom irregular flattened solid; no sphere",
+          "localBounds": {
+            "min": [
+              -5.209401607513428,
+              -0.3454242944717407,
+              -1.6090720891952515
+            ],
+            "max": [
+              4.110383987426758,
+              4.934000015258789,
+              1.9147546291351318
+            ]
+          },
+          "meshes": 4,
+          "triangles": 9408
+        },
+        "worldBounds": {
+          "min": [
+            10.97711638758629,
+            158.62628804562834,
+            -14.429555872846915
+          ],
+          "max": [
+            20.672705008765192,
+            164.7793809449357,
+            -10.393262565920402
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "role": "windswept",
+        "x": -9,
+        "z": 7.5,
+        "yaw": 0,
+        "y": -0.1259482387547166,
+        "rootRadius": 1.55,
+        "pathGap": 5.465374513859982,
+        "model": {
+          "version": 3,
+          "displayScale": 1,
+          "id": 5,
+          "role": "windswept",
+          "source": "Greg approved target v2; authored curved trunk/horizontal branches/irregular needle plates",
+          "trunk": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              -0.5,
+              0.9,
+              0.1
+            ],
+            [
+              -1.55,
+              1.85,
+              0.15
+            ],
+            [
+              -2.8,
+              2.65,
+              0.1
+            ],
+            [
+              -3.8,
+              3.2,
+              0.18
+            ]
+          ],
+          "arms": [
+            [
+              [
+                -1.5,
+                1.8,
+                0.15
+              ],
+              [
+                -3.7,
+                1.95,
+                0.5
+              ],
+              [
+                -5.5,
+                2.25,
+                0.7
+              ]
+            ],
+            [
+              [
+                -2.7,
+                2.6,
+                0.1
+              ],
+              [
+                -2.5,
+                3.55,
+                -0.2
+              ],
+              [
+                -1.85,
+                3.85,
+                -0.35
+              ]
+            ],
+            [
+              [
+                -0.65,
+                1.15,
+                0.12
+              ],
+              [
+                1,
+                1.85,
+                -0.25
+              ],
+              [
+                2.45,
+                2.1,
+                -0.4
+              ]
+            ],
+            [
+              [
+                -3.6,
+                3.1,
+                0.17
+              ],
+              [
+                -4.75,
+                3.4,
+                0.2
+              ],
+              [
+                -5.7,
+                3.5,
+                0.2
+              ]
+            ]
+          ],
+          "crowns": [
+            [
+              -5.05,
+              2.45,
+              0.7,
+              3.5,
+              1.9,
+              0.25
+            ],
+            [
+              -1.95,
+              4,
+              -0.35,
+              3.3,
+              1.9,
+              0.27
+            ],
+            [
+              2.05,
+              2.3,
+              -0.4,
+              3.4,
+              1.8,
+              0.25
+            ],
+            [
+              -5.4,
+              3.65,
+              0.2,
+              3.1,
+              1.8,
+              0.26
+            ]
+          ],
+          "rootRadius": 1.55,
+          "trunkBaseRadius": 0.73,
+          "limbCount": 26,
+          "leafPlateCount": 12,
+          "crownPrimitive": "custom irregular flattened solid; no sphere",
+          "localBounds": {
+            "min": [
+              -7.429349899291992,
+              -0.3544747829437256,
+              -2.0773544311523438
+            ],
+            "max": [
+              3.8789446353912354,
+              4.464000225067139,
+              1.9162883758544922
+            ]
+          },
+          "meshes": 4,
+          "triangles": 9408
+        },
+        "worldBounds": {
+          "min": [
+            -0.08756532903141068,
+            160.19837645609059,
+            1.2797887133875516
+          ],
+          "max": [
+            11.398868264619825,
+            166.11665647341158,
+            5.3437181814423065
+          ]
+        }
+      },
+      {
+        "id": 6,
+        "role": "arching",
+        "x": 7.5,
+        "z": 8,
+        "yaw": 0.15,
+        "y": -0.2155118993968017,
+        "rootRadius": 1.55,
+        "pathGap": 4.715856099730654,
+        "model": {
+          "version": 3,
+          "displayScale": 1,
+          "id": 6,
+          "role": "arching",
+          "source": "Greg approved target v2; authored curved trunk/horizontal branches/irregular needle plates",
+          "trunk": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0.4,
+              1.25,
+              0.04
+            ],
+            [
+              1.2,
+              2.55,
+              0.15
+            ],
+            [
+              0.8,
+              3.65,
+              0.22
+            ],
+            [
+              -0.35,
+              4.45,
+              0.12
+            ],
+            [
+              -1.55,
+              4.7,
+              0.05
+            ]
+          ],
+          "arms": [
+            [
+              [
+                1.1,
+                2.6,
+                0.15
+              ],
+              [
+                -0.7,
+                2.85,
+                0.55
+              ],
+              [
+                -2.4,
+                3.1,
+                0.8
+              ],
+              [
+                -3.7,
+                3.6,
+                0.9
+              ]
+            ],
+            [
+              [
+                0.85,
+                3.6,
+                0.22
+              ],
+              [
+                2.35,
+                3.65,
+                -0.2
+              ],
+              [
+                3.7,
+                4.05,
+                -0.4
+              ]
+            ],
+            [
+              [
+                -0.3,
+                4.4,
+                0.13
+              ],
+              [
+                -0.15,
+                5.35,
+                0.1
+              ],
+              [
+                0.5,
+                5.65,
+                0
+              ]
+            ],
+            [
+              [
+                -1.1,
+                4.65,
+                0.07
+              ],
+              [
+                -2.1,
+                5,
+                0.35
+              ],
+              [
+                -3.2,
+                5.15,
+                0.4
+              ]
+            ]
+          ],
+          "crowns": [
+            [
+              -3.25,
+              3.8,
+              0.9,
+              3.4,
+              1.9,
+              0.27
+            ],
+            [
+              3.25,
+              4.25,
+              -0.4,
+              3,
+              1.7,
+              0.25
+            ],
+            [
+              0.25,
+              5.8,
+              0,
+              3.1,
+              1.85,
+              0.28
+            ],
+            [
+              -2.8,
+              5.3,
+              0.4,
+              3.2,
+              1.8,
+              0.26
+            ]
+          ],
+          "rootRadius": 1.55,
+          "trunkBaseRadius": 0.75,
+          "limbCount": 26,
+          "leafPlateCount": 12,
+          "crownPrimitive": "custom irregular flattened solid; no sphere",
+          "localBounds": {
+            "min": [
+              -5.611344814300537,
+              -0.22853748500347137,
+              -1.7195035219192505
+            ],
+            "max": [
+              5.159518241882324,
+              6.27400016784668,
+              2.1716291904449463
+            ]
+          },
+          "meshes": 4,
+          "triangles": 9408
+        },
+        "worldBounds": {
+          "min": [
+            18.087189398906034,
+            158.50233489358817,
+            1.3788867356319257
+          ],
+          "max": [
+            29.527563394089224,
+            165.99988601226542,
+            6.8871969120585295
+          ]
+        }
+      }
+    ],
+    "rejected": [],
+    "groundcover": [
+      {
+        "x": -15.3,
+        "z": -5.6,
+        "r": 1.15,
+        "planter": false
+      },
+      {
+        "x": -13.2,
+        "z": -5,
+        "r": 0.8,
+        "planter": false
+      },
+      {
+        "x": -1.6,
+        "z": -9,
+        "r": 1.1,
+        "planter": false
+      },
+      {
+        "x": 1.5,
+        "z": -9.1,
+        "r": 0.8,
+        "planter": false
+      },
+      {
+        "x": -10.2,
+        "z": 7.2,
+        "r": 1.05,
+        "planter": false
+      },
+      {
+        "x": -8,
+        "z": 8.4,
+        "r": 0.8,
+        "planter": false
+      },
+      {
+        "x": 6.2,
+        "z": 8.5,
+        "r": 1,
+        "planter": false
+      },
+      {
+        "x": 8.4,
+        "z": 9.2,
+        "r": 0.8,
+        "planter": false
+      },
+      {
+        "x": 8.1,
+        "z": 2.4,
+        "r": 0.65,
+        "planter": false
+      },
+      {
+        "x": 10.8,
+        "z": 1.1,
+        "r": 0.7,
+        "planter": false
+      },
+      {
+        "x": -6.5,
+        "z": -1.8,
+        "r": 0.7,
+        "planter": false
+      }
+    ],
+    "draws": 20,
+    "triangles": 42183,
+    "groundBinding": {
+      "source": "final-hills-mesh",
+      "samples": 1094,
+      "missing": 0,
+      "trackRejected": 0,
+      "rootClearance": 2.1
+    },
+    "placement": [
+      {
+        "id": 2,
+        "requested": [
+          -14.5,
+          -4.5
+        ],
+        "placed": [
+          -14.5,
+          -4.5
+        ],
+        "existingSceneChanged": false
+      },
+      {
+        "id": 4,
+        "requested": [
+          0,
+          -8.5
+        ],
+        "placed": [
+          0,
+          -8.5
+        ],
+        "existingSceneChanged": false
+      },
+      {
+        "id": 5,
+        "requested": [
+          -9,
+          7.5
+        ],
+        "placed": [
+          -9,
+          7.5
+        ],
+        "existingSceneChanged": false
+      },
+      {
+        "id": 6,
+        "requested": [
+          7.5,
+          8
+        ],
+        "placed": [
+          7.5,
+          8
+        ],
+        "existingSceneChanged": false
+      }
+    ],
+    "originalScenePreserved": true,
+    "requestedAdditions": 4
+  },
+  "trees": [
+    {
+      "uuid": "68caeb1f-9753-4814-83cc-c2c6aa7e30b6",
+      "name": "moon-lake-pine-2-lean",
+      "position": [
+        -14.5,
+        -0.9022164477765102,
+        -4.5
+      ],
+      "meshes": 4,
+      "enabledMeshes": 4,
+      "labelOnScreen": true,
+      "occlusionVerified": false
+    },
+    {
+      "uuid": "3d62e463-e3e5-4d5d-99f2-039f7cbc6b0f",
+      "name": "moon-lake-pine-4-spread",
+      "position": [
+        0,
+        -0.40912768223415696,
+        -8.5
+      ],
+      "meshes": 4,
+      "enabledMeshes": 4,
+      "labelOnScreen": true,
+      "occlusionVerified": false
+    },
+    {
+      "uuid": "26805eb3-8568-4920-bf5d-00598428f873",
+      "name": "moon-lake-pine-5-windswept",
+      "position": [
+        -9,
+        -0.1259482387547166,
+        7.5
+      ],
+      "meshes": 4,
+      "enabledMeshes": 4,
+      "labelOnScreen": true,
+      "occlusionVerified": false
+    },
+    {
+      "uuid": "dac54db4-39f2-44d2-a0ec-514df7305adc",
+      "name": "moon-lake-pine-6-arching",
+      "position": [
+        7.5,
+        -0.2155118993968017,
+        8
+      ],
+      "meshes": 4,
+      "enabledMeshes": 4,
+      "labelOnScreen": true,
+      "occlusionVerified": false
+    }
+  ]
+}

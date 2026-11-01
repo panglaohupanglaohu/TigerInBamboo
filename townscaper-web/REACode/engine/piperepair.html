@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — PipeRepair（难用的模块集 + 自修复）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #4a4642; overflow: hidden;
+    font: 12px/1.45 -apple-system, "PingFang SC", sans-serif; color: #e6e2dd; }
+  #wrap { display: flex; height: 100%; }
+  #stage { flex: 1 1 auto; min-width: 0; position: relative; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #panel { flex: 0 0 292px; width: 292px; background: #35322e; border-left: 1px solid #262421;
+    padding: 12px; box-sizing: border-box; overflow-y: auto; }
+  .t { color: #9a938b; font-size: 11px; margin: 12px 0 5px; border-bottom: 1px solid #443f3a; padding-bottom: 3px; }
+  .t:first-child { margin-top: 0; }
+  .stat { font: 11px ui-monospace, monospace; color: #b9d8c4; }
+  .stat b { color: #fff; }
+  button { background: #443f3a; color: #e6e2dd; border: 1px solid #565049; border-radius: 3px;
+    padding: 4px 10px; font: 11px inherit; cursor: pointer; margin: 0 4px 4px 0; }
+  button:hover { background: #524b45; }
+  button.on { background: #6a5a3f; border-color: #8a764f; }
+  table { border-collapse: collapse; font: 11px ui-monospace, monospace; width: 100%; }
+  td, th { text-align: right; padding: 2px 3px; border-bottom: 1px solid #3d3833; }
+  td:first-child, th:first-child { text-align: left; }
+  th { color: #9a938b; font-weight: 500; }
+  .good { color: #8ff0b8; } .bad { color: #ff9a8a; }
+  #hint { position: absolute; left: 12px; bottom: 8px; font: 11px ui-monospace, monospace; color: #b9b0a7; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="stage">
+    <canvas id="view"></canvas>
+    <div id="hint">白色=管子 · 红框=接口对不上的格子 · 黄框=当前处理的格子（原文 793806535898136576）</div>
+  </div>
+  <div id="panel">
+    <div class="t">模块库（越少越"难用"）</div>
+    <div id="libs"></div>
+    <div class="t">操作</div>
+    <div>
+      <button id="btnGen">重新生成 + 破坏</button>
+      <button id="btnStep">单步修复</button>
+      <button id="btnAuto">整段修复</button>
+    </div>
+    <div class="t">状态</div>
+    <div class="stat" id="stats"></div>
+    <div class="t">各库成品率（5 seed）</div>
+    <div id="summary"></div>
+    <div class="t">说明</div>
+    <div style="font:11px/1.6 ui-monospace,monospace;color:#9a938b">
+      修复 = 逐格贪心下降（换模块）→ 换不动才删格 → 成对重连。<br>
+      单格贪心永远接不上断口（两边都闭着才不漏），所以必须成对改。
+    </div>
+  </div>
+</div>
+<script type="module">
+import {
+  generate, repair, reconnect, findLeaks, componentStats, drawPipes, localLeaks,
+  repairReport, makeLibrary,
+} from '../src/piperepair.js';
+
+const cv = document.getElementById('view');
+const ctx = cv.getContext('2d');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+let W = 0, H = 0;
+
+let libKind = 'normal';
+let state = null;      // { g, lib, leaks, select }
+let fixed = null;      // 修复后快照
+let view = 'before';
+
+function resize() {
+  const r = cv.getBoundingClientRect();
+  W = r.width; H = r.height;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+function seed(idx = 3) {
+  const { g, lib } = generate({ library: libKind, steps: 30, seed: idx, corrupt: 0.25 });
+  state = { g, lib, leaks: [], select: -1, idx, history: [] };
+  refresh();
+}
+
+function snapshot() {
+  return {
+    cells: Uint8Array.from(state.g.cells),
+    mod: Int16Array.from(state.g.mod),
+  };
+}
+function restore(s) {
+  state.g.cells.set(s.cells);
+  state.g.mod.set(s.mod);
+}
+
+function refresh() {
+  state.leaks = findLeaks(state.g, state.lib);
+  const cs = componentStats(state.g, state.lib);
+  const el = document.getElementById('stats');
+  if (view === 'after' && fixed) {
+    const lk = findLeaks(state.g, state.lib).length;
+    const c2 = componentStats(state.g, state.lib);
+    el.innerHTML = [
+      `<b>修复后</b> · 库 ${libKind}`,
+      `leak <b class="${lk ? 'bad' : 'good'}">${lk}</b>（原 ${state.origLeaks}）`,
+      `连通块 <b class="good">${c2.components}</b>（原 ${state.origComps}）`,
+      `最大块 ${c2.largest} / ${c2.cells} 格`,
+      `换模块 ${fixed.swaps} · 删格 ${fixed.deletes} · 重连 ${fixed.joined} 对`,
+      `耗时 ${fixed.ms}ms · 迭代 ${fixed.iters}`,
+      `模块种类 ${state.lib.length}`,
+    ].join('<br>');
+  } else {
+    el.innerHTML = [
+      `<b>被搞坏</b> · 库 ${libKind}`,
+      `leak <b class="${cs.components > 1 ? 'bad' : 'good'}">${state.leaks.length}</b>`,
+      `连通块 <b class="bad">${cs.components}</b>`,
+      `最大块 ${cs.largest} / ${cs.cells} 格`,
+      `模块种类 ${state.lib.length}`,
+    ].join('<br>');
+  }
+  draw();
+}
+
+function draw() {
+  if (!state) return;      // resize 可能早于第一次 seed
+  ctx.fillStyle = '#4a4642';
+  ctx.fillRect(0, 0, W, H);
+  const g = state.g;
+  const s = Math.min(W / ((g.W + g.D) * 0.9), H / ((g.W + g.D) * 0.55 + g.H)) * 0.92;
+  const ox = W / 2 - ((g.W - g.D) * 0.866 * s) / 2;
+  const oy = H / 2 + ((g.W + g.D) * 0.25 - g.H * 0.5) * s * 0.7;
+
+  // 地台
+  ctx.save();
+  for (let z = 0; z < g.D; z++) {
+    for (let x = 0; x < g.W; x++) {
+      const p0 = { x: 0, y: 0 };
+      const q = (px, pz) => {
+        const X = (px - pz) * s * 0.866, Y = (px + pz) * s * 0.5;
+        return { x: ox + X, y: oy + Y };
+      };
+      const a = q(x, z), b = q(x + 1, z), c = q(x + 1, z + 1), d = q(x, z + 1);
+      ctx.fillStyle = (x + z) % 2 ? '#5e5751' : '#66605a';
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.lineTo(c.x, c.y); ctx.lineTo(d.x, d.y);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = 'rgba(30,28,26,0.35)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  drawPipes(ctx, g, state.lib, {
+    s, ox, oy, leaks: state.leaks, select: state.select, showBoxes: true,
+  });
+}
+
+/* 按钮 */
+const libs = document.getElementById('libs');
+for (const k of ['hard', 'normal', 'easy']) {
+  const b = document.createElement('button');
+  b.textContent = k === 'hard' ? 'hard（直管+2弯头）' : k === 'normal' ? 'normal（8 种）' : 'easy（12 种）';
+  if (k === libKind) b.className = 'on';
+  b.onclick = () => { libKind = k; [...libs.children].forEach((c) => c.classList.remove('on')); b.classList.add('on'); view = 'before'; fixed = null; seed(); };
+  libs.appendChild(b);
+}
+
+let stepCursor = 0;
+document.getElementById('btnGen').onclick = () => { view = 'before'; fixed = null; stepCursor = 0; seed(3 + ((Math.random() * 5) | 0)); };
+document.getElementById('btnStep').onclick = () => {
+  // 单步：只修一个格子，方便看清"红框怎么消失"
+  const g = state.g;
+  let i = stepCursor;
+  while (i < g.cells.length && (!g.cells[i] || localLeaks(g, state.lib, i) === 0)) i++;
+  if (i >= g.cells.length) { stepCursor = 0; return; }
+  state.select = i;
+  const before = localLeaks(g, state.lib, i);
+  let best = -1, bestSc = before;
+  for (let k = 0; k < state.lib.length; k++) {
+    const old = g.mod[i]; g.mod[i] = k;
+    const sc = localLeaks(g, state.lib, i);
+    g.mod[i] = old;
+    if (sc < bestSc) { bestSc = sc; best = k; }
+  }
+  if (best >= 0) g.mod[i] = best;
+  stepCursor = i + 1;
+  refresh();
+};
+document.getElementById('btnAuto').onclick = () => {
+  state.origLeaks = findLeaks(state.g, state.lib).length;
+  state.origComps = componentStats(state.g, state.lib).components;
+  const r = repair(state.g, state.lib);
+  const rc = reconnect(state.g, state.lib);
+  fixed = { swaps: r.swaps, deletes: r.deletes, joined: rc.joined, ms: r.ms, iters: r.iters };
+  view = 'after';
+  state.leaks = findLeaks(state.g, state.lib);
+  state.select = -1;
+  refresh();
+  drawSummary();
+};
+
+function drawSummary() {
+  const rows = ['hard', 'normal', 'easy'].map((k) => {
+    const rep = repairReport({ library: k });
+    return `<tr><td>${k}</td><td>${rep.totalLeaksBefore}→${rep.totalLeaksAfter}</td>
+      <td class="${rep.fixedPct > 95 ? 'good' : ''}">${rep.fixedPct}%</td>
+      <td class="${rep.connectedRate > 0.8 ? 'good' : 'bad'}">${(rep.connectedRate * 100).toFixed(0)}%</td></tr>`;
+  }).join('');
+  document.getElementById('summary').innerHTML =
+    `<table><tr><th>库</th><th>leak</th><th>修好</th><th>连通率</th></tr>${rows}</table>`;
+}
+
+seed();
+resize();
+addEventListener('resize', resize);
+drawSummary();
+
+window.__pipe = { generate, repair, reconnect, findLeaks, componentStats, repairReport, get state() { return state; } };
+</script>
+</body>
+</html>

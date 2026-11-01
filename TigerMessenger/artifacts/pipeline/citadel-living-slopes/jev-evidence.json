@@ -1,0 +1,55 @@
+{
+  "task": "citadel-living-slopes",
+  "target": "Supported grouped vegetation and final-terrain cloud system informed by sourced Oskar experiments",
+  "visual_observations": {
+    "source": "Final coordinate-fixed cloud close-up and overview, plus unchanged tested vegetation runtime images",
+    "image_sha256": "42a7c07aa5a26acd46c3ea8b282d30e0876fff7578bbe6b32ffbf5a776c3e2ba",
+    "completed": [
+      "Grass patches visibly cover shoulders and flatter faces",
+      "Small tufts rooted on turf; grouped cypress and shrubs visible",
+      "Final mountain cache replaces obsolete cloud field",
+      "Clouds visibly follow mountain valley after removing duplicate composition offset"
+    ],
+    "remaining": [
+      "Angular turf edges inherit terrain triangles",
+      "Does not implement original Oskar contrast/depth-atlas shader"
+    ]
+  },
+  "checks": [
+    {
+      "name": "8 terrain vegetation/cloud tests passed",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "731 planted roots supported",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "23049 rail probes zero hits",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Protected structure hash unchanged",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "No runtime page errors",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Cloud coordinate frame corrected; captured active centres rail distance >=61.05",
+      "passed": true,
+      "required": true
+    }
+  ],
+  "constraints": [
+    "Three pre-existing warnings unchanged",
+    "Preserve city and terrain layout",
+    "Evidence coverage partial, not full author algorithm reproduction"
+  ]
+}

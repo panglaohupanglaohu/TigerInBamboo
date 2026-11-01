@@ -1,0 +1,41 @@
+{
+  "version": "r13-aprons",
+  "goal": "Target terrain first, cities then rail; final >95; current not accepted",
+  "visual_observations": {
+    "source": "root viewed actual r13 GPU PNG",
+    "sha256": "2bc0ceaf936b3cf99b9f77179e9649239193b607cf03ad24c4cdb305c8f11dc1",
+    "differences": [
+      "Left city front platform now has a second lower bench; circle skirt remains.",
+      "New city side cliffs broken by lower benches; rear still continuous regular walls.",
+      "Still far from target. Existing architecture remains pending relocation and is partly buried.",
+      "Bay water sampling has no loss in each of 81 rows in x[-40,45],z[0,80],step1m; not global connectivity proof."
+    ]
+  },
+  "checks": [
+    {
+      "name": "actual GPU sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "terrain visual acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "new city and rail gameplay",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "sampled existing bay water not filled and building cores remain flat",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "No false 95 score",
+    "Candidate opt-in only; keep original rollback",
+    "Prioritize silhouette and authored topology before automated module selection"
+  ]
+}

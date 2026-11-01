@@ -1,0 +1,41 @@
+{
+  "task": "LeeBai production ship target iteration",
+  "target": "Raked narrowing bow, integrated bulbous nose, rounded stern, dark teal topsides and red-brown lower hull, name 李/LeeBai",
+  "visual_observations": {
+    "source": "User target and before screenshot inspected; new GPU frame unavailable",
+    "completed": [
+      "Closed loft with projecting lower nose and tapered stern",
+      "Conforming bilingual hull names",
+      "Production hull vertex palette now dark teal/red-brown"
+    ],
+    "remaining": [
+      "Actual sea occlusion and camera proportions unverified",
+      "Ship equipment and lighting still need same-camera target comparison"
+    ]
+  },
+  "checks": [
+    {
+      "name": "closed hull and real quay clearance",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "retained root transforms and animation",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "fresh production GPU review",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not alter Duke or unloading anchors",
+    "No GPU pass or score claim from CPU projection"
+  ],
+  "evidence_revision": {
+    "target-v1.png": "a09e98d4fddf906a8238b3239e4f92556adb4cdae04cd1cfaf06461a5a410fab",
+    "hull-palette-cpu.json": "c98c1eeae1d4612f3995cc0fdbe9ac2aa1b732e78ace369accefbd4b5c2442a5"
+  }
+}

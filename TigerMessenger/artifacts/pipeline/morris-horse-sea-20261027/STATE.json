@@ -1,0 +1,26 @@
+{
+  "status": "implemented_validation_pending",
+  "changes": [
+    "horse radial ocean movement, procedural swim gait and wake",
+    "mounted elder E exception and brake",
+    "horse neck UV merge repair"
+  ],
+  "checks": {
+    "riding_regressions": 9,
+    "surface_tests": 8,
+    "elder_mock_audio_tests": 7
+  },
+  "normal_game": {
+    "initial_shore_run": "real F and Shift+W moved34.6966m; failed at shoreline before fix; rider visible",
+    "after_fix": "verification tab closed before final run; pending"
+  },
+  "pending": [
+    "formal game sea entry, swim, landing and mounted E validation",
+    "full original princess patrol and organism visual acceptance remain separate ongoing work"
+  ],
+  "not_claimed": [
+    "current full crossing",
+    "subjective sound",
+    "princess patrol completion"
+  ]
+}

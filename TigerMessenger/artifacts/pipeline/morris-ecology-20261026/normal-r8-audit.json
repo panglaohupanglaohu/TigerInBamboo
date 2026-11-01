@@ -1,0 +1,403 @@
+{
+  "animalScaleRatio": 0.75,
+  "audio": {
+    "active": [],
+    "muted": false,
+    "range": 10,
+    "source": "existing world SFX budget and live post-gain analyser",
+    "synthesis": "original, not field recording",
+    "weatherBaseGain": 0.15,
+    "weatherGain": 0.15000000596046448,
+    "weatherOriginalBaseGain": 0.6
+  },
+  "bridge": "real curved deck and stone parapets",
+  "castle": "cream stone keep and offset wings with russet gables",
+  "cuckoos": 3,
+  "curledLeafClumps": 344,
+  "cypresses": 10,
+  "diameter": 116.413057686842,
+  "elderPlacement": {
+    "anchor": [
+      -69.7,
+      142.01,
+      27.71
+    ],
+    "elderOriginalUuid": "6ec20a7c-5065-463c-bf5f-b5f8886fd464",
+    "interactionUsesOriginalWorldPosition": true,
+    "moved": [
+      {
+        "name": "music-elder",
+        "newLocal": [
+          25,
+          9.875669707246084,
+          5
+        ],
+        "newWorld": [
+          -58.87855047467666,
+          153.50470343979595,
+          49.77314008927516
+        ],
+        "originalParent": "b01a8b18-1be7-46c4-9756-13d3dbb67d8a",
+        "originalWorld": [
+          -69.7,
+          142.01,
+          27.71
+        ],
+        "sameModel": true,
+        "uuid": "6ec20a7c-5065-463c-bf5f-b5f8886fd464"
+      },
+      {
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          20.466224242218267,
+          10.551906663188356,
+          2.0398649143951206
+        ],
+        "newWorld": [
+          -60.71483900167509,
+          154.35694903301106,
+          44.70593764000201
+        ],
+        "originalParent": "78898680-4a45-4a20-a5a0-5463c49a6058",
+        "originalWorld": [
+          -74.1516772259396,
+          141.0695293919609,
+          24.71722574197983
+        ],
+        "sameModel": true,
+        "uuid": "9cf0b01d-2601-494f-90cd-8084df9aa7ca"
+      },
+      {
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          29.692770922089643,
+          3.8424724579437792,
+          2.6714714390760257
+        ],
+        "newWorld": [
+          -51.6442057591196,
+          150.1432548268821,
+          50.22979421929996
+        ],
+        "originalParent": "78898680-4a45-4a20-a5a0-5463c49a6058",
+        "originalWorld": [
+          -65.85622873842884,
+          145.03389241889354,
+          25.719000572404106
+        ],
+        "sameModel": true,
+        "uuid": "b2fc46c4-5557-4c98-a4e3-743ad33b1a73"
+      },
+      {
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          25.299022877995423,
+          -0.5805238571825327,
+          -3.1000770783746816
+        ],
+        "newWorld": [
+          -49.59460635385402,
+          147.68266753443902,
+          42.360655573800514
+        ],
+        "originalParent": "78898680-4a45-4a20-a5a0-5463c49a6058",
+        "originalWorld": [
+          -69.87097949509682,
+          143.778198993591,
+          19.79677752361077
+        ],
+        "sameModel": true,
+        "uuid": "c39b5442-6c31-4dbb-852c-6d195e896827"
+      },
+      {
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          22.86216285568253,
+          11.688124419729542,
+          1.5817718270448555
+        ],
+        "newWorld": [
+          -59.26034924264243,
+          156.06606093183274,
+          46.190780380706215
+        ],
+        "originalParent": "78898680-4a45-4a20-a5a0-5463c49a6058",
+        "originalWorld": [
+          -72.52429300600994,
+          143.22921793983713,
+          24.56467988913235
+        ],
+        "sameModel": true,
+        "uuid": "b94fd0bc-c36b-4d2c-8479-1e4ce3f634b9"
+      },
+      {
+        "name": "IcosahedronGeometry",
+        "newLocal": [
+          26.515097501384,
+          10.062681380372902,
+          0.32263310190750527
+        ],
+        "newWorld": [
+          -55.2716085918783,
+          155.93532750160065,
+          47.47307664922653
+        ],
+        "originalParent": "78898680-4a45-4a20-a5a0-5463c49a6058",
+        "originalWorld": [
+          -69.56585221880528,
+          145.60088556707035,
+          23.581644819933977
+        ],
+        "sameModel": true,
+        "uuid": "668e1df9-5c32-441f-92e2-41ba68829300"
+      },
+      {
+        "name": "BufferGeometry",
+        "newLocal": [
+          25.24510853029641,
+          10.033400984663638,
+          5.2653509872931625
+        ],
+        "newWorld": [
+          -58.92256043112421,
+          153.5867470118781,
+          50.15615506283466
+        ],
+        "originalParent": "78898680-4a45-4a20-a5a0-5463c49a6058",
+        "originalWorld": [
+          -69.54386270423616,
+          142.22343149170425,
+          28.010722478095136
+        ],
+        "sameModel": true,
+        "uuid": "93af3926-f7c9-460e-b5f0-c3b9f97479a7"
+      },
+      {
+        "name": "giantTreeGroup",
+        "newLocal": [
+          30.08999630886698,
+          3.1031819387828476,
+          9.673734957834698
+        ],
+        "newWorld": [
+          -54.96331362065965,
+          146.67061459423698,
+          55.393158014718395
+        ],
+        "originalParent": "b01a8b18-1be7-46c4-9756-13d3dbb67d8a",
+        "originalWorld": [
+          -65.01445330843625,
+          143.57844335398397,
+          32.54452834227476
+        ],
+        "sameModel": true,
+        "uuid": "6f238ed7-3ba3-452f-8a85-8effbedb1232"
+      },
+      {
+        "name": "giantTreeGroup",
+        "newLocal": [
+          33.521025530318724,
+          0.5764978322181321,
+          7.852630210141175
+        ],
+        "newWorld": [
+          -50.42544200276569,
+          145.9284010960325,
+          55.96705425750964
+        ],
+        "originalParent": "b01a8b18-1be7-46c4-9756-13d3dbb67d8a",
+        "originalWorld": [
+          -62.192329190879235,
+          145.77607637195135,
+          30.96550050173939
+        ],
+        "sameModel": true,
+        "uuid": "a6214b11-2e66-47c9-9dec-1e673314f495"
+      },
+      {
+        "name": "giantTreeGroup",
+        "newLocal": [
+          31.21821738673938,
+          0.19399471391383255,
+          3.437877096760319
+        ],
+        "newWorld": [
+          -49.41316349772295,
+          146.92678248178566,
+          51.17979973424019
+        ],
+        "originalParent": "b01a8b18-1be7-46c4-9756-13d3dbb67d8a",
+        "originalWorld": [
+          -64.46337322296779,
+          145.5852136452134,
+          26.538119217204876
+        ],
+        "sameModel": true,
+        "uuid": "93835e17-563b-472b-af91-79fd2c540a28"
+      }
+    ],
+    "movedCount": 10,
+    "originalInstrumentAndMusicKeysPreserved": true
+  },
+  "farmGate": "open wooden rails between stone posts",
+  "flowers": 4029,
+  "hollyhockClumps": 17,
+  "horsePositions": [
+    [
+      -24,
+      2.312712270834254,
+      20
+    ],
+    [
+      25,
+      5.514729692893383,
+      14
+    ],
+    [
+      -10,
+      -1.639590075390771,
+      37
+    ]
+  ],
+  "horses": 3,
+  "layers": [
+    {
+      "name": "外圈花草坪",
+      "range": "外围低地径向约1.4–4m"
+    },
+    {
+      "name": "环绕溪流缓丘",
+      "range": "中圈约4–9m"
+    },
+    {
+      "name": "中央山肩城堡",
+      "range": "城基径向10.5m"
+    },
+    {
+      "name": "中央错位主峰",
+      "range": "主峰径向约26m；四周连续降低"
+    }
+  ],
+  "linearScale": 2.6457513110645907,
+  "mainIslandEdgeCleanup": {
+    "clearedTexels": 231153,
+    "revision": "main-island-edge-cleanup-r1-20261026",
+    "shadowMasks": true,
+    "status": "installed"
+  },
+  "navigationTraversalVerified": false,
+  "oldSceneMoved": false,
+  "originalGroundOwnership": {
+    "meshes": 3,
+    "mode": "user-selected elder overlap only; old source geometry retained",
+    "shadowMasks": true,
+    "supportMasks": true
+  },
+  "originalShoreJoin": true,
+  "pathWidth": 3.2,
+  "planarAreaRatio": 7,
+  "planeTrees": 6,
+  "plantScaleRatio": 0.85,
+  "previewListening": false,
+  "protectedExistingSites": 11,
+  "protectedRailSamples": 176,
+  "rabbits": 8,
+  "radius": 58.206528843421,
+  "revision": "morris-ecology-r8-20261026",
+  "robins": 4,
+  "seaPalette": {
+    "geometryChanged": false,
+    "revision": 1,
+    "scope": "bounded Morris coastal sea, matching citadel cyan direction"
+  },
+  "site": {
+    "automaticEmptyOceanAcceptance": false,
+    "candidates": 2304,
+    "envelope": 70.15408379511177,
+    "lat": 62.15807569871641,
+    "lon": 158.31916226225306,
+    "method": "explicit user-selected original music-elder shoreline; finite old-ground join and protected rail/actor corridors",
+    "minimumClearance": -29.013385179750586,
+    "nearestSafeCandidates": [
+      {
+        "clearance": 71.35535519896331,
+        "lat": 20,
+        "lon": 150,
+        "targetDistance": 80.23181047331748
+      },
+      {
+        "clearance": 70.60416302286335,
+        "lat": -70,
+        "lon": -80,
+        "targetDistance": 257.3299503639378
+      },
+      {
+        "clearance": 74.80114304934393,
+        "lat": -70,
+        "lon": -75,
+        "targetDistance": 260.11943079351386
+      },
+      {
+        "clearance": 73.34604667785142,
+        "lat": -65,
+        "lon": -75,
+        "targetDistance": 261.2941453145577
+      },
+      {
+        "clearance": 79.02083655517258,
+        "lat": -70,
+        "lon": -70,
+        "targetDistance": 262.81539034036115
+      },
+      {
+        "clearance": 78.59381891913544,
+        "lat": -65,
+        "lon": -70,
+        "targetDistance": 264.6066286161912
+      }
+    ],
+    "obstacles": 742,
+    "otherObjectsMoved": false,
+    "route": {
+      "bookshopDistance": 224.0113458223219,
+      "departure": [
+        -100.07376737885296,
+        -41.35911952176487,
+        117.79076498175732
+      ],
+      "destination": [
+        -67.84384769251405,
+        84.78708227731278,
+        -117.50899118439892
+      ],
+      "request": "书店镇去苔庭路上的广阔海域",
+      "saihojiDistance": 162.72725546877683
+    },
+    "routeMidpointDistance": 135.41484412363943,
+    "routeMidpointEdgeDistance": 77.20831528021846,
+    "routeSamples": 2403,
+    "userSpecifiedAnchor": true
+  },
+  "source": "normal-game-installed",
+  "stream": "authored descending radial levels, carved real bed",
+  "streamLevels": [
+    10.2,
+    7.2,
+    4.9,
+    3.2,
+    2.3,
+    1.2,
+    -0.6
+  ],
+  "style": "Arts and Crafts / William Morris inspired original geometry",
+  "terrainLayout": "central highland, asymmetric shoulders, low surrounding meadows",
+  "view": "城堡琴庭",
+  "wholeNavigationVerified": false,
+  "wildlife": {
+    "cuckoos": 3,
+    "rabbits": 8,
+    "robins": 4,
+    "scheduledAt": 331.868,
+    "successfulVoices": 0
+  }
+}

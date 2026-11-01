@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<title>Engine — 贴图与光照：无缝 patch 混合 / 摆动贴图 / 表面阴影 / 山体烘焙明暗</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1b2124; color: #dfe6e6; overflow: hidden;
+    font: 11px/1.5 ui-monospace, Menlo, monospace; }
+  #grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 8px; padding: 8px; height: calc(100% - 16px); box-sizing: border-box; }
+  .cell { position: relative; background: #10151a; border: 1px solid #2b363b; border-radius: 3px; overflow: hidden; }
+  .cell h2 { position: absolute; left: 8px; top: 6px; margin: 0; z-index: 2;
+    font: 600 11px/1.4 ui-monospace, Menlo, monospace; color: #cfe3e6; letter-spacing: .02em; }
+  .cell .sub { position: absolute; left: 8px; top: 22px; z-index: 2; color: #7f9aa1; font-size: 10px; }
+  .cell canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .hud { position: absolute; left: 8px; bottom: 6px; right: 8px; z-index: 2; color: #9fb6bd;
+    white-space: pre; font-size: 10px; line-height: 1.45; text-shadow: 0 1px 2px #000; }
+  .hud b { color: #e6d9a8; font-weight: 600; }
+  .hud i { color: #8fd0a8; font-style: normal; }
+  #topbar { position: fixed; right: 12px; top: 10px; z-index: 9; color: #6d848b; font-size: 10px; }
+</style>
+</head>
+<body>
+<div id="topbar">1/2/3 切 patch 合成模式 · 空格 重算</div>
+<div id="grid">
+  <div class="cell" id="cell-patch">
+    <h2>① 无缝 patch 混合</h2>
+    <div class="sub">1781405550061687016 · 投影式(草/水) + 手工UV(岸带) + 高度混合</div>
+    <canvas id="cv-patch"></canvas>
+    <div class="hud" id="hud-patch"></div>
+  </div>
+  <div class="cell" id="cell-wobble">
+    <h2>② 非直线沉积层：世界先抖一下</h2>
+    <div class="sub">1699146321318314094 · 直线对照 / 整体位移场 W(p) / 逐面独立抖（错解）</div>
+    <canvas id="cv-wobble"></canvas>
+    <div class="hud" id="hud-wobble"></div>
+  </div>
+  <div class="cell" id="cell-shadow">
+    <h2>③ 贴图级表面阴影：两个独立高度</h2>
+    <div class="sub">1705195380457996629 · castH 管「谁有资格投」/ zTestH 管深度比较</div>
+    <canvas id="cv-shadow"></canvas>
+    <div class="hud" id="hud-shadow"></div>
+  </div>
+  <div class="cell" id="cell-mountain">
+    <h2>④ 山体：把斜率烘进贴图（运行时 0 采样）</h2>
+    <div class="sub">1786014232594485497 · 左 none / 中 baked / 右 runtime</div>
+    <canvas id="cv-mountain"></canvas>
+    <div class="hud" id="hud-mountain"></div>
+  </div>
+</div>
+
+<script type="module">
+import { buildWorld, render as renderPatches, abModes, seamStats } from '../src/patchblend.js';
+import { renderCliff, bandCurves, inverseResidual, geometryDrift, facetSeam, makeWarp } from '../src/wobbletex.js';
+import { buildTerrain, shadowMap, shadowStats, sweep, islandSeams, renderTop } from '../src/surfaceshadow.js';
+import { buildMountain, renderShade, compare } from '../src/mountainlight.js';
+
+const stats = {};
+
+/* ── 通用：把裸 ARGB 缓冲画到目标 canvas 的一块矩形里 ── */
+function blit(ctx, img, dx, dy, dw, dh) {
+  const off = document.createElement('canvas');
+  off.width = img.w; off.height = img.h;
+  const octx = off.getContext('2d');
+  const id = octx.createImageData(img.w, img.h);
+  id.data.set(img.data);
+  octx.putImageData(id, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(off, dx, dy, dw, dh);
+  return off;
+}
+
+function fit(cv) {
+  const r = cv.parentElement.getBoundingClientRect();
+  const dpr = 1;
+  cv.width = Math.round(r.width * dpr);
+  cv.height = Math.round(r.height * dpr);
+  return { w: cv.width, h: cv.height };
+}
+
+/* ══════════════ ① patch 混合 ══════════════ */
+const world = buildWorld({ w: 560, h: 380, seed: 7, band: 0.018 });
+let patchMode = 'height';
+let ab = null;
+
+function drawPatch() {
+  const cv = document.getElementById('cv-patch');
+  const { w, h } = fit(cv);
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+  const img = renderPatches(world, patchMode);
+  const pad = 6, top = 40;
+  const scale = Math.min((w - pad * 2) / img.w, (h - top - 62) / img.h);
+  const dw = img.w * scale, dh = img.h * scale;
+  blit(ctx, img, (w - dw) / 2, top, dw, dh);
+
+  const s = seamStats(img);
+  document.getElementById('hud-patch').innerHTML =
+    '模式 <b>' + patchMode + '</b>   seam 能量比 <i>' + s.ratio.toFixed(2) + '</i>  ' +
+    '(边界 ' + s.gradBand.toFixed(4) + ' / 内部 ' + s.gradInner.toFixed(4) + ')\n' +
+    (ab
+      ? 'hard ' + ab.hard.seam.ratio.toFixed(2) + '  →  alpha ' + ab.alpha.seam.ratio.toFixed(2) +
+        '  →  height ' + ab.height.seam.ratio.toFixed(2) + '   边界像素 ' + s.edgePx
+      : '');
+}
+
+/* ══════════════ ② wobble ══════════════ */
+let wob = null;
+
+function drawWobble() {
+  const cv = document.getElementById('cv-wobble');
+  const { w, h } = fit(cv);
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+  const gap = 5, pad = 6;
+  const pw = Math.floor((w - pad * 2 - gap * 2) / 3), ph = h - 80;
+  const views = [
+    ['直线（贴图数学照旧）', renderCliff({ w: pw, h: ph, warp: false })],
+    ['整体位移场（原文）', renderCliff({ w: pw, h: ph, warp: true, noiseMode: 'field' })],
+    ['逐面独立（错解）', renderCliff({ w: pw, h: ph, warp: true, noiseMode: 'perface' })],
+  ];
+  views.forEach(([label, img], i) => {
+    const x = pad + i * (pw + gap);
+    blit(ctx, img, x, 36, pw, ph);
+    ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+    ctx.strokeRect(x, 36, pw, ph);
+    ctx.fillStyle = i === 2 ? '#d99a8a' : '#9fb6bd';
+    ctx.font = '10px ui-monospace, Menlo, monospace';
+    ctx.fillText(label, x + 4, 36 + ph - 6);
+  });
+
+  const cStraight = bandCurves(pw, ph, { warp: false });
+  const cWavy = bandCurves(pw, ph, { warp: true });
+  const inv = inverseResidual({ w: pw, h: ph });
+  const drift = geometryDrift(pw, ph);
+  const seam = facetSeam();
+  const jac = makeWarp({}).jacobian();
+
+  document.getElementById('hud-wobble').innerHTML =
+    '层线峰峰值 直线 <b>' + cStraight.meanP2P.toFixed(1) + 'px</b> → 抖动后 <i>' + cWavy.meanP2P.toFixed(1) + 'px</i>' +
+    '   平均曲率 ' + cStraight.meanCurv.toFixed(3) + ' → ' + cWavy.meanCurv.toFixed(3) + '\n' +
+    'W⁻¹ 残差 max ' + inv[1].maxPx + ' / ' + inv[2].maxPx + ' / ' + inv[3].maxPx + ' px（1/2/3 次迭代，|∂D/∂x|=' + jac + '）' +
+    '   不撤 wobble 面积漂移 <b>' + drift.driftPct + '%</b>\n' +
+    '跨面错位：整体位移场 <i>' + seam.fieldOffsetPx + 'px</i>  vs  逐面独立 <b>' + seam.perFaceMeanPx +
+    'px</b>（最大 ' + seam.perFaceMaxPx + 'px ≈ ' + seam.shareOfLayerPct + '% 层厚）';
+
+  wob = { cStraight, cWavy, inv, drift, seam };
+  stats.wobble = wob;
+}
+
+/* ══════════════ ③ 表面阴影 ══════════════ */
+function drawShadow() {
+  const cv = document.getElementById('cv-shadow');
+  const { w, h } = fit(cv);
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+  const terr = buildTerrain({ w: 300, h: 200, seed: 21 });
+
+  const castH = 0.10, zTestH = 0.02;
+  const sm = shadowMap(terr, { castH, zTestH });
+  const img = renderTop(terr, sm);
+  const pad = 10, top = 44;
+  const scale = Math.min((w - pad * 2) / img.w, (h - top - 78) / img.h);
+  blit(ctx, img, (w - img.w * scale) / 2, top, img.w * scale, img.h * scale);
+
+  const st = shadowStats(sm, terr);
+  const sw = sweep(terr, [0.0, 0.10, 0.25], [0.01, 0.10, 0.30]);
+  const isol = shadowMap(terr, { castH, zTestH, islands: true });
+  const seam = islandSeams(isol, terr.w, terr.h);
+
+  const row = (r) => 'castH ' + r.castH.toFixed(2) + ' → ' +
+    r.cells.map((c) => c.coveragePct.toFixed(1) + '%').join(' / ');
+  document.getElementById('hud-shadow').innerHTML =
+    '覆盖率（zTestH 0.01 / 0.10 / 0.30）\n' + row(sw[0]) + '\n' + row(sw[1]) + '\n' + row(sw[2]) +
+    '\n当前 castH 0.10：檐下 ' + st.underRoofPct + '%（占阴影 ' + st.roofShareOfShadowPct +
+    '%）  崖口 ' + st.atCliffEdgePct + '%（' + st.edgeShareOfShadowPct + '%）' +
+    '   UV 边界伪影 ' + seam.seamPx + 'px';
+
+  stats.shadow = { st, sw, seam };
+}
+
+/* ══════════════ ④ 山体 ══════════════ */
+function drawMountain() {
+  const cv = document.getElementById('cv-mountain');
+  const { w, h } = fit(cv);
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+  const m = buildMountain({ w: 340, h: 250, seed: 31 });
+  const modes = ['none', 'baked', 'runtime'];
+  const gap = 6, pad = 8, top = 40;
+  const pw = Math.floor((w - pad * 2 - gap * 2) / 3);
+  const ph = Math.min(Math.round(pw * 250 / 340), h - top - 70);
+  const res = {};
+  modes.forEach((mode, i) => {
+    const r = renderShade(m, mode);
+    res[mode] = r;
+    blit(ctx, r, pad + i * (pw + gap), top, pw, ph);
+    ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+    ctx.strokeRect(pad + i * (pw + gap), top, pw, ph);
+    ctx.fillStyle = '#cfe3e6';
+    ctx.font = '11px ui-monospace, Menlo, monospace';
+    ctx.fillText(mode, pad + i * (pw + gap) + 4, top + ph - 6);
+  });
+
+  const cmp = compare(m);
+  document.getElementById('hud-mountain').innerHTML =
+    '与真 N·L 的相关 r：none <b>' + cmp.none.rVsNL + '</b>  baked <i>' + cmp.baked.rVsNL +
+    '</i>  runtime ' + cmp.runtime.rVsNL + '\n' +
+    '岩石区明度 std：' + cmp.none.stdLuma + ' / ' + cmp.baked.stdLuma + ' / ' + cmp.runtime.stdLuma +
+    '   采样成本 8 → 10 (' + cmp.cost.extraPct + '%)';
+
+  stats.mountain = cmp;
+}
+
+/* ══════════════ 启动 ══════════════ */
+function boot() {
+  drawPatch();
+  drawWobble();
+  drawShadow();
+  drawMountain();
+
+  // hard/alpha/height 三种模式的完整对比（给文档用）
+  ab = abModes(world);
+  drawPatch();
+
+  stats.patch = {
+    mode: patchMode,
+    hard: ab.hard.seam, alpha: ab.alpha.seam, height: ab.height.seam,
+    jump: { hard: ab.hard.jump, alpha: ab.alpha.jump, height: ab.height.jump },
+    covHist: ab.height.covHist,
+    band: world.band,
+  };
+
+  window.__texlab = stats;
+  console.log('[texlab] ready', JSON.stringify(stats.patch));
+}
+
+addEventListener('resize', () => { boot(); });
+addEventListener('keydown', (e) => {
+  if (e.key === '1') { patchMode = 'hard'; drawPatch(); stats.patch.mode = patchMode; }
+  if (e.key === '2') { patchMode = 'alpha'; drawPatch(); stats.patch.mode = patchMode; }
+  if (e.key === '3') { patchMode = 'height'; drawPatch(); stats.patch.mode = patchMode; }
+  if (e.key === ' ') { boot(); }
+});
+
+boot();
+</script>
+</body>
+</html>

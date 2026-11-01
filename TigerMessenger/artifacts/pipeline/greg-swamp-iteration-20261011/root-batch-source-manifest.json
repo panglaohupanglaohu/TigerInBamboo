@@ -1,0 +1,18 @@
+{
+  "scope": "root-rendering-only",
+  "files": [
+    {
+      "path": "TigerMessenger/src/world/swampV2Art.js",
+      "SHA256": "55947ba69e52ce750575be7f98b67a159573eb72b1f9de5ddd8784c5a0306f9c",
+      "bytes": 45487,
+      "beforeSHA256": "fa9dc2c822169c5732b17edab252cce98a8a87e5061921a26c214ce7954c3061"
+    },
+    {
+      "path": "TigerMessenger/src/world/swampRimRootBatch.js",
+      "SHA256": "d66aed8bee33efd5317750094533c531f075fd90001db7fd40a834bbfeff00d7",
+      "bytes": 6116,
+      "beforeSHA256": null
+    }
+  ],
+  "rollback": "TigerMessenger/artifacts/pipeline/greg-swamp-iteration-20261011/source-before/root-batch/swampV2Art.js"
+}

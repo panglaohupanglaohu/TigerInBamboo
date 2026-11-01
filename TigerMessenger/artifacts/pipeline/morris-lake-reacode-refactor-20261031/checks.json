@@ -1,0 +1,15 @@
+{
+ "date": "2026-10-31",
+ "harness": "morris-lake-harness.html (real createMorrisIsland factory, SwiftShader Chromium)",
+ "legacyMigration": {"oldColumns": 418, "newColumns": 350, "migrated": true, "namedSavesMigrated": ["旧城堡"], "newStorageKey": "morris-townscaper-refactor-v1"},
+ "pointerEdits": {"voxelsBefore": 1400, "afterDragBuild": 1405, "afterRightClickErase": 1404, "afterUndo": 1405, "afterRedo": 1404, "paintedCells": 1},
+ "namedSave": {"before": 354, "afterClear": 0, "afterLoad": 354},
+ "sceneGenerators": {"town": {"columns": 238, "triangles": 10753}, "terrain": {"columns": 3828, "rockColumns": 3828, "triangles": 38160}, "fusion": {"columns": 3167, "rockColumns": 3140, "triangles": 57512}, "outsideLake": 0},
+ "timeOfDay": ["dusk", "night"],
+ "learnPanelToggles": 42,
+ "gridToggle": true,
+ "airshipGullAdapter": {"mesh": "reacode-refactoring-gull-flight-flock", "count": 3},
+ "townPassTriangles": {"beforeLakeSurfaceSwap": 263416, "after": 53752},
+ "browserErrors": 0,
+ "notVerified": ["full game start in headless Chromium (software rendering too slow to reach Morris)", "manual play-through of story / vehicles / princess patrol in the complete game"]
+}

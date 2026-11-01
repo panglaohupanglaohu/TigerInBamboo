@@ -1,0 +1,56 @@
+{
+  "pass": true,
+  "triangles": 554,
+  "maxGap": 1.0715467624322628e-8,
+  "maxNormal": 2.955558284984058e-8,
+  "duplicates": 1341,
+  "grassBasePoints": 15824,
+  "maxGrassGap": 1.1133920452266466e-8,
+  "refinement": {
+    "sourceFaces": 84,
+    "steepWholeFaceRejects": 0,
+    "otherWholeFaceRejects": 0,
+    "protectedWholeFaceRejects": 0,
+    "hiddenPiecesRejected": 0,
+    "splitEdgesPerLevel": [
+      41,
+      165
+    ],
+    "maxLevels": 2,
+    "maxSharedSplitEdges": 6000,
+    "maxRefinedTriangles": 120000,
+    "normalFallbackFaces": 0,
+    "localTail": {
+      "method": "local castle-coordinate lower-slope window; area-weighted actual turf geometric slope, continuous field clipping on source triangles",
+      "steepThreshold": 0.85,
+      "window": {
+        "x": [
+          -36,
+          -28,
+          -2,
+          6
+        ],
+        "z": [
+          -18,
+          -12,
+          5,
+          13
+        ],
+        "fadeHeight": [
+          5,
+          9
+        ]
+      },
+      "beforeTriangles": 554,
+      "afterTriangles": 554,
+      "beforeArea": 800.4408363363159,
+      "afterArea": 800.4408363363159,
+      "unaffectedArea": 34.213505526536586,
+      "affectedBeforeArea": 766.227330809779,
+      "sharedSplitEdges": 0,
+      "maxSharedSplitEdges": 2500,
+      "maxLevels": 2,
+      "maxOutput": 120000
+    }
+  }
+}

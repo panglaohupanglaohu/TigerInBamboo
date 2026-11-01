@@ -1,0 +1,619 @@
+{
+  "version": "apostles-oskar-wfc-10-soft-shoulders",
+  "built": 9,
+  "report": {
+    "version": "apostles-oskar-wfc-10-soft-shoulders",
+    "railSource": "red",
+    "masses": [
+      {
+        "id": "back-left",
+        "s": -48,
+        "d": -36,
+        "source": "hand-assembled",
+        "lobes": 4,
+        "grid": {
+          "seed": 90840,
+          "hexRadius": 7,
+          "triSize": 6,
+          "vertices": 659,
+          "quads": 609,
+          "hash": "ff016c96"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 4,
+          "continuousShoulders": true,
+          "rimInset": 1.35,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 226307,
+              "ok": true,
+              "reason": "solved",
+              "observations": 47,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "eb56a0af",
+          "pins": 4,
+          "bans": 3882,
+          "levelHistogram": [
+            493,
+            17,
+            72,
+            57,
+            20,
+            0,
+            0
+          ]
+        },
+        "height": 26,
+        "minRail": 16.29,
+        "dropped": {
+          "rail": 9,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 127,
+        "talus": 28,
+        "triangles": 17886
+      },
+      {
+        "id": "back-right",
+        "s": 26,
+        "d": -42,
+        "source": "hand-assembled",
+        "lobes": 5,
+        "grid": {
+          "seed": 6477,
+          "hexRadius": 8,
+          "triSize": 6.4,
+          "vertices": 863,
+          "quads": 806,
+          "hash": "d8ca121e"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 4,
+          "continuousShoulders": true,
+          "rimInset": 1.35,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 229438,
+              "ok": true,
+              "reason": "solved",
+              "observations": 85,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "7c19816a",
+          "pins": 4,
+          "bans": 5051,
+          "levelHistogram": [
+            646,
+            7,
+            83,
+            65,
+            44,
+            2,
+            16
+          ]
+        },
+        "height": 42,
+        "minRail": 16.9,
+        "dropped": {
+          "rail": 16,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 150,
+        "talus": 28,
+        "triangles": 22469
+      },
+      {
+        "id": "back-tower",
+        "s": 60,
+        "d": -24,
+        "source": "hand-assembled",
+        "lobes": 2,
+        "grid": {
+          "seed": 34426,
+          "hexRadius": 6,
+          "triSize": 4.2,
+          "vertices": 489,
+          "quads": 446,
+          "hash": "f1c6dd73"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 1,
+          "continuousShoulders": true,
+          "rimInset": 1.35,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 232569,
+              "ok": true,
+              "reason": "solved",
+              "observations": 26,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "71163837",
+          "pins": 1,
+          "bans": 2886,
+          "levelHistogram": [
+            401,
+            1,
+            26,
+            7,
+            54,
+            0,
+            0
+          ]
+        },
+        "height": 26,
+        "minRail": 15.78,
+        "dropped": {
+          "rail": 19,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 92,
+        "talus": 12,
+        "triangles": 12605
+      },
+      {
+        "id": "front-left",
+        "s": -52,
+        "d": 36,
+        "source": "hand-assembled",
+        "lobes": 5,
+        "grid": {
+          "seed": 51142,
+          "hexRadius": 7,
+          "triSize": 6,
+          "vertices": 661,
+          "quads": 611,
+          "hash": "51402280"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 1,
+          "continuousShoulders": true,
+          "rimInset": 1.35,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 235700,
+              "ok": true,
+              "reason": "solved",
+              "observations": 45,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "0739f51e",
+          "pins": 4,
+          "bans": 3907,
+          "levelHistogram": [
+            465,
+            7,
+            177,
+            12,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 19,
+        "minRail": 15.66,
+        "dropped": {
+          "rail": 16,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 103,
+        "talus": 47,
+        "triangles": 15121
+      },
+      {
+        "id": "front-right",
+        "s": 56,
+        "d": 38,
+        "source": "hand-assembled",
+        "lobes": 4,
+        "grid": {
+          "seed": 73883,
+          "hexRadius": 6,
+          "triSize": 6,
+          "vertices": 491,
+          "quads": 448,
+          "hash": "10c598de"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 5,
+          "continuousShoulders": true,
+          "rimInset": 1.35,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 238831,
+              "ok": true,
+              "reason": "solved",
+              "observations": 59,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "eb02e32a",
+          "pins": 3,
+          "bans": 2867,
+          "levelHistogram": [
+            311,
+            16,
+            147,
+            17,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 19,
+        "minRail": 15.86,
+        "dropped": {
+          "rail": 1,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 107,
+        "talus": 34,
+        "triangles": 14730
+      },
+      {
+        "id": "bay-1",
+        "s": -14,
+        "d": 26,
+        "source": "hand-assembled",
+        "lobes": 2,
+        "grid": {
+          "seed": 50677,
+          "hexRadius": 5,
+          "triSize": 2.6,
+          "vertices": 347,
+          "quads": 311,
+          "hash": "4b78567f"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 0,
+          "continuousShoulders": true,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 241962,
+              "ok": true,
+              "reason": "solved",
+              "observations": 29,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "140a0322",
+          "pins": 1,
+          "bans": 2045,
+          "levelHistogram": [
+            263,
+            9,
+            75,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 12.5,
+        "minRail": 19.38,
+        "dropped": {
+          "rail": 0,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 48,
+        "talus": 12,
+        "triangles": 7009
+      },
+      {
+        "id": "bay-2",
+        "s": 12,
+        "d": 22,
+        "source": "hand-assembled",
+        "lobes": 1,
+        "grid": {
+          "seed": 17820,
+          "hexRadius": 4,
+          "triSize": 2.4,
+          "vertices": 227,
+          "quads": 198,
+          "hash": "df290eee"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 0,
+          "continuousShoulders": true,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 245093,
+              "ok": true,
+              "reason": "solved",
+              "observations": 18,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "c5b1df76",
+          "pins": 1,
+          "bans": 1337,
+          "levelHistogram": [
+            172,
+            4,
+            51,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 12.5,
+        "minRail": 17.22,
+        "dropped": {
+          "rail": 0,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 30,
+        "talus": 14,
+        "triangles": 5118
+      },
+      {
+        "id": "bay-3",
+        "s": 6,
+        "d": 38,
+        "source": "constraint-generated",
+        "lobes": 1,
+        "grid": {
+          "seed": 95439,
+          "hexRadius": 4,
+          "triSize": 2.4,
+          "vertices": 225,
+          "quads": 196,
+          "hash": "a8a46283"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 0,
+          "continuousShoulders": true,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 248224,
+              "ok": true,
+              "reason": "solved",
+              "observations": 8,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "e68eb215",
+          "pins": 1,
+          "bans": 1342,
+          "levelHistogram": [
+            165,
+            60,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 6.5,
+        "minRail": 32.19,
+        "dropped": {
+          "rail": 0,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 29,
+        "talus": 12,
+        "triangles": 3905
+      },
+      {
+        "id": "bay-4",
+        "s": -8,
+        "d": 48,
+        "source": "constraint-generated",
+        "lobes": 2,
+        "grid": {
+          "seed": 62582,
+          "hexRadius": 4,
+          "triSize": 2.3,
+          "vertices": 229,
+          "quads": 200,
+          "hash": "a08198dd"
+        },
+        "smoothing": {
+          "iterations": 2,
+          "alpha": 0.5,
+          "cornersChanged": 2,
+          "continuousShoulders": true,
+          "rimInset": 0.38,
+          "footprintExpansion": 0
+        },
+        "wfc": {
+          "solved": true,
+          "attempts": [
+            {
+              "seed": 251355,
+              "ok": true,
+              "reason": "solved",
+              "observations": 19,
+              "backtracks": 0
+            }
+          ],
+          "solutionHash": "b86ac7ac",
+          "pins": 1,
+          "bans": 1347,
+          "levelHistogram": [
+            188,
+            3,
+            26,
+            12,
+            0,
+            0,
+            0
+          ]
+        },
+        "height": 19,
+        "minRail": 42.37,
+        "dropped": {
+          "rail": 0,
+          "protected": 0,
+          "town": 0
+        },
+        "bushes": 65,
+        "talus": 8,
+        "triangles": 7816
+      }
+    ],
+    "railUnchanged": true,
+    "triangles": 106659,
+    "levels": [
+      0,
+      6.5,
+      12.5,
+      19,
+      26,
+      34,
+      42
+    ],
+    "maxStep": 2,
+    "built": 9
+  },
+  "geometry": [
+    {
+      "id": "back-left",
+      "triangles": 6718,
+      "area": 5040.866451471901,
+      "steepArea": 2468.8699502756076,
+      "shoulderArea": 1024.4170712786306,
+      "degenerate": 0,
+      "rootMiss": 63
+    },
+    {
+      "id": "back-right",
+      "triangles": 9461,
+      "area": 7698.3494261663,
+      "steepArea": 2897.486691511314,
+      "shoulderArea": 2458.2341784595797,
+      "degenerate": 0,
+      "rootMiss": 51
+    },
+    {
+      "id": "back-tower",
+      "triangles": 4813,
+      "area": 2346.9258434636768,
+      "steepArea": 1677.9168711333418,
+      "shoulderArea": 238.76687964443215,
+      "degenerate": 0,
+      "rootMiss": 52
+    },
+    {
+      "id": "front-left",
+      "triangles": 5189,
+      "area": 4429.554385298422,
+      "steepArea": 1656.607421162887,
+      "shoulderArea": 1174.3018031459503,
+      "degenerate": 0,
+      "rootMiss": 44
+    },
+    {
+      "id": "front-right",
+      "triangles": 4946,
+      "area": 4081.4257773286067,
+      "steepArea": 1723.3113739051125,
+      "shoulderArea": 926.5185478472896,
+      "degenerate": 0,
+      "rootMiss": 40
+    },
+    {
+      "id": "bay-1",
+      "triangles": 2737,
+      "area": 836.6706418783112,
+      "steepArea": 673.9019921059321,
+      "shoulderArea": 34.44324182030184,
+      "degenerate": 0,
+      "rootMiss": 17
+    },
+    {
+      "id": "bay-2",
+      "triangles": 2214,
+      "area": 581.8443744916926,
+      "steepArea": 486.04453592990035,
+      "shoulderArea": 22.103647833687262,
+      "degenerate": 0,
+      "rootMiss": 7
+    },
+    {
+      "id": "bay-3",
+      "triangles": 1153,
+      "area": 421.2815235156997,
+      "steepArea": 335.2895375255956,
+      "shoulderArea": 22.87486288348119,
+      "degenerate": 0,
+      "rootMiss": 2
+    },
+    {
+      "id": "bay-4",
+      "triangles": 2328,
+      "area": 542.9523370716015,
+      "steepArea": 469.4644024623755,
+      "shoulderArea": 19.40882870376975,
+      "degenerate": 0,
+      "rootMiss": 32
+    }
+  ]
+}

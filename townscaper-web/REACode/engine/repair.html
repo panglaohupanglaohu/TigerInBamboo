@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — tile tiling self-repair</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1f2125; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #e8ebef;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #eef1f5;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">铺砖"自我修复"：红 = 坏格，黄 = 修复区（793806535898136576）</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * repair.html — src/tilerepair.js 的验证页。
+ *
+ * 照参考片 793806535898136576：那套故意做难的管道 tileset（弯头多、直管少），
+ * 右侧**红框**标坏的格子、**黄框**标修复区，修完红框逐个消失。
+ *
+ * 这里把 3D 等距压成 2D 俯视（修复逻辑跟维度无关，量的是"改动了几格"）；
+ * 管道用"从格心画到开口边"的粗线表示，一眼能看出通/堵。
+ *
+ * 键位：R 随机破坏 6 格 / F 修复 / 空格 自动一轮（破坏→修复）/ N 重铺一张新图。
+ */
+import { Grid, PIPESET, buildCompat, solveAll, findConflicts, growRegion, solveRegion } from '../src/tilerepair.js';
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const hud = document.getElementById('hud');
+
+const COLS = 16, ROWS = 16, CS = 34, PAD = 28;
+const W = COLS * CS + PAD * 2, H = ROWS * CS + PAD * 2;
+
+const tiles = PIPESET;
+const compat = buildCompat(tiles);
+const grid = new Grid(COLS, ROWS);
+
+let rngState = 12345;
+const rnd = () => ((rngState = (rngState * 1664525 + 1013904223) | 0) >>> 0) / 4294967296;
+
+let base = solveAll(grid, compat, tiles, rnd);
+let assign = Int16Array.from(base.assign);
+let conflicts = [];
+let region = null;
+let changed = [];
+let lastRun = null;
+
+function corrupt(k = 6) {
+  for (let i = 0; i < k; i++) {
+    const c = (rnd() * grid.n) | 0;
+    assign[c] = (rnd() * tiles.length) | 0;
+  }
+  conflicts = findConflicts(assign, grid, compat, tiles);
+  // 破坏之后先把"打算修哪一块"（黄框）亮出来，再做修复 —— 参考片里红框和黄框是同时在的。
+  region = conflicts.length ? growRegion(grid, conflicts, 1) : null;
+  changed = [];
+}
+
+function repair() {
+  const before = conflicts.length;
+  let radius = 1, res = null, attempts = 0;
+  const seeds = conflicts.length ? conflicts : [];
+  while (attempts < 4) {
+    attempts++;
+    const rg = growRegion(grid, seeds, radius);
+    res = solveRegion(assign, grid, compat, tiles, rg, rnd);
+    if (res.ok) { region = rg; break; }
+    radius++;
+  }
+  if (res && res.ok) {
+    assign = res.assign;
+    changed = res.changed;
+    conflicts = findConflicts(assign, grid, compat, tiles);
+    lastRun = { before, after: conflicts.length, changed: changed.length, region: region.cells.length, attempts, nodes: res.nodes };
+  } else {
+    lastRun = { before, after: -1, changed: -1, region: -1, attempts, nodes: res ? res.nodes : -1 };
+  }
+}
+
+function fresh() {
+  rngState = (rngState * 1103515245 + 12345) | 0;
+  base = solveAll(grid, compat, tiles, rnd);
+  assign = Int16Array.from(base.assign);
+  conflicts = findConflicts(assign, grid, compat, tiles);
+  region = null; changed = new Set(); lastRun = null;
+}
+
+const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+function draw() {
+  ctx.fillStyle = '#1f2125';
+  ctx.fillRect(0, 0, W, H);
+
+  // 底板
+  ctx.fillStyle = '#2b2f35';
+  ctx.fillRect(PAD - 6, PAD - 6, COLS * CS + 12, ROWS * CS + 12);
+
+  const changedSet = new Set(changed);
+
+  for (let c = 0; c < grid.n; c++) {
+    const x = grid.x(c), y = grid.y(c);
+    const cx = PAD + x * CS + CS / 2, cy = PAD + y * CS + CS / 2;
+    const t = tiles[assign[c]];
+    if (!t) continue;
+
+    // 管道：从格心画到开口的边（粗线 + 圆头，像参考片里的白管）
+    ctx.strokeStyle = changedSet.has(c) ? '#ffd86b' : '#dfe4ea';
+    ctx.lineWidth = 7;
+    ctx.lineCap = 'round';
+    for (let d = 0; d < 4; d++) {
+      if (!t.open[d]) continue;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + DIRS[d][0] * CS * 0.5, cy + DIRS[d][1] * CS * 0.5);
+      ctx.stroke();
+    }
+    // 管心
+    ctx.fillStyle = changedSet.has(c) ? '#ffd86b' : '#eef2f6';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4.6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 修复区（黄虚线框）
+  if (region) {
+    ctx.strokeStyle = 'rgba(255,216,107,.85)';
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([5, 4]);
+    for (const c of region.cells) {
+      const x = grid.x(c), y = grid.y(c);
+      ctx.strokeRect(PAD + x * CS + 2, PAD + y * CS + 2, CS - 4, CS - 4);
+    }
+    ctx.setLineDash([]);
+  }
+
+  // 坏格（红框，参考片里的红盒）
+  ctx.strokeStyle = '#ff4d4d';
+  ctx.lineWidth = 2.2;
+  for (const c of conflicts) {
+    const x = grid.x(c), y = grid.y(c);
+    ctx.strokeRect(PAD + x * CS + 1, PAD + y * CS + 1, CS - 2, CS - 2);
+  }
+
+  hud.textContent =
+    `tileset ${tiles.length} 种（弯头权重 6、直管权重 1 —— 故意做难），网格 ${COLS}×${ROWS}\n` +
+    `conflicts=${conflicts.length}  region=${region ? region.cells.length : 0}  changed=${changed.length}\n` +
+    (lastRun ? `上次：坏格 ${lastRun.before} → ${lastRun.after}，改动 ${lastRun.changed} 格 / ${region ? region.cells.length : 0} 格区域，尝试 ${lastRun.attempts} 轮\n` : '') +
+    `键：R 破坏 6 格 · F 修复 · 空格 自动 · N 重铺`;
+}
+
+function resize() {
+  cv.width = W; cv.height = H;
+  const s = Math.min((innerWidth - 40) / W, (innerHeight - 40) / H);
+  cv.style.width = W * s + 'px';
+  cv.style.height = H * s + 'px';
+  cv.style.margin = `${Math.max(0, (innerHeight - H * s) / 2)}px ${Math.max(0, (innerWidth - W * s) / 2)}px`;
+  draw();
+}
+addEventListener('resize', resize);
+
+addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  if (k === 'r') corrupt(6);
+  else if (k === 'f') repair();
+  else if (k === ' ') { corrupt(6); repair(); }
+  else if (k === 'n') fresh();
+  else return;
+  draw();
+});
+
+resize();
+
+window.__worldStats = { kind: 'repair' };
+window.__repair = {
+  get stats() {
+    return {
+      cols: COLS, rows: ROWS, tiles: tiles.length,
+      conflicts: conflicts.length,
+      region: region ? region.cells.length : 0,
+      changed: changed.length,
+      lastRun,
+    };
+  },
+  corrupt(n = 6) { corrupt(n); draw(); return this.stats; },
+  repair() { repair(); draw(); return this.stats; },
+  step(n = 6) { corrupt(n); repair(); draw(); return this.stats; },
+  fresh() { fresh(); draw(); return this.stats; },
+};
+</script>
+</body>
+</html>

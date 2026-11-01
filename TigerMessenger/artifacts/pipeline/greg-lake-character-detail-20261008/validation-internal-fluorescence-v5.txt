@@ -1,0 +1,15 @@
+✔ fine ink keeps bird/lizard surfaces and all animal pivots and behaviour references; monkey shape is separately approved (1.796542ms)
+✔ fine shells weld coincident contour normals and cap toes, wings and tail tips by their actual thickness (25.401584ms)
+✔ contour is stable at device scale, screen-capped and independent of shared brush-noise shader (2.587375ms)
+✔ bird colour correction preserves every anatomical/outline vertex, pivot and exact five RNG calls (34.544417ms)
+✔ real separated head/breast/tail and wing feather colour regions survive the final local art pass (835.528084ms)
+✔ head-only internal fluorescence replaces the visible whole-bird aureole without new resources (22.520291ms)
+✔ lizard keeps all green vertex colours and geometry while only torso has internal pink-purple emission (14.141792ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1016.253

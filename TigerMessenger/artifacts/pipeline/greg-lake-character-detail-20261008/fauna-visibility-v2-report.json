@@ -1,0 +1,16 @@
+{
+  "version": "coral-native-fauna-v2",
+  "observedGPUInputs": [
+    "compare-fireflies-fauna-v1.jpg",
+    "compare-pinkHanger-fauna-v1.jpg"
+  ],
+  "fixes": {
+    "firefly": "sprite size and alpha footprint unchanged; local opacity factor .2→.75; initial .16→.6, authored dynamic flicker same, no larger halo",
+    "pinkHanger": "eye center Z .231→.258; original surface Z .24973/.24744 hid previous eye front Z .245; new front Z .272 visible <.03 proud of skin"
+  },
+  "preserved": "all original RNG, formal counts, paths and phase metadata; no other species modified",
+  "CPU": "6/6 tests, including finite/closed mesh, original RNG+placement baseline, runtime light opacity, eye-first ray hit and skin clearance .005–.03",
+  "GPU": "await parent review of v2",
+  "rollback": "fauna-v1/visibility-source.txt (only two functions; shared file not globally restored)",
+  "log": "validation-fauna-v2.txt"
+}

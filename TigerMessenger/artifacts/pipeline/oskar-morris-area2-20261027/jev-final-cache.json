@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "5c565d5ef1e1c9e1ff3e34452ff291aaf1ac59ef84b7742d3b583402f605393a",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.91
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.61,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.14,
+        "lighting": 0,
+        "navigation": 0.16,
+        "review": 0.69
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.48
+    }
+  },
+  "usage": {
+    "input_tokens": 829,
+    "output_tokens": 91,
+    "cost_usd": 0.000349,
+    "credits_remaining_usd": 4.896042
+  },
+  "elapsed_ms": 1873,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "current enlarged bare and formal game images",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "full riding enlarged route and railway envelopes",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,78 @@
+{
+  "passed": true,
+  "scope": "eight production seed/dimension fixtures on inclined triangulated spherical ocean; not full-world collision audit",
+  "results": [
+    {
+      "seed": 0,
+      "foamTriangles": 224,
+      "talus": 6,
+      "misses": 0,
+      "maxAnchorError": 4.809038728695314e-7,
+      "maxFootprint": 8.363582069899849,
+      "limit": 8.724552759219087
+    },
+    {
+      "seed": 1,
+      "foamTriangles": 224,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 4.954403672804975e-7,
+      "maxFootprint": 11.644219134155307,
+      "limit": 11.68887844991855
+    },
+    {
+      "seed": 2,
+      "foamTriangles": 224,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 9.727634643491578e-7,
+      "maxFootprint": 13.977961299600068,
+      "limit": 14.020930067982595
+    },
+    {
+      "seed": 3,
+      "foamTriangles": 224,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 4.780804872608901e-7,
+      "maxFootprint": 8.794965587682807,
+      "limit": 8.854599952697756
+    },
+    {
+      "seed": 4,
+      "foamTriangles": 224,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 9.477657987033705e-7,
+      "maxFootprint": 11.32234557148309,
+      "limit": 11.549689017060329
+    },
+    {
+      "seed": 5,
+      "foamTriangles": 224,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 4.935458534222059e-7,
+      "maxFootprint": 13.424963915409096,
+      "limit": 13.517019377388031
+    },
+    {
+      "seed": 6,
+      "foamTriangles": 224,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 9.546995670683955e-7,
+      "maxFootprint": 8.186641925570433,
+      "limit": 8.22003555976625
+    },
+    {
+      "seed": 10,
+      "foamTriangles": 224,
+      "talus": 5,
+      "misses": 0,
+      "maxAnchorError": 4.79242374985811e-7,
+      "maxFootprint": 8.776683807373058,
+      "limit": 8.806829125094435
+    }
+  ]
+}

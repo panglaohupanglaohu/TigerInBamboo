@@ -1,0 +1,79 @@
+✔ formal player adapter returns articulated illustrated courier, fitted to existing player scale (101.8805ms)
+✔ walking, sprinting, jumping, mounting, dismounted boarding and delivery keep real pivots live (35.321417ms)
+✔ flat palette, fine outline shader and rigid batches are finite and below legacy geometry cost (123.057291ms)
+✔ reedbank divided hem follows thighs during riding and life-specific props are retained (30.0345ms)
+✔ leaf pod opens to inspect mail and closes for running or riding without detaching hinges (27.019042ms)
+✔ rear hair continuously covers skull from crown through ear line without new geometry batches (26.139542ms)
+V9 canopy group submissions {"old":13824,"after":192,"saved":13632}
+✔ 48 real factory canopies retain exact ordered triangles per material with four submissions each (8.282917ms)
+✔ leaf veins and stems remain geometrically identical (1.500292ms)
+✔ actor reconstruction preserves original random stream and bounds draw calls (172.888875ms)
+✔ whale body is a closed smooth volume; small side eyes and rounded fins retain forward axis (4.750667ms)
+✔ flower cup has closed thin walls, a floor under passengers and one line batch (21.303666ms)
+✔ wing and work-arm pivots remain available to existing animations (59.528625ms)
+✔ actual factory preserves creature counts, pink hanger identity and story anchors (759.986875ms)
+✔ coral atmosphere stays local and attenuated throughout animation; visual rollback restores legacy glow (794.614083ms)
+✔ ordinary lizards follow rendered rim/floor, turn before entrance, and retain legacy rollback and water carrier (2433.381083ms)
+✔ falling and floating leaves are single two-sided tapered blades, preserve RNG and pool slots (366.073083ms)
+rounded fan geometry {"trianglesPerFan":396,"totalTriangles":147708,"originalTriangles":1039248,"drawCalls":10,"domed":373}
+✔ real crown groups become fewer broad fan instances without extra draws or moved anchors (0.87275ms)
+✔ every fan vertex stays inside its original crown envelope and its stem meets the original branch anchor (3.639042ms)
+✔ shared fan has a closed domed top, drooping edge and coherent face color (0.437833ms)
+✔ placed crown surfaces retain a visible dome and tilt instead of horizontal discs (3.043417ms)
+✔ local palette pass installs one shared vein material with near-view LOD and no added outline meshes (8.619958ms)
+✔ spherical placement preserves canopy and branch common-frame relationship (1.576084ms)
+✔ rollback restores original crown visibility and a disabled install is inert (1.108875ms)
+{"outerCliff":{"version":1,"renderDraws":2,"cracks":41,"roots":7,"depthInner":[6.355419508566815,10.597598723818523],"walkable":false,"entrance":"same angular endpoints as existing rim","triangles":2698,"topAnchorCount":193},"minRadius":38.660296115026206,"minY":29.402400970458984,"maxY":40,"topBytesUnchanged":true,"walkwayWidthWorld":2}
+✔ production outer cliff attaches to the real rim, closes its shell and preserves original walking geometry byte for byte (1259.795792ms)
+✔ ordinary monkey landing points are grounded near real trunks without replacing route objects (4.956959ms)
+✔ ordinary leap centres clear new branches between original landing zones (321.677625ms)
+✔ relocated ordinary routes preserve original animation timing and all repair actors through 20 seconds (444.399541ms)
+✔ real perch supports survive spherical placement without a second coordinate change (3.144125ms)
+✔ dispose and reinstall seats roots on final V7 shortened trunks, without leaked geometry (672.96825ms)
+organic bark {"trunks":55,"branches":230,"deformedTrunks":27,"deformedBranches":214,"moved":12432,"maxOrganicOffset":0.6323950384417698}
+actual embedded branch bases preserved 211
+✔ organic shape changes real centreline without any extra triangles or draw surfaces (4.330875ms)
+✔ all structural end rings, real perch anchors, under-water roots and transforms stay fixed (6.269667ms)
+✔ walk/bridge attachment band stays unchanged and recomputed boxes remain valid after placement (7.074209ms)
+✔ branch bases that were embedded in wood remain attached to actual closed surfaces (12.456792ms)
+understory statistics {"plants":495,"rimPlants":83,"rimAngularCoverage":0.49027777777777776,"vines":180,"counts":{"fern":89,"fan":46,"pendant":360},"triangles":37084,"drawCalls":4,"trunks":55}
+understory maximum inner Y 52.96792840873817
+fissure continuity {"colonies":18,"neighbours":279,"overlapping":277,"ratio":0.992831541218638}
+irregular rim habitats {"plants":83,"clusters":7,"heroes":20,"heightRange":[0.5090022751270726,3.404684903499485]}
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (4.640959ms)
+✔ lush understory uses four instanced batches within triangle budget, not per-plant mesh draws (13.150625ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (24.254083ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (12.956416ms)
+✔ fissure habitats form unequal attached overlapping trails, not isolated shelf dots (0.315541ms)
+✔ rim foliage uses fewer unequal habitats with large upright fans and low fern mats (3.892833ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (49.147584ms)
+✔ entry link attaches to actual graded tread and supports the player route after spherical placement (367.204584ms)
+✔ full placed root forceDrink cycle never intersects the entry-link volume with visible head neck or torso (12108.216333ms)
+✔ natural pockets embed in actual clipped wall and taper back into it (43.692083ms)
+✔ soil plants root on real pocket caps; root seams stay against the wall (33.414875ms)
+✔ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (14.076208ms)
+✔ protected paths, story worksite, original tree and swimming domain remain unchanged (11.244709ms)
+✔ spherical placement preserves attachment and dispose exactly restores old visuals (69.710666ms)
+✔ remaining fauna preserves exact sampled RNG consumption and authored placement/phase metadata (186.06175ms)
+✔ first fauna pass uses sealed tapered anatomy and restrained shared ink (52.18575ms)
+✔ formal factory retains native identities and ribbon animation keeps thickness and contour attached (1272.269958ms)
+✔ fish, swimmer and point lights use formal anatomy with finite closed parts and bounded drawing cost (806.462708ms)
+✔ micropoint appearance retains explicit legacy atmosphere fallback (0.521292ms)
+✔ pink hanger eyes reach the actual curved skin surface (5.44325ms)
+real boat render batches {"before":59,"after":55,"robeBatches":6,"gripBatches":2,"static":11}
+✔ only explicit swamp style changes rendering; both real 26-slot rigs preserve every transform through rowing and sedation (187.65325ms)
+✔ hands retain real grip geometry and all original ship/oar static meshes; fewer instanced batches replace feather layers (0.990209ms)
+✔ real lake keeps two working boats with 52 same crew slots and no style change to unrelated ships (930.182417ms)
+✔ adult coral character has broad temples, muscular shoulders/thighs, load-bearing soles and live thin ink (1300.726375ms)
+✔ four beat stance cancels ground speed at multiple scales and speeds; stopped feet do not cycle (0.305292ms)
+✔ swing actively bends separate fore elbow and hind knee/hock while shoulder anchors and paw ends stay attached (6.637ms)
+✔ adult muzzle extends ahead of restrained side-set eyes, without inherited smile/brow addons (0.243ms)
+✔ round38 muzzle is wide and deep with a broad embedded nasal pad, not a detached white tube (4.606792ms)
+ℹ tests 61
+ℹ suites 0
+ℹ pass 61
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13881.438583

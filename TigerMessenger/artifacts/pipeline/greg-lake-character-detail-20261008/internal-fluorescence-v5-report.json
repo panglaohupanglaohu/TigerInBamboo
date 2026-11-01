@@ -1,0 +1,14 @@
+{
+  "revision": "internal-fluorescence-v5",
+  "status": "CPU7/7 passed, frozen for GPU",
+  "actuallyViewed": [
+    "lizard-body-internal-glow-v4.jpg",
+    "bird-head-internal-glow-v4.jpg"
+  ],
+  "finding": "v4 green lizard plus additive pink made cyan-white core. Bird head accepted unchanged.",
+  "changed": "Only swampInternalGlow.js lizard-torso shader branch now uses facing-weighted pink-purple core mixing up to .88 plus .10 low radiance. silhouette-facing=0 has zero tint. Shader cache revision2.",
+  "preserved": "All vertex colours, geometry, story/RNG; bird head exact prior shader expression.",
+  "log": "validation-internal-fluorescence-v5.txt",
+  "rollback": "before-internal-fluorescence/swampInternalGlow-v4.js.txt",
+  "gpu": "Pending parent real shader/image check"
+}

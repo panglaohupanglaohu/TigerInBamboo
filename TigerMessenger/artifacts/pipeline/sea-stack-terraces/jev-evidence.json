@@ -1,0 +1,40 @@
+{
+  "task": "Twelve Apostles canyon rim terraces and colour pass",
+  "target": "User requests blue-grey sea stacks on canyon rim; Oskar-inspired palette organization and real terraces",
+  "visual_observations": {
+    "source": "Assistant inspected current after-hero.png, after-coast.png, after-overview.png",
+    "image_sha256": "3b324d51d023585963b02ee0746cbf72b122e3a8604e2c7c55b2a11c53169110",
+    "completed": [
+      "Two actual shelf levels visible",
+      "Light shelf / blue-grey cliff / olive shrub separation visible",
+      "Shrubs supported by triangles",
+      "Stacks moved to canyon rim"
+    ],
+    "remaining": [
+      "Repeated stepped silhouette still visible; candidate not final art acceptance",
+      "Full-route rail probes and switch compatibility running; old regional probes had zero hits"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Finite mesh and no runtime shader errors",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "All base samples below rendered water triangles",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Full railway clearance after relocation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not claim a finished 3D WFC engine",
+    "WFC currently used for cliff details only; shelves and rim arrangement are authored",
+    "No change to citadel castle this batch"
+  ]
+}

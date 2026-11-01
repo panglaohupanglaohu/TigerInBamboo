@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Mixed Perspective (verticals stay parallel)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #2c4149; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 12px; color: #e7f0f4;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 12px; color: #dbe8ee;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">混合透视：远处更小，但竖棱永远竖直（1310503825510367232）— 左 = 普通透视，右 = 混合</div>
+<div id="hud"></div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+/**
+ * mixedpersp.html — "混合透视"的小样（原文 1310503825510367232, 2020-09-28）：
+ *
+ *   "Ok, I tried the mixed perspective. Note how houses further away are smaller,
+ *    yet the vertical lines stay straight and parallel. It's definitely not a good
+ *    fit for Townscaper, but might work well if I make another Bad North-ish game
+ *    with a hearty mix of 3D meshes and billboards."
+ *
+ * 为什么普通透视里竖线会歪：相机一俯仰，世界竖直方向就不再平行于成像面。
+ * 一条竖棱的两个端点因此有不同的 view-space z，透视除法给出的 ndc.x 也不一样
+ * → 竖棱在画面上是**斜的**，所有竖线汇聚到天顶的消失点（三点透视的第三点）。
+ *
+ * 混合透视的做法（这个页面里用一条顶点着色器实现）：
+ *   · ndc.x / ndc.z 仍然按**地面投影点**（把 y 压到地面高度）做透视 → 远处物体照样变小；
+ *   · ndc.y 直接取世界高度的一次函数（`(y - refY) * k`）→ 没有透视除法，
+ *     所以同一根竖棱的两个端点 ndc.x 完全相同，画面上就是**竖直且互相平行**的。
+ * 于是画面里只剩两个消失点（水平方向），竖线不收敛。
+ *
+ * 这不是投影矩阵能表达的（矩阵乘法给不出 "x 用投影点、y 用原点的非线性组合"），
+ * 必须写在**顶点着色器**里 —— 这也是为什么它没法只改 camera.projectionMatrix。
+ */
+
+import * as THREE from 'three';
+
+const cv = document.getElementById('c');
+const hud = document.getElementById('hud');
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setScissorTest(true);
+
+const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 200);
+const target = new THREE.Vector3(0, 1.4, 0);
+let yaw = 0.55, pitch = 0.30, dist = 26;
+
+// ---- 几何：一条街（盒子高度不一）+ 地面 ---------------------------------
+// 第一版把所有盒子焊成一段 BufferGeometry，结果画出来是一片飞散的三角面
+// （合并时 position 已经乘过矩阵，而 shader 里又乘了一次 modelMatrix 的来源搞混了）。
+// 这里改回最笨的做法：一个盒子一个 Mesh，位置交给 three 的 modelMatrix —— 
+// 顶点着色器里的 `modelMatrix * position` 就自然是对的。
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#2c4149');
+const boxes = [];
+{
+  let s2 = 7;
+  const rnd = () => ((s2 = (s2 * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+  for (let i = 0; i < 9; i++) {
+    const z = -16 + i * 4;
+    for (const side of [-1, 1]) {
+      const h = 1.2 + rnd() * 2.8;
+      boxes.push({ x: side * 3.4, z, w: 2.4, d: 2.4, h });
+    }
+  }
+  // 地面：薄板
+  boxes.push({ x: 0, z: 0, w: 40, d: 70, h: 0.1, ground: true });
+}
+
+// ---- 着色器：一个 material，两种投影 ------------------------------------
+const VERT = /* glsl */`
+  uniform mat4 uProj;
+  uniform mat4 uView;
+  uniform float uMixed;    // 0 = 普通透视，1 = 混合
+  uniform float uScaleY;   // 世界高度 → ndc.y 的系数
+  uniform float uRefY;     // 参考高度（画面中心对应的 y）
+  varying vec3 vN;
+  varying vec3 vW;
+
+  void main() {
+    vec4 world = modelMatrix * vec4(position, 1.0);
+
+    // 普通透视：直接用投影矩阵
+    vec4 c = uProj * uView * world;
+
+    // 混合透视：把点压到地面高度，先算它的透视位置 (gx, gy)，再用**世界高度的一次项**
+    // 把 gy 抬起来。这样：
+    //   · 地面（y = uRefY）→ 仍是正常的透视，远处照样退远；
+    //   · 同一根竖棱（x,z 固定）→ gx 恒定、gy 恒定，只加一个 A·y 的线性项
+    //     → 屏幕上是**竖直且平行**的线。
+    // 第一版把 gy 整个换成 A·y（没有 gy 项），结果水平面被压成一条线、
+    // 整条街糊成一堵墙 —— 这一项不能丢。
+    vec4 ground = uProj * uView * vec4(world.x, uRefY, world.z, 1.0);
+    float gx = ground.x / max(ground.w, 1e-4);
+    float gy = ground.y / max(ground.w, 1e-4);
+    float wy = gy + (world.y - uRefY) * uScaleY;
+
+    vec4 mixedClip = vec4(gx * c.w, wy * c.w, c.z, c.w);
+
+    // 相机背后的点必须丢出屏幕：混合投影用的是"地面点"的 w，
+    // 而地面点可能在相机后面 → 除法翻号，画面顶部就会拉出几条斜带。
+    if (c.w <= 0.001) {
+      gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+    } else {
+      gl_Position = mix(c, mixedClip, uMixed);
+    }
+
+    vN = normalize(mat3(modelMatrix) * normal);
+    vW = world.xyz;
+  }
+`;
+
+const FRAG = /* glsl */`
+  varying vec3 vN;
+  varying vec3 vW;
+  uniform vec3 uLight;
+
+  void main() {
+    // 不用顶点色（ShaderMaterial 不带 USE_COLOR 时 color 属性不存在，
+    // 第一版还在 shader 里取 color → 编译失败、整页空白）。
+    // 墙面米色、顶面亮一点，并按 x 做一点点色调变化，竖棱就看得出来。
+    float lam = max(0.0, dot(normalize(vN), uLight));
+    vec3 wall = mix(vec3(0.70, 0.64, 0.56), vec3(0.80, 0.78, 0.70), fract(vW.z * 0.21 + 0.3));
+    vec3 top = vec3(0.88, 0.87, 0.82);
+    vec3 base = mix(wall, top, clamp(vN.y, 0.0, 1.0));
+    vec3 c = base * (0.40 + 0.52 * lam);
+    gl_FragColor = vec4(pow(c, vec3(1.0 / 2.2)), 1.0);
+  }
+`;
+
+const material = new THREE.ShaderMaterial({
+  uniforms: {
+    uProj: { value: camera.projectionMatrix },
+    uView: { value: camera.matrixWorldInverse },
+    uMixed: { value: 0 },
+    uScaleY: { value: 1 },
+    uRefY: { value: 0 },
+    uLight: { value: new THREE.Vector3(0.42, 0.82, 0.38).normalize() },
+  },
+  vertexShader: VERT,
+  fragmentShader: FRAG,
+});
+
+for (const b of boxes) {
+  const geo = new THREE.BoxGeometry(b.w, b.h, b.d);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.position.set(b.x, b.h / 2, b.z);
+  mesh.userData.ground = !!b.ground;
+  scene.add(mesh);
+}
+
+// ---- 量"竖棱歪了多少" ---------------------------------------------------
+// 取每栋房子正面的左右两条竖棱，比较两端点在屏幕 x 上的偏移（像素）
+function verticalDriftPx(mixed, W, H) {
+  const cam = camera;
+  cam.updateMatrixWorld();
+  const proj = cam.projectionMatrix;
+  const view = cam.matrixWorldInverse;
+  const refY = 0;
+  const scaleY = proj.elements[5] / Math.max(1e-4, dist);   // 让画面中心处的纵向比例与透视一致
+
+  const project = (x, y, z) => {
+    const w = new THREE.Vector4(x, y, z, 1).applyMatrix4(view);
+    const c = new THREE.Vector4(w.x, w.y, w.z, w.w).applyMatrix4(proj);
+    if (!mixed) return [c.x / c.w, c.y / c.w];
+    // 地面点必须在**世界空间**里取 (x, refY, z) 再进 view ——
+    // 第一版拿 view 空间的 w.x/w.z 又乘了一次 matrixWorldInverse，量出来残留 15px
+    const g = new THREE.Vector4(x, refY, z, 1).applyMatrix4(cam.matrixWorldInverse);
+    const gc = new THREE.Vector4(g.x, g.y, g.z, 1).applyMatrix4(proj);
+    const ndcX = gc.x / Math.max(1e-4, gc.w);
+    void c;
+    const cy = (y - refY) * scaleY;
+    return [ndcX, cy];
+  };
+
+  let maxDrift = 0;
+  for (let i = 0; i < 9; i++) {
+    const z = -16 + i * 4;
+    for (const side of [-1, 1]) {
+      const x = side * 3.4;
+      for (const dz of [-1.2, 1.2]) {
+        const a = project(x - side * 1.2, 0, z + dz);
+        const b = project(x - side * 1.2, 2.4, z + dz);
+        maxDrift = Math.max(maxDrift, Math.abs(a[0] - b[0]) * (W / 2));
+      }
+    }
+  }
+  return +maxDrift.toFixed(2);
+}
+
+// ---- 渲染 ---------------------------------------------------------------
+function resize() {
+  const w = cv.clientWidth || innerWidth;
+  const h = cv.clientHeight || innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = (w / 2) / h;      // 每个视口占一半宽
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+
+let drag = false, lx = 0, ly = 0, spin = true;
+cv.addEventListener('pointerdown', (e) => { drag = true; lx = e.clientX; ly = e.clientY; spin = false; });
+addEventListener('pointerup', () => { drag = false; });
+addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  yaw -= (e.clientX - lx) * 0.006;
+  pitch = Math.min(0.9, Math.max(-0.05, pitch + (e.clientY - ly) * 0.004));
+  lx = e.clientX; ly = e.clientY;
+});
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  if (spin) yaw += dt * 0.12;
+
+  camera.position.set(
+    target.x + Math.cos(yaw) * Math.cos(pitch) * dist,
+    target.y + Math.sin(pitch) * dist,
+    target.z + Math.sin(yaw) * Math.cos(pitch) * dist,
+  );
+  camera.lookAt(target);
+  camera.updateMatrixWorld();
+  camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
+
+  // 混合透视的纵向比例：取画面中心深度处的透视比例，两者在中心处一致
+  const scaleY = camera.projectionMatrix.elements[5] / dist;
+  material.uniforms.uScaleY.value = scaleY;
+
+  const w = cv.clientWidth, h = cv.clientHeight;
+
+  // 左：普通透视
+  material.uniforms.uMixed.value = 0;
+  renderer.setViewport(0, 0, w / 2, h);
+  renderer.setScissor(0, 0, w / 2, h);
+  renderer.render(scene, camera);
+
+  // 右：混合透视（同一个 material，只换一个 uniform）
+  material.uniforms.uMixed.value = 1;
+  renderer.setViewport(w / 2, 0, w / 2, h);
+  renderer.setScissor(w / 2, 0, w / 2, h);
+  renderer.render(scene, camera);
+
+  const driftStd = verticalDriftPx(false, w / 2, h);
+  const driftMix = verticalDriftPx(true, w / 2, h);
+  hud.textContent =
+    `pitch ${(pitch * 180 / Math.PI).toFixed(1)}°   yaw ${(yaw * 180 / Math.PI).toFixed(1)}°   dist ${dist}\n` +
+    `竖棱最大横向偏移   普通透视 ${driftStd}px   混合透视 ${driftMix}px\n` +
+    `（偏移 = 同一根竖棱上下端在屏幕 x 上的差；普通透视下它会朝天上汇聚）`;
+
+  requestAnimationFrame(frame);
+}
+
+resize();
+requestAnimationFrame(frame);
+
+window.__worldStats = { kind: 'mixedpersp' };
+window.__mixed = {
+  set(y, p, d) { yaw = y; pitch = p; dist = d; spin = false; },
+  stopSpin() { spin = false; },
+  measure() {
+    const w = cv.clientWidth, h = cv.clientHeight;
+    return { standard: verticalDriftPx(false, w / 2, h), mixed: verticalDriftPx(true, w / 2, h), pitch };
+  },
+};
+</script>
+</body>
+</html>

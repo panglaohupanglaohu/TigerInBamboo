@@ -60,6 +60,7 @@ import { Timer } from "three/addons/misc/Timer.js";
 import * as THREE from "three";
 import { createStage } from "./core/stage.js";
 import { createPerfProbe } from "./tools/perfProbe.js?v=remote-clearance-20261025";
+import { installUiLayers } from "./ui/uiLayers.js?v=ui-layers-r1";
 import { createSceneCensus } from "./tools/sceneCensus.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js?v=airship-down15-20261025";
@@ -177,7 +178,7 @@ import {
   resolveSceneIdsFromUrl,
   loadScenesIncrementally,
   listScenes,
-} from "./scenes/registry.js?v=morris-threeview-r81";
+} from "./scenes/registry.js?v=apostles-r4b";
 import { mergeColliders, updateScenes } from "./scenes/sceneApi.js";
 import {
   resolveWorldLandmarks,
@@ -188,6 +189,9 @@ import {
 // ---------- 舞台 ----------
 const { scene, camera, renderer } = createStage();
 morrisViewer.camera = camera;
+morrisViewer.renderer = renderer;
+// Townscaper panel "返回玩家视角": leave the Morris tour camera (if open) and snap the follow camera back behind the player.
+morrisViewer.returnToPlayer = () => { if (morrisInspection?.active) morrisInspection.restore(); else cameraRig.snapToPlayer(); };
 let targetCityRuntime=null;
 let citadelGuardian=null;
 let targetCityInspection=null;
@@ -197,6 +201,8 @@ let morrisInspection=null,morrisStartupTourShown=false;
 renderer.info.autoReset = false;
 // 性能探针（F10 显隐 / F9 截图）。performance.now() 以页面导航为起点，
 // 首帧读数即完整 boot 耗时，无需额外基准。
+// UI layers first: player HUD / editor groups / monitors (dev-only layers hidden on published builds).
+installUiLayers();
 const perfProbe = createPerfProbe(renderer);
 // 固定容量灯池：接管全部点光，常驻 lightPoolCapacity 盏代理灯追随最重要的灯位。
 // 它与 idleLightCulling 会争抢同一批灯的 visible，所以二选一。回滚：?lightPoolV1=0
@@ -1276,6 +1282,7 @@ if (messenger?.landmarks?.canalJunctionCitadel) {
       ),
   });
 }
+// Build menu dropdown (morrisTownscaper.js) lists the castle / crystal editors next to Morris Lake and the Twelve Apostles.
 const getCitadelTarget = () => {
   const t = citadelTargets.find((x) => (x.id ?? null) === citadelTargetId) || citadelTargets[0];
   return t ? t.get() : null;
@@ -1741,7 +1748,7 @@ if(batianFleet&&new URLSearchParams(location.search).get('batianHeightIndex')!==
   scene.userData.batianHeightIndexes=batianIndexes;
 }
 let batianFollowCamera=entryParams.get('tour')==='fleet-command';
-const batianHud=document.createElement('details');batianHud.style.cssText='position:fixed;left:12px;bottom:160px;z-index:30;background:#17303ddd;color:#e4e7db;border-radius:10px;padding:8px;font:12px sans-serif;max-width:230px';
+const batianHud=document.createElement('details');batianHud.id='batian-hud';batianHud.style.cssText='position:fixed;left:120px;bottom:160px;z-index:235;background:#17303ddd;color:#e4e7db;border-radius:10px;padding:8px;font:12px sans-serif;width:230px;max-width:calc(100vw - 132px)';
 if(batianFleet){const title=document.createElement('summary');title.textContent='霸天舰队';batianHud.append(title);const select=document.createElement('select');select.id='batian-target';for(const target of batianTargets){const opt=document.createElement('option');opt.value=target.id;opt.textContent=target.label;select.append(opt);}const launch=document.createElement('button');launch.textContent='集结出击';launch.onclick=()=>{if(!batianFleet.start(select.value))showToast('舰队暂不可出击：请先结束乘机或当前战斗',2.5);else setBatianBattleBgm(true);};const back=document.createElement('button');back.textContent='召回返航';back.onclick=()=>batianFleet.retreat();const status=document.createElement('div');status.id='batian-fleet-status';const follow=document.createElement('button');follow.textContent=batianFollowCamera?'返回信使':'跟随霸天';follow.onclick=()=>{batianFollowCamera=!batianFollowCamera;follow.textContent=batianFollowCamera?'返回信使':'跟随霸天';};batianHud.append(select,launch,back,follow,status);const credit=document.createElement('a');credit.textContent='Hitman · Kevin MacLeod · CC BY 4.0';credit.href='https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300013';credit.target='_blank';credit.rel='noopener';credit.style.cssText='display:block;font-size:10px;color:#81b8b2;margin-top:6px';batianHud.append(credit);document.body.append(batianHud);}
 const foxAli = messenger?.landmarks?.camp?.landmarks?.foxAli || null;
 const foxNpc = createFoxNpc({
@@ -2389,9 +2396,13 @@ function animate() {
     camera.updateMatrixWorld(true);
   }
   frameCpuMark("cullingAndLights");
+  morrisViewer.applyTownCamera?.();
   const restoreGuardianAtmosphere=guardianAtmosphere.apply();
+  const restoreTownLighting=morrisViewer.beginTownRender?.({scene,camera,renderer});
   try {
-  if (nightBloom) {
+  // Morris lake town (REACodeRefactoring) is drawn after the main pass and needs its depth: keep the direct path near the lake.
+  const townOverlay=morrisViewer.townOverlayActive?.(camera)===true;
+  if (restoreTownLighting || townOverlay) {renderer.render(scene,camera);if(townOverlay)morrisViewer.renderTownOverlay?.({scene,camera,renderer});} else if (nightBloom) {
     try {
       nightBloom.setSize(renderer.domElement.width, renderer.domElement.height);
       nightBloom.render(scene, camera);
@@ -2408,7 +2419,7 @@ function animate() {
   } else {
     safeRender();
   }
-  } finally { restoreGuardianAtmosphere(); }
+  } finally { restoreTownLighting?.();restoreGuardianAtmosphere(); }
   // 必须在 render 之后读，renderer.info 才是本帧的真实提交数
   frameCpuMark("render");
   if(frameCpuEnabled){frameCpuRows.push(frameCpuRow);if(frameCpuRows.length>60)frameCpuRows.shift();}
@@ -2512,6 +2523,8 @@ function fleetSelfCheck() {
   };
 }
 
+// Castle / crystal-city editors join the build menu's 构建对象 dropdown (same 构建 editor group as the lake and the apostles).
+morrisViewer.buildEditors=[citadelEditorPanel&&{id:'editor:citadel',name:'高山圣城 · 古堡搭建',open:()=>citadelEditorPanel.open()},crystalCityEditorPanel&&{id:'editor:crystal',name:'水晶城 · 搭建',open:()=>crystalCityEditorPanel.open()}].filter(Boolean);
 window.__tm = {
   get gateApproachRailings() { return gateApproachRailings; },
   bookshopJakubPass,

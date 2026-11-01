@@ -1,0 +1,155 @@
+{
+  "audio": {
+    "active": [],
+    "muted": false,
+    "range": 10,
+    "source": "existing world SFX budget and live post-gain analyser",
+    "synthesis": "original, not field recording",
+    "weatherBaseGain": 0.15,
+    "weatherGain": 0.15000000596046448,
+    "weatherOriginalBaseGain": 0.6
+  },
+  "bridge": "real curved deck and stone parapets",
+  "castle": "cream stone keep and offset wings with russet gables",
+  "cuckoos": 3,
+  "curledLeafClumps": 342,
+  "cypresses": 10,
+  "diameter": 116.413057686842,
+  "farmGate": "open wooden rails between stone posts",
+  "flowers": 4640,
+  "hollyhockClumps": 24,
+  "horsePositions": [
+    [
+      -16,
+      0.9937646171262032,
+      4
+    ],
+    [
+      24,
+      0.04251100734418856,
+      -4
+    ],
+    [
+      -7,
+      -0.2065379110776462,
+      23
+    ]
+  ],
+  "horses": 3,
+  "layers": [
+    {
+      "name": "花草坪",
+      "range": "前场径向约1.4–2m"
+    },
+    {
+      "name": "溪流缓丘",
+      "range": "中场约2–7m"
+    },
+    {
+      "name": "城堡山肩",
+      "range": "城基径向7.5m"
+    },
+    {
+      "name": "背景高山",
+      "range": "主峰径向约27m"
+    }
+  ],
+  "linearScale": 2.6457513110645907,
+  "navigationTraversalVerified": false,
+  "oldSceneMoved": false,
+  "pathWidth": 3.2,
+  "planarAreaRatio": 7,
+  "planeTrees": 6,
+  "previewListening": false,
+  "rabbits": 8,
+  "radius": 58.206528843421,
+  "revision": "morris-ecology-r5-20261026",
+  "robins": 4,
+  "site": {
+    "candidates": 2304,
+    "envelope": 70.15408379511177,
+    "lat": 20,
+    "lon": 150,
+    "method": "closest safe enlarged footprint along bookshop-to-Saihoji sea corridor; colliders/landmarks/land shell/rail survey",
+    "minimumClearance": 71.35535519896331,
+    "nearestSafeCandidates": [
+      {
+        "clearance": 71.35535519896331,
+        "lat": 20,
+        "lon": 150,
+        "targetDistance": 80.23181047331748
+      },
+      {
+        "clearance": 70.60416302286335,
+        "lat": -70,
+        "lon": -80,
+        "targetDistance": 257.3299503639378
+      },
+      {
+        "clearance": 74.80114304934393,
+        "lat": -70,
+        "lon": -75,
+        "targetDistance": 260.11943079351386
+      },
+      {
+        "clearance": 73.34604667785142,
+        "lat": -65,
+        "lon": -75,
+        "targetDistance": 261.2941453145577
+      },
+      {
+        "clearance": 79.02083655517258,
+        "lat": -70,
+        "lon": -70,
+        "targetDistance": 262.81539034036115
+      },
+      {
+        "clearance": 78.59381891913544,
+        "lat": -65,
+        "lon": -70,
+        "targetDistance": 264.6066286161912
+      }
+    ],
+    "obstacles": 742,
+    "otherObjectsMoved": false,
+    "route": {
+      "bookshopDistance": 111.5912034905415,
+      "departure": [
+        -100.07376737885296,
+        -41.35911952176487,
+        117.79076498175732
+      ],
+      "destination": [
+        -67.84384769251405,
+        84.78708227731278,
+        -117.50899118439892
+      ],
+      "request": "书店镇去苔庭路上的广阔海域",
+      "saihojiDistance": 222.1673641286946
+    },
+    "routeMidpointDistance": 80.23181047331748,
+    "routeMidpointEdgeDistance": 22.025281629896483,
+    "routeSamples": 2403
+  },
+  "source": "normal-game-installed",
+  "stream": "authored descending radial levels, carved real bed",
+  "streamLevels": [
+    5,
+    3.7,
+    2.1,
+    1.35,
+    0.9,
+    0.35,
+    -0.6
+  ],
+  "style": "Arts and Crafts / William Morris inspired original geometry",
+  "view": "岛屿全景",
+  "wholeNavigationVerified": false,
+  "wildlife": {
+    "cuckoos": 3,
+    "rabbits": 8,
+    "robins": 4,
+    "scheduledAt": 306.509099999994,
+    "successfulVoices": 0
+  }
+}

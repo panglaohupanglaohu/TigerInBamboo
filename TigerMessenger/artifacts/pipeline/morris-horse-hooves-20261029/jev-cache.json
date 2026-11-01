@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "d01df04864284bfdad2b73d7df0e912c12a8c5bdcd381a39e6bcf3149365f572",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.91
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.3,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.17,
+        "lighting": 0,
+        "navigation": 0.44,
+        "review": 0.39
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.54
+    }
+  },
+  "usage": {
+    "input_tokens": 647,
+    "output_tokens": 91,
+    "cost_usd": 0.000272,
+    "credits_remaining_usd": 4.88641
+  },
+  "elapsed_ms": 2935,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "normal game gait/grounding",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

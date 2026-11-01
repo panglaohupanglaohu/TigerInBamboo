@@ -1,0 +1,27 @@
+{
+  "passed": 5,
+  "originalLength": 227.77801931241984,
+  "newLength": 247.09570845579114,
+  "originalWestReturnLength": 18.847974008476456,
+  "newWestReturnLength": 28.27327925884896,
+  "originalEastReturnLength": 14.29215400882012,
+  "newEastReturnLength": 15.16876416222837,
+  "oldEastStart": {
+    "x": 28,
+    "z": 27.6,
+    "h": 7.4,
+    "tx": 0.999999999999976,
+    "tz": 0,
+    "s": 193.88464558855182
+  },
+  "newEastStart": {
+    "x": 32,
+    "z": 27.6,
+    "h": 7.7,
+    "tx": 0.9999722499053718,
+    "tz": 0.007449793261814678,
+    "s": 208.32572457851475
+  },
+  "bridgePoseUnchanged": true,
+  "testPolicy": "fixed structural anchors retained; middle and upper route geometry deliberately redesigned, not legacy point equality"
+}

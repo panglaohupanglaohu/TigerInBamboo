@@ -1,0 +1,18 @@
+{
+  "status": "V12 new-method candidate; bare side/front/threequarter inspected; parent review needed",
+  "method": "metaball body/limbs only; explicit neck and 8-region skull cross-section lofts; joined once through voxel union; original armature contract",
+  "triangles": 154822,
+  "bones": 22,
+  "unweighted": 0,
+  "observations": [
+    "Neck/head automatic field inflation removed; skull and muzzle elongated and throat gap readable",
+    "Pass1 poll cap step fixed in pass2, pass1 images/source retained",
+    "Body shoulder/front-neck seam still visible, head/cheeks and muscle anatomy remain simplified",
+    "Existing cloth/borders restored from V10, no V11 cloth-shortening regression"
+  ],
+  "remaining": [
+    "Parent visual review before runtime integration",
+    "Actual gait, grounding, reins and rider contact not verified",
+    "Mane/tail still rope-like and ornament coarse"
+  ]
+}

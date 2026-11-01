@@ -1,0 +1,208 @@
+{
+  "status": "CPU verified; source frozen; parent GPU review pending",
+  "scope": [
+    "src/world/moebiusTiger.js: only greeting-return ascend water support",
+    "src/assets/characters/tigerTargetV1.js: classify ground by real support rays, distinguish water support",
+    "tests/world/swampTigerWaterReturn.test.mjs: actual factory greeting return regression"
+  ],
+  "appearance": "Tiger round38 geometry/materials unchanged; no stair, entry link, route, story or gait timing edits",
+  "reproduction": {
+    "factory": "createMoebiusSwampPlacement({seed:7711,scale:.5})",
+    "execution": "actual root.userData.update(dt=1/30,t,runtime)",
+    "frames": 18001,
+    "seconds": 600,
+    "transform": {
+      "position": [
+        17,
+        21,
+        -11
+      ],
+      "rotation": [
+        0.31,
+        0.6,
+        -0.2
+      ]
+    },
+    "events": [
+      {
+        "time": 0,
+        "action": "forceDrink"
+      },
+      {
+        "time": 180,
+        "action": "player appears at inner [0,25,0]"
+      },
+      {
+        "time": 200,
+        "action": "player leaves scene"
+      },
+      {
+        "time": 420,
+        "action": "forceDrink again"
+      }
+    ],
+    "random": "Math.random fixed .5 during both traces, restored finally; original seed factory. CPU image loading shim, not GPU"
+  },
+  "before": {
+    "issues": {
+      "missingGroundSupport": 1238,
+      "pawNoActualSurface": 126
+    },
+    "mechanism": "After water greeting, ascend immediately claimed grounded despite null actual ground rays, so feet/body sunk below water before reaching stairs."
+  },
+  "after": {
+    "issues": {},
+    "waterReturnFrames": 338,
+    "waterSupport": "Explicit design water plane inner y25.15, not a terrain collider. grounded=false; feet=[] while returning across water. Original four-foot gait still follows actual xz distance. Transition to real-ground requires actual tread and supported feet.",
+    "maxima": {
+      "rootStep": 1.8197448067691528,
+      "phaseStepError": 1.1368683772161603e-13,
+      "stationaryPhaseAdvance": 0,
+      "footPenetration": 0,
+      "stanceGap": 0.01500000000002899,
+      "swingGap": 0.15899999986188362,
+      "torsoPenetration": 0,
+      "absPitch": 1.1,
+      "legLocalLength": 4.638760893920653,
+      "waterReturnFootBelow": 0
+    },
+    "stoppedFrames": 2763,
+    "raySamples": 6936,
+    "drinkSamples": 32,
+    "finiteChecks": 43272,
+    "elapsedMs": 458376.270417
+  },
+  "comparison": {
+    "samples": 601,
+    "maxSampledHorizontalDifference": 0.0,
+    "maxSampledGaitPhaseDifference": 0.0,
+    "allModeTransitionTimesIdentical": true,
+    "deformationEnvelopesIdentical": true
+  },
+  "deformationBounds": {
+    "coordinateSystem": "per limb mesh local coordinates, not world",
+    "meshes": {
+      "n53": {
+        "min": [
+          -0.4581409692764282,
+          -2.0556013584136963,
+          -1.892069935798645
+        ],
+        "max": [
+          0.5036562085151672,
+          4.065234661102295,
+          0.96591717004776
+        ]
+      },
+      "n60": {
+        "min": [
+          -0.5036239624023438,
+          -2.0470430850982666,
+          -1.859527349472046
+        ],
+        "max": [
+          0.45811355113983154,
+          3.0213510990142822,
+          0.9656270742416382
+        ]
+      },
+      "n67": {
+        "min": [
+          -0.4289160668849945,
+          -2.0684239864349365,
+          -1.648886799812317
+        ],
+        "max": [
+          0.69809490442276,
+          3.5697362422943115,
+          1.695235013961792
+        ]
+      },
+      "n74": {
+        "min": [
+          -0.6980252861976624,
+          -2.06864070892334,
+          -1.533420205116272
+        ],
+        "max": [
+          0.4289892911911011,
+          3.5697362422943115,
+          1.6010037660598755
+        ]
+      }
+    }
+  },
+  "samplingLimits": "Root displacement/gait phase/support classification checked at 30Hz. Actual sole geometry rays and water paw minima checked at 3Hz. Torso sampled vertices, all finite geometry and nose-to-water checked at 1Hz. This is a CPU audit, not a claim of continuous mesh collision proof or GPU approval.",
+  "gpuReproduction": {
+    "longAuditGreetingStarts": 180,
+    "beforeBadReturnStarts": 191,
+    "afterWaterReturningSampleTimes": [
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199,
+      200,
+      201,
+      202
+    ],
+    "afterFirstRecordedRealGroundOnReturn": 203,
+    "returnPatrol": 206.63333333333333,
+    "parentFixture": "For simulation player entering at t0, t12/t14 are proposed water-return capture points; actual encounter geometry may alter end-of-return timing."
+  },
+  "tests": [
+    {
+      "test": "tests/world/swampTigerWaterReturn.test.mjs",
+      "passed": 1,
+      "log": "validation-tiger-water-return-specific.txt"
+    },
+    {
+      "test": "tests/world/swampTigerSupport.test.mjs",
+      "passed": 4,
+      "includes": "9003-frame real scene multi-drink duration regression",
+      "log": "validation-tiger-water-return-regression.txt"
+    }
+  ],
+  "evidence": [
+    "tiger-600s-before-audit.json",
+    "tiger-600s-before-summary.json",
+    "tiger-600s-after-audit.json",
+    "tiger-600s-after-summary.json",
+    "validation-tiger-600s-after.txt",
+    "tiger-water-return.patch"
+  ],
+  "rollback": {
+    "backupDirectory": "before-tiger-water-return",
+    "method": "Reverse only tiger-water-return.patch or restore corresponding owned hunks from backup; do not overwrite concurrent source edits."
+  },
+  "sourceHashes": {
+    "src/world/moebiusTiger.js": "dc8a11a851364b4a2ea6b9086e76936febc4803dd5d1da442fa5a503d7007d74",
+    "src/assets/characters/tigerTargetV1.js": "26a76be30be4d0ae426e442b37e90bc4215cc8a5f7f5d06819aef54fc56ac558",
+    "tests/world/swampTigerWaterReturn.test.mjs": "56e44fbe7bfd07b203bfbf85d6e62cfdc5bb19341b1900777da84c63c0fbed78"
+  },
+  "parentGPU": {
+    "scope": "real factory scale.5 seed7711; virtual entry player rather than native physical input",
+    "t12": {
+      "mode": "ascend",
+      "kind": "water-supported",
+      "grounded": false,
+      "waterReturning": true
+    },
+    "t28": {
+      "mode": "patrol",
+      "kind": "real-ground",
+      "grounded": true,
+      "waterReturning": false
+    },
+    "shaderErrors": [],
+    "screenshots": [
+      "tiger-return-water-before.jpg",
+      "tiger-return-water-after.jpg",
+      "tiger-return-real-ground-after.jpg"
+    ]
+  }
+}

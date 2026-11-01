@@ -1,0 +1,32 @@
+{
+  "task": "Side berth and locust readiness review",
+  "target": "One flank berth, public waterfront arc open, cargo off rails; locust always ready",
+  "visual_observations": {
+    "source": "Assistant inspected current two rendered screenshots and generated modeling diagram",
+    "completed": [
+      "One compact quay on left flank; public front arc remains exposed",
+      "Boxes and receiving shed on side quay",
+      "Locust holds rifle forward in idle render"
+    ],
+    "remaining": [
+      "Generated ship side elevation is modeling reference, not exact existing geometry",
+      "Full manual driving not tested"
+    ]
+  },
+  "checks": [
+    {
+      "name": "10215 rail clearance probes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "18 aim tests and 3 non-firing ready poses",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "No factory or railway redesign",
+    "Pending fleet redesign and city fixes must not be claimed complete"
+  ]
+}

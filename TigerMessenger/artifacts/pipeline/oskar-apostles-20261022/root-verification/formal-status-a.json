@@ -1,0 +1,112 @@
+{
+  "entry": "/TigerMessenger/",
+  "mode": "front-shore-fixed-camera",
+  "frames": 1583,
+  "version": "apostles-oskar-wfc-12-sealed-shoulders",
+  "built": 9,
+  "roots": [
+    "back-left",
+    "back-right",
+    "back-tower",
+    "front-left",
+    "front-right",
+    "bay-1",
+    "bay-2",
+    "bay-3",
+    "bay-4"
+  ],
+  "railClearance": [
+    {
+      "id": "back-left",
+      "minRail": 15.15
+    },
+    {
+      "id": "back-right",
+      "minRail": 14.94
+    },
+    {
+      "id": "back-tower",
+      "minRail": 13.74
+    },
+    {
+      "id": "front-left",
+      "minRail": 15.14
+    },
+    {
+      "id": "front-right",
+      "minRail": 15.17
+    },
+    {
+      "id": "bay-1",
+      "minRail": 19.27
+    },
+    {
+      "id": "bay-2",
+      "minRail": 17.33
+    },
+    {
+      "id": "bay-3",
+      "minRail": 32.37
+    },
+    {
+      "id": "bay-4",
+      "minRail": 42.66
+    }
+  ],
+  "collisionSurfaces": 9,
+  "cloudSurfaces": 9,
+  "draw": {
+    "frame": 1603,
+    "calls": 8454,
+    "triangles": 6528072,
+    "points": 0,
+    "lines": 94321
+  },
+  "waves": [
+    {
+      "mass": "back-left",
+      "name": "apostle-foam",
+      "time": 0
+    },
+    {
+      "mass": "back-right",
+      "name": "apostle-foam",
+      "time": 124.66769999980926
+    },
+    {
+      "mass": "back-tower",
+      "name": "apostle-foam",
+      "time": 124.66769999980926
+    },
+    {
+      "mass": "front-left",
+      "name": "apostle-foam",
+      "time": 0
+    },
+    {
+      "mass": "front-right",
+      "name": "apostle-foam",
+      "time": 124.66769999980926
+    },
+    {
+      "mass": "bay-1",
+      "name": "apostle-foam",
+      "time": 0
+    },
+    {
+      "mass": "bay-2",
+      "name": "apostle-foam",
+      "time": 124.66789999985694
+    },
+    {
+      "mass": "bay-3",
+      "name": "apostle-foam",
+      "time": 124.66789999985694
+    },
+    {
+      "mass": "bay-4",
+      "name": "apostle-foam",
+      "time": 124.66789999985694
+    }
+  ]
+}

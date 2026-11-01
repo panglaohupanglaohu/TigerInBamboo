@@ -1,0 +1,226 @@
+{
+  "updated": "2026-09-29",
+  "agent": "oskar_world_advisor",
+  "scope": "conference learning only; no code or skill edits",
+  "remote_media_downloaded": false,
+  "full_videos_watched": 0,
+  "official_full_transcripts_read": 0,
+  "talks": [
+    {
+      "id": "0bcZb-SsnrA",
+      "title": "EPC2018 | Wave Function Collapse in Bad North | Oskar Stalberg",
+      "author": "BUas Games",
+      "lengthSeconds": "2261",
+      "publishDate": "2018-07-11T02:58:43-07:00",
+      "uploadDate": "2018-07-11T02:58:43-07:00",
+      "legacy_caption_bytes": 0,
+      "event_year": 2018,
+      "url": "https://www.youtube.com/watch?v=0bcZb-SsnrA",
+      "primary_source": "official conference channel video page",
+      "metadata_read": true,
+      "description_read": true,
+      "video_watched": false,
+      "official_caption_language": "en",
+      "official_caption_kind": "asr",
+      "official_caption_read": false,
+      "caption_attempts": [
+        {
+          "method": "captionTracks baseUrl + fmt=json3",
+          "result": "HTTP response empty"
+        },
+        {
+          "method": "public api/timedtext with en asr",
+          "result": "HTTP response empty"
+        },
+        {
+          "method": "public YouTube page getTranscript endpoint",
+          "result": "HTTP 400 Bad Request"
+        },
+        {
+          "method": "Filmot public video page",
+          "result": "not accessible via web tool"
+        },
+        {
+          "method": "Bilibili mirrors BV1HQ4y1P7E7 and BV14V411Y7hG public subtitle lists",
+          "result": "empty lists; no transcript obtained"
+        }
+      ],
+      "coverage": "metadata-and-official-description-only",
+      "technical_status": "do not infer talk-specific implementation from description alone",
+      "complete_transcript_read": false
+    },
+    {
+      "id": "6JcFbivo8dQ",
+      "title": "Konsoll 2018: Oskar Stålberg - Developing The Bad North Look",
+      "author": "Konsoll",
+      "lengthSeconds": "3340",
+      "publishDate": "2019-01-29T06:24:21-08:00",
+      "uploadDate": "2019-01-29T06:24:21-08:00",
+      "legacy_caption_bytes": 0,
+      "event_year": 2018,
+      "url": "https://www.youtube.com/watch?v=6JcFbivo8dQ",
+      "primary_source": "official conference channel video page",
+      "metadata_read": true,
+      "description_read": true,
+      "video_watched": false,
+      "official_caption_language": "en",
+      "official_caption_kind": "asr",
+      "official_caption_read": false,
+      "caption_attempts": [
+        {
+          "method": "captionTracks baseUrl + fmt=json3",
+          "result": "HTTP response empty"
+        },
+        {
+          "method": "public api/timedtext with en asr",
+          "result": "HTTP response empty"
+        },
+        {
+          "method": "public YouTube page getTranscript endpoint",
+          "result": "HTTP 400 Bad Request"
+        },
+        {
+          "method": "Filmot public video page",
+          "result": "not accessible via web tool"
+        }
+      ],
+      "coverage": "metadata-and-official-description-only",
+      "technical_status": "do not infer talk-specific implementation from description alone",
+      "complete_transcript_read": false
+    },
+    {
+      "id": "1hqt8JkYRdI",
+      "title": "ORGANIC TOWNS FROM SQUARE TILES - a talk by OSKAR STÅLBERG at INDIECADE EUROPE 2019",
+      "author": "IndieCade Europe",
+      "lengthSeconds": "1917",
+      "publishDate": "2020-03-17T06:04:26-07:00",
+      "uploadDate": "2020-03-17T06:04:26-07:00",
+      "legacy_caption_bytes": 0,
+      "event_year": 2019,
+      "url": "https://www.youtube.com/watch?v=1hqt8JkYRdI",
+      "primary_source": "official conference channel video page",
+      "metadata_read": true,
+      "description_read": true,
+      "video_watched": false,
+      "official_caption_language": "en",
+      "official_caption_kind": "asr",
+      "official_caption_read": false,
+      "caption_attempts": [
+        {
+          "method": "captionTracks baseUrl + fmt=json3",
+          "result": "HTTP response empty"
+        },
+        {
+          "method": "public api/timedtext with en asr",
+          "result": "HTTP response empty"
+        },
+        {
+          "method": "public YouTube page getTranscript endpoint",
+          "result": "HTTP 400 Bad Request"
+        },
+        {
+          "method": "Filmot public video page",
+          "result": "not accessible via web tool"
+        },
+        {
+          "method": "Bilibili mirror BV1Ky4y1E7NX public subtitle list",
+          "result": "empty list; no transcript obtained"
+        }
+      ],
+      "coverage": "metadata-and-official-description-only",
+      "technical_status": "do not infer talk-specific implementation from description alone",
+      "complete_transcript_read": false
+    },
+    {
+      "id": "Uxeo9c-PX-w",
+      "title": "SGC21- Oskar Stålberg - Beyond Townscapers",
+      "author": "Sweden Game Arena",
+      "lengthSeconds": "3121",
+      "publishDate": "2021-12-08T00:47:16-08:00",
+      "uploadDate": "2021-12-08T00:47:16-08:00",
+      "legacy_caption_bytes": 0,
+      "event_year": 2021,
+      "url": "https://www.youtube.com/watch?v=Uxeo9c-PX-w",
+      "primary_source": "official conference channel video page",
+      "metadata_read": true,
+      "description_read": true,
+      "video_watched": false,
+      "official_caption_language": "en",
+      "official_caption_kind": "asr",
+      "official_caption_read": false,
+      "caption_attempts": [
+        {
+          "method": "captionTracks baseUrl + fmt=json3",
+          "result": "HTTP response empty"
+        },
+        {
+          "method": "public api/timedtext with en asr",
+          "result": "HTTP response empty"
+        }
+      ],
+      "coverage": "official metadata/description plus partial mirrored transcript read",
+      "technical_status": "do not infer talk-specific implementation from description alone",
+      "mirror_url": "https://lilys.ai/ko/notes/356130",
+      "mirror_read_ranges_seconds": [
+        [
+          0,
+          3063
+        ]
+      ],
+      "mirror_missing_tail_seconds": 58,
+      "mirror_status": "unverified automatic transcription; not checked against speaker audio or slides",
+      "complete_transcript_read": false
+    }
+  ],
+  "cross_checks": [
+    {
+      "url": "https://konsoll.org/speaker/oskar-stalberg/",
+      "kind": "official event speaker archive",
+      "read": "speaker and talk titles"
+    },
+    {
+      "url": "https://github.com/mxgmn/WaveFunctionCollapse",
+      "kind": "algorithm author documentation",
+      "read": "algorithm and Bad North application/navigation notes"
+    },
+    {
+      "url": "https://x.com/OskSta/status/1448248658865049605",
+      "mirror": "https://threadreaderapp.com/scrolly/1448248658865049605",
+      "kind": "author original post via text mirror",
+      "read": "full 7-post mirrored thread; no animation viewed"
+    },
+    {
+      "url": "https://www.gamedeveloper.com/game-platforms/how-townscaper-works-a-story-four-games-in-the-making",
+      "kind": "author interview quotations within reporter article",
+      "read": "Bad North navigation and Townscaper failure-handling author quotations; reporting separated"
+    },
+    {
+      "url": "https://indiecade-europe.eu/en/programme/conferences",
+      "kind": "official event schedule",
+      "read": "indexed official description and 2019-10-19 14:30 session; full page fetch failed"
+    }
+  ],
+  "next_required": [
+    "Obtain usable official transcript or view all four videos with audio and slides",
+    "Verify mirrored SGC timestamps against actual video",
+    "Do not promote mirrored-speech details into skill facts until verified"
+  ],
+  "primary_browser_attempt": {
+    "initial_epc_page": "public player metadata readyState=4; not watched",
+    "seek_frames": "8 attempts EPC/Konsoll, all width=0 and readyState=0; invalid for study",
+    "transcript_ui": "no segments returned",
+    "logged_in_x": "user screenshot confirms embedded browser login; current tools cannot read that session; Chrome tabs are a different session",
+    "evidence": "conference-browser/primary-frame-log.json"
+  },
+  "advisor_browser_attempt": {
+    "date": "2026-09-29",
+    "talks": [
+      "1hqt8JkYRdI",
+      "Uxeo9c-PX-w"
+    ],
+    "method": "standard headless Chrome YouTube player navigation and seeking; no downloaded video",
+    "valid_frames_viewed": 0,
+    "result": "Organic Towns player displayed playback error; Beyond seek returned readyState 0, videoWidth 0, duration null. Invalid error images excluded from study coverage.",
+    "remote_video_downloaded": false
+  }
+}

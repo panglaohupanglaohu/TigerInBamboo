@@ -1,0 +1,32 @@
+{
+  "task": "old-tower-crown",
+  "target": "Correct thin top-storey support while retaining old tower identity",
+  "visual_observations": {
+    "source": "Actual same-camera before/after PNGs inspected",
+    "image_sha256": "3fff056952cf1213b8b9beaddbf46032d45ef3fe4484b4cbb488651d2f09ca8a",
+    "completed": [
+      "Square-to-octagonal plinth visibly seats gallery on shaft",
+      "Shorter thicker piers and connected arch rings support dome",
+      "Roof hue and lower shaft retained"
+    ],
+    "remaining": [
+      "No structural engineering simulation; decorative game model"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Runtime page errors absent",
+      "passed": true,
+      "required": true
+    },
+    {
+      "name": "Diff whitespace clean",
+      "passed": true,
+      "required": true
+    }
+  ],
+  "constraints": [
+    "Only crown factory changed",
+    "Three pre-existing warnings remain"
+  ]
+}

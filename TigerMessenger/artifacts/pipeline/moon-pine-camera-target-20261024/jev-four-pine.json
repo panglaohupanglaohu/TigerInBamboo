@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "15c57666c510ebfe2c3a2c1b7f64964b34501ed7dc44d1b5a4b7a270d7b19b6e",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.85
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.55,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.22,
+        "lighting": 0,
+        "navigation": 0.14,
+        "review": 0.64
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.63
+    }
+  },
+  "usage": {
+    "input_tokens": 700,
+    "output_tokens": 91,
+    "cost_usd": 0.000294,
+    "credits_remaining_usd": 4.924884
+  },
+  "elapsed_ms": 7868,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Source-factory four-pine candidate GPU and clearance audit",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

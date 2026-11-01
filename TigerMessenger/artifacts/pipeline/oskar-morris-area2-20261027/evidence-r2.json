@@ -1,0 +1,36 @@
+{
+  "task": "Morris actual area doubled with unchanged core anchors",
+  "observations": {
+    "target": "Actually viewed approvedtarget-v1: leftrear summit, four descending shoulders, prebridge side view, upperright keep and lower music court",
+    "candidate": "Actual area2 ridge shoulders extended; new S meadow approach; outer constant flat skirt rejected after actualr53 GPUimage, now asymmetric1.5to4.5m meadow hummocks and coves; creek rerouted to rail-safe southeast and extends beyond exact coast by2.5percent.; r2 added three actual wide5to7m foreground spurs, unchanged road and coreanchors; removed strong checker palette in continuous rocks.",
+    "images": "Actually viewed current component-r54-bare; outer gentle hummocks insufficient. New foreground spurs current GPU pending.",
+    "rail": "First downstream candidate failed0.59m railgap, rejected; final stream min26.11m, road17.76m, production depressed terrain0 railcover samples; current GPU train envelope not claimed"
+  },
+  "checks": [
+    {
+      "name": "15 actual factory geometry and creek checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "current enlarged bare and formal game images",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "full riding enlarged route and railway envelopes",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "saved rail full expanded sample check",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "text evidence only",
+    "JEV cannot visually accept",
+    "no submission or publication"
+  ]
+}

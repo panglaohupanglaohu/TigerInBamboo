@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>REA Engine — 地形（同一套四边形网格）</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; overflow:hidden; background:#cfe3ea;
+    font:13px/1.5 -apple-system, "PingFang SC", sans-serif; color:#12232e; }
+  #view { display:block; width:100%; height:100%; }
+  #hud { position:fixed; left:16px; top:16px; width:262px; padding:12px 14px;
+    background:rgba(255,255,255,.86); backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.6); border-radius:12px;
+    box-shadow:0 6px 22px rgba(18,35,46,.18); }
+  #hud h1 { margin:0 0 6px; font-size:14px; }
+  #hud p { margin:0 0 8px; color:rgba(18,35,46,.7); font-size:12px; }
+  #hud button { width:100%; padding:8px; border:0; border-radius:8px; background:#12232e;
+    color:#fff; font:inherit; cursor:pointer; }
+  #stats { margin-top:10px; font-size:11px; line-height:1.7; color:rgba(18,35,46,.75); }
+  #stats b { color:#12232e; }
+</style>
+<script type="importmap">{ "imports": { "three": "../vendor/three.module.js" } }</script>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="hud">
+  <h1>地形引擎 <span style="font-size:10px;color:#c2452f;letter-spacing:.08em">SAME GRID</span></h1>
+  <p>噪声 → 离散层 → 逐格填充体素 → 用城镇的同一个渲染器出图。</p>
+  <button id="regen">重新生成</button>
+  <div id="stats"></div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { TownMesh } from '../src/mesh.js';
+import { buildTerrain } from './terrain.js';
+
+const LEVEL = 0.42;
+const canvas = document.getElementById('view');
+const statsEl = document.getElementById('stats');
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 500);
+
+scene.add(new THREE.AmbientLight(0xfffdf6, 1.1));
+scene.add(new THREE.HemisphereLight(0xf8fdff, 0xe4d6bf, 1.8));
+const sun = new THREE.DirectionalLight(0xfff3e0, 2.5);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+const S = 30;
+Object.assign(sun.shadow.camera, { left: -S, right: S, top: S, bottom: -S, near: 1, far: 120 });
+sun.shadow.bias = -0.0015;
+scene.add(sun, sun.target);
+
+const waterGeo = new THREE.PlaneGeometry(400, 400);
+waterGeo.rotateX(-Math.PI / 2);
+const water = new THREE.Mesh(waterGeo, new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#4f93a6').convertSRGBToLinear(),
+  roughness: 0.28, metalness: 0,
+}));
+scene.add(water);
+
+const material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.92, metalness: 0 });
+let mesh = null;
+let seed = 3;
+
+function build(nextSeed) {
+  seed = nextSeed;
+  const { town, grid, filled } = buildTerrain({ radius: 16, hexSize: 0.62, seed, levels: 5 });
+  const tm = new TownMesh(town, { levelHeight: LEVEL, mode: 'terrain' });
+  tm.rebuild();
+
+  if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); }
+  mesh = new THREE.Mesh(tm.geometry, material);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  scene.add(mesh);
+
+  let maxLevel = 0;
+  for (const c of grid.cells) maxLevel = Math.max(maxLevel, town.top(c));
+
+  statsEl.innerHTML =
+    '种子 <b>' + seed + '</b>　格数 <b>' + grid.cellCount + '</b><br>' +
+    '陆地 <b>' + filled + '</b> 格　最高 <b>' + maxLevel + '</b> 层<br>' +
+    '三角形 <b>' + (tm.geometry.getAttribute('position').count / 3 | 0) + '</b>';
+
+  return town;
+}
+
+build(seed);
+
+const target = new THREE.Vector3(0, 1.8, 0);
+let yaw = 0.72, pitch = 0.46, dist = 21;
+function syncCamera() {
+  const cp = Math.cos(pitch);
+  camera.position.set(
+    target.x + Math.sin(yaw) * cp * dist,
+    target.y + Math.sin(pitch) * dist,
+    target.z + Math.cos(yaw) * cp * dist,
+  );
+  camera.lookAt(target);
+  sun.position.set(target.x + 16, 26, target.z + 14);
+  sun.target.position.copy(target);
+}
+syncCamera();
+
+let drag = false, lx = 0, ly = 0;
+canvas.addEventListener('pointerdown', (e) => { drag = true; lx = e.clientX; ly = e.clientY; });
+canvas.addEventListener('pointerup', () => { drag = false; });
+canvas.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  yaw -= (e.clientX - lx) * 0.006;
+  pitch = Math.min(1.45, Math.max(0.1, pitch + (e.clientY - ly) * 0.005));
+  lx = e.clientX; ly = e.clientY;
+  syncCamera();
+});
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  dist = Math.min(90, Math.max(8, dist * Math.exp(e.deltaY * 0.0011)));
+  syncCamera();
+}, { passive: false });
+addEventListener('keydown', (e) => { if (e.key.toLowerCase() === 'r') build((Math.random() * 1e6) | 0); });
+document.getElementById('regen').addEventListener('click', () => build((Math.random() * 1e6) | 0));
+
+function resize() {
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+  camera.aspect = canvas.clientWidth / canvas.clientHeight;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+resize();
+renderer.setAnimationLoop(() => renderer.render(scene, camera));
+window.reaTerrain = { build };
+</script>
+</body>
+</html>

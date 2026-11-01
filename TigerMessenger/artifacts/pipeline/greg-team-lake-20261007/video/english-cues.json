@@ -1,0 +1,3172 @@
+[
+  {
+    "start": "00:00:00.273",
+    "end": "00:00:02.856",
+    "text": "(gentle music)"
+  },
+  {
+    "start": "00:00:11.993",
+    "end": "00:00:13.703",
+    "text": "- Yeah, so I guess I'll get started."
+  },
+  {
+    "start": "00:00:13.703",
+    "end": "00:00:15.173",
+    "text": "Hello and welcome."
+  },
+  {
+    "start": "00:00:15.173",
+    "end": "00:00:17.003",
+    "text": "My name's Gregorios Kythreotis."
+  },
+  {
+    "start": "00:00:17.003",
+    "end": "00:00:20.453",
+    "text": "And today I'm gonna be talking\nabout The Art of Sable,"
+  },
+  {
+    "start": "00:00:20.453",
+    "end": "00:00:22.933",
+    "text": "Imperfection, Limitation and Worldbuilding"
+  },
+  {
+    "start": "00:00:22.933",
+    "end": "00:00:24.033",
+    "text": "Through Visual Design."
+  },
+  {
+    "start": "00:00:25.395",
+    "end": "00:00:26.228",
+    "text": "So if you don't know, I'm\none of the co-founders"
+  },
+  {
+    "start": "00:00:26.228",
+    "end": "00:00:30.006",
+    "text": "of Shedworks alongside Daniel Fineberg."
+  },
+  {
+    "start": "00:00:30.873",
+    "end": "00:00:33.703",
+    "text": "We started working together\nin my parent's shed in 2014,"
+  },
+  {
+    "start": "00:00:33.703",
+    "end": "00:00:36.946",
+    "text": "and I guess just kept\nkind of going from there."
+  },
+  {
+    "start": "00:00:37.853",
+    "end": "00:00:40.883",
+    "text": "Development on Sable started\nwith just the two of us,"
+  },
+  {
+    "start": "00:00:40.883",
+    "end": "00:00:42.673",
+    "text": "but by the end of four\nyears of development,"
+  },
+  {
+    "start": "00:00:42.673",
+    "end": "00:00:45.693",
+    "text": "we were between six to 10\npeople on the core dev team"
+  },
+  {
+    "start": "00:00:45.693",
+    "end": "00:00:47.246",
+    "text": "at various points throughout."
+  },
+  {
+    "start": "00:00:48.853",
+    "end": "00:00:51.373",
+    "text": "And before we get started\nin case you don't know,"
+  },
+  {
+    "start": "00:00:51.373",
+    "end": "00:00:55.273",
+    "text": "Sable is a game we released\non September 23rd, 2021,"
+  },
+  {
+    "start": "00:00:55.273",
+    "end": "00:00:57.873",
+    "text": "and it's an open world exploration game"
+  },
+  {
+    "start": "00:00:57.873",
+    "end": "00:01:01.063",
+    "text": "set in a desert in which you play a Sable."
+  },
+  {
+    "start": "00:01:01.063",
+    "end": "00:01:03.093",
+    "text": "And she's a young girl leaving home"
+  },
+  {
+    "start": "00:01:03.093",
+    "end": "00:01:04.833",
+    "text": "for the first time on her gliding."
+  },
+  {
+    "start": "00:01:04.833",
+    "end": "00:01:06.873",
+    "text": "And here's what it looks like."
+  },
+  {
+    "start": "00:01:06.873",
+    "end": "00:01:09.456",
+    "text": "(gentle music)"
+  },
+  {
+    "start": "00:01:16.553",
+    "end": "00:01:19.013",
+    "text": "♪ Come in to me ♪"
+  },
+  {
+    "start": "00:01:19.013",
+    "end": "00:01:21.542",
+    "text": "♪ Show us the way ♪"
+  },
+  {
+    "start": "00:01:21.542",
+    "end": "00:01:26.542",
+    "text": "♪ I'm caught between the wind\nand parts of the unknown ♪"
+  },
+  {
+    "start": "00:01:28.510",
+    "end": "00:01:32.729",
+    "text": "♪ A door between two worlds ♪"
+  },
+  {
+    "start": "00:01:32.729",
+    "end": "00:01:34.990",
+    "text": "♪ A sight to see ♪"
+  },
+  {
+    "start": "00:01:34.990",
+    "end": "00:01:39.990",
+    "text": "♪ It feels like everything is moving ♪"
+  },
+  {
+    "start": "00:01:42.660",
+    "end": "00:01:47.260",
+    "text": "♪ Around me ♪"
+  },
+  {
+    "start": "00:01:47.260",
+    "end": "00:01:52.260",
+    "text": "♪ Feels like it is moving ♪"
+  },
+  {
+    "start": "00:01:53.180",
+    "end": "00:01:55.347",
+    "text": "♪ In time ♪"
+  },
+  {
+    "start": "00:02:04.733",
+    "end": "00:02:07.893",
+    "text": "So, what is this talk about?"
+  },
+  {
+    "start": "00:02:07.893",
+    "end": "00:02:09.473",
+    "text": "It's not a technical talk,"
+  },
+  {
+    "start": "00:02:09.473",
+    "end": "00:02:10.953",
+    "text": "but I will go into some details"
+  },
+  {
+    "start": "00:02:10.953",
+    "end": "00:02:13.126",
+    "text": "on workflow and method at points."
+  },
+  {
+    "start": "00:02:14.113",
+    "end": "00:02:16.693",
+    "text": "But the focus of this\ntalk is really about how,"
+  },
+  {
+    "start": "00:02:16.693",
+    "end": "00:02:18.643",
+    "text": "as a small team, we use techniques"
+  },
+  {
+    "start": "00:02:18.643",
+    "end": "00:02:20.373",
+    "text": "that would allow us to create and populate"
+  },
+  {
+    "start": "00:02:20.373",
+    "end": "00:02:22.783",
+    "text": "an open world game convincingly,"
+  },
+  {
+    "start": "00:02:22.783",
+    "end": "00:02:25.213",
+    "text": "and how we kind of turned our limitations"
+  },
+  {
+    "start": "00:02:25.213",
+    "end": "00:02:28.596",
+    "text": "into strengths in making the\nart and the world of Sable."
+  },
+  {
+    "start": "00:02:30.753",
+    "end": "00:02:33.653",
+    "text": "So the primary focus for us artistically"
+  },
+  {
+    "start": "00:02:33.653",
+    "end": "00:02:36.713",
+    "text": "is always gonna be creating\nsomething that we like,"
+  },
+  {
+    "start": "00:02:36.713",
+    "end": "00:02:39.743",
+    "text": "but you have to be able to\nexecute on that style of course,"
+  },
+  {
+    "start": "00:02:39.743",
+    "end": "00:02:42.033",
+    "text": "and with the team and the\nskillset that you have."
+  },
+  {
+    "start": "00:02:42.033",
+    "end": "00:02:44.976",
+    "text": "So this was our number one\nfocus throughout development."
+  },
+  {
+    "start": "00:02:45.873",
+    "end": "00:02:48.723",
+    "text": "We really wanted to make\nsomething that felt handcrafted"
+  },
+  {
+    "start": "00:02:48.723",
+    "end": "00:02:50.783",
+    "text": "and a big objective of\nours was to make the game"
+  },
+  {
+    "start": "00:02:50.783",
+    "end": "00:02:54.463",
+    "text": "look almost as 2D as possible\nin a still or an animation,"
+  },
+  {
+    "start": "00:02:54.463",
+    "end": "00:02:56.813",
+    "text": "but actually be a fully\nrealized 3D environment"
+  },
+  {
+    "start": "00:02:56.813",
+    "end": "00:02:58.443",
+    "text": "that players could explore."
+  },
+  {
+    "start": "00:02:58.443",
+    "end": "00:03:03.113",
+    "text": "And we also felt that if our\ngame had been photo realistic,"
+  },
+  {
+    "start": "00:03:03.113",
+    "end": "00:03:04.903",
+    "text": "people's expectations of it coming in,"
+  },
+  {
+    "start": "00:03:04.903",
+    "end": "00:03:06.243",
+    "text": "would've been very different."
+  },
+  {
+    "start": "00:03:06.243",
+    "end": "00:03:08.773",
+    "text": "So it was good to set\nexpectations with the style"
+  },
+  {
+    "start": "00:03:08.773",
+    "end": "00:03:11.856",
+    "text": "of the game and the art that we used."
+  },
+  {
+    "start": "00:03:13.093",
+    "end": "00:03:16.033",
+    "text": "So in terms of visual\nreferences for Sable,"
+  },
+  {
+    "start": "00:03:16.033",
+    "end": "00:03:19.653",
+    "text": "we looked a lot at 2D\nanimation and illustration."
+  },
+  {
+    "start": "00:03:19.653",
+    "end": "00:03:21.843",
+    "text": "We talked a lot about how we looked at"
+  },
+  {
+    "start": "00:03:21.843",
+    "end": "00:03:24.293",
+    "text": "European clear line\nstyle, such as Moebius,"
+  },
+  {
+    "start": "00:03:24.293",
+    "end": "00:03:28.813",
+    "text": "Herge and Schuiten as\nimportant reference points."
+  },
+  {
+    "start": "00:03:28.813",
+    "end": "00:03:31.363",
+    "text": "But we also looked a lot at animation."
+  },
+  {
+    "start": "00:03:31.363",
+    "end": "00:03:33.013",
+    "text": "Obviously, the game is in motion."
+  },
+  {
+    "start": "00:03:33.013",
+    "end": "00:03:37.193",
+    "text": "So we looked a lot at Studio\nGhibli as well as architects,"
+  },
+  {
+    "start": "00:03:37.193",
+    "end": "00:03:42.193",
+    "text": "such as Carlo Scarper,\nArchigram, and the Metabolists."
+  },
+  {
+    "start": "00:03:42.873",
+    "end": "00:03:45.738",
+    "text": "And also research trips\nto Arcosanti and Marrakesh"
+  },
+  {
+    "start": "00:03:45.738",
+    "end": "00:03:49.543",
+    "text": "informed some of the design route we took"
+  },
+  {
+    "start": "00:03:49.543",
+    "end": "00:03:50.773",
+    "text": "as well as deeper research"
+  },
+  {
+    "start": "00:03:50.773",
+    "end": "00:03:54.336",
+    "text": "into vernacular architecture\nand tent architecture."
+  },
+  {
+    "start": "00:03:56.213",
+    "end": "00:03:59.133",
+    "text": "So this was a project\nbased around our strengths"
+  },
+  {
+    "start": "00:03:59.133",
+    "end": "00:04:01.093",
+    "text": "and weakness as a team."
+  },
+  {
+    "start": "00:04:01.093",
+    "end": "00:04:03.523",
+    "text": "We decided to avoid doing combat because"
+  },
+  {
+    "start": "00:04:03.523",
+    "end": "00:04:06.503",
+    "text": "we didn't really have an\nanimator on the team initially,"
+  },
+  {
+    "start": "00:04:06.503",
+    "end": "00:04:08.243",
+    "text": "and we didn't think we\ncould do it justice."
+  },
+  {
+    "start": "00:04:08.243",
+    "end": "00:04:10.353",
+    "text": "There are plenty of games that do combat"
+  },
+  {
+    "start": "00:04:10.353",
+    "end": "00:04:12.263",
+    "text": "better than we ever could."
+  },
+  {
+    "start": "00:04:12.263",
+    "end": "00:04:16.403",
+    "text": "And so the project was\nnarrative led and art led"
+  },
+  {
+    "start": "00:04:16.403",
+    "end": "00:04:18.313",
+    "text": "because that's what we care about."
+  },
+  {
+    "start": "00:04:18.313",
+    "end": "00:04:20.566",
+    "text": "And that's what we felt\nwe could execute on."
+  },
+  {
+    "start": "00:04:22.293",
+    "end": "00:04:24.303",
+    "text": "Also, I have a degree in architecture,"
+  },
+  {
+    "start": "00:04:24.303",
+    "end": "00:04:26.593",
+    "text": "so we decided to try and\nfocus a lot of production"
+  },
+  {
+    "start": "00:04:26.593",
+    "end": "00:04:28.143",
+    "text": "and world building around that."
+  },
+  {
+    "start": "00:04:30.203",
+    "end": "00:04:32.963",
+    "text": "And we wanted a style that\nwould be quick to produce,"
+  },
+  {
+    "start": "00:04:32.963",
+    "end": "00:04:35.793",
+    "text": "quick to trade on, would\nbe consistent visually,"
+  },
+  {
+    "start": "00:04:35.793",
+    "end": "00:04:37.803",
+    "text": "and would stand out."
+  },
+  {
+    "start": "00:04:37.803",
+    "end": "00:04:40.583",
+    "text": "That it could be low poly was\nan important part of that."
+  },
+  {
+    "start": "00:04:40.583",
+    "end": "00:04:43.233",
+    "text": "And being able to use\ncolor and consistent use"
+  },
+  {
+    "start": "00:04:43.233",
+    "end": "00:04:45.383",
+    "text": "of visual rules were\nalso really important."
+  },
+  {
+    "start": "00:04:46.833",
+    "end": "00:04:49.213",
+    "text": "Our limitations informed a\nlot of the world building,"
+  },
+  {
+    "start": "00:04:49.213",
+    "end": "00:04:51.093",
+    "text": "things like setting and culture"
+  },
+  {
+    "start": "00:04:51.093",
+    "end": "00:04:53.486",
+    "text": "were informed directly by our team size."
+  },
+  {
+    "start": "00:04:54.883",
+    "end": "00:04:56.823",
+    "text": "For example, one of the key reasons"
+  },
+  {
+    "start": "00:04:56.823",
+    "end": "00:04:59.353",
+    "text": "the game is set in a\ndesert is because we knew"
+  },
+  {
+    "start": "00:04:59.353",
+    "end": "00:05:00.033",
+    "text": "we couldn't make a really\ndetailed open world"
+  },
+  {
+    "start": "00:05:00.033",
+    "end": "00:05:02.553",
+    "text": "we couldn't make a really\ndetailed open world"
+  },
+  {
+    "start": "00:05:02.553",
+    "end": "00:05:03.803",
+    "text": "that was at this scale."
+  },
+  {
+    "start": "00:05:03.803",
+    "end": "00:05:07.663",
+    "text": "The game's about 10 kilometers\nby 10 kilometers in size."
+  },
+  {
+    "start": "00:05:07.663",
+    "end": "00:05:10.873",
+    "text": "And, you know, the desert\nprobably could have been"
+  },
+  {
+    "start": "00:05:10.873",
+    "end": "00:05:14.633",
+    "text": "something like an ocean,\nbut anything more dense,"
+  },
+  {
+    "start": "00:05:14.633",
+    "end": "00:05:17.713",
+    "text": "it would've been much\nmore challenging for us."
+  },
+  {
+    "start": "00:05:17.713",
+    "end": "00:05:20.803",
+    "text": "And actually we always kind\nof thought of the dunes as a,"
+  },
+  {
+    "start": "00:05:20.803",
+    "end": "00:05:22.883",
+    "text": "almost like a seascape and the locations"
+  },
+  {
+    "start": "00:05:22.883",
+    "end": "00:05:25.256",
+    "text": "that players would visit\nas islands of content."
+  },
+  {
+    "start": "00:05:27.073",
+    "end": "00:05:29.603",
+    "text": "And this really provided\na focus for development"
+  },
+  {
+    "start": "00:05:29.603",
+    "end": "00:05:32.313",
+    "text": "as we could focus on specific locations"
+  },
+  {
+    "start": "00:05:32.313",
+    "end": "00:05:35.473",
+    "text": "in terms of density, and\nallow those spaces in between"
+  },
+  {
+    "start": "00:05:35.473",
+    "end": "00:05:37.163",
+    "text": "to breathe a little bit."
+  },
+  {
+    "start": "00:05:37.163",
+    "end": "00:05:40.073",
+    "text": "But also they act as points\nof interest for the player"
+  },
+  {
+    "start": "00:05:40.073",
+    "end": "00:05:42.666",
+    "text": "in a world that could\npotentially be disorienting."
+  },
+  {
+    "start": "00:05:44.327",
+    "end": "00:05:46.153",
+    "text": "This was really important\nbecause we tried to make sure"
+  },
+  {
+    "start": "00:05:46.153",
+    "end": "00:05:48.393",
+    "text": "that players were focused on exploration"
+  },
+  {
+    "start": "00:05:48.393",
+    "end": "00:05:51.143",
+    "text": "in a kind of organic heads up sort of way,"
+  },
+  {
+    "start": "00:05:51.143",
+    "end": "00:05:54.903",
+    "text": "rather than relying heavily\non a minimap or map markers."
+  },
+  {
+    "start": "00:05:54.903",
+    "end": "00:05:57.483",
+    "text": "So that was our kind of\nprevailing philosophy"
+  },
+  {
+    "start": "00:05:57.483",
+    "end": "00:06:00.566",
+    "text": "as we developed the art of the game."
+  },
+  {
+    "start": "00:06:02.473",
+    "end": "00:06:06.273",
+    "text": "And our primary focus was\nto make a fully explorable"
+  },
+  {
+    "start": "00:06:06.273",
+    "end": "00:06:08.613",
+    "text": "3D open world that looked 2D."
+  },
+  {
+    "start": "00:06:08.613",
+    "end": "00:06:12.173",
+    "text": "So the illusion of the game\nbeing 2D was really important."
+  },
+  {
+    "start": "00:06:12.173",
+    "end": "00:06:15.443",
+    "text": "At first, we kinda thought it\nwas just something fun to try."
+  },
+  {
+    "start": "00:06:15.443",
+    "end": "00:06:17.633",
+    "text": "And after some exploration we found"
+  },
+  {
+    "start": "00:06:17.633",
+    "end": "00:06:20.153",
+    "text": "we could push it and\nactually be quite successful,"
+  },
+  {
+    "start": "00:06:20.153",
+    "end": "00:06:22.526",
+    "text": "but this brought a whole host of problems."
+  },
+  {
+    "start": "00:06:23.613",
+    "end": "00:06:27.246",
+    "text": "So one big issue with making\na flat dune shaded world,"
+  },
+  {
+    "start": "00:06:28.183",
+    "end": "00:06:33.183",
+    "text": "characters, and backgrounds\nis reading depth in 3D space."
+  },
+  {
+    "start": "00:06:33.443",
+    "end": "00:06:35.873",
+    "text": "It's already a really\nbig issue to overcome"
+  },
+  {
+    "start": "00:06:35.873",
+    "end": "00:06:37.033",
+    "text": "with 3D games in general."
+  },
+  {
+    "start": "00:06:37.033",
+    "end": "00:06:40.376",
+    "text": "'Cause you are flattening a\n3D environment to a 2D plane."
+  },
+  {
+    "start": "00:06:42.297",
+    "end": "00:06:44.673",
+    "text": "And a lot of the time shading\nand detail help with this."
+  },
+  {
+    "start": "00:06:44.673",
+    "end": "00:06:47.553",
+    "text": "And obviously when you have flat shading,"
+  },
+  {
+    "start": "00:06:47.553",
+    "end": "00:06:50.443",
+    "text": "you are getting rid of\nsome of the tools you have."
+  },
+  {
+    "start": "00:06:50.443",
+    "end": "00:06:54.633",
+    "text": "You can overcome some of\nthese with things like,"
+  },
+  {
+    "start": "00:06:54.633",
+    "end": "00:06:58.563",
+    "text": "in Mario Nintendo, they shine\na light down below Mario"
+  },
+  {
+    "start": "00:06:58.563",
+    "end": "00:07:01.473",
+    "text": "to give the player footing and guidance."
+  },
+  {
+    "start": "00:07:01.473",
+    "end": "00:07:04.383",
+    "text": "It's also also the\nreason why a lot of games"
+  },
+  {
+    "start": "00:07:04.383",
+    "end": "00:07:06.183",
+    "text": "have double jump mechanics I think,"
+  },
+  {
+    "start": "00:07:06.183",
+    "end": "00:07:11.183",
+    "text": "and a reason that we used this\nhover mechanic in the game"
+  },
+  {
+    "start": "00:07:12.093",
+    "end": "00:07:13.833",
+    "text": "just to allow players to recalibrate"
+  },
+  {
+    "start": "00:07:13.833",
+    "end": "00:07:16.163",
+    "text": "where they sit in the environment."
+  },
+  {
+    "start": "00:07:16.163",
+    "end": "00:07:18.616",
+    "text": "But we also had to solve\nthis on a visual basis,"
+  },
+  {
+    "start": "00:07:19.893",
+    "end": "00:07:22.643",
+    "text": "having committed to having\nflat shade environments."
+  },
+  {
+    "start": "00:07:22.643",
+    "end": "00:07:25.916",
+    "text": "So this is kind of how we\nbuild up the rendered image."
+  },
+  {
+    "start": "00:07:27.413",
+    "end": "00:07:30.953",
+    "text": "So this is the initial flat shading."
+  },
+  {
+    "start": "00:07:30.953",
+    "end": "00:07:33.916",
+    "text": "No post-processing over it."
+  },
+  {
+    "start": "00:07:34.833",
+    "end": "00:07:39.033",
+    "text": "And the first thing that we\nadd obviously is lighting."
+  },
+  {
+    "start": "00:07:39.033",
+    "end": "00:07:42.883",
+    "text": "Lighting is really important\nto readability and depth,"
+  },
+  {
+    "start": "00:07:42.883",
+    "end": "00:07:45.623",
+    "text": "having light and shadows,\njust to help players"
+  },
+  {
+    "start": "00:07:45.623",
+    "end": "00:07:48.173",
+    "text": "figure out where they sit on a surface,"
+  },
+  {
+    "start": "00:07:48.173",
+    "end": "00:07:51.023",
+    "text": "where other objects sit on a\nsurface in relation to them."
+  },
+  {
+    "start": "00:07:52.260",
+    "end": "00:07:54.423",
+    "text": "It actually was a big\nmotivation to adding a shadow"
+  },
+  {
+    "start": "00:07:54.423",
+    "end": "00:07:56.333",
+    "text": "to the moonlight in the game."
+  },
+  {
+    "start": "00:07:56.333",
+    "end": "00:07:59.173",
+    "text": "We needed the player to be casting shadows"
+  },
+  {
+    "start": "00:07:59.173",
+    "end": "00:08:01.313",
+    "text": "as often as possible in order to make sure"
+  },
+  {
+    "start": "00:08:01.313",
+    "end": "00:08:04.116",
+    "text": "that they were readable on the surface."
+  },
+  {
+    "start": "00:08:06.003",
+    "end": "00:08:10.463",
+    "text": "We then added this distant\nfog, this distant gradient."
+  },
+  {
+    "start": "00:08:10.463",
+    "end": "00:08:12.673",
+    "text": "This was really, really key"
+  },
+  {
+    "start": "00:08:13.753",
+    "end": "00:08:15.583",
+    "text": "to reading mid to long distances."
+  },
+  {
+    "start": "00:08:15.583",
+    "end": "00:08:18.953",
+    "text": "And it was something we\nactually added fairly early on"
+  },
+  {
+    "start": "00:08:18.953",
+    "end": "00:08:21.033",
+    "text": "and solved a bunch of problems for us,"
+  },
+  {
+    "start": "00:08:21.033",
+    "end": "00:08:23.383",
+    "text": "definitely had the biggest impact overall."
+  },
+  {
+    "start": "00:08:23.383",
+    "end": "00:08:25.933",
+    "text": "And we were able to\ncustomize this per biome"
+  },
+  {
+    "start": "00:08:25.933",
+    "end": "00:08:29.033",
+    "text": "and environment to add\nvariety, change of tone."
+  },
+  {
+    "start": "00:08:29.033",
+    "end": "00:08:31.983",
+    "text": "And it also provides the\nframework for our day-night cycle."
+  },
+  {
+    "start": "00:08:33.903",
+    "end": "00:08:37.473",
+    "text": "Obviously outlines and\ndensity are kind of a key part"
+  },
+  {
+    "start": "00:08:37.473",
+    "end": "00:08:41.583",
+    "text": "of our style, but actually\ngave us a really useful tool"
+  },
+  {
+    "start": "00:08:41.583",
+    "end": "00:08:44.653",
+    "text": "for keep adding depth to the world."
+  },
+  {
+    "start": "00:08:44.653",
+    "end": "00:08:48.883",
+    "text": "Because they give a great\nsense of perspective and scale"
+  },
+  {
+    "start": "00:08:48.883",
+    "end": "00:08:51.683",
+    "text": "as it kind of fades into the distance."
+  },
+  {
+    "start": "00:08:51.683",
+    "end": "00:08:54.293",
+    "text": "Some environments might have\ngridded lines that kind of"
+  },
+  {
+    "start": "00:08:54.293",
+    "end": "00:08:57.253",
+    "text": "create these perspectival focuses"
+  },
+  {
+    "start": "00:08:57.253",
+    "end": "00:09:01.196",
+    "text": "as well as overlapping and\nunderlapping in nice ways."
+  },
+  {
+    "start": "00:09:03.173",
+    "end": "00:09:05.583",
+    "text": "And so we needed to have both\ntexturing in the environment"
+  },
+  {
+    "start": "00:09:05.583",
+    "end": "00:09:07.753",
+    "text": "that supports this as\nwell as object placement"
+  },
+  {
+    "start": "00:09:07.753",
+    "end": "00:09:09.843",
+    "text": "in the environment that supported this."
+  },
+  {
+    "start": "00:09:09.843",
+    "end": "00:09:11.613",
+    "text": "And again creates some more readable"
+  },
+  {
+    "start": "00:09:11.613",
+    "end": "00:09:13.106",
+    "text": "3D environment for players."
+  },
+  {
+    "start": "00:09:15.213",
+    "end": "00:09:16.713",
+    "text": "And an added detail to this"
+  },
+  {
+    "start": "00:09:16.713",
+    "end": "00:09:19.583",
+    "text": "is the fading opacity on outlines."
+  },
+  {
+    "start": "00:09:19.583",
+    "end": "00:09:24.273",
+    "text": "So as outlines go into the\ndistance, we fade them out."
+  },
+  {
+    "start": "00:09:24.273",
+    "end": "00:09:27.043",
+    "text": "This again, emphasizes\nthe perspectival lines,"
+  },
+  {
+    "start": "00:09:27.043",
+    "end": "00:09:32.043",
+    "text": "but also allows us to create\nsome really nice fog effects"
+  },
+  {
+    "start": "00:09:32.163",
+    "end": "00:09:34.333",
+    "text": "in the game, because we have a game"
+  },
+  {
+    "start": "00:09:34.333",
+    "end": "00:09:36.243",
+    "text": "where we're rendering\nstuff quite far away,"
+  },
+  {
+    "start": "00:09:36.243",
+    "end": "00:09:37.663",
+    "text": "and we need that to work."
+  },
+  {
+    "start": "00:09:37.663",
+    "end": "00:09:40.113",
+    "text": "And the player is traveling\nquite long distances."
+  },
+  {
+    "start": "00:09:41.350",
+    "end": "00:09:45.353",
+    "text": "This kind of helps us disguise\nobjects as they fade in."
+  },
+  {
+    "start": "00:09:45.353",
+    "end": "00:09:46.673",
+    "text": "At some point we didn't have this"
+  },
+  {
+    "start": "00:09:46.673",
+    "end": "00:09:48.093",
+    "text": "and objects would just kind of pop in"
+  },
+  {
+    "start": "00:09:48.093",
+    "end": "00:09:51.396",
+    "text": "and it was kind of ugly,\nand a real problem for us."
+  },
+  {
+    "start": "00:09:52.253",
+    "end": "00:09:55.103",
+    "text": "And actually this effect\nsolved a bunch of that"
+  },
+  {
+    "start": "00:09:55.103",
+    "end": "00:09:57.393",
+    "text": "whilst also actually\nmaking things more readable"
+  },
+  {
+    "start": "00:09:57.393",
+    "end": "00:09:59.043",
+    "text": "in the foreground on top of that."
+  },
+  {
+    "start": "00:10:05.693",
+    "end": "00:10:07.823",
+    "text": "It was really important to style."
+  },
+  {
+    "start": "00:10:07.823",
+    "end": "00:10:09.023",
+    "text": "It's one of the more recognizable"
+  },
+  {
+    "start": "00:10:09.023",
+    "end": "00:10:10.843",
+    "text": "visual components of the game."
+  },
+  {
+    "start": "00:10:10.843",
+    "end": "00:10:14.003",
+    "text": "And it communicates mood and\ntone of a lot of locations,"
+  },
+  {
+    "start": "00:10:14.003",
+    "end": "00:10:16.303",
+    "text": "as well as providing variety and setting"
+  },
+  {
+    "start": "00:10:16.303",
+    "end": "00:10:19.323",
+    "text": "that could easily feel\none tone and monotonous."
+  },
+  {
+    "start": "00:10:19.323",
+    "end": "00:10:22.223",
+    "text": "It's a desert, you know,\nhow much variety do you get?"
+  },
+  {
+    "start": "00:10:22.223",
+    "end": "00:10:25.503",
+    "text": "Actually quite a lot, but\nyour initial perception"
+  },
+  {
+    "start": "00:10:25.503",
+    "end": "00:10:27.596",
+    "text": "would be that it's pretty one tone."
+  },
+  {
+    "start": "00:10:28.603",
+    "end": "00:10:31.133",
+    "text": "And it let us do things\nlike day-night cycles."
+  },
+  {
+    "start": "00:10:31.133",
+    "end": "00:10:33.233",
+    "text": "Here's an example of\nschemes that we can set"
+  },
+  {
+    "start": "00:10:33.233",
+    "end": "00:10:37.626",
+    "text": "in the same environment using\ncolor and color profiles."
+  },
+  {
+    "start": "00:10:38.663",
+    "end": "00:10:41.576",
+    "text": "And here's how those schemes\ntransition in a time lapse."
+  },
+  {
+    "start": "00:10:42.713",
+    "end": "00:10:46.573",
+    "text": "So you get a really nice\nsense of the tone shifting"
+  },
+  {
+    "start": "00:10:46.573",
+    "end": "00:10:48.836",
+    "text": "as you spend time in the same place."
+  },
+  {
+    "start": "00:10:51.593",
+    "end": "00:10:53.823",
+    "text": "So we use these things\ncalled color profiles"
+  },
+  {
+    "start": "00:10:53.823",
+    "end": "00:10:55.543",
+    "text": "to set different attributes"
+  },
+  {
+    "start": "00:10:55.543",
+    "end": "00:10:58.220",
+    "text": "for various times of day and biomes."
+  },
+  {
+    "start": "00:10:59.613",
+    "end": "00:11:00.913",
+    "text": "So as an artist, I could go in"
+  },
+  {
+    "start": "00:11:00.913",
+    "end": "00:11:04.243",
+    "text": "and tweak various values\nin the distance gradient"
+  },
+  {
+    "start": "00:11:04.243",
+    "end": "00:11:08.773",
+    "text": "as well as set shadow intensity\nwhere lines start and end,"
+  },
+  {
+    "start": "00:11:08.773",
+    "end": "00:11:10.803",
+    "text": "and where gradient starts and ends."
+  },
+  {
+    "start": "00:11:10.803",
+    "end": "00:11:14.443",
+    "text": "So actually this provided\nincredible framework"
+  },
+  {
+    "start": "00:11:14.443",
+    "end": "00:11:18.406",
+    "text": "for being able to create\ndiversity across the game."
+  },
+  {
+    "start": "00:11:19.693",
+    "end": "00:11:21.883",
+    "text": "And these gradients, the gradients"
+  },
+  {
+    "start": "00:11:21.883",
+    "end": "00:11:24.153",
+    "text": "that I mentioned earlier\napplied over distance."
+  },
+  {
+    "start": "00:11:24.153",
+    "end": "00:11:25.863",
+    "text": "And we can tweak this per biome,"
+  },
+  {
+    "start": "00:11:25.863",
+    "end": "00:11:29.433",
+    "text": "and even adjust this when\nplayers move indoors or outdoors."
+  },
+  {
+    "start": "00:11:29.433",
+    "end": "00:11:32.563",
+    "text": "So when what the player\nneeds to read shortens,"
+  },
+  {
+    "start": "00:11:32.563",
+    "end": "00:11:34.133",
+    "text": "we can actually bring the gradients in"
+  },
+  {
+    "start": "00:11:34.133",
+    "end": "00:11:36.663",
+    "text": "and create a more\ndramatic looking gradient"
+  },
+  {
+    "start": "00:11:36.663",
+    "end": "00:11:39.203",
+    "text": "that looks kind of awkward outside,"
+  },
+  {
+    "start": "00:11:39.203",
+    "end": "00:11:41.056",
+    "text": "but inside looks really effective."
+  },
+  {
+    "start": "00:11:42.413",
+    "end": "00:11:44.523",
+    "text": "And it's just a tool that\ngave us a lot of control"
+  },
+  {
+    "start": "00:11:44.523",
+    "end": "00:11:46.166",
+    "text": "and consistency in the style."
+  },
+  {
+    "start": "00:11:47.983",
+    "end": "00:11:50.053",
+    "text": "And yeah, we spent a lot of\ntime thinking about colors"
+  },
+  {
+    "start": "00:11:50.053",
+    "end": "00:11:51.593",
+    "text": "and different color schemes"
+  },
+  {
+    "start": "00:11:51.593",
+    "end": "00:11:54.663",
+    "text": "acted almost like rewards for exploration."
+  },
+  {
+    "start": "00:11:54.663",
+    "end": "00:11:56.773",
+    "text": "Transitions between\ncolors also communicate"
+  },
+  {
+    "start": "00:11:56.773",
+    "end": "00:11:58.923",
+    "text": "a sense of journey and\nthe passage of time."
+  },
+  {
+    "start": "00:12:00.503",
+    "end": "00:12:01.883",
+    "text": "And it also meant that we could have"
+  },
+  {
+    "start": "00:12:01.883",
+    "end": "00:12:04.333",
+    "text": "elements repeating in the environment,"
+  },
+  {
+    "start": "00:12:04.333",
+    "end": "00:12:06.713",
+    "text": "but feel recontextualized\nin different locations"
+  },
+  {
+    "start": "00:12:06.713",
+    "end": "00:12:08.063",
+    "text": "at different times of day."
+  },
+  {
+    "start": "00:12:08.063",
+    "end": "00:12:10.863",
+    "text": "These kind of intentionally\nsimilar structures"
+  },
+  {
+    "start": "00:12:11.813",
+    "end": "00:12:13.373",
+    "text": "in terms of the world building"
+  },
+  {
+    "start": "00:12:13.373",
+    "end": "00:12:17.183",
+    "text": "just made them feel less mechanical"
+  },
+  {
+    "start": "00:12:19.873",
+    "end": "00:12:20.706",
+    "text": "Outlines."
+  },
+  {
+    "start": "00:12:20.706",
+    "end": "00:12:22.513",
+    "text": "Again, I'm gonna go back to those"
+  },
+  {
+    "start": "00:12:22.513",
+    "end": "00:12:23.843",
+    "text": "because they're a huge part of the style."
+  },
+  {
+    "start": "00:12:23.843",
+    "end": "00:12:27.466",
+    "text": "And I'll go back to how\nwe kind of generated them."
+  },
+  {
+    "start": "00:12:28.333",
+    "end": "00:12:29.723",
+    "text": "There's a lot of detail to add here,"
+  },
+  {
+    "start": "00:12:29.723",
+    "end": "00:12:31.843",
+    "text": "and I'm actually not the best\nperson to ask about this,"
+  },
+  {
+    "start": "00:12:31.843",
+    "end": "00:12:36.163",
+    "text": "but I'll go over the three\nmain ways we create linework."
+  },
+  {
+    "start": "00:12:36.163",
+    "end": "00:12:39.423",
+    "text": "So yeah, we have three techniques."
+  },
+  {
+    "start": "00:12:39.423",
+    "end": "00:12:42.943",
+    "text": "The first one is a fairly\nstandard automatic edge detection"
+  },
+  {
+    "start": "00:12:42.943",
+    "end": "00:12:45.003",
+    "text": "for drawing lines based on distances."
+  },
+  {
+    "start": "00:12:45.003",
+    "end": "00:12:48.783",
+    "text": "This is something that we\ncould tweak on a shade basis."
+  },
+  {
+    "start": "00:12:48.783",
+    "end": "00:12:53.363",
+    "text": "So, and you can see it really\neffectively in the dunes,"
+  },
+  {
+    "start": "00:12:53.363",
+    "end": "00:12:56.863",
+    "text": "where the lines kind of end nicely."
+  },
+  {
+    "start": "00:12:56.863",
+    "end": "00:13:00.033",
+    "text": "And yeah, it was a really useful tool"
+  },
+  {
+    "start": "00:13:00.033",
+    "end": "00:13:01.826",
+    "text": "and it was just automatic."
+  },
+  {
+    "start": "00:13:03.903",
+    "end": "00:13:05.263",
+    "text": "The second way of drawing lines"
+  },
+  {
+    "start": "00:13:05.263",
+    "end": "00:13:07.693",
+    "text": "is probably the most important\nto the style that we have."
+  },
+  {
+    "start": "00:13:07.693",
+    "end": "00:13:09.243",
+    "text": "And this is vertex painting."
+  },
+  {
+    "start": "00:13:09.243",
+    "end": "00:13:12.973",
+    "text": "So we vertex paint objects that\nwe want lines to be around."
+  },
+  {
+    "start": "00:13:12.973",
+    "end": "00:13:16.173",
+    "text": "This method is extremely\nstable and reliable"
+  },
+  {
+    "start": "00:13:16.173",
+    "end": "00:13:20.363",
+    "text": "and it creates this extremely\nconsistent linework,"
+  },
+  {
+    "start": "00:13:20.363",
+    "end": "00:13:23.483",
+    "text": "but it requires a lot of\nmanual work as an artist,"
+  },
+  {
+    "start": "00:13:23.483",
+    "end": "00:13:25.283",
+    "text": "but also gives you a lot of control."
+  },
+  {
+    "start": "00:13:26.763",
+    "end": "00:13:28.283",
+    "text": "And you can get issues where if you have"
+  },
+  {
+    "start": "00:13:28.283",
+    "end": "00:13:30.823",
+    "text": "too many vertex colors\nand too many objects,"
+  },
+  {
+    "start": "00:13:30.823",
+    "end": "00:13:33.552",
+    "text": "especially over distance where linework"
+  },
+  {
+    "start": "00:13:33.552",
+    "end": "00:13:35.733",
+    "text": "gets really kind of mushed together"
+  },
+  {
+    "start": "00:13:35.733",
+    "end": "00:13:37.953",
+    "text": "and you just get these intense,"
+  },
+  {
+    "start": "00:13:37.953",
+    "end": "00:13:40.563",
+    "text": "like dithering black\nblobs in the distance."
+  },
+  {
+    "start": "00:13:40.563",
+    "end": "00:13:43.553",
+    "text": "So it takes a bit of fiddling to get used"
+  },
+  {
+    "start": "00:13:43.553",
+    "end": "00:13:44.903",
+    "text": "to what works for the game,"
+  },
+  {
+    "start": "00:13:44.903",
+    "end": "00:13:48.123",
+    "text": "but you just kind of develop that sense"
+  },
+  {
+    "start": "00:13:48.123",
+    "end": "00:13:50.483",
+    "text": "as you work with it more."
+  },
+  {
+    "start": "00:13:50.483",
+    "end": "00:13:52.683",
+    "text": "And the final technique\nwe use is something"
+  },
+  {
+    "start": "00:13:52.683",
+    "end": "00:13:54.236",
+    "text": "we call noise texture."
+  },
+  {
+    "start": "00:13:55.833",
+    "end": "00:13:57.303",
+    "text": "So this is a black and white texture"
+  },
+  {
+    "start": "00:13:57.303",
+    "end": "00:14:00.433",
+    "text": "that we made a specific\nslot for on the shader."
+  },
+  {
+    "start": "00:14:00.433",
+    "end": "00:14:02.793",
+    "text": "And we draw lines between the thresholds"
+  },
+  {
+    "start": "00:14:02.793",
+    "end": "00:14:04.116",
+    "text": "of black and white here."
+  },
+  {
+    "start": "00:14:05.793",
+    "end": "00:14:08.783",
+    "text": "And this let us introduce..."
+  },
+  {
+    "start": "00:14:08.783",
+    "end": "00:14:10.933",
+    "text": "Well, it is just like a standard texture,"
+  },
+  {
+    "start": "00:14:10.933",
+    "end": "00:14:13.703",
+    "text": "but we could draw outlines\naround it basically."
+  },
+  {
+    "start": "00:14:13.703",
+    "end": "00:14:17.333",
+    "text": "But because we could separate\nthe color and the noise,"
+  },
+  {
+    "start": "00:14:17.333",
+    "end": "00:14:19.913",
+    "text": "it meant that actually we\ncould have differentiate"
+  },
+  {
+    "start": "00:14:19.913",
+    "end": "00:14:22.443",
+    "text": "the two textures and\ncreate some interesting"
+  },
+  {
+    "start": "00:14:22.443",
+    "end": "00:14:24.606",
+    "text": "kind of patterns there."
+  },
+  {
+    "start": "00:14:25.983",
+    "end": "00:14:29.363",
+    "text": "So, these raw techniques\nthat really focused"
+  },
+  {
+    "start": "00:14:29.363",
+    "end": "00:14:32.913",
+    "text": "on our limitations as a\nteam, low poly models,"
+  },
+  {
+    "start": "00:14:32.913",
+    "end": "00:14:35.163",
+    "text": "bold use of color and color profiles"
+  },
+  {
+    "start": "00:14:35.163",
+    "end": "00:14:38.173",
+    "text": "meant that we could iterate on art"
+  },
+  {
+    "start": "00:14:38.173",
+    "end": "00:14:41.276",
+    "text": "in a kind of broad way very quickly."
+  },
+  {
+    "start": "00:14:42.593",
+    "end": "00:14:44.643",
+    "text": "And this was really crucial for us"
+  },
+  {
+    "start": "00:14:44.643",
+    "end": "00:14:47.246",
+    "text": "to create a coherent and consistent style."
+  },
+  {
+    "start": "00:14:49.333",
+    "end": "00:14:51.953",
+    "text": "Another one of the things that we tried"
+  },
+  {
+    "start": "00:14:51.953",
+    "end": "00:14:55.673",
+    "text": "to introduce in the game was imperfection."
+  },
+  {
+    "start": "00:14:55.673",
+    "end": "00:14:58.503",
+    "text": "So one of the dangers\nwith working with outlines"
+  },
+  {
+    "start": "00:14:58.503",
+    "end": "00:15:00.033",
+    "text": "is that I think it could potentially"
+  },
+  {
+    "start": "00:15:04.373",
+    "end": "00:15:09.373",
+    "text": "And like a really perfectly\nmade computer generated project."
+  },
+  {
+    "start": "00:15:10.993",
+    "end": "00:15:12.863",
+    "text": "Computers are quite good\nat doing perfect things."
+  },
+  {
+    "start": "00:15:12.863",
+    "end": "00:15:14.253",
+    "text": "And generally we wanna introduce"
+  },
+  {
+    "start": "00:15:14.253",
+    "end": "00:15:16.343",
+    "text": "some element of imperfection to the art."
+  },
+  {
+    "start": "00:15:16.343",
+    "end": "00:15:18.973",
+    "text": "So this was how we tried to do it."
+  },
+  {
+    "start": "00:15:18.973",
+    "end": "00:15:22.013",
+    "text": "First and foremost, and\nmost controversially,"
+  },
+  {
+    "start": "00:15:22.013",
+    "end": "00:15:25.493",
+    "text": "we added limited frame animations\nfor character animation"
+  },
+  {
+    "start": "00:15:25.493",
+    "end": "00:15:27.066",
+    "text": "and for creature animations."
+  },
+  {
+    "start": "00:15:28.483",
+    "end": "00:15:30.773",
+    "text": "We don't tend to do this\nfor environmental elements"
+  },
+  {
+    "start": "00:15:30.773",
+    "end": "00:15:32.293",
+    "text": "or anything affected by physics,"
+  },
+  {
+    "start": "00:15:32.293",
+    "end": "00:15:34.813",
+    "text": "but this was just to emphasize and push"
+  },
+  {
+    "start": "00:15:34.813",
+    "end": "00:15:38.146",
+    "text": "that 2D and 3D feeling."
+  },
+  {
+    "start": "00:15:39.933",
+    "end": "00:15:41.123",
+    "text": "Another one of the things that we did"
+  },
+  {
+    "start": "00:15:41.123",
+    "end": "00:15:43.983",
+    "text": "was to kind of wobble our\ngeometry lines where we could."
+  },
+  {
+    "start": "00:15:43.983",
+    "end": "00:15:46.493",
+    "text": "So instead of these\nperfectly straight lines,"
+  },
+  {
+    "start": "00:15:46.493",
+    "end": "00:15:48.563",
+    "text": "we just add a little bit of imperfection."
+  },
+  {
+    "start": "00:15:48.563",
+    "end": "00:15:50.513",
+    "text": "We tried to do that everywhere we could"
+  },
+  {
+    "start": "00:15:51.433",
+    "end": "00:15:54.233",
+    "text": "just to disrupt that pure straight line."
+  },
+  {
+    "start": "00:15:54.233",
+    "end": "00:15:56.753",
+    "text": "And this just helps to make the game"
+  },
+  {
+    "start": "00:15:56.753",
+    "end": "00:15:59.056",
+    "text": "feel more handcrafted\nand handmade I think."
+  },
+  {
+    "start": "00:16:01.173",
+    "end": "00:16:03.003",
+    "text": "And going back to the textures,"
+  },
+  {
+    "start": "00:16:03.003",
+    "end": "00:16:07.603",
+    "text": "all of our textures were drawn\nin Procreate and hand drawn,"
+  },
+  {
+    "start": "00:16:07.603",
+    "end": "00:16:10.213",
+    "text": "and try to keep them quite loose"
+  },
+  {
+    "start": "00:16:10.213",
+    "end": "00:16:12.543",
+    "text": "and leave imperfections in there,"
+  },
+  {
+    "start": "00:16:12.543",
+    "end": "00:16:16.563",
+    "text": "just to again, make it\nfeel handmade and leave"
+  },
+  {
+    "start": "00:16:16.563",
+    "end": "00:16:20.403",
+    "text": "that kind of thumbprint of\nthe creator in the project."
+  },
+  {
+    "start": "00:16:20.403",
+    "end": "00:16:22.493",
+    "text": "And this also extends to\nsome of our hand drawn"
+  },
+  {
+    "start": "00:16:22.493",
+    "end": "00:16:25.543",
+    "text": "VFX animations, also drawn in Procreate"
+  },
+  {
+    "start": "00:16:25.543",
+    "end": "00:16:27.036",
+    "text": "and brought into Unity."
+  },
+  {
+    "start": "00:16:28.783",
+    "end": "00:16:31.183",
+    "text": "And I think this just brings that 2D look"
+  },
+  {
+    "start": "00:16:31.183",
+    "end": "00:16:33.453",
+    "text": "in the motion parts of the game."
+  },
+  {
+    "start": "00:16:33.453",
+    "end": "00:16:36.423",
+    "text": "And it gives the game a lot of character,"
+  },
+  {
+    "start": "00:16:36.423",
+    "end": "00:16:40.286",
+    "text": "as well as giving myself a\nlot of control as an artist."
+  },
+  {
+    "start": "00:16:41.353",
+    "end": "00:16:46.353",
+    "text": "One thing that we did\nautomate though was rocks."
+  },
+  {
+    "start": "00:16:46.623",
+    "end": "00:16:48.003",
+    "text": "There's a lot of rocks in our game,"
+  },
+  {
+    "start": "00:16:48.003",
+    "end": "00:16:50.163",
+    "text": "and we need to be able\nto reshape them quickly,"
+  },
+  {
+    "start": "00:16:50.163",
+    "end": "00:16:54.133",
+    "text": "and reuse them in a variety of ways."
+  },
+  {
+    "start": "00:16:54.133",
+    "end": "00:16:58.693",
+    "text": "So we had this noise\nbased shader that let us"
+  },
+  {
+    "start": "00:16:58.693",
+    "end": "00:17:01.273",
+    "text": "basically kind of copy and\npaste and move around rocks"
+  },
+  {
+    "start": "00:17:01.273",
+    "end": "00:17:03.776",
+    "text": "really quickly for level design purposes."
+  },
+  {
+    "start": "00:17:04.894",
+    "end": "00:17:09.894",
+    "text": "But keep a consistent\nscale and visual style."
+  },
+  {
+    "start": "00:17:10.333",
+    "end": "00:17:13.163",
+    "text": "This was a incredibly\nimportant tool that came"
+  },
+  {
+    "start": "00:17:13.163",
+    "end": "00:17:16.516",
+    "text": "actually pretty late, but\ngave us a lot of power."
+  },
+  {
+    "start": "00:17:20.163",
+    "end": "00:17:23.453",
+    "text": "Yeah, so embracing these\nvisual imperfections"
+  },
+  {
+    "start": "00:17:23.453",
+    "end": "00:17:25.453",
+    "text": "was something we felt was really crucial"
+  },
+  {
+    "start": "00:17:25.453",
+    "end": "00:17:27.523",
+    "text": "for the style of the game."
+  },
+  {
+    "start": "00:17:27.523",
+    "end": "00:17:30.133",
+    "text": "But the main goal was just\nto create this layered image"
+  },
+  {
+    "start": "00:17:30.133",
+    "end": "00:17:34.603",
+    "text": "that felt coherent and kind\nof captivating as a whole."
+  },
+  {
+    "start": "00:17:34.603",
+    "end": "00:17:38.606",
+    "text": "And I think all those different\nelements tied into that."
+  },
+  {
+    "start": "00:17:41.023",
+    "end": "00:17:44.243",
+    "text": "So another technique\nwe used was modularity."
+  },
+  {
+    "start": "00:17:44.243",
+    "end": "00:17:47.753",
+    "text": "We used this in masks, NPCs and bikes."
+  },
+  {
+    "start": "00:17:47.753",
+    "end": "00:17:51.103",
+    "text": "So from very early on,\nwe decided that masks"
+  },
+  {
+    "start": "00:17:51.103",
+    "end": "00:17:53.043",
+    "text": "were a really important\npart of the visual design,"
+  },
+  {
+    "start": "00:17:53.043",
+    "end": "00:17:54.946",
+    "text": "but also the world building of Sable."
+  },
+  {
+    "start": "00:17:56.912",
+    "end": "00:17:58.703",
+    "text": "This was because we knew we were gonna try"
+  },
+  {
+    "start": "00:17:58.703",
+    "end": "00:18:03.703",
+    "text": "and make a larger world,\nbut I'm not an animator."
+  },
+  {
+    "start": "00:18:03.813",
+    "end": "00:18:06.143",
+    "text": "I was afraid of animating faces."
+  },
+  {
+    "start": "00:18:06.143",
+    "end": "00:18:08.373",
+    "text": "So we just decided to do masks."
+  },
+  {
+    "start": "00:18:08.373",
+    "end": "00:18:13.093",
+    "text": "And this, you know, then became\na really primary narrative"
+  },
+  {
+    "start": "00:18:13.093",
+    "end": "00:18:14.253",
+    "text": "and art focus of the game."
+  },
+  {
+    "start": "00:18:14.253",
+    "end": "00:18:17.096",
+    "text": "So we kind of embraced and\nlean into that limitation."
+  },
+  {
+    "start": "00:18:19.593",
+    "end": "00:18:22.083",
+    "text": "And I think keeping\nthose points of friction"
+  },
+  {
+    "start": "00:18:22.083",
+    "end": "00:18:26.083",
+    "text": "and working with them is where\ngood design tends to occur."
+  },
+  {
+    "start": "00:18:26.083",
+    "end": "00:18:28.303",
+    "text": "And I think that really\nworked for us here."
+  },
+  {
+    "start": "00:18:28.303",
+    "end": "00:18:30.846",
+    "text": "And in terms how those designs came about,"
+  },
+  {
+    "start": "00:18:31.743",
+    "end": "00:18:34.183",
+    "text": "kind of just take 'em\non a case by case basis,"
+  },
+  {
+    "start": "00:18:34.183",
+    "end": "00:18:37.273",
+    "text": "there weren't any specific\ncultural or historical examples"
+  },
+  {
+    "start": "00:18:37.273",
+    "end": "00:18:39.753",
+    "text": "that we focused on, but we focused instead"
+  },
+  {
+    "start": "00:18:39.753",
+    "end": "00:18:43.183",
+    "text": "more on in world symbolism, communication,"
+  },
+  {
+    "start": "00:18:43.183",
+    "end": "00:18:45.436",
+    "text": "functionality and materiality."
+  },
+  {
+    "start": "00:18:47.833",
+    "end": "00:18:51.913",
+    "text": "And this modularity went into\nour character customization."
+  },
+  {
+    "start": "00:18:51.913",
+    "end": "00:18:55.103",
+    "text": "So all our clothing and\ncharacters are built modularly."
+  },
+  {
+    "start": "00:18:55.103",
+    "end": "00:18:58.006",
+    "text": "Again, because we knew we had\nto populate a larger world."
+  },
+  {
+    "start": "00:18:59.093",
+    "end": "00:19:02.103",
+    "text": "And this was a really\nearly decision we made"
+  },
+  {
+    "start": "00:19:02.103",
+    "end": "00:19:04.643",
+    "text": "when it was just a two person team even,"
+  },
+  {
+    "start": "00:19:04.643",
+    "end": "00:19:07.593",
+    "text": "and became one of the\ncore systems in terms of"
+  },
+  {
+    "start": "00:19:09.693",
+    "end": "00:19:13.403",
+    "text": "the player being able to\ncustomize Sable herself."
+  },
+  {
+    "start": "00:19:13.403",
+    "end": "00:19:18.403",
+    "text": "But it also gave us a really\nnice amount of variety,"
+  },
+  {
+    "start": "00:19:18.433",
+    "end": "00:19:21.483",
+    "text": "not just in visual language,\nin terms of clothing,"
+  },
+  {
+    "start": "00:19:21.483",
+    "end": "00:19:24.643",
+    "text": "and masks, but also I\nthink we get some fun,"
+  },
+  {
+    "start": "00:19:24.643",
+    "end": "00:19:28.453",
+    "text": "like variety in body\nshapes and silhouettes,"
+  },
+  {
+    "start": "00:19:28.453",
+    "end": "00:19:30.253",
+    "text": "which is really important in a world"
+  },
+  {
+    "start": "00:19:30.253",
+    "end": "00:19:32.483",
+    "text": "where you can't actually\nsee anyone's face."
+  },
+  {
+    "start": "00:19:32.483",
+    "end": "00:19:34.193",
+    "text": "But we still want the player to connect"
+  },
+  {
+    "start": "00:19:34.193",
+    "end": "00:19:38.166",
+    "text": "with these characters and\nremember who they are."
+  },
+  {
+    "start": "00:19:40.593",
+    "end": "00:19:43.163",
+    "text": "And then turning that into a system"
+  },
+  {
+    "start": "00:19:43.163",
+    "end": "00:19:44.963",
+    "text": "for the player to access meant that"
+  },
+  {
+    "start": "00:19:44.963",
+    "end": "00:19:48.043",
+    "text": "we then had a tool for rewarding players."
+  },
+  {
+    "start": "00:19:48.043",
+    "end": "00:19:51.573",
+    "text": "So we could reward players\nwith masks, clothing items,"
+  },
+  {
+    "start": "00:19:51.573",
+    "end": "00:19:55.156",
+    "text": "and that then feeds into the\nexploration cycle of the game."
+  },
+  {
+    "start": "00:19:56.513",
+    "end": "00:19:59.276",
+    "text": "And then another system\nwas bike modularity."
+  },
+  {
+    "start": "00:20:00.183",
+    "end": "00:20:03.693",
+    "text": "Again, really important for\npopulating a large world"
+  },
+  {
+    "start": "00:20:03.693",
+    "end": "00:20:07.463",
+    "text": "with such a small team,\nbut also another system"
+  },
+  {
+    "start": "00:20:07.463",
+    "end": "00:20:08.473",
+    "text": "for player expression."
+  },
+  {
+    "start": "00:20:08.473",
+    "end": "00:20:11.043",
+    "text": "So we made it so that you could"
+  },
+  {
+    "start": "00:20:11.043",
+    "end": "00:20:12.623",
+    "text": "customize components on your bike"
+  },
+  {
+    "start": "00:20:12.623",
+    "end": "00:20:14.883",
+    "text": "and that would affect\nthe physics of the bike,"
+  },
+  {
+    "start": "00:20:14.883",
+    "end": "00:20:19.533",
+    "text": "the audio of the bike, but\nalso you could change color"
+  },
+  {
+    "start": "00:20:19.533",
+    "end": "00:20:21.333",
+    "text": "for self-expression reasons."
+  },
+  {
+    "start": "00:20:21.333",
+    "end": "00:20:24.623",
+    "text": "And you get some really nice variety"
+  },
+  {
+    "start": "00:20:24.623",
+    "end": "00:20:26.273",
+    "text": "and variation with those systems."
+  },
+  {
+    "start": "00:20:27.763",
+    "end": "00:20:30.553",
+    "text": "So all of these modular\nelements allowed us"
+  },
+  {
+    "start": "00:20:30.553",
+    "end": "00:20:33.303",
+    "text": "to scale up and create\nvariation across the world,"
+  },
+  {
+    "start": "00:20:33.303",
+    "end": "00:20:35.673",
+    "text": "but also allowed us to embed storytelling"
+  },
+  {
+    "start": "00:20:35.673",
+    "end": "00:20:38.993",
+    "text": "and well building elements\ninto the art of each component."
+  },
+  {
+    "start": "00:20:38.993",
+    "end": "00:20:41.063",
+    "text": "Once those systems were established,"
+  },
+  {
+    "start": "00:20:41.063",
+    "end": "00:20:43.093",
+    "text": "they could be turned\ninto systems for players"
+  },
+  {
+    "start": "00:20:43.093",
+    "end": "00:20:46.263",
+    "text": "to interact with, which\nthen added significant value"
+  },
+  {
+    "start": "00:20:46.263",
+    "end": "00:20:48.416",
+    "text": "in terms of being able to reward players."
+  },
+  {
+    "start": "00:20:49.533",
+    "end": "00:20:52.473",
+    "text": "And that was extremely\nimportant in a world"
+  },
+  {
+    "start": "00:20:52.473",
+    "end": "00:20:54.832",
+    "text": "where exploration was\nkey, but we didn't have"
+  },
+  {
+    "start": "00:20:54.832",
+    "end": "00:20:56.763",
+    "text": "these kind of more circular combat,"
+  },
+  {
+    "start": "00:20:56.763",
+    "end": "00:20:58.896",
+    "text": "or survival systems to lean on."
+  },
+  {
+    "start": "00:21:01.683",
+    "end": "00:21:05.513",
+    "text": "Yeah, and then, so an\nobvious key system in Sable"
+  },
+  {
+    "start": "00:21:05.513",
+    "end": "00:21:08.333",
+    "text": "are the landscapes and biomes."
+  },
+  {
+    "start": "00:21:08.333",
+    "end": "00:21:10.323",
+    "text": "So these were really important"
+  },
+  {
+    "start": "00:21:10.323",
+    "end": "00:21:11.653",
+    "text": "to the exploration of the game."
+  },
+  {
+    "start": "00:21:11.653",
+    "end": "00:21:15.073",
+    "text": "We tried to think about\nnature in this world"
+  },
+  {
+    "start": "00:21:15.073",
+    "end": "00:21:16.743",
+    "text": "in a slightly less constructed way"
+  },
+  {
+    "start": "00:21:16.743",
+    "end": "00:21:18.973",
+    "text": "than we did with the architecture."
+  },
+  {
+    "start": "00:21:18.973",
+    "end": "00:21:21.263",
+    "text": "So we used a procedural\ntool called Map Magic"
+  },
+  {
+    "start": "00:21:21.263",
+    "end": "00:21:24.173",
+    "text": "to create these broad stroke patterns"
+  },
+  {
+    "start": "00:21:24.173",
+    "end": "00:21:27.533",
+    "text": "for six biomes each with our own"
+  },
+  {
+    "start": "00:21:27.533",
+    "end": "00:21:29.926",
+    "text": "design language tone and visual rhythm."
+  },
+  {
+    "start": "00:21:32.453",
+    "end": "00:21:35.803",
+    "text": "And we tried to use as a\nnatural environment generated"
+  },
+  {
+    "start": "00:21:36.863",
+    "end": "00:21:41.143",
+    "text": "as a kind of context for the other levels"
+  },
+  {
+    "start": "00:21:41.143",
+    "end": "00:21:43.263",
+    "text": "or environments that we developed."
+  },
+  {
+    "start": "00:21:43.263",
+    "end": "00:21:45.313",
+    "text": "And it helped us kind of reduce the burden"
+  },
+  {
+    "start": "00:21:45.313",
+    "end": "00:21:47.393",
+    "text": "on decision making and design"
+  },
+  {
+    "start": "00:21:47.393",
+    "end": "00:21:49.546",
+    "text": "when generating those environments."
+  },
+  {
+    "start": "00:21:50.713",
+    "end": "00:21:53.943",
+    "text": "Here's an example of what one\nof the biome generation nodes"
+  },
+  {
+    "start": "00:21:53.943",
+    "end": "00:21:55.686",
+    "text": "looks like within Map Magic."
+  },
+  {
+    "start": "00:21:57.603",
+    "end": "00:22:01.373",
+    "text": "And here's a breakdown of how\nthose biomes are built up."
+  },
+  {
+    "start": "00:22:01.373",
+    "end": "00:22:05.163",
+    "text": "So, we generally have this\nkind of top level dune,"
+  },
+  {
+    "start": "00:22:05.163",
+    "end": "00:22:09.843",
+    "text": "and this is sort of like\nwaves on the top of..."
+  },
+  {
+    "start": "00:22:09.843",
+    "end": "00:22:11.306",
+    "text": "Like sandy waves on top."
+  },
+  {
+    "start": "00:22:12.233",
+    "end": "00:22:14.633",
+    "text": "And then we have a second layer underneath"
+  },
+  {
+    "start": "00:22:14.633",
+    "end": "00:22:17.053",
+    "text": "which acts as a kind of underlying rocks,"
+  },
+  {
+    "start": "00:22:17.053",
+    "end": "00:22:21.773",
+    "text": "and provides a kind of broader\ndirectionality to an area,"
+  },
+  {
+    "start": "00:22:21.773",
+    "end": "00:22:24.883",
+    "text": "and lends, gives a player a tool"
+  },
+  {
+    "start": "00:22:24.883",
+    "end": "00:22:27.773",
+    "text": "for kind of sensing where\nthey are in the world."
+  },
+  {
+    "start": "00:22:27.773",
+    "end": "00:22:29.613",
+    "text": "Like they feel like they're\ngoing up a hill or down a hill"
+  },
+  {
+    "start": "00:22:29.613",
+    "end": "00:22:32.443",
+    "text": "rather than just across dunes."
+  },
+  {
+    "start": "00:22:32.443",
+    "end": "00:22:35.393",
+    "text": "And also creates more dynamic\nand interesting environments."
+  },
+  {
+    "start": "00:22:36.343",
+    "end": "00:22:39.203",
+    "text": "And then we use modifiers\non the top dune layer"
+  },
+  {
+    "start": "00:22:39.203",
+    "end": "00:22:41.573",
+    "text": "to give each biome more\nof a kind of rhythm"
+  },
+  {
+    "start": "00:22:41.573",
+    "end": "00:22:43.333",
+    "text": "and distinct feeling."
+  },
+  {
+    "start": "00:22:43.333",
+    "end": "00:22:46.063",
+    "text": "In this example, we have\nthese kind of clay mounds,"
+  },
+  {
+    "start": "00:22:46.063",
+    "end": "00:22:47.173",
+    "text": "but in other biomes they might be"
+  },
+  {
+    "start": "00:22:47.173",
+    "end": "00:22:49.626",
+    "text": "cliffs or other disruptions."
+  },
+  {
+    "start": "00:22:51.873",
+    "end": "00:22:54.073",
+    "text": "And then we have these smaller rocks,"
+  },
+  {
+    "start": "00:22:54.073",
+    "end": "00:22:58.563",
+    "text": "which each biome has kind of\nunique distribution patterns,"
+  },
+  {
+    "start": "00:22:58.563",
+    "end": "00:23:02.953",
+    "text": "and silhouettes, and\nspacing, and scale on these."
+  },
+  {
+    "start": "00:23:02.953",
+    "end": "00:23:06.133",
+    "text": "They give a lot of color and\npersonality to each biome."
+  },
+  {
+    "start": "00:23:06.133",
+    "end": "00:23:08.953",
+    "text": "And the spacing can kind of relate"
+  },
+  {
+    "start": "00:23:08.953",
+    "end": "00:23:10.733",
+    "text": "to other elements of the biome."
+  },
+  {
+    "start": "00:23:10.733",
+    "end": "00:23:14.023",
+    "text": "So in this example, I\nthink certain types of rock"
+  },
+  {
+    "start": "00:23:14.023",
+    "end": "00:23:15.936",
+    "text": "only gather around the clay mounds."
+  },
+  {
+    "start": "00:23:17.493",
+    "end": "00:23:19.223",
+    "text": "And this is also true for the foliage."
+  },
+  {
+    "start": "00:23:19.223",
+    "end": "00:23:23.353",
+    "text": "So the foliage adds a real sense of life"
+  },
+  {
+    "start": "00:23:23.353",
+    "end": "00:23:25.503",
+    "text": "and movement to the\nbiome as well as color."
+  },
+  {
+    "start": "00:23:26.803",
+    "end": "00:23:29.433",
+    "text": "But again, if you get the\npatterns of distribution right,"
+  },
+  {
+    "start": "00:23:29.433",
+    "end": "00:23:32.543",
+    "text": "they can lend a real\nsense of believability."
+  },
+  {
+    "start": "00:23:32.543",
+    "end": "00:23:33.873",
+    "text": "If you have a certain kind of plan"
+  },
+  {
+    "start": "00:23:33.873",
+    "end": "00:23:35.573",
+    "text": "only growing around a certain thing,"
+  },
+  {
+    "start": "00:23:35.573",
+    "end": "00:23:39.946",
+    "text": "then it looks like a kind of\nnaturally formed environment."
+  },
+  {
+    "start": "00:23:42.038",
+    "end": "00:23:43.743",
+    "text": "And then we have wildlife,\nwhich we actually"
+  },
+  {
+    "start": "00:23:43.743",
+    "end": "00:23:45.076",
+    "text": "mostly place by hand."
+  },
+  {
+    "start": "00:23:46.351",
+    "end": "00:23:49.143",
+    "text": "We focus these around players,"
+  },
+  {
+    "start": "00:23:49.143",
+    "end": "00:23:51.463",
+    "text": "around locations that\nthe player will explore"
+  },
+  {
+    "start": "00:23:52.433",
+    "end": "00:23:54.493",
+    "text": "because they can kind of act as guidance"
+  },
+  {
+    "start": "00:23:54.493",
+    "end": "00:23:56.073",
+    "text": "or things that will attract the player eye"
+  },
+  {
+    "start": "00:23:56.073",
+    "end": "00:23:57.426",
+    "text": "as they explore this world."
+  },
+  {
+    "start": "00:23:59.213",
+    "end": "00:24:02.283",
+    "text": "And what wildlife went where\nwas related to the biome"
+  },
+  {
+    "start": "00:24:02.283",
+    "end": "00:24:04.113",
+    "text": "that they were placed into."
+  },
+  {
+    "start": "00:24:04.113",
+    "end": "00:24:06.893",
+    "text": "And this was in order to further emphasize"
+  },
+  {
+    "start": "00:24:06.893",
+    "end": "00:24:09.163",
+    "text": "geographic differences."
+  },
+  {
+    "start": "00:24:09.163",
+    "end": "00:24:12.163",
+    "text": "So we had different birds, beetles,"
+  },
+  {
+    "start": "00:24:12.163",
+    "end": "00:24:14.156",
+    "text": "and butterflies for each area."
+  },
+  {
+    "start": "00:24:15.963",
+    "end": "00:24:20.323",
+    "text": "Color profiles added a\nlot of variety to biomes."
+  },
+  {
+    "start": "00:24:20.323",
+    "end": "00:24:21.563",
+    "text": "And then of course audio,"
+  },
+  {
+    "start": "00:24:21.563",
+    "end": "00:24:25.033",
+    "text": "each biome has unique music\nand sound effect behavior"
+  },
+  {
+    "start": "00:24:25.033",
+    "end": "00:24:27.733",
+    "text": "adding to different tonal\ntexture throughout the game."
+  },
+  {
+    "start": "00:24:30.803",
+    "end": "00:24:32.683",
+    "text": "And yeah, here are a couple of examples"
+  },
+  {
+    "start": "00:24:32.683",
+    "end": "00:24:35.933",
+    "text": "for different biome\nslices that we generate"
+  },
+  {
+    "start": "00:24:35.933",
+    "end": "00:24:37.073",
+    "text": "throughout the game."
+  },
+  {
+    "start": "00:24:37.073",
+    "end": "00:24:39.023",
+    "text": "You can see how we use\ndifferent noise patterns"
+  },
+  {
+    "start": "00:24:39.023",
+    "end": "00:24:40.933",
+    "text": "to create variation."
+  },
+  {
+    "start": "00:24:40.933",
+    "end": "00:24:44.506",
+    "text": "Each of these slices is about\n500 meters by 500 meters."
+  },
+  {
+    "start": "00:24:47.613",
+    "end": "00:24:49.790",
+    "text": "And the final thing we\ndid within these biomes"
+  },
+  {
+    "start": "00:24:49.790",
+    "end": "00:24:53.533",
+    "text": "was to kind of add these\npatches that would add"
+  },
+  {
+    "start": "00:24:53.533",
+    "end": "00:24:56.773",
+    "text": "variation or unique\ncharacteristics to the biomes."
+  },
+  {
+    "start": "00:24:56.773",
+    "end": "00:24:59.793",
+    "text": "These gave players variation of location,"
+  },
+  {
+    "start": "00:24:59.793",
+    "end": "00:25:00.033",
+    "text": "but also gave us an additional landmark"
+  },
+  {
+    "start": "00:25:07.383",
+    "end": "00:25:09.383",
+    "text": "how you break your rules is important"
+  },
+  {
+    "start": "00:25:09.383",
+    "end": "00:25:10.706",
+    "text": "as the rules that you set."
+  },
+  {
+    "start": "00:25:12.593",
+    "end": "00:25:14.433",
+    "text": "And the nice thing about\nthe wellbeing procedure"
+  },
+  {
+    "start": "00:25:14.433",
+    "end": "00:25:15.863",
+    "text": "was that actually creating these"
+  },
+  {
+    "start": "00:25:15.863",
+    "end": "00:25:18.013",
+    "text": "and adding them was a\nrelatively quick process"
+  },
+  {
+    "start": "00:25:18.013",
+    "end": "00:25:19.996",
+    "text": "once we'd established the workflow."
+  },
+  {
+    "start": "00:25:21.503",
+    "end": "00:25:24.523",
+    "text": "And just to touch on\nquickly, the dunes themselves"
+  },
+  {
+    "start": "00:25:24.523",
+    "end": "00:25:26.393",
+    "text": "being a really important\npart of the visual"
+  },
+  {
+    "start": "00:25:26.393",
+    "end": "00:25:28.343",
+    "text": "and design language of Sable."
+  },
+  {
+    "start": "00:25:28.343",
+    "end": "00:25:30.563",
+    "text": "They kind of act as\nthis natural obfuscation"
+  },
+  {
+    "start": "00:25:30.563",
+    "end": "00:25:31.663",
+    "text": "built into the environment."
+  },
+  {
+    "start": "00:25:31.663",
+    "end": "00:25:34.183",
+    "text": "So as the player explores the world,"
+  },
+  {
+    "start": "00:25:34.183",
+    "end": "00:25:35.553",
+    "text": "they might see a point of interest,"
+  },
+  {
+    "start": "00:25:35.553",
+    "end": "00:25:37.003",
+    "text": "decide that they wanna go over to it"
+  },
+  {
+    "start": "00:25:37.003",
+    "end": "00:25:40.313",
+    "text": "and on their journey to that place,"
+  },
+  {
+    "start": "00:25:40.313",
+    "end": "00:25:42.973",
+    "text": "it disappears out of view\nand then reappears later on,"
+  },
+  {
+    "start": "00:25:42.973",
+    "end": "00:25:45.373",
+    "text": "or they find something else,\nor they get a bit lost."
+  },
+  {
+    "start": "00:25:45.373",
+    "end": "00:25:46.603",
+    "text": "And that was a really important part"
+  },
+  {
+    "start": "00:25:46.603",
+    "end": "00:25:48.656",
+    "text": "of the design of the world."
+  },
+  {
+    "start": "00:25:51.183",
+    "end": "00:25:52.506",
+    "text": "And, yeah, again, I just want to show"
+  },
+  {
+    "start": "00:25:52.506",
+    "end": "00:25:57.506",
+    "text": "an example of the different\ncolor profiles and biomes."
+  },
+  {
+    "start": "00:25:57.681",
+    "end": "00:26:02.193",
+    "text": "And finally, the architectural\nlanguage of the game"
+  },
+  {
+    "start": "00:26:02.193",
+    "end": "00:26:04.543",
+    "text": "is something that we\ndeveloped a bit over time."
+  },
+  {
+    "start": "00:26:06.263",
+    "end": "00:26:08.453",
+    "text": "We thought of it in three kind of strata."
+  },
+  {
+    "start": "00:26:08.453",
+    "end": "00:26:12.553",
+    "text": "So we had atomic,\nmonumental, and nomadic eras."
+  },
+  {
+    "start": "00:26:12.553",
+    "end": "00:26:14.363",
+    "text": "This was a kind of\nreflection of the journey"
+  },
+  {
+    "start": "00:26:14.363",
+    "end": "00:26:17.296",
+    "text": "that humans took when they\narrived on this planet."
+  },
+  {
+    "start": "00:26:18.173",
+    "end": "00:26:20.033",
+    "text": "And we needed each element to reflect"
+  },
+  {
+    "start": "00:26:20.033",
+    "end": "00:26:22.443",
+    "text": "their evolving culture,\nthe evolving technology"
+  },
+  {
+    "start": "00:26:22.443",
+    "end": "00:26:24.043",
+    "text": "and materials available to them."
+  },
+  {
+    "start": "00:26:25.723",
+    "end": "00:26:28.923",
+    "text": "We have this atomic,\nthis kind of Sci-Fi era,"
+  },
+  {
+    "start": "00:26:28.923",
+    "end": "00:26:31.393",
+    "text": "which relates to this\nship called the Whale"
+  },
+  {
+    "start": "00:26:31.393",
+    "end": "00:26:36.393",
+    "text": "and all of these come from\nthis one ship in the world."
+  },
+  {
+    "start": "00:26:36.523",
+    "end": "00:26:39.723",
+    "text": "And that humans living on the planet"
+  },
+  {
+    "start": "00:26:39.723",
+    "end": "00:26:43.033",
+    "text": "have kind of looted and\nrelied upon for generations."
+  },
+  {
+    "start": "00:26:43.033",
+    "end": "00:26:47.773",
+    "text": "And yeah, we try to maintain\na consistent style there."
+  },
+  {
+    "start": "00:26:47.773",
+    "end": "00:26:49.623",
+    "text": "We have the monumental era."
+  },
+  {
+    "start": "00:26:49.623",
+    "end": "00:26:51.073",
+    "text": "This comes from an era where humans"
+  },
+  {
+    "start": "00:26:51.073",
+    "end": "00:26:53.673",
+    "text": "have kind of tried to\ntame the land a little bit"
+  },
+  {
+    "start": "00:26:53.673",
+    "end": "00:26:56.773",
+    "text": "and ties into some of the more unique,"
+  },
+  {
+    "start": "00:26:56.773",
+    "end": "00:27:00.023",
+    "text": "contextual elements of\nthe planet related to like"
+  },
+  {
+    "start": "00:27:00.023",
+    "end": "00:27:03.593",
+    "text": "the hoveral mobility, which\nwe call the perpetual."
+  },
+  {
+    "start": "00:27:03.593",
+    "end": "00:27:05.473",
+    "text": "And these structures tend to be more tied"
+  },
+  {
+    "start": "00:27:05.473",
+    "end": "00:27:08.173",
+    "text": "into religious practice,\nor historically had"
+  },
+  {
+    "start": "00:27:08.173",
+    "end": "00:27:10.003",
+    "text": "functional ideas behind them."
+  },
+  {
+    "start": "00:27:10.003",
+    "end": "00:27:12.533",
+    "text": "Like observatory, step wells,"
+  },
+  {
+    "start": "00:27:12.533",
+    "end": "00:27:16.263",
+    "text": "old villages, or scouting towers."
+  },
+  {
+    "start": "00:27:16.263",
+    "end": "00:27:20.056",
+    "text": "The idea is that they try to\nuse utilize rock and material."
+  },
+  {
+    "start": "00:27:21.793",
+    "end": "00:27:23.803",
+    "text": "And then finally we have this nomadic era,"
+  },
+  {
+    "start": "00:27:23.803",
+    "end": "00:27:27.573",
+    "text": "which is the kind of\nmodern era of this world."
+  },
+  {
+    "start": "00:27:27.573",
+    "end": "00:27:30.143",
+    "text": "And generally speaking,\npeople are living in tents"
+  },
+  {
+    "start": "00:27:30.143",
+    "end": "00:27:31.976",
+    "text": "or in more fabric architectures."
+  },
+  {
+    "start": "00:27:32.883",
+    "end": "00:27:37.883",
+    "text": "And this is people who have\ngenerally adapted better"
+  },
+  {
+    "start": "00:27:38.203",
+    "end": "00:27:40.553",
+    "text": "to the conditions of this\nplanet and kind of..."
+  },
+  {
+    "start": "00:27:42.323",
+    "end": "00:27:45.966",
+    "text": "Yeah, that was the basis\nof that architecture."
+  },
+  {
+    "start": "00:27:47.018",
+    "end": "00:27:49.230",
+    "text": "Each of these eras have their own design"
+  },
+  {
+    "start": "00:27:49.230",
+    "end": "00:27:50.473",
+    "text": "and visual languages."
+  },
+  {
+    "start": "00:27:50.473",
+    "end": "00:27:53.503",
+    "text": "And we use color profiles\nand modular materials"
+  },
+  {
+    "start": "00:27:53.503",
+    "end": "00:27:55.273",
+    "text": "and props to tie things together."
+  },
+  {
+    "start": "00:27:55.273",
+    "end": "00:27:57.733",
+    "text": "But we could also overlap these things"
+  },
+  {
+    "start": "00:27:57.733",
+    "end": "00:28:02.733",
+    "text": "and show them interacting\nto show points of tension"
+  },
+  {
+    "start": "00:28:02.943",
+    "end": "00:28:06.016",
+    "text": "between them, but also\ncreate interesting variation."
+  },
+  {
+    "start": "00:28:06.943",
+    "end": "00:28:08.593",
+    "text": "One example is the town of Eccria."
+  },
+  {
+    "start": "00:28:08.593",
+    "end": "00:28:11.673",
+    "text": "This started off as a monumental system"
+  },
+  {
+    "start": "00:28:11.673",
+    "end": "00:28:13.383",
+    "text": "and then was converted into a town"
+  },
+  {
+    "start": "00:28:13.383",
+    "end": "00:28:16.573",
+    "text": "that's more suited to desert living."
+  },
+  {
+    "start": "00:28:16.573",
+    "end": "00:28:18.763",
+    "text": "And, you know, it has like outer walls"
+  },
+  {
+    "start": "00:28:18.763",
+    "end": "00:28:22.473",
+    "text": "to protect people from sandstorms,"
+  },
+  {
+    "start": "00:28:22.473",
+    "end": "00:28:25.093",
+    "text": "embraces technological solutions\nto heating and cooling,"
+  },
+  {
+    "start": "00:28:25.093",
+    "end": "00:28:28.143",
+    "text": "but that are more passive."
+  },
+  {
+    "start": "00:28:28.143",
+    "end": "00:28:29.403",
+    "text": "And this was the sort of stuff"
+  },
+  {
+    "start": "00:28:29.403",
+    "end": "00:28:33.426",
+    "text": "that was inspired by our trips\nto Arcosanti, for example."
+  },
+  {
+    "start": "00:28:37.051",
+    "end": "00:28:38.753",
+    "text": "And there are also moments\nwhere nature or ruin"
+  },
+  {
+    "start": "00:28:38.753",
+    "end": "00:28:40.853",
+    "text": "have kind of overtaken the old structures."
+  },
+  {
+    "start": "00:28:40.853",
+    "end": "00:28:44.393",
+    "text": "And I think it's really important\nto show this interaction,"
+  },
+  {
+    "start": "00:28:44.393",
+    "end": "00:28:46.456",
+    "text": "to give the world of lived in feeling."
+  },
+  {
+    "start": "00:28:48.193",
+    "end": "00:28:50.963",
+    "text": "And in terms of workflow for\ndevelop developing these areas,"
+  },
+  {
+    "start": "00:28:50.963",
+    "end": "00:28:53.903",
+    "text": "we tend to go for a few key stages."
+  },
+  {
+    "start": "00:28:53.903",
+    "end": "00:28:55.993",
+    "text": "So first was the site placement."
+  },
+  {
+    "start": "00:28:55.993",
+    "end": "00:28:57.923",
+    "text": "Like I said before, we generate the biomes"
+  },
+  {
+    "start": "00:28:57.923",
+    "end": "00:28:59.373",
+    "text": "and we find ourselves a site."
+  },
+  {
+    "start": "00:29:00.643",
+    "end": "00:29:04.113",
+    "text": "This is something that I really wanted"
+  },
+  {
+    "start": "00:29:04.113",
+    "end": "00:29:06.523",
+    "text": "from my background in architecture."
+  },
+  {
+    "start": "00:29:06.523",
+    "end": "00:29:09.743",
+    "text": "Something that you rely\non a lot as an architect."
+  },
+  {
+    "start": "00:29:09.743",
+    "end": "00:29:13.936",
+    "text": "So we just accepted what we\nwere given there basically."
+  },
+  {
+    "start": "00:29:15.143",
+    "end": "00:29:16.603",
+    "text": "And once we'd found a suitable site,"
+  },
+  {
+    "start": "00:29:16.603",
+    "end": "00:29:19.303",
+    "text": "we developed white box\nscenes using Probuilder."
+  },
+  {
+    "start": "00:29:19.303",
+    "end": "00:29:21.803",
+    "text": "This was a really fantastic tool for us"
+  },
+  {
+    "start": "00:29:21.803",
+    "end": "00:29:23.613",
+    "text": "for being able to test spacing"
+  },
+  {
+    "start": "00:29:23.613",
+    "end": "00:29:25.833",
+    "text": "and to iterate levels quickly."
+  },
+  {
+    "start": "00:29:25.833",
+    "end": "00:29:27.753",
+    "text": "We could also actually apply materials"
+  },
+  {
+    "start": "00:29:27.753",
+    "end": "00:29:32.373",
+    "text": "and paint vertices for our structures."
+  },
+  {
+    "start": "00:29:32.373",
+    "end": "00:29:34.236",
+    "text": "And it got us really far actually."
+  },
+  {
+    "start": "00:29:35.563",
+    "end": "00:29:37.473",
+    "text": "And then there were prefabs."
+  },
+  {
+    "start": "00:29:37.473",
+    "end": "00:29:39.993",
+    "text": "So we would bring various related prefabs"
+  },
+  {
+    "start": "00:29:39.993",
+    "end": "00:29:43.203",
+    "text": "that we'd created to help theme levels,"
+  },
+  {
+    "start": "00:29:43.203",
+    "end": "00:29:45.783",
+    "text": "as well as provide easy\nways to get generic logic"
+  },
+  {
+    "start": "00:29:45.783",
+    "end": "00:29:49.016",
+    "text": "like doors, and switches into levels."
+  },
+  {
+    "start": "00:29:50.153",
+    "end": "00:29:52.413",
+    "text": "And whereas we could keep things generally"
+  },
+  {
+    "start": "00:29:52.413",
+    "end": "00:29:53.703",
+    "text": "thematically consistent."
+  },
+  {
+    "start": "00:29:53.703",
+    "end": "00:29:57.393",
+    "text": "Mixing these up would also\nprovide interesting opportunities"
+  },
+  {
+    "start": "00:29:57.393",
+    "end": "00:29:59.643",
+    "text": "for storytelling,\nenvironmental storytelling."
+  },
+  {
+    "start": "00:30:07.383",
+    "end": "00:30:10.423",
+    "text": "for creating something\nthat fit more neatly"
+  },
+  {
+    "start": "00:30:10.423",
+    "end": "00:30:13.216",
+    "text": "into a specific environment\nor level geometry."
+  },
+  {
+    "start": "00:30:15.773",
+    "end": "00:30:17.073",
+    "text": "So, yeah, we realized early on"
+  },
+  {
+    "start": "00:30:17.073",
+    "end": "00:30:19.183",
+    "text": "that we could never\nreally handcraft a world"
+  },
+  {
+    "start": "00:30:19.183",
+    "end": "00:30:22.043",
+    "text": "the size that we wanted,\nwith such a small team team"
+  },
+  {
+    "start": "00:30:22.043",
+    "end": "00:30:23.523",
+    "text": "and be able to iterate design."
+  },
+  {
+    "start": "00:30:23.523",
+    "end": "00:30:26.453",
+    "text": "So we used all of these factors to inform"
+  },
+  {
+    "start": "00:30:26.453",
+    "end": "00:30:29.573",
+    "text": "our world building, to\ninform the art of the game."
+  },
+  {
+    "start": "00:30:29.573",
+    "end": "00:30:33.203",
+    "text": "And we tried to embrace some\nof the unpredictable nature"
+  },
+  {
+    "start": "00:30:33.203",
+    "end": "00:30:37.673",
+    "text": "of procedural generations,\nboth in biome generation,"
+  },
+  {
+    "start": "00:30:37.673",
+    "end": "00:30:40.453",
+    "text": "but also in how we placed and laid out"
+  },
+  {
+    "start": "00:30:40.453",
+    "end": "00:30:42.226",
+    "text": "handcrafted locations to the game."
+  },
+  {
+    "start": "00:30:43.427",
+    "end": "00:30:46.027",
+    "text": "And yeah, I think it ended\nup serving us quite well."
+  },
+  {
+    "start": "00:30:47.163",
+    "end": "00:30:48.613",
+    "text": "We're happy with it at least."
+  },
+  {
+    "start": "00:30:49.633",
+    "end": "00:30:50.843",
+    "text": "So in terms of takeaways."
+  },
+  {
+    "start": "00:30:50.843",
+    "end": "00:30:54.323",
+    "text": "The things that I would\nsay most people could learn"
+  },
+  {
+    "start": "00:30:54.323",
+    "end": "00:30:57.493",
+    "text": "is that you should make a\nproject based on the assessments"
+  },
+  {
+    "start": "00:30:57.493",
+    "end": "00:30:59.983",
+    "text": "of your team strengths and weaknesses,"
+  },
+  {
+    "start": "00:30:59.983",
+    "end": "00:31:03.056",
+    "text": "and try to plan and\nbuild a team around that."
+  },
+  {
+    "start": "00:31:04.223",
+    "end": "00:31:05.503",
+    "text": "To lean into your weaknesses"
+  },
+  {
+    "start": "00:31:05.503",
+    "end": "00:31:06.953",
+    "text": "in your world building if you can."
+  },
+  {
+    "start": "00:31:06.953",
+    "end": "00:31:08.983",
+    "text": "And I think you can come up with some"
+  },
+  {
+    "start": "00:31:08.983",
+    "end": "00:31:10.836",
+    "text": "really interesting results there."
+  },
+  {
+    "start": "00:31:11.983",
+    "end": "00:31:14.353",
+    "text": "Yeah, that was a big thing for us."
+  },
+  {
+    "start": "00:31:14.353",
+    "end": "00:31:17.133",
+    "text": "Modularity as a tool for populating"
+  },
+  {
+    "start": "00:31:17.133",
+    "end": "00:31:18.843",
+    "text": "in planet like systems basically"
+  },
+  {
+    "start": "00:31:18.843",
+    "end": "00:31:21.053",
+    "text": "for populating things ahead of time."
+  },
+  {
+    "start": "00:31:21.053",
+    "end": "00:31:24.683",
+    "text": "Rather than just jumping in,\nthinking about how you can"
+  },
+  {
+    "start": "00:31:24.683",
+    "end": "00:31:28.166",
+    "text": "kind of help systemize your\ndesign is really helpful."
+  },
+  {
+    "start": "00:31:29.423",
+    "end": "00:31:30.953",
+    "text": "Embracing imperfection."
+  },
+  {
+    "start": "00:31:30.953",
+    "end": "00:31:33.913",
+    "text": "I think it can be really\nhelpful for adding"
+  },
+  {
+    "start": "00:31:33.913",
+    "end": "00:31:34.746",
+    "text": "a kind of thumbprint."
+  },
+  {
+    "start": "00:31:34.746",
+    "end": "00:31:37.383",
+    "text": "But also when you're kind of\nscrambling to get stuff in"
+  },
+  {
+    "start": "00:31:37.383",
+    "end": "00:31:41.716",
+    "text": "later on, maybe a level of\nimperfection will look okay."
+  },
+  {
+    "start": "00:31:43.213",
+    "end": "00:31:45.546",
+    "text": "And yeah, just focusing on readability."
+  },
+  {
+    "start": "00:31:46.563",
+    "end": "00:31:49.263",
+    "text": "I think that's just a\nparamount thing that, you know,"
+  },
+  {
+    "start": "00:31:49.263",
+    "end": "00:31:50.303",
+    "text": "you could make a game look good."
+  },
+  {
+    "start": "00:31:50.303",
+    "end": "00:31:53.316",
+    "text": "But if it's not playable,\nthen you're gonna struggle."
+  },
+  {
+    "start": "00:31:54.343",
+    "end": "00:31:56.215",
+    "text": "And thank you for watching."
+  },
+  {
+    "start": "00:31:56.215",
+    "end": "00:31:58.465",
+    "text": "I hope you have a lovely GDC, thanks."
+  },
+  {
+    "start": "00:31:58.465",
+    "end": "00:32:01.465",
+    "text": "(audience clapping)"
+  },
+  {
+    "start": "00:32:02.702",
+    "end": "00:32:05.285",
+    "text": "(gentle music)"
+  }
+]

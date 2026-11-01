@@ -1,0 +1,39 @@
+{
+  "passed": 2,
+  "checks": [
+    "actual stone bridge center supports forward riding",
+    "bridge side constraint stops water/parapet crossing"
+  ],
+  "crossing": {
+    "riding": true,
+    "horse": "morris-decorated-draft-horse",
+    "speed": 3.1961390777153333,
+    "maxSpeed": 3.1961390777153333,
+    "distanceTravelled": 6.616561429197673,
+    "yaw": 2.9746678475394175,
+    "blocked": false,
+    "gait": "grazing",
+    "controls": "WASD / Shift / F",
+    "local": [
+      8.517818830546306,
+      1.6829279198816778,
+      28.92675760788476
+    ]
+  },
+  "blocked": {
+    "riding": true,
+    "horse": "morris-decorated-draft-horse",
+    "speed": 0,
+    "maxSpeed": 2.4108897153868587,
+    "distanceTravelled": 0.881586502757278,
+    "yaw": 1.403871520744521,
+    "blocked": true,
+    "gait": "grazing",
+    "controls": "WASD / Shift / F",
+    "local": [
+      8.86933278041877,
+      1.0026715821961432,
+      32.14647620534811
+    ]
+  }
+}

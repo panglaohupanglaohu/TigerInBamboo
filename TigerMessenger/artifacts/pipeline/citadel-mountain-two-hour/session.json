@@ -1,0 +1,20 @@
+{
+  "started": "2026-09-28T02:08:39Z",
+  "work_until": "2026-09-28T04:08:39Z",
+  "target": "approved-target.png",
+  "status": "complete",
+  "latest_capture": "r13",
+  "notes": "Actual iteration duration, no fabricated completion counts",
+  "checks": {
+    "rail_probes": 23049,
+    "rail_collisions": 0,
+    "min_rear_rail_above_sea_m": 0.6472760696798616,
+    "walk_hash": 83626823,
+    "trees": 85,
+    "shrubs": 107,
+    "js_errors": 0,
+    "geometry_tests_passed": 3
+  },
+  "completed": "2026-09-28T04:09:27.755761+00:00",
+  "target_parity": false
+}

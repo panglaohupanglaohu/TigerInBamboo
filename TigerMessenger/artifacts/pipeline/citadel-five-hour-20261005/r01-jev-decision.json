@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "d7f1f15ceb9259e09f74b6fd373951b61e09c3ff626fc3fde326c19d874abc33",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.9
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "geometry",
+      "confidence": 0.55,
+      "probabilities": {
+        "lighting": 0.02,
+        "review": 0.22,
+        "navigation": 0.11,
+        "geometry": 0.64,
+        "dressing": 0.01
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.94
+    }
+  },
+  "usage": {
+    "input_tokens": 1085,
+    "output_tokens": 91,
+    "cost_usd": 0.000456,
+    "credits_remaining_usd": 4.966997
+  },
+  "elapsed_ms": 2006,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "candidate actual world rail/walk/architecture comparison",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "candidate actual full root support",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

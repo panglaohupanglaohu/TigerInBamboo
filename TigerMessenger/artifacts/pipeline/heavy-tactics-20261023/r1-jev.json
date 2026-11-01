@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "6bedb628d3f507dc073b720a5421298326ab3ba7d5505de2a9c0c2943f19b33c",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.94
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.96,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.97,
+        "review": 0.03
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.63
+    }
+  },
+  "usage": {
+    "input_tokens": 718,
+    "output_tokens": 91,
+    "cost_usd": 0.000302,
+    "credits_remaining_usd": 4.928684
+  },
+  "elapsed_ms": 1353,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "actual normal gameplay team and interception",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "99012eaa12c99d84881c8f7a2158e57351175794105e6cbf8f0f67dda43a87e3",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.5,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.02,
+        "lighting": 0,
+        "navigation": 0.37,
+        "review": 0.6
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.15
+    }
+  },
+  "usage": {
+    "input_tokens": 821,
+    "output_tokens": 91,
+    "cost_usd": 0.000345,
+    "credits_remaining_usd": 4.933404
+  },
+  "elapsed_ms": 2662,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "full actual train journey and character climbing",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,25 @@
+{
+  "version": "continuous-arch-r2",
+  "goal": "Triage local stone bridge geometry revision before parent GPU verification",
+  "observations": [
+    "Actually inspected approved terrain-buildings target and normal-bridge-before-r30. Before render shows strongly serrated coping and rotated box voussoirs.",
+    "Replaced detail geometry with closed smooth arch core,continuous thick stone parapets and continuous coping following original deck.52 fitted wedge voussoirs,204 shallow masonry faces,5 shared material batches.Only landscapeDetails source changed;center,8mspan,3.2mwalkwidth and deck retained.",
+    "26 deterministic tests pass including3fixture grades and actual production bridge parameter raycasts.Production water-level transverse opening remains clear."
+  ],
+  "checks": [
+    {
+      "name": "26finitegeometry,deck,envelope,walkingclearance,wateropening,andbatchtests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "New normal-game GPU visual quality,real bank contacts and mounted crossing",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Parent owns scene integration and GPU inspection",
+    "Do not equate JEV with visual,bank contact or full traversal acceptance"
+  ]
+}

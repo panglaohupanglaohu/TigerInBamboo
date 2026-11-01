@@ -1,0 +1,2980 @@
+{
+  "updatedAt": "2026-11-01T21:06:09+08:00",
+  "scope": "原版 src + engine 的全部 JS；vendor、页面内联脚本与工具另列后续范围。",
+  "modules": [
+    {
+      "source": "src/adjacency.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "缺少从实际模块网格抽取接口并查询可拼装邻接的工具。",
+      "clips": [
+        "795010582239997952"
+      ],
+      "sourceExports": [
+        "meshEdges",
+        "edgeSignature",
+        "buildFitTable",
+        "whichFits",
+        "gridEdgeSlots",
+        "selfCheck"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/app.js",
+      "targets": [
+        "src/world/app.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1384958097542819845"
+      ],
+      "sourceExports": [],
+      "idReferences": [
+        "src/core/grid.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/ballistic.js",
+      "targets": [
+        "src/badnorth/battle.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "987267068495003648"
+      ],
+      "sourceExports": [
+        "DEFAULT_PARAMS",
+        "bakeArc",
+        "bakeLUT",
+        "compileExpr",
+        "closestOnArc",
+        "pickArc",
+        "analyticRange",
+        "validateIntegrator",
+        "retune"
+      ],
+      "idReferences": [
+        "src/badnorth/battle.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/barycentric.js",
+      "targets": [
+        "src/core/spatial.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "974579499802202113",
+        "974564862729838592"
+      ],
+      "sourceExports": [
+        "prepTriangle",
+        "barycentric",
+        "barycentricWeight",
+        "barycentricCramer",
+        "insideTriangle",
+        "fromBarycentric",
+        "weightsToRGB",
+        "selfCheck"
+      ],
+      "idReferences": [
+        "src/core/spatial.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/birds.js",
+      "targets": [
+        "src/life/birds.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1244892370392489989",
+        "1215644531221311488"
+      ],
+      "sourceExports": [
+        "findRoofPerches",
+        "Birds"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/water/shore.js",
+        "src/world/view.js",
+        "src/life/birds.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/blobrelax.js",
+      "targets": [
+        "src/life/vegetation.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "现有球团树冠与外壳描边未覆盖硬边橡皮筋/内部气球的迭代松弛。",
+      "clips": [
+        "1580162341668237312"
+      ],
+      "sourceExports": [
+        "makeField",
+        "nearestBlob",
+        "computeNormals",
+        "relaxBlobMesh",
+        "buildBlobCanopy"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/borderpath.js",
+      "targets": [
+        "src/campaign/campaign.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "战役节点分组存在，沿三角边绕节点的前线边境生成未核实。",
+      "clips": [
+        "1097458505315946496"
+      ],
+      "sourceExports": [
+        "scatterNodes",
+        "buildEdgeGraph",
+        "walkBorder",
+        "buildBorder"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/bouncegi.js",
+      "targets": [
+        "src/light/lightvolume.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1580835075629133825"
+      ],
+      "sourceExports": [
+        "rng",
+        "makeCanyon",
+        "normalAt",
+        "cellAreaAt",
+        "worldAt",
+        "directLight",
+        "samplePattern",
+        "bounce",
+        "bruteForce",
+        "luma",
+        "renderRay",
+        "audit"
+      ],
+      "idReferences": [
+        "src/world/view.js",
+        "src/light/lightvolume.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/boxtest.js",
+      "targets": [
+        "src/core/obb.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "974325184525201409"
+      ],
+      "sourceExports": [
+        "makeBox",
+        "corners",
+        "axes",
+        "satDepth",
+        "overlaps",
+        "clipArea",
+        "aabbOverlap",
+        "circleOverlap",
+        "stressReport",
+        "speedReport",
+        "planRaid",
+        "auditPlan"
+      ],
+      "idReferences": [
+        "src/core/obb.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/cheesenav.js",
+      "targets": [
+        "src/world/layerednav.js",
+        "navigation.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。",
+      "clips": [
+        "906425294533394432",
+        "797119718477991936",
+        "1442695040888963407"
+      ],
+      "sourceExports": [
+        "carveCheese",
+        "components",
+        "navNodes",
+        "findPath",
+        "euclid",
+        "selfCheck"
+      ],
+      "idReferences": [
+        "src/world/layerednav.js",
+        "refactoring-audit.html",
+        "navigation.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/navigation-review.md"
+    },
+    {
+      "source": "src/colorgamut.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1710031224838771027"
+      ],
+      "sourceExports": [
+        "rgbToLab",
+        "deltaE",
+        "hsvToRgb",
+        "FEATURES",
+        "sample",
+        "grid",
+        "stats",
+        "separation",
+        "flatPalette",
+        "audit"
+      ],
+      "idReferences": [
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/contrast.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1482346496460828674"
+      ],
+      "sourceExports": [
+        "contrastField",
+        "bucketSpread"
+      ],
+      "idReferences": [
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/coroutine.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "缺少可预算执行、嵌套/递归及取消的通用生成器调度器。",
+      "clips": [
+        "863019585162932224"
+      ],
+      "sourceExports": [
+        "frame",
+        "Scheduler",
+        "fillSync",
+        "runFrames"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/demo.js",
+      "targets": [
+        "src/world/townDemo.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1197909675443916803",
+        "1215642481162887168",
+        "1238474550511308800"
+      ],
+      "sourceExports": [
+        "generateDemo"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/palette.js",
+        "src/world/townDemo.js",
+        "src/build/buildings.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/dfgrow.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1105131621391495176",
+        "1104771432440049664"
+      ],
+      "sourceExports": [
+        "sdRoundRect",
+        "sdCircle",
+        "sdCapsule",
+        "buildOrnament",
+        "makeTimeline",
+        "pieceAlpha",
+        "renderFrame",
+        "inkCoverage",
+        "audit"
+      ],
+      "idReferences": [
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/dirsprites.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "3D 小人不等于单方向精灵的视觉朝向约束。",
+      "clips": [
+        "969860566322958336"
+      ],
+      "sourceExports": [
+        "drawUnit",
+        "renderUnit",
+        "measureAmbiguity",
+        "compareVariants"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/doodlewall.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "缺少走廊墙板与涂鸦演示。",
+      "clips": [
+        "1897266928961700215",
+        "1890018647655272491"
+      ],
+      "sourceExports": [
+        "INK",
+        "PANEL_TINTS",
+        "PAPER",
+        "makeRng",
+        "drawMotif",
+        "makeDoodleWall"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/dual.js",
+      "targets": [
+        "grids.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "有对偶图演示，植被落点尚未统一使用顶点对偶区域。",
+      "clips": [
+        "959752525867036672"
+      ],
+      "sourceExports": [
+        "dualCells",
+        "pickFoliageSites"
+      ],
+      "idReferences": [
+        "src/life/vegetation.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/edgeplant.js",
+      "targets": [
+        "src/life/vegetation.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1590669875869286400",
+        "1707490274425884929",
+        "1290997501332525056"
+      ],
+      "sourceExports": [
+        "findRims",
+        "placeGrassBand",
+        "placeRimShrubs",
+        "placeGardenPath",
+        "stats",
+        "renderPlan",
+        "audit"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/world/townDemo.js",
+        "src/life/vegetation.js",
+        "src/build/buildings.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/edgesmooth.js",
+      "targets": [
+        "src/terrain/shape.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1670720537662836736",
+        "1670725072540106755"
+      ],
+      "sourceExports": [
+        "ORDER",
+        "ORDER_NAME",
+        "classifyEdges",
+        "hierarchicalSmooth",
+        "refreshBounds",
+        "regularity",
+        "borderKink",
+        "areaDrift",
+        "snapshotAreas"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/terrain/shape.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/floatprobe.js",
+      "targets": [
+        "src/world/view.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "缺少32位浮点渲染目标跨平台能力实测。",
+      "clips": [
+        "1664565063552847873"
+      ],
+      "sourceExports": [
+        "probeFloat"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/flowdemo.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "缺少共享体素碰撞/软法线/风场的独立量化验收页。",
+      "clips": [],
+      "sourceExports": [],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "src/flowfield.js",
+      "targets": [
+        "src/badnorth/flowfield.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "816748103193817088"
+      ],
+      "sourceExports": [
+        "buildFlowField",
+        "flowCrowd"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/frontier.js",
+      "targets": [
+        "src/world/navgraph.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "区域合并导航存在，未覆盖坍缩边缘候选 tile 的增量枚举。",
+      "clips": [
+        "1582293326815862786"
+      ],
+      "sourceExports": [
+        "makeTileSet",
+        "expandFrontier",
+        "measureCandidateCounts"
+      ],
+      "idReferences": [
+        "src/world/navgraph.js",
+        "src/world/navlayer.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/fusion.js",
+      "targets": [
+        "src/world/scenes.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1579483114178768898",
+        "1584623053061099520",
+        "1447488323845509121"
+      ],
+      "sourceExports": [],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/grid.js",
+        "src/world/scenes.js",
+        "src/terrain/generate.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/grasscards.js",
+      "targets": [
+        "src/life/vegetation.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1590669875869286400",
+        "1707490274425884929",
+        "1205420678859632640",
+        "1015149712469524480"
+      ],
+      "sourceExports": [
+        "pointInPoly",
+        "edgeInfo",
+        "placeCards",
+        "viewAlphaRaw",
+        "viewAlpha",
+        "swayAngle",
+        "audit"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/life/vegetation.js",
+        "src/life/smoke.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/grid.js",
+      "targets": [
+        "src/core/grid.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1302686201401442309"
+      ],
+      "sourceExports": [
+        "buildGrid",
+        "repairInvertedCells"
+      ],
+      "idReferences": [
+        "src/core/infinite.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/gridmodes.js",
+      "targets": [
+        "src/core/grid.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "四边形/混合演示存在，纯六边形地形对照未覆盖。",
+      "clips": [
+        "1670790425232175108",
+        "1447496205282549761",
+        "1147881669350891521"
+      ],
+      "sourceExports": [
+        "squareLattice",
+        "hexLattice",
+        "triLattice",
+        "irregularTriFromCells",
+        "quadDegreeStats",
+        "latticeStats"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/grid.js",
+        "src/world/view.js",
+        "src/world/app.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/gridwfc.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "缺少不规则格上的确定性约束传播与回溯求解。",
+      "clips": [
+        "1164926304640229376"
+      ],
+      "sourceExports": [
+        "TILES",
+        "solve",
+        "determinism"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/grouping.js",
+      "targets": [
+        "src/campaign/campaign.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "938422757288792064",
+        "938405900573986816"
+      ],
+      "sourceExports": [
+        "spreadNodes",
+        "groupByConnectivity",
+        "cutRatio",
+        "graphFromGrid"
+      ],
+      "idReferences": [
+        "src/campaign/campaign.js",
+        "refactoring-audit.html",
+        "campaign.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/halfedge.js",
+      "targets": [
+        "src/core/grid.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1458921394855718917",
+        "1584623053061099520",
+        "1447494168448753667"
+      ],
+      "sourceExports": [
+        "buildHalfEdge",
+        "halfEdgeReport",
+        "ringArrows",
+        "boundaryLines",
+        "splitToMixed",
+        "mixedTopologyCheck",
+        "mixedWire"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/grid.js",
+        "src/world/app.js",
+        "src/world/scenes.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/holenav.js",
+      "targets": [
+        "src/world/layerednav.js",
+        "navigation.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。",
+      "clips": [
+        "797119718477991936",
+        "906425294533394432"
+      ],
+      "sourceExports": [
+        "makeCheese",
+        "doorCost",
+        "buildPortalGraph",
+        "route",
+        "straightDist",
+        "routeNoDoors",
+        "report",
+        "growthSeries"
+      ],
+      "idReferences": [
+        "src/world/layerednav.js",
+        "refactoring-audit.html",
+        "navigation.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/navigation-review.md"
+    },
+    {
+      "source": "src/infograph.js",
+      "targets": [
+        "src/badnorth/battle.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "战斗流场存在，单位知识的动态节点通信图未覆盖。",
+      "clips": [
+        "883447205176238083"
+      ],
+      "sourceExports": [
+        "makeUnit",
+        "buildGraph",
+        "componentCount",
+        "spreadInfo",
+        "stepUnits",
+        "cohesion",
+        "simulateAB"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/learnpanel.js",
+      "targets": [
+        "src/ui/learnpanel.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "mountLearnPanel"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "src/lighting.js",
+      "targets": [
+        "src/light/bake.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "共享体素烘焙已迁移；碰撞与体素软法线用途需继续核查。",
+      "clips": [
+        "931196707236392960",
+        "1168571866405097472",
+        "1580846877855338497",
+        "1237305125070426112",
+        "1062374549407350790",
+        "1580845127207387137"
+      ],
+      "sourceExports": [
+        "buildVoxelField",
+        "reblurRect",
+        "bakeVertexAO",
+        "diffuseBounce",
+        "bakeSoftNormals",
+        "buildSDF",
+        "bakeRayBounce",
+        "bakeSixDirVolume",
+        "bakeVertexLight6",
+        "makeLightingUniforms",
+        "patchMaterial"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/world.js",
+        "src/core/meshwriter.js",
+        "src/world/view.js",
+        "src/light/bake.js",
+        "src/light/lightvolume.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/lightingcache.js",
+      "targets": [
+        "src/world/worldmesh.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "931196707236392960",
+        "1168571866405097472"
+      ],
+      "sourceExports": [
+        "LightingCache"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/world.js",
+        "src/world/view.js",
+        "src/light/bake.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/looptown.js",
+      "targets": [
+        "src/build/buildings.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1313837640366596096"
+      ],
+      "sourceExports": [
+        "findEnclosed",
+        "analyse",
+        "makeDemoTown",
+        "audit"
+      ],
+      "idReferences": [
+        "src/core/grid.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/mandala.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1490068909042642944"
+      ],
+      "sourceExports": [
+        "makeRng",
+        "buildMandala",
+        "drawMandala"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/march.js",
+      "targets": [
+        "grids.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "岸线绘制存在，marching squares 独立等值线与端点一致性未覆盖。",
+      "clips": [
+        "1120036868966502401"
+      ],
+      "sourceExports": [
+        "buildCornerField",
+        "marchQuad",
+        "marchGrid"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/mesh.js",
+      "targets": [
+        "src/core/meshwriter.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "TownMesh"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "src/mipcustom.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "贴图实验未覆盖自定义 mipmap 的实际构建和采样。",
+      "clips": [
+        "777596437534240768"
+      ],
+      "sourceExports": [
+        "srgbToLinear",
+        "linearToSrgb",
+        "buildMips",
+        "sampleTri",
+        "sampleBilinear",
+        "footprintLod",
+        "selfCheck"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/mipfilter.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "贴图实验未覆盖自定义 mipmap 的实际构建和采样。",
+      "clips": [
+        "777596437534240768"
+      ],
+      "sourceExports": [
+        "srgbToLinear",
+        "linearToSrgb",
+        "makeTestTexture",
+        "downsample",
+        "buildChain",
+        "sampleBilinear",
+        "sampleTrilinear",
+        "sampleAniso",
+        "laplacianEnergy",
+        "renderGround",
+        "compareFilters",
+        "checkMeanPreserved",
+        "paint",
+        "shimmerReport"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/mountainlight.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "地面笔触不能替代山体斜率烘焙贴图。",
+      "clips": [
+        "1786014232594485497"
+      ],
+      "sourceExports": [
+        "buildMountain",
+        "normalAt",
+        "renderShade",
+        "shadeStats",
+        "compare"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/navgraph.js",
+      "targets": [
+        "src/world/navgraph.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1795831296952041691",
+        "1582293326815862786"
+      ],
+      "sourceExports": [
+        "buildNavGraph"
+      ],
+      "idReferences": [
+        "src/world/navgraph.js",
+        "src/world/navlayer.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/navgrid.js",
+      "targets": [
+        "src/world/navgraph.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "797119718477991936",
+        "807135253215199233",
+        "817323301357948928"
+      ],
+      "sourceExports": [
+        "VILLAGE",
+        "buildSolid",
+        "NavGrid",
+        "Squad"
+      ],
+      "idReferences": [
+        "src/world/layerednav.js",
+        "refactoring-audit.html",
+        "navigation.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/paintnormal.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "缺少手绘法线与表面光照演示。",
+      "clips": [
+        "1481661852887265288"
+      ],
+      "sourceExports": [
+        "paintNormal",
+        "shadeWithNormals",
+        "shadeFlat",
+        "stats",
+        "audit"
+      ],
+      "idReferences": [
+        "src/light/lightvolume.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/palette.js",
+      "targets": [
+        "src/core/palette.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1200520827898343425",
+        "1371460793032716290",
+        "1344290848180203523",
+        "1727324352264474664"
+      ],
+      "sourceExports": [
+        "PALETTES",
+        "hexToRgb",
+        "rgbToHex",
+        "rgbToHsl",
+        "hslToRgb",
+        "mixHsl",
+        "mixPalette",
+        "wallColor",
+        "meanSaturation",
+        "hueDistance"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/partsprites.js",
+      "targets": [
+        "ui.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "847717312912211970"
+      ],
+      "sourceExports": [
+        "CELL",
+        "SLOTS",
+        "VARIANTS",
+        "buildAtlas",
+        "assemble",
+        "allVariants",
+        "atlasIdentity"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/patchblend.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1781405550061687016"
+      ],
+      "sourceExports": [
+        "makeElev",
+        "WATER",
+        "buildWorld",
+        "render",
+        "seamStats",
+        "edgeJump",
+        "abModes"
+      ],
+      "idReferences": [
+        "src/core/meshwriter.js",
+        "src/terrain/terrainmesh.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/piperepair.js",
+      "targets": [
+        "src/core/infinite.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "793806535898136576"
+      ],
+      "sourceExports": [
+        "DIRS",
+        "makeLibrary",
+        "makeGrid",
+        "generate",
+        "findLeaks",
+        "localLeaks",
+        "repair",
+        "largestComponent",
+        "repairReport",
+        "project",
+        "drawPipes",
+        "drawCellBox",
+        "reconnect",
+        "bestModule",
+        "componentStats"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/portrait.js",
+      "targets": [
+        "ui.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "958371606350454784"
+      ],
+      "sourceExports": [
+        "SLOTS",
+        "samplePortrait",
+        "drawPortrait",
+        "silhouetteDiversity"
+      ],
+      "idReferences": [
+        "ui.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/propanim.js",
+      "targets": [
+        "src/world/app.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1246074663546916873"
+      ],
+      "sourceExports": [
+        "springTrack",
+        "staggerAt",
+        "scaleAt",
+        "bakeProps",
+        "costBoth",
+        "rebake",
+        "audit"
+      ],
+      "idReferences": [
+        "src/world/view.js",
+        "src/life/effects.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/quadgrid.js",
+      "targets": [
+        "src/core/grid.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1147881669350891521",
+        "1151770831619534848",
+        "1332410042784641026"
+      ],
+      "sourceExports": [
+        "buildQuadGrid"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/grid.js",
+        "src/core/infinite.js",
+        "src/world/view.js",
+        "src/world/app.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/quadtex.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1015149712469524480",
+        "999185422403055616"
+      ],
+      "sourceExports": [
+        "makeNoise",
+        "buildCards",
+        "cardUV",
+        "similarity",
+        "stretchTable",
+        "seamShare",
+        "audit"
+      ],
+      "idReferences": [
+        "src/life/smoke.js",
+        "src/badnorth/battle.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/rayvis.js",
+      "targets": [
+        "src/world/navlayer.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "导航线不等于近似视线遮挡查询。",
+      "clips": [
+        "798580832906739712"
+      ],
+      "sourceExports": [
+        "fibonacciDirs",
+        "buildSolid",
+        "castRay",
+        "visibility",
+        "visibilityField",
+        "surfaceSamples",
+        "demoCastle",
+        "selfCheck"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/rectpack.js",
+      "targets": [
+        "src/core/atlas.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1764958522398146667",
+        "1593215065423245313",
+        "1765041830461055127",
+        "1765115069837221962"
+      ],
+      "sourceExports": [
+        "RectBin",
+        "shelfPack"
+      ],
+      "idReferences": [
+        "src/core/atlas.js",
+        "src/life/impostor.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/reflstreak.js",
+      "targets": [
+        "src/world/view.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1758250248483278925"
+      ],
+      "sourceExports": [
+        "streak",
+        "mirrorDownsample",
+        "gradients",
+        "verticalCorrLength",
+        "kernelExtent",
+        "buildComparison"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/repeatbreak.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1061229717582475264",
+        "1061227418961219585"
+      ],
+      "sourceExports": [
+        "makePeriodicTexture",
+        "tileField",
+        "tileSingle",
+        "autocorrX",
+        "peakCorr",
+        "audit"
+      ],
+      "idReferences": [
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/save.js",
+      "targets": [
+        "src/world/save.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "encodeTown",
+        "decodeTown"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "src/savestring.js",
+      "targets": [
+        "src/world/save.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1198957499027795969"
+      ],
+      "sourceExports": [
+        "encode",
+        "decode",
+        "audit",
+        "roundTrip"
+      ],
+      "idReferences": [
+        "src/world/save.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/scene.js",
+      "targets": [
+        "src/world/view.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "926903893866541057",
+        "1215644531221311488",
+        "1991103578011029507",
+        "1313840428685447170",
+        "1147881669350891521",
+        "1458921394855718917",
+        "1584623053061099520",
+        "1447494168448753667",
+        "1384958097542819845",
+        "1849732997945110651",
+        "931196707236392960",
+        "1580846877855338497",
+        "1580845127207387137",
+        "1062374549407350790",
+        "1244892370392489989"
+      ],
+      "sourceExports": [
+        "View"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/ui/learnpanel.js",
+        "src/core/world.js",
+        "src/core/grid.js",
+        "src/core/meshwriter.js",
+        "src/water/shore.js",
+        "src/world/view.js",
+        "src/world/app.js",
+        "src/world/scenes.js",
+        "src/life/birds.js",
+        "src/life/atmosphere.js",
+        "src/light/lightvolume.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/shore.js",
+      "targets": [
+        "src/water/shore.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1991101097818403263",
+        "1849732997945110651",
+        "1849730611964973481",
+        "1215644531221311488"
+      ],
+      "sourceExports": [
+        "buildShore",
+        "makeSkirtMaterial",
+        "makeWaveMaterial"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/water/shore.js",
+        "src/world/view.js",
+        "src/life/birds.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/smear.js",
+      "targets": [
+        "src/world/view.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1727315611959865407"
+      ],
+      "sourceExports": [
+        "velocityField",
+        "smearLengthPx",
+        "smear",
+        "sharpnessBand",
+        "sharpness",
+        "audit"
+      ],
+      "idReferences": [
+        "src/world/view.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/spherefusion.js",
+      "targets": [
+        "src/world/scenes.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "星球演示与平面 World 分离，球面建筑/地形融合尚未覆盖。",
+      "clips": [],
+      "sourceExports": [],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "src/spherehouse.js",
+      "targets": [
+        "src/sphere/planet.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "缺少球面上的建筑形变与放置。",
+      "clips": [
+        "1768627849529893109",
+        "1584623053061099520"
+      ],
+      "sourceExports": [
+        "HOUSE",
+        "buildSphereHouses"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/world/scenes.js",
+        "src/sphere/planet.js",
+        "planet.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/spheretown.js",
+      "targets": [
+        "src/sphere/planet.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1768627849529893109",
+        "1338825080844021760",
+        "1769641473895432220",
+        "1769691526924292506",
+        "1795831296952041691"
+      ],
+      "sourceExports": [
+        "SPHERE",
+        "buildSphereGrid",
+        "generateHeights",
+        "buildSphereMesh",
+        "buildShoreRibbon",
+        "buildSeaShell",
+        "carveRivers"
+      ],
+      "idReferences": [
+        "src/world/navgraph.js",
+        "src/world/navlayer.js",
+        "src/sphere/planet.js",
+        "src/terrain/generate.js",
+        "planet.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/splice.js",
+      "targets": [
+        "src/world/scenes.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "有融合造型，未覆盖预制多格 tile 的完整约束拼接。",
+      "clips": [
+        "1584623053061099520"
+      ],
+      "sourceExports": [
+        "bilinear",
+        "spliceFootprint",
+        "footprintFor"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/world/scenes.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/surfacedeco.js",
+      "targets": [
+        "src/life/vegetation.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1181464374839521280"
+      ],
+      "sourceExports": [
+        "DECO_TILES",
+        "runDeco",
+        "validate",
+        "permutationCost",
+        "townFaceCount",
+        "audit"
+      ],
+      "idReferences": [
+        "src/world/navgraph.js",
+        "src/world/navlayer.js",
+        "src/build/buildings.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/surfaceshadow.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "未覆盖投射高度与深度测试高度解耦的表面阴影。",
+      "clips": [
+        "1705195380457996629"
+      ],
+      "sourceExports": [
+        "buildTerrain",
+        "shadowMap",
+        "shadowStats",
+        "islandSeams",
+        "sweep",
+        "renderTop"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/terrainmesh.js",
+      "targets": [
+        "src/terrain/terrainmesh.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1447488323845509121",
+        "1063115611289645057"
+      ],
+      "sourceExports": [
+        "LAND",
+        "buildTerrainMesh"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/life/vegetation.js",
+        "src/terrain/generate.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/texelsnap.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1241046107125399552",
+        "1241096929490149376"
+      ],
+      "sourceExports": [
+        "bakeAtlas",
+        "drawQuad",
+        "edgeWidths",
+        "highFreq",
+        "zoomJitter",
+        "audit"
+      ],
+      "idReferences": [
+        "src/life/vegetation.js",
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/tileforce.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "压平台地放教堂不能替代先生成特定模块所需局部网格。",
+      "clips": [
+        "1751932427272909032",
+        "1670794261669769217",
+        "1579483114178768898"
+      ],
+      "sourceExports": [
+        "buildMixedGrid",
+        "clusterModule",
+        "moduleFromCells",
+        "moduleSignature",
+        "findPatch",
+        "countOccurrences",
+        "synthesizePatch",
+        "auditRarity",
+        "ringModule",
+        "audit"
+      ],
+      "idReferences": [
+        "src/core/grid.js",
+        "src/world/scenes.js",
+        "src/terrain/features.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/tileplace.js",
+      "targets": [
+        "src/build/buildings.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "784847588893814785",
+        "784847933686575104",
+        "787319655648100352",
+        "797844857821732864",
+        "793806535898136576",
+        "784848286272327680"
+      ],
+      "sourceExports": [
+        "SquareLattice",
+        "TriLattice",
+        "VoxelLattice",
+        "expandRotations",
+        "buildCompat",
+        "Placer",
+        "TILESET_FORT",
+        "TILESET_RUIN",
+        "TILESET_TRI",
+        "CONTENTS"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/tilerepair.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "未覆盖更改占用后的局部 WFC 修复。",
+      "clips": [
+        "793806535898136576"
+      ],
+      "sourceExports": [
+        "PIPESET",
+        "Grid",
+        "buildCompat",
+        "fits",
+        "findConflicts",
+        "growRegion",
+        "solveRegion",
+        "solveAll",
+        "selfCheck"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/topoline.js",
+      "targets": [
+        "src/core/grid.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1384958097542819845"
+      ],
+      "sourceExports": [
+        "traceStraightLine",
+        "edgeMid",
+        "stats"
+      ],
+      "idReferences": [
+        "src/core/grid.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/town.js",
+      "targets": [
+        "src/core/world.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "MAX_HEIGHT",
+        "PALETTES",
+        "TERRAIN",
+        "Town",
+        "decorateCells",
+        "buildCellIndex",
+        "pointInQuad"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "src/townmesh.js",
+      "targets": [
+        "src/build/buildings.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1197909675443916803",
+        "1189908238566903808",
+        "1215642481162887168",
+        "1258421104756097029",
+        "1189902695303458816",
+        "1238474550511308800",
+        "1168571866405097472",
+        "1237305125070426112",
+        "1313840428685447170",
+        "1580846877855338497",
+        "931196707236392960",
+        "1062374549407350790",
+        "1580845127207387137"
+      ],
+      "sourceExports": [
+        "STYLE",
+        "TownMesh"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/ui/learnpanel.js",
+        "src/core/palette.js",
+        "src/core/world.js",
+        "src/core/meshwriter.js",
+        "src/world/view.js",
+        "src/world/townDemo.js",
+        "src/life/effects.js",
+        "src/light/bake.js",
+        "src/light/lightvolume.js",
+        "src/build/buildings.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/trace.js",
+      "targets": [
+        "src/world/app.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1384958097542819845"
+      ],
+      "sourceExports": [
+        "traceStraightRuns",
+        "runAtCell",
+        "runGeometry",
+        "runThrough"
+      ],
+      "idReferences": [
+        "src/core/grid.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/traffic.js",
+      "targets": [
+        "src/world/traffic.js",
+        "src/badnorth/battle.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "本轮补齐稳定左车道并接入战斗；通道点线和拥挤压力测试仍待补齐。",
+      "clips": [
+        "880853661936734211",
+        "886199305522085890",
+        "795010582239997952"
+      ],
+      "sourceExports": [
+        "extractPassages",
+        "passageDots",
+        "createCorridor",
+        "corridorSim",
+        "selfCheck"
+      ],
+      "idReferences": [
+        "src/world/traffic.js",
+        "src/badnorth/battle.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/navigation-review.md"
+    },
+    {
+      "source": "src/triGraph.js",
+      "targets": [
+        "src/core/trigraph.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1677242779162877952"
+      ],
+      "sourceExports": [
+        "orient",
+        "TriGraph",
+        "blobPoints",
+        "buildTriGraph",
+        "insertNoFlip"
+      ],
+      "idReferences": [
+        "src/core/trigraph.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/triflow.js",
+      "targets": [
+        "src/badnorth/flowfield.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "810157485638189056",
+        "816743289500106752"
+      ],
+      "sourceExports": [
+        "CORRIDOR_SPEC",
+        "makeMask",
+        "TriField",
+        "FlowField",
+        "walk",
+        "Crowd"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/triisland.js",
+      "targets": [
+        "src/terrain/generate.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1654401054828638214",
+        "1447483550257799171",
+        "1258005604066627586"
+      ],
+      "sourceExports": [
+        "makeRng",
+        "footprintRadius",
+        "sampleFootprint",
+        "lloydStep",
+        "minAngle",
+        "heightOf",
+        "buildTriIsland",
+        "extrudePrisms",
+        "planHouses"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/unitbatch.js",
+      "targets": [
+        "src/badnorth/battle.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "单位尚用独立对象，未覆盖批量实例化与剔除。",
+      "clips": [
+        "817323301357948928"
+      ],
+      "sourceExports": [
+        "SPRITE",
+        "buildAtlas",
+        "drawNaive",
+        "drawBatch",
+        "makeCrowd",
+        "drawGround",
+        "bench",
+        "lodCost"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/voxelao.js",
+      "targets": [
+        "src/light/bake.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "793557992931266561"
+      ],
+      "sourceExports": [
+        "buildVoxelAO"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/voxelflow.js",
+      "targets": [
+        "src/life/atmosphere.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "风场已迁移，碰撞/体素软法线接口未完整覆盖。",
+      "clips": [
+        "931196707236392960"
+      ],
+      "sourceExports": [
+        "fieldFlow"
+      ],
+      "idReferences": [
+        "src/core/world.js",
+        "src/world/view.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/voxelnav.js",
+      "targets": [
+        "src/world/layerednav.js",
+        "navigation.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。",
+      "clips": [
+        "906425294533394432",
+        "797119718477991936"
+      ],
+      "sourceExports": [
+        "buildVoxelNav",
+        "buildHeightmapNav"
+      ],
+      "idReferences": [
+        "src/world/layerednav.js",
+        "refactoring-audit.html",
+        "navigation.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/navigation-review.md"
+    },
+    {
+      "source": "src/wind.js",
+      "targets": [
+        "src/life/atmosphere.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "926903893866541057",
+        "926890207298899969"
+      ],
+      "sourceExports": [
+        "makeWindField",
+        "sampleCurve",
+        "windStats"
+      ],
+      "idReferences": [
+        "src/life/atmosphere.js",
+        "src/badnorth/battle.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "src/wobbletex.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1699146321318314094"
+      ],
+      "sourceExports": [
+        "makeWarp",
+        "LAYER",
+        "sedimentBand",
+        "renderCliff",
+        "bandCurves",
+        "inverseResidual",
+        "geometryDrift",
+        "facetSeam"
+      ],
+      "idReferences": [
+        "src/terrain/terrainmesh.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/backlit.js",
+      "targets": [
+        "src/world/outline.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1751945034851570056"
+      ],
+      "sourceExports": [
+        "createBacklitRim"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/world/view.js",
+        "src/world/outline.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/birds.js",
+      "targets": [
+        "src/life/birds.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "createBirds"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/blotch.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1703750394164199473",
+        "1704246032626762189",
+        "1696864977171189980",
+        "1696896119794479541",
+        "1786014232594485497",
+        "1442695040888963407"
+      ],
+      "sourceExports": [
+        "createBlotchAtlas",
+        "createRimField",
+        "createBlotch",
+        "attachBlotch"
+      ],
+      "idReferences": [
+        "src/world/view.js",
+        "src/terrain/terrainmesh.js",
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/bnbrush.js",
+      "targets": [
+        "src/life/vegetation.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "着色笔触存在，预烘笔触图与轮廓能量对照未完整迁移。",
+      "clips": [],
+      "sourceExports": [
+        "buildBrushAtlas",
+        "buildLedgeField"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/bncanopy.js",
+      "targets": [
+        "src/life/vegetation.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "缺少 surface nets 树冠与硬边松弛的完整烘焙输入。",
+      "clips": [],
+      "sourceExports": [
+        "makeCanopyGeometry"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/butterflies.js",
+      "targets": [
+        "src/life/decor.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1273520600221433857"
+      ],
+      "sourceExports": [
+        "createButterflies"
+      ],
+      "idReferences": [
+        "src/life/decor.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/cage.js",
+      "targets": [
+        "src/terrain/shape.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1579478470098243584"
+      ],
+      "sourceExports": [
+        "deformCages",
+        "resetCages"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/terrain/shape.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/contour.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "缺少不规则格等值线跨边连接验收。",
+      "clips": [
+        "1120036868966502401"
+      ],
+      "sourceExports": [
+        "createCoastContour"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/flags.js",
+      "targets": [
+        "src/life/decor.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "926890207298899969",
+        "926834721392340992",
+        "958410200146497537"
+      ],
+      "sourceExports": [
+        "createFlags"
+      ],
+      "idReferences": [
+        "src/badnorth/battle.js",
+        "ui.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/fog.js",
+      "targets": [
+        "src/life/atmosphere.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "906207980802252801"
+      ],
+      "sourceExports": [
+        "createFogLayer"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/life/atmosphere.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/impostor.js",
+      "targets": [
+        "src/life/impostor.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1849427564034498642",
+        "1852334860137849222",
+        "926903893866541057",
+        "1191990107785572352",
+        "1205420678859632640"
+      ],
+      "sourceExports": [
+        "makeBlobTree",
+        "makeBlobCloud",
+        "createImpostors"
+      ],
+      "idReferences": [
+        "src/life/vegetation.js",
+        "src/life/atmosphere.js",
+        "src/life/impostor.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/islands.js",
+      "targets": [
+        "src/badnorth/island.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "MATERIAL",
+        "materialColor",
+        "buildIsland",
+        "findPath",
+        "buildIslandGeometry"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/lightvol.js",
+      "targets": [
+        "src/light/lightvolume.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1580845127207387137",
+        "1582757294672314368",
+        "1580846877855338497",
+        "1168168400155267072",
+        "1168400155267072",
+        "1237305125070426112"
+      ],
+      "sourceExports": [
+        "createPointLightVolume"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/world/view.js",
+        "src/light/bake.js",
+        "src/light/lightvolume.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/los.js",
+      "targets": [],
+      "status": "未覆盖",
+      "gap": "缺少导航图上的近似视线扇形查询。",
+      "clips": [
+        "810878197134950401"
+      ],
+      "sourceExports": [
+        "createLineOfSight"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/mesa.js",
+      "targets": [
+        "src/terrain/generate.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "MESA_PALETTE",
+        "WALL_SLOTS",
+        "TOP_SLOTS",
+        "buildMesa"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/meshcheck.js",
+      "targets": [
+        "grids.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1677242779162877952"
+      ],
+      "sourceExports": [
+        "checkMesh",
+        "formatMeshReport"
+      ],
+      "idReferences": [
+        "src/core/trigraph.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/noise.js",
+      "targets": [
+        "src/core/noise.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "valueNoise",
+        "fbm",
+        "ridged",
+        "makeRng",
+        "clamp01",
+        "smoothstep"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/normalsmooth.js",
+      "targets": [
+        "src/terrain/shape.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1062374549407350790",
+        "929417420921556993"
+      ],
+      "sourceExports": [
+        "smoothTerrainNormals"
+      ],
+      "idReferences": [
+        "src/core/meshwriter.js",
+        "src/world/view.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/ornament.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1104771432440049664"
+      ],
+      "sourceExports": [
+        "makeSwirlField",
+        "renderOrnamentTile",
+        "drawPanel"
+      ],
+      "idReferences": [
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/outline.js",
+      "targets": [
+        "src/world/outline.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1482011744843223042",
+        "1017355723171344385"
+      ],
+      "sourceExports": [
+        "OutlinePass"
+      ],
+      "idReferences": [
+        "src/world/outline.js",
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/props.js",
+      "targets": [
+        "src/build/buildings.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1205416648397721601",
+        "1205422438437273601",
+        "1176516621223043073"
+      ],
+      "sourceExports": [
+        "wallFrame",
+        "rectCorners",
+        "placeProps",
+        "makeHolePair"
+      ],
+      "idReferences": [
+        "src/build/buildings.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/reflection.js",
+      "targets": [
+        "src/water/shore.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "createFlatReflection"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/relax.js",
+      "targets": [
+        "src/sphere/planet.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1769641473895432220"
+      ],
+      "sourceExports": [
+        "relaxCellAreas"
+      ],
+      "idReferences": [
+        "src/sphere/planet.js",
+        "planet.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/rivers.js",
+      "targets": [
+        "src/terrain/generate.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1769691526924292506"
+      ],
+      "sourceExports": [
+        "carveRivers",
+        "paintRivers"
+      ],
+      "idReferences": [
+        "src/terrain/generate.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/roofs.js",
+      "targets": [
+        "src/build/buildings.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1205416648397721601"
+      ],
+      "sourceExports": [
+        "RoofBuilder",
+        "buildHouseRoofs"
+      ],
+      "idReferences": [
+        "src/build/buildings.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/shorefield.js",
+      "targets": [
+        "src/water/shore.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1664566546683899905"
+      ],
+      "sourceExports": [
+        "buildShoreDistance"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/snapshot.js",
+      "targets": [
+        "src/campaign/campaign.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "createIslandSnapshot"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/snow.js",
+      "targets": [
+        "src/life/atmosphere.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "943230624369868800",
+        "943230620242796544",
+        "823848950553780226"
+      ],
+      "sourceExports": [
+        "createSnow"
+      ],
+      "idReferences": [
+        "src/world/view.js",
+        "src/life/atmosphere.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/sphere.js",
+      "targets": [
+        "src/sphere/planet.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1338825080844021760",
+        "1338829205157646336"
+      ],
+      "sourceExports": [
+        "randomSpherePoints",
+        "normalizeAll",
+        "project",
+        "unproject",
+        "delaunay2D",
+        "relaxOnce",
+        "triangleStats",
+        "buildSphere"
+      ],
+      "idReferences": [
+        "src/core/trigraph.js",
+        "src/sphere/planet.js",
+        "planet.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/splash.js",
+      "targets": [
+        "src/life/effects.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1258421104756097029"
+      ],
+      "sourceExports": [
+        "createSplash"
+      ],
+      "idReferences": [
+        "src/life/effects.js",
+        "src/build/buildings.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/spritepack.js",
+      "targets": [
+        "src/core/atlas.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1593215065423245313",
+        "1852334860137849222",
+        "1849427564034498642",
+        "1478114309263839244"
+      ],
+      "sourceExports": [
+        "SpriteAtlas",
+        "radialPack"
+      ],
+      "idReferences": [
+        "src/core/atlas.js",
+        "src/life/vegetation.js",
+        "src/life/impostor.js",
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/surface.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "顶面混色存在，手动 UV 与投射贴图混合未完整覆盖。",
+      "clips": [
+        "1781405550061687016",
+        "1241096929490149376",
+        "978211952504852480",
+        "1714613599035863191",
+        "1313841094069817344",
+        "1699146321318314094",
+        "929417420921556993",
+        "1063115611289645057",
+        "1699038611125985317"
+      ],
+      "sourceExports": [
+        "makeSurfaceMaterial"
+      ],
+      "idReferences": [
+        "src/core/meshwriter.js",
+        "src/world/view.js",
+        "src/life/vegetation.js",
+        "src/terrain/terrainmesh.js",
+        "textures.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/surfaceshadow.js",
+      "targets": [
+        "textures.html"
+      ],
+      "status": "部分覆盖",
+      "gap": "未覆盖投射高度与深度测试高度解耦的表面阴影。",
+      "clips": [
+        "1704218784028905984",
+        "1705195380457996629"
+      ],
+      "sourceExports": [
+        "createSurfaceShadow",
+        "attachSurfaceShadow"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/terrain.js",
+      "targets": [
+        "src/terrain/generate.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [],
+      "sourceExports": [
+        "TERRAIN_PALETTE",
+        "buildTerrain"
+      ],
+      "idReferences": [],
+      "frameReview": false
+    },
+    {
+      "source": "engine/vertexlight.js",
+      "targets": [
+        "src/sphere/planet.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "缺少低分辨率高度立方体贴图单次查询光照。",
+      "clips": [
+        "1791049306213912823"
+      ],
+      "sourceExports": [
+        "createHeightLookup",
+        "attachVertexLookup"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/voxelshadow.js",
+      "targets": [
+        "src/light/bake.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "AO/阴影存在，逐顶点体素方向阴影未核实。",
+      "clips": [
+        "1190191289922465793"
+      ],
+      "sourceExports": [
+        "createVoxelSunShadow"
+      ],
+      "idReferences": [
+        "src/world/view.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/waterfall.js",
+      "targets": [
+        "src/water/waterfall.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1007587812462530561"
+      ],
+      "sourceExports": [
+        "createWaterfalls"
+      ],
+      "idReferences": [
+        "src/water/waterfall.js",
+        "src/world/view.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/watervol.js",
+      "targets": [
+        "src/water/watervol.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1758251637280268481"
+      ],
+      "sourceExports": [
+        "createWaterVolume"
+      ],
+      "idReferences": [
+        "src/water/watervol.js",
+        "src/world/view.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/waves.js",
+      "targets": [
+        "src/water/shore.js"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "clips": [
+        "1849732997945110651",
+        "1849730611964973481",
+        "1991103578011029507"
+      ],
+      "sourceExports": [
+        "buildShoreWaves",
+        "makeShoreWaveMaterial",
+        "makeOceanWaves"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/water/shore.js",
+        "src/world/view.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    },
+    {
+      "source": "engine/worldmap.js",
+      "targets": [
+        "src/sphere/planet.js"
+      ],
+      "status": "部分覆盖",
+      "gap": "缺少球面三维噪声世界地图贴图演示。",
+      "clips": [
+        "1783792917183606829"
+      ],
+      "sourceExports": [
+        "fbm3",
+        "buildWorldMap",
+        "paintEquirect",
+        "paintSphere",
+        "poleStretch"
+      ],
+      "idReferences": [
+        "refactoring-audit.html"
+      ],
+      "frameReview": false
+    }
+  ],
+  "counts": {
+    "未覆盖": 10,
+    "已合并/迁移（静态确认）": 87,
+    "部分覆盖": 31
+  }
+}

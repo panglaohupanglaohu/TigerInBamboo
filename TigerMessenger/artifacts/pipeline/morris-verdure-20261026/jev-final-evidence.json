@@ -1,0 +1,34 @@
+{
+  "task": "Morris final mountain approach, heights and verdure implementation",
+  "evidence_revision": "morris-route-r24-20261026",
+  "observations": [
+    "Root actually viewed current normal game via HUD: winding graded route, cross-stream stone arch, four height layers, castle, original musician ensemble, small grazing horse and layered flowers. Current screenshots and DOM audit saved. No isolated component substituted for normal gameplay.",
+    "Measured road length156.46m and width3.2m; actual modeled radial grade15.17percent; centerline minimum radius about5.6m, designed inside radius4m. Single creek crossing. Road and actual bridge deck supply raycast ground support.",
+    "Normal game exposed one original pine trunk overlapping road edge. Corrected by moving the same pine1m within its original court ensemble; actual final minimum edge clearance0.601m across all10 nodes, original model and collider references preserved.",
+    "Current normal inventory6645 flowers755 bouquets1394 leaf clumps16 hollyhock12 cypress6 plane trees3 horses8 rabbits7 birds. Camera framing and front tree placement preserve bridge and castle views.",
+    "Current normal console errors empty.49 local geometry/route/botany/castle/clearance checks pass. No FPS or subjective sound assertion. Existing original music-score-r15 retained unchanged.",
+    "Full actual player walk/ride traversal and elder E interaction not verified; old exterior coast remnants and exact tapestry material match remain explicit."
+  ],
+  "checks": [
+    {
+      "name": "current normal game visual inspection and bridge side view",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "original pine clearance corrected and checked in current normal game",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "49 local checks",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "text evidence only, JEV not an image/sound/navigation inspector",
+    "preserve old scene models and existing score",
+    "no commit push or publication"
+  ]
+}

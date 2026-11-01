@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>系统全局 · REACode 重构版</title>
+<style>
+  :root { --bg: #eef4f3; --ink: #1d2f36; --muted: #5d7279; --card: #fff; --line: #d6e2e1; --accent: #2f7f8a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14.5px/1.55 -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding: 24px 20px 64px; }
+  nav a { color: var(--accent); text-decoration: none; font-weight: 600; margin-right: 14px; }
+  h1 { font-size: 26px; margin: 14px 0 6px; }
+  h2 { font-size: 19px; margin: 34px 0 12px; }
+  .sub { color: var(--muted); max-width: 840px; margin: 0; }
+  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin-top: 18px; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; flex: 1 1 140px; min-width: 140px; }
+  .step b { display: block; font-size: 15px; }
+  .step code { font-size: 12px; color: var(--accent); }
+  .step p { margin: 4px 0 0; font-size: 12.5px; color: var(--muted); }
+  .arrow { align-self: center; color: var(--muted); font-size: 18px; }
+  .diagram { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; overflow-x: auto; }
+  .diagram svg { display: block; min-width: 760px; width: 100%; height: auto; }
+  .layers { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
+  .layer { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; border-left: 5px solid; }
+  .layer h3 { margin: 0 0 6px; font-size: 15.5px; }
+  .layer h3 code { font-size: 12.5px; color: var(--muted); font-weight: 400; margin-left: 6px; }
+  .mod { padding: 5px 0; border-top: 1px solid #eef3f2; font-size: 13.5px; }
+  .mod code { background: #eef4f3; padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f5f9f8; }
+  td code { font-size: 12.5px; background: #eef4f3; padding: 1px 5px; border-radius: 4px; }
+  @media (max-width: 640px) { main { padding: 18px 16px 48px; } .arrow { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <nav><a href="index.html">← 场景</a><a href="pipeline.html">管线图与路线</a><a href="learn.html">学习笔记</a><a href="GUIDE.md">接手指南</a><a href="ARCHITECTURE.md">ARCHITECTURE.md</a></nav>
+  <h1>系统全局</h1>
+  <p class="sub">重构版只有一条主线：<b>一张网格、一份体素</b>。地形管线写岩石层，建筑管线写其余层；两者写进同一个顶点池、一起烘焙光照；水层只看"哪些格是陆地"。所以小镇、地形、融合三个场景用的是同一套代码，只是生成器不同。</p>
+
+  <div class="flow" id="flow"></div>
+
+  <h2>数据怎么流</h2>
+  <div class="diagram">
+    <svg viewBox="0 0 960 300" role="img" aria-label="数据流图">
+      <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d7279"/></marker></defs>
+      <g stroke="#5d7279" stroke-width="1.6" fill="none" marker-end="url(#a)"><path d="M160 68 C185 68 185 138 203 138"/><path d="M160 150 H203"/><path d="M160 232 C185 232 185 162 203 162"/><path d="M285 62 V116"/><path d="M365 138 C390 138 390 68 413 68"/><path d="M365 150 H413"/><path d="M365 162 C390 162 390 232 413 232"/><path d="M575 68 C598 68 598 92 618 92"/><path d="M575 150 C598 150 598 112 618 112"/><path d="M705 130 C705 175 770 175 798 175"/><path d="M575 232 C700 232 760 195 798 195"/></g>
+      <g font-family="-apple-system, system-ui, PingFang SC, sans-serif" font-size="13"><rect x="10" y="40" width="150" height="56" rx="10" fill="#4f7fb8"/><text x="85.0" y="65.0" text-anchor="middle" fill="#fff" font-weight="700">地形生成</text><text x="85.0" y="82.0" text-anchor="middle" fill="#e2ecf7" font-size="11">terrain/generate.js</text><rect x="10" y="122" width="150" height="56" rx="10" fill="#7b5fb0"/><text x="85.0" y="147.0" text-anchor="middle" fill="#fff" font-weight="700">场景</text><text x="85.0" y="164.0" text-anchor="middle" fill="#ece6f6" font-size="11">小镇 / 地形 / 融合</text><rect x="10" y="204" width="150" height="56" rx="10" fill="#7b5fb0"/><text x="85.0" y="229.0" text-anchor="middle" fill="#fff" font-weight="700">玩家建造</text><text x="85.0" y="246.0" text-anchor="middle" fill="#ece6f6" font-size="11">world/app.js</text><rect x="215" y="14" width="140" height="48" rx="10" fill="#2f7f8a"/><text x="285.0" y="35.0" text-anchor="middle" fill="#fff" font-weight="700">网格</text><text x="285.0" y="52.0" text-anchor="middle" fill="#dff0f2" font-size="11">core/grid.js</text><rect x="205" y="118" width="160" height="64" rx="10" fill="#2f7f8a"/><text x="285.0" y="147.0" text-anchor="middle" fill="#fff" font-weight="700">World 体素场</text><text x="285.0" y="164.0" text-anchor="middle" fill="#dff0f2" font-size="11">solid / rock / color / river</text><rect x="415" y="40" width="160" height="56" rx="10" fill="#4f7fb8"/><text x="495.0" y="65.0" text-anchor="middle" fill="#fff" font-weight="700">地形网格</text><text x="495.0" y="82.0" text-anchor="middle" fill="#e2ecf7" font-size="11">terrain/terrainmesh.js</text><rect x="415" y="122" width="160" height="56" rx="10" fill="#d9663f"/><text x="495.0" y="147.0" text-anchor="middle" fill="#fff" font-weight="700">建筑网格</text><text x="495.0" y="164.0" text-anchor="middle" fill="#fbe5dc" font-size="11">build/buildings.js</text><rect x="415" y="204" width="160" height="56" rx="10" fill="#3a8fa0"/><text x="495.0" y="229.0" text-anchor="middle" fill="#fff" font-weight="700">水层</text><text x="495.0" y="246.0" text-anchor="middle" fill="#e0f1f4" font-size="11">water/shore.js</text><rect x="620" y="72" width="170" height="58" rx="10" fill="#c99a2e"/><text x="705.0" y="98.0" text-anchor="middle" fill="#fff" font-weight="700">同一顶点池 + 烘焙</text><text x="705.0" y="115.0" text-anchor="middle" fill="#fbf0d8" font-size="11">MeshWriter → light/bake.js</text><rect x="800" y="150" width="150" height="58" rx="10" fill="#1f3139"/><text x="875.0" y="176.0" text-anchor="middle" fill="#fff" font-weight="700">视图</text><text x="875.0" y="193.0" text-anchor="middle" fill="#cfdcdf" font-size="11">world/view.js</text></g>
+      <g font-family="-apple-system, system-ui, PingFang SC, sans-serif" font-size="11.5" fill="#5d7279"><text x="168" y="112">写</text><text x="378" y="112">读</text><text x="660" y="168">几何体</text><text x="640" y="250">每帧只推进时间</text></g>
+      <text x="10" y="292" font-size="11.5" fill="#5d7279" font-family="-apple-system, system-ui, PingFang SC, sans-serif">左边只写 World，右边只读 World。改动一次体素 → 版本号 +1 → 地形和建筑一起重建、一起烘焙。</text>
+    </svg>
+  </div>
+
+  <h2>模块</h2>
+  <div class="layers" id="layers"></div>
+
+  <h2>和原 REACode 的对应关系</h2>
+  <table>
+    <thead><tr><th>原 REACode</th><th>重构版</th><th>变化</th></tr></thead>
+    <tbody>
+      <tr><td><code>src/quadgrid.js</code>、<code>src/grid.js</code></td><td><code>src/core/grid.js</code></td><td>只保留一张网格；地形也改用它（原 engine 用的是旧的风筝网格）</td></tr>
+      <tr><td><code>src/town.js</code>（Town）</td><td><code>src/core/world.js</code>（World）</td><td>加了 rock 位、river、ground()、isBuilt()：地形和建筑共用一份体素</td></tr>
+      <tr><td><code>src/townmesh.js</code>、<code>src/mesh.js</code></td><td><code>src/build/buildings.js</code> + <code>src/terrain/terrainmesh.js</code> + <code>src/light/bake.js</code></td><td>拆成建筑 / 地形 / 光照三块，共用 <code>core/meshwriter.js</code></td></tr>
+      <tr><td><code>engine/mesa.js</code>、<code>rivers.js</code>、<code>noise.js</code></td><td><code>src/terrain/generate.js</code>、<code>src/core/noise.js</code></td><td>移植到新网格和 World；颜色不再做二次 sRGB 转换</td></tr>
+      <tr><td><code>src/shore.js</code>、<code>engine/waves.js</code>、<code>shorefield.js</code></td><td><code>src/water/shore.js</code></td><td>两套岸浪合成一套</td></tr>
+      <tr><td><code>src/scene.js</code>、<code>src/app.js</code>、<code>src/demo.js</code>、<code>src/save.js</code></td><td><code>src/world/</code></td><td>加了场景切换（小镇 / 地形 / 融合）；存档 v5 带上岩石层和场景</td></tr>
+      <tr><td><code>index.html</code> + <code>engine/*.html</code> 四个独立页面</td><td><code>index.html</code> 一个场景页</td><td>三个场景同页切换，学习面板加了「系统全局」</td></tr>
+    </tbody>
+  </table>
+
+  <h2>还没迁移的</h2>
+  <table id="np"><thead><tr><th>原文件</th><th>原因 / 打算</th></tr></thead><tbody></tbody></table>
+</main>
+<script src="learn/architecture.js"></script>
+<script>
+const A = window.ARCH;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+document.getElementById('flow').innerHTML = A.flow.map(([n, f, d], i) =>
+  (i ? '<span class="arrow">→</span>' : '') + `<div class="step"><b>${esc(n)}</b><code>${esc(f)}</code><p>${esc(d)}</p></div>`).join('');
+document.getElementById('layers').innerHTML = A.layers.map((l) => `
+  <div class="layer" style="border-left-color:${l.color}"><h3 style="color:${l.color}">${esc(l.name)}<code>${esc(l.dir)}/</code></h3>
+  ${l.modules.map(([f, d]) => `<div class="mod"><code>${esc(f)}</code> ${esc(d)}</div>`).join('')}</div>`).join('');
+document.querySelector('#np tbody').innerHTML = A.notPorted.map(([f, d]) => `<tr><td><code>${esc(f)}</code></td><td>${esc(d)}</td></tr>`).join('');
+</script>
+</body>
+</html>

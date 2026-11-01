@@ -1,0 +1,51 @@
+{
+  "scope": "Two actual UI readouts; proves motion/curve binding only, not continuous collision or full-loop acceptance",
+  "samples": [
+    {
+      "at": "2026-10-06T10:25:35.410Z",
+      "red": {
+        "progress": 0.6067801707698366,
+        "position": [
+          -93.07349488108525,
+          -0.017012998536401817,
+          135.22536932240703
+        ],
+        "curveShared": true,
+        "centreError": 0
+      },
+      "blue": {
+        "progress": 0.5220852606359103,
+        "position": [
+          -38.88373734694927,
+          -134.78693808687055,
+          79.55217740874915
+        ],
+        "curveShared": true,
+        "centreError": 0
+      }
+    },
+    {
+      "at": "2026-10-06T10:27:20.592Z",
+      "red": {
+        "progress": 0.7369802796547336,
+        "position": [
+          118.11255065684041,
+          102.66760415952295,
+          63.41342142043476
+        ],
+        "curveShared": true,
+        "centreError": 0
+      },
+      "blue": {
+        "progress": 0.4165791852832039,
+        "position": [
+          -88.14337885408028,
+          -44.36072701250968,
+          127.55735374764085
+        ],
+        "curveShared": true,
+        "centreError": 0
+      }
+    }
+  ]
+}

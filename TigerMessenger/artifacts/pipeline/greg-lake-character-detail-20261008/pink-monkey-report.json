@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-08",
+  "scope": "buildLongTailMonkey only; dedicated fine ink unchanged",
+  "source": "src/world/moebiusSwamp.js",
+  "sourceSHA256": "f43df22fb7ac08236d7ed27bf28655ceac788b966d98ea565c0ca5096de59771",
+  "referenceViewed": [
+    "/var/folders/3r/lv0k4zt11352vnhcc_194qdw0000gn/T/codex-clipboard-47a4d1f6-80bc-48cd-9714-e04787cdd0da.png",
+    "artifacts/pipeline/greg-lake-approved-coral-flower-20261007/01-overview-final.png"
+  ],
+  "referenceObservation": "The supplied narrow pink/mauve hanging creature and accepted upper-left monkey have slim torsos, restrained faces and long descending tails. The prior broad dark ape did not match.",
+  "implementation": [
+    "Slender pink/mauve body, narrower folded legs, small pale face, reduced ears and tiny eyes",
+    "Long tapered descending tail with curled endpoint instead of long horizontal trailing tail",
+    "Narrow grasping hands with curved fingers and elongated grasping feet",
+    "Original arm object references, shoulder position/rotation, phase RNG call and names preserved"
+  ],
+  "palette": {
+    "fur": "#c9a4bc",
+    "shade": "#b69caf",
+    "face": "#e7d0c3",
+    "eye": "#435968"
+  },
+  "measuredInnerLocal": {
+    "bodyWidth": 0.44088611006736755,
+    "bodyHeight": 1.3179999515414238,
+    "tailMinY": -1.9677268266677856,
+    "tailHorizontalDepthBelowYminusPoint1": 0.15538648515939713
+  },
+  "identities": {
+    "ordinary": 3,
+    "repair": 2,
+    "ordinaryPerchCounts": [
+      3,
+      4,
+      4
+    ],
+    "repairScales": [
+      0.5,
+      0.46
+    ],
+    "flowerBoatBoys": 10
+  },
+  "behaviour": "No shared update loop changed. Existing whole-character motion carries the tail as before; the old model had no independent tail-animation userdata slot. Repair arm lifting, ordinary jump/throw/dodge interfaces remain.",
+  "version": {
+    "coralActorVersion": 2
+  },
+  "backup": "monkey-shape-before/moebiusSwamp.js",
+  "tests": {
+    "passed": 5,
+    "failed": 0,
+    "files": [
+      "tests/world/swampPinkMonkey.test.mjs",
+      "tests/world/swampAnimalInk.test.mjs"
+    ],
+    "log": "validation-pink-monkey.txt"
+  },
+  "gpu": {
+    "status": "pending_root",
+    "required": [
+      "New portrait slim silhouette and fine ink",
+      "Ordinary monkey on real perch",
+      "Repair monkey tail/ship-edge visibility; worker positions were not moved"
+    ]
+  },
+  "rollback": "Restore only buildLongTailMonkey from monkey-shape-before. Do not overwrite whole current shared file."
+}

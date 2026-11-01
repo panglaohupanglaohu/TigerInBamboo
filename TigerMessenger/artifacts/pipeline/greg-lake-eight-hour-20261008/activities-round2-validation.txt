@@ -1,0 +1,16 @@
+activities-navigation {"seconds":180,"samples":1801,"spans":[3.546822136248035,3.5468267824273356,3.546817549377642,3.546823265119136,3.546828005553075],"minObstacle":1.0558917235865617,"minBoatGap":1.4666532024748613,"minEdge":1.4154846528396074,"minDirection":0.9996448436405492,"maxStemError":1.0658141036401503e-14,"maxRopeError":5.8927631492873816e-8,"minToolAxis":0.06287305826514217,"minDepartureGap":1.0449131073452769,"minWhaleGap":2.9232632977389073,"maxTailChange":0.26398947834968567,"minWhaleDirection":0.9999999999999996,"powerSamples":9641,"recoverySamples":6487,"repairPhases":["inspect","haul-rope","secure-and-check"]}
+✔ formal activities have real forward rowing, safe complete routes, attached stems and live repair contacts (4552.682667ms)
+real boat render batches {"before":59,"after":55,"robeBatches":6,"gripBatches":2,"static":11}
+✔ only explicit swamp style changes rendering; both real 26-slot rigs preserve every transform through rowing and sedation (124.106625ms)
+✔ hands retain real grip geometry and all original ship/oar static meshes; fewer instanced batches replace feather layers (0.941542ms)
+✔ real lake keeps two working boats with 52 same crew slots and no style change to unrelated ships (765.626875ms)
+longship-validation {"seconds":52,"frames":1561,"rowers":52,"maxGrip":4.351167857633658e-15,"maxWrist":4.782987168225453e-15,"maxElbow":0.0014094974956759584,"minHeading":0.9996240150919606,"minRecoveryBottom":25.193916229459717,"maxPowerTop":25.05755740649718,"wet":12320,"dry":63148,"span":22.122968541811815}
+✔ lake-only longships keep 52 identities, actual wet/dry blades and continuous hand/elbow contacts (4470.224583ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4649.711458

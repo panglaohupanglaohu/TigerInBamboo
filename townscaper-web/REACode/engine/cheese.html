@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — swiss cheese navigation</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #15171a; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #e6e9ee;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #eef1f5;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">瑞士奶酪里的导航：切面 + 可行走点（906425294533394432 / 797119718477991936）</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * cheese.html — src/cheesenav.js 的验证页。
+ *
+ * 两张参考片一起做：
+ *   906425294533394432 "It's like navigating a Swiss cheese" → 左：体素切面 + 实际路径；
+ *   797119718477991936 "Got some basic navigation going"   → 右：地板上的白点（navNodes）。
+ *
+ * 键位：↑/↓ 换切层 · P 重算最绕的一对点 · N 换一块新奶酪。
+ */
+import { carveCheese, components, navNodes, findPath, euclid } from '../src/cheesenav.js';
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const hud = document.getElementById('hud');
+
+const CS = 14;                 // 每格像素
+let seed = 7;
+
+let ch, comp, nav, path = null, pair = null, sliceY = 6;
+
+function rebuild(newSeed) {
+  if (newSeed !== undefined) seed = newSeed;
+  ch = carveCheese({ w: 26, h: 18, d: 26, seed });
+  comp = components(ch);
+  nav = navNodes(ch);
+  computeFarthest();
+}
+
+function computeFarthest() {
+  // 扫一对"最绕"的可行走点：随机抽 300 对，取 路径长/直线长 最大的那对。
+  // （第一版按索引等距抽样，抽到的都是邻居，比值只有 1.36，看不出"绕"来。）
+  let st = 20261101;
+  const rnd = () => ((st = (st * 1664525 + 1013904223) | 0) >>> 0) / 4294967296;
+  let best = null;
+  const nodes = nav.nodes;
+  for (let k = 0; k < 900; k++) {
+    const a = nodes[(rnd() * nodes.length) | 0];
+    const b = nodes[(rnd() * nodes.length) | 0];
+    if (a === b) continue;
+    const eu = euclid(ch, a, b);
+    if (eu < 8) continue;
+    const r = findPath(ch, nav, a, b);
+    if (!r.path) continue;
+    const ratio = r.dist / eu;
+    if (!best || ratio > best.ratio) best = { ratio, dist: r.dist, eu, a, b, path: r.path };
+  }
+  path = best ? best.path : null;
+  pair = best;
+  if (path) sliceY = Math.min(ch.h - 2, Math.max(2, ((path[0] / ch.w) | 0) % ch.h));
+}
+
+const px = (c) => [c % ch.w, ((c / ch.w) | 0) % ch.h, (c / (ch.w * ch.h)) | 0];
+
+function drawSlice(ox, oy) {
+  const { w, h, d, solid } = ch;
+  const idx = (x, y, z) => (z * h + y) * w + x;
+  // 切面取 z 轴（俯视一层）
+  for (let z = 0; z < d; z++) {
+    for (let x = 0; x < w; x++) {
+      const c = idx(x, sliceY, z);
+      ctx.fillStyle = solid[c] ? '#3a3f47' : '#101215';
+      ctx.fillRect(ox + x * CS, oy + z * CS, CS - 1, CS - 1);
+    }
+  }
+  // 该层的可行走点（白点）
+  for (const c of nav.nodes) {
+    const [x, y, z] = px(c);
+    if (y !== sliceY) continue;
+    ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.beginPath();
+    ctx.arc(ox + x * CS + CS / 2, oy + z * CS + CS / 2, 2.1, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // 路径：**按 XZ 投影**画（不按层筛），否则 3D 绕行的大部分落在别的层，画面上只剩一小段。
+  // 层内的段实心亮黄，层外的段半透明（保留"它在别的层"的暗示）。
+  if (path) {
+    ctx.lineWidth = 3;
+    ctx.lineJoin = 'round';
+    for (let i = 0; i + 1 < path.length; i++) {
+      const [ax, ay, az] = px(path[i]);
+      const [bx, by, bz] = px(path[i + 1]);
+      const sameLayer = ay === sliceY && by === sliceY;
+      ctx.strokeStyle = sameLayer ? '#ffcf4a' : 'rgba(255,207,74,.30)';
+      ctx.beginPath();
+      ctx.moveTo(ox + ax * CS + CS / 2, oy + az * CS + CS / 2);
+      ctx.lineTo(ox + bx * CS + CS / 2, oy + bz * CS + CS / 2);
+      ctx.stroke();
+    }
+    const [ax, , az] = px(path[0]);
+    const [bx, , bz] = px(path[path.length - 1]);
+    ctx.fillStyle = '#7fe08a';
+    ctx.beginPath(); ctx.arc(ox + ax * CS + CS / 2, oy + az * CS + CS / 2, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#ff6b6b';
+    ctx.beginPath(); ctx.arc(ox + bx * CS + CS / 2, oy + bz * CS + CS / 2, 5, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
+function drawProjection(ox, oy) {
+  // 右：所有可行走点按 XZ 投影（就是 797… 那片"城堡地板上一颗颗白点"的效果）
+  const { w, h, d, solid } = ch;
+  const idx = (x, y, z) => (z * h + y) * w + x;
+  for (let z = 0; z < d; z++) {
+    for (let x = 0; x < w; x++) {
+      // 取这一列最高的一块实体当"地面"颜色
+      let top = -1;
+      for (let y = h - 1; y >= 0; y--) if (solid[idx(x, y, z)]) { top = y; break; }
+      ctx.fillStyle = top < 0 ? '#0e1013' : '#31363d';
+      ctx.fillRect(ox + x * CS, oy + z * CS, CS - 1, CS - 1);
+    }
+  }
+  for (const c of nav.nodes) {
+    const [x, , z] = px(c);
+    ctx.fillStyle = 'rgba(255,255,255,.9)';
+    ctx.fillRect(ox + x * CS + CS * 0.35, oy + z * CS + CS * 0.35, CS * 0.3, CS * 0.3);
+  }
+}
+
+const W = 26 * 14 * 2 + 70, H = 26 * 14 + 76;
+
+function draw() {
+  ctx.fillStyle = '#15171a';
+  ctx.fillRect(0, 0, W, H);
+  drawSlice(16, 56);
+  drawProjection(26 * 14 + 46, 56);
+
+  ctx.fillStyle = 'rgba(255,255,255,.9)';
+  ctx.font = '600 12px ui-monospace, Menlo, monospace';
+  ctx.fillText(`切面 y=${sliceY}  实体=深灰  可行走=白点  路径=黄`, 16, 40);
+  ctx.fillText('XZ 投影（所有地板点）', 26 * 14 + 46, 40);
+
+  hud.textContent =
+    `奶酪 ${ch.w}×${ch.h}×${ch.d}  实体率 ${(ch.solid.reduce((a, b) => a + b, 0) / (ch.w * ch.h * ch.d) * 100).toFixed(1)}%\n` +
+    `空腔分量 ${comp.count}  可行走点 ${nav.nodes.length}` +
+    (pair ? `  最绕一对：路径 ${pair.dist} 格 / 直线 ${pair.eu.toFixed(1)} 格 = ${pair.ratio.toFixed(2)}×\n` : '\n') +
+    `键：↑/↓ 换切层 · P 重算 · N 换一块`;
+}
+
+function resize() {
+  cv.width = W; cv.height = H;
+  const s = Math.min((innerWidth - 24) / W, (innerHeight - 24) / H);
+  cv.style.width = W * s + 'px';
+  cv.style.height = H * s + 'px';
+  cv.style.margin = `${Math.max(0, (innerHeight - H * s) / 2)}px ${Math.max(0, (innerWidth - W * s) / 2)}px`;
+  draw();
+}
+addEventListener('resize', resize);
+
+addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowUp') { sliceY = Math.min(ch.h - 2, sliceY + 1); draw(); e.preventDefault(); }
+  else if (e.key === 'ArrowDown') { sliceY = Math.max(1, sliceY - 1); draw(); e.preventDefault(); }
+  else if (e.key.toLowerCase() === 'p') { computeFarthest(); draw(); }
+  else if (e.key.toLowerCase() === 'n') { rebuild(seed + 1); draw(); }
+});
+cv.addEventListener('click', (e) => {
+  // 点哪层切哪层（方便截图定格）
+  const r = cv.getBoundingClientRect();
+  const y = (e.clientY - r.top) / r.height * H;
+  if (y > 56) { sliceY = Math.min(ch.h - 2, Math.max(1, Math.round((y - 56) / CS))); draw(); }
+});
+
+rebuild();
+resize();
+
+window.__worldStats = { kind: 'cheese' };
+window.__cheese = {
+  get stats() {
+    return {
+      dims: [ch.w, ch.h, ch.d],
+      solidRate: +(ch.solid.reduce((a, b) => a + b, 0) / (ch.w * ch.h * ch.d)).toFixed(3),
+      components: comp.count,
+      navNodes: nav.nodes.length,
+      detour: pair ? +pair.ratio.toFixed(3) : null,
+      pathLen: pair ? pair.dist : null,
+      sliceY,
+    };
+  },
+  set({ y, seed: s }) {
+    if (s !== undefined) rebuild(s);
+    if (y !== undefined) sliceY = y;
+    draw();
+    return this.stats;
+  },
+};
+</script>
+</body>
+</html>

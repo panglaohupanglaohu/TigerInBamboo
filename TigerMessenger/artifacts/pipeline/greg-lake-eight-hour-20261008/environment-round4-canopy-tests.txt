@@ -1,0 +1,18 @@
+central shelter crown {"leaves":21,"minY":52.07589976745865,"farFromAnchor":19.295692916396497}
+rounded fan geometry {"trianglesPerFan":396,"totalTriangles":298188,"originalTriangles":1039248,"drawCalls":10,"domed":753}
+✔ real crown groups become fewer broad fan instances without extra draws or moved anchors (0.746959ms)
+✔ every fan vertex stays inside its declared crown envelope and its stem meets the original branch anchor (4.603625ms)
+✔ central shelter crown expands lateral mass and curved height above the protected walking level (0.657375ms)
+✔ shared fan has a closed domed top, drooping edge and coherent face color (0.367792ms)
+✔ placed crown surfaces retain a visible dome and tilt instead of horizontal discs (5.192208ms)
+✔ local palette pass installs shared screen-width veins without changing geometry, attachment or matrices (6.036416ms)
+✔ spherical placement preserves canopy and branch common-frame relationship (1.416583ms)
+✔ rollback restores original crown visibility and a disabled install is inert (0.354709ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1058.148459

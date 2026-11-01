@@ -1,0 +1,44 @@
+{
+  "version": "reedbank-face-6",
+  "GPUReferencesViewed": [
+    "courier-reedbank-target-v2.png",
+    "courier-front-v3.jpg",
+    "courier-back-v5.jpg"
+  ],
+  "changes": {
+    "jaw": "continuous cheek-to-chin taper; jaw radii .080/.075/.067/.053→.074/.066/.054/.041",
+    "nose": "continuous projection .028→.021 with softer wider vertical transition",
+    "eyes": "small ivory-shade aperture + small pupil placed by raycast on exact continuous face surface, no guessed plane",
+    "brows": "radius .0018→.00105; gentler short arch",
+    "mouth": "neutral fine three-point line, radius .0011→.00075",
+    "faceColour": "flat skin fill, removing hard threshold shadow strip on face only",
+    "hair": "same13 crown+5 fringe locks, slightly wider/laterally varying curls; exact highest curl preserved to avoid body refitting"
+  },
+  "unchanged": [
+    "original head bone local transform and scale",
+    "nape5 scalp geometry (back hair tests pass)",
+    "all non-head mesh attribute/index SHA256 hashes",
+    "all non-head world matrices within1e-7",
+    "height1.66 and feet0",
+    "body rig/clothes/cape/mailbag/animation hooks"
+  ],
+  "CPU": {
+    "passed": 8,
+    "failed": 0,
+    "meshDraws": 38,
+    "trianglesMax": 39844,
+    "eyes": "nearest rayhit is dark pupil; front remains .002–.005 above skin",
+    "tests": [
+      "courierMoebius.test.mjs",
+      "courierHeadV6.test.mjs"
+    ],
+    "log": "validation-courier-face-v6.txt"
+  },
+  "GPU": "pending front/side/back review by root",
+  "rollback": "before-courier-face-v6/courierMoebius.js.txt; restore owned head block and geometryRevision only if other changes arrive",
+  "files": [
+    "src/assets/characters/courierMoebius.js",
+    "tests/world/courierHeadV6.test.mjs",
+    "tests/fixtures/courierHeadV5Unchanged.json"
+  ]
+}

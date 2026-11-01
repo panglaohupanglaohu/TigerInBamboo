@@ -1,0 +1,7752 @@
+{
+  "baySurfaceSampling": null,
+  "bayLayout": {
+    "version": 1,
+    "separationArc": 34,
+    "sharedMeshes": 12,
+    "sharedVertices": 10422,
+    "footbridgeMeshes": 13,
+    "rotation": [
+      0.029610261964884133,
+      -0.09529860078967871,
+      0.03588947600216732,
+      0.9943607768743647
+    ],
+    "target": "citadel-bay-layout/approved-target.png"
+  },
+  "lightMode": "initial-query",
+  "lightCapture": {
+    "at": "2026-10-04T20:37:31.636Z",
+    "mode": "initial-query",
+    "lighting": {
+      "weather": 0,
+      "weatherLocked": true,
+      "phase": 0.75,
+      "flashIntensity": 0,
+      "directorEnabled": false,
+      "tramY": 153.6026852586141,
+      "moebiusTarget": 0,
+      "lights": [
+        {
+          "name": "light-pool-0",
+          "type": "PointLight",
+          "color": "ffab5c",
+          "intensity": 172.4658203125,
+          "visible": true,
+          "layers": 3
+        },
+        {
+          "name": "light-pool-1",
+          "type": "PointLight",
+          "color": "ffb873",
+          "intensity": 77.15576171875,
+          "visible": true,
+          "layers": 3
+        },
+        {
+          "name": "light-pool-2",
+          "type": "PointLight",
+          "color": "ffa55a",
+          "intensity": 59.00146484375,
+          "visible": true,
+          "layers": 3
+        },
+        {
+          "name": "light-pool-3",
+          "type": "PointLight",
+          "color": "ffd7ad",
+          "intensity": 217.8515625,
+          "visible": true,
+          "layers": 3
+        },
+        {
+          "name": "light-pool-4",
+          "type": "PointLight",
+          "color": "ffd0a0",
+          "intensity": 181.54296875,
+          "visible": true,
+          "layers": 3
+        },
+        {
+          "name": "light-pool-5",
+          "type": "PointLight",
+          "color": "ffa36f",
+          "intensity": 2300,
+          "visible": true,
+          "layers": 1
+        },
+        {
+          "name": "light-pool-6",
+          "type": "PointLight",
+          "color": "ffa55d",
+          "intensity": 95.31005859375,
+          "visible": true,
+          "layers": 3
+        },
+        {
+          "name": "light-pool-7",
+          "type": "PointLight",
+          "color": "ffb56f",
+          "intensity": 163.388671875,
+          "visible": true,
+          "layers": 3
+        },
+        {
+          "name": "",
+          "type": "AmbientLight",
+          "color": "f3fff7",
+          "intensity": 0.6,
+          "visible": true,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "HemisphereLight",
+          "color": "ffffff",
+          "groundColor": "f0e6e0",
+          "intensity": 0.3,
+          "visible": true,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "DirectionalLight",
+          "color": "ff9a5c",
+          "intensity": 1,
+          "visible": true,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "DirectionalLight",
+          "color": "75cfc3",
+          "intensity": 0.18666666666666668,
+          "visible": true,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "PointLight",
+          "color": "ffe8b0",
+          "intensity": 0.35,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "osk-v5-ambient-floor",
+          "type": "AmbientLight",
+          "color": "ffffff",
+          "intensity": 0.25,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "osk-v5-sky-ground-fill",
+          "type": "HemisphereLight",
+          "color": "d8f2ef",
+          "groundColor": "b6a790",
+          "intensity": 0.96,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "osk-v5-key-sun",
+          "type": "DirectionalLight",
+          "color": "ffe2b9",
+          "intensity": 1.7,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "tarn-elder-tree-zone-fill",
+          "type": "PointLight",
+          "color": "ffffff",
+          "intensity": 1.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "tarn-companion-zone-fill",
+          "type": "PointLight",
+          "color": "ffffff",
+          "intensity": 1.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 3.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffb254",
+          "intensity": 2.6,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "neon-dome-point-light",
+          "type": "PointLight",
+          "color": "ffc7da",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bubble-interior-light",
+          "type": "PointLight",
+          "color": "8effd8",
+          "intensity": 1.7,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bubble-interior-light",
+          "type": "PointLight",
+          "color": "ffd98e",
+          "intensity": 1.7,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bubble-interior-light",
+          "type": "PointLight",
+          "color": "ffa8d9",
+          "intensity": 1.7,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bubble-interior-light",
+          "type": "PointLight",
+          "color": "ffd98e",
+          "intensity": 1.7,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "old-city-tier-old-shore-court",
+          "type": "PointLight",
+          "color": "ffa55d",
+          "intensity": 95.31005859375,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "old-city-tier-old-middle-court",
+          "type": "PointLight",
+          "color": "ffac65",
+          "intensity": 131.61865234375,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "old-city-tier-old-upper-court",
+          "type": "PointLight",
+          "color": "ffb56f",
+          "intensity": 163.388671875,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "new-city-light-main-gate",
+          "type": "PointLight",
+          "color": "ffab5c",
+          "intensity": 172.4658203125,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "new-city-light-plaza",
+          "type": "PointLight",
+          "color": "ffb873",
+          "intensity": 77.15576171875,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "new-city-light-moon-fill",
+          "type": "PointLight",
+          "color": "ffa55a",
+          "intensity": 59.00146484375,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "new-city-light-landing-4",
+          "type": "PointLight",
+          "color": "ffb368",
+          "intensity": 40.84716796875,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "new-city-light-landing-7",
+          "type": "PointLight",
+          "color": "ffb368",
+          "intensity": 40.84716796875,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "new-city-light-upper-west",
+          "type": "PointLight",
+          "color": "ffd7ad",
+          "intensity": 217.8515625,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "new-city-light-upper-east",
+          "type": "PointLight",
+          "color": "ffd0a0",
+          "intensity": 181.54296875,
+          "visible": false,
+          "layers": 3
+        },
+        {
+          "name": "citadel-svarbova-ambient",
+          "type": "AmbientLight",
+          "color": "8eb9e5",
+          "intensity": 0.34,
+          "visible": true,
+          "layers": 2
+        },
+        {
+          "name": "citadel-svarbova-sun",
+          "type": "DirectionalLight",
+          "color": "78aee0",
+          "intensity": 0.62,
+          "visible": true,
+          "layers": 2
+        },
+        {
+          "name": "infiltration-torch-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 0.75,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "infiltration-torch-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 0.75,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "infiltration-torch-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 0.75,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "infiltration-torch-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 0.75,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 14.9959375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 14.9959375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "PointLight",
+          "color": "ff2d55",
+          "intensity": 0.036000000000000004,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "PointLight",
+          "color": "ff2d55",
+          "intensity": 0.036000000000000004,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-light",
+          "type": "PointLight",
+          "color": "b8ff66",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-neon-light",
+          "type": "PointLight",
+          "color": "00e8ff",
+          "intensity": 1.779601756216457,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-thruster-light",
+          "type": "PointLight",
+          "color": "ff4a18",
+          "intensity": 0.9100620694561468,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-fill",
+          "type": "PointLight",
+          "color": "c8ff70",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-orange-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-light",
+          "type": "PointLight",
+          "color": "b8ff66",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-neon-light",
+          "type": "PointLight",
+          "color": "00e8ff",
+          "intensity": 1.779601756216457,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-thruster-light",
+          "type": "PointLight",
+          "color": "ff4a18",
+          "intensity": 0.9100620694561468,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-fill",
+          "type": "PointLight",
+          "color": "c8ff70",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-orange-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-light",
+          "type": "PointLight",
+          "color": "b8ff66",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-neon-light",
+          "type": "PointLight",
+          "color": "00e8ff",
+          "intensity": 1.779601756216457,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-thruster-light",
+          "type": "PointLight",
+          "color": "ff4a18",
+          "intensity": 0.9100620694561468,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-fill",
+          "type": "PointLight",
+          "color": "c8ff70",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-orange-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-light",
+          "type": "PointLight",
+          "color": "b8ff66",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-neon-light",
+          "type": "PointLight",
+          "color": "00e8ff",
+          "intensity": 1.779601756216457,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-thruster-light",
+          "type": "PointLight",
+          "color": "ff4a18",
+          "intensity": 0.9100620694561468,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-fill",
+          "type": "PointLight",
+          "color": "c8ff70",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-orange-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-light",
+          "type": "PointLight",
+          "color": "b8ff66",
+          "intensity": 2.4,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-neon-light",
+          "type": "PointLight",
+          "color": "00e8ff",
+          "intensity": 1.779601756216457,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-thruster-light",
+          "type": "PointLight",
+          "color": "ff4a18",
+          "intensity": 0.9100620694561468,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-fill",
+          "type": "PointLight",
+          "color": "c8ff70",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "aircraft-cockpit-orange-light",
+          "type": "PointLight",
+          "color": "ff8a32",
+          "intensity": 4.344288037675284,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "citadel-svarbova-ambient",
+          "type": "AmbientLight",
+          "color": "ffffff",
+          "intensity": 0.62,
+          "visible": false,
+          "layers": 2
+        },
+        {
+          "name": "citadel-svarbova-sun",
+          "type": "DirectionalLight",
+          "color": "fff4e6",
+          "intensity": 0.95,
+          "visible": false,
+          "layers": 2
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "gate-sunset-bounce",
+          "type": "PointLight",
+          "color": "ffa36f",
+          "intensity": 2300,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "gate-meeting-lamp-0",
+          "type": "PointLight",
+          "color": "ffba63",
+          "intensity": 16.406249999999993,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "gate-meeting-lamp-1",
+          "type": "PointLight",
+          "color": "ffba63",
+          "intensity": 16.406249999999993,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "PointLight",
+          "color": "ff9a43",
+          "intensity": 0.55,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "PointLight",
+          "color": "ff9a43",
+          "intensity": 0.55,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "PointLight",
+          "color": "ff9a43",
+          "intensity": 0.55,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "PointLight",
+          "color": "ff9a43",
+          "intensity": 0.55,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "",
+          "type": "PointLight",
+          "color": "ff9a43",
+          "intensity": 0.55,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 23.43115234375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 22.493906250000002,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffaf60",
+          "intensity": 39.3643359375,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 25.30564453125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "bookshop-logical-lamp",
+          "type": "PointLight",
+          "color": "ffbb72",
+          "intensity": 21.55666015625,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "night-lantern-runtime-light",
+          "type": "PointLight",
+          "color": "ffa04c",
+          "intensity": 0.998486328125,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "leviathan-eye-light-L",
+          "type": "PointLight",
+          "color": "ffcf8a",
+          "intensity": 0.8502598372684168,
+          "visible": false,
+          "layers": 1
+        },
+        {
+          "name": "leviathan-eye-light-R",
+          "type": "PointLight",
+          "color": "ffcf8a",
+          "intensity": 0.8502598372684168,
+          "visible": false,
+          "layers": 1
+        }
+      ],
+      "isolation": {
+        "method": "review-only: seek red tram to maximum positive-Y route point and suspend tramSystem.update; other world updates remain active",
+        "progress": 0.0025,
+        "tramY": 153.6026852586141,
+        "persisted": false,
+        "wavesAndGrass": "not modified",
+        "settled": true,
+        "ambientReset": {
+          "selector": "unique unnamed AmbientLight directly under main scene, setupEnvironment source",
+          "before": "ffffff",
+          "after": "f3fff7"
+        },
+        "fadeSimulationSeconds": 18.027899999999924
+      },
+      "weatherPolicy": "review iframe forces weather=0 and weatherLocked=true; not persisted"
+    },
+    "mountainLightField": {
+      "revision": "palette-only",
+      "method": "palette-only; no heightfield",
+      "accepted": 21,
+      "skipped": 0,
+      "palette": 3,
+      "occlusion": true,
+      "light": false
+    },
+    "release": {
+      "releaseVersion": "citadel-mountain-20261005-candidate2",
+      "releaseEnabled": false,
+      "active": false,
+      "mode": "legacy-defaults",
+      "applied": [],
+      "resolved": {
+        "citadelRidgePass": "6",
+        "citadelTurfPass": "5",
+        "citadelWoodlandPass": "2",
+        "citadelRockSurfacePass": "4",
+        "citadelRockRelief": ".22",
+        "citadelSurfaceIndex": "1",
+        "citadelMountainLightPass": "0",
+        "citadelMountainPalette": "3",
+        "citadelRockDetail": ".35",
+        "autostart": "1",
+        "timeOfDay": "0.5"
+      }
+    },
+    "surfaceNormals": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/citadel-oskar-grid-mountain-surface[0]",
+        "vertices": 312486,
+        "indexCount": 0,
+        "rockSurfaceNormals": {
+          "version": 1,
+          "method": "constrained source-corner fans with affine normal transport",
+          "positionChanged": false,
+          "cornerFanConstraints": true,
+          "rawAffineNormals": true,
+          "mixedSubdivisionSoftEdges": 1405,
+          "cannotLinkPairs": 18370,
+          "constraintRejectedSoftJoins": 707,
+          "sourceFaces": 71440,
+          "softEdges": 97311,
+          "angleFallbackEdges": 97311,
+          "semanticEdges": 4570,
+          "protectedFaces": 3048,
+          "unmatchedEdges": 1328,
+          "subdivisionMismatchEdges": 0,
+          "nonManifoldEdges": 0,
+          "sharpEdges": 4309,
+          "smoothedCorners": 181379,
+          "interpolatedVertices": 272280,
+          "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+          "creaseAngleDeg": 42,
+          "protectionBounds": "shore-and-geometric-feature-edges-only",
+          "pass": 4,
+          "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+          "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+          "reasonCounts": {
+            "shoreAttributeFaces": 3048,
+            "callbackProtectedFaces": 0,
+            "openEdges": 1328,
+            "nonManifoldEdges": 0,
+            "subdivisionMismatchEdges": 0,
+            "protectedFaceEdges": 4570,
+            "mixedSemanticEdges": 0,
+            "semanticBoundaryEdges": 0,
+            "sharpAngleEdges": 4309,
+            "windingEdges": 0,
+            "crestFoldEdges": 306
+          }
+        },
+        "material": {
+          "name": "citadel-blue-grey-geology",
+          "effectiveRockDetailGain": 0.35,
+          "effectiveMossGain": 0.24
+        }
+      },
+      {
+        "name": "citadel-coastal-cliff-seal",
+        "path": "castleContainer/citadel-continuous-mountain-terrain-system[0]/citadel-oskar-grid-mountain-surface[0]/citadel-coastal-cliff-seal[0]",
+        "vertices": 8553,
+        "indexCount": 0,
+        "rockSurfaceNormals": {
+          "version": 1,
+          "method": "constrained source-corner fans with affine normal transport",
+          "positionChanged": false,
+          "cornerFanConstraints": true,
+          "rawAffineNormals": true,
+          "mixedSubdivisionSoftEdges": 50,
+          "cannotLinkPairs": 228,
+          "constraintRejectedSoftJoins": 0,
+          "sourceFaces": 342,
+          "softEdges": 225,
+          "angleFallbackEdges": 225,
+          "semanticEdges": 0,
+          "protectedFaces": 0,
+          "unmatchedEdges": 350,
+          "subdivisionMismatchEdges": 0,
+          "nonManifoldEdges": 2,
+          "sharpEdges": 110,
+          "smoothedCorners": 454,
+          "interpolatedVertices": 8547,
+          "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+          "creaseAngleDeg": 42,
+          "protectionBounds": "shore-and-geometric-feature-edges-only",
+          "pass": 4,
+          "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+          "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+          "reasonCounts": {
+            "shoreAttributeFaces": 0,
+            "callbackProtectedFaces": 0,
+            "openEdges": 350,
+            "nonManifoldEdges": 2,
+            "subdivisionMismatchEdges": 0,
+            "protectedFaceEdges": 0,
+            "mixedSemanticEdges": 0,
+            "semanticBoundaryEdges": 0,
+            "sharpAngleEdges": 110,
+            "windingEdges": 0,
+            "crestFoldEdges": 0
+          }
+        },
+        "material": {
+          "name": "citadel-blue-grey-geology",
+          "effectiveRockDetailGain": 0.35,
+          "effectiveMossGain": 0.24
+        }
+      },
+      {
+        "name": "highland-ravine-wall-west",
+        "path": "castleContainer/odyssey-citadel-mountain-valley-assembly[0]/citadel-latest-design-v1[0]/highland-mountain-ravine-walls[0]/highland-ravine-wall-west[0]",
+        "vertices": 16509,
+        "indexCount": 0,
+        "rockSurfaceNormals": {
+          "version": 1,
+          "method": "constrained source-corner fans with affine normal transport",
+          "positionChanged": false,
+          "cornerFanConstraints": true,
+          "rawAffineNormals": true,
+          "mixedSubdivisionSoftEdges": 262,
+          "cannotLinkPairs": 332,
+          "constraintRejectedSoftJoins": 39,
+          "sourceFaces": 1282,
+          "softEdges": 1757,
+          "angleFallbackEdges": 1757,
+          "semanticEdges": 0,
+          "protectedFaces": 0,
+          "unmatchedEdges": 0,
+          "subdivisionMismatchEdges": 0,
+          "nonManifoldEdges": 0,
+          "sharpEdges": 166,
+          "smoothedCorners": 3795,
+          "interpolatedVertices": 16509,
+          "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+          "creaseAngleDeg": 42,
+          "protectionBounds": "shore-and-geometric-feature-edges-only",
+          "pass": 4,
+          "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+          "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+          "reasonCounts": {
+            "shoreAttributeFaces": 0,
+            "callbackProtectedFaces": 0,
+            "openEdges": 0,
+            "nonManifoldEdges": 0,
+            "subdivisionMismatchEdges": 0,
+            "protectedFaceEdges": 0,
+            "mixedSemanticEdges": 0,
+            "semanticBoundaryEdges": 0,
+            "sharpAngleEdges": 166,
+            "windingEdges": 0,
+            "crestFoldEdges": 0
+          }
+        },
+        "material": {
+          "name": "citadel-blue-grey-geology",
+          "effectiveRockDetailGain": 0.35,
+          "effectiveMossGain": 0.24
+        }
+      },
+      {
+        "name": "citadel-backdrop-ridge-near",
+        "path": "castleContainer/odyssey-citadel-mountain-valley-assembly[0]/highland-west-city[0]/citadel-new-city-backdrop-range[0]/citadel-backdrop-ridge-near[0]",
+        "vertices": 12600,
+        "indexCount": 0,
+        "rockSurfaceNormals": {
+          "version": 1,
+          "method": "constrained source-corner fans with affine normal transport",
+          "positionChanged": false,
+          "cornerFanConstraints": true,
+          "rawAffineNormals": true,
+          "mixedSubdivisionSoftEdges": 149,
+          "cannotLinkPairs": 1414,
+          "constraintRejectedSoftJoins": 112,
+          "sourceFaces": 2880,
+          "softEdges": 3521,
+          "angleFallbackEdges": 3521,
+          "semanticEdges": 0,
+          "protectedFaces": 0,
+          "unmatchedEdges": 184,
+          "subdivisionMismatchEdges": 0,
+          "nonManifoldEdges": 0,
+          "sharpEdges": 707,
+          "smoothedCorners": 7977,
+          "interpolatedVertices": 12600,
+          "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+          "creaseAngleDeg": 42,
+          "protectionBounds": "shore-and-geometric-feature-edges-only",
+          "pass": 4,
+          "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+          "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+          "reasonCounts": {
+            "shoreAttributeFaces": 0,
+            "callbackProtectedFaces": 0,
+            "openEdges": 184,
+            "nonManifoldEdges": 0,
+            "subdivisionMismatchEdges": 0,
+            "protectedFaceEdges": 0,
+            "mixedSemanticEdges": 0,
+            "semanticBoundaryEdges": 0,
+            "sharpAngleEdges": 707,
+            "windingEdges": 0,
+            "crestFoldEdges": 0
+          }
+        },
+        "material": {
+          "name": "citadel-blue-grey-geology",
+          "effectiveRockDetailGain": 0.35,
+          "effectiveMossGain": 0.24
+        }
+      },
+      {
+        "name": "citadel-backdrop-ridge-mid",
+        "path": "castleContainer/odyssey-citadel-mountain-valley-assembly[0]/highland-west-city[0]/citadel-new-city-backdrop-range[0]/citadel-backdrop-ridge-mid[0]",
+        "vertices": 9600,
+        "indexCount": 0,
+        "rockSurfaceNormals": {
+          "version": 1,
+          "method": "constrained source-corner fans with affine normal transport",
+          "positionChanged": false,
+          "cornerFanConstraints": true,
+          "rawAffineNormals": true,
+          "mixedSubdivisionSoftEdges": 0,
+          "cannotLinkPairs": 854,
+          "constraintRejectedSoftJoins": 102,
+          "sourceFaces": 3200,
+          "softEdges": 4273,
+          "angleFallbackEdges": 4273,
+          "semanticEdges": 0,
+          "protectedFaces": 0,
+          "unmatchedEdges": 200,
+          "subdivisionMismatchEdges": 0,
+          "nonManifoldEdges": 0,
+          "sharpEdges": 427,
+          "smoothedCorners": 9241,
+          "interpolatedVertices": 9600,
+          "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+          "creaseAngleDeg": 42,
+          "protectionBounds": "shore-and-geometric-feature-edges-only",
+          "pass": 4,
+          "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+          "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+          "reasonCounts": {
+            "shoreAttributeFaces": 0,
+            "callbackProtectedFaces": 0,
+            "openEdges": 200,
+            "nonManifoldEdges": 0,
+            "subdivisionMismatchEdges": 0,
+            "protectedFaceEdges": 0,
+            "mixedSemanticEdges": 0,
+            "semanticBoundaryEdges": 0,
+            "sharpAngleEdges": 427,
+            "windingEdges": 0,
+            "crestFoldEdges": 0
+          }
+        },
+        "material": {
+          "name": "citadel-blue-grey-geology",
+          "effectiveRockDetailGain": 0.35,
+          "effectiveMossGain": 0.24
+        }
+      },
+      {
+        "name": "new-city-rock-shoulder",
+        "path": "castleContainer/odyssey-citadel-mountain-valley-assembly[0]/highland-west-city[0]/new-city-rock-shoulder[0]",
+        "vertices": 8994,
+        "indexCount": 0,
+        "rockSurfaceNormals": {
+          "version": 1,
+          "method": "constrained source-corner fans with affine normal transport",
+          "positionChanged": false,
+          "cornerFanConstraints": true,
+          "rawAffineNormals": true,
+          "mixedSubdivisionSoftEdges": 5,
+          "cannotLinkPairs": 174,
+          "constraintRejectedSoftJoins": 32,
+          "sourceFaces": 2974,
+          "softEdges": 4251,
+          "angleFallbackEdges": 4251,
+          "semanticEdges": 0,
+          "protectedFaces": 0,
+          "unmatchedEdges": 246,
+          "subdivisionMismatchEdges": 0,
+          "nonManifoldEdges": 0,
+          "sharpEdges": 87,
+          "smoothedCorners": 8877,
+          "interpolatedVertices": 8994,
+          "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+          "creaseAngleDeg": 42,
+          "protectionBounds": "shore-and-geometric-feature-edges-only",
+          "pass": 4,
+          "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+          "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+          "reasonCounts": {
+            "shoreAttributeFaces": 0,
+            "callbackProtectedFaces": 0,
+            "openEdges": 246,
+            "nonManifoldEdges": 0,
+            "subdivisionMismatchEdges": 0,
+            "protectedFaceEdges": 0,
+            "mixedSemanticEdges": 0,
+            "semanticBoundaryEdges": 0,
+            "sharpAngleEdges": 87,
+            "windingEdges": 0,
+            "crestFoldEdges": 0
+          }
+        },
+        "material": {
+          "name": "citadel-blue-grey-geology",
+          "effectiveRockDetailGain": 0.35,
+          "effectiveMossGain": 0.6
+        }
+      },
+      {
+        "name": "old-shore-blender-rock-support",
+        "path": "castleContainer/citadel-old-shore-approach[0]/old-shore-blender-rock-support[0]",
+        "vertices": 2280,
+        "indexCount": 0,
+        "rockSurfaceNormals": {
+          "version": 1,
+          "method": "constrained source-corner fans with affine normal transport",
+          "positionChanged": false,
+          "cornerFanConstraints": true,
+          "rawAffineNormals": true,
+          "mixedSubdivisionSoftEdges": 0,
+          "cannotLinkPairs": 872,
+          "constraintRejectedSoftJoins": 10,
+          "sourceFaces": 760,
+          "softEdges": 832,
+          "angleFallbackEdges": 832,
+          "semanticEdges": 0,
+          "protectedFaces": 0,
+          "unmatchedEdges": 0,
+          "subdivisionMismatchEdges": 0,
+          "nonManifoldEdges": 32,
+          "sharpEdges": 244,
+          "smoothedCorners": 1427,
+          "interpolatedVertices": 2280,
+          "sourceTJunctions": "unmatched original edges are not joined across; same-side fans may smooth; no topological repair",
+          "creaseAngleDeg": 42,
+          "protectionBounds": "shore-and-geometric-feature-edges-only",
+          "pass": 4,
+          "facePolicy": "shore attribute only; proximity/altitude/mesh-class callback not evaluated",
+          "reasonCountPolicy": "first blocking reason; not visible-face coverage",
+          "reasonCounts": {
+            "shoreAttributeFaces": 0,
+            "callbackProtectedFaces": 0,
+            "openEdges": 0,
+            "nonManifoldEdges": 32,
+            "subdivisionMismatchEdges": 0,
+            "protectedFaceEdges": 0,
+            "mixedSemanticEdges": 0,
+            "semanticBoundaryEdges": 0,
+            "sharpAngleEdges": 244,
+            "windingEdges": 0,
+            "crestFoldEdges": 0
+          }
+        },
+        "material": {
+          "name": "citadel-blue-grey-geology",
+          "effectiveRockDetailGain": 0.35,
+          "effectiveMossGain": 0.24
+        }
+      }
+    ],
+    "shader": {
+      "status": "sample-clean",
+      "programs": [
+        {
+          "id": 0,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "robot-ink",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "robot-steel",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "EquirectangularToCubeUV",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "SphericalGaussianBlur",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "locust-olive",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "citadel-blue-grey-geology",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "name": "MeshToonMaterial_m13",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "name": "MeshToonMaterial_m27",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "name": "MeshToonMaterial_m27",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 25,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 29,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "name": "courier-straw",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "name": "courier-hatBand",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 38,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 43,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 44,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 45,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 47,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 48,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 49,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 50,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 51,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 52,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 53,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 54,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 55,
+          "name": "robot-rust",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 56,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 57,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 58,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 59,
+          "name": "robot-ink",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 60,
+          "name": "robot-rust",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 61,
+          "name": "robot-steel",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 62,
+          "name": "locust-olive",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 63,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 64,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 65,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 66,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 67,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 68,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 69,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 70,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 71,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 72,
+          "name": "citadel-blue-grey-geology",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 73,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 74,
+          "name": "MeshToonMaterial_m13",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 75,
+          "name": "MeshToonMaterial_m27",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 76,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 77,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 78,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 79,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 80,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 81,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 82,
+          "name": "courier-straw",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 83,
+          "name": "courier-hatBand",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 84,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 85,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 86,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 87,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 88,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 89,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 90,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 91,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 92,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 93,
+          "name": "robot-ink",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 94,
+          "name": "robot-olive",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 95,
+          "name": "robot-rust",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 96,
+          "name": "robot-steel",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 97,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 98,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 99,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 100,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 101,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 102,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 103,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 104,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 105,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 106,
+          "name": "citadel-blue-grey-geology",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 107,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 108,
+          "name": "MeshToonMaterial_m13",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 109,
+          "name": "MeshToonMaterial_m27",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 110,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 111,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 112,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 113,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 114,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 115,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 116,
+          "name": "courier-straw",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 117,
+          "name": "courier-hatBand",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 118,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 119,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 120,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 121,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 122,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 123,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 124,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 125,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 126,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 127,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 128,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 129,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 130,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 131,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 132,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 133,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 134,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 135,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 136,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 137,
+          "name": "soldier-statue-white-limestone",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 138,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 139,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 140,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 141,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 142,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 143,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 144,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 145,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 146,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 147,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 148,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 149,
+          "name": "claude-house-roof_blue",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 150,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 151,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 152,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 153,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 154,
+          "name": "citadel-concentric-stone-paving",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 155,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 156,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 157,
+          "name": "citadel-blue-grey-geology",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 158,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 159,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 160,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 161,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 162,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 163,
+          "name": "beetle-headlamp-glass",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 164,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 165,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 166,
+          "name": "harbor-blue-canvas",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 167,
+          "name": "citadel-blue-grey-geology",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 168,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 169,
+          "name": "harbor-blue-canvas",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 170,
+          "name": "harbor-hemp-brass",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 171,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 172,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 173,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 174,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 175,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 176,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 177,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 178,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 179,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 180,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 181,
+          "name": "robot-ink",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 182,
+          "name": "robot-olive",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 183,
+          "name": "robot-rust",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 184,
+          "name": "robot-steel",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 185,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 186,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 187,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 188,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 189,
+          "name": "MeshToonMaterial_m13",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 190,
+          "name": "MeshToonMaterial_m27",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 191,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 192,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 193,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 194,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 195,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 196,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 197,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 198,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 199,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 200,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 201,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 202,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 203,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 204,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 205,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 206,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 207,
+          "name": "soldier-statue-white-limestone",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 208,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 209,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 210,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 211,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 212,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 213,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 214,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 215,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 216,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 217,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 218,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 219,
+          "name": "claude-house-roof_blue",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 220,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 221,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 222,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 223,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 224,
+          "name": "citadel-concentric-stone-paving",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 225,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 226,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 227,
+          "name": "citadel-blue-grey-geology",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 228,
+          "name": "citadel-blue-grey-geology",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 229,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 230,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 231,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 232,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 233,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 234,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 235,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 236,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 237,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 238,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 239,
+          "name": "beetle-headlamp-glass",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 240,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 241,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 242,
+          "name": "harbor-blue-canvas",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 243,
+          "name": "citadel-blue-grey-geology",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 244,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 245,
+          "name": "harbor-blue-canvas",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 246,
+          "name": "harbor-hemp-brass",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 247,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 248,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 249,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 250,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 251,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 252,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 253,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 254,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 255,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 256,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 257,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 258,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 259,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 260,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 261,
+          "name": "",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        },
+        {
+          "id": 262,
+          "name": "citadel-harbor-broken-gold-reflection",
+          "programLog": "",
+          "linked": true,
+          "shaders": [
+            {
+              "compiled": true,
+              "log": ""
+            },
+            {
+              "compiled": true,
+              "log": ""
+            }
+          ]
+        }
+      ],
+      "glErrors": [],
+      "note": "Current linked programs and consumed GL error queue at check time; not proof of prior or future frames."
+    },
+    "renderer": {
+      "render": {
+        "frame": 2384,
+        "calls": 3634,
+        "triangles": 2687424,
+        "points": 0,
+        "lines": 3422
+      },
+      "memory": {
+        "geometries": 6265,
+        "textures": 148
+      }
+    }
+  },
+  "terraceProfile": null,
+  "silhouetteProfile": null,
+  "readiness": {
+    "sceneReadyWallMs": 58256,
+    "startedAt": "2026-10-04T20:34:09.846Z",
+    "actualReadyWallMs": 76418.80000001192
+  },
+  "lighting": {
+    "weather": 0,
+    "weatherLocked": true,
+    "phase": 0.75,
+    "flashIntensity": 0,
+    "directorEnabled": false,
+    "tramY": 153.6026852586141,
+    "moebiusTarget": 0,
+    "lights": [
+      {
+        "name": "light-pool-0",
+        "type": "PointLight",
+        "color": "ffab5c",
+        "intensity": 172.4658203125,
+        "visible": true,
+        "layers": 3
+      },
+      {
+        "name": "light-pool-1",
+        "type": "PointLight",
+        "color": "ffb873",
+        "intensity": 77.15576171875,
+        "visible": true,
+        "layers": 3
+      },
+      {
+        "name": "light-pool-2",
+        "type": "PointLight",
+        "color": "ffa55a",
+        "intensity": 59.00146484375,
+        "visible": true,
+        "layers": 3
+      },
+      {
+        "name": "light-pool-3",
+        "type": "PointLight",
+        "color": "ffd7ad",
+        "intensity": 217.8515625,
+        "visible": true,
+        "layers": 3
+      },
+      {
+        "name": "light-pool-4",
+        "type": "PointLight",
+        "color": "ffd0a0",
+        "intensity": 181.54296875,
+        "visible": true,
+        "layers": 3
+      },
+      {
+        "name": "light-pool-5",
+        "type": "PointLight",
+        "color": "ffa36f",
+        "intensity": 2300,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "light-pool-6",
+        "type": "PointLight",
+        "color": "ffa55d",
+        "intensity": 95.31005859375,
+        "visible": true,
+        "layers": 3
+      },
+      {
+        "name": "light-pool-7",
+        "type": "PointLight",
+        "color": "ffb56f",
+        "intensity": 163.388671875,
+        "visible": true,
+        "layers": 3
+      },
+      {
+        "name": "",
+        "type": "AmbientLight",
+        "color": "f3fff7",
+        "intensity": 0.6,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "HemisphereLight",
+        "color": "ffffff",
+        "groundColor": "f0e6e0",
+        "intensity": 0.3,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "DirectionalLight",
+        "color": "ff9a5c",
+        "intensity": 1,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "DirectionalLight",
+        "color": "75cfc3",
+        "intensity": 0.18666666666666668,
+        "visible": true,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ffe8b0",
+        "intensity": 0.35,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "osk-v5-ambient-floor",
+        "type": "AmbientLight",
+        "color": "ffffff",
+        "intensity": 0.25,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "osk-v5-sky-ground-fill",
+        "type": "HemisphereLight",
+        "color": "d8f2ef",
+        "groundColor": "b6a790",
+        "intensity": 0.96,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "osk-v5-key-sun",
+        "type": "DirectionalLight",
+        "color": "ffe2b9",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "tarn-elder-tree-zone-fill",
+        "type": "PointLight",
+        "color": "ffffff",
+        "intensity": 1.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "tarn-companion-zone-fill",
+        "type": "PointLight",
+        "color": "ffffff",
+        "intensity": 1.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 3.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffb254",
+        "intensity": 2.6,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "neon-dome-point-light",
+        "type": "PointLight",
+        "color": "ffc7da",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bubble-interior-light",
+        "type": "PointLight",
+        "color": "8effd8",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bubble-interior-light",
+        "type": "PointLight",
+        "color": "ffd98e",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bubble-interior-light",
+        "type": "PointLight",
+        "color": "ffa8d9",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bubble-interior-light",
+        "type": "PointLight",
+        "color": "ffd98e",
+        "intensity": 1.7,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "old-city-tier-old-shore-court",
+        "type": "PointLight",
+        "color": "ffa55d",
+        "intensity": 95.31005859375,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "old-city-tier-old-middle-court",
+        "type": "PointLight",
+        "color": "ffac65",
+        "intensity": 131.61865234375,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "old-city-tier-old-upper-court",
+        "type": "PointLight",
+        "color": "ffb56f",
+        "intensity": 163.388671875,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "new-city-light-main-gate",
+        "type": "PointLight",
+        "color": "ffab5c",
+        "intensity": 172.4658203125,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "new-city-light-plaza",
+        "type": "PointLight",
+        "color": "ffb873",
+        "intensity": 77.15576171875,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "new-city-light-moon-fill",
+        "type": "PointLight",
+        "color": "ffa55a",
+        "intensity": 59.00146484375,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "new-city-light-landing-4",
+        "type": "PointLight",
+        "color": "ffb368",
+        "intensity": 40.84716796875,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "new-city-light-landing-7",
+        "type": "PointLight",
+        "color": "ffb368",
+        "intensity": 40.84716796875,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "new-city-light-upper-west",
+        "type": "PointLight",
+        "color": "ffd7ad",
+        "intensity": 217.8515625,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "new-city-light-upper-east",
+        "type": "PointLight",
+        "color": "ffd0a0",
+        "intensity": 181.54296875,
+        "visible": false,
+        "layers": 3
+      },
+      {
+        "name": "citadel-svarbova-ambient",
+        "type": "AmbientLight",
+        "color": "8eb9e5",
+        "intensity": 0.34,
+        "visible": true,
+        "layers": 2
+      },
+      {
+        "name": "citadel-svarbova-sun",
+        "type": "DirectionalLight",
+        "color": "78aee0",
+        "intensity": 0.62,
+        "visible": true,
+        "layers": 2
+      },
+      {
+        "name": "infiltration-torch-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 0.75,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "infiltration-torch-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 0.75,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "infiltration-torch-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 0.75,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "infiltration-torch-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 0.75,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 14.9959375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 14.9959375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff2d55",
+        "intensity": 0.036000000000000004,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff2d55",
+        "intensity": 0.036000000000000004,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 1.083850259490196,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 0.7400716444119269,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 1.083850259490196,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 0.7400716444119269,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 1.083850259490196,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 0.7400716444119269,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 1.083850259490196,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 0.7400716444119269,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-light",
+        "type": "PointLight",
+        "color": "b8ff66",
+        "intensity": 2.4,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-neon-light",
+        "type": "PointLight",
+        "color": "00e8ff",
+        "intensity": 1.083850259490196,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-thruster-light",
+        "type": "PointLight",
+        "color": "ff4a18",
+        "intensity": 0.7400716444119269,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-fill",
+        "type": "PointLight",
+        "color": "c8ff70",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "aircraft-cockpit-orange-light",
+        "type": "PointLight",
+        "color": "ff8a32",
+        "intensity": 4.451436104805628,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "citadel-svarbova-ambient",
+        "type": "AmbientLight",
+        "color": "ffffff",
+        "intensity": 0.62,
+        "visible": false,
+        "layers": 2
+      },
+      {
+        "name": "citadel-svarbova-sun",
+        "type": "DirectionalLight",
+        "color": "fff4e6",
+        "intensity": 0.95,
+        "visible": false,
+        "layers": 2
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "gate-sunset-bounce",
+        "type": "PointLight",
+        "color": "ffa36f",
+        "intensity": 2300,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "gate-meeting-lamp-0",
+        "type": "PointLight",
+        "color": "ffba63",
+        "intensity": 16.406249999999993,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "gate-meeting-lamp-1",
+        "type": "PointLight",
+        "color": "ffba63",
+        "intensity": 16.406249999999993,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "",
+        "type": "PointLight",
+        "color": "ff9a43",
+        "intensity": 0.55,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 23.43115234375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 22.493906250000002,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffaf60",
+        "intensity": 39.3643359375,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 25.30564453125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "bookshop-logical-lamp",
+        "type": "PointLight",
+        "color": "ffbb72",
+        "intensity": 21.55666015625,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "night-lantern-runtime-light",
+        "type": "PointLight",
+        "color": "ffa04c",
+        "intensity": 0.998486328125,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "leviathan-eye-light-L",
+        "type": "PointLight",
+        "color": "ffcf8a",
+        "intensity": 0.7955603042772784,
+        "visible": false,
+        "layers": 1
+      },
+      {
+        "name": "leviathan-eye-light-R",
+        "type": "PointLight",
+        "color": "ffcf8a",
+        "intensity": 0.7955603042772784,
+        "visible": false,
+        "layers": 1
+      }
+    ],
+    "isolation": {
+      "method": "review-only: seek red tram to maximum positive-Y route point and suspend tramSystem.update; other world updates remain active",
+      "progress": 0.0025,
+      "tramY": 153.6026852586141,
+      "persisted": false,
+      "wavesAndGrass": "not modified",
+      "settled": true,
+      "ambientReset": {
+        "selector": "unique unnamed AmbientLight directly under main scene, setupEnvironment source",
+        "before": "ffffff",
+        "after": "f3fff7"
+      },
+      "fadeSimulationSeconds": 18.027899999999924
+    },
+    "weatherPolicy": "review iframe forces weather=0 and weatherLocked=true; not persisted"
+  },
+  "at": "2026-10-04T20:37:33.017Z",
+  "round": "r19",
+  "url": "http://localhost:8931/TigerMessenger/?citadelRidgePass=6&citadelTurfPass=5&citadelWoodlandPass=2&citadelRockSurfacePass=4&citadelRockRelief=.22&citadelSurfaceIndex=1&citadelMountainLightPass=0&citadelMountainPalette=3&citadelRockDetail=.35&autostart=1&timeOfDay=0.5",
+  "ready": true,
+  "view": "bay-ridge",
+  "clock": 0.75,
+  "hideClouds": false,
+  "hidePlants": false,
+  "camera": {
+    "position": [
+      83.69073324627077,
+      167.2640371868037,
+      57.5573890362525
+    ],
+    "quaternion": [
+      0.23148137324448848,
+      0.8237430819801473,
+      0.3283981838143252,
+      -0.40002292634066217
+    ],
+    "aspect": 2.413127413127413,
+    "zoom": 1,
+    "fov": 47
+  },
+  "errors": [],
+  "report": null,
+  "performance": null
+}

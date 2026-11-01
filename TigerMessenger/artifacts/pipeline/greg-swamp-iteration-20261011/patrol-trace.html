@@ -1,0 +1,14 @@
+<!doctype html><meta charset="utf-8"><title>正式湖沼巡逻绘制诊断</title>
+<style>body{margin:0;background:#18343b}iframe{position:fixed;inset:0;width:100%;height:100%;border:0}pre{position:fixed;bottom:0;color:white;background:#000b;z-index:4;max-width:100%;white-space:pre-wrap;font:12px monospace}</style><iframe id="g"></iframe><pre id="s">loading</pre><script>
+// Read-only render instrumentation. No patrol/story activation; callbacks restored after sampling.
+const q=new URLSearchParams(location.search);g.src='/TigerMessenger/?tour=crystal-v7&autostart=1&cb='+Date.now()+(q.get('before')==='1'?'&harborPatrolFrustum=0':'');
+async function show(){const w=g.contentWindow,t=w?.__tm;if(!t?.swampCameraProfile){setTimeout(show,3000);return;}try{
+const ST=await w.eval("import('/TigerMessenger/artifacts/pipeline/swamp-target-20261010/stations.js?v='+Date.now())");ST.place('rim');ST.settle(true);
+const roots=[],meshes=[],hooks=[],counts={main:0,other:0};t.scene.traverse(o=>{if(o.name==='harbor-drum-patrol')roots.push(o);});
+const visible=o=>{for(let p=o;p;p=p.parent)if(!p.visible)return false;return (Array.isArray(o.material)?o.material:[o.material]).some(m=>m?.visible);};
+for(const root of roots)root.traverse(o=>{if(!o.isMesh)return;meshes.push(o);const original=o.onBeforeRender;hooks.push([o,original]);o.onBeforeRender=function(r,scene,camera,...args){counts[camera===t.camera?'main':'other']++;original?.call(this,r,scene,camera,...args);};});
+t.perfProbe.reset();const perf=await t.perfProbe.settle(30000);
+for(const [o,original]of hooks)o.onBeforeRender=original;
+const T=t.THREE,frustum=new T.Frustum().setFromProjectionMatrix(new T.Matrix4().multiplyMatrices(t.camera.projectionMatrix,t.camera.matrixWorldInverse));
+s.textContent=JSON.stringify({time:new Date().toISOString(),mode:q.get('before')==='1'?'legacy':'default',station:'rim',patrolRoots:roots.length,patrolSoldiers:roots.reduce((n,r)=>n+r.children.length,0),meshCount:meshes.length,effectiveVisible:meshes.filter(visible).length,outsideFrustum:meshes.filter(o=>visible(o)&&!frustum.intersectsObject(o)).length,forcedDraw:meshes.filter(o=>!o.frustumCulled).length,renderCallbacks:counts,perf});
+}catch(e){s.textContent='error '+e.message;}}show();</script>

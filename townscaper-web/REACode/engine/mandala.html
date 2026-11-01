@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Engine — 极坐标对称花纹（mandala.js）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #14232b; overflow: hidden; }
+  canvas { display: block; }
+  #hud {
+    position: fixed; left: 16px; top: 14px; z-index: 5; pointer-events: none;
+    font: 12px/1.7 ui-monospace, Menlo, monospace; color: #cddadd; white-space: pre;
+  }
+  #hint {
+    position: fixed; left: 16px; bottom: 14px; z-index: 5; pointer-events: none;
+    font: 11px/1.6 ui-monospace, Menlo, monospace; color: rgba(205,218,221,.55);
+  }
+</style>
+</head>
+<body>
+<div id="hud"></div>
+<div id="hint">R 换种子 · 空格 重播生长 · 1/2/3/4 换对称重数 · ↑/↓ 调环数</div>
+<canvas id="cv"></canvas>
+
+<script type="module">
+import { buildMandala, drawMandala } from '../src/mandala.js';
+
+/**
+ * 复现 x.com/OskSta/status/1490068909042642944（"Late night cryptic graph tweet"）。
+ *
+ * 一屏只看三件事：① 4 重对称是不是对得上；② 生长是"半径变大"而不是旋转；
+ * ③ 外圈节点确实比内圈稀（HUD 里的 环间距比 > 1）。
+ */
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const hud = document.getElementById('hud');
+
+let state = { seed: 7, symmetry: 4, rings: 7, progress: 1, playing: false };
+let mandala = null;
+let t0 = 0;
+
+function resize() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  cv.width = innerWidth * dpr;
+  cv.height = innerHeight * dpr;
+  cv.style.width = innerWidth + 'px';
+  cv.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function rebuild() {
+  mandala = buildMandala(state);
+  hud.textContent =
+    `mandala · seed ${state.seed} · ${state.symmetry} 重对称\n` +
+    `一象限 ${mandala.stats.baseNodes} 点 × ${mandala.stats.symmetry} = ${mandala.stats.totalNodes} 点\n` +
+    `环 ${mandala.stats.rings}   最高半径 ${mandala.stats.rMax}   节点半径 ${mandala.stats.sizeRange.join('~')}\n` +
+    `环间距 由内到外 ${mandala.stats.ringSpacing.join(' / ')}\n` +
+    `外/内 间距比 ${mandala.stats.ringRatio}（>1 = 越往外越稀）\n` +
+    `生长进度 ${(state.progress * 100).toFixed(0)}%`;
+  window.__mandala = { state, stats: mandala.stats, rebuild, draw };
+  window.__worldStats = { kind: 'mandala', ...mandala.stats };
+}
+
+function draw() {
+  if (!mandala) return;
+  drawMandala(ctx, {
+    w: innerWidth, h: innerHeight, mandala,
+    progress: state.progress, seed: state.seed,
+  });
+}
+
+function replay() {
+  state.playing = true;
+  t0 = performance.now();
+}
+
+function frame(now) {
+  if (state.playing) {
+    // 参考帧：2.4s 出现第一簇，7.5s 长满 → 约 5 秒
+    const t = Math.min(1, (now - t0) / 5200);
+    state.progress = 0.04 + 0.96 * (1 - (1 - t) ** 2.2);
+    if (t >= 1) state.playing = false;
+    rebuildLight();
+    draw();
+  }
+  requestAnimationFrame(frame);
+}
+
+// 生长时不重建节点集（只改 progress），所以单独一个轻函数更新 HUD
+function rebuildLight() {
+  hud.textContent = hud.textContent.replace(/生长进度 \d+%/, `生长进度 ${(state.progress * 100).toFixed(0)}%`);
+}
+
+addEventListener('resize', () => { resize(); draw(); });
+addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') { state.seed = (state.seed * 7919 + 13) % 100000; rebuild(); draw(); }
+  if (e.key === ' ') { e.preventDefault(); replay(); }
+  if (['1', '2', '3', '4'].includes(e.key)) { state.symmetry = +e.key; rebuild(); draw(); }
+  if (e.key === 'ArrowUp') { state.rings = Math.min(12, state.rings + 1); rebuild(); draw(); }
+  if (e.key === 'ArrowDown') { state.rings = Math.max(3, state.rings - 1); rebuild(); draw(); }
+
+
+});
+
+resize();
+rebuild();
+state.progress = 1;
+draw();
+requestAnimationFrame(frame);
+console.log('[mandala] ready');
+</script>
+</body>
+</html>

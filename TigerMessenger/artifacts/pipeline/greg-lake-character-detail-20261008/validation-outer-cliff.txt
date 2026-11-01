@@ -1,0 +1,15 @@
+{"outerCliff":{"version":1,"renderDraws":2,"cracks":41,"roots":7,"depthInner":[6.355419508566815,10.597598723818523],"walkable":false,"entrance":"same angular endpoints as existing rim","triangles":2698,"topAnchorCount":193},"minRadius":38.660296115026206,"minY":29.402400970458984,"maxY":40,"topBytesUnchanged":true,"walkwayWidthWorld":2,"status":"CPU passed; GPU pending","tests":"6/6","files":["src/world/swampCoralOuterCliff.js","src/world/swampCoralRim.js","tests/world/swampCoralOuterCliff.test.mjs"],"rollback":"gregLakeOuterCliff=0 disables the additional geology; dispose removes owned mesh and strokes. Full original rim source in before-outer-cliff/swampCoralRim.js; do not overwrite unrelated future changes.","untouched":"Original rim top/inner/bottom/outside geometry arrays and colors byte-identical; no changes to natural inner cliffs/understory/tree/characters/main; new shell outside original wall radially and below top.","bridgeClearance":"Exterior min radius >38inner, maximum Y40inner; no angular extension into entry slot. No whole-game bridge triangle intersection sweep performed; GPU/formal-scene review remains separate."}
+✔ production outer cliff attaches to the real rim, closes its shell and preserves original walking geometry byte for byte (823.901875ms)
+✔ actual rendered wall crown produces one closed-thickness coral rim without moving actors (0.618166ms)
+✔ 720-angle patrol samples and lateral footprints have real upward rim support outside the stair opening (736.472875ms)
+✔ entrance slot and entire lake interior remain free of new rim triangles (135.65875ms)
+✔ rim support remains at the correct radius after actual spherical placement and radial sampling (5.667084ms)
+✔ toggle, invalid input and dispose do not leave geometry or alter caller footing registrations (0.584542ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1758.959625

@@ -1,0 +1,31 @@
+{
+  "task": "Moon lake r2 shoreline seated to final ground",
+  "observations": {
+    "source": "Current lake production factories plus fixed-camera after-high-r2/after-low-r2 component GPU",
+    "actual": "392/392 outer bank vertices ray-seated to actual final hills mesh, no missed samples. Fixed camera GPU has no former straight-cut panel or deep-water overspill. Four geometry/support tests pass. Original .18m elevated water remains readable as a low lip. User broad-water screenshot identity still unresolved; normal game moon-review UI currently no-ops without error, so no full screenshot repair claim.",
+    "repair": "Max .27m outward bank extends to3.77m before3.8m existing path. Low damp sloping bank, shallow shelf; original circles/moon/pines/actors/colliders/terrain unchanged."
+  },
+  "checks": [
+    {
+      "name": "four water/deep/path/final-ground regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "same camera production component GPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal game user screenshot shoreline identity and final visual",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No global ocean or hills changes without screenshot identity",
+    "Component screenshots are not normal game acceptance",
+    "Source snapshot preserved"
+  ],
+  "evidence_revision": "shore-r2-20261025"
+}

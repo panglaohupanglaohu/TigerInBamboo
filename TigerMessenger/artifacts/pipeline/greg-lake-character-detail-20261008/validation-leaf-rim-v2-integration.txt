@@ -1,0 +1,25 @@
+rooted algae geometry {"clumps":26,"blades":110,"drawCalls":2,"triangles":7920,"maxY":12.855374736132351}
+actual factory algae {"clumps":26,"blades":122,"oldMeshDraws":244,"newMeshDraws":2,"triangles":8784,"bedY":10.400000023841859}
+separate legacy layer {"clumps":30,"blades":90,"drawCalls":1,"triangles":6660}
+legacy layer clearance {"maxY":13.861444473266602,"triangles":6660}
+✔ 26 legacy clumps preserve random consumption, exact placements and all original blade parameters (3.793958ms)
+✔ two instanced curved leaf batches are surface rooted, finite and clear of lake bed volume after sphere transforms (8.243292ms)
+✔ real factory refreshes attachment after V2 lake-floor replacement without changing water or walkable identity (1003.703834ms)
+✔ separate 30-by-3 legacy layer keeps bases and palette while short petioles meet actual floor (13.491417ms)
+{"outerCliff":{"version":1,"renderDraws":2,"cracks":41,"roots":7,"depthInner":[6.355419508566815,10.597598723818523],"walkable":false,"entrance":"same angular endpoints as existing rim","triangles":2698,"topAnchorCount":193},"minRadius":38.660296115026206,"minY":29.402400970458984,"maxY":40,"topBytesUnchanged":true,"walkwayWidthWorld":2}
+✔ production outer cliff attaches to the real rim, closes its shell and preserves original walking geometry byte for byte (992.322292ms)
+✔ actual rendered wall crown produces one closed-thickness coral rim without moving actors (0.753042ms)
+✔ 720-angle patrol samples and lateral footprints have real upward rim support outside the stair opening (852.820375ms)
+✔ entrance slot and entire lake interior remain free of new rim triangles (156.161958ms)
+✔ rim support remains at the correct radius after actual spherical placement and radial sampling (6.741625ms)
+✔ toggle, invalid input and dispose do not leave geometry or alter caller footing registrations (0.904792ms)
+✔ rim colour-only change preserves all geometry, exterior geology and random state (1.662833ms)
+✔ shared top colours form smooth warm-to-cool gradients without repeated five-sector bands (1.438916ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2066.185584

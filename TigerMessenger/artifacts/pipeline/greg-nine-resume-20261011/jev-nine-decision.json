@@ -1,0 +1,60 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "9ed5a90fe2151ae85ce0b164af3cdc06533f56876fbabbdfd22d0ff95d0c88b3",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.98
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.84,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.07,
+        "lighting": 0,
+        "navigation": 0.87,
+        "review": 0.06
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.96
+    }
+  },
+  "usage": {
+    "input_tokens": 1154,
+    "output_tokens": 91,
+    "cost_usd": 0.000485,
+    "credits_remaining_usd": 4.95689
+  },
+  "elapsed_ms": 11719,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "all visible opposite shore stairs open GPU",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "V3 swim/boat/whale contact GPU",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "all monkey tool contacts GPU",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "30 FPS full game",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,15 @@
+FRONT_RAIL_AUDIT {"status":"built-unaccepted-visual-candidate","attempts":[{"contraction":1,"controls":[[-44,60],[-40,108],[47,106],[83,101]],"samples":294,"seaMisses":0,"buried":0,"blockedSamples":[]}],"failures":[],"audit":{"samples":294,"worstCurvature":{"index":27,"t":0.09215017064846416,"x":-40.884632104858134,"z":72.03265432674728,"radius":33.59139469222925},"maxWorldGrade":0.0014767806767803824,"minWorldCurvatureRadius":33.59139469222925,"maxGaugeError":2.1094237467877974e-14,"gauge":1.75,"gradeLimit":0.04,"radiusLimit":25},"supports":6}
+✔ assembles true models with final triangle evidence without mutating frozen scene (4661.856708ms)
+✔ flow remains aligned with sampled curved ocean after animated updates (4602.240166ms)
+✔ apply is idempotent and disposal releases only owned resources once (5576.999458ms)
+✔ missing actual ocean never substitutes a nominal water height (140.913125ms)
+✔ front rail audits actual frozen city surfaces without changing terrain (5136.781959ms)
+✔ integrated roof transaction keeps live candidate ownership and original terrain through solve and rollback (5813.333916ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26018.115291

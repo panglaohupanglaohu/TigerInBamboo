@@ -1,0 +1,31 @@
+{
+  "task": "Moon lake shore r1, bounded production geometry repair",
+  "observations": {
+    "source": "Current lake.js factory and same-camera component GPU before/after-high-r1 and after-low-r1",
+    "actual": "Outer radius3.5 minus eccentric radius2.52 center distance1.304 uses invalid outside Shape hole. GPU before shows a straight cut panel; r1 single contour has392 boundary points, clipped deep disc and narrow wet-bank shelf. Three geometry tests pass. Low view still shows raised lake lip from original .18m water/ground difference. User broad-water screenshot location not yet resolved; may be different shoreline.",
+    "repair": "Exact original intersecting circle contour and deep triangle clipping. Max bank offset .19m stays before pathInner3.8. No original pines, companion pines, moon, actors, collisions or global terrain edited."
+  },
+  "checks": [
+    {
+      "name": "three water/triangle/deep/path boundary regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "same camera production component GPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal game user screenshot shoreline identity and final visual",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No global ocean or hills changes without screenshot identity",
+    "Component screenshots are not normal game acceptance",
+    "Source snapshot preserved"
+  ],
+  "evidence_revision": "shore-r1-20261025"
+}

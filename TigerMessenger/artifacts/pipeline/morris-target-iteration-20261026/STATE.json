@@ -1,0 +1,64 @@
+{
+  "status": "integrated-current-normal-GPU-checked",
+  "revision": "morris-route-r35-20261026",
+  "bridge": {
+    "archBarrel": true,
+    "archRise": 2.08,
+    "archStones": 52,
+    "closedArchCore": true,
+    "continuousCoping": true,
+    "deckCrown": 0.7499999999999999,
+    "masonryPieces": 196,
+    "mergedStoneBatches": 5,
+    "minimumCoreThickness": 0.6126992666817159,
+    "revision": "continuous-arch-r3",
+    "solidParapets": true,
+    "span": 8,
+    "terrainBankContactVerified": false,
+    "walkWidth": 3.2
+  },
+  "bridgeCrownRise": 0.75,
+  "bridgeMaxRadialGrade": 0.28635569960705604,
+  "roadMaxRadialGradeExcludingBridge": 0.15165953226522158,
+  "planeHeightRange": [
+    16.36724188970402,
+    22.914138645585627
+  ],
+  "cypressHeightRange": [
+    19.76759922180176,
+    27.05040077819824
+  ],
+  "normalInventory": {
+    "planeTrees": 6,
+    "cypresses": 12,
+    "hollyhockClumps": 17,
+    "flowers": 6544,
+    "curledLeafClumps": 1380
+  },
+  "normalEvidence": [
+    "normal-overview-final-r35.png",
+    "normal-bridge-final-r35.png",
+    "normal-mounted-tree-scale-r35.png",
+    "normal-final-audit.json",
+    "normal-riding-scale-audit.json",
+    "normal-console-final.json"
+  ],
+  "checks": {
+    "targetAndHeight": 6,
+    "routeSupport": 7,
+    "ridingController": 9,
+    "ridingBridgeBoundaries": 2,
+    "oldPineModelCollider": 1,
+    "advisorBridge": 74
+  },
+  "consoleErrors": [],
+  "missing": [
+    "complete actual mounted new bridge crossing and mountain circuit",
+    "full tapestry material and fine botanical/animal refinement",
+    "all bridge bank contacts and viewpoints navigation coverage"
+  ],
+  "jevActual": "jev-final-result.json",
+  "jevCache": "jev-final-cache.json",
+  "committed": false,
+  "pushed": false
+}

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Barycentric Gizmo (1 sub + 1 dot)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #6d6f74; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #f2f4f6;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #eef1f4;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">重心坐标 gizmo —— 每个权重 = 1 次减法 + 1 次点积（974579499802202113）</div>
+<div id="hud"></div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+/**
+ * barycentric.html — src/barycentric.js 的验证页 / 教学 gizmo。
+ *
+ * 照参考片 974579499802202113（+ 配对片 974564862729838592）复刻：
+ *   灰色地面、细深色三角形边框、一个白球在三角形里来回滑、
+ *   三个角各挂一颗小球（红/绿/蓝 = 三个权重）、某个角上立三根坐标轴箭头。
+ *
+ * 和片子唯一的差别：片子里那三颗小球挂在**顶点**上（= 权重为 1 的位置），
+ * 这里让它们挂在 `w_i * 顶点`（= 权重的实际大小），所以小球会随查询点滑动、
+ * 并且始终落在"顶点→重心"这条线上 —— 权重的几何含义更直白。
+ *
+ * URL：`?spin=0` 停转，`?mode=naive|fast` 换算法（两者画面必须一致）。
+ */
+import * as THREE from 'three';
+import { prepTriangle, barycentric, barycentricCramer, insideTriangle, fromBarycentric } from '../src/barycentric.js';
+
+const q = new URLSearchParams(location.search);
+const cv = document.getElementById('c');
+const hud = document.getElementById('hud');
+
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#6d6f74');
+scene.fog = new THREE.Fog('#6d6f74', 12, 26);
+
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 120);
+
+scene.add(new THREE.HemisphereLight(0xe8eef4, 0x8a8579, 1.25));
+const sun = new THREE.DirectionalLight(0xfff4e2, 2.1);
+sun.position.set(-3.5, 7, 4.5);
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0xbfd4e6, 0.65);
+fill.position.set(5, 3, -4);
+scene.add(fill);
+
+// 地面（片子里是一大片冷灰，很浅的明暗变化）
+const ground = new THREE.Mesh(
+  new THREE.BoxGeometry(26, 0.4, 26),
+  new THREE.MeshStandardMaterial({ color: '#7d7f84', roughness: 1.0, metalness: 0 }),
+);
+ground.position.y = -0.2;
+scene.add(ground);
+
+// 三角形：照片子取一个偏钝角的大三角。坐标是手摆的（片子里量不出世界尺度，
+// 只能量比例：底边 : 高 ≈ 2.1 : 1）。
+const A = { x: -3.6, y: 0.02, z: 2.2 };
+const B = { x: 3.9, y: 0.02, z: 1.15 };
+const C = { x: 0.55, y: 0.02, z: -3.3 };
+const prep = prepTriangle(A, B, C);
+
+const V = [A, B, C].map((p) => new THREE.Vector3(p.x, p.y, p.z));
+
+// 三角形填充：极浅的半透明白，让"点在三角形内"一眼能看出来
+{
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(
+    [...V[0].toArray(), ...V[1].toArray(), ...V[2].toArray()], 3));
+  g.computeVertexNormals();
+  const m = new THREE.MeshBasicMaterial({ color: '#c9ccd2', transparent: true, opacity: 0.16, side: THREE.DoubleSide });
+  scene.add(new THREE.Mesh(g, m));
+}
+
+// 边：细深线（片子里边框是细的深灰，不是黑色）
+{
+  const pts = [V[0], V[1], V[2], V[0]];
+  const g = new THREE.BufferGeometry().setFromPoints(pts);
+  scene.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: '#2b2d31' })));
+}
+
+// 三个顶点小球：红/绿/蓝 —— 和片子里角上的小球同色（顺序按 RGB 惯例）
+const COLORS = [0xd8412f, 0x3f8f3a, 0x2f5fb0];
+const cornerBalls = V.map((p, i) => {
+  const m = new THREE.Mesh(
+    new THREE.SphereGeometry(0.16, 20, 14),
+    new THREE.MeshStandardMaterial({ color: COLORS[i], roughness: 0.55 }),
+  );
+  m.position.copy(p);
+  scene.add(m);
+  return m;
+});
+
+// A 角上的三根坐标轴箭头（片子里只在一个角上有，绿上/红/蓝）
+{
+  const axes = [
+    [new THREE.Vector3(1, 0, 0), 0xc4453a],
+    [new THREE.Vector3(0, 1, 0), 0x4a9440],
+    [new THREE.Vector3(0, 0, 1), 0x3a5fb8],
+  ];
+  for (const [dir, col] of axes) {
+    const arrow = new THREE.ArrowHelper(dir, V[0], 1.15, col, 0.28, 0.16);
+    scene.add(arrow);
+  }
+}
+
+// 查询点：白球（片子里那颗一直在动的）
+const dot = new THREE.Mesh(
+  new THREE.SphereGeometry(0.17, 22, 16),
+  new THREE.MeshStandardMaterial({ color: '#f4f2ee', roughness: 0.4 }),
+);
+scene.add(dot);
+
+// 三个"权重球"：位置 = w_i * 顶点 i（权重越大越靠近那个角）
+const weightBalls = COLORS.map((c, i) => {
+  const m = new THREE.Mesh(
+    new THREE.SphereGeometry(0.1, 16, 12),
+    new THREE.MeshStandardMaterial({ color: c, roughness: 0.6 }),
+  );
+  scene.add(m);
+  return m;
+});
+
+// 点 → 三个角的三条细引线（片子里的浅色细线），让权重关系有迹可循
+const spokes = [0, 1, 2].map(() => {
+  const g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+  const l = new THREE.Line(g, new THREE.LineBasicMaterial({ color: '#8d9199', transparent: true, opacity: 0.55 }));
+  scene.add(l);
+  return l;
+});
+
+// 内部路径：和片子一样，白球在三角形里慢慢滑，且**始终不出界**
+// （片子 24 帧里没有一帧点在三角形外）。这里用 1:√2 的 Lissajous，
+// 再把越界的点用"权重夹取"拉回内侧 —— 这也是最省事的"夹在三角形内"做法。
+let t = 0;
+const mode = q.get('mode') === 'naive' ? 'naive' : 'fast';
+let spin = q.get('spin') !== '0';
+let yaw = 0.72, pitch = 0.86, dist = 12.4;
+
+let stats = { w: [1, 0, 0], err: 0, inside: true, frames: 0 };
+
+function lissajous(t) {
+  const r = 1.0;
+  const u = 0.5 + 0.34 * Math.sin(t * 0.61);
+  const v = 0.5 + 0.34 * Math.sin(t * 0.61 * Math.SQRT2 + 1.2);
+  // 重心坐标域里的单位三角形 → 映射到世界坐标（保证不出界）
+  const s = 1 - u - v < 0 ? 0.999 / Math.max(1e-6, (u + v)) : 1;
+  const w = [1 - u * s - v * s, u * s, v * s];
+  return { w, p: fromBarycentric(A, B, C, w), r };
+}
+
+function frame(now) {
+  const dt = Math.min(0.05, (now - (frame.last || now)) / 1000) || 0.016;
+  frame.last = now;
+  t += dt;
+  if (spin) yaw += dt * 0.16;
+
+  const { w, p } = lissajous(t);
+  dot.position.set(p.x, p.y + 0.05, p.z);
+
+  // 用生产路径重算一遍（画面用的是它，不是 lissajous 直接给的 w）
+  const w2 = mode === 'naive'
+    ? barycentricCramer(A, B, C, dot.position)
+    : barycentric(prep, dot.position);
+  const ref = barycentricCramer(A, B, C, dot.position);
+  const err = Math.max(Math.abs(w2[0] - ref[0]), Math.abs(w2[1] - ref[1]), Math.abs(w2[2] - ref[2]));
+
+  for (let i = 0; i < 3; i++) {
+    const k = Math.max(0, w2[i]);
+    weightBalls[i].position.set(V[i].x * k, V[i].y + 0.05, V[i].z * k);
+    const pos = spokes[i].geometry.attributes.position;
+    pos.setXYZ(0, dot.position.x, dot.position.y, dot.position.z);
+    pos.setXYZ(1, V[i].x, V[i].y, V[i].z);
+    pos.needsUpdate = true;
+  }
+
+  stats = { w: w2.map((v) => +v.toFixed(4)), err, inside: insideTriangle(w2), frames: stats.frames + 1 };
+
+  camera.position.set(
+    Math.cos(yaw) * Math.cos(pitch) * dist,
+    Math.sin(pitch) * dist,
+    Math.sin(yaw) * Math.cos(pitch) * dist,
+  );
+  camera.lookAt(0, 0.2, 0);
+
+  hud.textContent =
+    `w = ${w2.map((v) => v.toFixed(3)).join(' / ')}   sum=${w2.reduce((a, b) => a + b, 0).toFixed(6)}\n` +
+    `mode=${mode}  err(vs Cramer)=${err.toExponential(2)}  inside=${insideTriangle(w2)}\n` +
+    `ops/query: sub 1, dot 2   (Cramer: sub 3, dot 4, div 1)`;
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+resize();
+requestAnimationFrame(frame);
+
+window.__worldStats = { kind: 'barycentric' };
+window.__bary = {
+  get stats() { return stats; },
+  look(y, p, d) { yaw = y; pitch = p; dist = d; spin = false; },
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+{
+  "passed": true,
+  "field": {
+    "revision": "mountain-field-93f2901a",
+    "resolution": 128,
+    "validCells": 14884
+  },
+  "occlusion": {
+    "blocked": {
+      "ao": 1,
+      "direct": 0.76
+    },
+    "clear": {
+      "ao": 1,
+      "direct": 1
+    },
+    "closeAO": 0.8864071991001001
+  },
+  "directionUpdated": true,
+  "instancesUnchanged": true,
+  "originalHooksPreserved": true,
+  "repeatedBindingStable": true,
+  "textureDisposals": 2,
+  "materialDisposals": 3,
+  "paletteOnlyReleased": true,
+  "paletteCases": [
+    {
+      "palette": 1,
+      "key": "citadel-mountain-study-13-v1|mountain-field-v2-L0-P1-R1",
+      "rockBase": "929082",
+      "proceduralMossMaximum": 0.6
+    },
+    {
+      "palette": 2,
+      "key": "citadel-mountain-study-13-v1|mountain-field-v2-L0-P2-R1",
+      "rockBase": "a7a9aa",
+      "proceduralMossMaximum": 0.24
+    }
+  ],
+  "mossCases": [
+    {
+      "moss": 0,
+      "palette": 0,
+      "effectiveMossGain": 0
+    },
+    {
+      "moss": 0,
+      "palette": 1,
+      "effectiveMossGain": 0
+    },
+    {
+      "moss": 0,
+      "palette": 2,
+      "effectiveMossGain": 0
+    },
+    {
+      "moss": 0.1,
+      "palette": 0,
+      "effectiveMossGain": 0.1
+    },
+    {
+      "moss": 0.1,
+      "palette": 1,
+      "effectiveMossGain": 0.1
+    },
+    {
+      "moss": 0.1,
+      "palette": 2,
+      "effectiveMossGain": 0.1
+    },
+    {
+      "moss": 1,
+      "palette": 0,
+      "effectiveMossGain": 1
+    },
+    {
+      "moss": 1,
+      "palette": 1,
+      "effectiveMossGain": 1
+    },
+    {
+      "moss": 1,
+      "palette": 2,
+      "effectiveMossGain": 0.24
+    }
+  ],
+  "detailCases": [
+    {
+      "detail": 0,
+      "palette": 0,
+      "defaultGeometryAndNormalShaderUnchanged": true
+    },
+    {
+      "detail": 0,
+      "palette": 2,
+      "defaultGeometryAndNormalShaderUnchanged": true
+    },
+    {
+      "detail": 0.35,
+      "palette": 0,
+      "defaultGeometryAndNormalShaderUnchanged": true
+    },
+    {
+      "detail": 0.35,
+      "palette": 2,
+      "defaultGeometryAndNormalShaderUnchanged": true
+    }
+  ],
+  "gpuCompileTested": false
+}

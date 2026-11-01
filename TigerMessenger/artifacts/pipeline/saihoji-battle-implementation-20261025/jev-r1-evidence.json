@@ -1,0 +1,36 @@
+{
+  "task": "Saihoji battle contact bridge triage",
+  "target": "Actual Batian attack launches original defenders; physical projectiles hit production shield; existing soldiers deploy and recover",
+  "observations": {
+    "source": "Source inspection plus normal UI baseline sortie before contact patch",
+    "findings": [
+      "Baseline moss sortie fired 17 shots, six escort shots; groundAssault assigned=0 because controller rejects moss",
+      "Legacy vanguard deployment explicitly disabled in Batian command mode",
+      "Old arrows attached hull without calling production shield bus; patched swept contact bridge",
+      "No post-patch combat GPU evidence yet"
+    ]
+  },
+  "checks": [
+    {
+      "name": "three real geometry/identity/cycle helper tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "postpatch normal game shield contact",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "existing heavy deployment and recovery in moss",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "Do not bypass actual flagship first strike gate",
+    "Do not enable legacy plane controller in parallel",
+    "No stage or hit injection"
+  ],
+  "evidence_revision": "contact-bridge-r1"
+}

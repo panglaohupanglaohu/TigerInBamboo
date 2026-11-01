@@ -1,0 +1,13 @@
+{
+  "evidence": "../citadel-four-hour-20261005/runtime-1791282351631.png",
+  "target": "../citadel-rail-cliffs-20261006/target-v11-smooth-east-connection.png",
+  "rubricSource": "../citadel-city-detail-20261006/state.json",
+  "scores": {"layout":13,"architecture":16,"materials":14,"environment":8,"landmarkConnections":6,"silhouetteCompleteness":1},
+  "maximum": {"layout":25,"architecture":25,"materials":20,"environment":15,"landmarkConnections":10,"silhouetteCompleteness":5},
+  "visibleFrameScore":58,
+  "fullSceneScore":null,
+  "accepted":false,
+  "hardGatesRetested":false,
+  "priority":"Old-city two-wing connected street infill on existing safe terraces; proposed 8–12 modules, subject to actual footprint and public-route survey.",
+  "limitations":["Single visible panorama only","No CPU or startup credit in visual score","No final route, loaded vehicle, actor, wave or navigation certification","No source changes or installation"]
+}

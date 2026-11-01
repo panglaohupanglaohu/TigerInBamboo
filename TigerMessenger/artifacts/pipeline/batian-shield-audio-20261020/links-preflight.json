@@ -1,0 +1,72 @@
+{
+  "recorded_at_utc": "2026-10-20T18:37:32.377275+00:00",
+  "scope": "Final index and actual authored links HTTP verification, not new gameplay or hearing acceptance",
+  "links": [
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/index.html",
+      "status": 200,
+      "bytes": 3340,
+      "sha256": "f113e4809edc0fa3835b3b82e139755f4777094e550a1fcc26fb7176db558a5f"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/?autostart=1",
+      "status": 200,
+      "bytes": 56152,
+      "sha256": "346b44384051d48c3bf803d15b197327d546790dc72a64fdcdee3084eb3f0d46"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/batian-shield-hit.wav",
+      "status": 200,
+      "bytes": 432044,
+      "sha256": "d3145c8eff52124b91b641ce6d90cd9672c8d86a6a61faa0d686465155c3e60f"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/batian-shield-bomb-mix.wav",
+      "status": 200,
+      "bytes": 624044,
+      "sha256": "24c5f3f7d3f57ddd0433be3dc052f1441ee6ab34315ad63e47f6e9f2d1b27517"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/production-sortie-audio-weighted.json",
+      "status": 200,
+      "bytes": 704,
+      "sha256": "c1f92d082e9c64e123658afcc2e033e3d925733e4858941b6102320c05f5c1a5"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/sound-lifetime-weighted-verification.json",
+      "status": 200,
+      "bytes": 463,
+      "sha256": "8e13e081b55f3da23a72fab3f808a0491c687f0ae8c865d0f70d0d0105203420"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/mixed-preview-verification.json",
+      "status": 200,
+      "bytes": 435,
+      "sha256": "30337f0a964107cf78f7150e4524fa7e5562a2a7e2dbdea5fc9bc6258f8f525c"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/ripple-allocation-result.json",
+      "status": 200,
+      "bytes": 215,
+      "sha256": "5bed56061cf1286f88e329b59101eab6feec01ed5a80d856f74b09f046805b2f"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/ripple-gpu-check.json",
+      "status": 200,
+      "bytes": 924,
+      "sha256": "dfddfd2329e900d1c5848b861947b37ff9e4660e40f30df9b76b6a2cda755892"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/bgm-live-load-verification.json",
+      "status": 200,
+      "bytes": 1159,
+      "sha256": "a15f370251f6e69908ff5040de1a681c9d181144ce95fcfb82e648f2e9b99233"
+    },
+    {
+      "url": "http://localhost:8931/TigerMessenger/artifacts/pipeline/batian-shield-audio-20261020/delivery-manifest.json",
+      "status": 200,
+      "bytes": 3181,
+      "sha256": "cc5cb91b9b82274f1e612b76bdd00e0c0604b3571197b48e24a49f7a38ed3c26"
+    }
+  ]
+}

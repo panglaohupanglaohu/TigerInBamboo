@@ -1,0 +1,318 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-08",
+  "scope": "当前正式湖沼工厂中的动物及人物；沿用代码命名，不是生物学物种鉴定。",
+  "verification": {
+    "method": "实际正式 messengerIslandScene.loadSteps({scene,planetRadius:160}) 默认URL构造、await虎模型、遍历原湖沼19身份数组并90次更新验证对象引用；仅CPU浏览器API shim，无用户存档读写",
+    "locationSearch": "?tour=crystal-v7&autostart=1",
+    "factory": "src/world/moebiusSwamp.js",
+    "factorySHA256": "6d11bf86c9bd3cbc5e16c0f7854d5ebd37db59d200defb21f1e4fc0f8f02d851",
+    "gpu": "前后肖像由主代理另行截图，本清单不宣称GPU验收。",
+    "countMeaning": "工厂对象/人员槽位数量，不等于某相机同时可见数量。",
+    "verifiedAt": "2026-10-07T23:02:51.672Z",
+    "countStatus": "19个身份条目数量与原清单完全一致；13个肖像选项不含额外52桨手槽位。按builder字符串去重为14。",
+    "formalProbe": "final-integration-probe.json",
+    "runtimeReferenceStability": "90次实际inner.update后虎/鲸/维修猴/送水蜥/船/feeder引用不变",
+    "sourceLineNote": "fish/fireflies定位实际内联调用所用builder，而非另造肖像群组。",
+    "formalProbeFactorySHA256": "4a5068881cb0167e2b7303d250422e67946a446b26dc67105ed42bc66f7967ec",
+    "metadataRefreshedAt": "2026-10-07T23:56:06.705633+00:00",
+    "factoryHashScope": "Current delivery source; original verifiedAt/formalProbe remain historical CPU integration evidence, not rerun after latest corrections."
+  },
+  "entries": [
+    {
+      "id": "whale-adult",
+      "label": "成年白鲸",
+      "category": "animal",
+      "count": 1,
+      "builder": "buildBelugaWhale",
+      "hook": "inner.userData.whales[0] / inner.userData.whale",
+      "story": "主湖巡游；原花船喂食关系。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 409
+      }
+    },
+    {
+      "id": "whale-young",
+      "label": "幼白鲸",
+      "category": "animal",
+      "count": 1,
+      "builder": "buildBelugaWhale",
+      "hook": "inner.userData.whales[1]",
+      "story": "scale .55，成鲸附近巡游。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 409
+      }
+    },
+    {
+      "id": "whale-escort",
+      "label": "护航白鲸",
+      "category": "animal_story_character",
+      "count": 1,
+      "builder": "buildBelugaWhale",
+      "hook": "inner.userData.shipyard.escort",
+      "story": "scale .5，泊位绕游、出航船护送、出口领航后潜回；不是幼鲸。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 409
+      }
+    },
+    {
+      "id": "tiger",
+      "label": "成年湖沼虎",
+      "category": "animal_story_character",
+      "count": 1,
+      "builder": "createMoebiusTiger",
+      "hook": "inner.userData.tiger",
+      "story": "坑缘巡游、下阶饮水、见送信人相会与灯谜。",
+      "source": {
+        "file": "src/world/moebiusTiger.js",
+        "line": 7
+      },
+      "modelSources": [
+        "src/assets/characters/moebiusTiger.js",
+        "src/assets/characters/swampTigerV2.js",
+        "src/assets/characters/tigerTargetV1.js"
+      ],
+      "ready": "await inner.userData.tiger.userData.swampTigerV2Ready"
+    },
+    {
+      "id": "monkey-canopy",
+      "label": "普通长尾猴",
+      "category": "animal",
+      "count": 3,
+      "builder": "buildLongTailMonkey",
+      "hook": "inner.children.filter(o=>o.name==='swamp-longtail-monkey' && o.userData.perches)",
+      "story": "scale 1.3；跳枝、停留、投果、躲果，栖点已收拢至真实树干支撑。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 880
+      }
+    },
+    {
+      "id": "monkey-repair",
+      "label": "维修长尾猴",
+      "category": "animal_story_character",
+      "count": 2,
+      "builder": "buildLongTailMonkey",
+      "hook": "inner.userData.shipyard.workers",
+      "story": "workers[0]甲板立桅，workers[1]桅杆顶挥臂；scale .5/.46，保留剧情身份。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 880
+      }
+    },
+    {
+      "id": "glow-bird",
+      "label": "荧光雀",
+      "category": "animal",
+      "count": 4,
+      "builder": "buildSwampBird",
+      "hook": "inner.children.filter(o=>o.name==='swamp-bird')",
+      "story": "scale 1.25；薄荷白/暖杏黄各2，枝间飞行、翼拍及光羽袭扰。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 827
+      }
+    },
+    {
+      "id": "lizard-rim",
+      "label": "岸边荧光蜥蜴",
+      "category": "animal",
+      "count": 2,
+      "builder": "buildGlowLizard",
+      "hook": "inner.children.filter(o=>o.name==='swamp-glow-lizard' && o.userData.baseY>30)",
+      "story": "scale 1.35；沿坑缘往返爬行并避开入口。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 965
+      }
+    },
+    {
+      "id": "lizard-underwater",
+      "label": "湖底荧光蜥蜴",
+      "category": "animal",
+      "count": 1,
+      "builder": "buildGlowLizard",
+      "hook": "inner.children.find(o=>o.name==='swamp-glow-lizard' && o.userData.baseY<20)",
+      "story": "scale 1.35；水下湖底爬行。没有独立的自由游泳蜥蜴工厂，不能另列新物种。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 965
+      }
+    },
+    {
+      "id": "lizard-carrier",
+      "label": "送水蜥蜴",
+      "category": "animal_story_character",
+      "count": 1,
+      "builder": "buildGlowLizard",
+      "hook": "inner.userData.shipyard.waterLizard",
+      "story": "scale .42；背水葫芦沿维修船甲板为桨手送水；不计入岸边3只。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 965
+      }
+    },
+    {
+      "id": "ribbonfish",
+      "label": "荧色蝾螈",
+      "category": "animal",
+      "count": 3,
+      "builder": "buildRibbonFish",
+      "hook": "inner.children.filter(o=>o.name==='swamp-glow-ribbonfish')",
+      "story": "荧色蝾螈，四腿各三趾；沿用ribbonFish内部键、原三只巡游轨道与颜色，头光支持开关。四腿已由主代理GPU及交付审计顶视核图；局部肖像不等于完整剧情验收。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 1006
+      },
+      "namingSource": "2026-10-08用户明确纠正，非带鱼。",
+      "imageEvidence": "compare-salamander-four-legs-top-v2.jpg"
+    },
+    {
+      "id": "fish",
+      "label": "普通斑点鱼",
+      "category": "animal",
+      "count": 9,
+      "builder": "buildFishSchool",
+      "hook": "inner.children.filter(o=>/^swamp-fish-\\d+$/.test(o.name))",
+      "story": "正式工厂内联创建9鱼；导出 fishSchool 为肖像方便构造器，不能额外计数。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 3527
+      }
+    },
+    {
+      "id": "eel",
+      "label": "黄绿鳗",
+      "category": "animal",
+      "count": 1,
+      "builder": "buildSwampEel",
+      "hook": "inner.getObjectByName('swamp-eel')",
+      "story": "湖底以上蛇形巡游。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 729
+      }
+    },
+    {
+      "id": "pink-hanger",
+      "label": "辣椒猴",
+      "category": "animal",
+      "count": 3,
+      "builder": "buildPinkHanger",
+      "hook": "inner.children.filter(o=>o.name==='swamp-pink-hanger')",
+      "story": "辣椒猴，壁侧垂挂摆动；与长尾猴（普通/维修身份）分开物种与行为组。内部pinkHanger键保留兼容。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 805
+      },
+      "namingSource": "用户2026-10-08明确纠正；本轮仅正名，不改形状。"
+    },
+    {
+      "id": "tube-worms",
+      "label": "管状蠕虫",
+      "category": "animal_colony",
+      "count": 11,
+      "builder": "buildTubeWormCluster",
+      "hook": "inner.children.filter(o=>o.name==='swamp-tube-worms')",
+      "story": "默认两簇6+5条；每条管体+顶球2个直接子节点，其他种子每簇4–7条。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 756
+      },
+      "verificationNote": "数量11不变；当前每簇使用合批柔软管体和珊瑚小光球，读取 coralTubeCount 计数，不再按直接子节点除以2。"
+    },
+    {
+      "id": "fireflies",
+      "label": "萤火虫",
+      "category": "animal_swarm",
+      "count": 46,
+      "builder": "buildFireflies",
+      "hook": "inner.children.filter(o=>('followK' in o.userData)&&('flicker' in o.userData))",
+      "story": "Sprite群；水面/壁间漂移闪烁，玩家靠近时环绕/尾随。正式工厂内联创建，导出组不是额外46只。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 3546
+      }
+    },
+    {
+      "id": "flower-boys",
+      "label": "花船黑肤浅发男孩",
+      "category": "human_character",
+      "count": 10,
+      "builder": "buildFlowerBoy",
+      "hook": "inner.userData.lotuses.flatMap(o=>o.userData.passengers)",
+      "story": "默认5船保留各2人的原乘员refs，总数10；新活动分布8人在船、1岸边嬉戏、1随原成年鲸游动喂食。第一舟passengers[1]仍为feeder，不新增人；每船2桨。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 636
+      },
+      "warning": "nativeDoll导出为独立泳者；花舟男孩身份取lotusLeafBoat.userData.passengers（离舟后引用仍保留），不能仅按父节点计数。",
+      "verificationNote": "nativeDoll仍为独立水下泳者构造器，但造型本批已更新；花舟男孩仍应从 lotusLeafBoat.userData.passengers 取。",
+      "activityEvidence": "flower-activities-report.json：4/4 CPU，65采样；GPU另记，不将旧90次整合结果冒充新活动测试。"
+    },
+    {
+      "id": "swimmer",
+      "label": "水下原住民泳者",
+      "category": "human_character",
+      "count": 1,
+      "builder": "buildNativeDoll",
+      "hook": "inner.children.find(o=>o.name==='swamp-native-doll' && !o.userData.flowerBoy)",
+      "story": "独立水下原住民泳者，scaleArgument .95，沿原轨道；本批黑肤浅发与四肢泳动已更新。花船离舟男孩独立排除，不能仅按名字/父节点判断泳者数量。",
+      "source": {
+        "file": "src/world/moebiusSwamp.js",
+        "line": 555
+      },
+      "verificationNote": "身份和数量不变；本批已重制黑肤浅发儿童及四肢泳动，不再是旧棕色积木造型。"
+    },
+    {
+      "id": "rowers",
+      "label": "两艘战船桨手",
+      "category": "human_character",
+      "count": 52,
+      "builder": "createFisherBoat → createWarshipV6",
+      "hook": "inner.userData.shipyard.dock/departure.userData.crew.userData.rows",
+      "story": "每船26个桨手槽位；送水/划桨/受袭身份。工厂存在不等于某镜头可见，正式海面遮挡可隐藏整船。",
+      "source": {
+        "file": "src/assets/harbor.js",
+        "line": 116
+      },
+      "modelSource": {
+        "file": "src/assets/warshipV6.js",
+        "line": 17
+      }
+    }
+  ],
+  "otherEcology": [
+    {
+      "label": "紫蘑菇/珊瑚形生态",
+      "category": "fungal_form",
+      "countDefault": 6,
+      "hook": "inner.children.filter(o=>o.name==='swamp-mushroom')",
+      "note": "默认坑缘4+湖底2；其他种子坑缘可能因入口净空跳过。非动物。"
+    },
+    {
+      "label": "贝壳",
+      "category": "decorative_shell",
+      "countDefault": 3,
+      "hook": "inner.children.filter(o=>o.name==='swamp-shell')",
+      "note": "没有活体行为，不能据壳断言存在3只活软体动物。"
+    },
+    {
+      "label": "世界树、根藤、巨花、花蕊、岸边植被",
+      "category": "flora",
+      "note": "存在但不在动物/人物肖像计数；花蕊不是第三个娃娃。"
+    }
+  ],
+  "excluded": [
+    "送信人由外层玩家/agentMessenger工厂创建，不计为湖沼工厂原生生物。",
+    "水果、光羽弹、水滴、气泡、食物、光池不是动物。",
+    "叶舟、维修筏、船体是道具。"
+  ],
+  "authorStatements": [],
+  "projectInference": [
+    "角色名称、分类及故事身份来自项目代码，不归为Sable作者原设。"
+  ]
+}

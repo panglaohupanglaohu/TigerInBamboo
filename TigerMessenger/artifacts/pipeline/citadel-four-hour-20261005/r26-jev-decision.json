@@ -1,0 +1,55 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "fcacccd8a731250d3fafd8329cfc08335496b110283d83cfd9b3a82967daaa44",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "navigation",
+      "confidence": 0.29,
+      "probabilities": {
+        "geometry": 0.14,
+        "navigation": 0.44,
+        "review": 0.42,
+        "lighting": 0,
+        "dressing": 0
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.97
+    }
+  },
+  "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 91,
+    "cost_usd": 0.000422,
+    "credits_remaining_usd": 4.961132
+  },
+  "elapsed_ms": 2101,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "bridge city entry narrow phase collisions",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "landmark plaza rail route editor production integration",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "independent final visual score >95",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

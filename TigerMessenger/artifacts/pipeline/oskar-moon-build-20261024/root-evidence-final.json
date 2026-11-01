@@ -1,0 +1,31 @@
+{
+  "round": "four-new-pines-final-and-side-updates",
+  "observations": [
+    "Latest user correction: do not change existing scene; ADD FOUR pines. Normal game default entry actually loaded. DOM installed scene reports4new IDs2/4/5/6 all visible, original ancient pine separate, no rejected sites,1082actual carved hills samples0missing. Root GPU saw restored original forest plus new authored plants, floating moon, retained lake and walking ring.",
+    "Original-source forest exclusion and original trunk collider changes were removed. New roots avoid original colliders; actual-hill, rail rejection/relocation and preserved-props tests3pass; companion reseat/disposal probe passes. Normal main errors count 0.",
+    "Bookshop smoke production now8stable rise profiles7-25with independent lifetime/phase, common wind, emitter origins/count retained. Only stable profiles and normal-game loading checked; close smoke GPU pair not captured.",
+    "Shield production synth replaced with3diminishing wet plops/splash per hit, no longbass/chime; same actual interception callback and world audio bus preserved. Browser same-source OfflineAudioContext9hits peak0.8369 clipped0 tail0. No subjective listening or fresh real-game sound capture claimed."
+  ],
+  "checks": [
+    {
+      "name": "Four ADDITIONS in normal game and original scene preserved checked",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Finite actual ground and root/ring constraints",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "All-angle camera/player walkthrough",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Shared production sound render finite and unclipped",
+      "required": true,
+      "passed": true
+    }
+  ]
+}

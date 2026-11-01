@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "b31aadd962b26b5dd6e44dffa829eb6a15e82a5e4f80b5079fbeb5183f16c106",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.71
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.65,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0.28,
+        "navigation": 0,
+        "review": 0.72
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.24
+    }
+  },
+  "usage": {
+    "input_tokens": 929,
+    "output_tokens": 91,
+    "cost_usd": 0.000391,
+    "credits_remaining_usd": 4.919692
+  },
+  "elapsed_ms": 2674,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "normal game new colours visually checked",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

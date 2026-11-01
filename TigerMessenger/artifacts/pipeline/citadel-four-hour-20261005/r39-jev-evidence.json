@@ -1,0 +1,53 @@
+{
+  "version": "r39-arcades-clouds-paving",
+  "goal": "Citadel target v3 >95 visual and all hard checks; not yet accepted",
+  "visual_observations": {
+    "source": "root inspected r39 actual panorama; independent advisor inspected panorama and both city details scored64/100",
+    "sha256": "f448e6d718f6d3528d9e6c446aad98fdfd0ba7c0612dc422fb3d40220806d4cb",
+    "differences": [
+      "Real residential arcades, cooler pastel new main hall, continuous grass and visible original-statue/horse paved plaza.",
+      "Real WFC roof solving and atomic delete/recompute UI verified r38; v7r39 added geometry CPU checks.",
+      "Actual depth-derived pale coast and cyan center, shadows now soft and stripe-free.",
+      "Cities still small relative terrain; stair houses isolated; clouds show transparent overlapping silhouettes.",
+      "Static curved five-arch foreground railway remains without boarding/navigation, station roofs not yet built."
+    ]
+  },
+  "checks": [
+    {
+      "name": "r39 actual GPU/app sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r38 real WFC solve/contradiction rollback/atomic occupancy demonstrated",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Original statue/horse migration night/day functional r32",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Static railway sampled grade/gauge/footings",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Production boarding and continuous playable navigation",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Independent actual target visual score >95",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No concept or CPU tests counted as final visual acceptance",
+    "Keep r17 mountain geometry",
+    "No source code, private data, images or credentials in request",
+    "Continue user authorized five hour window through 2026-10-06 07:13 Asia Shanghai"
+  ]
+}

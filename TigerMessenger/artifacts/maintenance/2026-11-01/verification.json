@@ -1,0 +1,104 @@
+{
+  "active_links": 4543,
+  "link_hash_failures": [],
+  "http_failures": [],
+  "http_new_full_hash_checked": 134,
+  "http_existing_method": "HEAD",
+  "restored": null,
+  "last_run": {
+    "project": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger",
+    "archive": "/Users/panglaohu/Downloads/TigerMessenger-Archive",
+    "retention_days": 7,
+    "files": 134,
+    "bytes": 24037986,
+    "tracked_cold_bytes_kept": 2026222538,
+    "applied": true,
+    "moved_files": 134,
+    "offloaded_bytes": 24037986
+  },
+  "project_bytes": 10522517504,
+  "archive_bytes": 2016935936,
+  "older_than_90_days": [],
+  "tracked_large_old": [
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v1/equatorialClouds.blend",
+      "bytes": 72553531
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v2/equatorialClouds.blend",
+      "bytes": 72552161
+    },
+    {
+      "path": "TigerMessenger/artifacts/world-migration/import-repair/original-world-v1.before.glb",
+      "bytes": 65172612
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v1/saihoji.blend",
+      "bytes": 52582003
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v2/saihoji.blend",
+      "bytes": 51757994
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/citadel-mountain-forest/mountain-forest-layout-r02.blend",
+      "bytes": 21522747
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/citadel-mountain-forest/mountain-forest-layout-r03.blend",
+      "bytes": 21446146
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/citadel-compact-ascent/before-common-frame.glb",
+      "bytes": 21324328
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v1/moebiusSwamp.blend",
+      "bytes": 19035109
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v2/moebiusSwamp.blend",
+      "bytes": 18975906
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v2/swampZone.blend",
+      "bytes": 18614299
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v1/swampZone.blend",
+      "bytes": 18582250
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/citadel-terrain-rebuild/current-castle-baseline.glb",
+      "bytes": 18345884
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/moebius-v10/city-r10.glb",
+      "bytes": 18200984
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v1/bookshopHydrangeas.blend",
+      "bytes": 16915373
+    },
+    {
+      "path": "TigerMessenger/assets/models/optimized/batch-candidates-v2/bookshopHydrangeas.blend",
+      "bytes": 16190469
+    },
+    {
+      "path": "TigerMessenger/artifacts/pipeline/citadel-compact-ascent/before-old-harbor-overlay.glb",
+      "bytes": 15325276
+    },
+    {
+      "path": "TigerMessenger/artifacts/citadel-blue-night/layering-01/project/assets/original.glb",
+      "bytes": 15209100
+    },
+    {
+      "path": "TigerMessenger/artifacts/citadel-blue-night/layering-02/project/assets/original.glb",
+      "bytes": 15209100
+    },
+    {
+      "path": "TigerMessenger/artifacts/citadel-blue-night/round-01/project/assets/original.glb",
+      "bytes": 15209100
+    }
+  ]
+}

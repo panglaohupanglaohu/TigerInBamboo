@@ -1,0 +1,21 @@
+locust 3112964 [
+  { name: 'idle', duration: 1, frames: 31 },
+  { name: 'move', duration: 1.2566370614359172, frames: 39 },
+  { name: 'attack', duration: 2.4, frames: 73 },
+  { name: 'transport', duration: 1, frames: 31 },
+  { name: 'disabled', duration: 1, frames: 31 }
+]
+ant 9429132 [
+  { name: 'idle', duration: 1, frames: 31 },
+  { name: 'move', duration: 1.6534698176788385, frames: 51 },
+  { name: 'attack', duration: 2.4, frames: 73 },
+  { name: 'transport', duration: 1, frames: 31 },
+  { name: 'disabled', duration: 1, frames: 31 }
+]
+beetle 5501316 [
+  { name: 'idle', duration: 1, frames: 31 },
+  { name: 'move', duration: 1.2566370614359172, frames: 39 },
+  { name: 'attack', duration: 2.4, frames: 73 },
+  { name: 'transport', duration: 1, frames: 31 },
+  { name: 'disabled', duration: 1, frames: 31 }
+]

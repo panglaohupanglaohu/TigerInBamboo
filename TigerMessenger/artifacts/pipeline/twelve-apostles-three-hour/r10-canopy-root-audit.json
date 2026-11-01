@@ -1,0 +1,78 @@
+{
+  "method": "actual scrub geometry origin (0,-.88,0) transformed by Float32 instance matrices; independent raycast to final rock along instance local-up; expected burial .005m",
+  "results": [
+    {
+      "seed": 0,
+      "canopy": 0,
+      "maxRootMetadataDistance": 0,
+      "maxSeatingError": 0,
+      "maxAboveSurface": null,
+      "minAboveSurface": null,
+      "miss": 0
+    },
+    {
+      "seed": 1,
+      "canopy": 0,
+      "maxRootMetadataDistance": 0,
+      "maxSeatingError": 0,
+      "maxAboveSurface": null,
+      "minAboveSurface": null,
+      "miss": 0
+    },
+    {
+      "seed": 2,
+      "canopy": 40,
+      "maxRootMetadataDistance": 0.00500067991351047,
+      "maxSeatingError": 7.538547687202099e-7,
+      "maxAboveSurface": -0.004999446731069492,
+      "minAboveSurface": -0.005000679902905018,
+      "miss": 0
+    },
+    {
+      "seed": 3,
+      "canopy": 0,
+      "maxRootMetadataDistance": 0,
+      "maxSeatingError": 0,
+      "maxAboveSurface": null,
+      "minAboveSurface": null,
+      "miss": 0
+    },
+    {
+      "seed": 4,
+      "canopy": 15,
+      "maxRootMetadataDistance": 0.005000786595749395,
+      "maxSeatingError": 9.349574028588461e-7,
+      "maxAboveSurface": -0.0049990877123099655,
+      "minAboveSurface": -0.005000786591017204,
+      "miss": 0
+    },
+    {
+      "seed": 5,
+      "canopy": 20,
+      "maxRootMetadataDistance": 0.005000222924616975,
+      "maxSeatingError": 3.05768021429847e-7,
+      "maxAboveSurface": -0.004999761581420791,
+      "minAboveSurface": -0.005000222921371034,
+      "miss": 0
+    },
+    {
+      "seed": 6,
+      "canopy": 0,
+      "maxRootMetadataDistance": 0,
+      "maxSeatingError": 0,
+      "maxAboveSurface": null,
+      "minAboveSurface": null,
+      "miss": 0
+    },
+    {
+      "seed": 10,
+      "canopy": 0,
+      "maxRootMetadataDistance": 0,
+      "maxSeatingError": 0,
+      "maxAboveSurface": null,
+      "minAboveSurface": null,
+      "miss": 0
+    }
+  ],
+  "pass": true
+}

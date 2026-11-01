@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "47ebc1d37e33010da5d4c3361d3a06469c6205e915f36d6cf2418df8fe28d5d0",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.91
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.89,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.09,
+        "review": 0.91
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.82
+    }
+  },
+  "usage": {
+    "input_tokens": 915,
+    "output_tokens": 91,
+    "cost_usd": 0.000385,
+    "credits_remaining_usd": 4.937935
+  },
+  "elapsed_ms": 1591,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Final complete game troop medical flight visual acceptance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

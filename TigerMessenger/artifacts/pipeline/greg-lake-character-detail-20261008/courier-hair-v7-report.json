@@ -1,0 +1,22 @@
+{
+  "version": "reedbank-hair-7",
+  "draws": 38,
+  "triangles": 39764,
+  "reference": "courier-face-close-v6.jpg actually viewed",
+  "changes": {
+    "crownLocks": "13→9; five frontal locks kept",
+    "tips": "7 tapered closed six-sided curls replace coarse open four-sided tubes",
+    "strands": "6 light muted plum arcs projected on actual curved hair surface; .0013 local stand-off",
+    "nape": "v5 continuous scalp unchanged",
+    "highestY": 0.3036637604236603
+  },
+  "preserved": "non-head geometry SHA256 and world matrices; face v6; head scale, overall 1.66 height, feet0; outfit/rig/animation hooks",
+  "cpu": {
+    "passed": 9,
+    "failed": 0,
+    "log": "validation-courier-hair-v7.txt",
+    "verification": "small pupil first-hit, nape coverage, near-surface arc first-hits, original highest Y, unchanged body fit and geometry"
+  },
+  "gpu": "pending root front/side/back/close review",
+  "rollback": "before-courier-hair-v7/courierMoebius.js.txt; restore only hair block, hairLight palette key and geometryRevision if other edits land"
+}

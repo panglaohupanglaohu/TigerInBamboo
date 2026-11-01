@@ -1,0 +1,30 @@
+{
+  "recorded_at_utc": "2026-10-20T17:02:07.368761+00:00",
+  "scope": "Fresh normal game weighted sound version; actual UI bookshop sortie, camera restored",
+  "blockedHits": 200,
+  "flagshipAudioAccepted": 50,
+  "flagshipAudioSkipped": 95,
+  "otherShieldContacts": 55,
+  "shots": 17,
+  "arsenal": {
+    "cannon": 3,
+    "rain": 3,
+    "ion": 10,
+    "traction": 1,
+    "robotHits": 22,
+    "robotsShattered": 7,
+    "effectsAtEnd": 0,
+    "pendingProjectilesAtEnd": 0
+  },
+  "end": {
+    "phase": "idle",
+    "energy": 100,
+    "shield": false,
+    "completedTargets": [
+      "bookshop"
+    ]
+  },
+  "consoleErrorsSeen": [],
+  "subjectiveListening": false,
+  "individualWavefrontVisualCloseup": false
+}

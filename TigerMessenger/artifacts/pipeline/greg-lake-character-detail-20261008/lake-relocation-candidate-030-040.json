@@ -1,0 +1,677 @@
+{
+  "pierStats": {
+    "components": 165,
+    "minHorizontalWorld": 36.70085498002055,
+    "nearName": "gate-site-GateSite_stone-solid"
+  },
+  "connectorCount": 33,
+  "maxConnectorLength": 2.189049005508423,
+  "minConnectorY": 136.94469003345696,
+  "initialTowers": [
+    {
+      "id": "moebius-grand-community-tower",
+      "local": {
+        "lx": 0.2752623323100341,
+        "lz": -0.3286679079564608
+      },
+      "lakeDistance": 78.39574310926179
+    },
+    {
+      "id": "moebius-trackside-gold-right",
+      "local": {
+        "lx": 0.19428203230275518,
+        "lz": 0.17650635094610975
+      },
+      "lakeDistance": 38.230933967291755
+    },
+    {
+      "id": "moebius-trackside-gold-left",
+      "local": {
+        "lx": 0.5120319397786856,
+        "lz": -0.05313466520526787
+      },
+      "lakeDistance": 35.299747684326334
+    }
+  ],
+  "elapsedMs": 31631.968417,
+  "original": {
+    "lx": 0.3,
+    "lz": 0.4,
+    "afterRotation": {
+      "lx": 0.4598076211353314,
+      "lz": 0.19641016151377552
+    },
+    "distanceFromOld": 0,
+    "trackCenterDistance": 47.49214704839617,
+    "rim20Clearance": 23.19214704839617,
+    "canopy30Clearance": 13.19214704839617,
+    "nearestTrack": {
+      "name": "blue",
+      "t": 0.21533203125
+    },
+    "nearestTowers": [
+      {
+        "id": "moebius-trackside-gold-left",
+        "distance": 33.45762009440948
+      },
+      {
+        "id": "moebius-trackside-gold-left",
+        "distance": 35.29974768432626
+      },
+      {
+        "id": "moebius-trackside-gold-left",
+        "distance": 35.878432913196946
+      }
+    ]
+  },
+  "radius": 144.2,
+  "canopyRadius": 36.42745763823397,
+  "swampPosition": [
+    -97.21131177035363,
+    -79.48481062164045,
+    -70.89263533209255
+  ],
+  "bridgeBeforeDispose": null,
+  "best": [
+    {
+      "lx": 0.3,
+      "lz": 0.4,
+      "afterRotation": {
+        "lx": 0.4598076211353314,
+        "lz": 0.19641016151377552
+      },
+      "distanceFromOld": 0,
+      "trackCenterDistance": 47.49214704839617,
+      "rim20Clearance": 23.19214704839617,
+      "canopy30Clearance": 13.19214704839617,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.21533203125
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 33.45762009440948
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 35.29974768432626
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 35.878432913196946
+        }
+      ]
+    },
+    {
+      "lx": 0.275,
+      "lz": 0.4,
+      "afterRotation": {
+        "lx": 0.43815698604072073,
+        "lz": 0.2089101615137755
+      },
+      "distanceFromOld": 3.510684352524752,
+      "trackCenterDistance": 46.77908983480983,
+      "rim20Clearance": 22.47908983480983,
+      "canopy30Clearance": 12.47908983480983,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.21435546875
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 32.71868153035893
+        },
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 35.345270895738295
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 36.271024550408015
+        }
+      ]
+    },
+    {
+      "lx": 0.325,
+      "lz": 0.4,
+      "afterRotation": {
+        "lx": 0.48145825622994276,
+        "lz": 0.18391016151377565
+      },
+      "distanceFromOld": 3.5108748548381365,
+      "trackCenterDistance": 48.319426700498276,
+      "rim20Clearance": 24.019426700498276,
+      "canopy30Clearance": 14.019426700498276,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.21630859375
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 30.769334397703417
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 33.03328859773996
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 39.08824771171093
+        }
+      ]
+    },
+    {
+      "lx": 0.3,
+      "lz": 0.375,
+      "afterRotation": {
+        "lx": 0.4473076211353317,
+        "lz": 0.17475952641916462
+      },
+      "distanceFromOld": 3.552237861379952,
+      "trackCenterDistance": 44.00144028222025,
+      "rim20Clearance": 19.70144028222025,
+      "canopy30Clearance": 9.70144028222025,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.215576171875
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 32.8697029318676
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 35.86233012627011
+        },
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 36.29652022910986
+        }
+      ]
+    },
+    {
+      "lx": 0.3,
+      "lz": 0.425,
+      "afterRotation": {
+        "lx": 0.4723076211353316,
+        "lz": 0.21806079660838637
+      },
+      "distanceFromOld": 3.55237906813315,
+      "trackCenterDistance": 50.99076336971004,
+      "rim20Clearance": 26.690763369710037,
+      "canopy30Clearance": 16.690763369710037,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.21533203125
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 31.25383297254217
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 34.68043316346199
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 37.892636792559095
+        }
+      ]
+    },
+    {
+      "lx": 0.325,
+      "lz": 0.375,
+      "afterRotation": {
+        "lx": 0.4689582562299423,
+        "lz": 0.16225952641916427
+      },
+      "distanceFromOld": 4.8926512554086,
+      "trackCenterDistance": 44.85869165934329,
+      "rim20Clearance": 20.558691659343292,
+      "canopy30Clearance": 10.558691659343292,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.216552734375
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 30.40846498639224
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 33.335743085540194
+        },
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 39.433901723836335
+        }
+      ]
+    },
+    {
+      "lx": 0.275,
+      "lz": 0.425,
+      "afterRotation": {
+        "lx": 0.45065698604072035,
+        "lz": 0.23056079660838627
+      },
+      "distanceFromOld": 4.8927908051915265,
+      "trackCenterDistance": 50.30027053345997,
+      "rim20Clearance": 26.00027053345997,
+      "canopy30Clearance": 16.00027053345997,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.21435546875
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 31.395743858315182
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 34.21701059752204
+        },
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 37.672509325168654
+        }
+      ]
+    },
+    {
+      "lx": 0.275,
+      "lz": 0.375,
+      "afterRotation": {
+        "lx": 0.42565698604072066,
+        "lz": 0.1872595264191645
+      },
+      "distanceFromOld": 5.094118895236837,
+      "trackCenterDistance": 43.26119779677908,
+      "rim20Clearance": 18.96119779677908,
+      "canopy30Clearance": 8.961197796779079,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.214599609375
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 33.245965607588154
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 34.36970925995209
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 35.52095771546443
+        }
+      ]
+    },
+    {
+      "lx": 0.3,
+      "lz": 0.35,
+      "afterRotation": {
+        "lx": 0.43480762113533156,
+        "lz": 0.15310889132455344
+      },
+      "distanceFromOld": 7.104321515135411,
+      "trackCenterDistance": 40.51856578705953,
+      "rim20Clearance": 16.21856578705953,
+      "canopy30Clearance": 6.2185657870595294,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.2158203125
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 30.641325117576717
+        },
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 34.62954671451575
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 38.43010004615763
+        }
+      ]
+    },
+    {
+      "lx": 0.275,
+      "lz": 0.45,
+      "afterRotation": {
+        "lx": 0.4631569860407207,
+        "lz": 0.2522114317029975
+      },
+      "distanceFromOld": 7.797187457554341,
+      "trackCenterDistance": 53.82532344432955,
+      "rim20Clearance": 29.525323444329548,
+      "canopy30Clearance": 19.525323444329548,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.214111328125
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 30.443711658059154
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 32.405572705431524
+        },
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 40.18810611873106
+        }
+      ]
+    },
+    {
+      "lx": 0.25,
+      "lz": 0.375,
+      "afterRotation": {
+        "lx": 0.40400635094610976,
+        "lz": 0.1997595264191646
+      },
+      "distanceFromOld": 7.995554004511064,
+      "trackCenterDistance": 42.62923243530438,
+      "rim20Clearance": 18.32923243530438,
+      "canopy30Clearance": 8.32923243530438,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.213623046875
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 30.308492247065086
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 31.443632855624166
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 38.32275169399307
+        }
+      ]
+    },
+    {
+      "lx": 0.275,
+      "lz": 0.35,
+      "afterRotation": {
+        "lx": 0.41315698604072065,
+        "lz": 0.16560889132455353
+      },
+      "distanceFromOld": 8.05058196122145,
+      "trackCenterDistance": 39.749291423892956,
+      "rim20Clearance": 15.449291423892955,
+      "canopy30Clearance": 5.449291423892956,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.21484375
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-right",
+          "distance": 31.4203087643436
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 33.48255256423005
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 36.304080393657514
+        }
+      ]
+    },
+    {
+      "lx": 0.65,
+      "lz": 0.375,
+      "afterRotation": {
+        "lx": 0.7504165124598849,
+        "lz": -0.00024047358083556858
+      },
+      "distanceFromOld": 49.14359594504301,
+      "trackCenterDistance": 42.632623673977605,
+      "rim20Clearance": 18.332623673977604,
+      "canopy30Clearance": 8.332623673977604,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.259765625
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 31.376767899955627
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 35.06244017428784
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 41.13846718837286
+        }
+      ]
+    },
+    {
+      "lx": 0.65,
+      "lz": 0.35,
+      "afterRotation": {
+        "lx": 0.737916512459885,
+        "lz": -0.02189110867544642
+      },
+      "distanceFromOld": 49.38342604348901,
+      "trackCenterDistance": 40.47626766074911,
+      "rim20Clearance": 16.176267660749108,
+      "canopy30Clearance": 6.176267660749109,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.25732421875
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 32.803734412179004
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 33.836273744772264
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 37.82178329166379
+        }
+      ]
+    },
+    {
+      "lx": 0.65,
+      "lz": 0.325,
+      "afterRotation": {
+        "lx": 0.7254165124598851,
+        "lz": -0.04354174377005748
+      },
+      "distanceFromOld": 49.875194722319556,
+      "trackCenterDistance": 38.106717843514026,
+      "rim20Clearance": 13.806717843514026,
+      "canopy30Clearance": 3.8067178435140265,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.255126953125
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 30.77276670823496
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 34.50768848988137
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 36.45861477225793
+        }
+      ]
+    },
+    {
+      "lx": 0.675,
+      "lz": 0.375,
+      "afterRotation": {
+        "lx": 0.7720671475544962,
+        "lz": -0.012740473580835483
+      },
+      "distanceFromOld": 52.646098898993664,
+      "trackCenterDistance": 39.94951482619686,
+      "rim20Clearance": 15.64951482619686,
+      "canopy30Clearance": 5.649514826196861,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.26171875
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 33.765870360425765
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 37.84306892220383
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 41.0199319096774
+        }
+      ]
+    },
+    {
+      "lx": 0.675,
+      "lz": 0.4,
+      "afterRotation": {
+        "lx": 0.784567147554496,
+        "lz": 0.008910161513775435
+      },
+      "distanceFromOld": 52.67066654400965,
+      "trackCenterDistance": 41.736792089934504,
+      "rim20Clearance": 17.436792089934503,
+      "canopy30Clearance": 7.436792089934504,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.263916015625
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 31.715441886254553
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 40.12949519253818
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 44.35280748685006
+        }
+      ]
+    },
+    {
+      "lx": 0.675,
+      "lz": 0.35,
+      "afterRotation": {
+        "lx": 0.7595671475544961,
+        "lz": -0.034391108675446494
+      },
+      "distanceFromOld": 52.860282178961725,
+      "trackCenterDistance": 37.9739151428508,
+      "rim20Clearance": 13.673915142850799,
+      "canopy30Clearance": 3.6739151428507997,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.259521484375
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 35.74896905253232
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 36.03268886386871
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 37.686483935595525
+        }
+      ]
+    },
+    {
+      "lx": 0.7,
+      "lz": 0.4,
+      "afterRotation": {
+        "lx": 0.8062177826491072,
+        "lz": -0.0035898384862244077
+      },
+      "distanceFromOld": 56.18172432361915,
+      "trackCenterDistance": 38.860181127501626,
+      "rim20Clearance": 14.560181127501625,
+      "canopy30Clearance": 4.560181127501626,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.26513671875
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 34.457416063882164
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 42.88987804017479
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 44.54013376213024
+        }
+      ]
+    },
+    {
+      "lx": 0.7,
+      "lz": 0.425,
+      "afterRotation": {
+        "lx": 0.818717782649107,
+        "lz": 0.018060796608386494
+      },
+      "distanceFromOld": 56.437504850029896,
+      "trackCenterDistance": 40.39607101327341,
+      "rim20Clearance": 16.096071013273413,
+      "canopy30Clearance": 6.096071013273414,
+      "nearestTrack": {
+        "name": "blue",
+        "t": 0.267333984375
+      },
+      "nearestTowers": [
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 32.85085862325347
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 45.19745023389053
+        },
+        {
+          "id": "moebius-trackside-gold-left",
+          "distance": 47.86445446169031
+        }
+      ]
+    }
+  ]
+}

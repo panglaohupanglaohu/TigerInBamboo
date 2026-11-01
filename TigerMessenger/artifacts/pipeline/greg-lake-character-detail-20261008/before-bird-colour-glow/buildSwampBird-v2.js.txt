@@ -1,0 +1,39 @@
+function buildSwampBird(rnd, color) {
+  const g = new THREE.Group();
+  g.name = "swamp-bird";
+  // Same approved anatomy: colour belongs to real head, breast and feather pieces.
+  const head=0xdd93ab,breast=0xf1d59a,wingColor=0x72cfc0,tailColor=0x54b5ae,featherLight=0xb8f3d5;
+  const pieces = [
+    coralEllipsoid([0,0,0],[.24,.22,.51],breast),
+    coralEllipsoid([0,.14,.43],[.21,.2,.25],head),
+    coralEllipsoid([0,.11,.68],[.065,.07,.21],0x8a7782),
+    coralEllipsoid([-.095,.01,-.6],[.085,.04,.3],tailColor,[0,-.14,0]),
+    coralEllipsoid([.095,.01,-.6],[.085,.04,.3],tailColor,[0,.14,0]),
+    ...[-1,1].map(side=>coralEllipsoid([side*.183,.19,.48],[.028,.033,.033],CORAL_ACTOR_INK))
+  ];
+  const body=coralFineActorBatch(pieces);body.name='swamp-bird-anatomy';g.add(body);
+  for(const side of [-1,1]) {
+    const wing=coralFineActorBatch([
+      coralEllipsoid([side*.44,0,-.03],[.62,.055,.29],wingColor,[0,side*.25,0]),
+      coralEllipsoid([side*.85,-.015,-.23],[.42,.035,.12],featherLight,[0,side*.45,0])
+    ]);
+    wing.position.set(side*.17,.08,0);wing.rotation.z=side*.5;
+    wing.userData.side=side;wing.name='swamp-bird-wing';g.add(wing);
+    g.userData[`wing${side>0?'R':'L'}`]=wing;
+  }
+  // A small attached mint aureole survives both daylight and a white review
+  // background. Normal blending retains its colour there; no white bloom ball,
+  // point lights, extra meshes or frame allocations. The shared texture stays.
+  body.material.toneMapped=false;
+  for(const wing of [g.userData.wingL,g.userData.wingR])wing.material.toneMapped=false;
+  const halo = glowSprite(0x91efce, 1.12, 0.38, 'signal');
+  halo.material.blending=THREE.NormalBlending;halo.material.toneMapped=false;
+  g.add(halo);g.userData.halo=halo;
+  g.userData.orbitR = 15 + rnd() * 11;
+  g.userData.orbitY = 44 + rnd() * 7;
+  g.userData.dart = 2.5 + rnd() * 3.5;
+  g.userData.speed = 0.22 + rnd() * 0.18;
+  g.userData.phase = rnd() * Math.PI * 2;
+  g.userData.coralActorVersion=1;
+  return g;
+}

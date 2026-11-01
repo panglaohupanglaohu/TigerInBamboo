@@ -1,0 +1,77 @@
+{
+  "status": "deadline_closed_incomplete",
+  "deadline_utc": "2026-10-29T21:25:00Z",
+  "deadline_beijing": "2026-10-30 05:25",
+  "automation_id": "automation",
+  "interval_minutes": 10,
+  "sequence": [
+    "mountain and creek geometry",
+    "main road and piano branch",
+    "vegetation and castle"
+  ],
+  "phase": "right-bank road/stream composition rebuilt; final normal verification",
+  "targets": {
+    "castle_close": "morris-actual-target-20261029/target-v1.png",
+    "right_bank": "morris-replanned-panorama-20261029/right-bank-approach-target-v1.png",
+    "panorama": "morris-replanned-panorama-20261029/full-right-bank-panorama-v2-court-branch.png"
+  },
+  "ownership": {
+    "root": "All current integration and vegetation; prior advisor sources retained. Oskar subsequent turn failed credits; root continues."
+  },
+  "runtime_promoted": true,
+  "geometry_notes": "Castle west(-14,5), lower court(30,12), bridge near(24,34), span12m; main approach now stays right bank with gentle S instead of far west detour. Creek downstream controls(27,50),(20,66), sea outlet retained. Court Y fork before east/right bridge end. Current r71 formal loading; earlier r67/r66 evidence not current full traversal.",
+  "known_pending": [
+    "Exposed slopes now shared triangular3.2m authority and bent benches; broad smooth front meadow/rock silhouette still below three targets",
+    "Formal r66 court actually seen with original elder, black box instrument, original pine/rocks and clear approach; original ensemble preserved",
+    "Prior r66/r67 bridge1 court1 and resume proved. Current r71 route3/changed downstream creek awaits fresh formal traversal and E. Input clicks still time out, CUA reset restores old tab reads.",
+    "V18 cape prepared but not integrated; mount neigh and rear still pending",
+    "No target-match acceptance; castle and foliage detail still below target"
+  ],
+  "last_round_utc": "2026-10-29T20:29:00Z",
+  "current_profile": "r9 triangular rock with Route30 r3 and foreground creek course",
+  "rock_shoulders": "r8; r9 rejected after actual GPU",
+  "evidence": {
+    "route": "route-checks-r71.json",
+    "controller": "patrol-checks-r71.json",
+    "castle": "component-r6-castle.png",
+    "court_occlusion": "component-r6-court-occluded.png",
+    "rejected_r9": "component-r9-castle-rejected.png",
+    "bare": "component-r8-bare.png",
+    "overview": "component-r7-overview.png",
+    "normal": "normal-r71-audit.json",
+    "normal_image": "normal-r71-bridge.png",
+    "court_clear": "normal-r66-court.png",
+    "bridge_chart": "bridge-checks-r8.json",
+    "profile_candidate": "component-r9-rock-castle.png",
+    "route_candidate": "route-checks-r9-profile.json",
+    "patrol_candidate": "patrol-checks-r9-profile.json",
+    "court_resume": "normal-r66-after-court.json",
+    "approach": "component-r71-right-road-creek.png",
+    "obstructed_approach": "normal-r67-bridge-obstructed.png",
+    "budget": "geometry-budget-r67.json",
+    "normal_follow": "normal-r67-later.json",
+    "formal_bridge": "normal-r69-bridge.png"
+  },
+  "footsteps": "Courier footsteps import/create/update removed in src/main.js; fresh normal-entry check pending",
+  "runtime_entry": "morris-threeview-r71",
+  "bridge_geometry": {
+    "scaled_span": 12,
+    "width": 3.2,
+    "central_underside_above_center_water": "1.48 to1.54m chart samples",
+    "grade": 0.15363869355,
+    "scope": "Earlier factory chart; stale after downstream course change, not current ride acceptance"
+  },
+  "candidate_notes": "morrisClean=1 photo query hides UI only; actual game rendering and simulation remain. Bridge lens56deg and camera28m before bridge/4.2m above road. This photo view is not mounted-player navigation proof.",
+  "court_resume": "Latest normal r67 actual new profile r9/Flora r3 bridge1 court1 and resumed speed0.787 travelled113.36m; not full roundtrip",
+  "vegetation_round": "Acanthus base orientation follows sampled terrain normal; flowering slope threshold tightened2 to1; fan layers vertical offset0.78 instead0.40 without more leaves. Actual component seen, formal r67 loaded Flora r3.",
+  "spatial_flora_candidate": "Exact matrix/cell tests passed; GPU overview calls958 vs360, near5.02M triangles vs6.69M but492 calls. No FPS benefit established. Removed from runtime; helper/test retained unreferenced.",
+  "coast_rocks": "Added closed low warm coast volumes with12 footprint protection samples. Even bead-like first candidate rejected; irregular broken larger low clusters currently component-inspected only.",
+  "current_normal": "Last actual r71 read: travelled74.4657m, bridge0/court0, downhill-patrol speed0.65, riderV17/horseV13 loaded and visible. Not complete current route proof.",
+  "closed_utc": "2026-10-29T23:25:20Z",
+  "verdict": "NO-SHIP against approved target appearance; current integrated changes retained",
+  "final_read_failure": "Final browser audit failed: browser.user is unavailable; no final complete traversal claim",
+  "automation_deleted": true,
+  "final_jev": "jev-round-8.json",
+  "final_jev_cache": "jev-round-8-cache.json",
+  "review_http_status": 200
+}

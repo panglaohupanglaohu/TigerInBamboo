@@ -1,0 +1,143 @@
+{
+  "protectedMeshes": 16,
+  "violations": [
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": null
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": null
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": null
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": null
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    },
+    {
+      "name": "",
+      "history": true,
+      "colour": {
+        "district": "new",
+        "role": "stone"
+      }
+    }
+  ],
+  "wallRetained": true
+}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: plant and statue materials must survive the whole production material pipeline
+
+16 !== 0
+
+    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/tests/check_citadel_material_ownership.mjs:24:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:643:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 16,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

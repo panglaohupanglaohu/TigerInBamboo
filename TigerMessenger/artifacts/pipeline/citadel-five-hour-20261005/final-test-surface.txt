@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "tests": 5400,
+  "maxDistanceError": 0,
+  "maxNormalError": 0,
+  "sourceUnchanged": true,
+  "buildMs": 33.09720999999999,
+  "fastMs": 28.145118000001524,
+  "referenceMs": 203.9755570000001,
+  "syntheticBenchmark": {
+    "triangles": 124416,
+    "buildMs": 421.364917,
+    "rays": 10000,
+    "rayMs": 46.094082999999955,
+    "note": "Synthetic sphere on this machine; not measured actual game loading performance"
+  }
+}

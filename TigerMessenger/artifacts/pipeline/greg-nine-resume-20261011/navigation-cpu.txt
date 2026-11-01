@@ -1,0 +1,58 @@
+✔ real V7 promenade overlap no longer steals support from feet on the coral rim (11.450167ms)
+✖ feet below rim retain lower promenade and entrance/water are not captured (6.298708ms)
+✔ production collision substeps keep a standing player on the actual new rim (13.842125ms)
+✔ all three real bank midpoints stay supported through gravity instead of falling to old V7 terrain (189.629292ms)
+✔ real lower tread remains available beneath an upper terrace, late quay registration stays dynamic (3.609625ms)
+✖ production controller and gravity can descend actual entrance stairs with guard and steer active (2111.359167ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 4
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4365.486708
+
+✖ failing tests:
+
+test at TigerMessenger/tests/world/swampPlayerSupport.test.mjs:40:1
+✖ feet below rim retain lower promenade and entrance/water are not captured (6.298708ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Math.abs(ground(below)-shore)<1e-8)
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampPlayerSupport.test.mjs:45:109)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/world/swampStairNavigation.test.mjs:18:1
+✖ production controller and gravity can descend actual entrance stairs with guard and steer active (2111.359167ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number.isFinite(start))
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/swampStairNavigation.test.mjs:23:84)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

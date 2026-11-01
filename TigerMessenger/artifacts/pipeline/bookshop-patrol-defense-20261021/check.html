@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>书店防卫 CPU 回归</title><script type="importmap">{"imports":{"three":"/TigerMessenger/vendor/three.module.js"}}</script><h1>实际防卫模块 CPU 回归（非游戏实景）</h1><pre id="result">运行中</pre><script type="module">
+import * as T from 'three';
+import {createBaseDefense} from '/TigerMessenger/src/gameplay/robotOps/baseDefense.js';
+const results=[];
+function check(kind,{active=false,far=false,hidden=false,command=true}={}){
+ const scene=new T.Scene(),base=new T.Group();scene.userData.batianCommandMode=command;base.position.set(0,160,0);scene.add(base);
+ const robot=new T.Group();robot.userData.robotType=kind;base.add(robot);base.userData.models=[robot];
+ const aircraft=new T.Group();aircraft.userData.kind='moebius-aircraft';aircraft.position.set(0,175,22);aircraft.visible=!hidden;scene.add(aircraft);
+ const nonMember=new T.Group();nonMember.position.set(0,175,18);scene.add(nonMember); // deliberately absent from military lists
+ const flagship=new T.Group();flagship.userData.kind='crystal-colossus';flagship.position.set(0,180,25);scene.add(flagship);
+ if(far)aircraft.position.set(0,-175,0);
+ let retaliation=0,hits=0;scene.userData.batianFleet={active,units:()=>[flagship],receiveHit:()=>{hits++;return {accepted:true,intercepted:true};},shieldPoint:()=>null};
+ const defense=createBaseDefense({scene,base,logistics:new Map(),models:new Map(),combat:new Map(),getFleet:()=>({userData:{members:[aircraft]}}),getAssault:()=>({onFleetUnderAttack:()=>retaliation++,designateTarget:()=>retaliation++})});
+ for(let i=0;i<120;i++)defense.update(.05);
+ return {kind,battleActive:active,far,hidden,command,...defense.snapshot(),hullHealth:aircraft.userData.robotHullHealth??null,retaliation,flagshipHits:hits};
+}
+try{
+ for(const k of ['ant','locust','beetle']){const r=check(k);if(!r.shotsFired||r.intruders!==1||!(r.hullHealth<1800)||r.retaliation)throw Error(JSON.stringify(r));results.push(r);}
+ for(const opts of [{far:true},{hidden:true}]){const r=check('ant',opts);if(r.shotsFired||r.intruders)throw Error(JSON.stringify(r));results.push(r);}
+ const active=check('ant',{active:true});if(!active.flagshipHits||active.hullHealth!==null||active.intruders!==1)throw Error(JSON.stringify(active));results.push(active);
+ const legacy=check('ant',{command:false});if(!legacy.retaliation)throw Error(JSON.stringify(legacy));results.push(legacy);
+ document.querySelector('#result').textContent=JSON.stringify({passed:true,scope:'Real production defense CPU module in browser, no rendered game or subjective audio claim',results},null,2);
+}catch(e){document.querySelector('#result').textContent=JSON.stringify({passed:false,error:e.stack,results},null,2);}
+</script>

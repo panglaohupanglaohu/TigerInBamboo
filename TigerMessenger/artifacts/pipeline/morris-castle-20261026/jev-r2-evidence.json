@@ -1,0 +1,24 @@
+{
+  "goal": "Triage revised physical castle materials before GPU acceptance",
+  "version": "morris-castle-masonry-r2",
+  "observations": [
+    "Direct image inspection: target-v3 has irregular pale masonry, articulated roof tiles and framed openings; normal-castle before this round has flat pale walls, dark rectangles and smooth russet roofs.",
+    "New independent source candidate has 412 physical masonry pieces,60 thick window assemblies including side windows,925 raised roof tile pieces and18 footings. Shared static details merge into13 material batches. Original footprint14x10m,real arch gate2.6m and east music court exit retained."
+  ],
+  "checks": [
+    {
+      "name": "Ten deterministic geometry and raycast checks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Current revision normal-game GPU and walking verification",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No changes to main,landscape,island layout or other agent modules",
+    "Do not treat JEV as image or gameplay acceptance"
+  ]
+}

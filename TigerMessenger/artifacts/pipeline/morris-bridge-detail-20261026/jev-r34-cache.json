@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "51665485d303a56a0d165c1364eeb4578b6f067f4cc73b1bba371dbcfa1ce3b7",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.47,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.06,
+        "lighting": 0,
+        "navigation": 0.36,
+        "review": 0.58
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.11
+    }
+  },
+  "usage": {
+    "input_tokens": 811,
+    "output_tokens": 91,
+    "cost_usd": 0.000341,
+    "credits_remaining_usd": 4.904348
+  },
+  "elapsed_ms": 7752,
+  "cache_hit": true,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Current normal-game GPU form,bank contact and full mounted bridge crossing",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,22 @@
+{
+  "scope": "Only original26 lake-bed algae tufts; no water/floor mesh/root/fauna/route mutation.",
+  "module": "src/world/swampAlgaeClumps.js",
+  "integration": "Original tuft block calls createSwampAlgaeClumps; refreshAttachment runs immediately after applySwampV2Art because V2 replaces the original jittered bed.",
+  "originalIdentity": "26 clump positions and every original blade width/height/material choice/x/y/z/tilt random value are preserved. Named visible semantic groups remain with original transforms; rendered instances are rooted on final actual floor.",
+  "randomContract": "Same3 random calls per tuft and7 per blade; following random sentinel exactly equal in test.",
+  "appearance": "Curved14-segment blue-green ribbon leaves, light/shade palette #7CAE9D/#4E827E with thin screen-antialiased central veins, no thick outline hull.",
+  "actualSeed7711": {
+    "clumps": 26,
+    "blades": 122,
+    "attached": 122,
+    "bedInnerY": 10.400000023841859,
+    "oldDrawCalls": 244,
+    "newDrawCalls": 2,
+    "triangles": 3416
+  },
+  "validation": "3/3 passed: original random/placements; full vertex floor clearance after spherical transform; real factory final V2 floor attachment.",
+  "nonDefaultFailureBehavior": "If actual legacy jittered floor has no triangle under an individual leaf, that instance is zero-scaled and its surface/base are null; no invented support and no global startup throw. Default actual V2 has zero misses.",
+  "before": "algae-before/original-clump-builder.txt is exact narrow source snapshot from this batch; no claim of historical visual capture.",
+  "GPU": "Pending parent underwater-view review.",
+  "rollback": "Restore narrow original tuft block and remove helper import/final attachment call only; do not overwrite concurrent source edits."
+}

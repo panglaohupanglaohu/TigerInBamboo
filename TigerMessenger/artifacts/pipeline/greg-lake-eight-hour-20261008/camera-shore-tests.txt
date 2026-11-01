@@ -1,0 +1,18 @@
+✔ outside shore triangles retain the original geometry; wholly intruding faces are subtracted (0.795833ms)
+✔ crossing triangles are clipped at the lake wall, not discarded wholesale, preserving colour interpolation (0.4915ms)
+✔ clipping respects the actual spherical placement matrix and leaves above-rim surfaces intact (0.218ms)
+✔ provider supplies authored solid meshes, excludes vegetation and story objects, and returns empty far away (0.967875ms)
+✔ real camera pulls in before the lake wall on bank 1, spherical scale .5 (22.489ms)
+✔ real camera pulls in before the lake wall on bank 2, spherical scale .5 (28.369417ms)
+✔ real camera pulls in before the lake wall on bank 3, spherical scale .5 (21.965834ms)
+✔ near cliff keeps the full safety gap and snap/first update never render behind the wall (3.285959ms)
+✔ unoccluded third person, vehicle follow offsets and first person remain available (0.227666ms)
+✔ provider follows a new spherical placement, respects hidden ancestors, refreshes and releases references only (4.797375ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1902.511292

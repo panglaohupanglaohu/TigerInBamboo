@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import * as T from 'three';
+import {createBatianArsenal} from '../../../src/world/batianArsenal.js';
+const scene=new T.Scene(),craft=new T.Group();scene.add(craft);const contacts=[];
+const arsenal=createBatianArsenal({scene,aircraft:craft,audio:{shieldHit:p=>{contacts.push(p.clone());return true;}}});
+craft.position.set(12,7,-4);craft.rotation.set(.13,.4,-.07);craft.scale.setScalar(1.2);craft.updateMatrixWorld(true);
+const stalePoint=new T.Vector3(0,0,40),axes=new T.Vector3(40,10,40),local=craft.worldToLocal(stalePoint.clone());local.multiplyScalar(1/local.clone().divide(axes).length());const expected=craft.localToWorld(local.clone());
+arsenal.shieldImpact(stalePoint,craft);assert.equal(contacts.length,1);assert.ok(contacts[0].distanceTo(expected)<1e-9);assert.ok(contacts[0].distanceTo(stalePoint)>.001);
+const before=contacts[0].clone();craft.position.x+=5;arsenal.update(.1);assert.ok(contacts[0].equals(before),'already emitted contact sound remains at its emission point');
+let disposed=0;scene.getObjectByName('batian-arsenal-live').traverse(o=>o.geometry?.addEventListener('dispose',()=>disposed++));arsenal.update(2);assert.equal(disposed,3);assert.equal(arsenal.snapshot().activeEffects,0);assert.equal(arsenal.snapshot().shieldAudioPlayed,1);arsenal.dispose();
+console.log(JSON.stringify({projectedContactError:contacts[0].distanceTo(expected),oldPointError:stalePoint.distanceTo(expected),rippleGeometriesDisposed:disposed,audioAcceptedCounter:1}));

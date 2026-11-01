@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "e0a361bfb64a8fcd0b188298a5551ba008c24a0bf9efa82cd9013f91766e082e",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.94
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.34,
+      "probabilities": {
+        "dressing": 0.02,
+        "geometry": 0.12,
+        "lighting": 0,
+        "navigation": 0.39,
+        "review": 0.47
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.74
+    }
+  },
+  "usage": {
+    "input_tokens": 768,
+    "output_tokens": 91,
+    "cost_usd": 0.000323,
+    "credits_remaining_usd": 4.931533
+  },
+  "elapsed_ms": 1875,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "latest rear3 collar GPU",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,21 @@
+{
+  "source": {
+    "entry": "/TigerMessenger/",
+    "sourceVersion": "apostles-oskar-wfc-13-ridge-massing",
+    "staticTriangles": 19083,
+    "oceanTriangles": 942,
+    "sourceMeshes": 30,
+    "maxInterpolationError": 0.16652673057696155,
+    "sourceRoot": "christchurch-tram-system",
+    "rootVisible": true,
+    "scope": "Actual game static rail/deck/support triangle crop and curve samples. Vehicles excluded. Not newly authored bridge geometry.",
+    "exportPage": "/TigerMessenger/artifacts/pipeline/oskar-apostles-massing-20261022/root-verification/formal-review.html",
+    "entryEvidence": "root-verification/formal-status-r1.json"
+  },
+  "rigidDistanceError": 2.4868995751603507e-14,
+  "radialDistanceError": 2.842170943040401e-14,
+  "railGeometryTriangles": 19083,
+  "oceanTriangles": 942,
+  "referenceWaterRadius": 160.30549202703006,
+  "checks": "rigid no-scale rotation, sampled curves match stored vertices, finite triangle buffers, actual ocean radial query"
+}

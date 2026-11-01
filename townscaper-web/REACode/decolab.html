@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<title>Deco Lab — 强制模块 / 墙面装饰小 WFC / 卡片贴图漂移 / 浮点渲染目标</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1b2124; color: #dfe6e6; overflow: hidden;
+    font: 11px/1.5 ui-monospace, Menlo, monospace; }
+  #grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 8px; padding: 8px; height: calc(100% - 16px); box-sizing: border-box; }
+  .cell { position: relative; background: #10151a; border: 1px solid #2b363b; border-radius: 3px; overflow: hidden; }
+  .cell h2 { position: absolute; left: 8px; top: 6px; margin: 0; z-index: 3;
+    font: 600 11px/1.4 ui-monospace, Menlo, monospace; color: #cfe3e6; letter-spacing: .02em; }
+  .cell .sub { position: absolute; left: 8px; top: 22px; z-index: 3; color: #7f9aa1; font-size: 10px; }
+  .cell canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .hud { position: absolute; left: 8px; bottom: 6px; right: 8px; z-index: 3; color: #9fb6bd;
+    white-space: pre-wrap; font-size: 10px; line-height: 1.45; text-shadow: 0 1px 2px #000; }
+  .hud b { color: #e6d9a8; font-weight: 600; }
+  .hud i { color: #8fd0a8; font-style: normal; }
+  .hud s { color: #e08b7a; text-decoration: none; }
+  #topbar { position: fixed; left: 12px; bottom: 2px; z-index: 9; color: #556a71; font-size: 9px; }
+</style>
+</head>
+<body>
+<div id="topbar">1751932427272909032 · 1181464374839521280 · 1015149712469524480 / 999185422403055616 · 1664565063552847873</div>
+<div id="grid">
+  <div class="cell">
+    <h2>① 强制模块：先造它要的那小块网格</h2>
+    <div class="sub">1751932427272909032 · 左：在网格里找同构 patch / 右：找不到就照着模块铺出来</div>
+    <canvas id="cv-mod"></canvas>
+    <div class="hud" id="hud-mod"></div>
+  </div>
+  <div class="cell">
+    <h2>② 墙面装饰：另开一套小 WFC</h2>
+    <div class="sub">1181464374839521280 · 门只在地面 / 百叶必须贴窗 / 竖长窗上方留白</div>
+    <canvas id="cv-deco"></canvas>
+    <div class="hud" id="hud-deco"></div>
+  </div>
+  <div class="cell">
+    <h2>③ 卡片贴图：每片一次采样 + 沿流向滑</h2>
+    <div class="sub">1015149712469524480 · 上=均匀 / 中=每片随机偏移 / 下=偏移+沿各自流向滑</div>
+    <canvas id="cv-tex"></canvas>
+    <div class="hud" id="hud-tex"></div>
+  </div>
+  <div class="cell">
+    <h2>④ 浮点渲染目标：他的怀疑值多少</h2>
+    <div class="sub">1664565063552847873 · 32² 半拉格朗日平流 60 步，GPU 总质量 vs CPU 参考</div>
+    <canvas id="cv-float"></canvas>
+    <div class="hud" id="hud-float"></div>
+  </div>
+</div>
+
+<script type="module">
+import { buildMixedGrid, clusterModule, findPatch, synthesizePatch, moduleSignature, auditRarity } from './src/tileforce.js';
+import { runDeco, audit as auditDeco, permutationCost } from './src/surfacedeco.js';
+import { buildCards, cardUV, makeNoise, audit as auditTex, similarity } from './src/quadtex.js';
+import { probeFloat } from './src/floatprobe.js';
+import { buildQuadGrid } from './src/quadgrid.js';
+
+const $ = (id) => document.getElementById(id);
+const dpr = Math.min(2, window.devicePixelRatio || 1);
+function fit(cv) {
+  const r = cv.parentElement.getBoundingClientRect();
+  cv.width = Math.max(1, Math.round(r.width * dpr));
+  cv.height = Math.max(1, Math.round(r.height * dpr));
+  const g = cv.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { g, w: r.width, h: r.height };
+}
+
+/* ---------------------------------------------------------------- ① 模块 */
+
+const grid = buildMixedGrid({ radius: 11, seed: 20261101 });
+const rnd = (() => { let s = 4711; return () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296); })();
+const MOD_K = 7;
+const mod = clusterModule(grid, Math.floor(rnd() * grid.count), MOD_K, rnd);
+const found = findPatch(grid, mod, { limit: 6 });
+const synth = synthesizePatch(mod);
+const rarity = auditRarity();
+
+const modState = {
+  grid: { cells: grid.count, tris: grid.sides[3], quads: grid.sides[4] },
+  module: { n: mod.n, sides: mod.sides, sig: moduleSignature(mod) },
+  matches: found.matches.length,
+  tests: found.tests,
+  ms: found.ms,
+  synth: { cells: synth.cells, verts: synth.verts, overlaps: synth.overlaps, ms: synth.ms },
+  rarity: rarity.rows,
+  specified: rarity.specified,
+};
+
+function drawGrid(g, cells, x0, y0, W, H, hits, accent, bounds) {
+  let minX = 1e9, maxX = -1e9, minZ = 1e9, maxZ = -1e9;
+  if (bounds) {
+    minX = bounds.minX; maxX = bounds.maxX; minZ = bounds.minZ; maxZ = bounds.maxZ;
+  } else {
+    for (const c of cells) for (const p of c.pts) {
+      minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+      minZ = Math.min(minZ, p.z); maxZ = Math.max(maxZ, p.z);
+    }
+  }
+  const pad = 16;
+  const s = Math.min((W - pad * 2) / (maxX - minX || 1), (H - pad * 2) / (maxZ - minZ || 1));
+  const ox = x0 + (W - (maxX - minX) * s) / 2 - minX * s;
+  const oz = y0 + (H - (maxZ - minZ) * s) / 2 - minZ * s;
+  const X = (x) => ox + x * s;
+  const Z = (z) => oz + z * s;
+  g.lineWidth = 1;
+  g.strokeStyle = '#33424a';
+  for (const c of cells) {
+    g.beginPath();
+    c.pts.forEach((p, i) => (i ? g.lineTo(X(p.x), Z(p.z)) : g.moveTo(X(p.x), Z(p.z))));
+    g.closePath();
+    const hit = hits && hits.has(c.id);
+    if (hit) { g.fillStyle = accent || 'rgba(230,217,168,.32)'; g.fill(); }
+    if (c.pts.length === 3) g.strokeStyle = '#3c5058'; else g.strokeStyle = '#2f4048';
+    g.stroke();
+  }
+  if (hits) {
+    g.strokeStyle = accent || '#e6d9a8';
+    g.lineWidth = 1.6;
+    for (const c of cells) {
+      if (!hits.has(c.id)) continue;
+      g.beginPath();
+      c.pts.forEach((p, i) => (i ? g.lineTo(X(p.x), Z(p.z)) : g.moveTo(X(p.x), Z(p.z))));
+      g.closePath();
+      g.stroke();
+    }
+  }
+  return { s, X, Z };
+}
+
+const cvMod = $('cv-mod');
+function boundsOf(cells, pad = 1.2) {
+  let minX = 1e9, maxX = -1e9, minZ = 1e9, maxZ = -1e9;
+  for (const c of cells) for (const p of c.pts) {
+    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+    minZ = Math.min(minZ, p.z); maxZ = Math.max(maxZ, p.z);
+  }
+  return { minX: minX - pad, maxX: maxX + pad, minZ: minZ - pad, maxZ: maxZ + pad };
+}
+function renderMod() {
+  const { g, w, h } = fit(cvMod);
+  g.clearRect(0, 0, w, h);
+  const half = w * 0.5;
+  const hits = new Set();
+  if (found.matches.length) for (const m of found.matches[0]) hits.add(m);
+  // 左：整张网格（暗）+ 放大镜
+  g.save();
+  g.beginPath(); g.rect(0, 0, half - 8, h); g.clip();
+  drawGrid(g, grid.cells, 0, 0, half - 8, h * 0.62, hits);
+  // 放大镜：命中 patch 周围
+  const hitCells = grid.cells.filter((c) => hits.has(c.id));
+  if (hitCells.length) {
+    g.fillStyle = 'rgba(16,21,26,.85)';
+    g.fillRect(6, h * 0.60, half - 20, h * 0.34);
+    g.strokeStyle = '#2b363b';
+    g.strokeRect(6, h * 0.60, half - 20, h * 0.34);
+    g.save();
+    g.beginPath(); g.rect(6, h * 0.60, half - 20, h * 0.34); g.clip();
+    drawGrid(g, grid.cells, 6, h * 0.60, half - 20, h * 0.34, hits, 'rgba(230,217,168,.55)', boundsOf(hitCells, 0.22));
+    g.restore();
+  }
+  g.restore();
+  g.strokeStyle = '#2b363b';
+  g.beginPath(); g.moveTo(half - 4, 30); g.lineTo(half - 4, h - 24); g.stroke();
+  // 右：造出来的那块
+  g.save();
+  g.beginPath(); g.rect(half + 2, 0, w - half - 2, h); g.clip();
+  const all = new Set(synth.grid.cells.map((c) => c.id));
+  drawGrid(g, synth.grid.cells, half + 2, 0, w - half - 2, h - 26, all, 'rgba(143,208,168,.30)');
+  g.restore();
+  g.fillStyle = '#5f7780';
+  g.font = '10px ui-monospace, Menlo, monospace';
+  g.fillText('全网格 ' + grid.count + ' 格', 10, 48);
+  g.fillText('放大：命中的 patch', 12, h * 0.60 + 12);
+  g.fillText('造出来的 patch（同一模块）', half + 10, h - 12);
+  $('hud-mod').innerHTML =
+    `k=<b>${mod.n}</b> 边数[${mod.sides.join(',')}] · ${grid.count} 格里命中 <b>${found.matches.length}</b> 处` +
+    `（${found.tests} 次测试 / ${found.ms.toFixed(2)}ms）· 造 patch <i>${synth.cells} 格 / ${synth.verts} 顶点 / 重叠 ${synth.overlaps}</i>\n` +
+    `随机形状命中 ` + rarity.rows.map((r) => `${r.k}格=${r.meanHits.toFixed(0)}`).join(' ') + `\n` +
+    `指定环 ` + rarity.specified.map((sp) => `${sp.name}=<s>${sp.hits}</s>`).join(' ') + `（同样 1711 格网格里）`;
+}
+
+/* ---------------------------------------------------------------- ② 装饰 */
+
+const deco = auditDeco({ runs: 12 });
+const runs = [];
+for (let i = 0; i < 6; i++) {
+  const h = 2 + (i % 3 === 0 ? 0 : 1 + (i % 3));
+  runs.push(runDeco({ w: 8, h, seed: 1181464374839521280 + i * 7919 }));
+}
+
+const cvDeco = $('cv-deco');
+function renderDeco() {
+  const { g, w, h } = fit(cvDeco);
+  g.clearRect(0, 0, w, h);
+  const cols = 3;
+  const rows = 2;
+  const cw = (w - 24) / cols;
+  const ch = (h - 46) / rows;
+  let ox = 12;
+  let oy = 36;
+  for (let i = 0; i < runs.length; i++) {
+    const r = runs[i];
+    if (i > 0 && i % cols === 0) { ox = 12; oy += ch; }
+    const bw = Math.min(cw - 12, 160);
+    const cellW = bw / r.w;
+    const cellH = Math.min((ch - 22) / r.h, cellW * 1.1);
+    const bx = ox;
+    const by = oy + (ch - 20) - cellH * r.h;
+    for (let y = 0; y < r.h; y++) {
+      for (let x = 0; x < r.w; x++) {
+        const t = r.names[(r.h - 1 - y) * r.w + x];
+        const X = bx + x * cellW;
+        const Y = by + y * cellH;
+        g.fillStyle = '#2a333a';
+        g.fillRect(X + 0.6, Y + 0.6, cellW - 1.2, cellH - 1.2);
+        const cx = X + cellW / 2;
+        const cy = Y + cellH / 2;
+        if (t === 'window') {
+          g.fillStyle = '#a9d7e8';
+          g.fillRect(cx - cellW * 0.2, cy - cellH * 0.18, cellW * 0.4, cellH * 0.36);
+          g.strokeStyle = '#e8f6fb'; g.lineWidth = 1;
+          g.strokeRect(cx - cellW * 0.2, cy - cellH * 0.18, cellW * 0.4, cellH * 0.36);
+        } else if (t === 'window2') {
+          g.fillStyle = '#a9d7e8';
+          g.fillRect(cx - cellW * 0.16, cy - cellH * 0.3, cellW * 0.32, cellH * 0.6);
+        } else if (t === 'door') {
+          g.fillStyle = '#c9a06a';
+          g.fillRect(cx - cellW * 0.2, cy - cellH * 0.18, cellW * 0.4, cellH * 0.66);
+        } else if (t === 'arch') {
+          g.fillStyle = '#c9a06a';
+          g.beginPath();
+          g.arc(cx, cy, cellW * 0.22, Math.PI, 0);
+          g.lineTo(cx + cellW * 0.22, cy + cellH * 0.3);
+          g.lineTo(cx - cellW * 0.22, cy + cellH * 0.3);
+          g.closePath(); g.fill();
+        } else if (t === 'shutter') {
+          g.strokeStyle = '#7d8f6a'; g.lineWidth = 1.4;
+          for (let k = 0; k < 3; k++) {
+            g.beginPath();
+            g.moveTo(cx - cellW * 0.22, cy - cellH * 0.14 + k * cellH * 0.14);
+            g.lineTo(cx + cellW * 0.22, cy - cellH * 0.14 + k * cellH * 0.14);
+            g.stroke();
+          }
+        }
+      }
+    }
+    ox += cw;
+  }
+  const c = deco.cost;
+  $('hud-deco').innerHTML =
+    `${deco.runs} 面墙 / <b>${deco.slots}</b> 槽位 · 决策 ${deco.decisions} 推送 ${deco.pushes} 回溯 ${deco.backtracks}` +
+    ` · 违约 <i>${deco.violations}</i> / 失败 ${deco.fails} · 单面最慢 ${deco.maxMs.toFixed(2)}ms\n` +
+    `搜索空间 log10（估算）：折进建筑 <s>${c.rows[0].log10States.toFixed(0)}</s> → 建筑 ${c.rows[1].log10States.toFixed(0)}` +
+    ` + 每面 ${c.rows[2].log10States.toFixed(1)}　差 <b>${c.ratioLog10.toFixed(0)}</b> 个数量级`;
+}
+
+/* ---------------------------------------------------------------- ③ 贴图 */
+
+const noise = makeNoise(7, 8);
+const cards = buildCards(12, { seed: 11, period: 1 });
+const texAudit = auditTex({ cards: 24, seed: 11, period: 1, cells: buildQuadGrid({ radius: 9, seed: 5 }).cells });
+const MODES = ['uniform', 'offset', 'flow'];
+let texT = 0;
+
+const cvTex = $('cv-tex');
+function renderTex() {
+  const { g, w, h } = fit(cvTex);
+  g.clearRect(0, 0, w, h);
+  const strips = MODES.length;
+  const stripH = (h - 44) / strips;
+  const perRow = 6;
+  const n = 4;
+  for (let s = 0; s < strips; s++) {
+    const mode = MODES[s];
+    const cardW = Math.min((w - 84) / 6, stripH / 2 - 4);
+    for (let i = 0; i < 6; i++) {
+      const card = cards[i];
+      const x0 = 74 + i * (cardW + 8);
+      const y0 = 34 + s * stripH;
+      const cells = 14;
+      for (let j = 0; j < cells; j++) {
+        for (let k = 0; k < cells; k++) {
+          const lu = (k + 0.5) / cells;
+          const lv = (j + 0.5) / cells;
+          const [u, v] = cardUV(card, lu, lv, texT, mode);
+          const val = noise(u, v);
+          const c = Math.round(30 + val * 190);
+          g.fillStyle = `rgb(${c},${Math.round(c * 0.62)},${Math.round(c * 0.3)})`;
+          g.fillRect(x0 + (k * cardW) / cells, y0 + (j * cardW) / cells, cardW / cells + 1, cardW / cells + 1);
+        }
+      }
+      g.strokeStyle = '#2b363b';
+      g.strokeRect(x0, y0, cardW, cardW);
+    }
+  }
+  g.fillStyle = '#7f9aa1';
+  g.font = '10px ui-monospace, Menlo, monospace';
+  MODES.forEach((m, i) => g.fillText(m, 12, 34 + i * stripH + 10));
+  const st = texAudit.stretch;
+  const at10 = st.find((r) => r.pitch === 10);
+  const sim = texAudit.similarity;
+  $('hud-tex').innerHTML =
+    `两片卡片相似度：uniform <s>${sim[0].mean.toFixed(2)}</s> → offset <b>${sim[1].mean.toFixed(2)}</b>` +
+    ` → flow(t=2.5) <b>${texAudit.flowAtT2_5.mean.toFixed(2)}</b>\n` +
+    `世界 UV 在 10° 掠射角被拉伸 <s>${at10.world.toFixed(1)}×</s> → fwidth 混合后 <i>${at10.blended.toFixed(1)}×</i>` +
+    ` · 代价：连续表面上 <b>${(texAudit.seam.share * 100).toFixed(0)}%</b> 的边被撕开（${texAudit.seam.seams}/${texAudit.seam.edges}）`;
+}
+
+/* ---------------------------------------------------------------- ④ 浮点 */
+
+const cvFloat = document.createElement('canvas');
+cvFloat.id = 'rawfloat';
+cvFloat.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:220px;height:220px;image-rendering:pixelated;border:1px solid #2b363b;';
+$('cv-float').parentElement.insertBefore(cvFloat, $('cv-float'));
+$('cv-float').style.display = 'none';
+let floatRes = null;
+function runFloat() {
+  try {
+    floatRes = probeFloat({ canvas: cvFloat, size: 32, steps: 60 });
+  } catch (e) {
+    floatRes = { webgl2: false, error: String(e.message || e) };
+  }
+  if (!floatRes.webgl2) {
+    $('hud-float').textContent = 'WebGL2 不可用：' + (floatRes.error || floatRes.note || '');
+    return;
+  }
+  const a = floatRes.advect;
+  $('hud-float').innerHTML =
+    floatRes.verdict.join('\n') +
+    `\nNaN ${a.nan} · 结论：<i>${a.nan === 0 ? '本机 60 步不出问题' : '数值已经坏'}</i>`;
+}
+
+/* --------------------------------------------------------------- 启动 */
+
+let last = performance.now();
+function tick(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  texT += dt * 0.5;
+  renderTex();
+  requestAnimationFrame(tick);
+}
+
+window.__deco = {
+  mod: modState,
+  deco: { runs: deco.runs, slots: deco.slots, violations: deco.violations, fails: deco.fails, pushes: deco.pushes, decisions: deco.decisions, backtracks: deco.backtracks, maxMs: deco.maxMs, cost: deco.cost },
+  tex: { similarity: texAudit.similarity.map((s) => +s.mean.toFixed(3)), flowLate: +texAudit.flowAtT2_5.mean.toFixed(3), stretch: texAudit.stretch, seam: texAudit.seam },
+  float: () => floatRes,
+  rerunFloat: () => { runFloat(); return floatRes; },
+};
+
+renderMod();
+renderDeco();
+renderTex();
+runFloat();
+requestAnimationFrame(tick);
+window.addEventListener('resize', () => { renderMod(); renderDeco(); });
+</script>
+</body>
+</html>

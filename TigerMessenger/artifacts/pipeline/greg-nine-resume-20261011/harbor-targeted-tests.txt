@@ -1,0 +1,18 @@
+✔ ?swampHarborDeparture=original restores the full departure galley as well (1742.941083ms)
+✔ formal-page ocean pruning detached both warships; harbor pass re-attaches A, keeps B out of render but animated (2054.710625ms)
+✔ target composition: ship, pier and both workers sit in the lower-left of the overview frame (1.925292ms)
+✔ spare sail is furled while the mast lies on deck and set once the monkeys raise it (520.039834ms)
+✔ harbor pass leaves ship, repair actors, departure and escort choreography exactly as before (3343.303625ms)
+✔ pier keeps clear of the repair ship oars, the departing ship, its escort and every lotus boat (1237.392458ms)
+✔ rim leaves fill gaps only: off the walking ribbon, out of the overview centre, through living-path clearance (6.458333ms)
+✔ ?swampHarbor=0 is a no-op and installation is idempotent (1603.350209ms)
+✔ enlarged repair monkeys keep feet on their perches and the live hoist rope / mallet contacts (2351.695667ms)
+✔ far-shore longboat stays clear of lotus boats, whales, the world tree and the bank walkway (2559.274042ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19179.23975

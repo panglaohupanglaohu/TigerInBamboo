@@ -1,0 +1,42 @@
+{
+  "src/voxelnav.js": {
+    "targets": [
+      "src/world/layerednav.js",
+      "navigation.html"
+    ],
+    "status": "部分覆盖",
+    "gap": "本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。",
+    "frameReview": true,
+    "evidence": "artifacts/coverage/navigation-review.md"
+  },
+  "src/holenav.js": {
+    "targets": [
+      "src/world/layerednav.js",
+      "navigation.html"
+    ],
+    "status": "部分覆盖",
+    "gap": "本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。",
+    "frameReview": true,
+    "evidence": "artifacts/coverage/navigation-review.md"
+  },
+  "src/cheesenav.js": {
+    "targets": [
+      "src/world/layerednav.js",
+      "navigation.html"
+    ],
+    "status": "部分覆盖",
+    "gap": "本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。",
+    "frameReview": true,
+    "evidence": "artifacts/coverage/navigation-review.md"
+  },
+  "src/traffic.js": {
+    "targets": [
+      "src/world/traffic.js",
+      "src/badnorth/battle.js"
+    ],
+    "status": "部分覆盖",
+    "gap": "本轮补齐稳定左车道并接入战斗；通道点线和拥挤压力测试仍待补齐。",
+    "frameReview": true,
+    "evidence": "artifacts/coverage/navigation-review.md"
+  }
+}

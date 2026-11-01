@@ -1,0 +1,524 @@
+{
+  "method": "initial entrance placement only; real KeyW 12 seconds normal production physics",
+  "completed": true,
+  "points": [
+    {
+      "at": "2026-10-11T07:12:33.627Z",
+      "inner": [
+        35.63972687215107,
+        40.79222655618696,
+        19.47007152760878
+      ],
+      "support": {
+        "local": [
+          35.63972687215107,
+          40.79222655618696,
+          19.47007152760878
+        ],
+        "stair": null,
+        "authored": 145.61491166772723,
+        "bridge": 145.61491166772723,
+        "rim": null,
+        "v7": null,
+        "junction": null,
+        "gate": null,
+        "citadel": null,
+        "highland": null,
+        "lake": null,
+        "legacyPlatformsSuppressed": false
+      },
+      "cameraForward": [
+        -0.7447460143069295,
+        -0.5289811713548045,
+        -0.40685660192018713
+      ],
+      "playerForward": [
+        -0.8690552634702357,
+        0.13906542790210696,
+        -0.4747670542456409
+      ],
+      "onGround": true,
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 0,
+        "allowedNetworkDrops": 0,
+        "rescues": 0,
+        "lastBlock": null,
+        "active": true,
+        "refR": 145.6408701965115
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": false,
+        "steeredSteps": 0,
+        "entranceReleasedSteps": 45
+      }
+    },
+    {
+      "at": "2026-10-11T07:12:35.858Z",
+      "inner": [
+        31.337087802530817,
+        40.70113434043731,
+        17.11952909095651
+      ],
+      "support": {
+        "local": [
+          31.337087802530817,
+          40.70113434043731,
+          17.11952909095651
+        ],
+        "stair": 143.53350573914398,
+        "authored": 143.53350573914398,
+        "bridge": null,
+        "rim": null,
+        "v7": null,
+        "junction": null,
+        "gate": null,
+        "citadel": null,
+        "highland": null,
+        "lake": 143.533505739144,
+        "legacyPlatformsSuppressed": false
+      },
+      "cameraForward": [
+        -0.7673637588429241,
+        -0.4851943392916831,
+        -0.4192127320749764
+      ],
+      "playerForward": [
+        -0.8709242352903148,
+        0.12294991264224175,
+        -0.4757880782084034
+      ],
+      "onGround": false,
+      "velocity": [
+        1.8703357847483426,
+        -3.935877706371867,
+        5.567554060723131
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 1,
+        "allowedNetworkDrops": 112,
+        "rescues": 1,
+        "lastBlock": {
+          "drop": 2.609,
+          "local": [
+            22.07,
+            36.21,
+            12.06
+          ]
+        },
+        "active": true,
+        "refR": 145.86679047149147,
+        "lastLanding": {
+          "landing": 136.86340870650426,
+          "landingNet": 136.86340870650426,
+          "net": 142.15663471622412,
+          "refR": 145.4658463246245,
+          "feet": 142.85561519347087
+        }
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": false,
+        "steeredSteps": 0,
+        "entranceReleasedSteps": 45
+      }
+    },
+    {
+      "at": "2026-10-11T07:12:37.940Z",
+      "inner": [
+        24.474158795740493,
+        30.576600666937964,
+        13.370293886900388
+      ],
+      "support": {
+        "local": [
+          24.474158795740493,
+          30.576600666937964,
+          13.370293886900388
+        ],
+        "stair": 137.6350949060343,
+        "authored": 137.6350949060343,
+        "bridge": null,
+        "rim": null,
+        "v7": null,
+        "junction": null,
+        "gate": null,
+        "citadel": null,
+        "highland": null,
+        "lake": 142.34638896881748,
+        "legacyPlatformsSuppressed": true
+      },
+      "cameraForward": [
+        -0.6916511262308593,
+        -0.6155059249382588,
+        -0.37785073236594796
+      ],
+      "playerForward": [
+        -0.8731933038923244,
+        0.09989019138022026,
+        -0.47702767603529045
+      ],
+      "onGround": false,
+      "velocity": [
+        10.887505293084464,
+        1.1704823698843545,
+        13.181566116657596
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 2,
+        "allowedNetworkDrops": 282,
+        "rescues": 1,
+        "lastBlock": {
+          "drop": 3.01,
+          "local": [
+            22.02,
+            36.21,
+            12.03
+          ]
+        },
+        "active": true,
+        "refR": 145.85380532289676,
+        "lastLanding": {
+          "landing": 142.85714285714286,
+          "landingNet": null,
+          "net": null,
+          "refR": 145.86679047149147,
+          "feet": 142.8571428571429
+        }
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": false,
+        "steeredSteps": 0,
+        "entranceReleasedSteps": 45
+      }
+    },
+    {
+      "at": "2026-10-11T07:12:40.008Z",
+      "inner": [
+        14.561153669321627,
+        36.832093407166894,
+        7.954794504455588
+      ],
+      "support": {
+        "local": [
+          14.561153669321627,
+          36.832093407166894,
+          7.954794504455588
+        ],
+        "stair": null,
+        "authored": null,
+        "bridge": null,
+        "rim": null,
+        "v7": null,
+        "junction": null,
+        "gate": null,
+        "citadel": null,
+        "highland": null,
+        "lake": null,
+        "legacyPlatformsSuppressed": true
+      },
+      "cameraForward": [
+        -0.7855236485584085,
+        -0.4458665890606597,
+        -0.42913352504191404
+      ],
+      "playerForward": [
+        -0.8761014894279864,
+        0.05807321163345447,
+        -0.4786164250343271
+      ],
+      "onGround": true,
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 63,
+        "allowedNetworkDrops": 304,
+        "rescues": 1,
+        "lastBlock": {
+          "drop": 13.837,
+          "local": [
+            14.55,
+            36.83,
+            7.95
+          ]
+        },
+        "active": true,
+        "refR": 142.85714285714286,
+        "lastLanding": {
+          "landing": 129.0198869321982,
+          "landingNet": null,
+          "net": null,
+          "refR": 142.85714285714286,
+          "feet": 142.85561519347087
+        }
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": false,
+        "steeredSteps": 0,
+        "entranceReleasedSteps": 45
+      }
+    },
+    {
+      "at": "2026-10-11T07:12:42.150Z",
+      "inner": [
+        14.561153669321627,
+        36.832093407166894,
+        7.954794504455588
+      ],
+      "support": {
+        "local": [
+          14.561153669321627,
+          36.832093407166894,
+          7.954794504455588
+        ],
+        "stair": null,
+        "authored": null,
+        "bridge": null,
+        "rim": null,
+        "v7": null,
+        "junction": null,
+        "gate": null,
+        "citadel": null,
+        "highland": null,
+        "lake": null,
+        "legacyPlatformsSuppressed": true
+      },
+      "cameraForward": [
+        -0.7843450119931732,
+        -0.4485527133061937,
+        -0.4284896329516982
+      ],
+      "playerForward": [
+        -0.8761014894279864,
+        0.05807321163345458,
+        -0.4786164250343276
+      ],
+      "onGround": true,
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 219,
+        "allowedNetworkDrops": 304,
+        "rescues": 1,
+        "lastBlock": {
+          "drop": 13.837,
+          "local": [
+            14.55,
+            36.83,
+            7.95
+          ]
+        },
+        "active": true,
+        "refR": 142.85714285714286,
+        "lastLanding": {
+          "landing": 129.0198869321982,
+          "landingNet": null,
+          "net": null,
+          "refR": 142.85714285714286,
+          "feet": 142.85561519347087
+        }
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": false,
+        "steeredSteps": 0,
+        "entranceReleasedSteps": 45
+      }
+    },
+    {
+      "at": "2026-10-11T07:12:44.350Z",
+      "inner": [
+        14.561153669321627,
+        36.832093407166894,
+        7.954794504455588
+      ],
+      "support": {
+        "local": [
+          14.561153669321627,
+          36.832093407166894,
+          7.954794504455588
+        ],
+        "stair": null,
+        "authored": null,
+        "bridge": null,
+        "rim": null,
+        "v7": null,
+        "junction": null,
+        "gate": null,
+        "citadel": null,
+        "highland": null,
+        "lake": null,
+        "legacyPlatformsSuppressed": true
+      },
+      "cameraForward": [
+        -0.7843444600549411,
+        -0.44855396646870893,
+        -0.42848933142648005
+      ],
+      "playerForward": [
+        -0.8761014894279818,
+        0.05807321163345447,
+        -0.47861642503433555
+      ],
+      "onGround": true,
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 363,
+        "allowedNetworkDrops": 304,
+        "rescues": 1,
+        "lastBlock": {
+          "drop": 13.837,
+          "local": [
+            14.55,
+            36.83,
+            7.95
+          ]
+        },
+        "active": true,
+        "refR": 142.85714285714286,
+        "lastLanding": {
+          "landing": 129.0198869321982,
+          "landingNet": null,
+          "net": null,
+          "refR": 142.85714285714286,
+          "feet": 142.85561519347087
+        }
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": false,
+        "steeredSteps": 0,
+        "entranceReleasedSteps": 45
+      }
+    },
+    {
+      "at": "2026-10-11T07:12:46.496Z",
+      "inner": [
+        14.561153669321627,
+        36.832093407166894,
+        7.954794504455588
+      ],
+      "support": {
+        "local": [
+          14.561153669321627,
+          36.832093407166894,
+          7.954794504455588
+        ],
+        "stair": null,
+        "authored": null,
+        "bridge": null,
+        "rim": null,
+        "v7": null,
+        "junction": null,
+        "gate": null,
+        "citadel": null,
+        "highland": null,
+        "lake": null,
+        "legacyPlatformsSuppressed": true
+      },
+      "cameraForward": [
+        -0.7843444537117927,
+        -0.44855398087065296,
+        -0.42848932796119815
+      ],
+      "playerForward": [
+        -0.8761014894279835,
+        0.05807321163345458,
+        -0.4786164250343328
+      ],
+      "onGround": true,
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "edge": {
+        "enabled": true,
+        "version": 2,
+        "maxDrop": 0.7,
+        "networkDrop": 7.5,
+        "rescueDrop": 3,
+        "blockedSteps": 519,
+        "allowedNetworkDrops": 304,
+        "rescues": 1,
+        "lastBlock": {
+          "drop": 13.837,
+          "local": [
+            14.55,
+            36.83,
+            7.95
+          ]
+        },
+        "active": true,
+        "refR": 142.85714285714286,
+        "lastLanding": {
+          "landing": 129.0198869321982,
+          "landingNet": null,
+          "net": null,
+          "refR": 142.85714285714286,
+          "feet": 142.85561519347087
+        }
+      },
+      "steer": {
+        "enabled": true,
+        "version": 1,
+        "active": false,
+        "steeredSteps": 0,
+        "entranceReleasedSteps": 45
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "version": "coral-native-fauna-v1",
+  "status": "CPU passed; GPU pending root review",
+  "formalFactory": "createMoebiusSwampPlacement({seed:7711,scale:.5})",
+  "changed": [
+    "buildSwampEel",
+    "buildTubeWormCluster",
+    "buildPinkHanger",
+    "buildRibbonFish",
+    "buildFishSchool and inline9fish",
+    "buildNativeDoll underwater swimmer",
+    "buildFireflies and inline46sprites"
+  ],
+  "formalCounts": {
+    "eel": 1,
+    "tubeClusters": 2,
+    "individualTubeWorms": 11,
+    "pinkHangers": 3,
+    "ribbonFish": 3,
+    "smallFish": 9,
+    "underwaterChildren": 1,
+    "fireflySprites": 46
+  },
+  "preserved": "65 original placement/rotation/scale and numeric story metadata records; exact seeded RNG consumption for all seven builders and formal placement chain; flower boys/monkeys/tiger untouched",
+  "animation": [
+    "Original eel/pink/fish/ribbon/swimmer/firefly paths unchanged",
+    "Ribbon stores baseZ thickness and shares animated position attribute with outline",
+    "Swimmer four limbs paddle with bounded independent phase; original child orbit unchanged",
+    "All firefly phases, follow/orbit data and runtime opacity law unchanged"
+  ],
+  "rendering": {
+    "fishAndSwimmerMeshDraws": 28,
+    "first4Each": "one merged skin + one fine outline per actor/cluster",
+    "sprites": 46,
+    "fireflyTexture": "single shared 32x32 DataTexture; alpha occupies <18% sprite area",
+    "legacyAtmosphere": "gregLakeVisuals=0 retains original firefly texture"
+  },
+  "CPU": {
+    "tests": 5,
+    "passed": 5,
+    "closedGeometry": "coordinate-welded triangle edge incidence=2; finite vertices for all first six anatomical categories",
+    "animationTimes": [
+      0,
+      0.7,
+      3.2,
+      9.5,
+      0,
+      0.73,
+      2.14,
+      6.29
+    ],
+    "log": "validation-fauna-pass2.txt"
+  },
+  "files": [
+    "src/world/moebiusSwamp.js",
+    "src/world/swampFaunaGeometry.js",
+    "tests/world/swampRemainingFauna.test.mjs",
+    "tests/fixtures/swampRemainingFaunaBaseline.json"
+  ],
+  "rollback": {
+    "source": "before-fauna/owned-source-snippets.json",
+    "fullReferenceOnly": "before-fauna/moebiusSwamp-source.txt",
+    "warning": "Restore only owned seven builders and fish/firefly inline prefixes; do not restore entire shared source file. Remove buildCoralSmallFish/buildCoralFirefly and faunaTube import when reverting. Restore original ribbon setZ expression and remove coralSwimLimbs update block."
+  }
+}

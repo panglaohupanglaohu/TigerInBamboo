@@ -1,0 +1,32 @@
+{
+  "method": "All visible mesh/instance local bounds across 52s at30Hz, scaled to actual boat2, bob included; expanded .30 inner. 720 half-degree route angles against clipped real solid triangles. Expansion exceeds combined translation plus orientation displacement between samples (<.18 inner, plus pose-sampling margin). Conservative filled hull/mast/oar box plus separate real escort-whale bounds, no centre-only circles.",
+  "bounds": {
+    "min": [
+      -5.49999980926514,
+      -0.9351655237928114,
+      -5.347038748556896
+    ],
+    "max": [
+      7.580000209808353,
+      8.039999732971197,
+      5.347038773292824
+    ]
+  },
+  "escortBounds": {
+    "min": [
+      -2.77535332702032,
+      -2.24815505755138,
+      -7.290982961654669
+    ],
+    "max": [
+      2.9745820655040442,
+      0.7613319356394268,
+      -4.109017038345332
+    ]
+  },
+  "low": 22.851844942448622,
+  "high": 33.1399997329712,
+  "polygons": 4676,
+  "samples": 720,
+  "contacts": []
+}

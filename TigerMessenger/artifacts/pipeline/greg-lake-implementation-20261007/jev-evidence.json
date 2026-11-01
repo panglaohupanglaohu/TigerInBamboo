@@ -1,0 +1,64 @@
+{
+  "version": "coral52-canopy3",
+  "goal": "在原深坑湖沼中落实珊瑚平涂、细结构线、三层抵达与原动物故事。",
+  "observations": {
+    "source": "主代理实际查看新的WebGL截图，Jev仅看这些文字",
+    "images": [
+      {
+        "file": "after-overview.jpg",
+        "sha256": "8afa32002e7cef3cd019017d64d7b369a19fdaf4bbc3ee9861df4c9617dcfb56"
+      },
+      {
+        "file": "after-upper.jpg",
+        "sha256": "56b0a8545ee17ee4a4aab26beea936604b30d6e575797a61523d19254896ae3a"
+      },
+      {
+        "file": "after-lower.jpg",
+        "sha256": "07b8085128b3c2ace5c7b6980676db0c1c286218239e0a9a8dafbe767c217bf4"
+      },
+      {
+        "file": "after-lizard.jpg",
+        "sha256": "ecd4ace29327e294b0bb2890d961645bf45ae024ca457a8a53b917ed1e1a08ee"
+      }
+    ],
+    "seen": [
+      "三层岸路、珊瑚岩沿、藕色世界树和鼠尾草卷垂扇叶可辨；原大船仍在",
+      "鲸鱼一体圆身、小侧眼；原叶舟变为有叶脉的浅花杯；原乘员和花芯保留",
+      "维修平台有岸边固定与桩，但尚无主路陆接",
+      "猴子坐在靠真实树干的短枝，蜥蜴贴岸；上中下机位已看",
+      "比目标图仍简化，目标图不是游戏截图"
+    ]
+  },
+  "checks": [
+    {
+      "name": "三岸每0.1 world承托与2world宽通路",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "正式V7坑缘径向地面优先级与240子步支撑",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "所有9局部机位shader errors为空",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "完整正式游戏启动后GPU实走",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "虎全周期脚底实景复查",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "保留原剧情、数量、修船身份与存档",
+    "不得以概念图或CPU检查冒充正式实景验收",
+    "正在修完整启动链的山体裁切错误和虎步行脚底；禁止跳过保护检查"
+  ]
+}

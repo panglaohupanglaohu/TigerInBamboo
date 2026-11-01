@@ -1,0 +1,158 @@
+{
+  "at": "2026-10-06T01:14:31.424Z",
+  "view": "全景",
+  "installed": true,
+  "oldCity": "target-old-city-10-tower-centred-terraces",
+  "newStairs": "target-new-city-stairs-5-stepped-flanks",
+  "rock": {
+    "version": "target-continuous-rock-4",
+    "meshes": 2,
+    "palette": {
+      "mtBase": "#c8c1b5",
+      "mtShade": "#8296ac",
+      "mtChalk": "#eee0c8",
+      "mtVerdure": "#91ad78",
+      "trRose": "#c4aaa5"
+    },
+    "detailGain": 0.09,
+    "geometryChanged": false,
+    "paletteMethod": "actual sun exposure plus continuous castle-chart broad strata and regional interpolation; no per-face random colours",
+    "sourceEvidence": "1712088611934371876 shows a palette authoring tool, not a disclosed rock shader",
+    "sunBound": true,
+    "shaderPatches": [
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      },
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "matched": true,
+        "orientationField": "normalize(vMtShade)"
+      }
+    ],
+    "suppressedDecorations": [
+      {
+        "name": "citadel-study-fractured-buttresses",
+        "uuid": "ef1c3164-bc7a-4a42-b5e2-a0661fdbfc81"
+      }
+    ]
+  },
+  "clouds": "citadel-cloud-banks-candidate-12",
+  "landmarks": true,
+  "navigation": {
+    "providerAvailable": true,
+    "installedIntoPlayer": true,
+    "completeNavigationVerified": false,
+    "adapter": {
+      "version": "target-city-player-navigation-1",
+      "installed": true,
+      "continuousRouteVerified": false,
+      "legacyProxyRemoved": 1,
+      "terrainQueries": 7314,
+      "terrainHits": 0,
+      "scope": "candidate public floors/walls and actual final terrain; remaining world uses original collision",
+      "limitations": [
+        "Finite body rays retain provider limitations; continuous bookshop-to-city journey not yet tested.",
+        "No ceiling collision or spawn-inside recovery; neither tram routing nor moving-actor avoidance is implemented.",
+        "Terrain fallback samples actual upward-facing triangles only; private roofs never become an airborne landing target."
+      ],
+      "legacyProxyAmbiguous": false
+    }
+  },
+  "tram": {
+    "routeIntegrated": false,
+    "controlsChanged": false,
+    "railIsStatic": false,
+    "candidateRailPresent": false
+  },
+  "gpuProgramCount": 181,
+  "gpuFailures": [],
+  "oldMaterials": [
+    {
+      "name": "terrace-0--1",
+      "color": "f4e1bd",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-stone-residential-arcade",
+      "color": "f4e1bd",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-walls",
+      "color": "f5a1ac",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-cornice",
+      "color": "fff1d8",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-drip-edge",
+      "color": "ffa968",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-roof",
+      "color": "ff894f",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-roof-eaves",
+      "color": "ffa968",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-ridge",
+      "color": "ffa968",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-windows-glass",
+      "color": "456777",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-windows-trim",
+      "color": "fff1d8",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-0-base",
+      "color": "fff1d8",
+      "type": "MeshStandardMaterial"
+    },
+    {
+      "name": "house-0--1-1-stone-residential-arcade",
+      "color": "f4e1bd",
+      "type": "MeshStandardMaterial"
+    }
+  ],
+  "glError": 0,
+  "camera": {
+    "position": [
+      54.80601173944599,
+      276.5043389269115,
+      8.882659050320584
+    ],
+    "quaternion": [
+      0.27981895661088346,
+      0.778874308503205,
+      0.4265185412920083,
+      -0.3648809353871315
+    ],
+    "fov": 35
+  }
+}

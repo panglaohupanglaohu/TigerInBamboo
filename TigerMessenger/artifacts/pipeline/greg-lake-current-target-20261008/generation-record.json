@@ -1,0 +1,12 @@
+{
+  "tool": "built-in image_gen",
+  "asset": "target-v2.png",
+  "intent": "future illustration target based on actual factory overview; not runtime screenshot",
+  "base": "../greg-lake-character-detail-20261008/current-lake-target-base-20261008.png",
+  "styleReference": "../greg-lake-approved-coral-flower-20261007/01-overview-final.png",
+  "promptSummary": "Preserve actual circular lake topology, central tree, right inward walkway and stairs, left shore repair dock and two rowing boats. Moebius-inspired fine ink and flat coral/sage/lavender/turquoise palette, natural fissured cliff and rooted flora. Five flower boats with two paddles each, playful black boys aboard/shore/swimming, adult tiger drinks inward, one reedbank messenger. Pale green bird with pink head emission; green lizard with internal pink emission; pepper monkey distinct from long-tail monkey; four-legged slender salamanders. No UI/text, train piers through lake, or unrelated castle.",
+  "reviewLimits": [
+    "Five boats and two paddles per boat visible; small character counts and tiny species details remain approximate in generated illustration.",
+    "This is not an accepted implementation or full match certification."
+  ]
+}

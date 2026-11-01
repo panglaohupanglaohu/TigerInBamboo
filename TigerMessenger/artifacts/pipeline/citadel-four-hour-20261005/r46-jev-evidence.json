@@ -1,0 +1,48 @@
+{
+  "version": "r46-plaza-vista",
+  "goal": "Citadel target v3 >95 visual and all hard checks; not yet accepted",
+  "visual_observations": {
+    "source": "root inspected r45 panorama and r46 actual plaza detail; latest independent scored image remains r44=67, not r46",
+    "sha256": "7351ec5908a5c38b9c7fa8aaf752d6fdea65e01181ec47bd0650d22622583d4e",
+    "differences": [
+      "Old waterfront path reduced119m to37.883m, current actual ship boxes and city/rail body checks clear; thin pillars remain visually weak.",
+      "New hall enlarged 1.1XZ/1.2above-floorY; real entry landing fixed. Old and new factory palette brightened.",
+      "Plaza three circular paving rings visible but remaining foreground tree row still blocks them; exact root diagnostics being added.",
+      "Clouds opaque continuous bounded drift, no alpha stipple/reset jump; still similar flat-ended icons in r46, v11 CPU-only pending GPU.",
+      "Cities still sparse/boxy vs target. Current source edits must not inherit prior review score."
+    ]
+  },
+  "checks": [
+    {
+      "name": "r46 actual GPU/app sample clean",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r44 candidate finite player-surface audit152queries",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r46 original horse night8 soldiers out and7targets; dayreturn pending",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Production tram/boarding and actual continuous player navigation",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Independent visual score strictly>95",
+      "required": true,
+      "passed": false
+    }
+  ],
+  "constraints": [
+    "No concept or CPU tests counted as final visual acceptance",
+    "Keep r17 mountain geometry",
+    "No source code, private data, images or credentials in request",
+    "Continue user authorized five hour window through 2026-10-06 07:13 Asia Shanghai"
+  ]
+}

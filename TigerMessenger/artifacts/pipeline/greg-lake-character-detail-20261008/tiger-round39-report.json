@@ -1,0 +1,30 @@
+{
+  "round": 39,
+  "recordedAt": "2026-10-08T08:05:57.125109+08:00",
+  "status": "CPU passed; GPU pending; awaiting gait-agent interface if needed",
+  "source": "src/assets/characters/tigerTargetV1.js",
+  "sourceSHA256": "4b965cedf8feaf146034e291213c710683bade09064dbe549a64d48393dcbf86",
+  "backup": "artifacts/pipeline/greg-lake-character-detail-20261008/before-tiger-round39/tigerTargetV1.js",
+  "references": [
+    "user 3292c586 anatomy board, viewed",
+    "user 61d36be2 current screenshot, viewed",
+    "user 637da8e7 walking anatomy, viewed"
+  ],
+  "changes": [
+    "same closed torso loft: scapular crest above rump; broad deep anterior chest and tucked flank",
+    "limb root rings buried inside torso at rest; muscle envelopes narrow at wrist and hock",
+    "front load-bearing paws widened 0.78 to 0.86 local; fixed sole -2.075",
+    "throat loft thinner and raised, upper skull dome flattened and continuous cheek mantles broadened",
+    "nose and all existing head water-contact geometry unchanged"
+  ],
+  "supportAndGaitUpdateIdenticalTo38": true,
+  "tests": {
+    "characterAndWaterReturn": "6/6, 9.16 s",
+    "newAnatomyAndForceDrink": "2/2, 23.63 s",
+    "rootRingContainment": "96 root-ring vertex ray parity tests against actual closed torso mesh",
+    "noseDatum": "max local z 1.589 unchanged",
+    "outlines": "13 geometry-sharing skins unchanged"
+  },
+  "GPU": "not run by this agent; root review required",
+  "collaboration": "B owns tigerCoralGait.js; target appearance only in this revision"
+}

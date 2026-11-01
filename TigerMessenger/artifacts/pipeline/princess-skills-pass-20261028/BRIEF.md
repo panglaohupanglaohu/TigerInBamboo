@@ -1,0 +1,5 @@
+# Production brief and reference analysis
+Hero mounted princess, Three.js GLB, original seat origin/pivots retained. Budget 100k triangles, no new texture dependency. Skills: blender-director, character-artist, hair-groom, stylized-style.
+Reference: approved princess threeview and riding side sheets. Ivory gown, brick red botanical cape, moss green panels, antique gold embroidery, chestnut waves and fine circlet. Target graceful adult head, tapered jaw, recessed eyes and broad grouped hair waves. Current v4 has ring banding, protruding eye whites, tubular hair, plain cape and gown.
+Cameras: orthographic front/side/back and head detail, same prior camera/light for comparison. Standing sheet is design reference only: retain mounted pose and rein hand positions.
+Plan: continuous cubic loft interpolation, facial seating/proportions, tapered grouped waves, surface-following botanical ornament; export/loader validation, render comparison, normal-game verification. MCP tools unavailable; isolated background Blender fallback, no foreground changes. Original v4 preserved.

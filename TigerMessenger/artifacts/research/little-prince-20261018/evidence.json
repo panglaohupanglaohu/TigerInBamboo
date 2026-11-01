@@ -1,0 +1,33 @@
+{
+  "task": "Research comparison, not implementation or visual acceptance",
+  "public_sources": {
+    "game": "https://littleprince.dev/",
+    "author_tutorial": "https://x.com/Saccc_c/status/2110694725640474759",
+    "tutorial_reproduction": "https://bbs1.org/topic/2051",
+    "vendor_asset_pipeline": "https://www.tripo3d.ai/blog/workflow-game-scene"
+  },
+  "observations": [
+    "Author X origin blocked; tutorial reproduction describes concept multi-views, separate Tripo props, Blender/Unity assembly, rig and Mixamo adaptation. Treat reproduction as unverified against origin.",
+    "Live game browser binding timed out repeatedly; no gameplay screenshots or FPS inspected this session.",
+    "Local renderer source: WebGLRenderer, NoToneMapping baseline, BasicShadowMap, night bloom; optional ACES lighting director exists but default flag false. Dynamic day/night and regional changes mean baseline does not prove live settings.",
+    "Local character example uses procedural lofts, boxes, rods and separate pivot parts. It is one inspected asset, not a full inventory.",
+    "Cannot infer competitor render pipeline (URP/HDRP), GI/AO settings, face counts, texture size, memory or performance from tool names."
+  ],
+  "checks": [
+    {
+      "name": "Exact project identity matched title and domain",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Live game multi-angle visual inspection",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Classify missing evidence conservatively; probabilities are not research accuracy or visual scores.",
+    "Prioritize single-scene comparison using same camera lighting; separate geometry, materials, lighting.",
+    "Do not recommend whole-engine migration solely from promotional images."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "task": "Highland Citadel r01 candidate triage",
+  "target": "Connected main ridge, broad lower shoulder, lower saddle; retain city and rail boundaries.",
+  "visual_observations": {
+    "source": "Primary agent and independent advisor actually viewed four r01 screenshots; Jev receives text only.",
+    "images": {
+      "r01-old-mountain-day-noCloud-plants.png": "94732c14cecef91ae8ac3bae61b29574e1977dc870224e302153fd46a3d79097",
+      "r01-overview-day-cloud-plants.png": "92b036de476f1ff6ce4809777162d4191401a8fedbd48bbb4f3751e2f96c162c",
+      "r01-bay-ridge-day-noCloud-plants.png": "f8dc659a7eaab77e20537dae824dd53ace3ff84bf570f68295486d7eb2f882cd",
+      "r01-new-mountain-day-noCloud-plants.png": "ab29df7b5e76051aafe9b7b42e078f454d1d16b90456bec96de7a805adebd1d8"
+    },
+    "completed": [
+      "Eastern top is slightly wider and less pointed; geometry score 43/75 versus baseline 41/75."
+    ],
+    "remaining": [
+      "Eastern peak still an isolated steep column; no readable broad low shoulder.",
+      "Rock surface still visually noisy; turf cuts and cypress rows remain.",
+      "Fixed clock alone does not fix lighting: moving tram Moebius override invalidates colour comparison."
+    ]
+  },
+  "checks": [
+    {
+      "name": "bounded field and protected chart geometry unit tests",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "candidate actual world rail/walk/architecture comparison",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "candidate actual full root support",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Do not promote opt-in candidate until actual checks pass",
+    "Keep original city, paths, rail, shore fixed",
+    "First isolate lighting in comparison iframe only; then add one low shoulder if needed"
+  ]
+}

@@ -1,0 +1,505 @@
+{
+  "method": "CPU actual production constructor with raster canvas for steam texture; no browser or GPU",
+  "ms": 278.0592089999999,
+  "startup": {
+    "status": "composed-before-construction",
+    "installed": true,
+    "routes": {
+      "version": "citadel-rail-splice-1",
+      "installed": false,
+      "lanes": {
+        "center": {
+          "version": "citadel-rail-splice-1",
+          "id": "center",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2617.49661699655,
+          "length": 2599.9186055218443,
+          "oldSpanLength": 307.541442060268,
+          "replacementLength": 289.9634305855622,
+          "prefixLength": 1706.6152763871255,
+          "suffixLength": 603.3398985491565,
+          "sourceInterval": [
+            0.6520028584966744,
+            0.7694973530695678
+          ],
+          "replacementInterval": [
+            0.6564110402389236,
+            0.7679389280619203
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.6520028584966744,
+              "world": [
+                -15.084820222469714,
+                99.45874833364907,
+                135.08096840610725
+              ],
+              "tangent": [
+                0.7710032708853568,
+                0.5527639588888452,
+                -0.3162371926855097
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.015158585498972069
+            },
+            {
+              "name": "end",
+              "sourceU": 0.7694973530695678,
+              "world": [
+                130.79994503040433,
+                103.03446881784288,
+                -28.027793806196367
+              ],
+              "tangent": [
+                0.4075125004255937,
+                -0.6598304310139367,
+                -0.6313139981854063
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.015378099056065912
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.23899219042296016
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 291,
+            "chordLength": 289.96966649264755,
+            "lengthRelativeError": 0.000021505839797616476,
+            "expectedArcStep": 0.9998738985709041,
+            "maxArcStepRelativeError": 0.010058755272285738,
+            "minSampleChord": 0.9899539843054223,
+            "maxSampleChord": 1.0099313854197751
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "routeStatus": "finite-candidate-needs-runtime",
+            "terrainCutRequired": true,
+            "worldDirection": "source-increasing-u-east-to-west",
+            "clearanceVerified": false
+          }
+        },
+        "red": {
+          "version": "citadel-rail-splice-1",
+          "id": "red",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2587.1163133342784,
+          "length": 2569.4059805967745,
+          "oldSpanLength": 306.8951731814619,
+          "replacementLength": 289.18484044395797,
+          "prefixLength": 1683.424989047498,
+          "suffixLength": 596.7961511053185,
+          "sourceInterval": [
+            0.6506955177743431,
+            0.7693199381761978
+          ],
+          "replacementInterval": [
+            0.655180614414427,
+            0.767729912823389
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.6506955177743431,
+              "world": [
+                -13.791729740488739,
+                98.24417661686508,
+                136.1056946817185
+              ],
+              "tangent": [
+                0.7706318692405526,
+                0.5535316583208147,
+                -0.3157993434879506
+              ],
+              "positionError": 1.6512065736091918e-12,
+              "tangentAngleDegrees": 0.01674777469392556
+            },
+            {
+              "name": "end",
+              "sourceU": 0.7693199381761978,
+              "world": [
+                131.80325382978768,
+                102.16575568228114,
+                -26.465497276037404
+              ],
+              "tangent": [
+                0.4082228804782539,
+                -0.6611888546682492,
+                -0.6294309956750828
+              ],
+              "positionError": 4.906476380504503e-13,
+              "tangentAngleDegrees": 0.01765882224792899
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.2525490939623676
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 291,
+            "chordLength": 289.19118692891783,
+            "lengthRelativeError": 0.00002194611913307753,
+            "expectedArcStep": 0.9971891049791654,
+            "maxArcStepRelativeError": 0.0006898880498559266,
+            "minSampleChord": 0.996690490085857,
+            "maxSampleChord": 0.997877053826137
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "routeStatus": "finite-candidate-needs-runtime",
+            "terrainCutRequired": true,
+            "worldDirection": "source-increasing-u-east-to-west",
+            "clearanceVerified": false
+          }
+        },
+        "blue": {
+          "version": "citadel-rail-splice-1",
+          "id": "blue",
+          "sourceId": null,
+          "status": "offline-composition-validated-not-installed",
+          "oldLength": 2647.435381332443,
+          "length": 2630.048783355519,
+          "oldSpanLength": 308.1322556193916,
+          "replacementLength": 290.7456576424674,
+          "prefixLength": 1729.5164482742691,
+          "suffixLength": 609.7866774387821,
+          "sourceInterval": [
+            0.6532799480090845,
+            0.7696689098670733
+          ],
+          "replacementInterval": [
+            0.6575986191661755,
+            0.7681462483517919
+          ],
+          "joins": [
+            {
+              "name": "start",
+              "sourceU": 0.6532799480090845,
+              "world": [
+                -16.377247466175234,
+                100.66148455092294,
+                134.03702391169878
+              ],
+              "tangent": [
+                0.7706276573218548,
+                0.5535348181289507,
+                -0.31580408307933544
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.015238870488484374
+            },
+            {
+              "name": "end",
+              "sourceU": 0.7696689098670733,
+              "world": [
+                129.77784482684757,
+                103.88804582126205,
+                -29.58635250495433
+              ],
+              "tangent": [
+                0.40816807693778273,
+                -0.6611411490384778,
+                -0.6295166415727177
+              ],
+              "positionError": 0,
+              "tangentAngleDegrees": 0.015375437335537747
+            }
+          ],
+          "seam": {
+            "positionError": 0,
+            "tangentAngleDegrees": 0.24974764922527048
+          },
+          "validation": {
+            "positionTolerance": 0.0001,
+            "tangentToleranceDegrees": 0.5,
+            "sampleStep": 1,
+            "maxSamples": 65536,
+            "lengthRelativeTolerance": 0.01,
+            "arcStepRelativeTolerance": 0.05,
+            "samples": 292,
+            "chordLength": 290.75180522302827,
+            "lengthRelativeError": 0.000021144187021488305,
+            "expectedArcStep": 0.9991259712799567,
+            "maxArcStepRelativeError": 0.017303694942871414,
+            "minSampleChord": 0.9818374002634283,
+            "maxSampleChord": 1.0162112858385495
+          },
+          "untouchedGeometry": "delegated to original getPointAt/getTangentAt, without resampling",
+          "mapping": "new arc-length progress; replaced interiors reject by default; relative migration is explicit and not position preserving",
+          "rollback": {
+            "strategy": "restore borrowed source curve reference and remap progress; rebuild dependent track/stop/interlocking state externally",
+            "sourceId": null
+          },
+          "routeAcceptance": {
+            "installed": false,
+            "grade": false,
+            "terrain": false,
+            "structures": false,
+            "twinTrackGauge": false,
+            "dynamicVehicles": false
+          },
+          "metadata": {
+            "routeStatus": "finite-candidate-needs-runtime",
+            "terrainCutRequired": true,
+            "worldDirection": "source-increasing-u-east-to-west",
+            "clearanceVerified": false
+          }
+        }
+      },
+      "twinTrackClearanceVerified": false
+    },
+    "routeClearanceVerified": false,
+    "geometryAndVehicleRoutesShared": true
+  },
+  "release": "cliff-transit-inner-1",
+  "objects": 177,
+  "services": 2,
+  "poses": [
+    {
+      "lane": "red",
+      "t": 0,
+      "progress": 0.655180614414427,
+      "world": [
+        -13.801979473115033,
+        98.31387079301871,
+        136.20284232600983
+      ],
+      "quaternion": [
+        0.41683215900009185,
+        0.2807588196237641,
+        0.1893635407970457,
+        0.843544240596543
+      ],
+      "finite": true
+    },
+    {
+      "lane": "red",
+      "t": 0.2,
+      "progress": 0.6776904740962193,
+      "world": [
+        5.586048535475045,
+        135.89611618673936,
+        99.63258698317713
+      ],
+      "quaternion": [
+        0.2723414010535943,
+        0.504284383041925,
+        0.14933682910561685,
+        0.8057455763234882
+      ],
+      "finite": true
+    },
+    {
+      "lane": "red",
+      "t": 0.4,
+      "progress": 0.7002003337780118,
+      "world": [
+        53.30268897498094,
+        141.47079668122342,
+        74.19263182798197
+      ],
+      "quaternion": [
+        0.22878394776937352,
+        -0.004648074940425517,
+        -0.16813767172828598,
+        0.95883576486706
+      ],
+      "finite": true
+    },
+    {
+      "lane": "red",
+      "t": 0.6,
+      "progress": 0.7227101934598041,
+      "world": [
+        102.0134637259762,
+        111.47937244994966,
+        73.92384424543899
+      ],
+      "quaternion": [
+        0.2767792964376373,
+        0.10275575487816446,
+        -0.30398354889261797,
+        0.9057750702605776
+      ],
+      "finite": true
+    },
+    {
+      "lane": "red",
+      "t": 0.8,
+      "progress": 0.7452200531415967,
+      "world": [
+        124.9822643565071,
+        109.55947576149653,
+        26.63658083896778
+      ],
+      "quaternion": [
+        0.36741612592342987,
+        0.6844347446079543,
+        -0.20077751553075673,
+        0.596860838087204
+      ],
+      "finite": true
+    },
+    {
+      "lane": "red",
+      "t": 1,
+      "progress": 0.767729912823389,
+      "world": [
+        131.89609386738474,
+        102.23974337603381,
+        -26.483005805162936
+      ],
+      "quaternion": [
+        0.08429591126549271,
+        0.33358120108860545,
+        -0.4296651510666841,
+        0.8348686361237001
+      ],
+      "finite": true
+    },
+    {
+      "lane": "blue",
+      "t": 0,
+      "progress": 0.6575986191661753,
+      "world": [
+        -16.389338597448113,
+        100.73290160513758,
+        134.13269736105562
+      ],
+      "quaternion": [
+        0.19276738053338904,
+        -0.8485541531848062,
+        -0.40653373509923874,
+        0.278436542755031
+      ],
+      "finite": true
+    },
+    {
+      "lane": "blue",
+      "t": 0.2,
+      "progress": 0.6797081450032989,
+      "world": [
+        2.8834850252463684,
+        138.11036492885486,
+        96.73871560148338
+      ],
+      "quaternion": [
+        0.14339398033265624,
+        -0.823204941549194,
+        -0.2636375857629659,
+        0.48194088225260645
+      ],
+      "finite": true
+    },
+    {
+      "lane": "blue",
+      "t": 0.4,
+      "progress": 0.701817670840422,
+      "world": [
+        51.1762057636579,
+        144.07343950157133,
+        70.73670480278192
+      ],
+      "quaternion": [
+        -0.15608533786493486,
+        -0.9627171562300444,
+        -0.22039474713681562,
+        0.015466086719814476
+      ],
+      "finite": true
+    },
+    {
+      "lane": "blue",
+      "t": 0.6,
+      "progress": 0.7239271966775453,
+      "world": [
+        100.62879641919743,
+        114.62151324640907,
+        71.08200043206459
+      ],
+      "quaternion": [
+        -0.30479024925368436,
+        -0.9128075624541755,
+        -0.25881501173276955,
+        0.08306652507544732
+      ],
+      "finite": true
+    },
+    {
+      "lane": "blue",
+      "t": 0.8,
+      "progress": 0.7460367225146687,
+      "world": [
+        122.12541109225597,
+        113.54191563398571,
+        23.498519993582434
+      ],
+      "quaternion": [
+        -0.19973110512828052,
+        -0.5992576866559532,
+        -0.35179899578040347,
+        0.690822102422824
+      ],
+      "finite": true
+    },
+    {
+      "lane": "blue",
+      "t": 1,
+      "progress": 0.7681462483517918,
+      "world": [
+        129.86924212923145,
+        103.96326296593575,
+        -29.60607341426624
+      ],
+      "quaternion": [
+        -0.4255380063088552,
+        -0.8357842466177323,
+        -0.07424712596874125,
+        0.3389239775785955
+      ],
+      "finite": true
+    }
+  ]
+}

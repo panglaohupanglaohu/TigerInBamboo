@@ -1,0 +1,59 @@
+<!--
+  spherefusion.html — 第 8 步：把第 7 步那套台地 + 房子搬到球面上（这一版只有地形）。
+
+  src/spheretown.js    球面网格（engine/sphere.js 的球极投影 Delaunay + 松弛）
+                       → 每格一份体素高度 → 沿各自法线挤出，一格落差做软坡、两格以上做崖
+  src/spherefusion.js  场景、海壳、开关
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sphere · 第 8 步：同一套管线放到星球上</title>
+<style>
+  :root { --panel: rgba(16, 22, 26, .84); --line: rgba(255,255,255,.14); --ink: #e9eeea; --muted: #9db0ad; --accent: #7fd1b9; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #20323c; color: var(--ink);
+    font: 13px/1.55 -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; }
+  #view { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+  #view:active { cursor: grabbing; }
+  .panel { position: fixed; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; backdrop-filter: blur(8px); }
+  #stats { top: 14px; left: 14px; min-width: 260px; color: var(--muted); font-size: 12px; line-height: 1.75; }
+  #stats b { color: var(--accent); font-weight: 600; }
+  #ctl { top: 14px; right: 14px; width: 208px; }
+  #ctl h2 { margin: 0 0 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  #ctl label { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; }
+  #ctl input { accent-color: var(--accent); }
+  #reroll { margin-top: 8px; width: 100%; padding: 6px; border-radius: 7px; cursor: pointer;
+    border: 1px solid var(--line); background: rgba(255,255,255,.06); color: var(--ink); font: inherit; }
+  #reroll:hover { background: rgba(255,255,255,.12); }
+  #ctl .hint { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; line-height: 1.6; }
+  #ctl a { color: var(--accent); text-decoration: none; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="stats" class="panel"></div>
+<div id="ctl" class="panel">
+  <h2>第 8 步 · 球面</h2>
+  <label><input type="checkbox" id="softSlopes" checked> 一格落差做软坡</label>
+  <label><input type="checkbox" id="ao" checked> 邻域遮挡（代替体素场）</label>
+  <label><input type="checkbox" id="rivers" checked> 河流（陡降刻蚀）</label>
+  <label><input type="checkbox" id="houses" checked> 村子（球面上的房子）</label>
+  <label><input type="checkbox" id="wire"> 线框</label>
+  <label><input type="checkbox" id="spin" checked> 自转</label>
+  <button id="reroll">换一颗</button>
+  <div class="hint">
+    拖动 = 转视角，滚轮 = 缩放。<br>
+    网格来自球极投影 Delaunay + 三角形松弛；每格沿自己的法线挤出，所以没有"上方向"这回事。<br>
+    <a href="fusion.html">← 平面版（第 7 步）</a> · <a href="index.html">index</a>
+  </div>
+</div>
+<script type="module" src="src/spherefusion.js"></script>
+</body>
+</html>

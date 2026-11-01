@@ -1,0 +1,154 @@
+{
+  "date": "2026-10-08",
+  "status": "round37 CPU verified; GPU pending parent review",
+  "stateTimingsSource": "round35 real unchanged locomotion state machine; round37 forceDrink/greeting regression passes",
+  "latestReference": "codex-clipboard-792656d2-2df2-47eb-aaf8-c54e4d41dcd0.png",
+  "change": "low adult cranium, horizontal long nasal bridge, restrained side-set eyes, remove old eyebrow/smile/whisker addons, fuller forearms; same golden palette and ground solver",
+  "runtime": "createMoebiusSwampPlacement -> applySwampTigerV2 awaits tigerAnatomy.ready -> applyTigerTargetV1 round37",
+  "design": {
+    "version": 3,
+    "palette": {
+      "coat": "#CD8F48",
+      "stripe": "#34333D",
+      "ink": "#47434F",
+      "ivory": "#F2E8D3",
+      "nose": "#B97882",
+      "eye": "#C8A66E"
+    },
+    "outlineWidth": 0.008,
+    "extraOutlineDraws": 13,
+    "style": "adult golden ochre coat / near-black grey violet tiger stripes / pale ivory underside",
+    "gait": "distance-driven four-beat walk with articulated shoulder-elbow and hip-knee-hock"
+  },
+  "shapes": {
+    "n2": {
+      "triangles": 5836,
+      "bounds": {
+        "min": [
+          -1.1226173639297485,
+          -1.0424022674560547,
+          -3.0799999237060547
+        ],
+        "max": [
+          1.1226173639297485,
+          1.4021495580673218,
+          1.7999999523162842
+        ]
+      }
+    },
+    "n9": {
+      "triangles": 2976,
+      "bounds": {
+        "min": [
+          -0.9800000190734863,
+          -0.675000011920929,
+          -0.949999988079071
+        ],
+        "max": [
+          0.9800000190734863,
+          0.6650000214576721,
+          1.149999976158142
+        ]
+      }
+    },
+    "n53": {
+      "triangles": 1772,
+      "bounds": {
+        "min": [
+          -0.45734459161758423,
+          -1.9733680486679077,
+          -0.9943335056304932
+        ],
+        "max": [
+          0.5025871396064758,
+          0.2798430025577545,
+          0.4258648157119751
+        ]
+      }
+    },
+    "n67": {
+      "triangles": 1772,
+      "bounds": {
+        "min": [
+          -0.42654016613960266,
+          -2.0106067657470703,
+          -0.6645251512527466
+        ],
+        "max": [
+          0.6958655118942261,
+          0.47340455651283264,
+          0.780475378036499
+        ]
+      }
+    },
+    "n55": {
+      "triangles": 1840,
+      "bounds": {
+        "min": [
+          -0.38999998569488525,
+          -2.075000047683716,
+          -0.2800000011920929
+        ],
+        "max": [
+          0.38999998569488525,
+          -1.7450000047683716,
+          0.6650000214576721
+        ]
+      }
+    }
+  },
+  "states": [
+    {
+      "mode": "to-steps",
+      "time": 0
+    },
+    {
+      "mode": "descend",
+      "time": 0.6
+    },
+    {
+      "mode": "drink",
+      "time": 4.333333333333333
+    },
+    {
+      "mode": "ascend",
+      "time": 10.866666666666667
+    },
+    {
+      "mode": "patrol",
+      "time": 15.233333333333333
+    }
+  ],
+  "stride": 1.1692307692307693,
+  "actorScale": [
+    0.4,
+    0.4,
+    0.4
+  ],
+  "preserved": [
+    "original source GLB/anatomy controller",
+    "world state machine and routes",
+    "drinking nose water datum 25.12",
+    "four real sole support samples",
+    "original water greeting speech/behavior",
+    "eight inward descent steps"
+  ],
+  "tests": {
+    "character": "4/4",
+    "drinkAndGreeting": "2/2",
+    "patrol": "9003 frames round35; unchanged paw paths/torso geometry in round37"
+  },
+  "files": {
+    "src/assets/characters/swampTigerV2.js": "97ad60a8c2568d61220faa3ab4d2d117feb518263125f4b40c7f350af1a97959",
+    "src/assets/characters/tigerTargetV1.js": "dc0240fc0b479ce1f1d14aa842ad4e4f442967b57a36aef335544502005b10d0",
+    "src/assets/characters/tigerCoralGait.js": "3f9d7e1c974b82feb1175d7d0e0e1c7cb8e297a2c44a09a133552d7b13825c2f",
+    "tests/world/swampTigerCoralCharacter.test.mjs": "5a0905fbeef8e2e0d92e1fdb1da1ae321eee9e645e2b79492e40276be8b2685a"
+  },
+  "rollback": "Restore the two source files from before/src/assets/characters, remove tigerCoralGait.js and its dedicated test; no world/environment/main or storage changed.",
+  "limitations": [
+    "CUA no browser available/Mac locked; this agent inspected parent saved r36 GPU screenshots, not a new r37 render.",
+    "CPU canvas shim verifies integration/geometry, not raster appearance or GPU shader compile.",
+    "Natural target likeness, thin-outline readability, four-foot motion readability require parent GPU review.",
+    "Documented threejs-game-director skill path absent; no claim it was loaded."
+  ]
+}

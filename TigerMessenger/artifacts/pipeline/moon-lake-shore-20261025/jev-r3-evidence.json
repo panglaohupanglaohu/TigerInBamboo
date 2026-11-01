@@ -1,0 +1,31 @@
+{
+  "task": "Moon pine forest outer SEA coast r3 actual square shell remnants correction",
+  "observations": {
+    "source": "User clarified outer sea coast and wide city/moon/ship screenshot; production buildWorld/buildHills/compileOfficialOcean exact-scale component",
+    "actual": "City-facing eye flat61,2,59 target48,.3,44 reproduced broad green panel into sea. Same-camera disabling ONLY legacy platform removes panel but retains hill shore. Local r3 shader mask then produced same cleared water while hills remained; installed1shell,no console errors. Small crescent r2 is separate and not screenshot repair proof.",
+    "repair": "Finite east x>66 z0..53 plus south z>50 x20..72 ownership patches at final hills rectangle boundaries;3m end fade, ground-level rail/actor footprints excluded. CPU and GLSL share mask. Platform support and hills fallback now use indexed final hill/skirt triangles or -Infinity if no actual ground, not invisible original shell. One3m-bin index and4096 cache; other regions original callbacks preserved."
+  },
+  "checks": [
+    {
+      "name": "8 production geometry/support/material/rail+actor protection regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "fixed-camera full scale island+ocean component GPU",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "normal-game protected rail/actor/boat exact scene and screenshot",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No global sea level or hills geometry edits",
+    "Keep original moon/pines/path/city/rail/ships",
+    "Full normal verification belongs to parent integration; component is not acceptance"
+  ],
+  "evidence_revision": "moon-coast-r3-20261025"
+}

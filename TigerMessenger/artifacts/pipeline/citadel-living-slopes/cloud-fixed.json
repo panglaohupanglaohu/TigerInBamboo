@@ -1,0 +1,53 @@
+{
+  "stats": {
+    "particles": 384,
+    "spawnCells": 29,
+    "nx": 31,
+    "nz": 22,
+    "step": 8,
+    "validCells": 68,
+    "samples": 682,
+    "spawnBounds": {
+      "minX": -74,
+      "maxX": 46,
+      "minZ": -53,
+      "maxZ": -5
+    },
+    "source": "final rendered rock surfaces",
+    "method": "cached terrain field and wind advection; project shader",
+    "active": 351,
+    "unsupported": 28,
+    "alphaSum": 77.73359897139017
+  },
+  "worldCenter": [
+    122.474748218714,
+    60.23408280921672,
+    122.29314048270385
+  ],
+  "matrix": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    -52,
+    0,
+    0,
+    1
+  ],
+  "minRail": 61.053088655078575,
+  "groundGap": 12.240238120848119,
+  "errors": [],
+  "warnings": [
+    "[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface",
+    "[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate",
+    "[citadel] alignReleasedLighting 跳过: Cannot read properties of undefined (reading 'supports')"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "status": "source installed; actual GPU inspection pending parent",
+  "files": [
+    "src/world/morrisIsland.js",
+    "src/world/morrisLandscape.js",
+    "src/world/morrisLandscapeDetails.js"
+  ],
+  "rootCause": "Cool grey baked into every slope vertex, shoulder and overlay instead of limited to light shadows. White vertex-color materials do not double-tint.",
+  "palette": {
+    "slope": [
+      "e0ca96",
+      "c4a875"
+    ],
+    "fracture": [
+      "e1cb99",
+      "c3aa7c"
+    ],
+    "shoulder": [
+      "e2ca94",
+      "bca77f"
+    ],
+    "creekBoulder": "d3b886"
+  },
+  "shadowPolicy": "warm rock albedo; unchanged scene light supplies directional shadow. No global exposure or lights changed.",
+  "geometryCheck": "five actual ground/rock/road geometries and instance matrix hashes identical",
+  "gpuEvidence": null,
+  "component": "component.html",
+  "jev": "actual request and cache recorded",
+  "preservation": "source-before/*.js.original raw source; source-before/*.js import-rebased runnable frozen modules"
+}

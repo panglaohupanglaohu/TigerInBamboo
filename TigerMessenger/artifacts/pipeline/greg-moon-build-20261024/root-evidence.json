@@ -1,0 +1,32 @@
+{
+  "iteration": "greg-four-pines-root-r1",
+  "observations": [
+    "Root saw fresh normal entry overview and side view: four independently curved thick trunks with flat irregular needle plates, replacing ball crowns; original largest right pine retained.",
+    "In matching overview, pine1 is left of crescent with sky gap; pool/deep patch/ring kept. Side view still has pine/moon overlap, not all-angle clear.",
+    "900 CPU rays across ring plus .35m player margin and .2-2.4m body height hit none of the added tree triangles; excludes old forest and is not player navigation.",
+    "Three terrain/rail/existing-prop integration regressions pass with new-site-driven fixtures.",
+    "Normal game errors0; all4 actual roots use requested sites, no support rejection."
+  ],
+  "checks": [
+    {
+      "name": "normal overview four new silhouettes and no pine1/moon crossing",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "new-tree ring clearance triangle rays",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "actual hill/rail/old-objects regressions",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full player walkthrough",
+      "required": false,
+      "passed": null
+    }
+  ]
+}

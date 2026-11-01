@@ -1,0 +1,28 @@
+{
+  "task": "Morris round7 right-bank approach replanned",
+  "observations": [
+    "CUA reset actually restores existing tab reading; old normal r67 travelled145.76m countersbridge1/court1, not full roundtrip",
+    "Spatial flora candidate exact transforms and LOD tests passed, but measured draw calls rose and no FPS benefit established; removed runtime integration",
+    "Closed protected coast volumes first even bead ring rejected by GPU; irregular lower bigger clustered candidate inspected",
+    "Main right-bank route r3 removes west detour, retains winding S. Downstream creek moved to(27,50),(20,66). Actual component now shows right foreground road winding into bridge, creek onleft and castle beyond",
+    "Normal r69 bank cut and bridge underside/creek actually seen; newest r71 course still loading. Clean photo mode only hides UI, not gameplay simulation"
+  ],
+  "checks": [
+    {
+      "name": "r71 finite/grade/support no offbridge water crossing",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "r71 deterministic patrol stop resume11",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "fresh r71 normal full traversal and E",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraint": "Compact text only; no images/source/chat/secrets; JEV does not accept art or gameplay"
+}

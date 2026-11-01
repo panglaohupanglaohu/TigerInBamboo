@@ -1,0 +1,113 @@
+--- round38/tigerTargetV1.js
++++ round39/tigerTargetV1.js
+@@ -1,7 +1,7 @@
+ import * as THREE from 'three';
+ import { createTigerFaceLoft, TIGER_MUZZLE_SECTIONS, TIGER_BRIDGE_SECTIONS } from './tigerFaceAnatomy.js';
+-import { TIGER_CORAL_PALETTE, TIGER_WALK, tigerStrideLength, sampleTigerWalk, tigerLimbRadius } from './tigerCoralGait.js';
+-export const TIGER_TARGET_ROUND=38;
++import { TIGER_CORAL_PALETTE, TIGER_WALK, tigerStrideLength, sampleTigerWalk } from './tigerCoralGait.js';
++export const TIGER_TARGET_ROUND=39;
+ export function applyTigerTargetV1(tiger){
+  const nodes=new Map();tiger.traverse(n=>{if(n.userData.blenderSourceNode)nodes.set(n.userData.blenderSourceNode,n);});
+  const head=nodes.get('n8'),body=nodes.get('n1'),neck=nodes.get('n6');if(!head||!body||!neck)return;
+@@ -15,10 +15,10 @@
+  // Preserve the approved coat shader; remove stale pre-loft vertex shading.
+  neck.material=nodes.get('n2').material.clone();neck.material.vertexColors=false;
+  neck.material.onBeforeCompile=nodes.get('n2').material.onBeforeCompile;neck.material.customProgramCacheKey=()=> 'tiger-target-neck-1';
+- const p0=new THREE.Vector3(0,.16,.40),p1=new THREE.Vector3(0,.36,1.30),p2=new THREE.Vector3(),p3=new THREE.Vector3(),point=new THREE.Vector3(),tangent=new THREE.Vector3(),up=new THREE.Vector3(),endDir=new THREE.Vector3();
++ const p0=new THREE.Vector3(0,.35,.40),p1=new THREE.Vector3(0,.46,1.30),p2=new THREE.Vector3(),p3=new THREE.Vector3(),point=new THREE.Vector3(),tangent=new THREE.Vector3(),up=new THREE.Vector3(),endDir=new THREE.Vector3();
+  const curve=new THREE.CubicBezierCurve3(p0,p1,p2,p3);
+  const updateNeck=()=>{head.updateMatrix();p3.set(0,-.1,-.43).applyMatrix4(head.matrix);endDir.set(0,0,1).transformDirection(head.matrix);p2.copy(p3).addScaledVector(endDir,-.42);
+-  for(let i=0;i<=rings;i++){const u=i/rings,s=u*u*(3-2*u);curve.getPoint(u,point);curve.getTangent(u,tangent);up.set(0,tangent.z,-tangent.y).normalize();const rx=THREE.MathUtils.lerp(.86,.54,s),ry=THREE.MathUtils.lerp(.89,.59,s);
++  for(let i=0;i<=rings;i++){const u=i/rings,s=u*u*(3-2*u);curve.getPoint(u,point);curve.getTangent(u,tangent);up.set(0,tangent.z,-tangent.y).normalize();const rx=THREE.MathUtils.lerp(.79,.57,s),ry=THREE.MathUtils.lerp(.70,.53,s);
+    for(let j=0;j<=sides;j++){const a=j/sides*Math.PI*2,k=(i*(sides+1)+j)*3;positions[k]=Math.cos(a)*rx;positions[k+1]=point.y+Math.sin(a)*ry*up.y;positions[k+2]=point.z+Math.sin(a)*ry*up.z;}}
+   geo.attributes.position.needsUpdate=true;geo.computeVertexNormals();geo.computeBoundingSphere();
+  };
+@@ -161,7 +161,7 @@
+  const skull=nodes.get('n9'),skullGeo=new THREE.SphereGeometry(1,48,32),skullP=skullGeo.attributes.position;
+  for(let i=0;i<skullP.count;i++){
+   const y=skullP.getY(i),jaw=1-.15*(1-THREE.MathUtils.smoothstep(y,-.7,-.05));
+-  skullP.setXYZ(i,skullP.getX(i)*.98*jaw,y*.67-.005,skullP.getZ(i)*1.05+.10);
++  skullP.setXYZ(i,skullP.getX(i)*.98*jaw,y*.67-.005-.07*Math.pow(Math.max(0,y),3),skullP.getZ(i)*1.05+.10);
+  }
+  skullGeo.computeVertexNormals();skullGeo.computeBoundingSphere();skull.geometry=skullGeo;
+ 
+@@ -215,7 +215,7 @@
+   const fg=new THREE.SphereGeometry(1,32,24),p=fg.attributes.position,col=[];
+   for(let i=0;i<p.count;i++){
+    const x=p.getX(i),y=p.getY(i),z=p.getZ(i),t=(y+1)/2,tuft=1+.035*Math.sin(Math.atan2(z,x)*19+y*21);
+-   p.setXYZ(i,side*(.70+(x*.28+.045*(1-t))*tuft),-.24+y*.48,.52+z*.53);
++   p.setXYZ(i,side*(.66+(x*.32+.035*(1-t))*tuft),-.20+y*.43,.52+z*.58);
+    const c=new THREE.Color(t>.76?TIGER_CORAL_PALETTE.coat:TIGER_CORAL_PALETTE.ivory);col.push(c.r,c.g,c.b);
+   }
+   fg.setAttribute('color',new THREE.Float32BufferAttribute(col,3));fg.computeVertexNormals();const fur=new THREE.Mesh(fg,new THREE.MeshBasicMaterial({vertexColors:true,fog:false}));fur.name='target-tiger-cheek-mantle';head.add(fur);
+@@ -224,7 +224,9 @@
+  }
+ 
+  // Smooth shoulder/ribcage/rump loft; retains original limb pivots and the deforming neck.
+- const profile=[[-3.08,.04,.08,.15],[-2.70,.76,.88,.10],[-2.15,1.00,1.07,.12],[-1.3,.78,.82,.22],[-.5,.86,.98,.12],[.3,1.04,1.14,.12],[1.1,1.10,1.20,.20],[1.65,.72,.93,.23],[1.80,.08,.14,.25]];
++ const profile=[[-3.08,.04,.08,.15],[-2.70,.64,.70,.24],[-2.15,.86,.87,.28],[-1.3,.72,.68,.36],[-.5,.82,.84,.25],[.3,.99,1.03,.20],[1.03,.99,1.17,.32],[1.50,.76,.99,.38],[1.80,.08,.14,.35]];
++ // Distinct ribcage / tucked flank / scapular crest are a single watertight skin.
++ tiger.userData.tigerAnatomy={version:39,torsoSections:profile.map(s=>[...s]),foreAnchor:[.62,.38,1.03],hindAnchor:[.55,.27,-2.05],soleY:-2.075};
+  const bp=[],bi=[],bu=[],ringsB=72,sidesB=40;
+  for(let k=0;k<=ringsB;k++){
+   const z=-3.08+4.88*k/ringsB;let j=0;while(j<profile.length-2&&z>profile[j+1][0])j++;
+@@ -279,6 +281,13 @@
+   const lid=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(eyelidPoints),new THREE.LineBasicMaterial({color:TIGER_CORAL_PALETTE.ink,fog:false}));lid.name='adult-tiger-upper-eyelid';head.add(lid);
+  }
+ 
++ // Closed limb skins bury their small root ring inside the shoulder / pelvis.
++ // Smooth muscle envelopes taper at wrist and hock, rather than capsule limbs.
++ const muscleRadius=(u,rear)=>{
++  const profile=rear?[[0,.28,.36],[.12,.46,.59],[.28,.43,.51],[.45,.28,.34],[.64,.19,.22],[.78,.16,.18],[.85,.19,.23],[1,.19,.22]]:[[0,.27,.35],[.12,.38,.53],[.28,.38,.45],[.43,.29,.34],[.62,.245,.29],[.82,.16,.20],[1,.21,.24]];
++  let k=0;while(k<profile.length-2&&u>profile[k+1][0])k++;
++  const a=profile[k],b=profile[k+1],v=THREE.MathUtils.smoothstep(u,a[0],b[0]);return[a[1]+(b[1]-a[1])*v,a[2]+(b[2]-a[2])*v];
++ };
+  // Forelimbs have a shoulder, a rearward elbow and a forward-reaching wrist.
+  const foreMeshes=['n53','n60'].map(id=>nodes.get(id));
+  const limbRings=36,limbSides=24,limbIndices=[],limbUV=[];
+@@ -289,12 +298,12 @@
+   const joints=[new THREE.Vector3(0,.60-.40*bend,0),new THREE.Vector3(0,-.58,-.16-.52*bend),new THREE.Vector3(0,-1.36,.03),new THREE.Vector3(0,-1.85,.22)];
+   const centerline=new THREE.CatmullRomCurve3(joints);const q=new THREE.Vector3();
+   for(const [index,m] of foreMeshes.entries()){
+-   const anchor=m.worldToLocal(body.localToWorld(new THREE.Vector3(index===0?-.84:.84,-.05,1.03)));
++   const anchor=m.worldToLocal(body.localToWorld(new THREE.Vector3(index===0?-.62:.62,.38,1.03)));
+    joints[0].copy(anchor);joints[1].lerpVectors(anchor,joints[3],.48);joints[1].z-=.28+.30*bend+.46*(swings[index]||0);
+    joints[1].y+=.12*(swings[index]||0);
+    joints[2].lerpVectors(joints[1],joints[3],.70);
+    const p=m.geometry.attributes.position;
+-   for(let i=0;i<=limbRings;i++){const u=i/limbRings;centerline.getPoint(u,q);const tangent=centerline.getTangent(u),normal=new THREE.Vector3(0,-tangent.z,tangent.y).normalize();const [rx,rz]=tigerLimbRadius(u,false);
++   for(let i=0;i<=limbRings;i++){const u=i/limbRings;centerline.getPoint(u,q);const tangent=centerline.getTangent(u),normal=new THREE.Vector3(0,-tangent.z,tangent.y).normalize();const [rx,rz]=muscleRadius(u,false);
+     for(let j=0;j<=limbSides;j++){const a=j/limbSides*Math.PI*2;p.setXYZ(i*(limbSides+1)+j,q.x+Math.cos(a)*rx,q.y+Math.sin(a)*rz*normal.y,q.z+Math.sin(a)*rz*normal.z);}}
+    p.needsUpdate=true;m.geometry.computeVertexNormals();m.geometry.computeBoundingSphere();
+   }
+@@ -308,16 +317,16 @@
+  tiger.userData.updateTargetHindlimbs=(bend,swings=[])=>{
+   const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,.68,-.08),new THREE.Vector3(0,-.27,.25+.13*bend),new THREE.Vector3(0,-1.26,-.21-.10*bend),new THREE.Vector3(0,-1.85,.22)]),q=new THREE.Vector3();
+   for(const [index,m] of rearMeshes.entries()){
+-   const anchor=m.worldToLocal(body.localToWorld(new THREE.Vector3(index===0?-.68:.68,-.10,-2.05)));
++   const anchor=m.worldToLocal(body.localToWorld(new THREE.Vector3(index===0?-.55:.55,.27,-2.05)));
+    curve.points[0].copy(anchor);curve.points[1].lerpVectors(anchor,curve.points[3],.43);curve.points[1].z+=.40+.30*(swings[index+2]||0);
+    curve.points[2].lerpVectors(anchor,curve.points[3],.79);curve.points[2].z-=.30+.24*(swings[index+2]||0);
+-   const p=m.geometry.attributes.position;for(let i=0;i<=limbRings;i++){const u=i/limbRings;curve.getPoint(u,q);const tangent=curve.getTangent(u),normal=new THREE.Vector3(0,-tangent.z,tangent.y).normalize();const [rx,rz]=tigerLimbRadius(u,true);for(let j=0;j<=limbSides;j++){const a=j/limbSides*Math.PI*2;p.setXYZ(i*(limbSides+1)+j,q.x+Math.cos(a)*rx,q.y+Math.sin(a)*rz*normal.y,q.z+Math.sin(a)*rz*normal.z);}}p.needsUpdate=true;m.geometry.computeVertexNormals();m.geometry.computeBoundingSphere();}
++   const p=m.geometry.attributes.position;for(let i=0;i<=limbRings;i++){const u=i/limbRings;curve.getPoint(u,q);const tangent=curve.getTangent(u),normal=new THREE.Vector3(0,-tangent.z,tangent.y).normalize();const [rx,rz]=muscleRadius(u,true);for(let j=0;j<=limbSides;j++){const a=j/limbSides*Math.PI*2;p.setXYZ(i*(limbSides+1)+j,q.x+Math.cos(a)*rx,q.y+Math.sin(a)*rz*normal.y,q.z+Math.sin(a)*rz*normal.z);}}p.needsUpdate=true;m.geometry.computeVertexNormals();m.geometry.computeBoundingSphere();}
+  };tiger.userData.updateTargetHindlimbs(0);
+ 
+  // Broad load-bearing paws, with a flattened sole and subtle toe lobes.
+- for(const paw of paws){
++ for(const [pawIndex,paw] of paws.entries()){
+   const g=new THREE.SphereGeometry(1,40,24),p=g.attributes.position;
+-  for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i);p.setXYZ(i,x*.39,Math.max(-2.075,-1.925+y*.18),.18+z*.46+(z>0?.025*Math.cos(x*12.):0));}
++  for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i);p.setXYZ(i,x*(pawIndex<2?.43:.39),Math.max(-2.075,-1.925+y*.18),.18+z*.46+(z>0?.025*Math.cos(x*12.):0));}
+   g.computeVertexNormals();g.computeBoundingSphere();paw.geometry=g;const colors=[],normal=g.attributes.normal,base=new THREE.Color(TIGER_CORAL_PALETTE.ivory);
+   for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i),groove=Math.min(Math.abs(x),Math.abs(x-.16),Math.abs(x+.16));const shade=(normal.getY(i)>.05?1:.92)*(1-.22*(1-THREE.MathUtils.smoothstep(groove,.008,.025))*THREE.MathUtils.smoothstep(z,.33,.53));colors.push(base.r*shade,base.g*shade,base.b*shade);}
+   g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));paw.material=new THREE.MeshBasicMaterial({vertexColors:true});
+@@ -352,7 +361,7 @@
+  // A narrow inverted shell shares each final skin geometry, including animated lofts.
+  const ink=new THREE.MeshBasicMaterial({color:TIGER_CORAL_PALETTE.ink,side:THREE.BackSide,fog:false});
+  ink.onBeforeCompile=shader=>{shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed += normal * .008;');};
+- ink.customProgramCacheKey=()=> 'lake-tiger-fine-ink-38';
++ ink.customProgramCacheKey=()=> 'lake-tiger-fine-ink-39';
+  for(const id of ['n2','n6','n9','n23','add:Tiger_Broad_Nasal_Bridge','n53','n60','n67','n74','n55','n62','n69','n76']){
+   const skin=nodes.get(id),line=new THREE.Mesh(skin.geometry,ink);line.name='coral-tiger-fine-outline';line.userData.isOutline=true;line.userData.tigerCoralOutline=true;skin.add(line);
+  }

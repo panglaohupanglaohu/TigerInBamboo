@@ -53,3 +53,8 @@ backend/runtime.json
 
 # Godot 导出包（index.pck 265MB，超过 GitHub 100MB 硬限，不入库）
 *.pck
+
+# 本地静态服务状态与日志
+**/.server.pid
+**/.server.port
+**/.server.log

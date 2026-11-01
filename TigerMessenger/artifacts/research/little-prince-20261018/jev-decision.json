@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "8fcf132eecf9ad3afd7f9107c504cd6efdc1ccb3a2f9c513304a851f5a074fa3",
+  "model": "jev-1.13.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.95
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.94,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0.01,
+        "navigation": 0.03,
+        "review": 0.95
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.49
+    }
+  },
+  "usage": {
+    "input_tokens": 899,
+    "output_tokens": 91,
+    "cost_usd": 0.000378,
+    "credits_remaining_usd": 4.942556
+  },
+  "elapsed_ms": 3587,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "Live game multi-angle visual inspection",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

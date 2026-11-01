@@ -1,0 +1,18 @@
+{
+  "passed": 13,
+  "checks": [
+    "outside region never starts",
+    "island entry claims existing music bus and fades in",
+    "elder interactive music preempts without restarting island score",
+    "music resumes at saved position when elder stops",
+    "tram has priority",
+    "combat has priority",
+    "M silences immediately",
+    "unmute resumes inside",
+    "exit begins gradual fade",
+    "exit completes and releases music ownership",
+    "frame observes media end without restarting before ended event",
+    "one play per visit does not restart on ended",
+    "reenter allows new play-through"
+  ]
+}

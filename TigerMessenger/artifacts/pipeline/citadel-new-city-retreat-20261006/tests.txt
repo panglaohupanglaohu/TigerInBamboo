@@ -1,0 +1,63 @@
+{
+  changed: 4993,
+  protectedPoints: 7956,
+  report: {
+    version: 'target-new-city-coastal-retreat-1',
+    built: true,
+    visualReviewed: false,
+    changedQueries: 4993,
+    protectedQueries: 2884,
+    maxDrop: 160.83348013366276,
+    edge: [
+      [Array], [Array],
+      [Array], [Array],
+      [Array], [Array],
+      [Array], [Array],
+      [Array], [Array]
+    ],
+    transitionWidth: 3.8,
+    railChanged: false,
+    scope: 'new-city eastern exterior only; old city and reserved construction cores fixed',
+    limitations: [
+      'Authored castle-chart envelope; not a global railway clearance guarantee.',
+      'Final mesh, foundations, turf and current actors require runtime re-sampling.'
+    ],
+    maxDropPoint: {
+      x: 137,
+      z: -8,
+      before: 10.833480133669116,
+      after: -149.99999999999363,
+      sea: -146.99999999999363,
+      edge: 98.10905600000001
+    }
+  }
+}
+{
+  revision: 'target-terrain-heightfield-1',
+  grid: [ 169, 106 ],
+  stepActual: [ 1.6923076923076923, 1.6886792452830188 ],
+  validCells: 17030,
+  invalidCells: 884,
+  invalidSamples: 884,
+  boundaryEdges: 550,
+  components: 1,
+  vertices: 34612,
+  triangles: 69220,
+  minArea: 1.4288777931360528,
+  domainPolicy: 'omit whole cells touching null; cap resulting boundary; no analytic sea-curve clipping',
+  closed: true,
+  empty: false,
+  coordinateSpace: 'caller chart',
+  sceneMutation: false
+}
+✔ new city exterior retreats, all old terrain and full construction ellipses remain exactly fixed (69.380958ms)
+✔ outer ridge and toe removed seaward continuously, plaza actors and terrace remain supported (2.581459ms)
+✔ retreated entire mesh stays closed positive-area deterministic with original submerged floor (166.6635ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 299.642917

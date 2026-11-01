@@ -1,0 +1,35 @@
+{
+  "scope": "Only buildLongTailMonkey in moebiusSwamp.js, monkey tests and reports; all other source left intact.",
+  "reason": "After narrowing torso, preserved shoulder pivots at x±.27/y.7/z.13 lay outside torso. Old offset upper-arm ellipsoid did not begin at pivot, leaving gaps when rotated; separate differently oriented elbow/forearm ellipsoids appeared as a fork.",
+  "fix": [
+    "Short tapered shoulder bridge starts inside real torso ellipsoid and ends at unchanged shoulder pivot.",
+    "Joint sphere covers exact pivot; one closed tapered curve passes continuously through shoulder/elbow/wrist.",
+    "Original hand/palm/finger endpoints, armL/armR references and baseRotX remain."
+  ],
+  "palette": {
+    "fur": "#9B7C96",
+    "shade": "#856D82",
+    "face": "#C9B5AD",
+    "abdomen": "#B396A6",
+    "ink": "#435968"
+  },
+  "validation": {
+    "testsPassed": 9,
+    "actors": 5,
+    "arms": 10,
+    "actualActionSamples": 65,
+    "topology": "Arm tube one connected closed component; every shoulder root-ring vertex stays inside stationary joint under actual transformations.",
+    "tail": "Hanging, deck-flat and deck-raised vertex arrays SHA256 exactly unchanged against before snapshots.",
+    "randomCallsPerMonkey": 1,
+    "pivot": "position/quaternion/scale byte-exact unchanged",
+    "originalIdentity": "3 ordinary monkeys +2 repair workers; original perches, timing, phase and roles preserved.",
+    "minimumActualDeckTailClearance": [
+      0.07639989121675084,
+      0.1672371857625381
+    ]
+  },
+  "drawCalls": "Same three colored meshes plus three fine-ink shells per monkey; shoulder pieces merged in existing body batch.",
+  "limits": "Shoulder span now includes the real bridge to pre-existing outboard pivots (0.652local); central slender torso and tail profile unchanged. GPU sides/repair pending parent review.",
+  "backup": "monkey-arm-v3-before contains exact pre-fix narrow builder and tail/RNG/pivot contracts.",
+  "rollback": "Only apply inverse narrow builder patch; never restore whole moebiusSwamp.js over other team edits."
+}

@@ -1,0 +1,53 @@
+{
+  "actualViewed": true,
+  "image": "marked-stacked-live-front-day.png",
+  "release": "user-marked-transit-release-1",
+  "walking": "stacked-connected",
+  "scoreVisibleFrame": 57,
+  "maxScore": 100,
+  "completeSceneScore": null,
+  "accepted": false,
+  "rubric": [
+    {
+      "name": "全景布局与两城呼应",
+      "score": 14,
+      "max": 25
+    },
+    {
+      "name": "建筑轮廓与结构细节",
+      "score": 16,
+      "max": 25
+    },
+    {
+      "name": "材质与配色",
+      "score": 13,
+      "max": 20
+    },
+    {
+      "name": "植被云水环境协调",
+      "score": 7,
+      "max": 15
+    },
+    {
+      "name": "地标与连接关系",
+      "score": 6,
+      "max": 10
+    },
+    {
+      "name": "轮廓边缘与画面完整性",
+      "score": 1,
+      "max": 5
+    }
+  ],
+  "priorities": [
+    "measure and close only short shore/gallery backside gaps, not central bay",
+    "densify existing old-city terraces with small connected street groups"
+  ],
+  "unverified": [
+    "near-detail construction",
+    "backside scene",
+    "exact cliff distances",
+    "dynamic trains/ships/player",
+    "performance acceptance"
+  ]
+}

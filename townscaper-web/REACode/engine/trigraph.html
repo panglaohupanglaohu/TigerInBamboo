@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — Triangle Graph (incremental insert + flips)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #445d68; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #eaf2f5;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.45); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #dce9ee;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.45);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">三角图：随机插点 + 局部翻边（1677242779162877952）— 绿=本次检查的边，黄=正在翻的边</div>
+<div id="hud"></div>
+
+<script type="module">
+/**
+ * trigraph.html — src/triGraph.js 的可视化验证页（不是引擎的一部分）。
+ *
+ * 照参考片的样子画：石板灰背景、白色细线、每次插点只亮一小簇绿边和一条黄边。
+ * 那条黄边就是"正在被翻的边"，是这张图唯一的技术看点 —— 它证明翻边是**局部**的。
+ *
+ * 用法：`?n=160&speed=30`，空格暂停，`f` 切到"不翻边"的对照组。
+ */
+import { TriGraph, blobPoints } from '../src/triGraph.js';
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hud = document.getElementById('hud');
+const q = new URLSearchParams(location.search);
+const N = Number(q.get('n') || 160);
+const SPEED = Number(q.get('speed') || 26);   // 每秒插几个点
+const FLIP0 = q.get('flip') !== '0';
+
+let W = 0, H = 0, scale = 1, cx = 0, cy = 0;
+function resize() {
+  W = canvas.width = Math.floor(canvas.clientWidth * devicePixelRatio);
+  H = canvas.height = Math.floor(canvas.clientHeight * devicePixelRatio);
+  scale = Math.min(W, H) / 3.6;
+  cx = W * 0.5; cy = H * 0.52;
+}
+addEventListener('resize', resize);
+resize();
+
+let seed = 12345;
+const rng = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+
+const pts = blobPoints(N, { radius: 1.0, rng });
+
+// 和 src/triGraph.js 的 buildTriGraph 完全一致：超级三角形起手，最后只画真实点
+let graph = TriGraph.withSuper(pts);
+let idx = 0;
+let flip = FLIP0;
+let paused = false;
+let lastInsert = 0;
+let lastTouched = [];
+let lastFlips = [];
+let flashUntil = 0;
+
+// 累积器而不是"每帧至少一个"：第一版写成 max(1, SPEED*dt)，
+// 于是 60fps 下实际速度被抬到 60 个/秒，?speed=9 根本不起作用
+let acc = 0;
+function step(now) {
+  if (paused) return;
+  acc += (SPEED * (now - lastInsert)) / 1000;
+  lastInsert = now;
+  while (acc >= 1 && idx < pts.length) {
+    acc -= 1;
+    const p = pts[idx++];
+    const ok = flip ? graph.insertPoint(p) : insertNoFlip(graph, p);
+    if (ok) {
+      lastTouched = graph.lastTouched.slice();
+      lastFlips = graph.lastFlips.slice();
+      flashUntil = now + 420;
+    }
+  }
+}
+
+function insertNoFlip(g, p) {
+  const hit = g.locate(p);
+  if (!hit || hit.onEdge) return false;
+  const [a, b, c] = g.tris[hit.tri];
+  const pi = g.verts.length;
+  g.verts.push([p[0], p[1]]);
+  g.tris.splice(hit.tri, 1, [a, b, pi], [b, c, pi], [c, a, pi]);
+  g.lastFlips = [];
+  g.lastTouched = [];
+  return true;
+}
+
+const sx = (x) => cx + x * scale;
+const sy = (y) => cy + y * scale;
+
+function draw(now) {
+  ctx.fillStyle = '#445d68';
+  ctx.fillRect(0, 0, W, H);
+
+  // 三角形：白色细线
+  ctx.strokeStyle = 'rgba(238,246,249,0.62)';
+  ctx.lineWidth = 1 * devicePixelRatio;
+  ctx.beginPath();
+  for (const t of graph.visibleTris()) {
+    const A = graph.verts[t[0]], B = graph.verts[t[1]], C = graph.verts[t[2]];
+    ctx.moveTo(sx(A[0]), sy(A[1]));
+    ctx.lineTo(sx(B[0]), sy(B[1]));
+    ctx.lineTo(sx(C[0]), sy(C[1]));
+    ctx.closePath();
+  }
+  ctx.stroke();
+
+  const hot = now < flashUntil;
+  // 绿：本次被检查过的边（含没翻成的）
+  if (hot && lastTouched.length) {
+    ctx.strokeStyle = 'rgba(140,235,190,0.95)';
+    ctx.lineWidth = 2 * devicePixelRatio;
+    ctx.beginPath();
+    for (const [u, v] of lastTouched) {
+      // 连到超级三角形顶点的边不画：它们通到画面外，会变成几条横扫的长线
+      if (graph.pinned.has(u) || graph.pinned.has(v)) continue;
+      const U = graph.verts[u], V = graph.verts[v];
+      if (!U || !V) continue;
+      ctx.moveTo(sx(U[0]), sy(U[1]));
+      ctx.lineTo(sx(V[0]), sy(V[1]));
+    }
+    ctx.stroke();
+  }
+  // 黄：真正翻掉的边（画的是翻的位置：p—q 新边）
+  if (hot && lastFlips.length) {
+    ctx.strokeStyle = 'rgba(246,222,90,0.98)';
+    ctx.lineWidth = 3 * devicePixelRatio;
+    ctx.beginPath();
+    for (const [, , p, qq] of lastFlips) {
+      if (graph.pinned.has(p) || graph.pinned.has(qq)) continue;
+      const P = graph.verts[p], Q = graph.verts[qq];
+      if (!P || !Q) continue;
+      ctx.moveTo(sx(P[0]), sy(P[1]));
+      ctx.lineTo(sx(Q[0]), sy(Q[1]));
+    }
+    ctx.stroke();
+  }
+
+  const a = graph.audit();
+  hud.textContent =
+    `${flip ? 'flip ON ' : 'flip OFF'}   插点 ${idx}/${N}   空格暂停   f 切换翻边\n` +
+    `V ${a.verts}  E ${a.edges}  F ${a.tris}   Euler ${a.euler}\n` +
+    `中位最小角 ${a.medianMinAngle}°   最差 ${a.minAngle}°   细长(<10°) ${a.slivers}\n` +
+    `流形 ${a.manifold ? 'YES' : 'NO'}   非流形边 ${a.nonManifold}   重复三角 ${a.duplicateTris}`;
+}
+
+let raf = 0;
+let prev = performance.now();
+function loop(now) {
+  step(now);
+  draw(now);
+  raf = requestAnimationFrame(loop);
+}
+
+addEventListener('keydown', (e) => {
+  if (e.key === ' ') paused = !paused;
+  if (e.key === 'f' || e.key === 'F') {
+    // 换对照组：同一批点，从头再来
+    flip = !flip;
+    graph = TriGraph.withSuper(pts);
+    idx = 0;
+    lastTouched = [];
+    lastFlips = [];
+    flashUntil = 0;
+  }
+});
+
+// ?static=1 直接跑完再画（给截图脚本用）
+if (q.get('static') === '1') {
+  while (idx < pts.length) {
+    const p = pts[idx++];
+    if (!(flip ? graph.insertPoint(p) : insertNoFlip(graph, p))) continue;
+  }
+  lastTouched = []; lastFlips = []; flashUntil = 0;
+  draw(performance.now());
+} else {
+  raf = requestAnimationFrame(loop);
+}
+
+// 给截图脚本的就绪标记（shoot.mjs 等的是 __engine / __worldStats）
+window.__worldStats = { kind: 'trigraph' };
+
+window.__trigraph = {
+  get graph() { return graph; },
+  get audit() { return graph.audit(); },
+  runAll(to = N) { while (idx < to) { const p = pts[idx++]; if (!(flip ? graph.insertPoint(p) : insertNoFlip(graph, p))) continue; } return graph.audit(); },
+  setFlip(v) { flip = v; graph = TriGraph.withSuper(pts); idx = 0; },
+  pause() { paused = true; },
+  get progress() { return { idx, N, flip }; },
+};
+</script>
+</body>
+</html>

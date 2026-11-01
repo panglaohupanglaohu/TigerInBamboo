@@ -1,0 +1,16 @@
+✔ city-facing ownership is finite and leaves moon, garden, other coasts untouched (0.629833ms)
+✔ actual final hill/skirt support replaces old platform and empty sea has no walking shell (26.29975ms)
+✔ ground-level track and actor footprints are excluded while other patches remain active (17.134667ms)
+✔ cloned main-shell material installs identical bounded discard without changing shared material (18.465834ms)
+✔ intersecting circle crescent has one simple boundary and no outside hole (2.777083ms)
+✔ deep disc is clipped inside both lake boundary and original deep radius (3.951708ms)
+✔ shore band stays inside existing path and cannot extrude pointed broad panels (2.196959ms)
+✔ outer bank seats to real visible mesh without changing that source geometry (5.238375ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 129.046666

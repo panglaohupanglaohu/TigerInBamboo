@@ -1,0 +1,19 @@
+{
+  "asset": "Batian shield target v1",
+  "observations": [
+    "Generated image visually reviewed: translucent blue-violet faceted shell surrounds flagship, turquoise edges/nodes, original city composition and aircraft palette retained.",
+    "Shield is a target concept; current prototype runtime shield uses a coarse wireframe and does not yet match target."
+  ],
+  "checks": [
+    {
+      "name": "concept manually inspected",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "keep craft readable",
+    "no building damage",
+    "do not report concept as game screenshot"
+  ]
+}

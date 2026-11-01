@@ -1,0 +1,53 @@
+{
+  "evidence": "../citadel-four-hour-20261005/runtime-1791264785544.png",
+  "target": "../citadel-rail-cliffs-20261006/target-v11-smooth-east-connection.png",
+  "rubricSource": "../citadel-city-detail-20261006/state.json",
+  "scores": [
+    {
+      "name": "全景布局与两城呼应",
+      "score": 14,
+      "max": 25,
+      "observation": "两城对湾和上下交通可读，但岸廊仍像独立海上高架，右侧线路在近景占比偏大。"
+    },
+    {
+      "name": "建筑轮廓与结构细节",
+      "score": 17,
+      "max": 25,
+      "observation": "旧城塔和彩屋街群更完整；新城穹顶明确，但侧翼小屋孤立，街区密度仍明显低于目标。"
+    },
+    {
+      "name": "材质与配色",
+      "score": 14,
+      "max": 20,
+      "observation": "暖石彩墙橙顶关系明确，无粉色整体染光；岩壁仍偏冷灰平，草地偏浅灰绿。"
+    },
+    {
+      "name": "植被云水环境协调",
+      "score": 8,
+      "max": 15,
+      "observation": "云已圆润但仍是五条孤立白团；树冠稀疏串列，海面较平板。"
+    },
+    {
+      "name": "地标与连接关系",
+      "score": 7,
+      "max": 10,
+      "observation": "雕塑圆环、木马、瀑布及新石阶可辨；左前高山之门未换，实际功能连通未验证。"
+    },
+    {
+      "name": "轮廓边缘与画面完整性",
+      "score": 1,
+      "max": 5,
+      "observation": "左侧巨大旧斜壁、下缘球体切边及浅色拼块、杂散细点破坏完整性，右接头出画。"
+    }
+  ],
+  "visibleFrameScore": 61,
+  "fullSceneScore": null,
+  "accepted": false,
+  "hardGatesRetested": false,
+  "priority": "用户授权的后侧高山之门迁建并接通原铁路；不是直接隐藏旧门。",
+  "limitations": [
+    "只评该真实可见帧，不计概念图或CPU成绩。",
+    "运行时JSON continuousRouteVerified=false；不能称全线验证。",
+    "无新角色/承托/碰撞/编辑保存/GPU错误检查；右端接线出画。"
+  ]
+}

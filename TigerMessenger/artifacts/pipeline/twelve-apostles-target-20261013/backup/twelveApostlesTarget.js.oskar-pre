@@ -1,0 +1,117 @@
+import * as THREE from 'three';
+// Twelve Apostles, target sheet 2026-10-13 (Oskar-method authored assembly, not a claim of the
+// author's private code): stepped limestone mesas with sheer strata walls, flat grassy tops and
+// bushes along the edges, dark wet bases with foam and turquoise shallows. Two masses stand
+// landward of the rail, two low headlands seaward frame a bay with four free stacks.
+// Every mass sits in its own radial frame on the rendered sea; tiers that come within the rail
+// clearance or touch a protected town are shrunk, then dropped. Rails are never moved.
+export const twelveApostlesTargetEnabled=()=>new URLSearchParams(globalThis.location?.search||'').get('apostlesTarget')!=='0';
+
+const C=hex=>new THREE.Color(hex);
+const PAL={deep:C(0x34424e),wet:C(0x5d666c),bands:[C(0xe2dccb),C(0xcfc9b8),C(0xbcc2c2),C(0xd9d1bd),C(0xb3b6b2),C(0xd2cdbf)],grass:C(0x98bf55),grassEdge:C(0x7aa244),bush:[0x3d7a3d,0x4a8a45,0x5c9b4c]};
+// lateral d: + seaward, - landward (same convention as the connected banks). s: metres along the rail.
+// tiers: [dLat, dAlong, radiusLat, radiusAlong, topHeight] relative to the mass anchor.
+export const APOSTLE_MASSES=[
+ {id:'back-left',  s:-50,d:-34,tiers:[[0,0,19,17,14],[-4,-6,12,10,21],[-9,10,6.5,6,30]]},
+ {id:'back-right', s:28, d:-40,tiers:[[0,0,23,21,16],[-7,-5,15,13,27],[-11,-10,9,8,38],[-14,-12,5,4.5,46],[8,12,7,6,22]]},
+ {id:'back-tower', s:58, d:-22,tiers:[[0,0,12,11,13],[1,1,8,7.5,30]]},
+ {id:'front-left', s:-52,d:32, tiers:[[0,0,21,17,10],[-4,2,14,11,15],[9,-11,5.5,5,7]]},
+ {id:'front-right',s:48, d:36, tiers:[[0,0,23,19,11],[-6,-4,15,12,17],[11,11,6.5,5.5,9]]},
+ {id:'bay-1',s:-15,d:25,tiers:[[0,0,7,6,11]]},
+ {id:'bay-2',s:11, d:21,tiers:[[0,0,5,4.5,8]]},
+ {id:'bay-3',s:24, d:45,tiers:[[0,0,5,4,9]]},
+ {id:'bay-4',s:-32,d:54,tiers:[[0,0,4,3.5,6]]},
+];
+
+function rng(seed){let s=seed>>>0||1;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};}
+// blocky (superellipse) footprint, jointed: some vertices are pulled in as vertical clefts
+function blob(cx,cz,rx,rz,seed,n=18){const r=rng(seed),p=[r()*6.28,r()*6.28],rot=(r()-.5)*.9,pts=[],e=.55;
+ for(let k=0;k<n;k++){const a=k/n*Math.PI*2+(r()-.5)*.12,c=Math.cos(a),s=Math.sin(a);let f=1+.10*Math.sin(2*a+p[0])+.07*Math.sin(3*a+p[1])+(r()-.5)*.12;
+  if(r()<.22)f*=.84-r()*.08; // cleft
+  const x=Math.sign(c)*Math.pow(Math.abs(c),e)*rx*f,z=Math.sign(s)*Math.pow(Math.abs(s),e)*rz*f;pts.push([cx+x*Math.cos(rot)-z*Math.sin(rot),cz+x*Math.sin(rot)+z*Math.cos(rot)]);}
+ return pts;}
+function normals2(poly){const n=poly.length,out=[];for(let i=0;i<n;i++){const a=poly[(i-1+n)%n],b=poly[(i+1)%n];let nx=b[1]-a[1],nz=-(b[0]-a[0]);const l=Math.hypot(nx,nz)||1;out.push([nx/l,nz/l]);}
+ // make every normal point away from the centroid, whatever the winding
+ const cx=poly.reduce((t,v)=>t+v[0],0)/n,cz=poly.reduce((t,v)=>t+v[1],0)/n;let dot=0;for(let i=0;i<n;i++)dot+=out[i][0]*(poly[i][0]-cx)+out[i][1]*(poly[i][1]-cz);
+ return dot<0?out.map(([x,z])=>[-x,-z]):out;}
+const shrink=(poly,f,cx,cz)=>poly.map(([x,z])=>[cx+(x-cx)*f,cz+(z-cz)*f]);
+
+// one tier: strata bands with small set-backs (ledges), vertical flutes, green lip, flat grass cap
+function tierInto(P,Cc,poly,yTop,seed){
+ const r=rng(seed),n=poly.length,nrm=normals2(poly),flute=poly.map(()=>(r()-.5)*1.5),bands=[];let y=-6.5;
+ const cx0=poly.reduce((t,v)=>t+v[0],0)/n,cz0=poly.reduce((t,v)=>t+v[1],0)/n,rad=poly.map(([x,z])=>Math.hypot(x-cx0,z-cz0)),rmax=Math.max(...rad),shade=rad.map((d,i)=>.82+.18*d/rmax+flute[i]*.05);
+ const ys=[-6.5,-.35,1.6];for(let yy=2.2+r()*1.2;yy<yTop-1.1;yy+=1.4+r()*1.8)ys.push(yy);ys.push(yTop-.7,yTop);
+ let off=.35;const ring=(o,yy)=>poly.map(([x,z],i)=>[x+nrm[i][0]*(o+flute[i]*(yy>0?1:.3)),yy,z+nrm[i][1]*(o+flute[i]*(yy>0?1:.3))]);
+ const colAt=(yy,b)=>yy<-.3?PAL.deep:yy<1.6?PAL.wet:yy>=yTop-.71?PAL.grassEdge:PAL.bands[(b*7+seed)%PAL.bands.length];
+ const quad=(a,b,c,d,col,i=-1,j=-1)=>{const sh=[i<0?1:shade[i],j<0?1:shade[j],j<0?1:shade[j],i<0?1:shade[i]];const vs=[a,b,c,d];for(const k of[0,1,2,0,2,3]){const v=vs[k],f=v[1]>=yTop-.71?1:sh[k];P.push(v[0],v[1],v[2]);Cc.push(col.r*f,col.g*f,col.b*f);}};
+ let prev=null;
+ for(let b=0;b<ys.length-1;b++){
+  const ya=ys[b],yb=ys[b+1],o=b<2?.35-b*.15:off;const lo=ring(o,ya),hi=ring(o,yb),col=colAt((ya+yb)/2,b);
+  if(prev){for(let i=0;i<n;i++){const j=(i+1)%n;quad(prev[i],prev[j],lo[j],lo[i],colAt(ya+.01,b));}} // ledge between set-backs
+  for(let i=0;i<n;i++){const j=(i+1)%n;quad(lo[i],lo[j],hi[j],hi[i],col,i,j);}
+  prev=hi;if(b>=2&&yb<yTop-.75)off=Math.max(-1.6,off-(.08+r()*.5)+(r()<.3?.45:0));
+ }
+ // flat cap
+ const top=prev,contour=top.map(v=>new THREE.Vector2(v[0],v[2])),faces=THREE.ShapeUtils.triangulateShape(contour,[]);
+ for(const f of faces){const tri=f.map(k=>top[k]);// keep the cap facing up
+  const[a,b,c]=tri,ux=b[0]-a[0],uz=b[2]-a[2],vx=c[0]-a[0],vz=c[2]-a[2],up=uz*vx-ux*vz>0;const order=up?[a,b,c]:[a,c,b];
+  for(const v of order){P.push(v[0],yTop,v[2]);Cc.push(PAL.grass.r,PAL.grass.g,PAL.grass.b);}}
+ return top;
+}
+function inPoly(x,z,poly){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[a,b]=[poly[i],poly[j]];if((a[1]>z)!==(b[1]>z)&&x<(b[0]-a[0])*(z-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;}
+
+export function buildTwelveApostlesTarget({parent,radius=160,railCurves,railPoints,waterAt,protectedBoxes=[],plazaMargin=()=>Infinity,referencePoint,masses=APOSTLE_MASSES,clearance=10}){
+ // nearest rail point to the approved reference (same rule as the connected banks)
+ let nearest=null;for(const[name,curve]of Object.entries(railCurves||{})){if(!curve?.getPointAt)continue;const length=curve.getLength(),count=Math.ceil(length/2);for(let i=0;i<count;i++){const u=i/count,p=curve.getPointAt(u),dd=p.distanceToSquared(referencePoint);if(!nearest||dd<nearest.dd)nearest={name,curve,length,u,dd};}}
+ if(!nearest)throw new Error('twelve apostles need the actual rail curves');
+ const report={version:'apostles-target-1',railSource:nearest.name,masses:[],railUnchanged:true},rocks=[];
+ // Large merged meshes (town ground, batched props) have AABBs that swallow open sea; the town
+ // footprint is guarded by plazaMargin instead, so only compact boxes count as obstacles here.
+ const _sz=new THREE.Vector3();protectedBoxes=protectedBoxes.filter(e=>e.box.getSize(_sz).length()<25);
+ parent.updateWorldMatrix(true,false);const parentInv=parent.matrixWorld.clone().invert();
+ const rockMat=new THREE.MeshStandardMaterial({vertexColors:true,flatShading:true,roughness:.93,metalness:0,side:THREE.DoubleSide});
+ const bushMat=new THREE.MeshStandardMaterial({color:0xffffff,flatShading:true,roughness:.9});
+ const foamMat=new THREE.MeshBasicMaterial({color:0xf4f8f6,transparent:true,opacity:.72,depthWrite:false,side:THREE.DoubleSide});
+ const shoalMat=new THREE.MeshBasicMaterial({color:0x3cc4c0,transparent:true,opacity:.2,polygonOffset:true,polygonOffsetFactor:-2,depthWrite:false,side:THREE.DoubleSide});
+ for(const[mi,m]of masses.entries()){
+  const u=THREE.MathUtils.euclideanModulo(nearest.u+m.s/nearest.length,1),p=nearest.curve.getPointAt(u),t=nearest.curve.getTangentAt(u).normalize(),up0=p.clone().normalize(),lat=new THREE.Vector3().crossVectors(up0,t).normalize();
+  const dir=p.clone().addScaledVector(lat,m.d).normalize(),water=waterAt(dir);if(!water){report.masses.push({id:m.id,rejected:'no-water'});continue;}
+  const Y=water.clone().normalize(),X=lat.clone().addScaledVector(Y,-lat.dot(Y)).normalize(),Z=new THREE.Vector3().crossVectors(X,Y);
+  const frame=new THREE.Matrix4().makeBasis(X,Y,Z).setPosition(water),Rw=water.length();
+  const toWorld=(x,y,z)=>new THREE.Vector3(x,y-(x*x+z*z)/(2*Rw),z).applyMatrix4(frame);
+  const nearRail=railPoints.filter(q=>q.distanceTo(water)<90);
+  const ok=(poly,h)=>{for(const[x,z]of poly)for(const y of[0,h*.5,h]){const w=toWorld(x,y,z);if(nearRail.some(q=>q.distanceToSquared(w)<clearance*clearance))return'rail';if(protectedBoxes.some(e=>e.box.distanceToPoint(w)<2))return'protected';if(plazaMargin(w.clone().normalize())<6)return'town';}return null;};
+  const P=[],Cc=[],caps=[],tiersOut=[];let foamPoly=null;
+  for(const[ti,[cx,cz,rx,rz,h]]of m.tiers.entries()){
+   let poly=blob(cx,cz,rx,rz,9100+mi*31+ti*7),why=ok(poly,h),k=0;
+   while(why&&k<4){poly=shrink(poly,.85,cx,cz);why=ok(poly,h);k++;}
+   if(why){tiersOut.push({tier:ti,dropped:why});continue;}
+   const top=tierInto(P,Cc,poly,h,9300+mi*17+ti*5);caps.push({poly:top.map(v=>[v[0],v[2]]),h});tiersOut.push({tier:ti,height:h,shrink:+Math.pow(.85,k).toFixed(2)});
+   if(!foamPoly||ti===0)foamPoly=foamPoly||poly;
+  }
+  if(!P.length){report.masses.push({id:m.id,rejected:'all-tiers-dropped',tiers:tiersOut});continue;}
+  // planet curvature: bend every vertex with the sea so bases stay wet and tops stay level to the eye
+  for(let i=0;i<P.length;i+=3){const x=P[i],z=P[i+2];P[i+1]-=(x*x+z*z)/(2*Rw);}
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(P,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(Cc,3));geo.computeVertexNormals();geo.computeBoundingBox();geo.computeBoundingSphere();
+  const maxH=Math.max(...caps.map(c=>c.h));geo.userData.twelveApostles={id:m.id,height:maxH};
+  const rock=new THREE.Mesh(geo,rockMat);rock.name='g30-far-mountain';rock.castShadow=rock.receiveShadow=true;
+  rock.userData.apostleMass=m.id;rock.userData.seaStack={height:maxH,radius:geo.boundingSphere.radius,detailId:'apostle-'+m.id,seaAnchor:water.toArray(),worldUp:Y.toArray(),placement:'apostles-target-authored',waterSupport:'rendered-ocean-triangle'};
+  parent.add(rock);parentInv.clone().multiply(frame).decompose(rock.position,rock.quaternion,rock.scale);rock.updateWorldMatrix(true,false);
+  // bushes: clumps along every cap rim (inset) and a few across the meadow
+  const bushes=[],r=rng(9700+mi);
+  for(const c of caps){const cx=c.poly.reduce((a,v)=>a+v[0],0)/c.poly.length,cz=c.poly.reduce((a,v)=>a+v[1],0)/c.poly.length;
+   for(let i=0;i<c.poly.length;i++){if(r()<.45)continue;const[x,z]=c.poly[i],f=1-1.1/Math.max(2,Math.hypot(x-cx,z-cz));bushes.push([cx+(x-cx)*f,c.h,cz+(z-cz)*f,.55+r()*.8]);if(r()<.5)bushes.push([cx+(x-cx)*(f-.08),c.h,cz+(z-cz)*(f-.08),.45+r()*.5]);}
+   const xs=c.poly.map(v=>v[0]),zs=c.poly.map(v=>v[1]),area=(Math.max(...xs)-Math.min(...xs))*(Math.max(...zs)-Math.min(...zs));
+   for(let k=0,n=Math.round(area/150);k<n;k++){const x=Math.min(...xs)+r()*(Math.max(...xs)-Math.min(...xs)),z=Math.min(...zs)+r()*(Math.max(...zs)-Math.min(...zs));if(inPoly(x,z,c.poly)&&!caps.some(o=>o.h>c.h&&inPoly(x,z,o.poly)))bushes.push([x,c.h,z,.6+r()*.9]);}}
+  if(bushes.length){const bg=new THREE.IcosahedronGeometry(1,0);const inst=new THREE.InstancedMesh(bg,bushMat,bushes.length);inst.name='apostle-bushes';const mm=new THREE.Matrix4(),q=new THREE.Quaternion(),col=new THREE.Color();
+   bushes.forEach(([x,y,z,s],i)=>{const yy=y-(x*x+z*z)/(2*Rw)+s*.45;q.setFromEuler(new THREE.Euler(r()*.5,r()*6.28,r()*.5));mm.compose(new THREE.Vector3(x,yy,z),q,new THREE.Vector3(s,s*.78,s));inst.setMatrixAt(i,mm);inst.setColorAt(i,col.setHex(PAL.bush[i%PAL.bush.length]));});
+   inst.instanceMatrix.needsUpdate=true;inst.castShadow=true;rock.add(inst);}
+  // foam ring + turquoise shallows around the footprint, following the curved sea
+  if(foamPoly){const nrm=normals2(foamPoly);const ringGeo=(o0,o1,y)=>{const pts=[],n=foamPoly.length;const at=(i,o)=>{const[x,z]=foamPoly[i];const X1=x+nrm[i][0]*o,Z1=z+nrm[i][1]*o;return[X1,y-(X1*X1+Z1*Z1)/(2*Rw),Z1];};
+    for(let i=0;i<n;i++){const j=(i+1)%n,a=at(i,o0),b=at(j,o0),c=at(j,o1),d=at(i,o1);pts.push(...a,...c,...b,...a,...d,...c);}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.computeVertexNormals();return g;};
+   const foam=new THREE.Mesh(ringGeo(.15,1.3,.32),foamMat);foam.name='apostle-foam';foam.renderOrder=2;rock.add(foam);
+   const shoal=new THREE.Mesh(ringGeo(1.3,9,.26),shoalMat);shoal.name='apostle-shallows';shoal.renderOrder=1;rock.add(shoal);}
+  rocks.push(rock);report.masses.push({id:m.id,s:m.s,d:m.d,height:maxH,tiers:tiersOut,bushes:bushes.length});
+ }
+ report.built=rocks.length;return{rocks,report};
+}

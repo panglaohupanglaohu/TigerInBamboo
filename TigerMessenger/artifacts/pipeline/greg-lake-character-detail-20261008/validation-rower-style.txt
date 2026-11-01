@@ -1,0 +1,12 @@
+real boat render batches {"before":59,"after":55,"robeBatches":6,"gripBatches":2,"static":11}
+✔ only explicit swamp style changes rendering; both real 26-slot rigs preserve every transform through rowing and sedation (118.555292ms)
+✔ hands retain real grip geometry and all original ship/oar static meshes; fewer instanced batches replace feather layers (0.967833ms)
+✔ real lake keeps two working boats with 52 same crew slots and no style change to unrelated ships (653.438083ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1067.080167

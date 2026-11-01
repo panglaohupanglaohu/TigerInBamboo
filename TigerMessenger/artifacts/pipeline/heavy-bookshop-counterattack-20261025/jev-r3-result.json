@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "8b4b322b7258a2b8da66c01602bcedb68b00fe12dfc9cf68db0475226ac7e85a",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.89
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.71,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.08,
+        "lighting": 0.01,
+        "navigation": 0.14,
+        "review": 0.77
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.77
+    }
+  },
+  "usage": {
+    "input_tokens": 1157,
+    "output_tokens": 91,
+    "cost_usd": 0.000486,
+    "credits_remaining_usd": 4.913657
+  },
+  "elapsed_ms": 1389,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "R3 projectile visible GPU and moon-shore normal integration",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

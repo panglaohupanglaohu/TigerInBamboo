@@ -1,0 +1,20 @@
+central shelter crown {"leaves":21,"minY":52.07589967403277,"farFromAnchor":18.024748896754947}
+central actual angular light gaps [{"group":0,"fraction":0.225,"radius":8.285639474015223,"heightVariation":4.001200766746997},{"group":1,"fraction":0.25277777777777777,"radius":9.282078454430438,"heightVariation":4.0011983423897135},{"group":2,"fraction":0.24722222222222223,"radius":9.913611893215222,"heightVariation":4.001201920157335},{"group":3,"fraction":0.24722222222222223,"radius":9.020321691361376,"heightVariation":4.001201920157342},{"group":4,"fraction":0.2388888888888889,"radius":7.984899946207276,"heightVariation":4.001201920157342},{"group":5,"fraction":0.24444444444444444,"radius":9.329081293692523,"heightVariation":4.001201920157342},{"group":6,"fraction":0.24444444444444444,"radius":9.341926085505984,"heightVariation":4.001201920157342}]
+rounded fan geometry {"trianglesPerFan":396,"totalTriangles":298188,"originalTriangles":1039248,"drawCalls":10,"domed":753}
+✔ real crown groups become fewer broad fan instances without extra draws or moved anchors (0.639625ms)
+✔ every fan vertex stays inside its declared crown envelope and its stem meets the original branch anchor (4.162542ms)
+✔ central shelter crown expands lateral mass and curved height above the protected walking level (0.649292ms)
+✔ central three-leaf groups keep genuine angular light gaps and non-coplanar domes (60.247792ms)
+✔ shared fan has a closed domed top, drooping edge and coherent face color (0.397459ms)
+✔ placed crown surfaces retain a visible dome and tilt instead of horizontal discs (5.774792ms)
+✔ local palette pass installs shared screen-width veins without changing geometry, attachment or matrices (5.024666ms)
+✔ spherical placement preserves canopy and branch common-frame relationship (1.435583ms)
+✔ rollback restores original crown visibility and a disabled install is inert (0.373334ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1876.200166

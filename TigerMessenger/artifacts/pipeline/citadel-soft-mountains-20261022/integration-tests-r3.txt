@@ -1,0 +1,90 @@
+✔ shared cliff normals change while flat rim, positions, triangles and source remain unchanged (1.83725ms)
+✔ default off and authored edge locks preserve original shading (0.31775ms)
+✔ indexed input keeps triangle order/attributes, invalid coordinates rejected (0.724833ms)
+✔ bounded actual relief relaxation moves interior only and locks source border (1.784917ms)
+✔ startup keeps actual Mesh/frame/material identity and strict geometry; rollback before consumers restores original (4.583042ms)
+✔ wrong epoch or existing loaded consumers reject before source mutation (0.626792ms)
+✔ post-consumer rollback refuses stale cache restoration and disabled mode never inspects scene (0.862ms)
+✔ off never inspects scene dependencies (0.498ms)
+✖ strict real final install and actual meshes feed support transaction with rollback/finalize cleanup (20079.741625ms)
+✖ source identity, strict report, city terrain binding and ocean transform/wave failures reject (19071.462458ms)
+✖ unversioned terrain mutation after prepare and city replacement after commit automatically rollback before publish/finalize (18775.755917ms)
+✖ new clipped west retreat replays exact bytes before real support commit and rollback (25109.616125ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 8
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 83558.614125
+
+✖ failing tests:
+
+test at tests/world/targetEastCrossingStartupSupport.test.mjs:26:1
+✖ strict real final install and actual meshes feed support transaction with rollback/finalize cleanup (20079.741625ms)
+  Error: CROSSING_STARTUP_FINAL_GEOMETRY_MISMATCH
+      at createTargetEastCrossingStartupSupport (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/targetEastCrossingStartupSupport.js:44:249)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetEastCrossingStartupSupport.test.mjs:26:143)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests/world/targetEastCrossingStartupSupport.test.mjs:29:1
+✖ source identity, strict report, city terrain binding and ocean transform/wave failures reject (19071.462458ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /TERRAIN_BINDING_STALE/. Input:
+  
+  'Error: CROSSING_STARTUP_FINAL_GEOMETRY_MISMATCH'
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetEastCrossingStartupSupport.test.mjs:31:110)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: CROSSING_STARTUP_FINAL_GEOMETRY_MISMATCH
+        at createTargetEastCrossingStartupSupport (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/targetEastCrossingStartupSupport.js:44:249)
+        at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetEastCrossingStartupSupport.test.mjs:31:121
+        at getActual (node:assert:611:5)
+        at strict.throws (node:assert:759:24)
+        at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetEastCrossingStartupSupport.test.mjs:31:110)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1382:25)
+        at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+        at Test.postRun (node:internal/test_runner/test:1522:19)
+        at Test.run (node:internal/test_runner/test:1447:12),
+    expected: /TERRAIN_BINDING_STALE/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tests/world/targetEastCrossingStartupSupport.test.mjs:37:1
+✖ unversioned terrain mutation after prepare and city replacement after commit automatically rollback before publish/finalize (18775.755917ms)
+  Error: CROSSING_STARTUP_FINAL_GEOMETRY_MISMATCH
+      at createTargetEastCrossingStartupSupport (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/targetEastCrossingStartupSupport.js:44:249)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetEastCrossingStartupSupport.test.mjs:37:167)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/world/targetEastCrossingStartupSupport.test.mjs:39:1
+✖ new clipped west retreat replays exact bytes before real support commit and rollback (25109.616125ms)
+  Error: REAR_SHIP_VOLUME_REPLAY_REQUIRED
+      at replayWestHeadlandRetreatGeometry (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/targetWestRailHeadlandRetreat.js:59:190)
+      at createTargetEastCrossingStartupSupport (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/targetEastCrossingStartupSupport.js:43:236)
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/world/targetEastCrossingStartupSupport.test.mjs:39:254)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

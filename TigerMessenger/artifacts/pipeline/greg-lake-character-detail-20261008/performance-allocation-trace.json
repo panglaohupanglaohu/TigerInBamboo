@@ -1,0 +1,755 @@
+{
+  "method": "Actual completed messengerIslandScene generator returned handle, actual updateMessengerIsland and actual lake placement root.update; resource constructor monotonic IDs count all Texture/BufferGeometry/Material subclasses even if immediately detached. No renderer, main player/physics/lighting/DOM/audio loop; browser APIs stubbed, no claim of GPU memory measurement. dt=.05, 20 updates/s. Wall timers not accelerated.",
+  "records": [
+    {
+      "name": "formal-first-10s",
+      "seconds": 10,
+      "frames": 200,
+      "wallSeconds": 15.6140095,
+      "allocations": {
+        "texture": 0,
+        "geometry": 1577,
+        "material": 274
+      },
+      "disposals": {
+        "texture": 0,
+        "geometry": 221,
+        "material": 0
+      },
+      "canvas": 0,
+      "before": {
+        "objects": 42675,
+        "geometry": 16134,
+        "material": 7417,
+        "texture": 135
+      },
+      "after": {
+        "objects": 47277,
+        "geometry": 16824,
+        "material": 7621,
+        "texture": 135
+      },
+      "error": null
+    },
+    {
+      "name": "formal-next-10s",
+      "seconds": 10,
+      "frames": 200,
+      "wallSeconds": 14.553973416000002,
+      "allocations": {
+        "texture": 0,
+        "geometry": 887,
+        "material": 108
+      },
+      "disposals": {
+        "texture": 0,
+        "geometry": 231,
+        "material": 4
+      },
+      "canvas": 0,
+      "before": {
+        "objects": 47277,
+        "geometry": 16824,
+        "material": 7621,
+        "texture": 135
+      },
+      "after": {
+        "objects": 49977,
+        "geometry": 17154,
+        "material": 7683,
+        "texture": 135
+      },
+      "error": null
+    }
+  ],
+  "canvasAllocationStacks": {},
+  "addStacks": {
+    "    at boatWakePool (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:562:12)\n    at updateBoatWake (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:577:13)\n    at updateWarshipOars (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:448:79)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/canalBoats.js:124:77)\n    at updateMessengerIsland (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scenes/messenger/updateIsland.js:28:25)": {
+      "geometry": 1,
+      "material": 24,
+      "examples": [
+        "boat-wake-ring",
+        "boat-wake-ring",
+        "boat-wake-ring"
+      ]
+    },
+    "    at boatWakePool (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:562:12)\n    at updateBoatWake (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:577:13)\n    at updateWarshipOars (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:448:79)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/canalBoats.js:141:7)\n    at updateMessengerIsland (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scenes/messenger/updateIsland.js:28:25)": {
+      "geometry": 2,
+      "material": 48,
+      "examples": [
+        "boat-wake-ring",
+        "boat-wake-ring",
+        "boat-wake-ring"
+      ]
+    },
+    "    at boatWakePool (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:562:12)\n    at updateBoatWake (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:577:13)\n    at updateWarshipOars (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:448:79)\n    at Group.updateSwamp [as update] (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/moebiusSwamp.js:3021:7)\n    at wrap.userData.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/moebiusSwamp.js:3304:19)": {
+      "geometry": 1,
+      "material": 24,
+      "examples": [
+        "boat-wake-ring",
+        "boat-wake-ring",
+        "boat-wake-ring"
+      ]
+    },
+    "    at boatWakePool (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:562:12)\n    at updateBoatWake (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:577:13)\n    at updateWarshipOars (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:448:79)\n    at Group.updateSwamp [as update] (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/moebiusSwamp.js:3114:9)\n    at wrap.userData.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/moebiusSwamp.js:3304:19)": {
+      "geometry": 1,
+      "material": 24,
+      "examples": [
+        "boat-wake-ring",
+        "boat-wake-ring",
+        "boat-wake-ring"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at buildPorter (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1132:17)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2064:16)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2137:18)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1294:13)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2140:17)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1294:13)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2144:18)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1294:13)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2149:19)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1294:13)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2160:17)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1294:13)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2163:16)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1294:13)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2166:18)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1294:13)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2169:21)\n    at createHarborPatrolSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1625:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1294:13)": {
+      "geometry": 44,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at groupFrom (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/romanSoldierEquipment.js:84:11)\n    at bindRomanSoldierEquipment (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/romanSoldierEquipment.js:129:17)\n    at Object.add (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/romanSoldierCombatPose.js:14:24)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1298:23)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 2,
+      "examples": [
+        "Helmet_Galea.002",
+        "Skirt_Ten_Separated_Lames.002",
+        "Waist_Belt.002"
+      ]
+    },
+    "    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2821:13)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3214:23\n    at Array.forEach (<anonymous>)\n    at spawnRedSquadAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3213:20)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3169:48)": {
+      "geometry": 0,
+      "material": 3,
+      "examples": [
+        "harbor-patrol-soldier"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at buildPorter (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1132:17)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2064:16)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2137:18)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2140:17)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2144:18)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2149:19)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2160:17)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2163:16)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2166:18)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2169:21)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1665:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1675:16)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1293:13)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1677:9)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1293:13)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3214:23": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1678:17)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1293:13)": {
+      "geometry": 20,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createGladiusSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1680:9)\n    at createCitadelMeleeSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1661:10)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1293:13)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3214:23": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at groupFrom (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/romanSoldierEquipment.js:84:11)\n    at bindRomanSoldierEquipment (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/romanSoldierEquipment.js:129:81)\n    at Object.add (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/romanSoldierCombatPose.js:14:24)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1298:23)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 3,
+      "material": 2,
+      "examples": [
+        "Gold_Lower_Bracket",
+        "Gold_Upper_Bracket",
+        "Wooden_Grip"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at buildPorter (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1132:17)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2064:16)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2137:18)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2140:17)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2144:18)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2149:19)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2160:17)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2163:16)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2166:18)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createNightInfiltrationSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2169:21)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1745:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)": {
+      "geometry": 14,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1767:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1768:7)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3197:7)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4423:50)": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1772:20)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1774:11)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3197:7)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4423:50)": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1775:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1777:11)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3197:7)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4423:50)": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1782:20)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1785:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1790:21)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 1,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1792:7)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3197:7)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4423:50)": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "bow-string-top"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1793:21)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1800:15)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1802:10)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3197:7)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4423:50)": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1803:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1806:10)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3197:7)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4423:50)": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1807:18)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1809:10)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3197:7)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4423:50)": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1815:15)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1817:10)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)\n    at ensureRedGarrison (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:3197:7)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4423:50)": {
+      "geometry": 0,
+      "material": 1,
+      "examples": [
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1819:19)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 12,
+      "material": 1,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1823:18)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnRedAt (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:2801:32)": {
+      "geometry": 12,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createWarshipV6 (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/warshipV6.js:31:247)\n    at createFisherBoat (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:117:16)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1325:67)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4499:9)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:5009:7)": {
+      "geometry": 22,
+      "material": 20,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at createWarshipV6 (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/warshipV6.js:46:313)\n    at createFisherBoat (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:117:16)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1325:67)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4499:9)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:5009:7)": {
+      "geometry": 0,
+      "material": 58,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1342:16)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4499:9)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:5009:7)\n    at updateMessengerIsland (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scenes/messenger/updateIsland.js:119:29)\n    at update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scenes/messengerIsland.js:698:9)": {
+      "geometry": 0,
+      "material": 3,
+      "examples": [
+        "harbor-patrol-soldier"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1767:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1772:20)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1775:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1782:20)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1785:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1790:21)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1793:21)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1800:15)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1803:16)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1807:18)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1815:15)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 10,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1819:19)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 30,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at addOutline (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/toon.js:164:8)\n    at part (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:43:3)\n    at createLongbowSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1823:18)\n    at spawnSoldier (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1291:11)\n    at spawnWave (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:1338:19)": {
+      "geometry": 30,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at boatWakePool (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:562:12)\n    at updateBoatWake (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:577:13)\n    at updateWarshipOars (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:448:79)\n    at updateSimulation (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:4510:28)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1:5009:7)": {
+      "geometry": 2,
+      "material": 48,
+      "examples": [
+        "boat-wake-ring",
+        "boat-wake-ring",
+        "boat-wake-ring"
+      ]
+    },
+    "    at startHarborCraneJob (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1394:13)\n    at updatePorterSquad (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1285:9)\n    at squad.userData.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1201:5)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2614:23)\n    at updateMessengerIsland (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scenes/messenger/updateIsland.js:33:26)": {
+      "geometry": 8,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    },
+    "    at makeShot (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/scoutDefense.js:470:12)\n    at updateUnits (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/scoutDefense.js:645:11)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/scoutDefense.js:706:5)\n    at updateMessengerIsland (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scenes/messenger/updateIsland.js:54:27)\n    at update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scenes/messengerIsland.js:698:9)": {
+      "geometry": 4,
+      "material": 5,
+      "examples": [
+        "Mesh",
+        "Line",
+        "Mesh"
+      ]
+    },
+    "    at startHarborCraneJob (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1394:13)\n    at updatePorterSquad (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1285:9)\n    at squad.userData.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:1201:5)\n    at Object.update (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/assets/harbor.js:2613:23)\n    at updateMessengerIsland (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scenes/messenger/updateIsland.js:33:26)": {
+      "geometry": 4,
+      "material": 0,
+      "examples": [
+        "Mesh",
+        "Mesh",
+        "Mesh"
+      ]
+    }
+  }
+}

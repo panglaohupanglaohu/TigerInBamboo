@@ -1,0 +1,35 @@
+{
+  "recorded_at_utc": "2026-10-20T15:22:25.196971+00:00",
+  "scope": "Fresh normal production game after contact projection fix; actual UI start/follow/return-camera, DOM counters",
+  "midAttack": {
+    "phase": "pincer",
+    "shield": true,
+    "energy": 46.266682000060115,
+    "shieldImpacts": 99,
+    "shieldAudioPlayed": 32,
+    "shieldAudioSkipped": 47,
+    "activeEffects": 147,
+    "bayOpenness": 0.5978500000238418
+  },
+  "return": {
+    "phase": "return",
+    "energy": 11.88253999994748,
+    "shieldImpacts": 164,
+    "shieldAudioPlayed": 39,
+    "shieldAudioSkipped": 65,
+    "activeEffects": 0,
+    "pendingProjectiles": 0,
+    "robotsShattered": 6
+  },
+  "visualObservation": "Actual follow-camera GPU screenshot showed flattened cyan wireframe shield enclosing flagship over bookshop, escort formation and opened belly. Individual interception wavefronts were not clearly resolved in this sampled frame; no close-up acceptance claim.",
+  "cameraRestored": true,
+  "warnings": [
+    "Front strata baseline changed citadel-oskar-grid-mountain-surface 155",
+    "Old-city coastal source changed; continuing with slope update (twice)",
+    "[citadel] master terrain source changed; skipped",
+    "[citadel] parcel layout requires frozen terrain candidate; skipped"
+  ],
+  "warningScope": "Existing other-region source changes, not audio exceptions; no edits made to those files",
+  "errorsSeen": [],
+  "subjectiveListening": false
+}

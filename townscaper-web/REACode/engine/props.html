@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Props — stencil 打洞（1205422438437273601）</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #2b3a44; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 12px; bottom: 10px; color: #cfe3ec;
+    font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.5); white-space: pre; pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="hud"></div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+/**
+ * 验证页：stencil buffer 在墙上打洞（原文 x.com/OskSta/status/1205422438437273601）
+ *
+ *   "For doors and windows, I use som stencil buffer shenanigans to punch holes
+ *    in the zbuffer. I admit it was a bit fiddly to figure out."
+ *
+ * 参考片近景（512²）：门不是贴片，是墙上一个**真洞** —— 能看见洞口四周的墙厚、
+ * 退进去的门板、门槛，以及洞口内壁。要复现这件事，贴一张深色矩形是不够的，
+ * 必须让墙在那块**不出像素**，再用另一层几何去填洞。
+ *
+ * 这里把同一面墙画两遍来做对照：
+ *   左：普通墙 + 贴在表面的窗（"便宜做法"，一眼能看出是贴纸：没有墙厚）
+ *   右：stencil 打洞（cutter 先写 ref=1 不写深度 → 墙 NotEqual 丢弃 → 洞里能
+ *       看见退进去 0.06 的门板和洞口内壁）
+ *
+ * 坑（原文说 "a bit fiddly"，实测确实）：
+ *   1. cutter 必须 colorWrite=false 且 depthWrite=false，否则它自己会挡住里面的门板；
+ *   2. cutter 的 renderOrder 必须比墙**小**（先画）；墙画的时候 stencil 才有记号；
+ *   3. renderer 必须开 stencil（默认开，但 reset 时要清）；
+ *   4. 墙材质 depthWrite 必须为 true，否则洞后面的东西留不下来。
+ */
+import * as THREE from 'three';
+import { wallFrame, placeProps, rectCorners, makeHolePair } from './props.js';
+
+const canvas = document.getElementById('view');
+const hud = document.getElementById('hud');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, stencil: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#2f4150').convertSRGBToLinear();
+
+const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 60);
+
+scene.add(new THREE.AmbientLight(0xfff3e6, 1.15));
+const hemi = new THREE.HemisphereLight(0xdfefff, 0xc8bda8, 1.0);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff1dc, 2.4);
+sun.position.set(3.2, 5.0, 4.4);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+sun.shadow.camera.left = -4; sun.shadow.camera.right = 4;
+sun.shadow.camera.top = 4; sun.shadow.camera.bottom = -4;
+sun.shadow.bias = -0.0015;
+scene.add(sun);
+
+/**
+ * 一面墙（带厚度）：正面 + 背面 + 四条侧边，形成一个盒子的一侧。
+ * 有厚度才能看见"洞口内壁"，这是判断打洞成功与否的证据。
+ */
+function wallBox({ w, h, t, color }) {
+  const g = new THREE.BoxGeometry(w, h, t);
+  const m = new THREE.MeshStandardMaterial({ color, roughness: 0.9, metalness: 0 });
+  const mesh = new THREE.Mesh(g, m);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+/**
+ * 打洞版：cutter 用与窗洞同尺寸的平面，摆在墙面前表面内外各一层
+ * （前面一层写 stencil，后面一层同样写 —— 但只在墙的深度范围内有效，
+ *  因为 cutter 关了深度测试？不，保持 depthTest=true 更稳：
+ *  墙在 cutter 后面，所以 cutter 先写记号，墙再被丢弃。）
+ */
+function makePunchedWall({ w, h, t, color, holes }) {
+  const group = new THREE.Group();
+  const { cutter, wall } = makeHolePair({ wallColor: color });
+  wall.side = THREE.FrontSide;
+
+  const box = new THREE.Mesh(new THREE.BoxGeometry(w, h, t), wall);
+  box.castShadow = true;
+  box.receiveShadow = true;
+  group.add(box);
+
+  for (const r of holes) {
+    const g = new THREE.PlaneGeometry(r.u1 - r.u0, r.y1 - r.y0);
+    const m = new THREE.Mesh(g, cutter);
+    m.position.set((r.u0 + r.u1) / 2 - w / 2, (r.y0 + r.y1) / 2 - h / 2, t / 2 + 0.0005);
+    // 先画、不写深度、只在 stencil 里留记号
+    m.renderOrder = -10;
+    group.add(m);
+  }
+  return group;
+}
+
+const frame = wallFrame({ x: -0.85, z: 0 }, { x: 0.85, z: 0 });
+// 坑：wallFrame 的右手法线是 (uz, -ux)，这条墙的 u 是 +x，于是法线指向 -z，
+// 也就是**墙背面**。第一版没翻，贴片全贴到背面去了 —— 渲染出来左墙一片粉。
+// 相机在 +z，所以这里把法线翻到 +z。
+if (frame.nz < 0) { frame.nx = -frame.nx; frame.nz = -frame.nz; }
+
+// 两套道具：用 placeProps 摆（不重叠 + 正交基，所以窗永远是正的）
+const holes = placeProps(frame, 0.12, 1.28, { seed: 42, door: true, attempts: 300, margin: 0.06 });
+
+const left = new THREE.Group();
+left.position.set(-1.05, 0, 0);
+const plain = wallBox({ w: 1.7, h: 1.28, t: 0.22, color: '#c94f5f' });
+plain.position.y = 0.64;
+left.add(plain);
+  // 便宜做法：把窗/门贴成深色片。
+  // 坑 1：手搓三角形没有绕向校正，从墙外看是背面 → 被剔除（给 DoubleSide）。
+  // 坑 2：一个道具一个 Mesh 时，同一平面上的小 mesh 有几个根本不出现（6 顶点几何的
+  //       包围球/排序都不稳）。改成把所有贴片并进一个 geometry：5 个全在。
+  const patchPos = [];
+  for (const r of holes) {
+    // 0.128 = 墙前表面(0.11) 之外 0.018；只外 0.002 会和盒子前脸共面打架
+    const c = rectCorners(frame, r, 0.128);
+    patchPos.push(...c[0], ...c[1], ...c[2], ...c[0], ...c[2], ...c[3]);
+  }
+  const patchGeo = new THREE.BufferGeometry();
+  patchGeo.setAttribute('position', new THREE.Float32BufferAttribute(patchPos, 3));
+  patchGeo.computeVertexNormals();
+  const patchMesh = new THREE.Mesh(patchGeo, new THREE.MeshStandardMaterial({
+    color: '#3a2a2e', roughness: 0.8, side: THREE.DoubleSide,
+  }));
+  patchMesh.renderOrder = 1;
+  left.add(patchMesh);
+scene.add(left);
+
+const right = new THREE.Group();
+right.position.set(1.05, 0, 0);
+const punched = makePunchedWall({ w: 1.7, h: 1.28, t: 0.22, color: '#c94f5f', holes });
+punched.position.y = 0.64;
+right.add(punched);
+// 墙背后**不放**内衬：洞就该是洞 —— 能直接看见后面的地面和退进去的门板。
+// （试过加一块暗色内衬，结果洞口和左边贴片长得一模一样，对比就没了。）
+
+// 洞里的东西：退进去 0.06 的门板 / 玻璃，外加洞口内壁的暗色衬板
+for (const r of holes) {
+  const isDoor = r.kind === 'door';
+  const inset = 0.22 / 2 - 0.055;
+  const g = new THREE.PlaneGeometry(r.u1 - r.u0, r.y1 - r.y0);
+  const m = new THREE.MeshStandardMaterial({
+    color: isDoor ? '#6b4238' : '#243a46',
+    roughness: 0.75,
+    metalness: 0,
+    side: THREE.DoubleSide,
+  });
+  const leaf = new THREE.Mesh(g, m);
+  leaf.position.set((r.u0 + r.u1) / 2 - 0.85, (r.y0 + r.y1) / 2 - 0.64, inset);
+  right.add(leaf);
+  // 窗台 / 门槛：从洞口往外伸一点点，读作"墙厚"
+  const sill = new THREE.Mesh(
+    new THREE.BoxGeometry(r.u1 - r.u0 + 0.03, 0.022, 0.06),
+    new THREE.MeshStandardMaterial({ color: '#a9a29a', roughness: 0.95 }),
+  );
+  sill.position.set((r.u0 + r.u1) / 2 - 0.85, r.y0 - 0.64 + 0.011, 0.09);
+  sill.castShadow = true;
+  right.add(sill);
+}
+scene.add(right);
+
+// 地面
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(9, 6),
+  new THREE.MeshStandardMaterial({ color: '#8e9aa0', roughness: 1 }),
+);
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = -0.01;
+floor.receiveShadow = true;
+scene.add(floor);
+
+let yaw = 0.22;
+let pitch = 0.16;
+let dist = 4.4;
+function updateCamera() {
+  const x = Math.sin(yaw) * Math.cos(pitch) * dist;
+  const z = Math.cos(yaw) * Math.cos(pitch) * dist;
+  const y = Math.sin(pitch) * dist + 0.75;
+  camera.position.set(x, y, z);
+  camera.lookAt(0, 0.68, 0);
+}
+
+function resize() {
+  const w = canvas.clientWidth || innerWidth;
+  const h = canvas.clientHeight || innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+resize();
+
+let drag = false, lx = 0, ly = 0;
+canvas.addEventListener('pointerdown', (e) => { drag = true; lx = e.clientX; ly = e.clientY; });
+addEventListener('pointerup', () => { drag = false; });
+addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  yaw -= (e.clientX - lx) * 0.006;
+  pitch = Math.min(0.7, Math.max(-0.15, pitch + (e.clientY - ly) * 0.004));
+  lx = e.clientX; ly = e.clientY;
+});
+
+const stats = {
+  holes: holes.length,
+  doors: holes.filter((h) => h.kind === 'door').length,
+  windows: holes.filter((h) => h.kind !== 'door').length,
+  rects: holes.map((h) => ({
+    kind: h.kind,
+    w: +(h.u1 - h.u0).toFixed(3),
+    h: +(h.y1 - h.y0).toFixed(3),
+    u0: +h.u0.toFixed(3),
+    y0: +h.y0.toFixed(3),
+  })),
+};
+window.__propsStats = stats;
+hud.textContent = `stencil 打洞：左=贴片 / 右=真洞\nholes ${stats.holes}（门 ${stats.doors} / 窗 ${stats.windows}）`;
+
+window.__props = {
+  stats,
+  setView(y, p, d) { yaw = y; pitch = p; dist = d; updateCamera(); },
+  renderer,
+  scene,
+  camera,
+};
+
+let t = 0;
+function frameLoop() {
+  t += 0.016;
+  updateCamera();
+  renderer.render(scene, camera);
+  requestAnimationFrame(frameLoop);
+}
+requestAnimationFrame(frameLoop);
+</script>
+</body>
+</html>

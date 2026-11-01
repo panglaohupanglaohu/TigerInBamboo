@@ -1,0 +1,30 @@
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/build_morris_princess_v5.py:11: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.diffuse_color=(*[((int(h[i:i+2],16)/255+.055)/1.055)**2.4 if int(h[i:i+2],16)/255>.04045 else int(h[i:i+2],16)/255/12.92 for i in (0,2,4)],1);m.use_nodes=True
+Info: Saved as "princess-v5.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+22:16:07 | INFO: Starting glTF 2.0 export
+22:16:07 | INFO: Extracting primitive: continuous bent sleeve
+22:16:07 | INFO: Primitives created: 3
+22:16:07 | INFO: Extracting primitive: continuous bent sleeve.001
+22:16:07 | INFO: Primitives created: 3
+22:16:07 | INFO: Extracting primitive: bodice acanthus spine
+22:16:07 | INFO: Primitives created: 4
+22:16:07 | INFO: Extracting primitive: broad grouped wave
+22:16:07 | INFO: Primitives created: 8
+22:16:07 | INFO: Extracting primitive: cloak botanical vine
+22:16:07 | INFO: Primitives created: 2
+22:16:07 | INFO: Extracting primitive: Sphere.034
+22:16:07 | INFO: Primitives created: 3
+22:16:07 | INFO: Finished glTF 2.0 export in 0.03928494453430176 s
+00:00.827  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-skills-pass-20261028/princess-v5-front.png'
+00:01.003  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-skills-pass-20261028/princess-v5-side.png'
+00:01.179  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-skills-pass-20261028/princess-v5-back.png'
+00:01.418  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-skills-pass-20261028/princess-v5-head-side.png'
+00:01.686  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-skills-pass-20261028/princess-v5-head-front.png'
+00:01.969  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/princess-skills-pass-20261028/princess-v5-head-quarter.png'
+
+{"revision": "reference-skills-v5", "workflow": "new continuous authored lofts/sweeps and closed drape; courier-style empty pivots; no skinning claimed", "mesh_count": 6, "vertices": 40804, "triangles": 80624, "bounds_blender": [[-0.4950000047683716, -0.42900002002716064, -0.6929999589920044], [0.4950000047683716, 0.5350000262260437, 0.8440000414848328]], "nodes": ["MorrisPrincess", "body", "head", "cape", "armL", "armR"], "validation": "structural and offline component render only; no game navigation acceptance"}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

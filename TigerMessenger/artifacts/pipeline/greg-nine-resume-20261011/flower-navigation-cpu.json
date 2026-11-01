@@ -1,0 +1,1085 @@
+{
+  "buildMilliseconds": 2442.596459,
+  "formalSeed": 7711,
+  "coordinateUnits": {
+    "range": "inner-local units",
+    "innerLocalScale": [
+      1,
+      1,
+      1
+    ],
+    "wrapScale": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "innerWorldScale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "counts": {
+    "boats": 5,
+    "kids": 10,
+    "paddles": 10
+  },
+  "routes": [
+    {
+      "index": 0,
+      "valid": true,
+      "travelLocal": 1,
+      "travelWorld": 0.5,
+      "oneWayLocal": 2,
+      "oneWayWorld": 0.9999999999999953,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -1,
+        "max": 1
+      },
+      "rangeWorld": {
+        "min": -0.5,
+        "max": 0.5
+      },
+      "clearance": 0.41653529338602546
+    },
+    {
+      "index": 1,
+      "valid": true,
+      "travelLocal": 0.7,
+      "travelWorld": 0.35,
+      "oneWayLocal": 1.4,
+      "oneWayWorld": 0.6999999999999961,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -0.7,
+        "max": 0.7
+      },
+      "rangeWorld": {
+        "min": -0.35,
+        "max": 0.35
+      },
+      "clearance": 0.06201076916632586
+    },
+    {
+      "index": 2,
+      "valid": true,
+      "travelLocal": 0.7,
+      "travelWorld": 0.35,
+      "oneWayLocal": 1.4,
+      "oneWayWorld": 0.6999999999999941,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -0.7,
+        "max": 0.7
+      },
+      "rangeWorld": {
+        "min": -0.35,
+        "max": 0.35
+      },
+      "clearance": 0.05726208486694584
+    },
+    {
+      "index": 3,
+      "valid": true,
+      "travelLocal": 1.5,
+      "travelWorld": 0.75,
+      "oneWayLocal": 3,
+      "oneWayWorld": 1.5000000000000069,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -1.5,
+        "max": 1.5
+      },
+      "rangeWorld": {
+        "min": -0.75,
+        "max": 0.75
+      },
+      "clearance": 2.239041251993784
+    },
+    {
+      "index": 4,
+      "valid": true,
+      "travelLocal": 1.5,
+      "travelWorld": 0.75,
+      "oneWayLocal": 3,
+      "oneWayWorld": 1.4999999999999953,
+      "fullCycle": 32.8,
+      "rangeLocal": {
+        "min": -1.5,
+        "max": 1.5
+      },
+      "rangeWorld": {
+        "min": -0.75,
+        "max": 0.75
+      },
+      "clearance": 0.08369223610836296
+    }
+  ],
+  "quayGap": 3.138998241282728,
+  "pairGap": 1.4755365462892729,
+  "powerSamples": 2503,
+  "recoverySamples": 944,
+  "snapshots": [
+    {
+      "time": 0,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -3.5007634106008227,
+            25.18672023668755,
+            0.08459044271370555
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.60894718131636,
+            25.093813323381134,
+            1.7088034426974152
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.828356222936117,
+            25.01000004732626,
+            -17.05634672114976
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "26b231e1-da5c-4272-b8ed-2c0f9b74bf30",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "aaed4b42-28db-4293-80d1-5f511cf74c4c",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -11.676744133629821,
+            25.023111251787405,
+            -12.667813091180673
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "3e36fc8e-6257-47b1-aca6-5669e8bb0e2c",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "ef19a4b6-cc22-47ac-a94c-c70e039442a0",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            16.033395270511832,
+            25.12929479151613,
+            -7.371670633985921
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9b619434-2af2-4386-8a14-61f740beff51",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "62a75359-f38a-4f52-b69d-fed0f837bd7e",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 1,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -3.765944142769636,
+            25.164032601751178,
+            0.1373381699328753
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.614518284010439,
+            25.174805112971274,
+            1.709629837717219
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.894958247763894,
+            25.055298689741893,
+            -17.24248691081216
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "26b231e1-da5c-4272-b8ed-2c0f9b74bf30",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "aaed4b42-28db-4293-80d1-5f511cf74c4c",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -11.811805005440569,
+            25.1023181441097,
+            -12.556971498214763
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "3e36fc8e-6257-47b1-aca6-5669e8bb0e2c",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "ef19a4b6-cc22-47ac-a94c-c70e039442a0",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            15.868078650126067,
+            25.040759516468878,
+            -7.321522385446725
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "9b619434-2af2-4386-8a14-61f740beff51",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "62a75359-f38a-4f52-b69d-fed0f837bd7e",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 2,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -3.821068088614021,
+            25.077001300817585,
+            0.14830300450009
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.786182652230695,
+            25.180628393516415,
+            1.735093841302317
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.898882863861661,
+            25.145515797099222,
+            -17.25345547800932
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "26b231e1-da5c-4272-b8ed-2c0f9b74bf30",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "aaed4b42-28db-4293-80d1-5f511cf74c4c",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -12.06324936031119,
+            25.17919563100025,
+            -12.35061644909885
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "3e36fc8e-6257-47b1-aca6-5669e8bb0e2c",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "ef19a4b6-cc22-47ac-a94c-c70e039442a0",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            15.746012530048255,
+            25.011752509547485,
+            -7.284494032740305
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9b619434-2af2-4386-8a14-61f740beff51",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "62a75359-f38a-4f52-b69d-fed0f837bd7e",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 5,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -4.181605285532483,
+            25.12372941641355,
+            0.22001831186756748
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -16.075048902408586,
+            25.019710647336236,
+            1.7779431017889538
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.850620286287235,
+            25.053833054263304,
+            -17.118570609771005
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "26b231e1-da5c-4272-b8ed-2c0f9b74bf30",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "aaed4b42-28db-4293-80d1-5f511cf74c4c",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -12.449754586992558,
+            25.020447709936974,
+            -12.033419807017026
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "3e36fc8e-6257-47b1-aca6-5669e8bb0e2c",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "ef19a4b6-cc22-47ac-a94c-c70e039442a0",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            14.991813965268516,
+            25.188095779546586,
+            -7.055710399332954
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9b619434-2af2-4386-8a14-61f740beff51",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "62a75359-f38a-4f52-b69d-fed0f837bd7e",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 10,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -4.885258536743232,
+            25.03758274237006,
+            0.3599836458802911
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -16.310533048095614,
+            25.023956653666342,
+            1.8128738750890634
+          ],
+          "state": "turn-and-rest",
+          "paddles": [
+            {
+              "stroke": "rest",
+              "bladeY": 25.420000000000016,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "right"
+            },
+            {
+              "stroke": "rest",
+              "bladeY": 25.420000000000016,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.679499397427985,
+            25.142717107792997,
+            -16.640319763947247
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "26b231e1-da5c-4272-b8ed-2c0f9b74bf30",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "aaed4b42-28db-4293-80d1-5f511cf74c4c",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -13.224582099452748,
+            25.095413603367387,
+            -11.397535300990418
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "3e36fc8e-6257-47b1-aca6-5669e8bb0e2c",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999936,
+              "holder": "ef19a4b6-cc22-47ac-a94c-c70e039442a0",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            15.37022034752081,
+            25.16093034710808,
+            -7.17049872044504
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "9b619434-2af2-4386-8a14-61f740beff51",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "62a75359-f38a-4f52-b69d-fed0f837bd7e",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 16.4,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -5.462333971407284,
+            25.0708739408514,
+            0.4747710867459628
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.627271800924177,
+            25.010731166889272,
+            1.7115216432432052
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.500948977316979,
+            25.105193180449813,
+            -16.14130476928747
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "26b231e1-da5c-4272-b8ed-2c0f9b74bf30",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "aaed4b42-28db-4293-80d1-5f511cf74c4c",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -13.238426655050532,
+            25.057818733695232,
+            -11.386173367842868
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "3e36fc8e-6257-47b1-aca6-5669e8bb0e2c",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.480000000000018,
+              "holder": "ef19a4b6-cc22-47ac-a94c-c70e039442a0",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            16.64031423073336,
+            25.183231627979563,
+            -7.555777487787538
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9b619434-2af2-4386-8a14-61f740beff51",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "62a75359-f38a-4f52-b69d-fed0f837bd7e",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 20,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -4.831423309166556,
+            25.072643185207006,
+            0.3492751533145917
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.380074295650571,
+            25.178509515238954,
+            1.674853357181429
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.428829702751994,
+            25.149372828248236,
+            -15.939744899590501
+          ],
+          "state": "turn-and-rest",
+          "paddles": [
+            {
+              "stroke": "rest",
+              "bladeY": 25.41999999999996,
+              "holder": "26b231e1-da5c-4272-b8ed-2c0f9b74bf30",
+              "hand": "right"
+            },
+            {
+              "stroke": "rest",
+              "bladeY": 25.420000000000016,
+              "holder": "aaed4b42-28db-4293-80d1-5f511cf74c4c",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -12.637928249721892,
+            25.18125075014309,
+            -11.878989673022517
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "3e36fc8e-6257-47b1-aca6-5669e8bb0e2c",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "ef19a4b6-cc22-47ac-a94c-c70e039442a0",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            17.28410101898523,
+            25.01275594831286,
+            -7.751068074953965
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "9b619434-2af2-4386-8a14-61f740beff51",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "62a75359-f38a-4f52-b69d-fed0f837bd7e",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "time": 32.8,
+      "boats": [
+        {
+          "index": 0,
+          "position": [
+            -3.5007634106008227,
+            25.01670066483126,
+            0.08459044271370555
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "34519f2b-e1b5-494f-b8eb-7af8e74be544",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "position": [
+            -15.60894718131636,
+            25.11667144166079,
+            1.7088034426974152
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "e27e6f7f-3f98-43e8-9887-547be6afa460",
+              "hand": "left"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "position": [
+            4.828356222936117,
+            25.189390005450967,
+            -17.05634672114976
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "26b231e1-da5c-4272-b8ed-2c0f9b74bf30",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "aaed4b42-28db-4293-80d1-5f511cf74c4c",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "position": [
+            -11.676744133629821,
+            25.181843004373064,
+            -12.667813091180673
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "3e36fc8e-6257-47b1-aca6-5669e8bb0e2c",
+              "hand": "right"
+            },
+            {
+              "stroke": "recovery",
+              "bladeY": 25.47999999999996,
+              "holder": "ef19a4b6-cc22-47ac-a94c-c70e039442a0",
+              "hand": "right"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "position": [
+            16.033395270511832,
+            25.060929522692838,
+            -7.371670633985921
+          ],
+          "state": "rowing",
+          "paddles": [
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "9b619434-2af2-4386-8a14-61f740beff51",
+              "hand": "right"
+            },
+            {
+              "stroke": "power",
+              "bladeY": 24.819999999999993,
+              "holder": "62a75359-f38a-4f52-b69d-fed0f837bd7e",
+              "hand": "right"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

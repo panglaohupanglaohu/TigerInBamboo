@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — UnitBatch（几百个小人怎么画）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #6f7174; overflow: hidden;
+    font: 12px/1.45 -apple-system, "PingFang SC", sans-serif; color: #eceff2; }
+  #wrap { display: flex; height: 100%; }
+  #stage { flex: 1 1 auto; min-width: 0; position: relative; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #panel { flex: 0 0 288px; width: 288px; background: #35373a; border-left: 1px solid #26282a;
+    padding: 12px; box-sizing: border-box; overflow-y: auto; }
+  .t { color: #9aa0a6; font-size: 11px; margin: 12px 0 5px; border-bottom: 1px solid #44474b; padding-bottom: 3px; }
+  .t:first-child { margin-top: 0; }
+  .stat { font: 11px ui-monospace, monospace; color: #b8dcc8; }
+  .stat b { color: #fff; }
+  .bad { color: #ff9a8a; }
+  button { background: #43474b; color: #eceff2; border: 1px solid #565b60; border-radius: 3px;
+    padding: 4px 9px; font: 11px inherit; cursor: pointer; margin: 0 4px 4px 0; }
+  button:hover { background: #4f5459; }
+  button.on { background: #3b6a96; border-color: #4f87bd; }
+  input[type=range] { width: 100%; }
+  table { border-collapse: collapse; font: 11px ui-monospace, monospace; width: 100%; }
+  td, th { text-align: right; padding: 2px 3px; border-bottom: 1px solid #3d4044; }
+  td:first-child, th:first-child { text-align: left; }
+  th { color: #9aa0a6; font-weight: 500; }
+  #hint { position: absolute; left: 12px; bottom: 8px; font: 11px ui-monospace, monospace; color: #dfe3e6; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="stage">
+    <canvas id="view"></canvas>
+    <div id="hint">三队小人 · 单方向贴图 · 按 y 排序 · 小尺寸走 LOD（原文 817323301357948928）</div>
+  </div>
+  <div id="panel">
+    <div class="t">数量</div>
+    <input id="count" type="range" min="30" max="4000" step="10" value="120" />
+    <div class="stat" id="countV">120 个单位</div>
+    <div class="t">绘制路径</div>
+    <button id="bNaive">朴素 save/restore</button>
+    <button id="bBatch" class="on">批处理 + LOD</button>
+    <div class="t">实用尺寸（贴图高度 2 倍）</div>
+    <input id="size" type="range" min="1" max="30" value="10" />
+    <div class="stat" id="sizeV">单兵 10px 高</div>
+    <div class="t">每帧耗时</div>
+    <div class="stat" id="perf">—</div>
+    <div class="t">三档基准（30 帧均值）</div>
+    <div id="bench"></div>
+    <div class="t">LOD 代价</div>
+    <div class="stat" id="lod">—</div>
+    <div class="t">说明</div>
+    <div style="font:11px/1.6 ui-monospace,monospace;color:#9aa0a6">
+      帧里单兵只有 8~12px 高。这个尺寸下"好看"= 白盔/深蓝身的高对比，
+      不是细节；而 drawImage 的固定开销比画三个 fillRect 贵得多，所以小尺寸走 LOD。
+    </div>
+  </div>
+</div>
+<script type="module">
+import { buildAtlas, drawNaive, drawBatch, drawGround, makeCrowd, bench, lodCost, SPRITE } from '../src/unitbatch.js';
+
+const cv = document.getElementById('view');
+const ctx = cv.getContext('2d');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+const atlas = buildAtlas();
+
+let n = 120;
+let size = 10;            // 单兵屏幕高度（px）
+let mode = 'batch';
+let units = [];
+let t0 = performance.now();
+let lastFrameMs = 0;
+
+function resize() {
+  const r = cv.getBoundingClientRect();
+  cv.width = Math.round(r.width * dpr);
+  cv.height = Math.round(r.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function reseed() {
+  const r = cv.getBoundingClientRect();
+  units = makeCrowd(n, { W: r.width - 40, H: r.height - 80 }).sort((a, b) => a.y - b.y);
+}
+
+function frame(now) {
+  const dt = Math.min(0.05, (now - t0) / 1000);
+  t0 = now;
+  const W = cv.clientWidth, H = cv.clientHeight;
+  const t = performance.now();
+  drawGround(ctx, W, H);
+  // 让队伍"走动"一点：慢速正弦漂移，避免画面完全静止
+  for (const u of units) u.x += Math.sin(now / 1400 + u.phase) * 0.12;
+  if (mode === 'naive') drawNaive(ctx, atlas, units, { size, time: now / 1000 });
+  else drawBatch(ctx, atlas, units, { size, time: now / 1000, presorted: true });
+  lastFrameMs = performance.now() - t;
+  if (Math.random() < 0.06) {
+    document.getElementById('perf').innerHTML =
+      `${mode === 'batch' ? '批处理+LOD' : '朴素'} · ${units.length} 个<br>本帧 <b>${lastFrameMs.toFixed(2)}ms</b>` +
+      `<br>贴图 ${SPRITE.w}×${SPRITE.h} · 图集 ${atlas.atlasW}×${atlas.atlasH}`;
+  }
+  requestAnimationFrame(frame);
+}
+
+document.getElementById('count').addEventListener('input', (e) => {
+  n = +e.target.value;
+  document.getElementById('countV').textContent = n + ' 个单位';
+  reseed();
+});
+document.getElementById('size').addEventListener('input', (e) => {
+  size = +e.target.value;
+  document.getElementById('sizeV').textContent = '单兵 ' + size + 'px 高';
+});
+document.getElementById('bNaive').onclick = () => {
+  mode = 'naive';
+  document.getElementById('bNaive').classList.add('on');
+  document.getElementById('bBatch').classList.remove('on');
+};
+document.getElementById('bBatch').onclick = () => {
+  mode = 'batch';
+  document.getElementById('bBatch').classList.add('on');
+  document.getElementById('bNaive').classList.remove('on');
+};
+
+function runBench() {
+  const rows = [200, 1000, 4000].map((k) => bench(k, { frames: 20, W: 640, H: 480, size: 10 }));
+  document.getElementById('bench').innerHTML =
+    '<table><tr><th>单位</th><th>朴素</th><th>批</th><th>×</th></tr>' +
+    rows.map((r) => `<tr><td>${r.totalUnits}</td><td>${r.naiveMs}</td>
+      <td>${r.batchMs}</td><td class="${r.speedup > 2 ? 'good' : ''}">${r.speedup}</td></tr>`).join('') +
+    '</table><div style="color:#8b9298;font:10px ui-monospace,monospace;margin-top:3px">单位 ms/帧</div>';
+  const lod = lodCost(800, { W: 400, H: 300, size: 2 });
+  document.getElementById('lod').innerHTML =
+    `缩到 1/4 后 平均差 <b>${lod.meanAbsDiff}</b> / 峰值 ${lod.maxAbsDiff}<br>` +
+    '<span style="color:#8b9298">差得越小，说明小尺寸下 LOD 不是偷工减料</span>';
+}
+
+addEventListener('resize', () => { resize(); reseed(); });
+resize();
+reseed();
+requestAnimationFrame(frame);
+setTimeout(runBench, 300);
+
+window.__unit = { buildAtlas, drawNaive, drawBatch, bench, lodCost, makeCrowd, get units() { return units; } };
+</script>
+</body>
+</html>

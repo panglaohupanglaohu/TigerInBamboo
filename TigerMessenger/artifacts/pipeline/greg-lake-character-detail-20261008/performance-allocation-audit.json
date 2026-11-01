@@ -1,0 +1,96 @@
+{
+  "method": "Actual completed messengerIslandScene generator returned handle, actual updateMessengerIsland and actual lake placement root.update; resource constructor monotonic IDs count all Texture/BufferGeometry/Material subclasses even if immediately detached. No renderer, main player/physics/lighting/DOM/audio loop; browser APIs stubbed, no claim of GPU memory measurement. dt=.05, 20 updates/s. Wall timers not accelerated.",
+  "records": [
+    {
+      "name": "formal-first-10s",
+      "seconds": 10,
+      "frames": 200,
+      "wallSeconds": 14.337348084,
+      "allocations": {
+        "texture": 0,
+        "geometry": 1569,
+        "material": 274
+      },
+      "disposals": {
+        "texture": 0,
+        "geometry": 221,
+        "material": 0
+      },
+      "canvas": 0,
+      "before": {
+        "objects": 42675,
+        "geometry": 16134,
+        "material": 7417,
+        "texture": 135
+      },
+      "after": {
+        "objects": 47272,
+        "geometry": 16820,
+        "material": 7621,
+        "texture": 135
+      },
+      "error": null
+    },
+    {
+      "name": "formal-steady-120s",
+      "seconds": 120,
+      "frames": 2400,
+      "wallSeconds": 179.93346179199997,
+      "allocations": {
+        "texture": 0,
+        "geometry": 1089,
+        "material": 352
+      },
+      "disposals": {
+        "texture": 0,
+        "geometry": 349,
+        "material": 152
+      },
+      "canvas": 0,
+      "before": {
+        "objects": 47272,
+        "geometry": 16820,
+        "material": 7621,
+        "texture": 135
+      },
+      "after": {
+        "objects": 50069,
+        "geometry": 17190,
+        "material": 7779,
+        "texture": 135
+      },
+      "error": null
+    },
+    {
+      "name": "lake-root-steady-600s",
+      "seconds": 600,
+      "frames": 12000,
+      "wallSeconds": 434.810396875,
+      "allocations": {
+        "texture": 0,
+        "geometry": 0,
+        "material": 0
+      },
+      "disposals": {
+        "texture": 0,
+        "geometry": 0,
+        "material": 0
+      },
+      "canvas": 0,
+      "before": {
+        "objects": 50069,
+        "geometry": 17190,
+        "material": 7779,
+        "texture": 135
+      },
+      "after": {
+        "objects": 50069,
+        "geometry": 17190,
+        "material": 7779,
+        "texture": 135
+      },
+      "error": null
+    }
+  ],
+  "canvasAllocationStacks": {}
+}

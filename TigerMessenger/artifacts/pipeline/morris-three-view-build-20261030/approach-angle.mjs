@@ -1,0 +1,1 @@
+import {createMorrisIsland} from '../../../src/world/morrisIsland.js';const i=createMorrisIsland(),b=i.route.bridge;for(const off of[15,18,21,24,28,32]){const p=i.route.at(b.s-off),q=i.route.at(b.s-off+1),dx=b.x-p.x,dz=b.z-p.z,tx=q.x-p.x,tz=q.z-p.z;console.log(JSON.stringify({off,p:[p.x,p.z,p.h],angle:Math.acos((dx*tx+dz*tz)/(Math.hypot(dx,dz)*Math.hypot(tx,tz)))*180/Math.PI}));}

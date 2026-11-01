@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "35110bd0125f539011bbed3579473dc0788a7782a8863e91827976764078dbb0",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.88
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.84,
+      "probabilities": {
+        "dressing": 0.01,
+        "geometry": 0.11,
+        "lighting": 0,
+        "navigation": 0.01,
+        "review": 0.87
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.44
+    }
+  },
+  "usage": {
+    "input_tokens": 728,
+    "output_tokens": 91,
+    "cost_usd": 0.000306,
+    "credits_remaining_usd": 4.926555
+  },
+  "elapsed_ms": 2010,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "new target ring, waterfall-over-track, statue and horse review",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

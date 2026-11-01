@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — dirt cheap ray marching visibility</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0c0d; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed; left: 16px; bottom: 14px; color: #cfd4d6;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6); white-space: pre;
+  }
+  #title {
+    position: fixed; left: 16px; top: 14px; color: #cfd4d6;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="title">廉价 ray marching 可见度（室内压黑 / 室外近白 / 黄绿射线）（798580832906739712）</div>
+<div id="hud"></div>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.js" } }
+</script>
+
+<script type="module">
+/**
+ * rayvis.html — src/rayvis.js 的验证页。
+ *
+ * 照参考片 798580832906739712 复刻三件事：
+ *   1. **灰度**：每个体素按"这个位置能看到多少空"刷成灰阶，不加方向光；
+ *   2. **室内近黑**：房间里的面吃不到可见度，自然压黑 —— 片子最黑的地方就是楼梯间；
+ *   3. **黄绿射线**：从一个探针点向外打 N 条短射线，撞墙即断，画成细线段。
+ *
+ * 键位：V 灰阶/白模切换（对照片子"只有明暗、没有颜色"）/ R 射线开关 / W 线框。
+ * URL：`?k=16&step=0.5&maxDist=12` 直接调三个参数，用于扫参数看毛毛边。
+ */
+import * as THREE from 'three';
+import { demoCastle, fibonacciDirs, visibility, castRay } from '../src/rayvis.js';
+
+const q = new URLSearchParams(location.search);
+const cv = document.getElementById('c');
+const hud = document.getElementById('hud');
+
+const K = +(q.get('k') || 16);
+const STEP = +(q.get('step') || 0.5);
+const MAXD = +(q.get('maxDist') || 12);
+
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NoToneMapping;     // 片子的明暗是"可见度"本身，不要色调映射压
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0b0c0d');
+
+const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 200);
+
+// 只要一点点环境光：这张图的亮度全部来自顶点色（可见度）
+scene.add(new THREE.HemisphereLight(0xffffff, 0xffffff, 0.9));
+const sun = new THREE.DirectionalLight(0xffffff, 0.35);
+sun.position.set(1, 2, 1);
+scene.add(sun);
+
+const solid = demoCastle();
+// 剖面：把朝相机那一半（z≥7）切掉，露出一排房间。
+// 为什么必须切：参考片里能直接看到室内近黑，那是**剖面/大开口**才有的视角；
+// 不切就只能看到外墙（全白），室内数据 0.15 根本进不了画面 —— 这是第一版
+// 截图"整张太白"的原因。
+if (q.get('cut') !== '0') {
+  for (let z = 7; z < solid.d; z++) {
+    for (let y = 0; y < solid.h; y++) {
+      for (let x = 0; x < solid.w; x++) solid.data[(z * solid.h + y) * solid.w + x] = 0;
+    }
+  }
+}
+const dirs = fibonacciDirs(K);
+
+// ── 逐面可见度 → 逐顶点色 ────────────────────────────────────────
+// 坑（第一版）：用 InstancedMesh + setColorAt 做**逐体素**一色，再叠 Lambert 光照，
+// 结果整栋楼糊成一块均匀的灰板 —— 体素是方块，同色方块在光照下没有明暗层次，
+// 而参考片那种"从白到黑的软过渡"根本出不来。
+// 片子里的渐变是**逐顶点**的（面内插值），所以这里改成：把暴露面拆成非索引四边形，
+// 每个顶点单独算可见度当顶点色，面内自然插值出软过渡。
+const t0 = performance.now();
+
+const pos = [];
+const colors = [];
+const NEI = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+let faceCount = 0, interiorSum = 0, interiorN = 0, interiorMin = 1, exteriorMax = 0;
+
+// 面 → 四个角（按逆时针，法线朝外）
+function faceCorners(x, y, z, dx, dy, dz) {
+  const c = [x + 0.5, y + 0.5, z + 0.5];
+  const h = 0.5;
+  if (dx === 1) return [[c[0]+h,c[1]-h,c[2]-h],[c[0]+h,c[1]-h,c[2]+h],[c[0]+h,c[1]+h,c[2]+h],[c[0]+h,c[1]+h,c[2]-h]];
+  if (dx === -1) return [[c[0]-h,c[1]-h,c[2]+h],[c[0]-h,c[1]-h,c[2]-h],[c[0]-h,c[1]+h,c[2]-h],[c[0]-h,c[1]+h,c[2]+h]];
+  if (dy === 1) return [[c[0]-h,c[1]+h,c[2]-h],[c[0]+h,c[1]+h,c[2]-h],[c[0]+h,c[1]+h,c[2]+h],[c[0]-h,c[1]+h,c[2]+h]];
+  if (dy === -1) return [[c[0]-h,c[1]-h,c[2]+h],[c[0]+h,c[1]-h,c[2]+h],[c[0]+h,c[1]-h,c[2]-h],[c[0]-h,c[1]-h,c[2]-h]];
+  if (dz === 1) return [[c[0]+h,c[1]-h,c[2]+h],[c[0]-h,c[1]-h,c[2]+h],[c[0]-h,c[1]+h,c[2]+h],[c[0]+h,c[1]+h,c[2]+h]];
+  return [[c[0]-h,c[1]-h,c[2]-h],[c[0]+h,c[1]-h,c[2]-h],[c[0]+h,c[1]+h,c[2]-h],[c[0]-h,c[1]+h,c[2]-h]];
+}
+
+for (let z = 0; z < solid.d; z++) {
+  for (let y = 0; y < solid.h; y++) {
+    for (let x = 0; x < solid.w; x++) {
+      if (!solid.data[(z * solid.h + y) * solid.w + x]) continue;
+      const interior = x > 1 && z > 1 && y > 1 && x < solid.w - 2 && z < solid.d - 2 && y < solid.h - 3;
+      for (const [dx, dy, dz] of NEI) {
+        const nx = x + dx, ny = y + dy, nz = z + dz;
+        const inside = nx >= 0 && ny >= 0 && nz >= 0 && nx < solid.w && ny < solid.h && nz < solid.d;
+        if (inside && solid.data[(nz * solid.h + ny) * solid.w + nx]) continue;   // 内部面，不画
+        const quad = faceCorners(x, y, z, dx, dy, dz);
+        const vs = quad.map((p) => visibility(solid, { x: p[0] + dx * 0.03, y: p[1] + dy * 0.03, z: p[2] + dz * 0.03 }, dirs, { maxDist: MAXD, step: STEP }));
+        // 四边形 → 两个三角形（0,1,2 / 0,2,3），顶点色跟着走
+        const idx = [0, 1, 2, 0, 2, 3];
+        for (const i of idx) {
+          pos.push(quad[i][0], quad[i][1], quad[i][2]);
+          const g = Math.min(1, Math.pow(vs[i] * 1.55, 0.9));
+          colors.push(g, g, g);
+        }
+        faceCount++;
+        const mean = (vs[0] + vs[1] + vs[2] + vs[3]) / 4;
+        if (interior) { interiorSum += mean; interiorN++; interiorMin = Math.min(interiorMin, mean); }
+        else exteriorMax = Math.max(exteriorMax, mean);
+      }
+    }
+  }
+}
+
+const geo = new THREE.BufferGeometry();
+geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+geo.computeVertexNormals();
+// 片子完全没有方向光（明暗就是可见度本身）→ 用 Basic 材质，不吃光照
+const MAT = new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide });
+const mesh = new THREE.Mesh(geo, MAT);
+scene.add(mesh);
+const buildMs = performance.now() - t0;
+const n = faceCount;
+
+// ── 黄绿射线（探针点放在一楼房间里）──────────────────────────────
+const probe = { x: 10.5, y: 2.6, z: 5.5 };
+const rayGroup = new THREE.Group();
+{
+  const pts = [];
+  for (const d of fibonacciDirs(K * 3)) {   // 片子里线比采样方向密，这里用 3K 只为好看
+    const t = castRay(solid, probe.x, probe.y, probe.z, d, MAXD, STEP);
+    pts.push(new THREE.Vector3(probe.x, probe.y, probe.z));
+    pts.push(new THREE.Vector3(probe.x + d.x * t, probe.y + d.y * t, probe.z + d.z * t));
+  }
+  const g = new THREE.BufferGeometry().setFromPoints(pts);
+  rayGroup.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: '#b9d34a', transparent: true, opacity: 0.85 })));
+  const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.18, 16, 12),
+    new THREE.MeshBasicMaterial({ color: '#e8f0c0' }),
+  );
+  sphere.position.set(probe.x, probe.y, probe.z);
+  rayGroup.add(sphere);
+}
+scene.add(rayGroup);
+
+// ── 机位 ────────────────────────────────────────────────────────
+let yaw = 1.44, pitch = 0.18, dist = 48;
+let showRays = q.get('rays') !== '0';
+let gray = q.get('flat') !== '1';
+let wire = q.get('wire') === '1';
+
+function applyModes() {
+  rayGroup.visible = showRays;
+  MAT.wireframe = wire;
+  // 灰阶时用顶点色（可见度）；白模时关掉顶点色，换成纯白 —— 用来看"明暗确实是可见度造成的"
+  MAT.vertexColors = gray;
+  MAT.color.set(gray ? '#ffffff' : '#d2d2d2');
+  MAT.needsUpdate = true;
+}
+applyModes();
+
+addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  if (k === 'v') { gray = !gray; applyModes(); }
+  else if (k === 'r') { showRays = !showRays; applyModes(); }
+  else if (k === 'w') { wire = !wire; applyModes(); }
+});
+
+function frame() {
+  camera.position.set(
+    solid.w * 0.5 - 1.0 + Math.cos(yaw) * Math.cos(pitch) * dist,
+    solid.h * 0.46 + Math.sin(pitch) * dist,
+    3.2 + Math.sin(yaw) * Math.cos(pitch) * dist,
+  );
+  camera.lookAt(solid.w * 0.5 - 1.0, solid.h * 0.46, 3.2);
+  const stats = window.__rayvis.stats;
+  hud.textContent =
+    `k=${K} step=${STEP} maxDist=${MAXD}   rays=${showRays ? 'on' : 'off'}  gray=${gray ? 'on' : 'off'}\n` +
+    `faces=${n}  interior mean=${stats.interiorMean.toFixed(3)}  interior min=${stats.interiorMin.toFixed(3)}  exterior max=${stats.exteriorMax.toFixed(3)}\n` +
+    `对比度=${(stats.exteriorMax / Math.max(1e-6, stats.interiorMean)).toFixed(2)}×  build=${stats.buildMs.toFixed(0)}ms\n` +
+    `键：V 灰阶/白模 · R 射线 · W 线框`;
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+function resize() {
+  renderer.setSize(innerWidth, innerHeight, false);
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+resize();
+requestAnimationFrame(frame);
+
+window.__worldStats = { kind: 'rayvis' };
+window.__rayvis = {
+  stats: {
+    k: K, step: STEP, maxDist: MAXD,
+    faces: n,
+    interiorMean: interiorN ? interiorSum / interiorN : 0,
+    interiorMin, exteriorMax: exteriorMax,
+    interiorN, buildMs,
+  },
+  look(y, p, d) { yaw = y; pitch = p; dist = d; },
+  set({ rays, gray: g, wire: w }) {
+    if (rays !== undefined) showRays = rays;
+    if (g !== undefined) gray = g;
+    if (w !== undefined) wire = w;
+    applyModes();
+  },
+};
+</script>
+</body>
+</html>

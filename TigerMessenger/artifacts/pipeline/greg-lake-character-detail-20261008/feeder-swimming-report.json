@@ -1,0 +1,114 @@
+{
+  "revision": "feeder-articulated-swim-2",
+  "status": "source frozen; CPU passed; root GPU pending",
+  "timeUTC": "2026-10-08T00:10:45.443434+00:00",
+  "source": "src/world/swampFlowerActivities.js",
+  "sourceSHA256": "fb8a5d8adbeac2ec2c488722a2bbae0668212fd5e123a037238f6c534235dcdc",
+  "ownedChanges": [
+    "Same feeder group/roster refs; original body and rigid right arm hidden, not deleted; original head/hair/material retained.",
+    "Added torso and four actual two-segment limbs, shoulder/elbow/hip/knee pivots; arm cycles opposite, leg kicks opposite.",
+    "7.2s surface/submerged/feed/breath cycle, transformed existing head mouth/nose markers solve real waterline Y25; no RNG used.",
+    "Food particles visible only during feeding, trajectory starts at actual new right palm.",
+    "Shore support, boat paddles, independent swimmer and whale orbit untouched."
+  ],
+  "metrics": {
+    "samples": 648,
+    "draws": 9,
+    "breathingSeconds": [
+      1.5,
+      1.5,
+      1.5
+    ],
+    "submergedSeconds": [
+      4.233333333333333,
+      4.233333333333333,
+      4.233333333333333
+    ],
+    "mouthMin": 24.58,
+    "mouthMax": 25.190000000000005,
+    "noseMin": 24.526142845702374,
+    "noseMax": 25.216358014332044,
+    "minWhaleMouth": 0.7289210038518739,
+    "extrema": [
+      {
+        "upper": [
+          -1.6989523713454977,
+          0.7999995674006919
+        ],
+        "lower": [
+          0.40006186262541826,
+          0.88
+        ]
+      },
+      {
+        "upper": [
+          -2.5,
+          0.7989523713454978
+        ],
+        "lower": [
+          0.22,
+          0.8799381373745818
+        ]
+      },
+      {
+        "upper": [
+          -0.29999900722856826,
+          0.29999894710368197
+        ],
+        "lower": [
+          0.2,
+          0.7199981749797155
+        ]
+      },
+      {
+        "upper": [
+          -0.29999894710368197,
+          0.29999900722856826
+        ],
+        "lower": [
+          0.2,
+          0.719998279196185
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "tests": 5,
+    "log": "validation-feeder-swimming.txt",
+    "scope": "real createMoebiusSwampPlacement root.userData.update at 30Hz, 648 frames / 21.6s; original flower 4 tests including 65-sample palm grip and actual shore support also pass",
+    "notProven": "CPU head centre to whale mouth distance, not exhaustive triangle collision; no GPU approval yet."
+  },
+  "budget": {
+    "newVisibleMeshes": 9,
+    "hiddenSourceMeshes": 2,
+    "netVisibleDrawIncrease": 7,
+    "sharedOriginalMaterial": true,
+    "runtimeGeometryReallocation": false
+  },
+  "rollback": "feeder-swim-before/swampFlowerActivities.js and swampFlowerBoys.test.mjs; new swim test separate. Preserve concurrent modules.",
+  "GPUReview": [
+    "t=.8s nose/mouth above water with side head turn",
+    "t=2.6s submerged alternating arm stroke/knee kick",
+    "t=4.3s right hand feeding original whale",
+    "t=6.2s surface swim, repeat at t=8s",
+    "Check no whale snout overlap and inspect limb silhouettes through translucent water"
+  ],
+  "interfaces": {
+    "feeder": "inner.userData.flowerBoyActivities.feeder (same original reference)",
+    "state": "feeder.userData.flowerSwim",
+    "stateFields": [
+      "limbs[].upper/lower/tip",
+      "mouth",
+      "nose",
+      "rightHand",
+      "phase",
+      "mouthY",
+      "noseY",
+      "targetMouthY",
+      "breath",
+      "feeding",
+      "period"
+    ],
+    "version": "inner.userData.flowerBoyActivities.version === 2"
+  }
+}

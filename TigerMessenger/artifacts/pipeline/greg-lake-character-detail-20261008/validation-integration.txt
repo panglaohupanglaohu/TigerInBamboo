@@ -1,0 +1,56 @@
+✔ approved expedition courier keeps height, articulated delivery/ride poses and finite geometry (118.871542ms)
+✔ formal player adapter returns articulated illustrated courier, fitted to existing player scale (69.904084ms)
+✔ walking, sprinting, jumping, mounting, dismounted boarding and delivery keep real pivots live (20.469333ms)
+✔ flat palette, fine outline shader and rigid batches are finite and below legacy geometry cost (78.0785ms)
+✔ reedbank divided hem follows thighs during riding and life-specific props are retained (15.739792ms)
+✔ only intruding pier components change; high arch joins retained banks and rollback is exact (15.402042ms)
+✔ disabled patch and an unproven one-sided support span leave all geometry unchanged (0.832833ms)
+Front strata baseline changed citadel-oskar-grid-mountain-surface 155
+Old-city coastal source changed; continuing with slope update { hash: 2028752367, expected: 3381302665 }
+Old-city coastal source changed; continuing with slope update { hash: 2125320883, expected: 2915253182 }
+[citadel] loadMasterTerrainCandidate 跳过: Master terrain source changed: citadel-oskar-grid-mountain-surface
+[citadel] applyCitadelHarborSeabed 跳过: Harbor seabed requires the original planet and city
+[citadel] applyOldCityParcelCandidate 跳过: Parcel layout requires frozen terrain candidate
+[ELDER] 已放到指定落点 r=160.6
+[CLOUD-RIDGE] kept= 11 dropped= 12 rings= {"1":6,"2":2,"0.25":4,"center":1} maxH= 42.75 maxScore= 1.13 threshold= 0.35
+actual crown / new bridge edge intersections {"leafEdgeCrossings":0,"samples":[],"leaves":[]}
+formal lake bridge report {"ok":true,"version":1,"removedPiers":23,"removedGatePiers":2,"removedGenericPiers":21,"retainedPiers":149,"spanWorld":43.54875696136663,"retainedBearingCenters":[[37.52992582781327,86.72767895843515,-24.342402473034586],[-46.665727604863775,85.98878562646833,-2.059608411040819]],"archBottomInnerY":67.78321838378906,"bankSightlineInnerY":33,"bankClearanceWorld":17.39160919189453,"leafClearance":{"anchorDiagnostics":[{"instance":33,"anchor":[-47.9160074139469,77.7425550825792,1.8693020170715737],"contacts":[]},{"instance":34,"anchor":[-48.18233789588097,78.72561441456745,1.659043626205591],"contacts":[]},{"instance":29,"anchor":[-42.80001827396697,74.83911479285086,-12.195145873000628],"contacts":[]},{"instance":30,"anchor":[-43.06508886630843,75.94012470775093,-12.058853239805321],"contacts":[]},{"instance":15,"anchor":[32.154501901396756,73.4135799361406,-10.017467382457111],"contacts":[]},{"instance":21,"anchor":[32.991869744648504,78.8028224569776,-14.302014708238238],"contacts":[]},{"instance":22,"anchor":[32.86081285842103,79.38480369188613,-14.22754568837112],"contacts":[]}],"affectedInstances":[33,34,29,30,15,21,22],"changedInstances":[{"instance":33,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[1,0,0],"degrees":10,"scale":1},{"instance":34,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[1,-1,1],"degrees":20,"scale":1},{"instance":29,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[-1,1,-1],"degrees":45,"scale":0.85},{"instance":30,"source":"v2-rim-foliage-lobes","trimmed":true,"degrees":0,"scale":0},{"instance":15,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[-1,-1,-1],"degrees":10,"scale":1},{"instance":21,"source":"v2-rim-foliage-lobes","trimmed":true,"degrees":0,"scale":0},{"instance":22,"source":"v2-rim-foliage-lobes","trimmed":false,"axis":[-1,1,0],"degrees":45,"scale":1}],"trimmedInstances":[30,21],"visibleInstancesBefore":366,"visibleInstancesAfter":364,"unresolvedInstances":[],"remainingBidirectionalIntersections":0,"candidateInstances":30,"installMs":35.38524999999936,"instanceCountBefore":366,"instanceCountAfter":366,"branchesChanged":false,"anchorTranslationsChanged":false},"spandrelPosts":26,"renderMeshesAdded":1,"modifiedBatches":5,"deckAndRoutesChanged":false,"cutRadiusInner":36}
+canopy matrix hashes {"before":"c7f29b71436a13a6f1696cfc2edbdaad69e9f7da831dcb4f4342a49d3692f74d","changed":"f9c32fc503690bbcad678fab6d79726858a08052b58928f51d15cc8b749c2347","restored":"c7f29b71436a13a6f1696cfc2edbdaad69e9f7da831dcb4f4342a49d3692f74d"}
+Citadel boarding installation failed [TypeError: fetch failed] {
+  [cause]: Error: not implemented... yet...
+      at makeNetworkError (node:internal/deps/undici/undici:11806:35)
+      at schemeFetch (node:internal/deps/undici/undici:13359:34)
+      at mainFetch (node:internal/deps/undici/undici:13207:30)
+      at fetching (node:internal/deps/undici/undici:13176:7)
+      at fetch (node:internal/deps/undici/undici:13040:20)
+      at fetch (node:internal/deps/undici/undici:17708:10)
+      at fetch (node:internal/bootstrap/web/exposed-window-or-worker:83:12)
+      at installFrontBoarding (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/installFrontBoarding.js:11:26)
+      at holdAtReleasedPort (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:25:2)
+      at dockFrontHarborPatrol (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/world/citadel/frontHarborBerth.js:33:47)
+}
+✔ formal relocated lake keeps decks and outer bearings while removing both measured near-bank obstructions (30028.408625ms)
+understory statistics {"plants":421,"rimPlants":149,"rimAngularCoverage":0.6736111111111112,"vines":180,"counts":{"fern":124,"fan":77,"pendant":220},"triangles":28360,"drawCalls":4,"trunks":55}
+understory maximum inner Y 52.96792840873817
+✔ trunk detail keeps end rings and original anchors, adds no draws and preserves shader line detail (1.209125ms)
+✔ lush understory uses four instanced batches within triangle budget, not per-plant mesh draws (7.576292ms)
+✔ all root crowns meet their real rim, rock shoulder, cliff or trunk surface (13.340792ms)
+✔ instanced leaf vertices stay below bridge zone and clear the two-world rim ribbon; vine midpoints hug trunks (8.036708ms)
+✔ post-V7 shortened trees can rebuild attached growth after spherical placement, then dispose restores source resources (40.775ms)
+✔ natural pockets embed in actual clipped wall and taper back into it (31.909334ms)
+✔ soil plants root on real pocket caps; root seams stay against the wall (23.906334ms)
+✔ large continuous erosion bands meet the rim seam; fissure plants attach to rendered stone (8.947416ms)
+✔ protected paths, story worksite, original tree and swimming domain remain unchanged (6.091083ms)
+✔ spherical placement preserves attachment and dispose exactly restores old visuals (55.302416ms)
+✔ real V7 promenade overlap no longer steals support from feet on the coral rim (9.023875ms)
+✔ feet below rim retain lower promenade and entrance/water are not captured (6.159417ms)
+✔ production collision substeps keep a standing player on the actual new rim (10.785375ms)
+✔ all three real bank midpoints stay supported through gravity instead of falling to old V7 terrain (85.799416ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30839.670208

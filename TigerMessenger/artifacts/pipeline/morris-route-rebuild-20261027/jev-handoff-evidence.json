@@ -1,0 +1,27 @@
+{
+  "version": "route-candidate-handoff-20261027",
+  "goal": "Record completed geometry candidate and outstanding validation for handoff; no style decision",
+  "observations": [
+    "Source edits stopped at parent request. Candidate touches only MorrisLandscape and MorrisMountainRoute; no rollback performed.",
+    "13 local source-factory checks pass. Route185.106m,3.2mwidth,bridge(8,32),8mspan,crown0.75 andDetailsr3 retained. New farm gate is on2mstraight landing1mafter bridge. Bridge road omission halfspan4 fixes0.3mgaps.",
+    "Measured road radialgrade0.151414,castlestep0.04m,musiccourtcentredistance7.5004m,savedrailcentredistance17.7646m,separatecentrelines3.6577m.",
+    "Failed5mstraight candidate caused Dubins loop and selfcrossing and was rejected. Full Island test encountered parallel Horse UV merge failure; no Horse file changed."
+  ],
+  "checks": [
+    {
+      "name": "13localfactoryandroadformulageometrychecks",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Normal-gameGPU,fullmountedrouteandcurrentfullkeepouts",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "No further Morris style or source decisions by this agent",
+    "Transfer to independent Morris advisor",
+    "No image or chat payload"
+  ]
+}

@@ -19,28 +19,28 @@ export function dressMorrisBridge({bridge,deckY}){
   const q=n*4;ix.push(0,1,2,1,3,2,q,q+2,q+1,q+1,q+2,q+3);const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setIndex(ix);g.computeVertexNormals();return g;
  }
  // The solid core's underside is the actual opening; no upright sheet fills it.
- add(strip(-1.94,1.94,-4,4,archBottom,z=>deckY(z)-.025,128),0xbba47f,'bridge-continuous-stone-arch-core');
+ add(strip(-1.94,1.94,-4,4,archBottom,z=>deckY(z)-.025,128),0xd8c596,'bridge-continuous-stone-arch-core');
  for(const side of[-1,1]){
   const inner=side*1.6,outer=side*1.98,x0=Math.min(inner,outer),x1=Math.max(inner,outer);
-  add(strip(x0,x1,-4,4,z=>deckY(z)-.04,z=>copingTop(z)-.12,112),0xbba47f,'bridge-continuous-stone-arch-core');
+  add(strip(x0,x1,-4,4,z=>deckY(z)-.04,z=>copingTop(z)-.12,112),0xd8c596,'bridge-continuous-stone-arch-core');
   const capInner=side*1.6,capOuter=side*2.08;
-  add(strip(Math.min(capInner,capOuter),Math.max(capInner,capOuter),-4,4,z=>copingTop(z)-.13,copingTop,128),0xd1bb95,'bridge-continuous-stone-coping');
+  add(strip(Math.min(capInner,capOuter),Math.max(capInner,capOuter),-4,4,z=>copingTop(z)-.13,copingTop,128),0xe6d6ae,'bridge-continuous-stone-coping');
   // Shallow mortar lines and stone faces follow the continuous host surface.
   // Narrow joints never become deep slots or alter the smooth top silhouette.
   for(let row=0;row<3;row++)for(let j=0;j<16;j++){
    const z0=-4+j*.5+.012,z1=z0+.476,low=z=>deckY(z)+.025+row*.19,high=z=>low(z)+.168;
    const xa=side*1.982,xb=side*2.012;
-   add(strip(Math.min(xa,xb),Math.max(xa,xb),z0,z1,low,high,4),[0xc3ac85,0xb29c79,0xcbb58f][(j+row*2)%3],'bridge-subtle-mortared-stone-faces');masonryPieces++;
+   add(strip(Math.min(xa,xb),Math.max(xa,xb),z0,z1,low,high,4),[0xdccb9f,0xcdb98d,0xe3d2a8][(j+row*2)%3],'bridge-subtle-mortared-stone-faces');masonryPieces++;
   }
   for(let j=0;j<16;j++){
    const z0=-4+j*.5+.016,z1=z0+.468;
-   add(strip(Math.min(side*2.082,side*2.092),Math.max(side*2.082,side*2.092),z0,z1,z=>copingTop(z)-.115,z=>copingTop(z)-.012,4),0xc3ac85,'bridge-subtle-mortared-stone-faces');
+   add(strip(Math.min(side*2.082,side*2.092),Math.max(side*2.082,side*2.092),z0,z1,z=>copingTop(z)-.115,z=>copingTop(z)-.012,4),0xdccb9f,'bridge-subtle-mortared-stone-faces');
   }
   for(let row=0;row<8;row++)for(let j=0;j<16;j++){
    const z0=-4+j*.5+.014,z1=z0+.472,base=deckY(0)-2.25+row*.28;
    const low=z=>Math.max(base,archBottom(z)+.26),high=z=>Math.min(base+.245,deckY(z)-.06);
    if(Array.from({length:6},(_,k)=>high(T.MathUtils.lerp(z0,z1,k/5))-low(T.MathUtils.lerp(z0,z1,k/5))).some(h=>h<.045))continue;
-   add(strip(Math.min(side*1.944,side*1.963),Math.max(side*1.944,side*1.963),z0,z1,low,high,5),[0xc3ac85,0xb29c79,0xcbb58f][(j+row)%3],'bridge-subtle-mortared-stone-faces');masonryPieces++;
+   add(strip(Math.min(side*1.944,side*1.963),Math.max(side*1.944,side*1.963),z0,z1,low,high,5),[0xdccb9f,0xcdb98d,0xe3d2a8][(j+row)%3],'bridge-subtle-mortared-stone-faces');masonryPieces++;
   }
   // Proper wedge-shaped voussoirs lie between two continuous arch curves.
   const slope=(deckY(halfSpan)-deckY(-halfSpan))/(2*halfSpan);
@@ -49,11 +49,11 @@ export function dressMorrisBridge({bridge,deckY}){
    const t0=j*Math.PI/26+.003,t1=(j+1)*Math.PI/26-.003,p=[],indices=[];
    for(const xx of[side*1.944,side*2.022])for(const[t,o]of[[t0,false],[t1,false],[t1,true],[t0,true]]){const q=point(t,o);p.push(xx,q.y,q.z);}
    indices.push(0,1,2,0,2,3,4,7,6,4,6,5,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0);
-   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setIndex(indices);g.computeVertexNormals();add(g,j%3?0xcbb58f:0xd1bb95,'bridge-continuous-radial-voussoirs');masonryPieces++;
+   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setIndex(indices);g.computeVertexNormals();add(g,j%3?0xe3d2a8:0xe6d6ae,'bridge-continuous-radial-voussoirs');masonryPieces++;
   }
   // Bank-end rubble is embedded below the end deck, outside the walk corridor.
   for(const end of[-1,1])for(let j=0;j<3;j++){
-   const z=end*(3.24+j*.12),g=new T.DodecahedronGeometry(1,0);g.scale(.21,.18,.27);g.rotateY(j*.7);g.translate(side*(2.02+j*.06),deckY(z)-.18,z);add(g,j%2?0xb29c79:0xc3ac85,'bridge-embedded-bank-stones');
+   const z=end*(3.24+j*.12),g=new T.DodecahedronGeometry(1,0);g.scale(.21,.18,.27);g.rotateY(j*.7);g.translate(side*(2.02+j*.06),deckY(z)-.18,z);add(g,j%2?0xcdb98d:0xdccb9f,'bridge-embedded-bank-stones');
   }
  }
  for(const[color,b]of buckets){const g=mergeGeometries(b.geos,false);b.geos.forEach(g=>g.dispose());const m=new T.Mesh(g,new T.MeshStandardMaterial({color,roughness:.94,side:T.DoubleSide}));m.name=b.name;m.userData.morrisBridgeDetail=revision;m.castShadow=m.receiveShadow=true;bridge.add(m);}
@@ -65,7 +65,7 @@ function rockRandom(seed){let state=seed>>>0;return()=>{state=(Math.imul(state,1
 // Closed convex, weather-rounded volumes with overlapping rounded lobes.
 // No horizontal shelf ring: the silhouette continuously tapers into the bank.
 function weatheredRockGeometry(){
- const pos=[],ix=[],col=[],N=14,rings=[[-1.06,.22],[-.88,.62],[-.52,.91],[0,1.03],[.46,.92],[.79,.68],[.98,.30]],warm=new T.Color(0xe6cc99),shade=new T.Color(0xc2a77d);
+ const pos=[],ix=[],col=[],N=14,rings=[[-1.06,.22],[-.88,.62],[-.52,.91],[0,1.03],[.46,.92],[.79,.68],[.98,.30]],warm=new T.Color(0xc4bead),shade=new T.Color(0x8d8778);
  for(let j=0;j<rings.length;j++){const[y,r]=rings[j];for(let k=0;k<N;k++){const a=k/N*Math.PI*2,rr=r*(1+.045*Math.sin(k*2.1)+.03*Math.cos(k*3.4));pos.push(Math.cos(a)*rr,y+.035*Math.sin(k*1.6+j*.7),Math.sin(a)*rr);const c=shade.clone().lerp(warm,.50+j*.065);col.push(c.r,c.g,c.b);if(j<rings.length-1){const a=j*N+k,b=j*N+(k+1)%N;ix.push(a,b,a+N,b,b+N,a+N);}}}
  for(let k=1;k<N-1;k++){ix.push(0,k+1,k);const q=(rings.length-1)*N;ix.push(q,q+k,q+k+1);}
  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('color',new T.Float32BufferAttribute(col,3));g.setIndex(ix);g.computeVertexNormals();
@@ -110,7 +110,7 @@ export function installMorrisCoastRocks({root,heightAt,edge,R=160,canDress=()=>t
   let allowed=true;for(let j=0;j<12;j++){const t=j/12*Math.PI*2;if(!canDress(x+Math.cos(t)*sx*1.55,z+Math.sin(t)*sz*1.15)){allowed=false;break;}}
   if(!allowed||points.some(p=>Math.hypot(p.x-x,p.z-z)<2.8))continue;points.push({x,z,sx,sy,sz,y:heightAt(x,z)-sy*(.25+random()*.35),yaw:a+(random()-.5)*1.3,pitch:(random()-.5)*.15,roll:(random()-.5)*.15});
  }
- const g=weatheredRockGeometry(),p=g.attributes.position,c=[],light=new T.Color(0xe2c795),dark=new T.Color(0xbda37c);
+ const g=weatheredRockGeometry(),p=g.attributes.position,c=[],light=new T.Color(0xbfb8a6),dark=new T.Color(0x8a8474);
  for(let j=0;j<p.count;j++){const x=p.getX(j),y=p.getY(j),z=p.getZ(j),f=1+.025*Math.sin(x*9+z*6)*Math.cos(y*7);p.setXYZ(j,x*f,y*f,z*f);const col=dark.clone().lerp(light,.42+.25*y+.12*Math.sin(x*6+z*4));c.push(col.r,col.g,col.b);}
  g.setAttribute('color',new T.Float32BufferAttribute(c,3));g.computeVertexNormals();
  const mesh=new T.InstancedMesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:false}),points.length),d=new T.Object3D();

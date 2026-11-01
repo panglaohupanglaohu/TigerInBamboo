@@ -1,0 +1,59 @@
+{
+  "round": "r09",
+  "target": "Natural Twelve Apostles rock silhouette, organic surface-bound coastal vegetation, shared regional light, fixed eight sites and transport boundaries",
+  "observations": [
+    {
+      "source": "r09-complete-ui.jpg",
+      "sha256": "cd96f8f690a0988c581a3f41c2074ea75beb3a2fb008372e067fcda6d32daea4",
+      "findings": [
+        "Broad faces still too smooth; authored ledges and asymmetric crown are visible but still read as tall columns"
+      ]
+    },
+    {
+      "source": "r09-foliage-ui.jpg",
+      "sha256": "4250f62df88e4fba7d025b2690eeeb01b6dbc92d03b4cc2d278ee67800493d71",
+      "findings": [
+        "Large triangular turf cuts visibly removed; inset mineral rim and supported real shrub leaves visible"
+      ]
+    },
+    {
+      "source": "r09-base-ui.jpg",
+      "sha256": "d4eb9ec853c510fe1a8f39965940032ca5df3854cbcdc6b6be6dc902d2e76fc1",
+      "findings": [
+        "Surf is not clearly visible; wet erosion contact needs fixing"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "46800 rail probes without rock intersections",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "507 tagged pedestrian meshes / 68680 probes clear of fixed rock envelopes",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "167 vegetation roots surface supported",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Compiled shaders linked and no captured runtime errors",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Subjective independent visual score 67/100; not accepted as final art quality",
+    "Sampling does not prove full continuous navigation",
+    "Heightfield light approximation excludes cross-stack and dynamic-actor cast shadows"
+  ],
+  "proposedNext": [
+    "Improve actual geometry bedding relief while protecting footprint",
+    "Repair surf visibility with water-supported narrow ribbons, keep depth test",
+    "Freeze supported vegetation; avoid disguising shape weakness by density"
+  ]
+}

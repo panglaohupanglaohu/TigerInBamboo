@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>REACode 重构版 · 一张网格上的小镇与地形</title>
+<!--
+  REACodeRefactoring：按学习路线重建的系统。
+  共享底座（src/core）→ 地形管线（src/terrain）+ 建筑管线（src/build）→ 水层（src/water）
+  + 光照（src/light）→ 世界（src/world：场景、网格合成、视图、输入）→ 学习导航（src/ui）。
+  架构说明见 ARCHITECTURE.md，接手规矩见 GUIDE.md。
+-->
+<link rel="stylesheet" href="src/ui/hud.css" />
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+</head>
+<body>
+<div style="position:fixed;left:16px;bottom:8px;z-index:100;background:#20343c;color:white;padding:7px 12px;border-radius:7px;font:13px system-ui">REACode 重构版 · <a style="color:#ffe6a6" href="refactoring-audit.html">285 段重构清单：代码对比确认</a></div>
+<canvas id="view"></canvas>
+<div id="hud">
+  <div id="scenes" class="panel" aria-label="场景"></div>
+  <div id="palette" class="panel" aria-label="调色板"></div>
+  <div id="tools" class="panel">
+    <button class="tool" data-tool="build" title="建造 (B)">▲</button>
+    <button class="tool" data-tool="erase" title="拆除 (E)">▼</button>
+    <button class="tool" data-tool="paint" title="刷色 (P)">■</button>
+    <span class="sep"></span>
+    <button class="tool" id="undo" title="撤销 (Z)">↶</button>
+    <button class="tool" id="redo" title="重做 (Y)">↷</button>
+    <button class="tool" id="replay" title="回放建造过程（用撤销栈，1260586697538113537）">⟲</button>
+  </div>
+  <div id="topright" class="panel">
+    <button id="palettestyle" title="切换配色">◐</button>
+    <button id="timeofday" title="白天 / 黄昏 / 夜晚 (N)">☀</button>
+    <button id="demo" title="换一个种子重新生成当前场景 (R)">◎</button>
+    <button id="clear" title="清空 (C)">✕</button>
+    <button id="share" title="复制分享链接">⧉</button>
+    <button id="exportobj" title="导出 .OBJ（1430224300003545091）">⇩</button>
+    <button id="help" title="帮助 (H)">?</button>
+  </div>
+  <div id="learnpanel"></div>
+  <div id="toast"></div>
+  <div id="helpcard" class="panel hidden">
+    <h1>REACode <span>重构版</span></h1>
+    <p>左上角切换场景：<b>小镇</b>（Townscaper 建筑管线）、<b>地形</b>（engine 地形管线）、<b>融合</b>（两者在同一张网格、同一份体素上）。三个场景都能直接建造。</p>
+    <p>左键拖动 = 建造（用当前颜色），右键点击 = 拆掉一块（地形也能挖），右键拖动 = 旋转，中键 / Alt+左键 = 平移，滚轮 = 缩放。</p>
+    <p>快捷键：<kbd>T</kbd> 小镇 <kbd>G</kbd> 地形 <kbd>F</kbd> 融合 <kbd>R</kbd> 换种子 <kbd>B</kbd>/<kbd>E</kbd>/<kbd>P</kbd> 建造/拆除/刷色 <kbd>1</kbd>–<kbd>9</kbd> 选色 <kbd>Z</kbd>/<kbd>Y</kbd> 撤销/重做 <kbd>N</kbd> 时段 <kbd>C</kbd> 清空</p>
+    <button id="helpclose">知道了</button>
+  </div>
+</div>
+<script src="learn/data.js"></script>
+<script src="learn/refactoring-status.js"></script>
+<script src="learn/pipeline.js"></script>
+<script src="learn/architecture.js"></script>
+<script type="module" src="src/world/app.js"></script>
+<script type="module" src="src/ui/coverage-progress.js"></script>
+</body>
+</html>

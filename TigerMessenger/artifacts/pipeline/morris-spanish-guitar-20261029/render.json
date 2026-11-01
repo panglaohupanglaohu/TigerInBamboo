@@ -1,0 +1,810 @@
+{
+  "title": "溪畔吉他与舞步",
+  "original": true,
+  "commercialSamples": false,
+  "duration": 124.0,
+  "sampleRate": 32000,
+  "channels": 2,
+  "peak": 0.7900000028312206,
+  "rms": 0.10033660804153717,
+  "sections": [
+    {
+      "start": 0,
+      "end": 36,
+      "role": "calm nylon guitar, creek, sparse birds; no footwork"
+    },
+    {
+      "start": 36,
+      "end": 48,
+      "role": "soft footwork gradually enters"
+    },
+    {
+      "start": 48,
+      "end": 108,
+      "role": "12-pulse heel/toe footwork and rolled guitar strums"
+    },
+    {
+      "start": 108,
+      "end": 124,
+      "role": "gentle closing"
+    }
+  ],
+  "accentBeats": [
+    3,
+    6,
+    8,
+    10,
+    12
+  ],
+  "openingBodyKnocks": [
+    0.22,
+    0.92,
+    1.62
+  ],
+  "introTexture": "thumb bass plus rolling upper chord tones",
+  "synthesis": "decaying plucked-string partials, wood heel/toe transients, filtered creek and chirps; no organ voice",
+  "stems": {
+    "guitar": {
+      "rms": 0.0988535547003914,
+      "introRms": 0.09817255419187566
+    },
+    "footwork": {
+      "rms": 0.011937642037588746,
+      "introRms": 0.0
+    },
+    "nature": {
+      "rms": 0.012620765689844824,
+      "introRms": 0.013152135056367125
+    }
+  },
+  "events": [
+    {
+      "kind": "guitar-body-golpe",
+      "time": 0.22
+    },
+    {
+      "kind": "guitar-body-golpe",
+      "time": 0.92
+    },
+    {
+      "kind": "guitar-body-golpe",
+      "time": 1.62
+    },
+    {
+      "kind": "toe",
+      "time": 39.5,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 40.5,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 41.5,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 45.5,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 46.5,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 47.5,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 47.9987,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 48.5038,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 48.9946,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 49.4997,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 50.001,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 50.4944,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 51.0028,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 51.4955,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 52.0022,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 52.503,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 53.0053,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 53.4983,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 54.0019,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 54.5008,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 54.9979,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 55.5,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 55.9955,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 56.5039,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 56.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 56.9972,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 57.4984,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 58.0014,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 58.4965,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 58.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 58.9971,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 59.5028,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 59.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 59.9958,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 60.5037,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 60.9952,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 61.4959,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 61.9976,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 62.497,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 62.9971,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 63.5033,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 64.0027,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 64.5006,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 64.9966,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 65.5005,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 65.9957,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 66.502,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 67.0052,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 67.499,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 68.0036,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 68.5027,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 68.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 68.9954,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 69.5007,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 69.9975,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 70.5002,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 70.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 71.0016,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 71.4969,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 71.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 72.002,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 72.4979,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 73.0046,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 73.5001,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 73.9997,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 74.5055,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 74.9966,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 75.4942,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 76.0057,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 76.5038,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 76.9987,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 77.5024,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 78.0036,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 78.4959,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 78.9955,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 79.4992,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 79.9955,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 80.4981,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 80.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 80.999,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 81.5,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 82.0047,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 82.5017,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 82.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 83.0051,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 83.5033,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 83.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 84.0021,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 84.5054,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 84.9954,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 85.5058,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 85.9988,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 86.4946,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 86.9994,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 87.5034,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 87.9972,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 88.4941,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 88.9942,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 89.4998,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 89.997,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 90.4964,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 90.9966,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 91.4965,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 91.9957,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 92.5044,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 92.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 92.9969,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 93.4958,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 94.0041,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 94.499,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 94.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 95.0052,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 95.4954,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 95.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 96.005,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 96.497,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 96.9973,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 97.4945,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 97.9967,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 98.5044,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 98.9949,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 99.5036,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 99.9971,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 100.4995,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 101.0016,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 101.4998,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 102.0052,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 102.4982,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 102.9975,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 103.5039,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 103.9948,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 104.5001,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 104.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 105.0044,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 105.5059,
+      "accent": true
+    },
+    {
+      "kind": "heel",
+      "time": 105.9994,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 106.4976,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 106.75,
+      "accent": false
+    },
+    {
+      "kind": "heel",
+      "time": 107.0053,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 107.4941,
+      "accent": true
+    },
+    {
+      "kind": "toe",
+      "time": 107.75,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 109.0,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 111.5,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 113.5,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 115.0,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 117.5,
+      "accent": false
+    },
+    {
+      "kind": "toe",
+      "time": 119.5,
+      "accent": false
+    }
+  ],
+  "bytes": 15872044
+}
