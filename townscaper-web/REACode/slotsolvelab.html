@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SLOTS — 槽位里放的是候选集，不是一块砖</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --cool:#2f7d8f; --warm:#c08a3a; --bad:#b3412f; --ok:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#f2f0ec; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:120ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  header code { font:11.5px ui-monospace,monospace; background:#e6e2d9; padding:1px 4px; border-radius:3px; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 70px 10px;
+    background:linear-gradient(180deg, rgba(242,240,236,.98) 72%, rgba(242,240,236,0)); }
+  #stats { position:fixed; z-index:2; left:70px; right:70px; bottom:14px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.96);
+    border:1px solid var(--line); border-radius:8px; padding:8px 14px;
+    font-variant-numeric:tabular-nums; display:flex; gap:20px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:var(--ok); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>槽位里放的不是一块砖，是<b>这一格还能是什么</b>——求解就是把它收缩到一格</h1>
+  <p>左：<code>RESET</code> 后的状态，每个槽位都是完整的 27 个候选，所以 <b>80 格长得一模一样</b>（原片 6 帧全同，正是这个状态）。
+     右：<code>SOLVE</code> 之后，每格只剩一个变体，相邻格共享的那条棱自动同色 —— 因为边值是从<b>两端角点</b>算出来的，
+     「相邻边相等」是构造保证的，不是求解器凑出来的。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { makeGrid, measure, propagate, K } from './src/slotsolve.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1d2f36', MUTED = '#5c727a', LINE = '#d6e2e1', WARM = '#c08a3a';
+
+const COLS = 10, ROWS = 8, SEED = 7, GIVEN = 0.18;
+const grid = makeGrid(COLS, ROWS, SEED, GIVEN);
+const m = measure(grid);
+const prop = m.propagation;
+const sol = m.solved.solution;
+
+// 三个边值档 → 三种颜色。0 平 / 1 凸 / 2 凹
+const EC = ['#9db8bf', '#2f7d8f', '#c08a3a'];
+
+const PITCH = 50, CELL = 45;
+const LX = 70, RX = 700, GY = 152;
+
+function edgeBands(x, y, size, edges) {
+  // 上/右/下/左 四条边各画一条带；edges=null 表示未确定 → 三色斜纹
+  const t = Math.max(5, size * 0.16);
+  const bands = [
+    [x, y, size, t, 0],
+    [x + size - t, y, t, size, 1],
+    [x, y + size - t, size, t, 2],
+    [x, y, t, size, 3],
+  ];
+  for (const [bx, by, bw, bh, i] of bands) {
+    if (edges) {
+      ctx.fillStyle = EC[edges[i]];
+      ctx.fillRect(bx, by, bw, bh);
+    } else {
+      // 未定：三色窄条并排，假装"三个都可能"
+      const n = K;
+      for (let k = 0; k < n; k++) {
+        ctx.fillStyle = EC[k];
+        ctx.globalAlpha = 0.75;
+        if (i % 2 === 0) ctx.fillRect(bx, by + (bh / n) * k, bw, bh / n);
+        else ctx.fillRect(bx + (bw / n) * k, by, bw / n, bh);
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+}
+
+function drawGrid(x0, y0, mode) {
+  const V = grid.variants;
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      const px = x0 + x * PITCH, py = y0 + y * PITCH;
+      const s = grid.slots[y][x];
+      if (mode === 'before') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(px, py, CELL, CELL);
+        edgeBands(px, py, CELL, null);
+        ctx.fillStyle = 'rgba(29,47,54,.42)';
+        ctx.font = '600 15px -apple-system,system-ui';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(String(V.length), px + CELL / 2, py + CELL / 2 + 1);
+      } else {
+        const id = sol[y][x][0];
+        ctx.fillStyle = s.given ? '#f6f1e2' : '#ffffff';
+        ctx.fillRect(px, py, CELL, CELL);
+        edgeBands(px, py, CELL, V[id].edges);
+        // 中间的点：给定格是实心深色（已经长出来的），推出来的是空心
+        ctx.beginPath();
+        ctx.arc(px + CELL / 2, py + CELL / 2, 3.4, 0, Math.PI * 2);
+        if (s.given) { ctx.fillStyle = '#3d4d55'; ctx.fill(); }
+        else { ctx.strokeStyle = 'rgba(29,47,54,.30)'; ctx.lineWidth = 1.2; ctx.stroke(); }
+      }
+    }
+  }
+}
+
+// ---- 版面 ----
+ctx.clearRect(0, 0, 1280, 800);
+
+function label(x, y, text, size, color, weight) {
+  ctx.font = `${weight || 600} ${size}px -apple-system,system-ui,"PingFang SC"`;
+  ctx.fillStyle = color; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(text, x, y);
+}
+
+label(LX, GY - 22, 'RESET —— 每格 27 个候选，80 格全同', 14, INK);
+label(RX, GY - 22, 'SOLVE —— 每格 1 个，共享棱同色', 14, INK);
+label(LX, GY - 6, '候选池 = 27 个可实现变体（3⁴ 角点里能拼出邻居的那些）', 11.5, MUTED, 400);
+label(RX, GY - 6, `给定 ${m.given} 格（●实心）= 已经长出来的房子 / 岸线格`, 11.5, MUTED, 400);
+
+drawGrid(LX, GY, 'before');
+drawGrid(RX, GY, 'after');
+
+// 中间箭头
+const ay = GY + (ROWS * PITCH) / 2;
+ctx.strokeStyle = '#b9c6c4'; ctx.lineWidth = 2;
+ctx.beginPath(); ctx.moveTo(LX + COLS * PITCH + 8, ay - 12); ctx.lineTo(RX - 30, ay - 12); ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(RX - 30, ay - 12); ctx.lineTo(RX - 40, ay - 17); ctx.lineTo(RX - 40, ay - 7); ctx.closePath();
+ctx.fillStyle = '#b9c6c4'; ctx.fill();
+label(LX + COLS * PITCH + 12, ay - 26, 'AC-3', 12, MUTED);
+label(LX + COLS * PITCH + 10, ay + 4, '+ 最小熵', 11, MUTED, 400);
+
+// ---- 图例 ----
+const LY = GY + ROWS * PITCH + 34;
+label(LX, LY, '边值三档（同一条棱两边各自读同一份数据）：', 12.5, INK, 600);
+const leg = ['平', '凸', '凹'];
+for (let i = 0; i < K; i++) {
+  const bx = LX + 268 + i * 84;
+  ctx.fillStyle = EC[i]; ctx.fillRect(bx, LY - 11, 30, 14);
+  label(bx + 38, LY, leg[i] + ` = ${i}`, 12, MUTED, 400);
+}
+
+// 传播能推掉多少：一排小方块，格高 = 候选数
+label(LX, LY + 46, '光靠给定格做弧相容，每格平均候选数：', 12.5, INK, 600);
+label(LX + 268, LY + 46, `${m.pool} → ${m.afterPropAvg}`, 13, '#2f7d8f', 650);
+label(LX, LY + 66, '（剩下的 14.2 要靠决定 + 回溯才收得住，所以 SOLVE 不是一步到位的）', 11.5, MUTED, 400);
+
+// 右侧：解出来的边是否真的连成线
+label(RX, LY, '每条内部棱两边值相等（否则拼接会断）：', 12.5, INK, 600);
+label(RX + 268, LY, `${m.broken} 处断裂 / ${COLS * (ROWS - 1) + ROWS * (COLS - 1)} 条棱`, 13,
+  m.broken === 0 ? '#146c4a' : '#b3412f', 650);
+label(RX, LY + 22, `决策 ${m.decisions} 次 / 回溯 ${m.backtracks} 次；同 seed 重跑 ${m.diff} 格不同`, 11.5, MUTED, 400);
+label(RX, LY + 46, `解与"真值"有 ${m.wrong} 格不同 —— 给定 ${m.given} 格约束不住全局，`, 11.5, MUTED, 400);
+label(RX, LY + 64, `多解是常态；所以并列时必须按下标裁决，否则重跑会换一座镇子。`, 11.5, MUTED, 400);
+
+document.getElementById('stats').innerHTML =
+  `<span>槽位 <b>${m.total}</b></span>` +
+  `<span>给定 <b>${m.given}</b></span>` +
+  `<span>候选池 <b>${m.pool}</b></span>` +
+  `<span>未求解 <b>${m.beforeAvg}</b>/格</span>` +
+  `<span>弧相容后 <b>${m.afterPropAvg}</b>/格</span>` +
+  `<span>求解后 <b>${m.solvedAvg}</b>/格</span>` +
+  `<span>单值格 <b>${m.singles}</b></span>` +
+  `<span>断棱 <b class="${m.broken === 0 ? 'ok' : ''}">${m.broken}</b></span>` +
+  `<span>决策/回溯 <b>${m.decisions}/${m.backtracks}</b></span>` +
+  `<span>重跑差异 <b class="${m.diff === 0 ? 'ok' : ''}">${m.diff}</b></span>`;
+
+window.reaSlots = { m: { ...m, solved: undefined, propagation: undefined }, grid };
+</script>
+</body>
+</html>

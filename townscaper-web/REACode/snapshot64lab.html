@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>64² 快照 — 存小图，放大时要"脆"回来</title>
+<style>
+  :root { --ink:#eef1f5; --muted:#a3adba; --line:#4a4f5a; --bg:#33333b; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  canvas { position:fixed; inset:0; display:block; }
+  header { position:fixed; left:0; right:0; top:0; padding:10px 16px 14px; z-index:3; pointer-events:none;
+    background:linear-gradient(180deg, rgba(51,51,59,.96), rgba(51,51,59,.5) 74%, transparent); }
+  h1 { margin:0 0 3px; font-size:14px; font-weight:650; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:94ch; }
+  header b { color:#f2d79a; font-weight:600; }
+  #stats { position:fixed; left:14px; right:14px; bottom:12px; z-index:3; font-size:11.5px; color:#cfd6e2;
+    background:rgba(44,44,52,.94); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#f2d79a; font-weight:600; }
+  #stats .bad { color:#e2a0a0; }
+  #stats .good { color:#a8d99a; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<header>
+  <h1>岛屿快照压到 64²，再 crisping back up —— 存的是小图，看的是硬边</h1>
+  <p>四块是同一座岛：<b>①</b> 256² 原始剪影（真值）· <b>②</b> 64² 快照直接最近邻放大（存下来的全部信息，4096 个值）
+     · <b>③</b> 双线性放大（边变宽渐变带，剪影发虚）· <b>④</b> crispen：双线性 + 按局部梯度收窄阈值带
+     （梯度大处过渡带压到 0.05，边立刻硬；平坦处保持宽过渡，内部不出台阶）。下面量的是 IoU 与边缘能量。</p>
+</header>
+<div id="stats">—</div>
+
+<script type="module">
+import { makeIsland, downsample, upNearest, upBilinear, crispen, silhouette, iou,
+         peakGradient, bandPixels, rmse } from './src/snapshot64.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const statsEl = document.getElementById('stats');
+
+const N = 256, M = 64;
+let W = 0, H = 0;
+const truth = makeIsland(N, 3);
+const small = downsample(truth, N, M);
+const near = upNearest(small, M, N);
+const bil = upBilinear(small, M, N);
+const cris = crispen(small, M, N);
+
+const bTruth = silhouette(truth, N);
+const bNear = silhouette(near, N);
+const bBil = silhouette(bil, N);
+const bCris = silhouette(cris, N);
+
+const iNear = iou(bTruth, bNear), iBil = iou(bTruth, bBil), iCris = iou(bTruth, bCris);
+const pTruth = peakGradient(truth, N), pNear = peakGradient(near, N);
+const pBil = peakGradient(bil, N), pCris = peakGradient(cris, N);
+const bandBil = bandPixels(bil, N), bandCris = bandPixels(cris, N), bandNear = bandPixels(near, N);
+const rBil = rmse(bil, truth, N), rCris = rmse(cris, truth, N), rNear = rmse(near, truth, N);
+
+const panels = [
+  { title: '① 256² 原始（真值）', img: truth, iou: 1, edge: pTruth, note: '65536 个值' },
+  { title: '② 64² 快照 · 最近邻', img: near, iou: iNear, edge: pNear, note: '4096 个值（16× 压缩）' },
+  { title: '③ 双线性放大', img: bil, iou: iBil, edge: pBil, note: '边摊成宽渐变' },
+  { title: '④ crispen 回来', img: cris, iou: iCris, edge: pCris, note: '梯度定阈值带' },
+];
+
+function fit() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  paint();
+}
+
+function landColor(v, lift) {
+  // v = 覆盖率（快照里就是 0/0.25/0.5…），用它给岛一点高度感；不是装饰重点，别压过剪影
+  if (v < 0.5) {
+    const d = 1 - v * 0.7;
+    return `rgb(${Math.round(38 + 26 * v)},${Math.round(74 + 30 * v)},${Math.round(96 + 22 * v)})`;
+  }
+  const t = Math.min(1, (v - 0.5) * 2);
+  return `rgb(${Math.round(96 + 30 * t + lift)},${Math.round(140 + 26 * t + lift)},${Math.round(92 + 18 * t)})`;
+}
+
+function drawPanel(p, x, y, size, thick) {
+  const step = size / N;
+  for (let j = 0; j < N; j++) {
+    for (let i = 0; i < N; i++) {
+      const v = p.img[j * N + i];
+      const on = v >= 0.5;
+      let c;
+      if (on) {
+        // 岛内：越靠内陆越亮，顺便把海岸线的一圈描出来才看得清"脆"
+        c = `rgb(${112 + Math.round(34 * Math.min(1, (v - 0.5) * 2))},${148 + Math.round(26 * Math.min(1, (v - 0.5) * 2))},${96})`;
+      } else if (v > 0.02) {
+        c = `rgb(${Math.round(52 + 60 * v)},${Math.round(96 + 50 * v)},${Math.round(116 + 30 * v)})`;
+      } else {
+        c = 'rgb(40,74,96)';
+      }
+      ctx.fillStyle = c;
+      ctx.fillRect(x + i * step, y + j * step, step + 0.6, step + 0.6);
+    }
+  }
+  ctx.strokeStyle = 'rgba(150,156,168,.55)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x - 0.5, y - 0.5, size + 1, size + 1);
+  ctx.fillStyle = '#dfe5ee';
+  ctx.font = '600 12.5px system-ui';
+  ctx.fillText(p.title, x, y - 22);
+  ctx.fillStyle = '#9aa4b2';
+  ctx.font = '11px system-ui';
+  ctx.fillText(p.note, x, y - 7);
+  ctx.fillStyle = p.iou >= 0.94 ? '#a8d99a' : (p.iou >= 0.9 ? '#f2d79a' : '#e2a0a0');
+  ctx.font = '600 12px system-ui';
+  ctx.fillText(`IoU ${p.iou.toFixed(3)} · 峰值梯度 ${p.edge.toFixed(3)}`, x, y + size + 17);
+}
+
+function paint() {
+  ctx.clearRect(0, 0, W, H);
+  const gap = 24;
+  const size = Math.min(300, Math.floor((W - 60 - gap * (panels.length - 1)) / panels.length));
+  // 竖直居中：上留标题、下留统计，中间不留大片死白
+  const top = Math.max(112, Math.round((H - (size + 30)) / 2 - 6));
+  panels.forEach((p, i) => drawPanel(p, 30 + i * (size + gap), top, size));
+
+  const rows = panels.map((p) => `${p.title.split(' ')[0]} ${p.iou.toFixed(3)}`).join(' · ');
+  statsEl.innerHTML =
+    `IoU：<b>${rows}</b> · ` +
+    `过渡带像素（0.15&lt;v&lt;0.85 越少越脆）：最近邻 <b>${bandNear}</b> · 双线性 <b>${bandBil}</b> → crispen ` +
+    `<span class="good"><b>${bandCris}</b>（−${((1 - bandCris / bandBil) * 100).toFixed(0)}%）</span> · ` +
+    `峰值梯度 <b>${pBil.toFixed(2)}</b> → <b>${pCris.toFixed(2)}</b>（真值 ${pTruth.toFixed(2)}）<br>` +
+    `RMSE 双线性 <b>${rBil.toFixed(4)}</b> → crispen <span class="good"><b>${rCris.toFixed(4)}</b></span>` +
+    `（最近邻 ${rNear.toFixed(4)}）· 存储 65536 值 → 64²=<b>4096</b> 值（16× 压缩）· 剪影保真 IoU <b>${iCris.toFixed(3)}</b>`;
+
+  window.reaSnapshot64 = {
+    iouNear: +iNear.toFixed(4), iouBilinear: +iBil.toFixed(4), iouCrisp: +iCris.toFixed(4),
+    peakBilinear: +pBil.toFixed(2), peakCrisp: +pCris.toFixed(2), peakTruth: +pTruth.toFixed(2),
+    bandBilinear: bandBil, bandCrisp: bandCris, bandNear: bandNear,
+    rmseBilinear: +rBil.toFixed(4), rmseCrisp: +rCris.toFixed(4), rmseNear: +rNear.toFixed(4),
+    valuesSaved: M * M, valuesTruth: N * N,
+  };
+}
+
+addEventListener('resize', () => { clearTimeout(window.__rz); window.__rz = setTimeout(fit, 120); });
+fit();
+</script>
+</body>
+</html>

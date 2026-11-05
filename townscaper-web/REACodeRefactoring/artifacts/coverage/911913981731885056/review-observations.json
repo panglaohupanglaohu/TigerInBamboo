@@ -1,0 +1,83 @@
+{
+  "id": "911913981731885056",
+  "method": "全部帧序列查看，关键/模糊处回看原尺寸；时间取frames.json。",
+  "frames": [
+    {
+      "frame": 0,
+      "seconds": 0.0,
+      "reviewed": true,
+      "observation": "菱形贴片显示蓝/紫/红等编码色，通道具体含义未知",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 1,
+      "seconds": 0.5,
+      "reviewed": true,
+      "observation": "切成灰白岛屿与白色外缘，贴片黑底仍在",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 2,
+      "seconds": 0.7000000000000001,
+      "reviewed": true,
+      "observation": "切成深色模糊场，不能仅凭画面确定该场的语义",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 3,
+      "seconds": 0.9,
+      "reviewed": true,
+      "observation": "白色区域与细黑色内轮廓出现",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 4,
+      "seconds": 1.1,
+      "reviewed": true,
+      "observation": "灰度/白区/黑线组合调整，黑色矩形外部仍在",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 5,
+      "seconds": 1.3,
+      "reviewed": true,
+      "observation": "灰度/白区/黑线组合调整，黑色矩形外部仍在",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 6,
+      "seconds": 1.5,
+      "reviewed": true,
+      "observation": "菱形黑底被去除，留下岛屿及黑色外缘",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 7,
+      "seconds": 1.7,
+      "reviewed": true,
+      "observation": "加入亮色外缘",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 8,
+      "seconds": 1.9000000000000001,
+      "reviewed": true,
+      "observation": "加入外部淡色晕染",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 9,
+      "seconds": 2.1,
+      "reviewed": true,
+      "observation": "加入连接岛屿的点线航路，结果保持",
+      "nativeRevisit": true
+    },
+    {
+      "frame": 10,
+      "seconds": 4.099,
+      "reviewed": true,
+      "observation": "加入连接岛屿的点线航路，结果保持",
+      "nativeRevisit": true
+    }
+  ]
+}

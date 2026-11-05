@@ -1,0 +1,58 @@
+{
+  "reports": [
+    {
+      "mirror": {
+        "hashes": [
+          2439416661,
+          2987190325,
+          549548357,
+          2146643581,
+          1422093221,
+          2664481141,
+          1912613917,
+          2417537701
+        ],
+        "seams": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "oneTexture": true
+      }
+    },
+    {
+      "kind": "mixed",
+      "before": {
+        "rockVoxels": 30,
+        "groundConnected": 30,
+        "unsupported": 0,
+        "undersides": 1,
+        "exposedFaces": 81,
+        "cavityColumns": 1,
+        "undersideVertices": 6,
+        "version": 691
+      },
+      "detached": 1
+    },
+    {
+      "kind": "quad",
+      "before": {
+        "rockVoxels": 28,
+        "groundConnected": 28,
+        "unsupported": 0,
+        "undersides": 1,
+        "exposedFaces": 80,
+        "cavityColumns": 1,
+        "undersideVertices": 6,
+        "version": 798
+      },
+      "detached": 1
+    }
+  ],
+  "errors": []
+}

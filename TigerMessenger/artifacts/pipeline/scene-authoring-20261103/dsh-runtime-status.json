@@ -1,0 +1,14 @@
+{
+  "service": "dsh-superagent",
+  "modelExecutionVerified": false,
+  "profile": "scene-authoring",
+  "status": "runtime-ready",
+  "http": 200,
+  "setupProblem": null,
+  "workerLoad": {
+    "running": 0,
+    "queued": 0,
+    "maxWorkers": 3
+  },
+  "note": "Authenticated runtime state only. Does not verify model execution or local scene Source."
+}

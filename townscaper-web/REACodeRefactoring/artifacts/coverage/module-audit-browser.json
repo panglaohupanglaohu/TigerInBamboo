@@ -1,0 +1,46 @@
+{
+  "report": {
+    "rows": [
+      {
+        "id": "quad-7",
+        "countAtLeast": 0,
+        "exactCount": 0,
+        "reason": "complete",
+        "tests": 2198,
+        "confirmedAbsent": true
+      },
+      {
+        "id": "quad-19",
+        "countAtLeast": 0,
+        "exactCount": 0,
+        "reason": "complete",
+        "tests": 2196,
+        "confirmedAbsent": true
+      },
+      {
+        "id": "mixed-7",
+        "countAtLeast": 1,
+        "exactCount": 1,
+        "reason": "complete",
+        "tests": 184,
+        "confirmedAbsent": false
+      },
+      {
+        "id": "mixed-19",
+        "countAtLeast": 3,
+        "exactCount": 3,
+        "reason": "complete",
+        "tests": 344,
+        "confirmedAbsent": false
+      }
+    ],
+    "tests": 4922,
+    "detected": 2,
+    "absent": 2,
+    "unknown": 0,
+    "sampleCount": 4,
+    "observedHitShare": 0.5,
+    "scope": "finite-topology-sample-not-wfc-probability"
+  },
+  "errors": []
+}

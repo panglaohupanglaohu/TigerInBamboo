@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tigerinbamboo.local/cartonbook/recipe.schema.json",
+  "title": "CartonBookRecipe",
+  "description": "一个场景子故事 = 一章卡通书。画面只能来自游戏截屏。",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "scene",
+    "storyboard",
+    "pages"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "章节目录名，如 bookshop-letter"
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "scene": {
+      "type": "string",
+      "description": "游戏 ?scene= 值，如 messenger / saihoji"
+    },
+    "gameUrl": {
+      "type": "string",
+      "description": "完整或相对游戏 URL；可含 query。缺省由 cli 拼。"
+    },
+    "timeOfDay": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "viewport": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        }
+      }
+    },
+    "storyboard": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/shot"
+      }
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 2,
+      "description": "第一项通常为 cover，其后为分镜页",
+      "items": {
+        "$ref": "#/$defs/page"
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "shot": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string",
+          "description": "分镜意图 / 场面说明"
+        },
+        "camera": {
+          "type": "object",
+          "properties": {
+            "preset": {
+              "type": "string",
+              "enum": [
+                "wide",
+                "medium",
+                "close",
+                "high",
+                "cover"
+              ],
+              "description": "远景/中景/近景/俯视/封面"
+            },
+            "landmark": {
+              "type": "string",
+              "description": "__tm.messenger.landmarks 键，如 bookshop"
+            },
+            "dist": {
+              "type": "number"
+            },
+            "orbit": {
+              "type": "number",
+              "description": "环绕角增量（弧度或内部单位）"
+            },
+            "pitch": {
+              "type": "number"
+            },
+            "waitMs": {
+              "type": "integer",
+              "default": 800
+            }
+          }
+        },
+        "caption": {
+          "type": "string",
+          "description": "旁白"
+        },
+        "dialog": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "speaker": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": [
+        "id",
+        "template",
+        "panels"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "cover",
+            "story"
+          ]
+        },
+        "template": {
+          "type": "string",
+          "description": "cover | edena-stack-3 | edena-close-insert | edena-banner-pair | edena-wide-strip | (legacy panels-*)"
+        },
+        "title": {
+          "type": "string"
+        },
+        "panels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "shotId"
+            ],
+            "properties": {
+              "shotId": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string",
+                "description": "banner | main | side 等模板槽"
+              },
+              "showCaption": {
+                "type": "boolean",
+                "default": true
+              },
+              "showDialog": {
+                "type": "boolean",
+                "default": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "manifestShot": {
+      "type": "object",
+      "properties": {
+        "shotId": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "playwright-screenshot",
+            "canvas-todataurl",
+            "fixture",
+            "external-dir"
+          ]
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "id": "bookshop-letter",
+      "title": "书店镇 · 一封要送出的信",
+      "scene": "messenger",
+      "storyboard": [
+        {
+          "id": "cover",
+          "title": "封面：书店镇黄昏",
+          "camera": {
+            "preset": "cover",
+            "landmark": "bookshop"
+          },
+          "caption": "信在怀里，风里有纸墨味。"
+        }
+      ],
+      "pages": [
+        {
+          "id": "cover",
+          "kind": "cover",
+          "template": "cover",
+          "panels": [
+            {
+              "shotId": "cover"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

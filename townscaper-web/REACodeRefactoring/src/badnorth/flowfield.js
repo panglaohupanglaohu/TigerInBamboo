@@ -1,3 +1,4 @@
+import { MinHeap } from '../core/minheap.js';
 /**
  * flowfield.js — Bad North 的流场 / 影响场（多源 Dijkstra + 数据继承）。
  *
@@ -49,5 +50,23 @@ export function buildFlowField(world, nav, sources) {
     dist, parent, src, sources,
     /** 这一格：最近的源（含兵种等数据）、距离、往它走的下一格 */
     at(cell) { if (!cell) return null; const k = src[cell.id]; return k < 0 ? null : { source: sources[k], dist: dist[cell.id], next: parent[cell.id] >= 0 ? cells[parent[cell.id]] : cell }; },
+  };
+}
+
+/** Layered adaptation of the existing influence-field algorithm. Occupancy and
+ * allowed portals come from BattleNavigation's graph; no second voxel store.
+ * Reverse traversal preserves directed river costs. Each floor inherits its
+ * own nearest source instead of conflating a tunnel with the roof above it.
+ */
+export function buildLayeredFlowField(graph, sources) {
+  const n=graph.nodes.length,dist=new Float64Array(n).fill(Infinity),parent=new Int32Array(n).fill(-1),src=new Int32Array(n).fill(-1);
+  const reverse=Array.from({length:n},()=>[]),heap=new MinHeap();
+  for(let a=0;a<n;a++)for(const e of graph.adj[a])reverse[e.to].push({from:a,cost:e.cost});
+  sources.forEach((s,k)=>{if(!graph.nodes[s.node])return;if(dist[s.node]!==0){dist[s.node]=0;src[s.node]=k;heap.push(0,s.node);}});
+  while(heap.length){const[d,id]=heap.pop();if(d!==dist[id])continue;
+    for(const e of reverse[id]){const nd=d+e.cost;if(nd<dist[e.from]){dist[e.from]=nd;parent[e.from]=id;src[e.from]=src[id];heap.push(nd,e.from);}}
+  }
+  return {dist,parent,src,sources,nodes:graph.nodes,version:graph.version,
+    atNode(id){const k=src[id];return k===undefined||k<0?null:{source:sources[k],dist:dist[id],next:graph.nodes[parent[id]]??graph.nodes[id]};},
   };
 }

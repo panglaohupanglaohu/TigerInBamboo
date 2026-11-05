@@ -1,0 +1,72 @@
+{
+  "gpu": [
+    {
+      "tail": "straight",
+      "mismatch": 0,
+      "white": 393,
+      "opaque": 8192
+    },
+    {
+      "tail": "swallow",
+      "mismatch": 0,
+      "white": 393,
+      "opaque": 6354
+    },
+    {
+      "tail": "fork",
+      "mismatch": 0,
+      "white": 393,
+      "opaque": 5304
+    },
+    {
+      "tail": "triple",
+      "mismatch": 0,
+      "white": 393,
+      "opaque": 5676
+    },
+    {
+      "tail": "point",
+      "mismatch": 0,
+      "white": 393,
+      "opaque": 7292
+    },
+    {
+      "tail": "step",
+      "mismatch": 0,
+      "white": 393,
+      "opaque": 7958
+    }
+  ],
+  "bunting": [
+    {
+      "vertices": 306,
+      "pinned": 18,
+      "moving": 288,
+      "roof": 5,
+      "camera": {
+        "start": 0,
+        "yaw": 0,
+        "pitch": 0.7
+      },
+      "worldUnchanged": true
+    },
+    {
+      "vertices": 369,
+      "pinned": 18,
+      "moving": 351,
+      "roof": 2,
+      "camera": {
+        "start": 102,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "worldUnchanged": true
+    }
+  ],
+  "scenes": [
+    "town",
+    "terrain",
+    "badnorth"
+  ],
+  "errors": []
+}

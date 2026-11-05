@@ -1,0 +1,23 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "steps": 16,
+      "maxDegenerate": 0,
+      "successRestored": true,
+      "failureRestored": true,
+      "changed": 7380,
+      "unchanged": 87930
+    },
+    {
+      "grid": "quad",
+      "steps": 16,
+      "maxDegenerate": 0,
+      "successRestored": true,
+      "failureRestored": true,
+      "changed": 8307,
+      "unchanged": 100584
+    }
+  ],
+  "errors": []
+}

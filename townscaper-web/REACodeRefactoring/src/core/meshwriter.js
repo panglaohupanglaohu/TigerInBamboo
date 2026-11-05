@@ -20,6 +20,8 @@ export class MeshWriter {
     this.pos = [];
     this.col = [];
     this.glow = [];
+    this.field = [];
+    this.fieldFrame = null; // [axisX, axisZ, optional caller-owned surface kind]; null writes zero.
     this.softTri = [];      // 每个三角形一个标记
     this.soft = false;
     this.softAngle = 55;
@@ -41,10 +43,12 @@ export class MeshWriter {
     this.pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
     this.col.push(color.r * s0, color.g * s0, color.b * s0, color.r * s1, color.g * s1, color.b * s1, color.r * s2, color.g * s2, color.b * s2);
     this.glow.push(g, g, g);
+    const q = this.fieldFrame;
+    for (const p of [a, b, c]) this.field.push(q ? p[0]*q[0]+p[2]*q[1] : 0, q ? -p[0]*q[1]+p[2]*q[0] : 0, q ? (q[2] ?? 1) : 0);
     this.softTri.push(this.soft ? 1 : 0);
   }
 
-  /** 三个顶点各自的颜色（顶面混色用，1781405550061687016）。 */
+  /** 三个顶点各自的颜色（本地顶面混色；不是投射/手工UV patch）。 */
   triC(a, b, c, dir, ca, cb, cc, g = 0) {
     const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
     const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
@@ -53,6 +57,8 @@ export class MeshWriter {
     this.pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
     this.col.push(ca.r, ca.g, ca.b, cb.r, cb.g, cb.b, cc.r, cc.g, cc.b);
     this.glow.push(g, g, g);
+    const q = this.fieldFrame;
+    for (const p of [a, b, c]) this.field.push(q ? p[0]*q[0]+p[2]*q[1] : 0, q ? -p[0]*q[1]+p[2]*q[0] : 0, q ? (q[2] ?? 1) : 0);
     this.softTri.push(this.soft ? 1 : 0);
   }
 
@@ -187,6 +193,7 @@ export class MeshWriter {
     g.setAttribute('position', new THREE.Float32BufferAttribute(this.pos, 3));
     g.setAttribute('color', new THREE.Float32BufferAttribute(this.col, 3));
     g.setAttribute('aGlow', new THREE.Float32BufferAttribute(this.glow, 1));
+    g.setAttribute('aField', new THREE.Float32BufferAttribute(this.field, 3));
     const { normal, outline } = this.normals();
     g.setAttribute('normal', new THREE.Float32BufferAttribute(normal, 3));
     g.setAttribute('aOutline', new THREE.Float32BufferAttribute(outline, 3));   // 描边外扩方向（world/outline.js）

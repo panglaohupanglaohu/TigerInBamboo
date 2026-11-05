@@ -14,6 +14,8 @@
  *  1176516621223043073                        白框小窗，临步道的一面开门
  */
 
+import { classifyCourtyards } from '../core/courtyards.js';
+import { gardenPaths } from '../core/garden-paths.js';
 import { BUILD } from '../core/palette.js';
 import { hash01, mix, clamp } from '../core/noise.js';
 import { UP, DOWN, edgeOut } from '../core/meshwriter.js';
@@ -75,46 +77,16 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
   };
 
   /* ---- 后院：地面层（顶=1 的码头格）连通块碰不到水 / 网格边 ------------------- */
-  const yard = new Uint8Array(n);
-  const path = new Uint8Array(n);      // 后院里的小径（1290997501332525056 "garden paths"）
-  const yardComps = [];
-  {
-    const seen = new Uint8Array(n);
-    const isGround = (c) => tops[c.id] === 1 && world.isBuilt(c, 1);
-    for (const start of cells) {
-      if (seen[start.id] || !isGround(start)) continue;
-      const comp = [];
-      let open = false;
-      const stack = [start];
-      seen[start.id] = 1;
-      while (stack.length) {
-        const c = stack.pop();
-        comp.push(c);
-        for (let i = 0; i < c.n; i++) {
-          const nb = nbr(c, i);
-          if (nb === null || tops[nb.id] === 0) { open = true; continue; }
-          if (isGround(nb) && !seen[nb.id]) { seen[nb.id] = 1; stack.push(nb); }
-        }
-      }
-      if (!open) { for (const c of comp) yard[c.id] = 1; yardComps.push(comp); }
-    }
-  }
+  const courtyard = classifyCourtyards(world, { tops });
+  const yard = courtyard.mask;
+  const yardComps = courtyard.components;
+  const path = new Uint8Array(n);
 
-  // 小径：后院够大时，沿后院的两条主轴铺一个"十字"（原片：草坪中间十字形石板路通向中心）
+  // Local graph reconstruction: connect PCA endpoints through garden cells.
+  // Source video shows paths, not PCA or this algorithm. Never bridge a hole.
   for (const comp of yardComps) {
-    if (comp.length < 6) continue;
-    let mx = 0, mz = 0;
-    for (const c of comp) { mx += c.cx; mz += c.cz; }
-    mx /= comp.length; mz /= comp.length;
-    let sxx = 0, szz = 0, sxz = 0;
-    for (const c of comp) { const dx = c.cx - mx, dz = c.cz - mz; sxx += dx * dx; szz += dz * dz; sxz += dx * dz; }
-    const ang = 0.5 * Math.atan2(2 * sxz, sxx - szz);
-    const ux = Math.cos(ang), uz = Math.sin(ang);
-    for (const c of comp) {
-      const dx = c.cx - mx, dz = c.cz - mz;
-      const along = Math.abs(dx * ux + dz * uz), across = Math.abs(-dx * uz + dz * ux);
-      if (across < 0.2 || (along < 0.2 && comp.length >= 10)) path[c.id] = 1;
-    }
+    const plan = gardenPaths(comp, c => Array.from({length:c.n},(_,i)=>nbr(c,i)));
+    for (const id of plan.path) path[id] = 1;
   }
 
   /* ---- 墙面零件 ------------------------------------------------------------- */
@@ -389,7 +361,7 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
 
   const yardCells = new Set(), pathCells = new Set();
   for (let i = 0; i < n; i++) { if (yard[i]) yardCells.add(i); if (path[i]) pathCells.add(i); }
-  return { posts, yards, yardCells, pathCells, chimneys, modules: sigs.size, doors: door.size };
+  return { posts, yards, yardCells, pathCells, yardOpenings: courtyard.openComponents, chimneys, modules: sigs.size, doors: door.size };
 }
 
 /**

@@ -1,0 +1,109 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "stages": [
+        {
+          "bounce": 0,
+          "world": 672,
+          "meanChanges": [],
+          "estimatedBytes": 19701240,
+          "ms": 82
+        },
+        {
+          "bounce": 1,
+          "world": 672,
+          "meanChanges": [
+            0.1252460544740485
+          ],
+          "estimatedBytes": 19701240,
+          "ms": 97
+        },
+        {
+          "bounce": 3,
+          "world": 672,
+          "meanChanges": [
+            0.1252460544740485,
+            0.013611995226297078,
+            0.0032655521925591896
+          ],
+          "estimatedBytes": 19701240,
+          "ms": 117
+        },
+        {
+          "bounce": 6,
+          "world": 672,
+          "meanChanges": [
+            0.1252460544740485,
+            0.013611995226297078,
+            0.0032655521925591896,
+            0.0009446608093298559,
+            0.00030624152008924257,
+            0.0001072103964506657
+          ],
+          "estimatedBytes": 19701240,
+          "ms": 107
+        }
+      ],
+      "checks": {
+        "zeroToOne": 0.75,
+        "oneToThree": 0.4777807593345642,
+        "sliceColors": 4930
+      },
+      "sunChange": 10351.600044071674
+    },
+    {
+      "kind": "quad",
+      "stages": [
+        {
+          "bounce": 0,
+          "world": 781,
+          "meanChanges": [],
+          "estimatedBytes": 22669920,
+          "ms": 96
+        },
+        {
+          "bounce": 1,
+          "world": 781,
+          "meanChanges": [
+            0.12551722302595072
+          ],
+          "estimatedBytes": 22669920,
+          "ms": 115
+        },
+        {
+          "bounce": 3,
+          "world": 781,
+          "meanChanges": [
+            0.12551722302595072,
+            0.012517025605439958,
+            0.0028048507026417068
+          ],
+          "estimatedBytes": 22669920,
+          "ms": 112
+        },
+        {
+          "bounce": 6,
+          "world": 781,
+          "meanChanges": [
+            0.12551722302595072,
+            0.012517025605439958,
+            0.0028048507026417068,
+            0.0007666008015930864,
+            0.0002366491928043484,
+            0.00007930955349054152
+          ],
+          "estimatedBytes": 22669920,
+          "ms": 137
+        }
+      ],
+      "checks": {
+        "zeroToOne": 0.75,
+        "oneToThree": 0.4374600052833557,
+        "sliceColors": 4414
+      },
+      "sunChange": 9228.800039291382
+    }
+  ],
+  "errors": []
+}

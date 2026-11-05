@@ -1,7 +1,8 @@
 // UI layers: one rule for every on-screen panel (industry pattern: player HUD vs. editor tools vs. debug stats).
 //
 //   play     玩家 HUD：任务 / 小地图 / 罗盘 / 救援主线 / 操作提示条 / 遥控 / 交互提示 / 对话 / 提示气泡。
-//            Ships with the game, always visible; nothing else may cover the bottom controls bar.
+//            Ships with the game, always visible in play; nothing else may cover the bottom controls bar.
+//            Exception: capture-clean mode (CartonBook / shot harness) hides play + edit + monitor for menu-free screenshots.
 //   edit     编辑工具：构建（莫西斯湖 · 十二门徒 · 高山圣城 · 水晶城 · 地图）、剧情镜头、玩法调试（霸天舰队 · 机器人）、参数。
 //            Development only. One group open at a time from the dock (bottom-right) or F1; closed by default.
 //   monitor  监控：帧率探针、体素 AO 探针、湖区 / 城区实时审计、WFC 失败面板。Development only, F2.
@@ -17,20 +18,33 @@ export const EDIT_GROUPS=[
  {id:'params',name:'参数',note:'开发者菜单（移动 · 光照 · 天空 · 场景开关）',selectors:['#dev-toggle','#dev-panel']},
 ];
 export const MONITOR_SELECTORS=['#tm-perf-probe','#voxel-ao-probe','#morris-live-audit','#moon-lake-live-audit','#citadel-runtime-status','#dev-wfc-failure'];
-/** Player HUD (documentation + tests): never hidden by this module. */
+/** Player HUD (documentation + tests): hidden only by capture-clean mode, not by edit/monitor toggles. */
 export const PLAY_SELECTORS=['#hud','#topleft-stack','#quest-panel','#minimap-panel','#compass','#rescue-campaign','#controls-dock','#hint-panel','#touch-controls','#toast','#intro','#startup-progress','#load-error','#fox-chat','#morris-princess-dialogue','#morris-princess-hint','#morris-horse-hint','#robot-greeting-hint','#journal-panel'];
+/** Extra DOM chrome that is not in PLAY/EDIT/MONITOR lists but still must leave comic frames. */
+export const CAPTURE_EXTRA_SELECTORS=['#tm-ui-dock','#npc-hint','#tram-hint','#airship-hint','#scout-hint','#elder-hint','#fox-hint','#bubble-hint','#boat-hint','#bubble','#bubble-crosshair','.toast','#touch-toggle','#touch-toggle-slot','#dive-tint'];
+/** Full hide list for CartonBook / dedicated screenshot mode (strategy 1). */
+export const CAPTURE_HIDE_SELECTORS=[
+ ...PLAY_SELECTORS,
+ ...EDIT_GROUPS.flatMap(g=>g.selectors),
+ ...MONITOR_SELECTORS,
+ ...CAPTURE_EXTRA_SELECTORS,
+];
 
 const STORE='tm-ui-layers-v1';
 const q=new URLSearchParams(globalThis.location?.search||'');
 const host=globalThis.location?.hostname||'';
 const localHost=['localhost','127.0.0.1','::1','[::1]',''].includes(host)||host.endsWith('.local');
-export const UI_DEV=q.get('dev')==='1'||(localHost&&q.get('release')!=='1'&&q.get('dev')!=='0');
+// Main game URLs default to play UI; the workshop iframe opts in with dev=1.
+const mainGameEntry=/\/TigerMessenger\/(?:index\.html)?$/.test(globalThis.location?.pathname||'');
+export const UI_DEV=q.get('dev')==='1'||(localHost&&!mainGameEntry&&q.get('release')!=='1'&&q.get('dev')!=='0');
 
 const state={group:null,monitor:false};
 try{const s=JSON.parse(localStorage.getItem(STORE)||'{}');if(EDIT_GROUPS.some(g=>g.id===s.group))state.group=s.group;state.monitor=!!s.monitor;}catch{}
 if(q.has('editor'))state.group=EDIT_GROUPS.some(g=>g.id===q.get('editor'))?q.get('editor'):null;
 const listeners=new Set();
 let installed=false,dock=null;
+let captureMode=q.get('cartonCapture')==='1';
+let capturePrev=null; // {group,monitor} restored when leaving capture-clean
 
 function save(){try{localStorage.setItem(STORE,JSON.stringify(state));}catch{}}
 function apply(){const root=document.documentElement;
@@ -71,6 +85,9 @@ html:has(#citadel-editor[style*="display: block"]) #learnpanel,html:has(#crystal
 #tm-ui-dock .item.on{background:#12232e;color:#fff}
 #tm-ui-dock .item small{display:block;opacity:.7;font-size:11px}
 #tm-ui-dock .foot{margin-top:6px;padding:6px 8px 2px;border-top:1px solid rgba(18,35,46,.1);font-size:11px;opacity:.75}
+/* capture-clean: dedicated screenshot UI — hide every overlay; world canvas stays */
+html.tm-capture-clean ${CAPTURE_HIDE_SELECTORS.join(',html.tm-capture-clean ')}{visibility:hidden!important;opacity:0!important;display:none!important;pointer-events:none!important}
+html.tm-capture-clean #tm-ui-dock,html.tm-capture-clean #intro,html.tm-capture-clean #startup-progress,html.tm-capture-clean #load-error{display:none!important}
 `;
 
 function mountDock(){
@@ -94,7 +111,34 @@ export function setGroup(id){state.group=id&&EDIT_GROUPS.some(g=>g.id===id)?id:n
 export function setMonitor(on){state.monitor=!!on;save();apply();}
 export function isGroupOpen(id){return UI_DEV&&state.group===id;}
 export function onUiLayersChange(fn){listeners.add(fn);return()=>listeners.delete(fn);}
-export function uiLayersState(){return{dev:UI_DEV,...state};}
+export function uiLayersState(){return{dev:UI_DEV,captureMode,...state};}
+
+/**
+ * Capture-clean mode (preferred CartonBook strategy): hide all HUD / menus / docks
+ * before a screenshot, restore after. Also enabled by ?cartonCapture=1.
+ * ZERO TOLERANCE for formal CartonBook shots: minimap, quest/letter panels,
+ * WASD/hint dock, interact prompts (R/E/F overlays), crosshair, fps probe,
+ * touch「遥控」, toast/bubble — all must be gone (see CAPTURE_HIDE_SELECTORS).
+ * @param {boolean} on
+ * @returns {{ok:true,captureMode:boolean,hiddenSelectors:string[]}}
+ */
+export function setCaptureMode(on){
+ captureMode=!!on;
+ const root=document.documentElement;
+ if(captureMode){
+  if(!capturePrev)capturePrev={group:state.group,monitor:state.monitor};
+  state.group=null;state.monitor=false;
+  // session overlay only — do not persist editor prefs while capturing
+  apply();
+  root.classList.add('tm-capture-clean');
+ }else{
+  root.classList.remove('tm-capture-clean');
+  if(capturePrev){state.group=capturePrev.group;state.monitor=capturePrev.monitor;capturePrev=null;}
+  apply();
+ }
+ return {ok:true,captureMode,hiddenSelectors:CAPTURE_HIDE_SELECTORS.slice()};
+}
+export function isCaptureMode(){return captureMode;}
 
 export function installUiLayers(){
  if(installed)return;installed=true;
@@ -104,5 +148,6 @@ export function installUiLayers(){
   window.addEventListener('keydown',e=>{if(e.repeat||['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
    if(e.key==='F1'){e.preventDefault();setGroup(state.group?null:lastGroup);}else if(e.key==='F2'){e.preventDefault();setMonitor(!state.monitor);}},true);}
  apply();
- globalThis.__tmUiLayers={state:uiLayersState,setGroup,setMonitor,groups:EDIT_GROUPS.map(g=>g.id)};
+ if(captureMode)setCaptureMode(true);
+ globalThis.__tmUiLayers={state:uiLayersState,setGroup,setMonitor,setCaptureMode,isCaptureMode,groups:EDIT_GROUPS.map(g=>g.id),CAPTURE_HIDE_SELECTORS};
 }

@@ -220,6 +220,54 @@ function finishGrid(polys, verts, { radius, hexSize, kind, triangles }) {
   return { kind, cells, verts, vertexCells, radius, hexSize, cellCount: cells.length, triangles };
 }
 
+/** 1670790425232175108: "pure triangle/hex and square grids ... mixed approach".
+ * A true regular square control, sharing the existing cell/half-edge contract.
+ * Randomly merging all possible triangle pairs can leave triangles and rhombi;
+ * it is not a pure square lattice. The main game grid choices stay unchanged.
+ */
+export function buildSquareGrid({radius=9, cellSize=1}={}) {
+  if(!Number.isInteger(radius)||radius<0||radius>128||!Number.isFinite(cellSize)||cellSize<=0) throw new RangeError('Invalid square grid size');
+  const side=radius*2+1, verts=[], polys=[];
+  for(let z=0;z<=side;z++)for(let x=0;x<=side;x++)verts.push({id:verts.length,x:(x-radius-.5)*cellSize,z:(z-radius-.5)*cellSize,pinned:x===0||z===0||x===side||z===side});
+  const at=(x,z)=>verts[z*(side+1)+x];
+  for(let z=0;z<side;z++)for(let x=0;x<side;x++)polys.push([at(x,z),at(x+1,z),at(x+1,z+1),at(x,z+1)]);
+  return finishGrid(polys,verts,{radius,hexSize:cellSize,kind:'square',triangles:0});
+}
+
+/** 1447494168448753667: quads cut on both diagonals into four triangles.
+ * Derive a new shared-cell grid, retaining parent ownership. This supplies
+ * geometry/adjacency; it does not impose a joint four-subtile WFC constraint.
+ * Source uses the existing clockwise XZ cell contract and is never mutated.
+ */
+export function buildTriangularSubgrid(source) {
+  const verts=[],byId=new Map(),polys=[],owners=[],groups=[],cellIds=new Set();
+  for(const p of source.verts){
+    if(!Number.isInteger(p.id)||byId.has(p.id)||!Number.isFinite(p.x)||!Number.isFinite(p.z))throw new TypeError('Invalid source vertex');
+    const copy={...p,id:verts.length};byId.set(p.id,copy);verts.push(copy);
+  }
+  for(const c of source.cells){
+    if(!Number.isInteger(c.id)||cellIds.has(c.id)||![3,4].includes(c.pts.length))throw new TypeError('Invalid source cell');
+    cellIds.add(c.id);
+    const pts=c.pts.map(p=>{const v=byId.get(p.id);if(!v||v.x!==p.x||v.z!==p.z)throw new TypeError('Unknown source corner');return v;});
+    let area=0;for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length];area+=a.x*b.z-b.x*a.z;}
+    if(!(area<0)||!isConvex(pts))throw new RangeError('Expected convex clockwise source cell');
+    const children=[];
+    const add=(pg,edge)=>{children.push(polys.length);polys.push([...pg].reverse());owners.push({sourceCell:c.id,sourceEdge:edge});};
+    if(pts.length===3)add(pts,-1);
+    else{
+      const [a,b,c,d]=pts,rx=c.x-a.x,rz=c.z-a.z,sx=d.x-b.x,sz=d.z-b.z,den=rx*sz-rz*sx;
+      const t=((b.x-a.x)*sz-(b.z-a.z)*sx)/den,u=((b.x-a.x)*rz-(b.z-a.z)*rx)/den;
+      if(!Number.isFinite(t)||!Number.isFinite(u)||t<=0||t>=1||u<=0||u>=1)throw new RangeError('Invalid quad diagonal intersection');
+      const center={id:verts.length,x:a.x+t*rx,z:a.z+t*rz,pinned:false};verts.push(center);
+      for(let e=0;e<4;e++)add([pts[e],pts[(e+1)%4],center],e);
+    }
+    groups.push({sourceCell:c.id,children});
+  }
+  const grid=finishGrid(polys,verts,{radius:source.radius,hexSize:source.hexSize,kind:'tri-subtiles',triangles:polys.length});
+  grid.cells.forEach((c,i)=>Object.assign(c,owners[i]));
+  grid.subdivision={parentKind:source.kind,groups};return grid;
+}
+
 /** 对边：方格的第 i 条边对着 i+2；三角格没有对边（返回 -1）。直线行走、拱门都靠它。 */
 export function oppositeEdge(cell, i) { return cell.n === 4 ? (i + 2) % 4 : -1; }
 
@@ -310,7 +358,8 @@ function latticeAndMerge({ radius, hexSize, seed, mergeRate }) {
   return { verts, polys, addVert, ekey };
 }
 
-export { signedArea, isConvex, relaxPolygons };
+// Low-level topology finalizer; callers must validate polygon geometry first.
+export { signedArea, isConvex, relaxPolygons, finishGrid };
 
 /**
  * 无限网格用的"一块"（1332410042784641026）：中心在三角点阵 (q0, r0) 的六边形块，
@@ -347,18 +396,35 @@ export function quadPatchTopology({ N = 4, L = 1, q0 = 0, r0 = 0, seed = 1 } = {
  * controls and possibly some drag-to-paint mode"）：从格子 cell 的第 i 条边出去，每到一个四边形就从对边出去，
  * 碰到三角格 / 外圈就停。返回经过的格子（不含起点）。
  */
-export function traceStraight(grid, cell, i, max = 200) {
-  const out = [];
-  let c = cell, e = i;
-  for (let k = 0; k < max; k++) {
-    const nid = c.edgeNeighbors[e];
-    if (nid < 0) break;
-    const twin = c.edgeTwins[e];
-    c = grid.cells[nid];
-    out.push(c);
-    if (c.n !== 4) break;
-    e = (twin + 2) % 4;
-    if (c === cell) break;   // 走了一圈回来（Townscaper 里藏的"完美环"，1313837640366596096）
+export function traceStraightReport(grid, cell, i, max = 200) {
+  if(!Number.isInteger(max)||max<0||max>100000)throw new RangeError('Invalid trace budget');
+  const byId=new Map(grid.cells.map(c=>[c.id,c]));
+  if(byId.size!==grid.cells.length||byId.get(cell?.id)!==cell||!Number.isInteger(i)||i<0||i>=cell.n)throw new TypeError('Invalid trace origin');
+  const cells=[],segments=[],seen=new Set();
+  let c=cell,e=i,reason='budget',closed=false;
+  const initial=cell.id+':'+i;
+  const mid=(c,e)=>{const a=c.pts[e],b=c.pts[(e+1)%c.n];return [(a.x+b.x)/2,(a.z+b.z)/2];};
+  for(let step=0;step<max;step++){
+    const key=c.id+':'+e;
+    if(seen.has(key)){reason=key===initial?'loop':'cycle';closed=key===initial;break;}
+    seen.add(key);
+    const nid=c.edgeNeighbors[e];
+    if(nid===-1){reason='boundary';break;}
+    const next=byId.get(nid),twin=c.edgeTwins[e];
+    if(!next||!Number.isInteger(twin)||twin<0||twin>=next.n||next.edgeNeighbors[twin]!==c.id||next.edgeTwins[twin]!==e)throw new Error('Nonreciprocal trace edge');
+    c=next;cells.push(c);
+    if(c.n!==4){segments.push({cell:c.id,entry:twin,exit:null,a:mid(c,twin),b:[c.cx,c.cz]});reason='nonquad';break;}
+    e=(twin+2)%4;
+    segments.push({cell:c.id,entry:twin,exit:e,a:mid(c,twin),b:mid(c,e)});
+    const nextKey=c.id+':'+e;
+    if(seen.has(nextKey)){reason=nextKey===initial?'loop':'cycle';closed=nextKey===initial;break;}
   }
-  return out;
+  return {cells,segments,reason,closed,steps:cells.length,max};
+}
+
+/** Compatibility array result: excludes the start unless the walk returns to it.
+ * Loop detection uses a directed cell/exit state, not just a visited cell.
+ */
+export function traceStraight(grid, cell, i, max = 200) {
+  return traceStraightReport(grid,cell,i,max).cells;
 }

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>贴地软影 — 单位脚下那圈圆不是投影，是软盘</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --cool:#2f7d8f; --bad:#b3412f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:118ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,242,.97) 66%, rgba(238,243,242,0)); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.95);
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:20px; flex-wrap:wrap; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .no { color:#b3412f; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>单位脚下那圈软影 = <b>一张贴地软盘</b>，半径随高度放大、浓度变淡</h1>
+  <p>不投几何形状（小人才 20 像素，shadow map 只会得到噪点）：一个径向软圆就够读出"他站在这儿"。
+     A 到 E 的离地高度 0 / 0.9 / 2.0 / 0 / 3.2：圆从最实最小长到最虚最大，但都要收在自己的占地四边形里；
+     D 站在 26° 坡上，影盘沿坡向拉长 1/cosθ、横向压短 cosθ，<b>面积不变</b> —— 浓度才不变。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { measure, shadowParams, LIGHT_DIR, footprintHalfDiag } from './src/blobshadow.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1d2f36', MUTED = '#5c727a', COOL = '#2f7d8f', BAD = '#b3412f';
+
+const m = measure();
+const A = 96 * Math.SQRT1_2;      // 世界 x → 屏幕系数
+const B = 96 * 0.35355;           // 世界 z → 屏幕系数（2:1 等距）
+const KY = 52;                    // 每单位高度的像素
+const CX = 392, CY = 470;         // 场景中心
+
+const sx = (x, z) => CX + (x - z) * A;
+const sy = (x, z, y = 0) => CY + (x + z) * B - y * KY;
+
+// 地面菱形
+function groundDiamond(half, fill, stroke) {
+  ctx.beginPath();
+  const p = [[-half, -half], [half, -half], [half, half], [-half, half]];
+  p.forEach(([x, z], i) => (i ? ctx.lineTo(sx(x, z), sy(x, z)) : ctx.moveTo(sx(x, z), sy(x, z))));
+  ctx.closePath();
+  ctx.fillStyle = fill; ctx.fill();
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.2; ctx.stroke(); }
+}
+
+// 贴地的软盘：3 层同心圆，外层最淡最快消失 → 看起来是羽化边
+function softBlob(cxw, czw, r, alpha, stretch = 1, squash = 1, dirDeg = 34, y = 0) {
+  const rings = [[1.0, 0.34], [0.70, 0.34], [0.42, 0.32]];
+  const rot = (dirDeg * Math.PI) / 180;
+  for (const [k, a] of rings) {
+    const pts = [];
+    for (let i = 0; i < 40; i++) {
+      const t = (i / 40) * Math.PI * 2;
+      // 坡向拉长：先在坡向坐标系里取点，再转回世界 xz
+      let u = Math.cos(t) * r * k * stretch;
+      let v = Math.sin(t) * r * k * squash;
+      const x = cxw + u * Math.cos(rot) - v * Math.sin(rot);
+      const z = czw + u * Math.sin(rot) + v * Math.cos(rot);
+      pts.push([sx(x, z), sy(x, z, y)]);
+    }
+    ctx.beginPath();
+    pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+    ctx.closePath();
+    ctx.globalAlpha = alpha * a * 1.55;
+    ctx.fillStyle = '#3a3a44';
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+// 占地四边形（线框菱形）
+function footprint(x, z, side, col, dash = [], y = 0) {
+  const h = side / 2;
+  ctx.beginPath();
+  [[-h, -h], [h, -h], [h, h], [-h, h]].forEach(([dx, dz], i) => {
+    const X = sx(x + dx, z + dz), Y = sy(x + dx, z + dz, y);
+    i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+  });
+  ctx.closePath();
+  ctx.setLineDash(dash);
+  ctx.strokeStyle = col; ctx.lineWidth = 1.3; ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// 小人：斗篷 + 头 + 长矛（对应画面里那身黑衣白头的兵）
+function figure(x, z, y) {
+  const X = sx(x, z), Y = sy(x, z, y);
+  const H = KY * 1.55;              // 身高像素
+  const w = H * 0.30;
+  ctx.beginPath();
+  ctx.moveTo(X - w, Y);
+  ctx.quadraticCurveTo(X - w * 0.9, Y - H * 0.62, X - w * 0.42, Y - H * 0.72);
+  ctx.lineTo(X + w * 0.42, Y - H * 0.72);
+  ctx.quadraticCurveTo(X + w * 0.9, Y - H * 0.62, X + w, Y);
+  ctx.closePath();
+  ctx.fillStyle = '#2b3440'; ctx.fill();
+  ctx.beginPath();
+  ctx.arc(X, Y - H * 0.86, w * 0.52, 0, Math.PI * 2);
+  ctx.fillStyle = '#eef1ef'; ctx.fill();
+  ctx.strokeStyle = 'rgba(29,47,54,.35)'; ctx.lineWidth = 0.8; ctx.stroke();
+  // 长矛
+  ctx.beginPath();
+  ctx.moveTo(X + w * 1.1, Y - H * 1.16);
+  ctx.lineTo(X + w * 0.35, Y + H * 0.04);
+  ctx.strokeStyle = '#8a6a44'; ctx.lineWidth = 1.6; ctx.stroke();
+}
+
+// 背景
+ctx.fillStyle = '#eef3f2';
+ctx.fillRect(0, 0, 1280, 800);
+ctx.fillStyle = 'rgba(255,255,255,.78)';
+ctx.beginPath(); ctx.roundRect(20, 100, 748, 552, 12); ctx.fill();
+ctx.strokeStyle = 'rgba(206,220,219,.95)'; ctx.lineWidth = 1.2; ctx.stroke();
+
+// 远一点的一层灰色高台，给"高低错落"一个参照（对应画面二）
+groundDiamond(1.62, 'rgba(174,186,186,.55)', 'rgba(150,164,164,.9)');
+groundDiamond(2.55, '#dfe7e6', 'rgba(176,190,189,.9)');
+
+const UNITS = [
+  { id: 'A', x: -1.45, z: 0.95, h: 0.0, slope: 0, sel: true },
+  { id: 'B', x: -0.05, z: 0.45, h: 0.9, slope: 0 },
+  { id: 'C', x: 1.30, z: 0.00, h: 2.0, slope: 0 },
+  { id: 'D', x: 0.55, z: 1.75, h: 0.0, slope: 26 },
+  { id: 'E', x: -0.45, z: -0.95, h: 3.2, slope: 0 },
+];
+
+// 高处单位脚下的灰台：把"h 是地形高度"画出来，避免小人悬空
+function plinth(x, z, h, half = 0.86) {
+  if (h <= 0.01) return;
+  const b = [[-half, -half], [half, -half], [half, half], [-half, half]];
+  // 侧面
+  for (let i = 0; i < 4; i++) {
+    const j = (i + 1) % 4;
+    const p = [b[i], b[j]];
+    ctx.beginPath();
+    p.forEach(([dx, dz], k) => {
+      const X = sx(x + dx, z + dz), Y = sy(x + dx, z + dz, k ? h : 0);
+      k ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+    });
+    for (let k = p.length - 1; k >= 0; k--) {
+      const [dx, dz] = p[k];
+      ctx.lineTo(sx(x + dx, z + dz), sy(x + dx, z + dz, h));
+    }
+    ctx.closePath();
+    ctx.fillStyle = i % 2 ? 'rgba(168,180,180,.92)' : 'rgba(184,195,195,.92)';
+    ctx.fill();
+  }
+  // 顶面
+  ctx.beginPath();
+  b.forEach(([dx, dz], k) => {
+    const X = sx(x + dx, z + dz), Y = sy(x + dx, z + dz, h);
+    k ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = '#cfd9d7'; ctx.fill();
+  ctx.strokeStyle = 'rgba(150,164,164,.9)'; ctx.lineWidth = 1; ctx.stroke();
+}
+
+// 先台、再影、再物：软盘必须贴在台面上（y = h），不是贴地平
+for (const u of UNITS) plinth(u.x, u.z, u.h);
+
+// 先影后物：所有软盘先贴地画，避免盖住别人
+for (const u of UNITS) {
+  const s = shadowParams(u.h, u.slope);
+  softBlob(u.x + s.off[0] * 0.6, u.z + s.off[1] * 0.6, s.r, s.alpha,
+    s.major / s.r, s.minor / s.r, (Math.atan2(LIGHT_DIR[1], LIGHT_DIR[0]) * 180) / Math.PI, u.h);
+}
+
+// 占地四边形 + 小人
+for (const u of UNITS) {
+  const s = shadowParams(u.h, u.slope);
+  footprint(u.x, u.z, 1.25, u.id === 'D' ? 'rgba(179,65,47,.75)' : 'rgba(47,143,138,.55)',
+            u.id === 'D' ? [4, 3] : [], u.h);
+  figure(u.x, u.z, u.h);
+  // 从脚下到影心的连线（说明影子是被偏移过的，不是天然对齐）
+  ctx.beginPath();
+  ctx.moveTo(sx(u.x, u.z), sy(u.x, u.z, u.h));
+  ctx.lineTo(sx(u.x + s.off[0] * 0.6, u.z + s.off[1] * 0.6), sy(u.x + s.off[0] * 0.6, u.z + s.off[1] * 0.6, u.h));
+  ctx.strokeStyle = 'rgba(92,114,122,.45)'; ctx.lineWidth = 1; ctx.setLineDash([2, 3]); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// 标签最后画，避免被后一个小人盖住
+for (const u of UNITS) {
+  const lx = sx(u.x, u.z) + (u.id === 'C' ? 16 : -6), ly = sy(u.x, u.z, u.h) - KY * 1.78;
+  ctx.fillStyle = 'rgba(255,255,255,.82)';
+  const t = `${u.id}  h=${u.h.toFixed(1)}${u.slope ? `  ${u.slope}°` : ''}`;
+  ctx.font = '600 12px -apple-system,system-ui,sans-serif';
+  const tw = ctx.measureText(t).width;
+  ctx.beginPath(); ctx.roundRect(lx - 3, ly - 12, tw + 6, 16, 3); ctx.fill();
+  ctx.fillStyle = u.id === 'D' ? BAD : INK;
+  ctx.fillText(t, lx, ly);
+}
+
+// 选中态：A 外面那圈上收的线框棱柱（对应画面一）
+{
+  const u = UNITS[0];
+  const half = 0.625, top = 0.38, Hh = 2.05;
+  const bot = [[-half, -half], [half, -half], [half, half], [-half, half]].map(([dx, dz]) => [u.x + dx, u.z + dz]);
+  const tp = [[-top, -top], [top, -top], [top, top], [-top, top]].map(([dx, dz]) => [u.x + dx, u.z + dz]);
+  ctx.strokeStyle = 'rgba(29,47,54,.55)'; ctx.lineWidth = 1;
+  for (let i = 0; i < 4; i++) {
+    const j = (i + 1) % 4;
+    ctx.beginPath();
+    ctx.moveTo(sx(...bot[i]), sy(...bot[i], 0));
+    ctx.lineTo(sx(...bot[j]), sy(...bot[j], 0));
+    ctx.moveTo(sx(...tp[i]), sy(...tp[i], Hh));
+    ctx.lineTo(sx(...tp[j]), sy(...tp[j], Hh));
+    ctx.moveTo(sx(...bot[i]), sy(...bot[i], 0));
+    ctx.lineTo(sx(...tp[i]), sy(...tp[i], Hh));
+    ctx.stroke();
+  }
+}
+
+// —— 右侧指标表 ——
+{
+  const px = 790, py = 100, pw = 460;
+  ctx.fillStyle = 'rgba(255,255,255,.90)';
+  ctx.beginPath(); ctx.roundRect(px, py, pw, 552, 12); ctx.fill();
+  ctx.strokeStyle = 'rgba(206,220,219,.95)'; ctx.lineWidth = 1.2; ctx.stroke();
+  ctx.fillStyle = INK; ctx.font = '600 13.5px -apple-system,system-ui,sans-serif';
+  ctx.fillText('同一个 base（r₀=0.52, α₀=0.46）下的五个单位', px + 16, py + 26);
+  ctx.fillStyle = MUTED; ctx.font = '11.5px -apple-system,system-ui,sans-serif';
+  ctx.fillText('r = r₀(1+0.16h)   α = α₀(1−0.10h)   影子沿光方向偏移 0.36h', px + 16, py + 44);
+
+  const cols = ['单位', '离地 h', '坡 θ', '半径 r', '浓度 α', '长半轴', '占框'];
+  const xs = [px + 18, px + 74, px + 140, px + 196, px + 266, px + 330, px + 404];
+  ctx.font = '600 11px -apple-system,system-ui,sans-serif';
+  ctx.fillStyle = MUTED;
+  cols.forEach((c, i) => ctx.fillText(c, xs[i], py + 76));
+  ctx.beginPath(); ctx.moveTo(px + 16, py + 84); ctx.lineTo(px + pw - 16, py + 84);
+  ctx.strokeStyle = 'rgba(206,220,219,1)'; ctx.stroke();
+
+  ctx.font = '12px ui-monospace,SFMono-Regular,Menlo,monospace';
+  m.rows.forEach((r, i) => {
+    const y = py + 108 + i * 30;
+    ctx.fillStyle = INK;
+    ctx.fillText(r.id, xs[0], y);
+    ctx.fillText(r.h.toFixed(1), xs[1], y);
+    ctx.fillText(r.slope ? `${r.slope}°` : '—', xs[2], y);
+    ctx.fillText(r.r.toFixed(3), xs[3], y);
+    ctx.fillText(r.alpha.toFixed(3), xs[4], y);
+    ctx.fillText(r.major.toFixed(3), xs[5], y);
+    ctx.fillStyle = r.inside ? '#146c4a' : BAD;
+    ctx.fillText(r.fit.toFixed(2) + '×', xs[6], y);
+  });
+
+  // 高度曲线：r 与 α 随 h 的走势
+  const gx = px + 24, gy = py + 296, gw = 200, gh = 118;
+  ctx.strokeStyle = 'rgba(140,160,160,.7)'; ctx.lineWidth = 1;
+  ctx.strokeRect(gx, gy, gw, gh);
+  ctx.fillStyle = MUTED; ctx.font = '11px -apple-system,system-ui,sans-serif';
+  ctx.fillText('r（实）与 α（虚）随 h', gx, gy - 8);
+  const HMAX = 4;
+  ctx.beginPath();
+  for (let i = 0; i <= 40; i++) {
+    const h = (i / 40) * HMAX;
+    const s = shadowParams(h);
+    const X = gx + (h / HMAX) * gw;
+    const Y = gy + gh - ((s.r - 0.55) / (0.62 * (1 + 0.16 * HMAX) - 0.55)) * gh;
+    i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+  }
+  ctx.strokeStyle = COOL; ctx.lineWidth = 2; ctx.stroke();
+  ctx.beginPath();
+  for (let i = 0; i <= 40; i++) {
+    const h = (i / 40) * HMAX;
+    const s = shadowParams(h);
+    const X = gx + (h / HMAX) * gw;
+    const Y = gy + gh - (s.alpha / 0.46) * gh;
+    i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+  }
+  ctx.setLineDash([4, 3]); ctx.strokeStyle = BAD; ctx.stroke(); ctx.setLineDash([]);
+
+  // 坡面拉伸示意
+  const rx = px + 268, ry = py + 300, rw = 168, rh = 112;
+  ctx.fillStyle = MUTED; ctx.font = '11px -apple-system,system-ui,sans-serif';
+  ctx.fillText('D：26° 坡上的影盘', rx, ry - 8);
+  ctx.save();
+  ctx.translate(rx + rw / 2, ry + rh / 2 + 12);
+  // 水平（对照）
+  ctx.beginPath(); ctx.ellipse(0, 30, 52, 14, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(58,58,68,.20)'; ctx.fill();
+  ctx.fillStyle = MUTED; ctx.font = '10.5px sans-serif'; ctx.fillText('平地 r', -12, 58);
+  // 坡面（拉长压扁）
+  const srow = m.rows.find((r) => r.slope > 0);
+  ctx.beginPath();
+  ctx.ellipse(0, -22, 52 * (srow.major / srow.r), 14 * (srow.minor / srow.r), 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(179,65,47,.28)'; ctx.fill();
+  ctx.strokeStyle = BAD; ctx.lineWidth = 1.2; ctx.stroke();
+  ctx.fillStyle = BAD; ctx.font = '10.5px sans-serif';
+  ctx.fillText(`${m.stretch.toFixed(3)}× / ${m.squash.toFixed(3)}×`, -34, -46);
+  ctx.restore();
+
+  ctx.fillStyle = MUTED; ctx.font = '11.5px -apple-system,system-ui,sans-serif';
+  ctx.fillText(`坡向拉长 ${m.stretch}（=1/cos26°=${m.cosSlope}）`, px + 24, py + 452);
+  ctx.fillText(`横向压短 ${m.squash}，椭圆面积比 ${m.areaRatio}`, px + 24, py + 472);
+  ctx.fillText(`占框 = 长半轴 / 占地半对角线(${m.halfDiag})`, px + 24, py + 492);
+  ctx.fillStyle = m.outOfBox ? BAD : '#146c4a';
+  ctx.font = '600 12px -apple-system,system-ui,sans-serif';
+  ctx.fillText(`出框单位：${m.outOfBox} 个`, px + 24, py + 518);
+}
+
+const st = document.getElementById('stats');
+st.innerHTML = `
+  <span>半径 <b>${m.rRange[0]}</b> → <b>${m.rRange[1]}</b>（h 0→3.2）</span>
+  <span>浓度 <b>${m.alphaRange[0]}</b> → <b>${m.alphaRange[1]}</b></span>
+  <span>坡向拉伸 <b>${m.stretch}</b> × 压短 <b>${m.squash}</b> · 面积比 <span class="ok">${m.areaRatio}</span></span>
+  <span>出框 <span class="${m.outOfBox ? 'no' : 'ok'}">${m.outOfBox}</span> / ${m.rows.length}</span>
+  <span>最远偏移 ${m.rows[4].off.map((v) => v.toFixed(2)).join(', ')}</span>`;
+
+window.__blobStats = m;
+</script>
+</body>
+</html>

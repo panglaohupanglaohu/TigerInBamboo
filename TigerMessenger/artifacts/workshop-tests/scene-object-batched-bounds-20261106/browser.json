@@ -1,0 +1,372 @@
+{
+  "startedAt": "2026-11-05T16:44:15.898Z",
+  "base": "http://localhost:8931",
+  "isolated": true,
+  "cases": [
+    {
+      "id": "L13 synchronous IndexedDB open denial keeps learning usable",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S01 initial pipeline",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S02 scan real library and search",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S03 scan HTTP404 and recovery",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S12 scene categories subgroups and method shelf",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S14 ordered scene-layer board selects config and inserts inside its layer",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S04 add remove undo redo and reorder",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S05 goal save and exported JSON",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L01 learning loads source records",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L06 shared snapshot matches upstream and outage preserves old data",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L07 verified refresh updates all learning views and keeps recipe iframe",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L08 progress evidence history and next are folded with reachable learning tabs",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L09 offline full reload uses verified learning cache then recovers",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L10 cache quota failure leaves live learning and scene stores usable",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L11 unavailable IndexedDB keeps online learning and reports offline error",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L12 corrupt offline cache never activates and online refresh repairs it",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L14 video notes and pipeline methods show genuine thumbnails and missing-image fallback",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L02 module search and source links",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L03 add method to scene locate no duplicate",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L04 videos search play close",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S06 saved recipe refresh",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S07 real game connection and editor docking",
+      "status": "PASS",
+      "ms": 38559
+    },
+    {
+      "id": "S18 real plane trees select focus clear without scene or storage edits",
+      "status": "PASS",
+      "ms": 5186,
+      "detail": {
+        "trees": 4,
+        "bridgeTree": "located and highlighted",
+        "objectEditing": "not connected",
+        "worldRecipeStorage": "unchanged"
+      }
+    },
+    {
+      "id": "S08 editor tools palette help collapse",
+      "status": "PASS",
+      "ms": 4799
+    },
+    {
+      "id": "S13 approved light blue toolbar contrast and focus",
+      "status": "PASS",
+      "ms": 717,
+      "detail": {
+        "background": "rgb(227, 243, 251)",
+        "foreground": "rgb(23, 55, 68)",
+        "borderRadius": "14px",
+        "contrast": 11.08957390102491,
+        "buttons": 9
+      }
+    },
+    {
+      "id": "S09 actual parameter preview baseline and snapshot",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S15 canonical actions save actual manual parameters once and locate versions in-page",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S16 draft quota failure preserves world settings recipe and all stored versions",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S10 stale finalize reject restore and isolated final",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S17 fixed-version game loads exact data settings and missing ID reports fallback",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S11 play mode and service outage independence",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L05 mobile overflow and preserved scene iframe",
+      "status": "PASS",
+      "ms": 1192
+    },
+    {
+      "id": "G01 clean game startup and remote controls",
+      "status": "PASS",
+      "ms": 47203
+    }
+  ],
+  "errors": [],
+  "responsivenessBeforeGameExit": [
+    {
+      "url": "/TigerMessenger/pipeline.html",
+      "ageMs": 51133,
+      "readyState": "complete",
+      "visibility": "visible",
+      "longTasks": [
+        {
+          "start": 15425,
+          "duration": 4623
+        },
+        {
+          "start": 8475,
+          "duration": 3841
+        },
+        {
+          "start": 20066,
+          "duration": 2993
+        },
+        {
+          "start": 12333,
+          "duration": 2923
+        },
+        {
+          "start": 2464,
+          "duration": 2755
+        },
+        {
+          "start": 37030,
+          "duration": 1601
+        },
+        {
+          "start": 6565,
+          "duration": 1434
+        },
+        {
+          "start": 1395,
+          "duration": 1051
+        },
+        {
+          "start": 35514,
+          "duration": 914
+        },
+        {
+          "start": 24680,
+          "duration": 829
+        },
+        {
+          "start": 38664,
+          "duration": 818
+        },
+        {
+          "start": 23079,
+          "duration": 796
+        },
+        {
+          "start": 23918,
+          "duration": 743
+        },
+        {
+          "start": 25764,
+          "duration": 639
+        },
+        {
+          "start": 26421,
+          "duration": 515
+        },
+        {
+          "start": 30017,
+          "duration": 479
+        },
+        {
+          "start": 36461,
+          "duration": 448
+        },
+        {
+          "start": 27663,
+          "duration": 329
+        },
+        {
+          "start": 28810,
+          "duration": 322
+        },
+        {
+          "start": 29150,
+          "duration": 304
+        }
+      ],
+      "unsupported": false
+    },
+    {
+      "url": "/TigerMessenger/index.html",
+      "ageMs": 51075,
+      "readyState": "complete",
+      "visibility": "visible",
+      "longTasks": [
+        {
+          "start": 15366,
+          "duration": 4623
+        },
+        {
+          "start": 8416,
+          "duration": 3841
+        },
+        {
+          "start": 20007,
+          "duration": 2993
+        },
+        {
+          "start": 12274,
+          "duration": 2923
+        },
+        {
+          "start": 2405,
+          "duration": 2755
+        },
+        {
+          "start": 36971,
+          "duration": 1601
+        },
+        {
+          "start": 6506,
+          "duration": 1434
+        },
+        {
+          "start": 1336,
+          "duration": 1051
+        },
+        {
+          "start": 35455,
+          "duration": 914
+        },
+        {
+          "start": 24621,
+          "duration": 829
+        },
+        {
+          "start": 38605,
+          "duration": 818
+        },
+        {
+          "start": 23020,
+          "duration": 796
+        },
+        {
+          "start": 23859,
+          "duration": 743
+        },
+        {
+          "start": 25705,
+          "duration": 639
+        },
+        {
+          "start": 26362,
+          "duration": 515
+        },
+        {
+          "start": 29958,
+          "duration": 479
+        },
+        {
+          "start": 36402,
+          "duration": 448
+        },
+        {
+          "start": 27604,
+          "duration": 329
+        },
+        {
+          "start": 28751,
+          "duration": 322
+        },
+        {
+          "start": 29091,
+          "duration": 304
+        }
+      ],
+      "unsupported": false
+    }
+  ],
+  "finishedAt": "2026-11-05T16:45:54.238Z",
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "pageErrors": 0
+  }
+}

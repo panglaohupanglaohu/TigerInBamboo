@@ -1,0 +1,187 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "none": {
+        "total": 0,
+        "changed": 0
+      },
+      "thin": {
+        "total": 858262,
+        "changed": 9840
+      },
+      "thick": {
+        "total": 2961139,
+        "changed": 21044
+      },
+      "rejected": 4,
+      "widths": [
+        {
+          "resolution": 240,
+          "width": 1,
+          "phase": 0,
+          "coverage": 1
+        },
+        {
+          "resolution": 240,
+          "width": 1,
+          "phase": 0.0013,
+          "coverage": 1
+        },
+        {
+          "resolution": 240,
+          "width": 1,
+          "phase": 0.023,
+          "coverage": 1
+        },
+        {
+          "resolution": 240,
+          "width": 2,
+          "phase": 0,
+          "coverage": 2
+        },
+        {
+          "resolution": 240,
+          "width": 2,
+          "phase": 0.0013,
+          "coverage": 2
+        },
+        {
+          "resolution": 240,
+          "width": 2,
+          "phase": 0.023,
+          "coverage": 2
+        },
+        {
+          "resolution": 480,
+          "width": 1,
+          "phase": 0,
+          "coverage": 1
+        },
+        {
+          "resolution": 480,
+          "width": 1,
+          "phase": 0.0013,
+          "coverage": 1
+        },
+        {
+          "resolution": 480,
+          "width": 1,
+          "phase": 0.023,
+          "coverage": 1
+        },
+        {
+          "resolution": 480,
+          "width": 2,
+          "phase": 0,
+          "coverage": 2
+        },
+        {
+          "resolution": 480,
+          "width": 2,
+          "phase": 0.0013,
+          "coverage": 2
+        },
+        {
+          "resolution": 480,
+          "width": 2,
+          "phase": 0.023,
+          "coverage": 2
+        }
+      ],
+      "worldUnchanged": true
+    },
+    {
+      "grid": "quad",
+      "none": {
+        "total": 0,
+        "changed": 0
+      },
+      "thin": {
+        "total": 835679,
+        "changed": 9433
+      },
+      "thick": {
+        "total": 2863800,
+        "changed": 19990
+      },
+      "rejected": 4,
+      "widths": [
+        {
+          "resolution": 240,
+          "width": 1,
+          "phase": 0,
+          "coverage": 1
+        },
+        {
+          "resolution": 240,
+          "width": 1,
+          "phase": 0.0013,
+          "coverage": 1
+        },
+        {
+          "resolution": 240,
+          "width": 1,
+          "phase": 0.023,
+          "coverage": 1
+        },
+        {
+          "resolution": 240,
+          "width": 2,
+          "phase": 0,
+          "coverage": 2
+        },
+        {
+          "resolution": 240,
+          "width": 2,
+          "phase": 0.0013,
+          "coverage": 2
+        },
+        {
+          "resolution": 240,
+          "width": 2,
+          "phase": 0.023,
+          "coverage": 2
+        },
+        {
+          "resolution": 480,
+          "width": 1,
+          "phase": 0,
+          "coverage": 1
+        },
+        {
+          "resolution": 480,
+          "width": 1,
+          "phase": 0.0013,
+          "coverage": 1
+        },
+        {
+          "resolution": 480,
+          "width": 1,
+          "phase": 0.023,
+          "coverage": 1
+        },
+        {
+          "resolution": 480,
+          "width": 2,
+          "phase": 0,
+          "coverage": 2
+        },
+        {
+          "resolution": 480,
+          "width": 2,
+          "phase": 0.0013,
+          "coverage": 2
+        },
+        {
+          "resolution": 480,
+          "width": 2,
+          "phase": 0.023,
+          "coverage": 2
+        }
+      ],
+      "worldUnchanged": true
+    }
+  ],
+  "errors": []
+}

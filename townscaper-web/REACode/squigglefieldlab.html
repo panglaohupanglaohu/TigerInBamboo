@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>歪扭距离场 — 花纹是场，不是笔触</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:120ch; }
+  header b { color:#9c4720; font-weight:650; }
+  #stage { position:absolute; left:18px; top:104px; width:880px; height:520px;
+    background:#e3e7e6; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  #cv { position:absolute; left:0; top:0; }
+  #panel { position:fixed; right:16px; top:104px; width:250px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:11px 13px; display:flex; flex-direction:column; gap:6px; }
+  #panel h2 { margin:4px 0 0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #panel .btns { display:flex; gap:6px; margin-top:4px; }
+  #panel button { flex:1; padding:5px 6px; font:12px/1 inherit; color:var(--ink); background:#f3f7f6;
+    border:1px solid var(--line); border-radius:7px; cursor:pointer; }
+  #panel button.on { background:#1d2f36; color:#fff; border-color:#1d2f36; }
+  #stats { position:fixed; left:18px; bottom:14px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .warn { color:#9c4720; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>花纹是距离场：歪扭和动画都加在场里</h1>
+  <p>整枚卷草牌匾 = 49 个<b>胶囊</b>（线段＋半径），只写右上四分之一，取场时把坐标折到 |x|,|y|，
+    上下左右镜像免费。线的"手绘感"是在距离上加<b>两个不同方向的低频正弦</b>，
+    动画是推它们的相位 —— <b>形状一帧都没改，改的只是这条边此刻在哪</b>。</p>
+</header>
+
+<div id="stage"><canvas id="cv" width="880" height="520"></canvas></div>
+
+<div id="panel">
+  <h2>歪扭幅度 wobble amp</h2>
+  <div class="row"><span>世界单位</span><b id="amplab">0.008</b></div>
+  <input type="range" id="amp" min="0" max="0.022" step="0.001" value="0.008" />
+  <h2>频率 freq</h2>
+  <div class="row"><span>每单位周期</span><b id="freqLab">18</b></div>
+  <input type="range" id="freq" min="4" max="40" step="1" value="18" />
+  <h2>动画速度 speed</h2>
+  <div class="row"><span>相位/秒</span><b id="spdLab">0.9</b></div>
+  <input type="range" id="spd" min="0" max="3" step="0.1" value="0.9" />
+  <h2>扫光 sweep</h2>
+  <div class="row"><span>掠过的亮带</span><b id="swpLab">开</b></div>
+  <input type="range" id="swp" min="-1" max="1.4" step="0.02" value="-1" />
+  <div class="btns">
+    <button id="play" class="on">播放</button>
+    <button id="flat">关掉歪扭</button>
+  </div>
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { buildOrnament, bakeBuckets, shade, probeEdge, inkShare } from './src/squigglefield.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+const P = buildOrnament();
+const SCALE = 760;                       // 世界→像素
+const VIEW = { cx: W / 2, cy: H / 2, scale: SCALE };
+const bk = bakeBuckets(P, W / SCALE + 0.1, H / SCALE + 0.1, 16 / SCALE);
+
+const el = {
+  amp: document.getElementById('amp'), freq: document.getElementById('freq'),
+  spd: document.getElementById('spd'), swp: document.getElementById('swp'),
+  amplab: document.getElementById('amplab'), freqLab: document.getElementById('freqLab'),
+  spdLab: document.getElementById('spdLab'), swpLab: document.getElementById('swpLab'),
+  play: document.getElementById('play'), flat: document.getElementById('flat'),
+  stats: document.getElementById('stats'),
+};
+
+let t = 0, playing = true, sweepVal = -1, flatMode = false;
+let last = performance.now(), fps = 0, ms = 0;
+
+// 单边探针（跟参数走）：歪扭把一条已知横线推了多远
+let probe = { rmsPx: 0, maxPx: 0, arcRatio: 1, wavelengthPx: 0 };
+function recompute() {
+  const amp = flatMode ? 0 : +el.amp.value;
+  const freq = +el.freq.value;
+  probe = probeEdge({ amp, freq, t: 0 }, SCALE);
+}
+// 基线墨量（t=0、参数固定），用来对比"相位在动、形状没换"
+let ink0 = 0, inkNow = 0, inkTick = 0;
+
+function frame(now) {
+  const dt = Math.min(0.06, (now - last) / 1000);
+  last = now;
+  if (playing) t += dt * (+el.spd.value);
+  const amp = flatMode ? 0 : +el.amp.value;
+  const freq = +el.freq.value;
+
+  const t0 = performance.now();
+  const img = shade(P, bk, W, H, VIEW, { amp, freq, t, sweep: sweepVal });
+  ctx.putImageData(new ImageData(img, W, H), 0, 0);
+
+  // 字是普通 fillText —— 机制不在字上，参考片里那行 Victory 就是这么排的
+  ctx.save();
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = 'rgba(45,58,62,0.82)';
+  ctx.font = '600 44px Georgia, "Times New Roman", serif';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '6px';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('VICTORY', W / 2, H / 2 + 2);
+  ctx.restore();
+
+  ms = performance.now() - t0;
+  fps = fps * 0.9 + (1 / Math.max(dt, 1e-4)) * 0.1;
+
+  // 墨量每 8 帧采一次样本：相位推着边缘爬，但墨量只应在 0.2% 里浮动
+  if ((inkTick++ & 7) === 0) {
+    inkNow = inkShare(P, bk, { ...VIEW, w: W, h: H }, { amp, freq, t }, 240, 140);
+    if (ink0 === 0) ink0 = inkNow;
+  }
+  const dInk = ink0 ? Math.abs(inkNow - ink0) : 0;
+  el.stats.innerHTML =
+    `歪扭 <b>${amp.toFixed(3)}</b> · 频率 <b>${freq}</b>（波长 ${probe.wavelengthPx.toFixed(0)}px）` +
+    ` · 单边探针 抖动 RMS <b>${probe.rmsPx.toFixed(1)}px</b> / 最大 <b>${probe.maxPx.toFixed(1)}px</b>` +
+    ` · 弧长 <b>${probe.arcRatio.toFixed(3)}×</b>直线` +
+    ` · 墨量 ${ink0.toFixed(2)}% → ${inkNow.toFixed(2)}% ` +
+    `<span class="${dInk < 1.0 ? 'ok' : 'warn'}">Δ${dInk.toFixed(2)}%</span>` +
+    ` · <b>${ms.toFixed(1)}ms</b> ${fps.toFixed(0)}fps · 图元 ${P.length} / 桶 ${bk.buckets.length}`;
+
+  requestAnimationFrame(frame);
+}
+
+for (const k of ['amp', 'freq', 'spd']) {
+  el[k].addEventListener('input', () => {
+    if (k === 'amp') el.amplab.textContent = (+el.amp.value).toFixed(3);
+    if (k === 'freq') el.freqLab.textContent = el.freq.value;
+    if (k === 'spd') el.spdLab.textContent = (+el.spd.value).toFixed(1);
+    recompute();
+  });
+}
+el.swp.addEventListener('input', () => {
+  sweepVal = +el.swp.value;
+  el.swpLab.textContent = sweepVal < 0 ? '关' : '开';
+});
+el.play.addEventListener('click', () => {
+  playing = !playing;
+  el.play.classList.toggle('on', playing);
+  el.play.textContent = playing ? '播放' : '暂停';
+});
+el.flat.addEventListener('click', () => {
+  flatMode = !flatMode;
+  el.flat.classList.toggle('on', flatMode);
+  el.flat.textContent = flatMode ? '歪扭已关' : '关掉歪扭';
+  recompute();
+});
+
+recompute();
+window.reaSquiggle = { P, bk, stats: () => ({ probe, ink0, inkNow, ms, fps, t }) };
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

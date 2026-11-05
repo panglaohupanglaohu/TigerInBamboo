@@ -1,0 +1,33 @@
+{
+  "iteration": "2026-11-05 20:27 Shanghai",
+  "observations": [
+    "Current unified suite 20261105T122758533338Z: 51 local and 32 browser PASS, zero page errors. Runtime fixed/missing versions included. Historical timeouts remain unresolved.",
+    "Added isolated read-only CDP startup CPU capture tool, no user profile access. First capture succeeded with aggregate hotspots; changed diagnostic to correlate longest parent-document task windows with monotonic CDP CPU timestamps; second capture succeeded. CAPTURED is evidence collection, not performance PASS.",
+    "Final capture longest parent task ~4537ms: finishCrystalV9/V10Scene accounts for ~4200ms sampled inclusive, including installGateTargetThirty/mountains ~2554ms. Another ~3918ms task includes applyCitadelMountainStudy ~3669ms. Other windows identify moon garden/coast and swamp construction.",
+    "Cloud ridge terrain raycasting is a large aggregate cost but not identified as the longest single task. No rendering/generation code was changed without parity evidence.",
+    "Actual profile-learning screenshot inspected: current shared snapshot, folded progress groups and tabs remain accessible. Not a gameplay or frame-time acceptance.",
+    "Captured startup elapsed times 37765 and 47087ms are separate instrumented runs with overhead, not a before/after speed comparison. Real Worker, user gameplay/navigation/performance and immutable code/resource release still incomplete."
+  ],
+  "checks": [
+    {
+      "name": "current unified workshop regression",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "isolated CPU capture and window correlation collected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "startup responsiveness fix and historical root causes",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "real Worker and gameplay acceptance",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

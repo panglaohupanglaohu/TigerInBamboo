@@ -10,7 +10,7 @@
  * 所有顶点位置都经过 shape.at(p, 切面)（见 shape.js：层级平滑 + 笼形变形），
  * 崖壁第 lv 段连接切面 lv-1 和 lv，台地顶在切面 top，所以变形后网格仍然闭合。
  *
- * 顶面混色（1781405550061687016 "seamless patch blending"）：每个顶面画成扇形，
+ * 本地顶面混色：每个顶面画成扇形；1781405550061687016展示的投影贴图/手工UV patch不等同此方法，
  * 中心是本格的颜色，角上是"共用这个角、同一高度的所有顶面颜色"的平均 → 草、苔、沙之间柔和过渡，
  * 不再是一块块拼色。
  *
@@ -19,7 +19,7 @@
  *
  * 岩层线（1699146321318314094）："make the whole world wobbly, do the texturing math, then
  * simply undo the wobble" —— 这里每层一条线，高度 = 层中线 + 世界空间噪声(x, z)，
- * 相邻崖面用同一个噪声，所以线在拐角处接得上，整座山上连成起伏的沉积层。
+ * 这是保留的旧窄条近似；新strata着色读取岩壁mask与core/sediment.js世界剪切坐标，几何保持原位。
  */
 
 import { TERRAIN } from '../core/palette.js';
@@ -37,6 +37,9 @@ export function buildTerrain(w, world, { L, shape = null }) {
   const P = (p, sl, y) => { const [x, z] = at(p, sl); return [x, y, z]; };
   // 崖面上高度 y 处的点：在下、上两个切面之间插值（崖壁收分、扭动后不再竖直）
   const wallAt = (p, lv, y) => {
+    // 1579478470098243584: reuse the shared continuous cage sampler for strata.
+    // Keep compatibility with custom shapes that only support integer planes.
+    if (shape?.continuous) return P(p, Math.max(lv-1, Math.min(lv, y/L)), y);
     const [x0, z0] = at(p, lv - 1), [x1, z1] = at(p, lv);
     const t = Math.min(1, Math.max(0, y / L - (lv - 1)));
     return [x0 + (x1 - x0) * t, y, z0 + (z1 - z0) * t];
@@ -87,6 +90,8 @@ export function buildTerrain(w, world, { L, shape = null }) {
     const tone = fbm(c.cx * 0.35 + 9, c.cz * 0.35 + 4, { octaves: 2, freq: 1.3, seed: 17 });
     const wallBase = tone > 0.55 ? K.rockPale : K.rock;
 
+    // aField.z: -1 rock wall, -2 legacy raised stripe; +1 field top, 0 other.
+    w.fieldFrame = [0,0,-1];
     // 崖壁
     for (let i = 0; i < c.n; i++) {
       const a = c.pts[i], b = c.pts[(i + 1) % c.n];
@@ -106,11 +111,14 @@ export function buildTerrain(w, world, { L, shape = null }) {
           const s2 = 0.011, e = 0.006;
           const ya = y0 + 0.5 * L + wob(a.x, a.z), yb = y0 + 0.5 * L + wob(b.x, b.z);
           const off = (q) => [q[0] + nx * e, q[1], q[2] + nz * e];
+          w.fieldFrame = [0,0,-2];
           w.quad(off(wallAt(a, lv, ya - s2)), off(wallAt(b, lv, yb - s2)), off(wallAt(b, lv, yb + s2)), off(wallAt(a, lv, ya + s2)), out, K.strata, 0.9);
+          w.fieldFrame = [0,0,-1];
         }
       }
     }
 
+    w.fieldFrame = null;
     // 洞窟顶：岩石段的底下是空的
     for (let lv = 2; lv <= g; lv++) {
       if (world.isRock(c, lv) && !world.isSolid(c, lv - 1)) {
@@ -132,10 +140,15 @@ export function buildTerrain(w, world, { L, shape = null }) {
     const ring = c.pts.map((p) => P(p, g, y));
     const ctr = [ring.reduce((s, q) => s + q[0], 0) / c.n, y, ring.reduce((s, q) => s + q[2], 0) / c.n];
     const cc = c.pts.map((p) => cornerColor(c, p));
+    const fieldAngle = hash01(c.id * 19 + 5) * Math.PI;
+    // Only exposed, non-river rock tops: no fields on roofs, walls or river water.
+    w.fieldFrame = me.kind === 'river' ? null : [Math.cos(fieldAngle), Math.sin(fieldAngle)];
     for (let i = 0; i < c.n; i++) {
       const j = (i + 1) % c.n;
       w.triC(ctr, ring[i], ring[j], UP, me.color, cc[i], cc[j]);
     }
+
+    w.fieldFrame = null;
 
     // 草皮垂过崖边：草顶面、邻居更低的边，沿崖面垂下一段圆润的"舌头"
     if ((me.kind === 'grass' || me.kind === 'dry') && g >= 2) {

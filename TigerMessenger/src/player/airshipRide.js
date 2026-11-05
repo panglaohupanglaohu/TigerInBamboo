@@ -327,8 +327,12 @@ export function createAirshipRide({
   }
 
   function setViewMode(mode) {
-    if (mode !== "passenger" && mode !== "pilot") return;
-    if (viewMode === mode) return;
+    if (mode !== "passenger" && mode !== "pilot") {
+      return { ok: false, state, viewMode, error: "bad-mode" };
+    }
+    if (viewMode === mode) {
+      return { ok: true, state, viewMode, changed: false };
+    }
     viewMode = mode;
     applyCameraForView();
     refreshFlyHint();
@@ -337,6 +341,91 @@ export function createAirshipRide({
     } else {
       toast("舱外跟拍 · 再按 C 切换驾驶员视角", 2.2);
     }
+    return { ok: true, state, viewMode, changed: true };
+  }
+
+  /**
+   * CartonBook / Playwright：跳过攀爬动画，直接进入 flying + passenger。
+   * 不打断正常 Q/F/C 手感；仅供自动化截屏。
+   * @returns {{ok:boolean,state:string,viewMode:string,error?:string}}
+   */
+  function forceBoardForCapture() {
+    let a = airship();
+    if (!a) {
+      return { ok: false, state, viewMode, error: "no-airship" };
+    }
+
+    // 已在飞：保持当前状态，便于再 setViewMode('pilot')
+    if (state === "flying") {
+      a.userData.flying = true;
+      a.userData.flown = true;
+      player.riding = true;
+      if (player.velocity) player.velocity.set(0, 0, 0);
+      applyCameraForView();
+      setHint(null);
+      return { ok: true, state, viewMode };
+    }
+
+    // idle / climbing / descending → 快进登上
+    if (state === "idle") {
+      // 若艇太远，先召唤到玩家前方
+      const rb0 = ropeBottom(_tmp);
+      const needSummon = !rb0 || player.position.distanceTo(rb0) > BOARD_RANGE * 2.5;
+      if (needSummon) {
+        if (!summon()) {
+          a = airship();
+          if (!a) return { ok: false, state, viewMode, error: "summon-failed" };
+        }
+        a = airship();
+      }
+    }
+
+    a = airship();
+    if (!a) return { ok: false, state, viewMode, error: "no-airship" };
+
+    // 贴绳再坐上甲板（跳过 climbing 插值）
+    const rb = ropeBottom(_tmp);
+    if (rb) player.position.copy(rb).addScaledVector(a.position.clone().normalize(), 0.15);
+    const seat = deckSeat(_seat);
+    if (seat) player.position.copy(seat);
+    else {
+      // 无 gondola 时退到艇旁
+      _up.copy(a.position).normalize();
+      player.position.copy(a.position).addScaledVector(_up, -2.2);
+    }
+
+    prevDist = cameraRig?.getDist ? cameraRig.getDist() : (prevDist || FLY_DIST);
+    prevFov = cameraRig?.getFov?.() ?? cameraRig?.getDefaultFov?.() ?? prevFov ?? 60;
+    if (cameraRig?.setDist) cameraRig.setDist(FLY_DIST);
+
+    state = "flying";
+    viewMode = "passenger";
+    boost = 1;
+    climbT = CLIMB_TIME;
+    _dir.copy(a.position).normalize();
+    hover = a.userData.hover ?? 20;
+    yaw = captureYaw(a);
+    a.userData.flying = true;
+    a.userData.flown = true;
+    a.userData.ropeState = "idle";
+    a.visible = true;
+    player.riding = true;
+    player.boardingOnFoot = false;
+    player.onGround = false;
+    if (player.velocity) player.velocity.set(0, 0, 0);
+    if (playerGroup) playerGroup.visible = true;
+
+    _fwd.copy(FWD_LOCAL).applyQuaternion(a.quaternion);
+    _fwd.addScaledVector(_up.copy(a.position).normalize(), -_fwd.dot(_up));
+    if (_fwd.lengthSq() > 1e-6) {
+      _fwd.normalize();
+      if (player.forward) player.forward.copy(_fwd);
+      if (player.facing) player.facing.copy(_fwd);
+    }
+
+    applyCameraForView();
+    setHint(null);
+    return { ok: true, state, viewMode };
   }
 
   function pilotSeat(out) {
@@ -931,8 +1020,11 @@ export function createAirshipRide({
     setPose,
     summon,
     rideSpot,
+    setViewMode,
+    forceBoardForCapture,
     isFlying: () => state === "flying",
     isPilotView: () => viewMode === "pilot" && state === "flying",
     getState: () => state,
+    getViewMode: () => viewMode,
   };
 }

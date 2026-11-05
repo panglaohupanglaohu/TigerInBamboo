@@ -1,0 +1,35 @@
+{
+  "reports": [
+    {
+      "kind": "square",
+      "cells": 361,
+      "triangles": 0,
+      "quads": 361
+    },
+    {
+      "kind": "rhombi",
+      "cells": 269,
+      "triangles": 52,
+      "quads": 217
+    },
+    {
+      "kind": "tri",
+      "cells": 486,
+      "triangles": 486,
+      "quads": 0
+    },
+    {
+      "kind": "mixed",
+      "cells": 331,
+      "triangles": 176,
+      "quads": 155
+    }
+  ],
+  "world": {
+    "cells": 169,
+    "vertices": 8970,
+    "calls": 1,
+    "changed": 45665
+  },
+  "errors": []
+}

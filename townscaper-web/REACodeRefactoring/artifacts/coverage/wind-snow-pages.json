@@ -1,0 +1,18 @@
+[
+  {
+    "url": "http://localhost:8769/index.html?scene=fusion",
+    "progress": true,
+    "flowLink": true,
+    "moduleCount": true,
+    "snowControl": true,
+    "windControl": true
+  },
+  {
+    "url": "http://localhost:8769/pipeline.html",
+    "progress": true,
+    "flowLink": true,
+    "moduleCount": true,
+    "snowControl": false,
+    "windControl": false
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "initial": {
+        "version": 346,
+        "nx": 65,
+        "nz": 73,
+        "water": 920,
+        "band": 745
+      },
+      "motion": {
+        "changed": 1006,
+        "disposed": 1,
+        "sun": [
+          -0.7404878902641793,
+          0.6156614753256582,
+          0.26951555089073936
+        ]
+      },
+      "off": {
+        "disposed": 3,
+        "restored": true,
+        "removed": true,
+        "layer": false
+      }
+    },
+    {
+      "kind": "quad",
+      "initial": {
+        "version": 341,
+        "nx": 58,
+        "nz": 60,
+        "water": 796,
+        "band": 658
+      },
+      "motion": {
+        "changed": 681,
+        "disposed": 1,
+        "sun": [
+          -0.7404878902641793,
+          0.6156614753256582,
+          0.26951555089073936
+        ]
+      },
+      "off": {
+        "disposed": 3,
+        "restored": true,
+        "removed": true,
+        "layer": false
+      }
+    }
+  ],
+  "errors": []
+}

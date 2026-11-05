@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>手工网格补丁 — 把一块区域的手抖关掉</title>
+<style>
+  :root { --ink:#eef1f5; --muted:#a3adba; --line:#4a4f5a; --bg:#3a3a42; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  canvas { position:fixed; inset:0; display:block; }
+  header { position:fixed; left:0; right:0; top:0; padding:10px 16px 14px; z-index:3; pointer-events:none;
+    background:linear-gradient(180deg, rgba(58,58,66,.96), rgba(58,58,66,.5) 72%, transparent); }
+  h1 { margin:0 0 3px; font-size:14px; font-weight:650; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:90ch; }
+  #panel { position:fixed; right:14px; top:74px; z-index:3; display:flex; flex-direction:column; gap:7px;
+    background:rgba(48,48,56,.94); border:1px solid var(--line); border-radius:10px; padding:9px 11px; }
+  label { display:flex; gap:6px; align-items:center; font-size:12px; color:#cfd6e2; cursor:pointer; }
+  #stats { position:fixed; left:14px; bottom:12px; z-index:3; font-size:11.5px; color:#cfd6e2;
+    background:rgba(48,48,56,.92); border:1px solid var(--line); border-radius:8px; padding:7px 10px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#f2d79a; font-weight:600; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<header>
+  <h1>不规则网格里镶手工补丁：补丁 = 顶点抖动归零</h1>
+  <p>绝大多数格子顶点都带 0.26R 的抖动，所以六边形是歪的。四块随机圆盘里抖动量被逐点置零 ——
+     那一处的格子就变成正六边形（暖色底）。红点线是接缝：一条边两端「一端抖一端不抖」的地方，
+     它数出来多少，就是这块补丁的代价。</p>
+</header>
+<div id="panel">
+  <label><input type="checkbox" id="seam" checked> 画出接缝（红）</label>
+  <label><input type="checkbox" id="only"> 只显示补丁格</label>
+</div>
+<div id="stats">—</div>
+
+<script type="module">
+import { buildGrid, draw } from './src/gridpatch.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const statsEl = document.getElementById('stats');
+const seamEl = document.getElementById('seam');
+const onlyEl = document.getElementById('only');
+let W = 0, H = 0, g = null;
+
+function fit() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g = buildGrid({ w: W, h: H, R: 26, jitter: 0.26, patches: 4, seed: 5, patchR: 2.8 });
+  redraw();
+}
+
+function redraw() {
+  draw(ctx, g, { showSeam: seamEl.checked, onlyPatches: onlyEl.checked });
+  const k = g.stats;
+  statsEl.innerHTML =
+    `格 <b>${k.cells}</b> · 补丁 <b>${k.patches}</b> 块 / <b>${k.patchCells}</b> 格（占 ${(k.patchCells / k.cells * 100).toFixed(1)}%）<br>` +
+    `边 ${k.totalEdges} 条 · 缝上 <b>${k.seamEdges}</b> 条（每块 <b>${k.seamPerPatch}</b> 条）· R 26px · 抖动 0.26R`;
+  window.reaGridPatch = g;
+}
+
+seamEl.onchange = redraw;
+onlyEl.onchange = redraw;
+addEventListener('resize', () => { clearTimeout(window.__rz); window.__rz = setTimeout(fit, 120); });
+fit();
+</script>
+</body>
+</html>

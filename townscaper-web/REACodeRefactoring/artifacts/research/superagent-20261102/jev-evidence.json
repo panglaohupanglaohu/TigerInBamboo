@@ -1,0 +1,29 @@
+{
+  "goal": "Select next category for a planned capability-library integration pilot; planning only, no scene edits requested.",
+  "sources": [
+    "DeepSeek dsh-superagent-prototype commit 6337fc823ce20251c8de8085948165c81aaa701e docs 000-005, architecture excerpts and Engine/stage source",
+    "Local Morris adapter imports, Atmosphere rebuild/update, latest src comparison"
+  ],
+  "observations": [
+    "Library has 70 JS modules, game snapshot 32, 11 shared files differ.",
+    "Proposed pilot is one Atmosphere hollow-voxel wind fix. No game-side pilot execution or screenshots yet.",
+    "Need isolated source snapshot, dependency closure, versioned release, deterministic integration gates, per-scene results, reversible promotion.",
+    "No visual observations made in this planning turn."
+  ],
+  "checks": [
+    {
+      "name": "Local adapter call chain statically inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "Pilot game runtime integration and same-camera comparison",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Planning does not imply implementation or release.",
+    "Text-only classification; no image inspection or release authority."
+  ]
+}

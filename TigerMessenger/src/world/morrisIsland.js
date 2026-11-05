@@ -1,3 +1,4 @@
+import {registerSceneObjects} from '../scene-authoring/scene-objects.js';
 import {createMorrisLakeTerrain,installMorrisLake} from './morrisLake.js?v=apostles-r4';
 import * as T from 'three';
 import {createMorrisPreservation} from './morrisPreservedRegions.js';
@@ -58,6 +59,7 @@ export function createMorrisIsland({scene,R=160,obstacles=[],curves=[],near=null
  const canTree=(x,z)=>terrain.onBank(x,z,2)&&Math.hypot((x-30)/7,(z-12)/6)>1.65&&!terrain.bridgeSightline(x,z)&&radialHeight(x,z)!=null&&pathDistance(x,z)>4&&!railKeepouts.some(s=>Math.hypot(x-s.x,z-s.z)<s.r+3)&&!keepouts.some(s=>Math.hypot(x-s.x,z-s.z)<s.r+3)&&Math.hypot(x+14,z-5)>14&&!terrain.stream.some(p=>Math.hypot(x-p.x,z-p.z)<3.5);
  const bankRoot=new T.Group();root.add(bankRoot);bankRoot.add=function(object){if(object.isGroup){let a=Math.atan2(object.position.z,object.position.x),r=edge(a)*.927;for(let attempt=0;attempt<64&&terrain.isProtected(Math.cos(a)*r,Math.sin(a)*r);attempt++){a+=.1;r=edge(a)*.927;}object.position.set(Math.cos(a)*r,heightAt(Math.cos(a)*r,Math.sin(a)*r),Math.sin(a)*r);object.scale.multiplyScalar(.55);}T.Group.prototype.add.call(this,object);return this;};
  const botany=installMorrisBotany({root:bankRoot,heightAt:()=>3.8,pathDistance:()=>99,canPlant:()=>true,canTree:()=>true,outerMeadow:true});
+ const unregisterObjects=registerSceneObjects([...botany.trees,...botany.cypresses,...botany.hollyhocks].map(object=>({id:object.userData.authoringId,name:object.userData.authoringName,kind:object.userData.authoringKind,object})));
  const understory=addPlaneTreeUnderstory({group:root,trees:botany.trees,heightAt,random});
  const wildlife=createMorrisWildlife({root,heightAt,trees:botany.trees,safeSite:(x,z)=>canPlant(x,z)&&pathDistance(x,z)>3,playBird:(kind,position)=>birdAudio?.play(kind,position)??false});
  for(const rabbit of wildlife.rabbits){const a=Math.atan2(rabbit.z,rabbit.x),r=edge(a)*.975;rabbit.x=Math.cos(a)*r;rabbit.z=Math.sin(a)*r;}
@@ -70,7 +72,7 @@ export function createMorrisIsland({scene,R=160,obstacles=[],curves=[],near=null
   // Only authored supports (rock shoulders, bridge, castle base) can sit above that surface.
   worldUp.copy(position).normalize();ray.set(worldUp.clone().multiplyScalar(R+50),worldUp.clone().negate());ray.far=95;const hit=ray.intersectObjects(landscape.supports,false)[0];return hit&&hit.point.length()>surfLen?hit.point.length():surfLen;},
   update(dt,time){report.seagulls=landscape.townscaper.birds?.stats??null;horses.forEach(h=>animateMorrisHorse(h,time));wildlife.update(dt,time);landscape.update(time);const viewer=morrisViewer.camera;if(viewer){const r2=ANIMAL_VIEW_RANGE*ANIMAL_VIEW_RANGE,show=o=>{if(!o)return;o.getWorldPosition(_animalPos);o.visible=_animalPos.distanceToSquared(viewer.position)<r2;};horses.forEach((h,i)=>{if(i===0)return show(h);if(!h)return;h.getWorldPosition(_animalPos);h.visible=_animalPos.distanceToSquared(viewer.position)<2500;});wildlife.rabbits.forEach(r=>show(r.root));wildlife.birds.forEach(b=>show(b.root));}if(api.requestBird){wildlife.call(api.requestBird);api.requestBird=null;}},
-  dispose(){landscape.townscaper.dispose();root.removeFromParent();const gs=new Set(),ms=new Set();root.traverse(o=>{if(o.geometry)gs.add(o.geometry);if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>ms.add(m));});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());}
+  dispose(){unregisterObjects();landscape.townscaper.dispose();root.removeFromParent();const gs=new Set(),ms=new Set();root.traverse(o=>{if(o.geometry)gs.add(o.geometry);if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>ms.add(m));});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());}
  };
  root.userData.morrisIsland=report;return api;
 }

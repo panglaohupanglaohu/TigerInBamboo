@@ -1,0 +1,23 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "drift": 2.571310098176127e-7,
+      "arrowDrift": 0,
+      "rollChange": 0.03219250086144229,
+      "goreRoundTrip": true,
+      "deathPoseCaptured": true
+    },
+    {
+      "grid": "mixed",
+      "drift": 3.7897369509209966e-7,
+      "arrowDrift": 0,
+      "rollChange": 0.03219250086144229,
+      "goreRoundTrip": true,
+      "deathPoseCaptured": true
+    }
+  ],
+  "departedCorpseRemoved": true,
+  "sceneStopClearsBlood": true,
+  "errors": []
+}

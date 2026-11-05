@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>战斗层 — 击退出崖 · 长矛突刺 · 血贴花附着 · 血浸透</title>
+<style>
+  :root { --ink:#20323a; --muted:#5d7279; --line:#d3e0e0; --bg:#eef4f3; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; }
+  #cv { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  header { position:fixed; left:0; right:0; top:0; padding:12px 18px; z-index:2; pointer-events:none;
+    background:linear-gradient(180deg, rgba(238,244,243,.97), rgba(238,244,243,.6) 72%, transparent); }
+  h1 { margin:0 0 4px; font-size:15px; }
+  p { margin:0; color:var(--muted); font-size:12.5px; max-width:86ch; }
+  .panel { position:fixed; right:14px; top:84px; z-index:2; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:8px; font-size:12.5px; width:210px; }
+  .panel h2 { margin:2px 0 0; font-size:12px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  .panel label { display:flex; gap:6px; align-items:center; cursor:pointer; }
+  button { font:inherit; padding:5px 9px; border:1px solid var(--line); background:#f7fbfa; border-radius:7px; cursor:pointer; }
+  button:hover { background:#eaf5f3; }
+  input[type=range] { width:100%; }
+  #stats { position:fixed; left:14px; bottom:12px; z-index:2; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.88); border:1px solid var(--line); border-radius:8px; padding:7px 11px; white-space:pre; }
+  .legend { display:flex; gap:10px; flex-wrap:wrap; font-size:11.5px; color:var(--muted); }
+  .legend i { display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
+  .tags { position:fixed; inset:0; pointer-events:none; z-index:1; }
+  .tags span { position:absolute; transform:translate(-50%,-50%); font-size:11.5px; font-weight:600;
+    background:rgba(255,255,255,.9); border:1px solid var(--line); border-radius:999px; padding:1px 8px; white-space:nowrap; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<header>
+  <h1>战斗层：击退出崖 / 长矛 / 贴花附着 / 血浸透 / 血腥开关</h1>
+  <p>左岛：点「击退」把兵推向崖边 —— 看它是不是<b>先离地、再由重力接管</b>，而不是直接瞬移下去。右侧船上：切
+    <b>局部 / 世界</b>坐标看血贴花会不会跟着船走。灰线是流场里一个格子回溯到源的继承路径。</p>
+</header>
+
+<div class="panel">
+  <h2>单位</h2>
+  <button id="push">击退（推向崖边）</button>
+  <button id="spear">长矛突刺</button>
+  <button id="board">往船上扎一箭</button>
+  <button id="reset">重置</button>
+
+  <h2>贴花坐标系</h2>
+  <label><input type="checkbox" id="local" checked> 记在船体局部坐标</label>
+
+  <h2>血浸透（大兵种血量）</h2>
+  <input type="range" id="soak" min="0" max="100" value="0">
+  <label><input type="checkbox" id="gore" checked> 血腥表现开启</label>
+
+  <h2>流场继承</h2>
+  <label><input type="checkbox" id="field" checked> 显示按阵营继承的 dist 场</label>
+  <div class="legend">
+    <span><i style="background:#c8564b"></i>红方</span>
+    <span><i style="background:#3f7fb5"></i>蓝方</span>
+    <span><i style="background:#8b8f92"></i>障碍</span>
+  </div>
+</div>
+
+<div class="tags" id="tags"></div>
+<div id="stats">—</div>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import {
+  ST, makeUnit, knockback, stepUnits, thrust, DecalSet, soakTint, buildFactionField, gore,
+} from './src/combatfx.js';
+
+THREE.ColorManagement.enabled = false;
+
+const cv = document.getElementById('cv');
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#e6eeec');
+
+const cam = new THREE.PerspectiveCamera(36, 1, 0.1, 120);
+// 机位要同时容下台地（6.6, 4.6）和右下角的对照组船（13.4, 8.6），
+// 早先 32° / (6.6,11.2,17.4) 会把船切掉一半——而「贴花跟船走」正是靠这条船对照的
+cam.position.set(8.2, 13.6, 21.0);
+cam.lookAt(7.4, 0.3, 5.2);
+
+scene.add(new THREE.HemisphereLight('#ffffff', '#9aa9a4', 1.15));
+const sun = new THREE.DirectionalLight('#fff6e8', 1.5);
+sun.position.set(-5, 9, 6);
+scene.add(sun);
+
+/* ───────── 地形：一格 = 1 单位，两层台地 + 海 ───────── */
+// 网格 18×12，高度图：中心 5×4 的台地高 1.4，外圈 0，再外面是水（-0.5）
+const GW = 18, GH = 12;
+const WATER_Y = -0.5;
+const heights = [];
+const blocked = new Uint8Array(GW * GH);
+for (let z = 0; z < GH; z++) {
+  heights[z] = [];
+  for (let x = 0; x < GW; x++) {
+    const inIsland = x >= 2 && x <= 12 && z >= 1 && z <= 9;
+    const inTop = x >= 4 && x <= 9 && z >= 3 && z <= 6;
+    // 北侧留一条 1 格宽的窄脊，专门用来演示"被推下崖后落在一格宽的坡上"
+    const ridge = z === 2 && x >= 3 && x <= 10;
+    const h = inTop ? 1.4 : inIsland || ridge ? 0 : WATER_Y - 0.2;
+    heights[z][x] = h;
+    blocked[z * GW + x] = inTop ? 0 : 1;   // 台地上才是可走区域（故意做窄）
+  }
+}
+
+const world = {
+  waterY: WATER_Y,
+  heightAt(x, z) {
+    const cx = Math.round(x), cz = Math.round(z);
+    if (cx < 0 || cz < 0 || cx >= GW || cz >= GH) return WATER_Y - 0.2;
+    return heights[cz][cx];
+  },
+  walkable(x, z) {
+    const h = this.heightAt(x, z);
+    return h > WATER_Y + 0.05;
+  },
+};
+
+// 地形用一块块薄盒子拼，崖面靠高度差自然形成
+const landGeo = new THREE.BoxGeometry(1, 1, 1);
+const matTop = new THREE.MeshLambertMaterial({ color: '#cbbfa8' });
+const matShelf = new THREE.MeshLambertMaterial({ color: '#b3a68d' });
+for (let z = 0; z < GH; z++) {
+  for (let x = 0; x < GW; x++) {
+    const h = heights[z][x];
+    if (h <= WATER_Y + 0.05) continue;
+    const m = new THREE.Mesh(landGeo, h > 1 ? matTop : matShelf);
+    // 顶面必须正好落在 heightAt() 返回的 h 上：盒子高 h+0.6，所以中心 = h - (h+0.6)/2
+    // 早先写成 h - 0.5，把台地抬高了 0.5，于是 y = heightAt() 的单位全被埋进地里只剩一条缝
+    m.position.set(x + 0.5, h - (h + 0.6) / 2, z + 0.5);
+    m.scale.set(1, Math.max(0.2, h + 0.6), 1);
+    scene.add(m);
+  }
+}
+const water = new THREE.Mesh(
+  new THREE.PlaneGeometry(60, 44),
+  new THREE.MeshLambertMaterial({ color: '#7fa9b5', transparent: true, opacity: 0.85 }),
+);
+water.rotation.x = -Math.PI / 2;
+water.position.set(6, WATER_Y, 6);
+scene.add(water);
+
+/* ───────── 船（移动平台）：贴花局部坐标的对照组 ───────── */
+const boat = {
+  group: new THREE.Group(),
+  x: 12.2, z: 8.6, rot: 0, speed: 0.55, dir: 1,
+  toLocal(wx, wz) {
+    const dx = wx - this.x, dz = wz - this.z;
+    const c = Math.cos(-this.rot), s = Math.sin(-this.rot);
+    return { x: dx * c - dz * s, z: dx * s + dz * c };
+  },
+  toWorld(lx, lz) {
+    const c = Math.cos(this.rot), s = Math.sin(this.rot);
+    return { x: this.x + lx * c - lz * s, z: this.z + lx * s + lz * c };
+  },
+};
+{
+  const hull = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.42, 1.3),
+    new THREE.MeshLambertMaterial({ color: '#8d6b4f' }));
+  boat.group.add(hull);
+  const deck = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.08, 1.05),
+    new THREE.MeshLambertMaterial({ color: '#c9a982' }));
+  deck.position.y = 0.24;
+  boat.group.add(deck);
+  boat.group.position.set(boat.x, WATER_Y + 0.28, boat.z);
+  scene.add(boat.group);
+}
+
+/* ───────── 单位 ───────── */
+const units = [];
+const unitMeshes = new Map();
+const unitGeo = new THREE.BoxGeometry(0.28, 0.42, 0.28);
+
+function makeMesh(u) {
+  const m = new THREE.Mesh(unitGeo, new THREE.MeshLambertMaterial({ color: u.kind === 'big' ? '#6b5b4b' : '#8a7f70' }));
+  m.scale.y = u.kind === 'big' ? 1.55 : 1;
+  scene.add(m);
+  unitMeshes.set(u, m);
+  return m;
+}
+
+function spawn() {
+  for (const u of units) scene.remove(unitMeshes.get(u));
+  units.length = 0; unitMeshes.clear();
+
+  const spots = [
+    [5.5, 4.5, 'big'], [6.5, 4.5, 'small'], [7.5, 3.5, 'small'], [8.5, 4.5, 'small'],
+    [5.5, 5.5, 'small'], [8.5, 5.5, 'big'],
+  ];
+  for (const [x, z, kind] of spots) {
+    const u = makeUnit({ x, z, kind });
+    u.y = world.heightAt(x, z);
+    units.push(u);
+    makeMesh(u);
+  }
+  // 船上留守的一个：贴花挂在它脚下的甲板
+  boatCrew = makeUnit({ x: boat.x, z: boat.z, kind: 'small' });
+  makeMesh(boatCrew);
+}
+let boatCrew = null;
+spawn();
+
+/* ───────── 贴花 ───────── */
+const decals = new DecalSet(48);
+const decalMeshes = [];
+const decalGeo = new THREE.CircleGeometry(1, 12);
+const DECK_Y = WATER_Y + 0.28 + 0.24 + 0.05;   // 船体 y + 甲板偏移 + 一点离面间隙
+function rebuildDecals() {
+  for (const m of decalMeshes) scene.remove(m);
+  decalMeshes.length = 0;
+  const local = document.getElementById('local').checked;
+  // 两类锚点必须分开：
+  //   anchor:'boat' → 记的是船体局部坐标，勾上「局部」时跟着船走，取消勾选就退回命中瞬间的世界坐标
+  //   anchor:'world'→ 地面上的血，永远留在原地，跟船没关系
+  // 早先所有贴花一律走 boat.toWorld，结果台地上的命中被算成 lx=-7.9，血飘到海上去了。
+  for (const d of decals.items) {
+    const onBoat = d.anchor === 'boat';
+    let x, z, y, yaw = 0;
+    if (onBoat && local) {
+      const w = boat.toWorld(d.lx, d.lz);
+      x = w.x; z = w.z; yaw = boat.rot; y = DECK_Y;
+    } else if (onBoat) {
+      x = d._wx; z = d._wz; y = DECK_Y;        // 世界坐标：船开走，血留在原地
+    } else {
+      x = d._wx; z = d._wz;
+      y = world.heightAt(d._wx, d._wz) + 0.02; // 贴地，不是贴水面——抬高的台地上不能算成海平面
+    }
+    const m = new THREE.Mesh(decalGeo, new THREE.MeshBasicMaterial({
+      color: d.kind === 'arrow' ? '#3a2f28' : '#7d1f1a',
+      transparent: true, opacity: 0.82, depthWrite: false,
+    }));
+    m.rotation.x = -Math.PI / 2;
+    m.rotation.z = d.yaw || 0;
+    m.scale.setScalar(d.r * (d.kind === 'arrow' ? 0.5 : 1));
+    m.position.set(x, y, z);
+    scene.add(m);
+    decalMeshes.push(m);
+  }
+}
+
+/* ───────── 流场（按阵营继承） ───────── */
+const fieldSources = [
+  { x: 4, z: 3, type: 0 },   // 红方
+  { x: 9, z: 6, type: 1 },   // 蓝方
+];
+const field = buildFactionField({ w: GW, h: GH, blocked, sources: fieldSources });
+const fieldGroup = new THREE.Group();
+scene.add(fieldGroup);
+const COL = [new THREE.Color('#c8564b'), new THREE.Color('#3f7fb5')];
+for (let z = 0; z < GH; z++) {
+  for (let x = 0; x < GW; x++) {
+    const a = field.at(x, z);
+    if (a.d < 0) continue;
+    const c = COL[a.type].clone().lerp(new THREE.Color('#ffffff'), Math.min(0.72, a.d / 14));
+    const q = new THREE.Mesh(new THREE.PlaneGeometry(0.86, 0.86),
+      new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.5, depthWrite: false }));
+    q.rotation.x = -Math.PI / 2;
+    q.position.set(x + 0.5, heights[z][x] + 0.02, z + 0.5);
+    fieldGroup.add(q);
+  }
+}
+// 一条回溯路径：从最远的格子走回源，形状就是"蜿蜒寻路"
+{
+  let far = null;
+  for (let z = 0; z < GH; z++) for (let x = 0; x < GW; x++) {
+    const a = field.at(x, z);
+    if (a.d > 0 && (!far || a.d > far.d)) far = { x, z, d: a.d };
+  }
+  const path = field.pathTo(far.x, far.z);
+  const pts = path.map(([x, z]) => new THREE.Vector3(x + 0.5, heights[z][x] + 0.06, z + 0.5));
+  const line = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(pts),
+    new THREE.LineBasicMaterial({ color: '#2f3d42' }),
+  );
+  fieldGroup.add(line);
+}
+
+/* ───────── 长矛 ───────── */
+const spearState = {
+  id: 0, ox: 6, oz: 6.6, dx: 0, dz: -1, len: 1.9, radius: 0.12, push: 2.2,
+};
+const spearMesh = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 1.9),
+  new THREE.MeshLambertMaterial({ color: '#4a4034' }));
+spearMesh.visible = false;
+scene.add(spearMesh);
+
+/* ───────── 交互 ───────── */
+document.getElementById('push').onclick = () => {
+  // 从台地中心朝北侧窄脊推：三下之内必然出崖
+  for (const u of units) {
+    if (u.state === ST.DEAD || u.state === ST.DROWN) continue;
+    const dx = (u.x > 7) ? 0.6 : -0.6;
+    knockback(u, dx * 0.3, -1, 3.6);
+  }
+};
+document.getElementById('spear').onclick = () => {
+  // 突刺线必须真的穿过单位：早先写在 x=6.0，正好从 (5.5,4.5) 和 (6.5,4.5) 中间的缝里穿过去，
+  // 永远 0 命中，机制等于没演示。现在从 (6.5, 6.5) 沿 -z 扎到 z≈4.3，正中 (6.5, 4.5) 那个。
+  spearState.ox = 6.5; spearState.oz = 6.5;
+  spearState.dx = 0; spearState.dz = -1;
+  spearState.len = 2.2;
+  const hits = thrust(spearState, units);
+  spearMesh.visible = true;
+  // 杆子高度要跟着地形走，不能硬写 0.9（台面已经抬到 1.4，硬写就整根埋进地里）
+  spearMesh.position.set(spearState.ox, world.heightAt(spearState.ox, spearState.oz) + 0.35, spearState.oz - spearState.len / 2);
+  spearMesh.scale.z = spearState.len / 1.9;
+  setTimeout(() => { spearMesh.visible = false; }, 220);
+  window.__lastHits = hits.length;
+  if (gore.allow() && hits.length) {
+    // 打在地上的人 → 血记世界坐标，贴在他脚下的台面上
+    for (const h of hits) {
+      const wx = h.t.x, wz = h.t.z;
+      const d = decals.add({ lx: 0, lz: 0, kind: 'blood', anchor: 'world' });
+      d._wx = wx; d._wz = wz;
+    }
+    rebuildDecals();
+  }
+};
+document.getElementById('board').onclick = () => {
+  // 这一箭是「局部坐标系」的对照组：命中点先换算成船体局部坐标存下来，
+  // 勾上「记在船体局部坐标」时船开走血跟着走；取消勾选就留在命中瞬间的海面上。
+  if (!gore.allow()) return;
+  const lx = (Math.random() - 0.5) * 1.4;
+  const lz = (Math.random() - 0.5) * 0.7;
+  const w = boat.toWorld(lx, lz);   // toWorld 自己会加船的位置，别再手动加一遍 boat.x
+  const d = decals.add({ lx, lz, kind: 'arrow', r: 0.3, anchor: 'boat' });
+  d._wx = w.x; d._wz = w.z;
+  rebuildDecals();
+};
+document.getElementById('reset').onclick = () => {
+  spawn(); decals.clear(); rebuildDecals();
+};
+document.getElementById('local').onchange = rebuildDecals;
+document.getElementById('gore').onchange = (e) => {
+  gore.on = e.target.checked;
+  if (!gore.on) { decals.clear(); rebuildDecals(); }
+};
+document.getElementById('soak').oninput = (e) => {
+  const v = e.target.value / 100;
+  for (const u of units) if (u.kind === 'big') u.soak = v;
+};
+document.getElementById('field').onchange = (e) => { fieldGroup.visible = e.target.checked; };
+
+/* ───────── 循环 ───────── */
+const tags = document.getElementById('tags');
+const statsEl = document.getElementById('stats');
+let last = performance.now();
+let pushed = 0;
+
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  cam.aspect = w / h;
+  cam.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+resize();
+
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+
+  // 船来回开，血贴花必须跟着
+  boat.x += boat.dir * boat.speed * dt;
+  // 航道右端收到 13.6：原来开到 15.2 时会钻到右侧面板底下，船和它的贴花都被 UI 挡住
+  if (boat.x > 13.6) boat.dir = -1;
+  if (boat.x < 10.8) boat.dir = 1;
+  boat.group.position.set(boat.x, WATER_Y + 0.28, boat.z);
+  boat.group.rotation.y = boat.rot;
+  if (boatCrew) { boatCrew.x = boat.x; boatCrew.z = boat.z; }
+  // 船在动，船体局部坐标的贴花就得每帧重解算，否则血会脱在原来的位置
+  if (decalMeshes.length) rebuildDecals();
+
+  const evts = stepUnits(units, world, dt);
+  for (const e of evts) {
+    if (e.type === 'land' && gore.allow() && e.drop > 0.8) {
+      // 落地这摊血在地面上，也是世界锚点（不是船体局部坐标）
+      const d = decals.add({ lx: 0, lz: 0, kind: 'blood', anchor: 'world' });
+      d._wx = e.u.x; d._wz = e.u.z;
+      rebuildDecals();
+    }
+  }
+
+  for (const u of units) {
+    const m = unitMeshes.get(u);
+    if (!m) continue;
+    if (u.state === ST.DEAD || u.state === ST.DROWN) { m.visible = false; continue; }
+    m.visible = true;
+    // 半高要跟着 scale.y 走，否则大兵种（1.55 倍）脚会陷进地面 0.11
+    m.position.set(u.x, u.y + 0.21 * (m.scale.y || 1), u.z);
+    m.rotation.y += u.spin * dt;
+    m.rotation.z = u.state === ST.FALL ? Math.min(1.2, Math.abs(u.spin) * 0.2) : 0;
+    if (u.kind === 'big') {
+      const [r, g, b] = soakTint(u.soak);
+      m.material.color.setRGB(r, g, b);
+    } else if (u.state === ST.STUN) {
+      m.material.color.set('#d8c04a');
+    } else {
+      m.material.color.set('#8a7f70');
+    }
+  }
+  if (boatCrew) {
+    const m = unitMeshes.get(boatCrew);
+    m.position.set(boatCrew.x, WATER_Y + 0.5, boatCrew.z);
+  }
+
+  const count = (s) => units.filter((u) => u.state === s).length;
+  statsEl.textContent =
+    `台地 ${count(ST.WALK) + count(ST.LAND)} · 空中 ${count(ST.AIR)} · 坠落 ${count(ST.FALL)} · ` +
+    `落水 ${count(ST.DROWN)} · 眩晕 ${count(ST.STUN)}\n` +
+    `贴花 ${decals.items.length}（${document.getElementById('local').checked ? '局部坐标，跟船走' : '世界坐标，留在原地'}）` +
+    ` · 血腥 ${gore.on ? '开' : '关'} · 上次突刺命中 ${window.__lastHits ?? 0}`;
+
+  // 标签跟随
+  const proj = (x, y, z) => {
+    const v = new THREE.Vector3(x, y, z).project(cam);
+    return [(v.x * 0.5 + 0.5) * innerWidth, (-v.y * 0.5 + 0.5) * innerHeight];
+  };
+  tags.innerHTML = '';
+  const addTag = (x, y, z, txt) => {
+    const [px, py] = proj(x, y, z);
+    const s = document.createElement('span');
+    s.style.left = px + 'px';
+    s.style.top = py + 'px';
+    s.textContent = txt;
+    tags.appendChild(s);
+  };
+  addTag(7, 2.6, 4.5, '台地（可走）');
+  addTag(6.5, 0.6, 2, '一格宽窄脊');
+  addTag(boat.x, WATER_Y + 1.1, boat.z, '船（载具）');
+
+  renderer.render(scene, cam);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// 供截图脚本评估
+window.__sim = { units, decals, field, boat, world, spearState };
+</script>
+</body>
+</html>

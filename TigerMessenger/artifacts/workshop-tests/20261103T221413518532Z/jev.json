@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "bc45d1b1c9cda37bf5ca2afb60c967ad0998bbe42eb5b4dd9e7e72e0c9152986",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.75
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.56,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0,
+        "navigation": 0.34,
+        "review": 0.65
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.83
+    }
+  },
+  "usage": {
+    "input_tokens": 761,
+    "output_tokens": 91,
+    "cost_usd": 0.00032,
+    "credits_remaining_usd": 4.868532
+  },
+  "elapsed_ms": 2225,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "front-end complete snapshot integration",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "producer transaction consistency",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

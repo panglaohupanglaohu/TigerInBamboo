@@ -1,0 +1,45 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "initial": {
+        "loops": 2,
+        "edges": [
+          4,
+          3
+        ],
+        "world": 349
+      },
+      "bridge": {
+        "loops": 1,
+        "edges": [
+          7
+        ],
+        "world": 353,
+        "waveVertices": 96
+      },
+      "restoredLoops": 2
+    },
+    {
+      "kind": "quad",
+      "initial": {
+        "loops": 2,
+        "edges": [
+          4,
+          4
+        ],
+        "world": 344
+      },
+      "bridge": {
+        "loops": 1,
+        "edges": [
+          8
+        ],
+        "world": 348,
+        "waveVertices": 88
+      },
+      "restoredLoops": 1
+    }
+  ],
+  "errors": []
+}

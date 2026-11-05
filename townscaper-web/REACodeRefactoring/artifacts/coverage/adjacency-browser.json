@@ -1,0 +1,29 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "cells": 147,
+      "slots": 4,
+      "edgesChecked": 510,
+      "mismatched": 0,
+      "nonManifold": 0,
+      "fitSlots": 474,
+      "samples": [],
+      "matches": 3,
+      "detectedBoundaryMismatch": 1
+    },
+    {
+      "kind": "quad",
+      "cells": 206,
+      "slots": 4,
+      "edgesChecked": 824,
+      "mismatched": 0,
+      "nonManifold": 0,
+      "fitSlots": 776,
+      "samples": [],
+      "matches": 3,
+      "detectedBoundaryMismatch": 1
+    }
+  ],
+  "errors": []
+}

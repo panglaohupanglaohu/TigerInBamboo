@@ -1,0 +1,85 @@
+{
+  "status": "first-engineering-slice-implemented-worker-not-connected",
+  "date": "2026-11-02",
+  "name": "REA Super-agent Morris lake pilot",
+  "base": {
+    "repository": "deepseek-ai/dsh-superagent-prototype",
+    "commit": "6337fc823ce20251c8de8085948165c81aaa701e",
+    "approach": "Pinned upstream fork, actual DSH execution validation, local Source and execution adapters; preserve native recovery records internally."
+  },
+  "objective": "Continuously improve Morris lake through scene observations and reusable capability learning.",
+  "cycle": [
+    "observe",
+    "identify_gap",
+    "retrieve_capability_or_learn_video",
+    "propose_bounded_experiment",
+    "compose_in_isolated_preview",
+    "measure_and_review",
+    "promote_or_reject",
+    "distill_reusable_knowledge"
+  ],
+  "components": [
+    "lightweight Router",
+    "on-demand learning/composition/review Workers",
+    "capability graph and recipes in REACodeRefactoring",
+    "Morris read-only probes and reversible preview adapter",
+    "persistent events/state/references",
+    "independent Watchdog"
+  ],
+  "pilotExperiments": [
+    "Hollow-voxel wind repair as engineering canary",
+    "Shared World + wind + existing vegetation/decor response, if local spatial wind sampling needs new adapter implement and verify",
+    "One bounded lakeside composition combining paths/planting/building footprints without changing protected scene identities"
+  ],
+  "milestones": [
+    {
+      "name": "Runtime grounding",
+      "doneWhen": "Pinned DSH fork launches a real worker, handles async result and restart recovery; local events reach correct worker."
+    },
+    {
+      "name": "Scene perception",
+      "doneWhen": "Morris probes report actual versions, occupancy, routes, fixed camera captures and performance baseline."
+    },
+    {
+      "name": "Closed learning loop",
+      "doneWhen": "A selected capability improves a real preview, fails/retries honestly, promotes with evidence and can roll back."
+    },
+    {
+      "name": "Capability composition",
+      "doneWhen": "A bounded lakeside recipe combines capabilities, preserves traversal and visual identity, is reusable on another seed."
+    },
+    {
+      "name": "Sustained operation",
+      "doneWhen": "Duplicate events, stale evidence, worker stall, provider failure and machine offline recovery are exercised."
+    }
+  ],
+  "limits": [
+    "No model-weight training implied by learning.",
+    "GPU and local-device tasks wait while device is offline.",
+    "No upstream benchmark speedup or token savings assumed.",
+    "Changed dependencies invalidate affected evidence.",
+    "Do not expose unrestricted shell endpoints through pipeline UI."
+  ],
+  "confirmedArchitecture": {
+    "module": "TigerMessenger/src/scene-authoring",
+    "editor": "Existing Morris World/stage/renderer/save/undo chain",
+    "service": "Independent pinned Super-agent; not deployed",
+    "workflow": [
+      "select scene",
+      "Worker pipeline candidate",
+      "manual edit and compare",
+      "validate",
+      "user final confirmation",
+      "game fixed-version load"
+    ],
+    "protection": "Immutable snapshots; candidate must never silently replace manual work or finals",
+    "firstSlice": "Scene registry, real editor entry, snapshots, compare, restore, codec validation, explicit final archive and exact-ID runtime loading",
+    "pending": [
+      "Worker/Source integration",
+      "capability registry and execution checks",
+      "candidate conflicts and object locks",
+      "cross-device fixed asset distribution",
+      "Watchdog"
+    ]
+  }
+}

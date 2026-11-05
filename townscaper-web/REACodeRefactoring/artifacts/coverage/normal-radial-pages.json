@@ -1,0 +1,25 @@
+{
+  "pages": [
+    {
+      "path": "index.html?scene=town",
+      "count": "124/285",
+      "remaining": 161,
+      "normalContrastLink": true
+    },
+    {
+      "path": "pipeline.html",
+      "count": "124/285",
+      "remaining": 161,
+      "normalContrastLink": true
+    },
+    {
+      "path": "textures.html?t=radial",
+      "note": "1478114309263839244 \"the radial (instead of directional) size-sorting … that big coherent chunk in the middle\"：原片是UV不规则图块/三角网和棋盘格模型对照；本页圆块螺旋只表示大小布局意图，不能代表原UV分片/参数化/无重叠打包。"
+    },
+    {
+      "path": "textures.html?t=contrast",
+      "note": "1482346496460828674是后来的专用反差迭代，本页保留该旧近似。1482011744843223042更早：由程序化法线map反差生成细线，不能用三角值迭代代替；共享法线场局部近似见normal-contrast.html。"
+    }
+  ],
+  "errors": []
+}

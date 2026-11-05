@@ -60,7 +60,7 @@ import { Timer } from "three/addons/misc/Timer.js";
 import * as THREE from "three";
 import { createStage } from "./core/stage.js";
 import { createPerfProbe } from "./tools/perfProbe.js?v=remote-clearance-20261025";
-import { installUiLayers } from "./ui/uiLayers.js?v=ui-layers-r1";
+import { installUiLayers, setCaptureMode, isCaptureMode } from "./ui/uiLayers.js?v=ui-layers-r2-capture";
 import { createSceneCensus } from "./tools/sceneCensus.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js?v=airship-down15-20261025";
@@ -2601,4 +2601,6 @@ window.__tm = {
   lightingPresetInfo, // V6-G11 光照参数包加载状态（?lightingPreset=grok-v1）
   touchControls,
   messenger, // messengerIsland 场景句柄（含 vanguardAssault：苔庭之战任务，验收可驱动）
+  setCaptureMode, // CartonBook / 截屏：隐藏全部 HUD·菜单；?cartonCapture=1 等价
+  isCaptureMode,
 };

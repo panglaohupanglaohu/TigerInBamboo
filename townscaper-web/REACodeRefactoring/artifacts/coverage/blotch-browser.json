@@ -1,0 +1,33 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "actualGrid": "mixed",
+      "changes": [
+        0,
+        11727,
+        0
+      ],
+      "scaledError": 0,
+      "cap": 5619,
+      "other": 23331,
+      "version": 672,
+      "levelHeight": 0.5
+    },
+    {
+      "kind": "quad",
+      "actualGrid": "quad",
+      "changes": [
+        0,
+        11727,
+        0
+      ],
+      "scaledError": 0,
+      "cap": 8628,
+      "other": 28944,
+      "version": 781,
+      "levelHeight": 0.5
+    }
+  ],
+  "errors": []
+}

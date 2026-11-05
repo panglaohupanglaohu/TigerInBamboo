@@ -5,7 +5,7 @@
  *   1582293326815862786 "my algorithm now tries to expand (and interconnect) a simplified nav graph"
  *     → 走得通的格子按"同一高度连成片"合并成区域节点，区域之间用"台阶边"相连；图很小，可以随时重算。
  *   1795831296952041691 "a navigation structure that lets you travel faster along rivers (and especially downstream)"
- *     → 河格之间的边更便宜，顺流（离河口的步数变小）最便宜，逆流次之。
+ *     → 河格之间的边更便宜，高差优先区分顺逆；平床用河口距离，无法判向时保持中性河道费用。
  *   1181464374839521280 "I made some stairs"
  *     → 落差 1 层的边才能走，并且要有楼梯；每对相邻区域只放一架（最短路树里用到的那条边），避免满地台阶。
  *
@@ -31,7 +31,7 @@ export function buildNav(world, { start = null } = {}) {
   }
 
   // 河：离河口（接水的河格）的步数，用来判断顺流 / 逆流
-  const river = world.river, rd = new Int16Array(n).fill(-1);
+  const river = world.river, rd = new Int32Array(n).fill(-1);
   const q = [];
   for (const c of cells) if (river[c.id] && c.edgeNeighbors.some((id) => id >= 0 && world.top(cells[id]) === 0)) { rd[c.id] = 0; q.push(c); }
   for (let h = 0; h < q.length; h++) {
@@ -39,12 +39,22 @@ export function buildNav(world, { start = null } = {}) {
     for (const id of c.edgeNeighbors) if (id >= 0 && river[id] && rd[id] < 0) { rd[id] = rd[c.id] + 1; q.push(cells[id]); }
   }
 
+  // Local heuristic, not a reconstruction of the original solver. Height wins:
+  // shortcuts between nearby meanders must not label an uphill step downstream.
+  // Flat reaches use mouth distance; closed/equidistant reaches stay neutral.
+  const riverDirection = (a, b) => {
+    if (!river[a.id] || !river[b.id]) return 0;
+    const dh = hgt[b.id] - hgt[a.id];
+    if (dh) return dh < 0 ? 1 : -1;
+    if (rd[a.id] < 0 || rd[b.id] < 0) return 0;
+    return Math.sign(rd[a.id] - rd[b.id]);
+  };
   const dist = (a, b) => Math.hypot(a.cx - b.cx, a.cz - b.cz);
   const edgeCost = (a, b) => {
-    if (!walk[b.id] || Math.abs(hgt[a.id] - hgt[b.id]) > MAX_STEP) return Infinity;
+    if (!walk[a.id] || !walk[b.id] || !a.edgeNeighbors.includes(b.id) || Math.abs(hgt[a.id] - hgt[b.id]) > MAX_STEP) return Infinity;
     if (hgt[a.id] !== hgt[b.id] && !stairSet.has(a.id + '>' + b.id) && !(river[a.id] && river[b.id])) return Infinity;
     let k = hgt[a.id] !== hgt[b.id] ? STAIR_COST : 1;
-    if (river[a.id] && river[b.id]) k = rd[b.id] >= 0 && rd[b.id] < rd[a.id] ? RIVER_DOWN : RIVER_UP;
+    if (river[a.id] && river[b.id]) k = riverDirection(a, b) > 0 ? RIVER_DOWN : RIVER_UP;
     return dist(a, b) * k;
   };
 
@@ -120,5 +130,5 @@ export function buildNav(world, { start = null } = {}) {
   // 只留最短路树真正用到的楼梯（每片区域一架通向起点就够了，满山台阶反而乱）
   const used = stairs.filter((st) => parent[st.high.id] === st.low.id || parent[st.low.id] === st.high.id);
 
-  return { cost: edgeCost, walk, hgt, region, regions, edges: [...edges.values()], start, tree: { parent, time }, stairs: used, stairCandidates: stairs.length, riverDist: rd };
+  return { cost: edgeCost, walk, hgt, region, regions, edges: [...edges.values()], start, tree: { parent, time }, stairs: used, stairCandidates: stairs.length, riverDist: rd, riverDirection };
 }

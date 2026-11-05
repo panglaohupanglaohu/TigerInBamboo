@@ -1,0 +1,16 @@
+const{chromium}=require('playwright'),fs=require('fs');
+(async()=>{const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader']}),p=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[],reports=[];p.on('pageerror',e=>errors.push(e.message));try{for(const grid of ['quad','mixed']){
+ await p.goto('http://localhost:8769/index.html?scene=badnorth&grid='+grid);await p.waitForFunction(()=>window.rea?.battle?.running);
+ await p.evaluate(async()=>{const T=await import('three'),{beginSpearThrust}=await import('./src/core/spear-thrust.js'),b=rea.battle,u=b.units.find(u=>u.squad?.pike),w=b.world,c=w.cells.find(c=>w.top(c)>=1&&w.top(c)===w.ground(c)&&c.edgeNeighbors.every(id=>id>=0&&w.top(w.cells[id])===w.top(c)));if(!c)throw Error('no open fixture');u.x=c.cx;u.z=c.cz;u.y=w.top(c)*b.L;u.navFloor=w.top(c);u.face=0;u.cd=100;b.units=[u];b.nextWave=Infinity;b.paused=true;u.thrust=beginSpearThrust(u,{x:1,z:0});window.spearPoseFixture={T,b,u,lengths:[]};b.update(0);});
+ for(let tick=0;tick<7;tick++){
+ const r=await p.evaluate(()=>{const{T,b,u,lengths}=spearPoseFixture;b.paused=false;b.update(.05);b.paused=true;const m=new T.Matrix4();b.mSpear.getMatrixAt(0,m);const base=new T.Vector3().applyMatrix4(m),tip=new T.Vector3(0,0,1).applyMatrix4(m),length=tip.distanceTo(base);lengths.push(length);const active=u.thrust,expected=active?active.length*active.age/active.duration:u.spearRecovery?.length??.32;
+ if(active&&Math.abs(length-expected)>1e-6)throw Error('visual extent differs from collision reach');
+ if(active&&(Math.abs(tip.x-(active.x+expected))>1e-6||Math.abs(tip.z-active.z)>1e-6))throw Error('weapon ignores frozen thrust direction');
+ const age=active?.age;b.update(0);if(active&&u.thrust.age!==age)throw Error('pause advances weapon');
+ rea.view.target.set(u.x,u.y+.1,u.z);rea.view.distance=2;rea.view.pitch=1.2;rea.view.updateCamera();return{length,active:!!active,recovery:!!u.spearRecovery};});
+ if(tick===0||tick===3)await p.screenshot({path:'artifacts/coverage/spear-pose-'+grid+'-'+(tick===0?'extend':'full')+'.png'});
+ }
+ reports.push({grid,...await p.evaluate(()=>{const{b,u,lengths}=spearPoseFixture;if(!(lengths[0]<lengths[1]&&lengths[1]<lengths[2]&&Math.abs(lengths[3]-.44)<1e-6&&lengths[4]<lengths[3]&&Math.abs(lengths[6]-.32)<1e-6))throw Error('bad extension/recovery phases');
+ u.spearRecovery={remaining:.1,duration:.12,dx:1,dz:0,length:.44};u.stunRemaining=.7;b.update(0);if(u.spearRecovery)throw Error('stun retains recovery');
+ rea.view.setDebug('unitsprites',true);b.update(0);if(b.mSpear.count!==0)throw Error('sprite mode duplicates weapon');rea.view.setDebug('unitsprites',false);b.update(0);if(b.mSpear.count!==1)throw Error('mesh mode missing weapon');return{lengths,paused:true,stunClearsRecovery:true,spriteRoundTrip:true};})});
+ }}finally{await browser.close()}fs.writeFileSync('artifacts/coverage/spear-pose-browser.json',JSON.stringify({reports,errors},null,2));if(errors.length)throw Error(errors.join('\n'));console.log('PASS actual spear presentation',reports)})().catch(e=>{console.error(e);process.exit(1)});

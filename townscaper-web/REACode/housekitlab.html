@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>房屋套件 — 比例就是变体</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:104ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  /* 画布铺满窗口：不留 flex 流，否则 800 高的画布会被 header 顶下去 100px，底部被裁掉 */
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  /* header 必须自带浅色底，否则深色画布会把标题吃掉 */
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,242,.97) 62%, rgba(238,243,242,0)); }
+  #panel { position:fixed; z-index:2; right:16px; top:104px; width:206px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:7px; }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #panel button { margin-top:2px; padding:5px 8px; font:inherit; font-size:12px; border:1px solid var(--line);
+    background:#f7fbfa; border-radius:7px; color:var(--ink); cursor:pointer; }
+  #stats { position:fixed; left:18px; bottom:12px; right:236px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>一座屋子 = 一组比例参数，不是一栋模型</h1>
+  <p>墙高只取<b>层高整数倍</b>（1/2/3 层）、屋顶坡度只取 <b>8 档</b>、封边宽度恒定、烟囱底面必须落在坡面上。
+     变体是这些数在约束里的取值，所以随便撒多少栋，都还是"同一个世界里的房子"。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="panel">
+  <h2>村子</h2>
+  <div class="row"><span>房屋数</span><b id="nlab">12</b></div>
+  <input type="range" id="n" min="4" max="20" step="1" value="12" />
+  <h2>随机种子</h2>
+  <div class="row"><span>seed</span><b id="slab">7</b></div>
+  <input type="range" id="seed" min="1" max="40" step="1" value="7" />
+  <button id="reseed">再撒一遍</button>
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { buildVillage, verify, toWorld, TRIM, mulberry32, FLOOR_H, EAVE_X, EAVE_Y } from './src/housekit.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const CX = Math.cos(Math.PI / 6), CY = 0.5;
+
+/* ---- 等距投影：x 往右下、y 往左下、z 往上 ----
+   注意：+x / +y 都是「朝镜头」的方向（sx=(x−y)、sy=(x+y)），
+   所以看得见的是 x=+L/2、y=+W/2 那两面墙，以及两侧坡面。 */
+let S = 12, OX = 640, OY = 470;
+const P = (X, Y, Z) => [OX + (X - Y) * CX * S, OY + ((X + Y) * CY - Z) * S];
+
+function poly(pts, fill, stroke) {
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+}
+
+/* 灯光约定：光从左上前方来 → 朝 -y 的墙面亮、朝 -x 的墙面暗。 */
+const C = {
+  front: '#c9562f', side: '#a4412a', gate: '#8e3722',
+  roofN: '#e7b53c', roofS: '#c99a2a',
+  trim: TRIM, door: '#2c3b35', win: '#33484f', winEdge: '#efe7d6',
+  stone: '#b0a48c', stoneSide: '#91866f',
+};
+
+function drawHouse(h) {
+  const { L, W } = h;
+  const W2 = W / 2, L2 = L / 2;
+  const eY = W2 + EAVE_Y, eX = L2 + EAVE_X;
+  const W3 = (x, y, z) => P(...toWorld(h, x, y, z));
+
+  // 1. 地面投影
+  poly([W3(-L2, -W2, 0), W3(L2, -W2, 0), W3(L2, W2, 0), W3(-L2, W2, 0)], 'rgba(12,18,22,0.30)');
+
+  // 2. 远侧坡面（y = −eY 那一侧，被屋脊挡住一半，先画）
+  poly([W3(-eX, 0, h.ridgeZ), W3(eX, 0, h.ridgeZ), W3(eX, -eY, h.eaveZ), W3(-eX, -eY, h.eaveZ)], C.roofS, 'rgba(60,40,10,.35)');
+
+  // 3. 山墙三角（x = +L/2 这端朝镜头）
+  poly([W3(L2, -W2, h.h), W3(L2, W2, h.h), W3(L2, 0, h.ridgeZ)], C.gate, 'rgba(50,25,15,.4)');
+
+  // 4. 两面朝向镜头的墙：+x 侧墙（暗）、+y 前墙（亮，带门窗）
+  poly([W3(L2, -W2, 0), W3(L2, W2, 0), W3(L2, W2, h.h), W3(L2, -W2, h.h)], C.side);
+  poly([W3(-L2, W2, 0), W3(L2, W2, 0), W3(L2, W2, h.h), W3(-L2, W2, h.h)], C.front);
+
+  // 5. 门（贴花，不参与几何）
+  const yF = W2 + 0.012;
+  poly([W3(h.door.x - h.door.w / 2, yF, 0.02), W3(h.door.x + h.door.w / 2, yF, 0.02),
+        W3(h.door.x + h.door.w / 2, yF, h.door.h), W3(h.door.x - h.door.w / 2, yF, h.door.h)], C.door);
+
+  // 6. 每层窗，同一层同一个 z（层高是硬约束）
+  for (const w of h.wins) {
+    const x0 = w.x - w.w / 2, x1 = w.x + w.w / 2, z0 = w.z, z1 = w.z + w.h;
+    poly([W3(x0, yF, z0), W3(x1, yF, z0), W3(x1, yF, z1), W3(x0, yF, z1)], C.win, C.winEdge);
+  }
+
+  // 7. 近侧坡面（+y）
+  poly([W3(-eX, 0, h.ridgeZ), W3(eX, 0, h.ridgeZ), W3(eX, eY, h.eaveZ), W3(-eX, eY, h.eaveZ)], C.roofN, 'rgba(90,60,10,.35)');
+
+  // 8. 白色封边：屋脊 + 近侧檐口 + 近侧山墙斜边（宽度恒定，套件感全靠它）
+  ctx.strokeStyle = C.trim; ctx.lineCap = 'round';
+  ctx.lineWidth = Math.max(2, S * 0.14);
+  const line = (a, b) => { ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); };
+  line(W3(-eX, 0, h.ridgeZ), W3(eX, 0, h.ridgeZ));
+  line(W3(-eX, eY, h.eaveZ), W3(eX, eY, h.eaveZ));
+  line(W3(eX, 0, h.ridgeZ), W3(eX, eY, h.eaveZ));
+  line(W3(eX, eY, h.eaveZ), W3(L2, W2, h.h));
+  // 屋脊压一道深色，屋顶才不是一块平板
+  ctx.strokeStyle = 'rgba(120,80,15,.4)'; ctx.lineWidth = Math.max(1, S * 0.05);
+  line(W3(-eX, -0.02, h.ridgeZ - 0.02), W3(eX, -0.02, h.ridgeZ - 0.02));
+
+  // 9. 烟囱：底面 = 屋面高度（建模时就贴死，这里只是画出来）
+  if (h.chimney) {
+    const c = h.chimney, x0 = c.x - c.w / 2, x1 = c.x + c.w / 2;
+    const y0 = c.y - c.d / 2, y1 = c.y + c.d / 2, zb = c.baseZ, zt = c.baseZ + c.h;
+    poly([W3(x0, y0, zt), W3(x1, y0, zt), W3(x1, y1, zt), W3(x0, y1, zt)], C.stoneSide); // 顶
+    poly([W3(x1, y0, zb), W3(x1, y1, zb), W3(x1, y1, zt), W3(x1, y0, zt)], C.stoneSide); // +x 侧
+    poly([W3(x0, y1, zb), W3(x1, y1, zb), W3(x1, y1, zt), W3(x0, y1, zt)], C.stone);     // +y 面
+    ctx.strokeStyle = 'rgba(70,60,45,.35)'; ctx.lineWidth = 1;
+    line(W3(x0, y1, zt), W3(x1, y1, zt));
+  }
+}
+
+function bounds(houses) {
+  let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+  for (const h of houses) {
+    const top = h.chimney ? h.chimney.baseZ + h.chimney.h : h.ridgeZ;
+    for (const [x, y, z] of [[-h.L / 2 - EAVE_X, -h.W / 2 - EAVE_Y, 0], [h.L / 2 + EAVE_X, h.W / 2 + EAVE_Y, 0],
+                             [-h.L / 2 - EAVE_X, h.W / 2 + EAVE_Y, top], [h.L / 2 + EAVE_X, -h.W / 2 - EAVE_Y, top]]) {
+      const [px, py] = (() => { const [a, b, c] = toWorld(h, x, y, z); return [ (a - b) * CX, (a + b) * CY - c ]; })();
+      x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py);
+    }
+  }
+  return { x0, x1, y0, y1 };
+}
+
+let houses = [], stats = null;
+
+function layout() {
+  const b = bounds(houses);
+  const boxW = 966, boxH = 470;                  // 右侧留面板(206+16)，底部留统计条
+  S = Math.min(boxW / (b.x1 - b.x0), boxH / (b.y1 - b.y0));
+  OX = 26 + (boxW - (b.x1 - b.x0) * S) / 2 - b.x0 * S;
+  OY = 124 + (boxH - (b.y1 - b.y0) * S) / 2 - b.y0 * S;
+}
+
+function render(seed, n) {
+  houses = buildVillage(seed, n);
+  stats = verify(houses);
+  layout();
+  ctx.clearRect(0, 0, cv.width, cv.height);
+
+  // 地面：深蓝灰 + 等距网格（原片就是这种底）
+  ctx.fillStyle = '#3d4750'; ctx.fillRect(0, 0, cv.width, cv.height);
+  ctx.strokeStyle = 'rgba(255,255,255,.055)'; ctx.lineWidth = 1;
+  for (let i = -22; i <= 22; i++) {
+    const [x0, y0] = P(i * 6, -140, 0), [x1, y1] = P(i * 6, 140, 0);
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    const [a0, b0] = P(-140, i * 6, 0), [a1, b1] = P(140, i * 6, 0);
+    ctx.beginPath(); ctx.moveTo(a0, b0); ctx.lineTo(a1, b1); ctx.stroke();
+  }
+
+  // 画家算法：x+y 小的在后
+  [...houses].sort((a, b) => (a.x + a.y) - (b.x + b.y)).forEach((h) => drawHouse(h));
+
+  document.getElementById('stats').innerHTML =
+    `<b>${stats.houses}</b> 栋 / 变体组合 <b>${stats.combos}</b> / 层数 <b>${stats.floors}</b> / 坡度档 <b>${stats.pitches}</b>` +
+    ` &nbsp;|&nbsp; 烟囱贴面误差 <span class="ok">${stats.chimneyErr.toFixed(4)}</span>` +
+    ` &nbsp; 左右檐口高差 <span class="ok">${stats.eaveSkew.toFixed(4)}</span>` +
+    ` &nbsp; 同层窗 z 极差 <span class="ok">${stats.winRowSpread.toFixed(4)}</span>` +
+    ` &nbsp;|&nbsp; 屋顶抬升/墙高 <b>${stats.ratioMin}–${stats.ratioMax}</b>` +
+    ` &nbsp; 烟囱 <b>${stats.chimneys}</b> / 窗 <b>${stats.windows}</b> / 最小占地间隙 <b>${stats.minGap}</b>`;
+
+  window.reaHouseKit = { stats, seed, n, scale: +S.toFixed(2) };
+}
+
+const nEl = document.getElementById('n'), sEl = document.getElementById('seed');
+function kick() {
+  document.getElementById('nlab').textContent = nEl.value;
+  document.getElementById('slab').textContent = sEl.value;
+  render(+sEl.value, +nEl.value);
+}
+nEl.addEventListener('input', kick);
+sEl.addEventListener('input', kick);
+document.getElementById('reseed').addEventListener('click', () => {
+  sEl.value = 1 + Math.floor(Math.random() * 40);
+  kick();
+});
+kick();
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "markerDots": 287,
+  "stress": [
+    {
+      "dt": 0.03333333333333333,
+      "agents": 64,
+      "seconds": 45.33,
+      "opposingMin": 0.1608
+    },
+    {
+      "dt": 0.016666666666666666,
+      "agents": 64,
+      "seconds": 45.32,
+      "opposingMin": 0.1605
+    },
+    {
+      "dt": 0.008333333333333333,
+      "agents": 64,
+      "seconds": 45.32,
+      "opposingMin": 0.16
+    }
+  ]
+}
+PASS lane targets remain inside mixed polygons

@@ -1,0 +1,45 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "initial": {
+        "version": 346,
+        "layers": 6,
+        "owned": 8,
+        "land": 5871,
+        "spacing": [
+          0.09618114816428269,
+          0.10903593359134084
+        ],
+        "gpuPixels": 5533
+      },
+      "empty": {
+        "disposed": 8,
+        "children": 0,
+        "texture": false,
+        "field": false
+      }
+    },
+    {
+      "kind": "quad",
+      "initial": {
+        "version": 341,
+        "layers": 6,
+        "owned": 8,
+        "land": 5818,
+        "spacing": [
+          0.09214428452229222,
+          0.09537735045326373
+        ],
+        "gpuPixels": 4998
+      },
+      "empty": {
+        "disposed": 8,
+        "children": 0,
+        "texture": false,
+        "field": false
+      }
+    }
+  ],
+  "errors": []
+}

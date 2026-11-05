@@ -1,0 +1,33 @@
+{
+  "iteration": "2026-11-05 16:27 Shanghai",
+  "observations": [
+    "Unified current baseline 20261105T082735293078Z: 51 local PASS, 30 browser PASS, L04 scene-tab click timeout FAIL, zero page errors. Video playback/close had completed.",
+    "Failure diagnostics show game iframe consecutive long tasks 4093ms and 9590ms separated by 18ms, overlapping the failed interaction. Startup responsiveness remains unresolved; this does not prove historical L07/cache root cause.",
+    "Added S17 real version-panel popup: exact pinned ID/World/settings overrides a deliberately different valid workspace encoding; missing ID reports failure and actual workspace fallback, version records unchanged, isolated workspace restored.",
+    "First S17 probe returned Promise in wait predicate and ran before ready (7 PASS/1 FAIL retained). Local installed Playwright source checks predicate truthiness synchronously. Probe now imports once then synchronously checks runtime readiness and captures result.",
+    "Corrected targeted 8 PASS, zero page errors, including L01/L04 and real fixed/missing game loads. Actual screenshots inspected: version banner versus explicit failure/workspace banner; intro still visible, gameplay not tested.",
+    "No production code edits or user-profile/original-library changes. Fixed scenes currently freeze data/settings in same-origin storage, not code/resources or cross-device release. Real Worker/gameplay/performance acceptance incomplete."
+  ],
+  "checks": [
+    {
+      "name": "fixed-version actual runtime and missing ID regression",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full current browser regression",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "startup responsiveness and historical timeout root causes",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "real Worker and gameplay acceptance",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

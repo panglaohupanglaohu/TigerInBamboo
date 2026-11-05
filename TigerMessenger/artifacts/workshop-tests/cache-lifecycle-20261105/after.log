@@ -1,0 +1,14 @@
+✔ last successful learning cache survives new reader and revalidates hashes (17.785875ms)
+✔ quota and oversized learning payload preserve previous slot (21.578459ms)
+✔ corrupt cached data rejects instead of activating an unverified offline view (3.259125ms)
+✔ synchronous storage-open denial releases the deadline timer immediately (0.200542ms)
+✔ late storage-open result closes after timeout without starting a transaction (0.150459ms)
+✔ active storage transaction aborts and closes at deadline without publishing result (0.09875ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 78.035333

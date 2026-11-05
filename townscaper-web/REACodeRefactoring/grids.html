@@ -37,7 +37,7 @@
   <div id="stat"></div>
 </div>
 <script type="module">
-import { buildMixedGrid, buildQuadGrid, traceStraight } from './src/core/grid.js';
+import { buildMixedGrid, buildQuadGrid, buildSquareGrid, traceStraightReport } from './src/core/grid.js';
 import { buildInfinite, verify } from './src/core/infinite.js';
 import { baryPrep } from './src/core/spatial.js';
 import { Atlas } from './src/core/atlas.js';
@@ -48,17 +48,18 @@ function resize() { DPR = Math.min(2, devicePixelRatio); W = innerWidth; H = inn
 addEventListener('resize', () => resize());
 
 const NOTES = {
-  kinds: '1670790425232175108 "my generator also output pure triangle/hex and square grids, to illustrate why I\'m going for my mixed approach"：同一个三角点阵，合并率 0 → 纯三角；1 → 几乎全是方格；0.55 → 混合。1447496205282549761：底图就是一张不规则三角网。1471817524148940807 "Square, yet hex"。959752525867036672 / 1151770831619534848：对偶图（顶点格）——每个内部顶点周围的格子中心连成一圈。',
+  kinds: '1670790425232175108 "my generator also output pure triangle/hex and square grids, to illustrate why I\'m going for my mixed approach"：本轮610帧全核验：纯方格现用真正正交方格；旧合并率1仍有残留三角，改名“合并菱形”。纯三角/混合继续用原生成器，六边仅对偶诊断，尚非独立六边形World/原模块生成。1447496205282549761：底图就是一张不规则三角网。1471817524148940807 "Square, yet hex"。959752525867036672 / 1151770831619534848：对偶图（顶点格）——每个内部顶点周围的格子中心连成一圈。',
   infinite: '1332410042784641026：网格由块（Patch）组成，相邻三块组成簇（Cluster），块和簇各自松弛；每个顶点 = 它在所在块和最近两个簇里的三个版本按重心坐标插值。1151137783785771008 / 1151770831619534848：无限、确定、无缝。1302686201401442309：每组松弛外圈钉住，不会翻折。',
-  lines: '1384958097542819845：在网格上追"拓扑直线"——每到一个四边形就从对边出去（手柄操作 / 拖动连刷）。1313837640366596096：有的直线会绕回起点 = "完美环"（Townscaper 里能在环上造飞岛）。点格子试试。',
-  atlas: '1764958522398146667 "A cute binary tree rect packer … using the tree properly for fast collision checks"；1765115069837221962：递归解析树的过程，板子越碎"手指"越多；1765041830461055127：也能删除矩形，用久了会碎，但仍然紧。core/atlas.js：叶子要么空要么占用，切的时候按剩余较多的方向切；删掉后兄弟也空就合并回父节点。细线 = 树的切分，色块 = 占用。',
+  lines: '1384958097542819845：每到四边格从对边出去；按“格子＋出边”状态识别闭环，区分边界/三角格/预算。画出真实入边到对边段；闭环不等于通过飞岛支撑规则。点击格子试验。',
+  atlas: '1764958522398146667 "A cute binary tree rect packer … using the tree properly for fast collision checks"；1765115069837221962：递归解析树的过程，板子越碎"手指"越多；1765041830461055127：也能删除矩形，用久了会碎，但仍然紧。本地保留first-fit，并可切换候选+跨叶放置；青线显示真实搜索，黄框是命中、橙框是尺寸拒绝，可暂停逐步查看。删除只合并空兄弟，跨切线空区仍可能放不下；最大空闲占比只是叶面积指标，不是最优装填证明。候选是边角+有界随机尝试，不保证最优。原3D树和完整兼容接口仍待补。',
   bary: '974579499802202113：预先算好三角形里的两个向量，重心坐标只要 1 次减法 + 1 次点积。974564862729838592：讲课用的小工具。移动鼠标。',
 };
 let tab = 'kinds', sub = 'mixed', showDual = false, infMode = 'blend', picked = null, mouse = null;
 const cache = {};
 const grids = {
   tri: () => buildMixedGrid({ radius: 9, hexSize: 1, mergeRate: 0, seed: 5 }),
-  square: () => buildMixedGrid({ radius: 9, hexSize: 1, mergeRate: 1, seed: 5 }),
+  square: () => buildSquareGrid({ radius: 9, cellSize: 1 }),
+  rhombi: () => buildMixedGrid({ radius: 9, hexSize: 1, mergeRate: 1, seed: 5 }),
   mixed: () => buildMixedGrid({ radius: 9, hexSize: 1, mergeRate: 0.55, seed: 5 }),
   townscaper: () => buildQuadGrid({ radius: 6, hexSize: 1.4, seed: 7 }),
 };
@@ -71,13 +72,23 @@ function setTab(t) {
   const s = document.getElementById('sub');
   s.innerHTML = '';
   const add = (label, on, fn) => { const b = document.createElement('button'); b.textContent = label; b.classList.toggle('on', on); b.onclick = () => { fn(); setTab(tab); }; s.appendChild(b); };
-  if (t === 'kinds') { for (const [k, l] of [['tri', '纯三角'], ['square', '纯方格'], ['mixed', '混合']]) add(l, sub === k, () => (sub = k)); add('对偶图', showDual, () => (showDual = !showDual)); }
+  if (t === 'kinds') { for (const [k, l] of [['tri', '纯三角'], ['square', '纯方格'], ['rhombi', '合并菱形（含三角）'], ['mixed', '混合']]) add(l, sub === k, () => (sub = k)); add('对偶图', showDual, () => (showDual = !showDual)); }
   if (t === 'infinite') {
     if (!inf) { const t0 = performance.now(); inf = buildInfinite({ N: 4, L: 1, rings: 2 }); infStats = { ms: performance.now() - t0 }; }
     for (const [k, l] of [['raw', '未松弛'], ['patch', '只按块'], ['cluster', '只按簇'], ['blend', '块 + 两簇插值']]) add(l, infMode === k, () => (infMode = k));
   }
   if (t === 'lines' || t === 'bary') sub = t === 'lines' ? 'townscaper' : 'mixed';
-  if (t === 'atlas') startAtlas(); else stopAtlas();
+  if (t === 'atlas') {
+    add(atlasState.running ? '暂停' : '自动增删', atlasState.running, () => { atlasState.running = !atlasState.running; });
+    add(atlasState.candidates ? '候选 + 跨叶' : '单叶 first-fit', atlasState.candidates, () => {atlasState.candidates=!atlasState.candidates});
+    add('添加一块', false, () => atlasStep('add'));
+    add('删除一块', false, () => atlasStep('remove'));
+    add('重置种子7', false, resetAtlas);
+    const label=document.createElement('label'); label.textContent='搜索步骤 ';
+    const slider=document.createElement('input');slider.id='atlas-trace';slider.type='range';slider.min=0;slider.max=atlasState.atlas.lastTrace.length;slider.value=atlasState.traceStep;slider.setAttribute('aria-label','实际搜索步骤');
+    slider.oninput=()=>{atlasState.running=false;stopAtlas();atlasState.traceStep=+slider.value;draw()};label.append(slider);s.append(label);
+    if(atlasState.running) startAtlas(); else stopAtlas();
+  } else stopAtlas();
   document.getElementById('note').textContent = NOTES[t];
   draw();
 }
@@ -149,32 +160,40 @@ function draw() {
     let msg = '点一个格子';
     if (picked) {
       hl.set(picked.id, '#2f7f8a');
-      const lines = [];
-      for (let i = 0; i < picked.n; i++) lines.push(traceStraight(g, picked, i));
+      const traces = [];
+      for (let i = 0; i < picked.n; i++) traces.push(traceStraightReport(g, picked, i));
+      const lines=traces.map(t=>t.cells);
+      window.topolineReview={grid:g,picked,traces};
       const colors = ['#f2c14e', '#e98fa6', '#8fc1e3', '#b6e38f'];
       lines.forEach((L, i) => L.forEach((c) => hl.set(c.id, c === picked ? '#ffffff' : colors[i % 4])));
-      const loop = lines.some((L) => L.length && L[L.length - 1] === picked);
-      msg = `4 个方向：${lines.map((L) => L.length).join(' / ')} 格${loop ? ' · 绕回起点了：完美环！' : ''}`;
+      const loop = traces.some(t=>t.closed);
+      msg = `4 个方向：${traces.map(t=>t.cells.length+'('+t.reason+')').join(' / ')} 格${loop ? ' · 绕回起点了：完美环！' : ''}`;
     }
     drawGrid(g, hl);
+    if(picked&&window.topolineReview){const colors=['#cc9b21','#c55b7c','#438aaf','#75a34f'];window.topolineReview.traces.forEach((t,i)=>{ctx.strokeStyle=colors[i%4];ctx.lineWidth=2;ctx.beginPath();for(const s of t.segments){const a=V.P(...s.a),b=V.P(...s.b);ctx.moveTo(...a);ctx.lineTo(...b);}ctx.stroke();});}
     st.textContent = msg;
   } else if (tab === 'atlas') {
-    const A = atlasState.atlas, S = Math.min(W - (W > 800 ? 440 : 40), H - 60), ox = W > 800 ? 420 : 20, oy = (H - S) / 2, k = S / A.width;
-    ctx.fillStyle = '#1f262b'; ctx.fillRect(ox, oy, S, S);
-    const walk = (n) => {
-      if (n.a) {
-        ctx.strokeStyle = 'rgba(255,255,255,.28)'; ctx.lineWidth = 1;
-        ctx.strokeRect(ox + n.x * k, oy + n.y * k, n.w * k, n.h * k);
-        walk(n.a); walk(n.b);
-      } else if (n.used) {
-        ctx.fillStyle = `hsl(${(n.x * 7 + n.y * 13) % 360}, 55%, 62%)`;
-        ctx.fillRect(ox + n.x * k + 1, oy + n.y * k + 1, n.w * k - 2, n.h * k - 2);
-      }
-    };
-    walk(A.root);
-    const used = A.rects().reduce((s, r) => s + r.w * r.h, 0);
-    let leaves = 0; const cnt = (n) => { if (n.a) { cnt(n.a); cnt(n.b); } else leaves++; }; cnt(A.root);
-    st.textContent = `${atlasState.live.length} 块 · 占用 ${(used / (A.width * A.height) * 100).toFixed(0)}% · 树叶子 ${leaves} 个（越多越碎）· 失败 ${atlasState.fail} 次`;
+    const A=atlasState.atlas;
+    const R=A.report();
+    st.textContent=`${atlasState.live.length} 块 · 占用 ${(R.fill*100).toFixed(1)}% · 空闲叶 ${R.freeLeaves}/${R.leaves} · 最大空闲占比 ${(R.largestShare*100).toFixed(1)}% · 本次访问 ${A.lastSearch.visited} 节点 · 失败 ${atlasState.fail}`;
+    const wide=W>800, top=wide?30:document.getElementById('ui').getBoundingClientRect().bottom+16;
+    const S=Math.max(1,Math.min(W-(wide?460:40),H-top-20)),ox=wide?440:(W-S)/2,oy=top+(H-top-20-S)/2,k=S/A.width;
+    ctx.fillStyle='#1f262b';ctx.fillRect(ox,oy,S,S);
+    const stack=[A.root];
+    while(stack.length) {
+      const n=stack.pop();
+      if(n.a) {ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=1;ctx.strokeRect(ox+n.x*k,oy+n.y*k,n.w*k,n.h*k);stack.push(n.b,n.a);}
+      else if(n.used) {ctx.fillStyle=`hsl(${(n.x*7+n.y*13)%360},55%,62%)`;ctx.fillRect(ox+n.x*k+1,oy+n.y*k+1,Math.max(1,n.w*k-2),Math.max(1,n.h*k-2));}
+    }
+    const trace=A.lastTrace;
+    if(A.lastSearch.x!==undefined){const q=A.lastSearch;ctx.strokeStyle=q.found?'#fff38b':'#fa9470';ctx.lineWidth=3;ctx.strokeRect(ox+q.x*k,oy+q.y*k,q.w*k,q.h*k);}
+    for(let i=0;i<Math.min(trace.length,atlasState.traceStep);i++) {
+      const n=trace[i],parent=trace[n.parent];ctx.strokeStyle=n.decision==='fit'?'#fff38b':n.decision==='size'?'#ee9d70':'#52ebdf';ctx.lineWidth=1.5;
+      if(parent){ctx.beginPath();ctx.moveTo(ox+(parent.x+parent.w/2)*k,oy+(parent.y+parent.h/2)*k);ctx.lineTo(ox+(n.x+n.w/2)*k,oy+(n.y+n.h/2)*k);ctx.stroke();}
+      ctx.strokeRect(ox+n.x*k,oy+n.y*k,n.w*k,n.h*k);
+    }
+    const slider=document.getElementById('atlas-trace');if(slider){slider.max=trace.length;slider.value=atlasState.traceStep;}
+    cv.dataset.atlasBounds=JSON.stringify({x:ox,y:oy,size:S});
   } else if (tab === 'bary') {
     const g = get('mixed');
     drawGrid(g);
@@ -206,25 +225,20 @@ cv.addEventListener('click', (e) => {
   for (const c of g.cells) { const d = Math.hypot(c.cx - x, c.cz - z); if (d < bd) { bd = d; best = c; } }
   picked = best; draw();
 });
-const atlasState = { atlas: new Atlas(512, 512), live: [], fail: 0, timer: null };
-function startAtlas() {
-  if (atlasState.timer) return;
-  atlasState.timer = setInterval(() => {
-    const S = atlasState;
-    if (S.live.length > 60 || (S.live.length > 20 && Math.random() < 0.35)) {
-      const i = (Math.random() * S.live.length) | 0;
-      S.atlas.free(S.live[i]); S.live.splice(i, 1);
-    } else {
-      const w = 16 * (1 + ((Math.random() * Math.random() * 6) | 0)), h = 16 * (1 + ((Math.random() * Math.random() * 6) | 0));
-      const r = S.atlas.allocate(w, h);
-      if (r) S.live.push(r); else S.fail++;
-    }
-    if (tab === 'atlas') draw();
-  }, 90);
+const atlasState={atlas:new Atlas(512,512),live:[],fail:0,timer:null,running:true,seed:7,traceStep:0,candidates:false,nextKey:0};
+function atlasRandom(){atlasState.seed=(Math.imul(atlasState.seed,1664525)+1013904223)>>>0;return atlasState.seed/4294967296;}
+function resetAtlas(){atlasState.atlas=new Atlas(512,512);atlasState.live=[];atlasState.fail=0;atlasState.seed=7;atlasState.traceStep=0;atlasState.nextKey=0;}
+function atlasStep(action) {
+  const S=atlasState;
+  if(action==='remove'&&S.live.length) {const i=Math.floor(atlasRandom()*S.live.length);S.atlas.free(S.live[i]);S.live.splice(i,1);}
+  else if(action==='add') {const w=16*(1+Math.floor(atlasRandom()*atlasRandom()*6)),h=16*(1+Math.floor(atlasRandom()*atlasRandom()*6)),r=S.candidates?S.atlas.place('demo-'+S.nextKey++,w,h,{rng:atlasRandom,attempts:32,trace:true}):S.atlas.allocate(w,h,{trace:true});if(r)S.live.push(r);else S.fail++;}
+  S.traceStep=S.atlas.lastTrace.length;if(tab==='atlas')draw();
 }
-function stopAtlas() { clearInterval(atlasState.timer); atlasState.timer = null; }
+function startAtlas(){if(atlasState.timer)return;atlasState.timer=setInterval(()=>{const S=atlasState;atlasStep(S.live.length>60||(S.live.length>20&&atlasRandom()<.35)?'remove':'add')},240);}
+function stopAtlas(){clearInterval(atlasState.timer);atlasState.timer=null;}
+addEventListener('pagehide',stopAtlas);
 resize(); setTab(new URLSearchParams(location.search).get('t') || 'kinds');
-window.gridLab = { setTab };
+window.gridLab = { selectLineCell(id){if(tab!=='lines')setTab('lines');const g=get('townscaper');picked=g.cells.find(c=>c.id===id);draw();}, setTab, atlasStep, resetAtlas, pauseAtlas(){atlasState.running=false;stopAtlas();if(tab==='atlas')setTab('atlas')}, get selectedGrid(){return tab==='kinds'?get(sub):null}, get gridKind(){return sub}, get atlas(){return atlasState.atlas}, get atlasLive(){return atlasState.live.slice()} };
 </script>
 </body>
 </html>

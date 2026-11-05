@@ -1,0 +1,43 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "active": 5619,
+      "off": 23331,
+      "vertices": 28950,
+      "changed": 7158,
+      "version": 672
+    },
+    {
+      "kind": "quad",
+      "active": 8628,
+      "off": 28944,
+      "vertices": 37572,
+      "changed": 6441,
+      "version": 781
+    }
+  ],
+  "gpu": [
+    {
+      "zoom": 2,
+      "width": 0.9960784313725521,
+      "partial": 256
+    },
+    {
+      "zoom": 4,
+      "width": 0.9960784313725517,
+      "partial": 128
+    },
+    {
+      "zoom": 8,
+      "width": 0.9960784313725508,
+      "partial": 64
+    },
+    {
+      "zoom": 16,
+      "width": 0.996078431372549,
+      "partial": 32
+    }
+  ],
+  "errors": []
+}

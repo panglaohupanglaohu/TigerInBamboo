@@ -1,0 +1,22 @@
+{
+  "status": {
+    "source": "scene-local",
+    "intakeReady": true,
+    "executionReady": false,
+    "modelExecutionVerified": false
+  },
+  "firstHTTP": 201,
+  "first": {
+    "id": "8aac2be1-0ac9-4887-917f-4973339299b3",
+    "hash": "15a79e3e01a2315199db8723bce93be3308c268459d2e8120e0470bf1438875d",
+    "duplicate": false,
+    "received": "stored",
+    "executionReady": false,
+    "modelExecuted": false
+  },
+  "secondHTTP": 200,
+  "duplicate": true,
+  "conflictHTTP": 409,
+  "crossOriginHTTP": 403,
+  "syntheticTestOnly": true
+}

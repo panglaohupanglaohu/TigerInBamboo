@@ -9,6 +9,7 @@
  */
 
 import * as THREE from 'three';
+import { advanceWake } from '../core/wake-sampling.js';
 
 const TRAIL = 70;
 
@@ -52,7 +53,7 @@ export class Boats {
 
   /** 找一圈都是海的航线；isLand(x, z) → bool */
   refresh(isLand, span = 8, count = 2) {
-    for (const b of this.boats) { this.group.remove(b.mesh, b.wake); b.wake.geometry.dispose(); }
+    for (const b of this.boats) { this.group.remove(b.mesh, b.wake); b.wake.geometry.dispose(); b.mesh.traverse(o => o.geometry?.dispose()); }
     this.boats = [];
     let R = span * 0.6;
     for (; R < span * 2; R += 0.25) {
@@ -80,19 +81,8 @@ export class Boats {
       b.mesh.position.set(x, 0.0 + Math.sin(t * 2 + b.phase) * 0.008, z);
       b.mesh.rotation.y = -Math.atan2(dz, dx);
       b.mesh.rotation.z = Math.sin(t * 1.6 + b.phase) * 0.03;
-      // 船尾两点，带向外的速度
-      b.acc += dt;
-      if (b.acc > 0.06) {
-        b.acc = 0;
-        const sx = x - dx * 0.5, sz = z - dz * 0.5, nx = -dz, nz = dx;
-        b.trail.unshift({ l: [sx + nx * 0.06, sz + nz * 0.06], r: [sx - nx * 0.06, sz - nz * 0.06], v: [nx, nz], age: 0 });
-        if (b.trail.length > TRAIL) b.trail.pop();
-      }
-      for (const p of b.trail) {
-        p.age += dt;
-        const s = dt * 0.18;
-        p.l[0] += p.v[0] * s; p.l[1] += p.v[1] * s; p.r[0] -= p.v[0] * s; p.r[1] -= p.v[1] * s;
-      }
+      // Keep emission remainder and interpolate event poses; existing ribbons stay in world space.
+      advanceWake(b, { x, z, dx, dz }, dt, { max: TRAIL });
       // 两条带子
       const pos = [], al = [];
       for (const side of ['l', 'r']) {

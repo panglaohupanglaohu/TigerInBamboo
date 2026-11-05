@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>拱形开口 — 一圈楔石沿椭圆等角挤出来</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --cool:#2f7d8f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:110ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,242,.97) 66%, rgba(238,243,242,0)); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.95);
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:22px; flex-wrap:wrap; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:#146c4a; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>拱洞 = 一条椭圆 + 一圈等角楔石</h1>
+  <p>净空曲线是<b>椭圆</b>不是抛物线：中心净空 = 矢高，两端为 0。楔数决定缝角（180/N），
+     跨度只决定石头变多大——小桥不换石头数量，石头就会变胖。桥面高度 = 矢高 + 拱厚 + 板厚，
+     由矢高比直接推出来，所以"桥面与两岸石基齐平"是参数问题，不是摆位置。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="stats"></div>
+
+<script type="module">
+import { makeArch, measure, clearance, archInner, archOuter, deckSlab, abutment, ARCH_PRESETS } from './src/archvoid.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1d2f36', MUTED = '#5c727a', COOL = '#2f7d8f';
+
+const ABUT = 1.7;     // 桥台宽
+const WATER = -2.0;   // 水面在起拱线以下 2.0
+
+function mock(arch, box) {
+  const { ox, oy, k } = box;
+  return { x: (x) => ox + x * k, y: (y) => oy - y * k, k };
+}
+
+function poly(pts, m) {
+  ctx.beginPath();
+  pts.forEach((p, i) => (i ? ctx.lineTo(m.x(p[0]), m.y(p[1])) : ctx.moveTo(m.x(p[0]), m.y(p[1]))));
+  ctx.closePath();
+}
+
+function brickFill(m, x0, x1, y0, y1, base) {
+  ctx.save();
+  poly([[x0, y0], [x1, y0], [x1, y1], [x0, y1]], m);
+  ctx.fillStyle = base;
+  ctx.fill();
+  ctx.clip();
+  ctx.strokeStyle = 'rgba(120,110,92,.30)';
+  ctx.lineWidth = 1;
+  const h = 0.42;
+  for (let y = y0; y < y1; y += h) {
+    ctx.beginPath();
+    ctx.moveTo(m.x(x0), m.y(y));
+    ctx.lineTo(m.x(x1), m.y(y));
+    ctx.stroke();
+    const row = Math.round((y - y0) / h);
+    const off = row % 2 ? 0.45 : 0;
+    for (let x = x0 + off; x < x1; x += 0.9) {
+      ctx.beginPath();
+      ctx.moveTo(m.x(x), m.y(y));
+      ctx.lineTo(m.x(x), m.y(y + h));
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+function drawScene(arch, box, opt = {}) {
+  const m = mock(arch, box);
+  const AB = opt.abut ?? ABUT;
+  const half = arch.span * 0.5;
+  const innerL = -half, innerR = half;
+  const details = opt.details !== false;
+
+  // 水面 / 渠道
+  const grad = ctx.createLinearGradient(0, m.y(0), 0, m.y(WATER));
+  grad.addColorStop(0, '#cfe3ec');
+  grad.addColorStop(1, '#b8d5e2');
+  ctx.fillStyle = grad;
+  ctx.fillRect(m.x(innerL), m.y(0), (innerR - innerL) * m.k, (0 - WATER) * m.k);
+  ctx.strokeStyle = 'rgba(255,255,255,.75)';
+  ctx.lineWidth = 1.2;
+  for (let i = 0; i < 3; i++) {
+    const wy = -0.35 - i * 0.5;
+    ctx.beginPath();
+    for (let x = innerL; x <= innerR; x += 0.12) {
+      const yy = wy + Math.sin(x * 2.1 + i) * 0.045;
+      x === innerL ? ctx.moveTo(m.x(x), m.y(yy)) : ctx.lineTo(m.x(x), m.y(yy));
+    }
+    ctx.stroke();
+  }
+
+  // 桥台（两岸石基）——顶面必须与桥面齐平
+  for (const side of [-1, 1]) {
+    const q = abutment(arch, AB, side);
+    brickFill(m, Math.min(q[0][0], q[1][0]), Math.max(q[0][0], q[1][0]), -0.12, arch.deckTop, '#d9d2c2');
+    poly(q, m);
+    ctx.strokeStyle = 'rgba(90,84,70,.55)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+  }
+
+  // 拱券：一圈楔石，缝就是共享的径向边
+  for (const w of arch.wedges) {
+    const isKey = w === arch.keystone;
+    poly(w.quad, m);
+    ctx.fillStyle = isKey ? '#c8bd9e' : (w.i % 2 ? '#e6e0d1' : '#ded7c7');
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(104,96,80,.7)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // 桥面板
+  const slab = deckSlab(arch, AB);
+  poly(slab, m);
+  ctx.fillStyle = '#d5cdb9';
+  ctx.fill();
+  poly(slab.map((p, idx) => [p[0], idx > 1 ? arch.deckTop : arch.deckTop - 0.18]), m);
+  ctx.fillStyle = '#eae4d5';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(90,84,70,.6)';
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+  // 桥面顶（与桥台顶同一条线）
+  ctx.beginPath();
+  ctx.moveTo(m.x(-half - AB - arch.thickness), m.y(arch.deckTop));
+  ctx.lineTo(m.x(half + AB - arch.thickness), m.y(arch.deckTop));
+  ctx.strokeStyle = 'rgba(47,125,143,.85)';
+  ctx.lineWidth = 1.6;
+  ctx.stroke();
+
+  // 净空曲线（虚线）＋ 起拱线
+  ctx.save();
+  ctx.setLineDash([5, 4]);
+  ctx.beginPath();
+  for (let x = innerL; x <= innerR + 1e-6; x += 0.05) {
+    const y = clearance(arch, x);
+    x === innerL ? ctx.moveTo(m.x(x), m.y(y)) : ctx.lineTo(m.x(x), m.y(y));
+  }
+  ctx.strokeStyle = COOL;
+  ctx.lineWidth = 1.6;
+  ctx.stroke();
+  ctx.restore();
+
+  // 水面以下补一块，让拱脚有落点
+  ctx.beginPath();
+  ctx.moveTo(m.x(innerL), m.y(0));
+  ctx.lineTo(m.x(innerR), m.y(0));
+  ctx.strokeStyle = 'rgba(47,125,143,.55)';
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+
+  if (!details) return m;
+
+  // 中心净空标注
+  const cx = 0;
+  const cy = clearance(arch, 0);
+  ctx.beginPath();
+  ctx.moveTo(m.x(cx), m.y(0));
+  ctx.lineTo(m.x(cx), m.y(cy));
+  ctx.strokeStyle = 'rgba(47,125,143,.7)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.fillStyle = COOL;
+  ctx.font = '600 12px -apple-system,system-ui,sans-serif';
+  ctx.fillText('rise ' + cy.toFixed(2), m.x(cx + 0.25), m.y(cy * 0.55));
+
+  // 跨度标注
+  const yDim = WATER - 0.38;
+  ctx.beginPath();
+  ctx.moveTo(m.x(innerL), m.y(yDim));
+  ctx.lineTo(m.x(innerR), m.y(yDim));
+  ctx.strokeStyle = 'rgba(92,114,122,.8)';
+  ctx.setLineDash([4, 3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  for (const x of [innerL, innerR]) {
+    ctx.beginPath();
+    ctx.moveTo(m.x(x), m.y(yDim - 0.18));
+    ctx.lineTo(m.x(x), m.y(yDim + 0.18));
+    ctx.stroke();
+  }
+  ctx.fillStyle = MUTED;
+  ctx.font = '12px -apple-system,system-ui,sans-serif';
+  ctx.fillText('span ' + arch.span.toFixed(1), m.x(-0.9), m.y(yDim + 0.42));
+
+  // 键石标记
+  const kc = arch.keystone;
+  const mid = kc.centre;
+  const kx = Math.cos(mid) * 0, ky = 0;
+  ctx.fillStyle = 'rgba(138,90,18,.95)';
+  ctx.font = '600 11.5px -apple-system,system-ui,sans-serif';
+  ctx.fillText('键石 (θ=90°)', m.x(1.0), m.y(arch.crownOuter + 0.55));
+  ctx.beginPath();
+  ctx.moveTo(m.x(0.95), m.y(arch.crownOuter + 0.42));
+  ctx.lineTo(m.x(0.12), m.y(arch.crownOuter + 0.08));
+  ctx.strokeStyle = 'rgba(138,90,18,.8)';
+  ctx.stroke();
+  return m;
+}
+
+// ── 主拱 ──────────────────────────────────────────────────────────────
+const main = makeArch({ span: 9.2, riseRatio: 0.5, thickness: 0.55, count: 15, deck: 0.9 });
+const mainM = measure(main);
+
+ctx.fillStyle = '#eef3f2';
+ctx.fillRect(0, 0, 1280, 800);
+
+// 主场景坐标：起拱线在 y=505，尺度 46px/单位
+const mainBox = { ox: 300, oy: 505, k: 46 };
+drawScene(main, mainBox);
+
+ctx.fillStyle = INK;
+ctx.font = '600 13px -apple-system,system-ui,sans-serif';
+ctx.fillText('单孔石拱（span 9.2 / 矢高比 0.50 / 15 块楔石）', 42, 96);
+ctx.fillStyle = MUTED;
+ctx.font = '12px -apple-system,system-ui,sans-serif';
+ctx.fillText('拱脚直接落在石基立面上，没有另做桥墩；虚线是净空曲线 = 内椭圆本身。', 42, 114);
+
+// ── 右侧三条矢高比对照 ────────────────────────────────────────────────
+const variants = ARCH_PRESETS.map((p) => ({
+  ...p,
+  arch: makeArch({ span: 6, riseRatio: p.riseRatio, thickness: 0.45, count: 13, deck: 0.6 }),
+}));
+variants.forEach((v, i) => {
+  const y0 = 196 + i * 160;
+  ctx.fillStyle = 'rgba(255,255,255,.72)';
+  ctx.fillRect(886, y0 - 26, 356, 148);
+  ctx.strokeStyle = 'rgba(206,220,219,.95)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(886, y0 - 26, 356, 148);
+
+  ctx.fillStyle = INK;
+  ctx.font = '600 12px -apple-system,system-ui,sans-serif';
+  ctx.fillText(`${v.name}   rise/span = ${v.riseRatio.toFixed(2)}`, 897, y0 - 8);
+
+  // 图在左，数字在右，互不重叠
+  const box = { ox: 972, oy: y0 + 78, k: 17.5 };
+  drawScene(v.arch, box, { details: false, abut: 1.0 });
+
+  const mm = measure(v.arch);
+  ctx.fillStyle = MUTED;
+  ctx.font = '11.5px -apple-system,system-ui,sans-serif';
+  const tx = 1074;
+  ctx.fillText(`矢高      ${mm.rise.toFixed(2)}`, tx, y0 + 18);
+  ctx.fillText(`桥面高    ${mm.deckTop.toFixed(2)}`, tx, y0 + 35);
+  ctx.fillText(`中心净空  ${mm.clearCenter.toFixed(2)}`, tx, y0 + 52);
+  ctx.fillText(`0.4span   ${mm.clearAt40.toFixed(2)}`, tx, y0 + 69);
+  ctx.fillText(`缝角      ${mm.jointAngleDeg.toFixed(1)}°`, tx, y0 + 86);
+  ctx.fillText(`长细比    ${mm.aspectMin.toFixed(2)}~${mm.aspectMax.toFixed(2)}`, tx, y0 + 103);
+});
+
+// ── 统计条 ────────────────────────────────────────────────────────────
+const ok = (b) => `<span class="ok">${b ? '✅' : '❌'}</span>`;
+document.getElementById('stats').innerHTML = [
+  `楔石 <b>${mainM.count}</b> 块 · 缝角 <b>${mainM.jointAngleDeg.toFixed(1)}°</b>`,
+  `接缝间隙 max <b>${mainM.jointGapMax.toFixed(4)}</b> ${ok(mainM.jointGapMax < 1e-9)} · 楔石互插 <b>${mainM.overlapPairs}</b> 对 ${ok(mainM.overlapPairs === 0)}`,
+  `外/内弧长 <b>${mainM.arcRatio.toFixed(3)}</b> · 石料长细比 <b>${mainM.aspectMin.toFixed(2)}~${mainM.aspectMax.toFixed(2)}</b>（${mainM.aspectSpread.toFixed(2)}×）`,
+  `净空 中心 <b>${mainM.clearCenter.toFixed(2)}</b> / 0.25span <b>${mainM.clearQuarter.toFixed(2)}</b> / 0.4span <b>${mainM.clearAt40.toFixed(2)}</b>`,
+  `桥面−桥台 <b>${mainM.deckVsAbutment.toFixed(4)}</b> ${ok(Math.abs(mainM.deckVsAbutment) < 1e-9)} · 拱脚内缩 <b>${mainM.footInset.toFixed(2)}</b>`,
+].join('<span style="color:#c9d6d4">·</span>');
+
+window.__stats = {
+  main: mainM,
+  variants: variants.map((v) => ({ name: v.name, ...measure(v.arch) })),
+};
+</script>
+</body>
+</html>

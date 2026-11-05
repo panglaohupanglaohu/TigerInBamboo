@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>单图 8 向 — 靠中心镜像铺满任意尺寸的 UI 装饰</title>
+<style>
+  :root { --ink:#20323a; --muted:#5d7279; --line:#d3e0e0; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef4f3; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 6px; }
+  h1 { margin:0 0 4px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:96ch; }
+  header b { color:#a4691f; font-weight:650; }
+  #panel { position:fixed; right:16px; top:104px; width:236px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:11px 13px; display:flex; flex-direction:column; gap:8px; }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); }
+  #panel input[type=range] { width:100%; }
+  #panel label { display:flex; gap:6px; align-items:center; font-size:12.5px; cursor:pointer; }
+  #stats { position:fixed; left:18px; bottom:14px; right:18px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#20323a; }
+  #stats .ok { color:#1c7a52; font-weight:650; }
+  #stats .bad { color:#a03b2c; font-weight:650; }
+  .cap { position:absolute; font-size:11px; color:var(--muted); }
+  #cv { position:absolute; left:0; top:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>一张图、8 个朝向，靠“绕中心镜像”铺满任意尺寸</h1>
+  <p>存的是<b>一张 motif</b>，铺的时候把目标像素折回 [0,1]²：三角波折叠让图案每 2 倍周期自动翻面，
+    所以矩形多宽多高都不用重画、线宽也不变，边界永远是自己跟自己对接。8 个朝向 = 4 次旋转 × 是否镜像。</p>
+</header>
+
+<canvas id="cv"></canvas>
+
+<div id="panel">
+  <h2>朝向 orientation</h2>
+  <div class="row"><span>0 = 原图 … 7 = 转 3 次 + 镜像</span><b id="olab">0</b></div>
+  <input type="range" id="orient" min="0" max="7" step="1" value="0" />
+  <h2>单元尺寸</h2>
+  <div class="row"><span>scale</span><b id="slab">96 px</b></div>
+  <input type="range" id="scale" min="48" max="160" step="8" value="96" />
+  <label><input type="checkbox" id="mirror" checked> 镜像折叠（关掉就是硬平铺）</label>
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { makeMotif, paintRect, seamError } from './src/mirrordecor.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d', { willReadFrequently: true });
+const motif = makeMotif(64, 11);
+
+const orientEl = document.getElementById('orient');
+const scaleEl = document.getElementById('scale');
+const mirrorEl = document.getElementById('mirror');
+const olab = document.getElementById('olab');
+const slab = document.getElementById('slab');
+const statsEl = document.getElementById('stats');
+
+const LAYOUT = {
+  big:  { x: 32,  y: 104, w: 292, h: 292 },
+  thumb:{ x: 344, y: 104, w: 108, h: 108, gap: 12 },
+  wide: { x: 32,  y: 420, w: 596, h: 112 },
+  flat: { x: 32,  y: 552, w: 596, h: 112 },
+};
+let res = {};
+
+function fit() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  cv.width = innerWidth; cv.height = innerHeight;
+  cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  draw();
+}
+
+function draw() {
+  const orient = +orientEl.value;
+  const scale = +scaleEl.value;
+  const mirror = mirrorEl.checked;
+  olab.textContent = orient;
+  slab.textContent = scale + ' px';
+
+  ctx.fillStyle = '#eef4f3';
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  // 主图：跟滑块联动
+  const b = LAYOUT.big;
+  paintRect(ctx, motif, { ...b, scale, orient, mirror });
+  ctx.strokeStyle = '#b9c9c7'; ctx.lineWidth = 1;
+  ctx.strokeRect(b.x - .5, b.y - .5, b.w + 1, b.h + 1);
+  label('主图 ' + b.w + '×' + b.h + ' · orient ' + orient, b.x, b.y - 18);
+
+  // 8 个朝向一次排开：同一张 motif，不重画
+  const t = LAYOUT.thumb;
+  for (let o = 0; o < 8; o++) {
+    const x = t.x + (o % 4) * (t.w + t.gap);
+    const y = t.y + Math.floor(o / 4) * (t.h + t.gap + 14);
+    paintRect(ctx, motif, { x, y, w: t.w, h: t.h, scale: 54, orient: o, mirror: true });
+    ctx.strokeStyle = o === orient ? '#a4691f' : '#b9c9c7';
+    ctx.lineWidth = o === orient ? 2 : 1;
+    ctx.strokeRect(x - .5, y - .5, t.w + 1, t.h + 1);
+    label('orient ' + o, x, y + t.h + 12);
+  }
+
+  // 任意长宽比：同一张图，不拉伸
+  const wd = LAYOUT.wide;
+  paintRect(ctx, motif, { ...wd, scale, orient, mirror });
+  ctx.strokeStyle = '#b9c9c7'; ctx.lineWidth = 1;
+  ctx.strokeRect(wd.x - .5, wd.y - .5, wd.w + 1, wd.h + 1);
+  label('宽扁 ' + wd.w + '×' + wd.h + '（同一张 motif，不拉伸）', wd.x, wd.y - 8);
+
+  // 对照组：同一块尺寸，关掉镜像 = 硬平铺
+  const fl = LAYOUT.flat;
+  paintRect(ctx, motif, { ...fl, scale, orient, mirror: false });
+  ctx.strokeStyle = '#b9c9c7'; ctx.lineWidth = 1;
+  ctx.strokeRect(fl.x - .5, fl.y - .5, fl.w + 1, fl.h + 1);
+  label('对照：同一块尺寸，关掉镜像的硬平铺（接缝就是 motif 边界硬接）', fl.x, fl.y - 8);
+
+  // 实测接缝
+  const m1 = seamError(ctx, wd.x, wd.y, wd.w, wd.h, scale);
+  const m2 = seamError(ctx, fl.x, fl.y, fl.w, fl.h, scale);
+  const tiles = (wd.w / scale) * (wd.h / scale);
+  res = {
+    orient, scale, mirror,
+    seamMirror: +m1.mean.toFixed(4), seamMirrorWorst: +m1.worst.toFixed(3),
+    seamRepeat: +m2.mean.toFixed(4), seamRepeatWorst: +m2.worst.toFixed(3),
+    seamSamples: m1.samples, tiles: +tiles.toFixed(2),
+  };
+  statsEl.innerHTML =
+    `镜像折叠：接缝平均差 <span class="ok">${res.seamMirror}</span>（最差 ${res.seamMirrorWorst}，${m1.samples} 个采样）· ` +
+    `硬平铺：<span class="bad">${res.seamRepeat}</span>（最差 ${res.seamRepeatWorst}）` +
+    ` —— 同样的 motif、同样的格子，唯一的差别是有没有翻面。<br>` +
+    `宽扁那块 ${wd.w}×${wd.h} px 用了 <b>${tiles.toFixed(2)}</b> 个 motif 单元（scale ${scale}），` +
+    `8 个朝向全部由这一张 64² 图变换得到，没有第二张贴图。`;
+  window.reaDecor = res;
+}
+
+function label(txt, x, y) {
+  ctx.fillStyle = '#5d7279';
+  ctx.font = '11px -apple-system,system-ui,"PingFang SC",sans-serif';
+  ctx.fillText(txt, x, y);
+}
+
+orientEl.oninput = draw;
+scaleEl.oninput = draw;
+mirrorEl.onchange = draw;
+addEventListener('resize', fit);
+fit();
+</script>
+</body>
+</html>

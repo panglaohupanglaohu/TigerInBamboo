@@ -115,8 +115,8 @@ export function generateTerrain(world, {
 
 /**
  * 1769691526924292506："collapsing them depth-first to let them wiggle real far"。
- * 从高处出发深度优先往下走（不准爬升超过一层，遇死路回溯），沿途把河床切低，
- * 河床高度只降不升；两岸比河床高出 1 层以上的削到 +1，形成 V 形河谷。
+ * 本地近似（不是配文中的球面约束坍缩）：从高处出发深度优先往下走（不准爬升超过一层，遇死路回溯），沿途把河床切低，
+ * 尚未实现“先河道约束坍缩、其余广度优先”的完整求解。河床高度只降不升；两岸比河床高出 1 层以上的削到 +1，形成 V 形河谷。
  */
 export function carveRivers(world, { seed = 1, count = 2, maxSteps = 220, wiggle = 0.45, depth = 2 } = {}) {
   const rng = makeRng(seed);

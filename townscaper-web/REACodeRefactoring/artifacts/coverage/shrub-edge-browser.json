@@ -1,0 +1,39 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "normal": {
+        "anchors": 556,
+        "error": 4.218936329181133e-7
+      },
+      "translated": {
+        "anchors": 556,
+        "error": 0.0000019057441988934443
+      },
+      "restored": {
+        "anchors": 556,
+        "error": 4.218936329181133e-7
+      },
+      "shrubs": 556,
+      "version": 672
+    },
+    {
+      "kind": "quad",
+      "normal": {
+        "anchors": 564,
+        "error": 4.468608452157241e-7
+      },
+      "translated": {
+        "anchors": 564,
+        "error": 0.0000019071817050075879
+      },
+      "restored": {
+        "anchors": 564,
+        "error": 4.468608452157241e-7
+      },
+      "shrubs": 564,
+      "version": 781
+    }
+  ],
+  "errors": []
+}

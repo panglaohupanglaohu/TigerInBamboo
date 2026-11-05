@@ -1,16 +1,11 @@
-// Shared progress for index and pipeline; updated by the 30-minute learning workflow.
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export async function refreshCoverage() {
-  let host = document.getElementById('coverage-progress');
-  if (!host) {
-    host = document.createElement('details'); host.id = 'coverage-progress';
-    host.style.cssText = 'position:fixed;left:16px;bottom:46px;z-index:7;max-width:min(500px,90vw);max-height:40vh;overflow:auto;background:#f4faf7;color:#20343c;border:1px solid #9ebcbc;border-radius:10px;padding:10px;font:13px/1.6 system-ui;box-shadow:0 2px 12px #0002';
-    document.body.appendChild(host);
-  }
-  try {
-    const [map, progress] = await Promise.all(['learn/coverage.json','learn/coverage-progress.json'].map(async u => { const res = await fetch(u,{cache:'no-store'}); if(!res.ok) throw Error(`${u}: ${res.status}`); return res.json(); }));
-    host.innerHTML = `<summary><b>模块覆盖进度 · ${map.modules.length} 个原版模块</b> · 展开</summary><p>更新：${esc(progress.updatedAt)}<br>${Object.entries(map.counts).map(([k,v])=>`${esc(k)} ${v}`).join(' · ')}<br>静态迁移记录与逐帧学习、运行验收分别记录。</p><p><a href="coverage.html">原版 → 重构完整映射表 →</a></p><b>本轮完成</b><ul>${progress.completed.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><b>后续学习任务</b><ol>${progress.next.map(t=>`<li>${esc(t.title)} · ${t.clips.map(id=>`<a href="gifs/${id}.mp4">${id}</a>`).join(' / ')}</li>`).join('')}</ol>`;
-  } catch (e) { host.innerHTML = `<summary>模块覆盖进度暂不可用</summary>${esc(e.message)}`; }
+// One progress source for index, pipeline and generated PIPELINE.md.
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export async function refreshCoverage(){
+ let host=document.getElementById('coverage-progress');if(!host){host=document.createElement('details');host.id='coverage-progress';host.style.cssText='position:fixed;left:16px;bottom:46px;z-index:7;max-width:min(500px,90vw);max-height:48vh;overflow:auto;background:#f4faf7;color:#20343c;border:1px solid #9ebcbc;border-radius:10px;padding:10px;font:13px/1.6 system-ui;box-shadow:0 2px 12px #0002';document.body.appendChild(host);}
+ try{const[map,p]=await Promise.all(['learn/coverage.json','learn/coverage-progress.json'].map(async u=>{const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw Error(`${u}: ${r.status}`);return r.json()})),latest=p.latest??{title:'最新学习与重构',summary:p.completed.at(-1)},counts=Object.entries(map.counts).map(([k,v])=>`${esc(k)} ${v}`).join(' · '),recent=p.completed.slice(-6),links=(latest.links??[]).map(l=>`<a href="${esc(l.href)}">${esc(l.label)}</a>`).join(' · '),next=`<ol>${p.next.map(t=>`<li>${esc(t.title)} · ${t.clips.map(id=>`<a href="gifs/${esc(id)}.mp4">${esc(id)}</a>`).join(' / ')}</li>`).join('')}</ol>`,pace=p.learningPace,paceText=pace?`<p><b>逐帧核验记录 ${pace.reviewedClips}/${pace.totalClips}</b> · 剩余 ${pace.remainingClips} 段<br>目标 ${pace.targetClipsPerHour} 段/小时 · 目标窗口 ${pace.goalHours} 小时（至 ${esc(pace.targetAt)}）<br>窗口内实际新增速率 ${pace.actualClipsPerHour??0} 段/小时；目标不能替代逐帧核验或代码验收。</p>`:'',body=`${paceText}<p>更新：<time>${esc(p.updatedAt)}</time><br>${map.modules.length} 个原版模块 · ${counts}</p><p><b>${esc(latest.title)}</b><br>${esc(latest.summary)}</p><p>静态改进确认、逐帧学习和运行验收分别记载；部分覆盖仍有缺口。</p><p>${links}</p><p><a href="coverage.html">完整模块映射</a> · <a href="${esc(latest.evidence??'CHANGELOG.md')}">本轮证据</a> · <a href="GUIDE.md">接手指南</a> · <a href="PIPELINE.md">管线文档</a></p><b>近期完成</b><ul>${recent.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><b>后续学习与缺口</b>${next}`;
+ const open=host.open;host.innerHTML=`<summary><b>重构最新进度</b> · 未覆盖 ${map.counts['未覆盖']??0} / 部分 ${map.counts['部分覆盖']??0}</summary>${body}<details><summary>全部批次完成记录（${p.completed.length}条）</summary><ul>${p.completed.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></details>`;host.open=open;
+ const inline=document.getElementById('latest-progress');if(inline)inline.innerHTML=`<h2>最新学习与重构进度</h2>${body}`;
+ for(const b of document.querySelectorAll('[data-progress-badge]'))b.textContent=`${map.modules.length}模块 · 未覆盖${map.counts['未覆盖']??0} / 部分${map.counts['部分覆盖']??0}`;
+ }catch(e){host.innerHTML=`<summary>重构进度暂不可用</summary>${esc(e.message)}`;}
 }
-refreshCoverage();
-setInterval(refreshCoverage, 30 * 60 * 1000);
+refreshCoverage();setInterval(refreshCoverage,30*60*1000);

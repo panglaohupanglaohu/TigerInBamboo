@@ -1,0 +1,31 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "count": 303,
+      "error": 4.443059973708341e-16,
+      "fractionalCalls": 8902,
+      "geometryError": 0,
+      "vertices": 28950,
+      "scrub": {
+        "error": 0,
+        "level": 3.71,
+        "geometry": "24d16c6f-f61b-4553-872e-2975d5b8733f"
+      }
+    },
+    {
+      "grid": "quad",
+      "count": 404,
+      "error": 3.8882579728510553e-16,
+      "fractionalCalls": 11318,
+      "geometryError": 0,
+      "vertices": 37572,
+      "scrub": {
+        "error": 0,
+        "level": 3.71,
+        "geometry": "1301da97-9300-4c79-957c-90473020cb57"
+      }
+    }
+  ],
+  "errors": []
+}

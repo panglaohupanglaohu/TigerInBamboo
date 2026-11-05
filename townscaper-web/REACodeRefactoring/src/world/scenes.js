@@ -9,6 +9,7 @@
  *            into the terrain"
  */
 
+import { placeHouseTiles } from '../build/multicell.js';
 import { generateTerrain } from '../terrain/generate.js';
 import { forceChurch } from '../terrain/features.js';
 import { generateBadNorth } from '../badnorth/island.js';
@@ -49,8 +50,12 @@ export function generateFusion(world, seed = 7) {
   // 0) 强制模块：先把一块台地压平，再放一座教堂（1751932427272909032）——排屋之前放，免得被占
   world.church = forceChurch(world, { seed, color: scheme[0] });
 
+  // 1579483114178768898: explicit quad+triangle footprint, committed atomically.
+  // Existing mesher reads those same solid bits, suppressing the shared wall.
+  const tileBatch = placeHouseTiles(world, { seed, count: 6 });
+
   // 1) 台地上的排屋：从平坦的台地格出发，尽量直着走
-  const flat = cells.filter((c) => ground(c) >= 2 && free(c) && c.edgeNeighbors.every((_, i) => { const o = nb(c, i); return o && ground(o) === ground(c); }));
+  const flat = cells.filter((c) => ground(c) >= 2 && free(c) && !tileBatch.reserved.has(c.id) && c.edgeNeighbors.every((_, i) => { const o = nb(c, i); return o && ground(o) === ground(c); }));
   const rows = Math.round(flat.length * 0.09);
   for (let r = 0; r < rows; r++) {
     let cur = pick(flat);
@@ -59,7 +64,7 @@ export function generateFusion(world, seed = 7) {
     const stories = rng() < 0.7 ? 1 : 2;
     const colour = pick(scheme);
     for (let k = 0, len = 2 + ((rng() * 4) | 0); k < len && cur; k++) {
-      if (!free(cur) || ground(cur) !== g) break;
+      if (!free(cur) || tileBatch.reserved.has(cur.id) || ground(cur) !== g) break;
       for (let s = 1; s <= stories; s++) world.setSolid(cur, g + s, true);
       paint(cur, rng() < 0.85 ? colour : undefined);
       let next = null;
@@ -123,5 +128,7 @@ export function generateFusion(world, seed = 7) {
   }
 
   world.touch();
-  return { quay: quay.length, arches };
+  // Diagnostic generation receipt only: invalid after any edit/undo changes version.
+  world.fusionTileReport = { version: world.version, placements: tileBatch.placements, receipt: tileBatch.receipt };
+  return { quay: quay.length, arches, multiCellTiles: tileBatch.placements.length };
 }

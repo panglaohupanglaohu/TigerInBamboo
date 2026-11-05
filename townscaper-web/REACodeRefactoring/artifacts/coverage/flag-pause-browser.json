@@ -1,0 +1,33 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "flags": 3,
+      "pauseDrift": 0,
+      "motion": 0.05121821165084839,
+      "windSamples": 90,
+      "curveError": 1.9073486329235223e-7,
+      "constraintError": 9.71445146547012e-17,
+      "visibleAngle": {
+        "flagIndex": 0,
+        "yaw": 0,
+        "pitch": 0.3
+      }
+    },
+    {
+      "grid": "quad",
+      "flags": 3,
+      "pauseDrift": 0,
+      "motion": 0.050246089696884155,
+      "windSamples": 90,
+      "curveError": 2.1934509276955172e-7,
+      "constraintError": 1.5265566588595902e-16,
+      "visibleAngle": {
+        "flagIndex": 0,
+        "yaw": 3.141592653589793,
+        "pitch": 0.3
+      }
+    }
+  ],
+  "errors": []
+}

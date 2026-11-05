@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
+<link rel="icon" href="data:," />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>REACode 重构版 · 一张网格上的小镇与地形</title>
 <!--
@@ -14,7 +15,7 @@
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
 </head>
 <body>
-<div style="position:fixed;left:16px;bottom:8px;z-index:100;background:#20343c;color:white;padding:7px 12px;border-radius:7px;font:13px system-ui">REACode 重构版 · <a style="color:#ffe6a6" href="refactoring-audit.html">285 段重构清单：代码对比确认</a></div>
+<div style="position:fixed;left:16px;bottom:8px;z-index:100;background:#20343c;color:white;padding:7px 12px;border-radius:7px;font:13px system-ui">REACode 重构版 · <a style="color:#ffe6a6" href="pipeline.html#latest-progress">最新进度</a> · <a style="color:#ffe6a6" href="coverage.html">模块映射</a> · <span data-progress-badge>加载进度…</span></div>
 <canvas id="view"></canvas>
 <div id="hud">
   <div id="scenes" class="panel" aria-label="场景"></div>
@@ -37,6 +38,7 @@
     <button id="exportobj" title="导出 .OBJ（1430224300003545091）">⇩</button>
     <button id="help" title="帮助 (H)">?</button>
   </div>
+  <details id="environment-panel" class="panel" open><summary>风与天气 · 已接入能力</summary></details>
   <div id="learnpanel"></div>
   <div id="toast"></div>
   <div id="helpcard" class="panel hidden">

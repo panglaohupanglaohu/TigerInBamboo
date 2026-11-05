@@ -1,3 +1,7 @@
+import {resolveObjectHit,describeSceneObject} from '../scene-authoring/scene-objects.js';
+import {validateRecipe,effectiveSettings,DEFAULT_SETTINGS} from '../scene-authoring/pipeline-model.js';
+import {resolveSceneVersion} from '../scene-authoring/store.js';
+import {mountSceneWorkbench} from '../scene-authoring/workbench.js';
 import * as T from 'three';
 // Morris lake construction on REACodeRefactoring (src/vendor/townscaper-rea-refactoring, unchanged):
 // one grid, one voxel World; WorldMesh (terrain + buildings + baked AO/bounce), shore, outline,
@@ -9,14 +13,13 @@ import {PALETTES} from '../vendor/townscaper-rea-refactoring/src/core/palette.js
 import {encodeWorld,decodeWorld} from '../vendor/townscaper-rea-refactoring/src/world/save.js';
 import {MorrisTownStage} from './morrisTownStage.js?v=reacode-refactor-r2';
 import {mountMorrisTownMenu} from './morrisTownscaperMenu.js?v=apostles-edit-r1';
-import {buildMorrisMountain,MORRIS_MOUNTAIN_REVISION} from './morrisMountain.js?v=reacode-refactor-r2';
 import {createMorrisTownLighting} from './morrisTownscaperLighting.js?v=reacode-refactor-r2';
 import {migrateLegacyTown} from './morrisTownscaperLegacy.js?v=reacode-refactor-r1';
 import {morrisViewer} from './morrisViewer.js';
 import {onUiLayersChange} from '../ui/uiLayers.js?v=ui-layers-r1';
 import {P} from '../core/params.js';
 const STORAGE='morris-townscaper-refactor-v1',SAVES='morris-townscaper-refactor-saves-v1';
-const LEGACY_STORAGE='morris-townscaper-rea-v1',LEGACY_SAVES='morris-townscaper-saves-v1',MOUNTAIN_FLAG='morris-townscaper-mountain-r1';
+const LEGACY_STORAGE='morris-townscaper-rea-v1',LEGACY_SAVES='morris-townscaper-saves-v1';
 export const MORRIS_TOWN_GRID_RADIUS=28,MORRIS_TOWN_SCALE=3;
 // Flat lake surface in town units: polar strips out to the shoreline, minus protected sites (~12k triangles instead of the ~82k grid).
 function lakeSurfaceGeometry({edge,ratio,isProtected,scale,segments=256,rings=24}){
@@ -31,12 +34,12 @@ export function installMorrisTownscaper({root,terrain,water,edge}){
  const waterGeometry=edge?lakeSurfaceGeometry({edge,ratio:terrain.lakeRatio,isProtected:terrain.isProtected,scale}):water.geometry.clone().scale(1/scale,1/scale,1/scale);water.visible=false;
  const stage=new MorrisTownStage({world,grid,index,waterGeometry,anchor});
  // Invisible copy in the game scene: patrol / hoof support raycasts keep hitting the real town surface.
- const mesh=new T.Mesh(stage.worldMesh.geometry,new T.MeshBasicMaterial({visible:false}));mesh.name='morris-user-townscaper-castle';anchor.add(mesh);
+ const mesh=new T.Mesh(stage.worldMesh.geometry,new T.MeshBasicMaterial({visible:false}));mesh.name='morris-user-townscaper-castle';mesh.userData.authoringPickProxy=true;mesh.userData.authoringLabel='湖上建筑与地形';mesh.userData.authoringKind='体素合并网格（只读）';anchor.add(mesh);
  stage.onGeometry=g=>{mesh.geometry=g;stage.focusPoint=null;};
  const withinLake=cell=>cell.pts.every(p=>terrain.inLake(p.x*scale,p.z*scale));
  const allowed=cell=>withinLake(cell)&&cell.pts.every(p=>!terrain.isProtected?.(p.x*scale,p.z*scale));
  const clip=()=>{for(const c of grid.cells)if(!allowed(c)&&world.solid[c.id]){world.solid[c.id]=0;world.rock[c.id]=0;world.river[c.id]=0;}world.touch();};
- const undo=[],redo=[];let active=false,color=0,mode='build',scene='town',storageError='',restoredSave=false,migrated=false,seededCastle=false,manualTime=null;
+ const undo=[],redo=[];let pickingObject=false,pickCallback=null,pickDown=null,inspectingObject=false,active=false,color=0,mode='build',scene='town',storageError='',restoredSave=false,migrated=false,seededCastle=false,manualTime=null;
  const rebuild=()=>stage.update(0);
  const encode=()=>encodeWorld(world,scene);
  const load=str=>{scene=decodeWorld(str,world);clip();};
@@ -44,26 +47,24 @@ export function installMorrisTownscaper({root,terrain,water,edge}){
  // Every edit path below goes through `target`: world / anchor / allowed / pickRay / updateHover / rebuild / undo / redo.
  const morrisTarget={id:'morris',kind:'morris',name:'莫西斯湖',world,anchor,snapshot:()=>world.snapshot(),restore:s=>world.restore(s),allowed,maxLevel:()=>MAX_LEVEL,clip,pickRay:r=>stage.pickRay(r),updateHover:(h,m)=>stage.updateHover(h,m),rebuild:()=>rebuild(),undo,redo,setEditing(){}};
  let target=morrisTarget;
- try{const saved=new URLSearchParams(location.search).get('morrisTown')||localStorage.getItem(STORAGE);if(saved){load(saved);restoredSave=true;}}catch{storageError='存档无法读取';world.reset();}
- if(!restoredSave){try{const legacy=localStorage.getItem(LEGACY_STORAGE);if(legacy&&migrateLegacyTown(legacy,world)){clip();restoredSave=migrated=true;localStorage.setItem(STORAGE,encode());}}catch{storageError='旧版存档无法迁移';world.reset();}}
+ const versionId=new URLSearchParams(location.search).get('sceneVersion');
+ let pinnedVersion=null;
+ if(versionId){try{pinnedVersion=resolveSceneVersion(localStorage,'morris-lake',versionId);}catch(e){storageError=e.message;}}
+ try{const saved=pinnedVersion?.data||new URLSearchParams(location.search).get('morrisTown')||localStorage.getItem(STORAGE);if(saved){load(saved);restoredSave=true;}}catch{storageError='存档无法读取';pinnedVersion=null;world.reset();}
+ if(!versionId&&!restoredSave){try{const legacy=localStorage.getItem(LEGACY_STORAGE);if(legacy&&migrateLegacyTown(legacy,world)){clip();restoredSave=migrated=true;localStorage.setItem(STORAGE,encode());}}catch{storageError='旧版存档无法迁移';world.reset();}}
  // Named saves from the original REACode menu move to v5 once; the old list is kept untouched as a backup.
  try{if(!localStorage.getItem(SAVES)){const old=JSON.parse(localStorage.getItem(LEGACY_SAVES)||'[]');if(Array.isArray(old)&&old.length){const probe=new World(grid);const rows=[];for(const r of old){try{if(r&&typeof r.data==='string'&&migrateLegacyTown(r.data,probe)){rows.push({id:r.id,name:r.name,time:r.time,data:encodeWorld(probe,'town'),migratedFrom:'reacode-v3'});}}catch{}}localStorage.setItem(SAVES,JSON.stringify(rows));}}}catch{}
- // Morris mountain (refactor terrain pipeline) + summit castle. Fresh lakes get it directly; an existing lake is upgraded
- // once, after its current state is kept as a named save, so no earlier castle is lost.
- let mountain=null;const fromLink=!!new URLSearchParams(location.search).get('morrisTown');
- const upgraded=(()=>{try{return localStorage.getItem(MOUNTAIN_FLAG)===MORRIS_MOUNTAIN_REVISION;}catch{return false;}})();
- if(!restoredSave||(!fromLink&&!upgraded)){
-  if(restoredSave&&world.cells.some(c=>world.top(c))){try{const rows=JSON.parse(localStorage.getItem(SAVES)||'[]');rows.unshift({id:'pre-mountain-'+Date.now(),name:'升级前的城堡（自动备份）',time:Date.now(),data:encode()});localStorage.setItem(SAVES,JSON.stringify(rows));}catch{}}
-  mountain=buildMorrisMountain(world,{allowed});scene='fusion';seededCastle=!!mountain.castle;
-  try{localStorage.setItem(STORAGE,encode());localStorage.setItem(MOUNTAIN_FLAG,MORRIS_MOUNTAIN_REVISION);}catch{}
- }
+ // No generated terrain on startup: the lake belongs to the user's saved Townscaper build.
+ // Mountain generation remains an explicit editor action, never a missing-save fallback.
+ let mountain=null;
  rebuild();
+ if(versionId){const banner=document.createElement('p');banner.id='scene-version-status';banner.style.cssText='position:fixed;top:4px;left:30%;z-index:250;background:#f4e9cf;color:#25483e;padding:8px';banner.textContent=pinnedVersion?'莫里斯固定版本 · '+versionId:'固定版本加载失败 · '+storageError+'（当前显示本机工作区）';document.body.append(banner);}
  const panel=document.createElement('section');panel.id='morris-townscaper';panel.style.cssText='position:fixed;left:14px;bottom:65px;z-index:230;background:#f4e9cfee;color:#25483e;padding:10px;border-radius:10px;max-width:340px;font:13px system-ui';
  const toggle=document.createElement('button');toggle.textContent='Townscaper · 开始建城';panel.append(toggle);const body=document.createElement('div');body.hidden=true;panel.append(body);
  const info=document.createElement('div');info.textContent='左键划动建造 · Shift/右键删单层 · 右键拖动旋转（REACode 重构版）';body.append(info);
  function button(label,fn){const b=document.createElement('button');b.textContent=label;b.style.margin='3px';b.onclick=fn;body.append(b);return b;}
  const status=document.createElement('div');status.textContent=storageError||(migrated?'旧版存档已迁移到重构版网格':'');body.append(status);
- const persist=()=>{if(target!==morrisTarget){status.textContent=target.persist()?'已保存到本机（'+target.name+'）':'本机存储不可用';return;}rebuild();try{localStorage.setItem(STORAGE,encode());status.textContent='已保存到本机';}catch{status.textContent='本机存储不可用，请导出存档';}};
+ const persist=()=>{if(target!==morrisTarget){status.textContent=target.persist()?'已保存到本机（'+target.name+'）':'本机存储不可用';return;}rebuild();try{if(versionId){status.textContent='固定版本预览：修改仅留在本次编辑；请保存实验快照';return;}localStorage.setItem(STORAGE,encode());status.textContent='已保存到本机';}catch{status.textContent='本机存储不可用，请导出存档';}};
  const remember=()=>{target.undo.push(target.snapshot());if(target.undo.length>60)target.undo.shift();target.redo.length=0;};
  for(const tool of ['build','erase','paint','rock'])button({build:'建造',erase:'拆除',paint:'涂色',rock:'岩石'}[tool],()=>{mode=tool;status.textContent={build:'建造',erase:'拆除',paint:'涂色',rock:'岩石'}[tool];});
  button('撤销',()=>{const t=target;if(t.undo.length){t.redo.push(t.snapshot());t.restore(t.undo.pop());persist();}});button('重做',()=>{const t=target;if(t.redo.length){t.undo.push(t.snapshot());t.restore(t.redo.pop());persist();}});
@@ -122,10 +123,10 @@ export function installMorrisTownscaper({root,terrain,water,edge}){
   else if(tool==='erase'){const target=world.isSolid(cell,level)?level:top;if(!target)return;world.setSolid(cell,target,false);if(!world.ground(cell))world.river[cell.id]=0;}
   else{if(world.color[cell.id]===color)return;world.color[cell.id]=color;world.touch();}
   stroke.edits.add(key);stroke.changed=true;target.rebuild(hit);}
- const onDown=e=>{if(!active||!isCanvas(e))return;if(e.button===2){down={x:e.clientX,y:e.clientY};return;}if(e.button!==0||e.altKey)return;stroke={snapshot:target.snapshot(),edits:new Set(),changed:false};apply(pick(e),e.shiftKey);e.preventDefault();e.stopImmediatePropagation();};
- const onMove=e=>{if(!active||!isCanvas(e))return;const hit=pick(e);target.updateHover(hit,e.shiftKey?'erase':mode==='rock'?'build':mode);if(stroke){apply(hit,e.shiftKey);e.preventDefault();e.stopImmediatePropagation();}};
+ const onDown=e=>{if(!active||inspectingObject||pickingObject||!isCanvas(e))return;if(e.button===2){down={x:e.clientX,y:e.clientY};return;}if(e.button!==0||e.altKey)return;stroke={snapshot:target.snapshot(),edits:new Set(),changed:false};apply(pick(e),e.shiftKey);e.preventDefault();e.stopImmediatePropagation();};
+ const onMove=e=>{if(!active||inspectingObject||pickingObject||!isCanvas(e))return;const hit=pick(e);target.updateHover(hit,e.shiftKey?'erase':mode==='rock'?'build':mode);if(stroke){apply(hit,e.shiftKey);e.preventDefault();e.stopImmediatePropagation();}};
  const finish=()=>{if(stroke?.changed){target.undo.push(stroke.snapshot);if(target.undo.length>60)target.undo.shift();target.redo.length=0;persist();}stroke=null;};
- const onUp=e=>{if(stroke){finish();e.preventDefault();e.stopImmediatePropagation();return;}if(!active||!down||!isCanvas(e))return;const start=down;down=null;if(Math.hypot(e.clientX-start.x,e.clientY-start.y)>5)return;stroke={snapshot:target.snapshot(),edits:new Set(),changed:false};apply(pick(e),true);finish();e.preventDefault();e.stopImmediatePropagation();};
+ const onUp=e=>{if(inspectingObject||pickingObject)return;if(stroke){finish();e.preventDefault();e.stopImmediatePropagation();return;}if(!active||!down||!isCanvas(e))return;const start=down;down=null;if(Math.hypot(e.clientX-start.x,e.clientY-start.y)>5)return;stroke={snapshot:target.snapshot(),edits:new Set(),changed:false};apply(pick(e),true);finish();e.preventDefault();e.stopImmediatePropagation();};
  const onCancel=()=>{finish();down=null;stage.updateHover(null);};
  const context=e=>{if(active&&isCanvas(e))e.preventDefault();};
  window.addEventListener('pointerdown',onDown,true);window.addEventListener('pointerup',onUp,true);window.addEventListener('pointermove',onMove,true);window.addEventListener('pointercancel',onCancel,true);window.addEventListener('blur',onCancel);window.addEventListener('contextmenu',context,true);
@@ -141,7 +142,23 @@ export function installMorrisTownscaper({root,terrain,water,edge}){
  morrisViewer.beginTownRender=({scene,renderer,camera})=>updateInLake(camera)?lighting.beginRender({scene,renderer}):null;
  let last=performance.now()/1000,lastMode=null,targetPoll=0;
  const autoMode=()=>P.timeOfDay<.2||P.timeOfDay>.85?'night':P.timeOfDay>.65?'dusk':'day';
+ const authoringSettings=()=>({waves:stage.waves.visible,reflection:stage.reflection.visible,time:stage.timeOfDay,outline:stage.outline.ink.visible,grid:stage.gridLines.visible,vegetation:stage.vegetation.group.visible,birds:stage.birds.visible,fog:stage.atmosphere.fog.visible,snow:stage.atmosphere.snow.visible,fire:stage.effects.fire.visible});
+ const applyAuthoringSettings=settings=>{for(const [k,v]of Object.entries(settings)){if(k==='time')menu.view.setTimeOfDay(v);else stage.setDebug(k,v);}};
+ if(pinnedVersion?.settings){try{applyAuthoringSettings(pinnedVersion.settings);}catch{storageError='固定版本参数无法读取';}}
+ else if(pinnedVersion?.recipe){try{validateRecipe(pinnedVersion.recipe);applyAuthoringSettings(effectiveSettings(pinnedVersion.recipe,pinnedVersion.recipe.baseline||DEFAULT_SETTINGS));}catch{storageError='固定版本管线参数无法读取';}}
+ morrisViewer.sceneVersion=()=>({requested:versionId,loaded:pinnedVersion?.id||null,data:encode(),settings:authoringSettings()});
+ let objectMarker=null;const clearObjectFocus=(restoreCamera=true)=>{inspectingObject=false;if(objectMarker){objectMarker.removeFromParent();objectMarker.geometry.dispose();objectMarker.material.dispose();objectMarker=null;}if(restoreCamera)menu.restoreCamera();};
+ const focusObject=(object,localBounds=object.userData.authoringBounds,{frame=true}={})=>{object.updateWorldMatrix(true,true);const stored=localBounds,bounds=stored?new T.Box3(new T.Vector3().fromArray(stored.min),new T.Vector3().fromArray(stored.max)).applyMatrix4(object.matrixWorld):new T.Box3().setFromObject(object);if(bounds.isEmpty())throw Error('该对象暂缺可定位的几何边界');clearObjectFocus(frame);inspectingObject=true;target.updateHover(null);anchor.updateWorldMatrix(true,false);const center=bounds.getCenter(new T.Vector3()),size=bounds.getSize(new T.Vector3()),scale=anchor.getWorldScale(new T.Vector3()).x;if(frame){menu.view.target.copy(anchor.worldToLocal(center));menu.view.distance=Math.max(6,size.length()/scale*1.7);menu.view.pitch=.16;menu.view.updateCamera();}const markerBounds=stored?new T.Box3(new T.Vector3().fromArray(stored.min),new T.Vector3().fromArray(stored.max)):bounds.clone().applyMatrix4(object.matrixWorld.clone().invert());objectMarker=new T.Box3Helper(markerBounds,0x87e6cb);objectMarker.name='workshop-object-selection';objectMarker.material.depthTest=false;objectMarker.renderOrder=1000;object.add(objectMarker);};
+ const setObjectPicking=(on,callback=null)=>{pickingObject=on;pickCallback=callback;pickDown=null;};
+ const pickObjectDown=e=>{if(!pickingObject||e.button!==0||!isCanvas(e))return;pickDown={x:e.clientX,y:e.clientY};e.preventDefault();e.stopImmediatePropagation();};
+ const pickObjectUp=e=>{if(!pickingObject||e.button!==0||!pickDown||!isCanvas(e))return;const start=pickDown;pickDown=null;e.preventDefault();e.stopImmediatePropagation();if(Math.hypot(e.clientX-start.x,e.clientY-start.y)>6)return;try{
+  const rect=e.target.getBoundingClientRect(),picker=new T.Raycaster();picker.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),morrisViewer.camera);let sceneRoot=anchor;while(sceneRoot.parent)sceneRoot=sceneRoot.parent;sceneRoot.updateWorldMatrix(true,true);
+  const hit=picker.intersectObject(sceneRoot,true).find(h=>{if(!h.object.isMesh)return false;for(let o=h.object;o;o=o.parent)if(!o.visible)return false;const material=Array.isArray(h.object.material)?h.object.material[h.face?.materialIndex||0]:h.object.material;return material?.visible!==false||h.object.userData.authoringPickProxy;});
+  const row=hit&&resolveObjectHit(hit);if(!row){pickCallback?.(null,'未选中物件，请点击实体表面。');return;}focusObject(row.object,row.bounds,{frame:false});pickingObject=false;pickCallback?.(describeSceneObject(row));
+ }catch(error){pickCallback?.(null,error.message);}};
+ window.addEventListener('pointerdown',pickObjectDown,true);window.addEventListener('pointerup',pickObjectUp,true);
+ const authoring=mountSceneWorkbench({editorHud:menu.hud,focusObject,clearObjectFocus,setObjectPicking,settings:authoringSettings,apply:applyAuthoringSettings,id:'morris-lake',name:'莫西斯湖',play:()=>{menu.restoreCamera();morrisViewer.returnToPlayer?.();},open:()=>{selectTarget('morris');menu.view.frameTown();},encode,restore:data=>{selectTarget('morris');if(!importText(data))throw Error('存档无法恢复');},validate:data=>{const probe=new World(grid);try{const mode=decodeWorld(data,probe);return {passed:encodeWorld(probe,mode)===data,message:'编码往返不一致',scope:'codec-only'};}catch{return {passed:false,message:'场景编码无效'};}}});
  return{selectTarget,get target(){return target;},town:world,world,grid,index,mesh,stage,anchor,birds:stage.birds,undo,redo,seededCastle,migrated,mountain,encode,
   update(){const now=performance.now()/1000,dt=Math.min(.05,Math.max(0,now-last));last=now;const m=manualTime??(inLake?'day':autoMode());if(m!==lastMode){lastMode=m;stage.setTimeOfDay(m);lighting.setMode(m);menu.syncLighting(m);}stage.update(dt);if(++targetPoll%30===0)refreshTargets();menu.update(false);},
-  dispose(){offLayers();menu.dispose();lighting.dispose();if(morrisViewer.beginTownRender)morrisViewer.beginTownRender=null;morrisViewer.isInMorrisLake=null;stage.dispose();anchor.removeFromParent();panel.remove();if(morrisViewer.renderTownOverlay)morrisViewer.renderTownOverlay=null;morrisViewer.townOverlayActive=null;window.removeEventListener('pointerdown',onDown,true);window.removeEventListener('pointerup',onUp,true);window.removeEventListener('pointermove',onMove,true);window.removeEventListener('pointercancel',onCancel,true);window.removeEventListener('blur',onCancel);window.removeEventListener('contextmenu',context,true);}};
+  dispose(){setObjectPicking(false);window.removeEventListener('pointerdown',pickObjectDown,true);window.removeEventListener('pointerup',pickObjectUp,true);clearObjectFocus();morrisViewer.sceneVersion=null;document.getElementById('scene-version-status')?.remove();authoring.dispose();offLayers();menu.dispose();lighting.dispose();if(morrisViewer.beginTownRender)morrisViewer.beginTownRender=null;morrisViewer.isInMorrisLake=null;stage.dispose();anchor.removeFromParent();panel.remove();if(morrisViewer.renderTownOverlay)morrisViewer.renderTownOverlay=null;morrisViewer.townOverlayActive=null;window.removeEventListener('pointerdown',onDown,true);window.removeEventListener('pointerup',onUp,true);window.removeEventListener('pointermove',onMove,true);window.removeEventListener('pointercancel',onCancel,true);window.removeEventListener('blur',onCancel);window.removeEventListener('contextmenu',context,true);}};
 }

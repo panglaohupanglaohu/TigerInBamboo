@@ -16,6 +16,7 @@
  */
 
 import * as THREE from 'three';
+import {bakeNormalLight} from '../core/mountain-bake.js';
 import { MeshWriter } from '../core/meshwriter.js';
 import { BUILD, TERRAIN } from '../core/palette.js';
 import { buildTerrain } from '../terrain/terrainmesh.js';
@@ -46,6 +47,7 @@ class ChunkRouter {
     return w;
   }
   at(cell) { this.cur = this.writer(this.chunkOf(cell)); this.cur.soft = this._soft; }
+  set fieldFrame(v) { this.cur.fieldFrame = v; }
   set soft(v) { this._soft = v; this.cur.soft = v; }
   get soft() { return this._soft; }
   c(hex) { return this.cur.c(hex); }
@@ -66,6 +68,7 @@ function hashWriter(w) {
   for (let i = 0; i < w.pos.length; i++) mix(Math.round(w.pos[i] * 10000));
   for (let i = 0; i < w.col.length; i++) mix(Math.round(w.col[i] * 4096));
   for (let i = 0; i < w.glow.length; i++) mix(w.glow[i] * 7);
+  for (const v of w.field) mix(Math.round(v * 10000));
   return h ^ w.pos.length;
 }
 
@@ -91,6 +94,7 @@ export class WorldMesh {
     this.debugModules = false;   // 模块签名调试色（build/buildings.js）
     this.smooth = true;   // 层级平滑 + 笼形变形（terrain/shape.js）
     this.shape = null;
+    this.shapeOptions = {};
     this.stats = {};
     this.cache = new Map();      // 块 → { hash, pos, col, glow, normal, outline }
     this.prev = null;            // 上次的体素快照，用来找变了的格子
@@ -141,7 +145,7 @@ export class WorldMesh {
     }
 
     // 1. 全部重新生成，按块路由
-    const shape = shapeTerrain(world, { enabled: this.smooth });
+    const shape = shapeTerrain(world, { ...this.shapeOptions, enabled: this.smooth });
     this.shape = shape;
     const r = new ChunkRouter((c) => this.chunkKey(c));
     const terrain = buildTerrain(r, world, { L, shape });
@@ -190,7 +194,7 @@ export class WorldMesh {
         }
       }
       const { normal, outline } = w.normals(halo);
-      fresh.set(it.k, { hash: it.hash, pos: new Float32Array(w.pos), col: new Float32Array(w.col), glow: new Float32Array(w.glow), normal, outline });
+      fresh.set(it.k, { hash: it.hash, pos: new Float32Array(w.pos), col: new Float32Array(w.col), field: new Float32Array(w.field), glow: new Float32Array(w.glow), normal, outline });
     }
     this.cache = fresh;
 
@@ -207,13 +211,15 @@ export class WorldMesh {
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(cat('pos', 3), 3));
     g.setAttribute('color', new THREE.BufferAttribute(cat('col', 3), 3));
+    g.setAttribute('aField', new THREE.BufferAttribute(cat('field', 3), 3));
     g.setAttribute('aGlow', new THREE.BufferAttribute(cat('glow', 1), 1));
     g.setAttribute('normal', new THREE.BufferAttribute(cat('normal', 3), 3));
+    g.setAttribute('aMountainTone',new THREE.BufferAttribute(bakeNormalLight(g.getAttribute('normal').array),1));
     g.setAttribute('aOutline', new THREE.BufferAttribute(cat('outline', 3), 3));
     g.computeBoundingSphere();
     this.geometry = g;
     this.posts = build.posts;
-    this.garden = { yards: build.yardCells, paths: build.pathCells };
+    this.garden = { yards: build.yardCells, paths: build.pathCells, openings: build.yardOpenings };
     this.chimneys = build.chimneys;   // 给植被层（后院灌木、小花）
     this.buildStats = { modules: build.modules, doors: build.doors };   // 用到几种拼图块、开了几扇门
 

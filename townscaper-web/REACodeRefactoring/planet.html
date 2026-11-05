@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
+<link rel="icon" href="data:," />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>球面网格 · REACode 重构版</title>
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
@@ -26,21 +27,25 @@
 <canvas id="c"></canvas>
 <canvas id="proj" width="600" height="600"></canvas>
 <div id="ui">
-  <nav><a href="index.html">← 首页</a><a href="pipeline.html">管线</a></nav>
+  <nav><a href="index.html">← 首页</a><a href="pipeline.html">管线</a><a href="artifacts/coverage/sphere-stages-review.md">711帧阶段复核</a></nav>
   <h1>球面网格 → 小星球</h1>
   <p>1338825080844021760：随机点 → 散开 → 三角化 → 按三角形松弛。1338829205157646336：三角化在球极投影平面上做（右下角）。1768627849529893109：放到球面上。1769641473895432220：防"蘑菇化"。</p>
   <div class="row" id="steps">
     <button data-s="random">1 随机点</button><button data-s="spaced">2 散开</button><button data-s="tri">3 三角化</button><button data-s="relaxed">4 松弛</button><button data-s="planet" class="on">5 星球</button>
   </div>
   <div class="row">
-    <button id="relax" class="on">防蘑菇化 relax</button><button id="wire">三角网</button><button id="projbtn">球极投影</button><button id="spin" class="on">自转</button>
+    <button id="cube-light">高度立方体光照</button><button id="relax" class="on">防蘑菇化 relax</button><button id="wire">三角网</button><button id="projbtn">球极投影</button><button id="spin" class="on">自转</button>
   </div>
-  <div id="stat"></div>
+  <p>1791049306213912823：可选16²×6面高度贴图，顶点单次查询的本地光照实验。</p>
+  <label>收缩约束 <select id="modules"><option value="all">所有高地（旧代理）</option><option value="one">显式选择最高一格</option><option value="none">无模块格</option></select></label>
+  <p>本地边长弹簧近似；显式格ID可供模块接入。多格约束可能冲突，最差边长误差可增大，不能仅按平均面积认证。球面演示尚未与平面World/游戏融合。</p>
+  <p><a href="artifacts/coverage/sphere-relax-review.md">本轮708帧核验与差距</a></p><div id="stat"></div>
   <p>源码：<code>src/core/trigraph.js</code> <code>src/sphere/planet.js</code></p>
 </div>
 <script type="module">
 import * as THREE from 'three';
-import { buildSphere, buildPlanet, cornerPositions, planetMesh, mushroomRatio } from './src/sphere/planet.js';
+import {createCubeHeightLookup} from './src/light/cube-height.js';
+import { sphereTopologyReport, buildSphere, buildPlanet, cornerPositions, planetMesh, mushroomRatio, moduleSizeReport } from './src/sphere/planet.js';
 
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -64,8 +69,19 @@ const core = new THREE.Mesh(new THREE.IcosahedronGeometry(planet.R - 0.02, 4), n
 let land = null, wire = null, dots = null;
 const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, flatShading: true });
 
+const cubeLight=createCubeHeightLookup(direction=>{
+ let nearest=planet.cells[0],best=-Infinity;
+ for(const cell of planet.cells){const dot=cell.c.reduce((sum,n,i)=>sum+n*direction[i],0);if(dot>best){best=dot;nearest=cell}}
+ return planet.R+planet.H[nearest.id]*planet.L;
+},{size:16,minHeight:planet.R,maxHeight:planet.R+6*planet.L});
+cubeLight.attach(mat);
+document.getElementById('cube-light').onclick=e=>{const on=cubeLight.uniforms.uCubeHeightStrength.value===0;cubeLight.uniforms.uCubeHeightStrength.value=on?1:0;e.target.classList.toggle('on',on)};
+window.planetLighting={cubeLight,planet,get land(){return land},renderer,scene,camera};
+
+let moduleCells=null, sizeReport, currentAt;
 function buildLand(relax) {
-  const at = cornerPositions(planet, { relax });
+  const at = cornerPositions(planet, { relax, moduleCells });currentAt=at;
+  sizeReport=moduleSizeReport(planet,at,{moduleCells});
   const m = planetMesh(planet, at);
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(m.position, 3));
@@ -87,24 +103,33 @@ function wireOf(P, tris, r = planet.R + 0.01) {
   return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.55 }));
 }
 
-let step = 'planet', relaxOn = true, showWire = false, spin = true, ratio = { on: 0, off: 0 };
+const initialStep = new URLSearchParams(location.search).get('stage');
+let step = ['random','spaced','tri','relaxed','planet'].includes(initialStep) ? initialStep : 'planet', relaxOn = true, showWire = false, spin = true, ratio = { on: 0, off: 0 };
 ratio.off = buildLand(false); ratio.on = buildLand(true);
+function stagePoints(){return step==='random'?sphere.steps.random:step==='spaced'?sphere.steps.spaced:step==='tri'?sphere.steps.triangulated:sphere.steps.relaxed;}
 function show() {
   world.clear();
   if (step === 'planet') { world.add(core, sea, land); if (showWire) world.add(wireOf(sphere.pts, sphere.tris, planet.R + 0.13)); }
   else {
-    const P = step === 'random' ? sphere.steps.random : step === 'spaced' ? sphere.steps.spaced : sphere.pts;
+    const P = stagePoints();
     world.add(new THREE.Mesh(new THREE.SphereGeometry(planet.R * 0.99, 48, 32), new THREE.MeshBasicMaterial({ color: 0x4d5f78 })));
     world.add(pointsOf(P));
     if (step === 'tri' || step === 'relaxed') world.add(wireOf(P, sphere.tris));
   }
   document.querySelectorAll('#steps button').forEach((b) => b.classList.toggle('on', b.dataset.s === step));
   const c = sphere.steps.check;
+  const topology = ['tri','relaxed','planet'].includes(step) ? sphereTopologyReport(stagePoints(),sphere.tris) : null;
   document.getElementById('stat').innerHTML =
-    `${sphere.pts.length} 点 · ${sphere.tris.length} 三角（球面应为 2n−4 = ${2 * sphere.pts.length - 4}）· 流形 ${c.manifold ? '✓' : '✗'} · Delaunay ${c.delaunay ? '✓' : '✗'} · ${tBuild.toFixed(0)} ms<br>` +
-    `高台（≥4 层）格子面积 / 海平面面积：relax 关 <b>${ratio.off.toFixed(2)}</b> → 开 <b>${ratio.on.toFixed(2)}</b>（越接近 1 越不"蘑菇"）`;
+    `${sphere.pts.length} 点 · ${sphere.tris.length} 三角（球面应为 2n−4 = ${2 * sphere.pts.length - 4}）· ${topology ? `球面拓扑 ${topology.closed ? '✓' : '待查'}（Euler ${topology.euler}）` : '点云阶段（未套用后续三角网）'}· 投影平面抽查 ${c.checkedTriangles}/${c.tris} 面 ${c.manifold && c.delaunay ? '✓' : '待查'} · ${tBuild.toFixed(0)} ms<br>` +
+    `高台（≥4 层）格子面积 / 海平面面积：relax 关 <b>${ratio.off.toFixed(2)}</b> → 开 <b>${ratio.on.toFixed(2)}</b>（仅面积汇总，不能代表每格形状）<br>` +
+    `当前约束${sizeReport.count}格 · 单格面积比范围 ${sizeReport.minAreaRatio.toFixed(3)}–${sizeReport.maxAreaRatio.toFixed(3)} · 最差边长误差 ${(100*sizeReport.maxEdgeError).toFixed(1)}%`;
+  if(window.planetDemo)Object.assign(window.planetDemo,{land,at:currentAt,sizeReport,moduleCells,relaxOn,step,stagePoints:stagePoints(),topology});
 }
 document.querySelectorAll('#steps button').forEach((b) => (b.onclick = () => { step = b.dataset.s; show(); }));
+document.getElementById('modules').onchange=e=>{
+  moduleCells=e.target.value==='all'?null:e.target.value==='none'?[]:[planet.H.indexOf(Math.max(...planet.H))];
+  ratio.off=buildLand(false);ratio.on=buildLand(true);buildLand(relaxOn);show();
+};
 document.getElementById('relax').onclick = (e) => { relaxOn = !relaxOn; e.target.classList.toggle('on', relaxOn); buildLand(relaxOn); show(); };
 document.getElementById('wire').onclick = (e) => { showWire = !showWire; e.target.classList.toggle('on', showWire); show(); };
 document.getElementById('spin').onclick = (e) => { spin = !spin; e.target.classList.toggle('on', spin); };
@@ -120,7 +145,9 @@ document.getElementById('projbtn').onclick = (e) => {
   for (const [a, b, c] of tris) { const A = pts[a], B = pts[b], C = pts[c]; ctx.moveTo(300 + A[0] * S, 300 + A[1] * S); ctx.lineTo(300 + B[0] * S, 300 + B[1] * S); ctx.lineTo(300 + C[0] * S, 300 + C[1] * S); ctx.closePath(); }
   ctx.stroke();
 };
-buildLand(true); show();
+buildLand(true);
+window.planetDemo = { sphere, planet, world, ratio, land, at:currentAt, sizeReport, moduleCells, relaxOn };
+show();
 
 // 拖动旋转
 let drag = null, rx = 0.35, ry = 0;
@@ -131,7 +158,7 @@ canvas.addEventListener('wheel', (e) => { camera.position.multiplyScalar(e.delta
 function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize();
 renderer.setAnimationLoop(() => { if (spin && !drag) ry += 0.003; world.rotation.set(rx, ry, 0); renderer.render(scene, camera); });
-window.planetDemo = { sphere, planet, ratio };
+
 </script>
 </body>
 </html>

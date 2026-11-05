@@ -1,0 +1,27 @@
+{
+  "iteration": "2026-11-05 08:26 Shanghai",
+  "observations": [
+    "Actual screenshot inspected: blue toolbar, one draft save, in-page version dock, preserved original building controls. Screenshot uses isolated test world, not user storage.",
+    "S15 passed: one new draft stores actual dusk while recipe remains day.",
+    "Current full browser run: 29 pass, L07 timeout failed, zero page errors. Three targeted learning refresh cases pass; root cause unresolved.",
+    "Added bounded long-task and refresh phase/request diagnostics without increasing interaction deadlines.",
+    "Source connectivity does not establish model Worker execution. Real model and gameplay acceptance remain unverified."
+  ],
+  "checks": [
+    {
+      "name": "manual settings protected by draft save",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "full workshop regression",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "user gameplay acceptance and model Worker",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

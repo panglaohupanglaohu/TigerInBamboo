@@ -1,39 +1,159 @@
 {
+  "lightvolume.html": {
+    "original": "engine/piperepair.html",
+    "bodySimilarity": 0.0365,
+    "changedBody": true,
+    "sha256": "12afb42e4d0a3f90b1bb8464111068e30fec8fb0b277d48868c01de35e4b82d2"
+  },
+  "wfc.html": {
+    "original": "engine/navflow.html",
+    "bodySimilarity": 0.0602,
+    "changedBody": true,
+    "sha256": "5b2cbf9c28eb32275f77e2c1f2fc2e6c3c334a8f4de8f92f0ed27c2027ab0ac4"
+  },
   "pipeline.html": {
     "original": "pipeline.html",
-    "bodySimilarity": 0.6069,
+    "bodySimilarity": 0.5906,
     "changedBody": true,
-    "sha256": "d85c5ceb164c0cec0ddd2b2e23c40f10922530845b1a639614a241bf1a31991a"
+    "sha256": "5f2319cb80aa4ec4c6f750d1c203497efb43921b8d3f2ca17bf72f456872cd11"
+  },
+  "trigraph.html": {
+    "original": "engine/trigraph.html",
+    "bodySimilarity": 0.0914,
+    "changedBody": true,
+    "sha256": "5cf9b87d3591e81b1b3ad226d1dafb8221924ca344db3f5183bfea3ce562775e"
+  },
+  "mountain-bake.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.1314,
+    "changedBody": true,
+    "sha256": "2a1ba945f1a0731558af08dbc08c827ec4e1bce5d96665f3fb89c3824e14946a"
+  },
+  "shoreloops.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0686,
+    "changedBody": true,
+    "sha256": "f3f5c89424cc716795688992dbcb88c090b9f93a83949ed9a696ef3719e7fac6"
   },
   "textures.html": {
     "original": "alivelab.html",
-    "bodySimilarity": 0.0358,
+    "bodySimilarity": 0.0345,
     "changedBody": true,
-    "sha256": "4443f723221b1b79348f02ec0bf097d48b58da75ec079283005a9c525bcaff81"
+    "sha256": "8114b13bb232d61f4a6d3873503cb132d80f06a993a6c5b7a67a5d320ce01014"
   },
   "index.html": {
     "original": "index.html",
-    "bodySimilarity": 0.5479,
+    "bodySimilarity": 0.5259,
     "changedBody": true,
-    "sha256": "68260079059cdfa1e68a2ebafca2340013989929fdb6cd0688f52c74779d7bf0"
+    "sha256": "b3cf2f6da63debf62b9e6a0b88a0116e5a4008d814c442caad5f7a4e9f96912e"
+  },
+  "banners.html": {
+    "original": "tools/player.html",
+    "bodySimilarity": 0.041,
+    "changedBody": true,
+    "sha256": "90384f35bbe7ad48c4f6ffbfb2921e265d4bbfb9a7204f2454f079962546c90f"
+  },
+  "patch.html": {
+    "original": "engine/blobs.html",
+    "bodySimilarity": 0.0924,
+    "changedBody": true,
+    "sha256": "6ba7cc8554d88dc4f5ae8eff4f15d4329165ac35723e0b1a28eedc347a8b6aa7"
+  },
+  "impostors.html": {
+    "original": "engine/world.html",
+    "bodySimilarity": 0.0227,
+    "changedBody": true,
+    "sha256": "62e8cd244b171a1fd2c9eed19b8ecc596ee7cabfd08cd3d6722098f9e9cf393c"
+  },
+  "surface-shadows.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0881,
+    "changedBody": true,
+    "sha256": "74a50ad9fc82624eaff80ea4c9d85f7d7e532ca6f36777a068b3f13f17da8ca2"
+  },
+  "color-lab.html": {
+    "original": "engine/portrait.html",
+    "bodySimilarity": 0.0681,
+    "changedBody": true,
+    "sha256": "a34cdf2d3b40e4cef5e0cf4af647a7c9bcfde2157558c2f5959e7a6c54da4395"
+  },
+  "reflection.html": {
+    "original": "bouncelab.html",
+    "bodySimilarity": 0.0243,
+    "changedBody": true,
+    "sha256": "04d77f09e3fc3a3ac4742b4435254d6b0f48c16f2696a02edc433dcade55a511"
+  },
+  "mirror.html": {
+    "original": "src/mirrordecor.js",
+    "bodySimilarity": 0.0184,
+    "changedBody": true,
+    "sha256": "1712fe505179d56d04083588d2e7ff5ad41d669d59e01a44c1d9ee5d2c683a1b"
+  },
+  "smoke.html": {
+    "original": "engine/worldmap.html",
+    "bodySimilarity": 0.0853,
+    "changedBody": true,
+    "sha256": "6c26b3513f3747582175f88b269833d7b4e7504bc81935f5bad0722a92eeb3d7"
+  },
+  "river-nav.html": {
+    "original": "engine/waterfall.js",
+    "bodySimilarity": 0.0607,
+    "changedBody": true,
+    "sha256": "85203b1b7afcbfe7e8807387e18e23bd5b68d3b998ab6eac02af1e804de4486b"
+  },
+  "leaf-surface.html": {
+    "original": "plantlab.html",
+    "bodySimilarity": 0.0358,
+    "changedBody": true,
+    "sha256": "9ae5e23c078cb739fa0c3bf97ebce5acfdfb076b4fdc1c6826a0db836db57952"
   },
   "coverage.html": {
     "original": "compare.html",
-    "bodySimilarity": 0.0921,
+    "bodySimilarity": 0.0878,
     "changedBody": true,
-    "sha256": "8c8c4f712028149ecfaee0730d56a237dc30002b37500e57b7b9ec13a4e6561f"
+    "sha256": "cbc6f08fb1ad6189831f6fe4c26d5b1639e89e871013a62a1a8badcae963e645"
+  },
+  "hierarchy.html": {
+    "original": "engine/mandala.html",
+    "bodySimilarity": 0.0288,
+    "changedBody": true,
+    "sha256": "1e8a11a1d3371ff51b23ec66e9c63ea313130b37179004cb0f35343cf1036e38"
+  },
+  "sediment.html": {
+    "original": "engine/texlab.html",
+    "bodySimilarity": 0.0398,
+    "changedBody": true,
+    "sha256": "8f43603643d7b4bd21c7bbf75e0c6339a0ef5e046fb0f1b8ddcf59fd186e45fb"
   },
   "grids.html": {
-    "original": "alivelab.html",
-    "bodySimilarity": 0.0375,
+    "original": "engine/world.html",
+    "bodySimilarity": 0.0219,
     "changedBody": true,
-    "sha256": "7838cc0fafd813f5cc76deb5c22820e195b5a3493d4c258cd8c6e41d72504459"
+    "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+  },
+  "overhang.html": {
+    "original": "flow.html",
+    "bodySimilarity": 0.064,
+    "changedBody": true,
+    "sha256": "3a8b4373ea629cca240588c11b0cb1ce40abe1bb5e3d297f071a76e9db29e3ce"
+  },
+  "scheduler.html": {
+    "original": "engine/mandala.html",
+    "bodySimilarity": 0.0569,
+    "changedBody": true,
+    "sha256": "498a4ef7de2c616526f5097a8c6ca9720c2c708205da274a69fabfc8c42fd124"
   },
   "planet.html": {
     "original": "engine/sphere.html",
-    "bodySimilarity": 0.0695,
+    "bodySimilarity": 0.0698,
     "changedBody": true,
-    "sha256": "dc9f038b7d1baac55e5e9dbab830768358f56135f237cbef873664cd4a4e68b9"
+    "sha256": "68b67bcdeda80547fe95494f8c033544ab4a9d54854d8af2f51ff40b813cbf8c"
+  },
+  "visibility.html": {
+    "original": "engine/gridmodes.html",
+    "bodySimilarity": 0.0422,
+    "changedBody": true,
+    "sha256": "32b214181ab217268b210b025b25fdddc9e1fc4665a220869d99779c5501f5c9"
   },
   "architecture.html": {
     "original": "overview.html",
@@ -41,29 +161,197 @@
     "changedBody": true,
     "sha256": "94b034d9dc53a7456ae8416b0b7bb2a01c3f79822167438410dba3bd373f193e"
   },
+  "clouds.html": {
+    "original": "tools/player.html",
+    "bodySimilarity": 0.0401,
+    "changedBody": true,
+    "sha256": "618aa1069cba2b8207fc7660b6693eef3905ca07a0cc436ef6db8fbe340c16fa"
+  },
+  "ornament.html": {
+    "original": "engine/ornament.html",
+    "bodySimilarity": 0.0276,
+    "changedBody": true,
+    "sha256": "7e4c342cfce95eb613c4987ce0ec4843fac49f0756a6bbf387b932bd2987555d"
+  },
+  "float.html": {
+    "original": "decolab.html",
+    "bodySimilarity": 0.0224,
+    "changedBody": true,
+    "sha256": "cc2a7459017460483141d76e962c41bfc8faa5225f4d8a2bb659c4a89e577450"
+  },
+  "blotches.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0829,
+    "changedBody": true,
+    "sha256": "71004bc369fedae7cdf59454f53ca51d523fa991fd710339978bea02f6cab7e6"
+  },
   "learn.html": {
     "original": "learn.html",
     "bodySimilarity": 0.978,
     "changedBody": true,
     "sha256": "07a285459f2f907c3d0fbd88b6446b40663443b4df257bf8b778177e1f554ecd"
   },
+  "qa-replay.html": {
+    "original": "src/palette.js",
+    "bodySimilarity": 0.0133,
+    "changedBody": true,
+    "sha256": "0c79c32b91933cdb98cb9995d335629be1d6def9c17ab8ec16425e781abe9c54"
+  },
   "ui.html": {
     "original": "engine/flags.js",
-    "bodySimilarity": 0.0136,
+    "bodySimilarity": 0.0096,
     "changedBody": true,
-    "sha256": "4f906623e230614e943d9b54c780dac75cab4ba3dbb6ac64f9032048f137352a"
+    "sha256": "b6a9b5107e7037033b9cce028a30cddad6bd86970d94f477888cde9586eab065"
+  },
+  "save-mesh.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.1077,
+    "changedBody": true,
+    "sha256": "e62d18b0dcf014c418861f77769ecb5244137e2a13ecf8591628155b2e9e238b"
+  },
+  "penumbra.html": {
+    "original": "src/penumbra.js",
+    "bodySimilarity": 0.0291,
+    "changedBody": true,
+    "sha256": "029ac2aa3e393c9eb16d0e749f129d6f06642277a02612e635c21433e9a438de"
+  },
+  "multicell.html": {
+    "original": "engine/terrain.html",
+    "bodySimilarity": 0.0491,
+    "changedBody": true,
+    "sha256": "6c006e610f5a877a2d424980f4cbe99de53b14a399a3f744f896faecacb5fa67"
+  },
+  "doodle.html": {
+    "original": "tools/player.html",
+    "bodySimilarity": 0.0407,
+    "changedBody": true,
+    "sha256": "d77226324fbbd9d5f966f9596fb4735cd65de36f6fdee3fdf45a1ea87c75168e"
+  },
+  "flow.html": {
+    "original": "flow.html",
+    "bodySimilarity": 0.0619,
+    "changedBody": true,
+    "sha256": "4cb9086cd5faf0d64cba78aa1141af3d2e33dc36d4be537b591d8a64e0af9fa6"
+  },
+  "fields.html": {
+    "original": "engine/surface.js",
+    "bodySimilarity": 0.0127,
+    "changedBody": true,
+    "sha256": "a814bb5ce9c73bebb32abef46b698a1111b9ee93a3dc8fedf2fb59f967cf4fc5"
+  },
+  "waves.html": {
+    "original": "overview.html",
+    "bodySimilarity": 0.0328,
+    "changedBody": true,
+    "sha256": "f1494004216d6e9c998c57300a2c2590328965d5077f2361f772571767e21a05"
+  },
+  "wall-palette.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0764,
+    "changedBody": true,
+    "sha256": "c54be07121d51605ac55f939450bd838aaa0f4a6e8c99e96a2ebaf27358201f5"
+  },
+  "snapshot.html": {
+    "original": "engine/blobs.html",
+    "bodySimilarity": 0.0931,
+    "changedBody": true,
+    "sha256": "d9b40df417bdf554518c8f1bfee7403c05dd67a696d5fbc4852c89e8508595c2"
+  },
+  "normal-contrast.html": {
+    "original": "engine/world.html",
+    "bodySimilarity": 0.0214,
+    "changedBody": true,
+    "sha256": "a533848a938cc759bbed7ba9f570fac53f750cdc035f6cfb68eaccfefea8caac"
+  },
+  "billboard-anchor.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.1028,
+    "changedBody": true,
+    "sha256": "dad20595f4638bf8f2816b4ebfe0c7e77e5e7158d5b171b80442e0fa8605a9de"
+  },
+  "unit-shadows.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0725,
+    "changedBody": true,
+    "sha256": "aa0d5b42474a4e9170bcdde32ac32996ff3abb2872c0c0458b58e7894e0f478b"
+  },
+  "palette-editor.html": {
+    "original": "engine/worldmap.html",
+    "bodySimilarity": 0.0672,
+    "changedBody": true,
+    "sha256": "81226fbf67a8fb3db46d60ed61e5e8b05c16ac35a42eb54a9c233bb05766c18a"
+  },
+  "atlas-live.html": {
+    "original": "src/rectpack.js",
+    "bodySimilarity": 0.0082,
+    "changedBody": true,
+    "sha256": "60fe9ace6a3f780e265b1c2a39dc16b60e504b8e2100f3af93e64d0a51508502"
+  },
+  "cage.html": {
+    "original": "engine/portrait.html",
+    "bodySimilarity": 0.0494,
+    "changedBody": true,
+    "sha256": "fa1682a07a2bd7d7950869a97f5bf5bf988032df9361442ac9845188b76e9e35"
+  },
+  "garden.html": {
+    "original": "engine/mandala.html",
+    "bodySimilarity": 0.0345,
+    "changedBody": true,
+    "sha256": "f9f6d33897aee8368632781a57a4ce5b9c34dfd84c5d0c297a49cf7805b44209"
+  },
+  "gridpatch.html": {
+    "original": "engine/portrait.html",
+    "bodySimilarity": 0.0475,
+    "changedBody": true,
+    "sha256": "9a7c04445d80863c286aca2249d40259474d92fc00a84a82b1b37e472d1c3ceb"
+  },
+  "sprites.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0864,
+    "changedBody": true,
+    "sha256": "8116efe07ce9ee9b844970e6d4c784aa78537fd3c34929962ad5efc7afb8c564"
+  },
+  "fire.html": {
+    "original": "engine/worldmap.html",
+    "bodySimilarity": 0.1083,
+    "changedBody": true,
+    "sha256": "13323f1c6cef941ec34a9f7b87fafb7e1598385eb496959471c66f3a626fe956"
+  },
+  "adjacency.html": {
+    "original": "tools/measure.html",
+    "bodySimilarity": 0.0472,
+    "changedBody": true,
+    "sha256": "8d1ee6ec76276063a6bc05e6435e03b64f4d548212a3146475edefae3bae5b2a"
+  },
+  "wake-fog.html": {
+    "original": "tools/player.html",
+    "bodySimilarity": 0.0381,
+    "changedBody": true,
+    "sha256": "8a146602066324698986f1ae7ca01f16f7e58027173808862b72006990139f50"
+  },
+  "contour.html": {
+    "original": "gridpatchlab.html",
+    "bodySimilarity": 0.0962,
+    "changedBody": true,
+    "sha256": "64cfc6c3e7ef333375b88e3f1cf0808b754c86a2e5cd86705b74e210fba0120b"
   },
   "campaign.html": {
-    "original": "src/grouping.js",
-    "bodySimilarity": 0.0103,
+    "original": "src/campaignmap.js",
+    "bodySimilarity": 0.0171,
     "changedBody": true,
-    "sha256": "eb3839ce225f2bf237463d4b9c61eee8235a3d27d01446730ae43b15caf3414a"
+    "sha256": "2a983e6e41e60e5059cf38f1ec3990607d31c9cd2cb5d4a8de0aadcacaf8c3ee"
   },
   "navigation.html": {
     "original": "engine/cheese.html",
-    "bodySimilarity": 0.0708,
+    "bodySimilarity": 0.0706,
     "changedBody": true,
-    "sha256": "616c2af4f57160fc55aceb3d7ed6dd2cd3a9738bc4b0411d38e07154e3269d66"
+    "sha256": "98173d1a22d2c5a18224c17a77f9c714c8fd77ddf1513c0a0381534115305656"
+  },
+  "src/ui/environment-panel.js": {
+    "original": "engine/unitbatch.html",
+    "bodySimilarity": 0.0235,
+    "changedBody": true,
+    "sha256": "a8a789d7413230d4a07aa274f661abd41640013ec03d5ea88f7d814d8a0f4959"
   },
   "src/ui/walkthrough.js": {
     "original": "plantlab.html",
@@ -77,23 +365,71 @@
     "changedBody": true,
     "sha256": "e1db703431e8661fa14f4a420653cf285bbccef3e16b6b9d551a170fb64d0d5d"
   },
-  "src/ui/coverage-progress.js": {
-    "original": "tools/player.html",
-    "bodySimilarity": 0.0336,
+  "src/ui/house-project.js": {
+    "original": "src/edgesmooth.js",
+    "bodySimilarity": 0.0223,
     "changedBody": true,
-    "sha256": "8bac4ebd29d930ed4a4e108a41054db4fec43c708a434889aab3009c5883ab31"
+    "sha256": "1c3c0eb0cdd5334620a157e670a4ee47bc69b26eb1d6ab81b4579d9fd766b313"
+  },
+  "src/ui/ornament.js": {
+    "original": "engine/ornament.js",
+    "bodySimilarity": 0.0211,
+    "changedBody": true,
+    "sha256": "3130a85dc4e8ee2e25d824ba430ee5609ffbe44987b3cfc18c769cba8dbb4c41"
+  },
+  "src/ui/icon-toolbar.js": {
+    "original": "src/uikit.js",
+    "bodySimilarity": 0.0259,
+    "changedBody": true,
+    "sha256": "b31e9c95eae13f287fb17f3af807be2d03d23d84dab5882e8464eb98f09d5d0e"
+  },
+  "src/ui/coverage-progress.js": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0384,
+    "changedBody": true,
+    "sha256": "d2d565c916d0d31d415629e6e83008b69fcdaf8fb6d4b5a8808338059b69db0f"
   },
   "src/ui/learnpanel.js": {
     "original": "src/learnpanel.js",
-    "bodySimilarity": 0.7274,
+    "bodySimilarity": 0.7246,
     "changedBody": true,
-    "sha256": "ba23f500172e04bd5b893e2261f3c30ef750663fcbbe71d7ee0d4cad5ae20803"
+    "sha256": "5c418a79d2c7254701790b9c5819206f2b7419bcd13f429073d7be3caf4c4c0a"
+  },
+  "src/ui/flow-markers.js": {
+    "original": "flow.html",
+    "bodySimilarity": 0.0273,
+    "changedBody": true,
+    "sha256": "a20a2a0c73210d65232e95509f5fa2ceed2c962ceffe7d18aa2af074a6f4ea14"
   },
   "src/tools/objexport.js": {
-    "original": "src/march.js",
-    "bodySimilarity": 0.0636,
+    "original": "engine/rivers.js",
+    "bodySimilarity": 0.0247,
     "changedBody": true,
-    "sha256": "efcf3c99573ddde0dd3af6934d311872d73ac95d8d8d72023d991446c14afd23"
+    "sha256": "3bbd635fe0244f9d908dc9dea31d7b3b0e7550c6707eda8fcbaf6878b9b768c4"
+  },
+  "src/tools/mesh-audit.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0837,
+    "changedBody": true,
+    "sha256": "1a7f19629a36153e1ef76857dc2ffa6f476c732410ee61534a8a2319d3349930"
+  },
+  "src/core/mirror-uv.js": {
+    "original": "src/mirrordecor.js",
+    "bodySimilarity": 0.035,
+    "changedBody": true,
+    "sha256": "5e8d5a4be3b96bc6996648ba79034afc8b901721bb0bfca035656250b2466718"
+  },
+  "src/core/ornament-field.js": {
+    "original": "src/dfgrow.js",
+    "bodySimilarity": 0.0467,
+    "changedBody": true,
+    "sha256": "ba54b213a48b683b6878acdafe1859d73569b0a01c458dea1ac5a6b340228315"
+  },
+  "src/core/combat-state.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0225,
+    "changedBody": true,
+    "sha256": "76eb875e05641cd79773b5c3763818e22008c8ab825370cca1cb7078a10419fe"
   },
   "src/core/spatial.js": {
     "original": "src/barycentric.js",
@@ -103,9 +439,51 @@
   },
   "src/core/palette.js": {
     "original": "src/townmesh.js",
-    "bodySimilarity": 0.0348,
+    "bodySimilarity": 0.0346,
     "changedBody": true,
-    "sha256": "0039e60e545ee4c634a02f3a41ce6b31564c3dd94e2c4200d427b12c7096efa9"
+    "sha256": "5a476ab77c80c9515725e2f4f0f34e99494b2139c2af543eef0baa23f7e45652"
+  },
+  "src/core/minheap.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0341,
+    "changedBody": true,
+    "sha256": "7c0e8836580541fc7d6db55f1ce219ad70f5e3b83dacc1955a823c32cb7dce09"
+  },
+  "src/core/voxel-ray.js": {
+    "original": "engine/bncanopy.js",
+    "bodySimilarity": 0.0368,
+    "changedBody": true,
+    "sha256": "f715afbd3f64e3e0b8fc6f6ac42ff903a0e1429acd488ffbba3d94bf85884762"
+  },
+  "src/core/platform-anchor.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0465,
+    "changedBody": true,
+    "sha256": "fb1c37bdd5a4011711e9bfcc61b42749c84054b735d0b3757f445bb449082087"
+  },
+  "src/core/coroutine.js": {
+    "original": "src/coroutine.js",
+    "bodySimilarity": 0.021,
+    "changedBody": true,
+    "sha256": "7abe00db49ea2d62baee7211f9611ba8a8484352530d4bce7bed5491b017f09b"
+  },
+  "src/core/ui-reveal.js": {
+    "original": "src/uikit.js",
+    "bodySimilarity": 0.0311,
+    "changedBody": true,
+    "sha256": "49c27378c7f41a76576becece4a7bee6c25fa747767964bd4910cbfc9be3e29e"
+  },
+  "src/core/smoke-order.js": {
+    "original": "src/smokefx.js",
+    "bodySimilarity": 0.0148,
+    "changedBody": true,
+    "sha256": "f6dc82b6b11f37a902dbb4575437e1bd2e7a6769336ee1b8ad3ffa466c9e4814"
+  },
+  "src/core/world-probes.js": {
+    "original": "src/lightingcache.js",
+    "bodySimilarity": 0.0241,
+    "changedBody": true,
+    "sha256": "3a5115198f7295c647a5c03d799d9608b0f3a72a47fe2c17c34dadaff46c2846"
   },
   "src/core/obb.js": {
     "original": "src/boxtest.js",
@@ -119,11 +497,95 @@
     "changedBody": true,
     "sha256": "2f5e07963679d6f76c2e468aec4d822a5357d7d91bf5a2978b60c28c5eea6c9e"
   },
-  "src/core/grid.js": {
-    "original": "src/grid.js",
-    "bodySimilarity": 0.096,
+  "src/core/unit-shadow.js": {
+    "original": "src/blobshadow.js",
+    "bodySimilarity": 0.0281,
     "changedBody": true,
-    "sha256": "a7619eccb0e1543460d3a4e49042195498e27a46a137ecb2e0ffef3faa0b3908"
+    "sha256": "829b879ed171ee2fd7a8b9dcb3f136d92f65e2c175ac65596bb5bb425be55396"
+  },
+  "src/core/voxel-distance.js": {
+    "original": "src/paintnormal.js",
+    "bodySimilarity": 0.0309,
+    "changedBody": true,
+    "sha256": "37666f8f98cad628153d9694d87a3200336a5bd62f51e71e723a8ccd17af9917"
+  },
+  "src/core/grid.js": {
+    "original": "src/tileforce.js",
+    "bodySimilarity": 0.0412,
+    "changedBody": true,
+    "sha256": "8276f979671a438ceac79643ecd26a00efde21a5c546d5871f4144560a1f443d"
+  },
+  "src/core/campaign-graph.js": {
+    "original": "src/campaignmap.js",
+    "bodySimilarity": 0.022,
+    "changedBody": true,
+    "sha256": "9f4032c1c3a8f3e41ff6306663dd78963fa1107325796a22f0bc9056052e7129"
+  },
+  "src/core/leaf-atlas.js": {
+    "original": "plantlab.html",
+    "bodySimilarity": 0.0157,
+    "changedBody": true,
+    "sha256": "2324860db2900db1d5e7a7598fde4a8e2f33c3f925368444289b75e877e9b03d"
+  },
+  "src/core/shore-profile.js": {
+    "original": "engine/reflection.js",
+    "bodySimilarity": 0.0269,
+    "changedBody": true,
+    "sha256": "da37ab90e4bee055dea9204a07c37eb334be67f86368d198586da996a6f10c59"
+  },
+  "src/core/deformation-guard.js": {
+    "original": "src/dual.js",
+    "bodySimilarity": 0.0354,
+    "changedBody": true,
+    "sha256": "794658423c7e5f565c4e219bbf240585d697de7b0050854d38bf5ee5327ec14b"
+  },
+  "src/core/color-volume.js": {
+    "original": "src/colorgamut.js",
+    "bodySimilarity": 0.0276,
+    "changedBody": true,
+    "sha256": "788b290a48bc5037bf3b5ce48cc4a2e1607bb61ac9cd95ea3de07919c3838eb5"
+  },
+  "src/core/nav-visibility.js": {
+    "original": "engine/los.js",
+    "bodySimilarity": 0.0241,
+    "changedBody": true,
+    "sha256": "ee103f91836c8237f94371d2134ffce1154be3ec4f621d5ff601d07df7d88b34"
+  },
+  "src/core/wfc.js": {
+    "original": "engine/repair.html",
+    "bodySimilarity": 0.023,
+    "changedBody": true,
+    "sha256": "0e2eba4d6f820ac6ff97292b4156dbf6ab1543b8208f5eaf0f8f408f30101beb"
+  },
+  "src/core/fog-envelope.js": {
+    "original": "engine/reflection.js",
+    "bodySimilarity": 0.0221,
+    "changedBody": true,
+    "sha256": "2187b9d7324b4b9404b6159092323a92a91e118c69043d51541809d7267b8ddf"
+  },
+  "src/core/part-random.js": {
+    "original": "src/portrait.js",
+    "bodySimilarity": 0.0091,
+    "changedBody": true,
+    "sha256": "830cafcc112198cf2e746e1df5d974180fa2111ff3fa1c51a6c93b7fa46f5811"
+  },
+  "src/core/sprite-ambiguity.js": {
+    "original": "src/dirsprites.js",
+    "bodySimilarity": 0.0469,
+    "changedBody": true,
+    "sha256": "3806cc7063524a937e92067bf8e0b14b56735cf0a7cf6f7f6ea34f5bae3a2379"
+  },
+  "src/core/wire-route.js": {
+    "original": "engine/voxelshadow.js",
+    "bodySimilarity": 0.0338,
+    "changedBody": true,
+    "sha256": "3a6e0424135d19b940a4783c38e72ef0426fb6cc185987be5ca3cfcb86c68880"
+  },
+  "src/core/mountain-bake.js": {
+    "original": "src/mountainlight.js",
+    "bodySimilarity": 0.0186,
+    "changedBody": true,
+    "sha256": "d0158ed523de886722c7b35c7cae79cef976b56cd819dc397f720e099d235a9f"
   },
   "src/core/infinite.js": {
     "original": "src/quadgrid.js",
@@ -131,17 +593,209 @@
     "changedBody": true,
     "sha256": "30f0e555bfe429c4aaa3842d1640c2483984711c7e9b357924e1d7827ecd79ff"
   },
-  "src/core/atlas.js": {
-    "original": "engine/spritepack.js",
-    "bodySimilarity": 0.0384,
+  "src/core/qa-replay.js": {
+    "original": "src/palette.js",
+    "bodySimilarity": 0.0335,
     "changedBody": true,
-    "sha256": "da032ab66eb5ef6302d99046ce2d4c74b901a253a0454840d7dba193b92aea8c"
+    "sha256": "427e98341ae1ddb9866dba2787a0e6b25699439376098d72e1d16b4211108e27"
+  },
+  "src/core/contrast-field.js": {
+    "original": "src/storydatum.js",
+    "bodySimilarity": 0.04,
+    "changedBody": true,
+    "sha256": "a203e15d6d45f0f4744db7ded4921c190e9a4a41d5a1dd5885eb3314c968569e"
+  },
+  "src/core/penumbra.js": {
+    "original": "src/penumbra.js",
+    "bodySimilarity": 0.0318,
+    "changedBody": true,
+    "sha256": "fd19d7a01a5b8816e6cab8029c2fc4c90148ea0562e8868f5a8a079d21db2f58"
+  },
+  "src/core/palette-patch.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0353,
+    "changedBody": true,
+    "sha256": "54379de28eb2498e9f0ed93a45accdfd5aa5f5a519fe9140cb84093bfe4fa6eb"
+  },
+  "src/core/playful-layout.js": {
+    "original": "src/uikit.js",
+    "bodySimilarity": 0.0862,
+    "changedBody": true,
+    "sha256": "673070479a65ca2dcab0137c1be95c1b02ad36890bf6b03090adf678da6b948f"
+  },
+  "src/core/combat-profile.js": {
+    "original": "src/combatfx.js",
+    "bodySimilarity": 0.0192,
+    "changedBody": true,
+    "sha256": "41e38050896e25949cdf09bf6c1076809ecdeae0ab38515d21a2f6ea311bb450"
+  },
+  "src/core/camera-motion.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0365,
+    "changedBody": true,
+    "sha256": "ad0f0c1779d59fd55c214f7b7611c1702922bd603daa56a2dee349090177981b"
+  },
+  "src/core/atlas.js": {
+    "original": "src/rectpack.js",
+    "bodySimilarity": 0.0181,
+    "changedBody": true,
+    "sha256": "68089f4e608b4ee642d81f5b8c1e0a4e8c3afc9064f92badb81e16c998a7dace"
+  },
+  "src/core/rock-topology.js": {
+    "original": "src/march.js",
+    "bodySimilarity": 0.0333,
+    "changedBody": true,
+    "sha256": "7835134fcf91cf5057edc5dd9b1a027c3a1a91ae7ed85de712f777a94ce2a92d"
+  },
+  "src/core/sediment.js": {
+    "original": "src/wobbletex.js",
+    "bodySimilarity": 0.0239,
+    "changedBody": true,
+    "sha256": "5b7da94632b34bf8c8f882b831ea6d4a077434ddf188fdf3d0a420678f4a6889"
+  },
+  "src/core/wave-cycle.js": {
+    "original": "engine/noise.js",
+    "bodySimilarity": 0.0297,
+    "changedBody": true,
+    "sha256": "a9a03399574437dd69ab5b25bebdf07f77ffe50a910d5bb7728d99777f79353a"
+  },
+  "src/core/frontier.js": {
+    "original": "src/borderpath.js",
+    "bodySimilarity": 0.0349,
+    "changedBody": true,
+    "sha256": "8265765746a2189d90c8b3a74dab4b3b3f998015e709effe09266374234d6321"
+  },
+  "src/core/banner.js": {
+    "original": "engine/flags.js",
+    "bodySimilarity": 0.014,
+    "changedBody": true,
+    "sha256": "3d674684f4a384c5a706175beb3575a0f1546146525702733d1e913a811ce241"
+  },
+  "src/core/module-search.js": {
+    "original": "src/tileforce.js",
+    "bodySimilarity": 0.0238,
+    "changedBody": true,
+    "sha256": "80efb73d04436c48ff5514418590a9e74a5cc729412f02228ef183bb5b6783cf"
+  },
+  "src/core/snapshot-replay.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0164,
+    "changedBody": true,
+    "sha256": "b8b28fa398e66e34575bb249d4c0a7cd2c78aa1eb8638e5f8a4dd89d411720ab"
+  },
+  "src/core/courtyards.js": {
+    "original": "src/demo.js",
+    "bodySimilarity": 0.0308,
+    "changedBody": true,
+    "sha256": "722c9d0f0dfce88acd64438d7e8e49a4eca1d4bf490ed926a4d21b4252abeb7f"
+  },
+  "src/core/contour.js": {
+    "original": "src/march.js",
+    "bodySimilarity": 0.0817,
+    "changedBody": true,
+    "sha256": "f664f3b41aca3b3288573eeb9790b132f932781c5f467f1c2745d891d1836156"
+  },
+  "src/core/spear-thrust.js": {
+    "original": "src/coroutine.js",
+    "bodySimilarity": 0.0222,
+    "changedBody": true,
+    "sha256": "18d6154e3018a3d80e1c9408f22ce6198ef80cf3debf1eae66dde882182299f9"
+  },
+  "src/core/module-audit.js": {
+    "original": "src/tileforce.js",
+    "bodySimilarity": 0.0107,
+    "changedBody": true,
+    "sha256": "3a9579f1b2fc37431fb0906e69b099022ba3a94876511b66854411899b1a903c"
+  },
+  "src/core/doodle-layout.js": {
+    "original": "src/doodlewall.js",
+    "bodySimilarity": 0.0221,
+    "changedBody": true,
+    "sha256": "d354545fb65031433f260d903f51c3bcefebe79a6bd7c0825d08c8a3966003ea"
+  },
+  "src/core/edge-inset.js": {
+    "original": "engine/bncanopy.js",
+    "bodySimilarity": 0.044,
+    "changedBody": true,
+    "sha256": "51eae500a1323d6373f5852b031e053dd76515047ff08dba2f16ef9850578ea8"
+  },
+  "src/core/frontier-candidates.js": {
+    "original": "src/frontier.js",
+    "bodySimilarity": 0.0346,
+    "changedBody": true,
+    "sha256": "5b59c12ef59fe8368a02111037dcc94382a1df83dc15fe0e8816cfa180586ed6"
   },
   "src/core/meshwriter.js": {
-    "original": "src/patchblend.js",
-    "bodySimilarity": 0.0228,
+    "original": "src/townmesh.js",
+    "bodySimilarity": 0.0302,
     "changedBody": true,
-    "sha256": "4ee6745fe959736a8560297553b45f15710c2affa6cdbc708e451a416f2dd06e"
+    "sha256": "d009008cfd020b07738c2a1dc7107cb4fbff1b8369aeafa7a267b06c4360858e"
+  },
+  "src/core/radial-patch.js": {
+    "original": "src/gridpatch.js",
+    "bodySimilarity": 0.0397,
+    "changedBody": true,
+    "sha256": "e2073478678bcf58c7fab1bd532ae2e7de284b865c2521397fbdec6e4700685a"
+  },
+  "src/core/module-fit.js": {
+    "original": "decolab.html",
+    "bodySimilarity": 0.0203,
+    "changedBody": true,
+    "sha256": "dd9cc7adca271c99c4891c20ee37283a1ed327949928b9e9fd9b96821be7d8a2"
+  },
+  "src/core/canopy.js": {
+    "original": "src/blobrelax.js",
+    "bodySimilarity": 0.0466,
+    "changedBody": true,
+    "sha256": "395028bbe2a302306ab681c658010dc928dd05ff42d61233a3562dc16cc08e34"
+  },
+  "src/core/region-groups.js": {
+    "original": "src/grouping.js",
+    "bodySimilarity": 0.0145,
+    "changedBody": true,
+    "sha256": "ba7f04b974194cf8bdf09bc21a8055ac79559a9190533ccc7f3f895f7e30ac01"
+  },
+  "src/core/anchored-billboard.js": {
+    "original": "engine/impostor.js",
+    "bodySimilarity": 0.0088,
+    "changedBody": true,
+    "sha256": "3ac2d5b520c53062e51d0935f6134ad599ed5d9369acc72a53c555c374cb6f76"
+  },
+  "src/core/vertex-dual.js": {
+    "original": "src/dual.js",
+    "bodySimilarity": 0.0273,
+    "changedBody": true,
+    "sha256": "1c0f835e5bf3442f38cc3d478db0029264329fc10887a992e679f11adca108e2"
+  },
+  "src/core/cube-height.js": {
+    "original": "engine/reflection.js",
+    "bodySimilarity": 0.0385,
+    "changedBody": true,
+    "sha256": "4ef20ed23ca76693ab81bdf69228446dded1aa8f9ba582107e8a869a6867336d"
+  },
+  "src/core/adjacency.js": {
+    "original": "src/adjacency.js",
+    "bodySimilarity": 0.073,
+    "changedBody": true,
+    "sha256": "c90f66e56b048b52b5addf1af19ef6598525dcbfdf527c5f7b631fea62b74ff8"
+  },
+  "src/core/normal-contrast.js": {
+    "original": "engine/outline.js",
+    "bodySimilarity": 0.0116,
+    "changedBody": true,
+    "sha256": "aaf681a836844b759a35663e5a31ba25e726a5b8143730c7b5541485af7989a0"
+  },
+  "src/core/module-patch.js": {
+    "original": "decolab.html",
+    "bodySimilarity": 0.023,
+    "changedBody": true,
+    "sha256": "e899936775f73373ad892cb0bafd94de051643378f6285f1745edac470f7ab4c"
+  },
+  "src/core/wake-sampling.js": {
+    "original": "engine/reflection.js",
+    "bodySimilarity": 0.0244,
+    "changedBody": true,
+    "sha256": "401987aa5b9aa755371b2921658a6f7f14b111e27d1bd252bd2dab4bf7234566"
   },
   "src/core/noise.js": {
     "original": "engine/noise.js",
@@ -149,23 +803,53 @@
     "changedBody": true,
     "sha256": "b79b31dad5e4f0df599cf1ce7886d75f0b10a44d6ad6eb163ac75ac4199d3498"
   },
+  "src/core/shore-loops.js": {
+    "original": "src/dual.js",
+    "bodySimilarity": 0.0748,
+    "changedBody": true,
+    "sha256": "e7e917335dac16176e9bc7293c4a6413013be5f00e0c1e3d00ec64c92c2f1d36"
+  },
+  "src/core/texel-skip.js": {
+    "original": "engine/surface.js",
+    "bodySimilarity": 0.0141,
+    "changedBody": true,
+    "sha256": "78de575670dc414036b9432d84a32bce9392dda14e10827e6e4a9e1715077eb3"
+  },
+  "src/core/garden-paths.js": {
+    "original": "src/edgeplant.js",
+    "bodySimilarity": 0.0294,
+    "changedBody": true,
+    "sha256": "3c65e95fe746f692fb02b80315e532ce88ac5d08e7e88811d7ea79e3942c2c0b"
+  },
   "src/core/trigraph.js": {
     "original": "engine/sphere.js",
-    "bodySimilarity": 0.0463,
+    "bodySimilarity": 0.0376,
     "changedBody": true,
-    "sha256": "1eb26a6e8af2b65c34bff2c72e9cfd6edf3199046290a0b2e41cfd3de89ec232"
+    "sha256": "868f4458cec7f8d7b6d67830f0ceb35c9da23713b2ac11eb6bbc947e71bbaa9a"
+  },
+  "src/water/reflection.js": {
+    "original": "engine/reflection.js",
+    "bodySimilarity": 0.0491,
+    "changedBody": true,
+    "sha256": "df076315939147a7f45a1ff7fb5c44e66efee72a8d1c0aef4012239adeeaf876"
   },
   "src/water/shore.js": {
     "original": "src/shore.js",
-    "bodySimilarity": 0.9848,
+    "bodySimilarity": 0.6912,
     "changedBody": true,
-    "sha256": "d4798b6bd112948d181c308295436d06e64fbe966d1d445dbd54607304e181e2"
+    "sha256": "0ab4472edd71e8557d180a291d444440fc4a882639159c7b6e587d62d59e678f"
   },
   "src/water/watervol.js": {
     "original": "engine/watervol.js",
-    "bodySimilarity": 0.0455,
+    "bodySimilarity": 0.0546,
     "changedBody": true,
-    "sha256": "b65306e3721bb6e02ebe5532a318977ee1ba396f944dfd5ee053f5ec11349324"
+    "sha256": "567d2096cc612241b7283d6ffebe2ee2540d4ced5093c7586ab1ae1623de17f8"
+  },
+  "src/water/land-distance.js": {
+    "original": "engine/backlit.js",
+    "bodySimilarity": 0.0257,
+    "changedBody": true,
+    "sha256": "fc40a96221ad30c8252e87a5906fc56d279678d0a16083a21a65d7fd04b60170"
   },
   "src/water/waterfall.js": {
     "original": "engine/waterfall.js",
@@ -173,17 +857,29 @@
     "changedBody": true,
     "sha256": "71c7bd4d0b12934a0e248e1de1a16d238a01bc09b0c5eb38ee43dc11ccc994bc"
   },
+  "src/world/penumbra-layer.js": {
+    "original": "engine/watervol.js",
+    "bodySimilarity": 0.0473,
+    "changedBody": true,
+    "sha256": "aac59fbcc9ee2bae4947cc2cb65c034e63137d159ce2b820228e569b11a350c6"
+  },
+  "src/world/island-snapshot.js": {
+    "original": "engine/surface.js",
+    "bodySimilarity": 0.0193,
+    "changedBody": true,
+    "sha256": "604753afc959ef6dd9825e6317091c2850d00d1b644391e36250c68dfab354b7"
+  },
   "src/world/save.js": {
     "original": "src/save.js",
-    "bodySimilarity": 0.212,
+    "bodySimilarity": 0.1409,
     "changedBody": true,
-    "sha256": "45887c33d6280d5a3250ad150f0ee49e5442ec9555fa30b240a91eb5e7406ed7"
+    "sha256": "8866fb5c2bb413a7249fe3bb48ad749e1734b5100ad00bb7eb9158d20a1fa675"
   },
   "src/world/navgraph.js": {
     "original": "src/surfacedeco.js",
-    "bodySimilarity": 0.0157,
+    "bodySimilarity": 0.0153,
     "changedBody": true,
-    "sha256": "4e0a777b6ba710bc775173cdae607e8a98edb63281ca3e1707309f999da0bf6c"
+    "sha256": "9e2f992ffd4a2345a157295a185b7d6d4245c5bb74dbf82c7cc5204bdea222af"
   },
   "src/world/navlayer.js": {
     "original": "src/frontier.js",
@@ -193,15 +889,21 @@
   },
   "src/world/worldmesh.js": {
     "original": "src/townmesh.js",
-    "bodySimilarity": 0.0279,
+    "bodySimilarity": 0.0303,
     "changedBody": true,
-    "sha256": "cde1e69e247ded77a1e706f3cacb24caedaf28bcef3dfd84da4f63096039db3e"
+    "sha256": "c5662889453cb0fb6fa2607259cab49bcd6ae1608e6131f17b6f24b178c0c6f0"
+  },
+  "src/world/contour-overlay.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.1123,
+    "changedBody": true,
+    "sha256": "520fb51b9debe75bd1197607935931126ad70d57fe151924147ca2e8a93e4b6b"
   },
   "src/world/view.js": {
     "original": "src/scene.js",
-    "bodySimilarity": 0.4976,
+    "bodySimilarity": 0.3224,
     "changedBody": true,
-    "sha256": "ef940d04551fa194dd037e6bc5a46300e1c8f815cecbfc69b8953b50fd64f611"
+    "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
   },
   "src/world/outline.js": {
     "original": "engine/backlit.js",
@@ -209,11 +911,17 @@
     "changedBody": true,
     "sha256": "5235eaf9f2f8be527d375a094a232181407ddc9578e1a1d28394d7b2e901a10d"
   },
-  "src/world/layerednav.js": {
-    "original": "src/navgrid.js",
-    "bodySimilarity": 0.046,
+  "src/world/doodle-overlay.js": {
+    "original": "engine/hallway.html",
+    "bodySimilarity": 0.0455,
     "changedBody": true,
-    "sha256": "b3fc905b0f1b7d0e2c62a5603559d01ebd68e71fe3aee854ea7ae7a394df5e9c"
+    "sha256": "e3da21b0400ede662998e6f893d4e85fecc77b614b67bb94840255ed44d1e5ab"
+  },
+  "src/world/layerednav.js": {
+    "original": "src/holenav.js",
+    "bodySimilarity": 0.0376,
+    "changedBody": true,
+    "sha256": "3536acb68465ffe356a952c7efa52523f139d3b89ce2212de27f0474ff45af36"
   },
   "src/world/townDemo.js": {
     "original": "src/demo.js",
@@ -221,41 +929,71 @@
     "changedBody": true,
     "sha256": "bff7742dc1b58a0304194e75caae977483f5182bd36d072230d2946987bcf91a"
   },
+  "src/world/float-probe.js": {
+    "original": "src/floatprobe.js",
+    "bodySimilarity": 0.2668,
+    "changedBody": true,
+    "sha256": "71483f2c9f35d0193efb404e6b537a84c5083fc80a051d5f3aada2f52250c6ea"
+  },
+  "src/world/visibility.js": {
+    "original": "engine/los.js",
+    "bodySimilarity": 0.062,
+    "changedBody": true,
+    "sha256": "2929429695af29dbb8ebfd75ccb5b1e9de2824d2726299122ea5d571855c5832"
+  },
   "src/world/app.js": {
     "original": "src/app.js",
-    "bodySimilarity": 0.4346,
+    "bodySimilarity": 0.4029,
     "changedBody": true,
-    "sha256": "bea22fd7aa951d030b1ff52919529843f616e6da7edf4dfe9d50480ea8ea5113"
+    "sha256": "6ffa86bb5501fec96e22e5064a29c30aa303e424ad4540fa8dcb3b34c8f15cd0"
+  },
+  "src/world/vertex-dual-overlay.js": {
+    "original": "src/dual.js",
+    "bodySimilarity": 0.0196,
+    "changedBody": true,
+    "sha256": "19be7c55f54398e366c3846e3ec03041c41275eb30f45f115115697afa66341f"
   },
   "src/world/scenes.js": {
     "original": "src/spherehouse.js",
-    "bodySimilarity": 0.0341,
+    "bodySimilarity": 0.0327,
     "changedBody": true,
-    "sha256": "9bf6e33e4e6410634282c0497c254794d2c92943b6f13998add911933276dfae"
+    "sha256": "d55c4dd400f232e500ccf8ab64dbd8b137a186ce68256bbae6fc1ec948e12508"
   },
   "src/world/traffic.js": {
     "original": "src/traffic.js",
-    "bodySimilarity": 0.0755,
+    "bodySimilarity": 0.0286,
     "changedBody": true,
-    "sha256": "9d96509014e881f8698f4320d039a4bf89409eaae0a95ef18043fb2535c448bc"
+    "sha256": "c297f78047aebe3e0f86c67c8f2c125e88eeac91174c96197630ef431c01780d"
+  },
+  "src/world/battle-navigation.js": {
+    "original": "src/holenav.js",
+    "bodySimilarity": 0.0243,
+    "changedBody": true,
+    "sha256": "f3ce06a3aff4af417a4ba71f27ea4df87b96da82d1ab8b557bee2918ef57fc91"
   },
   "src/sphere/planet.js": {
     "original": "src/spheretown.js",
-    "bodySimilarity": 0.0261,
+    "bodySimilarity": 0.0237,
     "changedBody": true,
-    "sha256": "e33428e4d925915021069b9a7ded266cc110589902e00eb06ef7b6a1e2e45b1b"
+    "sha256": "6eaf61ea2f89267b3b2c2a8d319b029a5f185be484e5033d3dc1d3a832d2cc1b"
   },
   "src/life/boats.js": {
-    "original": "engine/waterfall.js",
-    "bodySimilarity": 0.0723,
+    "original": "src/wake.js",
+    "bodySimilarity": 0.0215,
     "changedBody": true,
-    "sha256": "de43798b804c65b236bcf4ea2ad7bd86199270aaaa0352ec1def12b8890652f4"
+    "sha256": "ef9942450f53545a9e8e0475a584fe5bcaf696aaa40676b410d7ce4fe219602c"
+  },
+  "src/life/unit-sprites.js": {
+    "original": "src/dirsprites.js",
+    "bodySimilarity": 0.0107,
+    "changedBody": true,
+    "sha256": "0151d9508f64e956082e75535426bbfd0be8d2af372d8b94bfe0e5a037897631"
   },
   "src/life/effects.js": {
-    "original": "engine/blendlab.html",
-    "bodySimilarity": 0.0426,
+    "original": "smokelab.html",
+    "bodySimilarity": 0.0479,
     "changedBody": true,
-    "sha256": "eeddc232023fa4f69ce40e2c989465e055f5b3de94191d5a18456d95707cbd98"
+    "sha256": "097280b35d27140407fb6b833d4ec4569bc074068c405df2bf778a4e40e2fafd"
   },
   "src/life/sound.js": {
     "original": "engine/waterfall.js",
@@ -271,39 +1009,57 @@
   },
   "src/life/decor.js": {
     "original": "engine/butterflies.js",
-    "bodySimilarity": 0.0377,
+    "bodySimilarity": 0.0386,
     "changedBody": true,
-    "sha256": "d999397ac15f142ca8eaa1d1b9cfb5c0eac218dc9eb813f988d619311cb1a7fb"
+    "sha256": "5cba0d00dbd7b2a6eb8cd84fbb972d260ed024e13d8a412f115b58183d832dd0"
   },
   "src/life/vegetation.js": {
     "original": "engine/world.html",
-    "bodySimilarity": 0.0294,
+    "bodySimilarity": 0.0281,
     "changedBody": true,
-    "sha256": "6bb2fd1d67a2858eaa6fefc2a191146d69a6d85c47edfded4bfdbf5a5996a6d9"
+    "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
   },
   "src/life/smoke.js": {
-    "original": "src/quadtex.js",
-    "bodySimilarity": 0.0262,
+    "original": "src/smokefx.js",
+    "bodySimilarity": 0.0948,
     "changedBody": true,
-    "sha256": "455c50d5ebb6d0722110093eb659b32c76c5efc0c11e11a3e66367788ca69322"
+    "sha256": "0331e960bcd4f2ff3657bc408e9078379b5edd5224329bdbc7079067b3a638c0"
+  },
+  "src/life/banner.js": {
+    "original": "engine/flags.js",
+    "bodySimilarity": 0.0353,
+    "changedBody": true,
+    "sha256": "ffd78cebae81a170a0dc61a930858ed247dc1419d1d080bb306ea50500669aca"
+  },
+  "src/life/unit-shadow-batch.js": {
+    "original": "engine/backlit.js",
+    "bodySimilarity": 0.1233,
+    "changedBody": true,
+    "sha256": "6bc7a00dfab71361e1660f0e415c90e4fde15120c92a8da0d27635657b0cedbf"
   },
   "src/life/atmosphere.js": {
     "original": "engine/impostor.js",
-    "bodySimilarity": 0.0459,
+    "bodySimilarity": 0.0436,
     "changedBody": true,
-    "sha256": "ebbcc5992f73f27affb1a2827e015decbe785517eba21a2cbf3e82b17de0b32c"
+    "sha256": "ce10f6f82c417237b966c9efa0d5e8432736045d8115fe57b0a9fe4164e61a31"
+  },
+  "src/life/leaf-surface.js": {
+    "original": "engine/backlit.js",
+    "bodySimilarity": 0.0539,
+    "changedBody": true,
+    "sha256": "894300a9203411e4c16f9f795e3e9c699bfa21b36af7f43af3e8b73dce0056ac"
   },
   "src/life/impostor.js": {
     "original": "engine/impostor.js",
-    "bodySimilarity": 0.0544,
+    "bodySimilarity": 0.0331,
     "changedBody": true,
-    "sha256": "106e7f76c45e976c9f03c63f15ace42beb171f6a8483019372dc065d3e1a1b63"
+    "sha256": "3e466728d8769ad9103cb1c50e34c01f7182c25a0a06d74a0ba4288b607a42ba"
   },
   "src/badnorth/flowfield.js": {
     "original": "src/flowfield.js",
-    "bodySimilarity": 0.2144,
+    "bodySimilarity": 0.1765,
     "changedBody": true,
-    "sha256": "ed50d5ce6da0111a5442c6dcacc736a931d3b40af8bfe529d4e0ad2f79bfcff3"
+    "sha256": "b9397288bfb803cf54c09e899c69bae402856e030cd40a0563e4d80b6c5d8b0d"
   },
   "src/badnorth/theme.js": {
     "original": "src/colorgamut.js",
@@ -313,45 +1069,57 @@
   },
   "src/badnorth/battle.js": {
     "original": "engine/world.html",
-    "bodySimilarity": 0.0285,
+    "bodySimilarity": 0.0241,
     "changedBody": true,
-    "sha256": "6fb528bfcb02649949f7568d077a9941c262ec8b8647d07d4e784426c5360d24"
+    "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
   },
   "src/badnorth/island.js": {
-    "original": "src/voxelao.js",
-    "bodySimilarity": 0.0375,
+    "original": "src/campaignmap.js",
+    "bodySimilarity": 0.0175,
     "changedBody": true,
     "sha256": "58f6932c677a5f99cd2132eb81505f6f9b26aed33afe6fe6b3830e5712fa000d"
   },
-  "src/terrain/features.js": {
-    "original": "decolab.html",
-    "bodySimilarity": 0.0206,
+  "src/terrain/field-pattern.js": {
+    "original": "engine/surface.js",
+    "bodySimilarity": 0.0066,
     "changedBody": true,
-    "sha256": "03b69c82de9da58b7c14257c97a277d555a519c788b69dc9edbd3dea13c62e28"
+    "sha256": "0bb3b10d5d9c499f5ad7caadd9566099a7a98b68010c17a5472381bd5a64c497"
+  },
+  "src/terrain/features.js": {
+    "original": "src/overhangterrain.js",
+    "bodySimilarity": 0.0278,
+    "changedBody": true,
+    "sha256": "03f343be9d035ea83c6341f50efc01f0dab6e385cb8d7e0a561194fa5cbb0d75"
   },
   "src/terrain/generate.js": {
     "original": "engine/rivers.js",
     "bodySimilarity": 0.286,
     "changedBody": true,
-    "sha256": "f28768f97c39cbcebaabfb5e32d34bba3f92897ae4615d74a8ea7b1a77a00544"
+    "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+  },
+  "src/terrain/blotch-pattern.js": {
+    "original": "engine/bncanopy.js",
+    "bodySimilarity": 0.0405,
+    "changedBody": true,
+    "sha256": "0608d2dac81d69154d91ebcc48fcf53fae621212ba11958f6b477d010467d893"
   },
   "src/terrain/shape.js": {
     "original": "src/edgesmooth.js",
-    "bodySimilarity": 0.0212,
+    "bodySimilarity": 0.0294,
     "changedBody": true,
-    "sha256": "251df1b5e30dea532bffbfb1c4c457b53edb9655b999fd9c7754aa0c909fbd97"
+    "sha256": "f606d60073222fe4de44b1d8d32416a6070fbf3c5581098fc3e1f917fdcaebd5"
   },
   "src/terrain/terrainmesh.js": {
     "original": "src/terrainmesh.js",
-    "bodySimilarity": 0.0162,
+    "bodySimilarity": 0.0155,
     "changedBody": true,
-    "sha256": "1247b54c804f62610be4e6dab5dfaf165976f89c831c40fb2b0140cf53fbafa5"
+    "sha256": "726304fec3f54e5641917beaec10c17a942642b00586507682db98e3ce0c49ec"
   },
   "src/campaign/campaign.js": {
     "original": "src/grouping.js",
-    "bodySimilarity": 0.0367,
+    "bodySimilarity": 0.0264,
     "changedBody": true,
-    "sha256": "218b2f0c7d70f1a352bb438345ecdc767a64833a3e8f79db5a3048957fde33f1"
+    "sha256": "e5417aae0f9ead404263eea24116f4581d8638ea9c35bcc175611cf95c810076"
   },
   "src/light/bake.js": {
     "original": "src/mesh.js",
@@ -359,22 +1127,58 @@
     "changedBody": true,
     "sha256": "2edc43f5acb1da16b133390223a98f5559e7b6fc87896b88043f6ef6f8b750a5"
   },
+  "src/light/penumbra.js": {
+    "original": "src/penumbra.js",
+    "bodySimilarity": 0.023,
+    "changedBody": true,
+    "sha256": "554cef6edde352f3dd7882be55845940223cc0637fc50e96dac127274e6a1e7f"
+  },
+  "src/light/surface-shadow.js": {
+    "original": "engine/waterfall.js",
+    "bodySimilarity": 0.0247,
+    "changedBody": true,
+    "sha256": "7352617fae7e204c3eb0e9861fcd0b55ac0eb17a6f92e96272e43a25dce29482"
+  },
+  "src/light/cube-height.js": {
+    "original": "engine/vertexlight.js",
+    "bodySimilarity": 0.1454,
+    "changedBody": true,
+    "sha256": "d2e05dc56098b526080a83b9e1f287127ae32e1ce1dec258d517ad712aab9cfc"
+  },
   "src/light/lightvolume.js": {
     "original": "engine/lightvol.js",
-    "bodySimilarity": 0.0368,
+    "bodySimilarity": 0.0373,
     "changedBody": true,
-    "sha256": "f1d4735994cf5400ffc22cafe2b7f3fa7ad0ec3e92d9969854510911087eb53c"
+    "sha256": "c1a2b14af4215a2534ca35054ad77c1ded46a5e9ba8a03357527403822938a43"
+  },
+  "src/build/doodle-wall.js": {
+    "original": "src/doodlewall.js",
+    "bodySimilarity": 0.7228,
+    "changedBody": true,
+    "sha256": "797fa25288330ce306a6d618abdad8f8440e1aadadeae4480de0c371b62e3310"
+  },
+  "src/build/module-volume.js": {
+    "original": "src/tileforce.js",
+    "bodySimilarity": 0.0083,
+    "changedBody": true,
+    "sha256": "a7b63f75f5fa7263b152ea3bf5541fe093c2fa60afaad00db903635e8a4a0e11"
   },
   "src/build/buildings.js": {
     "original": "src/townmesh.js",
-    "bodySimilarity": 0.031,
+    "bodySimilarity": 0.0339,
     "changedBody": true,
-    "sha256": "afa31c6e65a589cb19f3c5422a4b5f3b4877e9066ff9be69cb8be60ccdabfcc2"
+    "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
   },
   "src/build/lighthouse.js": {
     "original": "engine/waterfall.js",
     "bodySimilarity": 0.0889,
     "changedBody": true,
     "sha256": "aad9304d45e602d7b3fd3d5a5d7d9e1b7ef4b777106b36ac477fe8fef3bf5308"
+  },
+  "src/build/multicell.js": {
+    "original": "src/fusion.js",
+    "bodySimilarity": 0.0087,
+    "changedBody": true,
+    "sha256": "ab8f24ed8fa5d8d84afd2fc1a873183001559653be397f9d2a72f9923392c1e9"
   }
 }

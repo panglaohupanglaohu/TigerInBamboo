@@ -11,7 +11,7 @@
  * URL: index.html?on=grid,shorelines&off=waves&tour=arch&time=night
  */
 
-const DEFAULT_ON = new Set(['waves', 'reflection', 'ao', 'shadows', 'smooth', 'outline', 'backlit', 'birds', 'vegetation', 'grass', 'shrubs', 'trees', 'flowers', 'leafy', 'clouds', 'flags', 'wires', 'butterflies', 'sound', 'stairs', 'waterfalls', 'boats', 'gore', 'hardnormal', 'motionblur', 'lighthouse']);
+const DEFAULT_ON = new Set(['waves', 'reflection', 'ao', 'shadows', 'smooth', 'outline', 'backlit', 'birds', 'vegetation', 'grass', 'shrubs', 'trees', 'flowers', 'leafy', 'clouds', 'flags', 'wires', 'butterflies', 'sound', 'stairs', 'waterfalls', 'boats', 'gore', 'hardnormal', 'motionblur', 'lighthouse', 'passages']);
 
 const GUIDE_RULES = [
   ['先读原文，再看画面', '原文在 REA-agent/gifs/README.md，连同前后几条一起读；不要看画面猜，也别去抓 x.com。'],
@@ -24,7 +24,9 @@ const GUIDE_RULES = [
 ];
 
 const PAGES = [
-  ['coverage.html', '原版 → 重构模块映射（128项）', '逐模块落点、已知差距与下一批学习任务'],
+  ['wfc.html', '确定性WFC接口约束', '多边形半边、固定格、正反顺序对照'],
+  ['scheduler.html', '跨帧嵌套协程', '共享World连通性分析、工作预算、重开和取消'],
+  ['coverage.html', '原版 → 重构模块映射（动态清单）', '逐模块落点、已知差距与下一批学习任务'],
   ['navigation.html', '洞内多层导航验收', '共享 World 多层/柱顶对照、身高净空、混合与四边形'],
   ['refactoring-audit.html', '重构审核清单（285 段）', '历史实现状态、README 原文、代码差异与待复核项目'],
   ['architecture.html', '系统全局（架构图）', '每一层的模块、数据流、和原 REACode 的对应关系'],

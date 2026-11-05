@@ -1,0 +1,573 @@
+{
+  "startedAt": "2026-11-05T12:36:29.192Z",
+  "isolation": "new non-persistent context",
+  "samplingIntervalUs": 1000,
+  "status": "CAPTURED",
+  "errors": [],
+  "scope": "CPU samples with profiler overhead; not gameplay/performance acceptance",
+  "connectedAfterMs": 37765,
+  "sampledMs": 37763,
+  "samples": 32985,
+  "topSelf": [
+    {
+      "name": "(idle)",
+      "url": "",
+      "line": 0,
+      "selfMs": 2199,
+      "inclusiveMs": 2199
+    },
+    {
+      "name": "_computeIntersections",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11886,
+      "selfMs": 1166,
+      "inclusiveMs": 5761
+    },
+    {
+      "name": "relaxPolygons",
+      "url": "http://localhost:8931/TigerMessenger/src/vendor/townscaper-rea-refactoring/src/core/grid.js",
+      "line": 132,
+      "selfMs": 1135,
+      "inclusiveMs": 1135
+    },
+    {
+      "name": "intersectTriangle",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 5888,
+      "selfMs": 732,
+      "inclusiveMs": 1473
+    },
+    {
+      "name": "(garbage collector)",
+      "url": "",
+      "line": 0,
+      "selfMs": 708,
+      "inclusiveMs": 708
+    },
+    {
+      "name": "getZ",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10243,
+      "selfMs": 678,
+      "inclusiveMs": 678
+    },
+    {
+      "name": "getVertexPosition",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11796,
+      "selfMs": 650,
+      "inclusiveMs": 2222
+    },
+    {
+      "name": "checkGeometryIntersection",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 12054,
+      "selfMs": 611,
+      "inclusiveMs": 4519
+    },
+    {
+      "name": "getVertexPosition",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11796,
+      "selfMs": 549,
+      "inclusiveMs": 1015
+    },
+    {
+      "name": "smoothSeaStackSurface",
+      "url": "http://localhost:8931/TigerMessenger/src/world/seaStackSurfaceSmoothing.js",
+      "line": 11,
+      "selfMs": 434,
+      "inclusiveMs": 1008
+    },
+    {
+      "name": "(anonymous)",
+      "url": "http://localhost:8931/TigerMessenger/src/world/apostlesReacode.js",
+      "line": 111,
+      "selfMs": 389,
+      "inclusiveMs": 1483
+    },
+    {
+      "name": "subVectors",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 4166,
+      "selfMs": 373,
+      "inclusiveMs": 373
+    },
+    {
+      "name": "relaxPolygons",
+      "url": "http://localhost:8931/TigerMessenger/src/vendor/townscaper-rea-refactoring/src/core/grid.js",
+      "line": 132,
+      "selfMs": 372,
+      "inclusiveMs": 372
+    },
+    {
+      "name": "intersectsTriangle",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 5055,
+      "selfMs": 371,
+      "inclusiveMs": 1197
+    },
+    {
+      "name": "getY",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10223,
+      "selfMs": 355,
+      "inclusiveMs": 355
+    },
+    {
+      "name": "distanceToPoint",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 5114,
+      "selfMs": 355,
+      "inclusiveMs": 1094
+    },
+    {
+      "name": "_computeIntersections",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11886,
+      "selfMs": 352,
+      "inclusiveMs": 1355
+    },
+    {
+      "name": "clamp",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 4337,
+      "selfMs": 324,
+      "inclusiveMs": 382
+    },
+    {
+      "name": "(program)",
+      "url": "",
+      "line": 0,
+      "selfMs": 321,
+      "inclusiveMs": 321
+    },
+    {
+      "name": "subVectors",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 4166,
+      "selfMs": 288,
+      "inclusiveMs": 288
+    },
+    {
+      "name": "block",
+      "url": "http://localhost:8931/TigerMessenger/src/world/seaStackCoastalGeometry.js",
+      "line": 97,
+      "selfMs": 283,
+      "inclusiveMs": 291
+    },
+    {
+      "name": "getX",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 10203,
+      "selfMs": 270,
+      "inclusiveMs": 270
+    },
+    {
+      "name": "subVectors",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 4166,
+      "selfMs": 270,
+      "inclusiveMs": 270
+    },
+    {
+      "name": "fromBufferAttribute",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 4675,
+      "selfMs": 268,
+      "inclusiveMs": 1572
+    },
+    {
+      "name": "coastalStackGeometry",
+      "url": "http://localhost:8931/TigerMessenger/src/world/seaStackCoastalGeometry.js",
+      "line": 31,
+      "selfMs": 263,
+      "inclusiveMs": 2625
+    }
+  ],
+  "topInclusive": [
+    {
+      "name": "runStartupSteps",
+      "url": "http://localhost:8931/TigerMessenger/src/core/startupTasks.js",
+      "line": 11,
+      "selfMs": 0,
+      "inclusiveMs": 33869
+    },
+    {
+      "name": "loadSteps",
+      "url": "http://localhost:8931/TigerMessenger/src/scenes/messengerIsland.js",
+      "line": 159,
+      "selfMs": 26,
+      "inclusiveMs": 33862
+    },
+    {
+      "name": "completeCloudTerrainSteps",
+      "url": "http://localhost:8931/TigerMessenger/src/world/planetV8/runtime.js",
+      "line": 215,
+      "selfMs": 6,
+      "inclusiveMs": 7457
+    },
+    {
+      "name": "relocateCloudClustersToRidgesSteps",
+      "url": "http://localhost:8931/TigerMessenger/src/world/planetV8/cloudTerrainRemap.js",
+      "line": 129,
+      "selfMs": 0,
+      "inclusiveMs": 6379
+    },
+    {
+      "name": "sample",
+      "url": "http://localhost:8931/TigerMessenger/src/world/planetV8/cloudTerrainRemap.js",
+      "line": 147,
+      "selfMs": 0,
+      "inclusiveMs": 6340
+    },
+    {
+      "name": "sampleSceneHeightAt",
+      "url": "http://localhost:8931/TigerMessenger/src/world/planetV8/cloudTerrainRemap.js",
+      "line": 34,
+      "selfMs": 66,
+      "inclusiveMs": 6339
+    },
+    {
+      "name": "intersectObjects",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 34707,
+      "selfMs": 25,
+      "inclusiveMs": 6263
+    },
+    {
+      "name": "intersect",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 34729,
+      "selfMs": 85,
+      "inclusiveMs": 6235
+    },
+    {
+      "name": "raycast",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11840,
+      "selfMs": 60,
+      "inclusiveMs": 5985
+    },
+    {
+      "name": "_computeIntersections",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 11886,
+      "selfMs": 1166,
+      "inclusiveMs": 5761
+    },
+    {
+      "name": "checkGeometryIntersection",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 12054,
+      "selfMs": 611,
+      "inclusiveMs": 4519
+    },
+    {
+      "name": "finishCrystalV9Scene",
+      "url": "http://localhost:8931/TigerMessenger/src/world/crystalV9.js",
+      "line": 59,
+      "selfMs": 0,
+      "inclusiveMs": 4322
+    },
+    {
+      "name": "finishCrystalV10Scene",
+      "url": "http://localhost:8931/TigerMessenger/src/world/crystalV10.js",
+      "line": 19,
+      "selfMs": 6,
+      "inclusiveMs": 4318
+    },
+    {
+      "name": "seatTerracedSeaStacksSteps",
+      "url": "http://localhost:8931/TigerMessenger/src/world/seaStackTerraces.js",
+      "line": 29,
+      "selfMs": 0,
+      "inclusiveMs": 3729
+    },
+    {
+      "name": "applyCitadelMountainStudy",
+      "url": "http://localhost:8931/TigerMessenger/src/world/citadel/mountainStudy.js",
+      "line": 115,
+      "selfMs": 7,
+      "inclusiveMs": 3667
+    },
+    {
+      "name": "buildTwelveApostlesReacodeSteps",
+      "url": "http://localhost:8931/TigerMessenger/src/world/apostlesReacode.js",
+      "line": 74,
+      "selfMs": 0,
+      "inclusiveMs": 3589
+    },
+    {
+      "name": "withPalette",
+      "url": "http://localhost:8931/TigerMessenger/src/world/apostlesReacode.js",
+      "line": 59,
+      "selfMs": 0,
+      "inclusiveMs": 3586
+    },
+    {
+      "name": "(anonymous)",
+      "url": "http://localhost:8931/TigerMessenger/src/world/apostlesReacode.js",
+      "line": 95,
+      "selfMs": 2,
+      "inclusiveMs": 3586
+    },
+    {
+      "name": "placeMoebiusSwampAndSky",
+      "url": "http://localhost:8931/TigerMessenger/src/scenes/messenger/loadMoebius.js",
+      "line": 87,
+      "selfMs": 3,
+      "inclusiveMs": 2922
+    },
+    {
+      "name": "createCatalogObject",
+      "url": "http://localhost:8931/TigerMessenger/src/core/buildingCatalog.js",
+      "line": 786,
+      "selfMs": 0,
+      "inclusiveMs": 2895
+    },
+    {
+      "name": "create",
+      "url": "http://localhost:8931/TigerMessenger/src/core/buildingCatalog.js",
+      "line": 280,
+      "selfMs": 0,
+      "inclusiveMs": 2895
+    },
+    {
+      "name": "createMoebiusSwampPlacement",
+      "url": "http://localhost:8931/TigerMessenger/src/world/moebiusSwamp.js",
+      "line": 3296,
+      "selfMs": 0,
+      "inclusiveMs": 2895
+    },
+    {
+      "name": "createMoebiusSwampZone",
+      "url": "http://localhost:8931/TigerMessenger/src/world/moebiusSwamp.js",
+      "line": 1488,
+      "selfMs": 6,
+      "inclusiveMs": 2895
+    },
+    {
+      "name": "installGateTargetThirty",
+      "url": "http://localhost:8931/TigerMessenger/src/world/gateTargetThirty.js",
+      "line": 9,
+      "selfMs": 3,
+      "inclusiveMs": 2690
+    },
+    {
+      "name": "installHighlandGate",
+      "url": "http://localhost:8931/TigerMessenger/src/world/citadel/highlandGate.js",
+      "line": 14,
+      "selfMs": 12,
+      "inclusiveMs": 2668
+    },
+    {
+      "name": "mountains",
+      "url": "http://localhost:8931/TigerMessenger/src/world/gateTargetThirty.js",
+      "line": 36,
+      "selfMs": 2,
+      "inclusiveMs": 2654
+    },
+    {
+      "name": "seaStackGeometry",
+      "url": "http://localhost:8931/TigerMessenger/src/world/gateSeaStacks.js",
+      "line": 9,
+      "selfMs": 0,
+      "inclusiveMs": 2646
+    },
+    {
+      "name": "terraceStackGeometry",
+      "url": "http://localhost:8931/TigerMessenger/src/world/seaStackTerraces.js",
+      "line": 21,
+      "selfMs": 21,
+      "inclusiveMs": 2646
+    },
+    {
+      "name": "coastalStackGeometry",
+      "url": "http://localhost:8931/TigerMessenger/src/world/seaStackCoastalGeometry.js",
+      "line": 31,
+      "selfMs": 263,
+      "inclusiveMs": 2625
+    },
+    {
+      "name": "intersectObjects",
+      "url": "http://localhost:8931/TigerMessenger/vendor/three.core.js",
+      "line": 34707,
+      "selfMs": 0,
+      "inclusiveMs": 2383
+    }
+  ],
+  "frames": [
+    {
+      "url": "/TigerMessenger/pipeline.html",
+      "tasks": [
+        {
+          "startMs": 15718,
+          "durationMs": 4674
+        },
+        {
+          "startMs": 8564,
+          "durationMs": 3911
+        },
+        {
+          "startMs": 20410,
+          "durationMs": 3134
+        },
+        {
+          "startMs": 12492,
+          "durationMs": 3055
+        },
+        {
+          "startMs": 2529,
+          "durationMs": 2805
+        },
+        {
+          "startMs": 6657,
+          "durationMs": 1437
+        },
+        {
+          "startMs": 1425,
+          "durationMs": 1087
+        },
+        {
+          "startMs": 36735,
+          "durationMs": 1001
+        },
+        {
+          "startMs": 25291,
+          "durationMs": 871
+        },
+        {
+          "startMs": 23561,
+          "durationMs": 868
+        },
+        {
+          "startMs": 24472,
+          "durationMs": 801
+        },
+        {
+          "startMs": 26427,
+          "durationMs": 685
+        },
+        {
+          "startMs": 27129,
+          "durationMs": 563
+        },
+        {
+          "startMs": 30967,
+          "durationMs": 508
+        },
+        {
+          "startMs": 28451,
+          "durationMs": 357
+        },
+        {
+          "startMs": 29682,
+          "durationMs": 349
+        },
+        {
+          "startMs": 30048,
+          "durationMs": 328
+        },
+        {
+          "startMs": 33929,
+          "durationMs": 311
+        },
+        {
+          "startMs": 32502,
+          "durationMs": 291
+        },
+        {
+          "startMs": 31491,
+          "durationMs": 287
+        }
+      ]
+    },
+    {
+      "url": "/TigerMessenger/index.html",
+      "tasks": [
+        {
+          "startMs": 15675,
+          "durationMs": 4674
+        },
+        {
+          "startMs": 8521,
+          "durationMs": 3911
+        },
+        {
+          "startMs": 20367,
+          "durationMs": 3134
+        },
+        {
+          "startMs": 12449,
+          "durationMs": 3055
+        },
+        {
+          "startMs": 2486,
+          "durationMs": 2805
+        },
+        {
+          "startMs": 6614,
+          "durationMs": 1437
+        },
+        {
+          "startMs": 1382,
+          "durationMs": 1087
+        },
+        {
+          "startMs": 36692,
+          "durationMs": 1001
+        },
+        {
+          "startMs": 25248,
+          "durationMs": 871
+        },
+        {
+          "startMs": 23518,
+          "durationMs": 868
+        },
+        {
+          "startMs": 24429,
+          "durationMs": 801
+        },
+        {
+          "startMs": 26384,
+          "durationMs": 685
+        },
+        {
+          "startMs": 27086,
+          "durationMs": 563
+        },
+        {
+          "startMs": 30924,
+          "durationMs": 508
+        },
+        {
+          "startMs": 37745,
+          "durationMs": 474
+        },
+        {
+          "startMs": 28408,
+          "durationMs": 357
+        },
+        {
+          "startMs": 29639,
+          "durationMs": 349
+        },
+        {
+          "startMs": 30005,
+          "durationMs": 328
+        },
+        {
+          "startMs": 33886,
+          "durationMs": 311
+        },
+        {
+          "startMs": 32459,
+          "durationMs": 291
+        }
+      ]
+    }
+  ],
+  "finishedAt": "2026-11-05T12:37:09.666Z"
+}

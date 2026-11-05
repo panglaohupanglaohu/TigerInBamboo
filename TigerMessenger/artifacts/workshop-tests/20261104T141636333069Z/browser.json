@@ -1,0 +1,145 @@
+{
+  "startedAt": "2026-11-04T14:16:37.576Z",
+  "base": "http://localhost:8931",
+  "isolated": true,
+  "cases": [
+    {
+      "id": "S01 initial pipeline",
+      "status": "PASS",
+      "ms": 13
+    },
+    {
+      "id": "S02 scan real library and search",
+      "status": "PASS",
+      "ms": 133,
+      "detail": "发现 202 条能力记录，已加入分类能力库；新增方法均待执行适配。"
+    },
+    {
+      "id": "S03 scan HTTP404 and recovery",
+      "status": "PASS",
+      "ms": 207
+    },
+    {
+      "id": "S12 scene categories subgroups and method shelf",
+      "status": "PASS",
+      "ms": 334
+    },
+    {
+      "id": "S04 add remove undo redo and reorder",
+      "status": "PASS",
+      "ms": 4544
+    },
+    {
+      "id": "S05 goal save and exported JSON",
+      "status": "PASS",
+      "ms": 192
+    },
+    {
+      "id": "L01 learning loads source records",
+      "status": "PASS",
+      "ms": 72,
+      "detail": "正在保存学习缓存…"
+    },
+    {
+      "id": "L06 shared snapshot matches upstream and outage preserves old data",
+      "status": "PASS",
+      "ms": 436
+    },
+    {
+      "id": "L07 verified refresh updates all learning views and keeps recipe iframe",
+      "status": "PASS",
+      "ms": 2210
+    },
+    {
+      "id": "L08 progress evidence history and next are folded with reachable learning tabs",
+      "status": "PASS",
+      "ms": 7434
+    },
+    {
+      "id": "L09 offline full reload uses verified learning cache then recovers",
+      "status": "FAIL",
+      "ms": 12131,
+      "error": "page.waitForFunction: Timeout 12000ms exceeded."
+    },
+    {
+      "id": "L10 cache quota failure leaves live learning and scene stores usable",
+      "status": "FAIL",
+      "ms": 12103,
+      "error": "page.waitForFunction: Timeout 12000ms exceeded."
+    },
+    {
+      "id": "L02 module search and source links",
+      "status": "PASS",
+      "ms": 862
+    },
+    {
+      "id": "L03 add method to scene locate no duplicate",
+      "status": "PASS",
+      "ms": 3013
+    },
+    {
+      "id": "L04 videos search play close",
+      "status": "PASS",
+      "ms": 2775
+    },
+    {
+      "id": "S06 saved recipe refresh",
+      "status": "PASS",
+      "ms": 718
+    },
+    {
+      "id": "S07 real game connection and editor docking",
+      "status": "PASS",
+      "ms": 45684
+    },
+    {
+      "id": "S08 editor tools palette help collapse",
+      "status": "PASS",
+      "ms": 7264
+    },
+    {
+      "id": "S13 approved light blue toolbar contrast and focus",
+      "status": "PASS",
+      "ms": 998,
+      "detail": {
+        "background": "rgb(227, 243, 251)",
+        "foreground": "rgb(23, 55, 68)",
+        "borderRadius": "14px",
+        "contrast": 11.08957390102491,
+        "buttons": 9
+      }
+    },
+    {
+      "id": "S09 actual parameter preview baseline and snapshot",
+      "status": "PASS",
+      "ms": 5061
+    },
+    {
+      "id": "S10 stale finalize reject restore and isolated final",
+      "status": "PASS",
+      "ms": 7389
+    },
+    {
+      "id": "S11 play mode and service outage independence",
+      "status": "PASS",
+      "ms": 1972
+    },
+    {
+      "id": "L05 mobile overflow and preserved scene iframe",
+      "status": "PASS",
+      "ms": 1500
+    },
+    {
+      "id": "G01 clean game startup and remote controls",
+      "status": "PASS",
+      "ms": 47223
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-04T14:19:22.573Z",
+  "summary": {
+    "passed": 22,
+    "failed": 2,
+    "pageErrors": 0
+  }
+}

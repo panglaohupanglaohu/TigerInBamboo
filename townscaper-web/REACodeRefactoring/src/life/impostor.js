@@ -9,6 +9,8 @@
  *     画面：白色蓬松的云团成带状飘过岛屿上空，底部略灰。
  *   1593215065423245313 运行时从网格烘出精灵、放进动态图集 → 用 core/atlas.js 分配图集里的格子。
  *
+ * 本地近似：八张水平视图不是由“octagonal”一词唯一确定的原算法。
+ * 尚未复现原球面树卡几何/完整俯仰采样与原云材质。
  * 做法：
  *   烘焙：每种网格从水平方向 8 个方位（每 45°，仰角固定）各拍一张，放进图集里分配到的格子；
  *         白色材质 + 固定光照 → 图里存的是"明暗"，实例颜色在着色器里再乘上去（一套图给所有颜色的树用）。
@@ -25,15 +27,18 @@ const CELL = 128;
 const ELEV = 0.42;   // 烘焙仰角（弧度）：接近游戏镜头的俯角
 
 export class ImpostorBaker {
+  #allocations = new WeakMap();
   constructor(renderer, size = 1024) {
     this.renderer = renderer;
     this.atlas = new Atlas(size, size);
     this.rt = new THREE.WebGLRenderTarget(size, size, { depthBuffer: true });
-    // 缩小时不闪：开 mipmap（图集格子之间留了边，低级别 mip 不会串到隔壁格子）
+    // Mipmaps reduce minification flicker; finite padding cannot isolate every mip level.
     this.rt.texture.generateMipmaps = true;
     this.rt.texture.minFilter = THREE.LinearMipmapLinearFilter;
     this.size = size;
     this.cleared = false;
+    this.clearScene = new THREE.Scene();
+    this.clearCamera = new THREE.Camera();
     this.scene = new THREE.Scene();
     this.scene.add(new THREE.AmbientLight(0xffffff, 0.95));
     const sun = new THREE.DirectionalLight(0xffffff, 2.1);
@@ -45,46 +50,58 @@ export class ImpostorBaker {
   /**
    * 烘一种网格的 8 个方位，返回 { frames: [u0,v0,du,dv]×8, size: 世界尺寸, base: 底部偏移 }。
    */
+  // 1593215065423245313: "add and remove sprite allotments at runtime".
+  // Reserve the complete 8-view set before rendering; no partial slot leaks.
   bake(geometry, CELL = 128) {
+    if(!Number.isSafeInteger(CELL)||CELL<=0)throw new RangeError('positive integer bake size required');
     geometry.computeBoundingBox();
-    const bb = geometry.boundingBox;
-    const c = bb.getCenter(new THREE.Vector3());
-    const ext = bb.getSize(new THREE.Vector3());
-    const half = Math.max(ext.x, ext.y, ext.z) * 0.62;
-    const mesh = new THREE.Mesh(geometry, this.mat);
+    const bb=geometry.boundingBox,c=bb.getCenter(new THREE.Vector3()),ext=bb.getSize(new THREE.Vector3());
+    const half=Math.max(ext.x,ext.y,ext.z)*.62;
+    if(!Number.isFinite(half)||half<=0)throw new RangeError('nonempty finite geometry required');
+    const slots=[];
+    try {for(let k=0;k<VIEWS;k++){const slot=this.atlas.allocate(CELL+16,CELL+16);if(!slot)throw new Error('impostor 图集满了');slots.push(slot);}}
+    catch(error){for(const slot of slots)this.atlas.free(slot);throw error;}
+    const mesh=new THREE.Mesh(geometry,this.mat),cam=new THREE.OrthographicCamera(-half,half,half,-half,.01,half*8),frames=[];
     this.scene.add(mesh);
-    const cam = new THREE.OrthographicCamera(-half, half, half, -half, 0.01, half * 8);
-    const r = this.renderer;
-    const prevRT = r.getRenderTarget();
-    const prevClear = r.getClearColor(new THREE.Color()), prevAlpha = r.getClearAlpha();
-    r.setRenderTarget(this.rt);
-    if (!this.cleared) { r.setClearColor(0x000000, 0); r.clear(true, true, true); this.cleared = true; }
-    const frames = [];
-    for (let k = 0; k < VIEWS; k++) {
-      const PADC = 8;                              // 每格四周留 8px
-      const slot0 = this.atlas.allocate(CELL + PADC * 2, CELL + PADC * 2);
-      const slot = slot0 && { x: slot0.x + PADC, y: slot0.y + PADC };
-      if (!slot) throw new Error('impostor 图集满了');
-      const a = (k / VIEWS) * Math.PI * 2;
-      cam.position.set(c.x + Math.sin(a) * Math.cos(ELEV) * half * 4, c.y + Math.sin(ELEV) * half * 4, c.z + Math.cos(a) * Math.cos(ELEV) * half * 4);
-      cam.lookAt(c);
-      this.rt.viewport.set(slot.x, slot.y, CELL, CELL);
-      this.rt.scissor.set(slot.x, slot.y, CELL, CELL);
-      this.rt.scissorTest = true;
-      r.setRenderTarget(this.rt);
-      r.setClearColor(0x000000, 0);
-      r.clear(true, true, true);
-      r.render(this.scene, cam);
-      frames.push(slot.x / this.size, slot.y / this.size, CELL / this.size, CELL / this.size);
-    }
-    this.rt.scissorTest = false;
-    this.rt.viewport.set(0, 0, this.size, this.size);
-    r.setRenderTarget(prevRT);
-    r.setClearColor(prevClear, prevAlpha);
-    this.scene.remove(mesh);
-    // 四边形的世界尺寸 = 烘焙相机的视野宽度；中心对准包围盒中心
-    return { frames, size: half * 2, center: c.clone() };
+    try {
+      this.#withTarget(()=>{
+        const r=this.renderer;
+        if(!this.cleared){this.rt.scissorTest=false;r.setRenderTarget(this.rt);r.setClearColor(0,0);r.clear(true,true,true);this.cleared=true;}
+        for(let k=0;k<VIEWS;k++) {
+          const slot=slots[k],x=slot.x+8,y=slot.y+8,a=k/VIEWS*Math.PI*2;
+          cam.position.set(c.x+Math.sin(a)*Math.cos(ELEV)*half*4,c.y+Math.sin(ELEV)*half*4,c.z+Math.cos(a)*Math.cos(ELEV)*half*4);cam.lookAt(c);
+          // Clear the whole allotment, including reused padding. Then draw inside.
+          this.rt.viewport.set(slot.x,slot.y,slot.w,slot.h);this.rt.scissor.copy(this.rt.viewport);this.rt.scissorTest=true;
+          r.setRenderTarget(this.rt);r.setClearColor(0,0);r.clear(true,true,true);
+          this.rt.viewport.set(x,y,CELL,CELL);this.rt.scissor.copy(this.rt.viewport);r.setRenderTarget(this.rt);r.render(this.scene,cam);
+          frames.push(x/this.size,y/this.size,CELL/this.size,CELL/this.size);
+        }
+      });
+    } catch(error) {
+      for(const slot of slots)this.atlas.free(slot);
+      // Clean partially drawn regions, preserving every other live sprite.
+      try{this.#clearSlots(slots)}catch{};
+      throw error;
+    } finally {this.scene.remove(mesh);}
+    const baked={frames,size:half*2,center:c.clone()};this.#allocations.set(baked,slots);return baked;
   }
+  #withTarget(fn) {
+    const r=this.renderer,target=r.getRenderTarget(),face=r.getActiveCubeFace(),mip=r.getActiveMipmapLevel(),color=r.getClearColor(new THREE.Color()),alpha=r.getClearAlpha();
+    const viewport=this.rt.viewport.clone(),scissor=this.rt.scissor.clone(),test=this.rt.scissorTest;
+    try{return fn()}finally{this.rt.viewport.copy(viewport);this.rt.scissor.copy(scissor);this.rt.scissorTest=test;r.setRenderTarget(target,face,mip);r.setClearColor(color,alpha);}
+  }
+  #clearSlots(slots) {
+    this.#withTarget(()=>{for(const slot of slots){this.rt.viewport.set(slot.x,slot.y,slot.w,slot.h);this.rt.scissor.copy(this.rt.viewport);this.rt.scissorTest=true;this.renderer.setRenderTarget(this.rt);this.renderer.setClearColor(0,0);this.renderer.clear(true,true,true);}
+      // A render finalizes the RT mip chain after clears as well as draws.
+      this.renderer.render(this.clearScene,this.clearCamera);});
+  }
+  /** Detach consumers before releasing: their UVs become available for reuse. */
+  release(baked) {
+    const slots=baked&&this.#allocations.get(baked);if(!slots)return false;
+    this.#clearSlots(slots); // If GPU clearing fails, keep ownership for a retry.
+    for(const slot of slots)this.atlas.free(slot);this.#allocations.delete(baked);return true;
+  }
+
 }
 
 /**
@@ -92,7 +109,7 @@ export class ImpostorBaker {
  * 实例矩阵：平移 = 网格原点所在位置，Y 旋转 = 朝向，缩放 = 大小。
  */
 export class ImpostorField {
-  constructor(texture, baked, max, { cloud = false, uTime = { value: 0 }, uLight = { value: 1 } } = {}) {
+  constructor(texture, baked, max, { cloud = false, horizon = false, uTime = { value: 0 }, uLight = { value: 1 } } = {}) {
     const g = new THREE.PlaneGeometry(1, 1);
     this.color = new THREE.InstancedBufferAttribute(new Float32Array(max * 3).fill(1), 3);
     this.yaw = new THREE.InstancedBufferAttribute(new Float32Array(max), 1);
@@ -107,14 +124,16 @@ export class ImpostorField {
       uniforms: {
         uTex: { value: texture }, uFrames: { value: fr }, uSize: { value: baked.size },
         uCenter: { value: baked.center }, uTime, uLight,
+        uOrbit: { value: new THREE.Vector3(0, 0, .002) },
       },
-      defines: { CLOUD: cloud ? 1 : 0, VIEWS },
+      defines: { CLOUD: cloud ? 1 : 0, HORIZON: horizon ? 1 : 0, VIEWS },
       vertexShader: /* glsl */ `
         attribute vec3 aColor;
         attribute float aYaw;
         uniform float uSize;
         uniform vec3 uCenter;
         uniform float uTime;
+        uniform vec3 uOrbit;
         uniform vec4 uFrames[VIEWS];
         varying vec4 vF0;
         varying vec4 vF1;
@@ -123,20 +142,41 @@ export class ImpostorField {
         varying float vK;
         varying float vT;
         void main() {
-          float s = length(instanceMatrix[0].xyz);
-          vec3 origin = (instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
-          vec3 center = origin + uCenter * s;
+          // 1849427564034498642: stability while rotating. Transform the
+          // off-centre bake anchor with the actual instance and parent matrix.
+          // Contract: positive uniform scale and Y rotations (cylindrical cards).
+          mat4 im = modelMatrix * instanceMatrix;
+          float s = length(im[0].xyz);
+          vec3 center = (im * vec4(uCenter, 1.0)).xyz;
           #if CLOUD
+          #if HORIZON
+            // 1243228419162341379 "Some moody clouds": local continuous
+            // ring drift, not an inferred original weather solver. No hard wrap
+            // across the island; preserve distance from the World bounds centre.
+            float angle = uTime * uOrbit.z;
+            vec2 turn = normalize(vec2(cos(angle), sin(angle)));
+            vec2 d = center.xz - uOrbit.xy;
+            center.xz = uOrbit.xy + vec2(turn.x*d.x-turn.y*d.y,
+                                         turn.y*d.x+turn.x*d.y);
+          #else
             center.x += mod(uTime * 0.12 + aYaw * 7.0, 40.0) - 20.0;   // 沿风向慢慢飘，飘出去从另一边回来
           #endif
-          vec3 toCam = cameraPosition - center;
-          vec3 hdir = normalize(vec3(toCam.x, 0.0, toCam.z) + vec3(1e-5));
+          #endif
+          // Orthographic rays are parallel; camera position must not make
+          // copies of one object select different views across the screen.
+          vec3 back = vec3(viewMatrix[0][2], viewMatrix[1][2], viewMatrix[2][2]);
+          vec3 toCam = isOrthographic ? back : cameraPosition - center;
+          vec2 hd = toCam.xz;
+          if (length(hd) < 1e-6) hd = back.xz;
+          if (length(hd) < 1e-6) hd = vec2(0.0, 1.0);
+          vec3 hdir = vec3(hd.x, 0.0, hd.y) / length(hd);
           vec3 right = vec3(hdir.z, 0.0, -hdir.x);
           vec3 up = vec3(0.0, 1.0, 0.0);
           vec3 p = center + (right * position.x + up * position.y) * uSize * s;
           // 镜头相对这棵树的方位角 → 第几张图（相邻两张按 t 混合）
-          float az = atan(hdir.x, hdir.z) - aYaw;
-          float f = mod(az / 6.2831853 * float(VIEWS) + float(VIEWS), float(VIEWS));
+          float parentYaw = atan(modelMatrix[2].x, modelMatrix[2].z);
+          float az = atan(hdir.x, hdir.z) - aYaw - parentYaw;
+          float f = mod(mod(az / 6.28318530718 * float(VIEWS), float(VIEWS)) + float(VIEWS), float(VIEWS));
           vK = floor(f);
           vT = f - vK;
           // 在顶点着色器里选好两张图（整块四边形都一样），片元里就能无条件采样
@@ -147,6 +187,11 @@ export class ImpostorField {
           vUv = position.xy + 0.5;
           vCol = aColor;
           gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0);
+          #if CLOUD && HORIZON
+            // Background clouds must stay behind opaque islands even when a
+            // large billboard from the near side of the ring crosses the view.
+            gl_Position.z = gl_Position.w * .9999;
+          #endif
         }`,
       fragmentShader: /* glsl */ `
         uniform sampler2D uTex;

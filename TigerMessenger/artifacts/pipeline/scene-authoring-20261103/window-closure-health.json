@@ -1,0 +1,17 @@
+{
+  "game": {
+    "http": 200
+  },
+  "sourceBridge": {
+    "http": 200,
+    "body": {
+      "service": "tm-scene-source-bridge",
+      "bridgeReady": true,
+      "intakeReady": false,
+      "workerReady": false,
+      "modelExecutionVerified": false,
+      "nativeUnavailable": true,
+      "error": "URLError"
+    }
+  }
+}

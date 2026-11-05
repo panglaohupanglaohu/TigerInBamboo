@@ -3,6 +3,95 @@
 这个目录是 `../REACode` 的**重构版**。`../REACode` 保持原样，作对照用；所有新工作都在这里做。
 先读完这一页，再打开 `index.html` 和 `architecture.html` 看一遍，再动代码。
 
+## 最新接续状态 · 2026-11-06
+
+最近学习：新增动画/软盘25帧、早期战斗315帧，共340帧全核验，累计146/285，剩139。纠正820素材“无文字软影教程”误读，新增可选单位接触软盘、凸格裁剪及真实导航楼层接入；实际北境双网格24单位GPU开关/过滤/停止通过。blobshadow由未覆盖转部分覆盖，navribbon仍未覆盖；坡面/跨格连续性、原参数及动画仍缺。 入口 `unit-shadows.html`；证据 `artifacts/coverage/unit-shadow-review.md`。
+
+最近学习：新增拓扑直线679帧、早期四边网1068帧，共1747帧全核验，累计144/285，剩141。保留已有网格主体，补按格/出边状态判环、真实对边线段和边界/三角/预算原因；1254走法与实际Canvas点击通过。四边网片本轮只学习/主体复核；游戏手柄/连刷、飞岛支撑和完整生成动画仍缺。 入口 `grids.html?t=lines`；证据 `artifacts/coverage/topoline-quad-review.md`。
+
+静态清单新增：原版并行增加 `src/blobshadow.js` 与 `src/navribbon.js`，现146模块，二者保持未覆盖并进入学习队列；现有地表遮影/导航线不能冒充单位软盘/弧长走廊。当轮5段素材未逐帧，后续学习以最新接续状态为准。
+
+最近学习：新增不规则底图383帧、三角/方形模块库178帧，共561帧全核验，累计142/285，剩143。保留已有网格/WFC，新增四边形沿对角线切四三角的派生共享网格和父子映射，实际WFC混合147→354/四边206→824格、pins/修复/候选通过。四子格联合模块约束、原3D曲面tile和完整岛生成仍缺，底图成果片本轮仅学习。 入口 `wfc.html?subtiles=1`；证据 `artifacts/coverage/tri-subtiles-review.md`。
+
+最近学习：新增球面投影316帧、散点到松弛395帧，共711帧全核验，累计140/285，剩145。修三角化/松弛按钮显示同一最终坐标，补独立阶段快照及只读球面拓扑报告，平面60面抽样单列；18次闭合球逻辑与900点实际GPU阶段坐标通过。原投影往返/动态重三角化/完整阶段动画及游戏融合仍待补。 入口 `planet.html?stage=tri`；证据 `artifacts/coverage/sphere-stages-review.md`。
+
+最近学习：新增通用三角图279帧、Half Edge 511帧，共790帧全核验，累计138/285，剩147。共享TriGraph补确定性抽样/显式全查、退化/孤立点检查与坏输入原子拒绝；450次增量全查及实际200点浏览器通过，球面消费者回归通过。原版局部翻边编辑接口、Half Edge显式环/扇仍缺，后者本轮仅学习。 入口 `trigraph.html`；证据 `artifacts/coverage/trigraph-halfedge-review.md`。
+
+最近学习：再学纯网格对照610帧、多岛成果649帧，共1259帧全核验，累计136/285，剩149。本次用户请求合计新增4段1985帧。修旧“纯方格”仍有残留三角，新增共享cell契约的正交方格，保留合并菱形/混合旧算法；12组几何与真实Canvas/WorldMesh通过。纯六边地形、完整坡面/模块联合生成及原作美术仍待补，成果片本批仅学习审核。 入口 `grids.html?t=kinds`；证据 `artifacts/coverage/grid-kinds-review.md`。
+
+最近学习：新增笼形变272帧、岛屿生成454帧，共726帧全核验，累计134/285，剩151。纠正原片“全白线框”旧说明，保留切面/Taubin/面积保护，修shape.at分数层未定义并接入沉积线；9540次连续采样与双网格实际GPU通过。完整原笼/扭曲壁面碰撞、坡面/模块联合生成仍待补，后一段本批仅学习审核。 入口 `cage.html`；证据 `artifacts/coverage/cage-review.md`。
+
+最近学习：新增平滑对照164帧、边层级102帧，共266帧全核验，累计132/285，剩153。保留已有切面/Taubin/防塌陷，补显式hardEdges/全层钉点与实景开关，双网格位移误差<3e-7、移除恢复约0.12，既有薄檐保护回归通过。崖顶/脚等级不等于原模块/材质边，完整三模式/3D语义本批仍待补。 入口 `hierarchy.html`；证据 `artifacts/coverage/hierarchy-review.md`。
+
+最近学习：新增球面化229帧、防蘑菇化479帧，共708帧全核验，累计130/285，剩155。保留分层角点弹簧，补显式模块格选择/未触及角点隔离及逐格面积/边误差诊断，120/240点逻辑与900点GPU通过。发现旧平均指标掩盖局部误差：多格最差边误差48%→53.5%，完整模块拟合仍待补；球面原视觉/World接入本批仅学习审核。 入口 `planet.html`；证据 `artifacts/coverage/sphere-relax-review.md`。
+
+最近学习：新增河网194帧、沿河导航598帧，共792帧全核验，累计128/285，剩157。修复河口距离把上坡判为顺流，保留平床方向与既有河道费用；双网格真实河边、战斗导航及分层流场通过。河网仍是DFS开挖/局部削岸，完整球面河道约束坍缩＋其余BFS缓坡待实现，本批仅学习审核。 入口 `river-nav.html`；证据 `artifacts/coverage/river-nav-review.md`。
+
+最近学习：新增球面Texture test242帧、Mountain textures234帧，共476帧全核验，累计126/285，剩159。共享World几何补顶点法线明度属性与岩壁底色/烘焙/实时法线对照，5000方向逻辑及双网格GPU通过；原主场景模式保持默认。山体具体烘焙算法仅本地假设，原纹理atlas仍缺；球面海陆3D纹理/岸缘混合本批仅学习待实现。 入口 `mountain-bake.html`；证据 `artifacts/coverage/mountain-texture-review.md`。
+
+最近学习：新增径向排序346帧、法线反差384帧，共730帧全核验，累计124/285，剩161。纠正圆盘/矩形排序冒充UV图块、反差迭代冒充更早法线map细线的旧说明。共享地形材质补可关闭的解析法线场细线，双网格GPU开关/阈值/宽度与240/480像素覆盖通过；UV图块流程本批仅学习，仍待实现，原笔触normal atlas/接缝与完整后处理也缺。 入口 `normal-contrast.html`；证据 `artifacts/coverage/normal-radial-review.md`。
+
+最近学习：新增树impostor334帧、蓬松云235帧，共569帧全核验，累计122/285，剩163。保留本地八水平视图，修复旋转/父组锚点及正交相机误选图；双网格GPU锚点误差低于1e-6、正交选图差0、64步周界连续。背景云共享时钟/遮挡与三场回归通过；原球面octagonal卡片、多俯仰采样、原云形/层次仍缺。 入口 `impostors.html`；证据 `artifacts/coverage/impostor-view-review.md`。
+
+最近学习：新增候选/树查询296帧、运行时精灵图集164帧，共460帧全核验，累计120/285，剩165。共享Atlas补跨叶候选/key释放，9000次候选增删通过；ImpostorBaker补整组预留、真实GPU释放和满板/异常回滚，存活UV与像素不变，三主场树云32槽通过。原3D树、自动扩容/重排、原素材及完整兼容接口仍缺。 入口 `grids.html?t=atlas` / `atlas-live.html`；证据 `artifacts/coverage/atlas-candidates-review.md`。
+
+最近学习：新增矩形树添加247帧、移除/碎片化558帧，共805帧全核验，累计118/285，剩167。修复过期句柄重复释放清掉新槽的漏洞，补尺寸校验、显式栈搜索/统计与真实遍历拖动对照；24,000次增删和6,000层树通过。三主场景共享树/云图集32槽通过；删除只合并空兄弟，跨叶放置/原3D树视图与完整接口仍缺。 入口 `grids.html?t=atlas`；证据 `artifacts/coverage/atlas-review.md`。
+
+最近学习：新增早期头像88帧、游戏头像100帧，共188帧全核验，累计116/285，剩169。修复声明镜像分支的随机起点，增加显式种子和按固定槽派生身份，重绘/切页/手机换列可复现，旗帜共用生成器回归通过。2000流状态/2000槽种子及真实Canvas验证通过；原素材、SLOTS/spec/剪影IoU和游戏角色接口仍待补。 入口 `ui.html?t=face`；证据 `artifacts/coverage/portraits-review.md`。
+
+最近学习：新增UI flair100帧、图标306帧，共406帧全核验，累计114/285，剩171。抽出可复用图标工具条：单选状态、方向键跳过禁用项、跨页保持与销毁通过；纹饰补可拖动标题/外纹两轨时序及透明文字退出交互，保持同一GPU纹理。既有菜单/纹饰GPU回归通过；仍缺原徽章/逐部件时序、原图稿和游戏命令。 入口 `ui.html?t=icons` / `ornament.html`；证据 `artifacts/coverage/icons-flair-review.md`。
+
+最近学习：新增斜按钮383帧、确认弹出370帧，共753帧全核验，累计112/285，剩173。纠正原片确认菜单为横排；新增键/种子确定的视觉扰动与AABB间距约束、稳定按钮命中槽，补键盘/延时清理/快速切队，修复手机裁切。12000逻辑用例和真实UI交互通过。仍是本地UI实验，单Move目标确认、完整游戏指令/原美术待接。 入口 `ui.html?t=menu` / `ui.html?t=pop`；证据 `artifacts/coverage/ui-interaction-review.md`。
+
+最近学习：新增阴云489帧、冬季全景306帧，共795帧全核验，累计110/285，剩175。远云修复固定时钟、连续环带漂移及盖住建筑的问题，首页新增独立阴云开关；双网格GPU轨迹/周期/遮挡与三场通过。冬季第210帧是战斗景观突切，完整雪景/船群/血烟组合仍仅学习、待实现验收；原片高耸云体/层次也未复现。 入口 `clouds.html`；首页“远景阴云”与近云独立。证据 `artifacts/coverage/clouds-winter-review.md`。
+
+最近学习：新增风矢量516帧、受风雪花318帧，共834帧全核验，累计108/285，剩177。保留已有分层风场，修复雪片用柱顶填实洞口：共享World实际层碰撞、重生避开实心、非法dt拒绝。双网格通洞/封洞/即时重开与风向反转通过，首页三场风雪可见。仍是端点体素碰撞和简单白点，原作风接口/旗形轨迹、雪片接触AO/完整冬景待补。 静态扫描另补原版新增squigglefield/uikit到已有纹饰/UI实验，列部分覆盖，不增加视频计数。入口 `flow.html` 的共享风场雪片/洞口近景；首页继续用“风与天气”开关。证据 `artifacts/coverage/wind-snow-review.md`。
+
+最近学习：新增船迹138帧、背景雾326帧，共464帧全核验，累计106/285，剩179。船迹补固定时间采样和相位余量，实际双网格30/60/120Hz一致；雾盘外缘渐隐，首页可调浓度/相对流速，GPU边界/关闭/冻结通过。仍是带状尾迹与圆盘雾，原片泡沫喷溅和风场软片/体积遮挡未复现。 入口 `wake-fog.html`；首页“雾参数”直接控制共享场景。证据 `artifacts/coverage/wake-fog-review.md`。
+
+最近学习：新增早期草地333帧、锚点灌木316帧，共649帧全核验，累计104/285，剩181。纠正“草地片已长树”的旧说法，高层grass plots仍待实现；新增可选中心固定草卡片，实际共享shader四视角GPU读回中心漂移0，默认旧模式保留。局部GPU验收1段，另一段高层地块待实现，不计原作完整灌木/生命周期完成。 入口 `billboard-anchor.html`；证据 `artifacts/coverage/anchored-plots-review.md`。
+
+最近学习：新增道具动画306帧、封闭庭院202帧，共508帧全核验，累计102/285，剩183。庭院按实际墙层识别开口，修复高处桥体误封闭，双网格开口/重封闭及小径回归通过。道具片仅学习与审核完成：已有柱顶缩放/灰尘不等于独立道具生命周期，已明确部分覆盖及待验收，未虚计代码完成。 入口 `garden.html`；证据 `artifacts/coverage/courtyard-props-review.md`。
+
+最近学习：新增OBJ导出288帧、撤销录像167帧，共455帧全核验，累计100/285，剩185。主体OBJ改精确坐标与合法可选法线、坏属性拒绝，实际下载拓扑一致；回放修复历史截断偏移和编辑污染，新增取消/异常保岛。双网格通过，第三方DCC/完整材质与动作特效录制仍缺。 首页“更多能力实验”可回放/停止和导出主体，证据 `artifacts/coverage/obj-replay-review.md`。
+
+最近学习：新增分享串321帧、网格合并349帧，共670帧全核验，累计98/285，剩187。本地v5修复坏输入解码破坏当前岛、游程越界/尾随数据、空列元数据和北境场景身份；双网格真实分享重载通过。既有合并主体编辑前后GPU均1次提交，不代表全场景或Switch三倍性能；完整配色/玩法存档仍待补。 入口 `save-mesh.html`；证据 `artifacts/coverage/save-mesh-review.md`。
+
+最近学习：新增建筑QA814帧、饱和度/建筑/草地/彩色反弹说明456帧，共1270帧全核验，累计96/285，剩189。纠正QA片被简化为极端模块配色的旧解释；新增共享World的16步编辑压力回放、几何属性/索引诊断和异常恢复，双网格局部验收通过；完整原作QA及彩色反弹参数仍有差距。 入口 `qa-replay.html`，记录 `artifacts/coverage/qa-palette-review.md`；与首页环境入口改进分开记账。
+
+首页能力入口补齐：首页新增默认展开的风与天气实景控制：八项环境开关、风向重算、昼夜与北境环境配色；实验能力独立入口，完整管线保留。没有新增视频计数，仍94/285，剩191。 说明与验收见 `artifacts/coverage/environment-panel-review.md`。雨天目前仅北境配色；雪为粒子与表面着色，不能记为完整天气模拟。
+
+本目录当前服务已核验为 `http://localhost:8769`；`/__rea_identity__` 返回本目录绝对路径。`start.sh` 默认端口仍为8766，会复用本目录已运行的端口；明确指定可用 `./start.sh --port 8769 --open`。不要把端口相同当作目录身份相同。
+
+原版并行新增archvoid/storydatum已静态映射到已有拱底/全局层高立面；楔石/净空和任意塔基对齐接口待补，对应2016视频未逐帧，不计学习。
+
+当前映射范围为原版src/engine的 **144个JS模块**：本轮迁移/增强33、静态确认合并/迁移50、部分覆盖61、未覆盖0。本轮静态扫描发现新增src/housekit.js，映射到既有房屋/北境小屋，原比例约束/完整接口与对应视频尚待核验，不新增学习计数。静态确认代表保留已有代码改进，不等于每段视频都重新逐帧、运行验收。新增 `src/combatfx.js`经静态对照映射到已有Battle/分层流场，保留既有成果，440帧复核后补船上血斑即时局部锚点，现记部分覆盖；`src/tileforce.js`已补显式模板种子、已有拓扑搜索、整体2D刚体复核、有限样本诊断及共享World体量放置/撤回，现记部分覆盖；`src/smokefx.js`已有烟火主体并完成六段2197帧复核，现记部分覆盖；本次重新扫描补录此前未登记的src/campaignmap.js与src/gridpatch.js：前者与现有战役管线静态对应；后者经324帧纠正为四边格/放射手工模板，已补共享边界单个放射补丁，列部分覆盖；patch.html局部模块种子保留，不冒充完整规则模板库。其余部分覆盖缺口继续推进。
+
+权威进度在 `learn/coverage-progress.json`，模块映射在 `learn/coverage.json` / `MODULE-MAP.md`。首页左下角和pipeline页顶部读取同一份进度；`PIPELINE.md`由 `tools/gen-pipeline-md.mjs` 同时读取管线、映射和共享进度生成。后续更新这些源数据，避免只改页面标题或把旧记录复制成已完成。
+
+本轮已对原版新增src/mirrordecor.js、src/overhangterrain.js完成对应视频核验与映射，分别列增强/部分覆盖；未改动原版文件，薄檐/软坡等差距继续保留。
+
+本轮新增：新增轨道拖抹337帧、城镇调色200帧，共537帧全核验，累计94/285，剩191。历史留存按dt换算，真实30/60/120Hz通过；墙色新增本地HSL短弧过渡滑杆，双网格中点/端点/还原通过，World与位置不变。原片轮廓拖抹、PNG/完整接口与持久化仍待补。138模块28增强/68静态/42部分。 证据 artifacts/coverage/palette-transition-review.md。
+
+| 已验证成果 | 入口 / 主要证据 | 保留的缺口 |
+|---|---|---|
+| 分层战斗、洞内穿行、攻击遮挡、分层流场、水平半径扫掠 | navigation.html；artifacts/coverage/battle-navigation-review.md | 形变侧壁、连续斜坡脚高、精细模块portal、复杂拥挤 |
+| 协程预算/取消/异常，60000层显式嵌套 | scheduler.html；coroutine-review.md | 合作式不可抢占；仅同步finally取消清理 |
+| socket WFC、确定性、局部扩区修复与失败回滚 | wfc.html；wfc-review.md、wfc-repair-review.md | 完整建筑预制库和多格联合求解 |
+| 几何边界候选与共享半边审核 | adjacency.html；adjacency-review.md | 平行等长候选不保证完整实体装配 |
+| 实际融合双格房屋、整体替换/移除和本页撤销 | multicell.html；multicell-edit-review.md | 工程JSON已保存双格身份；统一撤销栈/通用模块身份待补 |
+| 等值线跨边缓存/闭环与双线性鞍点 | contour.html；contour-review.md | 语义平面诊断不等于形变泡沫岸线 |
+| 分层导航近似视线 | visibility.html；visibility-review.md | 角度漏检/角点保守停止，不是光学或攻击资格 |
+| 可选单方向精灵及锚点/alpha翻转指标 | sprites.html；sprites-review.md | 原作美术、完整动作与精灵阴影（UV血斑/摆动已补） |
+| 墙饰生成器及共享World贴面 | doodle.html；doodle-review.md | 完整走廊、弧顶/门口版式、纹样复杂度与贴面光照 |
+| 烟火机制保留、UV/mip及生命周期GPU量化 | smoke.html、fire.html；fire-review.md | 火焰quad/noise轮廓与动态火光，透明相交仍近似 |
+| 闭合球并集树冠、三角形接缝松弛及共享烘焙输入 | index.html?scene=terrain；canopy-review.md | 原作MC/美术、低分辨率歧义及全局自交证明 |
+| 共享World占用/支撑/梯度量化，实际洞内风场修复 | flow.html；world-probes-review.md | 梯度法线写回网格与硬边约束、形变后精确碰撞 |
+
+表中简写的证据文件均在 `artifacts/coverage/`。本轮续审火焰两段531帧，累计烟火六段2197帧；保留Max/二次收缩，修复实际寿命年龄、出生尺寸、到期残点及火源清空。GPU对照与三场景回归通过；火焰quad/noise轮廓与动态火光仍列部分覆盖。上一批223帧对应931196707236392960：画面展示圆润/体素显示切换；碰撞、风等用途由README原文说明。本轮实际修复Atmosphere从柱顶推断占用导致洞内被填实的问题，现按每层solid位采样。两种网格通洞/封洞、支撑和风速量化及三个主场景回归通过。不得把占用梯度诊断写成已经替换了现有网格软法线。
+
+
+
 ---
 
 ## 一、规矩（必须遵守）
@@ -23,7 +112,7 @@ REACodeRefactoring/
 ├── index.html              主场景：三个场景切换 + 右侧学习面板（系统全局 / 管线开关 / 去看 / 原视频）
 ├── architecture.html       系统全局：数据流图、模块卡片、新旧对照、未迁移清单（数据来自 learn/architecture.js）
 ├── pipeline.html           判断 + 学习路线 + 四条管线（数据来自 learn/pipeline.js）
-├── learn.html              237 段视频的学习笔记（数据来自 learn/data.js，缩略图 learn/thumbs/）
+├── learn.html              已登记视频的学习笔记（完整素材清单另见refactoring-audit.html）（数据来自 learn/data.js，缩略图 learn/thumbs/）
 ├── README.md               怎么打开、怎么操作
 ├── ARCHITECTURE.md         模块职责、依赖、约定
 ├── GUIDE.md                本文件
@@ -169,17 +258,17 @@ rea.loadScene('town'|'terrain'|'fusion')
 - **学视频先读全文再看画面**：一句话末尾顺口提的东西（"…and adding pretty little flowers"）不是视频内容；画面才是。
 - **音效要等一次点击**：AudioContext 在第一次 pointerdown / click 时创建，resume 是异步的；第一声要排队不能丢。
 
-## 七、下一步（按收益排）
+## 七、下一步（以共享进度数据为准）
 
-1. ~~描边 / 逆光~~、~~层级平滑 + 笼形变形~~、~~起伏沉积线~~、~~软法线~~（已完成，见 `terrain/shape.js`、`world/outline.js`）。
-2. **烘焙对齐变形**：`bake.js` 的占用图还按未变形的格子栅格化，崖壁移动大时 AO 会偏；改成按 `shape.at(p, lv)` 栅格化。
-3. ~~增量烘焙~~（第 3 轮完成：分块 + 内容哈希，一次编辑 ≈ 60 ms）。还可以把生成本身也做成按块增量。
-4. ~~三角 + 方格混合网格~~（第 4 轮完成：`buildMixedGrid()`，所有管线都支持任意多边形格子）。下一步：多格 tile（一个房子跨一个方格 + 一个三角格，`1579483114178768898`）。
-5. **球面**（`1768627849529893109`、`1338825080844021760`）：网格换成球面三角化，World 不变。
-6. 植被剩下的：八角 impostor（`1849427564034498642`）、和树共用 impostor 的云（`1852334860137849222`）、草的对比度描边、小花；水花 / 弹出动画、旗子、楼梯 WFC。
+1. 下一批新片：`821680056514781186`软影关联余片与`827215002448846848`弧长走廊首片，先README/全部帧。blobshadow已部分覆盖，navribbon仍未覆盖；本批340帧不重计。原动画/软影坡面与跨格连续性仍待补。
+2. 部分覆盖：体素梯度软化网格并约束硬边；精细portal、形变碰撞/斜坡脚高；复杂分岔真实战斗压力测试。
+3. 多格实例身份与统一撤销/存档，预制轮廓/socket、旋转和多格联合WFC。双格原子放置及整体编辑已做，不重新从零实现。
+4. 树冠硬边松弛、共享World球面融合和表面光照剩余缺口。独立planet.html、树/云impostor已有，不再记为全无。
+5. 走廊空间/弧顶与纹样质量；现有墙饰生成器和表面预览保留。
 
-每做完一项：更新 `learn/data.js`、`learn/pipeline.js`、`learn/architecture.js`，跑 `tools/gen-pipeline-md.mjs`，截图。
+每批先读取当前文件和git状态，避免覆盖并行编辑。原版只读。新片先按ID读README，再查看全部解码帧；沿用已看证据时新增观看量记0。观察、工程推断、静态确认、逻辑测试和运行截图分开记载。
 
+同步顺序：更新学习/管线与覆盖override → `python3 tools/build-coverage.py` → 更新共享进度 → `node tools/gen-pipeline-md.mjs` → `node tools/audit-pipeline.mjs` → `python3 tools/audit-refactoring.py`。修改实际算法时跑对应测试并截图三个主场景；只改文档/导航则核验链接、数据一致和页面可读性，不重复全部算法测试。
 
 ## 2026-11-01 · 重构状态口径补充（用户确认）
 
@@ -188,6 +277,15 @@ rea.loadScene('town'|'terrain'|'fusion')
 
 ## 覆盖补差与定时接续
 
-原版 src/engine 全部128个JS的映射在 MODULE-MAP.md，页面 coverage.html。职责映射在 tools/build-coverage.py；逐项实证覆盖写 learn/coverage-overrides.json，避免生成时丢失。每批先读原文再看全帧，证据目录 artifacts/coverage。每30分钟的定时任务承接当前聊天，刷新 learn/coverage-progress.json；index 与 pipeline 共享 src/ui/coverage-progress.js，页面也每30分钟重新读取。不要把自动轮询当作代码审核。
+原版 src/engine 当前141个JS的映射（动态新增以生成清单为准）在 MODULE-MAP.md，页面 coverage.html。职责映射在 tools/build-coverage.py；逐项实证覆盖写 learn/coverage-overrides.json，避免生成时丢失。每批先读原文再看全帧，证据目录 artifacts/coverage。每30分钟的定时任务承接当前聊天，刷新 learn/coverage-progress.json；index 与 pipeline 共享 src/ui/coverage-progress.js，页面也每30分钟重新读取。不要把自动轮询当作代码审核。
 
-首批导航逻辑测试：node tests/navigation.mjs。浏览器验收：artifacts/coverage/browser-check.json。多层战斗完整接入仍待补齐。后续顺序：多层单位接入 → 左行点线/压力测试 → 确定性WFC/局部修复 → 树冠硬边松弛 → 体素与表面光照。
+首批导航逻辑测试：node tests/navigation.mjs。浏览器验收：artifacts/coverage/browser-check.json。多层战斗、分层流场、基本半径与WFC/局部修复已接入，后续以本页顶部与共享进度缺口为准。
+
+
+### 分层战斗接续验收（22:07批次）
+
+运行 node tests/battle-navigation.mjs 验证层选择、门户移动、占用遮挡、缓存失效及有向河流费用。tests/battle-navigation-browser.cjs 使用 Playwright 和本地8769服务，真实Battle构造穿洞/封洞/上下层攻击场景，并截图；可用 REA_TEST_URL / CHROME_PATH 指定环境。证据 artifacts/coverage/battle-navigation-review.md。分层流场和基本水平半径扫掠已补；后续继续精细模块portal、形变侧壁和斜坡脚高插值，已有接入不重做。
+
+### 能力库与游戏接入分账
+
+TigerMessenger通过独立vendor副本和场景适配器调用部分重构能力；学习目录通过验收不等于游戏已同步。集成负责人智能体目前是讨论建议，尚未创建。继续记录“已学习/实验通过/已同步/已适配/游戏实景通过”，不自动把实验页计入游戏验收。

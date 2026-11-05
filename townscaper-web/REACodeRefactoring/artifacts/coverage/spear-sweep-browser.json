@@ -1,0 +1,27 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "frontHealth": 2,
+      "sideHealth": 5,
+      "otherFloorHealth": 5,
+      "oneHitPerThrust": true,
+      "newThrustCanHit": true,
+      "pausePreserved": true,
+      "stunCancels": true,
+      "fastCrossingHit": true
+    },
+    {
+      "grid": "mixed",
+      "frontHealth": 2,
+      "sideHealth": 5,
+      "otherFloorHealth": 5,
+      "oneHitPerThrust": true,
+      "newThrustCanHit": true,
+      "pausePreserved": true,
+      "stunCancels": true,
+      "fastCrossingHit": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,41 @@
+{
+  "report": {
+    "results": [
+      {
+        "width": 320,
+        "height": 160,
+        "borderChanges": 15672,
+        "centerChanges": 14508,
+        "leaks": 0,
+        "mirrorError": 1,
+        "fullOn": 7790,
+        "halfOn": 3875
+      },
+      {
+        "width": 640,
+        "height": 320,
+        "borderChanges": 25468,
+        "centerChanges": 83536,
+        "leaks": 0,
+        "mirrorError": 1,
+        "fullOn": 35310,
+        "halfOn": 17602
+      },
+      {
+        "width": 960,
+        "height": 480,
+        "borderChanges": 30008,
+        "centerChanges": 204660,
+        "leaks": 0,
+        "mirrorError": 1,
+        "fullOn": 83152,
+        "halfOn": 41430
+      }
+    ],
+    "oneTexture": true,
+    "uniformOnlyUpdates": true,
+    "invalidUpdateRejected": true,
+    "playbackAndStop": true
+  },
+  "errors": []
+}

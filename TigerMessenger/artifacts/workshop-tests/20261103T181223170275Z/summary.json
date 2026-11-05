@@ -1,0 +1,31 @@
+{
+  "at": "20261103T181223170275Z",
+  "output": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/workshop-tests/20261103T181223170275Z",
+  "checks": [
+    {
+      "name": "unit",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 0.09
+    },
+    {
+      "name": "source-bridge",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 0.6
+    },
+    {
+      "name": "watchdog",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 0.07
+    },
+    {
+      "name": "browser",
+      "status": "FAIL",
+      "exitCode": 1,
+      "seconds": 158.35
+    }
+  ],
+  "browserIsolation": "new non-persistent Playwright context; never user profile"
+}

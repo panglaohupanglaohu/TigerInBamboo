@@ -1,0 +1,49 @@
+{
+  "reports": [
+    {
+      "url": "index.html",
+      "progress": true,
+      "strata": 0,
+      "fields": 0,
+      "incremental": false,
+      "vertices": 36297
+    },
+    {
+      "url": "pipeline.html",
+      "progress": true
+    },
+    {
+      "url": "index.html?scene=town",
+      "progress": true,
+      "strata": 0,
+      "fields": 0,
+      "incremental": false,
+      "vertices": 36297
+    },
+    {
+      "url": "index.html?scene=badnorth",
+      "progress": true,
+      "strata": 0,
+      "fields": 0,
+      "incremental": false,
+      "vertices": 16458
+    },
+    {
+      "url": "index.html?scene=terrain&on=fields",
+      "progress": true,
+      "strata": 0,
+      "fields": 1,
+      "incremental": true,
+      "vertices": 37572
+    },
+    {
+      "url": "index.html?scene=terrain&on=strata",
+      "progress": true,
+      "strata": 2,
+      "fields": 0,
+      "incremental": false,
+      "vertices": 37572
+    }
+  ],
+  "errors": []
+}

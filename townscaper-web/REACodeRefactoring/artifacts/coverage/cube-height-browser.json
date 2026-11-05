@@ -1,0 +1,91 @@
+{
+  "result": {
+    "samples": [
+      {
+        "direction": [
+          1,
+          0,
+          0
+        ],
+        "actual": 0.6,
+        "expected": 0.6
+      },
+      {
+        "direction": [
+          -1,
+          0,
+          0
+        ],
+        "actual": 0.4,
+        "expected": 0.4
+      },
+      {
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "actual": 0.6509803921568628,
+        "expected": 0.65
+      },
+      {
+        "direction": [
+          0,
+          -1,
+          0
+        ],
+        "actual": 0.35294117647058826,
+        "expected": 0.35
+      },
+      {
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "actual": 0.6980392156862745,
+        "expected": 0.7
+      },
+      {
+        "direction": [
+          0,
+          0,
+          -1
+        ],
+        "actual": 0.30196078431372547,
+        "expected": 0.3
+      },
+      {
+        "direction": [
+          1,
+          0.3,
+          0.6
+        ],
+        "actual": 0.7176470588235294,
+        "expected": 0.720070521612411
+      },
+      {
+        "direction": [
+          -0.4,
+          1,
+          -0.2
+        ],
+        "actual": 0.5647058823529412,
+        "expected": 0.5639009650422694
+      },
+      {
+        "direction": [
+          0.6,
+          -0.2,
+          -1
+        ],
+        "actual": 0.3568627450980392,
+        "expected": 0.3563237766961521
+      }
+    ],
+    "vertexLookups": 1,
+    "size": 16,
+    "faces": 6
+  },
+  "errors": []
+}

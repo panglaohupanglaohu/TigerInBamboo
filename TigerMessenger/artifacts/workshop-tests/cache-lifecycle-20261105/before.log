@@ -1,0 +1,34 @@
+✔ last successful learning cache survives new reader and revalidates hashes (16.932584ms)
+✔ quota and oversized learning payload preserve previous slot (20.213917ms)
+✔ corrupt cached data rejects instead of activating an unverified offline view (3.188375ms)
+✖ synchronous storage-open denial releases the deadline timer immediately (0.442209ms)
+✔ late storage-open result closes after timeout without starting a transaction (0.124125ms)
+✔ active storage transaction aborts and closes at deadline without publishing result (0.091833ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 76.237917
+
+✖ failing tests:
+
+test at TigerMessenger/tests/learning-cache.test.mjs:8:1
+✖ synchronous storage-open denial releases the deadline timer immediately (0.442209ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/learning-cache.test.mjs:8:253
+      at async fakeClock (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/learning-cache.test.mjs:7:261)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

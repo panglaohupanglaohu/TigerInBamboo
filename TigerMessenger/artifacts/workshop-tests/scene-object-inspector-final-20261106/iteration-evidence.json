@@ -1,0 +1,33 @@
+{
+  "iteration": "2026-11-06 plane-tree object interface",
+  "observations": [
+    "User requested a visible way to select a specific plane tree in the scene workshop. Added always-visible runtime object list above viewport, names for four actual trees including bridge tree, contextual object inspector, focus and oriented highlight, clear-to-scene.",
+    "Object selection is explicitly read-only: no movement/shape/color editing or object edit serialization. Disable global apply/baseline and hide construction controls while selected; voxel pointer editing guarded.",
+    "Stable IDs based on authored planting sites. Existing botany batches meshes and empties original groups: initial screenshot showed ocean despite functional assertions. Corrected by storing exact local geometry bounds before batching and drawing local oriented helper under the selected logical object. Final viewport image actually viewed, bridge tree centered and green bounds around tree.",
+    "Final targeted S07/S18/S08/S13/L05 five PASS, zero page errors. Earlier six-case affected regression including G01 passed before final highlight/inspector polishing; do not claim full 33-case suite tested. Initial targeted setup failures retained: L01 left learning view; S07 now explicitly activates scene view.",
+    "Final local suite 20261105T165347912688Z: 51 PASS. Separate isolated factory comparison to committed botany: batched geometry attributes/index hashes, material properties, tree transforms and old report equal; four local bounds valid. Fixture not gameplay acceptance.",
+    "S18 actual World/settings, tree transforms, recipe and all storage keys unchanged across select/clear. User browser profile, restored buildings and original REA untouched. Real Worker, editable object pipelines and prior startup issues remain incomplete."
+  ],
+  "checks": [
+    {
+      "name": "real object selector and preserved scene state",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "botany geometry material transform parity",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "movement shape and persistent object editing",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "full workshop regression on final revision",
+      "required": false,
+      "passed": false
+    }
+  ]
+}

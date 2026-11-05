@@ -1,0 +1,14 @@
+✔ parses real ARCH single quotes comments trailing commas and real JSON declarations without execution (7.639417ms)
+✔ data escapes work; execution expressions prototypes duplicates and trailing programs are rejected (0.270333ms)
+✔ bounds malformed strings comments and nesting without accepting a partial result (0.106625ms)
+✔ decode real seven source files as one hash-checked data value without script execution (9.7575ms)
+✔ tamper version duplicate and missing core reject; incomplete value never commits globals (16.213167ms)
+✔ optional absence explicit and accepted; supported data grammar still checks structure (8.171333ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67.986291

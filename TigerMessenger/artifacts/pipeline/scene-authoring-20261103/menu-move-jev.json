@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "63b70c9ddc46894a8c899155a19536998450f61b3811b0edfd022a7d2ba883cb",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.31
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.84,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0,
+        "navigation": 0.12,
+        "review": 0.87
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.14
+    }
+  },
+  "usage": {
+    "input_tokens": 677,
+    "output_tokens": 91,
+    "cost_usd": 0.000285,
+    "credits_remaining_usd": 4.871953
+  },
+  "elapsed_ms": 2655,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "real8931 moved tool/palette/save and clean-game controls browser",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

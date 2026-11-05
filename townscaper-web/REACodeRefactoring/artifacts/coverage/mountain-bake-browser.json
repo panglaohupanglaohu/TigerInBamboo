@@ -1,0 +1,59 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "vertices": 28950,
+      "normalCount": 28950,
+      "rockVertices": 9792,
+      "error": 0,
+      "min": 0.6600000262260437,
+      "max": 1.0653164386749268,
+      "flatToBake": {
+        "sum": 1243716,
+        "count": 16204
+      },
+      "flatToRuntime": {
+        "sum": 1244291,
+        "count": 16204
+      },
+      "frozen": {
+        "sum": 0,
+        "count": 0
+      },
+      "restored": {
+        "sum": 0,
+        "count": 0
+      },
+      "rejected": 4,
+      "unchanged": true
+    },
+    {
+      "grid": "quad",
+      "vertices": 37572,
+      "normalCount": 37572,
+      "rockVertices": 12468,
+      "error": 0,
+      "min": 0.6600000262260437,
+      "max": 1.0605331659317017,
+      "flatToBake": {
+        "sum": 982047,
+        "count": 13271
+      },
+      "flatToRuntime": {
+        "sum": 982236,
+        "count": 13271
+      },
+      "frozen": {
+        "sum": 0,
+        "count": 0
+      },
+      "restored": {
+        "sum": 0,
+        "count": 0
+      },
+      "rejected": 4,
+      "unchanged": true
+    }
+  ],
+  "errors": []
+}

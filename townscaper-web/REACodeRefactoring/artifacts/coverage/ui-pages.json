@@ -1,0 +1,29 @@
+{
+  "reports": [
+    {
+      "scene": "town",
+      "remaining": true,
+      "menu": true,
+      "popup": true
+    },
+    {
+      "scene": "terrain",
+      "remaining": true,
+      "menu": true,
+      "popup": true
+    },
+    {
+      "scene": "fusion",
+      "remaining": true,
+      "menu": true,
+      "popup": true
+    },
+    {
+      "scene": "pipeline",
+      "remaining": true,
+      "menu": true,
+      "popup": true
+    }
+  ],
+  "errors": []
+}

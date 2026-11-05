@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "eaf0d1774c2e070521b7ae21840bcae8c178a0681477a5582cb1abb43da78d17",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.76
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.65,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0,
+        "navigation": 0.27,
+        "review": 0.72
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.75
+    }
+  },
+  "usage": {
+    "input_tokens": 614,
+    "output_tokens": 91,
+    "cost_usd": 0.000258,
+    "credits_remaining_usd": 4.873564
+  },
+  "elapsed_ms": 2652,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "real DSH worker model invocation",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

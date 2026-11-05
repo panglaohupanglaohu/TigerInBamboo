@@ -1,0 +1,48 @@
+{
+  "environment": "headless Chrome SwiftShader; not cross-platform certification",
+  "report": {
+    "webgl2": true,
+    "scope": "current-browser-only",
+    "renderer": "WebKit WebGL",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "extensions": {
+      "colorFloat": true,
+      "floatLinear": true
+    },
+    "formats": [
+      {
+        "name": "RGBA16F",
+        "framebufferStatus": 36053,
+        "renderable": true,
+        "readback": true,
+        "linearFiltering": true,
+        "readError": 0,
+        "values": [
+          1.25,
+          -0.5,
+          0.125,
+          0.75
+        ],
+        "filterError": 0,
+        "filteredValue": 0.5019607843137255
+      },
+      {
+        "name": "RGBA32F",
+        "framebufferStatus": 36053,
+        "renderable": true,
+        "readback": true,
+        "linearFiltering": true,
+        "readError": 0,
+        "values": [
+          1.25,
+          -0.5,
+          0.125,
+          0.75
+        ],
+        "filterError": 0,
+        "filteredValue": 0.5019607843137255
+      }
+    ]
+  },
+  "errors": []
+}

@@ -1,0 +1,37 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "segments": 31,
+      "ends": 0,
+      "loops": 1,
+      "openEnds": 2
+    },
+    {
+      "kind": "quad",
+      "segments": 28,
+      "ends": 0,
+      "loops": 1,
+      "openEnds": 2
+    },
+    {
+      "scene": "town",
+      "updated": true,
+      "hidden": true,
+      "segments": 78
+    },
+    {
+      "scene": "terrain",
+      "updated": true,
+      "hidden": true,
+      "segments": 131
+    },
+    {
+      "scene": "fusion",
+      "updated": true,
+      "hidden": true,
+      "segments": 136
+    }
+  ],
+  "errors": []
+}

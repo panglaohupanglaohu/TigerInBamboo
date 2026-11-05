@@ -1,0 +1,173 @@
+{
+  "reports": [
+    {
+      "scene": "terrain",
+      "stats": [
+        {
+          "vertices": 570,
+          "triangles": 1136,
+          "hardEdges": 105,
+          "hardBefore": 0.03573625638612727,
+          "hardAfter": 0.026628979700712683,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 40
+        },
+        {
+          "vertices": 560,
+          "triangles": 1116,
+          "hardEdges": 79,
+          "hardBefore": 0.02776480759948791,
+          "hardAfter": 0.023473531731638984,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 37
+        },
+        {
+          "vertices": 566,
+          "triangles": 1128,
+          "hardEdges": 123,
+          "hardBefore": 0.03699687986035726,
+          "hardAfter": 0.029982348910632783,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 31
+        }
+      ],
+      "impostorFields": 3
+    },
+    {
+      "scene": "town",
+      "stats": [
+        {
+          "vertices": 570,
+          "triangles": 1136,
+          "hardEdges": 105,
+          "hardBefore": 0.03573625638612727,
+          "hardAfter": 0.026628979700712683,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 0
+        },
+        {
+          "vertices": 560,
+          "triangles": 1116,
+          "hardEdges": 79,
+          "hardBefore": 0.02776480759948791,
+          "hardAfter": 0.023473531731638984,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 0
+        },
+        {
+          "vertices": 566,
+          "triangles": 1128,
+          "hardEdges": 123,
+          "hardBefore": 0.03699687986035726,
+          "hardAfter": 0.029982348910632783,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 0
+        }
+      ],
+      "impostorFields": 3
+    },
+    {
+      "scene": "fusion",
+      "stats": [
+        {
+          "vertices": 570,
+          "triangles": 1136,
+          "hardEdges": 105,
+          "hardBefore": 0.03573625638612727,
+          "hardAfter": 0.026628979700712683,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 19
+        },
+        {
+          "vertices": 560,
+          "triangles": 1116,
+          "hardEdges": 79,
+          "hardBefore": 0.02776480759948791,
+          "hardAfter": 0.023473531731638984,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 13
+        },
+        {
+          "vertices": 566,
+          "triangles": 1128,
+          "hardEdges": 123,
+          "hardBefore": 0.03699687986035726,
+          "hardAfter": 0.029982348910632783,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 19
+        }
+      ],
+      "impostorFields": 3
+    },
+    {
+      "scene": "badnorth",
+      "stats": [
+        {
+          "vertices": 570,
+          "triangles": 1136,
+          "hardEdges": 105,
+          "hardBefore": 0.03573625638612727,
+          "hardAfter": 0.026628979700712683,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 19
+        },
+        {
+          "vertices": 560,
+          "triangles": 1116,
+          "hardEdges": 79,
+          "hardBefore": 0.02776480759948791,
+          "hardAfter": 0.023473531731638984,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 15
+        },
+        {
+          "vertices": 566,
+          "triangles": 1128,
+          "hardEdges": 123,
+          "hardBefore": 0.03699687986035726,
+          "hardAfter": 0.029982348910632783,
+          "resolution": 16,
+          "passes": 6,
+          "closed": true,
+          "extraction": "surface-nets",
+          "instances": 15
+        }
+      ],
+      "impostorFields": 3
+    }
+  ],
+  "errors": []
+}

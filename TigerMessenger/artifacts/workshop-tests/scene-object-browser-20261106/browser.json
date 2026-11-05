@@ -1,0 +1,1108 @@
+{
+  "startedAt": "2026-11-05T16:36:21.988Z",
+  "base": "http://localhost:8931",
+  "isolated": true,
+  "cases": [
+    {
+      "id": "L13 synchronous IndexedDB open denial keeps learning usable",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S01 initial pipeline",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S02 scan real library and search",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S03 scan HTTP404 and recovery",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S12 scene categories subgroups and method shelf",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S14 ordered scene-layer board selects config and inserts inside its layer",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S04 add remove undo redo and reorder",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S05 goal save and exported JSON",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L01 learning loads source records",
+      "status": "PASS",
+      "ms": 165,
+      "detail": "正在保存学习缓存…"
+    },
+    {
+      "id": "L06 shared snapshot matches upstream and outage preserves old data",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L07 verified refresh updates all learning views and keeps recipe iframe",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L08 progress evidence history and next are folded with reachable learning tabs",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L09 offline full reload uses verified learning cache then recovers",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L10 cache quota failure leaves live learning and scene stores usable",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L11 unavailable IndexedDB keeps online learning and reports offline error",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L12 corrupt offline cache never activates and online refresh repairs it",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L14 video notes and pipeline methods show genuine thumbnails and missing-image fallback",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L02 module search and source links",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L03 add method to scene locate no duplicate",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L04 videos search play close",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S06 saved recipe refresh",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S07 real game connection and editor docking",
+      "status": "FAIL",
+      "ms": 50663,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#edit')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"edit\">进入编辑 ↗</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    17 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+      "responsiveness": [
+        {
+          "url": "/TigerMessenger/pipeline.html",
+          "ageMs": 50917,
+          "readyState": "complete",
+          "visibility": "visible",
+          "longTasks": [
+            {
+              "start": 15884,
+              "duration": 4632
+            },
+            {
+              "start": 8898,
+              "duration": 3835
+            },
+            {
+              "start": 20534,
+              "duration": 2995
+            },
+            {
+              "start": 12750,
+              "duration": 2968
+            },
+            {
+              "start": 2781,
+              "duration": 2869
+            },
+            {
+              "start": 37275,
+              "duration": 1617
+            },
+            {
+              "start": 6987,
+              "duration": 1438
+            },
+            {
+              "start": 1683,
+              "duration": 1082
+            },
+            {
+              "start": 35851,
+              "duration": 924
+            },
+            {
+              "start": 25184,
+              "duration": 833
+            },
+            {
+              "start": 23547,
+              "duration": 827
+            },
+            {
+              "start": 38925,
+              "duration": 765
+            },
+            {
+              "start": 24420,
+              "duration": 747
+            },
+            {
+              "start": 26270,
+              "duration": 641
+            },
+            {
+              "start": 26928,
+              "duration": 516
+            },
+            {
+              "start": 30482,
+              "duration": 471
+            },
+            {
+              "start": 36812,
+              "duration": 445
+            },
+            {
+              "start": 28164,
+              "duration": 328
+            },
+            {
+              "start": 29297,
+              "duration": 319
+            },
+            {
+              "start": 29633,
+              "duration": 300
+            }
+          ],
+          "unsupported": false
+        },
+        {
+          "url": "/TigerMessenger/index.html",
+          "ageMs": 50901,
+          "readyState": "complete",
+          "visibility": "visible",
+          "longTasks": [
+            {
+              "start": 15837,
+              "duration": 4632
+            },
+            {
+              "start": 8851,
+              "duration": 3835
+            },
+            {
+              "start": 20487,
+              "duration": 2995
+            },
+            {
+              "start": 12703,
+              "duration": 2968
+            },
+            {
+              "start": 2734,
+              "duration": 2869
+            },
+            {
+              "start": 37228,
+              "duration": 1617
+            },
+            {
+              "start": 6939,
+              "duration": 1438
+            },
+            {
+              "start": 1636,
+              "duration": 1082
+            },
+            {
+              "start": 35804,
+              "duration": 924
+            },
+            {
+              "start": 25137,
+              "duration": 833
+            },
+            {
+              "start": 23500,
+              "duration": 827
+            },
+            {
+              "start": 38878,
+              "duration": 765
+            },
+            {
+              "start": 24373,
+              "duration": 747
+            },
+            {
+              "start": 26222,
+              "duration": 641
+            },
+            {
+              "start": 26881,
+              "duration": 516
+            },
+            {
+              "start": 30434,
+              "duration": 471
+            },
+            {
+              "start": 36765,
+              "duration": 445
+            },
+            {
+              "start": 28117,
+              "duration": 328
+            },
+            {
+              "start": 29250,
+              "duration": 319
+            },
+            {
+              "start": 29585,
+              "duration": 300
+            }
+          ],
+          "unsupported": false
+        }
+      ],
+      "diagnostic": {
+        "cache": "已缓存上次成功学习资料；场景存档独立保存。",
+        "progress": "current",
+        "notice": "资料与进度来自同一校验快照 · 11f2886bfe08",
+        "version": "sha256:11f2886bfe087b1547a75d89a5c3b98f2502d696318fe79e50b2c59e755db529"
+      }
+    },
+    {
+      "id": "S18 real plane trees select focus clear without scene or storage edits",
+      "status": "FAIL",
+      "ms": 12334,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '♧ 桥边悬铃树', exact: true })\u001b[22m\n",
+      "responsiveness": [
+        {
+          "url": "/TigerMessenger/pipeline.html",
+          "ageMs": 63342,
+          "readyState": "complete",
+          "visibility": "visible",
+          "longTasks": [
+            {
+              "start": 15884,
+              "duration": 4632
+            },
+            {
+              "start": 8898,
+              "duration": 3835
+            },
+            {
+              "start": 20534,
+              "duration": 2995
+            },
+            {
+              "start": 12750,
+              "duration": 2968
+            },
+            {
+              "start": 2781,
+              "duration": 2869
+            },
+            {
+              "start": 37275,
+              "duration": 1617
+            },
+            {
+              "start": 6987,
+              "duration": 1438
+            },
+            {
+              "start": 1683,
+              "duration": 1082
+            },
+            {
+              "start": 35851,
+              "duration": 924
+            },
+            {
+              "start": 25184,
+              "duration": 833
+            },
+            {
+              "start": 23547,
+              "duration": 827
+            },
+            {
+              "start": 38925,
+              "duration": 765
+            },
+            {
+              "start": 24420,
+              "duration": 747
+            },
+            {
+              "start": 26270,
+              "duration": 641
+            },
+            {
+              "start": 26928,
+              "duration": 516
+            },
+            {
+              "start": 30482,
+              "duration": 471
+            },
+            {
+              "start": 36812,
+              "duration": 445
+            },
+            {
+              "start": 28164,
+              "duration": 328
+            },
+            {
+              "start": 29297,
+              "duration": 319
+            },
+            {
+              "start": 29633,
+              "duration": 300
+            }
+          ],
+          "unsupported": false
+        },
+        {
+          "url": "/TigerMessenger/index.html",
+          "ageMs": 63295,
+          "readyState": "complete",
+          "visibility": "visible",
+          "longTasks": [
+            {
+              "start": 15837,
+              "duration": 4632
+            },
+            {
+              "start": 8851,
+              "duration": 3835
+            },
+            {
+              "start": 20487,
+              "duration": 2995
+            },
+            {
+              "start": 12703,
+              "duration": 2968
+            },
+            {
+              "start": 2734,
+              "duration": 2869
+            },
+            {
+              "start": 37228,
+              "duration": 1617
+            },
+            {
+              "start": 6939,
+              "duration": 1438
+            },
+            {
+              "start": 1636,
+              "duration": 1082
+            },
+            {
+              "start": 35804,
+              "duration": 924
+            },
+            {
+              "start": 25137,
+              "duration": 833
+            },
+            {
+              "start": 23500,
+              "duration": 827
+            },
+            {
+              "start": 38878,
+              "duration": 765
+            },
+            {
+              "start": 24373,
+              "duration": 747
+            },
+            {
+              "start": 26222,
+              "duration": 641
+            },
+            {
+              "start": 26881,
+              "duration": 516
+            },
+            {
+              "start": 30434,
+              "duration": 471
+            },
+            {
+              "start": 36765,
+              "duration": 445
+            },
+            {
+              "start": 28117,
+              "duration": 328
+            },
+            {
+              "start": 29250,
+              "duration": 319
+            },
+            {
+              "start": 29585,
+              "duration": 300
+            }
+          ],
+          "unsupported": false
+        }
+      ],
+      "diagnostic": {
+        "cache": "已缓存上次成功学习资料；场景存档独立保存。",
+        "progress": "current",
+        "notice": "资料与进度来自同一校验快照 · 11f2886bfe08",
+        "version": "sha256:11f2886bfe087b1547a75d89a5c3b98f2502d696318fe79e50b2c59e755db529"
+      }
+    },
+    {
+      "id": "S08 editor tools palette help collapse",
+      "status": "FAIL",
+      "ms": 12001,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '建造', exact: true })\u001b[22m\n",
+      "responsiveness": [
+        {
+          "url": "/TigerMessenger/pipeline.html",
+          "ageMs": 75393,
+          "readyState": "complete",
+          "visibility": "visible",
+          "longTasks": [
+            {
+              "start": 15884,
+              "duration": 4632
+            },
+            {
+              "start": 8898,
+              "duration": 3835
+            },
+            {
+              "start": 20534,
+              "duration": 2995
+            },
+            {
+              "start": 12750,
+              "duration": 2968
+            },
+            {
+              "start": 2781,
+              "duration": 2869
+            },
+            {
+              "start": 37275,
+              "duration": 1617
+            },
+            {
+              "start": 6987,
+              "duration": 1438
+            },
+            {
+              "start": 1683,
+              "duration": 1082
+            },
+            {
+              "start": 35851,
+              "duration": 924
+            },
+            {
+              "start": 25184,
+              "duration": 833
+            },
+            {
+              "start": 23547,
+              "duration": 827
+            },
+            {
+              "start": 38925,
+              "duration": 765
+            },
+            {
+              "start": 24420,
+              "duration": 747
+            },
+            {
+              "start": 26270,
+              "duration": 641
+            },
+            {
+              "start": 26928,
+              "duration": 516
+            },
+            {
+              "start": 30482,
+              "duration": 471
+            },
+            {
+              "start": 36812,
+              "duration": 445
+            },
+            {
+              "start": 28164,
+              "duration": 328
+            },
+            {
+              "start": 29297,
+              "duration": 319
+            },
+            {
+              "start": 29633,
+              "duration": 300
+            }
+          ],
+          "unsupported": false
+        },
+        {
+          "url": "/TigerMessenger/index.html",
+          "ageMs": 75346,
+          "readyState": "complete",
+          "visibility": "visible",
+          "longTasks": [
+            {
+              "start": 15837,
+              "duration": 4632
+            },
+            {
+              "start": 8851,
+              "duration": 3835
+            },
+            {
+              "start": 20487,
+              "duration": 2995
+            },
+            {
+              "start": 12703,
+              "duration": 2968
+            },
+            {
+              "start": 2734,
+              "duration": 2869
+            },
+            {
+              "start": 37228,
+              "duration": 1617
+            },
+            {
+              "start": 6939,
+              "duration": 1438
+            },
+            {
+              "start": 1636,
+              "duration": 1082
+            },
+            {
+              "start": 35804,
+              "duration": 924
+            },
+            {
+              "start": 25137,
+              "duration": 833
+            },
+            {
+              "start": 23500,
+              "duration": 827
+            },
+            {
+              "start": 38878,
+              "duration": 765
+            },
+            {
+              "start": 24373,
+              "duration": 747
+            },
+            {
+              "start": 26222,
+              "duration": 641
+            },
+            {
+              "start": 26881,
+              "duration": 516
+            },
+            {
+              "start": 30434,
+              "duration": 471
+            },
+            {
+              "start": 36765,
+              "duration": 445
+            },
+            {
+              "start": 28117,
+              "duration": 328
+            },
+            {
+              "start": 29250,
+              "duration": 319
+            },
+            {
+              "start": 29585,
+              "duration": 300
+            }
+          ],
+          "unsupported": false
+        }
+      ],
+      "diagnostic": {
+        "cache": "已缓存上次成功学习资料；场景存档独立保存。",
+        "progress": "current",
+        "notice": "资料与进度来自同一校验快照 · 11f2886bfe08",
+        "version": "sha256:11f2886bfe087b1547a75d89a5c3b98f2502d696318fe79e50b2c59e755db529"
+      }
+    },
+    {
+      "id": "S13 approved light blue toolbar contrast and focus",
+      "status": "FAIL",
+      "ms": 12197,
+      "error": "locator.focus: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#morris-town-topright').getByRole('button', { name: '帮助', exact: true })\u001b[22m\n",
+      "responsiveness": [
+        {
+          "url": "/TigerMessenger/pipeline.html",
+          "ageMs": 87629,
+          "readyState": "complete",
+          "visibility": "visible",
+          "longTasks": [
+            {
+              "start": 15884,
+              "duration": 4632
+            },
+            {
+              "start": 8898,
+              "duration": 3835
+            },
+            {
+              "start": 20534,
+              "duration": 2995
+            },
+            {
+              "start": 12750,
+              "duration": 2968
+            },
+            {
+              "start": 2781,
+              "duration": 2869
+            },
+            {
+              "start": 37275,
+              "duration": 1617
+            },
+            {
+              "start": 6987,
+              "duration": 1438
+            },
+            {
+              "start": 1683,
+              "duration": 1082
+            },
+            {
+              "start": 35851,
+              "duration": 924
+            },
+            {
+              "start": 25184,
+              "duration": 833
+            },
+            {
+              "start": 23547,
+              "duration": 827
+            },
+            {
+              "start": 38925,
+              "duration": 765
+            },
+            {
+              "start": 24420,
+              "duration": 747
+            },
+            {
+              "start": 26270,
+              "duration": 641
+            },
+            {
+              "start": 26928,
+              "duration": 516
+            },
+            {
+              "start": 30482,
+              "duration": 471
+            },
+            {
+              "start": 36812,
+              "duration": 445
+            },
+            {
+              "start": 28164,
+              "duration": 328
+            },
+            {
+              "start": 29297,
+              "duration": 319
+            },
+            {
+              "start": 29633,
+              "duration": 300
+            }
+          ],
+          "unsupported": false
+        },
+        {
+          "url": "/TigerMessenger/index.html",
+          "ageMs": 87582,
+          "readyState": "complete",
+          "visibility": "visible",
+          "longTasks": [
+            {
+              "start": 15837,
+              "duration": 4632
+            },
+            {
+              "start": 8851,
+              "duration": 3835
+            },
+            {
+              "start": 20487,
+              "duration": 2995
+            },
+            {
+              "start": 12703,
+              "duration": 2968
+            },
+            {
+              "start": 2734,
+              "duration": 2869
+            },
+            {
+              "start": 37228,
+              "duration": 1617
+            },
+            {
+              "start": 6939,
+              "duration": 1438
+            },
+            {
+              "start": 1636,
+              "duration": 1082
+            },
+            {
+              "start": 35804,
+              "duration": 924
+            },
+            {
+              "start": 25137,
+              "duration": 833
+            },
+            {
+              "start": 23500,
+              "duration": 827
+            },
+            {
+              "start": 38878,
+              "duration": 765
+            },
+            {
+              "start": 24373,
+              "duration": 747
+            },
+            {
+              "start": 26222,
+              "duration": 641
+            },
+            {
+              "start": 26881,
+              "duration": 516
+            },
+            {
+              "start": 30434,
+              "duration": 471
+            },
+            {
+              "start": 36765,
+              "duration": 445
+            },
+            {
+              "start": 28117,
+              "duration": 328
+            },
+            {
+              "start": 29250,
+              "duration": 319
+            },
+            {
+              "start": 29585,
+              "duration": 300
+            }
+          ],
+          "unsupported": false
+        }
+      ],
+      "diagnostic": {
+        "cache": "已缓存上次成功学习资料；场景存档独立保存。",
+        "progress": "current",
+        "notice": "资料与进度来自同一校验快照 · 11f2886bfe08",
+        "version": "sha256:11f2886bfe087b1547a75d89a5c3b98f2502d696318fe79e50b2c59e755db529"
+      }
+    },
+    {
+      "id": "S09 actual parameter preview baseline and snapshot",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S15 canonical actions save actual manual parameters once and locate versions in-page",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S16 draft quota failure preserves world settings recipe and all stored versions",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S10 stale finalize reject restore and isolated final",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S17 fixed-version game loads exact data settings and missing ID reports fallback",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "S11 play mode and service outage independence",
+      "status": "NOT_RUN",
+      "reason": "targeted test filter"
+    },
+    {
+      "id": "L05 mobile overflow and preserved scene iframe",
+      "status": "PASS",
+      "ms": 893
+    },
+    {
+      "id": "G01 clean game startup and remote controls",
+      "status": "PASS",
+      "ms": 47958
+    }
+  ],
+  "errors": [],
+  "responsivenessBeforeGameExit": [
+    {
+      "url": "/TigerMessenger/pipeline.html",
+      "ageMs": 89061,
+      "readyState": "complete",
+      "visibility": "visible",
+      "longTasks": [
+        {
+          "start": 15884,
+          "duration": 4632
+        },
+        {
+          "start": 8898,
+          "duration": 3835
+        },
+        {
+          "start": 20534,
+          "duration": 2995
+        },
+        {
+          "start": 12750,
+          "duration": 2968
+        },
+        {
+          "start": 2781,
+          "duration": 2869
+        },
+        {
+          "start": 37275,
+          "duration": 1617
+        },
+        {
+          "start": 6987,
+          "duration": 1438
+        },
+        {
+          "start": 1683,
+          "duration": 1082
+        },
+        {
+          "start": 35851,
+          "duration": 924
+        },
+        {
+          "start": 25184,
+          "duration": 833
+        },
+        {
+          "start": 23547,
+          "duration": 827
+        },
+        {
+          "start": 38925,
+          "duration": 765
+        },
+        {
+          "start": 24420,
+          "duration": 747
+        },
+        {
+          "start": 26270,
+          "duration": 641
+        },
+        {
+          "start": 26928,
+          "duration": 516
+        },
+        {
+          "start": 30482,
+          "duration": 471
+        },
+        {
+          "start": 36812,
+          "duration": 445
+        },
+        {
+          "start": 28164,
+          "duration": 328
+        },
+        {
+          "start": 29297,
+          "duration": 319
+        },
+        {
+          "start": 29633,
+          "duration": 300
+        }
+      ],
+      "unsupported": false
+    },
+    {
+      "url": "/TigerMessenger/index.html",
+      "ageMs": 89014,
+      "readyState": "complete",
+      "visibility": "visible",
+      "longTasks": [
+        {
+          "start": 15837,
+          "duration": 4632
+        },
+        {
+          "start": 8851,
+          "duration": 3835
+        },
+        {
+          "start": 20487,
+          "duration": 2995
+        },
+        {
+          "start": 12703,
+          "duration": 2968
+        },
+        {
+          "start": 2734,
+          "duration": 2869
+        },
+        {
+          "start": 37228,
+          "duration": 1617
+        },
+        {
+          "start": 6939,
+          "duration": 1438
+        },
+        {
+          "start": 1636,
+          "duration": 1082
+        },
+        {
+          "start": 35804,
+          "duration": 924
+        },
+        {
+          "start": 25137,
+          "duration": 833
+        },
+        {
+          "start": 23500,
+          "duration": 827
+        },
+        {
+          "start": 38878,
+          "duration": 765
+        },
+        {
+          "start": 24373,
+          "duration": 747
+        },
+        {
+          "start": 26222,
+          "duration": 641
+        },
+        {
+          "start": 26881,
+          "duration": 516
+        },
+        {
+          "start": 30434,
+          "duration": 471
+        },
+        {
+          "start": 36765,
+          "duration": 445
+        },
+        {
+          "start": 28117,
+          "duration": 328
+        },
+        {
+          "start": 29250,
+          "duration": 319
+        },
+        {
+          "start": 29585,
+          "duration": 300
+        }
+      ],
+      "unsupported": false
+    }
+  ],
+  "finishedAt": "2026-11-05T16:38:39.010Z",
+  "summary": {
+    "passed": 3,
+    "failed": 4,
+    "pageErrors": 0
+  }
+}

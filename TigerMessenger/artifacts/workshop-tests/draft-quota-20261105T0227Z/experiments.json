@@ -1,0 +1,407 @@
+{
+  "versions": [
+    {
+      "id": "d3c18b14-fdb0-4c16-b9dd-4ab7c86a6ae2",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "保留湖上建筑群，探索水、光与生命的组合",
+      "validation": {
+        "passed": true,
+        "message": "编码往返不一致",
+        "scope": "codec-only"
+      },
+      "time": 1793845713772,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "保留湖上建筑群，探索水、光与生命的组合",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "day",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": []
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "day",
+        "outline": true,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": false,
+        "snow": false,
+        "fire": true
+      }
+    },
+    {
+      "id": "737603df-6701-4493-a22b-46e14a727f44",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "保留湖上建筑群，探索水、光与生命的组合",
+      "validation": {
+        "passed": true,
+        "message": "编码往返不一致",
+        "scope": "codec-only"
+      },
+      "time": 1793845715767,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "保留湖上建筑群，探索水、光与生命的组合",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "day",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": []
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "dusk",
+        "outline": true,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": false,
+        "snow": false,
+        "fire": true
+      }
+    },
+    {
+      "id": "88604728-3061-47de-8ea9-9a9ceb92aa5f",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "保留湖上建筑群，探索水、光与生命的组合",
+      "validation": {
+        "passed": true,
+        "message": "编码往返不一致",
+        "scope": "codec-only"
+      },
+      "time": 1793845719417,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "保留湖上建筑群，探索水、光与生命的组合",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "day",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": []
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "dusk",
+        "outline": true,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": false,
+        "snow": false,
+        "fire": true
+      }
+    },
+    {
+      "id": "6c7de29b-3647-468a-874d-daeaee1bb9bb",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "恢复前自动保护",
+      "validation": null,
+      "time": 1793845723406,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "保留湖上建筑群，探索水、光与生命的组合",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "night",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": []
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "night",
+        "outline": true,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": false,
+        "snow": false,
+        "fire": true
+      }
+    }
+  ],
+  "finals": {
+    "morris-lake": "88604728-3061-47de-8ea9-9a9ceb92aa5f"
+  }
+}

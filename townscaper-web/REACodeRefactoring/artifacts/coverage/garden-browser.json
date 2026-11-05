@@ -1,0 +1,43 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "runs": [
+        {
+          "hole": true,
+          "yards": 26,
+          "paths": 13,
+          "version": 397,
+          "connected": 13
+        },
+        {
+          "hole": false,
+          "yards": 27,
+          "paths": 12,
+          "version": 447,
+          "connected": 12
+        }
+      ]
+    },
+    {
+      "kind": "quad",
+      "runs": [
+        {
+          "hole": true,
+          "yards": 22,
+          "paths": 14,
+          "version": 392,
+          "connected": 14
+        },
+        {
+          "hole": false,
+          "yards": 23,
+          "paths": 12,
+          "version": 442,
+          "connected": 12
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

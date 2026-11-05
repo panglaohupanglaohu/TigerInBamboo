@@ -1,0 +1,36 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "wave": 3,
+      "bigMax": 6,
+      "bigHealth": 3,
+      "soak": 0.5,
+      "bigScale": 1.499999966200724,
+      "bigRadius": 0.0825,
+      "smallStunned": true,
+      "bigResistsStun": true,
+      "spriteSizes": [
+        0.36,
+        0.24
+      ]
+    },
+    {
+      "grid": "mixed",
+      "wave": 3,
+      "bigMax": 6,
+      "bigHealth": 3,
+      "soak": 0.5,
+      "bigScale": 1.5,
+      "bigRadius": 0.0825,
+      "smallStunned": true,
+      "bigResistsStun": true,
+      "spriteSizes": [
+        0.36,
+        0.24
+      ]
+    }
+  ],
+  "corpseRetainsScale": true,
+  "errors": []
+}

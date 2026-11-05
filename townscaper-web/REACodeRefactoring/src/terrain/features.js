@@ -6,7 +6,7 @@
  *     画面：崖顶的岩石往外伸出一截，底下是空的。
  *   1670794261669769217 "this lovely rock feature … sometimes you build a cool tile and it wont show up in forever,
  *     since it's conditions are so specific … and then suddenly: poof!"  画面：两根岩柱之间架着一道天然石拱。
- *   1708815475801505819 "a cool cliff I came across"  画面：海边一根根石柱，顶上压着更宽的一块（蘑菇石）。
+ *   1708815475801505819 "a cool cliff I came across"：斜向崖脊/柱群和小屋；本地蘑菇石扩展并非该片已证实的生成法。
  *   1751932427272909032 "force specific modules to appear. To do this I first generate the specific bit of grid they need.
  *     A large module like this would be highly unlikely to appear by chance"  画面：岛中央一座带尖塔的教堂。
  *

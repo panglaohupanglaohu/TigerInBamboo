@@ -1,0 +1,27 @@
+{
+  "iteration": "2026-11-05 10:24 Shanghai final status fix",
+  "observations": [
+    "Pre-fix full suite 51 local/30 browser PASS. Historical L07 timeout still open, not reproduced this run.",
+    "New S16 first passed storage integrity but actual screenshot revealed old saved status remaining inside version panel on quota failure. Fixed workbench onSave catch to report failure there as well.",
+    "After fix six targeted connected real-game browser cases PASS, zero page errors. S16 asserts both failure statuses, codec not-saved, all storage keys and complete World/settings/recipe capture unchanged; retry adds exactly one version.",
+    "Actual final quota screenshot inspected: top and version dock both show failure, light blue toolbar preserved.",
+    "Final text suffix made generic for validation or storage errors. No user profile access or original library changes. Existing nonempty-final fixture not independently covered in S16. Model Worker and gameplay not accepted."
+  ],
+  "checks": [
+    {
+      "name": "affected browser regression including quota failure",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "historical timeout root cause",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "real Worker and gameplay acceptance",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

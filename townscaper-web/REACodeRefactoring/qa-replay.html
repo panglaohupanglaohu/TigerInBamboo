@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>重构 · 建筑编辑压力回放</title>
+<style>body{margin:0;background:#eef4f3;color:#20343c;font:14px system-ui}header{padding:12px}iframe{width:100%;height:76vh;border:0}#status{white-space:pre-wrap}button,select{padding:6px;margin:4px}</style>
+<header><a href="pipeline.html">← 管线</a> · <b>真实共享World · 建筑编辑压力回放</b><p>1344290848180203523 展示复杂悬空建筑的增删重组。此页用本地确定性序列检查有限顶点、法线、颜色和三角索引，退化面单独报告；不是原作QA算法，也不证明无穿插/漏面。</p>
+<label>网格<select id="grid"><option value="mixed">三角＋方格</option><option value="quad">四边格</option></select></label><button id="run" disabled>回放16步并恢复</button><span id="status">加载共享场景…</span></header><iframe id="scene" title="QA共享场景"></iframe>
+<script type="module">
+import{runWorldQA}from'./src/core/qa-replay.js';
+const $=s=>document.querySelector(s);let api,running=false;function load(){api=null;window.qaReplay=null;$('#run').disabled=true;$('#scene').src='index.html?scene=town&grid='+$('#grid').value;}$('#scene').onload=()=>{const ready=()=>{api=$('#scene').contentWindow.rea;if(!api?.view.worldMesh.geometry.attributes.color?.count){setTimeout(ready,100);return}window.qaReplay={api,run};$('#run').disabled=false;$('#status').textContent='就绪 · 编辑后恢复体素/配色/河道';};ready();};
+async function run(){if(running||!api)return;running=true;$('#run').disabled=true;$('#grid').disabled=true;$('#scene').style.pointerEvents='none';try{const r=await runWorldQA(api,{afterStep:async r=>{$('#status').textContent=`顶点 ${r.vertices} · 退化三角 ${r.degenerateTriangles}`;await new Promise(requestAnimationFrame);}});window.qaReplay.result=r;$('#status').textContent=`完成 ${r.steps.length} 步，已恢复。退化三角最大值 ${Math.max(...r.steps.map(s=>s.degenerateTriangles))}，仍需视觉检查。`;return r;}catch(e){$('#status').textContent=`失败，已恢复：${e.message}`;throw e;}finally{running=false;$('#run').disabled=false;$('#grid').disabled=false;$('#scene').style.pointerEvents='';}}
+$('#run').onclick=()=>run().catch(console.error);$('#grid').onchange=load;load();
+</script></html>

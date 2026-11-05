@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "9ae0094f6e917021fe44506a182f70b8ddba25a46874eaab2b190dd8a62e438c",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.36
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.91,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.07,
+        "review": 0.93
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.17
+    }
+  },
+  "usage": {
+    "input_tokens": 805,
+    "output_tokens": 91,
+    "cost_usd": 0.000339,
+    "credits_remaining_usd": 4.86687
+  },
+  "elapsed_ms": 2157,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "producer transaction dependencies stable identities and AI upgrade",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

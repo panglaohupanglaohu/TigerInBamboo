@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>台地上的队伍 — 高度必须逐人取</title>
+<style>
+  :root { --ink:#22303a; --muted:#5f7480; --line:#d3dcdc; --ok:#146c4a; --bad:#b3412f; --blue:#2d4f7c; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef1ef; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:118ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 60px 8px;
+    background:linear-gradient(180deg, rgba(238,241,239,.98) 70%, rgba(238,241,239,0)); }
+  #stats { position:fixed; z-index:2; left:60px; right:60px; bottom:14px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.96);
+    border:1px solid var(--line); border-radius:8px; padding:8px 14px;
+    font-variant-numeric:tabular-nums; display:flex; gap:20px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:var(--ok); font-weight:650; }
+  #stats .bad { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>队伍站在台地上：高度得<b>一个人一个人取</b>，不是整队一个数</h1>
+  <p>同一片台地、同一队兵。左：整队用队伍中心那一格的高度，全队踩在同一条水平线上 —— 高一级台面上的人被埋进土里，
+     低一级上的人悬在空中（红色虚线是脚底到地面的落差）。右：每个人各自取<b>自己脚下那一格</b>的台面高度，
+     悬空和埋入同时归零，代价是队形在坡上变成阶梯状。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { makeTerrain, makeSquad, place, measure, standHeight } from './src/unitsnap.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#22303a', MUTED = '#5f7480', OK = '#146c4a', BAD = '#b3412f', BLUE = '#2d4f7c';
+
+const N = 22;
+const terrain = makeTerrain(N);
+const CX = 12, CY = 12;
+const squad = makeSquad(CX, CY, 22, 3.4, 3);
+
+const SX = 12, SY = 6, SZ = 24;
+const iso = (x, y, z, ox, oy) => [ox + (x - y) * SX, oy + (x + y) * SY - z * SZ];
+
+function drawUnit(ox, oy, u, mode) {
+  const [px, py] = iso(u.x, u.y, u.foot, ox, oy);
+  const t = standHeight(u.x, u.y);
+  const gap = u.foot - t;
+  // 脚底投影
+  ctx.beginPath();
+  ctx.ellipse(px, py, 6.4, 3.1, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(30,45,55,.16)'; ctx.fill();
+  // 落差线：脚底 → 真实地面
+  if (Math.abs(gap) > 0.02) {
+    const [gx, gy] = iso(u.x, u.y, t, ox, oy);
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = 'rgba(179,65,47,.85)'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(gx, gy); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(gx, gy, 2.2, 0, Math.PI * 2); ctx.fillStyle = BAD; ctx.fill();
+  }
+  // 人：斗篷 + 盾（坏掉的那半用红描边点出来）
+  ctx.beginPath();
+  ctx.moveTo(px - 3.4, py - 1.4);
+  ctx.lineTo(px - 2.4, py - 12.6);
+  ctx.quadraticCurveTo(px, py - 16.2, px + 2.4, py - 12.6);
+  ctx.lineTo(px + 3.4, py - 1.4);
+  ctx.closePath();
+  ctx.fillStyle = mode === 'flat' ? '#3c6089' : BLUE;
+  ctx.fill();
+  if (Math.abs(gap) > 0.02) { ctx.strokeStyle = BAD; ctx.lineWidth = 1.3; ctx.stroke(); }
+  ctx.beginPath();
+  ctx.ellipse(px + 2.8, py - 7.2, 1.9, 2.7, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#a9cbdd'; ctx.fill();
+}
+
+/** 关键：单位跟着它所在的那一格一起画，被前排格子自然遮住 —— 埋进去的人才真的"陷进去"。 */
+function drawScene(ox, oy, units, mode) {
+  const byCell = new Map();
+  for (const u of units) {
+    const k = Math.floor(u.x) + ',' + Math.floor(u.y);
+    if (!byCell.has(k)) byCell.set(k, []);
+    byCell.get(k).push(u);
+  }
+  const cells = [];
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) cells.push(terrain.g[y][x]);
+  cells.sort((a, b) => (a.x + a.y) - (b.x + b.y) || a.x - b.x);
+
+  for (const c of cells) {
+    const z = c.z, x0 = c.x, y0 = c.y, x1 = x0 + 1, y1 = y0 + 1, zb = z - 0.9;
+    const t = [iso(x0, y0, z, ox, oy), iso(x1, y0, z, ox, oy), iso(x1, y1, z, ox, oy), iso(x0, y1, z, ox, oy)];
+    // 侧面（先画，压在同格顶面之下）
+    const a1 = iso(x0, y1, z, ox, oy), a2 = iso(x1, y1, z, ox, oy);
+    const b1 = iso(x0, y1, zb, ox, oy), b2 = iso(x1, y1, zb, ox, oy);
+    ctx.beginPath(); ctx.moveTo(...a1); ctx.lineTo(...a2); ctx.lineTo(...b2); ctx.lineTo(...b1); ctx.closePath();
+    ctx.fillStyle = '#c3cbc0'; ctx.fill();
+    const c1 = iso(x1, y0, z, ox, oy), c2 = iso(x1, y1, z, ox, oy);
+    const d1 = iso(x1, y0, zb, ox, oy), d2 = iso(x1, y1, zb, ox, oy);
+    ctx.beginPath(); ctx.moveTo(...c1); ctx.lineTo(...c2); ctx.lineTo(...d2); ctx.lineTo(...d1); ctx.closePath();
+    ctx.fillStyle = '#a8b1a6'; ctx.fill();
+    // 顶面
+    ctx.beginPath(); ctx.moveTo(...t[0]); for (let i = 1; i < 4; i++) ctx.lineTo(...t[i]); ctx.closePath();
+    ctx.fillStyle = '#e3e8e1'; ctx.fill();
+    ctx.strokeStyle = 'rgba(60,80,70,.10)'; ctx.lineWidth = 0.7; ctx.stroke();
+    // 同格的单位
+    const us = byCell.get(x0 + ',' + y0);
+    if (us) for (const u of us.sort((p, q) => (p.x + p.y) - (q.x + q.y))) drawUnit(ox, oy, u, mode);
+  }
+}
+
+function drawPanel(ox, oy, mode, title, sub) {
+  ctx.font = '600 14px -apple-system,system-ui,"PingFang SC"';
+  ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(title, ox, oy - 132);
+  ctx.font = '400 11.5px -apple-system,system-ui,"PingFang SC"';
+  ctx.fillStyle = MUTED;
+  ctx.fillText(sub, ox, oy - 114);
+
+  const units = place(squad, mode, { x: CX, y: CY });
+  drawScene(ox, oy, units, mode);
+
+  // 参照线：整队共用的那条水平线
+  if (mode === 'flat') {
+    const z = standHeight(CX, CY);
+    const [l1, l2] = [iso(0, 0, z, ox, oy), iso(N, 0, z, ox, oy)];
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = 'rgba(179,65,47,.42)'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(l1[0] - 18, l1[1] + 6); ctx.lineTo(l2[0] + 18, l2[1] - 6); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = '400 10.5px -apple-system,system-ui'; ctx.fillStyle = 'rgba(179,65,47,.85)';
+    ctx.textAlign = 'left';
+    ctx.fillText('全队共用这条水平线', l2[0] + 22, l2[1] - 8);
+  }
+  ctx.textAlign = 'left';
+  return units;
+}
+
+const AX = 330, BX = 960, AY = 340;
+const uf = drawPanel(AX, AY, 'flat', '整队一个高度（错的）', '队伍中心那一格算一次，全队共用');
+const us = drawPanel(BX, AY, 'snap', '逐人取脚下那格（对的）', '每个人各自落在自己那一格台面上');
+
+const mf = measure(uf), ms = measure(us);
+
+ctx.font = '400 11.5px -apple-system,system-ui,"PingFang SC"';
+ctx.fillStyle = MUTED; ctx.textAlign = 'left';
+const NOTES = [
+  '红色虚线 = 脚底到地面的落差（悬空/埋入都会被标出来）；红描边的那个兵就是站错的',
+  `一队 ${squad.length} 人跨 ${ms.levels} 级台面，脚底天然相差 ${ms.groundSpread.toFixed(2)}（= ${(ms.groundSpread / 0.9).toFixed(0)} 级 × 0.90）`,
+  '阶梯轮廓不是 bug：人站在一级一级的台面上，队形在等距视角里本来就是台阶状',
+];
+NOTES.forEach((t, i) => ctx.fillText(t, 60, 648 + i * 22));
+
+document.getElementById('stats').innerHTML =
+  `<span>同一队 <b>${squad.length}</b> 人</span>` +
+  `<span>层高 <b>0.90</b></span>` +
+  `<span>跨 <b>${ms.levels}</b> 级 / 高差 <b>${ms.groundSpread.toFixed(2)}</b></span>` +
+  `<span>整队一个高度：悬空 <b class="bad">${mf.floating}</b> 埋入 <b class="bad">${mf.buried}</b></span>` +
+  `<span>逐人取高：悬空 <b class="ok">${ms.floating}</b> 埋入 <b class="ok">${ms.buried}</b></span>` +
+  `<span>相邻最大落差 <b>${mf.maxGap.toFixed(2)}</b></span>`;
+
+window.reaUnitsnap = { flat: mf, snap: ms, n: squad.length };
+</script>
+</body>
+</html>

@@ -18,25 +18,34 @@
   #stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px 20px 20px 440px; }
   @media (max-width: 800px) { #stage { padding: 330px 16px 20px; align-items: flex-start; } }
   canvas { display: block; max-width: 100%; }
-  .pane { display: none; } .pane.on { display: block; }
+  .pane { display:none;min-width:0;max-width:100%; } .pane.on { display: block; }
   /* 确认弹出 */
   #pop { position: relative; width: 520px; max-width: 100%; height: 360px; border-radius: 16px; background: radial-gradient(ellipse at 50% 40%, #a9c58f, #7fa36b 70%, #6d8f8f 100%); overflow: hidden; }
   .squad { position: absolute; width: 64px; height: 52px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; font-size: 26px; transition: transform .2s; }
   .squad:hover { transform: scale(1.06); }
   .squad.sel { box-shadow: 0 0 0 4px rgba(255,255,255,.8); }
   .pbtn { position: absolute; width: 74px; height: 64px; margin: -32px 0 0 -37px; border-radius: 14px; border: 3px solid rgba(0,0,0,.25); color: #fff; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transform: scale(0); transition: transform .32s cubic-bezier(.3,1.7,.5,1), opacity .2s; opacity: 0; cursor: pointer; }
-  .pbtn.show { transform: scale(1); opacity: 1; }
+  .pbtn { pointer-events:none; padding:0; font:inherit; }
+  .pbtn.show { transform: scale(1); opacity: 1; pointer-events:auto; }
+  .pbtn:focus-visible,.squad:focus-visible { outline:3px solid #fff; outline-offset:3px; }
   .pbtn:hover { filter: brightness(1.1); }
   .pbtn svg { width: 24px; height: 24px; }
   /* 斜按钮 */
   #menu { display: flex; flex-direction: column; gap: 10px; width: 240px; }
-  #menu .mb { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-radius: 10px; border: 2px solid rgba(0,0,0,.2); font: 600 18px/1 "Courier New", monospace; letter-spacing: .5px; cursor: pointer; transition: transform .18s ease; box-shadow: 0 3px 0 rgba(0,0,0,.18); }
-  #menu .mb:hover { transform: rotate(0deg) scale(1.05) !important; }
-  #menu .pair { display: flex; gap: 10px; } #menu .pair .mb { flex: 1; }
+  #menu .mb { position:relative; display:block; width:100%; height:44px; padding:0; border:0; background:transparent; transition:none; }
+  #menu .mb-look { pointer-events:none; display:flex; justify-content:space-between; align-items:center; width:100%; height:100%; padding:8px 14px; border-radius:10px; border:2px solid rgba(0,0,0,.2); font:600 18px/1 "Courier New",monospace; box-shadow:0 3px 0 #0003; transition:filter .15s; }
+  #menu .mb:hover .mb-look { filter:brightness(1.08); }
+  #menu .mb:focus-visible { outline:3px solid #fff; outline-offset:3px; }
+  #menu .pair { display:flex; gap:10px; } #menu .pair .mb { flex:1; min-width:0; }
+  #ui-status { position:absolute;left:440px;right:20px;bottom:8px;color:#edf4f3; font-size:13px; margin-top:12px; max-width:520px; }
+  @media(max-width:800px){#ui-status{left:16px;right:16px;bottom:4px}}
+  @media(prefers-reduced-motion:reduce){.pbtn,.squad,.ic{transition:none}}
   /* 图标 */
   #icons { display: flex; flex-direction: column; gap: 12px; padding: 14px; background: #3a6aa0; border-radius: 16px; }
   .ic { position: relative; width: 56px; height: 56px; border-radius: 14px; border: 3px solid rgba(0,0,0,.35); display: grid; place-items: center; cursor: pointer; transition: transform .15s; }
   .ic svg { width: 36px; height: 36px; }
+  .ic:focus-visible {outline:3px solid #fff;outline-offset:4px}
+  .ic:disabled {cursor:default;opacity:.45}
   .ic.on::after { content: ''; position: absolute; right: -16px; top: 50%; margin-top: -8px; border: 8px solid transparent; border-right: 10px solid #fff; border-left: 0; }
   .ic.on { transform: rotate(-4deg) scale(1.08); }
 </style>
@@ -52,17 +61,23 @@
     <button data-t="menu">斜按钮</button>
     <button data-t="icons">图标</button>
   </div>
-  <div class="row"><button id="again">换一批</button></div>
+  <div class="row"><button id="again">换一批</button><label id="part-seed-row" hidden>部件种子 <input id="part-seed" type="number" min="1" max="2147483646" step="1" value="7" style="width:110px"></label></div>
   <p id="note"></p>
 </div>
 <div id="stage">
   <div class="pane on" id="p-face"><canvas id="cface"></canvas></div>
   <div class="pane" id="p-banner"><canvas id="cbanner"></canvas></div>
-  <div class="pane" id="p-pop"><div id="pop"></div></div>
+  <div class="pane" id="p-pop"><div id="pop" aria-label="本地确认菜单演示"></div></div>
   <div class="pane" id="p-menu"><div id="menu"></div></div>
   <div class="pane" id="p-icons"><div id="icons"></div></div>
-</div>
+<div id="ui-status" role="status" aria-live="polite"></div></div>
 <script type="module">
+import {withRandomState,mirroredRandom,partSeed} from "./src/core/part-random.js";
+import {playfulJitter} from "./src/core/playful-layout.js";
+import {mountIconToolbar} from "./src/ui/icon-toolbar.js";
+let iconToolbar=null, selectedTool="select";
+let disposePopup=()=>{}, menuSeed=7;
+
 /* ============================================================================================
  * 层级部件生成器（958371606350454784 "The beginnings of a portrait generator. It currently runs on 5 examples …
  *   but it's content agnostic"；958410200146497537 "The approach is versatile enough that I can use it for the ingame
@@ -71,7 +86,8 @@
  * 生成 = 从根开始，每个槽随机挑一个变体，按挂点递归画子部件。系统本身不知道"脸"或"旗"是什么——
  * 换一棵部件树就换一种内容。
  * ========================================================================================== */
-let seed = 7;
+let seed=7, faceSeed=7, bannerSeed=7;
+const partRandom={get state(){return seed},set state(value){seed=value}};
 const rng = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
 const pick = (a) => a[(rng() * a.length) | 0];
 const jit = (s) => (rng() - 0.5) * 2 * s;
@@ -84,10 +100,12 @@ function grow(ctx, part, x, y, s, ctxData) {
     if (!a || (child.chance !== undefined && rng() > child.chance)) continue;
     const cs = s * (a.s ?? 1) * (1 + jit(child.scaleJit ?? 0.06));
     if (child.mirror) {
-      ctx.save(); grow(ctx, child.part, x + a.x * s, y + a.y * s, cs, ctxData); ctx.restore();
-      ctx.save(); ctx.translate(x - a.x * s, 0); ctx.scale(-1, 1); ctx.translate(-(x - a.x * s), 0);
-      const keep = seed; seed = ctxData.mirrorSeed ?? seed; grow(ctx, child.part, x - a.x * s, y + a.y * s, cs, ctxData); seed = keep; ctx.restore();
-    } else grow(ctx, child.part, x + a.x * s, y + a.y * s, cs, ctxData);
+      // Explicit mirror requests replay the branch state; do not reset to the
+      // unrelated head's mirrorSeed. Asymmetric non-mirrored parts stay as-is.
+      mirroredRandom(partRandom,()=>{ctx.save();try{grow(ctx,child.part,x+a.x*s,y+a.y*s,cs,ctxData)}finally{ctx.restore()}},()=>{
+        ctx.save();try{ctx.translate(x-a.x*s,0);ctx.scale(-1,1);ctx.translate(-(x-a.x*s),0);grow(ctx,child.part,x-a.x*s,y+a.y*s,cs,ctxData)}finally{ctx.restore()}
+      });
+    } else grow(ctx,child.part,x+a.x*s,y+a.y*s,cs,ctxData);
   }
 }
 const INK = '#1d1b1a';
@@ -115,7 +133,7 @@ const headVariants = [
     if (v.square) { rx = Math.sign(rx) * Math.min(Math.abs(rx) * 1.15, w * 0.5); }
     pts.push([x + rx, y + ry + (ry > 0 ? ry * 0.12 : 0)]);
   }
-  d.skin = pick(SKIN); d.hair = pick(HAIR); d.mirrorSeed = (rng() * 1e9) | 0;
+  d.skin=pick(SKIN);d.hair=pick(HAIR);
   blob(ctx, pts); ctx.fillStyle = d.skin; ctx.fill(); stroke(ctx, 3.2);
   d.headW = w; d.headH = h;
   return {
@@ -238,14 +256,16 @@ function setupCanvas(cv, w, h) { const DPR = Math.min(2, devicePixelRatio); cv.w
 function drawFaces() {
   const W = Math.min(760, innerWidth - 40), cols = W > 600 ? 4 : 3, cell = W / cols;
   const ctx = setupCanvas(document.getElementById('cface'), W, cell * 2 + 10);
-  for (let i = 0; i < cols; i++) drawFace(ctx, cell * (i + 0.5), cell * 0.5, cell * 0.72, false);
-  for (let i = 0; i < cols; i++) drawFace(ctx, cell * (i + 0.5), cell * 1.5 + 10, cell * 0.72, true);
+  const base=seed,identities=[];
+  for(let row=0;row<2;row++)for(let i=0;i<cols;i++){const id=row*4+i,localSeed=partSeed(base,id);identities.push([id,localSeed]);withRandomState(partRandom,localSeed,()=>drawFace(ctx,cell*(i+.5),cell*(row+.5)+(row?10:0),cell*.72,!!row));}
+  document.getElementById('cface').dataset.partSeeds=JSON.stringify(identities);
 }
 function drawBanners() {
   const W = Math.min(760, innerWidth - 40), cols = W > 600 ? 3 : 2, cw = W / cols, ch = 110;
   const ctx = setupCanvas(document.getElementById('cbanner'), W, ch * 4);
   ctx.fillStyle = '#2f4a78'; ctx.fillRect(0, 0, W, ch * 4);
-  for (let j = 0; j < 4; j++) for (let i = 0; i < cols; i++) grow(ctx, BANNER, cw * i + cw * 0.42, ch * (j + 0.5), Math.min(70, cw * 0.32), {});
+  const base=seed,identities=[];for(let j=0;j<4;j++)for(let i=0;i<cols;i++){const id=j*3+i,localSeed=partSeed(base,id);identities.push([id,localSeed]);withRandomState(partRandom,localSeed,()=>grow(ctx,BANNER,cw*i+cw*.42,ch*(j+.5),Math.min(70,cw*.32),{}));}
+  document.getElementById('cbanner').dataset.partSeeds=JSON.stringify(identities);
 }
 
 /* ---------- 确认弹出（1016680972610359298） ---------- */
@@ -255,43 +275,38 @@ const ICON = {
   swap: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg>',
 };
 function buildPop() {
-  const box = document.getElementById('pop'); box.innerHTML = '';
-  const squads = [{ x: 170, y: 230, c: '#e9a93a', f: '🛡' }, { x: 380, y: 200, c: '#5a8fd6', f: '⚔' }];
-  const btns = [['选择', 'select', '#c08a4a'], ['移动', 'move', '#5a8fd6'], ['交换', 'swap', '#c08a4a']].map(([t, k, c]) => {
-    const b = document.createElement('div'); b.className = 'pbtn'; b.style.background = c; b.innerHTML = ICON[k] + `<span>${t}</span>`; box.appendChild(b); return b;
+  // 1016680972610359298: "This is what the confirm popup looks like".
+  // The source shows a horizontal row, not an arc. This remains a UI demo,
+  // not a claim that Move/Swap is connected to the game's Battle controller.
+  const box=document.getElementById('pop');box.innerHTML='';
+  const abort=new AbortController(),timers=new Set();let alive=true,open=null;
+  const later=(fn,ms)=>{const id=setTimeout(()=>{timers.delete(id);if(alive)fn();},ms);timers.add(id);};
+  const cancel=()=>{for(const id of timers)clearTimeout(id);timers.clear();};
+  const squads=[{x:box.clientWidth*.33,y:230,c:'#e9a93a',f:'🛡'},{x:box.clientWidth*.73,y:200,c:'#5a8fd6',f:'⚔'}];
+  const btns=[['选择','select','#c08a4a'],['移动','move','#5a8fd6'],['交换','swap','#c08a4a']].map(([text,key,color])=>{
+    const b=document.createElement('button');b.type='button';b.className='pbtn';b.style.background=color;b.innerHTML=ICON[key]+`<span>${text}</span>`;b.disabled=true;b.tabIndex=-1;b.setAttribute('aria-hidden','true');box.append(b);return b;
   });
-  let open = null;
-  let timers = [];
-  const later = (f, ms) => timers.push(setTimeout(f, ms));
-  const close = (now) => { timers.forEach(clearTimeout); timers = []; btns.forEach((b, i) => (now ? b.classList.remove('show') : later(() => b.classList.remove('show'), (2 - i) * 40))); open?.el.classList.remove('sel'); open = null; };
-  squads.forEach((s) => {
-    const el = document.createElement('div'); el.className = 'squad'; el.style.left = s.x - 32 + 'px'; el.style.top = s.y - 26 + 'px';
-    el.style.background = `radial-gradient(circle at 50% 40%, ${s.c}, ${s.c}aa 60%, transparent 72%)`; el.textContent = s.f; box.appendChild(el);
-    el.onclick = (e) => {
-      e.stopPropagation();
-      if (open?.s === s) return close();
-      close(true); open = { s, el }; el.classList.add('sel');
-      // 三个按钮沿上方的一段圆弧排开，依次弹出（弹簧缓动：cubic-bezier 超调）
-      btns.forEach((b, i) => { const a = -Math.PI / 2 + (i - 1) * 0.95; b.style.left = s.x + Math.cos(a) * 100 + 'px'; b.style.top = s.y + Math.sin(a) * 100 + 'px'; later(() => b.classList.add('show'), i * 60); });
-    };
+  const close=()=>{cancel();for(const b of btns){b.classList.remove('show');b.disabled=true;b.tabIndex=-1;b.setAttribute('aria-hidden','true');}if(open){open.el.classList.remove('sel');open.el.setAttribute('aria-expanded','false');}open=null;};
+  squads.forEach(s=>{const el=document.createElement('button');el.type='button';el.className='squad';el.setAttribute('aria-label',s.f==='🛡'?'盾队':'剑队');el.setAttribute('aria-expanded','false');el.style.left=s.x-32+'px';el.style.top=s.y-26+'px';el.style.background=`radial-gradient(circle at 50% 40%,${s.c},${s.c}aa 60%,transparent 72%)`;el.textContent=s.f;box.append(el);
+    el.addEventListener('click',e=>{e.stopPropagation();if(open?.s===s){close();return}close();open={s,el};el.classList.add('sel');el.setAttribute('aria-expanded','true');const cx=Math.max(131,Math.min(box.clientWidth-131,s.x));
+      btns.forEach((b,i)=>{b.style.left=cx+(i-1)*86+'px';b.style.top=Math.max(40,s.y-80)+'px';later(()=>{b.classList.add('show');b.disabled=false;b.tabIndex=0;b.setAttribute('aria-hidden','false');if(e.detail===0&&i===0)b.focus();},i*60);});
+    },{signal:abort.signal});
   });
-  btns.forEach((b) => (b.onclick = (e) => { e.stopPropagation(); b.animate([{ transform: 'scale(1)' }, { transform: 'scale(.85)' }, { transform: 'scale(1)' }], 160); setTimeout(() => close(), 170); }));
-  box.onclick = () => close();
-  setTimeout(() => squads[0] && box.querySelector('.squad').click(), 400);
+  for(const b of btns)b.addEventListener('click',e=>{e.stopPropagation();const selected=open;document.getElementById('ui-status').textContent=`本地演示：${b.textContent}，未发送游戏指令`;later(()=>{if(open===selected)close();},170);},{signal:abort.signal});
+  box.addEventListener('click',close,{signal:abort.signal});
+  box.addEventListener('keydown',e=>{if(e.key==='Escape'){const target=open?.el;close();target?.focus();e.preventDefault();}},{signal:abort.signal});
+  later(()=>box.querySelector('.squad')?.click(),400);
+  disposePopup=()=>{alive=false;close();abort.abort();disposePopup=()=>{};};
 }
 
 /* ---------- 斜按钮（1242824460325052417 "you can make a boring list of buttons playful by just tilting them slightly"） ---------- */
 function buildMenu() {
-  const m = document.getElementById('menu'); m.innerHTML = '';
-  const rows = [[['新建', '#cdeaa8', '⌂']], [['打开', '#cdeaa8', '▤']], [['退出', '#f2c0c0', '✕']], [['存到剪贴板', '#f4eec8', '']], [['从剪贴板读', '#f4eec8', '']], [['撤销', '#f2c0c0', '↶'], ['重做', '#f2c0c0', '↷']], [['网格', '#cfe2f2', '◐']]];
-  for (const r of rows) {
-    const holder = r.length > 1 ? Object.assign(document.createElement('div'), { className: 'pair' }) : m;
-    for (const [t, c, i] of r) {
-      const b = document.createElement('div'); b.className = 'mb'; b.style.background = c;
-      b.style.transform = `rotate(${(rng() * 2 - 1) * 2.4}deg) translateX(${jit(4)}px)`;   // ±2.4°，再错开几像素
-      b.innerHTML = `<span>${t}</span><span>${i}</span>`; holder.appendChild(b);
-    }
-    if (holder !== m) m.appendChild(holder);
+  const m=document.getElementById('menu');m.innerHTML='';
+  const rows=[[['新建','#cdeaa8','⌂']],[['打开','#cdeaa8','▤']],[['退出','#f2c0c0','✕']],[['存到剪贴板','#f4eec8','']],[['从剪贴板读','#f4eec8','']],[['撤销','#f2c0c0','↶'],['重做','#f2c0c0','↷']],[['网格','#cfe2f2','◐']]];
+  for(const row of rows){const holder=row.length>1?Object.assign(document.createElement('div'),{className:'pair'}):m;
+    for(const[text,color,icon]of row){const b=document.createElement('button');b.type='button';b.className='mb';b.dataset.key=text;const visual=document.createElement('span');visual.className='mb-look';visual.style.background=color;visual.innerHTML=`<span>${text}</span><span>${icon}</span>`;
+      const j=playfulJitter(text,{seed:menuSeed,width:row.length>1?115:240,height:44,gap:10});visual.style.transform=`translate(${j.dx}px,${j.dy}px) rotate(${j.rot}deg)`;b.append(visual);b.onclick=()=>{document.getElementById('ui-status').textContent=`本地演示：${text}，未绑定游戏操作`;};holder.append(b);
+    }if(holder!==m)m.append(holder);
   }
 }
 
@@ -306,25 +321,26 @@ const TOOL_ICONS = [
   ['#8aa2c8', '<svg viewBox="0 0 36 36"><path d="M11 11l14 14M25 11L11 25" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/></svg>'],
 ];
 function buildIcons() {
-  const box = document.getElementById('icons'); box.innerHTML = '';
-  TOOL_ICONS.forEach(([c, svg], i) => {
-    const b = document.createElement('div'); b.className = 'ic' + (i === 0 ? ' on' : ''); b.style.background = c; b.innerHTML = svg;
-    if (i < 4) b.onclick = () => { box.querySelectorAll('.ic').forEach((x) => x.classList.toggle('on', x === b)); b.animate([{ transform: 'rotate(-4deg) scale(1.2)' }, { transform: 'rotate(-4deg) scale(1.08)' }], 180); };
-    box.appendChild(b);
-  });
+  const box=document.getElementById('icons');box.innerHTML='';
+  box.setAttribute('aria-label','本地图标工具示例');
+  const keys=['select','shape','paint','palette','undo','redo','quit'],labels=['选择','改形','涂色','配色','撤销（未接入）','重做（未接入）','退出（未接入）'];
+  iconToolbar=mountIconToolbar(box,TOOL_ICONS.map(([color,svg],i)=>({key:keys[i],label:labels[i],color,disabled:i>=4,render:b=>{b.innerHTML=svg;}})),{value:selectedTool,onChange:key=>{selectedTool=key;document.getElementById('ui-status').textContent=`本地工具：${labels[keys.indexOf(key)]}，未发送游戏指令`;}});
 }
 
 const NOTES = {
-  face: '958371606350454784 头像生成器 + 1010979395719319552 游戏里的头像。一个"内容无关"的层级部件生成器：头 → 耳（镜像）/ 头发 / 眼（镜像）/ 胡子 / 嘴 / 鼻，每个槽随机挑变体并带一点尺寸抖动。下排加了切角相框、红蓝背景、盔和护鼻。',
+  face: '958371606350454784 头像生成器 + 1010979395719319552 游戏里的头像。一个"内容无关"的层级部件生成器：头 → 耳（镜像）/ 头发 / 眼（镜像）/ 胡子 / 嘴 / 鼻，每个槽随机挑变体并带一点尺寸抖动。下排保留本地切角相框/背景/盔甲样例；显式种子使重绘/缩放保持身份，mirror分支只在声明时共享随机选择。原作图稿/完整接口未复现。',
   banner: '958410200146497537 "versatile enough that I can use it for the ingame banners too"：同一个生成器换一棵部件树——旗形（尖、缺口、燕尾、方）→ 1–2 个大徽记（太阳 / 三叶 / 塔 / 小人 / 百合）+ 小点缀。',
-  pop: '1016680972610359298 确认弹出：点一队 → 三个按钮（选择 / 移动 / 交换）沿上方圆弧依次弹出，带超调的弹簧缓动；再点一次或点空白收回。',
-  menu: '1242824460325052417 "make a boring list of buttons playful by just tilting them slightly"：每个按钮随机转 ±2.4°、错开几像素；鼠标移上去摆正放大。',
-  icons: '1201179450668441600 Icons!：粗黑描边的白色图形 + 彩色圆角底；选中的那个歪一点、放大，旁边一个白色小三角指着它。',
+  pop: '1016680972610359298 确认弹出：点一队 → 三个按钮（选择 / 移动 / 交换）横排依次弹出；切队/切页取消旧定时器，Esc关闭并还焦点。仅本地UI演示，未绑定游戏指令。',
+  menu: '1242824460325052417 "make a boring list of buttons playful by just tilting them slightly"：固定种子/按钮键确定轻微倾斜；只变视觉层，点击槽不旋转；AABB约束间距，键盘可用。',
+  icons: '1201179450668441600 Icons!：粗黑描边的白色图形 + 彩色圆角底；选中标记与aria-pressed一致；方向键/Home/End跳过禁用项，切页保留选择。原作图稿/游戏指令仍待接。',
 };
 let tab = 'face';
 function render() {
+  disposePopup();iconToolbar?.dispose();iconToolbar=null;document.getElementById('ui-status').textContent='';
   document.getElementById('note').textContent = NOTES[tab];
-  if (tab === 'face') drawFaces(); else if (tab === 'banner') drawBanners(); else if (tab === 'pop') buildPop(); else if (tab === 'menu') buildMenu(); else buildIcons();
+  const seeded=tab==='face'||tab==='banner';document.getElementById('part-seed-row').hidden=!seeded;if(seeded)document.getElementById('part-seed').value=tab==='face'?faceSeed:bannerSeed;
+  if(tab==='face')withRandomState(partRandom,faceSeed,drawFaces);else if(tab==='banner')withRandomState(partRandom,bannerSeed,drawBanners); else if (tab === 'pop') buildPop(); else if (tab === 'menu') buildMenu(); else buildIcons();
+  document.getElementById('stage').style.paddingTop=innerWidth<=800?(document.getElementById('ui').getBoundingClientRect().bottom+18)+'px':'';
 }
 function setTab(t) {
   tab = t;
@@ -333,10 +349,12 @@ function setTab(t) {
   render();
 }
 document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => setTab(b.dataset.t)));
-document.getElementById('again').onclick = () => { seed = (seed * 7 + 13) % 2147483647 || 1; render(); };
+document.getElementById('again').onclick = () => { seed = (seed * 7 + 13) % 2147483647 || 1; if(tab==='face')faceSeed=seed;else if(tab==='banner')bannerSeed=seed;else if(tab==='menu')menuSeed=seed;render(); };
 addEventListener('resize', () => (tab === 'face' || tab === 'banner') && render());
+function setPartSeed(value){if(!Number.isSafeInteger(value)||value<1||value>2147483646)throw new RangeError('种子需为1至2147483646的整数');if(tab==='face')faceSeed=value;else if(tab==='banner')bannerSeed=value;else throw new Error('请选择头像或旗帜');render()}
+document.getElementById('part-seed').onchange=e=>{try{setPartSeed(+e.target.value);e.target.setCustomValidity('')}catch(error){e.target.setCustomValidity(error.message);e.target.reportValidity()}};
 setTab(new URLSearchParams(location.search).get('t') || 'face');
-window.uiLab = { setTab };
+window.uiLab = {setTab,setPartSeed, get toolbar(){return iconToolbar} };
 </script>
 </body>
 </html>

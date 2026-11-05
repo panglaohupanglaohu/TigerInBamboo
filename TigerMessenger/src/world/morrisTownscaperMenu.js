@@ -1,3 +1,4 @@
+import {UI_DEV} from '../ui/uiLayers.js?v=ui-layers-r1';
 import * as T from 'three';
 // In-game menu for the Morris lake, driven by REACodeRefactoring: its learnpanel (pipelines, toggles,
 // clips, camera tours), palettes, scene generators (town / terrain / fusion) and v5 share strings.
@@ -55,7 +56,7 @@ export function mountMorrisTownMenu({panel,body,world,stage,anchor,getWorld=()=>
  const toast=message=>{notice.textContent=message;notice.classList.add('show');clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>notice.classList.remove('show'),2500);};
  topButton('⧉','复制分享链接',async()=>{try{const url=new URL(location.href);if(!morrisOnly())return;url.searchParams.set('morrisTown',encodeWorld(world,getScene()));await navigator.clipboard.writeText(url.href);toast('分享链接已复制');}catch{toast('无法复制，请通过保存菜单导出');}});
  const help=document.createElement('div');help.id='morris-town-helpcard';help.className='panel hidden';help.innerHTML='<h1>Townscaper <span>REACode 重构版</span></h1><p>一张网格、一份体素：建筑和地形写进同一个 World，一起烘焙光照。左键拖动建造，右键点击拆除单块（地形也能挖）；掏空底部自动形成钢架，两侧支撑形成拱。右键拖动旋转，中键平移，滚轮缩放。</p><p>左侧选色，下方切换建造、拆除、刷色；上方切换配色、时段、生成小镇 / 地形岛 / 融合岛、清空和复制存档（v5）。右侧是重构版的学习导航：每条管线可开关、看镜头、播放原视频。</p>';const close=document.createElement('button');close.textContent='知道了';close.onclick=()=>help.classList.add('hidden');help.append(close);hud.append(help);topButton('?','帮助',()=>help.classList.toggle('hidden'));
- loadLearnData().then(()=>{if(disposed)return;learned=mountLearnPanel(view,world,{getScene,loadScene:s=>loadScene(s)});observer=fixLinks(host);}).catch(e=>{host.textContent='学习导航数据加载失败：'+e.message;});
+ if(UI_DEV&&!new URLSearchParams(location.search).has('authoringEmbed'))loadLearnData().then(()=>{if(disposed)return;learned=mountLearnPanel(view,world,{getScene,loadScene:s=>loadScene(s)});observer=fixLinks(host);}).catch(e=>{host.textContent='学习导航数据加载失败：'+e.message;});
  const collapse=document.createElement('button');collapse.id='morris-town-collapse';collapse.type='button';collapse.className='panel';collapse.textContent='收起建城菜单';collapse.setAttribute('aria-expanded','true');hud.append(collapse);
  const collapsible=[panel,palette,toolbar,top,host];for(const element of collapsible)element.classList.add('morris-menu-collapsible');
  collapse.onclick=()=>{const collapsed=hud.classList.toggle('collapsed');collapse.textContent=collapsed?'展开建城菜单':'收起建城菜单';collapse.setAttribute('aria-expanded',String(!collapsed));if(collapsed)help.classList.add('hidden');};

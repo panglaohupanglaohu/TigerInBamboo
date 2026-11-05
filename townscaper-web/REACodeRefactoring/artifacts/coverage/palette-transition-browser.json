@@ -1,0 +1,77 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "version": 346,
+      "snapshots": [
+        {
+          "t": 0,
+          "changed": 0
+        },
+        {
+          "t": 0.5,
+          "changed": 79015
+        },
+        {
+          "t": 1,
+          "changed": 79014
+        },
+        {
+          "t": 0,
+          "changed": 0
+        }
+      ],
+      "weights": [
+        {
+          "hz": 30,
+          "alpha": 0.5184
+        },
+        {
+          "hz": 60,
+          "alpha": 0.72
+        },
+        {
+          "hz": 120,
+          "alpha": 0.848528137423857
+        }
+      ]
+    },
+    {
+      "kind": "quad",
+      "version": 341,
+      "snapshots": [
+        {
+          "t": 0,
+          "changed": 0
+        },
+        {
+          "t": 0.5,
+          "changed": 73864
+        },
+        {
+          "t": 1,
+          "changed": 73870
+        },
+        {
+          "t": 0,
+          "changed": 0
+        }
+      ],
+      "weights": [
+        {
+          "hz": 30,
+          "alpha": 0.5184
+        },
+        {
+          "hz": 60,
+          "alpha": 0.72
+        },
+        {
+          "hz": 120,
+          "alpha": 0.848528137423857
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

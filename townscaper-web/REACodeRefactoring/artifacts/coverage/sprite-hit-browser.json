@@ -1,0 +1,34 @@
+{
+  "gpu": {
+    "blood": [
+      19006,
+      0
+    ],
+    "reversed": [
+      19006,
+      0
+    ],
+    "goreOff": [
+      0,
+      0
+    ],
+    "materials": 2,
+    "footAnchored": true,
+    "stunPose": true
+  },
+  "reports": [
+    {
+      "grid": "quad",
+      "paused": true,
+      "goreRoundTrip": true,
+      "count": 2
+    },
+    {
+      "grid": "mixed",
+      "paused": true,
+      "goreRoundTrip": true,
+      "count": 2
+    }
+  ],
+  "errors": []
+}

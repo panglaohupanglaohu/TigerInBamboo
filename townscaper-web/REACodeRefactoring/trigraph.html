@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>重构 · 三角图增量检查</title><style>body{margin:24px;background:#edf4f3;color:#193c42;font:16px system-ui}button{padding:10px;margin:5px}canvas{background:#608783;width:min(800px,100%)}pre{white-space:pre-wrap}</style><h1>重构 · 通用三角图</h1><p><a href="index.html">首页</a> · <a href="pipeline.html">管线</a> · <a href="artifacts/coverage/trigraph-halfedge-review.md">790帧学习与验收记录</a></p><p>使用共享 src/core/trigraph.js。每次加入固定种子的新点，全部三角与全部顶点进行浮点外接圆检查；同一序列可复现。尚不代表精确几何谓词或完整 Half Edge 编辑系统。</p><button id="add">加入25点</button><button id="reset">重置种子</button><button id="reject">拒绝重复/非有限/域外输入</button><pre id="report"></pre><canvas id="mesh" width="800" height="600"></canvas><script type="module">
+import {TriGraph} from './src/core/trigraph.js';
+let graph,seed,count,rejected=0;const ctx=mesh.getContext('2d');
+const random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/2**32);
+function draw(){ctx.clearRect(0,0,800,600);ctx.strokeStyle='#eff6ef';for(const t of graph.triangles()){ctx.beginPath();t.forEach((v,i)=>{const x=400+graph.x[v+3]*280,y=300+graph.y[v+3]*240;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath();ctx.stroke()}const audit=graph.check(Infinity);report.textContent=JSON.stringify({points:count,rejected,...audit},null,2);window.triGraphLab={graph,count,rejected,audit};}
+function reset(){graph=new TriGraph(10);seed=19;count=0;rejected=0;add();}
+function add(){for(let i=0;i<25;i++){graph.add((random()-.5)*2,(random()-.5)*2);count++;}draw();}
+document.querySelector('#add').onclick=add;document.querySelector('#reset').onclick=reset;
+document.querySelector('#reject').onclick=()=>{for(const p of [[graph.x[3],graph.y[3]],[NaN,0],[0,31]]){try{graph.add(...p)}catch{rejected++}}draw()};reset();
+</script></html>

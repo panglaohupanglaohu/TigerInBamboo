@@ -1,0 +1,102 @@
+{
+  "startedAt": "2026-11-03T18:12:24.609Z",
+  "base": "http://localhost:8931",
+  "isolated": true,
+  "cases": [
+    {
+      "id": "S01 initial pipeline",
+      "status": "PASS",
+      "ms": 16
+    },
+    {
+      "id": "S02 scan real library and search",
+      "status": "PASS",
+      "ms": 213,
+      "detail": "发现 198 条能力记录，已加入能力库；均待执行适配。"
+    },
+    {
+      "id": "S03 scan HTTP404 and recovery",
+      "status": "PASS",
+      "ms": 314
+    },
+    {
+      "id": "S04 add remove undo redo and reorder",
+      "status": "PASS",
+      "ms": 322
+    },
+    {
+      "id": "S05 goal save and exported JSON",
+      "status": "PASS",
+      "ms": 84
+    },
+    {
+      "id": "L01 learning loads source records",
+      "status": "PASS",
+      "ms": 90,
+      "detail": "39 条模块职责 · 243 条学习记录（登记不等于验收）"
+    },
+    {
+      "id": "L02 module search and source links",
+      "status": "PASS",
+      "ms": 574
+    },
+    {
+      "id": "L03 add method to scene locate no duplicate",
+      "status": "PASS",
+      "ms": 4734
+    },
+    {
+      "id": "L04 videos search play close",
+      "status": "PASS",
+      "ms": 713
+    },
+    {
+      "id": "S06 saved recipe refresh",
+      "status": "PASS",
+      "ms": 153
+    },
+    {
+      "id": "S07 real game connection and editor docking",
+      "status": "PASS",
+      "ms": 61416
+    },
+    {
+      "id": "S08 editor tools palette help collapse",
+      "status": "FAIL",
+      "ms": 17585,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#morris-town-collapse')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" class=\"panel\" aria-expanded=\"true\" id=\"morris-town-collapse\">收起建城菜单</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    13 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "id": "S09 actual parameter preview baseline and snapshot",
+      "status": "PASS",
+      "ms": 5478
+    },
+    {
+      "id": "S10 stale finalize reject restore and isolated final",
+      "status": "PASS",
+      "ms": 7667
+    },
+    {
+      "id": "S11 play mode and service outage independence",
+      "status": "PASS",
+      "ms": 1956
+    },
+    {
+      "id": "L05 mobile overflow and preserved scene iframe",
+      "status": "PASS",
+      "ms": 1646
+    },
+    {
+      "id": "G01 clean game startup and remote controls",
+      "status": "PASS",
+      "ms": 53500
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-03T18:15:02.083Z",
+  "summary": {
+    "passed": 16,
+    "failed": 1,
+    "pageErrors": 0
+  }
+}

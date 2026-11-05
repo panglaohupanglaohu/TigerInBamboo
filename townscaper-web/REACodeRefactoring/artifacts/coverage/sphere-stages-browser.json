@@ -1,0 +1,103 @@
+{
+  "reports": [
+    {
+      "step": "random",
+      "error": 0,
+      "topology": null,
+      "planar": {
+        "manifold": true,
+        "delaunay": true,
+        "tris": 1799,
+        "finite": true,
+        "degenerate": 0,
+        "orphanVertices": 0,
+        "checkedTriangles": 60,
+        "full": false
+      },
+      "stat": "900 点 · 1796 三角（球面应为 2n−4 = 1796）· 点云阶段（未套用后续三角网）· 投影平面抽查 60/1799 面 ✓ · 74 ms高台（≥4 层）格子面积 / 海平面面积：relax 关 1.90 → 开 1.35（仅面积汇总，不能代表每格形状）当前约束618格 · 单格面积比范围 0.976–1.989 · 最差边长误差 53.5%"
+    },
+    {
+      "step": "spaced",
+      "error": 0,
+      "topology": null,
+      "planar": {
+        "manifold": true,
+        "delaunay": true,
+        "tris": 1799,
+        "finite": true,
+        "degenerate": 0,
+        "orphanVertices": 0,
+        "checkedTriangles": 60,
+        "full": false
+      },
+      "stat": "900 点 · 1796 三角（球面应为 2n−4 = 1796）· 点云阶段（未套用后续三角网）· 投影平面抽查 60/1799 面 ✓ · 74 ms高台（≥4 层）格子面积 / 海平面面积：relax 关 1.90 → 开 1.35（仅面积汇总，不能代表每格形状）当前约束618格 · 单格面积比范围 0.976–1.989 · 最差边长误差 53.5%"
+    },
+    {
+      "step": "tri",
+      "error": 0,
+      "topology": {
+        "closed": true,
+        "vertices": 900,
+        "edges": 2694,
+        "faces": 1796,
+        "euler": 2,
+        "components": 1,
+        "orphanVertices": 0,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "windingConflicts": 0,
+        "invalidFaces": 0,
+        "duplicateFaces": 0,
+        "degenerateFaces": 0,
+        "inwardFaces": 0,
+        "finite": true,
+        "maxRadiusError": 2.220446049250313e-16
+      },
+      "planar": {
+        "manifold": true,
+        "delaunay": true,
+        "tris": 1799,
+        "finite": true,
+        "degenerate": 0,
+        "orphanVertices": 0,
+        "checkedTriangles": 60,
+        "full": false
+      },
+      "stat": "900 点 · 1796 三角（球面应为 2n−4 = 1796）· 球面拓扑 ✓（Euler 2）· 投影平面抽查 60/1799 面 ✓ · 74 ms高台（≥4 层）格子面积 / 海平面面积：relax 关 1.90 → 开 1.35（仅面积汇总，不能代表每格形状）当前约束618格 · 单格面积比范围 0.976–1.989 · 最差边长误差 53.5%"
+    },
+    {
+      "step": "relaxed",
+      "error": 0,
+      "topology": {
+        "closed": true,
+        "vertices": 900,
+        "edges": 2694,
+        "faces": 1796,
+        "euler": 2,
+        "components": 1,
+        "orphanVertices": 0,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "windingConflicts": 0,
+        "invalidFaces": 0,
+        "duplicateFaces": 0,
+        "degenerateFaces": 0,
+        "inwardFaces": 0,
+        "finite": true,
+        "maxRadiusError": 2.220446049250313e-16
+      },
+      "planar": {
+        "manifold": true,
+        "delaunay": true,
+        "tris": 1799,
+        "finite": true,
+        "degenerate": 0,
+        "orphanVertices": 0,
+        "checkedTriangles": 60,
+        "full": false
+      },
+      "stat": "900 点 · 1796 三角（球面应为 2n−4 = 1796）· 球面拓扑 ✓（Euler 2）· 投影平面抽查 60/1799 面 ✓ · 74 ms高台（≥4 层）格子面积 / 海平面面积：relax 关 1.90 → 开 1.35（仅面积汇总，不能代表每格形状）当前约束618格 · 单格面积比范围 0.976–1.989 · 最差边长误差 53.5%"
+    }
+  ],
+  "errors": []
+}

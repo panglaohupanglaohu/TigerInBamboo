@@ -48,3 +48,6 @@
 
 ## REA-agent 对话入口
 用户发送 `/REA-agent 路径 问题` 时，读取 `/Users/panglaohu/.codex/skills/rea-agent/SKILL.md`，调用实际 REA MCP 或本地工具；它是对话触发约定，不声称新增了 Codex 内置斜杠命令。
+
+## 双工坊周期测试与接手（2026-11-04）
+场景工坊/学习工坊任务先读 docs/WORKSHOP_GUIDE.md、WORKSHOP_TEST.md、WORKSHOP_LOG.md。用户授权每两小时测试和有依据优化；统一入口 tools/scene-authoring/test_workshops.py，证据按UTC唯一目录保留。只能用隔离浏览器测试，不改用户湖上建筑存档；缺失功能和模型阻塞不得写成通过。日志保留失败、重测及下一动作，任何LLM接手据此继续。

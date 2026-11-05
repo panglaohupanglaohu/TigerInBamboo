@@ -1,0 +1,55 @@
+{
+  "icons": {
+    "disabled": 3,
+    "keyboard": true,
+    "wrap": true,
+    "persist": true,
+    "dispose": true,
+    "invalidRejected": true,
+    "mobile": {
+      "x": 153,
+      "y": 330,
+      "width": 84,
+      "height": 492
+    }
+  },
+  "states": [
+    {
+      "t": 0,
+      "title": 0,
+      "ornament": 0,
+      "inert": true,
+      "hidden": "true"
+    },
+    {
+      "t": 0.4,
+      "title": 0.393586,
+      "ornament": 0,
+      "inert": false,
+      "hidden": "false"
+    },
+    {
+      "t": 2,
+      "title": 1,
+      "ornament": 1,
+      "inert": false,
+      "hidden": "false"
+    },
+    {
+      "t": 3.2,
+      "title": 0,
+      "ornament": 0.7886501041507896,
+      "inert": true,
+      "hidden": "true"
+    },
+    {
+      "t": 4,
+      "title": 0,
+      "ornament": 0,
+      "inert": true,
+      "hidden": "true"
+    }
+  ],
+  "sameTexture": true,
+  "errors": []
+}

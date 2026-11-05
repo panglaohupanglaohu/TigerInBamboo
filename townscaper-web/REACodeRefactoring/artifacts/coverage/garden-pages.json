@@ -1,0 +1,37 @@
+{
+  "reports": [
+    {
+      "url": "index.html",
+      "progress": true,
+      "fields": 0,
+      "incremental": false,
+      "vertices": 36297
+    },
+    {
+      "url": "pipeline.html",
+      "progress": true
+    },
+    {
+      "url": "index.html?scene=town",
+      "progress": true,
+      "fields": 0,
+      "incremental": false,
+      "vertices": 36297
+    },
+    {
+      "url": "index.html?scene=badnorth",
+      "progress": true,
+      "fields": 0,
+      "incremental": false,
+      "vertices": 16458
+    },
+    {
+      "url": "index.html?scene=terrain&on=fields",
+      "progress": true,
+      "fields": 1,
+      "incremental": true,
+      "vertices": 37572
+    }
+  ],
+  "errors": []
+}

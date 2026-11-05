@@ -1,0 +1,39 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "change": 17639,
+      "hueChange": 17638,
+      "restoredPixels": 0,
+      "version": 672,
+      "before": {
+        "sameMean": 0.3324956399471261,
+        "contrastMean": 0.33143808893653276,
+        "violations": 246
+      },
+      "after": {
+        "sameMean": 0.02348094039760289,
+        "contrastMean": 0.31225116878084686,
+        "violations": 0
+      }
+    },
+    {
+      "kind": "quad",
+      "change": 15718,
+      "hueChange": 15717,
+      "restoredPixels": 0,
+      "version": 781,
+      "before": {
+        "sameMean": 0.33285696915226387,
+        "contrastMean": 0.3311443889858322,
+        "violations": 328
+      },
+      "after": {
+        "sameMean": 0.02190784477003647,
+        "contrastMean": 0.3065055955824943,
+        "violations": 0
+      }
+    }
+  ],
+  "errors": []
+}

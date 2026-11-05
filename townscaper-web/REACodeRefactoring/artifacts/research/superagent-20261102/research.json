@@ -1,0 +1,19 @@
+{
+  "researchDate": "2026-11-02",
+  "repository": "https://github.com/deepseek-ai/dsh-superagent-prototype",
+  "commit": "6337fc823ce20251c8de8085948165c81aaa701e",
+  "scope": "Read README, domain/execution/prompt/panel docs and architecture excerpts; inspected Engine, stage, runtime excerpts, executor excerpts, package and ports. Did not install, execute or evaluate upstream tests.",
+  "localComparison": {
+    "libraryJS": 70,
+    "vendorJS": 32,
+    "newJS": 38,
+    "differentSharedJS": 11
+  },
+  "recommendation": "Adopt narrow router + integration executor + persistent tickets and deterministic evidence gates. Keep executor backend replaceable. Pilot Morris Atmosphere only; no game changes in research turn.",
+  "limits": [
+    "Research prototype is not an official product per upstream README.",
+    "Directory/wrapper separation is not OS isolation per upstream execution docs.",
+    "Upstream ready/merged does not establish scene acceptance.",
+    "Full DSH integration not validated locally."
+  ]
+}

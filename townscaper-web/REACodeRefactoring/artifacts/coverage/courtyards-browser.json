@@ -1,0 +1,71 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "states": [
+        {
+          "mode": "closed",
+          "yards": 26,
+          "paths": 13,
+          "openings": 0,
+          "rendererCurrent": true
+        },
+        {
+          "mode": "elevated",
+          "yards": 0,
+          "paths": 0,
+          "openings": 1,
+          "rendererCurrent": true
+        },
+        {
+          "mode": "open",
+          "yards": 0,
+          "paths": 0,
+          "openings": 1,
+          "rendererCurrent": true
+        },
+        {
+          "mode": "closed",
+          "yards": 26,
+          "paths": 13,
+          "openings": 0,
+          "rendererCurrent": true
+        }
+      ]
+    },
+    {
+      "grid": "quad",
+      "states": [
+        {
+          "mode": "closed",
+          "yards": 22,
+          "paths": 14,
+          "openings": 0,
+          "rendererCurrent": true
+        },
+        {
+          "mode": "elevated",
+          "yards": 0,
+          "paths": 0,
+          "openings": 1,
+          "rendererCurrent": true
+        },
+        {
+          "mode": "open",
+          "yards": 0,
+          "paths": 0,
+          "openings": 1,
+          "rendererCurrent": true
+        },
+        {
+          "mode": "closed",
+          "yards": 22,
+          "paths": 14,
+          "openings": 0,
+          "rendererCurrent": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

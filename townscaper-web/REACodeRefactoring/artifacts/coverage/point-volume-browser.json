@@ -1,0 +1,103 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "before": {
+        "worldVersion": 672,
+        "peak": 4.370984077453613,
+        "vertices": 28950,
+        "voxels": 113880,
+        "ms": 161,
+        "bounceChange": [
+          0.3819,
+          0.0417,
+          0.01
+        ],
+        "point": true,
+        "pointCount": 2,
+        "directional": true,
+        "bounceStats": [
+          {
+            "iteration": 1,
+            "meanChange": 0.12729795876961952,
+            "maxChange": 0.9569481611251831,
+            "meanEnergy": 0.12729795876961952,
+            "relativeChange": null
+          },
+          {
+            "iteration": 2,
+            "meanChange": 0.013902323609345034,
+            "maxChange": 0.278096079826355,
+            "meanEnergy": 0.14120028237896456,
+            "relativeChange": 0.1092108918612363
+          },
+          {
+            "iteration": 3,
+            "meanChange": 0.0033224282759120954,
+            "maxChange": 0.12873876094818115,
+            "meanEnergy": 0.14452271065487665,
+            "relativeChange": 0.023529898240536785
+          }
+        ],
+        "estimatedWorkingBytes": 19701240
+      },
+      "motion": 3.8880202770233154,
+      "off": {
+        "markerCount": 0,
+        "pointCount": 0,
+        "version": 672,
+        "peak": 1.048633337020874
+      }
+    },
+    {
+      "kind": "quad",
+      "before": {
+        "worldVersion": 781,
+        "peak": 4.362221717834473,
+        "vertices": 37572,
+        "voxels": 131040,
+        "ms": 170,
+        "bounceChange": [
+          0.3826,
+          0.0385,
+          0.0086
+        ],
+        "point": true,
+        "pointCount": 2,
+        "directional": true,
+        "bounceStats": [
+          {
+            "iteration": 1,
+            "meanChange": 0.12751988944778347,
+            "maxChange": 1.003757357597351,
+            "meanEnergy": 0.12751988944778347,
+            "relativeChange": null
+          },
+          {
+            "iteration": 2,
+            "meanChange": 0.012830651916471023,
+            "maxChange": 0.33053553104400635,
+            "meanEnergy": 0.1403505413642545,
+            "relativeChange": 0.10061686825508805
+          },
+          {
+            "iteration": 3,
+            "meanChange": 0.0028693843215213,
+            "maxChange": 0.1251721978187561,
+            "meanEnergy": 0.1432199256857758,
+            "relativeChange": 0.020444412209813505
+          }
+        ],
+        "estimatedWorkingBytes": 22669920
+      },
+      "motion": 4.357337534427643,
+      "off": {
+        "markerCount": 0,
+        "pointCount": 0,
+        "version": 781,
+        "peak": 1.0369268655776978
+      }
+    }
+  ],
+  "errors": []
+}

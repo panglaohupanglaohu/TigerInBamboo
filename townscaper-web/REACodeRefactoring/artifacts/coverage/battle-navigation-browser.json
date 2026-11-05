@@ -1,0 +1,65 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "normal": {
+        "units": 24,
+        "resolved": 24
+      },
+      "start": 245,
+      "goal": 1896,
+      "goalFloor": 1,
+      "clickedGoal": true,
+      "remaining": 0.1486640390483723,
+      "floor": 1,
+      "maxY": 0.5,
+      "tunnelSamples": 188,
+      "pathMaxY": 0.550000011920929,
+      "cacheGoals": 1,
+      "attacks": {
+        "meleeHP": [
+          3,
+          3
+        ],
+        "projectileStopped": true,
+        "projectileT": 0.29166666666666663,
+        "targetHP": 3
+      },
+      "closedTunnel": {
+        "distance": 0,
+        "height": 0.5
+      }
+    },
+    {
+      "kind": "mixed",
+      "normal": {
+        "units": 24,
+        "resolved": 24
+      },
+      "start": 4,
+      "goal": 728,
+      "goalFloor": 1,
+      "clickedGoal": true,
+      "remaining": 0.14461597278586577,
+      "floor": 1,
+      "maxY": 0.5,
+      "tunnelSamples": 213,
+      "pathMaxY": 0.550000011920929,
+      "cacheGoals": 1,
+      "attacks": {
+        "meleeHP": [
+          3,
+          3
+        ],
+        "projectileStopped": true,
+        "projectileT": 0.29166666666666663,
+        "targetHP": 3
+      },
+      "closedTunnel": {
+        "distance": 0,
+        "height": 0.5
+      }
+    }
+  ],
+  "errors": []
+}

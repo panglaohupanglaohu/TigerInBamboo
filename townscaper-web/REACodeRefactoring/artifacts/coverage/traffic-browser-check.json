@@ -1,0 +1,19 @@
+{
+  "stats": {
+    "segments": 85,
+    "dots": 280,
+    "candidateDots": 283,
+    "version": 406
+  },
+  "errors": [],
+  "shots": [
+    "town",
+    "terrain",
+    "fusion"
+  ],
+  "checks": [
+    "points visible in battle",
+    "toggle off/on",
+    "no markers outside battle"
+  ]
+}

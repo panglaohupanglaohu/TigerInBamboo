@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CartonBook Viewer</title>
+<link rel="stylesheet" href="../layouts/edena.css" />
+<style>
+  .home-hero { margin-bottom: 1.25rem; }
+  .home-hero h1 { margin: 0 0 0.35rem; font-size: 1.75rem; }
+  .home-hero .lede { color: var(--ink-soft); margin: 0.4rem 0 0; line-height: 1.55; }
+  .chapter-card { list-style: none; margin: 0 0 0.85rem; padding: 0.9rem 1rem; border: 1.5px solid var(--ink); background: #fffdf8; }
+  .chapter-card .chapter-link { text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: 0.25rem; }
+  .chapter-card .sub { font-size: 0.92rem; color: var(--ink-soft); }
+  .chapter-card .meta { margin-top: 0.55rem; font-family: var(--font-ui); font-size: 12px; color: var(--ink-soft); }
+  .badge { display: inline-block; padding: 0.1rem 0.45rem; border: 1px solid var(--ink); border-radius: 999px; font-size: 11px; }
+  .badge.ok { background: #e8f5e6; }
+  .badge.warn { background: #f7ecd6; }
+  .home-links { margin-top: 1.5rem; font-family: var(--font-ui); font-size: 13px; }
+  .home-links a { margin-right: 0.85rem; }
+  ul.chapter-list { padding: 0; margin: 0; }
+</style>
+</head>
+<body>
+<div class="book-shell">
+  <header class="home-hero">
+    <h1>CartonBook Viewer</h1>
+    <p class="hard-constraint">所有画面来自 TigerMessenger 游戏截屏 · 禁止文生图 / 图生动画</p>
+    <p class="lede">本地 HTTP 目录页。请用 <code>npm run serve</code>（端口 8787）打开，不要依赖 file://。</p>
+  </header>
+  <ul class="chapter-list">
+<li class="chapter-card">
+  <a class="chapter-link" href="../chapters/bookshop-letter/book.html">
+    <strong>书店镇 · 一封要送出的信</strong>
+    <span class="sub">取信启程</span>
+  </a>
+  <div class="meta"><code>bookshop-letter</code> <span class="badge warn">样章/fixtures（仅排版）</span> · <code>fixtures</code></div>
+</li>
+<li class="chapter-card">
+  <a class="chapter-link" href="../chapters/messenger-tide-letter/book.html">
+    <strong>信使日记 · 潮气那封</strong>
+    <span class="sub">Hard To Find · 接信启程</span>
+  </a>
+  <div class="meta"><code>messenger-tide-letter</code> <span class="badge ok">真截屏</span> · <code>live</code></div>
+</li>
+  </ul>
+  <p class="home-links">
+    <a href="../chapters/bookshop-letter/book.html">打开样章 book.html</a>
+    <a href="../docs/DESIGN.md">设计文档</a>
+    <a href="../docs/QA-CHECKLIST.md">QA 清单</a>
+    <a href="../README.md">README</a>
+  </p>
+</div>
+</body>
+</html>

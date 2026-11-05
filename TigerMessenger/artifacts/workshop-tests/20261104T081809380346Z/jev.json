@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "96cd71d5a01cd098c1c518cdc4f7f88683aecbb250fdf10935a9c400df3ab97d",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.65
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.9,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0.01,
+        "lighting": 0,
+        "navigation": 0.07,
+        "review": 0.92
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.27
+    }
+  },
+  "usage": {
+    "input_tokens": 826,
+    "output_tokens": 91,
+    "cost_usd": 0.000347,
+    "credits_remaining_usd": 4.867538
+  },
+  "elapsed_ms": 1748,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "cross-reload offline persistence producer transaction and module dependency hashes",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "real AI Worker scene upgrade and gameplay acceptance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

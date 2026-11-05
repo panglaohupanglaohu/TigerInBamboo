@@ -3,19 +3,21 @@
  *
  * 依据：1758251637280268481 "It's simply a stack of planes sampling an SDF I had laying around. Gives a much more fluid vibe
  *   than the basic flipped mesh approach in Bad North and Townscaper"
- *   画面：小岛周围的水有层次——近岸浅、透出一圈圈色带，远处深；色带边缘在微微流动。
+ *   画面：镜头降低至水面，线框与反射随视角变化；SDF维度未给出。本地同心浅水线只是近似。
  *
  * 做法：
- *   1. 2D 海岸距离场：岛的包围盒铺 192² 的网格，陆地格 = 0，其余用两遍 chamfer 算到最近陆地的距离（世界单位）。
+ *   1. 2D 海岸中心距离场：192²采样level1实心，用各向异性精确中心EDT；不是原片3D SDF。
  *   2. N 张水平面，叠在海面上方极小的高度上（第 i 张代表"水下 i 层"），每张只画距离 < 阈值 i 的那一圈，
  *      颜色从浅青到海色，半透明；阈值随时间和噪声轻微起伏 → 一圈套一圈、会流动的浅水。
- *   我们的海面是不透明的，所以平面叠在水面之上而不是之下；视觉上等价于"透过水看到的一层层浅滩"。
+ *   我们的海面是不透明的，所以平面叠在水面之上而不是之下；这是本地浅滩近似，不证明与原片SDF反射等价。
  */
 
 import * as THREE from 'three';
+import {waterDistance} from './land-distance.js';
 
 export class WaterVolume {
   constructor({ scene, uTime, layers = 6 }) {
+    if(!Number.isInteger(layers)||layers<2||layers>32)throw new RangeError('water layers');
     this.uTime = uTime;
     this.group = new THREE.Group();
     this.group.visible = false;
@@ -28,40 +30,16 @@ export class WaterVolume {
   set visible(on) { this.group.visible = on; }
 
   refresh(world, index) {
-    // 包围盒
-    let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
-    for (const c of world.cells) { if (!world.top(c)) continue; minX = Math.min(minX, c.minX); maxX = Math.max(maxX, c.maxX); minZ = Math.min(minZ, c.minZ); maxZ = Math.max(maxZ, c.maxZ); }
-    if (!Number.isFinite(minX)) return;
-    const pad = 4; minX -= pad; minZ -= pad; maxX += pad; maxZ += pad;
-    const R = 192, sx = (maxX - minX) / R, sz = (maxZ - minZ) / R;
-    const d = new Float32Array(R * R).fill(1e9);
-    for (let y = 0; y < R; y++) for (let x = 0; x < R; x++) {
-      const c = index.cellAt(minX + (x + 0.5) * sx, minZ + (y + 0.5) * sz);
-      if (c && world.top(c) > 0) d[y * R + x] = 0;
-    }
-    // 两遍 chamfer（3-4 权重近似欧氏距离）
-    const s = Math.max(sx, sz), a = s, b = s * 1.4142;
-    for (let y = 0; y < R; y++) for (let x = 0; x < R; x++) {
-      let v = d[y * R + x];
-      if (x > 0) v = Math.min(v, d[y * R + x - 1] + a);
-      if (y > 0) { v = Math.min(v, d[(y - 1) * R + x] + a); if (x > 0) v = Math.min(v, d[(y - 1) * R + x - 1] + b); if (x < R - 1) v = Math.min(v, d[(y - 1) * R + x + 1] + b); }
-      d[y * R + x] = v;
-    }
-    for (let y = R - 1; y >= 0; y--) for (let x = R - 1; x >= 0; x--) {
-      let v = d[y * R + x];
-      if (x < R - 1) v = Math.min(v, d[y * R + x + 1] + a);
-      if (y < R - 1) { v = Math.min(v, d[(y + 1) * R + x] + a); if (x < R - 1) v = Math.min(v, d[(y + 1) * R + x + 1] + b); if (x > 0) v = Math.min(v, d[(y + 1) * R + x - 1] + b); }
-      d[y * R + x] = v;
-    }
-    const data = new Uint8Array(R * R * 4);
-    for (let i = 0; i < R * R; i++) { const v = Math.min(255, (d[i] / 4) * 255); data[i * 4] = v; data[i * 4 + 3] = 255; }
-    this.tex?.dispose();
-    this.tex = new THREE.DataTexture(data, R, R, THREE.RGBAFormat);
-    this.tex.magFilter = this.tex.minFilter = THREE.LinearFilter;
-    this.tex.needsUpdate = true;
-    // 平面
-    this.group.clear();
-    this.mats = [];
+    if(this.world===world&&this.version===world.version)return;
+    const field=waterDistance(world,index);
+    this.clearResources();this.world=world;this.version=world.version;this.field=field;
+    if(!field)return;
+    const {R,minX,minZ,width,depth,distance,land,maxDistance}=field;
+    const data=new Uint8Array(R*R*4);
+    for(let i=0;i<R*R;i++){data[i*4]=Math.round(distance[i]/maxDistance*255);data[i*4+3]=land[i]?0:255;}
+    this.tex=new THREE.DataTexture(data,R,R,THREE.RGBAFormat);
+    this.tex.magFilter=this.tex.minFilter=THREE.LinearFilter;this.tex.needsUpdate=true;
+    const maxX=minX+width,maxZ=minZ+depth;
     const geo = new THREE.PlaneGeometry(maxX - minX, maxZ - minZ).rotateX(-Math.PI / 2).translate((minX + maxX) / 2, 0, (minZ + maxZ) / 2);
     for (let i = 0; i < this.layers; i++) {
       const t = i / (this.layers - 1);
@@ -74,7 +52,9 @@ export class WaterVolume {
           varying vec3 vW;
           void main() {
             vec2 uv = (vW.xz - uBox.xy) / uBox.zw;
-            float d = texture2D(uSdf, uv).r * 4.0;                 // 到最近陆地的距离（世界单位）
+            vec4 field = texture2D(uSdf, uv);
+            if(field.a<0.5)discard;
+            float d = field.r * 4.0;                 // 到最近陆地的距离（世界单位）
             float wob = sin(vW.x * 1.7 + uTime * 0.6 + uLayer) * 0.06 + sin(vW.z * 2.3 - uTime * 0.45 + uLayer * 1.3) * 0.05;
             float edge = uLimit + wob;
             if (d <= 0.02 || d > edge) discard;
@@ -91,4 +71,10 @@ export class WaterVolume {
       this.mats.push(mat);
     }
   }
+  clearResources(){
+    const geos=new Set(),mats=new Set();for(const m of this.group.children){geos.add(m.geometry);mats.add(m.material)}
+    this.group.clear();for(const g of geos)g.dispose();for(const m of mats)m.dispose();this.tex?.dispose();this.tex=null;this.mats=[];
+  }
+  dispose(){this.clearResources();this.group.removeFromParent();this.world=null;this.version=-1;this.field=null;}
+
 }

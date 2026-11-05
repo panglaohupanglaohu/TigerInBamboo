@@ -1,0 +1,19 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "cells": 5,
+      "verts": 675,
+      "finite": true,
+      "sameWorld": true
+    },
+    {
+      "kind": "quad",
+      "cells": 4,
+      "verts": 594,
+      "finite": true,
+      "sameWorld": true
+    }
+  ],
+  "errors": []
+}

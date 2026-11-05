@@ -1,0 +1,343 @@
+--- a/docs/007-architecture.md
++++ b/docs/007-architecture.md
+@@ -399,6 +399,8 @@
+ 
+ `src/sources/github.ts` and `src/sources/feishu.ts` are also the entries of the two Source plugins, built by `tsdown.config.ts` and exported in `package.json` as `./github-watch` and `./feishu-watch`. The bundle's `cordis.patch.yml` inserts the three plugins, with Feishu disabled.
+ 
++| `src/sources/local.ts` | TigerMessenger extension: explicit authenticated local scene request intake; snapshot persistence and native Engine triggers; execution remains setup-gated |
++
+ ## Tests
+ 
+ | Test | Covers |
+@@ -447,6 +449,10 @@
+ 
+ `tests/fixtures/` holds what several tests share: `host.ts`, a simulated DeepSeek Harness host; `panel-server.ts` and `panel.tsx`, the fake management API and the panel around a page; `deployment.ts`, a resolved deployment; `git.ts`, the environment of every git the tests start, which names no repository; and `async.ts`.
+ 
++| `tests/local-scene-source.spec.ts` | Local request idempotency, conflicting IDs and strict schema rejection |
++
++| `tests/local-deployment.spec.ts` | Local-only setup, absent GitHub identity and blocked remote CLI |
++
+ ## Persistence
+ 
+ One SQLite file, `<stateDir>/orchestrator.sqlite`, which only the Store opens.
+--- a/package.json
++++ b/package.json
+@@ -17,7 +17,8 @@
+     "./github-watch": "./lib/github-watch.js",
+     "./feishu-watch": "./lib/feishu-watch.js",
+     "./package.json": "./package.json",
+-    "./locale/*.json": "./locale/*.json"
++    "./locale/*.json": "./locale/*.json",
++    "./local-watch": "./lib/local-watch.js"
+   },
+   "files": [
+     "lib",
+--- a/src/app/http.ts
++++ b/src/app/http.ts
+@@ -98,7 +98,7 @@
+   const resolved = runtime.configured() ? runtime.deployment : undefined
+   return {
+     machine: machineView(runtime.machine), problem: runtime.setupProblem ?? null, feishuProblem: runtime.feishuProblem ?? null,
+-    accounts: resolved ? { repository: resolved.repository, agent: resolved.github.login, feishu: resolved.feishu ? { appId: resolved.feishu.appId, brand: resolved.feishu.brand, botId: resolved.feishu.botId, name: resolved.feishu.name } : null } : null,
++    accounts: resolved ? { repository: resolved.repository, ...(resolved.local ? {local:resolved.local.root} : {}), agent: resolved.github?.login ?? null, feishu: resolved.feishu ? { appId: resolved.feishu.appId, brand: resolved.feishu.brand, botId: resolved.feishu.botId, name: resolved.feishu.name } : null } : null,
+   }
+ }
+ /** Build the `/orchestrator/api/state` response consumed by the management panel and `scripts/dsh-superagent status` (`docs/006-deployment.md`). */
+--- a/src/app/setup.ts
++++ b/src/app/setup.ts
+@@ -1,7 +1,7 @@
+ /** Probes repository and account CLIs, configures the worker execution environment and command shims, and tracks setup readiness. */
+ import type { Context } from '@deepseek-ai/cordis'
+ import { UserError } from '../core/index.ts'
+-import { SETUP_FIELDS, resolveDeployment, resolveFeishuBot, workerProbe, type Deployment, type Machine } from '../deployment.ts'
++import { SETUP_FIELDS, resolveLocalDeployment, resolveDeployment, resolveFeishuBot, workerProbe, type Deployment, type Machine } from '../deployment.ts'
+ import { agentVariables, applyEnvironment, verifyEnvironment, withoutDirectory, workerBin, writeEnvironment } from '../infra/environment.ts'
+ import type { Settings, SettingsBlock } from '../policy.ts'
+ import { SetupError, type SetupProblem } from '../setup.ts'
+@@ -60,7 +60,7 @@
+   /** Verify account CLIs for a modified source block before saving, ignoring setup errors belonging to other blocks. */
+   async checkAccounts(block: SettingsBlock, settings: Settings): Promise<void> {
+     const { machine } = this.host
+-    const check = block === 'source:feishu' ? resolveFeishuBot(machine, settings.sources.feishu?.config, this.probe())
++    const check = machine.localRoot ? Promise.resolve(resolveLocalDeployment(machine)) : block === 'source:feishu' ? resolveFeishuBot(machine, settings.sources.feishu?.config, this.probe())
+       : resolveDeployment(machine, settings.sources.github?.config, this.probe())
+     await check.catch((error: unknown) => { if (!(error instanceof SetupError) || error.place === block.slice(7)) throw error })
+   }
+@@ -76,8 +76,8 @@
+   private async resolve(settings: Settings): Promise<Deployment> {
+     const { context, machine, lifetime } = this.host
+     const probe = this.probe()
+-    const deployment = await resolveDeployment(machine, settings.sources.github?.config, probe)
+-    const feishu = await resolveFeishuBot(machine, settings.sources.feishu?.config, probe).catch((error: unknown) => {
++    const deployment = machine.localRoot ? resolveLocalDeployment(machine) : await resolveDeployment(machine, settings.sources.github?.config, probe)
++    const feishu = machine.localRoot ? undefined : await resolveFeishuBot(machine, settings.sources.feishu?.config, probe).catch((error: unknown) => {
+       if (!(error instanceof SetupError)) throw error
+       this.feishuProblem = error.problem
+       context.logger.warn('dsh-superagent leaves Feishu out: %s', error.message)
+--- a/src/app/tools/executor.ts
++++ b/src/app/tools/executor.ts
+@@ -79,7 +79,7 @@
+         summary: z.string().min(1),
+         human_action: z.string().trim().min(1).max(1000).nullish().describe('One concrete question for a person, also with state=progress; omit to keep the pending one, null to clear it.'),
+         question_for_trigger_id: z.string().optional().describe('With human_action: the human message that raised the question, which is asked where that person wrote.'),
+-        pr_number: z.number().int().positive().nullish().describe(`The ticket's PR: its source PR, or one by ${host.github.deployment.github.login} from a branch named after this ticket (DSH_SUPERAGENT_NAME).`),
++        pr_number: z.number().int().positive().nullish().describe(`The ticket's PR: its source PR, or one by ${host.github.deployment.github?.login ?? 'unavailable in local-only mode'} from a branch named after this ticket (DSH_SUPERAGENT_NAME).`),
+         reply_to_trigger_id: z.string().optional().describe('The explicit human question this report answers; never for ordinary progress.'),
+       }).strict(),
+       execute: async (args, signal) => {
+--- a/src/deployment.ts
++++ b/src/deployment.ts
+@@ -1,6 +1,6 @@
+ /** Plugin configuration and startup verification for repository access and agent CLI identities. */
+ import { LIMITS } from './limits.ts'
+-import { accessSync, constants, statSync } from 'node:fs'
++import { accessSync, constants, statSync, realpathSync } from 'node:fs'
+ import { delimiter, isAbsolute, join } from 'node:path'
+ import type { Volatile } from '@deepseek-ai/cordis'
+ import s from '@deepseek-ai/schemastery'
+@@ -14,6 +14,7 @@
+ /** Plugin configuration of the dsh-superagent entry. Volatile fields apply without a restart because dsh-superagent reads them on each use; changing `stateDir` remounts the plugin. */
+ export const Config = s.object({
+   stateDir: absolute('Directory for the database, locks, worker shims, the agent\'s git configuration and, by default, the ticket directories.').required(),
++  localRoot: absolute('Explicit local-only workspace; no GitHub account is used.'),
+   promptMaxChars: s.number().min(LIMITS.promptMaxChars.min).max(LIMITS.promptMaxChars.max).step(1).default(100000)
+     .description('Largest saved prompt configuration, in characters.').volatile(),
+   admissionContextMaxPages: s.number().min(LIMITS.admissionContextMaxPages.min).max(LIMITS.admissionContextMaxPages.max).step(1).default(10)
+@@ -23,6 +24,7 @@
+ })
+ export type DeploymentConfig = ReturnType<typeof Config>
+ export interface Machine {
++  localRoot?: string
+   stateDir: string
+   promptMaxChars: Volatile<number>
+   admissionContextMaxPages: Volatile<number>
+@@ -38,8 +40,8 @@
+ export function machineOf(config: DeploymentConfig): Machine {
+   const unknown = Object.keys(config).filter(key => !(key in (Config.dict ?? {})))
+   if (unknown.length) throw new Error(`dsh-superagent configuration has keys it does not use: ${unknown.map(key => MOVED[key] ? `${key} (now ${MOVED[key]})` : key).join(', ')}; docs/006-deployment.md lists the keys`)
+-  const { stateDir, promptMaxChars, admissionContextMaxPages, admissionContextTimeoutMs } = config
+-  return { stateDir, promptMaxChars, admissionContextMaxPages, admissionContextTimeoutMs }
++  const { stateDir, localRoot, promptMaxChars, admissionContextMaxPages, admissionContextTimeoutMs } = config
++  return { stateDir, ...(localRoot ? { localRoot } : {}), promptMaxChars, admissionContextMaxPages, admissionContextTimeoutMs }
+ }
+ 
+ export const GithubAccountsSchema = z.object({
+@@ -52,7 +54,8 @@
+ 
+ export interface Deployment extends Machine {
+   repository: string
+-  github: { cli: string; login: string; noreply: string }
++  local?: { root: string }
++  github?: { cli: string; login: string; noreply: string }
+   feishu?: FeishuBot
+ }
+ export interface FeishuBot { cli: string; appId: string; brand: 'feishu' | 'lark'; botId: string; name: string }
+@@ -84,7 +87,7 @@
+   return result.success ? result.data : undefined
+ }
+ /** Verify the agent's GitHub CLI identity and push access to the configured repository. */
+-export async function resolveDeployment(machine: Machine, github: unknown, probe: Probe, path = process.env.PATH ?? ''): Promise<Deployment> {
++export async function resolveDeployment(machine: Machine, github: unknown, probe: Probe, path = process.env.PATH ?? ''): Promise<Deployment & { github: NonNullable<Deployment['github']> }> {
+   const { stateDir } = machine
+   const accounts = GithubAccountsSchema.parse(github ?? {})
+   const remote = accounts.repository
+@@ -129,3 +132,12 @@
+   if (!info) return fail(new SetupError('feishuNoBot'))
+   return { cli, appId: status.appId, brand: status.brand, botId: info.bot.open_id, name: info.bot.app_name }
+ }
++
++/** Explicit local deployment: no GitHub account, fake remote, or remote CLI probe. */
++export function resolveLocalDeployment(machine: Machine): Deployment {
++ const root=machine.localRoot;
++ try{if(!root||!isAbsolute(root)||!statSync(root).isDirectory())throw new Error('invalid');const directory=realpathSync(root);return {...machine,repository:directory,local:{root:directory}};}catch{throw new SetupError('environmentFailed',{output:'Local workspace must be an existing absolute directory'});}
++}
++export function requireGithub(deployment: Pick<Deployment,'github'>): NonNullable<Deployment['github']> {
++ if(!deployment.github)throw new Error('GitHub operations are unavailable in local-only deployment');return deployment.github;
++}
+--- a/src/infra/commands.ts
++++ b/src/infra/commands.ts
+@@ -1,3 +1,4 @@
++import {requireGithub} from '../deployment.ts'
+ /** Subprocess wrapper for running gh, lark-cli, and git commands under the deployment's configured accounts. */
+ import { execFile } from 'node:child_process'
+ import { basename } from 'node:path'
+@@ -73,7 +74,7 @@
+     } catch (error) { throw commandError(error, program) }
+   }
+   /** Runs the agent's GitHub CLI and parses its JSON output; callers should prefer `api`, which is restricted to the configured repository and validates output. */
+-  async gh<T>(args: string[]): Promise<T> { return JSON.parse(await this.run(this.deployment.github.cli, args)) as T }
++  async gh<T>(args: string[]): Promise<T> { return JSON.parse(await this.run(requireGithub(this.deployment).cli, args)) as T }
+   /**
+    * Calls the GitHub API on a path within the configured repository, validating JSON output when a schema is provided
+    * or returning raw CLI output (such as raw files or `--include` headers) when omitted.
+@@ -82,7 +83,7 @@
+   async api<T>(schema: z.ZodType<T>, path: string, ...flags: string[]): Promise<T>
+   async api(path: string, ...flags: string[]): Promise<string>
+   async api<T>(schema: z.ZodType<T> | string, ...rest: string[]): Promise<T | string> {
+-    if (typeof schema === 'string') return this.run(this.deployment.github.cli, ['api', this.path(schema), ...rest])
++    if (typeof schema === 'string') return this.run(requireGithub(this.deployment).cli, ['api', this.path(schema), ...rest])
+     const [path = '', ...flags] = rest
+     return schema.parse(await this.gh(['api', this.path(path), ...flags]))
+   }
+--- a/src/infra/environment.ts
++++ b/src/infra/environment.ts
+@@ -97,10 +97,10 @@
+   ].join('\n')
+   const run = (program: string): string => `${withoutShims}\nexec ${shellQuote(program)} "$@"`
+   const fail = (message: string): string => `echo ${shellQuote(message)} >&2\nexit 1`
+-  await shim('gh', run(github.cli))
++  await shim('gh', github ? run(github.cli) : fail('GitHub CLI is unavailable in local-only deployment.'))
+   await shim('lark-cli', feishu ? run(feishu.cli) : fail('lark-cli is unavailable: this installation has no Feishu bot.'))
+   for (const name of new Set(blockedCommands.filter(name => !WORKER_COMMANDS.includes(name)))) {
+-    await shim(name, fail(`${name} is blocked in this installation; use gh, which acts as ${github.login}.`))
++    await shim(name, fail(`${name} is blocked in this installation; use gh, which acts as ${github?.login ?? 'no GitHub identity (local-only)'}.`))
+   }
+   for (const name of before) if (!kept.has(name)) await unlink(join(dir, name))
+   await own(workerGitConfig(stateDir), [
+@@ -108,7 +108,7 @@
+     // Make git refuse to commit without an explicit identity set by the worker instead of guessing from the operator's OS user.
+     '[user]', '\tuseConfigOnly = true',
+     '[credential]', '\thelper =',
+-    '[credential "https://github.com"]', `\thelper = ${gitQuote(credentialHelper(github.cli))}`,
++    ...(github ? ['[credential \"https://github.com\"]', `\thelper = ${gitQuote(credentialHelper(github.cli))}`] : []),
+     '[url "https://github.com/"]', '\tinsteadOf = git@github.com:', '\tinsteadOf = ssh://git@github.com/',
+     // Include Git LFS filters because the operator's global gitconfig (which usually holds them) is ignored.
+     '[filter "lfs"]', '\tclean = git-lfs clean -- %f', '\tsmudge = git-lfs smudge -- %f', '\tprocess = git-lfs filter-process', '\trequired = true',
+@@ -137,6 +137,7 @@
+ /** Verifies that worker git invocations resolve the deployment's GitHub credential helper. */
+ export async function verifyEnvironment(deployment: Pick<Deployment, 'github' | 'stateDir'>, subprocess: SubprocessRuntime, signal: AbortSignal): Promise<void> {
+   const { github, stateDir } = deployment
++  if(!github)return; // Local-only environment installs no external credential helper.
+   // `-z` separates fields with NUL and never quotes paths.
+   const helpers = (await runAsWorker(subprocess, ['git', 'config', '-z', '--show-origin', '--get-all', 'credential.https://github.com.helper'], stateDir, AbortSignal.any([signal, AbortSignal.timeout(60_000)])).catch(() => '')).split('\0')
+   if (helpers.join('\0') !== [`file:${workerGitConfig(stateDir)}`, credentialHelper(github.cli), ''].join('\0')) throw new SetupError('gitTooOld')
+--- a/src/sources/github-channel.ts
++++ b/src/sources/github-channel.ts
+@@ -18,6 +18,7 @@
+ export async function sendGithub(host: Pick<SourceContext, 'commands'>, message: OutboundMessage): Promise<'sent' | 'gone'> {
+   const { commands } = host
+   const { repository, github } = commands.deployment
++  if(!github)throw new Error('GitHub replies are unavailable in local-only deployment')
+   const number = Number(message.channel.address.number)
+   if (!number) throw new Error('Missing GitHub reply target')
+   try {
+--- a/src/sources/github-pull.ts
++++ b/src/sources/github-pull.ts
+@@ -1,3 +1,4 @@
++import {requireGithub} from '../deployment.ts'
+ /** Pull request binding, lifecycle observation, and terminal IM notification helpers. */
+ import { z } from 'zod'
+ import { key, liveTicket, type Follow, type OutboundMessage, type ThreadFact, type Ticket } from '../core/index.ts'
+@@ -22,7 +23,7 @@
+ /** True when the PR was opened by the agent account from a branch in the configured repository (not a fork). */
+ export const agentPull = (pr: { user: { login: string }; head?: { repo?: { full_name: string } | null } | null },
+   deployment: Pick<Deployment, 'github' | 'repository'>): boolean =>
+-  sameName(pr.user.login, deployment.github.login) && sameName(pr.head?.repo?.full_name ?? '', deployment.repository)
++  sameName(pr.user.login, requireGithub(deployment).login) && sameName(pr.head?.repo?.full_name ?? '', deployment.repository)
+ /** True when a branch belongs to the ticket: its last path segment is the ticket's short name, such as `agent/<name>`. */
+ export const ticketBranch = (ticket: Pick<Ticket, 'execution'>, ref: string): boolean =>
+   !!ticket.execution?.name && ref.split('/').at(-1) === ticket.execution.name
+@@ -39,7 +40,7 @@
+   const started = source?.source === SOURCE && source.meta.isPr === true && source.meta.number === pr.number
+   const opened = agentPull(pr, ctx.deployment) && ticketBranch(ticket, pr.head.ref)
+   if (!started && !opened) {
+-    const { login } = ctx.deployment.github
++    const { login } = requireGithub(ctx.deployment)
+     return `PR does not belong to this ticket: use the source PR or a PR by ${login} from a branch whose last path segment is DSH_SUPERAGENT_NAME; omit pr_number when no PR exists`
+   }
+   const owner = ctx.tickets.open().find(item => pullsOf(item, true).includes(pr.number))
+--- a/src/sources/github.ts
++++ b/src/sources/github.ts
+@@ -1,3 +1,4 @@
++import {requireGithub} from '../deployment.ts'
+ /** GitHub source kind definition, notification and repository polling loops, and Cordis plugin entry. */
+ import type { Context } from '@deepseek-ai/cordis'
+ import { key, type Thread } from '../core/index.ts'
+@@ -99,12 +100,12 @@
+     ],
+     values: ({ deployment, trigger }) => {
+       const number = trigger?.threads[0]?.source === SOURCE ? Number(trigger.meta.number) || 0 : 0
+-      return { DSH_SUPERAGENT_GITHUB_REPOSITORY: deployment.repository, DSH_SUPERAGENT_GITHUB_ACCOUNT: deployment.github.login, DSH_SUPERAGENT_GITHUB_COMMIT_EMAIL: deployment.github.noreply, DSH_SUPERAGENT_GITHUB_NUMBER: number ? String(number) : '',
++      return { DSH_SUPERAGENT_GITHUB_REPOSITORY: deployment.repository, DSH_SUPERAGENT_GITHUB_ACCOUNT: requireGithub(deployment).login, DSH_SUPERAGENT_GITHUB_COMMIT_EMAIL: requireGithub(deployment).noreply, DSH_SUPERAGENT_GITHUB_NUMBER: number ? String(number) : '',
+         DSH_SUPERAGENT_GITHUB_PR_HEAD: number && trigger?.meta.isPr === true ? `refs/pull/${number}/head` : '' }
+     },
+   },
+-  facts: (deployment): Record<string, Localized | string> => deployment ? {
+-    cli: { zh: `当前账号 @${deployment.github.login}`, en: `Current account @${deployment.github.login}` },
++  facts: (deployment): Record<string, Localized | string> => deployment?.github ? {
++    cli: { zh: `当前账号 @${requireGithub(deployment).login}`, en: `Current account @${requireGithub(deployment).login}` },
+   } : {},
+ }
+ export const name = 'dsh-superagent-github'
+@@ -218,7 +219,7 @@
+   }
+   const { headers, body } = included(raw)
+   const items = validItems(ListedSchema, z.array(z.unknown()).parse(JSON.parse(body)), round.tally)
+-  const { login } = ctx.deployment.github
++  const { login } = requireGithub(ctx.deployment)
+   const fresh = (at: string | null | undefined, kind: string) =>
+     kind in started && Date.parse(at ?? '') >= Math.max(Date.parse(started[kind]!), horizon)
+   for (const item of items) {
+@@ -351,7 +352,7 @@
+     if (!isPr) {
+       // An Issue opened by someone other than the agent since the cursor brings its body so a mention in it reaches the gate.
+       // A mention added by a later edit to the body is not read: only the author can be the actor of the body.
+-      const { login } = ctx.deployment.github
++      const { login } = requireGithub(ctx.deployment)
+       const opened = Date.parse(issue.created_at) >= Date.parse(since) && !sameName(issue.user.login, login)
+       if (opened) await ctx.receive(issueTrigger(issue, login))
+       await intakeComments(ctx, { number, isPr: false, url: issue.html_url }, since, round)
+@@ -361,7 +362,7 @@
+   if (isPr) {
+     const pr = await pull(ctx, round, number)
+     // Emit a PR description trigger for PRs opened since the cursor; its ID is the same as the one produced by the repository PR stream.
+-    const { login } = ctx.deployment.github
++    const { login } = requireGithub(ctx.deployment)
+     if (pr.created_at && Date.parse(pr.created_at) >= Date.parse(since) && !sameName(pr.user.login, login)) {
+       const opened = { number, title: pr.title ?? '', body: pr.body, user: pr.user, created_at: pr.created_at, html_url: pr.html_url }
+       await ctx.receive(pullTrigger(opened, login))
+@@ -383,7 +384,7 @@
+ }
+ async function intakeComments(ctx: SourceContext, ref: PullRef, since: string, round: Round): Promise<void> {
+   const commands = ctx.commands.withSignal(round.signal)
+-  const { login } = ctx.deployment.github
++  const { login } = requireGithub(ctx.deployment)
+   const kinds = ref.isPr ? ['conversation', 'inline', 'review'] as const : ['conversation'] as const
+   for (const kind of kinds) {
+     const suffix = `&since=${encodeURIComponent(since)}`
+--- a/tests/fixtures/deployment.ts
++++ b/tests/fixtures/deployment.ts
+@@ -11,9 +11,9 @@
+   stateDir: '/tmp/dsh-superagent-test', promptMaxChars: reference(100000), admissionContextMaxPages: reference(10),
+   admissionContextTimeoutMs: reference(15000), ...overrides,
+ })
+-export const testDeployment = (overrides: Partial<Deployment> = {}): Deployment => ({
++export const testDeployment = (overrides: Partial<Deployment> = {}): Deployment & {github: NonNullable<Deployment['github']>} => ({
+   ...testMachine(), repository: 'acme/widgets',
+-  github: { cli: '/bin/false', login: 'agent-bot', noreply: '7+agent-bot@users.noreply.github.com' },
+   feishu: { cli: '/bin/false', botId: 'ou_bot', appId: 'cli_bot', brand: 'feishu', name: 'Widgets Bot' },
+   ...overrides,
++  github: overrides.github ?? { cli: '/bin/false', login: 'agent-bot', noreply: '7+agent-bot@users.noreply.github.com' },
+ })
+--- a/tests/fixtures/panel-server.ts
++++ b/tests/fixtures/panel-server.ts
+@@ -113,7 +113,7 @@
+ 
+ function resolved() {
+   const accounts = server.setup.accounts
+-  return accounts ? testDeployment({ repository: accounts.repository, github: { cli: '/bin/false', login: accounts.agent, noreply: '' },
++  return accounts && typeof accounts.agent==='string' ? testDeployment({ repository: accounts.repository, github: { cli: '/bin/false', login: accounts.agent, noreply: '' },
+     ...accounts.feishu ? { feishu: { cli: '/bin/false', ...accounts.feishu } } : { feishu: undefined } }) : undefined
+ }
+ /** Default source health: paused during setup; Feishu defaults to `socket closed` unless overridden or paused by setup. */
+--- a/tsdown.config.ts
++++ b/tsdown.config.ts
+@@ -7,7 +7,7 @@
+   load: (id: string) => id.endsWith('?raw') ? { code: `export default ${JSON.stringify(readFileSync(id.slice(0, -4), 'utf8'))}`, moduleType: 'js' as const }
+     : undefined }
+ export default defineConfig([
+-  { entry: { index: 'src/index.ts', 'github-watch': 'src/sources/github.ts', 'feishu-watch': 'src/sources/feishu.ts' }, outDir: 'lib', format: 'esm', fixedExtension: false, platform: 'node', target: 'es2024', dts: true, clean: true, deps: { neverBundle: [/^@deepseek-ai\//, 'zod', 'proper-lockfile'] } },
++  { entry: { index: 'src/index.ts', 'github-watch': 'src/sources/github.ts', 'feishu-watch': 'src/sources/feishu.ts', 'local-watch': 'src/sources/local.ts' }, outDir: 'lib', format: 'esm', fixedExtension: false, platform: 'node', target: 'es2024', dts: true, clean: true, deps: { neverBundle: [/^@deepseek-ai\//, 'zod', 'proper-lockfile'] } },
+   { entry: { client: 'src/client/index.tsx' }, outDir: 'lib', format: 'cjs', platform: 'browser', dts: false, clean: false, plugins: [raw],
+     deps: { neverBundle: ['react', 'react/jsx-runtime', 'react-dom'] },
+     outputOptions: { entryFileNames: 'client.js', banner: 'window.__ModuleLoader__.load({ id: "dsh-superagent", factory: (require) => {', footer: 'return module.exports; } });', intro: 'var module = { exports: {} }; var exports = module.exports;' } },

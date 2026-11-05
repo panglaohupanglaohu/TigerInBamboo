@@ -1,0 +1,39 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "wind": {
+        "rebuilt": true,
+        "x": -1,
+        "z": 1.2246467991473532e-16,
+        "worldSame": true,
+        "flow": [
+          -1,
+          0,
+          1.2246468525851679e-16
+        ]
+      },
+      "toggles": 8,
+      "sceneSwitch": true,
+      "theme": true
+    },
+    {
+      "grid": "quad",
+      "wind": {
+        "rebuilt": true,
+        "x": -1,
+        "z": 1.2246467991473532e-16,
+        "worldSame": true,
+        "flow": [
+          -1,
+          0,
+          1.2246468525851679e-16
+        ]
+      },
+      "toggles": 8,
+      "sceneSwitch": true,
+      "theme": true
+    }
+  ],
+  "errors": []
+}

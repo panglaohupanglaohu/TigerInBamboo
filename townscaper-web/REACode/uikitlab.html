@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>俏皮 UI — 歪在绘制，不在布局</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:120ch; }
+  header b { color:#9c4720; font-weight:650; }
+
+  #stage { position:absolute; left:18px; top:104px; width:880px; height:520px; border-radius:12px;
+    overflow:hidden; border:1px solid var(--line);
+    background:linear-gradient(180deg,#cfe3e2 0%,#c3d9d8 58%,#8fb8b6 58%,#7fb0ae 100%); }
+  /* 场景里放几块"房子"，只是为了让 UI 有东西可压 */
+  .block { position:absolute; border-radius:6px; box-shadow:0 6px 0 rgba(35,60,64,.18); }
+
+  #sidebar { position:absolute; left:18px; top:18px; width:56px; height:100%; }
+  .btn { position:absolute; width:40px; height:40px; border-radius:11px; border:2px solid;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:transform .06s linear; }
+  .btn:hover { filter:brightness(1.06); }
+  .btn svg { width:22px; height:22px; stroke:#fff; stroke-width:2; fill:none;
+    stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 1px 0 rgba(0,0,0,.18)); }
+
+  #card { position:absolute; right:22px; top:26px; width:250px; background:#f6f1e4;
+    border:2px solid #3b4a4e; border-radius:12px; box-shadow:5px 5px 0 rgba(35,60,64,.22); }
+  #card .bar { display:flex; align-items:center; justify-content:space-between;
+    padding:7px 11px; border-bottom:2px solid #3b4a4e; font:600 12.5px/1 inherit; letter-spacing:.04em; }
+  #card .bar i { font-style:normal; color:#8a6a3a; }
+  #card .body { padding:9px 11px 11px; display:flex; flex-direction:column; gap:7px; }
+  #card .row2 { display:flex; gap:7px; }
+  .pill { flex:1; padding:7px 8px; border-radius:9px; border:2px solid #3b4a4e; background:#fdfaf2;
+    font:600 11.5px/1 inherit; color:#3b4a4e; text-align:center; cursor:pointer; }
+  .pill:hover { background:#fff; }
+
+  #pop { position:absolute; left:50%; top:46%; width:268px; margin-left:-150px;
+    background:#f6f1e4; border:2.5px solid #3b4a4e; border-radius:14px;
+    box-shadow:7px 7px 0 rgba(35,60,64,.26); padding:13px 14px 14px; }
+  #pop h3 { margin:0 0 3px; font:700 15px/1.2 inherit; letter-spacing:.06em; }
+  #pop p { margin:0 0 11px; font-size:12px; color:#6b6a5e; }
+  #pop .row2 { display:flex; gap:8px; }
+  #pop .pill { padding:9px 8px; }
+  #pop .yes { background:#e9b34e; }
+  #veil { position:absolute; inset:0; background:rgba(28,44,48,.28); }
+
+  #panel { position:fixed; right:16px; top:104px; width:250px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:11px 13px; display:flex; flex-direction:column; gap:6px; }
+  #panel h2 { margin:4px 0 0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #panel button { padding:6px; font:12px/1 inherit; color:var(--ink); background:#f3f7f6;
+    border:1px solid var(--line); border-radius:7px; cursor:pointer; }
+  #panel button.on { background:#1d2f36; color:#fff; border-color:#1d2f36; }
+  #stats { position:fixed; left:18px; bottom:14px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .warn { color:#9c4720; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>把一排无聊的按钮变活泼：歪在绘制，不在布局</h1>
+  <p>槽位还是<b>一列等距方块</b>（点击、滚动、对齐都靠它），每个条目渲染时按 index 取一个
+    <b>确定性的小扰动</b>——旋转 ≤1.6°、位移 ≤2.4px。同一块按钮每次都歪在同一个姿势上，
+    不是每帧乱抖；扰动小于缝宽的一半，所以相邻点击区<b>永不重叠</b>。</p>
+</header>
+
+<div id="stage">
+  <div class="block" style="left:150px;top:220px;width:96px;height:78px;background:#e8896b"></div>
+  <div class="block" style="left:262px;top:250px;width:72px;height:60px;background:#f0c76a"></div>
+  <div class="block" style="left:352px;top:210px;width:120px;height:96px;background:#e5615c"></div>
+  <div class="block" style="left:490px;top:280px;width:88px;height:70px;background:#8fc98d"></div>
+  <div class="block" style="left:600px;top:240px;width:64px;height:64px;background:#7fb3d8"></div>
+  <div id="sidebar"></div>
+  <div id="card">
+    <div class="bar"><span>TOWN</span><i>···</i></div>
+    <div class="body">
+      <div class="row2"><div class="pill">RENAME</div><div class="pill">SHARE</div></div>
+      <div class="row2"><div class="pill">EXPORT</div><div class="pill">SETTINGS</div></div>
+      <div class="row2"><div class="pill" style="background:#f0d7a8">DEMOLISH</div></div>
+    </div>
+  </div>
+  <div id="veil"></div>
+  <div id="pop">
+    <h3>DEMOLISH?</h3>
+    <p>This cannot be undone.</p>
+    <div class="row2"><div class="pill yes">YES</div><div class="pill">CANCEL</div></div>
+  </div>
+</div>
+
+<div id="panel">
+  <h2>倾斜角 max rot</h2>
+  <div class="row"><span>度</span><b id="rotLab">1.6</b></div>
+  <input type="range" id="rot" min="0" max="4" step="0.1" value="1.6" />
+  <h2>位移 max offset</h2>
+  <div class="row"><span>像素</span><b id="offLab">2.4</b></div>
+  <input type="range" id="off" min="0" max="6" step="0.2" value="2.4" />
+  <h2>弹出确认</h2>
+  <div class="row"><span>遮挡场景</span><b id="popLab">开</b></div>
+  <div style="display:flex;gap:6px">
+    <button id="play" class="on">俏皮</button>
+    <button id="flat">对齐版</button>
+  </div>
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { layoutList, colorFor, GLYPHS } from './src/uikit.js';
+
+const ICONS = ['brush', 'hammer', 'eye', 'water', 'tree', 'grid', 'camera', 'wand'];
+const sidebar = document.getElementById('sidebar');
+const el = {
+  rot: document.getElementById('rot'), off: document.getElementById('off'),
+  rotLab: document.getElementById('rotLab'), offLab: document.getElementById('offLab'),
+  play: document.getElementById('play'), flat: document.getElementById('flat'),
+  pop: document.getElementById('pop'), veil: document.getElementById('veil'),
+  popLab: document.getElementById('popLab'), stats: document.getElementById('stats'),
+};
+let wobble = true, shown = null;
+
+// 槽位从 18,18 起，40px 方块 + 6px 缝
+const X0 = 8, Y0 = 18;
+
+function render() {
+  const maxRot = +el.rot.value, maxDx = +el.off.value;
+  const L = layoutList(ICONS.length, { x: X0, y: Y0, size: 40, gap: 6, maxRot, maxDx, maxDy: maxDx * 0.75, wobble });
+  sidebar.innerHTML = '';
+  L.items.forEach((it, i) => {
+    const c = colorFor(i, ICONS.length);
+    const d = document.createElement('div');
+    d.className = 'btn';
+    d.style.left = it.x + 'px';
+    d.style.top = it.y + 'px';
+    d.style.background = c.fill;
+    d.style.borderColor = c.edge;
+    d.style.transform = `translate(${it.dx}px,${it.dy}px) rotate(${it.rot}deg)`;
+    d.title = `${ICONS[i]} · ${it.rot.toFixed(1)}° / ${Math.hypot(it.dx, it.dy).toFixed(1)}px`;
+    d.innerHTML = `<svg viewBox="0 0 24 24" style="transform:rotate(${it.iconRot}deg)"><path d="${GLYPHS[ICONS[i]]}"/></svg>`;
+    d.addEventListener('click', () => { shown = ICONS[i]; });
+    sidebar.appendChild(d);
+  });
+  // 弹窗也歪一点（比按钮更狠一点，读起来像"卡片被手放上去"）
+  el.pop.style.transform = wobble ? 'rotate(-1.4deg) translate(2px,-2px)' : 'none';
+  el.panelRot = maxRot;
+  shown = L;
+  updateStats(L, maxRot, maxDx);
+}
+
+function updateStats(L, maxRot, maxDx) {
+  const overlapOk = L.overlaps === 0;
+  el.stats.innerHTML =
+    `条目 <b>${L.items.length}</b> · 槽距 46px · 旋转 最大 <b>${L.maxRotDeg.toFixed(2)}°</b> / 平均 ${L.meanRotDeg.toFixed(2)}°` +
+    ` · 位移 最大 <b>${L.maxDispPx.toFixed(2)}px</b> · 相邻包围盒最小缝 <b>${L.minGapPx.toFixed(1)}px</b>` +
+    ` · 重叠对 <span class="${overlapOk ? 'ok' : 'warn'}">${L.overlaps}</span>` +
+    ` · 槽位仍是整列（布局未动），歪的只是 transform` +
+    ` · 图标 ${ICONS.length} 个 · 最大设定 ${maxRot}° / ${maxDx}px`;
+}
+
+el.rot.addEventListener('input', () => { el.rotLab.textContent = (+el.rot.value).toFixed(1); render(); });
+el.off.addEventListener('input', () => { el.offLab.textContent = (+el.off.value).toFixed(1); render(); });
+el.play.addEventListener('click', () => { wobble = true; el.play.classList.add('on'); el.flat.classList.remove('on'); render(); });
+el.flat.addEventListener('click', () => {
+  wobble = false; el.flat.classList.add('on'); el.play.classList.remove('on');
+  el.veil.style.display = 'none'; el.pop.style.display = 'none'; el.popLab.textContent = '关';
+  render();
+});
+el.veil.addEventListener('click', () => { el.veil.style.display = 'none'; el.pop.style.display = 'none'; el.popLab.textContent = '关'; });
+
+render();
+window.reaUikit = { layout: () => shown, toggleFlat: () => el.flat.click() };
+</script>
+</body>
+</html>

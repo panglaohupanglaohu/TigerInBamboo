@@ -1,0 +1,33 @@
+{
+  "iteration": "2026-11-06 00:56 Shanghai heartbeat",
+  "observations": [
+    "Read current instructions, guides and handoff. Current unified 20261105T165631610662Z: 51 local and 33 browser PASS, zero page errors, includes recent object selector and fixed-version runtime.",
+    "No production implementation changed: no new reproduced defect justifies one. Added S19 integration validation for object-view lifecycle.",
+    "Target S07/S18/S19 three PASS, zero page errors. Switching bridge tree to lake tree 2 leaves exactly one helper. Refresh and learning roundtrip preserve selection and iframe. Entering original editor clears object scope and frees both helpers geometry/materials exactly twice.",
+    "Runtime World/settings, recipe and all localStorage keys unchanged across this lifecycle. Actual screenshot of second tree after learning reviewed: correct tree framed with green local oriented box.",
+    "Only viewing/focus is implemented. Moving/rotating/shape/color editing and persistent object scene data remain unavailable; no user profile access, no original library modifications, no automatic terrain/model execution or publishing.",
+    "Earlier startup responsiveness and historical learning timeout root causes remain unresolved. No performance improvement or complete Worker acceptance claimed."
+  ],
+  "checks": [
+    {
+      "name": "current unified functional regression",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "object selection lifecycle and resource release",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "editable object pipeline and real Worker acceptance",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "historical startup and learning timeout fixes",
+      "required": true,
+      "passed": false
+    }
+  ]
+}

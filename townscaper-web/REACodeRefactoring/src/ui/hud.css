@@ -263,3 +263,27 @@ html, body {
 #walk .wk-video { width: 100%; border-radius: 8px; margin-top: 8px; max-height: 220px; background: #000; }
 #walk .wk-video.hidden { display: none; }
 @media (max-width: 720px) { #walk { bottom: 8px; padding: 10px 12px; } #walk h3 { font-size: 16px; } }
+
+/* Always-visible entry to learned environment capabilities. */
+#environment-panel { position: fixed; right: 16px; top: 76px; z-index: 8; width: 320px; padding: 12px; max-height: calc(100dvh - 140px); overflow: auto; }
+#environment-panel > summary { cursor: pointer; font-weight: 700; font-size: 14px; }
+.environment-note { color: #4b626b; font-size: 11px; margin: 8px 0; }
+.environment-toggles, .environment-links { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 10px 0; }
+.environment-toggles label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+.environment-row { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
+.environment-row input { flex: 1; min-width: 0; }
+.environment-row[hidden] { display: none; }
+.environment-row select { margin-left: auto; max-width: 180px; }
+.environment-footer { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-top: 12px; }
+.environment-footer button, .environment-row select { border: 1px solid #9bb6bb; border-radius: 6px; padding: 5px; background: #f8fcfc; color: #193b46; }
+#environment-panel a { color: #216976; font-size: 12px; }
+#learnpanel[hidden] { display: none !important; }
+body:has(#environment-panel) #learnpanel { top: 128px; max-height: calc(100dvh - 196px); }
+@media(max-width:720px) {
+  #environment-panel { right: 10px; top: 122px; width: min(300px, calc(100vw - 20px)); max-height: calc(100dvh - 208px); }
+  #topright { top: 70px; right: 10px; }
+  body:has(#environment-panel) #learnpanel { top: 176px; bottom: auto; max-height: calc(100dvh - 260px); }
+  #scenes { max-width: calc(100vw - 20px); overflow-x: auto; left: 10px; }
+}
+
+.environment-links button { border: 1px solid #9bb6bb; border-radius: 6px; padding: 5px; background: #f8fcfc; color: #193b46; cursor: pointer; }

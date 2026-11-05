@@ -1,0 +1,161 @@
+{
+  "runs": [
+    {
+      "mixed": true,
+      "size": 64,
+      "occupied": 1493,
+      "vertices": 12114,
+      "versionBefore": 354,
+      "versionAfter": 354,
+      "stateRestored": true,
+      "failureRestored": true,
+      "samples": [
+        {
+          "size": 128,
+          "crisp": false,
+          "on": 5972,
+          "transition": 776,
+          "rgb": 1229016
+        },
+        {
+          "size": 128,
+          "crisp": true,
+          "on": 5972,
+          "transition": 112,
+          "rgb": 1228727
+        },
+        {
+          "size": 256,
+          "crisp": false,
+          "on": 23876,
+          "transition": 2984,
+          "rgb": 4914945
+        },
+        {
+          "size": 256,
+          "crisp": true,
+          "on": 23876,
+          "transition": 1002,
+          "rgb": 4909982
+        },
+        {
+          "size": 512,
+          "crisp": false,
+          "on": 95480,
+          "transition": 11216,
+          "rgb": 19659315
+        },
+        {
+          "size": 512,
+          "crisp": true,
+          "on": 95480,
+          "transition": 2074,
+          "rgb": 19639565
+        }
+      ],
+      "lines": [
+        {
+          "size": 32,
+          "width": 1.003921568627451
+        },
+        {
+          "size": 64,
+          "width": 1.003921568627451
+        },
+        {
+          "size": 128,
+          "width": 1.003921568627451
+        }
+      ],
+      "fringes": [
+        {
+          "crisp": false,
+          "tested": 14
+        },
+        {
+          "crisp": true,
+          "tested": 2
+        }
+      ]
+    },
+    {
+      "mixed": false,
+      "size": 64,
+      "occupied": 1496,
+      "vertices": 16458,
+      "versionBefore": 406,
+      "versionAfter": 406,
+      "stateRestored": true,
+      "failureRestored": true,
+      "samples": [
+        {
+          "size": 128,
+          "crisp": false,
+          "on": 5984,
+          "transition": 784,
+          "rgb": 1230428
+        },
+        {
+          "size": 128,
+          "crisp": true,
+          "on": 5984,
+          "transition": 118,
+          "rgb": 1230091
+        },
+        {
+          "size": 256,
+          "crisp": false,
+          "on": 23928,
+          "transition": 3018,
+          "rgb": 4920847
+        },
+        {
+          "size": 256,
+          "crisp": true,
+          "on": 23928,
+          "transition": 1018,
+          "rgb": 4918110
+        },
+        {
+          "size": 512,
+          "crisp": false,
+          "on": 95696,
+          "transition": 11364,
+          "rgb": 19682427
+        },
+        {
+          "size": 512,
+          "crisp": true,
+          "on": 95696,
+          "transition": 2114,
+          "rgb": 19671407
+        }
+      ],
+      "lines": [
+        {
+          "size": 32,
+          "width": 1.003921568627451
+        },
+        {
+          "size": 64,
+          "width": 1.003921568627451
+        },
+        {
+          "size": 128,
+          "width": 1.003921568627451
+        }
+      ],
+      "fringes": [
+        {
+          "crisp": false,
+          "tested": 14
+        },
+        {
+          "crisp": true,
+          "tested": 2
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,14 @@
+{
+  "stoppedOwnedBridgePID": 30398,
+  "recoveryActions": [
+    {
+      "started": true,
+      "pid": 32544,
+      "service": "bridge"
+    }
+  ],
+  "bridgeRecovered": true,
+  "intakeRecovered": true,
+  "executorStillPaused": true,
+  "modelExecutionVerified": false
+}

@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "69a1b9d24cf42d881c1df9c44106bd4afee370eecebcee8b7b88b62550d84ad5",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.73
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.85,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.12,
+        "review": 0.88
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.2
+    }
+  },
+  "usage": {
+    "input_tokens": 758,
+    "output_tokens": 91,
+    "cost_usd": 0.000319,
+    "credits_remaining_usd": 4.871356
+  },
+  "elapsed_ms": 1851,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "local SceneSource router/model execution",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

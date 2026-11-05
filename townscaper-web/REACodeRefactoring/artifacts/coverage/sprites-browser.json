@@ -1,0 +1,52 @@
+{
+  "reports": [
+    {
+      "comparison": [
+        {
+          "variant": "sword",
+          "empty": false,
+          "pixels": 691,
+          "mirrorIoU": 0.7189054726368159,
+          "flipDiff": 0.18507098157807605,
+          "massSkew": 0.06180828969469905,
+          "pivotX": 23.5
+        },
+        {
+          "variant": "axe",
+          "empty": false,
+          "pixels": 758,
+          "mirrorIoU": 0.6162046908315565,
+          "flipDiff": 0.28660196715549,
+          "massSkew": 0.13488420118423006,
+          "pivotX": 23.5
+        },
+        {
+          "variant": "spear",
+          "empty": false,
+          "pixels": 715,
+          "mirrorIoU": 0.6784037558685446,
+          "flipDiff": 0.21874893306113727,
+          "massSkew": 0.07564378234751291,
+          "pivotX": 23.5
+        }
+      ]
+    },
+    {
+      "grid": "quad",
+      "count": 24,
+      "alive": 24,
+      "visible": true,
+      "materials": 2,
+      "pool": 24
+    },
+    {
+      "grid": "mixed",
+      "count": 24,
+      "alive": 24,
+      "visible": true,
+      "materials": 2,
+      "pool": 24
+    }
+  ],
+  "errors": []
+}

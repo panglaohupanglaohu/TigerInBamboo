@@ -1,0 +1,33 @@
+{
+  "report": {
+    "id": 231,
+    "traces": [
+      {
+        "reason": "boundary",
+        "closed": false,
+        "steps": 1,
+        "segments": 1
+      },
+      {
+        "reason": "boundary",
+        "closed": false,
+        "steps": 3,
+        "segments": 3
+      },
+      {
+        "reason": "boundary",
+        "closed": false,
+        "steps": 20,
+        "segments": 20
+      },
+      {
+        "reason": "boundary",
+        "closed": false,
+        "steps": 12,
+        "segments": 12
+      }
+    ],
+    "finite": true
+  },
+  "errors": []
+}

@@ -1,0 +1,122 @@
+{
+  "startedAt": "2026-11-04T02:15:26.715Z",
+  "base": "http://localhost:8931",
+  "isolated": true,
+  "cases": [
+    {
+      "id": "S01 initial pipeline",
+      "status": "PASS",
+      "ms": 15
+    },
+    {
+      "id": "S02 scan real library and search",
+      "status": "PASS",
+      "ms": 1234,
+      "detail": "发现 201 条能力记录，已加入分类能力库；新增方法均待执行适配。"
+    },
+    {
+      "id": "S03 scan HTTP404 and recovery",
+      "status": "PASS",
+      "ms": 1641
+    },
+    {
+      "id": "S12 scene categories subgroups and method shelf",
+      "status": "PASS",
+      "ms": 3433
+    },
+    {
+      "id": "S04 add remove undo redo and reorder",
+      "status": "PASS",
+      "ms": 699
+    },
+    {
+      "id": "S05 goal save and exported JSON",
+      "status": "PASS",
+      "ms": 1524
+    },
+    {
+      "id": "L01 learning loads source records",
+      "status": "PASS",
+      "ms": 463,
+      "detail": "39 条模块职责 · 243 条学习记录（登记不等于验收）"
+    },
+    {
+      "id": "L06 shared progress matches upstream and refresh failure recovers",
+      "status": "PASS",
+      "ms": 7043
+    },
+    {
+      "id": "L02 module search and source links",
+      "status": "PASS",
+      "ms": 7485
+    },
+    {
+      "id": "L03 add method to scene locate no duplicate",
+      "status": "PASS",
+      "ms": 3844
+    },
+    {
+      "id": "L04 videos search play close",
+      "status": "PASS",
+      "ms": 1317
+    },
+    {
+      "id": "S06 saved recipe refresh",
+      "status": "PASS",
+      "ms": 559
+    },
+    {
+      "id": "S07 real game connection and editor docking",
+      "status": "PASS",
+      "ms": 45495
+    },
+    {
+      "id": "S08 editor tools palette help collapse",
+      "status": "PASS",
+      "ms": 12274
+    },
+    {
+      "id": "S13 approved light blue toolbar contrast and keyboard focus",
+      "status": "PASS",
+      "ms": 1019,
+      "detail": {
+        "background": "rgb(227, 243, 251)",
+        "foreground": "rgb(23, 55, 68)",
+        "contrast": 11.08957390102491,
+        "buttons": 9
+      }
+    },
+    {
+      "id": "S09 actual parameter preview baseline and snapshot",
+      "status": "PASS",
+      "ms": 5185
+    },
+    {
+      "id": "S10 stale finalize reject restore and isolated final",
+      "status": "PASS",
+      "ms": 7193
+    },
+    {
+      "id": "S11 play mode and service outage independence",
+      "status": "PASS",
+      "ms": 5151
+    },
+    {
+      "id": "L05 mobile overflow and preserved scene iframe",
+      "status": "PASS",
+      "ms": 1472
+    },
+    {
+      "id": "G01 clean game startup and remote controls",
+      "status": "PASS",
+      "ms": 48043
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-04T02:18:02.645Z",
+  "summary": {
+    "passed": 20,
+    "failed": 0,
+    "pageErrors": 0
+  }
+}

@@ -3,24 +3,24 @@
  *
  * 依据：
  *   1212732478458343424 "Added some flags. Gotta make it homely and welcoming."
- *     画面：高房子的屋顶尖上一根细杆、一面小旗，在风里飘。
+ *     全帧复核：楼间/庭院彩旗绳随建筑布局增减；此ID不作为屋顶插杆旗的证据。
  *   1259838941299183619 "In code, these are called 'Italian Wires'"
- *     画面：相对的两面墙之间拉着下垂的绳子，挂满三角彩旗；隔街、跨院子都有。
+ *     316帧复核：跨楼绳线也挂白色衣物，楼体加高/旋转时连接变化；不声称原作端点/求解算法。
  *   1273520600221433857 "Butterflies fly quite different from birds. Mine loosely orbit a potential landing spot,
  *     and drift by randomly switching that spot. Additional world space noise adds variability but also coherence (without boiding)"
  *     画面：花园里几只小蝴蝶在花丛上方绕圈，忽然飘去另一处。
  *
  * 做法：
- *   旗子：每个建筑体量最高的屋脊点（来自 birds.js 的 findRoofPerches）插一根杆；旗面 6×3 细分，
+ *   屋顶插杆旗（本地附加装饰）：每个建筑体量最高的屋脊点（来自 birds.js 的 findRoofPerches）插一根杆；旗面 6×3 细分，
  *         顶点着色器里沿旗面方向传播的正弦波 + 越靠外摆得越大；旗面朝向 = 风向（atmosphere.uWind）。
- *   电线：从建筑格的外墙中点沿外法线往外"走"，走过 0.6–2.2 的空地碰到另一栋足够高的房子 → 拉一根；
- *         悬链线下垂（中间最低），每隔一段挂一面三角彩旗；整根绳在风里轻轻荡（中间幅度最大）。
+ *   电线：从外墙中点沿外法线做精确多边形裁切，0.6–2.2范围内按距离检验建筑墙，允许越过较矮屋顶；按共享逐层solid检查下垂/衣物/摆幅保守包络。
+ *         抛物线下垂（中间最低），每隔一段挂一面三角彩旗/白色衣物；整根绳在风里轻轻荡（中间幅度最大）。
  *   蝴蝶：落点 = 小花和后院；每只绕自己的落点松散地转圈，随机换落点；
  *         速度里叠一个世界空间的噪声场 → 同一处的几只往同一边飘（有整体感，但不是 boids）。
  */
 
 import * as THREE from 'three';
-import { pointInQuad } from '../core/spatial.js';
+import { planWire } from '../core/wire-route.js';
 
 function rng32(seed) {
   let a = seed >>> 0;
@@ -144,37 +144,21 @@ export class Decor {
     if (this.flags.instanceColor) this.flags.instanceColor.needsUpdate = true;
 
     /* 电线：外墙中点沿外法线走，碰到另一栋足够高的房子就拉 */
-    const cellAt = (x, z) => { for (const c of index.at(x, z)) if (pointInQuad(c.pts, x, z)) return c; return null; };
     const pos = [], colr = [], sway = [], phase = [];
     const done = new Set();
-    let nw = 0;
+    let nw = 0;this.wireRoutes=[];
     for (const c of world.cells) {
       if (nw >= 18) break;
       const T = world.top(c);
       if (T < 3 || !world.topIsBuilt(c) || rnd() > 0.35) continue;
       for (let i = 0; i < c.n && nw < 18; i++) {
-        const nb = world.neighbor(c, i);
-        if (nb && world.top(nb) >= T - 1) continue;           // 这面墙外面得是空的（街道 / 院子）
-        const a = c.pts[i], b = c.pts[(i + 1) % c.n];
-        let nx = -(b.z - a.z), nz = b.x - a.x;
-        const l = Math.hypot(nx, nz) || 1; nx /= l; nz /= l;
-        if (nx * ((a.x + b.x) / 2 - c.cx) + nz * ((a.z + b.z) / 2 - c.cz) < 0) { nx = -nx; nz = -nz; }
-        const sx = (a.x + b.x) / 2, sz = (a.z + b.z) / 2;
-        for (let d = 0.6; d <= 2.2; d += 0.1) {
-          const o = cellAt(sx + nx * d, sz + nz * d);
-          if (!o) break;
-          const OT = world.top(o);
-          if (o.id === c.id || OT < 3) continue;
-          const key = Math.min(c.id, o.id) + ':' + Math.max(c.id, o.id);
-          if (done.has(key)) break;
-          done.add(key);
-          // 拉在两栋都有的高度
-          const y = (Math.min(T, OT) - 1) * L + 0.12;
-          const ex = sx + nx * (d - 0.02), ez = sz + nz * (d - 0.02);
-          this.#wire(pos, colr, sway, phase, [sx + nx * 0.01, y, sz + nz * 0.01], [ex, y, ez], rnd, nw);
-          nw++;
-          break;
-        }
+        const route=planWire(world,c,i,{levelHeight:L});
+        if(!route)continue;
+        const key=Math.min(route.source,route.target)+':'+Math.max(route.source,route.target);
+        if(done.has(key))continue;done.add(key);
+        this.#wire(pos,colr,sway,phase,route.A,route.B,rnd,nw);
+        this.wireRoutes.push(route);nw++;
+
       }
     }
     const g = new THREE.BufferGeometry();
@@ -225,7 +209,11 @@ export class Decor {
       const mid = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 - 0.045, (p0[2] + p1[2]) / 2];
       c.set(PENNANTS[(idx * 3 + k) % PENNANTS.length]);
       const s = 4 * t * (1 - t);
-      push(p0, [c.r, c.g, c.b], s); push(p1, [c.r, c.g, c.b], s); push(mid, [c.r * 0.85, c.g * 0.85, c.b * 0.85], s);
+      if(idx%2===0&&k%2===0){
+        const depth=.06,lo0=[p0[0],p0[1]-depth,p0[2]],lo1=[p1[0],p1[1]-depth,p1[2]],white=[.92,.91,.86];
+        for(const v of[p0,p1,lo1,p0,lo1,lo0])push(v,white,s);
+      }else{push(p0,[c.r,c.g,c.b],s);push(p1,[c.r,c.g,c.b],s);push(mid,[c.r*.85,c.g*.85,c.b*.85],s);}
+
     }
   }
 

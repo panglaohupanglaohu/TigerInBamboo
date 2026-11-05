@@ -1,0 +1,19 @@
+{
+  "upstreamCommit": "6337fc823ce20251c8de8085948165c81aaa701e",
+  "baseFiles": {
+    "docs/007-architecture.md": "e3747665587fdf88b28d4e9c1a1f8ac40cbc2c65a9999be1fce14b69ec44d748",
+    "package.json": "f5170d812137dd370c568decb481e19f4da9a3d1fd7bad341a0f07942020a559",
+    "src/app/http.ts": "5da39830429559975cae7ae6d39416acb2322ac8e31cfb4da3436df602cb7ec4",
+    "src/app/setup.ts": "d1de51b048d352345d4837a5911ba4d0158979c8073575feddc064670c8a697a",
+    "src/app/tools/executor.ts": "9869d8a5043725847f18814e23b29c11ae93aa974defa72d2eab62c61a6def47",
+    "src/deployment.ts": "9984953f17592b267e386d4028552d413cfe9c9ac4df6dfb730b6be5115dbf77",
+    "src/infra/commands.ts": "9d7593c5022e0c1813731c1f1cd8471b1536b0b5f42974a08ef2b2930c1e62b2",
+    "src/infra/environment.ts": "413680e755ed36b74157f364a38cb5dbe81e4af0db0fa88c8376c682e2282a7c",
+    "src/sources/github-channel.ts": "6de9657465b8bae9a7cb4748d469fedff3c8d27fec6ed6b4dd52e620a239a0d1",
+    "src/sources/github-pull.ts": "615856e7a6958eade1dbf28c9628adc7a8c7bb5392bee71346e471fb571595ec",
+    "src/sources/github.ts": "60bfc2c298cbef708553de5ca0c91c387fd633bc7440c6be0d1242478ef84e88",
+    "tests/fixtures/deployment.ts": "48a7af52fa153b2da58e952cce726bb40f4a4f5b59dbf41b0409fa581425faf7",
+    "tests/fixtures/panel-server.ts": "02ea5bca9c55e17da1d88af7bd835a1c59a9ca099a9f2f9a05c7a490595d472c",
+    "tsdown.config.ts": "39163d8b6b8bd8e7eb723e535da60ce6840fa83930f4c92e1de916d3cfdfd211"
+  }
+}

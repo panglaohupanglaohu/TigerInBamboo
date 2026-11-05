@@ -1,0 +1,21 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "count": 24,
+      "vertices": 723,
+      "finite": true,
+      "changedPixels": 34,
+      "filteredCases": 4
+    },
+    {
+      "kind": "mixed",
+      "count": 24,
+      "vertices": 750,
+      "finite": true,
+      "changedPixels": 291,
+      "filteredCases": 4
+    }
+  ],
+  "errors": []
+}

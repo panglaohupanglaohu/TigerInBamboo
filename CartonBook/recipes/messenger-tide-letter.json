@@ -1,0 +1,442 @@
+{
+  "id": "messenger-tide-letter",
+  "title": "信使日记 · 潮气那封",
+  "subtitle": "Hard To Find · 接信启程",
+  "scene": "messenger",
+  "gameUrl": "/TigerMessenger/?scene=messenger&autostart=1&cartonCapture=1&timeOfDay=0.75",
+  "timeOfDay": 0.75,
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "notes": "Edena 七页（封面+6）：信使中心弧；镜头族 panorama→cinematic→唯一低仰→macro→tele→harbor→airshipPilot→panorama。capture-clean 强制；禁止 HUD fixtures。资产经 landmark=bookshop 与 orbit 覆盖：书店本体/berm/招牌/台地/广场/坡道/Jakub廊灯/蒸汽大气/港湾坞/小人信使/取信。 timeOfDay=0.75 黄昏暖橙粉天（对齐 8931 拱廊台地+街灯最新外观）。",
+  "storyboard": [
+    {
+      "id": "c0",
+      "title": "封面：台地书店镇",
+      "note": "panorama ELS；人极小；台地+书店轮廓；无对白 HUD",
+      "camera": {
+        "mode": "panorama",
+        "family": "panorama",
+        "landmark": "bookshop",
+        "dist": 36,
+        "orbit": 0.28,
+        "pitch": 0.42,
+        "fov": 72,
+        "waitMs": 1200
+      },
+      "caption": "",
+      "assetHero": "terrace+bookshop body+messenger tiny"
+    },
+    {
+      "id": "s01",
+      "title": "坡道入口",
+      "note": "cinematic；入口路径引导线；人小",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 22,
+        "orbit": 0.55,
+        "pitch": 0.08,
+        "fov": 58,
+        "waitMs": 1000
+      },
+      "caption": "坡道尽头，潮气先到。",
+      "assetHero": "entrance path"
+    },
+    {
+      "id": "s02",
+      "title": "圆形广场",
+      "note": "cinematic；广场抵达",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 17,
+        "orbit": 0.2,
+        "pitch": 0.05,
+        "fov": 58,
+        "waitMs": 950
+      },
+      "caption": "广场把脚步放慢。",
+      "assetHero": "circular plaza"
+    },
+    {
+      "id": "s03",
+      "title": "土坡 berm",
+      "note": "cinematic；berm 压人尺度",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 14,
+        "orbit": 0.05,
+        "pitch": 0.04,
+        "fov": 56,
+        "waitMs": 900
+      },
+      "caption": "",
+      "assetHero": "berm"
+    },
+    {
+      "id": "s04",
+      "title": "眼高台地仍小",
+      "note": "cinematic eye-level；全身仍小于立面；台地廊",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 15,
+        "orbit": 0.12,
+        "pitch": 0.03,
+        "fov": 58,
+        "waitMs": 900
+      },
+      "caption": "台地把风托在廊檐下。",
+      "assetHero": "terrace"
+    },
+    {
+      "id": "s05",
+      "title": "低机位立面（全章唯一）",
+      "note": "cinematic + 负 pitch 仰拍；全章唯一低机位；书店本体纪念碑感",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 11,
+        "orbit": 0.04,
+        "pitch": -0.12,
+        "fov": 55,
+        "waitMs": 950
+      },
+      "caption": "",
+      "assetHero": "bookshop body facade low-angle"
+    },
+    {
+      "id": "s06",
+      "title": "Jakub 廊静场",
+      "note": "cinematic；侧廊+灯；静默；orbit 变号",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 16,
+        "orbit": -0.72,
+        "pitch": 0.06,
+        "fov": 58,
+        "waitMs": 1000
+      },
+      "caption": "廊灯认得取信的脚步。",
+      "assetHero": "Jakub arcade/lamps"
+    },
+    {
+      "id": "s07",
+      "title": "接信交互",
+      "note": "cinematic medium；全章唯一对白气泡（店主）",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 9.2,
+        "orbit": 0.18,
+        "pitch": 0.04,
+        "fov": 56,
+        "waitMs": 900
+      },
+      "dialog": {
+        "speaker": "店主",
+        "text": "边境那封。潮气重。"
+      },
+      "caption": "",
+      "assetHero": "entrance door interact"
+    },
+    {
+      "id": "s08",
+      "title": "微距：HARD TO FIND",
+      "note": "macro 全章唯一近景插入；招牌字；其后必须 tele 拉开",
+      "camera": {
+        "mode": "macro",
+        "family": "macro",
+        "landmark": "bookshop",
+        "dist": 4.6,
+        "orbit": 0.06,
+        "pitch": 0.12,
+        "fov": 46,
+        "waitMs": 1000
+      },
+      "caption": "铜钉咬着旧木纹。",
+      "assetHero": "sign HARD TO FIND"
+    },
+    {
+      "id": "s09",
+      "title": "长焦拉开",
+      "note": "tele 紧接 macro；窄 FOV 压缩平面",
+      "camera": {
+        "mode": "tele",
+        "family": "tele",
+        "landmark": "bookshop",
+        "dist": 22,
+        "orbit": 0.85,
+        "pitch": 0.12,
+        "fov": 40,
+        "waitMs": 1000
+      },
+      "caption": "信封比预想的轻。",
+      "assetHero": "bookshop+messenger compressed"
+    },
+    {
+      "id": "s10",
+      "title": "信在身上·背影",
+      "note": "cinematic medium；信使背影带信意图；禁大脸",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 13,
+        "orbit": 1.12,
+        "pitch": 0.04,
+        "fov": 56,
+        "waitMs": 900
+      },
+      "caption": "",
+      "assetHero": "messenger figure small + letter intent"
+    },
+    {
+      "id": "s11",
+      "title": "港湾水面",
+      "note": "cinematic；港湾水；不抢取信戏",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 24,
+        "orbit": 1.55,
+        "pitch": 0.06,
+        "fov": 60,
+        "waitMs": 1000
+      },
+      "caption": "水把镇又写了一遍。",
+      "assetHero": "harbor/water"
+    },
+    {
+      "id": "s12",
+      "title": "飞艇坞与蒸汽",
+      "note": "cinematic；坞/蒸汽远景；大气层",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 26,
+        "orbit": 1.75,
+        "pitch": 0.1,
+        "fov": 58,
+        "waitMs": 1000
+      },
+      "caption": "蒸汽在坞口散开。",
+      "assetHero": "dock + atmosphere/steam"
+    },
+    {
+      "id": "s13",
+      "title": "登艇",
+      "note": "cinematic；登艇第三人称；邻格才 POV",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "bookshop",
+        "dist": 18,
+        "orbit": 1.9,
+        "pitch": 0.08,
+        "fov": 58,
+        "waitMs": 1000
+      },
+      "caption": "",
+      "assetHero": "airship dock board"
+    },
+    {
+      "id": "s14",
+      "title": "飞艇驾驶员视野",
+      "note": "airshipPilot 全章唯一主观 POV；FOV82；须 capture-clean",
+      "camera": {
+        "mode": "airshipPilot",
+        "family": "airshipPilot",
+        "landmark": "bookshop",
+        "waitMs": 1500
+      },
+      "caption": "气囊隐去，只剩航路。",
+      "assetHero": "airshipPilot POV"
+    },
+    {
+      "id": "s15",
+      "title": "告别全景",
+      "note": "panorama；镇缩；人剪影；静默收束",
+      "camera": {
+        "mode": "panorama",
+        "family": "panorama",
+        "landmark": "bookshop",
+        "dist": 38,
+        "orbit": 2.05,
+        "pitch": 0.45,
+        "fov": 72,
+        "waitMs": 1200
+      },
+      "caption": "镇矮下去。潮气那封上路。",
+      "assetHero": "town shrinking + messenger tiny"
+    }
+  ],
+  "pages": [
+    {
+      "id": "cover",
+      "kind": "cover",
+      "template": "cover",
+      "title": "信使日记 · 潮气那封",
+      "panels": [
+        {
+          "shotId": "c0",
+          "showCaption": false,
+          "showDialog": false
+        }
+      ]
+    },
+    {
+      "id": "page-01",
+      "kind": "story",
+      "template": "edena-stack-3",
+      "title": "坡道",
+      "panels": [
+        {
+          "shotId": "s01",
+          "role": "path",
+          "showCaption": true,
+          "showDialog": false
+        },
+        {
+          "shotId": "s02",
+          "role": "plaza",
+          "showCaption": true,
+          "showDialog": false
+        },
+        {
+          "shotId": "s03",
+          "role": "berm",
+          "showCaption": false,
+          "showDialog": false
+        }
+      ]
+    },
+    {
+      "id": "page-02",
+      "kind": "story",
+      "template": "edena-banner-pair",
+      "title": "立面",
+      "panels": [
+        {
+          "shotId": "s04",
+          "role": "terrace",
+          "showCaption": true,
+          "showDialog": false
+        },
+        {
+          "shotId": "s05",
+          "role": "facade",
+          "showCaption": false,
+          "showDialog": false
+        }
+      ]
+    },
+    {
+      "id": "page-03",
+      "kind": "story",
+      "template": "edena-close-insert",
+      "title": "取信",
+      "panels": [
+        {
+          "shotId": "s06",
+          "role": "env",
+          "showCaption": true,
+          "showDialog": false
+        },
+        {
+          "shotId": "s07",
+          "role": "interact",
+          "showCaption": false,
+          "showDialog": true
+        },
+        {
+          "shotId": "s08",
+          "role": "insert",
+          "showCaption": true,
+          "showDialog": false
+        }
+      ]
+    },
+    {
+      "id": "page-04",
+      "kind": "story",
+      "template": "edena-banner-pair",
+      "title": "信在身上",
+      "panels": [
+        {
+          "shotId": "s09",
+          "role": "pull",
+          "showCaption": true,
+          "showDialog": false
+        },
+        {
+          "shotId": "s10",
+          "role": "letter",
+          "showCaption": false,
+          "showDialog": false
+        }
+      ]
+    },
+    {
+      "id": "page-05",
+      "kind": "story",
+      "template": "edena-banner-pair",
+      "title": "港湾",
+      "panels": [
+        {
+          "shotId": "s11",
+          "role": "harbor",
+          "showCaption": true,
+          "showDialog": false
+        },
+        {
+          "shotId": "s12",
+          "role": "dock",
+          "showCaption": true,
+          "showDialog": false
+        }
+      ]
+    },
+    {
+      "id": "page-06",
+      "kind": "story",
+      "template": "edena-banner-pair",
+      "rhythm": "depart",
+      "title": "启程",
+      "panels": [
+        {
+          "shotId": "s13",
+          "role": "board",
+          "showCaption": false,
+          "showDialog": false
+        },
+        {
+          "shotId": "s14",
+          "role": "pilot",
+          "showCaption": true,
+          "showDialog": false
+        },
+        {
+          "shotId": "s15",
+          "role": "farewell",
+          "showCaption": true,
+          "showDialog": false
+        }
+      ]
+    }
+  ],
+  "captureVia": "direct"
+}

@@ -24,7 +24,7 @@ export const PALETTES = {
   },
 };
 
-/** 建筑固定色（1197909675443916803：屋顶永远陶土色，调色板只上墙）。 */
+/** 建筑固定色（1197909675443916803：片中屋顶为暖橙色系；本实现固定屋顶材质，调色板只上墙）。 */
 export const BUILD = {
   roof: '#e07a52', roofAlt: '#d96f4a', roofTrim: '#8a3a32', plaster: '#efe6d4',
   stone: '#8d8f95', stoneDark: '#6d6f76', band: '#7d3836',
@@ -39,3 +39,19 @@ export const TERRAIN = {
   sand: '#c9b691', sandBright: '#ded0ae', moss: '#8d8f62', mossDeep: '#7e8155', grass: '#86a160', grassDeep: '#6f8f55',
   lip: '#e3b67e', river: '#5d9fae', riverBank: '#b9ad8c',
 };
+
+/** Make a private wall-slot palette; never mutate shipped presets. */
+export function withPaletteColors(palette,colors){
+  if(!palette||!Array.isArray(palette.colors)||!Array.isArray(colors)||colors.length!==palette.colors.length||colors.some(c=>typeof c!=='string'||!/^#[0-9a-f]{6}$/i.test(c)))throw new RangeError('wall palette slots');
+  return {...palette,colors:[...colors]};
+}
+
+/** Optional wall-only HSL transition; not a recovered formula from the clip. */
+export function blendWallPalettes(a,b,t){
+  withPaletteColors(a,a?.colors); withPaletteColors(b,b?.colors);
+  if(a.colors.length!==b.colors.length||!Number.isFinite(t)||t<0||t>1)throw new RangeError('palette blend');
+  if(t===0)return withPaletteColors(a,a.colors);if(t===1)return withPaletteColors(a,b.colors);
+  const hsl=hex=>{const [r,g,b]=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255),hi=Math.max(r,g,b),lo=Math.min(r,g,b),d=hi-lo,l=(hi+lo)/2;if(d===0)return [0,0,l];const h=hi===r?((g-b)/d+(g<b?6:0)):hi===g?(b-r)/d+2:(r-g)/d+4;return[h/6,d/(1-Math.abs(2*l-1)),l]};
+  const hex=([h,s,l])=>{const f=n=>{const k=(n+h*12)%12;return l-s*Math.min(l,1-l)*Math.max(-1,Math.min(k-3,9-k,1))};return '#'+[f(0),f(8),f(4)].map(c=>Math.round(Math.max(0,Math.min(1,c))*255).toString(16).padStart(2,'0')).join('')};
+  return withPaletteColors(a,a.colors.map((c,i)=>{const A=hsl(c),B=hsl(b.colors[i]);if(A[1]<1e-6)A[0]=B[0];if(B[1]<1e-6)B[0]=A[0];const d=((B[0]-A[0]+1.5)%1)-.5;return hex([(A[0]+d*t+1)%1,A[1]+(B[1]-A[1])*t,A[2]+(B[2]-A[2])*t])}));
+}

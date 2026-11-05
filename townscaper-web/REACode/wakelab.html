@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>船尾迹 — 两条边是算出来的，不是画出来的</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  canvas#cv { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  header { position:fixed; left:20px; top:14px; max-width:min(700px,56vw); pointer-events:none; }
+  h1 { margin:0 0 5px; font-size:15px; letter-spacing:.2px; color:#12333b;
+       text-shadow:0 1px 0 rgba(255,255,255,.75); }
+  header p { margin:0; color:#3f585f; font-size:12.5px; background:rgba(255,255,255,.78);
+    border-radius:8px; padding:6px 9px; }
+  header b { color:#8a5a12; font-weight:650; }
+  #panel { position:fixed; right:16px; top:16px; width:212px; background:rgba(255,255,255,.94);
+    border:1px solid var(--line); border-radius:10px; padding:10px 12px;
+    display:flex; flex-direction:column; gap:6px; box-shadow:0 4px 14px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.4px; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #stats { position:fixed; left:20px; bottom:14px; right:20px; font-size:12px; color:#37525a;
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px;
+    padding:7px 12px; font-variant-numeric:tabular-nums; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<header>
+  <h1>尾迹是「两个舷侧发射点以固定横向速度走开」的几何后果</h1>
+  <p>沿航向 v∥、横向 v⊥ = (speed−v∥)·tan<b>θ</b>，粒子走过的边线与航迹恒成 θ ——
+     所以 V 的张角不用画，量就能量出来。船一拐弯，旧的 V 留在原地。</p>
+</header>
+
+<div id="panel">
+  <h2>V 形张角（半角）</h2>
+  <div class="row"><span>θ</span><b id="alab">19.5°</b></div>
+  <input type="range" id="ang" min="10" max="32" step="0.5" value="19.5" />
+  <h2>泡沫寿命</h2>
+  <div class="row"><span>life</span><b id="llab">4.2 s</b></div>
+  <input type="range" id="life" min="1.4" max="6" step="0.1" value="4.2" />
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { Wake, KELVIN } from './src/wake.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const statsEl = document.getElementById('stats');
+const angEl = document.getElementById('ang');
+const lifeEl = document.getElementById('life');
+
+/* 泡沫贴图：核心硬、边缘快落 —— 原片里泡沫是**小段/斑点**，不是一团雾 */
+const BLOB = 48;
+const blob = document.createElement('canvas');
+blob.width = blob.height = BLOB;
+{
+  const b = blob.getContext('2d');
+  const g = b.createRadialGradient(BLOB / 2, BLOB / 2, 0, BLOB / 2, BLOB / 2, BLOB / 2);
+  g.addColorStop(0, 'rgba(255,255,255,1)');
+  g.addColorStop(0.62, 'rgba(255,255,255,.92)');
+  g.addColorStop(0.86, 'rgba(255,255,255,.35)');
+  g.addColorStop(1, 'rgba(255,255,255,0)');
+  b.fillStyle = g;
+  b.fillRect(0, 0, BLOB, BLOB);
+}
+
+let W = 0, H = 0, dpr = 1;
+let wake;
+/* 泡沫层：只把**新出生**的粒子画一次，之后整层按时间衰减。
+   每帧重画几千个粒子在软件渲染下只有 6 fps，慢到统计都追不上。 */
+const LAYER_SCALE = 0.6;
+const layer = document.createElement('canvas');
+const lctx = layer.getContext('2d');
+
+const SHIPS = [
+  { at: [952, 296], dir: -0.25, speed: 58, len: 86, beam: 21 },
+  { at: [706, 646], dir: -0.35, speed: 52, len: 70, beam: 17 },
+  { at: [470, 236], dir: -0.15, speed: 44, len: 52, beam: 13 },
+];
+
+function paintFoam(p) {
+  const a = Wake.alphaOf(p);
+  if (a <= 0.01) return;
+  lctx.globalAlpha = Math.min(1, a * 0.9);
+  const s = p.size * LAYER_SCALE;
+  lctx.drawImage(blob, p.x * LAYER_SCALE - s, p.y * LAYER_SCALE - s, s * 2, s * 2);
+  lctx.globalAlpha = 1;
+}
+
+function build(prewarm = 9) {
+  wake = new Wake({ angle: +angEl.value, life: +lifeEl.value, rate: 240, sprayRate: 6, seed: 21 });
+  for (const s of SHIPS) {
+    const c = Math.cos(s.dir), sn = Math.sin(s.dir);
+    wake.addShip({
+      x: s.at[0] - c * s.speed * prewarm, y: s.at[1] - sn * s.speed * prewarm,
+      dir: s.dir, speed: s.speed, len: s.len, beam: s.beam,
+    });
+  }
+  for (let i = 0; i < Math.round(prewarm * 60); i++) wake.step(1 / 60);
+  lctx.clearRect(0, 0, layer.width, layer.height);
+  for (const p of wake.foam) { paintFoam(p); p.painted = true; }
+}
+
+function resize() {
+  dpr = Math.min(2, window.devicePixelRatio || 1);
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  layer.width = Math.max(1, Math.round(W * LAYER_SCALE));
+  layer.height = Math.max(1, Math.round(H * LAYER_SCALE));
+  build();
+}
+
+/* ---------- 水面 ---------- */
+function drawWater() {
+  const g = ctx.createLinearGradient(0, 0, W * 0.25, H);
+  g.addColorStop(0, '#a3c0be');
+  g.addColorStop(0.5, '#8daeae');
+  g.addColorStop(1, '#a9c4bd');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+
+  // 很淡的横向波纹：原片水面不是一块平涂，有一圈圈白线
+  ctx.strokeStyle = 'rgba(255,255,255,.5)';
+  ctx.lineWidth = 1.3;
+  for (let k = 0; k < 14; k++) {
+    const y0 = 46 + k * (H / 14);
+    ctx.beginPath();
+    for (let x = -20; x <= W + 20; x += 14) {
+      const y = y0 + Math.sin(x * 0.011 + k * 1.7) * 6 + Math.sin(x * 0.029 + k) * 2.2;
+      if (x === -20) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.globalAlpha = 0.14;
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ---------- 船 ---------- */
+function drawShip(s) {
+  ctx.save();
+  ctx.translate(s.x, s.y);
+  ctx.rotate(s.dir);
+  const L = s.len, B = s.beam;
+  ctx.beginPath();
+  ctx.moveTo(L * 0.52, 0);
+  ctx.quadraticCurveTo(L * 0.18, -B * 0.62, -L * 0.34, -B * 0.5);
+  ctx.quadraticCurveTo(-L * 0.5, 0, -L * 0.34, B * 0.5);
+  ctx.quadraticCurveTo(L * 0.18, B * 0.62, L * 0.52, 0);
+  ctx.closePath();
+  ctx.fillStyle = '#4b4a58';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(26,24,34,.6)';
+  ctx.lineWidth = 1.3;
+  ctx.stroke();
+  ctx.fillStyle = '#8f8c9a';
+  ctx.beginPath();
+  ctx.ellipse(-L * 0.13, 0, L * 0.21, B * 0.34, 0, 0, 7);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(34,32,42,.8)';
+  for (let i = -2; i <= 2; i++) {
+    ctx.beginPath(); ctx.arc(i * L * 0.15, -B * 0.58, 1.6, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(i * L * 0.15, B * 0.58, 1.6, 0, 7); ctx.fill();
+  }
+  ctx.fillStyle = 'rgba(255,255,255,.6)';
+  ctx.beginPath();
+  ctx.ellipse(L * 0.5, 0, L * 0.09, B * 0.2, 0, 0, 7);
+  ctx.fill();
+  ctx.restore();
+}
+
+let statAcc = 0;
+function draw(dt) {
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawWater();
+
+  // 泡沫层：先按时间淡出，再把这一帧新生的粒子画进去
+  if (dt > 0) {
+    lctx.globalCompositeOperation = 'destination-out';
+    lctx.fillStyle = `rgba(0,0,0,${1 - Math.exp(-dt * 0.42)})`;
+    lctx.fillRect(0, 0, layer.width, layer.height);
+    lctx.globalCompositeOperation = 'source-over';
+  }
+  for (const p of wake.foam) {
+    if (p.painted) continue;
+    paintFoam(p);
+    p.painted = true;
+  }
+
+  ctx.globalAlpha = 0.96;
+  ctx.drawImage(layer, 0, 0, W, H);
+  ctx.globalAlpha = 1;
+
+  // 水花：小小实心方片，跟泡沫不是一层
+  for (const p of wake.spray) {
+    const a = Math.pow(1 - p.age / p.life, 1.3);
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.globalAlpha = a * 0.92;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(-p.w / 2, -p.w / 2, p.w, p.w * 0.8);
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+
+  for (const s of wake.ships) drawShip(s);
+
+  statAcc += dt;
+  if (statAcc > 0.3) { statAcc = 0; report(); }
+}
+
+function report() {
+  const st = wake.stats();
+  const d = st.decay;
+  const pct = (v) => (v * 100).toFixed(0) + '%';
+  statsEl.innerHTML =
+    `泡沫 <b>${st.foam}</b> 粒 · 水花 <b>${st.spray}</b> 片 · 累计发射 <b>${st.emitted}</b>` +
+    `　│　实测张角 <span class="ok"><b>${st.angleDeg.toFixed(1)}°</b></span>` +
+    ` vs 设定 <b>${st.targetDeg.toFixed(1)}°</b>（斜率拟合，样本 ${st.angleSamples}）` +
+    `　│　按年龄四段的平均不透明度 ${d.map(pct).join(' / ')}` +
+    `　│　尾迹最长 <b>${st.length.toFixed(0)}</b> px`;
+}
+
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(1 / 30, (now - last) / 1000);
+  last = now;
+  wake.step(dt);
+  draw(dt);
+  requestAnimationFrame(loop);
+}
+
+resize();
+requestAnimationFrame(loop);
+
+angEl.addEventListener('input', () => {
+  document.getElementById('alab').textContent = (+angEl.value).toFixed(1) + '°';
+  wake.angle = +angEl.value * Math.PI / 180;
+  report();
+});
+lifeEl.addEventListener('input', () => {
+  document.getElementById('llab').textContent = (+lifeEl.value).toFixed(1) + ' s';
+  wake.life = +lifeEl.value;
+  report();
+});
+window.__wake = () => wake.stats();
+</script>
+</body>
+</html>

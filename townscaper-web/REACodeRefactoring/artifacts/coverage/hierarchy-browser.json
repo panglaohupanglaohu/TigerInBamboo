@@ -1,0 +1,249 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "pinned": {
+        "error": 2.440146064439151e-7,
+        "baseline": 0.12000061589664009,
+        "bad": 0,
+        "pair": [
+          106,
+          133
+        ],
+        "guard": {
+          "slices": [
+            {
+              "slice": 0,
+              "blend": 0.5,
+              "initialFailures": 11,
+              "failures": 0,
+              "minArea": 0.5194640401670794,
+              "minEdge": 0.5830653541885427,
+              "minFan": 0.5149153191873771
+            },
+            {
+              "slice": 1,
+              "blend": 0.5,
+              "initialFailures": 6,
+              "failures": 0,
+              "minArea": 0.5993802119604976,
+              "minEdge": 0.6438880522032726,
+              "minFan": 0.5543871826462339
+            },
+            {
+              "slice": 2,
+              "blend": 0.5,
+              "initialFailures": 6,
+              "failures": 0,
+              "minArea": 0.5426007529558897,
+              "minEdge": 0.6833527133996454,
+              "minFan": 0.5320680487254107
+            },
+            {
+              "slice": 3,
+              "blend": 0.5,
+              "initialFailures": 8,
+              "failures": 0,
+              "minArea": 0.45752805845022204,
+              "minEdge": 0.627872220942269,
+              "minFan": 0.4575280584502195
+            },
+            {
+              "slice": 4,
+              "blend": 0.5,
+              "initialFailures": 11,
+              "failures": 0,
+              "minArea": 0.45350719736116973,
+              "minEdge": 0.6447840803846396,
+              "minFan": 0.45350719736116873
+            },
+            {
+              "slice": 5,
+              "blend": 0.5,
+              "initialFailures": 9,
+              "failures": 0,
+              "minArea": 0.5387135581054464,
+              "minEdge": 0.6137850823840493,
+              "minFan": 0.4801277114946477
+            },
+            {
+              "slice": 6,
+              "blend": 0.5,
+              "initialFailures": 9,
+              "failures": 0,
+              "minArea": 0.5265010837215637,
+              "minEdge": 0.6581341341587514,
+              "minFan": 0.5265010837215633
+            },
+            {
+              "slice": 7,
+              "blend": 0.5,
+              "initialFailures": 3,
+              "failures": 0,
+              "minArea": 0.581963246801315,
+              "minEdge": 0.6402898480845985,
+              "minFan": 0.5819632468013146
+            },
+            {
+              "slice": 8,
+              "blend": 0.5,
+              "initialFailures": 1,
+              "failures": 0,
+              "minArea": 0.6536644977624355,
+              "minEdge": 0.7402717808949347,
+              "minFan": 0.5991115278366728
+            },
+            {
+              "slice": 9,
+              "blend": 0.5,
+              "initialFailures": 3,
+              "failures": 0,
+              "minArea": 0.455889542487623,
+              "minEdge": 0.6172931181339824,
+              "minFan": 0.45588954248762265
+            },
+            {
+              "slice": 10,
+              "blend": 0.5,
+              "initialFailures": 2,
+              "failures": 0,
+              "minArea": 0.36153455871896806,
+              "minEdge": 0.5904080169441462,
+              "minFan": 0.3615345587189677
+            }
+          ],
+          "guardedSlices": 11,
+          "minBlend": 0.5
+        }
+      },
+      "free": 0.12000061589664009,
+      "geom": {
+        "vertices": 28950,
+        "finite": true
+      }
+    },
+    {
+      "grid": "quad",
+      "pinned": {
+        "error": 1.9646439531997634e-7,
+        "baseline": 0.12000053807531257,
+        "bad": 0,
+        "pair": [
+          1125,
+          2398
+        ],
+        "guard": {
+          "slices": [
+            {
+              "slice": 0,
+              "blend": 0.5,
+              "initialFailures": 18,
+              "failures": 0,
+              "minArea": 0.5207356701095419,
+              "minEdge": 0.6333349438721705,
+              "minFan": 0.47874899135117344
+            },
+            {
+              "slice": 1,
+              "blend": 0.5,
+              "initialFailures": 18,
+              "failures": 0,
+              "minArea": 0.566378796388762,
+              "minEdge": 0.6266577025745754,
+              "minFan": 0.4279718381277966
+            },
+            {
+              "slice": 2,
+              "blend": 0.5,
+              "initialFailures": 20,
+              "failures": 0,
+              "minArea": 0.35958090839642026,
+              "minEdge": 0.5981471682749135,
+              "minFan": 0.35752567646035704
+            },
+            {
+              "slice": 3,
+              "blend": 0.5,
+              "initialFailures": 17,
+              "failures": 0,
+              "minArea": 0.3177966895600445,
+              "minEdge": 0.5334125239734218,
+              "minFan": 0.28941601205835865
+            },
+            {
+              "slice": 4,
+              "blend": 0.25,
+              "initialFailures": 24,
+              "failures": 0,
+              "minArea": 0.5893166507192497,
+              "minEdge": 0.7397835568042832,
+              "minFan": 0.5883390561748499
+            },
+            {
+              "slice": 5,
+              "blend": 0.5,
+              "initialFailures": 13,
+              "failures": 0,
+              "minArea": 0.3535570365837274,
+              "minEdge": 0.4473224728567267,
+              "minFan": 0.33166177613937614
+            },
+            {
+              "slice": 6,
+              "blend": 0.5,
+              "initialFailures": 17,
+              "failures": 0,
+              "minArea": 0.356557073718846,
+              "minEdge": 0.5122611975939594,
+              "minFan": 0.34317840195481897
+            },
+            {
+              "slice": 7,
+              "blend": 0.5,
+              "initialFailures": 8,
+              "failures": 0,
+              "minArea": 0.45151523394210286,
+              "minEdge": 0.5865701758976446,
+              "minFan": 0.3864097297244488
+            },
+            {
+              "slice": 8,
+              "blend": 0.5,
+              "initialFailures": 11,
+              "failures": 0,
+              "minArea": 0.4116378533644613,
+              "minEdge": 0.5564051036491462,
+              "minFan": 0.3628590090011426
+            },
+            {
+              "slice": 9,
+              "blend": 0.5,
+              "initialFailures": 2,
+              "failures": 0,
+              "minArea": 0.5315907072950816,
+              "minEdge": 0.6202134663625701,
+              "minFan": 0.43989192091433893
+            },
+            {
+              "slice": 10,
+              "blend": 0.5,
+              "initialFailures": 2,
+              "failures": 0,
+              "minArea": 0.49434497264613236,
+              "minEdge": 0.6070941135940986,
+              "minFan": 0.43777492123117684
+            }
+          ],
+          "guardedSlices": 11,
+          "minBlend": 0.25
+        }
+      },
+      "free": 0.12000053807531257,
+      "geom": {
+        "vertices": 37572,
+        "finite": true
+      }
+    }
+  ],
+  "errors": []
+}

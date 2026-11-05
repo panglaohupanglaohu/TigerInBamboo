@@ -11,7 +11,7 @@
  *     1590669875869286400 "grass billboards … a completely new kind of shape and detail frequency"
  *       画面：成簇的小草丛，坡上和崖脚更密
  *   灌木
- *     1707490274425884929 "lil' shrubbery at the edges of things"  画面：崖顶边、路边一圈蓬松的灌木
+ *     1707490274425884929 "lil' shrubbery at the edges of things"  画面：崖肩/墙根的暖色纹理灌木（342帧复核），本地球团为近似
  *     1191990107785572352 "shrubbery … anchored center vert to the billboards"  画面：贴着房子墙根的一圈灌木
  *   树
  *     1580158269267406849 "foliage from Marching Cubes-blobs"  画面：几团球融成的蓬松树冠，成片长在台地上，有墨线
@@ -19,26 +19,30 @@
  *
  * 第 2 轮（第 1 小时）补的：
  *   1205420678859632640 "alpha is view angle modulated by leaf texture mapped to a sphere"
- *     → 灌木 / 树冠的轮廓处按"视角 × 叶片噪声"镂空，镂空边缘一圈深色 = 墨线（叶状的毛边，墨线自然贴合）
+ *     → 本轮补真实32²角落纹理的球面UV与视角alpha；原三维噪声保留对照，不等同原作手绘素材。
  *   小花（茎 + 彩色花头），草地上成簇 —— 没有专门的视频依据，按通用做法补的
  *   （946660607008403456 原文末尾提了一句 "pretty little flowers"，但画面是战斗：血、尸体、箭粘在船上，不是花）
  *   1590674061092212738 草的描边强度 = 站立处与背景的反差 → 只有崖边（背景是远处的低处）的草丛有墨线
  *   1241046107125399552 / 1290997501332525056 小镇后院：沿墙一排圆灌木、草坪上的小花；小径由 buildings.js 铺
  *
  * 做法：
- *   所有落点都从 World + 地形形状（shape.at）算，和地形网格严丝合缝：
+ *   落点从 World + 地形形状（shape.at）算；锚点在格内不等于整个植被体积不越界：
  *     草丛：长在草 / 苔顶面上（不长在沙、河、房顶），在变形后的多边形里随机取点；靠崖边的格子更密。
  *     灌木：沿崖顶线（顶面边上邻居更低）每隔一段放一丛，往里收一点；房子墙根（建筑格旁边同高的地面）也放。
  *     树林：用低频噪声圈出"林地"，林地里离崖边、房子都有距离的草顶面上种树，每棵 1–3 个树冠。
- *   草丛是面向镜头的竖直广告牌（只绕 Y 轴转），中间那个顶点往镜头方向提一点（1191990107785572352 的"anchored center vert"）
+ *   草丛是面向镜头的竖直广告牌（只绕 Y 轴转），旧模式中心随镜头偏移；新增可选中心按实例轴固定的对照（1191990107785572352，局部重建并非原着色器）
  *   → 转镜头时不会显得是一张纸片。
- *   树冠 = 几个球融在一起：每个顶点的法线取"离整个树冠中心的方向"和自身法线的混合 → 像 Marching Cubes 团块那样一整团地受光。
+ *   旧球团近似（现仅用于灌木）：每个顶点的法线取"离整个树冠中心的方向"和自身法线的混合 → 像 Marching Cubes 团块那样一整团地受光。
  *   风：顶点着色器里按世界坐标 + 时间轻轻摆，越高摆得越多。
  *   墨线：灌木和树冠用反向外壳（和 world/outline.js 的墨线同一种），跟随面板「墨线」开关。
  */
 
+import { anchoredBillboardGLSL } from '../core/anchored-billboard.js';
 import * as THREE from 'three';
+import {insetEdgeAnchor} from '../core/edge-inset.js';
+import {makeLeafSurface,LEAF_SURFACE_GLSL} from './leaf-surface.js';
 import { fbm, hash01 } from '../core/noise.js';
+import { buildCanopy } from '../core/canopy.js';
 import { ImpostorBaker, ImpostorField, cloudGeometry } from './impostor.js';
 
 /* ------------------------------------------------------------ 随机 */
@@ -138,10 +142,20 @@ function blobGeometry(blobs, { detail = 1, puff = 0.65 } = {}) {
 }
 
 const SHRUB = () => blobGeometry([[0, 0.032, 0, 0.034], [0.03, 0.024, 0.014, 0.027], [-0.028, 0.022, -0.01, 0.027], [0.008, 0.05, -0.016, 0.024], [-0.01, 0.026, 0.03, 0.024]], { detail: 1, puff: 0.5 });
+function canopyGeometry(blobs) {
+  const mesh=buildCanopy(blobs.map(([x,y,z,r])=>({x,y,z,r})),{resolution:16});
+  const geometry=new THREE.BufferGeometry(),maxY=Math.max(...mesh.positions.map(p=>p[1]));
+  geometry.setAttribute('position',new THREE.Float32BufferAttribute(mesh.positions.flat(),3));
+  geometry.setAttribute('normal',new THREE.Float32BufferAttribute(mesh.normals.flat(),3));
+  geometry.setAttribute('aTip',new THREE.Float32BufferAttribute(mesh.positions.map(p=>Math.max(0,Math.min(1,p[1]/maxY))),1));
+  geometry.setIndex(mesh.triangles.flat());geometry.computeBoundingBox();geometry.computeBoundingSphere();
+  geometry.userData.canopy=mesh.stats;
+  return geometry;
+}
 const CROWNS = [
-  () => blobGeometry([[0, 0.30, 0, 0.16], [0.11, 0.25, 0.04, 0.12], [-0.1, 0.26, -0.03, 0.12], [0.02, 0.40, -0.02, 0.11], [0.0, 0.24, 0.11, 0.1]], { detail: 2 }),
-  () => blobGeometry([[0, 0.34, 0, 0.13], [0.06, 0.46, 0.02, 0.1], [-0.07, 0.28, 0.05, 0.1], [0.07, 0.26, -0.06, 0.09]], { detail: 2 }),
-  () => blobGeometry([[0, 0.26, 0, 0.19], [0.14, 0.22, 0.05, 0.13], [-0.13, 0.22, 0.03, 0.13], [0.03, 0.36, 0.08, 0.12], [-0.04, 0.38, -0.08, 0.12], [0.08, 0.2, -0.12, 0.11]], { detail: 2 }),
+  () => canopyGeometry([[0, 0.30, 0, 0.16], [0.11, 0.25, 0.04, 0.12], [-0.1, 0.26, -0.03, 0.12], [0.02, 0.40, -0.02, 0.11], [0.0, 0.24, 0.11, 0.1]]),
+  () => canopyGeometry([[0, 0.34, 0, 0.13], [0.06, 0.46, 0.02, 0.1], [-0.07, 0.28, 0.05, 0.1], [0.07, 0.26, -0.06, 0.09]]),
+  () => canopyGeometry([[0, 0.26, 0, 0.19], [0.14, 0.22, 0.05, 0.13], [-0.13, 0.22, 0.03, 0.13], [0.03, 0.36, 0.08, 0.12], [-0.04, 0.38, -0.08, 0.12], [0.08, 0.2, -0.12, 0.11]]),
 ];
 function trunkGeometry() {
   const g = new THREE.CylinderGeometry(0.018, 0.028, 0.26, 6, 1).toNonIndexed();
@@ -163,28 +177,41 @@ const LEAF_GLSL = /* glsl */ `
 
 /**
  * 叶状轮廓（1205420678859632640）：rim = 1 - |N·V|，叶片噪声贴在植物自己的坐标上（转镜头不游走）；
- * rim 超过阈值就镂空，阈值附近一圈画成墨色 → 毛茸茸的叶边 + 贴合的墨线。uLeafy = 0 时关掉。
+ * 保留旧噪声阈值对照，默认新增球面atlas+视角alpha，uLeafy = 0 时关掉。
  */
-function swayMaterial(uTime, amount, uLeafy = null, leafScale = 60) {
+function swayMaterial(uTime, amount, uLeafy = null, leafScale = 60, surface = null, center = new THREE.Vector3()) {
   const m = new THREE.MeshLambertMaterial({ color: 0xffffff });
+  m.alphaToCoverage = !!surface;
+  m.customProgramCacheKey = () => `leaf-surface-${amount}-${leafScale}-${!!surface}`;
   m.onBeforeCompile = (shader) => {
     shader.uniforms.uTime = uTime;
     shader.uniforms.uLeafy = uLeafy ?? { value: 0 };
+    shader.uniforms.uLeafAtlas = surface?.uniform ?? {value:null};
+    shader.uniforms.uLeafAtlasOn = surface?.on ?? {value:0};
+    shader.uniforms.uLeafCenter = {value:center};
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vLeafP;')
-      .replace('#include <begin_vertex>', `#include <begin_vertex>\nvLeafP = position * ${leafScale.toFixed(1)};`);
+      .replace('#include <common>', '#include <common>\nuniform vec3 uLeafCenter;\nvarying vec3 vLeafSphere;\nvarying vec3 vLeafP;')
+      .replace('#include <begin_vertex>', `#include <begin_vertex>\nvLeafSphere = position - uLeafCenter;\nvLeafP = position * ${leafScale.toFixed(1)};`);
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform float uLeafy;\nvarying vec3 vLeafP;' + LEAF_GLSL)
+      .replace('#include <common>', '#include <common>\nuniform float uLeafy;\nvarying vec3 vLeafP;' + LEAF_GLSL + LEAF_SURFACE_GLSL)
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
         float inkBand = 0.0;
+        float leafAlpha = 1.0;
         if (uLeafy > 0.5) {
           float rim = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition)));
           float leaf = lnoise(vLeafP) * 0.65 + lnoise(vLeafP * 2.3) * 0.35;
           float th = 0.52 + 0.4 * leaf;
-          if (rim > th) discard;
-          inkBand = smoothstep(th - 0.1, th - 0.04, rim);
+          if (uLeafAtlasOn > .5) {
+            float pattern = leafPattern(vLeafSphere);
+            leafAlpha = leafCoverage(1.0-rim,pattern);
+            inkBand = (1.0-leafCoverage(1.0-rim-.06,pattern));
+            if (leafAlpha <= .001) discard;
+          } else {
+            if (rim > th) discard;
+            inkBand = smoothstep(th - 0.1, th - 0.04, rim);
+          }
         }`)
-      .replace('#include <dithering_fragment>', '#include <dithering_fragment>\ngl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.12, 0.13, 0.1), inkBand * 0.85);');
+      .replace('#include <dithering_fragment>', '#include <dithering_fragment>\ngl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.12, 0.13, 0.1), inkBand * 0.85);\ngl_FragColor.a *= leafAlpha;');
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nuniform float uTime;\nattribute float aTip;')
       .replace('#include <begin_vertex>', `#include <begin_vertex>
@@ -221,33 +248,35 @@ function inkMaterial(uTime, amount, width) {
 }
 
 /** 草丛：只绕 Y 轴转向镜头的广告牌；中心底点往镜头提（立体感）；顶部随风摆、颜色变浅。 */
-function tuftMaterial(uTime, uLight, { flower = false, uInk = { value: 1 } } = {}) {
+function tuftMaterial(uTime, uLight, { flower = false, uInk = { value: 1 }, uTuftAnchor = { value: 0 } } = {}) {
   return new THREE.ShaderMaterial({
     side: THREE.DoubleSide,
-    uniforms: { uTime, uLight, uInk },
+    uniforms: { uTime, uLight, uInk, uTuftAnchor },
     defines: { FLOWER: flower ? 1 : 0, TW: TUFT_W.toFixed(4), TH: TUFT_H.toFixed(4) },
     vertexShader: /* glsl */ `
       attribute float aTip;
       attribute vec3 aColor;
       attribute float aCenter;   // 锚定中心点（1191990107785572352）
-      attribute float aEdge;     // 背景反差（1590674061092212738）：1 = 身后是崖下 / 海 → 外轮廓墨线加粗
+      attribute float aEdge;     // Local static cliff-proximity proxy, NOT the source contrast-texture/background-ray method.
       varying float vEdge;
       varying vec2 vUv;
       varying float vSeed;
       uniform float uTime;
       varying vec3 vCol;
+      uniform float uTuftAnchor;
+      ${anchoredBillboardGLSL}
       void main() {
         vec3 origin = (instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
         float scale = length(instanceMatrix[0].xyz);
         vec3 toCam = cameraPosition - origin; toCam.y = 0.0;
-        vec3 fwd = normalize(toCam + vec3(1e-5));
+        vec3 fwd = dot(toCam, toCam) > 1e-8 ? normalize(toCam) : vec3(0.0, 0.0, 1.0);
         vec3 right = vec3(fwd.z, 0.0, -fwd.x);
         float sway = (sin(uTime * 1.8 + origin.x * 2.1 + origin.z * 1.7) * 0.6 + sin(uTime * 3.1 + origin.z * 3.3) * 0.4) * 0.012 * aTip;
         #if FLOWER
           vec3 p = origin + right * position.x * scale + vec3(0.0, position.y * scale, 0.0);
         #else
-          vec3 p = origin + right * (position.x * TW * scale + sway) + vec3(0.0, position.y * TH * scale, 0.0);
-          p += fwd * (0.02 + 0.05 * aCenter) * scale;   // 往镜头提一点；中心点再多推一些 = 鼓起来
+          vec3 axis = length(instanceMatrix[2].xyz) > 1e-4 ? normalize(instanceMatrix[2].xyz) : vec3(0.0, 0.0, 1.0);
+          vec3 p = anchoredCard(origin, fwd, right, axis, position.xy, scale, aCenter, uTuftAnchor, sway);
         #endif
         vEdge = aEdge;
         vUv = position.xy;
@@ -324,14 +353,16 @@ export class Vegetation {
     this.stats = {};
 
     this.uLeafy = { value: 1 };
+    this.leafSurface = makeLeafSurface();
     const tg = tuftGeometry();
     this.tuftColor = new THREE.InstancedBufferAttribute(new Float32Array(max.tufts * 3), 3);
     this.tuftEdge = new THREE.InstancedBufferAttribute(new Float32Array(max.tufts), 1);
     tg.setAttribute('aColor', this.tuftColor);
     tg.setAttribute('aEdge', this.tuftEdge);
     tg.setAttribute('aHead', new THREE.Float32BufferAttribute(new Float32Array(tg.getAttribute('position').count), 1));
+    this.uTuftAnchor = { value: 0 }; // Optional fixed-center A/B mode; legacy look stays default.
     this.uTuftInk = { value: 1 };   // 草丛的墨线画在同一个着色器里（外轮廓 + 叶瓣弧线）
-    this.tufts = new THREE.InstancedMesh(tg, tuftMaterial(this.uTime, this.uLight, { uInk: this.uTuftInk }), max.tufts);
+    this.tufts = new THREE.InstancedMesh(tg, tuftMaterial(this.uTime, this.uLight, { uInk: this.uTuftInk, uTuftAnchor: this.uTuftAnchor }), max.tufts);
 
     const fg = flowerGeometry();
     this.flowerColor = new THREE.InstancedBufferAttribute(new Float32Array(max.tufts * 3), 3);
@@ -341,12 +372,14 @@ export class Vegetation {
     this.flowers = new THREE.InstancedMesh(fg, tuftMaterial(this.uTime, this.uLight, { flower: true }), max.tufts);
 
     const sg = SHRUB();
-    this.shrubs = new THREE.InstancedMesh(sg, swayMaterial(this.uTime, 0.004, this.uLeafy, 70), max.shrubs);
+    sg.computeBoundingBox();
+    this.shrubs = new THREE.InstancedMesh(sg, swayMaterial(this.uTime, 0.004, this.uLeafy, 70, this.leafSurface, sg.boundingBox.getCenter(new THREE.Vector3())), max.shrubs);
     this.shrubInk = new THREE.InstancedMesh(sg, inkMaterial(this.uTime, 0.004, 0.006), max.shrubs);
 
     this.crowns = CROWNS.map((f) => {
       const g = f();
-      const m = new THREE.InstancedMesh(g, swayMaterial(this.uTime, 0.02, this.uLeafy, 28), max.crowns);
+      g.computeBoundingBox();
+      const m = new THREE.InstancedMesh(g, swayMaterial(this.uTime, 0.02, this.uLeafy, 28, this.leafSurface, g.boundingBox.getCenter(new THREE.Vector3())), max.crowns);
       const ink = new THREE.InstancedMesh(g, inkMaterial(this.uTime, 0.02, 0.009), max.crowns);
       return { m, ink };
     });
@@ -381,7 +414,7 @@ export class Vegetation {
     this.cloudField = new ImpostorField(baker.rt.texture, this.cloudBaked, 64, { cloud: true, uTime: this.uTime, uLight: this.uLight });
     this.group.add(this.cloudField.mesh);
     // 远处的阴云（1243228419162341379 "Some moody clouds"）：同一团云，放大很多、偏灰，围在地平线上
-    this.backdrop = new ImpostorField(baker.rt.texture, this.cloudBaked, 48, { cloud: true, uTime: { value: 0 }, uLight: this.uLight });
+    this.backdrop = new ImpostorField(baker.rt.texture, this.cloudBaked, 48, { cloud: true, horizon: true, uTime: this.uTime, uLight: this.uLight });
     this.backdrop.mesh.visible = false;
     this.backdrop.mesh.renderOrder = -2;
     this.group.add(this.backdrop.mesh);
@@ -398,6 +431,7 @@ export class Vegetation {
     for (const c of this.crowns) c.m.visible = !on && this.layers.trees;
     this.#syncInk();
   }
+  setTuftAnchor(on) { if(typeof on!=='boolean')throw new TypeError('Tuft anchor toggle'); this.uTuftAnchor.value=on?1:0; }
   set clouds(on) { if (this.cloudField) this.cloudField.mesh.visible = on; }
   set moody(on) { if (this.backdrop) this.backdrop.mesh.visible = on; }
   // 叶状轮廓打开时，墨线由镂空边缘画（贴着叶边）；关掉时退回反向外壳墨线
@@ -409,6 +443,7 @@ export class Vegetation {
   }
   layers = { grass: true, shrubs: true, trees: true, flowers: true };
   set ink(on) { this.inkVisible = on; this.#syncInk(); }
+  set leafAtlasOn(on) { this.leafSurface.on.value = on ? 1 : 0; }
   set leafyOn(on) { this.leafy = on; this.uLeafy.value = on ? 1 : 0; this.#syncInk(); }
   setLayer(name, on) {
     this.layers[name] = on;
@@ -513,7 +548,7 @@ export class Vegetation {
 
     /* ---- 2. 地被：草丛（+ 背景反差）+ 小花 ---- */
     let nT = 0, nF = 0;
-    // 一个点身后"背景"的反差：离"邻居更低"的边越近越高（镜头看过去，身后就是崖下 / 海）
+    // Static cliff-distance heuristic. Camera-independent: no contrast texture or background ray sampling yet.
     const edgeContrast = (c, g, x, z) => {
       let best = 1e9;
       for (let i = 0; i < c.n; i++) {
@@ -590,6 +625,7 @@ export class Vegetation {
 
     /* ---- 3. 灌木：崖顶线 + 房子墙根 ---- */
     let nS = 0;
+    this.shrubEdgeAnchors = [];
     const addShrub = (x, y, z, warm) => {
       if (nS >= this.max.shrubs) return;
       q.setFromAxisAngle(up, rnd() * Math.PI * 2);
@@ -602,6 +638,7 @@ export class Vegetation {
       const kind = capKind(c);
       if (!kind || kind === 'sand') continue;
       const g = world.ground(c);
+      const poly=c.pts.map(p=>at(p,g));
       for (let i = 0; i < c.n; i++) {
         const o = world.neighbor(c, i);
         const og = o ? world.top(o) : 0;
@@ -610,17 +647,17 @@ export class Vegetation {
         if (!houseWall && !cliffTop) continue;
         if (cliffTop && hash01(c.id * 31 + i) > 0.45) continue;      // 不是每条崖边都长
         const [ax, az] = at(c.pts[i], g), [bx, bz] = at(c.pts[(i + 1) % c.n], g);
-        // 往格子里收一点（崖边：别挂在外面；墙根：贴着墙）
-        let nx = -(bz - az), nz = bx - ax;
-        const l = Math.hypot(nx, nz) || 1; nx /= l; nz /= l;
-        if (nx * ((ax + bx) / 2 - c.cx) + nz * ((az + bz) / 2 - c.cz) < 0) { nx = -nx; nz = -nz; }
         const inset = houseWall ? 0.05 : 0.06;
         const len = Math.hypot(bx - ax, bz - az);
         const k = Math.max(1, Math.round(len / (houseWall ? 0.1 : 0.16)));
         const warm = !houseWall && fbm(c.cx * 0.3, c.cz * 0.3, { octaves: 1, freq: 1, seed: 7 }) > (kind === 'dry' ? 0.5 : 0.66);
         for (let t = 0; t < k; t++) {
           const u = (t + 0.5 + (rnd() - 0.5) * 0.5) / k;
-          addShrub(ax + (bx - ax) * u - nx * inset, g * L, az + (bz - az) * u - nz * inset, warm);
+          const anchor=insetEdgeAnchor(poly,i,u,inset);
+          if(!anchor)continue;
+          const before=nS;
+          addShrub(anchor.point[0],g*L,anchor.point[1],warm);
+          if(nS>before)this.shrubEdgeAnchors.push({instance:before,cell:c.id,edge:i,poly,point:anchor.point,distance:anchor.distance});
         }
       }
     }
@@ -698,6 +735,7 @@ export class Vegetation {
       if (Number.isFinite(minX)) {
         const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2, R = Math.max(maxX - minX, maxZ - minZ) * 0.5;
         const brng = rng32(seed * 13 + 1);
+        this.backdrop.material.uniforms.uOrbit.value.set(cx, cz, .002);
         const grey = new THREE.Color(0.72, 0.75, 0.8);
         for (let k = 0; k < 48; k++) {
           const a = (k / 48) * Math.PI * 2 + brng() * 0.1, r = R + 16 + brng() * 8;

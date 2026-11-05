@@ -1,0 +1,22 @@
+{
+  "name": "cartonbook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Tiger Messenger 场景截屏 → Edena 式卡通书流水线（禁止文生图）",
+  "bin": {
+    "cartonbook": "./src/cli.mjs"
+  },
+  "scripts": {
+    "run": "node src/cli.mjs run --recipe recipes/bookshop-letter.sample.json",
+    "layout-only": "node src/cli.mjs layout-only --recipe recipes/bookshop-letter.sample.json",
+    "plan": "node src/cli.mjs plan --recipe recipes/bookshop-letter.sample.json",
+    "capture": "node src/cli.mjs capture --recipe recipes/bookshop-letter.sample.json",
+    "layout": "node src/cli.mjs layout --recipe recipes/bookshop-letter.sample.json",
+    "export": "node src/cli.mjs export --recipe recipes/bookshop-letter.sample.json",
+    "serve": "python3 -m http.server 8787 --bind 127.0.0.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

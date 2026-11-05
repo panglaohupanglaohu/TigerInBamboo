@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>楼层标高 — 檐线属于整座城，不属于某一栋楼</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --cool:#2f7d8f; --bad:#b3412f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:112ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,242,.97) 66%, rgba(238,243,242,0)); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.95);
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:22px; flex-wrap:wrap; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .no { color:#b3412f; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>檐线是<b>整座城的标高网格</b>，不是每栋楼自己数出来的</h1>
+  <p>同样的六座塔、同样高低不平的台地：左边每栋从自己塔基往上数层，白檐就跟着台地一格一格错开，立面成了锯齿；
+     右边檐线吸附到 <b>k × 层高</b>，塔基在哪都无所谓，檐线天然连成水平长线——代价是塔顶得补到上一条网格线。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { buildTowers, measureFacade, windowRows, STOREY_H, CORNICE, CORNICE_T, terrainBase } from './src/storydatum.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1d2f36', MUTED = '#5c727a', COOL = '#2f7d8f', BAD = '#b3412f';
+
+const k = 31;          // px / 世界单位
+const CELL = 2.55;     // 塔间距（世界单位）
+
+function drawFacade(towers, m0, opt) {
+  const { ox, oy, w } = m0;
+  const mx = (x) => ox + x * k;
+  const my = (y) => oy - y * k;
+
+  // 背板
+  ctx.fillStyle = 'rgba(255,255,255,.72)';
+  ctx.fillRect(m0.px, m0.py, w, m0.ph);
+  ctx.strokeStyle = 'rgba(206,220,219,.95)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(m0.px, m0.py, w, m0.ph);
+
+  // 全局网格线（datum 模式画得明显，local 模式只画淡的当参照）
+  const maxY = 14;
+  for (let i = 1; i * STOREY_H <= maxY; i++) {
+    const y = i * STOREY_H;
+    ctx.beginPath();
+    ctx.moveTo(m0.px + 8, my(y));
+    ctx.lineTo(m0.px + w - 8, my(y));
+    ctx.setLineDash([4, 5]);
+    ctx.strokeStyle = opt.mode === 'datum' ? 'rgba(47,125,143,.30)' : 'rgba(120,140,145,.22)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(92,114,122,.75)';
+    ctx.font = '10.5px -apple-system,system-ui,sans-serif';
+    ctx.fillText(i + 'H', m0.px + 6, my(y) - 3);
+  }
+
+  // 台地
+  for (const t of towers) {
+    ctx.fillStyle = '#cdd6d3';
+    ctx.fillRect(mx(t.x - 0.15), my(t.base), (t.w + 0.3) * k, (t.base + 0.35) * k);
+    ctx.strokeStyle = 'rgba(140,158,155,.7)';
+    ctx.strokeRect(mx(t.x - 0.15), my(t.base), (t.w + 0.3) * k, (t.base + 0.35) * k);
+    ctx.fillStyle = '#b9c7c3';
+    ctx.fillRect(mx(t.x - 0.15), my(0), (t.w + 0.3) * k, 0.35 * k);
+  }
+
+  // 塔身
+  for (const t of towers) {
+    const hue = ['#e9e2d4', '#e3ddd0', '#ece6d9'][t.i % 3];
+    ctx.fillStyle = hue;
+    ctx.fillRect(mx(t.x), my(t.top), t.w * k, (t.top - t.base) * k);
+    ctx.strokeStyle = 'rgba(120,112,96,.55)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(mx(t.x), my(t.top), t.w * k, (t.top - t.base) * k);
+
+    // 窗：檐与檐之间一排两扇
+    ctx.fillStyle = 'rgba(78,92,98,.55)';
+    for (const wy of windowRows(t)) {
+      const ww = 0.28 * k;
+      const wh = 0.52 * k;
+      ctx.fillRect(mx(t.x + 0.34), my(wy + 0.26), ww, wh);
+      ctx.fillRect(mx(t.x + t.w - 0.34 - 0.28), my(wy + 0.26), ww, wh);
+    }
+
+    // 檐线：这就是机制本体
+    for (const y of t.bands) {
+      const dev = Math.abs(y - Math.round(y / STOREY_H) * STOREY_H);
+      const off = Math.min(dev, STOREY_H - dev);
+      const wrong = opt.mode === 'local' && off > 0.02;
+      ctx.fillStyle = wrong ? '#f3d9d2' : '#ffffff';
+      ctx.fillRect(mx(t.x - CORNICE), my(y + CORNICE_T), (t.w + 2 * CORNICE) * k, 2 * CORNICE_T * k);
+      ctx.strokeStyle = wrong ? BAD : 'rgba(140,132,112,.75)';
+      ctx.lineWidth = wrong ? 1.4 : 1;
+      ctx.strokeRect(mx(t.x - CORNICE), my(y + CORNICE_T), (t.w + 2 * CORNICE) * k, 2 * CORNICE_T * k);
+    }
+  }
+
+  // 共用檐线高亮：横穿整排塔的浅蓝长线
+  if (opt.mode === 'datum') {
+    const seen = new Map();
+    for (const t of towers) for (const y of t.bands) seen.set(y, (seen.get(y) ?? 0) + 1);
+    ctx.strokeStyle = 'rgba(47,125,143,.55)';
+    ctx.lineWidth = 1.6;
+    for (const [y, n] of seen) {
+      if (n < 2) continue;
+      ctx.beginPath();
+      ctx.moveTo(m0.px + 14, my(y));
+      ctx.lineTo(m0.px + w - 14, my(y));
+      ctx.stroke();
+    }
+  }
+}
+
+ctx.fillStyle = '#eef3f2';
+ctx.fillRect(0, 0, 1280, 800);
+
+const local = buildTowers({ mode: 'local', seed: 7, count: 6 });
+const datum = buildTowers({ mode: 'datum', seed: 7, count: 6 });
+const mLocal = measureFacade(local);
+const mDatum = measureFacade(datum);
+
+// 左：local（对照）／右：datum（机制）
+drawFacade(local, { px: 26, py: 100, ph: 486, w: 594, ox: 44, oy: 556 }, { mode: 'local' });
+drawFacade(datum, { px: 654, py: 100, ph: 486, w: 600, ox: 672, oy: 556 }, { mode: 'datum' });
+
+ctx.fillStyle = BAD;
+ctx.font = '600 13px -apple-system,system-ui,sans-serif';
+ctx.fillText('每栋从自己塔基往上数层 → 檐线跟着台地错开', 44, 92);
+ctx.fillStyle = COOL;
+ctx.fillText('檐线吸附 k × 层高 → 塔基在哪都落在同一条水平线上', 672, 92);
+ctx.fillStyle = MUTED;
+ctx.font = '11.5px -apple-system,system-ui,sans-serif';
+ctx.fillText('红框 = 这条檐线不落在网格上', 44, 630 - 44);
+ctx.fillText('蓝线 = 被 ≥2 座塔共用的檐高', 672, 630 - 44);
+
+const ok = (b) => `<span class="${b ? 'ok' : 'no'}">${b ? '✅' : '❌'}</span>`;
+document.getElementById('stats').innerHTML = [
+  `檐线总数 <b>${mLocal.bandTotal}</b> / <b>${mDatum.bandTotal}</b>`,
+  `不同檐高 <b>${mLocal.distinctLevels}</b> → <b>${mDatum.distinctLevels}</b>`,
+  `共用檐高条数 <b>${mLocal.sharedLevels}</b> → <b>${mDatum.sharedLevels}</b>`,
+  `单层最多几塔共用 <b>${mLocal.maxShared}</b> → <b>${mDatum.maxShared}</b>`,
+  `离网格最大偏差 <b>${mLocal.maxDevFromGrid.toFixed(2)}</b> → <b class="ok">${mDatum.maxDevFromGrid.toFixed(2)}</b>`,
+  `檐高复用率 <b>${mLocal.reuse.toFixed(2)}</b> → <b>${mDatum.reuse.toFixed(2)}</b>`,
+  `顶层层高被网格截掉（比想要层数低） <b>${mDatum.topFill.map((v) => v.toFixed(2)).join(' / ')}</b>`,
+].join('<span style="color:#c9d6d4">·</span>');
+
+window.__stats = { local: mLocal, datum: mDatum, storeyH: STOREY_H, terrace: terrainBase(0) };
+</script>
+</body>
+</html>

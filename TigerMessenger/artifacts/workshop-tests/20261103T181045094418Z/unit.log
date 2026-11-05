@@ -1,0 +1,25 @@
+✔ scanner reads real library, preserves distinct entries, never enables live execution (4.812417ms)
+✔ invalid format rejected without executing JS; malicious controls stripped (0.182292ms)
+✔ experiment restores data actual parameters and recipe; stale state cannot finalize (2.740291ms)
+✔ restore failure rolls all state back; backup quota stops before mutation (0.192125ms)
+✔ invalid snapshot parameters and codec reject before backup or scene changes (0.135417ms)
+✔ game URL defaults clean despite remembered editor state; workshop explicitly opts in (1.895ms)
+✔ missing/manual adapters cannot masquerade as complete execution (1.818ms)
+✔ candidate preserves geometry and setting locks; manual drift and tampering reject (0.638083ms)
+✔ candidate reloads from isolated disk and preserves current snapshot (4.290834ms)
+✔ disabled and removed capabilities restore baseline; unrelated geometry never enters settings (0.580041ms)
+✔ duplicate capabilities and invalid parameters reject (0.146917ms)
+✔ saved experiment retains independent recipe and baseline (2.249333ms)
+✔ legacy life recipe stays valid; new defaults separate weather vegetation animals smoke and fire (0.157042ms)
+✔ immutable experiments and explicit validated final survive reload (2.381375ms)
+✔ storage failure is surfaced and duplicate plugins rejected (0.267167ms)
+✔ exact runtime version is stable after a new final; missing versions reject (0.135959ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48.540916
+

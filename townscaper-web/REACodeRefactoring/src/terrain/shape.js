@@ -7,7 +7,7 @@
  *     lower order verts, and only along the appropriate edges"
  *   1670725072540106755 no- / dumb- / hierarchical smoothing：层级平滑"preserve the intent of
  *     the input-tiles while smoothing out the jankyness from the weird underlying grid"
- *     （画面：dumb 版海岸被啃出锯齿、崖顶塌圆；层级版海岸成圆滑曲线，崖顶和房子 tile 保持锐利）
+ *     （原片依次切换三种模式；代码切面崖顶/崖脚等级为本地近似，非原作全部mesh边类型）
  *   1579478470098243584 "radical cage deformation on the cells" —— 崖壁收分、扭动，不再是直柱
  *
  * 做法：
@@ -25,10 +25,11 @@
  *
  *   之后做"笼形变形"：轮廓点沿外法线 ——
  *     高处的崖顶略向内收（崖壁下宽上窄），再加一点随高度缓慢变化的噪声（崖壁扭动）。
- *   位移有上限，保证不翻折。
+ *   位移有上限，并对每切面格子面积/边长/三角扇朝向做回退约束；不保证所有3D侧壁互不相交。
  */
 
 import { fbm } from '../core/noise.js';
+import {guardDeformation} from '../core/deformation-guard.js';
 
 const DEFAULTS = {
   passes: 10,        // Taubin 对数
@@ -39,6 +40,10 @@ const DEFAULTS = {
   taper: 0.055,      // 每往上一层，崖顶向内收多少
   taperMax: 0.16,
   wobble: 0.09,      // 笼形变形噪声幅度
+  guardCells: true,
+  minAreaRatio: .3,
+  minEdgeRatio: .35,
+  minFanRatio: .2,
   maxShift: 0.24,    // 总位移上限
 };
 
@@ -90,6 +95,17 @@ export function shapeTerrain(world, opts = {}) {
   const verts = grid.verts;
   const n = verts.length;
   const { E, cellEdge, off, nbr, eid, BX, BZ } = adjacency(grid);
+  // 1670720537662836736: "Black is hard ... only along the appropriate edges".
+  // Explicit hard grid-edge endpoints stay at original coordinates on all slices.
+  // This is not a classification of original module/material triangle-mesh edges.
+  const hardEdges = opts.hardEdges ?? [];
+  if (!Array.isArray(hardEdges)) throw new TypeError('hardEdges must be vertex ID pairs');
+  const explicitHard = new Set();
+  for (const pair of hardEdges) {
+    if (!Array.isArray(pair) || pair.length !== 2 || !pair.every(id => Number.isInteger(id) && id >= 0 && id < n) ||
+        !nbr[pair[0]].includes(pair[1])) throw new RangeError('hardEdges must reference adjacent vertices');
+    explicitHard.add(pair[0]); explicitHard.add(pair[1]);
+  }
 
   // 结果只取决于 solid / rock 两个位图和参数
   let h = 2166136261 >>> 0;
@@ -107,19 +123,34 @@ export function shapeTerrain(world, opts = {}) {
 
   const api = {
     slices: S,
+    continuous: true,
+    explicitHardVertices: [...explicitHard].sort((a,b)=>a-b),
+    guard: {slices:[],guardedSlices:0,minBlend:1},
     enabled: opts.enabled !== false,
+    // 1579478470098243584: "cage deformation on the cells".
+    // Local continuous corner sampler between existing slice handles; this does
+    // not interpolate the interior of a twisted wall or provide a collision SDF.
     at(p, s) {
+      if (!Number.isFinite(s)) throw new RangeError('Invalid cage slice');
       if (!api.enabled) return [p.x, p.z];
+      if (!Number.isInteger(p.id) || p.id < 0 || p.id >= n) throw new RangeError('Invalid cage vertex');
       s = Math.max(0, Math.min(S - 1, s));
-      return [X[s * n + p.id], Z[s * n + p.id]];
+      const lo=Math.floor(s), hi=Math.ceil(s), t=s-lo, a=lo*n+p.id, b=hi*n+p.id;
+      return [X[a]+(X[b]-X[a])*t, Z[a]+(Z[b]-Z[a])*t];
     },
-    order: (vid, s) => ORD[Math.max(0, Math.min(S - 1, s)) * n + vid],
+    // Conservative diagnostic rank over the bracketing planes.
+    order(vid, s) {
+      if (!Number.isInteger(vid) || vid < 0 || vid >= n || !Number.isFinite(s)) throw new RangeError('Invalid cage order query');
+      s=Math.max(0,Math.min(S-1,s));
+      return Math.max(ORD[Math.floor(s)*n+vid],ORD[Math.ceil(s)*n+vid]);
+    },
     ms: 0,
   };
   if (!api.enabled) { lastResult.set(world, { key, api }); return api; }
 
   // 钉住：外圈格子、有建筑体素的格子（房子是预制 tile，不许动）
   const pinned = new Uint8Array(n);
+  for (const id of explicitHard) pinned[id] = 1;
   for (const c of grid.cells) {
     const built = world.solid[c.id] & ~world.rock[c.id];          // 这一列里有建筑体素
     const rim = c.edgeNeighbors.some((e) => e < 0);                // 六边形外圈
@@ -250,6 +281,15 @@ export function shapeTerrain(world, opts = {}) {
       const dx = X[base + v] - BX[v], dz = Z[base + v] - BZ[v];
       const d = Math.hypot(dx, dz);
       if (d > o.maxShift) { X[base + v] = BX[v] + dx / d * o.maxShift; Z[base + v] = BZ[v] + dz / d * o.maxShift; }
+    }
+    // A displacement bound alone cannot prevent tiny cells/overhangs collapsing.
+    // Backtrack this shared slice, keeping all incident polygons stitched.
+    if(o.guardCells){
+      const occupied=grid.cells.filter(c=>solidAt(c,s)||solidAt(c,s+1));
+      const report=guardDeformation(occupied,BX,BZ,X,Z,base,o);
+      api.guard.slices.push({slice:s,...report});
+      if(report.blend<1)api.guard.guardedSlices++;
+      api.guard.minBlend=Math.min(api.guard.minBlend,report.blend);
     }
   }
   api.ms = +(performance.now() - t0).toFixed(1);

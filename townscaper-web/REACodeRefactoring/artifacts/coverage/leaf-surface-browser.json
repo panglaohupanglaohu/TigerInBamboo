@@ -1,0 +1,73 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "version": 672,
+      "atlas": {
+        "x": 96,
+        "y": 96,
+        "w": 32,
+        "h": 32
+      },
+      "stats": [
+        {
+          "angle": 0,
+          "mass": 15084.498039215703,
+          "solidMass": 18054.964705882274,
+          "changed": 2752,
+          "partial": 1227
+        },
+        {
+          "angle": 0.7,
+          "mass": 13634.458823529396,
+          "solidMass": 16041.360784313663,
+          "changed": 2268,
+          "partial": 1067
+        },
+        {
+          "angle": 1.5,
+          "mass": 12491.992156862729,
+          "solidMass": 14837.368627450924,
+          "changed": 2249,
+          "partial": 989
+        }
+      ],
+      "sourceInstances": 36
+    },
+    {
+      "kind": "quad",
+      "version": 781,
+      "atlas": {
+        "x": 96,
+        "y": 96,
+        "w": 32,
+        "h": 32
+      },
+      "stats": [
+        {
+          "angle": 0,
+          "mass": 15091.094117647062,
+          "solidMass": 18062.690196078343,
+          "changed": 2763,
+          "partial": 1264
+        },
+        {
+          "angle": 0.7,
+          "mass": 13682.384313725486,
+          "solidMass": 16100.098039215633,
+          "changed": 2309,
+          "partial": 1082
+        },
+        {
+          "angle": 1.5,
+          "mass": 12546.000000000005,
+          "solidMass": 14901.372549019554,
+          "changed": 2239,
+          "partial": 984
+        }
+      ],
+      "sourceInstances": 40
+    }
+  ],
+  "errors": []
+}

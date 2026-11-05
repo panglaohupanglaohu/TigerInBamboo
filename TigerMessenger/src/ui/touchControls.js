@@ -28,7 +28,7 @@ function readOpenPref() {
     /* private */
   }
   // 默认：触控设备展开，桌面收起
-  return isCoarsePointer();
+  return isCoarsePointer() || (/\/TigerMessenger\/(?:index\.html)?$/.test(location.pathname) && !new URLSearchParams(location.search).has('authoringEmbed'));
 }
 
 function writeOpenPref(open) {
@@ -137,14 +137,14 @@ export function createTouchControls({
     if (nx > dead) keys.KeyD = true;
   }
 
-  function setOpen(next, { silent = false } = {}) {
+  function setOpen(next, { silent = false, persist = true } = {}) {
     open = !!next;
     elPad.hidden = !open;
     elToggle.classList.toggle("is-active", open);
     elToggle.setAttribute("aria-pressed", open ? "true" : "false");
     elToggle.setAttribute("aria-label", open ? "收起遥控杆并显示操作提示" : "展开遥控杆并收起操作提示");
     document.body.classList.toggle("touch-pad-open", open);
-    writeOpenPref(open);
+    if(persist)writeOpenPref(open);
     if (!open) {
       clearMoveKeys();
       keys.Space = false;
@@ -340,7 +340,7 @@ export function createTouchControls({
   // 开场后按偏好展开
   const preferOpen = readOpenPref();
   // 先不 toast，等用户点开始再提示一次可选
-  setOpen(preferOpen, { silent: true });
+  setOpen(preferOpen, { silent: true, persist: false });
 
   // 防止触控滑动整页
   root.addEventListener(

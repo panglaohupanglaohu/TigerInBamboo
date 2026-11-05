@@ -1,0 +1,35 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "wall": 69,
+      "visible": 147,
+      "onlyLower": true
+    },
+    {
+      "kind": "quad",
+      "wall": 81,
+      "visible": 166,
+      "onlyLower": true
+    },
+    {
+      "scene": "town",
+      "ok": true,
+      "rays": 96,
+      "current": true
+    },
+    {
+      "scene": "terrain",
+      "ok": true,
+      "rays": 96,
+      "current": true
+    },
+    {
+      "scene": "fusion",
+      "ok": true,
+      "rays": 96,
+      "current": true
+    }
+  ],
+  "errors": []
+}

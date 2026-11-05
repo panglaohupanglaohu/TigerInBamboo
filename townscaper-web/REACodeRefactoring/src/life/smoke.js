@@ -13,16 +13,17 @@
  *     blurry at the tip"   画面：一块块方片，越往上贴图越糊。
  *
  * 实现：每个烟团是一张朝镜头的方片（InstancedMesh），属性 aAge（0 底 … 1 顶）、aSeed、aDir（UV 前 / 后滚）。
- *   形状 = 圆形衰减 × 噪声贴图（每片采样一次，UV 沿流向滚），alpha 阈值化成硬边；
+ *   形状 = 圆形衰减 × 噪声贴图（每个片元/每遍一次纹理指令，UV 沿流向滚），alpha 阈值化成硬边；
  *   噪声采样的 mip 偏移 = aAge × 4（越往上越糊）；阈值也随 aAge 变软 → "清楚 → 虚"。
  *   两遍：第一遍黑色、底部 alpha 满；第二遍浅灰、底部更透明、阈值往里收一个像素（fwidth）→ 黑色描边。
  */
 
 import * as THREE from 'three';
+import { smokeDepthOrder } from '../core/smoke-order.js';
 
 const N = 240;
 
-function noiseTexture(size = 64) {
+function noiseTexture(size = 64, checker = false) {
   // 可平铺的值噪声（两层），带 mipmap
   const d = new Uint8Array(size * size * 4);
   const r = (x, y, s) => { const h = Math.sin((((x % s) + s) % s) * 127.1 + (((y % s) + s) % s) * 311.7) * 43758.5453; return h - Math.floor(h); };
@@ -33,7 +34,7 @@ function noiseTexture(size = 64) {
     return a + (b - a) * u + (c - a) * v + (a - b - c + e) * u * v;
   };
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
-    const n = 0.65 * vn(x / 8, y / 8, size / 8) + 0.35 * vn(x / 4, y / 4, size / 4);
+    const n = checker ? ((Math.floor(x / 8) + Math.floor(y / 8)) % 2) : 0.65 * vn(x / 8, y / 8, size / 8) + 0.35 * vn(x / 4, y / 4, size / 4);
     const k = (y * size + x) * 4;
     d[k] = d[k + 1] = d[k + 2] = (n * 255) | 0; d[k + 3] = 255;
   }
@@ -45,24 +46,30 @@ function noiseTexture(size = 64) {
 }
 
 export class Smoke {
-  constructor({ scene, uTime }) {
+  constructor({ scene, uTime, random = Math.random }) {
+    this.random = random; this.serial = 0;
     this.uTime = uTime;
     this.sources = [];
     const geo = new THREE.PlaneGeometry(1, 1);
     this.aAge = new THREE.InstancedBufferAttribute(new Float32Array(N), 1);
     this.aSeed = new THREE.InstancedBufferAttribute(new Float32Array(N), 1);
     this.aDir = new THREE.InstancedBufferAttribute(new Float32Array(N), 1);
+    this.aFlow = new THREE.InstancedBufferAttribute(new Float32Array(N * 2), 2);
+    geo.setAttribute('aFlow', this.aFlow);
     geo.setAttribute('aAge', this.aAge); geo.setAttribute('aSeed', this.aSeed); geo.setAttribute('aDir', this.aDir);
     const tex = noiseTexture();
+    this.checkerTexture = noiseTexture(64, true);
+    // Shared controls keep both passes identical; checker uses real mipmaps.
+    const sampling = { uScroll: { value: 1 }, uMip: { value: 1 }, uChecker: { value: this.checkerTexture } };
     const mat = (pass) => new THREE.ShaderMaterial({
       transparent: true, depthWrite: false,
-      uniforms: { uNoise: { value: tex }, uTime, uDebug: { value: 0 } },
+      uniforms: { uNoise: { value: tex }, uTime, uDebug: { value: 0 }, ...sampling },
       defines: { PASS: pass },
       vertexShader: /* glsl */ `
-        attribute float aAge; attribute float aSeed; attribute float aDir;
-        varying vec2 vUv; varying float vAge; varying float vSeed; varying float vDir;
+        attribute float aAge; attribute float aSeed; attribute float aDir; attribute vec2 aFlow;
+        varying vec2 vFlow; varying vec2 vUv; varying float vAge; varying float vSeed; varying float vDir;
         void main() {
-          vUv = uv; vAge = aAge; vSeed = aSeed; vDir = aDir;
+          vFlow = aFlow; vUv = uv; vAge = aAge; vSeed = aSeed; vDir = aDir;
           vec3 c = (instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
           float s = length(instanceMatrix[0].xyz);
           // 朝镜头的方片
@@ -73,15 +80,29 @@ export class Smoke {
         }`,
       fragmentShader: /* glsl */ `
         uniform sampler2D uNoise;
+        uniform sampler2D uChecker;
+        uniform float uScroll;
+        uniform float uMip;
         uniform float uTime;
         uniform float uDebug;
-        varying vec2 vUv; varying float vAge; varying float vSeed; varying float vDir;
+        varying vec2 vFlow; varying vec2 vUv; varying float vAge; varying float vSeed; varying float vDir;
         void main() {
-          // 每片采样一次噪声，UV 沿流向（片的竖直方向）随机前 / 后滚（1015149712469524480）
-          vec2 nuv = vUv * 0.55 + vec2(vSeed * 7.13, vSeed * 3.71 + vDir * uTime * 0.35);
-          // 越往上 mip 越高 = 越糊（1015151731804721152）
-          float n = texture2D(uNoise, nuv, vAge * 4.0).r;
-          if (uDebug > 0.5) { vec2 g = floor(nuv * 8.0); n = mod(g.x + g.y, 2.0); }
+          // 1015149712469524480: one texture instruction per fragment/pass, not one GPU fetch per quad.
+          // Rotate UV axes to the projected particle velocity, including camera orbit.
+          vec2 centered = vUv - 0.5;
+          vec2 aligned = vec2(dot(centered, vec2(vFlow.y, -vFlow.x)), dot(centered, vFlow)) + 0.5;
+          vec2 nuv = aligned * 0.55 + vec2(vSeed * 7.13, vSeed * 3.71 + vDir * uTime * 0.35 * uScroll);
+          // 1015151731804721152: bias adds to derivative-selected LOD, not an exact mip index.
+          float bias = vAge * 4.0 * uMip;
+          float n;
+          if ((uDebug > 0.5 && uDebug < 1.5) || uDebug > 2.5) n = texture2D(uChecker, nuv, bias).r;
+          else n = texture2D(uNoise, nuv, bias).r;
+          // Raw square cards isolate sampling from shape/alpha fade.
+          if (uDebug > 1.5) {
+            gl_FragColor = vec4(vec3(n), 1.0);
+            #include <colorspace_fragment>
+            return;
+          }
           float r = length(vUv - 0.5) * 2.0;
           float shape = (1.0 - r) + (n - 0.5) * mix(0.9, 0.5, vAge);
           // 阈值：底部硬、往上软（清楚 → 虚）
@@ -93,7 +114,7 @@ export class Smoke {
             gl_FragColor = vec4(vec3(0.08, 0.08, 0.1), a);
           #else
             // 第二遍：浅一些、底部更透明、阈值往里收 1 像素 → 第一遍露出一圈黑描边（1015142746372366336）
-            float a = smoothstep(px, soft + 2.0 * px, shape - px) * mix(0.7, 0.95, smoothstep(0.0, 0.5, vAge)) * mix(1.0, 0.0, smoothstep(0.55, 1.0, vAge));
+            float a = smoothstep(px, soft + 2.0 * px, shape) * mix(0.7, 0.95, smoothstep(0.0, 0.5, vAge)) * mix(1.0, 0.0, smoothstep(0.55, 1.0, vAge));
             vec3 col = mix(vec3(0.24, 0.23, 0.26), vec3(0.42, 0.41, 0.44), vAge) * (0.85 + 0.3 * n);
             gl_FragColor = vec4(col, a);
           #endif
@@ -111,9 +132,25 @@ export class Smoke {
     this.p = []; this.acc = 0;
   }
 
-  set debugChecker(on) { this.back.material.uniforms.uDebug.value = this.front.material.uniforms.uDebug.value = on ? 1 : 0; }
+  set debugChecker(on) { this.setDebug(on ? 'checker' : 'off'); }
+  setDebug(mode = 'off') {
+    const value = { off: 0, checker: 1, noise: 2, cards: 3 }[mode];
+    if (value === undefined) throw new RangeError('Unknown smoke debug mode');
+    this.back.material.uniforms.uDebug.value = this.front.material.uniforms.uDebug.value = value;
+  }
+  setSampling({ scroll = true, mip = true } = {}) {
+    this.back.material.uniforms.uScroll.value = scroll ? 1 : 0;
+    this.back.material.uniforms.uMip.value = mip ? 1 : 0;
+  }
 
-  update(dt, wind) {
+  setPasses({ back = true, front = true } = {}) { this.back.visible = back; this.front.visible = front; }
+  clear() { this.p.length = 0; this.acc = 0; this.back.count = this.front.count = 0; }
+  dispose() { this.group.parent?.remove(this.group); this.back.geometry.dispose(); this.back.material.uniforms.uNoise.value.dispose(); this.checkerTexture.dispose(); this.back.material.dispose(); this.front.material.dispose(); this.clear(); }
+
+  update(dt = 0, wind, camera = null) {
+    if (!Number.isFinite(dt) || dt < 0) throw new RangeError('Invalid smoke timestep');
+    // Visual particles skip excess stall time, bounding emission/update work.
+    dt = Math.min(dt, 0.1);
     const w = wind ?? new THREE.Vector3(1, 0, 0.3);
     if (this.sources.length) {
       this.acc += dt;
@@ -121,25 +158,37 @@ export class Smoke {
         this.acc -= 0.05;
         for (const s of this.sources) {
           if (this.p.length >= N) break;
-          this.p.push({ x: s.x + (Math.random() - 0.5) * 0.05, y: s.y, z: s.z + (Math.random() - 0.5) * 0.05, age: 0, life: 3.2 + Math.random(), seed: Math.random(), dir: Math.random() < 0.5 ? -1 : 1, vy: 0.42 + Math.random() * 0.12 });
+          this.p.push({ serial: this.serial++, x: s.x + (this.random() - 0.5) * 0.05, y: s.y, z: s.z + (this.random() - 0.5) * 0.05, age: 0, life: 3.2 + this.random(), seed: this.random(), dir: this.random() < 0.5 ? -1 : 1, vy: 0.42 + this.random() * 0.12 });
         }
       }
     }
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), v = new THREE.Vector3(), sc = new THREE.Vector3();
     let n = 0;
     this.p = this.p.filter((p) => (p.age += dt / p.life) < 1);
-    // 底部的先画（远的先画在这里不重要：两遍各自叠）
     for (const p of this.p) {
       p.y += p.vy * dt * (1 - p.age * 0.6);
-      p.x += w.x * dt * 0.3 * p.age * 2; p.z += w.z * dt * 0.3 * p.age * 2;   // 越往上越被风吹斜
+      p.x += w.x * dt * 0.3 * p.age * 2; p.z += w.z * dt * 0.3 * p.age * 2;
+    }
+    // 1015142746372366336: two passes do not remove instance sorting needs.
+    if (camera) camera.updateMatrixWorld();
+    const ordered = camera ? smokeDepthOrder(this.p, camera.matrixWorldInverse.elements) : this.p;
+    this.drawOrder = ordered.map(p => p.serial);
+    for (const p of ordered) {
       const s = 0.24 + p.age * 0.95;
       m.compose(v.set(p.x, p.y, p.z), q, sc.set(s, s, s));
       this.back.setMatrixAt(n, m); this.front.setMatrixAt(n, m);
+      // 1015149712469524480: scrolling follows trail motion in screen space.
+      const vx = w.x * 0.6 * p.age, vy = p.vy * (1 - p.age * 0.6), vz = w.z * 0.6 * p.age;
+      const e = camera?.matrixWorldInverse.elements;
+      const fx = e ? e[0] * vx + e[4] * vy + e[8] * vz : 0;
+      const fy = e ? e[1] * vx + e[5] * vy + e[9] * vz : 1;
+      const len = Math.hypot(fx, fy);
+      this.aFlow.setXY(n, len > 1e-6 ? fx / len : 0, len > 1e-6 ? fy / len : 1);
       this.aAge.setX(n, p.age); this.aSeed.setX(n, p.seed); this.aDir.setX(n, p.dir);
       n++;
     }
     this.back.count = this.front.count = n;
     this.back.instanceMatrix.needsUpdate = this.front.instanceMatrix.needsUpdate = true;
-    this.aAge.needsUpdate = this.aSeed.needsUpdate = this.aDir.needsUpdate = true;
+    this.aFlow.needsUpdate = this.aAge.needsUpdate = this.aSeed.needsUpdate = this.aDir.needsUpdate = true;
   }
 }

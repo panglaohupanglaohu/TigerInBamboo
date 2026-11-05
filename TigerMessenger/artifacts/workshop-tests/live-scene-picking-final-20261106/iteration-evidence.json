@@ -1,0 +1,32 @@
+{
+  "iteration": "2026-11-06 actual scene picking correction",
+  "observations": [
+    "User rejected the plane-tree-specific list as hardcoded selection. Replaced with generic scene-object entry, primary canvas-picking mode, optional searchable runtime directory. No four hardcoded UI buttons or species-specific heading.",
+    "Actual pointer tests pick bridge plane tree and cypress 1 from rendered canvas. Three Raycaster nearest valid visible mesh hit maps merged botanical vertex ranges to actual original plant. Other mesh and instance picks remain read-only with explicit kind labels; merged voxel geometry not falsely split into houses.",
+    "Final affected browser nine PASS, zero page errors, including real canvas picking, lifecycle, original editor/blue toolbar/mobile/clean game. S21 detached Three fixture independently verifies batch range boundaries and distinct instance transforms/IDs; it is not gameplay testing.",
+    "Factory geometry/material/transform/report comparison to committed botany still PASS after ownership metadata addition. Actual final canvas-picked-cypress screenshot inspected: selected cypress and local green bounds, generic UI, live directory.",
+    "World/settings/recipe/localStorage unchanged across picking. No user profile, restored buildings, original REA, worker execution or publishing modified. Object transformation/undo/persistence previously planned remains pending; latest user correction prioritized true selection first."
+  ],
+  "checks": [
+    {
+      "name": "real canvas-based selection rather than fixed list",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "affected regression and botany parity",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "object transform and persistent editing",
+      "required": true,
+      "passed": false
+    },
+    {
+      "name": "full workshop suite on latest revision",
+      "required": false,
+      "passed": false
+    }
+  ]
+}

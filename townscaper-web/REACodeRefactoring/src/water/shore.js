@@ -18,7 +18,7 @@
  * So, per shoreline loop:
  *   - the yellow line is the quay foot (where the stone meets the water),
  *   - the blue line is that loop pushed out to a fixed distance — measured on
- *     a distance field so bays don't fold — then smoothed along the loop,
+ *     an approximate distance field (not a guarantee against folds) — then smoothed along the loop,
  *   - K wave ribbons follow the loop. Every vertex stores its yellow point,
  *     its blue point and a time offset; the vertex shader walks it from blue
  *     to yellow and back a little, on its own clock. Nothing is simulated.
@@ -26,7 +26,10 @@
  */
 
 import * as THREE from 'three';
+import { traceShoreLoops } from '../core/shore-loops.js';
 import { pointInQuad } from '../core/spatial.js';
+import { bakeWaveMotion, waveCycleGLSL, waveCrest } from '../core/wave-cycle.js';
+import { sampleShoreline, marchShore } from '../core/shore-profile.js';
 
 const hash01 = (n) => {
   let x = Math.imul((n | 0) ^ 0x9e3779b9, 0x85ebca6b);
@@ -38,45 +41,6 @@ const hash01 = (n) => {
 
 /** Land = columns that touch the water (solid at level 1). */
 function isLand(town, cell) { return cell !== null && town.isSolid(cell, 1); }
-
-/** Chain the outward-facing boundary edges of the land into closed loops. */
-function traceLoops(town, grid) {
-  const cells = grid.cells;
-  const out = new Map(); // start vertex id -> [segments]
-  for (const cell of cells) {
-    if (!isLand(town, cell)) continue;
-    for (let i = 0; i < cell.pts.length; i++) {
-      const nid = cell.edgeNeighbors[i];
-      const nb = nid >= 0 ? cells[nid] : null;
-      if (isLand(town, nb)) continue;
-      const a = cell.pts[i], b = cell.pts[(i + 1) % cell.pts.length];
-      let nx = -(b.z - a.z), nz = b.x - a.x;
-      const l = Math.hypot(nx, nz) || 1;
-      nx /= l; nz /= l;
-      if (nx * ((a.x + b.x) / 2 - cell.cx) + nz * ((a.z + b.z) / 2 - cell.cz) < 0) { nx = -nx; nz = -nz; }
-      const seg = { a, b, nx, nz, used: false };
-      const list = out.get(a.id);
-      if (list) list.push(seg); else out.set(a.id, [seg]);
-    }
-  }
-  const loops = [];
-  for (const list of out.values()) {
-    for (const start of list) {
-      if (start.used) continue;
-      const loop = [];
-      let cur = start;
-      let guard = 0;
-      while (cur && !cur.used && guard++ < 200000) {
-        cur.used = true;
-        loop.push(cur);
-        const next = out.get(cur.b.id);
-        cur = next ? next.find((s) => !s.used) ?? next[0] : null;
-      }
-      if (cur === start && loop.length >= 3) loops.push(loop);
-    }
-  }
-  return loops;
-}
 
 /** Chamfer distance to land, rasterised from the real quads. */
 function distanceField(town, grid, index, ptsOf, res = 0.07, pad = 2.5) {
@@ -92,6 +56,7 @@ function distanceField(town, grid, index, ptsOf, res = 0.07, pad = 2.5) {
   minX -= pad; minZ -= pad; maxX += pad; maxZ += pad;
   const W = Math.ceil((maxX - minX) / res) + 1;
   const H = Math.ceil((maxZ - minZ) / res) + 1;
+  if (!Number.isSafeInteger(W * H) || W * H > 4000000) throw new RangeError('shore distance-field budget');
   const d = new Float32Array(W * H).fill(1e9);
   for (const c of grid.cells) {
     if (!isLand(town, c)) continue;
@@ -131,66 +96,46 @@ function distanceField(town, grid, index, ptsOf, res = 0.07, pad = 2.5) {
   };
   /** walk from (x,z) along n until the field reads `target` */
   const march = (x, z, nx, nz, target, max = 3) => {
-    let hi = 0;
-    const step = res * 0.7;
-    while (hi < max && sample(x + nx * hi, z + nz * hi) < target) hi += step;
-    let lo = Math.max(0, hi - step);
-    for (let it = 0; it < 10; it++) {
-      const m = (lo + hi) / 2;
-      if (sample(x + nx * m, z + nz * m) < target) lo = m; else hi = m;
-    }
-    return (lo + hi) / 2;
+    return marchShore(sample, x, z, nx, nz, target, max, res * 0.7);
   };
   return { sample, march };
-}
-
-function chaikin(pts, iterations) {
-  let p = pts;
-  for (let it = 0; it < iterations; it++) {
-    const o = [];
-    for (let i = 0; i < p.length; i++) {
-      const a = p[i], b = p[(i + 1) % p.length];
-      const mixp = (t) => {
-        let nx = a.nx * (1 - t) + b.nx * t, nz = a.nz * (1 - t) + b.nz * t;
-        const l = Math.hypot(nx, nz) || 1;
-        return { x: a.x * (1 - t) + b.x * t, z: a.z * (1 - t) + b.z * t, nx: nx / l, nz: nz / l };
-      };
-      o.push(mixp(0.25), mixp(0.75));
-    }
-    p = o;
-  }
-  return p;
 }
 
 /**
  * @returns {{skirt: THREE.BufferGeometry, waves: THREE.BufferGeometry}}
  */
 export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves = 2, foot = 0.075, shape = null } = {}) {
+  if (![reach, foot].every(Number.isFinite) || reach <= 0 || foot < 0 || !Number.isInteger(waves) || waves < 0 || waves > 32) throw new RangeError('shore options');
   // 地形变形后海岸在切面 0（水面）上的真实位置；没有 shape 时就是网格原位
   const posOf = shape ? (p) => { const [x, z] = shape.at(p, 0); return { x, z }; } : (p) => p;
   const ptsOf = shape ? (c) => c.pts.map(posOf) : (c) => c.pts;
-  const loops = traceLoops(town, grid);
+  const loops = traceShoreLoops(grid.cells,c=>isLand(town,c));
   const field = distanceField(town, grid, index, ptsOf);
 
   // skirt: rim + halo (alpha, colour-mix) ; waves: per-vertex shore/sea/phase
   const sPos = [], sA = [], sIdx = [];
   const yLine = [], bLine = [];   // debug: the yellow and blue lines of 1849732997945110651
   const wShore = [], wSea = [], wPhase = [], wRow = [], wIdx = [];
+  const wIn = [], wOut = [], wPeriod = [], wCrest = [], wWidth = [];
   let sv = 0, wv = 0;
 
   for (const loop of loops) {
     if (!field) break;
-    // loop vertices with averaged outward normals
-    const raw = loop.map((seg, i) => {
-      const prev = loop[(i + loop.length - 1) % loop.length];
-      let nx = seg.nx + prev.nx, nz = seg.nz + prev.nz;
-      const l = Math.hypot(nx, nz) || 1;
-      const q = posOf(seg.a);
-      return { x: q.x, z: q.z, nx: nx / l, nz: nz / l };
+    // Recompute edge normals after shape.at: anisotropic deformation changes them.
+    const edges = loop.map(seg => {
+      const a = posOf(seg.a), b = posOf(seg.b);
+      const sign = seg.nx * (-(seg.b.z-seg.a.z)) + seg.nz * (seg.b.x-seg.a.x) >= 0 ? 1 : -1;
+      const length = Math.hypot(b.x-a.x,b.z-a.z) || 1;
+      return {x:a.x,z:a.z,nx:sign*-(b.z-a.z)/length,nz:sign*(b.x-a.x)/length};
     });
-    const pts = chaikin(raw, 2);
+    const raw = edges.map((p,i) => {
+      const prev = edges[(i+edges.length-1)%edges.length];
+      const nx=p.nx+prev.nx,nz=p.nz+prev.nz,l=Math.hypot(nx,nz);
+      return {...p,nx:l>1e-9?nx/l:p.nx,nz:l>1e-9?nz/l:p.nz};
+    });
+    const pts = sampleShoreline(raw);
     const N = pts.length;
-    if (N < 6) continue;
+    if (N < 3) continue;
 
     // yellow line: the quay foot. blue line: pushed out on the field, smoothed.
     const shore = pts.map((p) => ({ x: p.x + p.nx * foot, z: p.z + p.nz * foot }));
@@ -201,7 +146,9 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
     for (let pass = 0; pass < 6; pass++) {
       sea = sea.map((p, i) => {
         const a = sea[(i + N - 1) % N], b = sea[(i + 1) % N];
-        return { x: p.x * 0.5 + (a.x + b.x) * 0.25, z: p.z * 0.5 + (a.z + b.z) * 0.25 };
+        const q = { x: p.x * 0.5 + (a.x + b.x) * 0.25, z: p.z * 0.5 + (a.z + b.z) * 0.25 };
+        // Reject smoothing that puts the sea endpoint back in the rasterised land.
+        return field.sample(q.x,q.z) >= 0.035 ? q : p;
       });
     }
 
@@ -214,6 +161,7 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
     // arc length for the travelling time offset
     const arc = new Float32Array(N);
     for (let i = 1; i < N; i++) arc[i] = arc[i - 1] + Math.hypot(shore[i].x - shore[i - 1].x, shore[i].z - shore[i - 1].z);
+    const perimeter = arc[N-1] + Math.hypot(shore[0].x-shore[N-1].x,shore[0].z-shore[N-1].z);
     const seed = hash01(N * 7919 + Math.round(shore[0].x * 100));
 
     // ---- static skirt: [rim inner, rim outer, halo outer]
@@ -239,12 +187,19 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
       const wb = wv;
       const ks = seed * 10 + k * 1.7;
       for (let i = 0; i < N; i++) {
-        const s = arc[i];
+        const s = arc[i] / Math.max(perimeter,1e-9) * Math.PI * 2;
+        const crest = waveCrest(s, ks);
+        const motion = bakeWaveMotion(shore[i],sea[i],pts[i]);
         // smooth along the shore so crests arrive at an angle, never in lockstep
-        const phase = k / waves + 0.14 * Math.sin(s * 0.7 + ks) + 0.05 * Math.sin(s * 1.9 + ks * 2.1);
+        const phase = k / waves + 0.14 * Math.sin(s * 2 + ks) + 0.05 * Math.sin(s * 5 + ks * 2.1);
         for (let row = 0; row < 2; row++) {
           wShore.push(shore[i].x, shore[i].z);
           wSea.push(sea[i].x, sea[i].z);
+          wIn.push(...motion.incoming);
+          wOut.push(...motion.outgoing);
+          wCrest.push(crest.coverage);
+          wWidth.push(crest.width);
+          wPeriod.push(0.90 + 0.22 * hash01(N * 109 + k * 7919));
           wPhase.push(phase);
           wRow.push(row);
           wv++;
@@ -289,6 +244,11 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
   wavesGeo.setAttribute('aShore', new THREE.Float32BufferAttribute(wShore, 2));
   wavesGeo.setAttribute('aSea', new THREE.Float32BufferAttribute(wSea, 2));
   wavesGeo.setAttribute('aPhase', new THREE.Float32BufferAttribute(wPhase, 1));
+  wavesGeo.setAttribute('aIn', new THREE.Float32BufferAttribute(wIn, 2));
+  wavesGeo.setAttribute('aOut', new THREE.Float32BufferAttribute(wOut, 2));
+  wavesGeo.setAttribute('aCrest', new THREE.Float32BufferAttribute(wCrest, 1));
+  wavesGeo.setAttribute('aWidth', new THREE.Float32BufferAttribute(wWidth, 1));
+  wavesGeo.setAttribute('aPeriod', new THREE.Float32BufferAttribute(wPeriod, 1));
   wavesGeo.setAttribute('aRow', new THREE.Float32BufferAttribute(wRow, 1));
   wavesGeo.setIndex(wIdx);
   wavesGeo.computeBoundingSphere();
@@ -332,6 +292,7 @@ export function makeSkirtMaterial(waterTint) {
  * Because the wave is invisible at both ends of the loop, the wrap is seamless.
  */
 export function makeWaveMaterial({ period = 4.6 } = {}) {
+  if (!Number.isFinite(period) || period <= 0) throw new RangeError('wave period');
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: false,
@@ -339,6 +300,7 @@ export function makeWaveMaterial({ period = 4.6 } = {}) {
     uniforms: {
       uTime: { value: 0 },
       uPeriod: { value: period },
+      uCrestBreakup: { value: 1 },
       uFoam: { value: new THREE.Color('#fbfeff') },
     },
     vertexShader: /* glsl */ `
@@ -346,30 +308,26 @@ export function makeWaveMaterial({ period = 4.6 } = {}) {
       attribute vec2 aSea;
       attribute float aPhase;
       attribute float aRow;
+      attribute vec2 aIn;
+      attribute vec2 aOut;
+      attribute float aPeriod;
+      attribute float aCrest;
+      attribute float aWidth;
+      uniform float uCrestBreakup;
       uniform float uTime;
       uniform float uPeriod;
       varying float vA;
+      ${waveCycleGLSL}
       void main() {
-        float t = fract(uTime / uPeriod + aPhase);
-        const float tIn = 0.68;
-        float f;      // 1 = at the blue line, 0 = on the stones
-        float a;
-        if (t < tIn) {
-          float u = t / tIn;
-          f = 1.0 - u * u * (3.0 - 2.0 * u) * (0.6 + 0.4 * u);
-          a = smoothstep(0.05, 0.55, u) * (0.12 + 0.78 * u * u);
-        } else {
-          float u = (t - tIn) / (1.0 - tIn);
-          f = 0.22 * sin(u * 1.5707963);
-          a = 0.85 * (1.0 - u) * (1.0 - u);
-        }
-        vec2 dir = aSea - aShore;
-        float len = max(length(dir), 1e-4);
-        // ribbon width: broad offshore, a thin lip when it hits the stone
-        float w = mix(0.07, 0.24, f) / len;
-        float g = clamp(f + aRow * w, 0.0, 1.15);
-        vec2 p = aShore + dir * g;
-        vA = a * (1.0 - aRow) * 0.62;
+        float t = fract(uTime / (uPeriod * aPeriod) + aPhase);
+        vec3 cycle = shoreCycle(t);
+        float f = cycle.x + cycle.y;
+        float a = cycle.z;
+        vec2 center = aShore + aIn * cycle.x + aOut * cycle.y;
+        float len = max(length(aIn), 1e-4);
+        float w = mix(0.07, 0.24, f) * mix(1.0, aWidth, uCrestBreakup) / len;
+        vec2 p = center + aIn * (aRow * w);
+        vA = a * (1.0 - aRow) * 0.62 * mix(1.0, aCrest, uCrestBreakup);
         gl_Position = projectionMatrix * modelViewMatrix * vec4(p.x, 0.012 + 0.004 * (1.0 - f), p.y, 1.0);
       }`,
     fragmentShader: /* glsl */ `

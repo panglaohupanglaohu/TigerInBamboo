@@ -1,0 +1,31 @@
+{
+  "goal": "Plan a DeepSeek-based autonomous scene learning and improvement system, using Morris lake as first proving ground. Replace ticket-centric UX with continuous observation, hypothesis, experiments and verified scene improvement. Planning only.",
+  "observations": [
+    "Primary DeepSeek article read: Router/Worker, event subscriptions, on-demand recall, asynchronous jobs, separated state/environment, independent Watchdog. Article is architecture discussion, public prototype implements only part.",
+    "Public prototype assumes GitHub-oriented setup; local capability and scene events need a Source integration and setup adaptations.",
+    "Morris already uses a vendor copy through scene adapters; current DSH command absent from PATH, installed runtime unverified.",
+    "Keep existing Morris identity and advisor responsibilities; no new images inspected in this turn."
+  ],
+  "checks": [
+    {
+      "name": "Primary article and local adapter boundaries inspected",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "DSH local installation and model/tool execution verified",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "Morris closed-loop experiment and runtime acceptance executed",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "constraints": [
+    "Planning only, no daemon installation or game edits this turn.",
+    "Use objective-based bounded experiments; preserve versions and evidence without task-board UX.",
+    "No visual or runtime pass from text triage."
+  ]
+}

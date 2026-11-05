@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "817c88920351155c2314b91085070c5325e96c5b2809db82569cdeb1346b3278",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.59,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.33,
+        "review": 0.67
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.68
+    }
+  },
+  "usage": {
+    "input_tokens": 773,
+    "output_tokens": 91,
+    "cost_usd": 0.000325,
+    "credits_remaining_usd": 4.869494
+  },
+  "elapsed_ms": 2207,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "all browser cases final rerun",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "real Worker and user gameplay acceptance",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -1,0 +1,106 @@
+{
+  "startedAt": "2026-11-03T20:13:17.699Z",
+  "base": "http://localhost:8931",
+  "isolated": true,
+  "cases": [
+    {
+      "id": "S01 initial pipeline",
+      "status": "PASS",
+      "ms": 11
+    },
+    {
+      "id": "S02 scan real library and search",
+      "status": "PASS",
+      "ms": 127,
+      "detail": "发现 199 条能力记录，已加入分类能力库；新增方法均待执行适配。"
+    },
+    {
+      "id": "S03 scan HTTP404 and recovery",
+      "status": "PASS",
+      "ms": 221
+    },
+    {
+      "id": "S04 add remove undo redo and reorder",
+      "status": "PASS",
+      "ms": 301
+    },
+    {
+      "id": "S05 goal save and exported JSON",
+      "status": "PASS",
+      "ms": 87
+    },
+    {
+      "id": "L01 learning loads source records",
+      "status": "PASS",
+      "ms": 254,
+      "detail": "39 条模块职责 · 243 条学习记录（登记不等于验收）"
+    },
+    {
+      "id": "L06 shared progress matches upstream and refresh failure recovers",
+      "status": "PASS",
+      "ms": 4658
+    },
+    {
+      "id": "L02 module search and source links",
+      "status": "PASS",
+      "ms": 10
+    },
+    {
+      "id": "L03 add method to scene locate no duplicate",
+      "status": "PASS",
+      "ms": 194
+    },
+    {
+      "id": "L04 videos search play close",
+      "status": "PASS",
+      "ms": 348
+    },
+    {
+      "id": "S06 saved recipe refresh",
+      "status": "PASS",
+      "ms": 144
+    },
+    {
+      "id": "S07 real game connection and editor docking",
+      "status": "PASS",
+      "ms": 47274
+    },
+    {
+      "id": "S08 editor tools palette help collapse",
+      "status": "PASS",
+      "ms": 6273
+    },
+    {
+      "id": "S09 actual parameter preview baseline and snapshot",
+      "status": "PASS",
+      "ms": 4929
+    },
+    {
+      "id": "S10 stale finalize reject restore and isolated final",
+      "status": "PASS",
+      "ms": 6804
+    },
+    {
+      "id": "S11 play mode and service outage independence",
+      "status": "PASS",
+      "ms": 1815
+    },
+    {
+      "id": "L05 mobile overflow and preserved scene iframe",
+      "status": "PASS",
+      "ms": 1393
+    },
+    {
+      "id": "G01 clean game startup and remote controls",
+      "status": "PASS",
+      "ms": 47135
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-03T20:15:20.388Z",
+  "summary": {
+    "passed": 18,
+    "failed": 0,
+    "pageErrors": 0
+  }
+}

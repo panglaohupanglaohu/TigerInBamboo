@@ -1,0 +1,45 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "77dc929efcc3700e3e0de636f66970e49e592bb271f5021866c90dfd69e4dee2",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.44
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.8,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.16,
+        "review": 0.84
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.19
+    }
+  },
+  "usage": {
+    "input_tokens": 783,
+    "output_tokens": 91,
+    "cost_usd": 0.000329,
+    "credits_remaining_usd": 4.867209
+  },
+  "elapsed_ms": 3471,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "cross-reload cache generation dependencies and AI scene upgrade",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

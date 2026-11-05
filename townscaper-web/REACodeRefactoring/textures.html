@@ -22,17 +22,18 @@
 </style>
 </head>
 <body>
+<a href="ornament.html" style="position:fixed;right:16px;bottom:12px;z-index:30;color:#bde6ed;background:#26363b;padding:6px 10px;border-radius:6px">单贴图镜像纹饰验收 →</a>
 <canvas id="gl"></canvas>
 <canvas id="cv"></canvas>
 <div id="ui">
   <nav><a href="index.html">← 首页</a><a href="pipeline.html">管线</a><a href="grids.html">网格</a></nav>
-  <h1>贴图实验室</h1>
+  <h1>贴图实验室</h1><nav><a href="normal-contrast.html">共享场景法线反差近似 →</a></nav>
   <div class="row" id="tabs">
     <button data-t="fwidth" class="on">抗锯齿线</button>
     <button data-t="pixel">隔像素一条线</button>
-    <button data-t="contrast">反差线</button>
+    <button data-t="contrast">反差迭代（后续实验）</button>
     <button data-t="blotch">地面笔触</button>
-    <button data-t="radial">径向排序</button>
+    <button data-t="radial">圆块排序（近似）</button>
     <button data-t="palette">调色板</button>
     <button data-t="deco">UI 装饰</button>
     <button data-t="squiggly">扭动距离场</button>
@@ -43,6 +44,7 @@
 </div>
 <span class="tag" id="tagL" style="left:16px"></span><span class="tag" id="tagR" style="right:16px"></span>
 <script type="module">
+import { TEXEL_SKIP_GLSL } from "./src/core/texel-skip.js";
 /* ------------------------------------------------------------ 小工具：全屏片元着色器 */
 const gl = document.getElementById('gl').getContext('webgl2', { antialias: false });
 const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
@@ -100,7 +102,7 @@ void main() {
 /* ------------------------------------------------------------ 2 隔像素一条线 */
 // 1241096929490149376 "I make the UVs speed past every 2nd pixel before sampling. It's core to my art style and what lets me get
 // away with one 128² texture and crisp antialiased lines"：贴图里每隔一个像素是"线像素"；采样前把 UV 重新映射，
-// 让线像素在屏幕上永远只占 1 个像素宽，其余空间都给内容像素 → 放多大线都是 1 像素、不会糊也不会变粗。
+// 放大时让线的积分宽度约1屏幕像素，线性过滤保留亚像素过渡；缩小仍需mipmap。
 let pixTex = null;
 function makePixTex() {
   const N = 128, d = new Uint8Array(N * N * 4);
@@ -117,25 +119,19 @@ function makePixTex() {
   }
   const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, N, N, 0, gl.RGBA, gl.UNSIGNED_BYTE, d);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
   return t;
 }
 const FS_PIXEL = `
-float remap(float t, float w) {
-  // t：贴图像素坐标；每两个像素一对：[内容, 线]。w：一个屏幕像素 = 多少贴图像素
-  float p = floor(t * 0.5) * 2.0, f = t - p;          // f ∈ [0,2)
-  float lw = min(w, 1.0);                              // 线占 1 屏幕像素（放大时），缩小时退回 1 贴图像素
-  float split = 2.0 - lw;
-  return f < split ? p + 0.5 : p + 1.5;                // 内容像素占大部分，线像素只占一个屏幕像素
-}
+${TEXEL_SKIP_GLSL}
 void main() {
   vec2 px = gl_FragCoord.xy;
   float z = uZoom * (1.0 + 7.0 * (0.5 + 0.5 * sin(uTime * 0.35)));
   vec2 t = (px - uRes * 0.5) / z + 64.0;
   vec3 c;
   if (px.x < uRes.x * 0.5) c = texture(uTex, (floor(t) + 0.5) / 128.0).rgb;   // 左：直接最近邻 —— 线跟着放大变粗
-  else { vec2 w = fwidth(t); c = texture(uTex, vec2(remap(t.x, w.x), remap(t.y, w.y)) / 128.0).rgb; }
+  else { vec2 w = fwidth(t); c = texture(uTex, vec2(skipTexel(t.x, w.x), skipTexel(t.y, w.y)) / 128.0).rgb; }
   if (abs(px.x - uRes.x * 0.5) < 1.0) c = vec3(0.85, 0.3, 0.25);
   o = vec4(c, 1.0);
 }`;
@@ -183,8 +179,8 @@ float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f); return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
 float box(vec2 p, vec2 b, float r) { vec2 q = abs(p) - b + r; return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r; }
 float circ(vec2 p, float r) { return length(p) - r; }
-// 1104771432440049664：UI 元素不是画好的贴图，而是一个距离场；采样之前先用随时间变的噪声把坐标"扭"一下，
-// 边就会像手绘一样抖动；同一个场取不同阈值 = 填充、描边、外发光，全都跟着一起扭。
+// 1104771432440049664 原文：单张距离场贴图、镜像UV，边框/中心独立cutoff。
+// 下方保留的是程序SDF+噪声近似；时间扭曲不是该视频已证实的原作机制。
 void main() {
   vec2 uv = (gl_FragCoord.xy - uRes * 0.5) / (uRes.y * 0.42 * uZoom);
   float t = floor(uTime * 6.0) / 6.0;                     // 逐格（6fps）换一次噪声 → 定格动画的"抖"
@@ -349,12 +345,12 @@ function drawDeco() {
 /* ------------------------------------------------------------ 调度 */
 const NOTES = {
   fwidth: '978211952504852480 "use fwidth, ddx and ddy to create crisp, pixel perfect, zoom independent, antialiased lines"。左边：固定宽度的 step（远处断、近处粗、锯齿）；右边：宽度 = fwidth(uv)，永远 1 像素、抗锯齿。滚轮缩放。',
-  pixel: '1241096929490149376 "I make the UVs speed past every 2nd pixel before sampling … one 128² texture and crisp antialiased lines"。贴图里每隔一个像素是"线像素"。左边是直接最近邻采样，放大后线跟着变粗；右边先重映射 UV，线像素在屏幕上永远只占 1 个像素。',
-  contrast: '1482011744843223042 从反差生成一像素细线；1482346496460828674 三角形上的迭代模拟：从随机开始，"有反差"的边两侧推开，"没反差"的边两侧拉近；副产品是表达连通性的渐变色。值差大于阈值的边画成线。',
+  pixel: '1241096929490149376 "I make the UVs speed past every 2nd pixel before sampling … one 128² texture and crisp antialiased lines"。贴图里每隔一个像素是"线像素"。左边是直接最近邻采样，放大后线跟着变粗；右边先重映射 UV，放大时线的积分宽度约1屏幕像素，线性采样抗锯齿；缩小时仍需mipmap。',
+  contrast: '1482346496460828674是后来的专用反差迭代，本页保留该旧近似。1482011744843223042更早：由程序化法线map反差生成细线，不能用三角值迭代代替；共享法线场局部近似见normal-contrast.html。',
   blotch: '1480635131614355459 大块颜料斑；1703750394164199473 旋涡团块；1704246032626762189 疏密 + 高度分段线；1696864977171189980 色块不跨重要的边（每级台阶一套色块）；1714613599035863191 抽象田地。主场景面板里勾「地面笔触」可套到地形顶面上。',
-  radial: '1478114309263839244 "the radial (instead of directional) size-sorting … that big coherent chunk in the middle"：笔触从大到小，从中心往外螺旋找空位 → 中间一大块整齐的，越往外越碎。',
+  radial: '1478114309263839244 "the radial (instead of directional) size-sorting … that big coherent chunk in the middle"：原片是UV不规则图块/三角网和棋盘格模型对照；本页圆块螺旋只表示大小布局意图，不能代表原UV分片/参数化/无重叠打包。',
   palette: '1710031224838771027 给每种地物定义完整的颜色空间；1712088611934371876 调色板编辑器：四角取色的渐变方块 + 往白色收的三角。点四个角换颜色，下面是从方块里采样的 15 色（墙色的 15 个色槽）。',
-  squiggly: '1104771432440049664 squiggly distance field：UI 形状存成距离场，采样前用逐格变化的噪声扭一下坐标 → 边像手绘一样抖；同一个场取不同阈值得到填充 / 描边 / 内线 / 外发光，全部一起扭。第 4 个：1105131621391495176 带动画——镜像 UV 上的对称纹饰，用一个从中心长出的半径做阈值动画（1024679338292256769 UI flair 的展开）。',
+  squiggly: '1104771432440049664 原文为单张距离场贴图+镜像UV，边框/中心可独立调cutoff；本页保留程序SDF/噪声近似，单贴图复用和独立控制尚待接入。第 4 个：1105131621391495176 带动画——镜像 UV 上的对称纹饰，用一个从中心长出的半径做阈值动画（1024679338292256769 UI flair 的展开）。',
   deco: '1061221291137605633 一张贴图 8 种朝向 + 以中心镜像，任意尺寸都能用；1061227418961219585 拉太长会看出重复；1061229717582475264 用同一张贴图的几种不同设置打破重复。',
 };
 const SUBS = { pixel: ['放大看'], blotch: ['大色块', '疏密 + 等高线', '抽象田地'], deco: ['只镜像', '+ 8 向', '+ 几种设置'], contrast: ['迭代'], squiggly: ['静止', '扭动', '+ 内线 + 发光', '镜像纹饰 + 展开动画'] };
@@ -367,7 +363,7 @@ function setTab(t) {
   const glOn = ['fwidth', 'pixel', 'blotch', 'squiggly'].includes(t);
   gl.canvas.style.display = glOn ? 'block' : 'none'; cv.style.display = glOn ? 'none' : 'block';
   document.getElementById('tagL').textContent = t === 'fwidth' ? '固定宽度 step' : t === 'pixel' ? '最近邻（线变粗）' : '';
-  document.getElementById('tagR').textContent = t === 'fwidth' ? 'fwidth 抗锯齿' : t === 'pixel' ? '隔像素重映射（线 1 像素）' : '';
+  document.getElementById('tagR').textContent = t === 'fwidth' ? 'fwidth 抗锯齿' : t === 'pixel' ? '连续重映射 + 线性采样（放大验收）' : '';
   document.getElementById('tagL').style.display = document.getElementById('tagR').style.display = (t === 'fwidth' || t === 'pixel') ? 'block' : 'none';
   if (t === 'contrast' && !contrast) initContrast();
   if (t === 'radial') document.getElementById('stat').textContent = `放下 ${drawRadial()} 个笔触`;

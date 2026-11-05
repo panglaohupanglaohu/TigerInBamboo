@@ -10,7 +10,7 @@
  *   1769641473895432220 "a 'mushrooming' issue where tall mountains get weirdly wide. I managed to mitigate this by a
  *     relax pass where all module-containing cells try to achieve their desired shape and size"
  *     → 径向抬高时格子按 r/R 变大；relax：每层里"有东西的格子"把角点往自己的期望大小（R/r 缩回去）拉，
- *       共享角点取平均，迭代几遍。面板可以开关对比。
+ *       共享角点取平均，迭代几遍。这是本地边长弹簧近似，不等同原作模块形状拟合。
  */
 
 import { TriGraph } from '../core/trigraph.js';
@@ -18,6 +18,9 @@ import { makeRng, fbm } from '../core/noise.js';
 
 /** 球面三角网：返回 { pts:[[x,y,z]], tris:[[a,b,c]], steps } */
 export function buildSphere({ n = 900, seed = 3, spacing = 40, relax = 30 } = {}) {
+  if (!Number.isInteger(n) || n < 4 || n > 5000 || !Number.isFinite(seed) ||
+      !Number.isInteger(spacing) || spacing < 0 || spacing > 1000 ||
+      !Number.isInteger(relax) || relax < 0 || relax > 1000) throw new RangeError('Invalid sphere generation parameters');
   const rng = makeRng(seed);
   // 1. 随机点
   let P = [];
@@ -63,8 +66,9 @@ export function buildSphere({ n = 900, seed = 3, spacing = 40, relax = 30 } = {}
     const nrm = cross(sub(P[b], P[a]), sub(P[c], P[a]));
     return dot(nrm, P[a]) < 0 ? [a, c, b] : [a, b, c];
   });
+  steps.triangulated = P.map(p => p.slice());
   steps.check = T.check(60);
-  steps.projection = { pts: proj, tris: T.triangles() };
+  steps.projection = { pts: proj, tris: T.triangles(), order: others.map(o=>o.i), pole };
   // 4. 按三角形松弛：每个点移到相邻三角形重心的平均
   const nb = P.map(() => []);
   tris.forEach((t, ti) => t.forEach((v) => nb[v].push(ti)));
@@ -76,7 +80,41 @@ export function buildSphere({ n = 900, seed = 3, spacing = 40, relax = 30 } = {}
       return norm(lerp(p, norm(s), 0.6));
     });
   }
+  steps.relaxed = P.map(p => p.slice());
   return { pts: P, tris, nb, steps };
+}
+
+/** Closed unit-sphere mesh diagnostics. Topology is distinct from planar Delaunay.
+ * This checks edge incidence, connectivity, Euler and outward faces; it is not
+ * a self-intersection proof or an exact spherical Delaunay predicate.
+ */
+export function sphereTopologyReport(points, tris) {
+  const edges = new Map(), faces = new Set(), used = new Set();
+  const neighbors = points.map(()=>new Set());
+  let invalidFaces=0, duplicateFaces=0, degenerateFaces=0, inwardFaces=0;
+  const finite = points.every(p=>Array.isArray(p) && p.length===3 && p.every(Number.isFinite));
+  const maxRadiusError = finite ? points.reduce((m,p)=>Math.max(m,Math.abs(Math.hypot(...p)-1)),0) : Infinity;
+  for (const t of tris) {
+    if (!Array.isArray(t) || t.length!==3 || new Set(t).size!==3 || !t.every(v=>Number.isInteger(v)&&v>=0&&v<points.length)) { invalidFaces++; continue; }
+    const key=[...t].sort((a,b)=>a-b).join(',');if(faces.has(key))duplicateFaces++;faces.add(key);
+    const [a,b,c]=t, normal=finite?cross(sub(points[b],points[a]),sub(points[c],points[a])):[NaN,NaN,NaN];
+    if (!(Math.hypot(...normal)>1e-14)) degenerateFaces++;
+    if (!(dot(normal,points[a])>0)) inwardFaces++;
+    for (const [u,v] of [[a,b],[b,c],[c,a]]) {
+      used.add(u);used.add(v);neighbors[u].add(v);neighbors[v].add(u);
+      const k=u<v?u+','+v:v+','+u,list=edges.get(k)||[];list.push([u,v]);edges.set(k,list);
+    }
+  }
+  let boundaryEdges=0,nonManifoldEdges=0,windingConflicts=0;
+  for(const list of edges.values()){
+    if(list.length===1)boundaryEdges++;else if(list.length!==2)nonManifoldEdges++;
+    else if(list[0][0]!==list[1][1])windingConflicts++;
+  }
+  const seen=new Set();let components=0;
+  for(const start of used)if(!seen.has(start)){components++;const stack=[start];seen.add(start);while(stack.length){const v=stack.pop();for(const u of neighbors[v])if(!seen.has(u)){seen.add(u);stack.push(u);}}}
+  const orphanVertices=points.length-used.size,euler=used.size-edges.size+tris.length;
+  const closed=finite && !invalidFaces && !duplicateFaces && !degenerateFaces && !inwardFaces && !boundaryEdges && !nonManifoldEdges && !windingConflicts && !orphanVertices && components===1 && euler===2 && maxRadiusError<1e-8;
+  return {closed,vertices:points.length,edges:edges.size,faces:tris.length,euler,components,orphanVertices,boundaryEdges,nonManifoldEdges,windingConflicts,invalidFaces,duplicateFaces,degenerateFaces,inwardFaces,finite,maxRadiusError};
 }
 
 /**
@@ -97,7 +135,7 @@ export function buildPlanet(sphere, { seed = 3, R = 4, L = 0.32, maxH = 6 } = {}
   const edgeOwner = new Map();
   for (const c of cells) for (let k = 0; k < c.ring.length; k++) edgeOwner.set(c.ring[k] + ',' + c.ring[(k + 1) % c.ring.length], c.id);
   for (const c of cells) c.nb = c.ring.map((a, k) => edgeOwner.get(c.ring[(k + 1) % c.ring.length] + ',' + a) ?? -1);
-  // 高度：3D 噪声 → 0 = 海，1 = 沙滩，2.. 台地（偶数层量化，像地形管线）
+  // 高度：球面方向混合两个2D噪声切片（并非真正3D纹理） → 0 = 海，1 = 沙滩，2.. 台地（偶数层量化，像地形管线）
   const H = cells.map((c) => {
     const [x, y, z] = c.c;
     const e = fbm(x * 1.3 + 5 + z * 0.7, y * 1.3 + 9 - z * 0.4, { octaves: 4, freq: 1.4, seed }) + 0.25 * fbm(z * 2.1 + 3, x * 2.1 - y, { octaves: 2, freq: 2, seed: seed + 7 });
@@ -114,9 +152,19 @@ export function buildPlanet(sphere, { seed = 3, R = 4, L = 0.32, maxH = 6 } = {}
  * relax = true：有东西的格子把角点往"期望大小"拉（1769641473895432220）。
  * 返回 at(cornerId, level) → [x, y, z]
  */
-export function cornerPositions(planet, { relax = true, iters = 40 } = {}) {
+export function cornerPositions(planet, { relax = true, iters = 40, moduleCells = null } = {}) {
   const { cells, corners, H, R, L } = planet;
-  const maxH = Math.max(...H);
+  if (!Number.isFinite(R) || R <= 0 || !Number.isFinite(L) || L < 0 ||
+      !Number.isInteger(iters) || iters < 0 || iters > 1000 || H.length !== cells.length ||
+      !H.every(h => Number.isInteger(h) && h >= 0 && h <= 256)) throw new RangeError('Invalid planet relaxation parameters');
+  // 1769641473895432220: "all module-containing cells ... desired shape and size".
+  // Explicit selection is a hook for real module ownership, not another voxel field.
+  // null preserves the historical all-land proxy. [] means no module constraints.
+  if (moduleCells !== null && !Array.isArray(moduleCells)) throw new TypeError('moduleCells must be cell IDs');
+  const selected = moduleCells === null ? null : new Set(moduleCells);
+  if (selected && [...selected].some(id => !Number.isInteger(id) || !cells[id] || cells[id].id !== id)) throw new RangeError('Invalid module cell ID');
+  const active = (id,l) => H[id] >= l && (!selected || selected.has(id));
+  const maxH = H.reduce((a,b) => Math.max(a,b),0);
   // 边表（角点对）
   const edges = new Map();
   for (const c of cells) for (let k = 0; k < c.ring.length; k++) {
@@ -135,14 +183,12 @@ export function cornerPositions(planet, { relax = true, iters = 40 } = {}) {
       const free = new Uint8Array(corners.length);
       const springs = [];
       for (const e of E) {
-        if (!e.cells.some((id) => H[id] >= l)) continue;
-        free[e.a] = free[e.b] = 1;
+        if (!e.cells.some((id) => active(id, l))) continue;
         springs.push([e.a, e.b, len(sub(corners[e.a], corners[e.b])) * s]);
       }
-      for (const e of E) if (!e.cells.some((id) => H[id] >= l)) { free[e.a] = 0; free[e.b] = 0; }   // 和空格子共享的角点：钉住
-      // 上一行会把高地边界钉死；边界角点也要能动，只钉住"完全被空格子包围"的那些
+      // A shared corner moves iff at least one selected occupied cell touches it.
       const touch = new Uint8Array(corners.length);
-      for (const c of cells) if (H[c.id] >= l) for (const k of c.ring) touch[k] = 1;
+      for (const c of cells) if (active(c.id, l)) for (const k of c.ring) touch[k] = 1;
       for (let k = 0; k < corners.length; k++) free[k] = touch[k];
       for (let it = 0; it < iters; it++) {
         const acc = D.map(() => [0, 0, 0, 0]);
@@ -156,7 +202,10 @@ export function cornerPositions(planet, { relax = true, iters = 40 } = {}) {
     }
     pos.push(D);
   }
-  return (k, l) => { const d = pos[Math.min(l, maxH)][k], r = R + l * L; return [d[0] * r, d[1] * r, d[2] * r]; };
+  return (k, l) => {
+    if (!Number.isInteger(k) || !corners[k] || !Number.isInteger(l) || l < 0 || l > maxH) throw new RangeError('Invalid planet corner/level');
+    const d = pos[l][k], r = R + l * L; return [d[0] * r, d[1] * r, d[2] * r];
+  };
 }
 
 /** 网格：顶面 + 侧壁，顶点色。返回 { position, normal, color } 数组 */
@@ -188,6 +237,26 @@ export function planetMesh(planet, at) {
     }
   }
   return { position: P, normal: N, color: C };
+}
+
+/** 1769641473895432220: per-cell desired size diagnostics. Not a proof of
+ * original module fitting, global injectivity, or side-wall collision freedom. */
+export function moduleSizeReport(planet, at, { moduleCells = null } = {}) {
+  const ids = moduleCells === null ? planet.cells.filter(c => planet.H[c.id] > 0).map(c => c.id) : moduleCells;
+  if (!Array.isArray(ids) || ids.some(id => !Number.isInteger(id) || !planet.cells[id])) throw new RangeError('Invalid module cell IDs');
+  const area = ring => { let sum=0; for(let i=1;i+1<ring.length;i++) sum+=len(cross(sub(ring[i],ring[0]),sub(ring[i+1],ring[0])))/2; return sum; };
+  const rows=[];
+  for (const id of new Set(ids)) {
+    const c=planet.cells[id],h=planet.H[id]; if(!h)continue;
+    const base=c.ring.map(k=>at(k,0)),top=c.ring.map(k=>at(k,h));
+    let maxEdgeError=0;
+    for(let i=0;i<base.length;i++) { const j=(i+1)%base.length,rest=len(sub(base[i],base[j])); maxEdgeError=Math.max(maxEdgeError,Math.abs(len(sub(top[i],top[j]))/rest-1)); }
+    const ratio=area(top)/area(base);
+    rows.push({id,height:h,areaRatio:ratio,maxEdgeError});
+  }
+  return { cells:rows, count:rows.length, minAreaRatio:rows.length?Math.min(...rows.map(c=>c.areaRatio)):1,
+    maxAreaRatio:rows.length?Math.max(...rows.map(c=>c.areaRatio)):1,
+    maxEdgeError:rows.reduce((a,c)=>Math.max(a,c.maxEdgeError),0) };
 }
 
 /** 统计"蘑菇化"：最高一层的格子面积 / 海平面面积 */

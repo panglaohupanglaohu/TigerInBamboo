@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>三遍阴影 — 半影是用粗体素换来的</title>
+<style>
+  :root { --ink:#eef1f5; --muted:#a3adba; --line:#4a4f5a; --bg:#33333b; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  canvas { position:fixed; inset:0; display:block; }
+  header { position:fixed; left:0; right:0; top:0; padding:10px 16px 14px; z-index:3; pointer-events:none;
+    background:linear-gradient(180deg, rgba(51,51,59,.96), rgba(51,51,59,.5) 72%, transparent); }
+  h1 { margin:0 0 3px; font-size:14px; font-weight:650; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:92ch; }
+  header b { color:#f2d79a; font-weight:600; }
+  #panel { position:fixed; right:14px; top:250px; z-index:3; display:flex; flex-direction:column; gap:7px;
+    background:rgba(44,44,52,.94); border:1px solid var(--line); border-radius:10px; padding:9px 11px; width:206px; }
+  label { display:flex; gap:6px; align-items:center; font-size:12px; color:#cfd6e2; cursor:pointer; }
+  #stats { position:fixed; left:14px; bottom:12px; z-index:3; font-size:11.5px; color:#cfd6e2;
+    background:rgba(44,44,52,.92); border:1px solid var(--line); border-radius:8px; padding:7px 10px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#f2d79a; font-weight:600; }
+  #legend { position:fixed; left:14px; bottom:74px; z-index:3; font-size:11px; color:#9aa4b2;
+    background:rgba(44,44,52,.9); border:1px solid var(--line); border-radius:8px; padding:6px 10px; }
+  #legend i { display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<header>
+  <h1>“shadow thrice” —— normal / pulled in / big voxels 三份遮罩相乘</h1>
+  <p>影子不是后期模糊出来的：<b>①</b> 全分辨率高度场精确 march（硬核心）＋ <b>②</b> 遮挡门槛抬高 0.7 体素再投一次（往里收一圈窄过渡）
+     ＋ <b>③</b> 3×3 均值合并成粗体素再投、按粗格模糊一圈（宽半影）。半影宽度由体素尺寸决定（粗格 3×3 + 一圈模糊），因此跟世界尺度走、与屏幕缩放无关。拖右侧罗盘转太阳。</p>
+</header>
+<div id="legend">
+  <i style="background:rgb(52,58,66)"></i>硬核心 ① &nbsp;<i style="background:rgb(96,86,74)"></i>窄过渡 ② &nbsp;<i style="background:rgb(150,136,110)"></i>宽半影 ③
+</div>
+<div id="panel">
+  <label><input type="checkbox" id="m1" checked> ① normal</label>
+  <label><input type="checkbox" id="m2" checked> ② pulled in (+0.7 体素)</label>
+  <label><input type="checkbox" id="m3" checked> ③ big voxels (3×3)</label>
+  <label><input type="checkbox" id="gizmo" checked> 太阳 gizmo</label>
+</div>
+<div id="stats">—</div>
+
+<script type="module">
+import { buildWorld, composite, draw, drawGizmo, pickAzimuth, NX, NY } from './src/penumbra.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const statsEl = document.getElementById('stats');
+const m1 = document.getElementById('m1'), m2 = document.getElementById('m2'), m3 = document.getElementById('m3');
+const gz = document.getElementById('gizmo');
+
+let W = 0, H = 0, S = 1, ox = 0, oy = 0;
+let az = (208 * Math.PI) / 180;
+let world = buildWorld(7);
+let res = null;
+
+function fit() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  S = Math.max(4, Math.floor(Math.min((W - 300) / NX, (H - 178) / NY)));
+  ox = 26; oy = 92;
+  recalc();
+}
+
+function recalc() {
+  const full = composite(world, az);
+  // 面板勾掉哪一遍，就把那一条权重清零重算 —— 用来单独看每一遍的形状
+  const a1 = m1.checked ? full.hard.mask : new Uint8Array(NX * NY);
+  const a2 = m2.checked ? full.pulled.mask : new Uint8Array(NX * NY);
+  const a3 = m3.checked ? full.bigUp : new Float32Array(NX * NY);
+  const alpha = new Float32Array(NX * NY);
+  let band = 0, hardN = 0, bigN = 0;
+  for (let i = 0; i < alpha.length; i++) {
+    const v = 1 - (1 - a1[i] * 0.80) * (1 - a2[i] * 0.34) * (1 - a3[i] * 0.44);
+    alpha[i] = v;
+    if (a1[i]) hardN++;
+    if (a3[i] > 0.5) bigN++;
+    if (v > 0.10 && v < 0.50) band++;
+  }
+  res = { ...full, alpha, band, hardN, bigN };
+  paint();
+}
+
+function paint() {
+  ctx.clearRect(0, 0, W, H);
+  draw(ctx, world, res, { ox, oy, S });
+  // 地图边框
+  ctx.strokeStyle = 'rgba(140,146,158,.5)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(ox - 0.5, oy - 0.5, NX * S + 1, NY * S + 1);
+
+  if (gz.checked) {
+    const cx = W - 118, cy = 150;
+    drawGizmo(ctx, cx, cy, az);
+    window.__gizmo = { cx, cy };
+  }
+
+  const k = res;
+  const cov = (k.hardN / k.total) * 100;
+  statsEl.innerHTML =
+    `① 硬核心 <b>${k.hardN}</b> 格（占画面 ${cov.toFixed(1)}%）· ② 收进后 <b>${k.pulledN}</b> 格（差 ${k.hardN - k.pulledN}）<br>` +
+    `③ 粗体素 <b>${k.bigN}</b> 格 · 半影带 <b>${k.band}</b> 格` +
+    `，带宽约 <b>${k.bandWidth.toFixed(1)}</b> 格（= 粗格 ${k.k}× 的一圈）· 硬核心占画面 ${cov.toFixed(1)}%`;
+  window.reaPenumbra = {
+    hard: k.hardN, pulled: k.pulledN, big: k.bigN, band: k.band,
+    bandWidth: +k.bandWidth.toFixed(2), coverage: +cov.toFixed(2),
+    azDeg: +((az * 180) / Math.PI).toFixed(1), cell: S,
+  };
+}
+
+// —— 拖罗盘转太阳 ——
+let dragging = false;
+cv.addEventListener('pointerdown', (e) => {
+  const g = window.__gizmo;
+  if (!g) return;
+  if (Math.hypot(e.clientX - g.cx, e.clientY - g.cy) < 64) dragging = true;
+});
+addEventListener('pointerup', () => { dragging = false; });
+cv.addEventListener('pointermove', (e) => {
+  if (!dragging) return;
+  const g = window.__gizmo;
+  az = pickAzimuth(g.cx, g.cy, e.clientX, e.clientY);
+  recalc();
+});
+
+[m1, m2, m3, gz].forEach((el) => { el.onchange = recalc; });
+addEventListener('resize', () => { clearTimeout(window.__rz); window.__rz = setTimeout(fit, 120); });
+fit();
+</script>
+</body>
+</html>

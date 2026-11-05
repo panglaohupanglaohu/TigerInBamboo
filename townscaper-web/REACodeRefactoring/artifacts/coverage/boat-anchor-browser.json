@@ -1,0 +1,25 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "stains": 1,
+      "hitHealth": 2,
+      "drift": 6.28366052524143e-7,
+      "motion": 1.124454483192686,
+      "immediateCapture": true,
+      "transformedParent": true,
+      "singularRejected": true
+    },
+    {
+      "grid": "mixed",
+      "stains": 1,
+      "hitHealth": 2,
+      "drift": 3.718319359080624e-7,
+      "motion": 1.211035125960013,
+      "immediateCapture": true,
+      "transformedParent": true,
+      "singularRejected": true
+    }
+  ],
+  "errors": []
+}

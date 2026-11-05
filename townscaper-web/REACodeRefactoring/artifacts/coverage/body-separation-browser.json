@@ -1,0 +1,27 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "initial": 0.07999999999999996,
+      "after": 0.11078488578148833,
+      "displacement": 0.01714584733968988,
+      "pausedFrames": 12,
+      "bodyRadii": [
+        0.0825,
+        0.055
+      ]
+    },
+    {
+      "grid": "mixed",
+      "initial": 0.08000000000000007,
+      "after": 0.09700686420621385,
+      "displacement": 0.04309848076572839,
+      "pausedFrames": 12,
+      "bodyRadii": [
+        0.0825,
+        0.055
+      ]
+    }
+  ],
+  "errors": []
+}

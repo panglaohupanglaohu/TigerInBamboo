@@ -1,0 +1,165 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "before": {
+        "area": 0.1936817688472928,
+        "edge": 0.2760714771995224,
+        "fan": 0.14620754519432452,
+        "guard": {
+          "slices": [],
+          "guardedSlices": 0,
+          "minBlend": 1
+        },
+        "version": 699
+      },
+      "after": {
+        "area": 0.5192437576321597,
+        "edge": 0.6379572373337461,
+        "fan": 0.4832259508232879,
+        "guard": {
+          "slices": [
+            {
+              "slice": 0,
+              "blend": 0.5,
+              "initialFailures": 1,
+              "failures": 0,
+              "minArea": 0.5128496536022767,
+              "minEdge": 0.7057747110006014,
+              "minFan": 0.5128496536022765
+            },
+            {
+              "slice": 1,
+              "blend": 0.5,
+              "initialFailures": 1,
+              "failures": 0,
+              "minArea": 0.6613567903954053,
+              "minEdge": 0.7134901668515464,
+              "minFan": 0.5363382338995852
+            },
+            {
+              "slice": 2,
+              "blend": 0.5,
+              "initialFailures": 1,
+              "failures": 0,
+              "minArea": 0.5192437447929623,
+              "minEdge": 0.709392408931745,
+              "minFan": 0.49794501463784446
+            },
+            {
+              "slice": 3,
+              "blend": 0.5,
+              "initialFailures": 1,
+              "failures": 0,
+              "minArea": 0.5192788417750573,
+              "minEdge": 0.7102166875093378,
+              "minFan": 0.4983514661680739
+            },
+            {
+              "slice": 4,
+              "blend": 0.5,
+              "initialFailures": 2,
+              "failures": 0,
+              "minArea": 0.5202981085516614,
+              "minEdge": 0.6708941740277505,
+              "minFan": 0.48322593118270857
+            },
+            {
+              "slice": 5,
+              "blend": 0.5,
+              "initialFailures": 2,
+              "failures": 0,
+              "minArea": 0.5959709612356696,
+              "minEdge": 0.6379572411698852,
+              "minFan": 0.5417173930258611
+            }
+          ],
+          "guardedSlices": 6,
+          "minBlend": 0.5
+        },
+        "version": 699
+      }
+    },
+    {
+      "kind": "quad",
+      "before": {
+        "area": -0.005119921961009314,
+        "edge": 0.09352279606599574,
+        "fan": -0.15993905583265738,
+        "guard": {
+          "slices": [],
+          "guardedSlices": 0,
+          "minBlend": 1
+        },
+        "version": 806
+      },
+      "after": {
+        "area": 0.4013146809115291,
+        "edge": 0.3976582599846855,
+        "fan": 0.21751602644065593,
+        "guard": {
+          "slices": [
+            {
+              "slice": 0,
+              "blend": 0.5,
+              "initialFailures": 3,
+              "failures": 0,
+              "minArea": 0.6966332328928649,
+              "minEdge": 0.6922683059190221,
+              "minFan": 0.5517070466429217
+            },
+            {
+              "slice": 1,
+              "blend": 1,
+              "initialFailures": 0,
+              "failures": 0,
+              "minArea": 0.4713639971493023,
+              "minEdge": 0.49332300012817465,
+              "minFan": 0.2175160410255598
+            },
+            {
+              "slice": 2,
+              "blend": 0.25,
+              "initialFailures": 1,
+              "failures": 0,
+              "minArea": 0.5876728539409289,
+              "minEdge": 0.7511621249137923,
+              "minFan": 0.5690689719890346
+            },
+            {
+              "slice": 3,
+              "blend": 0.25,
+              "initialFailures": 1,
+              "failures": 0,
+              "minArea": 0.5876108998383558,
+              "minEdge": 0.7515882358723119,
+              "minFan": 0.5689970835972264
+            },
+            {
+              "slice": 4,
+              "blend": 0.25,
+              "initialFailures": 2,
+              "failures": 0,
+              "minArea": 0.5875959033523817,
+              "minEdge": 0.7118325633458251,
+              "minFan": 0.5559020213437279
+            },
+            {
+              "slice": 5,
+              "blend": 0.5,
+              "initialFailures": 2,
+              "failures": 0,
+              "minArea": 0.4013146459577846,
+              "minEdge": 0.3976582218577493,
+              "minFan": 0.32021167031765263
+            }
+          ],
+          "guardedSlices": 5,
+          "minBlend": 0.25
+        },
+        "version": 806
+      }
+    }
+  ],
+  "errors": []
+}

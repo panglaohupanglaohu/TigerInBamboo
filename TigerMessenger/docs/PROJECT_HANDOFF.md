@@ -3896,3 +3896,172 @@ Creek high 48samples crossing steep cliff removed; source now foot-of-slope vall
 
 ### 2026-10-31 GitHub Pages startup fix
 User reports main dynamic-import failure after e4020caf. Checked812 remote module HEAD URLs:all200; local graph exists. Exact transient failed child URL not available (remote CUA timed out), so do not claim missing-file root cause. Reachable source module text151.8MiB; large baked JSON modules dominate. Added reproducible esbuild0.28.2 release builder and lossless gzip payloads, preserving per-source import.meta.url for GLB/audio/worker paths. Release game-5de701c63638.js6.54MB,39 payloads15.00MB,4 download slots and2 retries with actual failed resource errors. Data numeric JSON not rounded;3 meaningful tests pass (hash roundtrip, concurrency,503retry). Actual local ?bundle=1 rendered bookshop/courier, screenshot pages-startup-fix-20261031/local-rendered.png, no captured runtime errors. Pages default uses release; localhost default remains source. Built from committed HEAD to exclude concurrent Morris creek changes; source/worktree edits preserved. Online render pending after this commit. No original model data removed; .nojekyll serves static files.
+
+### 2026-11-02 场景创作模块首批
+新增 src/scene-authoring/{store,workbench}.js，由 morrisTownscaper.js 挂载真实莫里斯插件，复用原 World/编辑器/导入撤销；实验快照、比较、恢复前保护、编码往返验证和显式定稿存档。pipeline.html 增加入口。边界和后续见 docs/SCENE_AUTHORING.md；证据 artifacts/pipeline/scene-authoring-20261102/REVIEW.md。Node行为2项通过，实际浏览器首轮快照/比较通过，截图仍有启动遮罩，不算编辑视角验收。DSH/Worker/对象锁/定稿游戏加载/Watchdog未完成。JEV真实调用已记录。未提交、未发布，其他会话改动保留。
+
+### 场景创作第二批：固定版本
+已增加 sceneVersion 精确ID解析、工作台定稿后的显式游戏入口；dev=0运行不挂载工作台。固定版本编辑不写回原工作区，旧链接不随新定稿变化。移除旧莫里斯初始化时对已有存档的自动地形升级；仅空白新场景生成。Node三项行为测试通过，语法检查通过。本轮JEV真实调用已记jev-r2.json。完整启动及关闭独立圣城构建的对照浏览器检查进行中，实际结果写同目录runtime-*.json，不可凭按钮成功推定三维验收。DSH/Worker等剩余范围见SCENE_AUTHORING.md。
+固定版本第二批补证：citadelRuntime=0对照真实startup=ready，编码验证/定稿/精确ID重载通过，实际数据一致，记录不变，dev=0工作台0，pageerror=[]；见runtime-isolated-summary.json。正常全量启动本次180秒超时，未定位根因。工作台打开编辑器已追加menu.view.frameTown，相机补测editor-framed.png。下一步本地Source/Worker候选与能力执行接口，完整场景回归仍待。
+
+### 用户纠正：莫西斯湖原有湖上Townscaper建筑群
+此前山地截图来自隔离测试浏览器无原存档时触发已有默认山地生成，并非用户原建筑群；不能当用户场景接入验收。已彻底移除启动时无存档自动生成山地（不仅已有存档升级），原编辑器显式生成工具保留。用户原浏览器localStorage尚未读取，旧键morris-townscaper-rea-v1 / morris-townscaper-saves-v1和新键及历史pre-mountain备份需只读查找并先导出保护后恢复。当前Chrome前台无游戏标签，原站点URL待确认；不得宣称原存档已恢复或丢失。JEV r3实际调用记录同批目录。
+
+### Worker连接实施开始（用户再次确认完整主流程）
+截图的Worker未连接仍是写死文案，没有真实连接。PATH无dsh，~/.dsh未发现；隔离npm10.9.2已从npm registry安装到~/.local/share/tigermessenger-superagent/tools/package。使用现有Node24.22.1启动固定@deepseek-ai/dsh@0.2.1-rc.3安装，prefix同根runtime；固定上游仓库clone到同根prototype已发起，完成后必须checkout6337fc823ce20251c8de8085948165c81aaa701e再配置。不可宣称DSH/Worker已连接。独立profile尚未创建，模型调用尚未验证，Source/执行适配尚未实现。用户最新问题是页面如何操作，已说明当前只能手工编辑/快照/比较/验证/定稿，目标输入不触发Worker；原湖上建筑未核实恢复前不要定稿替代场景。JEV r4调用证据保留。
+
+### 2026-11-03 Super-agent管线前端
+用户确认湖上建筑群已恢复。新TigerMessenger/pipeline.html实现深色管线工坊：左侧七类能力库，中间可增删/停用/拖动或按钮排序的线性节点、真实游戏iframe，右侧参数/检查与执行状态。studio.js/css、pipeline-model.js稳定能力ID、pipeline-bridge.js同源命令接现有stage；工作台新增入口，REA pipeline.html新增链接。岸浪/倒影/昼夜/描线/网格/现有植被鸟群可实时预览并恢复；地形建筑复用原编辑器，战斗/智能Worker仍待适配，不能称全能力执行完成。进入编辑聚焦原湖、游玩检验切回玩家；编辑态隐藏送信HUD和学习侧栏。生成地形仍禁止自动执行。
+6行为测试通过。真实浏览器岸浪关闭/恢复true、场景编码不变、7节点战斗移除重插通过、errors=[]；证据artifacts/pipeline/scene-authoring-20261103。测试浏览器无用户原存档，不将其空湖当用户建筑群。JEV实际文本调用已记。配方保存独立于场景定稿；保存实验附配方及参数baseline，固定版本加载会还原实时设置。README列插件契约和真实缺口。未提交发布，保留其他会话改动。
+
+### 管线能力来源校核与层级拆分
+按用户要求只读核对REA库learn/pipeline.js、data.js、MODULE-MAP、GUIDE及实际模块注释。纠正适配文件冒充能力来源；新增audit_sources.py生成capability-sources.js，12含legacy适配/45来源记录，区分库文件SHA/游戏副本相同不同缺失。工坊详情显示原lane/group/帖子ID/登记状态和覆盖说明；不把status done当完整行为验收。
+用户补充生命拆天气/植被/动物、还有烟火。新默认11节点：原地形建筑水光世界+天气植被动物+烟火+战斗。旧life.layers兼容保留，手动拆分可撤销。天气开放fog/snow实际stage控制；风箭头调试非风开关。烟来自独立Smoke，当前游戏无模块接入只能配方；火仅已有effects.fire可见性不新增火源，动态火光仍库缺口。7行为测试通过。source-audit-jev为本轮真实文字调用，视觉天气/烟火验收仍未测。未动REA原库/学习会话文件/用户建筑存档。
+
+### 载具层及能力扫描器
+用户新增船/飞行器/车载具层，要求能力扫描器自动添加库能力。已实现三个待适配载具节点：REA只确认Boats+航迹；飞行器及电车来源游戏player/*Ride，来源面板不冒称REA。新默认14节点，旧配方不自动改写。
+新增capability-scanner.js，前端按钮读取REA learn/pipeline.js声明JSON(no eval/no-store)，保留来源状态，登记为可搜索的recipe-only能力；＋插入、配方保存/刷新恢复，selected discovered声明随配方传入游戏验证，绝不从源toggle自动连接World。目录本机持久化。扫描范围不是全源码语义能力，自动登记不等于可执行。9行为测试通过，浏览器结果scanner-browser.json，JEV真实调用scanner-jev.json。已生成来源manifest包含15个适配（含legacy）和46来源记录；游戏独立模块附SHA。未生成载具、未修改用户场景数据，智能Worker仍未连接。
+
+### 学习工坊顶部并列入口
+用户要求将截图「重构版·系统与管线」侧菜单整理为顶部学习工坊，与场景工坊并列。pipeline.html顶部现有并列tab，学习模块learning-workshop.js读取REA当前architecture/pipeline/data三源，不复制旧侧栏数据；分系统与模块、管线与能力、视频与笔记，支持搜索和本地原视频dialog，源码链接定位实际REA文件。切换隐藏原场景区但保留iframe及管线状态。学习态隐藏场景保存操作；#learning可直接定位。当前源为39条模块职责/243条学习记录。真实浏览器切换/搜索船帖子/视频入口/返回场景保留节点通过，700px无横向溢出，pageerror=[]；learning-workshop-browser.json和已实际查看截图learning-workshop.png。所测901469409579061248原视频文件真实存在；不将弹出视频算已观看或验收。JEV真实文字分类记录learning-workshop-jev.json。未提交发布，无用户场景改写。
+
+### 两工坊双向连通已接入
+学习工坊的管线/视频方法行可加入当前场景配方；相同扫描能力已存在时定位，来源关联的已接游戏适配另列定位按钮。场景详情能按来源帖子ID返回学习工坊，模块行可按源文件检索关联方法。共同操作同一recipe和撤销链，iframe保持原对象不重建。旧节点/定稿不被学习记录自动升级；新增仅recipe待适配。
+真实浏览器完整往返：水节点→学习来源→定位水适配→添加方法14→15→撤销14→重做15→保存刷新15→返回来源后定位无重复，目标文本保留，iframe对象保持，errors=[]。workshop-link-browser.json/已查看workshop-link.png。测试同时发现goal onchange重绘会吞下接着的节点点击，已改输入时更新数据、失焦只记录撤销不重建节点，重测通过。9模型/扫描/存储测试通过。JEV本轮真实分类在workshop-link-jev.json，最初pending为调用时状态，最终浏览器证据独立保存。未改用户建筑数据，Worker执行仍未接入。
+
+### 菜单集中与8931默认游戏界面
+用户要求截图中版本/定稿、目标选择、建造/拆除/刷色/岩石、撤销重做、色板、日夜/配色/生成/导入导出全部收进场景工坊，并明确http://localhost:8931/TigerMessenger/为干净带遥控游戏界面。已校验8931模块内容与工作区相同（不凭端口猜身份）。父工坊新增editor-controls与scene-versions两区，原editorHud DOM/event handlers在同源iframe初始化后移入父页面；版本面板嵌入父工坊，原游戏不再显示大创作面板。学习来源仍在并列学习工坊。移入时跳过原learnpanel异步挂载，避免旧document找不到host；样式命名空间将固定定位改成面板内布局。
+主游戏路径/TigerMessenger/及index.html默认游玩UI，dev=1明确开启编辑，工坊iframe自带该参数；遥控仍在，首用主游戏默认展开，已存收起选择保留，工坊初始化不覆盖遥控偏好。新增game-entry-ui.test.mjs覆盖已存build/monitor状态仍默认clean及显式工坊dev，连既有共10测试通过。
+初轮真实8931：编辑DOM在父工坊1、版本面板1、iframe旧编辑DOM0、刷色/色板active有效、快照保存成功，pageerror=[]。初轮加载了修正遥控偏好前脚本，remoteOpen=false；不能用此报告称已默认展开。补轮已启动，最终menus-clean-game-browser.json记录真实结果；截图仍加载时不能称完整游戏启动通过。没有读改用户原浏览器存档，隔离测试快照非用户建筑群。JEV真实调用menu-move-jev.json。
+用户明确赞许原顶部图标工具栏（配色/日夜/生成/清空/分享/帮助）。保留原图标、aria-label/title与事件，撤销迁入时改成长文字的处理，置于场景工坊编辑区顶部，保持紧凑圆角样式；不是从游戏里删除功能。默认游戏仍干净，创作菜单仍集中于工坊。
+菜单集中补轮最终证据：menus-clean-game-browser.json实际startup=ready、release=true、workbench=false、editorVisible=false、remoteOpen=true、errors=[]。原编辑DOM在父工坊、iframe为0，刷色/色板/保存有效。clean-game.png已实际查看，为用户指定8931默认URL完整游戏画面（隔离测试存档），遥控摇杆和跳/E/F/C/G按钮可见，创作菜单无叠加。用户称赞原图标工具栏，已保留图标/title/aria并在工坊编辑区顶部恢复浅蓝圆角底和蓝色焦点高亮。菜单仍在工坊，未重新覆盖主游戏。
+
+### 用户休息四小时：临时持续推进窗口
+用户授权继续优化并在休息四小时时增强智能体能力。已真实创建当前聊天heartbeat automationId=super-agent，30分钟续做，截止2026-11-03 07:05 Asia/Shanghai（UTC2026-11-02 23:05）；截止时停止新增实现、最终总结并用automation_update删除本临时heartbeat，其他视频学习automation不动。不是已部署的独立Watchdog。OpenAI Docs调度官方网页查询/打开均503，实际调度以app工具创建成功为证，勿谎称文档已读取。
+当前首批：新增experiment-session.js统一保存World编码+实际settings+recipe+上方goal。workbench不再第二份目标textarea；比较区分建筑/参数/配方，恢复前强制备份，恢复失败回滚三类状态，定稿拒绝与当前实景不一致的版本。bridge保存也带实际settings并通知版本列表；固定游戏加载优先row.settings。父studio通过同源capture/restore事件共享内存recipe，恢复也纳入管线撤销链。13项行为测试通过（备份失败不改场景、失败回滚、参数/编码拒绝、旧配方兼容等），真实浏览器补测experiment-unified-browser.json运行中，不可推定通过。canonical比较补归一化discovered空列表，避免恢复后空字段导致误拒定稿。
+接下来优先：检查上述浏览器结果修复问题；DSH真实CLI --help已验证（Node24.22.1+固定rc.3安装），prototype目录仍只有.git未取完，请获取固定源码并审查独立profile/API/model配置；不接触聊天旧token/用户私密凭据，不假称Worker可用。模型凭据受阻则推进本地Source、候选执行检查、健康诊断、隔离恢复等独立工作。禁止把硬编码Worker未连接改成假连接。用户建筑已恢复，保护旧存档/固定版本；8931干净遥控game及所有工坊UI约定保持。
+统一实验浏览器补测已成功：experiment-unified-browser.json保存目标=上方管线目标，actualSettingsSaved=true；改夜间后比较报告time/fire与配方差异；未恢复定稿被拒；恢复场景+参数+配方后可确认测试定稿，自动保护版本1份（共2版本），errors=[]。experiment-unified.png已实际查看，游戏尚有开始遮罩，仅算版本/参数逻辑验证，不算正式玩法或美术验收。原用户浏览器未操作，测试定稿只在隔离浏览器中。
+DSH固定上游源码已实际从官方codeload固定提交URL获取并安全解包，不再被旧clone卡住：~/.local/share/tigermessenger-superagent/source-6337fc823ce2（对应6337fc823ce20251c8de8085948165c81aaa701e）。后续续做使用此完整目录，不用只有.git的prototype目录。尚未build/独立profile加载/模型调用验证，不把源码取得说成Worker部署成功。
+固定source目录已启动npm install（仅该隔离目录，no-audit/no-fund）。先查现有安装进程、node_modules与日志，不要并发再开重复安装；未完成不能build成功宣传。当前unified exec session49231（同聊天若仍可用可poll），命令用Codex缓存Node24和隔离npm10。主仓库依赖未动。
+
+### Heartbeat 03:35（上海）实际推进
+时间检查UTC19:35，窗口仍到上海07:05。原npm install因预发布peer依赖ERESOLVE失败，未force；已隔离安装pnpm11.7并在固定source目录运行frozen-lockfile install，235依赖成功。固定上游build成功（lib/client+index+dts），上游vitest59文件1197测试全通过（12.21s）。不要再重复取源码/装依赖。
+已创建完全隔离的DSH_HOME=~/.local/share/tigermessenger-superagent/dsh-home，profile=scene-authoring，链接固定源码bundle；profile patch设loopback127.0.0.1:8932、stateDir=同根state、disabled GitHub Source。首次启动真实进程unified exec session87120，日志~/.local/share/tigermessenger-superagent/logs/dsh.log可能包含此新服务的bootstrap token，不要cat/输出该日志URL。工具check_dsh.py在内存用新服务bootstrap cookie做同源带X-Orchestrator-Request请求，生成不含token的dsh-runtime-status.json：HTTP200、setup-required、repositoryUnset（原生仍要求GitHub仓库）、running0/queued0、modelExecutionVerified=false。SQLite已真实创建。服务启动≠Router/Worker或模型执行已接通；不要为绕过setup而填用户GitHub/个人账号。下一轮应实现显式local Source/本地执行适配，研究deployment/setup对GitHub硬耦合，若改上游要将补丁与验证保存到项目，不能只改缓存目录不留痕。模型尚未配置验证，不能冒称可用。
+新增pipeline-execution.js检查每个启用节点的live/manual/adapter-missing；默认完整执行遇缺失拒绝，只有显式execution=supported-preview才能执行已接实时参数，输出partial-preview且codec:not-run。新增tools/scene-authoring/{candidates.mjs,run_pipeline.mjs}为Worker可调用本地确定性边界：完整快照baseHash、参数锁、保护建筑编码、当前手改后拒绝过期候选、重算防篡改、不可覆盖的隔离磁盘候选。未连接模型，不是AI生成器。合成快照CLI真实执行到候选目录candidate-smoke-test，modelExecuted=false，未触碰用户存档。3新测试含同ID落盘拒绝，全部本地16项行为测试通过。JEV本轮真实调用heartbeat-0335-jev.json。无图像/美术改动，后端检查不冒称实景验收。
+
+### Heartbeat 04:05（上海）本地Source真实接入
+UTC20:06检查仍在窗口内。已新增并加载 `dsh-superagent/local-watch` Source插件到实际隔离8932运行时，原生Sources注册scene-local，GET/status intakeReady=true、executionReady=false。POST本地场景快照私有不可变落盘，并通过原生SourceContext.receive进入Engine（received=stored）。真实集成：首次201、同ID同内容200 duplicate、同ID不同内容409、跨Origin403；local-source-integration.json。没有假造GitHub repo/账号来绕过setup，仍repositoryUnset，模型未配置/未运行。独立executor已通过原生API设置paused=true，防止合成测试Trigger在未来解除setup时误触发模型；未来恢复前必须明确排除这些测试请求，不能随便resume。Source已通不等于Router/Worker已通。
+版本化文件在tools/scene-authoring/dsh-local/：source.ts、source.test.ts、upstream.patch（exports/build/架构文档）、base SHA manifest和install_extension.py，可重放固定源码，不仅改缓存。实际源码位于同前source-6337fc823ce2。新增test由vitest仅识别.spec.ts，初次文件后缀与docs表漏登记已修正；最终扩展后60测试文件1199测试全过、build成功、typecheck成功。SourceHost类型不暴露Runtime.machine，已改为显式schema requestDir；profile patch已写同根state/local-scene-requests，重启到新build（unified exec session65193为上次，最新重启见工具记录）。bootstrap日志仍含本实例token，严禁cat/输出；用check_dsh.py或local_source_client.py诊断。
+接下来：显式local deployment去除GitHub硬耦合而不伪造身份；本地Source policy允许的操作范围/人物授权、Worker snapshot文件执行和候选回收；模型仍待真实授权连接验证。也可先接前端本地Source状态与提交代理（不能把intakeReady显示为Worker connected），保留原game不依赖服务。不要重复部署/取源码。JEV本轮heartbeat-0405-jev.json真实调用。
+
+### Heartbeat 04:35（上海）显式local deployment与模型诊断
+已解除原型对GitHub启动的硬耦合，采用版本化显式localRoot配置/resolveLocalDeployment；真实本地workspace存在且canonical，不构造GitHub账号/remote。Deployment.github可缺省，所有仅GitHub命令有requireGithub/显式拒绝，gh worker shim失败而非转到用户gh，没有GitHub credential helper；Setup本地模式跳过GitHub/Feishu探测但保留隔离环境。原有GitHub测试fixture明确保留required github不放松原行为；panelfixture仅对真实string账户构造GitHub deployment。扩展后61文件1201测试全过、typecheck/build成功，项目16行为测试通过。
+所有upstream改动已收入tools/scene-authoring/dsh-local/upstream.patch及base SHA manifest，install_extension.py可检查/重放；新增local-deployment.test.ts随installer复制到spec测试目录。不是仅缓存改造。local SourceKind补明确allowed身份policy（默认空），本地cookie不等于任意执行授权。Source/status现在区分deploymentReady与executionReady，不会把setup完成误称Worker已连接。
+真实8932已重启到最新build，session46773：native state HTTP200 setupProblem=null、accounts.local=同根state/local-workspace、agent=null、paused=true、running0/queued0（local-deployment-status.json）；Source intakeReady=true/deploymentReady=true/executionReady=false/modelExecutionVerified=false。Router主session可建立，但尚未执行模型。GET/models真实200得到routableProviders0、groups0（model-catalog-status.json），独立profile确实没有可路由模型，不应从旧聊天/其他用户配置偷拷key，留待授权provider连接。继续独立可做的：前端服务状态与提交代理、候选回收/显式预览、Source policy和snapshot执行上下文、独立Watchdog诊断。不要重复取/装/重构已完成内容；不解除executor暂停，先排除合成source测试事件再计划真实模型探测。JEV本轮heartbeat-0435-jev.json真实调用。
+
+### Heartbeat 05:05（上海）前端真实Source连接
+UTC21:06仍在窗口。新增loopback独立source_bridge.py（session18350，127.0.0.1:8933）只暴露GET health/POST requests两路，精确允许http://localhost:8931和127.0.0.1:8931 Origin。内部用本实例原生8932 bootstrap cookie且不把token交浏览器；不是通用管理代理。4代理测试过：跨Origin拒绝、原生服务故障不误报Worker、JSON/尺寸限制、未知路由404。
+工坊右侧新增「检查本地服务」「提交目标与场景快照」。原游戏bridge新增capture，显式提交采集当前实际World编码/参数/管线/geometry lock，送本机Source，绝不改场景。真实浏览器source-bridge-browser.json：检查显示Source已连接/环境就绪/执行暂停/零模型provider，首次保存、重复提交去重、拦截health模拟断线后节点14仍可用，pageerror=[]；已实际查看source-bridge-ui.png（游戏还有开始遮罩，不能算玩法验收）。不是将硬编码Worker文案改成假连接。原生executor保持paused，所有UI测试目标标DIAGNOSTIC，未来解除暂停前需排除合成测试Trigger。
+新增请求ID+SHA256快照指纹ledger，不存重复整份World；同一快照重试复用ID，刷新显示上次收件线索。显式提交时同步保存当前recipe/goal，避免刷新后只能看到请求ID却丢目标。刷新恢复补测运行中，以最新source-bridge-browser.json为准。Source-client模块source-service.js独立，服务离线不阻止游戏/编辑。JEV真实heartbeat-0505-jev.json。
+下一步优先独立Watchdog/readiness/恢复脚本、candidate结果回收与显式预览/冲突检查、Source执行policy；真实模型仍0路由provider，需要授权配置，不从旧聊天或其他配置偷key。不自动解除暂停。Native服务8932+Source桥8933都独立于游戏8931。
+
+
+### Super-agent 四小时窗口关闭核对（实际 2026-11-03 08:09 UTC 后）
+授权截止为上海2026-11-03 07:05（UTC11-02 23:05）。本轮只核对证据和归档，不新增实现、不重启服务。排队heartbeat不能证明持续施工；app临时heartbeat直到本轮才删除，automation_update已确认super-agent deleted，其他automation未动。
+补记截止前05:35批：新增独立tools/scene-authoring/watchdog.py及5项watchdog_test.py测试通过。仅监督本项目8932/8933，锁防重复，端口占用时不杀进程，私有日志，剥离继承密钥环境，绝不监督8931。受控停止自己Source桥30398后，实际恢复到32544，intake恢复且executor仍暂停，证据watchdog-recovery.json。独立Watchdog status实际记录stopped=true/window-ended，UTC23:05:09自行退出；不能把app heartbeat延迟删除说成按时删除。
+关闭探测：8931主游戏HTTP200；8933桥HTTP200但intakeReady=false/nativeUnavailable=true；8932原生runtime当前不可达（URLError），不以历史成功报告冒充当前在线。没有截止后自动重启。恢复需后续授权窗口处理。
+已完成：干净遥控游戏入口、两工坊联通、来源扫描与配方插拔、统一World/settings/recipe保存恢复及过期定稿保护；隔离固定DSH及本地Source部署、参数候选隔离/冲突检查、前端显式提交/去重和恢复。source-bridge-browser.json已最终确认ledger/goal刷新恢复、离线保留14节点、errors=[]。此前上游扩展61文件1201测试、本地16行为测试、代理4测试、watchdog5测试通过，非本轮重跑。
+尚未完成：独立profile零模型provider，真实Router/Worker模型执行未验证，executor保持暂停；现有候选仅确定性实时参数预览。烟/载具/战斗等仍有待适配项；细粒度区域/对象锁、AI候选完整回收预览、实景通行/性能和用户验收尚缺，不能称完整创作闭环跑通。未来恢复executor前必须排除DIAGNOSTIC合成Trigger。未改用户原浏览器建筑存档、无自动造山、无提交/发布。关闭证据window-closure-{runtime,health,evidence,jev}.json；本轮JEV真实调用结果以输出为准。
+
+
+### 2026-11-04 用户截图扫描404修复
+实际8931为uvicorn backend.main，不是仓库根静态服务器。backend/main.py原先只挂TigerMessenger和frontend兜底，导致原库路径404。已在兜底前增加REACodeRefactoring与REA-agent/gifs两个限定静态挂载，不复制能力库、不开放REA原版或整个仓库。实际隔离浏览器点击扫描发现198条能力；学习39模块/243记录；视频Range206，pageerror=[]，scanner-route-fix-browser.json。未操作用户存档，未恢复Worker或改动场景。JEV本轮文字调用另存scanner-route-fix-jev.json。
+
+
+### 2026-11-04 双工坊两小时周期与学习接入设计
+新授权持续每两小时测试优化，已创建automation-2，旧四小时super-agent不复活。接手先读WORKSHOP_GUIDE.md/WORKSHOP_TEST.md/WORKSHOP_LOG.md；学习接入再读pipelineLearningGuide.md/pipelineLearningTest.md。可执行入口tools/scene-authoring/test_workshops.py，独立临时浏览器、唯一UTC证据目录。两轮测试及修正记录见LOG，最新全量重测尚需核对结果。学习工坊现加learning-progress.js，与原库index/pipeline同读coverage/progress JSON，实际时间/批次匹配已测；三经典资料的原子热刷新仍是P1待实现，不假称全量同步。详细P0–P5设计、数据契约及测试矩阵已写；不动原库并行学习。
+最新收尾：统一第三轮17浏览器PASS/1测试选择器FAIL，视频定位修正后L01/L06/L04定向3PASS；25本地行为/代理/Watchdog测试全过。失败报告未覆盖，WORKSHOP_LOG有路径。pipelineLearningGuide.md/pipelineLearningTest.md已完成设计与落地契约；下一优先P1一致只读学习快照，而非宣称学习自动执行完成。共享进度UI实际查看，JEV真实调用完成。本轮测试进程已退出。两小时automation-2继续。
+
+
+### 2026-11-04 04:11上海 周期分类优化
+按用户最新截图纠正能力库无分类长列表。capability-library.js将全部能力组织为十层入口，生命/载具/烟火分子类，场景能力与默认折叠待适配方法分区；不修改原库分组或升级执行状态。管线节点标父层，撤销后inspector选择有效节点。18行为/4代理/5Watchdog和原18浏览器整套PASS，新增分类S12定向4PASS。证据artifacts/workshop-tests/20261103T201316502438Z和library-categories-final-20261104，截图实际查看；游戏开始遮罩不是玩法验收。Guide/Test/LOG已更新，继续automation-2不删不重建。
+
+
+### 2026-11-04 06:13上海 周期学习快照后端
+新增backend/learning_snapshot.py及GET /api/workshop/learning-snapshot，固定七文件、界限读取、hash、观察到变化重试409、可选缺失、核心JSON检查、目录外symlink拒绝、弱ETag304。真实8931 API200/304，新增5项临时目录测试PASS；现有27本地+19浏览器PASS、pageErrors0，证据artifacts/workshop-tests/20261103T221413518532Z，JEV实际成功。统一入口纳入新5项。Guide明确P1仍缺前端消费/ARCH安全解析/模块依赖hash/生产者generation事务标记；双读稳定不等于批次事务完整。截图实际查看，顶部图标栏对比度偏低待核对浅蓝样式覆盖（不是新视觉改动）；下一轮先修这个可复现问题再推进P1。不动原库学习生产/用户场景，Source断线提示在本轮截图为测试模拟，不能当服务当前诊断；真实Worker仍无验收。保持automation-2。
+
+
+### 2026-11-04 10:15上海 工具栏视觉回归修复
+仅按当前02:15UTC实际轮次施工，不给排队08:15 heartbeat补造记录。通用两ID+.panel!important覆盖原浅蓝两ID规则，造成暗底暗图标并将圆角压成5px；studio.css改完整HUD三ID作用域，恢复浅蓝/深图标/14px圆角/8px内边距/蓝焦点，原按钮事件保留。新增S13 computed-style对比度11.09及圆角截图检查。整套32本地+20浏览器PASS/pageErrors0，证据20261104T021525489910Z；最终圆角修正另定向S07/S13两PASS，toolbar-final-20261104，截图实际查看，JEV实际成功。完整键盘、未实现执行器/真实Worker和用户玩法验收仍未过。日志/测试文档已更新；后续回到P1安全解析与前端快照消费，不改原库学习生产，无用户存档改写或提交发布。
+
+
+### 2026-11-04 12:14上海 P1客户端准备层
+新增learning-declaration.js有限纯数据语法，无eval/script，实际ARCH单引号/注释/裸键/尾逗号可解析，恶意表达式/原型/重复键/超限拒绝；learning-snapshot.js一次校验七文件SHA/manifest版本/缺失/源时间后返回解析值，不改DOM/global/storage。真实8931 API解码7文件39模块243记录7lane，Guide/Test更新。整套38本地+20浏览器PASS/pageErrors0，时间校验最终修改后新6项另重测PASS；证据20261104T041646364263Z，JEV成功，浅蓝栏截图复查保留。当前UI仍走原资料读取，不宣称页面已同snapshot更新；下一轮接入准备值并测试一次提交、失败保留旧数据、并发刷新，模块依赖hash/生产者generation事务仍缺。原库学习和用户存档不动，无提交发布。
+
+### 2026-11-04 16:14上海 P1页面实际接入
+learning-workshop已切同源snapshot API和纯解析器，三视图局部data与progress共享一份七文件hash校验值，不执行原库脚本。先准备进度DOM，再提交资料和进度；失败保留本页旧内容/ID并标stale，初次失败error；pending合并请求，60秒内切页复用、之后进入重检，手动刷新全部资料，recipe/iframe不改。返回学习页必须重绘使用状态（首轮L03发现已修）。L06测试API503保留/恢复；L07签名fixture三资料/进度同版本更新，无真实库写入。首轮4PASS/2FAIL保留，修复后定向6PASS；最终38本地+21浏览器PASS，20261104T081809380346Z，实际新页ID一致/current/无classic脚本，JEV成功，截图实际查看。Guide已重写旧“UI未接”说明，跨重载缓存/生产者generation/依赖hash/稳定ID和候选升级仍缺。观察原库证据链接/后续任务增长使进度卡占满首屏，下轮先分组折叠这些辅助内容，让最新批次和资料入口易找，再推进缓存和P2。无用户存档改写或提交发布，automation-2继续。
+
+### 2026-11-04 18:15上海 学习进度分组与首屏可达
+依据前轮真实截图处理上游证据/任务增长撑屏：learning-progress将证据入口、完成记录、后续缺口分三组默认折叠，摘要三行但可展开完整说明，保留全部源数据/主链接，刷新保留分组展开；样式桌面三列/窄屏单列。新增L08先滚回顶部检查资料页签首屏、证据可展开与刷新保持状态。整套38本地+22浏览器PASS，20261104T101623243704Z；完整说明和严格顶部断言最终另定向L01/L08两PASS，learning-folders-final-20261104，截图实际查看，JEV实际成功。最新源54证据/111完成/24任务默认折叠，资料页签搜索流程可见。不删源记录、不动原库学习/用户存档。后续优先跨重载离线缓存及配额失败保护，避免占满用户版本存储，再推进P2稳定ID和差异；生产者事务/依赖hash/Worker未验收。周期任务继续，无提交发布。
+
+### 2026-11-04 20:15上海 离线重载缓存
+新增learning-cache.js：独立IndexedDB tm-learning-cache-v1 snapshots/last单槽≤1.5MiB，读写校验；成功UI提交后异步写，失败明确未保存并保持在线可用，API失败且本页空才读取旧缓存并标stale/缓存时间。请求15秒、IDB3秒；不访问/清理场景localStorage、其他DB，不申请持久化，不当固定历史版本。原有本页数据优先保留。新增3单元、L09真实离线整页重载/恢复、L10学习DB专用put配额失败且localStorage全部键值不变。41本地+24浏览器PASS/pageErrors0，20261104T121739789361Z；补截图定向三PASS，learning-cache-final-20261104，离线图实际查看，JEV成功。Guide已更新原“无缓存”说明。下一步P2稳定ID/差异收件箱，生产者generation/依赖hash/Worker仍缺，损坏缓存及无IDB完整UI路径未测。用户场景及原库不动、无提交发布，automation-2继续。
+
+### 2026-11-04 22:13上海 P2只读方法登记对照
+新增learning-diff.js比较身份（帖子/toggle/位置，不含显示名和排序）及登记revision；重复/缺锚点/潜在位置移动隔离需核对，前后相同冲突合并。progress显示相对本页/最后缓存基线的新增/修改/撤回/需核对，注明仅登记变化、源码依赖未纳入；不改旧scanner ID/recipe/定稿。四项新增单元，L07签名fixture改名断言修改1。首套20261104T141636333069Z本地45PASS、浏览器22PASS/2缓存等待超时FAIL，定向不能重现，根因未定位。加失败诊断、明确缓存准备/失败后一次刷新，重跑20261104T142216829051Z全45本地+24浏览器PASS；三/六项定向PASS，截图实际查看，JEV成功。不要假称旧ID迁移或缓存时序根因已解决；若复现先诊断，再补损坏缓存/无IDB UI和持久映射/审核回执。原库/用户存档/模型不动，无提交发布，automation-2继续。
+
+### 2026-11-05 00:16上海 缓存负向UI补齐
+新增L11无IDB、L12坏hash离线缓存的独立context测试：在线可用但不持久、离线明确error不激活部分资料、恢复在线修复并校验、recipe不变；两个学习专用context隔离游戏iframe，不能算游戏实景通过，根S07/G01仍真实测试。新增子页pageerror/失败诊断和cachePreparation重试轨迹；生产cache超时含mode/phase，旧根因未知。本轮发现初次失败时统计仍“正在读取”，补progress onError回调显示“资料尚未加载”。整套45本地+26浏览器PASS，20261104T161748621327Z；最终提示修正另两负向定向PASS，learning-cache-error-state-final-20261105，截图实际查看，JEV成功。本轮缓存准备均成功、无重试，不宣称修好上轮间歇超时。继续P2持久身份映射/审核回执与既有契约；旧超时复现优先取阶段诊断。原库学习和用户存档不动，无提交发布，automation-2继续。
+
+### 2026-11-05 02:15上海 缓存生命周期清理
+围绕旧时序审计，受控时钟真实复现同步IDB.open拒绝残留deadline，cache-lifecycle-20261105/before.log失败留证；现统一finish清理，迟到upgrade在超时后abort、迟到open成功只close、活动事务超时abort且不发布未提交读值。三新测试及原三缓存测试全过，after.log；不是已证旧间歇缓存等待根因。整套48本地+26浏览器PASS/pageErrors0，20261104T181700092799Z；后加入L13原生SecurityError分支与L11/L12定向三PASS，cache-lifecycle-browser-denial-final-20261105，不能伪装原整套已有27。JEV实际成功，截图复查浅蓝栏/分类保留。旧间歇超时仍开放；继续P2持久身份映射/审核契约，保留生产者事务/依赖hash/Worker缺口。无用户profile/原库/模型操作或提交发布，automation-2继续。
+
+### 2026-11-05 用户要求重新设计分类，中央分层管线已落地
+此前仅左栏分类不足；studio现按实际recipe连续层段生成编号导航/轨道，生命、烟火、载具子类同层。左栏/中央选层联动inspector并在内部置顶；新方法插同层最后节点后，无同层追加，撤销可恢复，旧配方绝不因展示自动排序。静态待适配场景槽直接显示，扫描方法/来源工具各折叠，左栏10分类，搜索含层名。精简hero、实景紧接管线、编辑版本dock后移、两工坊导航sticky、原浅蓝栏保留。模块/CSS入口scene-layers-r2。新增插入单元+S14，两套49本地/28浏览器PASS；最终槽位/焦点/搜索定向5PASS，scene-layer-selection-search-final-20261105，最终截图实际查看；JEV在20261104T183817890073Z/classification-jev.json。不要回退到中央横向14卡长队。用户原场景未操作，无提交发布，后续继续P2身份审核/旧缓存时序缺口及真实Worker连接，不假称生成已就绪。
+
+### 2026-11-05 用户要求两处视频缩略图
+新增learning-video-card.js：本地thumbs按帖子ID预览，缺图/无关联明确提示；视频笔记是图文卡片+内容标题/中文项目状态，ID次要；管线方法行也显示同源缩略图，保留原播放/加入能力，无新增重复播放按钮。不重学生成视频。51本地+29浏览器PASS/pageErrors0，20261104T190937167097Z；定向5PASS，learning-thumbnails-20261105，图片实际查看；JEV实际调用。此前按钮只读审计确认preview/after同操作，编辑和保存重复/语义混淆，版本面板链接实际上只去dev游戏launcher；未实施按钮合并。Guide已列下轮优先收敛按钮职责/修正定位链接，先保留recipe/建造/完整实验各自范围与两类撤销，避免覆盖手改参数。原库与用户profile不动，无提交发布，周期继续。
+
+### 2026-11-05 08:26上海：去重保存已验真，L07整套超时仍开放
+接手先读WORKSHOP_GUIDE/Test/Log，当前按钮规范已从“待整理”改成实际入口。after/重复编辑/保存/返回入口移除；草稿保存不先apply，保存实际World/settings/recipe/goal，配方与建造保存/撤销明确范围；草稿与定稿定位本页。S15实际dusk而recipe day、版本+1、编码通过，截图本轮已看。
+统一20261105T002631595675Z为51本地PASS/29浏览器PASS/1FAIL(L07约31秒waitForFunction)，pageErrors0；上轮20261104T202416161457Z的L07/S06两FAIL仍保留，S06本轮过，不宣称根因已修。新增根context真实iframe有界longtask/失败阶段诊断，L07记录initial/fixtureID、fixture/restore阶段和命中次数；新代码定向3/10PASS，目录learning-refresh-diagnostics-20261105T0031Z及learning-refresh-sequence-diagnostics-20261105T0030Z，名称非真实时间，以JSONstartedAt为准。下一动作：运行统一入口收集带诊断整套，若L07失败先看phase/requests/frame longtasks；不要无限重试、放宽期限或把未复现当修复。旧缓存间歇时序问题同样不能无证合并根因。
+JEV已实际成功于本轮iteration-jev.json，完整回归/真实Worker及玩法尚缺。原库并行改动不动，用户浏览器存档未访问，所有测试隔离；无提交发布/自动定稿用户场景。automation-2继续，不动其他automation。
+
+### 2026-11-05 10:24上海：草稿配额失败同步提示
+统一20261105T022419848592Z为51本地/30浏览器PASS、pageErrors0；L07命中fixture一次并成功恢复，旧超时尚无根因，不关闭。带诊断最长longtask9654ms不是历史失败因果证明。
+新增S16隔离iframe版本键QuotaExceededError：所有localStorage和World/settings/recipe/locks不变，恢复重试恰好+1、finals相等。首轮六PASS但实际截图发现版本panel残留上次已保存文案，已修workbench onSave catch让面板同步报告失败/未新增版本；新增断言，draft-quota-status-final-20261105T0229Z六项受影响回归PASS，截图实看。尾句随后泛化“检查原因后重试”，不是截图原字句；同步失败逻辑已测。整套30在修复前，不伪称新31全套已过。
+Guide/Test/Log均更新，JEV两次实际调用输出在两个draft-quota定向目录。下一步先新31整套和L07阶段诊断；S16尚未单独建立非空final指针，补该fixture后再宣称已保护既有定稿实测。Worker、用户玩法/通行/性能、P2持久审核仍缺；不动原库/用户profile，不自动提交发布。automation-2继续。
+
+### 2026-11-05 14:24上海：非空定稿的配额保护已实测
+当前轮UTC06:24执行，无排队12:21补造记录。统一20261105T062450367249Z为51本地/31浏览器PASS、pageErrors0，最终通用失败文案实际看图对应；L07成功但旧间歇超时根因未关闭，最长longtask9659ms不能当因果证明。
+本轮只强化验证，无新产品实现变更。S16先经隔离版本UI定稿且断言非空finals，再模拟草稿配额失败，比对所有localStorage及World/settings/recipe/locks不变；重试新增1版、已有finals保持，existingFinalPreserved=true。draft-existing-final-quota-20261105T0628Z六项受影响回归PASS，截图实际查看；全31是强化前，不能写成强化后整套已测。Guide/Test/Log及JEV证据已更新；真实用户存档和原库未动，无提交发布。
+下一动作：跑强化后31整套；补固定版本新窗口真实加载、缺失版本错误UI的隔离验证；旧学习超时继续按fixture/restore和longtask诊断，未复现不算修复。真实Worker/玩法/性能和P2持久审核仍未验收。automation-2继续。
+
+### 2026-11-05 16:27上海：固定运行新窗口与缺失ID已验，启动切页超时未修
+统一20261105T082735293078Z：51本地PASS，浏览器30PASS/1FAIL(L04切回场景按钮超时)，pageErrors0；视频已播放关闭。诊断iframe连续4.093s/9.590s任务只隔18ms且与点击重叠，归启动响应问题线索；无CPU栈不能泛化旧L07/缓存根因，不能加超时掩盖。
+新S17实际点击版本入口打开dev0游戏，比对固定ID/World/settings，优先于不同有效场景模式workspace编码；缺失IDloaded=null并明示失败/工作区回退，记录/工作区不改，finally还原隔离workspace。首轮7PASS/1FAIL是新async等待探针过早通过；已查本机Playwright同步truthy轮询实现，改先import后同步判断__tm/函数并原子取快照。fixed-version-runtime-readiness-20261105T0835Z八项定向PASS，截图实际看过：仍有开始遮罩，未验湖区视觉/玩法。全套是新增S17前31项，不能写成32全通过。
+Guide/Test/Log已更新固定范围仅数据参数、同源存储依赖；代码资源冻结/跨设备包仍缺。JEV已实际调用。无产品代码改动或用户存档/原库操作，无提交发布；automation-2继续。下一步先32项整套，再单独隔离采样启动CPU调用栈定位长构造器，不并发多个重浏览器；继续保护原图标栏、手工/定稿。Worker与P2等既有缺口保留。
+
+### 2026-11-05 20:27上海：启动卡顿有CPU时间窗口证据，尚未优化生成器
+当前统一20261105T122758533338Z为51本地/32浏览器PASS、pageErrors0（350.31s），包含S16强final与S17；旧超时未复现不关闭。新独立profile_workshop_startup.mjs已实跑两次CAPTURED，工具不访问用户profile、不与回归并发。首份累计热点startup-profile-20261105123629Z；最终带窗口归因startup-profile-stacks-20261105124046Z：最长父文档4537ms中finishCrystalV9/V10约4.2s、installGateTargetThirty约2.55s；另一3918ms中applyCitadelMountainStudy约3.67s，另有moon coast/garden与swamp。云ridge射线采样累计高但不是最长单段。raw cpuprofile、summary和实际看过的学习页截图保留。
+工具用CDP NavigationStart与profile微秒时间对齐父文档最长五项；有采样开销且非所有iframe独占任务覆盖。37765/47087ms是两次带采样运行，不能当优化比较。CAPTURED不是功能/性能PASS。Guide/Test/Log与JEV证据已更新；本轮无产品世界生成改动。
+下一条动作：核对crystalV9.js/晶体V10收尾/gateTargetThirty所有权和原调用顺序，制定分段yield及同步路径完整几何/材质/参数parity，再小步实现与隔离重测。不要改云算法冒充解决最长任务，现有startupCloudParity不能证明别的世界pass保真。旧学习超时与启动卡顿仍分别开放；用户湖上建筑不动，不自动造山/提交发布。真实Worker/P2/代码资源冻结仍缺，automation-2继续。
+
+### 2026-11-06 最新用户优先：悬铃树对象界面已落地（只读定位）
+入口实景上方“场景对象 · 悬铃树”，运行时4树/桥边树可选，镜头对准+局部绿色框、右侧对象说明；返回场景清除。对象模式禁用全局apply/对照、隐藏建造面板并guard体素笔刷；编辑/游玩自动退出。移动/旋转/叶色/树冠/对象保存尚未接入，UI明确，不把选择写recipe/定稿。
+重要源事实：morrisBotany在末尾按材质合批并移除tree.children，因此树Group只留逻辑anchor。新稳定ID按种植点、createMorrisPlaneTree保存合批前局部mesh bounds；morrisIsland注册真实ref并在dispose注销；同源bridge新增固定objects.list/select/clear，框挂树下而非世界AABB。不能对空Group setFromObject；最初测试通过但海面截图、后续松框图均保留，最终实看scene-object-inspector-final-20261106/plane-tree-focus.png绿色框正确围桥边树。
+最终5项S07/S18/S08/S13/L05定向PASS、pageErrors0；51本地PASS目录20261105T165347912688Z，非33全套。中间6项含G01通过；工厂独立parity result精确比对HEAD原botany与当前合批属性/index hash、材质属性/树transform/原report一致，4边界有效。新JEV/Guide/Test/Log已留。用户profile/已恢复湖上建筑、原库/.workbuddy不动，无提交发布。
+后续先33整套；对象可编辑必须建立合批来源映射与候选/撤销/版本保存，不能只改逻辑Group。性能CPU窗口证据仍按上段保留，未借本用户请求盲改世界生成。automation-2保持原调度。
+
+### 2026-11-06 00:56上海周期：只读对象生命周期补齐
+统一20261105T165631610662Z为51本地/33浏览器PASS，pageErrors0。未改产品实现，新增S19验证桥边换湖岸2号、刷新/两工坊往返保留选择、进入编辑自动退出，以及两个暂态框geometry/material各dispose2次；所有World/settings/recipe/localStorage不变。object-view-lifecycle-20261105T1702Z三项定向PASS，实际看图2号树/框正确但柏树部分遮挡，未改植物，不能叫无遮挡验收。JEV实际调用、Test/Log更新。
+下一轮34整套（33是S19加入前），不把只读选择叫对象可编辑；合批映射/候选/撤销/保存仍缺。旧启动/学习超时根因未关，Worker未验收。无用户profile/原库操作、无提交发布，automation-2保留；本轮状态健康无需用户动作，静默。
+
+### 2026-11-06 06:26上海最新用户纠正：必须从实景选择，不是固定四树按钮
+最新UI已改通用“场景对象 → 在实景中选择物件”，真实canvas单击按相机Raycaster最近可见mesh命中，保持镜头并高亮；单独按钮定位。默认折叠搜索目录动态来自实际对象，不再物种专用标题/四树按钮。批植物WeakMap保存原plant顶点范围，hit.face.a回溯真实悬铃树/柏树/花丛，registry登记全部植物；其他mesh/instance只读运行时身份（不同instanceId边界），合批建筑仍明确合批只读，不假装单栋编辑。
+新增objects.picking同源命令、选择事件、指针保护；前端模式/上下文与全局apply禁用同步，取消/编辑/游玩退出。最终live-scene-picking-final-20261106九项受影响浏览器PASS/pageErrors0，S20真实点击选桥边树及柏树1，S21独立Three fixture测试范围/实例矩阵，不当游戏通过；本地51PASS目录20261105T223903780856Z。植物工厂对HEAD几何/材质/transform/report parity仍PASS，result-raycast-owner-map.json，实景柏树截图实际看过。改前相关文件拷贝scene-picking-baseline-20261105T222933Z；Guide/Test/Log/JEV证据齐。不是36整套。
+原“继续”要做移动/旋转/缩放/撤销/保存，但用户先纠正选择入口，因此这些编辑仍pending，UI如实未开放。下一动作先36整套，再对象基线buffer+候选+历史+版本恢复/定稿/Source objectId scope，利用现有范围映射，不只移动逻辑空Group；通用mesh UUID不是跨版本编辑ID。用户profile/原库/已恢复建筑未动，无提交发布，automation-2保留，旧性能/Worker/P2缺口不关闭。
+
+### 2026-11-06 用户明确重心：生命/植被算法作用于选中目标
+用户要的是能力节点绑定目标并执行，不仅选择框或移动/旋转面板。核对真实来源后新增TARGET_CAPABILITY_GUIDE.md：targetRef固定对象revision/部位或区域mask，capabilityRef真实模块/函数/revision，输入适配→局部候选patch→比较采用→对象历史与版本恢复。当前只有命中来源区间，尚无可执行target节点/目标快照，不要写成已完成。
+实际输入边界：Vegetation.refresh要World/shape/区域，不能当单树Mesh编辑；buildCanopy要blobs（surface-nets），现有莫里斯叶片扇冠需转换且不得默认替换风格；leaf-surface需shader/material通道，不能改共享材质影响全林。下一实现优先一条真实算法的目标适配+局部输出+候选/撤销/保存完整闭环，停止围绕通用transform按钮偏移用户核心目标。最新文档含测试门槛与待实现契约，非已上线API。

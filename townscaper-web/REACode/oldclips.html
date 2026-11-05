@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2016–17 老片 · 只有视频没有原文的那批</title>
+<style>
+  :root { --ink:#20323a; --muted:#5d7279; --line:#d3e0e0; --bg:#eef4f3; --ok:#2f7f8a; --warn:#b4622c; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; }
+  header { padding:18px 22px 12px; border-bottom:1px solid var(--line); background:#fff; position:sticky; top:0; z-index:5; }
+  h1 { margin:0 0 4px; font-size:16px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:96ch; }
+  .bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px; }
+  .bar button { font:inherit; font-size:12.5px; padding:4px 10px; border:1px solid var(--line); background:#f7fbfa; border-radius:999px; cursor:pointer; color:inherit; }
+  .bar button.on { background:#1f3139; color:#fff; border-color:#1f3139; }
+  .bar input { font:inherit; font-size:12.5px; padding:5px 9px; border:1px solid var(--line); border-radius:8px; width:180px; }
+  .bar .sp { flex:1; }
+  .counts { color:var(--muted); font-size:12px; }
+  main { padding:16px 22px 60px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+  .card .shot { position:relative; aspect-ratio:1/1; background:#0f1416 center/cover no-repeat; cursor:pointer; }
+  .card .shot::after { content:'▶'; position:absolute; inset:0; display:grid; place-items:center; color:#fff; font-size:20px; text-shadow:0 1px 6px #000; opacity:0; transition:opacity .15s; }
+  .card .shot:hover::after { opacity:1; }
+  .card .meta { padding:8px 10px 10px; display:flex; flex-direction:column; gap:5px; }
+  .card .id { font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .card .line { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .badge { font-size:11px; padding:1px 7px; border-radius:999px; border:1px solid var(--line); color:var(--muted); }
+  .badge.unreg { background:#fff2e4; border-color:#e8c49a; color:#8a5423; }
+  .badge.done { background:#e9f2f4; border-color:#b6d2d8; color:#215f68; }
+  .badge.todo { background:#f6f1e4; border-color:#ddd0b0; color:#7a6231; }
+  .marks { display:flex; gap:4px; margin-top:2px; }
+  .marks button { flex:1; font:inherit; font-size:11.5px; padding:3px 0; border:1px solid var(--line); background:#fbfdfd; border-radius:7px; cursor:pointer; color:var(--muted); }
+  .marks button.on[data-m="机制"] { background:#d8ecef; border-color:#8fc0c8; color:#1d5b64; font-weight:600; }
+  .marks button.on[data-m="展示"] { background:#efe9f5; border-color:#c6b6d9; color:#54407a; font-weight:600; }
+  .marks button.on[data-m="待定"] { background:#f6efdd; border-color:#dcc99b; color:#7a6231; font-weight:600; }
+  .note { font-size:11.5px; color:var(--muted); line-height:1.4; max-height:2.8em; overflow:hidden; }
+  dialog { border:0; border-radius:14px; padding:0; width:min(92vw,880px); background:#0d1113; }
+  dialog::backdrop { background:rgba(0,0,0,.6); }
+  dialog video { width:100%; display:block; max-height:74vh; background:#000; }
+  dialog p { margin:0; padding:10px 14px 14px; color:#e8eeee; font-size:12.5px; }
+  dialog button.close { position:absolute; right:10px; top:8px; border:0; border-radius:7px; padding:4px 10px; background:rgba(255,255,255,.18); color:#fff; cursor:pointer; }
+  .empty { color:var(--muted); padding:30px 0; }
+  #exportBox { width:100%; height:120px; font:11.5px/1.4 ui-monospace,monospace; border:1px solid var(--line); border-radius:8px; padding:8px; display:none; margin-top:10px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>2016–17 老片：只有视频、没有帖子原文</h1>
+  <p>这批是 <code>gifs/</code> 里最早的 75 个 mp4，<b>README 里没有对应原文</b>，所以只能看画面判读。
+     默认只显示「还没登记」的那些；每条可以点封面播放，右边三个按钮把判断记在本地浏览器里，随时导出。</p>
+  <div class="bar">
+    <button data-f="unreg" class="on">未登记</button>
+    <button data-f="all">全部 75</button>
+    <button data-f="reg">已登记</button>
+    <button data-f="marked">已标注</button>
+    <input id="q" placeholder="搜 id 或日期" />
+    <span class="sp"></span>
+    <span class="counts" id="counts">—</span>
+    <button id="export">导出标注</button>
+  </div>
+  <textarea id="exportBox" readonly></textarea>
+</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+</main>
+
+<dialog id="dlg">
+  <button class="close" id="close">关闭</button>
+  <video id="vid" controls playsinline></video>
+  <p id="cap"></p>
+</dialog>
+
+<script src="learn/data.js"></script>
+<script>
+const byId = new Map((window.LEARN?.items || []).map((it) => [it.id, it]));
+const MARKS_KEY = 'oldclips-marks-v1';
+let marks = JSON.parse(localStorage.getItem(MARKS_KEY) || '{}');
+
+const snowDate = (id) => new Date(Number(BigInt(id) >> 22n) + 1288834974657);
+let items = [];
+
+async function boot() {
+  const idx = await fetch('learn/thumbs-unreg/index.json').then((r) => r.json());
+  items = idx
+    .map((r) => {
+      const it = byId.get(r.id);
+      return {
+        ...r,
+        reg: !!it,
+        status: it?.status || '未登记',
+        topic: it?.topic || '',
+        note: it?.note || '',
+        // 有视频没登记 → 最需要人看；reg 且 todo/partial 的也值得回看
+        prio: it ? (it.status === 'todo' || it.status === 'partial' ? 2 : 3) : 1,
+      };
+    })
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.id < b.id ? 1 : -1));
+  render();
+}
+
+let filter = 'unreg';
+function render() {
+  const q = document.getElementById('q').value.trim();
+  const list = items.filter((x) => {
+    if (filter === 'unreg' && x.reg) return false;
+    if (filter === 'reg' && !x.reg) return false;
+    if (filter === 'marked' && !marks[x.id]) return false;
+    if (q && !(x.id.includes(q) || x.date.includes(q))) return false;
+    return true;
+  });
+
+  const unreg = items.filter((x) => !x.reg).length;
+  const reg = items.length - unreg;
+  const marked = items.filter((x) => marks[x.id]).length;
+  document.getElementById('counts').textContent =
+    `共 ${items.length} · 未登记 ${unreg} · 已登记 ${reg} · 已标注 ${marked} · 当前显示 ${list.length}`;
+
+  const grid = document.getElementById('grid');
+  if (!list.length) { grid.innerHTML = '<div class="empty">这个筛选下没有条目。</div>'; return; }
+
+  grid.innerHTML = list.map((x) => {
+    const d = snowDate(x.id);
+    const m = marks[x.id];
+    const cls = x.reg ? (x.status === 'todo' || x.status === 'partial' ? 'todo' : 'done') : 'unreg';
+    return `<article class="card">
+      <div class="shot" data-id="${x.id}" style="background-image:url('learn/thumbs-unreg/${x.id}.jpg')"></div>
+      <div class="meta">
+        <div class="id">${x.id}</div>
+        <div class="line">
+          <span class="badge ${cls}">${x.reg ? x.status + (x.topic ? ' · ' + x.topic : '') : '未登记'}</span>
+          <span class="badge">${d.toISOString().slice(0, 10)}</span>
+          ${x.dur ? `<span class="badge">${x.dur.toFixed(1)}s</span>` : ''}
+        </div>
+        <div class="note">${(x.note || (x.reg ? '' : '无原文、无笔记，需看画面判读')).replace(/</g, '&lt;')}</div>
+        <div class="marks">
+          ${['机制', '展示', '待定'].map((k) => `<button data-id="${x.id}" data-m="${k}" class="${m === k ? 'on' : ''}">${k}</button>`).join('')}
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+document.getElementById('grid').addEventListener('click', (e) => {
+  const mark = e.target.closest('button[data-m]');
+  if (mark) {
+    const id = mark.dataset.id;
+    marks[id] = marks[id] === mark.dataset.m ? '' : mark.dataset.m;
+    if (!marks[id]) delete marks[id];
+    localStorage.setItem(MARKS_KEY, JSON.stringify(marks));
+    render();
+    return;
+  }
+  const shot = e.target.closest('.shot');
+  if (shot) openVideo(shot.dataset.id);
+});
+
+function openVideo(id) {
+  const dlg = document.getElementById('dlg');
+  const vid = document.getElementById('vid');
+  const it = byId.get(id);
+  document.getElementById('cap').innerHTML =
+    `<b>${id}</b> · ${snowDate(id).toISOString().slice(0, 10)} · ${it ? '已登记：' + it.status + (it.where ? ' → ' + it.where : '') : '未登记（这批没有原文）'}` +
+    (it?.text ? `<br>原文：${it.text.replace(/</g, '&lt;')}` : '');
+  vid.src = `gifs/${id}.mp4`;
+  dlg.showModal();
+  vid.play().catch(() => {});
+}
+document.getElementById('close').onclick = () => {
+  const dlg = document.getElementById('dlg');
+  document.getElementById('vid').pause();
+  dlg.close();
+};
+document.getElementById('dlg').addEventListener('click', (e) => {
+  if (e.target.id === 'dlg') document.getElementById('close').click();
+});
+
+document.querySelectorAll('.bar button[data-f]').forEach((b) => {
+  b.onclick = () => {
+    document.querySelectorAll('.bar button[data-f]').forEach((x) => x.classList.toggle('on', x === b));
+    filter = b.dataset.f;
+    render();
+  };
+});
+document.getElementById('q').oninput = render;
+document.getElementById('export').onclick = () => {
+  const box = document.getElementById('exportBox');
+  box.style.display = box.style.display === 'block' ? 'none' : 'block';
+  const out = Object.entries(marks).map(([id, m]) => ({ id, date: snowDate(id).toISOString().slice(0, 10), mark: m }));
+  box.value = JSON.stringify(out, null, 1);
+  box.select();
+};
+
+boot();
+</script>
+</body>
+</html>

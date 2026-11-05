@@ -1,0 +1,15 @@
+{
+  "count": 200,
+  "rejected": 3,
+  "audit": {
+    "manifold": true,
+    "delaunay": true,
+    "tris": 401,
+    "finite": true,
+    "degenerate": 0,
+    "orphanVertices": 0,
+    "checkedTriangles": 401,
+    "full": true
+  },
+  "errors": []
+}

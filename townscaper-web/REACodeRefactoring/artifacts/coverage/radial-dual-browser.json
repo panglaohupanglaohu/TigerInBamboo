@@ -1,0 +1,41 @@
+{
+  "reports": [
+    {
+      "before": {
+        "kind": "quad",
+        "version": 997,
+        "meshVertices": 23796,
+        "triangles": 1632,
+        "cells": 879,
+        "sites": 879,
+        "vertices": 19584,
+        "seams": 56
+      },
+      "after": {
+        "version": 1025,
+        "overlayVersion": 1025,
+        "sites": 879,
+        "meshVertices": 27276
+      }
+    },
+    {
+      "before": {
+        "kind": "mixed",
+        "version": 380,
+        "meshVertices": 12006,
+        "triangles": 476,
+        "cells": 266,
+        "sites": 266,
+        "vertices": 5712,
+        "seams": 26
+      },
+      "after": {
+        "version": 393,
+        "overlayVersion": 393,
+        "sites": 266,
+        "meshVertices": 15906
+      }
+    }
+  ],
+  "errors": []
+}

@@ -18,6 +18,11 @@ window.ARCH = {
       modules: [
         ['grid.js', 'buildQuadGrid()：Townscaper 四边形网格（1147881669350891521）；buildMixedGrid()：三角 + 方格混合网格（1447494168448753667）；格子是任意多边形（cell.n），edgeTwins = 半边 twin'],
         ['world.js', 'World：solid / rock / color / river，regions()、snapshot()（931196707236392960 虚拟体素空间）'],
+        ['sprite-ambiguity.js', '969860566322958336：按贴图锚点/真实alpha测镜像差异，屏幕朝向投影和翻转死区；北境unitsprites可选单方向模式'],
+        ['nav-visibility.js', '810878197134950401：沿分层导航门户逐边采样近似视线；支持楼层分离，View visibility诊断，不等同于光学遮挡'],
+        ['contour.js', '1120036868966502401：共享角点、跨边交点缓存、双线性鞍点和混合网格等值线连接审核；View contours显示语义海岸诊断'],
+        ['adjacency.js', '795010582239997952：几何焊接/边界候选与共享多边形半边审核；平行等长候选不代表完整实体装配'],
+        ['wfc.js', '确定性socket约束、迭代回溯、局部扩区修复；完整多格建筑联合求解待补'],
         ['spatial.js', 'pointInQuad（任意凸多边形）、buildCellIndex、decorateCells'],
         ['meshwriter.js', 'MeshWriter：所有生成器共用的顶点池（tri / quad / beam / box / blob），一次 draw call；writer.soft 软法线（按夹角平均，1062374549407350790）+ 描边方向 aOutline'],
         ['palette.js', '墙面调色板 + 建筑固定色 + 地形色（不做二次 sRGB 转换）'],
@@ -37,6 +42,8 @@ window.ARCH = {
     {
       name: '建筑管线 build', color: '#d9663f', dir: 'src/build',
       modules: [
+        ['doodle-wall.js', '1897266928961700215 / 1890018647655272491：稳定墙板布局、逐板线稿裁剪与墨线遮罩统计；doodlewall可选World表面预览，完整室内/弧顶待补'],
+        ['multicell.js', '1579483114178768898：显式quad+triangle双格footprint、原子放置/整栋替换/移除、回执冲突检测与本页撤销；真实融合场景已接入。实例持久化、完整预制socket和联合WFC待补'],
         ['buildings.js', 'buildBuildings()：码头基座、墙与勒脚、门窗、栏杆、钢架 / 拱、后院与树'],
         ['buildings.js', 'buildRoofs()：半格点阵上的檐口距离场 → 陡坡双坡顶 + 山墙 + 封檐板'],
       ],
@@ -72,6 +79,7 @@ window.ARCH = {
         ['impostor.js', 'ImpostorBaker / ImpostorField：8 方位烘进图集、按方位角混合（1849427564034498642）；云共用同一套（1852334860137849222）'],
         ['atmosphere.js', 'Atmosphere：风场（每层网格，绕岛流动，926903893866541057）、雪（943230624369868800）、雾（906207980802252801）'],
         ['decor.js', 'Decor：旗子（1212732478458343424）、彩旗绳 Italian Wires（1259838941299183619）、蝴蝶（1273520600221433857）'],
+        ['smoke.js', '1015140880666300416 / 1015142746372366336：保留两遍/UV/mip，补相机排序、投影流向、真实mip棋盘与GPU量化；烟火六段已复核，火焰轮廓/火光仍有差距'],
         ['effects.js', 'Effects：水花（1258421104756097029）、出现 / 消失动画（1246074663546916873）、Max 混合的火（1056990611738451968）'],
         ['birds.js', 'Birds：海鸥，屋脊上成排停、挪步、扇翅 / 滑翔绕镇飞、倒影（1244892370392489989）'],
       ],
@@ -86,8 +94,8 @@ window.ARCH = {
     },
   ],
   notPorted: [
-    ['world/layerednav.js → badnorth/battle.js', '多层图已补；单位高度、拾取与攻击完整接入仍待补齐（见 coverage.html）'],
-    ['core WFC / 模块邻接', '确定性传播、局部修复及网格抽取邻接仍待迁移'],
+    ['world/layerednav.js → badnorth/battle.js', '分层路径、层选择和攻击遮挡已接入真实战斗；分层流场已接入，精细门户/碰撞待补齐（见 coverage.html）'],
+    ['core WFC / 模块邻接', '独立确定性socket求解器已补；socket局部修复已补；实际模块表和网格抽取邻接仍待接入'],
     ['life/vegetation.js', '硬边树冠松弛、顶点对偶落点仍待补齐'],
     ['sphere/planet.js → World', '独立球面/防蘑菇化已存在；共享 World 的球面建筑融合仍待补齐'],
     ['surface / vertexlight', '精细贴图与高度立方体贴图光照剩余能力见128项映射'],

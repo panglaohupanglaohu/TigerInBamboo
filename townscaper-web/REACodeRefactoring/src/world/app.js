@@ -8,13 +8,15 @@ import * as THREE from 'three';
 import { buildQuadGrid, buildMixedGrid } from '../core/grid.js';
 import { decorateCells, buildCellIndex } from '../core/spatial.js';
 import { World, MAX_LEVEL } from '../core/world.js';
-import { PALETTES } from '../core/palette.js';
+import { PALETTES, withPaletteColors } from '../core/palette.js';
 import { View } from './view.js';
 import { SCENES, buildScene } from './scenes.js';
 import { applyBadNorthTheme } from '../badnorth/theme.js';
 import { Battle } from '../badnorth/battle.js';
 import { encodeWorld, decodeWorld, peekGridRadius } from './save.js';
 import { mountLearnPanel } from '../ui/learnpanel.js';
+import { replaySnapshots, replayDelay } from '../core/snapshot-replay.js';
+import { mountEnvironmentPanel } from '../ui/environment-panel.js';
 import { mountWalkthrough } from '../ui/walkthrough.js';
 
 // 两种网格（共用全部管线）：
@@ -37,8 +39,10 @@ const params0 = new URLSearchParams(location.search);
 let gridKind = GRIDS[params0.get('grid')] ? params0.get('grid') : 'quad';
 // 分享链接里没写 ?grid= 时，按存档头里的网格半径判断
 if (!params0.get('grid') && location.hash.length > 1) {
-  const r = peekGridRadius(decodeURIComponent(location.hash.slice(1)));
-  for (const [k, g] of Object.entries(GRIDS)) if (g.radius === r) gridKind = k;
+  try {
+    const r = peekGridRadius(decodeURIComponent(location.hash.slice(1)));
+    for (const [k, g] of Object.entries(GRIDS)) if (g.radius === r) gridKind = k;
+  } catch (err) { console.warn('分享链接头读取失败：', err.message); }
 }
 const grid = decorateCells(GRIDS[gridKind].build());
 const index = buildCellIndex(grid);
@@ -110,6 +114,7 @@ function buildSceneBar() {
 }
 
 function loadScene(name, record) {
+  if (replaying) return;
   if (record) pushUndo(world.snapshot());
   sceneStart = undoStack.length;
   scene = name;
@@ -125,7 +130,7 @@ function loadScene(name, record) {
 /* ---- 撤销 ---------------------------------------------------------------- */
 function pushUndo(s) {
   undoStack.push(s);
-  if (undoStack.length > 60) undoStack.shift();
+  if (undoStack.length > 60) { undoStack.shift(); sceneStart = Math.max(0, sceneStart - 1); }
   redoStack.length = 0;
   refreshUndo();
 }
@@ -133,21 +138,30 @@ function refreshUndo() {
   document.getElementById('undo').disabled = !undoStack.length;
   document.getElementById('redo').disabled = !redoStack.length;
 }
-/* 回放（1260586697538113537 "I can use the undo/redo stack for snappier and more directed building footage"）：
- * 从这个场景载入后的第一步开始，按撤销栈一步一步重放到当前状态；每一步照常触发弹出动画、水花、音效。 */
-let sceneStart = 0, replaying = false;
+/* 1260586697538113537: history footage. Snapshot timing is local; not recovered
+ * per-action animation/splash metadata. Keep history intact and support cancellation. */
+let sceneStart = 0, replaying = false, replayAbort = null;
 async function replay() {
-  if (replaying) return;
+  if (replaying) { replayAbort.abort(); return; }
+  endStroke();
   const frames = undoStack.slice(sceneStart).concat([world.snapshot()]);
   if (frames.length < 2) { toast('先盖几块再回放'); return; }
-  replaying = true;
-  toast(`回放 ${frames.length - 1} 步`);
-  for (const f of frames) { world.restore(f); view.changed(); await new Promise((r) => setTimeout(r, 380)); }
-  replaying = false;
+  clearTimeout(scheduleHash.t);
+  replaying = true; replayAbort = new AbortController(); mode = null; pointers.clear();
+  const button = document.getElementById('replay');
+  button.textContent = '■'; button.title = '停止回放并恢复（Esc）';
+  toast(`回放 ${frames.length - 1} 步 · 再次点击停止`);
+  try {
+    await replaySnapshots(world, frames, { apply: () => view.changed(), wait: signal => replayDelay(380, signal), signal: replayAbort.signal });
+  } catch (err) { console.error('回放失败', err); toast('回放失败，已恢复当前岛'); }
+  finally {
+    replaying = false; replayAbort = null; button.textContent = '⟲';
+    button.title = '回放建造过程'; refreshUndo(); scheduleHash();
+  }
 }
 
-function undo() { if (!undoStack.length) return; redoStack.push(world.snapshot()); world.restore(undoStack.pop()); view.changed(); refreshUndo(); scheduleHash(); }
-function redo() { if (!redoStack.length) return; undoStack.push(world.snapshot()); world.restore(redoStack.pop()); view.changed(); refreshUndo(); scheduleHash(); }
+function undo() { if (replaying || !undoStack.length) return; redoStack.push(world.snapshot()); world.restore(undoStack.pop()); view.changed(); refreshUndo(); scheduleHash(); }
+function redo() { if (replaying || !redoStack.length) return; undoStack.push(world.snapshot()); world.restore(redoStack.pop()); view.changed(); refreshUndo(); scheduleHash(); }
 
 /* ---- 编辑 ---------------------------------------------------------------- */
 let stroke = null;
@@ -196,6 +210,7 @@ const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 canvas.addEventListener('pointerdown', (e) => {
+  if (replaying) return;
   canvas.setPointerCapture(e.pointerId);
   pointers.set(e.pointerId, e);
   lastX = e.clientX; lastY = e.clientY;
@@ -270,7 +285,8 @@ function cycleTime() {
   toast(`光照：${TIME_NAMES[next]}`);
 }
 addEventListener('keydown', (e) => {
-  if (e.target instanceof HTMLInputElement) return;
+  if (replaying) { if (e.key === 'Escape') replayAbort.abort(); return; }
+  if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement || e.target.isContentEditable) return;
   const k = e.key.toLowerCase();
   if (scene === 'badnorth' && k === ' ') { e.preventDefault(); battle.togglePause(); return; }
   if (scene === 'badnorth' && k >= '1' && k <= '6') { const names = ['summer', 'dawn', 'rain', 'dusk', 'night', 'autumn']; applyBadNorthTheme(view, names[+k - 1]); toast('北境 · ' + names[+k - 1]); return; }
@@ -299,6 +315,7 @@ function scheduleHash() {
 
 /* ---- 北境（Bad North）：主题 + 玩法层 ------------------------------------- */
 const battle = new Battle(view);
+view.battle = battle;
 view.onFrame = (dt) => battle.update(dt);
 let bnOn = false;
 function syncBadNorth() {
@@ -336,8 +353,8 @@ document.getElementById('undo').onclick = undo;
 document.getElementById('redo').onclick = redo;
 document.getElementById('replay').onclick = replay;
 document.getElementById('exportobj').onclick = async () => { const { downloadOBJ } = await import('../tools/objexport.js'); downloadOBJ(view.worldMesh.geometry, `town-${Date.now() % 1e6}.obj`); };
-document.getElementById('demo').onclick = () => { seed = (Math.random() * 1e6) | 0; loadScene(scene, true); toast(`新的${SCENES[scene].name}`); };
-document.getElementById('clear').onclick = () => { pushUndo(world.snapshot()); world.reset(); view.changed(); scheduleHash(); toast('已清空'); };
+document.getElementById('demo').onclick = () => { if (replaying) return; seed = (Math.random() * 1e6) | 0; loadScene(scene, true); toast(`新的${SCENES[scene].name}`); };
+document.getElementById('clear').onclick = () => { if (replaying) return; pushUndo(world.snapshot()); world.reset(); view.changed(); scheduleHash(); toast('已清空'); };
 document.getElementById('share').onclick = async () => {
   const code = encodeWorld(world, scene);
   const url = `${location.origin}${location.pathname}?grid=${gridKind}#${code}`;
@@ -349,6 +366,7 @@ document.getElementById('helpclose').onclick = () => helpEl.classList.add('hidde
 document.getElementById('timeofday').onclick = cycleTime;
 const PALETTE_ORDER = ['town', 'pastel', 'dusk'];
 document.getElementById('palettestyle').onclick = () => {
+  if (replaying) return;
   paletteName = PALETTE_ORDER[(PALETTE_ORDER.indexOf(paletteName) + 1) % PALETTE_ORDER.length];
   world.palette = PALETTES[paletteName];
   view.changed();
@@ -359,7 +377,7 @@ addEventListener('resize', () => view.resize());
 
 let last = performance.now();
 requestAnimationFrame(function frame(now) {
-  view.render(Math.min(0.05, (now - last) / 1000));
+  view.render(Math.max(0, Math.min(0.05, (now - last) / 1000)));
   last = now;
   requestAnimationFrame(frame);
 });
@@ -373,4 +391,12 @@ const walk = mountWalkthrough({
   onExit: () => { scene = 'fusion'; buildSceneBar(); scheduleHash(); },
 });
 if (params.get('walk')) walk.open();
-window.rea = { world, grid, gridKind, view, walk, get battle() { return battle; }, loadScene: (s) => loadScene(s, true), get scene() { return scene; }, encodeWorld, decodeWorld };
+const setWallPalette=(colors)=>{if(replaying)return;world.palette=withPaletteColors(world.palette,colors);view.changed();buildPalette();};
+window.rea = { world, grid, gridKind, view, walk, setWallPalette, get battle() { return battle; }, loadScene: (s) => loadScene(s, true), get scene() { return scene; }, get replaying() { return replaying; }, encodeWorld, decodeWorld };
+
+mountEnvironmentPanel(view, { getScene: () => scene });
+
+// Keep HUD edits out of the read-only playback; the same button stops it.
+document.getElementById('hud').addEventListener('click', e => {
+  if (replaying && !e.target.closest('#replay, [data-command="replay"]')) { e.preventDefault(); e.stopImmediatePropagation(); }
+}, true);

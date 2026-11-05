@@ -1,0 +1,285 @@
+{
+  "id": "bookshop-letter",
+  "title": "书店镇 · 一封要送出的信",
+  "subtitle": "信使抵达书店镇，取信、问路、启程",
+  "scene": "messenger",
+  "gameUrl": "/TigerMessenger/?scene=messenger&autostart=1",
+  "timeOfDay": 0.38,
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "notes": "第一页为故事板审阅（无新截屏）；拟拍 TOD=0.75 dusk。 Edena 六条仍约束后续截屏页：封面小人宽景；内页竖条；景别宽→眼高仍小→一次近景插入→拉开；低机位立面只用一次；少字。画面仅游戏截屏。",
+  "hardConstraint": "all-images-from-game-screenshots",
+  "createdAt": "2026-11-04T00:28:38.366Z",
+  "shots": [
+    {
+      "id": "cover",
+      "title": "封面：书店镇全景",
+      "note": "建立镜头，书店与廊道树",
+      "camera": {
+        "preset": "cover",
+        "landmark": "bookshop",
+        "dist": 28,
+        "orbit": 0.3,
+        "pitch": 0.2,
+        "waitMs": 1200
+      },
+      "caption": "书店镇。纸页翻动的声音，比风更早到达。",
+      "dialog": null,
+      "outFile": "shots/cover.png"
+    },
+    {
+      "id": "s01",
+      "title": "远眺书店",
+      "note": "宽景横幅",
+      "camera": {
+        "preset": "wide",
+        "landmark": "bookshop",
+        "dist": 22,
+        "orbit": 0.4,
+        "pitch": 0.15,
+        "waitMs": 900
+      },
+      "caption": "信使从坡道下来，招牌还在午后的光里。",
+      "dialog": null,
+      "outFile": "shots/s01.png"
+    },
+    {
+      "id": "s02",
+      "title": "近前门口",
+      "note": "中景",
+      "camera": {
+        "preset": "medium",
+        "landmark": "bookshop",
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 800
+      },
+      "caption": "门缝里飘出旧纸与墨的味道。",
+      "dialog": null,
+      "outFile": "shots/s02.png"
+    },
+    {
+      "id": "s03",
+      "title": "信使驻足",
+      "note": "近景",
+      "camera": {
+        "preset": "close",
+        "landmark": "bookshop",
+        "dist": 7,
+        "orbit": 0,
+        "pitch": 0.15,
+        "waitMs": 800
+      },
+      "caption": "",
+      "dialog": {
+        "speaker": "信使",
+        "text": "……就是这里。"
+      },
+      "outFile": "shots/s03.png"
+    },
+    {
+      "id": "s04",
+      "title": "廊道树影",
+      "note": "侧向宽景",
+      "camera": {
+        "preset": "wide",
+        "landmark": "bookshop",
+        "dist": 18,
+        "orbit": -0.8,
+        "pitch": 0.15,
+        "waitMs": 900
+      },
+      "caption": "廊道两侧的树认得每一个来取信的人。",
+      "dialog": null,
+      "outFile": "shots/s04.png"
+    },
+    {
+      "id": "s05",
+      "title": "俯视路径",
+      "note": "俯视",
+      "camera": {
+        "preset": "high",
+        "landmark": "bookshop",
+        "dist": 20,
+        "orbit": 0.2,
+        "pitch": 0.55,
+        "waitMs": 900
+      },
+      "caption": "路在脚下弯向港与塔——下一程还远。",
+      "dialog": null,
+      "outFile": "shots/s05.png"
+    },
+    {
+      "id": "s06",
+      "title": "交互距离",
+      "note": "中近景，可递信",
+      "camera": {
+        "preset": "medium",
+        "landmark": "bookshop",
+        "dist": 9,
+        "orbit": 0.2,
+        "pitch": 0.05,
+        "waitMs": 800
+      },
+      "caption": "",
+      "dialog": {
+        "speaker": "店主",
+        "text": "给边境的那封？路上小心潮气。"
+      },
+      "outFile": "shots/s06.png"
+    },
+    {
+      "id": "s07",
+      "title": "信入手中",
+      "note": "近景",
+      "camera": {
+        "preset": "close",
+        "landmark": "bookshop",
+        "dist": 6.5,
+        "orbit": 0,
+        "pitch": 0.1,
+        "waitMs": 800
+      },
+      "caption": "信封比预想的轻，责任却不轻。",
+      "dialog": null,
+      "outFile": "shots/s07.png"
+    },
+    {
+      "id": "s08",
+      "title": "转身启程",
+      "note": "中景背影向路",
+      "camera": {
+        "preset": "medium",
+        "landmark": "bookshop",
+        "dist": 14,
+        "orbit": 1.1,
+        "pitch": 0.05,
+        "waitMs": 900
+      },
+      "caption": "",
+      "dialog": {
+        "speaker": "信使",
+        "text": "日落前走到岔口。"
+      },
+      "outFile": "shots/s08.png"
+    },
+    {
+      "id": "s09",
+      "title": "镇口回望",
+      "note": "宽景收束",
+      "camera": {
+        "preset": "wide",
+        "landmark": "bookshop",
+        "dist": 26,
+        "orbit": 1.6,
+        "pitch": 0.15,
+        "waitMs": 1000
+      },
+      "caption": "书店镇矮下去。风把纸页的声音送出很远。",
+      "dialog": null,
+      "outFile": "shots/s09.png"
+    },
+    {
+      "id": "s10",
+      "title": "路上远景",
+      "note": "章末建立下一程",
+      "camera": {
+        "preset": "wide",
+        "landmark": "bookshop",
+        "dist": 30,
+        "orbit": 2,
+        "pitch": 0.25,
+        "waitMs": 1000
+      },
+      "caption": "一封信，一座镇，一条还要走很久的路。",
+      "dialog": null,
+      "outFile": "shots/s10.png"
+    }
+  ],
+  "pages": [
+    {
+      "id": "cover",
+      "kind": "cover",
+      "template": "cover",
+      "title": "书店镇 · 一封要送出的信",
+      "panels": [
+        {
+          "shotId": "cover",
+          "role": null,
+          "showCaption": true,
+          "showDialog": false
+        }
+      ]
+    },
+    {
+      "id": "page-01",
+      "kind": "storyboard",
+      "template": "storyboard-prose",
+      "title": "故事板",
+      "panels": [],
+      "rhythm": null,
+      "note": "文字故事板；拟拍表 C0/A/B/D；live 8931 捕获前不换图"
+    },
+    {
+      "id": "page-02",
+      "kind": "story",
+      "template": "panels-4",
+      "title": "取信",
+      "panels": [
+        {
+          "shotId": "s04",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s05",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s06",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s07",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-03",
+      "kind": "story",
+      "template": "panels-3",
+      "title": "启程",
+      "panels": [
+        {
+          "shotId": "s08",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s09",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s10",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    }
+  ]
+}

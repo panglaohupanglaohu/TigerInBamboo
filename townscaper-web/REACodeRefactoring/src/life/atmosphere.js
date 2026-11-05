@@ -18,6 +18,8 @@
  */
 
 import * as THREE from 'three';
+import { fogEnvelopeGLSL } from '../core/fog-envelope.js';
+import { makeWorldProbes } from '../core/world-probes.js';
 import { pointInQuad } from '../core/spatial.js';
 
 const RES = 0.45;
@@ -49,13 +51,15 @@ export class Atmosphere {
     this.group.add(this.snow);
 
     // 雾：一张大圆盘
+    this.fogOpacity = { value: .35 };
+    this.fogSpeed = { value: 1 };
     this.uFog = { value: new THREE.Color('#dfe6e8') };
     this.fogParams = { value: new THREE.Vector4(0, 0, 8, 24) };   // 中心 x, z, 内半径, 外半径
     const fg = new THREE.CircleGeometry(1, 96);
     fg.rotateX(-Math.PI / 2);
     this.fog = new THREE.Mesh(fg, new THREE.ShaderMaterial({
       transparent: true, depthWrite: false,
-      uniforms: { uTime, uColor: this.uFog, uP: this.fogParams },
+      uniforms: { uTime, uColor: this.uFog, uP: this.fogParams, uOpacity: this.fogOpacity, uSpeed: this.fogSpeed },
       vertexShader: /* glsl */ `
         uniform vec4 uP;
         varying vec2 vXZ;
@@ -69,14 +73,17 @@ export class Atmosphere {
         uniform vec3 uColor;
         uniform vec4 uP;
         varying vec2 vXZ;
+        uniform float uOpacity;
+        uniform float uSpeed;
+        ${fogEnvelopeGLSL}
         float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
         float n2(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
           return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
         void main() {
           float r = length(vXZ - uP.xy);
-          float ring = smoothstep(uP.z, uP.w, r);
-          float drift = n2(vXZ * 0.18 + vec2(uTime * 0.05, uTime * 0.02)) * 0.6 + n2(vXZ * 0.45 - vec2(uTime * 0.03, 0.0)) * 0.4;
-          float a = ring * (0.55 + 0.45 * drift) * 0.85;     // 背景效果，宁淡勿浓
+          float ring = fogEnvelope(r, uP.z, uP.w);
+          float drift = n2(vXZ * 0.18 + vec2(uTime * 0.05, uTime * 0.02) * uSpeed) * 0.6 + n2(vXZ * 0.45 - vec2(uTime * 0.03, 0.0) * uSpeed) * 0.4;
+          float a = ring * (0.55 + 0.45 * drift) * uOpacity;     // 背景效果，宁淡勿浓
           gl_FragColor = vec4(uColor, a);
           #include <colorspace_fragment>
         }`,
@@ -90,10 +97,24 @@ export class Atmosphere {
   set showArrows(on) { this.arrows.visible = on; }
   set showSnow(on) { this.snow.visible = on; if (on) this.#seedSnow(); }
   set showFog(on) { this.fog.visible = on; }
+  setFogAppearance({opacity=this.fogOpacity.value,speed=this.fogSpeed.value}={}) {
+    if(!Number.isFinite(opacity)||opacity<0||opacity>1||!Number.isFinite(speed)||speed<0||speed>2)throw new RangeError('Fog appearance');
+    this.fogOpacity.value=opacity;this.fogSpeed.value=speed;
+  }
   setFogColor(hex) { this.uFog.value.set(hex).lerp(new THREE.Color('#ffffff'), 0.35); }
+
+  /** Change the shared shader direction and rebuild obstacle-aware airflow together. */
+  setWindDirection(degrees) {
+    if (!Number.isFinite(degrees)) throw new TypeError('Wind direction must be finite');
+    const angle = degrees * Math.PI / 180;
+    this.uWind.value.set(Math.cos(angle), 0, Math.sin(angle));
+    if (this.world && this.index) this.rebuild(this.world, this.index);
+  }
 
   /** 城镇 / 地形变了：重算风场、箭头、雾的范围。 */
   rebuild(world, index) {
+    this.world = world; this.index = index;
+    this.probes = makeWorldProbes(world, index, { levelHeight: this.L });
     const cells = world.cells;
     let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity, maxTop = 0;
     for (const c of cells) {
@@ -106,11 +127,13 @@ export class Atmosphere {
     const x0 = minX - pad, z0 = minZ - pad, x1 = maxX + pad, z1 = maxZ + pad;
     const W = Math.ceil((x1 - x0) / RES) + 1, H = Math.ceil((z1 - z0) / RES) + 1, LV = maxTop + 4;
     const cellAt = (x, z) => { for (const c of index.at(x, z)) if (pointInQuad(c.pts, x, z)) return c; return null; };
-    // 地面高度图（格子顶），雪和风都要
+    // Column-top diagnostic cache; never use it to fill cavities for collision.
     const ground = new Float32Array(W * H);
+    const cellIds = new Int32Array(W * H).fill(-1);
     for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
       const c = cellAt(x0 + i * RES, z0 + j * RES);
       ground[j * W + i] = c ? world.top(c) * this.L : 0;
+      cellIds[j * W + i] = c?.id ?? -1;
     }
     // 每层阻挡度：实心 = 1，再模糊两遍
     const vx = new Float32Array(W * H * LV), vz = new Float32Array(W * H * LV), vy = new Float32Array(W * H * LV);
@@ -124,8 +147,10 @@ export class Atmosphere {
       }
     };
     for (let lv = 0; lv < LV; lv++) {
-      const y = (lv + 0.5) * this.L;
-      for (let k = 0; k < W * H; k++) occ[k] = ground[k] > y ? 1 : 0;
+      // 931196707236392960: "virtual voxel space ... wind simulation".
+      // A roof above a tunnel is not solid air below it. Read this layer's bit.
+      // The top-height cache remains available only for diagnostics.
+      for (let k = 0; k < W * H; k++) occ[k] = cellIds[k] >= 0 && world.isSolid(cells[cellIds[k]], lv + 1) ? 1 : 0;
       blur(occ);
       for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
         const k = j * W + i;
@@ -146,7 +171,7 @@ export class Atmosphere {
         vy[o] = b * 0.55;                                    // 被挡住的气流往上抬
       }
     }
-    this.field = { x0, z0, W, H, LV, vx, vy, vz, ground, maxTop };
+    this.field = { x0, z0, W, H, LV, vx, vy, vz, ground, maxTop, worldVersion: world.version };
     this.#buildArrows();
     const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2, R = Math.max(maxX - minX, maxZ - minZ) / 2;
     this.fogParams.value.set(cx, cz, R + 2.5, R + 22);
@@ -186,7 +211,8 @@ export class Atmosphere {
       const y = (lv + 0.5) * this.L;
       for (let j = 0; j < f.H; j += 2) for (let i = 0; i < f.W; i += 2) {
         const x = f.x0 + i * RES, z = f.z0 + j * RES;
-        if (this.groundAt(x, z) > y) continue;
+        const c = this.index.cellAt(x, z);
+        if (c && this.world.isSolid(c, lv + 1)) continue;
         this.sample(x, y, z, v);
         const s = 0.32;
         pos.push(x, y, z, x + v.x * s, y + v.y * s, z + v.z * s);
@@ -211,12 +237,18 @@ export class Atmosphere {
       if (Math.random() < Math.abs(w.x) / (Math.abs(w.x) + Math.abs(w.z))) x = w.x > 0 ? f.x0 : f.x0 + spanX;
       else z = w.z > 0 ? f.z0 : f.z0 + spanZ;
     }
-    this.snowPos[k * 3] = x; this.snowPos[k * 3 + 1] = Math.random() * (f.maxTop + 4) * this.L + 0.3; this.snowPos[k * 3 + 2] = z;
+    let y = Math.random() * (f.maxTop + 4) * this.L + 0.3;
+    // 943230624369868800: "snow flakes ... affected by the wind system".
+    // Initial/reseeded snow may be under a roof, but never inside an actual bit.
+    if (this.probes.occupied(x, y, z)) y = this.probes.supportBelow(x, z).y + 0.3;
+    this.snowPos[k * 3] = x; this.snowPos[k * 3 + 1] = y; this.snowPos[k * 3 + 2] = z;
   }
   #seedSnow() { for (let k = 0; k < this.snowN; k++) this.#spawn(k, true); }
 
   update(dt) {
     if (!this.snow.visible || !this.field) return;
+    if (!Number.isFinite(dt) || dt < 0) throw new RangeError('Snow timestep must be finite and nonnegative');
+    if (dt === 0) return;
     dt = Math.min(dt, 0.05);
     const v = new THREE.Vector3(), f = this.field, P = this.snowPos, t = this.uTime.value;
     for (let k = 0; k < this.snowN; k++) {
@@ -224,7 +256,9 @@ export class Atmosphere {
       this.sample(x, y, z, v);
       const flutter = Math.sin(t * 2.3 + k * 1.7) * 0.15;
       const nx = x + (v.x * 0.9 + flutter) * dt, ny = y + (v.y * 0.6 - 0.32) * dt, nz = z + (v.z * 0.9 + Math.cos(t * 1.9 + k) * 0.12) * dt;
-      if (ny < this.groundAt(nx, nz) + 0.02 || ny < 0 || nx < f.x0 || nz < f.z0 || nx > f.x0 + f.W * RES || nz > f.z0 + f.H * RES) { this.#spawn(k, false); continue; }
+      // Shared World occupancy, not column height: a cave below a roof is air.
+      // Endpoint collision is a voxel approximation, not a swept deformed mesh.
+      if (ny < 0.02 || nx < f.x0 || nz < f.z0 || nx > f.x0 + f.W * RES || nz > f.z0 + f.H * RES || this.probes.occupied(nx, ny, nz)) { this.#spawn(k, false); continue; }
       P[k * 3] = nx; P[k * 3 + 1] = ny; P[k * 3 + 2] = nz;
     }
     this.snow.geometry.attributes.position.needsUpdate = true;

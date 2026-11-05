@@ -1,0 +1,126 @@
+{
+  "search": {
+    "visited": 40,
+    "found": true,
+    "w": 16,
+    "h": 80
+  },
+  "report": {
+    "leaves": 51,
+    "freeLeaves": 6,
+    "usedArea": 44544,
+    "freeArea": 217600,
+    "largestFree": 179712,
+    "maxDepth": 13,
+    "fill": 0.169921875,
+    "largestShare": 0.8258823529411765
+  },
+  "stale": {
+    "again": false,
+    "unchanged": true
+  },
+  "mobile": {
+    "ui": 419.796875,
+    "bounds": {
+      "x": 20,
+      "y": 454.8984375,
+      "size": 350
+    }
+  },
+  "scenes": [
+    {
+      "scene": "town",
+      "shared": {
+        "slots": 32,
+        "report": {
+          "leaves": 36,
+          "freeLeaves": 4,
+          "usedArea": 1089536,
+          "freeArea": 3104768,
+          "largestFree": 2663424,
+          "maxDepth": 15,
+          "fill": 0.259765625,
+          "largestShare": 0.8578496042216359
+        }
+      },
+      "stats": {
+        "triangles": 12099,
+        "chunks": 17,
+        "dirtyChunks": 17,
+        "changedCells": "all",
+        "terrainCells": 0,
+        "yards": 12,
+        "posts": 3,
+        "shapeMs": 3.7,
+        "terrainMs": 4.4,
+        "buildMs": 8.4,
+        "bakeMs": 12.3,
+        "ms": 45.3,
+        "shoreMs": 7.5
+      }
+    },
+    {
+      "scene": "terrain",
+      "shared": {
+        "slots": 32,
+        "report": {
+          "leaves": 36,
+          "freeLeaves": 4,
+          "usedArea": 1089536,
+          "freeArea": 3104768,
+          "largestFree": 2663424,
+          "maxDepth": 15,
+          "fill": 0.259765625,
+          "largestShare": 0.8578496042216359
+        }
+      },
+      "stats": {
+        "triangles": 12524,
+        "chunks": 34,
+        "dirtyChunks": 34,
+        "changedCells": "all",
+        "terrainCells": 736,
+        "yards": 0,
+        "posts": 0,
+        "shapeMs": 19.1,
+        "terrainMs": 25.5,
+        "buildMs": 1,
+        "bakeMs": 30.4,
+        "ms": 79.3,
+        "shoreMs": 8.3
+      }
+    },
+    {
+      "scene": "fusion",
+      "shared": {
+        "slots": 32,
+        "report": {
+          "leaves": 36,
+          "freeLeaves": 4,
+          "usedArea": 1089536,
+          "freeArea": 3104768,
+          "largestFree": 2663424,
+          "maxDepth": 15,
+          "fill": 0.259765625,
+          "largestShare": 0.8578496042216359
+        }
+      },
+      "stats": {
+        "triangles": 17218,
+        "chunks": 36,
+        "dirtyChunks": 36,
+        "changedCells": "all",
+        "terrainCells": 736,
+        "yards": 0,
+        "posts": 2,
+        "shapeMs": 17.4,
+        "terrainMs": 23.3,
+        "buildMs": 3.2,
+        "bakeMs": 30.5,
+        "ms": 87.7,
+        "shoreMs": 8.7
+      }
+    }
+  ],
+  "errors": []
+}

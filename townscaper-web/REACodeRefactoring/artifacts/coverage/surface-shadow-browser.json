@@ -1,0 +1,47 @@
+{
+  "reports": [
+    {
+      "released": 1,
+      "kind": "mixed",
+      "fixtureHits": [
+        0,
+        160
+      ],
+      "eligible": [
+        0,
+        288
+      ],
+      "changed": 3949,
+      "stats": {
+        "res": 96,
+        "eligible": 608,
+        "hits": 380,
+        "version": 674,
+        "ms": 2
+      },
+      "version": 672
+    },
+    {
+      "released": 1,
+      "kind": "quad",
+      "fixtureHits": [
+        0,
+        160
+      ],
+      "eligible": [
+        0,
+        288
+      ],
+      "changed": 2900,
+      "stats": {
+        "res": 96,
+        "eligible": 564,
+        "hits": 377,
+        "version": 783,
+        "ms": 2.299999952316284
+      },
+      "version": 781
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>对比色系统 — 三角网上解出来的线</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:120ch; }
+  header b { color:#9c4720; font-weight:650; }
+  #panel { position:fixed; right:16px; top:106px; width:224px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:11px 13px; display:flex; flex-direction:column; gap:7px; }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #stats { position:fixed; left:18px; bottom:14px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #cv { position:absolute; left:0; top:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>线不画，是解出来的：三角网上的对比色约束</h1>
+  <p>整张贴花是一张三角网。<b>对比边</b>（跨特征交界）要求两侧颜色差得够远，<b>非对比边</b>要求两侧几乎一样。
+    从随机色起手反复扫边，两条要求同时成立，红色交界线自己就浮出来了 —— 同一块材质上没有一条缝。</p>
+</header>
+
+<canvas id="cv"></canvas>
+
+<div id="panel">
+  <h2>迭代次数 iterations</h2>
+  <div class="row"><span>已扫边</span><b id="itlab">70</b></div>
+  <input type="range" id="iters" min="0" max="300" step="5" value="70" />
+  <h2>对比边最小色差 target</h2>
+  <div class="row"><span>ΔE (OKLab×100)</span><b id="tglab">15</b></div>
+  <input type="range" id="target" min="6" max="28" step="1" value="15" />
+  <h2>非对比边收缩 pull</h2>
+  <div class="row"><span>每边每轮</span><b id="pllab">0.16</b></div>
+  <input type="range" id="pull" min="0.04" max="0.40" step="0.02" value="0.16" />
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { buildDecal, initColors, measure, solve, paint } from './src/contrasttex.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const mesh = buildDecal({ nx: 26, ny: 21, seed: 7, jitter: 0.34 });
+
+const el = {
+  iters: document.getElementById('iters'),
+  target: document.getElementById('target'),
+  pull: document.getElementById('pull'),
+  itlab: document.getElementById('itlab'),
+  tglab: document.getElementById('tglab'),
+  pllab: document.getElementById('pllab'),
+  stats: document.getElementById('stats'),
+};
+
+let randomColors = initColors(mesh, { seed: 3, random: true, spread: 0.28 });
+let solved = null;
+let startStats = null;
+
+function solveNow() {
+  const iters = +el.iters.value;
+  const target = +el.target.value / 100;
+  const pull = +el.pull.value;
+  el.itlab.textContent = iters;
+  el.tglab.textContent = (+el.target.value).toFixed(0);
+  el.pllab.textContent = pull.toFixed(2);
+  solved = solve(mesh, { iters, target, pull, anchor: 0, seed: 3, random: true, spread: 0.28 });
+  window.reaContrast = { mesh, solved, stats: measure(mesh, solved) };
+  draw();
+}
+
+// 贴花只占 world 0..1 的中间一块，按顶点包围盒缩放，别让画面里留一半白
+const BB = (() => {
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  for (const v of mesh.verts) {
+    x0 = Math.min(x0, v.x); y0 = Math.min(y0, v.y);
+    x1 = Math.max(x1, v.x); y1 = Math.max(y1, v.y);
+  }
+  return { x0, y0, w: x1 - x0, h: y1 - y0 };
+})();
+
+function fit(w, h, pad = 16) {
+  const s = Math.min((w - pad * 2) / BB.w, (h - pad * 2) / BB.h);
+  return { s, ox: w / 2 - (BB.x0 + BB.w / 2) * s, oy: h / 2 - (BB.y0 + BB.h / 2) * s };
+}
+
+function panel(x, y, w, h, colors, opt) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, 10);
+  ctx.fillStyle = '#dde7e6';
+  ctx.fill();
+  ctx.clip();
+  const f = fit(w, h);
+  paint(ctx, mesh, colors, { w: 1, h: 1, sx: f.s, sy: f.s, ox: x + f.ox, oy: y + f.oy, ...opt });
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(29,47,54,.14)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x + .5, y + .5, w - 1, h - 1, 10); ctx.stroke();
+}
+
+function label(x, y, w, title, sub) {
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#1d2f36';
+  ctx.font = '600 13px -apple-system,system-ui,"PingFang SC",sans-serif';
+  ctx.fillText(title, x + w / 2, y);
+  ctx.fillStyle = '#5c727a';
+  ctx.font = '11.5px -apple-system,system-ui,"PingFang SC",sans-serif';
+  ctx.fillText(sub, x + w / 2, y + 16);
+  ctx.restore();
+}
+
+function draw() {
+  const W = innerWidth, H = innerHeight;
+  cv.width = W; cv.height = H;
+  ctx.clearRect(0, 0, W, H);
+
+  const top = 96, bottom = 64;
+  const avail = H - top - bottom;
+  const gap = 26;
+  const panelW = Math.min(330, (W - 60 - gap * 2 - 244) / 3);
+  const panelH = Math.min(panelW * 0.92, avail - 56);
+  const totalW = panelW * 3 + gap * 2;
+  const x0 = (W - 244 - totalW) / 2;
+  const y0 = top + (avail - (panelH + 40)) / 2 + 40;
+
+  const s0 = startStats;
+  const s1 = measure(mesh, solved);
+  window.reaContrast = { mesh, solved, start: s0, stats: s1, iters: +el.iters.value };
+
+  // ① 随机起手
+  panel(x0, y0, panelW, panelH, randomColors, { lineColor: 'rgba(196,48,38,0)', lineWidth: 0 });
+  label(x0, y0 - 34, panelW, '① 随机起手', `非对比边 ΔE ${s0.sameDE.toFixed(1)} — 满是接缝`);
+
+  // ② 收敛后 + 红线（对比边）
+  panel(x0 + panelW + gap, y0, panelW, panelH, solved, { lineColor: 'rgba(198,52,38,.95)', lineWidth: 1.5 });
+  label(x0 + panelW + gap, y0 - 34, panelW, '② 收敛后：红线 = 对比边',
+    `对比 ΔE ${s1.contrastDE.toFixed(1)} / 非对比 ${s1.sameDE.toFixed(2)}`);
+
+  // ③ 接缝探针：把 ΔE>3 的非对比边涂白，应该一条都看不见
+  ctx.save();
+  ctx.beginPath(); ctx.roundRect(x0 + (panelW + gap) * 2, y0, panelW, panelH, 10); ctx.clip();
+  const px = x0 + (panelW + gap) * 2, py = y0;
+  ctx.fillStyle = '#dde7e6';
+  ctx.fillRect(px, py, panelW, panelH);
+  const f3 = fit(panelW, panelH);
+  paint(ctx, mesh, solved, { w: 1, h: 1, sx: f3.s, sy: f3.s, ox: px + f3.ox, oy: py + f3.oy, lineColor: 'rgba(0,0,0,0)', lineWidth: 0 });
+  let bad = 0, worst = 0;
+  ctx.strokeStyle = 'rgba(255,255,255,.95)';
+  ctx.lineWidth = 1.6;
+  for (const e of mesh.edges) {
+    if (e.contrast) continue;
+    const A = solved[e.i], B = solved[e.j];
+    const d = Math.hypot(B[0] - A[0], B[1] - A[1], B[2] - A[2]) * 100;
+    worst = Math.max(worst, d);
+    if (d > 4) {
+      bad++;
+      const p = mesh.verts[e.a], q = mesh.verts[e.b];
+      ctx.beginPath();
+      ctx.moveTo(px + f3.ox + p.x * f3.s, py + f3.oy + p.y * f3.s);
+      ctx.lineTo(px + f3.ox + q.x * f3.s, py + f3.oy + q.y * f3.s);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(29,47,54,.14)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(px + .5, py + .5, panelW - 1, panelH - 1, 10); ctx.stroke();
+  label(px, y0 - 34, panelW, '③ 接缝探针 (ΔE>4 涂白)',
+    bad === 0 ? `0 条可见接缝（最差 ${worst.toFixed(1)}）` : `${bad} 条残留接缝`);
+
+  const ratio = s1.sameDE > 0.001 ? s1.contrastDE / s1.sameDE : 999;
+  el.stats.innerHTML =
+    `三角面 <b>${mesh.tris.length}</b> · 内部边 <b>${mesh.edges.length}</b>（对比 ${mesh.edges.filter(e => e.contrast).length} / 非对比 ${mesh.edges.filter(e => !e.contrast).length}）` +
+    ` · 随机起手 非对比 ΔE <b>${s0.sameDE.toFixed(1)}</b> → 收敛后 <span class="ok"><b>${s1.sameDE.toFixed(2)}</b></span>` +
+    ` · 对比边平均 <b>${s1.contrastDE.toFixed(1)}</b> 最小 <b>${s1.minContrastDE.toFixed(1)}</b>` +
+    ` · 比值 <span class="ok"><b>${ratio.toFixed(0)}×</b></span> · 特征内渐变幅度 <b>${s1.withinFeatureSpread.toFixed(2)}</b> ΔE`;
+}
+
+startStats = measure(mesh, randomColors);
+solveNow();
+addEventListener('resize', draw);
+el.iters.addEventListener('input', solveNow);
+el.target.addEventListener('input', solveNow);
+el.pull.addEventListener('input', solveNow);
+window.reaContrast = { mesh, solved, start: startStats, stats: measure(mesh, solved) };
+</script>
+</body>
+</html>

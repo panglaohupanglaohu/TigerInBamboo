@@ -1,0 +1,464 @@
+{
+  "validation": "编码往返通过。仍需视觉和玩法确认",
+  "id": "e78c91c9-169b-48d6-9256-684facede589",
+  "errors": [],
+  "startup": {
+    "version": 1,
+    "status": "ready",
+    "stages": [
+      {
+        "label": "正在准备信使主岛…",
+        "milliseconds": 0.3999999761581421
+      },
+      {
+        "label": "正在构建岛屿地形…",
+        "milliseconds": 14.600000023841858
+      },
+      {
+        "label": "正在布置岛屿植被…",
+        "milliseconds": 28.799999952316284
+      },
+      {
+        "label": "正在构建港口…",
+        "milliseconds": 173.60000002384186
+      },
+      {
+        "label": "正在铺设铁路…",
+        "milliseconds": 221.79999995231628
+      },
+      {
+        "label": "正在构建水晶城…",
+        "milliseconds": 126.80000007152557
+      },
+      {
+        "label": "正在构建高山圣城…",
+        "milliseconds": 1137.8000000715256
+      },
+      {
+        "label": "正在构建高山之门…",
+        "milliseconds": 2998.899999976158
+      },
+      {
+        "label": "正在构建海洋与天空…",
+        "milliseconds": 77.09999990463257
+      },
+      {
+        "label": "正在整理圣城地形（1/33）…",
+        "milliseconds": 90.69999992847443
+      },
+      {
+        "label": "正在整理圣城地形（2/33）…",
+        "milliseconds": 2.200000047683716
+      },
+      {
+        "label": "正在整理圣城地形（3/33）…",
+        "milliseconds": 4.600000023841858
+      },
+      {
+        "label": "正在整理圣城地形（4/33）…",
+        "milliseconds": 2.299999952316284
+      },
+      {
+        "label": "正在整理圣城地形（5/33）…",
+        "milliseconds": 1
+      },
+      {
+        "label": "正在整理圣城地形（6/33）…",
+        "milliseconds": 13.299999952316284
+      },
+      {
+        "label": "正在整理圣城地形（7/33）…",
+        "milliseconds": 7.700000047683716
+      },
+      {
+        "label": "正在整理圣城地形（8/33）…",
+        "milliseconds": 0.2999999523162842
+      },
+      {
+        "label": "正在整理圣城地形（9/33）…",
+        "milliseconds": 17.800000071525574
+      },
+      {
+        "label": "正在整理圣城地形（10/33）…",
+        "milliseconds": 3.4000000953674316
+      },
+      {
+        "label": "正在整理圣城地形（11/33）…",
+        "milliseconds": 3.899999976158142
+      },
+      {
+        "label": "正在整理圣城地形（12/33）…",
+        "milliseconds": 42.89999997615814
+      },
+      {
+        "label": "正在整理圣城地形（13/33）…",
+        "milliseconds": 73
+      },
+      {
+        "label": "正在整理圣城地形（14/33）…",
+        "milliseconds": 0.7999999523162842
+      },
+      {
+        "label": "正在整理圣城地形（15/33）…",
+        "milliseconds": 2.600000023841858
+      },
+      {
+        "label": "正在整理圣城地形（16/33）…",
+        "milliseconds": 0.7999999523162842
+      },
+      {
+        "label": "正在整理圣城地形（17/33）…",
+        "milliseconds": 2.6999999284744263
+      },
+      {
+        "label": "正在整理圣城地形（18/33）…",
+        "milliseconds": 54
+      },
+      {
+        "label": "正在整理圣城地形（19/33）…",
+        "milliseconds": 3.899999976158142
+      },
+      {
+        "label": "正在整理圣城地形（20/33）…",
+        "milliseconds": 224.70000004768372
+      },
+      {
+        "label": "正在整理圣城地形（21/33）…",
+        "milliseconds": 63.5
+      },
+      {
+        "label": "正在整理圣城地形（22/33）…",
+        "milliseconds": 0.5
+      },
+      {
+        "label": "正在整理圣城地形（23/33）…",
+        "milliseconds": 0.10000002384185791
+      },
+      {
+        "label": "正在整理圣城地形（24/33）…",
+        "milliseconds": 36.799999952316284
+      },
+      {
+        "label": "正在整理圣城地形（25/33）…",
+        "milliseconds": 73.29999995231628
+      },
+      {
+        "label": "正在整理圣城地形（26/33）…",
+        "milliseconds": 0.6999999284744263
+      },
+      {
+        "label": "正在整理圣城地形（27/33）…",
+        "milliseconds": 5.699999928474426
+      },
+      {
+        "label": "正在整理圣城地形（28/33）…",
+        "milliseconds": 0.3999999761581421
+      },
+      {
+        "label": "正在整理圣城地形（29/33）…",
+        "milliseconds": 10.299999952316284
+      },
+      {
+        "label": "正在整理圣城地形（30/33）…",
+        "milliseconds": 1560.2000000476837
+      },
+      {
+        "label": "正在整理圣城地形（31/33）…",
+        "milliseconds": 118.10000002384186
+      },
+      {
+        "label": "正在整理圣城地形（32/33）…",
+        "milliseconds": 66.30000007152557
+      },
+      {
+        "label": "正在整理圣城地形（33/33）…",
+        "milliseconds": 247.19999992847443
+      },
+      {
+        "label": "正在整理山体与岩面植被…",
+        "milliseconds": 4241.599999904633
+      },
+      {
+        "label": "正在布置书店与湖沼…",
+        "milliseconds": 3199.5
+      },
+      {
+        "label": "正在连接水路与交汇城堡…",
+        "milliseconds": 28.600000023841858
+      },
+      {
+        "label": "正在布置港湾与苔庭…",
+        "milliseconds": 15.199999928474426
+      },
+      {
+        "label": "正在构建叹息之门…",
+        "milliseconds": 45.10000002384186
+      },
+      {
+        "label": "正在整理水晶城与湖沼…",
+        "milliseconds": 5112
+      },
+      {
+        "label": "正在布置连接道路与林带…",
+        "milliseconds": 3268.7999999523163
+      },
+      {
+        "label": "正在布置书店基地…",
+        "milliseconds": 860
+      },
+      {
+        "label": "正在布置十二门徒岩面植被…",
+        "milliseconds": 5.199999928474426
+      },
+      {
+        "label": "正在准备岩岸与海面连接…",
+        "milliseconds": 806.6000000238419
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（1/9）…",
+        "milliseconds": 873.5
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（2/9）…",
+        "milliseconds": 230.69999992847443
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（3/9）…",
+        "milliseconds": 680.3999999761581
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（4/9）…",
+        "milliseconds": 543.1999999284744
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（5/9）…",
+        "milliseconds": 208.19999992847443
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（6/9）…",
+        "milliseconds": 160.09999990463257
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（7/9）…",
+        "milliseconds": 143.29999995231628
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（8/9）…",
+        "milliseconds": 110.39999997615814
+      },
+      {
+        "label": "正在用 REACodeRefactoring 构建十二门徒岩群（9/9）…",
+        "milliseconds": 7.399999976158142
+      },
+      {
+        "label": "正在贴合云层与最终山体…",
+        "milliseconds": 1.6999999284744263
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 363.10000002384186
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 276.10000002384186
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 276.7999999523163
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 262.5
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 340.6999999284744
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 330.59999990463257
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 270.1999999284744
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 285.10000002384186
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 501.10000002384186
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 283.7000000476837
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 221.39999997615814
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 222.5
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 221.89999997615814
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 300.10000002384186
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 248.89999997615814
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 280
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 252.70000004768372
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 278.39999997615814
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 300.1999999284744
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 267.60000002384186
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 268.10000002384186
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 246.69999992847443
+      },
+      {
+        "label": "正在安排云层绕山路线…",
+        "milliseconds": 251
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 94.20000004768372
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 87.59999990463257
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 88.30000007152557
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 73.29999995231628
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 65.79999995231628
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 89.80000007152557
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 65.60000002384186
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 66.89999997615814
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 66
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 66.89999997615814
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 69.20000004768372
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 66.29999995231628
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 69.69999992847443
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 69.60000002384186
+      },
+      {
+        "label": "正在贴合云层高度…",
+        "milliseconds": 65.89999997615814
+      },
+      {
+        "label": "正在准备云层画面…",
+        "milliseconds": 3.700000047683716
+      },
+      {
+        "label": "正在连接舰队与士兵…",
+        "milliseconds": 39.199999928474426
+      },
+      {
+        "label": "正在种植繁花锦岛与披锦大马…",
+        "milliseconds": 1055.1000000238419
+      },
+      {
+        "label": "信使主岛已构建，正在连接玩法…",
+        "milliseconds": 0
+      },
+      {
+        "label": "正在准备西芳寺 · 苔寺…",
+        "milliseconds": 451.89999997615814
+      },
+      {
+        "label": "正在连接角色与游戏控制…",
+        "milliseconds": 1755.3999999761581
+      },
+      {
+        "label": "正在装配圣城街道与广场…",
+        "milliseconds": 0
+      },
+      {
+        "label": "正在准备首帧画面…",
+        "milliseconds": 794.9000000953674
+      }
+    ],
+    "current": null
+  },
+  "storage": {
+    "versions": [
+      {
+        "id": "e78c91c9-169b-48d6-9256-684facede589",
+        "scene": "morris-lake",
+        "data": "iukW0W070CeVuVu0n20202048X_X_W31e7u7u0a0y0y020606090F0F00FJ_p_m1aq0404001010100W1W1W0Fne080803Q1-1-010F0F02WVWVW0BeVuVu0a_y_y01_D0_0_04X_X_W07e0O0O040y0y0A060600_cW1W1W1G3m3m080O0O02w0U0U010_0_04V_YG0G0G134040401_-T0_0_04W7W7W018VuVu04_y_y027-7-04sW7W7W0G0m0m081u1u0K0C0C0I0U0U00KW1W1W35e1u1u0K040402060601F_F_067J_p_m1Xq_y_y0Pj0_0_02X_X_W1Foe0O0O0a0y0y01rF_F_043J_p_m0eVuVu0HA0200S42W1W1W0G0G0G080O0O0Jyw060601010100W1W1W0G0G0G07_-a040402060605010100BGFmFm17_zq04040PL3_3_02d_d_W0Fre0801m0A0200S0iW1W1W0G0G0G080O0O0JyI06060CSd_d_W35e1u1u0pzY7-7-0C_yW0W0W1F-8VuVu0po3-3-210V0V10WVWVW0G_m_m01a3y3y027-7-010_0_00FG3m3m087u7u040y0y0A7-7-01F_F_02X_X_W0J_p_m08VuVu04_y_y09j8_8_00d_d_W0G3m3m087u7u03zI0U0U01030302W7W7W0Fn80O0O040y0y02060604Md_d_W2Foe1u1u043y3y020U0U04_CX_X_W1J_p_m087u7u03yQ1-1-010F0F02WVWVW0F80O0O0oo0200S02W0W0708e5u5u01o0202004X_X_W1J_p_m0XqFyFy0P-PF_F_06FG0m0m18080803-Y020200Yd_d_W37e1u1u0mQ0U0U01030300W7W7W119_v_u0mQV-V-0C_gW7W7W1G0m0m081u1u03_g7-7-010_0_00X_X_W0GFmFm07__a0C0C020U0U05030300VdV_p_mW9_v_u07_y_y82V-V-00CZ_Z_WWJ_p_m09_v_u84VyVy41-L0F0F02WVWVW0G3m3m01a_y_y0OT010100PG0m0m1bq0C0C0I020200-d_d_W35e08080K0C0C02020200_UX_X_W1J_p_m0Zq3y3y027-7-050_0_00W1W1W0G3m3m080O0O03o020204aW1W1W1G0G0G080O0O00Q0U0U050_0_02PG0G0G180O0O01w7-7-01F_F_02X_X_W0E8080803zQV-V-0C6d_d_W3Df_v_u0q0y0y0P-b0F0F067G0m0m0808080020202010_0_06MJ_p_m0eVuVu0J_-I1-1-053_3_00WVWVW09e7u7u04FyFy0A1-1-00_gWVWVW1G_m_m0dK040400j0101001G3m3m087u7u04FyFy021-1-00cd_d_W33e1u1u0K0C0C08T3_3_04d_d_W02808080JI0U0U010_0_00a7a7W0GFmFm07zq2020005030300VG3m3m1c40C0C001070700EG0G0G0bqFyFy0A1-1-013_3_00TG0G0G07uqFyFy0Pv0100E2ViG3m3m087u7u0J_yw0U0U05030300W7W7W07e7u7u0K0y0y021-1-00_GW0W0W27e1u1u043y3y027-7-010_0_00W7W7W1G0m0m081u1u01A0200S5030300W7W7W1G0m0m05q0400u9-1F_F_04__d_k0Fv80808040C0C0A020200_Wd_d_W1G_m_m02q_y_y0J_-V-W0EW0W0W1080O0O041y1y421-1-050V0V104G0G0G080O0O0II02020D0F0F00W3W3W0G_m_m09_v_u00w7-7-01F_F_00X_X_W0GFmFm07_q_y_y0Gf0100E07G3m3m1dwK3y3y020U0U010_0_00X_X_W05eVuVu0p__g0U0U090_0_00IJ_p_m0eVuVu04_y_y01_-53_3_04d_d_W09e7u7u0K0y0y08f0303062J_p_m1Z4040401_D010102W1W1W16f_v_u0ZQ020204_4d_d_W3F_z9_v_u0YA1-1-08____2W0W0W0580O0O0K040402060600kd_d_W1G_m_m09_v_u03-I1-1-010F0F02WVWVW0Fr81u1u0Z__gV-V-0CgW1W1W2G0G0G07z40C0C00D030306V_iG0m0m1dq_y_y0P_90F0F02WVWVW13f_v_u0d_y_z01__D0100E01G0G03W7_K040409_f010100W1W1W1FpeVuVu0pg0U0U01070700W1W1W0G3m3m01a0y0y021-1-050F0F00VhJ_p_m1bd_y_yu3_-V-W1F_F_00V___bG0G03W7a0y0y020606010F0F02VsJ_p_m1duK_y_y0OfF_F_06VsG3m3m087u7u0Ww0606050F0F02OG0G0G080O0O0K040401__P0101020G0m0m00q3y3y0A7-7-05F_F_062GFmFm18VuVu01w020201030302W0W0W0F_m80801m40C0C081010100QGFmFm081u1u0JQ060601010104LG0G0G01q_y_y03_-V-41F_F_0ASG2G2G0808080XA7-7-0Cad_d_W3FrF_v_w04_y_y0I7-7-05F_F_00X_X_W0180O0O00I020200_4W0W0W0F_w9_v_u04FyFy0AV-V-004W0W0W1G0m0m0b4040401_53_3_06IG0m0m081u1u0K0C0C02020201030304DJ_p_m1e0O0O00A020200_0d_d_W2F__sf_v_u0XwV-V-013_3_00d_d_W0Fz81u1u043y3y02020200CX_X_W0GFmFm0eVuVu03zg0606090F0F00V__XG_m_m087u7u0KFyFy01r030300W0W0W1G0m0m07wa1y1y020c0c000W1W1W0Fr87u7u0a0y0y00j030302W7W7W1Fy8080803yg0202000W1W1W0780O0O0K0404020606006W7W7W1GFmFm081u1u03yo7-7-08_UW0W0W0G0m0m0ba04040Hn010104W1W1W01e7u7u0XY7-7-01F_F_00l_l_W0J_p_m01a3y3y0OT3_3_00XVXVW0G_m_m0c40400u810100E0VoG0G0G07xK04040A060604iW0W0W078080803A0U0U050_0_00W7W7W0Be08080Z-A0202090_0_00W7W7W0G1m1mG83u3u82I06060C_UW1W1W2G3m3m07xK_y_y0Gf0100E0VfG0G03W7_va0400u1__-v3_3_00WVWVW14eVuVu0a_y_y0Q1-1-0CAX_X_W2GFmFm07K0C0C020U0U05030300V_oG0m0m0e1u1u040C0C020202010303022G3m3m17a_y_y0P___5030304W7W7W039_v_u0Y20202000W0W070C8080802A06060D010100CG0m0m1Wa3y3y0H_-z0F0F06W1W1W3Foe08080K0C0C00X030300W0W0W0G0G0GGd-a040401D3_3_049N_t_m09_v_u0Z__yI1-1-053_3_00VvG3m3m0e7u7u03yY060608IX_X_W2GFmFm03K0404001010102AJ_p_m08VuVu04_y_y08DF_F_04VtG0m0m087u7u040C0C01_nF_F_06OG3m3m087u7u0JI020200AWVWVW2De08080020202010303002G0m0m080808040C0C01j0N0N00TG0G0G0W43y3y0A0U0U00_EWVWVW0G3m3m0e7u7u01wV-V-086W1W1W2G_m_m13q0C0C0H-93_3_04TG0m0m080808040C0C00D0101026G0G0G0YK04040I0606004W1W1W0G0G0G080O0O0K0y0y0A1-1-01F_F_04VqG0m0m04K040400f010100W1W1W18e0O0O0XA0606010F0F00W1W1W0187u7u0Z__zI0U0U08WW1W1W0G3m3m080O0O00Q0200S0Ud_d_W2B81u1u04FyFy024U4U00_OW0W070087u7u0Z-Y060608Ad_d_W28e7u7u0Zyw060601010100W1W1W0Fp87u7u040y0y08u",
+        "goal": "",
+        "validation": {
+          "passed": true,
+          "message": "编码往返不一致",
+          "scope": "codec-only"
+        },
+        "time": 1793613964554,
+        "origin": "manual"
+      }
+    ],
+    "finals": {
+      "morris-lake": "e78c91c9-169b-48d6-9256-684facede589"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "difference": 0,
+      "voxels": 113880,
+      "estimatedBytes": 26989560,
+      "ms": 110,
+      "rayStats": {
+        "queries": 91450,
+        "steps": 232530,
+        "fallbacks": 10962
+      },
+      "pointCheck": {
+        "difference": 0,
+        "rayStats": {
+          "queries": 134536,
+          "steps": 530099,
+          "fallbacks": 30982
+        }
+      },
+      "aoColors": 257,
+      "sdfColors": 598,
+      "normalsColors": 67968
+    },
+    {
+      "grid": "quad",
+      "difference": 0,
+      "voxels": 131040,
+      "estimatedBytes": 31056480,
+      "ms": 165,
+      "rayStats": {
+        "queries": 106734,
+        "steps": 265474,
+        "fallbacks": 11286
+      },
+      "pointCheck": {
+        "difference": 0,
+        "rayStats": {
+          "queries": 149308,
+          "steps": 548834,
+          "fallbacks": 30223
+        }
+      },
+      "aoColors": 257,
+      "sdfColors": 592,
+      "normalsColors": 59074
+    }
+  ],
+  "errors": []
+}

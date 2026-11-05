@@ -1,0 +1,176 @@
+{
+  "startedAt": "2026-11-04T02:30:00+08:00",
+  "windowHours": 80,
+  "totalSegments": 142,
+  "batchSize": 12,
+  "nextIndex": 142,
+  "batches": [
+    {
+      "start": 0,
+      "count": 12,
+      "frames": "done",
+      "code": "src/combatfx.js + combatlab.html",
+      "verified": true,
+      "note": "2026-11-04 07:38 复验通过：修掉地形块顶面高于 heightAt 0.5（6 个单位被埋，只剩 2 条缝）、单位半高未乘 scale.y、长矛杆埋地且突刺线从两人中间穿过 0 命中、贴花一律按船体局部坐标算导致地面血飘在海上、船开到 15.2 钻进右侧面板。现 6 人全部站在台面，突刺命中 1 → 血贴台面，击退 2 下打落水 1，船上贴花跟船走。902069/912691 等纯 gif 与立绘记为 ref，三角流场 partial，洞穴 tileset todo。"
+    },
+    {
+      "start": 12,
+      "count": 12,
+      "frames": "done",
+      "code": "src/campaignmap.js + campaignmaplab.html / src/gridpatch.js + gridpatchlab.html",
+      "verified": true,
+      "note": "2026-11-04 08:28 通过。1042732450730913793 + 1078792665980915714 → game：战役图五步生成器（撒点597 / 波状带裁边留131 / kNN 233边 / 主线67点绕行1.98×到终点 / 支线7 / 补点9），两套视图对齐原片（白环 + 方格纸 vs 彩色环 + 绿链）。1301816247479345152 → game：补丁=顶点抖动静零，825格/4块/47格5.7%/接缝52条。917405214638006273 → partial（图论连通有了，地形可达性没做）。1022573208590057472、938395867215728640 → ref。仍 todo 未动：1471817524148940807(方还是六边形岩岛)、1580158269267406849(marching cubes 叶簇)、1301816247479345152 已做但簇状分布可再调；原 partial 的 999185422403055616 / 1768627849529893109 / 1751932427272909032 / 1670725072540106755 保持。"
+    },
+    {
+      "start": 36,
+      "count": 12,
+      "frames": "done",
+      "code": "src/penumbra.js + penumbralab.html / src/snapshot64.js + snapshot64lab.html",
+      "verified": true,
+      "note": "2026-11-04 12:45 通过。1305951750638231552 + 1313840428685447170 → game：阴影画三遍（全分辨率硬核心 254 格 / 门槛抬高0.7体素收进 102 格 / 3×3均值粗体素再投+模糊一格 宽半影带带宽4.9格），太阳 gizmo 可拖方位；截图确认五座石塔可见、影子朝背光侧、无灰雾。911913981731885056 → game：64² 岛快照（4096值/16×）+ crispen 放大，过渡带像素 3350→458、峰值梯度0.25→1.0、RMSE0.0807→0.0587。1580835075629133825 / 931196707236392960 由前轮 bouncegi.js、lighting.js+lightingcache.js 覆盖记 both；1298689301488775169 / 1580846877855338497 / 1580845127207387137 / 1590674061092212738 / 1727315611959865407 记 ref；1448039167057879048 / 1579474420749725696 仍 todo。"
+    },
+    {
+      "start": 48,
+      "count": 12,
+      "frames": "done",
+      "code": "src/mirrordecor.js + mirrordecorlab.html / src/overhangterrain.js + overhangterrainlab.html",
+      "verified": true,
+      "note": "2026-11-04 19:20 通过（装饰页验收干净；地形页无 pageerror 但构图读不出，如实记 partial）。1061221291137605633 → game：单图 8 向 D4（4 旋转×镜像）+ 三角波折叠铺任意尺寸，宽扁 596×112 用 7.24 个单元，接缝实测 0（672 采样）vs 关闭镜像的硬平铺 0.2697。1671808851895627776 / 1447488323845509121 / 1669315384619540487 → partial：src/overhangterrain.js 用体素列叠层做出悬垂（水面以上朝下面 82 = 洞顶 15×5 + 石柱帽 40）、海蚀洞掏空 237 格深 14 格洞内空气 300 格连通、缓坡 908 / 陡崖 310 格按分位掩码插值；但 1280×800 下洞口与岩檐被坡面挡住，erosion 与线框/等高线两遍未做。1584623053061099520 / 1015151731804721152 / 1056990611738451968 → both（前轮 splice.js、smokefx.js 已覆盖）。1708815475801505819 / 1670794261669769217 / 1427721874490933250 / 1430227487376781317 / 1712088611934371876 → ref。"
+    },
+    {
+      "start": 60,
+      "count": 12,
+      "frames": "done",
+      "code": "src/contrasttex.js + contrasttexlab.html / src/colorvolume.js + colorvolumelab.html",
+      "verified": true,
+      "note": "2026-11-05 00:10 通过（两页都无 pageerror，截图看过）。1482346496460828674 → game：三角网对比色约束松弛，非对比边平均 ΔE 32.0→0.74、接缝探针 0 条 >4（最差 3.9）、对比边 18.0/最小 14.0、比值 24×，特征内仍有 2.9 ΔE 的渐变；随机起手 70 轮退火。1710031224838771027 → game：每特征一整块颜色空间（8 角点 × 高度/坡度/干湿 三线性 OKLab 插值），五块空间最小间隔 10.0 ΔE，同空间渲染 45500 像素的岛按高度/坡度分出 草76%/崖10%/沙8%/花7%。1670720537662836736 / 1181464374839521280 / 1246074663546916873 / 1061229717582475264 → both（edgesmooth/surfacedeco/propanim/repeatbreak 已覆盖）。1205416648397721601 → partial（rectpack 有撒点+树，道具不重叠铺满与门窗标准局部框未接）。1210969316071477248 / 1257213678056857600 / 1275089608758484992 → ref。1331905048801144836 / 1447494168448753667 仍 todo。"
+    },
+    {
+      "start": 72,
+      "count": 12,
+      "frames": "done",
+      "code": "src/wake.js + wakelab.html",
+      "verified": true,
+      "note": "2026-11-05 05:15 通过（无 pageerror，截图看过）。901469409579061248 → game：尾迹=船舷两个发射点以 (speed−v∥)·tanθ 横向走开，V 的张角是几何后果；三船 6062 泡沫粒，斜率拟合实测 20.6° vs 设定 19.5°（+1.1° 来自舷宽半宽），按年龄四段不透明度 53%/30%/13%/2%，尾迹 250px，另有方形水花层 26~30 片与船尾雾层。1758250248483278925 / 1590669875869286400 / 1707490274425884929 / 1290997501332525056 / 1241046107125399552 → both（reflstreak/grasscards/edgeplant/texelsnap 前轮已覆盖）。1212732478458343424 → ref（6 帧里 5 帧只有海面与光标，旗子始终不在画面内）。仍 todo：959530111187013632(每层多种草型) / 1243228419162341379(层叠阴云) / 1259838941299183619(Italian Wires) / 1270725616430530566(蝴蝶) / 1191990107785572352(锚定中心顶点灌木卡片)。"
+    },
+    {
+      "start": 84,
+      "count": 12,
+      "frames": "done",
+      "code": "src/squigglefield.js + squigglefieldlab.html / src/uikit.js + uikitlab.html",
+      "verified": true,
+      "note": "2026-11-05 09:58 通过（两页均无 pageerror，1280×800 截图看过）。1105131621391495176 → game：整枚卷草牌匾=49 个胶囊，只写右上象限、折坐标得四折镜像；歪扭=距离上叠两个异向低频正弦、动画=推相位，单边探针 RMS 3.3px / 最大 6.0px / 弧长 1.127×直线 / 墨量 13.75%→13.15%（边在爬、形状没换），13.5ms 60fps（16px 桶）。前轮 dfgrow.js 已覆盖同一条的“生长/擦除”轴，本轮补的是歪扭+镜像+扫光。1242824460325052417 + 1016680972610359298 → game：槽位仍是一列等距方块（布局不动），旋转/位移由 index 的确定性 hash 只加在 transform 上（最大 1.43° / 2.87px，相邻包围盒最小缝 3.2px、重叠 0 对），弹窗同语言。1201179450668441600（8 个描边图标）+ 1024679338292256769（UI 花饰）→ partial。1277554535297236994 / 1430224300003545091 / 1670064751181791233 → ref（本地化表、导出 beta、Burst 睡线程，纯截图无机制）；1724449858369568780（节点式道具动画）→ todo；1258421104756097029 仍 partial（水花专项未写）；768886648625061889（地球自转）、777501038274281472（体素小屋）本轮补登记为 ref。"
+    },
+    {
+      "start": 96,
+      "count": 12,
+      "frames": "done",
+      "code": "src/housekit.js + housekitlab.html",
+      "verified": true,
+      "note": "2026-11-05 15:24 通过（housekitlab.html 无 pageerror，仅 favicon 404；1280×800 截图看过：屋顶盖住墙顶、白色封边在、烟囱贴坡面、无互相重叠、底部统计条不压房子）。本批 12 条全是 2016 老片、data.js 原先一条都没有，已用 add.mjs 全部补登记。781027725452648448 → game：房屋套件=比例参数化，墙高=层数×2.6（1/2/3 层）、坡度只取满足「屋顶抬升/墙高 ∈ 0.20~0.95」的那几档、封边恒宽、烟囱底面 = 屋面高度场 roofY(y)（贴面误差 0.0000）、门窗是墙面贴花且同层同 z（极差 0.0000）；seed 7 撒 12 栋得 12 种组合 / 7 档坡度 / 3 种层数 / 11 根烟囱 / 36 扇窗 / 最小占地间隙 3.733。777596437534240768 → both（mipfilter.js）；784847588893814785 / 784847933686575104 / 784848286272327680 / 787319655648100352 → both（tileplace.js，含 3D 台面那版）；793557992931266561 → both（voxelao.js，白色城堡体块就是那份 AO 试验的底模）；793806535898136576 → both（piperepair.js / tilerepair.js）；795010582239997952 → both（adjacency.js / traffic.js）；794993371261665280 → ref（只有空台面 + Go! 按钮）；781957658597269506（层叠台地 + 木梯跨层）与 793545297376972801（台面上的旗）→ todo，画面已记，机制留待下一轮。"
+    },
+    {
+      "start": 108,
+      "count": 12,
+      "frames": "done",
+      "code": "src/archvoid.js + archvoidlab.html / src/storydatum.js + storydatumlab.html",
+      "verified": true,
+      "note": "2026-11-05 20:37 通过（两页 1280×800 截图均无 pageerror，仅 favicon 404，ViewImage 看过：主拱的楔石/桥面/水面/净空虚线都在视野内，右侧三块矢高比对照的数字列与图形不重叠；立面页左右两栏塔与檐线完整、底部统计条不压图）。本批 12 条全是 2016 老片、data.js 原先一条都没有，已用 add.mjs 全部补登记（240→263 里本批 +12）。806904557502464000 → game：拱洞=一条内椭圆+一圈等角楔石（span 9.2 / 矢高比 0.5 / 15 块）：缝角 12°、接缝间隙 0.000000、楔石互插 0 对；净空曲线是椭圆（中心 4.60、0.25span 3.98、0.4span 2.76）；桥面高=矢高+拱厚+板厚，与桥台顶高差 0.0000，拱脚内缩 0.55 即拱券厚度；对照 0.5/0.38/0.28 三档，半圆拱每块石头长细比恒 1.85，压扁到 0.38 → 1.47~1.85、0.28 → 1.16~1.85。803190517534248960 + 806856212260278272 → game：楼层线=全局标高网格 k×层高（2.6m）而不是各塔自基累加，同 seed 一排 6 塔：不同檐高 12→4、单条檐线最多被 2→6 塔共用、离网格最大偏差 1.30→0.00、檐高复用率 1.42→4.00，代价是顶层被截短 0.65~1.95（不到一层）。802496920790777856 → partial（穿楼拱形门洞的券形已落地，但「洞口只吃楼板以下一层 + 上方挑檐继续横穿」未做）。797119718477991936 / 797844857821732864 / 798580832906739712 / 807135253215199233 / 810157485638189056 / 810878197134950401 → both（holenav+voxelnav+navgrid+cheesenav / tileplace / rayvis / navgrid / triflow / los，前轮已覆盖，本轮只补登记）。815236105079398400（灰白台地岛：平台间近垂直崖壁 + 水线白沫，候选=高度场量化成台地层）、807256278154301441（红砖塔四坡红顶 + 彩墙矮塔，候选=四坡收顶）→ todo，画面已记。"
+    },
+    {
+      "start": 120,
+      "count": 12,
+      "frames": "done",
+      "code": "src/navribbon.js + navribbonlab.html / src/blobshadow.js + blobshadowlab.html",
+      "verified": true,
+      "note": "2026-11-06 01:50 通过（两页 1280×800 截图均无 pageerror，仅 favicon 404，ViewImage 看过：航点页左右两栏走廊与格子完整在面板内、步距标尺单行、第三块说明不压图形；软影页五只小人 A–E 各自站在灰色台面上、软影落在自己那块台面、标签不被遮、右侧表格与曲线不出框）。本批 12 条全是 2017 老片、data.js 原先一条都没有，已用 add.mjs 全部补登记（263→275）。823848950553780226 + 827215002448846848 → game：航点沿中线按弧长等距重采样（16 点 / 长 16.443，步距 1.000±0.000），每段合成一个贴地格子、相邻格共享边界（异常 0 对），格面积和 35.376 vs 弧长×带宽积分 36.176（比值 0.978 ≈ 弦/弧，说明格子是弦不是弧）；直接把控制点当航点则步距 0.32~2.69（8.41×），弧/弦最大 1.0189 解释了“拐弯处看着更密”。820977247083528192 + 821321422140309504 + 821680056514781186 → game：脚下软影=贴地径向软盘（不投几何形状），r=r0(1+0.16h) 0.52→0.786、α=α0(1−0.10h) 0.46→0.313、沿光偏移 0.36h，五只单位全部收在占地菱形内（最坏 fit 0.89 半对角线，出框 0），26° 坡上沿坡向拉长 1.113×（=1/cos26°）、横向压短 0.899×，椭圆面积比 1.000。816332161036984320 → both（ballistic.js 弹道 LUT + 现场拖参）；816743289500106752 / 816748103193817088 / 817323301357948928 → both（triflow / flowfield / navgrid+unitbatch）；818857408848130048 → both（shore.js 岸线白沫 + voxelao）；827561690896162816 → both（combatfx.js 血迹贴花）。827216768783495168（三支小队各举徽记旗：骷髅/剑/斧 + 阵营色）→ todo，画面已记，机制是纹章图集 + 单位继承小队色，未落地。"
+    },
+    {
+      "start": 132,
+      "count": 10,
+      "frames": "done",
+      "code": "src/slotsolve.js + slotsolvelab.html / src/unitsnap.js + unitsnaplab.html",
+      "verified": true,
+      "note": "2026-11-06 07:04 通过（两页 1280×800 截图均无 pageerror，仅 favicon 404，ViewImage 看过：槽位页左右两个 10×8 网格完整在框内、右栏最后一列不再出界、图例与统计条不重叠；单位页左右两块台地互不遮挡、台面成片可数出台阶、红虚线标出落差、图注三行不压统计条）。本批 10 条是队列最后 10 条（2017 老片），其中 6 条 data.js 原先没有（另 4 条 data.js 也漏登记、gifs 里有片，一并补上），已用 add.mjs 补登记 275→285。865200072685912064 → game：SLOTS 槽位求解器，边值由两端角点算得（v=(a+b)%3）所以相邻格共享棱相等是构造保证；候选池 27、未求解 27/格、弧相容后 14.2/格、SOLVE 后 1.00/格（80 格全单值）、142 条内部棱断 0、决策 122/回溯 56、同 seed 重跑 80/80 相同；解与真值 62 格不同说明 14 个给定格约束不住全局（多解是常态，并列必须按下标裁决）。828984794407170048 → game：台地上队伍逐人取自己所占格子的台面高度，22 人跨 3 级（脚底天然差 1.80=2×0.90），整队共用中心高度时 悬空 5/埋入 5，逐人取高后 0/0；渲染必须把单位插进所属格子的 painter 序列，否则被埋的人画在最上层看不出陷进去。890611046435627008 → partial（跨层台落位已解决，白色菱形路径标未做）。832633189277409280 / 837027901853810688 → both（shore.js 的岸线外推泡沫线就是水面上那几道平行白线）；839067977781768193 → both（combatfx.js 血迹贴花/血量浸透；+10 飘字与登陆艇放下单位未做）；847717312912211970 / 863019585162932224 / 883447205176238083 / 886199305522085890 → both（partsprites / coroutine / infograph / traffic 前轮已覆盖，只补登记不重写）。队列到此走完：nextIndex 142 = totalSegments 142。"
+    }
+  ],
+  "runs": [
+    {
+      "at": "2026-11-04T07:56:00+08:00",
+      "start": 0,
+      "segments": 12,
+      "module": "src/combatfx.js + combatlab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-04T08:28:00+08:00",
+      "start": 12,
+      "segments": 12,
+      "module": "src/campaignmap.js + campaignmaplab.html / src/gridpatch.js + gridpatchlab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-04T12:45:00+08:00",
+      "start": 36,
+      "segments": 12,
+      "module": "src/penumbra.js + penumbralab.html / src/snapshot64.js + snapshot64lab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-04T19:20:00+08:00",
+      "start": 48,
+      "segments": 12,
+      "module": "src/mirrordecor.js + mirrordecorlab.html / src/overhangterrain.js + overhangterrainlab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-04T15:22:39.550Z",
+      "start": 60,
+      "segments": 12,
+      "module": "src/contrasttex.js + contrasttexlab.html / src/colorvolume.js + colorvolumelab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-04T20:35:18.217Z",
+      "start": 72,
+      "segments": 12,
+      "module": "src/wake.js + wakelab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-05T01:53:01.837Z",
+      "start": 84,
+      "segments": 12,
+      "module": "src/squigglefield.js + squigglefieldlab.html / src/uikit.js + uikitlab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-05T07:24:53.000Z",
+      "start": 96,
+      "segments": 12,
+      "module": "src/housekit.js + housekitlab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-05T20:37:00+08:00",
+      "start": 108,
+      "segments": 12,
+      "module": "src/archvoid.js + archvoidlab.html / src/storydatum.js + storydatumlab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-05T17:50:55.000Z",
+      "start": 120,
+      "segments": 12,
+      "module": "src/navribbon.js + navribbonlab.html / src/blobshadow.js + blobshadowlab.html",
+      "verified": true
+    },
+    {
+      "at": "2026-11-06T07:04:00+08:00",
+      "start": 132,
+      "segments": 10,
+      "module": "src/slotsolve.js + slotsolvelab.html / src/unitsnap.js + unitsnaplab.html",
+      "verified": true
+    }
+  ]
+}

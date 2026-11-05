@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>战役地图节点图 — 撒点 / 裁边 / 游走 / 支线 / 补点</title>
+<style>
+  :root { --ink:#e8ecf2; --muted:#9aa5b5; --line:#454a55; --bg:#2b2b33; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  canvas { position:fixed; inset:0; display:block; }
+  header { position:fixed; left:0; right:0; top:0; padding:10px 16px 14px; z-index:3;
+    background:linear-gradient(180deg, rgba(43,43,51,.96), rgba(43,43,51,.55) 72%, transparent); pointer-events:none; }
+  h1 { margin:0 0 3px; font-size:14px; font-weight:650; letter-spacing:.2px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:88ch; }
+  #steps { position:fixed; right:14px; top:74px; z-index:3; display:flex; flex-direction:column; gap:5px;
+    background:rgba(38,38,46,.92); border:1px solid var(--line); border-radius:10px; padding:9px 10px; }
+  #steps .row { display:flex; gap:5px; }
+  button { font:inherit; font-size:12px; color:var(--ink); background:#3a3b45; border:1px solid var(--line);
+    border-radius:7px; padding:4px 9px; cursor:pointer; }
+  button:hover { background:#464853; }
+  button.on { background:#5d8f68; border-color:#7fb98b; color:#fff; }
+  label { display:flex; gap:6px; align-items:center; font-size:12px; color:var(--muted); cursor:pointer; }
+  #stats { position:fixed; left:14px; bottom:12px; z-index:3; font-size:11.5px; color:#cfd6e2;
+    background:rgba(38,38,46,.9); border:1px solid var(--line); border-radius:8px; padding:7px 10px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#bfe8c9; font-weight:600; }
+  #legend { position:fixed; left:14px; bottom:100px; z-index:3; font-size:11.5px; color:var(--muted); }
+  #legend span { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:5px;
+    border:1.6px solid currentColor; vertical-align:-1px; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<header>
+  <h1>战役地图节点图：撒点 → 裁边 → 主线游走 → 支线 → 补点</h1>
+  <p>左：第 0 步的原始撒点（全画布）；第 1 步用<strong>波状带</strong>当 bounds 把带外的裁掉（淡环带斜杠 = 被裁）。
+     第 3 步起主线由「随机游走」长出来，不是搜出来的 —— 连通性是这个生成器的前提，不是校验结果。</p>
+</header>
+
+<div id="steps">
+  <div class="row">
+    <button data-s="0">0 撒点</button><button data-s="1">1 裁边</button><button data-s="2">2 连边</button>
+  </div>
+  <div class="row">
+    <button data-s="3">3 主线</button><button data-s="4">4 支线</button><button data-s="5">5 补点</button>
+  </div>
+  <div class="row">
+    <button id="regen">重新生成</button><button id="mode">debug</button>
+  </div>
+  <label><input type="checkbox" id="culled" checked> 显示被裁掉的点</label>
+</div>
+
+<div id="legend">
+  <div><span style="color:#bfe8c9"></span>主线节点 / 主线边</div>
+  <div><span style="color:#e79fd8"></span>支线节点</div>
+  <div><span style="color:#ffdc96"></span>补点的可选小岛</div>
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { generate, draw } from './src/campaignmap.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const statsEl = document.getElementById('stats');
+const culledEl = document.getElementById('culled');
+const modeBtn = document.getElementById('mode');
+let step = 5, mode = 'final', seed = 7, st = null, W = 0, H = 0;
+
+function fit() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = Math.round(W * dpr);
+  cv.height = Math.round(H * dpr);
+  cv.style.width = W + 'px';
+  cv.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  regen(seed);
+}
+
+function regen(s) {
+  seed = s;
+  st = generate({ w: W, h: H, seed, tries: 900, bandHalf: H * 0.13, linkDist: 66, k: 3 });
+  draw(ctx, st, { step, showCulled: culledEl.checked, mode });
+  const k = st.stats;
+  statsEl.innerHTML =
+    `撒点 <b>${k.scattered}</b>（${k.attempts} 次尝试，拒绝采样留缝） · 带外裁掉 <b>${k.dropped}</b> · 留 <b>${k.kept}</b><br>` +
+    `边 <b>${k.edges}</b> 条（每点 ≤3 邻居、长度 < 66px）<br>` +
+    `主线 <b>${k.pathNodes}</b> 点 · 长 ${k.pathLen}px / 直线 ${k.straight}px = 绕行比 <b>${k.detour}×</b> · 走不动 ${k.stuck} 次 · 到终点 <b>${k.reachedFinish ? '是' : '否'}</b><br>` +
+    `支线 <b>${k.branchNodes}</b> 点 · 补点 <b>${k.extras}</b> 个 · seed ${seed} · step ${step} · ${mode}`;
+  window.reaCampaign = st;
+}
+
+document.querySelectorAll('#steps button[data-s]').forEach((b) => {
+  b.onclick = () => {
+    step = +b.dataset.s;
+    document.querySelectorAll('#steps button[data-s]').forEach((x) => x.classList.toggle('on', +x.dataset.s === step));
+    regen(seed);
+  };
+});
+document.querySelector('#steps button[data-s="5"]').classList.add('on');
+document.getElementById('regen').onclick = () => regen((seed * 31 + 17) % 9973);
+modeBtn.onclick = () => { mode = mode === 'final' ? 'debug' : 'final'; modeBtn.textContent = mode; regen(seed); };
+culledEl.onchange = () => regen(seed);
+addEventListener('resize', () => { clearTimeout(window.__rz); window.__rz = setTimeout(fit, 120); });
+fit();
+</script>
+</body>
+</html>

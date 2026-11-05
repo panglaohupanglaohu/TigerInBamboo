@@ -1,0 +1,75 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "open": {
+        "mode": "open",
+        "occupied": false,
+        "support": 1,
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "speed": 1.0000000284592971,
+        "wind": [
+          0.9438583850860596,
+          0,
+          0.33035042881965637
+        ],
+        "worldVersion": 4820,
+        "windVersion": 4820
+      },
+      "closed": {
+        "mode": "closed",
+        "occupied": true,
+        "support": 2,
+        "normal": null,
+        "speed": 0.9185335347968246,
+        "wind": [
+          0.8173577298713306,
+          0.32045732283514783,
+          0.2700690656244516
+        ],
+        "worldVersion": 6944,
+        "windVersion": 6944
+      }
+    },
+    {
+      "grid": "quad",
+      "open": {
+        "mode": "open",
+        "occupied": false,
+        "support": 1,
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "speed": 1.0000000284592971,
+        "wind": [
+          0.9438583850860596,
+          0,
+          0.33035042881965637
+        ],
+        "worldVersion": 5989,
+        "windVersion": 5989
+      },
+      "closed": {
+        "mode": "closed",
+        "occupied": true,
+        "support": 2,
+        "normal": null,
+        "speed": 0.8815162216841966,
+        "wind": [
+          0.8001361995221099,
+          0.3442459656162622,
+          0.13545341067549094
+        ],
+        "worldVersion": 8622,
+        "windVersion": 8622
+      }
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,23 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "ok": true,
+      "deterministic": true,
+      "cells": 147,
+      "changed": 2,
+      "region": 2,
+      "exteriorUnchanged": true
+    },
+    {
+      "kind": "quad",
+      "ok": true,
+      "deterministic": true,
+      "cells": 206,
+      "changed": 3,
+      "region": 3,
+      "exteriorUnchanged": true
+    }
+  ],
+  "errors": []
+}

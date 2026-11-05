@@ -1,0 +1,24 @@
+const{chromium}=require('playwright'),fs=require('fs'),assert=require('node:assert/strict');
+(async()=>{const b=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader']}),p=await b.newPage({viewport:{width:1440,height:1000}}),errors=[],reports=[];p.on('pageerror',e=>errors.push(e.message));try{
+ for(const grid of ['mixed','quad']){
+  await p.goto('http://localhost:8769/impostors.html');if(grid==='quad')await p.selectOption('#grid','quad');await p.waitForFunction(()=>window.impostorReview?.api.gridKind===document.querySelector('#grid').value);
+  const report=await p.evaluate(async()=>{
+   const api=impostorReview.api,v=api.view,T=await document.querySelector('#scene').contentWindow.eval("import('three')"),r=v.renderer,actual=v.vegetation.impostorFields[0],version=api.world.version;
+   const uniforms=T.UniformsUtils.clone(actual.material.uniforms);uniforms.uCenter.value.set(1,.5,-.4);
+   const vs='varying vec4 probe;\n'+actual.material.vertexShader.replace('gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0);','probe=vec4(center,vK+vT);gl_Position=vec4(position.xy*2.,0.,1.);');
+   const mat=new T.ShaderMaterial({uniforms,defines:{...actual.material.defines},vertexShader:vs,fragmentShader:'varying vec4 probe;void main(){gl_FragColor=probe;}',blending:T.NoBlending,depthTest:false,depthWrite:false}),mesh=new T.InstancedMesh(actual.mesh.geometry.clone(),mat,1),scene=new T.Scene();mesh.frustumCulled=false;mesh.position.set(3,1,-2);mesh.rotation.y=.4;mesh.scale.setScalar(2);scene.add(mesh);
+   const yaw=.6,m=new T.Matrix4().compose(new T.Vector3(2,0,-1),new T.Quaternion().setFromAxisAngle(new T.Vector3(0,1,0),yaw),new T.Vector3(1.5,1.5,1.5));mesh.setMatrixAt(0,m);mesh.geometry.attributes.aYaw.setX(0,yaw);mesh.geometry.attributes.aYaw.needsUpdate=true;
+   const rt=new T.WebGLRenderTarget(1,1,{type:T.FloatType,format:T.RGBAFormat,depthBuffer:false}),previous=r.getRenderTarget(),camera=new T.OrthographicCamera(-10,10,10,-10,.1,100),perspective=new T.PerspectiveCamera(40,1,.1,100);camera.position.set(10,8,18);camera.lookAt(0,0,0);perspective.position.copy(camera.position);perspective.lookAt(0,0,0);
+   const read=cam=>{r.setRenderTarget(rt);r.render(scene,cam);const out=new Float32Array(4);r.readRenderTargetPixels(rt,0,0,1,1,out);return Array.from(out)};
+   const first=read(camera),expected=uniforms.uCenter.value.clone().applyMatrix4(m).applyMatrix4(mesh.matrixWorld),anchorError=Math.hypot(first[0]-expected.x,first[1]-expected.y,first[2]-expected.z),perspectiveA=read(perspective);
+   m.setPosition(-7,2,5);mesh.setMatrixAt(0,m);mesh.instanceMatrix.needsUpdate=true;const second=read(camera),perspectiveB=read(perspective),angleDistance=(a,b)=>Math.min(Math.abs(a-b),8-Math.abs(a-b));
+   // Turn a full circle through all sector boundaries and the wrap seam.
+   const samples=[];for(let i=0;i<=64;i++){const a=i/64*Math.PI*2;camera.position.set(Math.sin(a)*20,8,Math.cos(a)*20);camera.lookAt(0,0,0);samples.push(read(camera)[3])}
+   let maxStep=0;for(let i=1;i<samples.length;i++)maxStep=Math.max(maxStep,angleDistance(samples[i],samples[i-1]));const wrap=angleDistance(samples[0],samples.at(-1));camera.position.set(0,20,0);camera.lookAt(0,0,0);const top=read(camera);
+   r.setRenderTarget(previous);rt.dispose();mesh.geometry.dispose();mat.dispose();if(api.world.version!==version)throw Error('World changed');
+   return{grid:api.gridKind,anchorError,orthographicDifference:angleDistance(first[3],second[3]),perspectiveDifference:angleDistance(perspectiveA[3],perspectiveB[3]),maxStep,wrap,topFinite:top.every(Number.isFinite),samples,cloudSharedAtlas:v.vegetation.cloudField.material.uniforms.uTex.value===actual.material.uniforms.uTex.value};
+  });assert.ok(report.anchorError<1e-4);assert.ok(report.orthographicDifference<1e-5);assert.ok(report.perspectiveDifference>.01);assert.ok(report.maxStep<.126&&report.wrap<1e-4&&report.topFinite&&report.cloudSharedAtlas);reports.push(report);
+  await p.locator('#angle').fill('170');await p.locator('#angle').dispatchEvent('input');await p.click('#near');await p.screenshot({path:`artifacts/coverage/impostor-view-${grid}.png`});await p.locator('#trees').uncheck();assert.ok(await p.evaluate(()=>impostorReview.api.view.vegetation.crowns[0].m.visible));await p.locator('#trees').check();assert.ok(await p.evaluate(()=>impostorReview.api.view.vegetation.impostorFields[0].mesh.visible));
+ }
+ assert.deepEqual(errors,[]);fs.writeFileSync('artifacts/coverage/impostor-view-browser.json',JSON.stringify({reports,errors},null,2));console.log('PASS actual shared shader GPU anchor transform, parallel ortho rays, perspective parallax, 64-sector sweep/wrap, top-down and shared cloud atlas');
+}finally{await b.close()}})().catch(e=>{console.error(e);process.exit(1)});

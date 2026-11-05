@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>颜色体积 — 每个特征一整块颜色空间</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:11px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:126ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  #panel { position:fixed; right:16px; top:96px; width:212px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:6px; }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #stats { position:fixed; left:18px; bottom:12px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>不给特征一个颜色，给它一整块颜色空间</h1>
+  <p>每格色带是一个特征的全部可能颜色：横轴<b>高度</b>、纵轴<b>坡度</b>、第三轴<b>干湿</b>，8 个角点三线性插值。
+    特征辨识度因此变成一个数：两块空间之间的<b>最小距离</b>。距离够了，草就长不成沙子。</p>
+</header>
+
+<canvas id="cv"></canvas>
+
+<div id="panel">
+  <h2>特征分离 separation</h2>
+  <div class="row"><span>把五块空间推开</span><b id="slab">0.35</b></div>
+  <input type="range" id="sep" min="0" max="1" step="0.05" value="0.35" />
+  <h2>色带取样</h2>
+  <div class="row"><span>坡度 v</span><b id="vlab">0.50</b></div>
+  <input type="range" id="vv" min="0" max="1" step="0.05" value="0.5" />
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { makeVolume, sample, strip, volumeStats, terrain, css, oklabToRgb, dE } from './src/colorvolume.js';
+
+/* 8 个角点按 (u=高度, v=坡度, w=干湿) 的二进制下标排。
+   这几组数字本身就是"这个特征能长成什么样"：草在低处更暗、湿处偏蓝绿，
+   石头的明暗跟高度无关、只跟坡度走，沙子在低处最亮。 */
+const SPEC = {
+  Grass:   ['#3d5f22', '#8fae3e', '#33501f', '#7d9a35', '#2f5936', '#7fa84f', '#2a4a2c', '#6f9147'],
+  Roof:    ['#4a2a20', '#8a4a2e', '#3f231c', '#7d4228', '#4f2c22', '#93502f', '#3a2019', '#6f3a26'],
+  Cliff:   ['#4a5560', '#7f8a95', '#3d454e', '#737d87', '#44505c', '#77828d', '#394049', '#6b7580'],
+  Beach:   ['#bda87c', '#eee0be', '#b3a077', '#e2d5b2', '#a89a75', '#dbcfae', '#a2946f', '#cfc7ac'],
+  Flowers: ['#a85e7d', '#f2c2d4', '#9c5371', '#e6b0c4', '#b06a86', '#fad4e0', '#8f4a63', '#d9a2b8'],
+};
+const ORDER = ['Grass', 'Roof', 'Cliff', 'Beach', 'Flowers'];
+const LABEL = { Grass:'Grass 草', Roof:'Roof 屋顶', Cliff:'Cliff 崖', Beach:'Beach 沙', Flowers:'Flowers 花' };
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const sepEl = document.getElementById('sep');
+const vvEl = document.getElementById('vv');
+const slab = document.getElementById('slab');
+const vlab = document.getElementById('vlab');
+const statsEl = document.getElementById('stats');
+
+let vols = null, terr = null, sheet = null;
+
+function build() {
+  const s = +sepEl.value;
+  slab.textContent = s.toFixed(2);
+  vlab.textContent = (+vvEl.value).toFixed(2);
+  const base = {};
+  for (const k of ORDER) base[k] = makeVolume(k, SPEC[k]);
+
+  // 五个特征的重心平均，作为"推开"的中心
+  const mid = [0, 0, 0];
+  for (const k of ORDER) {
+    const c = base[k].corners;
+    for (let i = 0; i < 8; i++) { mid[0] += c[i][0] / 8 / ORDER.length; mid[1] += c[i][1] / 8 / ORDER.length; mid[2] += c[i][2] / 8 / ORDER.length; }
+  }
+  vols = {};
+  for (const k of ORDER) {
+    const v = base[k];
+    const ctr = [0, 0, 0];
+    for (const c of v.corners) { ctr[0] += c[0] / 8; ctr[1] += c[1] / 8; ctr[2] += c[2] / 8; }
+    const shift = [0, 1, 2].map((i) => (ctr[i] - mid[i]) * s);
+    vols[k] = {
+      name: k,
+      corners: v.corners.map((c) => [c[0] + shift[0], c[1] + shift[1], c[2] + shift[2]]),
+    };
+  }
+
+  const v = +vvEl.value;
+  sheet = ORDER.map((k) => strip(vols[k], 12, v, 0.5));
+  terr = terrain(260, 175, vols, { seed: 1 });
+  const st = volumeStats(ORDER.map((k) => vols[k]));
+  window.reaColVol = { vols, sheet, terr, stats: st, sep: s };
+  draw(st);
+}
+
+function draw(st) {
+  const W = innerWidth, H = innerHeight;
+  cv.width = W; cv.height = H;
+  ctx.clearRect(0, 0, W, H);
+
+  const left = 34;
+  const cellW = 38, cellH = 24;
+  const rowH = 42;
+  const labelW = 86;
+  const sheetW = cellW * 12;
+  // 内容块整体在 header 与统计条之间居中，别把白全堆在下面
+  const top = 118;
+
+  // ---- 左：五条色带（对应 Inspector 里那五排格子）----
+  ctx.font = '11.5px -apple-system,system-ui,"PingFang SC",sans-serif';
+  ORDER.forEach((k, r) => {
+    const y = top + r * rowH;
+    ctx.fillStyle = '#4c6169';
+    ctx.textAlign = 'left';
+    ctx.fillText(LABEL[k], left, y + 15);
+    for (let i = 0; i < 12; i++) {
+      ctx.fillStyle = css(sheet[r][i]);
+      ctx.fillRect(left + labelW + i * cellW, y + 2, cellW - 2, cellH);
+    }
+    ctx.strokeStyle = 'rgba(29,47,54,.16)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(left + labelW + .5, y + 2.5, sheetW - 1, cellH);
+  });
+
+  // 色带上的轴注释
+  ctx.fillStyle = '#7a8f96';
+  ctx.font = '11px -apple-system,system-ui,"PingFang SC",sans-serif';
+  ctx.fillText('← 低  u 高度 → 高　（每条 = 该特征在 v=坡度、w=干湿 处的一刀切片）', left + labelW, top + 5 * rowH + 16);
+
+  // ---- 左下：Grass 这块空间的 8 个角点，说明"空间"不是一条线 ----
+  const gy0 = top + 5 * rowH + 34;
+  ctx.fillStyle = '#4c6169';
+  ctx.font = '11.5px -apple-system,system-ui,"PingFang SC",sans-serif';
+  ctx.fillText('Grass 的 8 个角点（u 高度 / v 坡度 / w 干湿 的极值）', left, gy0);
+  const cw = 84, ch = 34;
+  for (let i = 0; i < 8; i++) {
+    const col = i % 4, row = (i / 4) | 0;
+    const x = left + col * (cw + 6), y = gy0 + 8 + row * (ch + 20);
+    ctx.fillStyle = css(vols.Grass.corners[i]);
+    ctx.fillRect(x, y, cw, ch);
+    ctx.strokeStyle = 'rgba(29,47,54,.18)';
+    ctx.strokeRect(x + .5, y + .5, cw - 1, ch - 1);
+    ctx.fillStyle = '#7a8f96';
+    ctx.font = '10px ui-monospace,Menlo,monospace';
+    ctx.fillText(`${i & 1 ? 'u高' : 'u低'} ${(i >> 1) & 1 ? 'v陡' : 'v平'} ${(i >> 2) & 1 ? 'w湿' : 'w干'}`, x + 2, y + ch + 11);
+  }
+
+  // ---- 右：用这些空间画出来的岛（按原图比例，不拉伸）----
+  const px = left + labelW + sheetW + 40;
+  const availW = W - 246 - px;
+  const pw = Math.min(availW, (H - 104 - 150) * (terr.w / terr.h));
+  const ph = pw * (terr.h / terr.w);
+  const py = top - 6;
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(px, py, pw, ph, 10);
+  ctx.clip();
+  const img = ctx.createImageData(terr.w, terr.h);
+  for (let i = 0; i < terr.w * terr.h; i++) {
+    img.data[i * 4] = terr.rgb[i * 3] * 255;
+    img.data[i * 4 + 1] = terr.rgb[i * 3 + 1] * 255;
+    img.data[i * 4 + 2] = terr.rgb[i * 3 + 2] * 255;
+    img.data[i * 4 + 3] = 255;
+  }
+  const off = document.createElement('canvas');
+  off.width = terr.w; off.height = terr.h;
+  off.getContext('2d').putImageData(img, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(off, px, py, pw, ph);
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(29,47,54,.16)';
+  ctx.beginPath(); ctx.roundRect(px + .5, py + .5, pw - 1, ph - 1, 10); ctx.stroke();
+
+  ctx.fillStyle = '#4c6169';
+  ctx.font = '11.5px -apple-system,system-ui,"PingFang SC",sans-serif';
+  ctx.fillText('同一套空间渲染出来的岛：高度/坡度/随机数选特征，颜色在自己那块空间里取', px, py + ph + 18);
+  const used = terr.used;
+  const tot = terr.w * terr.h;
+  ctx.fillStyle = '#7a8f96';
+  ctx.fillText(ORDER.filter((k) => used[k])
+    .map((k) => `${k} ${(100 * used[k] / tot).toFixed(0)}%`).join(' · '), px, py + ph + 34);
+
+  const worst = st.closestPair.map((i) => ORDER[i]).join(' ↔ ');
+  statsEl.innerHTML =
+    `五块空间 <b>5</b> · 最小间隔 <span class="ok"><b>${st.minGap.toFixed(1)}</b></span> ΔE（最挤的一对：${worst}）` +
+    ` · 各空间跨度 ${ORDER.map((k, i) => `${k} ${st.extents[i].toFixed(0)}`).join(' / ')}` +
+    ` · 分离系数 <b>${(+sepEl.value).toFixed(2)}</b> · 岛 260×175 = <b>${tot}</b> 像素按高度/坡度分类`;
+}
+
+sepEl.addEventListener('input', build);
+vvEl.addEventListener('input', build);
+build();
+addEventListener('resize', () => build());
+</script>
+</body>
+</html>

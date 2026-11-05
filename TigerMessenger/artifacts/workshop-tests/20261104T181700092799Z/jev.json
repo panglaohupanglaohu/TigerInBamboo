@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "dc9756e70109657fe7683701bdea5497e12c49bd25fb48a6599b97bd2abc9090",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.22
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.89,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.09,
+        "review": 0.91
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.65
+    }
+  },
+  "usage": {
+    "input_tokens": 813,
+    "output_tokens": 91,
+    "cost_usd": 0.000342,
+    "credits_remaining_usd": 4.865829
+  },
+  "elapsed_ms": 2463,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "old intermittent cache readiness root cause",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "legacy identity migration review and AI scene upgrade",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}

@@ -7,7 +7,20 @@
  */
 
 import * as THREE from 'three';
+import {NORMAL_CONTRAST_GLSL} from '../core/normal-contrast.js';
+import {cameraAngularSpeed,smearHistoryWeight} from '../core/camera-motion.js';
+import {makePalettePatch,PALETTE_PATCH_GLSL} from '../core/palette-patch.js';
+import {makeColorVolume,COLOR_VOLUME_GLSL} from '../core/color-volume.js';
+import {GroundSurfaceShadow, SURFACE_SHADOW_GLSL} from '../light/surface-shadow.js';
+import {SEDIMENT_GLSL} from '../core/sediment.js';
+import { BLOTCH_GLSL } from '../terrain/blotch-pattern.js';
+import { FIELD_GLSL } from '../terrain/field-pattern.js';
+import { PenumbraLayer } from './penumbra-layer.js';
+import { DoodleOverlay } from './doodle-overlay.js';
+import { VisibilityOverlay } from './visibility.js';
+import { ContourOverlay } from './contour-overlay.js';
 import { WorldMesh } from './worldmesh.js';
+import { makeReflectionMaterial, setReflectionStyle } from '../water/reflection.js';
 import { buildShore, makeSkirtMaterial, makeWaveMaterial } from '../water/shore.js';
 import { OutlineLayers } from './outline.js';
 import { Birds } from '../life/birds.js';
@@ -31,20 +44,11 @@ const DEFAULT_LEVEL = 0.5;
 /**
  * 地面笔触（1480635131614355459 "these big paint blotches. They hide the polys well"；1703750394164199473 "the swirly blobbyness"；
  * 1696864977171189980 "draw with much bigger blotches without the blotches bleeding across"）：
- * 世界坐标的域扭曲噪声量化成三档明暗，只画在朝上的草色面上；每一层高度换一套噪声偏移 → 色块不跨台阶边渗色。
+ * 世界坐标的域扭曲噪声量化成三档明暗，只画在明确标记的地形顶面草色上，排除屋顶/河床/岩壁；每层高度按实际levelHeight换偏移。
+ * 本地近似，不等于原版距离场、atlas及受控跨崖采样管线；草边几何另由terrainmesh保留。
  * 贴图实验室（textures.html「地面笔触」）里有平面版和另外两种风格。
  */
-const BLOTCH_GLSL = `
-float bh(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float bn(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f); return mix(mix(bh(i), bh(i + vec2(1, 0)), f.x), mix(bh(i + vec2(0, 1)), bh(i + vec2(1, 1)), f.x), f.y); }
-float bfbm(vec2 p) { float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * bn(p); p = p * 2.03 + 7.1; a *= 0.5; } return s; }
-float blotchTone(vec3 w) {
-  float level = floor(w.y * 2.0 + 0.01);
-  vec2 p = w.xz * 0.9;
-  vec2 q = vec2(bfbm(p * 0.7 + level * 1.7), bfbm(p * 0.7 + 5.2 - level));
-  float b = bfbm(p * 1.1 + q * 2.5 + level * 3.1);
-  return b < 0.42 ? 0.8 : b < 0.58 ? 1.0 : 1.14;
-}`;
+
 
 export class View {
   constructor(canvas, town, grid, index, { levelHeight = DEFAULT_LEVEL } = {}) {
@@ -84,6 +88,19 @@ export class View {
     this.normMix = { value: 0.8 };        // 平滑 / 硬法线混合（929417420921556993）：1 = 全平滑，0 = 全硬
     this.voxOn = { value: 0 };            // 逐顶点体素阴影（1190191289922465793）
     this.giOn = { value: 0 };             // 光体积 GI（1580835075629133825 等）
+    this.fieldOn = { value: 0 };
+    this.mountainMode = {value:0}; // 0 existing, 1 base colour, 2 local vertex bake, 3 runtime normal
+    this.normalContrast = {value:new THREE.Vector4(0,1.25,.35,1)};
+    this.strataMode = {value:0};
+    this.strataUniform = {value:new THREE.Vector3(levelHeight,.14,1)};
+    this.palettePatchUniforms=Array.from({length:4},()=>({value:new THREE.Vector3(.5,.5,.5)}));
+    this.colorVolumeOn={value:0};
+    this.colorVolumeMin={value:new THREE.Vector3(.18,.2,.35)};
+    this.colorVolumeMax={value:new THREE.Vector3(.35,.5,.65)};
+    this.groundSurfaceShadow = new GroundSurfaceShadow(this);
+    this.blotchLevel = { value: levelHeight };
+    this.blotchStyleMode = { value: 0 };
+    this.blotchStyle = { value: new THREE.Vector4(2.3,.55,.9,1) };
     this.blotchOn = { value: 0 };         // 地面笔触（1480635131614355459 / 1703750394164199473 / 1696864977171189980）
     this.material.onBeforeCompile = (shader) => {
       shader.uniforms.uNight = this.nightUniform;
@@ -91,20 +108,36 @@ export class View {
       shader.uniforms.uSnow = this.snowUniform;
       shader.uniforms.uNormMix = this.normMix;
       shader.uniforms.uVoxOn = this.voxOn;
+      for(const [i,key]of ['uPaletteA','uPaletteB','uPaletteC','uPaletteD'].entries())shader.uniforms[key]=this.palettePatchUniforms[i];
+      shader.uniforms.uColorVolumeOn=this.colorVolumeOn;
+      shader.uniforms.uColorVolumeMin=this.colorVolumeMin;
+      shader.uniforms.uColorVolumeMax=this.colorVolumeMax;
+      shader.uniforms.uSurfaceShadowMap=this.groundSurfaceShadow.map;
+      shader.uniforms.uSurfaceShadowXform=this.groundSurfaceShadow.xform;
+      shader.uniforms.uSurfaceShadowStrength=this.groundSurfaceShadow.strength;
       shader.uniforms.uBlotch = this.blotchOn;
+      shader.uniforms.uBlotchLevel = this.blotchLevel;
+      shader.uniforms.uBlotchStyleMode = this.blotchStyleMode;
+      shader.uniforms.uBlotchStyle = this.blotchStyle;
+      shader.uniforms.uFields = this.fieldOn;
+      shader.uniforms.uNormalContrast = this.normalContrast;
+      shader.uniforms.uMountainMode = this.mountainMode;
+      shader.uniforms.uStrataMode = this.strataMode;
+      shader.uniforms.uStrata = this.strataUniform;
       shader.uniforms.uGI = this.giOn;
       Object.assign(shader.uniforms, this.pop.uniforms);
       shader.vertexShader = shader.vertexShader
-        .replace('#include <common>', '#include <common>\nattribute float aGlow;\nattribute float aVox;\nattribute vec3 aGI;\nvarying vec3 vGI;\nvarying float vGlow;\nvarying float vVox;\nvarying float vUp;\nvarying vec3 vWPos;\nuniform float uTime;\n' + this.pop.pars)
-        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlow = aGlow;\nvVox = aVox;\nvGI = aGI;\nvUp = normalize(objectNormal).y;\nvWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;\n' + this.pop.body);
+        .replace('#include <common>', '#include <common>\nattribute float aMountainTone;\nvarying float vMountainTone;\nattribute vec3 aField;\nvarying vec3 vField;\nattribute float aGlow;\nattribute float aVox;\nattribute vec3 aGI;\nvarying vec3 vGI;\nvarying float vGlow;\nvarying float vVox;\nvarying float vUp;\nvarying vec3 vWPos;\nuniform float uTime;\n' + this.pop.pars)
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvMountainTone=aMountainTone;\nvField = aField;\nvGlow = aGlow;\nvVox = aVox;\nvGI = aGI;\nvUp = normalize(objectNormal).y;\nvWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;\n' + this.pop.body);
       shader.fragmentShader = shader.fragmentShader
-        .replace('#include <common>', '#include <common>\nuniform float uNight;\nuniform float uSnow;\nuniform float uNormMix;\nuniform float uVoxOn;\nuniform float uBlotch;\nuniform float uGI;\nvarying vec3 vGI;\nvarying float vGlow;\nvarying float vVox;\nvarying float vUp;\nvarying vec3 vWPos;\n' + BLOTCH_GLSL)
+        .replace('#include <common>', '#include <common>\nuniform float uMountainMode;\nvarying float vMountainTone;\nuniform float uFields;\nvarying vec3 vField;\nuniform float uNight;\nuniform float uSnow;\nuniform float uNormMix;\nuniform float uVoxOn;\nuniform float uBlotch;\nuniform float uGI;\nvarying vec3 vGI;\nvarying float vGlow;\nvarying float vVox;\nvarying float vUp;\nvarying vec3 vWPos;\n' + BLOTCH_GLSL + FIELD_GLSL + SEDIMENT_GLSL + SURFACE_SHADOW_GLSL + COLOR_VOLUME_GLSL + PALETTE_PATCH_GLSL + NORMAL_CONTRAST_GLSL)
         // 平滑法线和硬法线在最终光照里混合：硬法线由屏幕空间导数算（每个面一个），和插值来的平滑法线按 uNormMix 混
         .replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\nvec3 hardN = normalize(cross(dFdx(-vViewPosition), dFdy(-vViewPosition)));\nif (dot(hardN, normal) < 0.0) hardN = -hardN;\nnormal = normalize(mix(hardN, normal, uNormMix));')
         // 逐顶点体素阴影：顶点朝太阳在体素里走，被挡住就暗
         .replace('#include <lights_fragment_begin>', '#include <lights_fragment_begin>\n')
         .replace('#include <aomap_fragment>', '#include <aomap_fragment>\nreflectedLight.directDiffuse *= 1.0 - uVoxOn * vVox * 0.75;\nreflectedLight.indirectDiffuse = mix(reflectedLight.indirectDiffuse, vGI * diffuseColor.rgb * 0.9, uGI * 0.7);')
-        .replace('#include <color_fragment>', '#include <color_fragment>\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.93, 0.95, 0.98), uSnow * smoothstep(0.55, 0.85, vUp));\nif (uBlotch > 0.5 && vUp > 0.8 && diffuseColor.g > diffuseColor.r * 0.82 && diffuseColor.g > diffuseColor.b * 1.05) diffuseColor.rgb *= blotchTone(vWPos);')
+        .replace('#include <color_fragment>', '#include <color_fragment>\nif(uColorVolumeOn>.5 && vField.z>.5 && vField.z<1.5) diffuseColor.rgb=uColorVolumeOn>1.5?palettePatch(vec2(bn(vWPos.xz*.3),clamp(vWPos.y/6.,0.,1.))):colorVolumeSample(vec3(bn(vWPos.xz*.3),.5,clamp(vWPos.y/6.,0.,1.)));\nif(uStrataMode>.5 && vField.z< -1.5) discard;\nif(uStrataMode>.5 && vField.z< -.5) diffuseColor.rgb=sedimentColor(diffuseColor.rgb,vWPos);\nif(uSurfaceShadowStrength>0. && vField.z>.5 && vField.z<1.5 && vUp>.8) diffuseColor.rgb*=surfaceShadowTone(vWPos);\nif (uFields > 0.5) diffuseColor.rgb *= fieldTone(vField);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.93, 0.95, 0.98), uSnow * smoothstep(0.55, 0.85, vUp));\nif (uBlotch > 0.5 && vField.z > 0.5 && vField.z < 1.5 && vUp > 0.8 && diffuseColor.g > diffuseColor.r * 0.82 && diffuseColor.g > diffuseColor.b * 1.05) diffuseColor.rgb *= blotchTone(vWPos);')
+        .replace('#include <opaque_fragment>', 'if(uMountainMode>.5 && vField.z<-.5){float tone=1.;if(uMountainMode>1.5)tone=uMountainMode<2.5?vMountainTone:.66+.42*max(0.,dot(normal,normalize((viewMatrix*vec4(-.62,.62,-.48,0.)).xyz)));outgoingLight=diffuseColor.rgb*tone;}\nif(uNormalContrast.x>.5 && abs(vField.z)>.5) outgoingLight=mix(outgoingLight,vec3(.025,.045,.05),normalContrastInk(vWPos)*.85);\n#include <opaque_fragment>')
         .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.72, 0.32) * vGlow * uNight * 1.6;');
     };
     this.mesh = new THREE.Mesh(this.worldMesh.geometry, this.material);
@@ -137,40 +170,7 @@ export class View {
     // colour halfway between itself and the sea (1215644531221311488: "the
     // bright colors wouldn't let me get away with a monochrome reflection, so
     // I had to figure out this somewhat abstract flat colored mid point").
-    this.reflectMaterial = new THREE.ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      vertexColors: true,
-      uniforms: { uTime: this.waterUniforms.uTime, uWater: this.waterUniforms.uShallow, uNight: this.nightUniform },
-      vertexShader: /* glsl */ `
-        uniform float uTime;
-        attribute float aGlow;
-        varying vec3 vCol;
-        varying float vDepth;
-        varying float vGlow;
-        void main() {
-          vec4 w = modelMatrix * vec4(position, 1.0);
-          vDepth = -w.y;
-          w.x += sin(w.y * 9.0 + uTime * 1.3 + w.z * 0.7) * 0.018 * vDepth;
-          w.z += cos(w.y * 7.0 - uTime * 1.1 + w.x * 0.5) * 0.012 * vDepth;
-          vCol = color;
-          vGlow = aGlow;
-          gl_Position = projectionMatrix * viewMatrix * w;
-        }`,
-      fragmentShader: /* glsl */ `
-        uniform vec3 uWater;
-        uniform float uNight;
-        varying vec3 vCol;
-        varying float vDepth;
-        varying float vGlow;
-        void main() {
-          vec3 mid = mix(uWater, vCol * 1.25 + 0.04, 0.5);
-          mid += vec3(1.0, 0.7, 0.3) * vGlow * uNight * 0.6;
-          float fade = exp(-vDepth * 0.9);
-          gl_FragColor = vec4(mid, 0.82 * fade);
-          #include <colorspace_fragment>
-        }`,
-    });
+    this.reflectMaterial = makeReflectionMaterial({time:this.waterUniforms.uTime,water:this.waterUniforms.uShallow,night:this.nightUniform});
     this.reflection = new THREE.Mesh(this.worldMesh.geometry, this.reflectMaterial);
     this.reflection.scale.y = -1;
     this.reflection.renderOrder = 1;
@@ -190,6 +190,12 @@ export class View {
 
     this.#setupHover();
     this.#setupDebug();
+    this.contourOverlay = new ContourOverlay(this.town);
+    this.scene.add(this.contourOverlay.mesh);
+    this.visibilityOverlay = new VisibilityOverlay(this.town, { levelHeight });
+    this.scene.add(this.visibilityOverlay.group);
+    this.doodleOverlay = new DoodleOverlay(this.town, { levelHeight });
+    this.scene.add(this.doodleOverlay.mesh);
     this.resize();
     this.updateCamera();
     this.setTimeOfDay('day');
@@ -258,8 +264,8 @@ export class View {
         uniform vec2 uFar;
         varying vec3 vWorld;
         void main() {
-          // barely-there drift so the flat sea is not dead (1991103578011029507:
-          // "a dynamic ocean without being too distractive")
+          // Local background color treatment. Clip 1991103578011029507 shows
+          // restrained coastal motion; it does not establish this drift formula.
           vec2 p = vWorld.xz;
           float n = sin(p.x * 0.35 + uTime * 0.21) * sin(p.y * 0.29 - uTime * 0.17)
                   + 0.5 * sin((p.x - p.y) * 0.8 + uTime * 0.37);
@@ -316,6 +322,15 @@ export class View {
    * 光体积 GI（src/light/lightvolume.js）：体素化 → 直射 → 3 次 6 向反弹 → 每个顶点取间接光（aGI）。
    * 点光源（1582757294672314368）：放在最高那栋楼顶上，暖橙色、大而软。
    */
+  /** Markers are created in this renderer's realm, including iframe editors. */
+  showGIPointMarkers(points=[]) {
+    if(!Array.isArray(points)||points.length>16||points.some(p=>!Array.isArray(p.pos)||p.pos.length!==3||!p.pos.every(Number.isFinite)||!Array.isArray(p.color)||p.color.length!==3||!p.color.every(Number.isFinite)))throw new RangeError('Invalid point markers');
+    this.giPointMarkers??=new THREE.Group();if(!this.giPointMarkers.parent)this.scene.add(this.giPointMarkers);
+    for(const m of [...this.giPointMarkers.children]){m.geometry.dispose();m.material.dispose();this.giPointMarkers.remove(m)}
+    for(const p of points){const m=new THREE.Mesh(new THREE.SphereGeometry(.10,8,6),new THREE.MeshBasicMaterial({color:new THREE.Color(...p.color)}));m.position.fromArray(p.pos);this.giPointMarkers.add(m)}
+    return this.giPointMarkers.children.length;
+  }
+
   bakeGI() {
     const w = this.town, L = this.levelHeight;
     const hex = (h) => { const c = new THREE.Color(h); return [c.r, c.g, c.b]; };
@@ -331,22 +346,64 @@ export class View {
       for (const c of w.cells) if (!best || w.top(c) > w.top(best)) best = c;
       if (best) point = { pos: [best.cx, (w.top(best) + 0.8) * L, best.cz], color: [1.0, 0.55, 0.25], intensity: 2.2, radius: 4.5 };
     }
-    const vol = bakeLightVolume(w, this.index, { L, sun: this.sunDir.toArray(), point, albedoOf });
+    const points=this.giPoint?(this.giPointLights??(point?[point]:[])):[];
+    const vol = bakeLightVolume(w, this.index, { L, sun: this.sunDir.toArray(), points, albedoOf, bounces:this.giBounces??3, directional:!!this.giDirectional,distanceField:!!this.giDistance });
     if (!vol) return null;
     const g = this.mesh.geometry, pos = g.attributes.position, nor = g.attributes.normal;
     const out = new Float32Array(pos.count * 3);
     for (let i = 0; i < pos.count; i++) {
-      const s = vol.sample(pos.getX(i) + nor.getX(i) * 0.14, pos.getY(i) + nor.getY(i) * 0.14, pos.getZ(i) + nor.getZ(i) * 0.14);
-      out[i * 3] = s[0]; out[i * 3 + 1] = s[1]; out[i * 3 + 2] = s[2];
+      const coords=[pos.getX(i)+nor.getX(i)*.14,pos.getY(i)+nor.getY(i)*.14,pos.getZ(i)+nor.getZ(i)*.14];
+      const normal=[nor.getX(i),nor.getY(i),nor.getZ(i)];
+      const s=this.giDirectional&&Math.hypot(...normal)>0?vol.sampleDirectional(...coords,normal):vol.sample(...coords);
+      const p=vol.samplePoint(pos.getX(i)+nor.getX(i)*.14,pos.getY(i)+nor.getY(i)*.14,pos.getZ(i)+nor.getZ(i)*.14);
+      out[i * 3] = s[0]+p[0]; out[i * 3 + 1] = s[1]+p[1]; out[i * 3 + 2] = s[2]+p[2];
     }
-    g.setAttribute('aGI', new THREE.BufferAttribute(out, 3));
-    this.giStats = { voxels: vol.nx * vol.ny * vol.nz, ms: vol.ms, bounceChange: vol.bounceChange, point: !!point };
+    if(g.attributes.aGI?.array.length===out.length){g.attributes.aGI.array.set(out);g.attributes.aGI.needsUpdate=true;}else g.setAttribute('aGI',new THREE.BufferAttribute(out,3));
+    this.giStats = { voxels: vol.nx * vol.ny * vol.nz, ms: vol.ms, bounceChange: vol.bounceChange, point: points.length>0,pointCount:points.length,directional:!!vol.directional,bounceStats:vol.bounceStats,estimatedWorkingBytes:vol.estimatedWorkingBytes,sdf:!!vol.sdf,rayStats:vol.sdf?{...vol.sdf.stats}:null };
     this.giVolume = vol;
     return this.giStats;
   }
 
+  setGroundPalettePatch(corners=null) {
+    if(corners===null){this.colorVolumeOn.value=0;return;}
+    const patch=makePalettePatch(corners);
+    patch.forEach((c,i)=>this.palettePatchUniforms[i].value.fromArray(c));
+    this.colorVolumeOn.value=2;
+  }
+
+  setGroundColorVolume(options=null) {
+    if(options===null){this.colorVolumeOn.value=0;return;}
+    const vol=makeColorVolume(options);
+    this.colorVolumeMin.value.set(vol.h[0],vol.s[0],vol.l[0]);
+    this.colorVolumeMax.value.set(vol.h[1],vol.s[1],vol.l[1]);
+    this.colorVolumeOn.value=1;
+  }
+
+  setBlotchStyle({mode=this.blotchStyleMode.value,swirl=this.blotchStyle.value.x,density=this.blotchStyle.value.y,scale=this.blotchStyle.value.z,strength=this.blotchStyle.value.w}={}) {
+    if(!Number.isInteger(mode)||mode<0||mode>1 || ![swirl,density,scale,strength].every(Number.isFinite) || swirl<0||swirl>6||density<0||density>1||scale<.05||scale>4||strength<0||strength>1)throw new RangeError('blotch style bounds');
+    this.blotchStyleMode.value=mode; this.blotchStyle.value.set(swirl,density,scale,strength);
+  }
+
+  setReflectionStyle(options) { setReflectionStyle(this.reflectMaterial,options); }
+
+  setPenumbra(on) {
+    if(on&&!this.penumbra){this.penumbra=new PenumbraLayer(this);this.penumbraCatcher=this.shadowCatcher.visible;this.shadowCatcher.visible=false;this.penumbraDirty=true;try{this.penumbra.refresh();}catch(e){this.penumbra.dispose();this.penumbra=null;this.shadowCatcher.visible=this.penumbraCatcher;throw e;}}
+    if(!on&&this.penumbra){this.penumbra.dispose();this.penumbra=null;this.shadowCatcher.visible=this.penumbraCatcher;}
+  }
+
+  setSunPosition(azimuth, elevation) {
+    if(!Number.isFinite(azimuth)||!Number.isFinite(elevation)||elevation<=0||elevation>=90)throw new RangeError('sun position');
+    const a=azimuth*Math.PI/180,e=elevation*Math.PI/180;
+    this.sunDir.set(Math.sin(a)*Math.cos(e),Math.sin(e),Math.cos(a)*Math.cos(e));
+    this.sunBase=this.sunDir.clone();this.penumbraDirty=true;this.updateCamera();
+    if(this.voxOn?.value)this.computeVoxelShadows();
+    if(this.giOn?.value){clearTimeout(this.giTimer);this.giTimer=setTimeout(()=>this.bakeGI(),300);}
+  }
+
   /** 绕竖轴转太阳（度）：在当前时段的太阳方向上再转 deg，影子、墨线、逆光一起跟着变 */
   setSunAngle(deg) {
+    if(!Number.isFinite(deg))throw new RangeError("sun angle");
+    this.penumbraDirty=true;
     if (!this.sunBase) this.sunBase = this.sunDir.clone();
     this.sunDir.copy(this.sunBase).applyAxisAngle(new THREE.Vector3(0, 1, 0), (deg * Math.PI) / 180);
     this.updateCamera();
@@ -374,6 +431,7 @@ export class View {
     this.sun.intensity = P.sun[1];
     this.sunDir.set(...P.dir).normalize();
     this.sunBase = this.sunDir.clone();
+    this.penumbraDirty=true;
     this.ambient.intensity = P.amb;
     this.hemi.intensity = P.hemi;
     this.fill.intensity = P.fill;
@@ -418,11 +476,25 @@ export class View {
     for (const l of [this.shoreLine, this.seaLine]) { l.renderOrder = 6; l.visible = false; l.frustumCulled = false; this.scene.add(l); }
   }
 
+  setMountainMode(mode) {
+    if(!Number.isInteger(mode)||mode<0||mode>3)throw new RangeError('mountain mode 0..3');
+    this.mountainMode.value=mode;
+  }
+
+  setNormalContrast({on,scale,threshold,width}={}) {
+    const v=this.normalContrast.value,next=[on===undefined?v.x:on?1:0,scale??v.y,threshold??v.z,width??v.w];
+    if((on!==undefined&&typeof on!=='boolean')||!next.every(Number.isFinite)||next[1]<.05||next[1]>8||next[2]<0||next[2]>2||next[3]<.5||next[3]>4)throw new RangeError('normal contrast parameters');
+    v.set(...next);
+  }
+
   /** Learning-panel switches. */
   setDebug(name, on) {
     (this.debugState ??= {})[name] = on;   // 面板和管线示例都读这个，保持勾选框同步
     switch (name) {
+      case 'normalcontrast': this.normalContrast.value.x=on?1:0; break;
       case 'grid': this.gridLines.visible = on; break;
+      case 'visibility': this.visibilityOverlay.setVisible(on); break;
+      case 'contours': this.contourOverlay.setVisible(on); break;
       case 'shorelines': this.shoreLine.visible = on; this.seaLine.visible = on; break;
       case 'wavewire': this.waveMaterial.wireframe = on; this.skirt.visible = !on; break;
       case 'waves': this.waves.visible = on; this.skirt.visible = on; break;
@@ -443,21 +515,27 @@ export class View {
       case 'waterfalls': this.waterfalls.visible = on; break;
       case 'boats': this.boats.visible = on; break;
       case 'lighthouse': this.lighthouses.visible = on; break;
+      case 'doodlewall': this.doodleOverlay.setVisible(on); break;
+      case 'doodlegray': this.doodleOverlay.setGray(on); break;
+      case 'unitsprites': if (this.battle) this.battle.spriteBatch.enabled = on; break;
+      case 'passages': this.battle?.setPassagesVisible(on); break;
       case 'watervol': this.waterVol.visible = on; if (on) this.waterVol.refresh(this.town, this.index); break;
       case 'smokecheck': this.smoke.debugChecker = on; break;
       case 'flow': this.flowDebug = on; break;
+      case 'strata': this.strataMode.value = on ? 2 : 0; break;
+      case 'fields': this.fieldOn.value = on ? 1 : 0; break;
       case 'blotch': this.blotchOn.value = on ? 1 : 0; break;
       case 'gi': this.giOn.value = on ? 1 : 0; if (on) this.bakeGI(); break;
       case 'pointlight': this.giPoint = on; if (this.giOn.value) this.bakeGI(); break;
       case 'voxshadow': this.voxOn.value = on ? 1 : 0; if (on) this.computeVoxelShadows(); break;
       case 'hardnormal': this.normMix.value = on ? 0.8 : 1.0; break;
       case 'thickoutline': this.outline.thickness = on ? 2 : 1; break;
-      case 'motionblur': this.motionBlur = on; break;
+      case 'motionblur': if(this.motionBlur!==on)this._smearReady=false; this.motionBlur = on; break;
       case 'gore': this.goreOff = !on; break;
       case 'modules': this.worldMesh.debugModules = on; this.worldMesh.invalidate(); break;
       case 'stairs': this.navLayer.showStairs = on; break;
       case 'flags': case 'wires': case 'butterflies': this.decor.setLayer(name, on); break;
-      case 'shadows': this.sun.castShadow = on; this.shadowCatcher.visible = on; break;
+      case 'shadows': this.sun.castShadow = on; this.shadowCatcher.visible = on && !this.penumbra; if(this.penumbra){this.penumbra.enabled=on;this.penumbra.mesh.visible=on;this.penumbraCatcher=on;} break;
       case 'ao': this.worldMesh.bake = on; this.worldMesh.invalidate(); break;
       case 'smooth': this.worldMesh.smooth = on; this.worldMesh.invalidate(); break;
       case 'outline': this.outline.inkVisible = on; this.vegetation.ink = on; break;
@@ -627,9 +705,18 @@ export class View {
     this.hover.visible = true;
   }
 
+  setStrataStyle({mode=this.strataMode.value,period=this.strataUniform.value.x,amplitude=this.strataUniform.value.y,strength=this.strataUniform.value.z}={}){
+    if(!Number.isInteger(mode)||mode<0||mode>2||![period,amplitude,strength].every(Number.isFinite)||period<.05||period>5||amplitude<0||amplitude>2||strength<0||strength>1)throw new RangeError('invalid sediment controls');
+    this.strataMode.value=mode;this.strataUniform.value.set(period,amplitude,strength);
+  }
+
   render(dt) {
     this.waterUniforms.uTime.value += dt;
     this.onFrame?.(dt);
+    this.penumbra?.refresh();
+    this.contourOverlay.refresh();
+    this.visibilityOverlay.refresh();
+    this.doodleOverlay.refresh();
     this.lighthouses.update();   // 玩法层（badnorth/battle.js）
     if (this.worldMesh.rebuild()) {
       this.mesh.geometry = this.worldMesh.geometry;
@@ -672,9 +759,10 @@ export class View {
     this.atmosphere.update(dt);
     this.effects.update(dt, this.atmosphere.uWind.value);
     this.boats.update(dt);
-    this.smoke.update(dt, this.atmosphere.uWind.value);
+    this.smoke.update(dt, this.atmosphere.uWind.value, this.camera);
     this.decor.update(dt);
     this.outline.update(this.renderer, this.camera, this.sunDir);
+    this.groundSurfaceShadow.refresh();
     this.renderer.render(this.scene, this.camera);
     this.#smear(dt);
   }
@@ -685,12 +773,14 @@ export class View {
    */
   #smear(dt) {
     const yaw = this.yaw, pitch = this.pitch;
-    const speed = this._lastYaw === undefined ? 0 : (Math.abs(yaw - this._lastYaw) + Math.abs(pitch - this._lastPitch)) / Math.max(dt, 1e-3);
+    const speed = cameraAngularSpeed(yaw,pitch,this._lastYaw,this._lastPitch,dt);
     this._lastYaw = yaw; this._lastPitch = pitch;
-    if (!this.motionBlur) return;
+    if (!this.motionBlur) { this._smearReady=false; return; }
     const r = this.renderer, size = r.getDrawingBufferSize(new THREE.Vector2());
     if (!this.smearTex || this.smearTex.image.width !== size.x || this.smearTex.image.height !== size.y) {
       this.smearTex?.dispose();
+      this.smearQuad?.geometry.dispose();
+      this.smearQuad?.material.dispose();
       this.smearTex = new THREE.FramebufferTexture(size.x, size.y);
       this.smearQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
         transparent: true, depthTest: false, depthWrite: false,
@@ -702,7 +792,8 @@ export class View {
       this.smearCam = new THREE.Camera();
       this._smearReady = false;
     }
-    const a = Math.min(0.72, Math.max(0, (speed - 0.4) * 0.35));
+    const a = smearHistoryWeight(speed,dt);
+    this.smearStats={speed,alpha:this._smearReady?a:0};
     if (this._smearReady && a > 0.01) {
       this.smearQuad.material.uniforms.uA.value = a;
       const ac = r.autoClear; r.autoClear = false; r.render(this.smearScene, this.smearCam); r.autoClear = ac;

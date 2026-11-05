@@ -1,0 +1,287 @@
+{
+  "versions": [
+    {
+      "id": "98f2d60c-28ca-4f4f-88fc-093505298c79",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "TEST ONLY: protect lake buildings",
+      "validation": {
+        "passed": true,
+        "message": "编码往返不一致",
+        "scope": "codec-only"
+      },
+      "time": 1793744129170,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "TEST ONLY: protect lake buildings",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          },
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "day",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": [
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "kind": "共享底座（基础能力）",
+            "name": "长船 + V 字尾迹",
+            "icon": "◇",
+            "color": "#2f7f8a",
+            "mode": "recipe",
+            "scanned": true,
+            "source": "src/life/boats.js",
+            "description": "扫描登记，尚无场景执行适配。",
+            "checks": "来源 / 接口 / 依赖 / 执行验证",
+            "provenance": {
+              "note": "自动扫描自REACodeRefactoring/learn/pipeline.js；库登记状态不等于当前场景可执行。",
+              "modules": [],
+              "records": [
+                {
+                  "id": "901469409579061248",
+                  "lane": "base",
+                  "laneName": "共享底座（基础能力）",
+                  "group": "水层",
+                  "name": "长船 + V 字尾迹",
+                  "where": "src/life/boats.js",
+                  "status": "done",
+                  "toggle": "boats",
+                  "project": "以库记录为准"
+                }
+              ]
+            },
+            "controls": []
+          }
+        ],
+        "baseline": {
+          "waves": true,
+          "reflection": true,
+          "time": "day",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": false
+        }
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "day",
+        "outline": true,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": false,
+        "snow": false,
+        "fire": true
+      }
+    },
+    {
+      "id": "1e7b5ec0-5e51-4754-81a9-62e84cdedf99",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "恢复前自动保护",
+      "validation": null,
+      "time": 1793744133710,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "TEST ONLY: protect lake buildings",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          },
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "night",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": [
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "kind": "共享底座（基础能力）",
+            "name": "长船 + V 字尾迹",
+            "icon": "◇",
+            "color": "#2f7f8a",
+            "mode": "recipe",
+            "scanned": true,
+            "source": "src/life/boats.js",
+            "description": "扫描登记，尚无场景执行适配。",
+            "checks": "来源 / 接口 / 依赖 / 执行验证",
+            "provenance": {
+              "note": "自动扫描自REACodeRefactoring/learn/pipeline.js；库登记状态不等于当前场景可执行。",
+              "modules": [],
+              "records": [
+                {
+                  "id": "901469409579061248",
+                  "lane": "base",
+                  "laneName": "共享底座（基础能力）",
+                  "group": "水层",
+                  "name": "长船 + V 字尾迹",
+                  "where": "src/life/boats.js",
+                  "status": "done",
+                  "toggle": "boats",
+                  "project": "以库记录为准"
+                }
+              ]
+            },
+            "controls": []
+          }
+        ]
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "night",
+        "outline": true,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": false,
+        "snow": false,
+        "fire": true
+      }
+    }
+  ],
+  "finals": {
+    "morris-lake": "98f2d60c-28ca-4f4f-88fc-093505298c79"
+  }
+}

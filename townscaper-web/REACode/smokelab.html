@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>烟雾 / 火焰 — 两遍绘制 · UV 滚动 · 沿轨迹 mip · MAX 混合</title>
+<style>
+  :root { --ink:#20323a; --muted:#5d7279; --line:#d3e0e0; --bg:#eef4f3; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; }
+  #cv { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  header { position:fixed; left:0; right:0; top:0; padding:12px 18px; z-index:2;
+    background:linear-gradient(180deg, rgba(238,244,243,.96), rgba(238,244,243,.55) 70%, transparent); }
+  h1 { margin:0 0 4px; font-size:15px; }
+  p { margin:0; color:var(--muted); font-size:12.5px; max-width:74ch; }
+  .panel { position:fixed; right:14px; top:76px; z-index:2; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:7px; font-size:12.5px; }
+  .panel label { display:flex; gap:6px; align-items:center; cursor:pointer; }
+  .tags { position:fixed; inset:0; pointer-events:none; z-index:1; }
+  .tags span { position:absolute; transform:translate(-50%,-50%); font-size:12px; font-weight:600;
+    background:rgba(255,255,255,.88); border:1px solid var(--line); border-radius:999px; padding:2px 9px;
+    white-space:nowrap; color:var(--ink); }
+  .tags b { font-weight:700; }
+  #stats { position:fixed; left:14px; bottom:12px; z-index:2; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.86); border:1px solid var(--line); border-radius:8px; padding:6px 10px; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<header>
+  <h1>烟雾与火焰：三组 A/B</h1>
+  <p>上：火焰 ADD（左）vs <b>MAX</b>（右）—— 看重叠处是否糊成白缝。中：烟雾<b>单遍</b>（左）vs <b>两遍</b>（右）—— 看基部是否压实、有没有一圈亮描边。下：噪声 mip <b>固定 0</b>（左）vs <b>沿轨迹 0→3.2</b>（右）—— 看尖端是否化开。</p>
+</header>
+
+<div class="panel">
+  <label><input type="checkbox" id="two" checked> 两遍绘制</label>
+  <label><input type="checkbox" id="max" checked> 火焰用 MAX 混合</label>
+  <label><input type="checkbox" id="mip" checked> 沿轨迹改 mip</label>
+  <label><input type="checkbox" id="spin" checked> 时间流动</label>
+</div>
+
+<div class="tags" id="tags"></div>
+<div id="stats">—</div>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { makeSmoke, makeFlame } from './src/smokefx.js';
+
+THREE.ColorManagement.enabled = false;
+
+const cv = document.getElementById('cv');
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#dfe7e4');
+
+const cam = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+cam.position.set(0, 0.05, 14.2);
+cam.lookAt(0, 0, 0);
+
+/* ---- 背景：一块砖墙 + 地面，用来判断"基部是否压得住"和描边 ---------------- */
+const wallMat = new THREE.MeshBasicMaterial({ color: '#c9b9a4' });
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(26, 16), wallMat);
+wall.position.set(0, 0, -1.6);
+scene.add(wall);
+
+// 砖缝：细横线，用来判断半透明层有没有"透出后面的细节"
+const mortar = new THREE.Group();
+for (let i = -8; i <= 8; i++) {
+  const g = new THREE.PlaneGeometry(26, 0.012);
+  const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: '#b3a28d' }));
+  m.position.set(0, i * 0.34, -1.59);
+  mortar.add(m);
+}
+for (let i = -13; i <= 13; i++) {
+  const g = new THREE.PlaneGeometry(0.012, 16);
+  const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: '#b3a28d' }));
+  m.position.set(i * 0.42, 0, -1.59);
+  mortar.add(m);
+}
+scene.add(mortar);
+
+// 左火焰后面垫一块深色板：ADD 在深底上看着还行、到浅底上就糊 —— 这正是
+// 1056990611738451968 说 MAX 更好控制颜色的原因。
+const darkPanel = new THREE.Mesh(
+  new THREE.PlaneGeometry(2.4, 3.2),
+  new THREE.MeshBasicMaterial({ color: '#2b3a40' }),
+);
+darkPanel.position.set(-1.7, 1.15, -1.45);
+scene.add(darkPanel);
+
+// 左火焰后面垫一块深色板：ADD 在深底上看着还行、到浅底上就糊 —— 这正是
+// 1056990611738451968 说 MAX 更好控制颜色的原因。
+const darkPanel = new THREE.Mesh(
+  new THREE.PlaneGeometry(2.4, 3.2),
+  new THREE.MeshBasicMaterial({ color: '#2b3a40' }),
+);
+darkPanel.position.set(-1.7, 1.15, -1.45);
+scene.add(darkPanel);
+
+/* ---- 三组 A/B ------------------------------------------------------------ */
+const groups = [];
+
+// 上：火焰 ADD / MAX（x = -1.35 / +1.35, y = 2.15）
+const flameAdd = makeFlame({ seed: 21, span: 1.9, baseSize: 0.62, tipSize: 0.14, cards: 30 });
+const flameMax = makeFlame({ seed: 21, span: 1.9, baseSize: 0.62, tipSize: 0.14, cards: 30 });
+flameAdd.group.position.set(-1.7, 1.15, 0);
+flameMax.group.position.set(1.7, 1.15, 0);
+flameAdd.setMaxBlend(false);   // 左：ADD（普通混合 + 加色）
+flameAdd.materials.front.blending = THREE.AdditiveBlending;
+flameAdd.materials.front.needsUpdate = true;
+scene.add(flameAdd.group, flameMax.group);
+
+// 中：烟雾单遍 / 两遍（y = 0）
+const smokeOne = makeSmoke({ seed: 5, span: 2.6, baseSize: 0.62, tipSize: 0.34, count: 34, colorA: '#f7f8f7', colorB: '#e8eceb' });
+const smokeTwo = makeSmoke({ seed: 5, span: 2.6, baseSize: 0.62, tipSize: 0.34, count: 34, colorA: '#f7f8f7', colorB: '#e8eceb' });
+smokeOne.group.position.set(-1.7, -2.35, 0);
+smokeTwo.group.position.set(1.7, -2.35, 0);
+smokeOne.setTwoPass(false);    // 左：只有亮部一遍
+scene.add(smokeOne.group, smokeTwo.group);
+
+// 下：mip 固定 / 沿轨迹（y = -2.1）
+const mipFlat = makeSmoke({ seed: 13, span: 2.4, baseSize: 0.56, tipSize: 0.3, count: 30, colorA: '#f4f6f5', colorB: '#dfe4e3' });
+const mipRamp = makeSmoke({ seed: 13, span: 2.4, baseSize: 0.56, tipSize: 0.3, count: 30, colorA: '#f4f6f5', colorB: '#dfe4e3' });
+mipFlat.group.position.set(-1.7, -5.6, 0);
+mipRamp.group.position.set(1.7, -5.6, 0);
+mipFlat.materials.front.uniforms.uMipBias.value = 0.0;
+mipFlat.materials.back.uniforms.uMipBias.value = 0.0;
+scene.add(mipFlat.group, mipRamp.group);
+
+const all = [flameAdd, flameMax, smokeOne, smokeTwo, mipFlat, mipRamp];
+groups.push(...all);
+
+/* ---- 标签（世界坐标 → 屏幕） -------------------------------------------- */
+const tagData = [
+  ['ADD 混合（浅底，糊）', -1.7, 2.55], ['MAX 混合（浅底，清楚）', 1.7, 2.55],
+  ['单遍（基部发虚）', -1.7, -0.45], ['两遍 + 描边', 1.7, -0.45],
+  ['mip 固定 0（尖端也锐）', -1.7, -3.1], ['沿轨迹 mip 0→3.2（尖端化开）', 1.7, -3.1],
+];
+const tagBox = document.getElementById('tags');
+const tagEls = tagData.map(([text]) => {
+  const s = document.createElement('span');
+  s.innerHTML = text.replace(/(MAX 混合|两遍 \+ 描边|沿轨迹 mip)/, '<b>$1</b>');
+  tagBox.appendChild(s);
+  return s;
+});
+
+/* ---- 交互 ---------------------------------------------------------------- */
+const state = { two: true, max: true, mip: true, spin: true };
+function apply() {
+  smokeTwo.setTwoPass(state.two);
+  mipRamp.materials.front.uniforms.uMipBias.value = state.mip ? 3.2 : 0.0;
+  mipRamp.materials.back.uniforms.uMipBias.value = state.mip ? 3.2 : 0.0;
+  flameMax.setMaxBlend(state.max);
+  document.getElementById('max').parentElement.style.opacity = state.max ? 1 : 1;
+  const f = flameMax.materials.front;
+  if (!state.max) { f.blending = THREE.AdditiveBlending; f.needsUpdate = true; }
+}
+for (const [id, key] of [['two', 'two'], ['max', 'max'], ['mip', 'mip'], ['spin', 'spin']]) {
+  const el = document.getElementById(id);
+  el.onchange = () => { state[key] = el.checked; apply(); };
+}
+
+/* ---- resize / loop ------------------------------------------------------- */
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  cam.aspect = w / h;
+  // 保持三行都在画面里：按高度反推距离
+  cam.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+resize();
+
+const clock = new THREE.Clock();
+let paused = 0;
+
+function placeTags() {
+  const v = new THREE.Vector3();
+  tagData.forEach(([, x, y], i) => {
+    v.set(x, y, 0).project(cam);
+    const px = (v.x * 0.5 + 0.5) * innerWidth;
+    const py = (-v.y * 0.5 + 0.5) * innerHeight;
+    tagEls[i].style.left = px + 'px';
+    tagEls[i].style.top = py + 'px';
+  });
+}
+
+function frame() {
+  const t = state.spin ? paused + clock.getElapsedTime() : paused;
+  if (!state.spin) paused = t;
+  for (const g of groups) g.update(t);
+  renderer.render(scene, cam);
+  placeTags();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+apply();
+
+document.getElementById('stats').textContent =
+  `6 组系统 · 每根 ${smokeTwo.params.count} 片 · 噪声 128² mip ${noiseMipLevels()} 级`;
+
+function noiseMipLevels() { return 8; }
+
+window.reaSmoke = {
+  state, apply, groups,
+  set(id, on) { state[id] = on; const el = document.getElementById(id); if (el) el.checked = on; apply(); },
+  get camera() { return cam; },
+  get scene() { return scene; },
+};
+</script>
+</body>
+</html>

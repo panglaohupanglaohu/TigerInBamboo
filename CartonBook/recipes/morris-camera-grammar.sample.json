@@ -1,0 +1,120 @@
+{
+  "id": "morris-camera-grammar",
+  "title": "莫西斯湖镇 · 科学镜头语法样张",
+  "subtitle": "全景 / 镜头感 / 微距 / 长焦 / 飞艇驾驶员",
+  "scene": "messenger",
+  "gameUrl": "/TigerMessenger/?scene=messenger&autostart=1",
+  "timeOfDay": 0.42,
+  "viewport": { "width": 1280, "height": 800 },
+  "notes": "对照 docs/CAMERA-GRAMMAR.md 与 EDENA-CAMERA-STUDY.md（Edena 公开页 + NYFA 景别/焦段）。正式画面须 capture-clean（含隐藏「遥控」）。勿用文生图。章弧：ELS 全景 → 场所 → 微距插入 → 长焦拉开 →（可选）飞艇 POV。",
+  "storyboard": [
+    {
+      "id": "g-panorama",
+      "title": "全景 ELS：湖镇曲地平线",
+      "note": "panorama＝ELS+wide；封面/主题；人≤15%；无 HUD",
+      "camera": {
+        "mode": "panorama",
+        "family": "panorama",
+        "landmark": "morrisIsland",
+        "dist": 36,
+        "orbit": 0.25,
+        "pitch": 0.45,
+        "fov": 72,
+        "waitMs": 1200
+      },
+      "caption": "湖镇铺在曲地平线上。"
+    },
+    {
+      "id": "g-cinematic",
+      "title": "镜头感：水面望向海堤",
+      "note": "cinematic＝LS/MLS+normal；场所建立；必须藏「遥控」",
+      "camera": {
+        "mode": "cinematic",
+        "family": "cinematic",
+        "landmark": "morrisIsland",
+        "dist": 16,
+        "orbit": 0.6,
+        "pitch": 0.03,
+        "fov": 58,
+        "waitMs": 1100
+      },
+      "caption": "水把立面又写了一遍。"
+    },
+    {
+      "id": "g-macro",
+      "title": "微距：前景花径",
+      "note": "macro＝CU/ECU close-focus；低机位；花满近景、人在中径、建筑/树在远；全章近景插入",
+      "camera": {
+        "mode": "macro",
+        "family": "macro",
+        "landmark": "morrisIsland",
+        "dist": 4.5,
+        "orbit": 0.1,
+        "pitch": 0.12,
+        "fov": 46,
+        "waitMs": 1000
+      },
+      "caption": "花把路认出来。"
+    },
+    {
+      "id": "g-tele",
+      "title": "长焦：压缩拉开",
+      "note": "tele＝long focal；窄 FOV 压缩人与镇；微距后的拉开",
+      "camera": {
+        "mode": "tele",
+        "family": "tele",
+        "landmark": "morrisIsland",
+        "dist": 22,
+        "orbit": 0.9,
+        "pitch": 0.12,
+        "fov": 40,
+        "waitMs": 1000
+      },
+      "caption": "镇贴在他肩后。"
+    },
+    {
+      "id": "g-airship",
+      "title": "飞艇驾驶员：特殊视野",
+      "note": "airshipPilot＝subjective POV；Q+F+C；FOV82；整章宜≤1",
+      "camera": {
+        "mode": "airshipPilot",
+        "family": "airshipPilot",
+        "landmark": "morrisIsland",
+        "waitMs": 1500
+      },
+      "caption": "气囊隐去，只剩航路。"
+    }
+  ],
+  "pages": [
+    {
+      "id": "cover",
+      "kind": "cover",
+      "template": "cover",
+      "title": "莫西斯湖镇 · 科学镜头",
+      "panels": [
+        { "shotId": "g-panorama", "showCaption": false, "showDialog": false }
+      ]
+    },
+    {
+      "id": "page-01",
+      "kind": "story",
+      "template": "edena-stack-3",
+      "title": "场所与细节",
+      "panels": [
+        { "shotId": "g-panorama", "role": "theme", "showCaption": true, "showDialog": false },
+        { "shotId": "g-cinematic", "role": "place", "showCaption": true, "showDialog": false },
+        { "shotId": "g-macro", "role": "detail", "showCaption": true, "showDialog": false }
+      ]
+    },
+    {
+      "id": "page-02",
+      "kind": "story",
+      "template": "edena-banner-pair",
+      "title": "拉开与旅程",
+      "panels": [
+        { "shotId": "g-tele", "role": "pull", "showCaption": true, "showDialog": false },
+        { "shotId": "g-airship", "role": "journey", "showCaption": true, "showDialog": false }
+      ]
+    }
+  ]
+}

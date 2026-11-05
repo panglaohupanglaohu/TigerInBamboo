@@ -1,0 +1,109 @@
+{
+  "startedAt": "2026-11-03T18:10:46.329Z",
+  "base": "http://localhost:8931",
+  "isolated": true,
+  "cases": [
+    {
+      "id": "S01 initial pipeline",
+      "status": "PASS",
+      "ms": 14
+    },
+    {
+      "id": "S02 scan real library and search",
+      "status": "PASS",
+      "ms": 173,
+      "detail": "发现 198 条能力记录，已加入能力库；均待执行适配。"
+    },
+    {
+      "id": "S03 scan HTTP404 and recovery",
+      "status": "PASS",
+      "ms": 234
+    },
+    {
+      "id": "S04 add remove undo redo and reorder",
+      "status": "PASS",
+      "ms": 303
+    },
+    {
+      "id": "S05 goal save and exported JSON",
+      "status": "PASS",
+      "ms": 70
+    },
+    {
+      "id": "L01 learning loads source records",
+      "status": "PASS",
+      "ms": 93,
+      "detail": "39 条模块职责 · 243 条学习记录（登记不等于验收）"
+    },
+    {
+      "id": "L02 module search and source links",
+      "status": "PASS",
+      "ms": 563
+    },
+    {
+      "id": "L03 add method to scene locate no duplicate",
+      "status": "PASS",
+      "ms": 4541
+    },
+    {
+      "id": "L04 videos search play close",
+      "status": "FAIL",
+      "ms": 275,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'http://localhost:8931/REA-agent/gifs/901469409579061248.mp4'\n- null\n"
+    },
+    {
+      "id": "S06 saved recipe refresh",
+      "status": "FAIL",
+      "ms": 12001,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#save-recipe')\u001b[22m\n\u001b[2m    - locator resolved to <button hidden=\"\" id=\"save-recipe\">保存管线</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    4 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "id": "S07 real game connection and editor docking",
+      "status": "FAIL",
+      "ms": 12019,
+      "error": "page.waitForFunction: Timeout 12000ms exceeded."
+    },
+    {
+      "id": "S08 editor tools palette help collapse",
+      "status": "FAIL",
+      "ms": 12001,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '建造', exact: true })\u001b[22m\n"
+    },
+    {
+      "id": "S09 actual parameter preview baseline and snapshot",
+      "status": "FAIL",
+      "ms": 12001,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#pipeline .node').nth(2)\u001b[22m\n\u001b[2m    - locator resolved to <article class=\"node\" tabindex=\"0\" draggable=\"true\">…</article>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    12 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "id": "S10 stale finalize reject restore and isolated final",
+      "status": "FAIL",
+      "ms": 12002,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#pipeline .node').nth(3)\u001b[22m\n\u001b[2m    - locator resolved to <article class=\"node\" tabindex=\"0\" draggable=\"true\">…</article>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    17 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n"
+    },
+    {
+      "id": "S11 play mode and service outage independence",
+      "status": "FAIL",
+      "ms": 12001,
+      "error": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#play')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"play\">游玩检验</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "id": "L05 mobile overflow and preserved scene iframe",
+      "status": "PASS",
+      "ms": 1013
+    },
+    {
+      "id": "G01 clean game startup and remote controls",
+      "status": "FAIL",
+      "ms": 30083,
+      "error": "page.waitForFunction: Timeout 30000ms exceeded."
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-03T18:12:36.558Z",
+  "summary": {
+    "passed": 9,
+    "failed": 8,
+    "pageErrors": 0
+  }
+}

@@ -1,20 +1,3 @@
-/**
- * pipeline.js — how the 237 clips fit together, as pipelines.
- *
- * Reading of the timeline (all from the clips' own text):
- *   Bad North (2017–2019)   square voxel islands; terrain, houses, units, wind
- *                           and snow all share one "virtual voxel space"
- *                           (931196707236392960).
- *   Townscaper (2019–2021)  irregular quad grid, buildings only; its water is
- *                           "almost the same as in Bad North" (1215644531221311488).
- *   Next project (2021–25)  "combine an irregular grid (like in Townscaper) with
- *                           multi-cell tiles (like in Bad North)" (1579483114178768898),
- *                           houses spliced into terrain (1584623053061099520),
- *                           then "put this on a sphere" (1768627849529893109).
- *
- * status: done = in this repo and visible, partial, engine = in engine/ only,
- * todo = studied, not built yet.
- */
 window.PIPELINE = {
   "verdict": {
     "title": "Bad North 不是两者的综合，是祖先；融合发生在 Townscaper 之后的第三个项目，最终落到球面",
@@ -48,11 +31,12 @@ window.PIPELINE = {
           "网格",
           [
             {
-              "name": "Townscaper 不规则四边形网格",
+              "name": "早期不规则四边网：1068帧已核验，已有主体保留",
               "id": "1147881669350891521",
               "status": "done",
               "where": "src/core/grid.js",
-              "toggle": "grid"
+              "toggle": "grid",
+              "page": "grids.html?t=kinds"
             },
             {
               "name": "无限网格：块 + 簇各自松弛，顶点 = 块 + 最近两簇的重心插值（无缝、无翻折）",
@@ -69,17 +53,17 @@ window.PIPELINE = {
               "page": "grids.html?t=infinite"
             },
             {
-              "name": "纯三角 / 纯方格 / 混合对比 + 对偶图（顶点格）",
+              "name": "纯格型对照：真实正交方格/合并菱形区分；独立六边待补",
               "id": "1670790425232175108",
-              "status": "done",
-              "where": "src/core/grid.js",
+              "status": "partial",
+              "where": "src/core/grid.js · grids.html",
               "page": "grids.html?t=kinds"
             },
             {
-              "name": "拓扑直线 + 完美环",
+              "name": "拓扑直线：有向状态判环/真实对边段/停止原因",
               "id": "1384958097542819845",
-              "status": "done",
-              "where": "src/core/grid.js（traceStraight）",
+              "status": "partial",
+              "where": "src/core/grid.js",
               "page": "grids.html?t=lines"
             },
             {
@@ -90,49 +74,53 @@ window.PIPELINE = {
               "page": "grids.html?t=bary"
             },
             {
-              "name": "通用三角图：增量 Delaunay + 流形检查",
+              "name": "通用三角图：确定性全查/坏输入拒绝；局部编辑接口待补",
               "id": "1677242779162877952",
-              "status": "done",
-              "where": "src/core/trigraph.js"
+              "status": "partial",
+              "where": "src/core/trigraph.js",
+              "page": "trigraph.html"
             },
             {
-              "name": "三角 + 方格混合网格（新项目）",
+              "name": "方形沿对角切四三角：父格追溯/实际WFC；联合模块待补",
               "id": "1447494168448753667",
-              "status": "done",
-              "where": "src/core/grid.js · buildMixedGrid()（左上角切换网格）"
+              "status": "partial",
+              "where": "src/core/grid.js · src/core/wfc.js",
+              "page": "wfc.html?subtiles=1"
             },
             {
-              "name": "半边结构（格子是任意多边形，edgeTwins）",
+              "name": "Half Edge：511帧已核验；显式环/扇与编辑接口待补",
               "id": "1458921394855718917",
-              "status": "done",
-              "where": "src/core/grid.js · finishGrid()"
+              "status": "partial",
+              "where": "src/core/grid.js · src/core/adjacency.js",
+              "page": "adjacency.html"
             },
             {
-              "name": "球面三角化：随机点 → 散开 → 球极投影上 Delaunay → 按三角形松弛",
+              "name": "球面四阶段：三角化/松弛真实坐标对照；完整原动画待补",
               "id": "1338825080844021760",
-              "status": "done",
+              "status": "partial",
               "where": "src/sphere/planet.js",
-              "page": "planet.html"
+              "page": "planet.html?stage=tri"
             },
             {
-              "name": "放到球面：台阶小星球",
+              "name": "球面化：已有对偶柱群；原模块/海岸与World接入待补",
               "id": "1768627849529893109",
-              "status": "done",
-              "where": "src/sphere/planet.js（独立星球演示；共享 World 球面融合待补齐）",
+              "status": "partial",
+              "where": "src/sphere/planet.js · planet.html",
               "page": "planet.html"
             },
             {
-              "name": "星球防蘑菇化 relax（高台面积 1.90× → 1.35×）",
+              "name": "防蘑菇化：显式模块格/尺寸诊断；多格冲突仍待补",
               "id": "1769641473895432220",
-              "status": "done",
-              "where": "src/sphere/planet.js（独立星球演示；共享 World 球面融合待补齐）",
+              "status": "partial",
+              "where": "src/sphere/planet.js · planet.html",
               "page": "planet.html"
             },
             {
-              "name": "对比三种：不平滑 / dumb（海岸被啃、崖顶塌）/ 层级（海岸圆滑、崖顶与房子保持锐利）。「地形」场景勾掉「层级平滑」即可对比",
+              "name": "分层平滑对照：已有形变保留，完整三模式待补",
               "id": "1670725072540106755",
-              "status": "done",
-              "where": "src/terrain/shape.js"
+              "status": "partial",
+              "where": "src/terrain/shape.js · hierarchy.html",
+              "page": "hierarchy.html"
             },
             {
               "name": "\"方，又带六边形味\"的岩岛：三角 + 方格混合网格",
@@ -141,16 +129,18 @@ window.PIPELINE = {
               "where": "src/core/grid.js（buildMixedGrid）"
             },
             {
-              "name": "底图就是一张不规则三角网",
+              "name": "不规则三角底图：383帧已学，完整岛生成仍待补",
               "id": "1447496205282549761",
-              "status": "done",
-              "where": "src/core/grid.js（buildMixedGrid）"
+              "status": "partial",
+              "where": "src/core/grid.js · src/terrain/generate.js",
+              "page": "grids.html?t=kinds"
             },
             {
-              "name": "球面 Delaunay = 在球极投影平面上做；点按半径排序再增量插入（planet.html 右下角）",
+              "name": "球面投影：径向索引/平面抽样与球面拓扑分开",
               "id": "1338829205157646336",
-              "status": "done",
-              "where": "src/core/trigraph.js · src/sphere/planet.js"
+              "status": "partial",
+              "where": "src/sphere/planet.js",
+              "page": "planet.html?stage=tri"
             },
             {
               "name": "完美环：直线绕回起点时检测出来；飞岛玩法没做",
@@ -171,6 +161,13 @@ window.PIPELINE = {
               "status": "done",
               "where": "grids.html（重心坐标）",
               "page": "grids.html"
+            },
+            {
+              "name": "局部规则/放射模板：324帧核验，单补丁共享接缝；复杂孔洞拒绝、多模板待补",
+              "id": "1301816247479345152",
+              "status": "partial",
+              "where": "src/core/radial-patch.js",
+              "page": "gridpatch.html"
             }
           ]
         ],
@@ -178,44 +175,180 @@ window.PIPELINE = {
           "水层",
           [
             {
-              "name": "浪裙（Bad North → Townscaper）",
+              "name": "彩色中间倒影 / 更宽浪裙",
               "id": "1215644531221311488",
-              "status": "done",
-              "where": "src/water/shore.js",
-              "toggle": "waves"
+              "status": "partial",
+              "where": "src/water/reflection.js · src/world/view.js",
+              "toggle": "waves",
+              "note": "270帧全核验：彩色中间倒影/宽岸裙，160起倒影与建筑线框。保留共享WorldMesh翻转，补实际水面上方裁切、受限深度淡出及线性颜色中点模块；GPU/双网格通过。未复现全部块面艺术与岸裙尺度。",
+              "page": "reflection.html",
+              "decodedFrames": 270,
+              "reviewEvidence": "artifacts/coverage/reflection-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  269
+                ],
+                "nativeRevisits": [
+                  0,
+                  159,
+                  160
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
+            },
+            {
+              "id": "1758250248483278925",
+              "status": "partial",
+              "where": "src/water/reflection.js · src/world/view.js",
+              "note": "516帧全核验：高崖、低平教堂、中高教堂岛依次转动，反射轮廓/颜色克制；原文没有公式。保留共享几何近似而不冒称原作算法，新增实际场景颜色混合/扰动/线框对照；完整反射投影/遮挡仍缺。",
+              "page": "reflection.html",
+              "decodedFrames": 516,
+              "reviewEvidence": "artifacts/coverage/reflection-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  515
+                ],
+                "nativeRevisits": [
+                  90,
+                  150,
+                  250
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              },
+              "name": "新水面反射：多组岛屿对照"
             },
             {
               "name": "距离场浪裙",
               "id": "1664566546683899905",
-              "status": "done",
-              "where": "src/water/shore.js"
+              "status": "partial",
+              "where": "src/water/shore.js · src/core/shore-profile.js",
+              "note": "340帧全复核：旋转岛屿与缓动近岸裙；README称distance-field-like，不证明精确欧氏距离或不折叠。保留chamfer栅格；修复最大步进越界/起点已达阈值及预算；真实双网格通过，独立原版buildShoreDistance API未迁移。",
+              "decodedFrames": 340,
+              "reviewEvidence": "artifacts/coverage/shore-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  339
+                ],
+                "nativeRevisits": [
+                  80,
+                  210
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "岸线黄线 / 外推蓝线",
               "id": "1849732997945110651",
-              "status": "done",
-              "where": "src/water/shore.js",
-              "toggle": "shorelines"
+              "status": "partial",
+              "where": "src/water/shore.js · src/core/shore-profile.js",
+              "toggle": "shorelines",
+              "note": "437帧全复核：黄线贴岸/蓝线外推，270起红三角浪带；窄湾蓝线有交叠。修复黄线Chaikin切凸角、形变后仍用旧法线；只平滑海侧并拒绝落入栅格陆地的端点。全局岩石泡沫mask、折叠消解与浪带全路径防穿岸仍缺。",
+              "decodedFrames": 437,
+              "reviewEvidence": "artifacts/coverage/shore-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  436
+                ],
+                "nativeRevisits": [
+                  140,
+                  269,
+                  270,
+                  436
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "循环顶点着色器岸浪（新项目）",
               "id": "1991101097818403263",
-              "status": "done",
-              "where": "src/water/shore.js",
-              "toggle": "wavewire"
+              "status": "partial",
+              "where": "src/water/shore.js · src/core/wave-cycle.js",
+              "toggle": "wavewire",
+              "note": "477帧全复核：线框浪带展开/到岸，绕高崖与海蚀洞；README明确生成时烘入/出方向和时间偏移。补独立aIn/aOut/aPeriod；退浪局部几何反射是本地近似，不宣称原作公式。真实GPU及View动态像素通过，完整浪形/碰撞仍部分。",
+              "page": "waves.html",
+              "decodedFrames": 477,
+              "reviewEvidence": "artifacts/coverage/wave-cycle-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  476
+                ],
+                "nativeRevisits": [
+                  30,
+                  70,
+                  400
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "中间色倒影",
               "id": "1215644531221311488",
-              "status": "done",
-              "where": "src/world/view.js",
-              "toggle": "reflection"
+              "status": "partial",
+              "where": "src/water/reflection.js · src/world/view.js",
+              "toggle": "reflection",
+              "note": "270帧全核验：彩色中间倒影/宽岸裙，160起倒影与建筑线框。保留共享WorldMesh翻转，补实际水面上方裁切、受限深度淡出及线性颜色中点模块；GPU/双网格通过。未复现全部块面艺术与岸裙尺度。",
+              "page": "reflection.html",
+              "decodedFrames": 270,
+              "reviewEvidence": "artifacts/coverage/reflection-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  269
+                ],
+                "nativeRevisits": [
+                  0,
+                  159,
+                  160
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "叠片采样 SDF 的水体",
               "id": "1758251637280268481",
-              "status": "todo",
-              "where": "原 engine/watervol.js，未迁移"
+              "status": "partial",
+              "where": "src/water/watervol.js · src/water/land-distance.js",
+              "toggle": "watervol",
+              "note": "213帧全核验：小岛镜头降到水面，线框/倒影随角度变化；原文说叠平面采SDF，未说明维度。保留本地浅水近似，补各向异性精确2D中心距离、level1遮罩、版本缓存/空场清理/共享资源释放，实际双网格通过；不同于原片完整反射效果。",
+              "decodedFrames": 213,
+              "reviewEvidence": "artifacts/coverage/water-patch-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  212
+                ],
+                "nativeRevisits": [
+                  100
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              },
+              "page": "index.html?scene=town&on=watervol"
             },
             {
               "name": "瀑布：河从崖边落下的水帘 + 白沫",
@@ -225,41 +358,142 @@ window.PIPELINE = {
               "toggle": "waterfalls"
             },
             {
-              "name": "长船 + V 字尾迹",
+              "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
               "id": "901469409579061248",
-              "status": "done",
-              "where": "src/life/boats.js",
-              "toggle": "boats"
+              "status": "partial",
+              "where": "src/life/boats.js · src/core/wake-sampling.js",
+              "toggle": "boats",
+              "page": "wake-fog.html"
             },
             {
               "name": "动态海面但不抢戏：极低幅度的颜色漂移",
               "id": "1991103578011029507",
-              "status": "done",
-              "where": "src/world/view.js（海面漂移）"
+              "status": "partial",
+              "where": "src/water/shore.js · src/core/wave-cycle.js · src/world/view.js",
+              "note": "529帧全复核：固定教堂岛，主要动态为分段白色近岸浪；不把“克制动态海洋”推断为现有整片海面颜色漂移公式。保留本地背景处理但纠正归因，新增可开关沿岸周期分段浪峰，实际双网格GPU对照通过。",
+              "page": "waves.html",
+              "decodedFrames": 529,
+              "reviewEvidence": "artifacts/coverage/wave-crest-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  528
+                ],
+                "nativeRevisits": [
+                  0,
+                  300
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "新的岸浪",
               "id": "1991099314714902634",
-              "status": "done",
-              "where": "src/water/shore.js"
+              "status": "partial",
+              "where": "src/water/shore.js · src/core/wave-cycle.js · src/world/view.js",
+              "note": "545帧全复核：高崖岛/海蚀洞换角度，白色岸浪分段展开/聚散；README只称新岸浪。保留独立进退/周期，补aCrest/aWidth与闭环整数谐波，遮罩/拓扑碰撞及完整原作形态仍缺。",
+              "page": "waves.html",
+              "decodedFrames": 545,
+              "reviewEvidence": "artifacts/coverage/wave-crest-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  544
+                ],
+                "nativeRevisits": [
+                  180,
+                  240
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "岸浪：许多重叠的浪各走各的周期",
               "id": "1849730611964973481",
-              "status": "done",
-              "where": "src/water/shore.js"
+              "status": "partial",
+              "where": "src/water/shore.js · src/core/wave-cycle.js",
+              "note": "599帧全复核：微弱错开岸浪、镜头移位、408起红色重叠三角带。保留实际多浪带，各层烘不同周期，闭环弧长相位改整周期频率，避免接缝正弦频率不闭合。到岸opacity连续，循环端隐藏。GPU/实际双网格通过；泡沫mask/窄湾交叠仍缺。",
+              "page": "waves.html",
+              "decodedFrames": 599,
+              "reviewEvidence": "artifacts/coverage/wave-cycle-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  598
+                ],
+                "nativeRevisits": [
+                  50,
+                  407,
+                  408
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "岸线渲染：Bad North / Townscaper 那套的改良版（距离场浪裙）",
               "id": "1666429884208381953",
-              "status": "done",
-              "where": "src/water/shore.js"
+              "status": "partial",
+              "where": "src/water/shore.js · src/core/shore-loops.js · src/world/townDemo.js",
+              "note": "630帧全核验：旋转/固定高崖岛，凹湾与白色岸裙细微聚散；原文只说Bad North/Townscaper改良版，不证明具体距离算法。共享水层改规范绕序/按左侧陆地转向及自接闭环分解，1024组合及实际双网格通过；蓝线窄湾交叠/泡沫mask仍缺。",
+              "page": "shoreloops.html",
+              "decodedFrames": 630,
+              "reviewEvidence": "artifacts/coverage/shore-topology-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  629
+                ],
+                "nativeRevisits": [
+                  80,
+                  200,
+                  400
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "整个项目放到水上：小镇场景就是水上码头",
               "id": "1215642481162887168",
-              "status": "done",
-              "where": "src/world/townDemo.js"
+              "status": "partial",
+              "where": "src/water/shore.js · src/core/shore-loops.js · src/world/townDemo.js",
+              "note": "330帧全核验：空水面逐块长出码头/房屋/拱口/多塔，岸线与倒影跟随。保留已有实际World小镇，补角接分岛/加桥合并的闭环稳定性；真实双网格2→1闭环及恢复小镇通过。拱底精确截面/完整建造美术仍缺。",
+              "page": "shoreloops.html",
+              "decodedFrames": 330,
+              "reviewEvidence": "artifacts/coverage/shore-topology-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  329
+                ],
+                "nativeRevisits": [
+                  3,
+                  60,
+                  160
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
+            },
+            {
+              "name": "浮点GPU能力探测",
+              "id": "1664565063552847873",
+              "status": "partial",
+              "where": "src/world/float-probe.js · float.html · 117帧已核验；本环境16F/32F写入、负值/HDR回读和线性过滤通过；跨平台及平流/CPU误差待补。",
+              "page": "float.html"
             }
           ]
         ],
@@ -290,9 +524,28 @@ window.PIPELINE = {
             {
               "name": "时段 / 夜里亮窗 + 太阳方位小工具",
               "id": "1313840428685447170",
-              "status": "done",
-              "where": "src/world/view.js · setSunAngle()",
-              "toggle": "time"
+              "status": "partial",
+              "where": "src/core/penumbra.js · src/light/penumbra.js · src/world/penumbra-layer.js · src/world/view.js",
+              "toggle": "time",
+              "note": "501帧全核验：二维太阳盘与滑条改变光照，夜间窗户亮，457附近恢复白天。保留原有日夜/太阳方位，补方位+高度控制共享真实View及水面三场阴影；不是复制原界面或完整地平线日照模拟。",
+              "page": "penumbra.html",
+              "decodedFrames": 501,
+              "reviewEvidence": "artifacts/coverage/penumbra-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  500
+                ],
+                "nativeRevisits": [
+                  210,
+                  310,
+                  457
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "只看光照（调试视图）",
@@ -343,34 +596,110 @@ window.PIPELINE = {
               "toggle": "thickoutline"
             },
             {
-              "name": "轨道相机运动模糊拖影",
+              "name": "轨道拖影：历史留存按dt换算，轮廓拖抹待补",
               "id": "1727315611959865407",
-              "status": "done",
-              "where": "src/world/view.js",
-              "toggle": "motionblur"
+              "status": "partial",
+              "where": "src/core/camera-motion.js · src/world/view.js",
+              "toggle": "motionblur",
+              "note": "337帧全核验。保留上一批历史帧/释放修复，新增按dt换算的历史留存，30/60/120Hz实际渲染参数通过；原片方向性轮廓拖抹、速度场与全指标接口仍待补。",
+              "decodedFrames": 337,
+              "reviewEvidence": "artifacts/coverage/palette-transition-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  336
+                ],
+                "nativeRevisits": [
+                  40
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true,
+                "acceptanceScope": "局部历史权重/可选墙色过渡，非原片完整算法或视觉等价"
+              },
+              "page": "index.html?scene=terrain&on=motionblur"
             },
             {
-              "name": "SDF + 光体积的多次反弹 GI",
+              "name": "六方向体积：213帧核验，法线采样/太阳DDA；SDF/mega反馈待补",
               "id": "1580845127207387137",
-              "status": "todo"
+              "status": "partial",
+              "where": "src/light/lightvolume.js · src/world/view.js",
+              "page": "lightvolume.html"
             },
             {
-              "name": "投影高度和深度测试高度分开、只在草-崖边和屋檐下出阴影：思路学了，实现是逐顶点版",
+              "name": "地表纹理阴影近似：投射资格与深度比较分开；屋檐/纹理浮凸待补",
               "id": "1705195380457996629",
               "status": "partial",
-              "where": "src/world/view.js（体素阴影）"
+              "where": "src/light/surface-shadow.js · src/world/view.js · surface-shadows.html",
+              "note": "300帧全核验。新增共享World地表高度图阴影，局部凸起筛选投射体、独立深度偏置；实际双网格GPU/缓存通过。仅地面2.5D近似，不是完整纹理浮凸/屋檐/洞内/UV接缝复现，保留已有体素阴影。",
+              "decodedFrames": 300,
+              "reviewEvidence": "artifacts/coverage/surface-shadow-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  299
+                ],
+                "nativeRevisits": [
+                  12
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true,
+                "acceptanceScope": "仅共享World地表高度场局部近似；原片完整纹理/屋檐效果待补"
+              },
+              "page": "surface-shadows.html"
             },
             {
-              "name": "贴图阴影（草上、屋檐下）：重构版用逐顶点体素阴影代替，不是贴图",
+              "name": "地表纹理阴影近似：投射资格与深度比较分开；屋檐/纹理浮凸待补",
               "id": "1704218784028905984",
               "status": "partial",
-              "where": "src/world/view.js（体素阴影）"
+              "where": "src/light/surface-shadow.js · src/world/view.js · surface-shadows.html",
+              "note": "335帧全核验。新增共享World地表高度图阴影，局部凸起筛选投射体、独立深度偏置；实际双网格GPU/缓存通过。仅地面2.5D近似，不是完整纹理浮凸/屋檐/洞内/UV接缝复现，保留已有体素阴影。",
+              "decodedFrames": 335,
+              "reviewEvidence": "artifacts/coverage/surface-shadow-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  334
+                ],
+                "nativeRevisits": [
+                  70
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true,
+                "acceptanceScope": "仅共享World地表高度场局部近似；原片完整纹理/屋檐效果待补"
+              },
+              "page": "surface-shadows.html"
             },
             {
               "name": "半影：阴影画三遍（正常、稍收、大体素）。重构版用 PCF 软阴影，没有三遍叠",
               "id": "1305951750638231552",
               "status": "partial",
-              "where": "src/world/view.js（shadows）"
+              "where": "src/core/penumbra.js · src/light/penumbra.js · src/world/penumbra-layer.js · src/world/view.js",
+              "note": "521帧全核验：塔楼编辑/旋转与长影，409起RGB阴影纹理通道检查。共享World顶面派生三场水面阴影，正确保留粗格世界尺度/最高遮挡、内收/合成与预算；真实双网格编辑/转太阳/释放通过。2.5D仅水面，洞/悬挑/形变表面及原片半影宽度匹配仍缺。",
+              "page": "penumbra.html",
+              "decodedFrames": 521,
+              "reviewEvidence": "artifacts/coverage/penumbra-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  520
+                ],
+                "nativeRevisits": [
+                  70,
+                  409,
+                  445,
+                  454
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "平涂 / 着色 / 只看光照 / AO 烘焙网格四种视图：前三种有（面板开关），AO 烘焙网格的可视化没做",
@@ -385,37 +714,46 @@ window.PIPELINE = {
               "where": "src/light/bake.js"
             },
             {
-              "name": "虚拟体素空间：World 的 solid / rock 位，同时用于光照烘焙、软法线、风场、体素阴影、碰撞（岛的体素块画面）",
+              "name": "共享World用途：碰撞/支撑/梯度诊断，真实风场按实心位保留洞内空气",
               "id": "931196707236392960",
               "status": "done",
-              "where": "src/core/world.js"
+              "where": "src/core/world-probes.js · src/life/atmosphere.js",
+              "page": "flow.html"
             },
             {
-              "name": "光体积 + 3 次反弹（色溢）",
+              "name": "GI峡谷：185帧复核，保留体素反弹；原版形因子/参考接口缺口",
               "id": "1580835075629133825",
-              "status": "done",
-              "where": "src/light/lightvolume.js",
-              "toggle": "gi"
+              "status": "partial",
+              "where": "src/core/voxel-distance.js · src/light/lightvolume.js",
+              "page": "lightvolume.html"
             },
             {
-              "name": "6 向光体积 + 反弹收敛（第 3 次后看不出）",
+              "name": "反弹过程：41帧核验，0/1/3/6次与实测变化；完整往返反馈待补",
               "id": "1580846877855338497",
-              "status": "done",
-              "where": "src/light/lightvolume.js（bounceChange）",
-              "toggle": "gi"
+              "status": "partial",
+              "where": "src/light/lightvolume.js · src/world/view.js",
+              "page": "lightvolume.html"
             },
             {
-              "name": "点光源进光体积（大而软）",
+              "name": "两色点光体积：176帧核验，有限DDA/直接项/移动关闭通过",
               "id": "1582757294672314368",
               "status": "done",
-              "where": "src/light/lightvolume.js（point）",
-              "toggle": "pointlight"
+              "where": "src/light/lightvolume.js · src/world/view.js",
+              "page": "lightvolume.html"
             },
             {
-              "name": "六向 AO 烘焙（3D SDF 未单存）",
+              "name": "法线/SDF/六AO：425帧复核，中心EDT/保守步进/六AO诊断；笔触法线待补",
               "id": "1481661852887265288",
               "status": "partial",
-              "where": "src/light/lightvolume.js（ao）"
+              "where": "src/core/voxel-distance.js · src/light/lightvolume.js",
+              "page": "lightvolume.html"
+            },
+            {
+              "name": "球面高度立方体光照：低分辨率6面、顶点单次查询",
+              "id": "1791049306213912823",
+              "status": "done",
+              "where": "src/core/cube-height.js · src/light/cube-height.js（273帧；本地高度暗化解释，GPU验证）",
+              "page": "planet.html"
             }
           ]
         ],
@@ -423,11 +761,118 @@ window.PIPELINE = {
           "多层导航 · 本轮补差",
           [
             {
-              "name": "洞内多层可站点、净空与门户边（战斗接入待补齐）",
+              "name": "洞内多层可站点、净空与门户边（已接入战斗，精细碰撞待补齐）",
               "id": "797119718477991936",
               "status": "partial",
-              "where": "src/world/layerednav.js",
+              "where": "src/world/layerednav.js · src/world/battle-navigation.js · src/badnorth/battle.js",
               "page": "navigation.html"
+            }
+          ]
+        ],
+        [
+          "跨帧算法",
+          [
+            {
+              "id": "863019585162932224",
+              "name": "跨帧嵌套协程：显式栈、预算、取消与错误传递",
+              "status": "done",
+              "where": "src/core/coroutine.js · scheduler.html",
+              "page": "scheduler.html"
+            }
+          ]
+        ],
+        [
+          "约束求解",
+          [
+            {
+              "id": "1164926304640229376",
+              "name": "确定性socket WFC：真实半边、固定约束与迭代回溯（独立实验）",
+              "status": "done",
+              "where": "src/core/wfc.js · wfc.html",
+              "page": "wfc.html"
+            }
+          ]
+        ],
+        [
+          "约束修复",
+          [
+            {
+              "id": "793806535898136576",
+              "name": "socket局部修复：锁定外部、优先旧值、无解扩区和预算回滚",
+              "status": "done",
+              "where": "src/core/wfc.js（repairWFC）· wfc.html",
+              "page": "wfc.html"
+            }
+          ]
+        ],
+        [
+          "几何邻接",
+          [
+            {
+              "id": "795010582239997952",
+              "name": "从网格抽边界接口、查询候选与核验半边（完整建筑轮廓另列后续）",
+              "status": "done",
+              "where": "src/core/adjacency.js · adjacency.html · wfc.html",
+              "page": "adjacency.html"
+            }
+          ]
+        ],
+        [
+          "等值线连接",
+          [
+            {
+              "id": "1120036868966502401",
+              "name": "不规则网格等值线：共享跨边端点、双线性鞍点及闭环审核",
+              "status": "done",
+              "where": "src/core/contour.js · src/world/contour-overlay.js",
+              "page": "contour.html",
+              "toggle": "contours"
+            }
+          ]
+        ],
+        [
+          "近似可见性",
+          [
+            {
+              "id": "810878197134950401",
+              "name": "导航图角度采样视线：逐边门户、楼层分离；光学精度不作保证",
+              "status": "done",
+              "where": "src/core/nav-visibility.js · src/world/visibility.js · visibility.html",
+              "page": "visibility.html",
+              "toggle": "visibility"
+            }
+          ]
+        ],
+        [
+          "墙饰表面",
+          [
+            {
+              "id": "1897266928961700215",
+              "name": "墙板底色/线稿/护墙板生成与World表面预览；完整走廊待补",
+              "toggle": "doodlewall",
+              "status": "partial",
+              "where": "src/build/doodle-wall.js · src/world/doodle-overlay.js",
+              "page": "doodle.html"
+            },
+            {
+              "id": "1890018647655272491",
+              "name": "黑白走廊研究：单色表面、稳定布局；弧顶/门口版式待补",
+              "toggle": "doodlegray",
+              "status": "partial",
+              "where": "src/build/doodle-wall.js · src/world/doodle-overlay.js",
+              "page": "doodle.html"
+            }
+          ]
+        ],
+        [
+          "模块出现条件诊断",
+          [
+            {
+              "id": "1670794261669769217",
+              "name": "特定条件模块的有限样本诊断：完整计数/下界/未知分开，不冒充WFC概率",
+              "status": "partial",
+              "where": "src/core/module-audit.js",
+              "page": "patch.html"
             }
           ]
         ]
@@ -443,10 +888,11 @@ window.PIPELINE = {
           "流程",
           [
             {
-              "name": "1 体素列 + 角点取值",
+              "name": "1 体素列与角点采样（等值线连接审核见共享底座）",
               "id": "1120036868966502401",
               "status": "done",
-              "where": "src/core/world.js"
+              "where": "src/core/contour.js · src/world/contour-overlay.js",
+              "page": "contour.html"
             },
             {
               "name": "2 模块装配（原作 545 块，这里用规则生成）+ 模块签名调试色：同一种邻居占用 = 同一块拼图 = 同一种颜色",
@@ -456,10 +902,17 @@ window.PIPELINE = {
               "toggle": "modules"
             },
             {
-              "name": "3 陡坡双坡顶 + 山墙",
+              "id": "1344290848180203523",
+              "name": "复杂悬空建筑QA：共享World编辑压力回放（局部验收）",
+              "status": "partial",
+              "where": "src/core/qa-replay.js",
+              "page": "qa-replay.html"
+            },
+            {
+              "name": "3 建筑增删、暖橙屋顶与多色墙（原帖重点含饱和度、庭院草地和彩色反弹）",
               "id": "1197909675443916803",
-              "status": "done",
-              "where": "src/build/buildings.js",
+              "status": "partial",
+              "where": "src/build/buildings.js · src/light/bake.js（现有实现保留，完整原作视觉待补）",
               "tour": "gable"
             },
             {
@@ -483,11 +936,12 @@ window.PIPELINE = {
               "where": "src/build/buildings.js（tryPlace）"
             },
             {
-              "name": "6 围合 → 后院",
+              "name": "6 围合庭院：按实际墙层识别开口，上层桥不再封院",
               "id": "1238474550511308800",
-              "status": "done",
-              "where": "src/build/buildings.js",
-              "tour": "yard"
+              "status": "partial",
+              "where": "src/core/courtyards.js · src/build/buildings.js",
+              "tour": "yard",
+              "page": "garden.html"
             },
             {
               "name": "7 楼梯 + 表面装饰的\"小 WFC\"：每栋每层一种窗型、整栋只开一扇门；楼梯按导航图放在崖脚",
@@ -511,17 +965,17 @@ window.PIPELINE = {
               "toggle": "butterflies"
             },
             {
-              "name": "8c 旗子：最高屋脊插杆，旗面顺风飘",
+              "name": "8c 庭院/楼间彩旗绳：308帧复核，纠正屋顶旗归因；双网格开关/截图通过",
               "id": "1212732478458343424",
               "status": "done",
-              "where": "src/life/decor.js",
-              "toggle": "flags"
+              "where": "src/life/decor.js（refresh / #wire）",
+              "toggle": "wires"
             },
             {
-              "name": "8d \"意大利电线\"：隔街相对的墙之间拉彩旗绳",
+              "name": "8d 楼间绳线/衣物：精确墙面端点与逐层包络，双网格通过",
               "id": "1259838941299183619",
               "status": "done",
-              "where": "src/life/decor.js",
+              "where": "src/core/wire-route.js · src/life/decor.js",
               "toggle": "wires"
             },
             {
@@ -531,35 +985,40 @@ window.PIPELINE = {
               "where": "src/life/effects.js"
             },
             {
-              "name": "8f 出现 / 消失动画：弹性长出、拆掉冒灰",
+              "name": "8f 道具出现/消失：已逐帧，独立生命周期待接（现仅柱顶增长/灰尘）",
               "id": "1246074663546916873",
-              "status": "done",
-              "where": "src/life/effects.js + view.js（uPops）"
+              "status": "partial",
+              "where": "src/life/effects.js（非完整propanim）"
             },
             {
-              "name": "8g 火：Max 混合的软粒子（Bad North）",
+              "name": "Max保留颜色：新增Max/Add真实GPU对照，重叠不累加增亮",
               "id": "1056990611738451968",
               "status": "done",
-              "where": "src/life/effects.js",
-              "toggle": "fire"
+              "where": "src/life/effects.js（setFireAppearance）",
+              "toggle": "fire",
+              "page": "fire.html"
             },
             {
-              "name": "8g2 火的面片往上缩得更快 → 火焰顶端碎开",
+              "name": "保留快速收缩，补实际寿命年龄/出生尺寸/到期丢弃；线性对照",
               "id": "1056992291108413446",
               "status": "done",
-              "where": "src/life/effects.js"
+              "where": "src/life/effects.js（fspan / fireShrink）",
+              "page": "fire.html"
             },
             {
-              "name": "8g3 浓烟：两遍画（黑描边）、每片一次噪声 UV 沿流向滚、越往上 mip 越高（勾选看棋盘格调试）",
+              "name": "8g3 烟雾两遍/硬边渐隐保留，新增相机排序；已有烟源时可看棋盘格",
               "id": "1015140880666300416",
               "status": "done",
               "where": "src/life/smoke.js",
-              "toggle": "smokecheck"
+              "toggle": "smokecheck",
+              "page": "smoke.html"
             },
             {
               "name": "8i 战斗痕迹：血、尸体、箭射中后粘在船上随船走（Bad North 战斗；原文 \"making blood, corpses and arrows stick to boats\"）——画面是长船靠岸、箭雨、滩上尸体和血，不是草和花",
               "id": "946660607008403456",
-              "status": "todo"
+              "status": "done",
+              "where": "src/badnorth/battle.js · core/platform-anchor.js（440帧；血斑/尸体完整锚点、箭附着及离场清理，双网格验证）",
+              "page": "scene:badnorth"
             },
             {
               "name": "8h 建造音效：入水\"咕咚\"（闷击 + 上扬的气泡音）、陆上磕石头、拆掉\"啵\"（WebAudio 现场合成；用户需求，非视频）",
@@ -568,16 +1027,18 @@ window.PIPELINE = {
               "toggle": "sound"
             },
             {
-              "name": "9 存档字符串 / 撤销",
+              "name": "9 本地v5分享串：原子导入 / 坏输入保岛 / 北境身份（完整状态另补）",
               "id": "1198957499027795969",
-              "status": "done",
-              "where": "src/world/save.js · app.js"
+              "status": "partial",
+              "where": "src/world/save.js · app.js",
+              "page": "save-mesh.html"
             },
             {
-              "name": "9b 用撤销栈回放建造过程（录预告片用，工具栏 ⟲）",
+              "name": "9b 撤销历史回放：可停止/保岛，截断历史偏移已修复（动作特效另补）",
               "id": "1260586697538113537",
-              "status": "done",
-              "where": "src/world/app.js（replay）"
+              "status": "partial",
+              "where": "src/core/snapshot-replay.js · src/world/app.js",
+              "page": "index.html?scene=town"
             },
             {
               "name": "蝴蝶在后院花园上空飞（画面：环形排屋围着的花园）",
@@ -598,22 +1059,25 @@ window.PIPELINE = {
               "where": "src/life/effects.js（MaxEquation）"
             },
             {
-              "name": "沿烟的轨迹提高噪声的 mip 级别：底部清晰、顶端模糊",
+              "name": "年龄增加mip偏移；同尺寸卡片GPU实测与mip开关，保留隐式LOD语义",
               "id": "1015151731804721152",
               "status": "done",
-              "where": "src/life/smoke.js（mip 偏移 = aAge×4）"
+              "where": "src/life/smoke.js（真实纹理采样）",
+              "page": "smoke.html"
             },
             {
-              "name": "每片只采样一次噪声，UV 沿烟的流向随机前 / 后滚；面板「烟·棋盘格调试」可看（画面就是棋盘格）",
+              "name": "随机正反UV沿投影烟流滚动；真实mip棋盘/裸方片与关闭滚动对照",
               "id": "1015149712469524480",
               "status": "done",
-              "where": "src/life/smoke.js（aDir）"
+              "where": "src/life/smoke.js（aFlow / aDir）",
+              "page": "smoke.html"
             },
             {
-              "name": "两遍画：第一遍黑、底部 alpha 满；第二遍浅、底部更透明、阈值往里收 1 像素（fwidth）→ 黑描边",
+              "name": "两遍画：黑底/浅色遍可单独验收、阈值仅内收一次、同深度排序与实例属性配对",
               "id": "1015142746372366336",
               "status": "done",
-              "where": "src/life/smoke.js（PASS 0 / 1）"
+              "where": "src/life/smoke.js · src/core/smoke-order.js",
+              "page": "smoke.html"
             },
             {
               "name": "灯塔：海边一格粗高塔 → 灯室 + 旋转光束",
@@ -636,87 +1100,95 @@ window.PIPELINE = {
           "流程",
           [
             {
-              "name": "1 岛屿高度场（扭曲 fbm + 脊线 + 径向衰减）",
+              "name": "边境：padding三角图→避让节点中点通路→自适应Bezier已验收；两侧细分待补",
               "id": "1097458505315946496",
-              "status": "done",
-              "where": "src/terrain/generate.js",
-              "page": "scene:terrain"
+              "status": "partial",
+              "where": "src/core/frontier.js",
+              "page": "campaign.html"
             },
             {
-              "name": "2 台地 / 悬崖（偶数层量化）+ 沙滩",
+              "name": "软坡＋硬崖：656帧复核，完整连续坡/无局部低洼生成待补；层级XZ形变不能替代",
               "id": "1447488323845509121",
-              "status": "done",
-              "where": "src/terrain/generate.js",
-              "page": "scene:terrain"
+              "status": "partial",
+              "where": "src/terrain/generate.js · shape.js（完整软坡/侵蚀保证待补）",
+              "page": "overhang.html"
             },
             {
-              "name": "3 河流：深度优先下山 + 回溯",
+              "name": "3 河网：DFS开挖已保留；球面河道约束坍缩＋其余BFS待补",
               "id": "1769691526924292506",
-              "status": "done",
+              "status": "partial",
               "where": "src/terrain/generate.js",
-              "page": "scene:terrain"
+              "page": "river-nav.html"
             },
             {
-              "name": "4 按边类型的层级平滑（钉住 > 崖顶线 > 崖脚线 > 内部）",
+              "name": "边层级：共享切面显式硬边；模块/材质边语义待补",
               "id": "1670720537662836736",
-              "status": "done",
-              "where": "src/terrain/shape.js",
-              "toggle": "smooth"
+              "status": "partial",
+              "where": "src/terrain/shape.js · hierarchy.html",
+              "toggle": "smooth",
+              "page": "hierarchy.html"
             },
             {
-              "name": "5 防\"蘑菇化\"的 relax",
+              "name": "防蘑菇化：显式模块格/尺寸诊断；多格冲突仍待补",
               "id": "1769641473895432220",
-              "status": "done",
-              "where": "src/sphere/planet.js（独立星球演示；共享 World 球面融合待补齐）",
+              "status": "partial",
+              "where": "src/sphere/planet.js · planet.html",
               "page": "planet.html"
             },
             {
-              "name": "6 起伏的沉积线（世界空间噪声，跨崖面连续）",
+              "name": "弯层理：可逆Y剪切纹理场、几何保持原位；同位置相位/三角剖分GPU无缝",
               "id": "1699146321318314094",
-              "status": "done",
-              "where": "src/terrain/terrainmesh.js"
+              "status": "partial",
+              "where": "src/core/sediment.js · terrainmesh.js · View",
+              "page": "sediment.html",
+              "toggle": "strata"
             },
             {
-              "name": "7 树：八方位 impostor（见植被管线）",
+              "name": "树转镜：旋转锚点/正交与透视/周界GPU通过；原octagonal卡片与俯仰仍缺",
               "id": "1849427564034498642",
-              "status": "done",
-              "where": "src/life/impostor.js",
-              "toggle": "impostor"
+              "status": "partial",
+              "where": "src/life/impostor.js · impostors.html",
+              "toggle": "impostor",
+              "page": "impostors.html"
             },
             {
-              "name": "8 云（与树共用 impostor，见植被管线）",
+              "name": "蓬松云：共享树云材质/时钟/遮挡回归通过；原云形/层次仍缺",
               "id": "1852334860137849222",
-              "status": "done",
-              "where": "src/life/impostor.js",
-              "toggle": "clouds"
+              "status": "partial",
+              "where": "src/life/impostor.js · impostors.html",
+              "toggle": "clouds",
+              "page": "impostors.html"
             },
             {
-              "name": "9 风场：每层一张网格，按阻挡度去掉撞墙分量、贴边加速、被挡上抬",
+              "name": "9 分层避障风场：通洞/封洞与共享风向已验；完整轨迹接口待补",
               "id": "926903893866541057",
-              "status": "done",
-              "where": "src/life/atmosphere.js",
-              "toggle": "wind"
+              "status": "partial",
+              "where": "src/life/atmosphere.js · src/core/world-probes.js",
+              "toggle": "wind",
+              "page": "flow.html"
             },
             {
-              "name": "10 雪花沿风场绕岛 + 台地 / 屋顶积雪",
+              "name": "10 受风雪片：真实层碰撞保留洞口；简单白点/表面混白，软片与AO待补",
               "id": "943230624369868800",
-              "status": "done",
-              "where": "src/life/atmosphere.js + view.js（uSnow）",
-              "toggle": "snow"
+              "status": "partial",
+              "where": "src/life/atmosphere.js · src/core/world-probes.js",
+              "toggle": "snow",
+              "page": "flow.html"
             },
             {
-              "name": "11 背景雾：岛周围一圈，越远越浓、缓慢流动",
+              "name": "11 背景雾：外缘渐隐 / 浓度与相对流速（圆盘近似）",
               "id": "906207980802252801",
-              "status": "done",
-              "where": "src/life/atmosphere.js",
-              "toggle": "fog"
+              "status": "partial",
+              "where": "src/life/atmosphere.js · src/core/fog-envelope.js",
+              "toggle": "fog",
+              "page": "wake-fog.html"
             },
             {
-              "name": "13 悬垂：崖顶岩石往外伸一格、底下留空（下面的地照样画）",
+              "name": "悬挑/柱间空洞：分层岩石底面、空隙诊断与切面面积/边长保护已接；3D侧壁交叉仍待补",
               "id": "1671808851895627776",
-              "status": "done",
-              "where": "src/terrain/features.js · terrainmesh.js",
-              "page": "scene:terrain"
+              "status": "partial",
+              "where": "src/core/rock-topology.js · terrain/features.js · terrainmesh.js",
+              "page": "overhang.html"
             },
             {
               "name": "14 天然石拱：两根岩柱之间架一道，拱下至少空一层",
@@ -726,31 +1198,77 @@ window.PIPELINE = {
               "page": "scene:terrain"
             },
             {
-              "name": "15 海中石柱：浪蚀台脚 + 蘑菇帽",
+              "name": "斜向崖脊/柱群观察：267帧纠偏，蘑菇石扩展保留；薄檐形变面积/边长保护已接",
               "id": "1708815475801505819",
-              "status": "done",
-              "where": "src/terrain/features.js",
-              "page": "scene:terrain"
+              "status": "partial",
+              "where": "src/terrain/features.js · shape.js · src/core/deformation-guard.js",
+              "page": "overhang.html"
             },
             {
-              "name": "16 简化导航图：同高连片合成区域节点，最短路树按耗时着色",
+              "name": "坍缩边缘候选：434帧核验，真实半边只读枚举；增量导航互连待补",
               "id": "1582293326815862786",
-              "status": "done",
-              "where": "src/world/navgraph.js · navlayer.js",
-              "toggle": "nav"
+              "status": "partial",
+              "where": "src/core/frontier-candidates.js · wfc.html",
+              "page": "wfc.html"
             },
             {
-              "name": "12 地平线上的阴云",
+              "name": "12 远景阴云：连续运动/背景深度/首页入口已验；原作云体层次待补",
               "id": "1243228419162341379",
-              "status": "done",
-              "where": "src/life/vegetation.js（backdrop，共用云 impostor）",
-              "toggle": "moody"
+              "status": "partial",
+              "where": "src/life/vegetation.js · src/life/impostor.js",
+              "toggle": "moody",
+              "page": "clouds.html"
             },
             {
-              "name": "沉积线让大崖壁更耐看、形体更好读：每层一条，贴在崖面外侧",
+              "name": "岩壁宽窄层带：世界坐标着色与直/弯对照，旧窄条保留；原作外观/反射仍待补",
               "id": "1699038611125985317",
-              "status": "done",
-              "where": "src/terrain/terrainmesh.js"
+              "status": "partial",
+              "where": "src/core/sediment.js · terrainmesh.js · View",
+              "page": "sediment.html",
+              "toggle": "strata"
+            }
+          ]
+        ],
+        [
+          "纹理学习与成本对照",
+          [
+            {
+              "id": "1783792917183606829",
+              "name": "球面Texture test：242帧已学；海陆纹理/岸缘混合待实现",
+              "status": "partial",
+              "where": "planet.html（网格能力保留，非原纹理）",
+              "page": "planet.html"
+            },
+            {
+              "id": "1786014232594485497",
+              "name": "山体：共享岩壁底色/顶点明度/实时法线局部通过；原纹理待补",
+              "status": "partial",
+              "where": "src/core/mountain-bake.js · mountain-bake.html",
+              "page": "mountain-bake.html"
+            }
+          ]
+        ],
+        [
+          "笼形变与生成复核",
+          [
+            {
+              "id": "1579474420749725696",
+              "name": "两组岛生成审核，原模块联合生成待补",
+              "status": "partial",
+              "where": "src/terrain/shape.js · cage.html",
+              "page": "cage.html"
+            }
+          ]
+        ],
+        [
+          "生成成果复核",
+          [
+            {
+              "id": "1669315384619540487",
+              "name": "多岛成果学习与差距审核",
+              "status": "partial",
+              "where": "src/terrain/generate.js",
+              "page": "scene:terrain"
             }
           ]
         ]
@@ -788,6 +1306,13 @@ window.PIPELINE = {
               "status": "done",
               "where": "src/badnorth/island.js",
               "page": "scene:badnorth"
+            },
+            {
+              "id": "943230620242796544",
+              "name": "冬季宣传全景：306帧已学；第210帧切到船群/士兵/血烟，完整组合待实现验收",
+              "status": "partial",
+              "where": "已有雪/战斗主体保留，完整冬景组合待补",
+              "page": "artifacts/coverage/clouds-winter-review.md"
             }
           ]
         ],
@@ -801,24 +1326,25 @@ window.PIPELINE = {
               "page": "scene:badnorth"
             },
             {
-              "name": "选中小队时间变慢、点地面下令、点线路径；空格暂停",
+              "name": "窄道点线：常驻等距圆点标示窄脊和楼梯连接（与选中命令路径分开）",
               "id": "886199305522085890",
               "status": "done",
-              "where": "src/badnorth/battle.js",
-              "page": "scene:badnorth"
+              "where": "src/world/traffic.js · src/badnorth/battle.js（passageDots）",
+              "page": "scene:badnorth",
+              "toggle": "passages"
             },
             {
               "name": "血、尸体、箭粘在船上随船走",
               "id": "946660607008403456",
               "status": "done",
-              "where": "src/badnorth/battle.js",
+              "where": "src/badnorth/battle.js · core/platform-anchor.js（440帧；血斑/尸体完整锚点、箭附着及离场清理，双网格验证）",
               "page": "scene:badnorth"
             },
             {
               "name": "血浸透当血量指示",
               "id": "984813819280191488",
-              "status": "done",
-              "where": "src/badnorth/battle.js（soak）"
+              "status": "partial",
+              "where": "src/badnorth/battle.js · core/combat-profile.js · life/unit-sprites.js（934帧；大小兵、中断/浸血及精灵反馈通过，完整动作/美术待续）"
             },
             {
               "name": "近战手感：挨打后退、血滴飞溅；会被打下悬崖",
@@ -830,15 +1356,15 @@ window.PIPELINE = {
             {
               "name": "矛兵：够得更远、先出手",
               "id": "903647529203634176",
-              "status": "done",
-              "where": "src/badnorth/battle.js",
+              "status": "partial",
+              "where": "src/badnorth/battle.js · core/spear-thrust.js（654帧；连续检测/命中集/显示同步通过，完整持矛动作及3D遮挡待续）",
               "page": "scene:badnorth"
             },
             {
               "name": "流场 / 影响场：多源 Dijkstra + 数据继承（兵种），每 0.25 秒一次",
               "id": "972829402873716737",
               "status": "done",
-              "where": "src/badnorth/flowfield.js",
+              "where": "src/badnorth/flowfield.js（分层多源场）· battle.js",
               "toggle": "flow"
             },
             {
@@ -864,7 +1390,7 @@ window.PIPELINE = {
               "name": "窄道会车（简化：互相让开）",
               "id": "880853661936734211",
               "status": "partial",
-              "where": "src/world/traffic.js · src/badnorth/battle.js"
+              "where": "src/world/traffic.js · src/badnorth/battle.js（601帧；左行/半径分离/暂停冻结通过，复杂路口及体型路由待续）"
             },
             {
               "name": "关掉血腥：面板「血腥」取消勾选后不画血、不留尸体（画面就是同一场战斗的有血 / 无血对比）",
@@ -873,10 +1399,11 @@ window.PIPELINE = {
               "where": "src/badnorth/battle.js（gore）"
             },
             {
-              "name": "军旗翻新：风取共享风场在旗杆顶的值 + 阵风，贝塞尔旗面；画面里地图上是风场格点",
+              "name": "真实军旗共享风/Bezier：暂停零漂移，新增白徽记/透明分叉尾；布料碰撞仍非目标",
               "id": "926834721392340992",
               "status": "done",
-              "where": "src/badnorth/battle.js（#updateFlag）· life/atmosphere.js"
+              "where": "src/badnorth/battle.js",
+              "page": "scene:badnorth"
             },
             {
               "name": "战斗动图：台地边上混战、血、落水的人；挨打后退 + 血滴飞溅落地成血点",
@@ -888,20 +1415,20 @@ window.PIPELINE = {
               "name": "\"瑞士奶酪\"一样的多洞岛（画面：拱门、洞口很多的紫色岩岛）。重构版有悬垂和石拱的造型，但单位不能穿洞",
               "id": "906425294533394432",
               "status": "partial",
-              "where": "src/world/layerednav.js · navigation.html",
+              "where": "src/world/layerednav.js · src/world/battle-navigation.js · src/badnorth/battle.js",
               "page": "navigation.html"
             },
             {
               "name": "数据继承可视化：每格到父格一段线，颜色 = 从哪支守军继承来的（面板「流场」）",
               "id": "902069261304287232",
               "status": "done",
-              "where": "src/badnorth/flowfield.js · battle.js（#drawFlow）"
+              "where": "src/badnorth/flowfield.js（分层多源场）· battle.js"
             },
             {
               "name": "流场 / 影响场：除了到最近单位的距离和方向，还带着\"那是什么兵种\"；维京人看到矛兵正面会绕开去打小屋",
               "id": "901842167508992000",
               "status": "done",
-              "where": "src/badnorth/flowfield.js"
+              "where": "src/badnorth/flowfield.js（分层多源场）· battle.js"
             },
             {
               "name": "单位会被打下悬崖：挨打时身后低 ≥2 层就可能被击飞，抛物线落下，落差大的摔死",
@@ -921,44 +1448,78 @@ window.PIPELINE = {
           "战役",
           [
             {
-              "name": "军旗：沿虚拟风粒子的贝塞尔曲线生成网格，风取共享风场",
+              "name": "真实军旗共享风/Bezier：暂停零漂移，新增白徽记/透明分叉尾；布料碰撞仍非目标",
               "id": "926890207298899969",
               "status": "done",
               "where": "src/badnorth/battle.js",
               "page": "scene:badnorth"
             },
             {
-              "name": "战役图：节点散开 → 剔除 → 随机游走 → 支路 → 分区（分区 = 元胞自动机：最小组被连边最多的邻组吃掉，938422757288792064）",
+              "name": "战役五步：散开→剔除→主路/支路/节点；连通补桥与有界无回环主路通过",
               "id": "1042732450730913793",
               "status": "done",
-              "where": "src/campaign/campaign.js",
+              "where": "src/core/campaign-graph.js · src/campaign/campaign.js",
               "page": "campaign.html"
             },
             {
-              "name": "岛屿快照：64² 小图放大收脆",
+              "name": "真实共享World几何→64²快照；双线性/导数阈值对照，主战役图标仍保留程序近似",
               "id": "911913981731885056",
               "status": "done",
-              "where": "src/campaign/campaign.js",
-              "page": "campaign.html"
+              "where": "src/world/island-snapshot.js",
+              "page": "snapshot.html"
             },
             {
-              "name": "分组元胞自动机：每次挑最小的组，整组并进和它连边最多的邻组，直到剩 6 组（战役图第 4 步的颜色）",
+              "name": "连接分组：保留整组合并，按权重逐节点调整边界、保持区域连通；第4步可回放历史",
               "id": "938422757288792064",
               "status": "done",
-              "where": "src/campaign/campaign.js（groupRegions）"
+              "where": "src/core/region-groups.js · src/campaign/campaign.js",
+              "page": "campaign.html"
             },
             {
-              "name": "战役图节点分成几片彩色区域，竖长条，上起点下终点",
+              "name": "战役岛屿散开与分区：重合散开、断开分量保留，原作精确权重/调度未知",
               "id": "938405900573986816",
               "status": "done",
-              "where": "src/campaign/campaign.js"
+              "where": "src/core/region-groups.js · src/campaign/campaign.js",
+              "page": "campaign.html"
             },
             {
-              "name": "节点连线 = Delaunay 三角网",
+              "name": "节点候选图与选路：Delaunay为本地近似，原作精确邻接未知；凸包边/连通修复已验收",
               "id": "1078792665980915714",
               "status": "done",
-              "where": "src/campaign/campaign.js",
+              "where": "src/core/campaign-graph.js · src/campaign/campaign.js",
               "page": "campaign.html"
+            }
+          ]
+        ],
+        [
+          "单方向精灵",
+          [
+            {
+              "id": "969860566322958336",
+              "name": "单方向造型与翻转审核：剑尖/斧刃对照；可选真实北境模式",
+              "status": "done",
+              "where": "src/core/sprite-ambiguity.js · src/life/unit-sprites.js · src/badnorth/battle.js · sprites.html",
+              "page": "sprites.html",
+              "toggle": "unitsprites"
+            }
+          ]
+        ],
+        [
+          "单位接触软盘",
+          [
+            {
+              "id": "820977247083528192",
+              "status": "partial",
+              "name": "动画/战斗与单位接触软盘复核",
+              "where": "src/core/unit-shadow.js · src/badnorth/battle.js",
+              "page": "unit-shadows.html"
+            },
+            {
+              "id": "821321422140309504",
+              "status": "partial",
+              "name": "动画/战斗与单位接触软盘复核",
+              "where": "src/core/unit-shadow.js · src/badnorth/battle.js",
+              "page": "unit-shadows.html"
             }
           ]
         ]
@@ -974,39 +1535,71 @@ window.PIPELINE = {
           "线条",
           [
             {
-              "name": "疏密变化的细笔触 + 高度分段线（等高线，用 fwidth 保持 1 像素）",
+              "name": "可变疏密与浅高度分段：共享World着色对照",
               "id": "1704246032626762189",
-              "status": "done",
-              "where": "textures.html（疏密 + 等高线）",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "src/terrain/blotch-pattern.js · src/world/view.js · blotches.html",
+              "page": "blotches.html",
+              "note": "564帧全核验。共享View补可调旋转角度场、独立低频密度阈值场与导数柔边；浅高度层理复用已有共享着色。实际双网格GPU及参数/零强度验证；本地近似，原作atlas/细卷边、配色、跨崖/反射一致性仍待补。",
+              "decodedFrames": 564,
+              "reviewEvidence": "artifacts/coverage/blotch-style-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  563
+                ],
+                "nativeRevisits": [
+                  200
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
-              "name": "专门的反差贴图：三角形上迭代，有反差的边推开（权重 1）、没反差的拉近（权重 4）；实测 80 条该画的边全画出、误画约 5 条；副产品…",
+              "name": "三角对比迭代：标量诊断，原作atlas待补",
               "id": "1482346496460828674",
-              "status": "done",
-              "where": "textures.html（反差线）",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "src/core/contrast-field.js · color-lab.html（三角诊断）",
+              "page": "color-lab.html",
+              "note": "517帧全核验，纠正原注释6帧；图集预览、灰岛上色和两组岛环绕。新增确定性标量对比图求解与实际网格三角诊断，预算修复后仍报告违例；原作彩色图集/贴花和实景接入未完成，未计整片代码运行验收。",
+              "decodedFrames": 517,
+              "reviewEvidence": "artifacts/coverage/color-lab-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  516
+                ],
+                "nativeRevisits": [
+                  100
+                ],
+                "implementationVerified": false,
+                "runtimeAccepted": false
+              }
             },
             {
-              "name": "从\"反差\"生成一像素细线：场景里的墨线按法线 / 高度反差画；实验室里按三角形反差模拟画",
+              "name": "程序化法线反差：共享材质/物理像素线局部GPU通过；原atlas待补",
               "id": "1482011744843223042",
-              "status": "done",
-              "where": "textures.html（反差线）· src/world/outline.js",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "src/core/normal-contrast.js · normal-contrast.html",
+              "page": "normal-contrast.html"
             },
             {
-              "name": "128² 贴图里每隔一个像素是线像素；采样前重映射 UV，让线像素在屏幕上永远只占 1 像素——放大不变粗、不糊",
+              "name": "隔像素线：连续UV重映射＋线性采样；放大积分宽度1px，缩小/全atlas接入待补",
               "id": "1241096929490149376",
-              "status": "done",
-              "where": "textures.html（隔像素一条线）",
+              "status": "partial",
+              "where": "src/core/texel-skip.js · textures.html",
               "page": "textures.html"
             },
             {
-              "name": "fwidth 画与缩放无关的 1 像素抗锯齿线；左右对比固定宽度 step（远处断、近处粗）",
+              "name": "fwidth缩放抗锯齿：保留纹理实验，真实快照alpha阈值及受控1像素线GPU验收通过",
               "id": "978211952504852480",
               "status": "done",
-              "where": "textures.html（抗锯齿线）",
-              "page": "textures.html"
+              "where": "textures.html · src/world/island-snapshot.js",
+              "page": "snapshot.html"
             }
           ]
         ],
@@ -1014,24 +1607,59 @@ window.PIPELINE = {
           "地面笔触",
           [
             {
-              "name": "像抽象田地的贴图：每块地一个条纹方向，能清楚看出格子",
+              "name": "抽象田地：格块专用顶面坐标、方向分段与导数抗锯齿；原作手绘atlas仍待补",
               "id": "1714613599035863191",
-              "status": "done",
-              "where": "textures.html（抽象田地）",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "src/terrain/field-pattern.js · WorldMesh/View",
+              "page": "fields.html",
+              "toggle": "fields"
             },
             {
-              "name": "旋涡状团块的地面笔触：域扭曲噪声量化成三档（主场景面板「地面笔触」）",
+              "name": "旋涡团块：可调角度场与柔边，本地近似",
               "id": "1703750394164199473",
-              "status": "done",
-              "where": "src/world/view.js（BLOTCH_GLSL）· textures.html",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "src/terrain/blotch-pattern.js · src/world/view.js · blotches.html",
+              "page": "blotches.html",
+              "note": "592帧全核验。共享View补可调旋转角度场、独立低频密度阈值场与导数柔边；浅高度层理复用已有共享着色。实际双网格GPU及参数/零强度验证；本地近似，原作atlas/细卷边、配色、跨崖/反射一致性仍待补。",
+              "decodedFrames": 592,
+              "reviewEvidence": "artifacts/coverage/blotch-style-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  591
+                ],
+                "nativeRevisits": [
+                  500
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
-              "name": "大色块不渗过重要的边：每一层台阶一套噪声偏移，色块在崖边断开",
+              "name": "重要边界：显式地表标记隔离屋顶/岩壁，真实层高选噪声",
               "id": "1696864977171189980",
-              "status": "done",
-              "where": "src/world/view.js（blotchTone 按高度层换噪声）"
+              "status": "partial",
+              "where": "src/terrain/blotch-pattern.js · src/world/view.js",
+              "note": "502帧全核验。共享View修复绿色屋顶被地面笔触误染：显式顶面标记+法线/颜色筛选，按真实levelHeight选层。实际材质GPU对照排除屋顶/岩壁、双网格通过；原版atlas/rim距离场和完整参数接口待补，局部修复不等于视觉等价。",
+              "decodedFrames": 502,
+              "reviewEvidence": "artifacts/coverage/blotch-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  501
+                ],
+                "nativeRevisits": [
+                  130
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              },
+              "page": "index.html?scene=terrain&on=blotch",
+              "toggle": "blotch"
             },
             {
               "name": "大块颜料斑藏住多边形：量化的三档明暗只画在朝上的草色面",
@@ -1040,18 +1668,18 @@ window.PIPELINE = {
               "where": "src/world/view.js（地面笔触）"
             },
             {
-              "name": "笔触从大到小、从中心螺旋找空位：中间一大块整齐的，越往外越碎",
+              "name": "径向大小排序：原片UV图块已学；旧圆块仅近似，UV流程未验",
               "id": "1478114309263839244",
-              "status": "done",
-              "where": "textures.html（径向排序）",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "textures.html（旧圆块近似）",
+              "page": "textures.html?t=radial"
             },
             {
-              "name": "一张贴图 8 种朝向 + 以中心镜像，任意尺寸都能用",
+              "name": "单纹理八方向/中心镜像：D4与可选固定像素尺度折叠，原作纹样/布局仍待补",
               "id": "1061221291137605633",
-              "status": "done",
-              "where": "textures.html（UI 装饰）",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "src/core/mirror-uv.js · src/ui/ornament.js",
+              "page": "mirror.html"
             }
           ]
         ],
@@ -1059,18 +1687,53 @@ window.PIPELINE = {
           "调色板与 UI 装饰",
           [
             {
-              "name": "调色板编辑器：四角取色的渐变方块 + 往白色收的三角（工具页，没有接回游戏调色板）",
+              "name": "四角色盘：sRGB实景编辑，其他色彩空间/交互待补",
               "id": "1712088611934371876",
-              "status": "done",
-              "where": "textures.html（调色板）",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "src/core/palette-patch.js · src/world/view.js · palette-editor.html",
+              "page": "palette-editor.html",
+              "note": "624帧全核验。四角/白三角/取样色带与OkHsl/OkLab/Srgb菜单可见；新增sRGB四角取样和真实地形顶面编辑，双网格GPU通过。白三角仅预览，OkHsl/OkLab、自由拖点/导出与全材质接入仍待补。",
+              "decodedFrames": 624,
+              "reviewEvidence": "artifacts/coverage/palette-editor-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  623
+                ],
+                "nativeRevisits": [
+                  550
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
-              "name": "颜色体积编辑：给地物定义完整的可用颜色空间（四角插值），采样出 15 色",
+              "name": "HSL色彩范围：真实顶面接入，其他特征待补",
               "id": "1710031224838771027",
-              "status": "done",
-              "where": "textures.html（调色板）",
-              "page": "textures.html"
+              "status": "partial",
+              "where": "src/core/color-volume.js · src/world/view.js · color-lab.html",
+              "page": "color-lab.html",
+              "note": "515帧全核验，实际画面为五特征H/S/L范围调色，不证明地形三轴/八角点。新增HSL范围与跨零色相，接实际View顶面；其他特征、离散采样和原版完整接口待补。",
+              "decodedFrames": 515,
+              "reviewEvidence": "artifacts/coverage/color-lab-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  514
+                ],
+                "nativeRevisits": [
+                  0,
+                  60,
+                  350,
+                  440
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              }
             },
             {
               "name": "更多颜色：15 个色槽（画面左边一列 15 色）",
@@ -1079,10 +1742,28 @@ window.PIPELINE = {
               "where": "src/core/palette.js"
             },
             {
-              "name": "调色板后端：小镇 / 粉彩 / 暮色三套墙色，一键切换（画面：彩色小镇逐步变灰再换色）",
+              "name": "墙色过渡：短弧HSL本地扩展，实景滑杆对照",
               "id": "1200520827898343425",
-              "status": "done",
-              "where": "src/core/palette.js · 工具栏调色板按钮"
+              "status": "partial",
+              "where": "src/core/palette.js · wall-palette.html",
+              "note": "200帧全核验，墙色由鲜艳到灰米，屋顶仍橙红；画面不足以证明原注释1.5秒/最短色相公式。新增可选本地HSL短弧过渡及无彩色端点处理，真实墙色滑杆双网格通过；PNG/完整原接口与持久化仍待补。",
+              "decodedFrames": 200,
+              "reviewEvidence": "artifacts/coverage/palette-transition-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  199
+                ],
+                "nativeRevisits": [
+                  52
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true,
+                "acceptanceScope": "局部历史权重/可选墙色过渡，非原片完整算法或视觉等价"
+              },
+              "page": "wall-palette.html"
             },
             {
               "name": "同一张装饰贴图的几种不同设置打破重复",
@@ -1092,25 +1773,25 @@ window.PIPELINE = {
               "page": "textures.html"
             },
             {
-              "name": "扭动距离场 UI 装饰（填充/描边/发光同场）",
+              "name": "单张距离场镜像 / 独立border与center / uniform展开播放：GPU三档尺寸通过；本地画稿/动画样例",
               "id": "1104771432440049664",
               "status": "done",
-              "where": "textures.html",
-              "page": "textures.html?t=squiggly"
+              "where": "src/core/ornament-field.js · src/ui/ornament.js",
+              "page": "ornament.html"
             },
             {
-              "name": "镜像纹饰 + 展开动画（阈值动画）",
+              "name": "单张距离场镜像 / 独立border与center / uniform展开播放：GPU三档尺寸通过；本地画稿/动画样例",
               "id": "1105131621391495176",
               "status": "done",
-              "where": "textures.html",
-              "page": "textures.html?t=squiggly"
+              "where": "src/core/ornament-field.js · src/ui/ornament.js",
+              "page": "ornament.html"
             },
             {
-              "name": "UI flair：纹饰从中心长出",
+              "name": "UI flair：标题/外纹本地两轨可拖动、空白端点；原徽章/逐部件时序待补",
               "id": "1024679338292256769",
-              "status": "done",
-              "where": "textures.html",
-              "page": "textures.html?t=squiggly"
+              "status": "partial",
+              "where": "src/core/ui-reveal.js · ornament.html",
+              "page": "ornament.html"
             },
             {
               "name": "拉太长会看出重复",
@@ -1125,37 +1806,39 @@ window.PIPELINE = {
           "打包与工具",
           [
             {
-              "name": "递归解析树：细线 = 树的切分；板子越碎叶子越多（页面显示叶子数）",
+              "name": "矩形树：实际查询逐步查看；原3D树/跨叶候选待补",
               "id": "1765115069837221962",
-              "status": "done",
-              "where": "grids.html（图集打包）",
-              "page": "grids.html"
+              "status": "partial",
+              "where": "src/core/atlas.js · grids.html",
+              "page": "grids.html?t=atlas"
             },
             {
-              "name": "能删除矩形；兄弟都空就合并回父节点，碎片不一直累积",
+              "name": "矩形删除：过期句柄修复、空兄弟合并；仍会残留碎片",
               "id": "1765041830461055127",
-              "status": "done",
-              "where": "src/core/atlas.js（free）· grids.html",
-              "page": "grids.html"
+              "status": "partial",
+              "where": "src/core/atlas.js · grids.html",
+              "page": "grids.html?t=atlas"
             },
             {
-              "name": "二叉树矩形打包：生成放置尝试是暴力的，碰撞检测用树加速；网格实验室里实时演示",
+              "name": "矩形候选/树剪枝：跨叶放置与key释放通过；3D树/完整接口待补",
               "id": "1764958522398146667",
-              "status": "done",
-              "where": "src/core/atlas.js · grids.html（图集打包）",
-              "page": "grids.html"
+              "status": "partial",
+              "where": "src/core/atlas.js · grids.html",
+              "page": "grids.html?t=atlas"
             },
             {
-              "name": "导出 .OBJ（首页 ⇩）",
+              "name": "主体OBJ导出：精确坐标/属性检查/真实下载（植被水面另补）",
               "id": "1430224300003545091",
-              "status": "done",
-              "where": "src/tools/objexport.js"
+              "status": "partial",
+              "where": "src/tools/objexport.js",
+              "page": "index.html?scene=town"
             },
             {
-              "name": "整座小镇一个合并网格（mesh merger）",
+              "name": "合并网格：实测共享主体一次提交（非全场景 / Switch基准）",
               "id": "1401145625572425728",
-              "status": "done",
-              "where": "src/core/meshwriter.js"
+              "status": "partial",
+              "where": "src/world/worldmesh.js · src/tools/mesh-audit.js",
+              "page": "save-mesh.html"
             }
           ]
         ],
@@ -1163,46 +1846,104 @@ window.PIPELINE = {
           "界面 UI",
           [
             {
-              "name": "头像生成器（层级部件，内容无关）",
+              "name": "头像生成：显式种子/镜像随机重放/固定槽身份已验；完整spec与剪影指标待补",
               "id": "958371606350454784",
-              "status": "done",
-              "where": "ui.html",
+              "status": "partial",
+              "where": "src/core/part-random.js · ui.html",
               "page": "ui.html?t=face"
             },
             {
-              "name": "游戏内头像相框",
+              "name": "游戏头像展示：卡片身份重绘/换列已验；原兜帽/锁甲素材与角色接口待接",
               "id": "1010979395719319552",
-              "status": "done",
-              "where": "ui.html",
+              "status": "partial",
+              "where": "src/core/part-random.js · ui.html",
               "page": "ui.html?t=face"
             },
             {
-              "name": "旗帜生成器（同一套生成器）",
+              "name": "通用旗形与本地徽记：54帧全原尺寸，六尾形共用到真实军旗",
               "id": "958410200146497537",
               "status": "done",
-              "where": "ui.html",
-              "page": "ui.html?t=banner"
+              "where": "src/core/banner.js · src/life/banner.js · src/badnorth/battle.js",
+              "page": "banners.html"
             },
             {
-              "name": "确认弹出：三按钮弧形弹出",
+              "name": "确认弹出：纠正横排，延时清理/切队/Esc/手机已验；单Move游戏目标待接",
               "id": "1016680972610359298",
-              "status": "done",
-              "where": "ui.html",
+              "status": "partial",
+              "where": "ui.html（本地UI演示）",
               "page": "ui.html?t=pop"
             },
             {
-              "name": "斜按钮",
+              "name": "斜按钮：确定性视觉扰动/AABB、稳定命中槽与键盘已验；游戏菜单待接",
               "id": "1242824460325052417",
-              "status": "done",
-              "where": "ui.html",
+              "status": "partial",
+              "where": "src/core/playful-layout.js · ui.html",
               "page": "ui.html?t=menu"
             },
             {
-              "name": "图标与选中态",
+              "name": "图标：单选状态/方向键/禁用跳过/切页保持已验；图稿与游戏指令待接",
               "id": "1201179450668441600",
-              "status": "done",
-              "where": "ui.html",
+              "status": "partial",
+              "where": "src/ui/icon-toolbar.js · ui.html",
               "page": "ui.html?t=icons"
+            }
+          ]
+        ],
+        [
+          "镜头与墙色续项",
+          [
+            {
+              "id": "1727324352264474664",
+              "status": "partial",
+              "where": "src/core/camera-motion.js · src/world/view.js（历史帧近似）",
+              "note": "303帧全核验；结合相邻motion blur smear配文纠正为快速转镜拖抹，不是调色算法。保留历史帧叠加，修复角度周界误速、关闭历史失效及resize纹理/材质/几何释放。原作强几何轮廓拖抹、速度场/CPU审计接口仍待补。",
+              "decodedFrames": 303,
+              "reviewEvidence": "artifacts/coverage/camera-wall-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  302
+                ],
+                "nativeRevisits": [
+                  95
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true,
+                "acceptanceScope": "本地历史帧修复/独立墙色色槽，不等于原作完整拖抹/PNG贴图系统"
+              },
+              "page": "index.html?scene=terrain&on=motionblur",
+              "name": "快速转镜拖抹：历史帧近似修复，原片轮廓算法待补"
+            }
+          ]
+        ],
+        [
+          "镜头与墙色续项",
+          [
+            {
+              "id": "1371460793032716290",
+              "status": "partial",
+              "where": "src/core/palette.js · src/world/app.js · wall-palette.html",
+              "note": "524帧全核验。Photoshop Palette.png窗口编辑色条与墙色联动；新增独立墙色色槽API与真实小镇编辑/还原，不修改预设。原PNG热重载、多行贴图和完整渐变/色彩接口仍待补。",
+              "decodedFrames": 524,
+              "reviewEvidence": "artifacts/coverage/camera-wall-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  523
+                ],
+                "nativeRevisits": [
+                  300
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true,
+                "acceptanceScope": "本地历史帧修复/独立墙色色槽，不等于原作完整拖抹/PNG贴图系统"
+              },
+              "page": "wall-palette.html",
+              "name": "实际墙色色槽编辑：预设隔离，PNG热更新待补"
             }
           ]
         ]
@@ -1218,16 +1959,18 @@ window.PIPELINE = {
           "落点",
           [
             {
-              "name": "1 顶点格（三角网格的对偶）作为植被落点",
+              "name": "顶点对偶：31帧核验，重心对偶/边界闭合与共享World脉动；植被统一待补",
               "id": "959752525867036672",
               "status": "partial",
-              "where": "src/life/vegetation.js（按顶面类型 + 变形后的多边形取点）"
+              "where": "src/core/vertex-dual.js · src/world/vertex-dual-overlay.js",
+              "page": "gridpatch.html"
             },
             {
-              "name": "1b 围合的草地块会长出树",
+              "name": "1b 早期高层草地分区（树木为原帖后续计划，完整地块规则待补）",
               "id": "1178731576982724611",
-              "status": "done",
-              "where": "src/build/buildings.js（后院）"
+              "status": "partial",
+              "where": "src/build/buildings.js（地面庭院仅部分对应）",
+              "page": "garden.html"
             }
           ]
         ],
@@ -1256,23 +1999,57 @@ window.PIPELINE = {
               "toggle": "grass"
             },
             {
-              "name": "2d 草的描边：外轮廓 + 叶瓣弧线画在同一个着色器里；身后是崖下 / 海（反差大）时外轮廓加粗",
+              "name": "草丛反差：181帧复核；原法为顶点shader采站立点/背景射线的纹理差，当前待实现",
               "id": "1590674061092212738",
-              "status": "done",
-              "where": "src/life/vegetation.js",
+              "status": "partial",
+              "where": "src/life/vegetation.js（仅静态邻崖近似）",
               "toggle": "outline"
             },
             {
-              "name": "2e 草皮垂过崖边（圆润的草色舌头）",
+              "name": "草边受控下垂：保留几何近似，原版atlas/rim采样待补",
               "id": "1696896119794479541",
-              "status": "done",
-              "where": "src/terrain/terrainmesh.js"
+              "status": "partial",
+              "where": "src/terrain/terrainmesh.js",
+              "note": "550帧全核验。保留已有沿形变崖面圆瓣草边几何；这是本地近似，未迁移原版rim距离场/atlas受控跨崖采样及可调bleed等接口，本片实现/运行验收仍待完成。",
+              "decodedFrames": 550,
+              "reviewEvidence": "artifacts/coverage/blotch-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  549
+                ],
+                "nativeRevisits": [
+                  350
+                ],
+                "implementationVerified": false,
+                "runtimeAccepted": false
+              },
+              "page": "index.html?scene=terrain&on=blotch"
             },
             {
               "name": "2g 顶面无缝混色（草 / 苔 / 沙之间柔和过渡）",
               "id": "1781405550061687016",
-              "status": "done",
-              "where": "src/terrain/terrainmesh.js（扇形顶面，角上取邻格平均色）"
+              "status": "partial",
+              "where": "src/terrain/terrainmesh.js（本地混色保留）· patch纹理接口待迁移",
+              "note": "219帧全核验：球面投影草/水与手工UV岸带，119附近atlas窗口移入后移出；原文将高度混合列为后续设想。纠正顶面颜色平均=该patch算法的归因，保留本地混色成果；投射/手工UV与atlas/接缝指标接口尚未迁移，本片仅学习完成，未计代码实现/运行通过。",
+              "decodedFrames": 219,
+              "reviewEvidence": "artifacts/coverage/water-patch-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  218
+                ],
+                "nativeRevisits": [
+                  50,
+                  135
+                ],
+                "implementationVerified": false,
+                "runtimeAccepted": false
+              }
             },
             {
               "name": "2f 小花 = Bad North 式的白色碎点，一大片一大片撒在草地上（不是带茎的彩色花；画面见这段）",
@@ -1287,38 +2064,81 @@ window.PIPELINE = {
           "灌木",
           [
             {
-              "name": "3 东西的边缘长一圈灌木（崖顶线）",
+              "name": "边缘灌木：形变多边形内收锚点修复，球团近似保留",
               "id": "1707490274425884929",
-              "status": "done",
-              "where": "src/life/vegetation.js",
-              "toggle": "shrubs"
+              "status": "partial",
+              "where": "src/core/edge-inset.js · src/life/vegetation.js",
+              "toggle": "shrubs",
+              "note": "342帧全核验。保留既有球团近似；修复形变后仍用旧格心判内侧，改按实际多边形绕序/下一边界限幅。双网格实际556/564锚点通过平移形变、恢复及World不变验收；只保证锚点不保证球团体积。",
+              "decodedFrames": 342,
+              "reviewEvidence": "artifacts/coverage/shrub-edge-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  341
+                ],
+                "nativeRevisits": [
+                  160
+                ],
+                "implementationVerified": true,
+                "runtimeAccepted": true
+              },
+              "page": "index.html?scene=terrain"
             },
             {
-              "name": "3b 墙根灌木：广告牌加一个锚定的中心点",
+              "id": "1707490932017279035",
+              "status": "partial",
+              "where": "纯纹理灌木待实现（保留现有球团近似）",
+              "note": "257帧全核验。配文明确100%纹理，近景有三角线框与小暗边；现有球团/叶片alpha不能算该法复现。纯纹理灌木、浮凸小阴影与表面贴附仍待实现/运行验收。",
+              "decodedFrames": 257,
+              "reviewEvidence": "artifacts/coverage/shrub-edge-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  256
+                ],
+                "nativeRevisits": [
+                  150
+                ],
+                "implementationVerified": false,
+                "runtimeAccepted": false
+              },
+              "page": "index.html?scene=terrain",
+              "name": "100%纹理灌木与小阴影：已学257帧，实现待补"
+            },
+            {
+              "name": "3b 锚定中心：共享草卡片GPU对照通过，墙根灌木仍待接",
               "id": "1191990107785572352",
               "status": "partial",
-              "where": "src/life/vegetation.js（墙根位置已做；草丛用了中心点技巧，灌木是团块）",
-              "toggle": "shrubs"
+              "where": "src/core/anchored-billboard.js · src/life/vegetation.js",
+              "page": "billboard-anchor.html"
             },
             {
-              "name": "3c 叶状轮廓：视角 × 叶片噪声镂空，镂空边缘即墨线",
+              "name": "3c 球面叶纹 × 视角alpha：真实贴图/连续覆盖，保留旧噪声对照；阴影与远景impostor待补",
               "id": "1205420678859632640",
-              "status": "done",
-              "where": "src/life/vegetation.js（swayMaterial uLeafy）",
-              "toggle": "leafy"
+              "status": "partial",
+              "where": "src/core/leaf-atlas.js · src/life/leaf-surface.js · vegetation.js",
+              "toggle": "leafy",
+              "page": "leaf-surface.html"
             },
             {
-              "name": "3d 小镇后院：沿墙一排圆灌木（原视频：植物贴图并进 128² 总图集的 32² 角）",
+              "name": "3d 植物32²角落atlas：已接共享树冠/灌木；全场景共图与原作素材待补",
               "id": "1241046107125399552",
-              "status": "done",
-              "where": "src/life/vegetation.js（yards）",
-              "toggle": "shrubs"
+              "status": "partial",
+              "where": "src/core/leaf-atlas.js · src/life/leaf-surface.js · vegetation.js",
+              "toggle": "shrubs",
+              "page": "leaf-surface.html"
             },
             {
-              "name": "3e 后院小径：沿后院主轴铺十字石板路",
+              "name": "后院小径：院内邻接图连接主轴端点，孔洞不跨越；细石板/门口规则/中心装饰待补",
               "id": "1290997501332525056",
-              "status": "done",
-              "where": "src/build/buildings.js（path）"
+              "status": "partial",
+              "where": "src/core/garden-paths.js · src/build/buildings.js",
+              "page": "garden.html"
             }
           ]
         ],
@@ -1335,30 +2155,61 @@ window.PIPELINE = {
             {
               "name": "4b 标记三角形之间的边（团块描边）",
               "id": "1580162341668237312",
-              "status": "partial",
-              "where": "src/life/vegetation.js（反向外壳墨线）",
-              "toggle": "outline"
+              "status": "done",
+              "where": "src/core/canopy.js · life/vegetation.js · life/impostor.js（155帧；闭合曲面/接缝松弛及真实烘焙输入通过）",
+              "toggle": "outline",
+              "page": "scene:terrain"
             },
             {
-              "name": "5 八方位 impostor：8 个方位烘进图集，按方位角混合相邻两张",
+              "name": "树转镜：旋转锚点/正交与透视/周界GPU通过；原octagonal卡片与俯仰仍缺",
               "id": "1849427564034498642",
-              "status": "done",
-              "where": "src/life/impostor.js",
-              "toggle": "impostor"
+              "status": "partial",
+              "where": "src/life/impostor.js · impostors.html",
+              "toggle": "impostor",
+              "page": "impostors.html"
             },
             {
-              "name": "5b 运行时精灵打包：二叉树矩形分配 / 释放（网格实验室「图集打包」可视化）",
-              "page": "grids.html?t=atlas",
+              "name": "运行时精灵：真实GPU烘焙/释放/失败回滚；自动扩容与原素材待补",
+              "page": "atlas-live.html",
               "id": "1593215065423245313",
-              "status": "done",
-              "where": "src/core/atlas.js"
+              "status": "partial",
+              "where": "src/life/impostor.js · atlas-live.html"
             },
             {
-              "name": "6 云和树共用 impostor（放大、半透明、随风飘）",
+              "name": "蓬松云：共享树云材质/时钟/遮挡回归通过；原云形/层次仍缺",
               "id": "1852334860137849222",
-              "status": "done",
-              "where": "src/life/impostor.js · ImpostorField({ cloud })",
-              "toggle": "clouds"
+              "status": "partial",
+              "where": "src/life/impostor.js · impostors.html",
+              "toggle": "clouds",
+              "page": "impostors.html"
+            }
+          ]
+        ],
+        [
+          "续作学习与缺口",
+          [
+            {
+              "id": "1707497006640365880",
+              "status": "partial",
+              "where": "纹理灌木生成待实现（保留既有球团管线）",
+              "note": "600帧全核验。多组岛从简单几何底色到表面/边缘纹理，夹有空背景和黑轮廓。仅效果证据，不证明生成算法或异步管线；原作纯纹理灌木生成/小阴影仍待实现，保留现有球团近似。",
+              "decodedFrames": 600,
+              "reviewEvidence": "artifacts/coverage/palette-editor-review.md",
+              "reviewStages": {
+                "textRead": true,
+                "allFramesReviewed": true,
+                "frameRange": [
+                  0,
+                  599
+                ],
+                "nativeRevisits": [
+                  390
+                ],
+                "implementationVerified": false,
+                "runtimeAccepted": false
+              },
+              "page": "index.html?scene=terrain",
+              "name": "多岛纹理生成：已学600帧，原作生成算法待补"
             }
           ]
         ]
@@ -1368,63 +2219,68 @@ window.PIPELINE = {
       "key": "fusion",
       "name": "融合 · 第三个项目 → 球面",
       "color": "#7b5fb0",
-      "note": "地形管线和建筑管线已经在同一张网格、同一份体素上（「融合」场景）。还差：球面（第 4 小时）。",
+      "note": "平面融合已共用World；显式双格房屋、整体编辑和撤销已接入。实例身份持久化、完整预制socket/联合WFC与共享World球面融合仍待补。",
       "groups": [
         [
           "流程",
           [
             {
-              "name": "1 三角 + 方格 tile 的 WFC",
+              "name": "方形沿对角切四三角：父格追溯/实际WFC；联合模块待补",
               "id": "1447494168448753667",
-              "status": "todo"
+              "status": "partial",
+              "where": "src/core/grid.js · src/core/wfc.js",
+              "page": "wfc.html?subtiles=1"
             },
             {
-              "name": "2 不规则网格 + 多格 tile（房子跨格）：同一栋房子相邻格之间不起墙，三角格 + 方格拼成一栋（切「三角 + 方格」网格看）",
+              "name": "2 显式双格房屋：原子放置/整体替换/移除与撤销；身份持久化、预制socket/联合WFC待补",
               "id": "1579483114178768898",
-              "status": "done",
-              "where": "src/build/buildings.js · core/grid.js（buildMixedGrid）"
+              "status": "partial",
+              "where": "src/build/multicell.js · ui/house-project.js（177帧；整体编辑/工程身份持久化通过，通用实例与完整prefab/socket待续）",
+              "page": "multicell.html"
             },
             {
-              "name": "3 悬崖笼形变形（收分 + 扭动）",
+              "name": "笼形变：分数层连续角点/沉积线采样；3D碰撞待补",
               "id": "1579478470098243584",
-              "status": "done",
-              "where": "src/terrain/shape.js",
-              "toggle": "smooth"
+              "status": "partial",
+              "where": "src/terrain/shape.js · cage.html",
+              "toggle": "smooth",
+              "page": "cage.html"
             },
             {
-              "name": "4 房子拼进地形（台地排屋、海湾码头、跨峡谷的拱）",
+              "name": "房屋插入地形：453帧核验，保留共享双格/整体编辑；任意轮廓重网格待补",
               "id": "1584623053061099520",
-              "status": "done",
-              "where": "src/world/scenes.js",
-              "page": "scene:fusion"
+              "status": "partial",
+              "where": "src/build/multicell.js · src/world/scenes.js",
+              "page": "multicell.html"
             },
             {
-              "name": "5 强制放置特定模块：先压平一块台地（\"先生成它需要的那一小块\"），再放教堂（中殿 + 钟楼）",
+              "name": "指定模块patch：几何复核→共享World整体体量放置/撤回；完整prefab待续",
               "id": "1751932427272909032",
-              "status": "done",
-              "where": "src/terrain/features.js（forceChurch）· world/scenes.js",
-              "page": "scene:fusion"
+              "status": "partial",
+              "where": "src/core/module-patch.js · module-search.js · module-fit.js · patch.html · src/build/module-volume.js",
+              "page": "patch.html"
             },
             {
-              "name": "6 放到球面",
+              "name": "球面化：已有对偶柱群；原模块/海岸与World接入待补",
               "id": "1768627849529893109",
-              "status": "done",
-              "where": "src/sphere/planet.js（独立星球演示；共享 World 球面融合待补齐）",
+              "status": "partial",
+              "where": "src/sphere/planet.js · planet.html",
               "page": "planet.html"
             },
             {
-              "name": "7 星球上的防蘑菇化",
+              "name": "防蘑菇化：显式模块格/尺寸诊断；多格冲突仍待补",
               "id": "1769641473895432220",
-              "status": "done",
-              "where": "src/sphere/planet.js（独立星球演示；共享 World 球面融合待补齐）",
+              "status": "partial",
+              "where": "src/sphere/planet.js · planet.html",
               "page": "planet.html"
             },
             {
-              "name": "8 沿河的导航结构：河上的边更便宜，顺流（离河口步数变小）最快",
+              "name": "8 沿河导航：高差优先/平床河口距离，战斗及流场共用费用",
               "id": "1795831296952041691",
-              "status": "done",
+              "status": "partial",
               "where": "src/world/navgraph.js",
-              "toggle": "nav"
+              "toggle": "nav",
+              "page": "river-nav.html"
             }
           ]
         ]
@@ -1449,7 +2305,7 @@ window.PIPELINE = {
         "src/core/grid.js · buildQuadGrid() → { cells[{pts, edgeNeighbors, cornerNeighbors}], verts, vertexCells }",
         "src/core/spatial.js · buildCellIndex() / pointInQuad()"
       ],
-      "check": "已完成两种网格：左上角切换「四边形 / 三角 + 方格」，三个场景和管线示例都能跑；格子是任意多边形（cell.n + edgeTwins）。下一步：多格 tile（一个房子跨一个方格 + 一个三角格，1579483114178768898）。",
+      "check": "两种任意多边形网格已完成；显式quad+triangle双格模板已进入融合场景。完整预制轮廓、旋转及联合WFC仍待补。",
       "status": "partial"
     },
     {
@@ -1466,7 +2322,7 @@ window.PIPELINE = {
         "src/core/world.js · World：solid / rock / color / river，isRock()、ground()、topIsBuilt()",
         "src/light/bake.js · bakeLighting()：地形和建筑一起烘焙"
       ],
-      "check": "已完成：「融合」场景里房子贴着崖壁会被压暗，崖壁也会染上房子的颜色（同一次烘焙）。",
+      "check": "单World光照/建筑/地形保留；flow.html实际通洞/封洞验证占用、下方支撑和风场，修复按柱顶填满洞内。梯度法线目前只作诊断。",
       "status": "done"
     },
     {
@@ -1488,7 +2344,7 @@ window.PIPELINE = {
         "src/terrain/terrainmesh.js · buildTerrain({ shape })",
         "src/core/meshwriter.js · writer.soft：按夹角平均的软法线"
       ],
-      "check": "切到「地形」场景：台地、峡谷、河流、洞窟；海岸和崖顶是圆滑曲线、崖壁收分扭动、沉积线起伏；勾掉「层级平滑」对比。还差：星球上的防蘑菇化 relax（要先有球面）。",
+      "check": "台地、峡谷、河流、洞窟、层级平滑与形变已在平面场景运行；独立planet.html有球面/relax演示，共享World球面融合与形变碰撞仍待补。",
       "status": "partial"
     },
     {
@@ -1571,8 +2427,8 @@ window.PIPELINE = {
         "src/life/vegetation.js · Vegetation.refresh(world, shape)：草丛、崖边 / 墙根灌木、团块树冠，带风和墨线",
         "src/world/view.js · 光照档位（雾 / 天色可挂在这里）"
       ],
-      "check": "植被和环境都做完了：草丛、小花、叶状灌木 / 树冠、八方位 impostor、云、风场（面板「风场箭头」）、雪（「雪」，台地和屋顶会积雪）、雾、地平线阴云。",
-      "status": "done"
+      "check": "草/花/灌木、impostor树云、风雪雾等既有成果保留；本轮修复洞内风场。树冠硬边松弛、球面植被及细节一致性继续列缺口。",
+      "status": "partial"
     },
     {
       "step": 7,
@@ -1592,7 +2448,7 @@ window.PIPELINE = {
         "src/world/worldmesh.js · WorldMesh（两条管线写同一个顶点池）",
         "src/water/shore.js（陆地格决定岸线）"
       ],
-      "check": "切到「融合」场景：悬崖台地上长出 Townscaper 式房子，岸浪同时绕着地形和码头。还差：多格 tile、房子跨三角格。",
+      "check": "真实融合两种网格各6个双格房屋，混合跨quad+triangle；整体移除/替换和本页撤销已验收。实例身份持久化、完整预制轮廓/socket与联合WFC仍待补。",
       "status": "partial"
     },
     {
@@ -1611,8 +2467,8 @@ window.PIPELINE = {
         "src/core/grid.js 的松弛（换成球面切平面上做）",
         "src/build/buildings.js（把 y 轴换成格子法线）"
       ],
-      "check": "未做：完成后应有一个 sphere.html，能旋转星球、在上面建房、看到环绕的岸浪。",
-      "status": "todo"
+      "check": "独立planet.html已存在球面房屋/relax演示；尚未将平面共享World的地形、建筑、岸浪和编辑管线完整迁到同一球面。",
+      "status": "partial"
     }
   ],
   "statusName": {

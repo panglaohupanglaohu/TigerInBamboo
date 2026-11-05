@@ -1,0 +1,1 @@
+2026-11-01：继续请求后核对当前代码，内湖和Townscaper已接入，且已升级到REACodeRefactoring。保留后续山体生成/存档迁移等修改，没有重复施工或回退。当前CUA返回 Local browser use is disabled in Work settings，本轮正式游戏实操验证未完成；不能将既有harness报告当本轮正式验收。需要用户开启本地浏览器使用后继续验证。

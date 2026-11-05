@@ -1,0 +1,58 @@
+{
+  "result": {
+    "initial": {
+      "leaves": 20,
+      "freeLeaves": 4,
+      "usedArea": 102400,
+      "freeArea": 159744,
+      "largestFree": 152064,
+      "maxDepth": 8,
+      "fill": 0.390625,
+      "largestShare": 0.9519230769230769
+    },
+    "active": {
+      "leaves": 30,
+      "freeLeaves": 6,
+      "usedArea": 135168,
+      "freeArea": 126976,
+      "largestFree": 107008,
+      "maxDepth": 9,
+      "fill": 0.515625,
+      "largestShare": 0.842741935483871
+    },
+    "alpha": 0,
+    "stale": false,
+    "unchanged": true,
+    "fullRejected": true,
+    "fullBefore": 102400,
+    "fullAfter": 102400,
+    "failed": true,
+    "restored": true,
+    "failureArea": 102400,
+    "survivorAfterFailure": true
+  },
+  "candidates": {
+    "slots": 70,
+    "report": {
+      "leaves": 154,
+      "freeLeaves": 32,
+      "usedArea": 73472,
+      "freeArea": 188672,
+      "largestFree": 65536,
+      "maxDepth": 17,
+      "fill": 0.2802734375,
+      "largestShare": 0.3473541383989145
+    },
+    "query": {
+      "visited": 49,
+      "found": true,
+      "x": 64,
+      "y": 256,
+      "w": 32,
+      "h": 16,
+      "tried": 130,
+      "totalVisited": 1870
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>悬垂地形 — 岩檐/石拱 + 缓坡与垂直崖壁同框</title>
+<style>
+  :root { --ink:#20323a; --muted:#5d7279; --line:#d3e0e0; --bg:#eef4f3; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  canvas { position:fixed; inset:0; display:block; }
+  header { position:fixed; left:0; right:0; top:0; padding:12px 18px; z-index:2; pointer-events:none;
+    background:linear-gradient(180deg, rgba(238,244,243,.97), rgba(238,244,243,.55) 72%, transparent); }
+  h1 { margin:0 0 4px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:82ch; }
+  header b { color:#a4691f; font-weight:650; }
+  #panel { position:fixed; right:14px; top:96px; z-index:2; width:216px; display:flex; flex-direction:column; gap:7px;
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.03em; }
+  #panel label { display:flex; gap:6px; align-items:center; font-size:12.5px; cursor:pointer; }
+  button { font:inherit; font-size:12.5px; padding:5px 9px; border:1px solid var(--line); background:#f7fbfa;
+    border-radius:7px; cursor:pointer; text-align:left; }
+  button:hover { background:#eaf5f3; }
+  #stats { position:fixed; left:14px; bottom:12px; z-index:2; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.9); border:1px solid var(--line); border-radius:8px; padding:8px 11px;
+    font-variant-numeric:tabular-nums; max-width:min(560px, 52vw); }
+  #stats b { color:#20323a; font-weight:650; }
+  #stats .ok { color:#1c7a52; font-weight:650; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<header>
+  <h1>地形能悬垂，才敢把镜头放到岩檐下面</h1>
+  <p>每格存的不是<b>一个高度</b>，而是一叠<b>实心体素</b>：隧道就是"顶上两层留着、下面四层掏空"，
+    蘑菇岩就是"柱子托着一圈悬空帽檐"。网格化只画邻居没盖住的面，拱顶下沿与岩檐底面就自己出现了。
+    缓坡与垂直崖壁共用一个高度场，靠低频掩码在两者之间连续插值，所以没有拼接缝。</p>
+</header>
+
+<div id="panel">
+  <h2>机位</h2>
+  <button id="b3q">三分之四视角</button>
+  <button id="blow">低机位（钻进隧道）</button>
+  <button id="btop">俯视（看崖壁台阶）</button>
+  <h2>图层</h2>
+  <label><input type="checkbox" id="water" checked> 水面 y=7.5</label>
+  <label><input type="checkbox" id="soffit"> 高亮朝下的面（岩檐）</label>
+  <label><input type="checkbox" id="spin"> 自动旋转</label>
+</div>
+
+<div id="stats">—</div>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { buildTerrain, buildMesh, measure, NX, NY, WATER } from './src/overhangterrain.js';
+
+THREE.ColorManagement.enabled = false;
+
+const cv = document.getElementById('cv');
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x6f8f90);
+
+const camera = new THREE.PerspectiveCamera(42, 1, 0.5, 800);
+
+/* ---- 地形 ---- */
+const T = buildTerrain(7);
+const g = buildMesh(T);
+const M = measure(T);
+
+const geo = new THREE.BufferGeometry();
+geo.setAttribute('position', new THREE.BufferAttribute(g.positions, 3));
+geo.setAttribute('normal', new THREE.BufferAttribute(g.normals, 3));
+geo.setAttribute('color', new THREE.BufferAttribute(g.colors, 3));
+const mat = new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide });
+const land = new THREE.Mesh(geo, mat);
+scene.add(land);
+
+/* ---- 岩檐高亮：把朝下的面单独画成一层薄片 ---- */
+const soffitGeo = new THREE.BufferGeometry();
+{
+  const src = g;
+  const p = [], c = [];
+  for (let i = 0; i < src.positions.length; i += 9) {
+    // 每 3 个顶点一个三角形，判法线朝下
+    if (src.normals[i + 1] === -1 && src.positions[i + 1] > WATER - 0.5) {
+      for (let k = 0; k < 9; k++) p.push(src.positions[i + k]);
+      for (let k = 0; k < 9; k++) c.push(k % 3 === 0 ? 0.92 : k % 3 === 1 ? 0.28 : 0.22);
+    }
+  }
+  soffitGeo.setAttribute('position', new THREE.Float32BufferAttribute(p, 3));
+  soffitGeo.setAttribute('color', new THREE.Float32BufferAttribute(c, 3));
+  var soffitCount = p.length / 18;   // 每个面 2 个三角形 × 9 个 float
+}
+const soffit = new THREE.Mesh(soffitGeo, new THREE.MeshBasicMaterial({
+  vertexColors: true, side: THREE.DoubleSide, depthTest: true,
+}));
+soffit.visible = false;
+scene.add(soffit);
+
+/* ---- 水面 ---- */
+const water = new THREE.Mesh(
+  new THREE.PlaneGeometry(700, 700),
+  new THREE.MeshBasicMaterial({ color: 0x4d7a7c, transparent: true, opacity: 0.55 })
+);
+water.rotation.x = -Math.PI / 2;
+water.position.y = WATER;
+scene.add(water);
+
+/* ---- 相机 ---- */
+const target = new THREE.Vector3(0, 14, 0);
+const dist0 = 86;
+let az = 1.46, el = 0.24, dist = dist0;
+
+function place() {
+  const ce = Math.cos(el);
+  camera.position.set(
+    target.x + Math.sin(az) * ce * dist,
+    target.y + Math.sin(el) * dist,
+    target.z + Math.cos(az) * ce * dist
+  );
+  camera.lookAt(target);
+}
+
+/* ---- 交互 ---- */
+let drag = false, lx = 0, ly = 0;
+cv.addEventListener('pointerdown', (e) => { drag = true; lx = e.clientX; ly = e.clientY; });
+addEventListener('pointerup', () => { drag = false; });
+cv.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  az -= (e.clientX - lx) * 0.006;
+  el = Math.max(-0.15, Math.min(1.42, el + (e.clientY - ly) * 0.005));
+  lx = e.clientX; ly = e.clientY;
+  place();
+});
+cv.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  dist = Math.max(46, Math.min(220, dist * (1 + Math.sign(e.deltaY) * 0.08)));
+  place();
+}, { passive: false });
+
+document.getElementById('b3q').onclick = () => {
+  az = 1.46; el = 0.24; dist = dist0; place();
+};
+document.getElementById('blow').onclick = () => {
+  // 贴水面平视洞口：洞顶下沿会切出一道剪影，能看进洞里
+  const tj = T.tunnel.j, tk = T.tunnel.k + 1.6;
+  target.set(T.tunnel.i1 - NX / 2 - 4, tk, tj - NY / 2);
+  az = Math.PI / 2; el = 0.02; dist = 30;
+  place();
+};
+document.getElementById('btop').onclick = () => {
+  target.set(0, 14, 0); az = 0.62; el = 1.16; dist = 96; place();
+};
+
+document.getElementById('water').onchange = (e) => { water.visible = e.target.checked; };
+document.getElementById('soffit').onchange = (e) => { soffit.visible = e.target.checked; };
+const spin = document.getElementById('spin');
+let spinning = false;
+spin.onchange = (e) => { spinning = e.target.checked; };
+
+/* ---- 尺寸 ---- */
+function fit() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  place();
+}
+addEventListener('resize', fit);
+fit();
+
+/* ---- 统计 ---- */
+const statsEl = document.getElementById('stats');
+statsEl.innerHTML =
+  `实心体素 <b>${M.solidVoxels.toLocaleString()}</b> · 三角面 <b>${g.faces.toLocaleString()}</b><br>` +
+  `水面以上朝下的面 <b>${g.soffitAboveWater}</b> 个 = 真悬垂（洞顶 ${T.tunnel.i1 - T.tunnel.i0 + 1}×${T.tunnel.width} 格 + 石柱帽 ${M.capCells / 3} 格）<br>` +
+  `海蚀洞 深 <b>${M.caveDepth}</b> 格 · 掏空 <b>${M.tunnelCells}</b> 格 · 洞内空气 BFS <span class="ok">${M.airReach} 格连通</span>（不设盒子边界会漏进天空，那个数不能用）<br>` +
+  `缓坡省 <b>${M.softCells}</b> 格 / 陡崖省 <b>${M.sharpCells}</b> 格 · 最高 ${M.maxHeight}（台阶步长 ${T.field.step}）`;
+
+window.reaOverhang = {
+  solid: M.solidVoxels, faces: g.faces, soffit: g.soffitAboveWater, soffitDrawn: soffitCount,
+  caveDepth: M.caveDepth, caveAir: M.airReach, tunnelCells: M.tunnelCells,
+  capCells: M.capCells, soft: M.softCells, sharp: M.sharpCells, maxHeight: M.maxHeight,
+};
+
+/* ---- 循环 ---- */
+renderer.setAnimationLoop(() => {
+  if (spinning && !drag) { az += 0.0035; place(); }
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

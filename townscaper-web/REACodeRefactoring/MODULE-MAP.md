@@ -2,135 +2,153 @@
 
 原版 src + engine 的全部 JS；vendor、页面内联脚本与工具另列后续范围。 映射按职责人工分组，代码引用作辅助；已合并/迁移是静态确认，不等于完整行为验收。
 
-{'未覆盖': 10, '已合并/迁移（静态确认）': 87, '部分覆盖': 31}
+{'已迁移/增强（本轮验证）': 34, '部分覆盖': 65, '已合并/迁移（静态确认）': 46, '未覆盖': 1}
 
 | 原版模块 | 重构落点 | 状态 | 缺口 / 说明 | 对应视频 |
 |---|---|---|---|---|
-| `src/adjacency.js` |  | 未覆盖 | 缺少从实际模块网格抽取接口并查询可拼装邻接的工具。 | 795010582239997952 |
-| `src/app.js` | `src/world/app.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1384958097542819845 |
+| `src/adjacency.js` | `src/core/adjacency.js`, `adjacency.html`, `wfc.html` | 已迁移/增强（本轮验证） | 几何抽边、边界候选与共享网格审核已补；平移/平行等长仅为候选，不保证完整面轮廓或实体无碰撞。实际建筑多格tile接入仍独立待做。 | 795010582239997952 |
+| `src/app.js` | `src/world/app.js`, `src/core/snapshot-replay.js`, `src/tools/objexport.js` | 已迁移/增强（本轮验证） | 本批288+167帧复核，保留共享编辑/撤销；新增回放取消/异常恢复、只读UI与60条截断修复，精确OBJ坐标/法线语法/属性校验，双网格实际下载和历史回归通过。未覆盖第三方DCC导入验收、实例植被/水/完整材质导出与逐动作动画/水花/音效/镜头轨迹录制。 | 1430224300003545091, 1260586697538113537 |
+| `src/archvoid.js` | `src/build/buildings.js` | 部分覆盖 | 静态新增映射：已有方格对边支撑的椭圆式拱底/侧壁与下方空洞；未迁移楔石/键石、法向外推、桥面/拱脚构造及clearance/measure完整接口。两条2016视频未逐帧，不计学习。 | 806904557502464000, 802496920790777856 |
 | `src/ballistic.js` | `src/badnorth/battle.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 987267068495003648 |
 | `src/barycentric.js` | `src/core/spatial.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 974579499802202113, 974564862729838592 |
 | `src/birds.js` | `src/life/birds.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1244892370392489989, 1215644531221311488 |
-| `src/blobrelax.js` | `src/life/vegetation.js` | 部分覆盖 | 现有球团树冠与外壳描边未覆盖硬边橡皮筋/内部气球的迭代松弛。 | 1580162341668237312 |
-| `src/borderpath.js` | `src/campaign/campaign.js` | 部分覆盖 | 战役节点分组存在，沿三角边绕节点的前线边境生成未核实。 | 1097458505315946496 |
-| `src/bouncegi.js` | `src/light/lightvolume.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1580835075629133825 |
+| `src/blobrelax.js` | `src/core/canopy.js`, `src/life/vegetation.js`, `src/life/impostor.js` | 已迁移/增强（本轮验证） | 155帧复核，闭合球并集surface nets、三角形接缝松弛及真实树冠/烘焙输入通过；低分辨率歧义明确拒绝，原作MC/参数、美术及全局自交证明未复现。 | 1580162341668237312 |
+| `src/blobshadow.js` | `src/core/unit-shadow.js`, `src/life/unit-shadow-batch.js`, `src/badnorth/battle.js`, `unit-shadows.html` | 部分覆盖 | 新增水平凸格裁剪软盘与实际单位导航楼层接入，真实Battle双网格GPU/过滤/停止通过。原配文820是动画参考请求，非无文字软影教程；高度淡出是本地策略。光向偏移/坡向椭圆、形变斜坡贴合、跨格连续性及原measure接口仍缺。 | 820977247083528192, 821321422140309504, 821680056514781186 |
+| `src/borderpath.js` | `src/core/frontier.js`, `src/campaign/campaign.js`, `campaign.html` | 部分覆盖 | 已学14帧续项：外围padding、避让节点的中点通路及自适应Bezier采样接入，96条逻辑/24项真实页面通过。原作精确拓扑未知；两侧场细分、同时多条前线/完整美术待补。 | 1097458505315946496 |
+| `src/bouncegi.js` | `src/light/lightvolume.js`, `src/core/voxel-distance.js`, `src/world/view.js`, `lightvolume.html` | 部分覆盖 | 185帧复核，保留已有共享体素多次反弹/六向收集与运行成果；本次实际算法对照发现原版2.5D表面形因子gather、暴力参考/audit等接口未迁移，不能把同职责静态对应当等价，改列部分。视频本身不证明原作形因子/逆平方。 | 1580835075629133825 |
 | `src/boxtest.js` | `src/core/obb.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 974325184525201409 |
-| `src/cheesenav.js` | `src/world/layerednav.js`, `navigation.html` | 部分覆盖 | 本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。 | 906425294533394432, 797119718477991936, 1442695040888963407 |
+| `src/campaignmap.js` | `src/campaign/campaign.js`, `src/core/campaign-graph.js`, `campaign.html` | 已合并/迁移（静态确认） | 本次目录重扫补录同职责文件。原版scatter/cull/walk/branches/extras在重构战役页/共享图管线有对应，图连通修复已有旧运行证据；保留原版kNN与重构Delaunay+近邻的算法差异，未逐个导出兼容、不声称917405214638006273已全帧。 | 1042732450730913793, 1078792665980915714, 917405214638006273 |
+| `src/cheesenav.js` | `src/world/layerednav.js`, `src/world/battle-navigation.js`, `src/badnorth/battle.js`, `navigation.html` | 部分覆盖 | 分层战斗/流场、基本水平身体半径及连续扫掠已接入；精细模块内部门户、形变侧壁和斜坡脚高插值待补齐。 | 906425294533394432, 797119718477991936, 1442695040888963407 |
 | `src/colorgamut.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1710031224838771027 |
+| `src/colorvolume.js` | `src/core/color-volume.js`, `src/world/view.js`, `color-lab.html`, `src/core/palette-patch.js`, `palette-editor.html` | 部分覆盖 | 515帧证实HSL范围/离散特征调色；新增共享范围采样与真实顶面shader，保留默认。原版八角点OKLab/统计、色带/terrain等API未全迁移，五特征/离散采样及视觉仍待补。 后续624帧补sRGB四角色盘实景取样；其他色彩空间/自由拖点/完整五特征仍缺。 | 1710031224838771027, 1712088611934371876 |
+| `src/combatfx.js` | `src/badnorth/battle.js`, `src/badnorth/flowfield.js`, `src/world/battle-navigation.js`, `src/core/platform-anchor.js`, `src/core/combat-state.js`, `src/core/spear-thrust.js`, `src/core/combat-profile.js`, `src/life/unit-sprites.js` | 部分覆盖 | 既有附着/中断/矛/精灵和大小兵配置保留，新增体型软分离及暂停冻结；完整动作/原作美术、复杂拥挤/体型路由、旋转武器/3D接触遮挡及盾格挡推力待补齐。 | 870296307889573889, 903647529203634176, 946660607008403456, 984813819280191488, 995043346778415104, 999191760944418817, 901842167508992000, 902069261304287232 |
 | `src/contrast.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1482346496460828674 |
-| `src/coroutine.js` |  | 未覆盖 | 缺少可预算执行、嵌套/递归及取消的通用生成器调度器。 | 863019585162932224 |
+| `src/contrasttex.js` | `src/core/contrast-field.js`, `color-lab.html` | 部分覆盖 | 517帧复核；新增显式图边约束的确定性标量松弛/有界修复、实际网格三角诊断与违例统计。仅诊断，不是原作彩色纹理atlas/贴花、OKLab/色域投影或完整buildDecal/paint接口；实景表面接入待补。 | 1482346496460828674 |
+| `src/coroutine.js` | `src/core/coroutine.js`, `scheduler.html` | 已迁移/增强（本轮验证） | 嵌套递归、预算、取消和演示已补；合作式步骤不可抢占，取消仅同步finally清理。 | 863019585162932224 |
 | `src/demo.js` | `src/world/townDemo.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1197909675443916803, 1215642481162887168, 1238474550511308800 |
 | `src/dfgrow.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1105131621391495176, 1104771432440049664 |
-| `src/dirsprites.js` |  | 未覆盖 | 3D 小人不等于单方向精灵的视觉朝向约束。 | 969860566322958336 |
-| `src/doodlewall.js` |  | 未覆盖 | 缺少走廊墙板与涂鸦演示。 | 1897266928961700215, 1890018647655272491 |
-| `src/dual.js` | `grids.html` | 部分覆盖 | 有对偶图演示，植被落点尚未统一使用顶点对偶区域。 | 959752525867036672 |
-| `src/edgeplant.js` | `src/life/vegetation.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1590669875869286400, 1707490274425884929, 1290997501332525056 |
-| `src/edgesmooth.js` | `src/terrain/shape.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1670720537662836736, 1670725072540106755 |
-| `src/floatprobe.js` | `src/world/view.js` | 部分覆盖 | 缺少32位浮点渲染目标跨平台能力实测。 | 1664565063552847873 |
-| `src/flowdemo.js` |  | 未覆盖 | 缺少共享体素碰撞/软法线/风场的独立量化验收页。 |  |
+| `src/dirsprites.js` | `src/core/sprite-ambiguity.js`, `src/life/unit-sprites.js`, `src/badnorth/battle.js`, `sprites.html` | 已迁移/增强（本轮验证） | 保留翻转指标、锚点/alpha修复及单方向模式；新增逐单位UV血斑和受击摆动。原作美术、完整兵种/攻击动画与精灵阴影待补齐，保留原3D模式。 | 969860566322958336 |
+| `src/doodlewall.js` | `src/core/doodle-layout.js`, `src/build/doodle-wall.js`, `src/world/doodle-overlay.js`, `doodle.html` | 已迁移/增强（本轮验证） | 墙饰生成器和World可选贴面已迁移：板号种子、逐板裁剪、墨线遮罩。完整室内走廊/弧顶/门口版式、纹样复杂度及贴面光照烘焙仍待补。 | 1897266928961700215, 1890018647655272491 |
+| `src/dual.js` | `src/core/vertex-dual.js`, `src/world/vertex-dual-overlay.js`, `gridpatch.html`, `grids.html` | 部分覆盖 | 31帧核验；新增有界三角网重心对偶、边界闭合及共享World分层脉动/区域候选。640顶点格覆盖面积测试通过；局部扇形三角输入不是完整导航网，植被落点尚未统一使用对偶区域，悬崖垂直面贴合未覆盖。 | 959752525867036672 |
+| `src/edgeplant.js` | `src/life/vegetation.js`, `src/core/garden-paths.js`, `src/build/buildings.js`, `garden.html`, `src/core/edge-inset.js` | 已迁移/增强（本轮验证） | 保留崖沿/墙根植被，新增共享World院内连通路由；原版完整CPU统计/平面渲染接口、原作门洞规则/细石板/中心装饰未完整迁移。草丛contrast texture+背景射线原法仍未实现，不能由静态邻崖启发式替代。 本批599帧复核确认原作纯纹理灌木，已有球团近似保留；修复基于未形变格心的错误内收方向并对薄格限幅，双网格实例锚点通过。原片纹理灌木/微阴影仍未实现，锚点在格内不保证球团整个体积在内。 续作600帧多岛生成已学，未从效果臆测内部纹理生成算法，保留待实现。 | 1590669875869286400, 1707490274425884929, 1290997501332525056, 1590674061092212738, 1707490932017279035, 1707497006640365880 |
+| `src/edgesmooth.js` | `src/terrain/shape.js`, `hierarchy.html` | 部分覆盖 | 保留切面层级/Taubin/建筑钉点及面积回退；新增显式硬边全层钉点局部通过。原模块/材质三角网边界、完整3D语义和三模式/regularity等接口仍缺。 | 1670720537662836736, 1670725072540106755 |
+| `src/floatprobe.js` | `src/world/float-probe.js`, `float.html` | 部分覆盖 | 117帧复核，16F/32F可写、HDR/负值回读及线性过滤本环境实测通过；跨平台矩阵、平流质量/CPU误差及GPU流体接入待补。 | 1664565063552847873 |
+| `src/flowdemo.js` | `src/core/world-probes.js`, `src/life/atmosphere.js`, `flow.html`, `src/ui/flow-markers.js` | 部分覆盖 | 共享World碰撞/下方支撑/梯度诊断和真实洞内风场已验收；体素梯度软化实际网格并约束硬边尚未完整迁移。 | 931196707236392960 |
 | `src/flowfield.js` | `src/badnorth/flowfield.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 816748103193817088 |
-| `src/frontier.js` | `src/world/navgraph.js` | 部分覆盖 | 区域合并导航存在，未覆盖坍缩边缘候选 tile 的增量枚举。 | 1582293326815862786 |
-| `src/fusion.js` | `src/world/scenes.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1579483114178768898, 1584623053061099520, 1447488323845509121 |
-| `src/grasscards.js` | `src/life/vegetation.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1590669875869286400, 1707490274425884929, 1205420678859632640, 1015149712469524480 |
+| `src/frontier.js` | `src/core/frontier-candidates.js`, `wfc.html`, `src/world/navgraph.js` | 部分覆盖 | 434帧复核；补真实半边坍缩周边候选枚举、预算不完整结果和WFC页入口，184候选域/双网格通过。只对直接固定邻居筛选，不等于全局可行性或视频中的增量放置/简化导航扩展互连；旧同高区域导航保留而不冒充此能力。 | 1582293326815862786 |
+| `src/fusion.js` | `src/world/scenes.js`, `src/build/multicell.js`, `src/build/buildings.js` | 已迁移/增强（本轮验证） | 共享World融合场景及显式双格模板已运行验收；完整预制轮廓socket/多格联合求解另列splice后续。 | 1579483114178768898, 1584623053061099520, 1447488323845509121 |
+| `src/grasscards.js` | `src/life/vegetation.js`, `src/life/leaf-surface.js`, `leaf-surface.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 本轮611帧复核仅补近景球冠/灌木纹理alpha；远景impostor/草卡片未接同一叶纹，原有实现保留，不升级为整模块运行通过。 | 1590669875869286400, 1707490274425884929, 1205420678859632640, 1015149712469524480 |
 | `src/grid.js` | `src/core/grid.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1302686201401442309 |
-| `src/gridmodes.js` | `src/core/grid.js` | 部分覆盖 | 四边形/混合演示存在，纯六边形地形对照未覆盖。 | 1670790425232175108, 1447496205282549761, 1147881669350891521 |
-| `src/gridwfc.js` |  | 未覆盖 | 缺少不规则格上的确定性约束传播与回溯求解。 | 1164926304640229376 |
-| `src/grouping.js` | `src/campaign/campaign.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 938422757288792064, 938405900573986816 |
-| `src/halfedge.js` | `src/core/grid.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1458921394855718917, 1584623053061099520, 1447494168448753667 |
-| `src/holenav.js` | `src/world/layerednav.js`, `navigation.html` | 部分覆盖 | 本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。 | 797119718477991936, 906425294533394432 |
+| `src/gridmodes.js` | `src/core/grid.js`, `grids.html`, `wfc.html` | 部分覆盖 | 保留纯三角/混合/不规则四边，新增真正正交纯方格，旧mergeRate=1合并菱形保留且不误标。独立纯六边形World地形及完整格型/度数接口仍缺。 本轮新增四边形对角四分三角子格、父子映射和实际WFC接口，完整四子格联合3D模块约束仍缺。 | 1670790425232175108, 1447496205282549761, 1147881669350891521 |
+| `src/gridpatch.js` | `src/core/radial-patch.js`, `gridpatch.html` | 部分覆盖 | 324帧核验纠正为四边格/放射模板与环院；新增单个星形孔洞规则内环、原边界共享接缝、同World渲染。48组25通过/23拒绝不安全边界。不是原版蜂窝关闭抖动；多补丁/完整手工库、复杂孔洞及已有世界迁移未覆盖。 编辑中央塔的屋顶比例偏高，未通过原片视觉匹配，需模板质量/建筑屋顶适配。 | 1301816247479345152 |
+| `src/gridwfc.js` | `src/core/wfc.js`, `wfc.html` | 已迁移/增强（本轮验证） | 保留已验收的任意多边形半边、确定性、迭代回溯、pins、预算与局部修复。本轮可选四分子格网格进入真实求解流程；四子格联合模块约束、3D预制tile/建筑和地形联合生成仍待补。 | 1164926304640229376 |
+| `src/grouping.js` | `src/core/region-groups.js`, `src/core/campaign-graph.js`, `src/campaign/campaign.js`, `campaign.html` | 已迁移/增强（本轮验证） | 两段773帧、100种子4455份连通历史和12次真实页面回放通过。共享World混合/四边形适配及权重切边量化通过；本地整组合并+节点调整，不承诺原作精确权重/调度或旧函数签名；固定迭代/512节点限制，边境轮廓另列。 | 938422757288792064, 938405900573986816 |
+| `src/halfedge.js` | `src/core/grid.js`, `src/core/adjacency.js` | 部分覆盖 | 保留共享顶点/互反edgeTwins与几何审核。显式next/prev/twin遍历、边界环/顶点扇/Euler和分割编辑接口未完整迁移，本轮仅视频学习与静态比较。 | 1458921394855718917, 1584623053061099520, 1447494168448753667 |
+| `src/holenav.js` | `src/world/layerednav.js`, `src/world/battle-navigation.js`, `src/badnorth/battle.js`, `navigation.html` | 部分覆盖 | 分层战斗/流场、基本水平身体半径及连续扫掠已接入；精细模块内部门户、形变侧壁和斜坡脚高插值待补齐。 | 797119718477991936, 906425294533394432 |
+| `src/housekit.js` | `src/build/buildings.js`, `src/world/townDemo.js`, `src/badnorth/island.js` | 部分覆盖 | 本轮扫描发现其他会话新增原版housekit，静态职责对照现有共享World房屋/屋顶/门窗与北境小屋；保留既有成果，未修改原版。原makeHouse/buildVillage/toWorld/verify接口、离散层高/坡度池/屋面烟囱约束和原茅顶套件尚未迁移；781027725452648448未逐帧复核，不新增学习计数。 | 781027725452648448 |
 | `src/infograph.js` | `src/badnorth/battle.js` | 部分覆盖 | 战斗流场存在，单位知识的动态节点通信图未覆盖。 | 883447205176238083 |
 | `src/learnpanel.js` | `src/ui/learnpanel.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
-| `src/lighting.js` | `src/light/bake.js` | 部分覆盖 | 共享体素烘焙已迁移；碰撞与体素软法线用途需继续核查。 | 931196707236392960, 1168571866405097472, 1580846877855338497, 1237305125070426112, 1062374549407350790, 1580845127207387137 |
+| `src/lighting.js` | `src/light/bake.js`, `src/light/lightvolume.js`, `src/core/world-probes.js`, `src/world/view.js`, `src/core/voxel-distance.js` | 部分覆盖 | 共享体素烘焙与占用探针保留；213+41帧后补六方向体素RGB/法线采样与反弹指标，并实际运行。完整SDF/UV/mega-texture反馈、形变碰撞和体素软法线写回仍缺；不把局部近似称原作等价。 新增中心EDT和保守距离步进不等于形变表面SDF或软法线写回。 | 931196707236392960, 1168571866405097472, 1580846877855338497, 1237305125070426112, 1062374549407350790, 1580845127207387137 |
 | `src/lightingcache.js` | `src/world/worldmesh.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 931196707236392960, 1168571866405097472 |
 | `src/looptown.js` | `src/build/buildings.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1313837640366596096 |
 | `src/mandala.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1490068909042642944 |
 | `src/march.js` | `grids.html` | 部分覆盖 | 岸线绘制存在，marching squares 独立等值线与端点一致性未覆盖。 | 1120036868966502401 |
-| `src/mesh.js` | `src/core/meshwriter.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
+| `src/mesh.js` | `src/world/worldmesh.js`, `src/core/meshwriter.js`, `src/tools/mesh-audit.js`, `save-mesh.html` | 已迁移/增强（本轮验证） | 349帧复核并保留既有分块缓存后合并主体；双网格编辑前后主体GPU提交均1次。并非全场景单call，不覆盖原作Switch性能/动态合批算法。 | 1401145625572425728 |
 | `src/mipcustom.js` | `textures.html` | 部分覆盖 | 贴图实验未覆盖自定义 mipmap 的实际构建和采样。 | 777596437534240768 |
 | `src/mipfilter.js` | `textures.html` | 部分覆盖 | 贴图实验未覆盖自定义 mipmap 的实际构建和采样。 | 777596437534240768 |
-| `src/mountainlight.js` | `textures.html` | 部分覆盖 | 地面笔触不能替代山体斜率烘焙贴图。 | 1786014232594485497 |
-| `src/navgraph.js` | `src/world/navgraph.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1795831296952041691, 1582293326815862786 |
+| `src/mirrordecor.js` | `src/core/mirror-uv.js`, `src/core/ornament-field.js`, `src/ui/ornament.js`, `mirror.html`, `ornament.html` | 已迁移/增强（本轮验证） | 单纹理D4八方向、中心折叠和uniform尺寸控制已实测；保留原距离场/独立cutoff动画。原作细线纹样/精确任意尺寸布局、makeMotif/paintRect/seamError CPU参考接口仍未逐一兼容。 | 1061221291137605633 |
+| `src/mountainlight.js` | `src/core/mountain-bake.js`, `src/world/worldmesh.js`, `src/world/view.js`, `mountain-bake.html` | 部分覆盖 | 234帧全核验；保留已有World/材质，补实际顶点法线烘焙明度属性和岩壁原场景/底色/烘焙/实时法线对照，5000方向及双网格GPU通过。配文不确认具体烘焙方式；原山体纹理atlas/白斑沟槽/球面混合、buildMountain/normalAt/renderMountain完整接口及低端设备性能未覆盖。 | 1786014232594485497 |
+| `src/navgraph.js` | `src/world/navgraph.js`, `src/world/battle-navigation.js`, `river-nav.html` | 部分覆盖 | 有向费用已保留并修复上坡误判，Battle/分层流场共用；复杂汇流/原球面流向及完整接口仍缺。 | 1795831296952041691, 1582293326815862786 |
 | `src/navgrid.js` | `src/world/navgraph.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 797119718477991936, 807135253215199233, 817323301357948928 |
-| `src/paintnormal.js` | `textures.html` | 部分覆盖 | 缺少手绘法线与表面光照演示。 | 1481661852887265288 |
-| `src/palette.js` | `src/core/palette.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1200520827898343425, 1371460793032716290, 1344290848180203523, 1727324352264474664 |
+| `src/navribbon.js` |  | 未覆盖 | 本批静态审计新出现模块：Catmull-Rom中线、弧长重采样、可变宽四边带与测量未迁移。现有navlayer/战斗命令线是导航显示，不能当弧长参数化走廊生成；2段素材未逐帧，本批不计学习。 | 827215002448846848, 823848950553780226 |
+| `src/overhangterrain.js` | `src/core/world.js`, `src/core/rock-topology.js`, `src/terrain/generate.js`, `src/terrain/features.js`, `src/terrain/shape.js`, `src/terrain/terrainmesh.js`, `overhang.html`, `src/core/deformation-guard.js` | 部分覆盖 | 保留共享分层rock/空洞及诊断，新增切面面积/边长/扇形朝向回退防薄檐坍缩；双网格AB修复负面积。144748软坡视频656帧已学习，但完整heightField/连续软坡/侵蚀无局部极小保证及measure接口未迁移，3D侧壁相交/碰撞仍待补。 | 1671808851895627776, 1447488323845509121 |
+| `src/paintnormal.js` | `textures.html`, `src/core/voxel-distance.js`, `lightvolume.html` | 部分覆盖 | 425帧复核；已有纹理演示保留，新补中心距离EDT/六AO及占用梯度法线诊断，但梯度不是原作程序笔触。原版paintNormal/shadeWithNormals/audit和真正表面贴图接入仍未覆盖。 | 1481661852887265288 |
+| `src/palette.js` | `src/core/palette.js`, `src/world/app.js`, `wall-palette.html`, `src/core/qa-replay.js`, `qa-replay.html` | 已迁移/增强（本轮验证） | 保留已有墙色预设/固定屋顶成果；本轮524帧后补独立色槽更新、真实World重建和还原。原PNG热更新、多行贴图、最短色相跨调色板渐变/QA及完整原接口仍待补。172732仅可作配色外观参考，实际主题是拖抹，已移至smear映射。 本批200帧复核后补本地最短色相HSL滑杆、无彩色端点处理；不从画面推导原公式/过渡时长，PNG、QA和持久化仍待补。 本批814帧纠正QA误归：视频为复杂建筑编辑，不证明随机模块色；新增16步编辑/检查/异常恢复为本地回放，完整原作QA和PNG仍未覆盖。 | 1200520827898343425, 1371460793032716290, 1344290848180203523 |
 | `src/partsprites.js` | `ui.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 847717312912211970 |
-| `src/patchblend.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1781405550061687016 |
+| `src/patchblend.js` | `src/terrain/terrainmesh.js`, `textures.html` | 部分覆盖 | 219帧纠正为球面投影草/水+手工UV岸条与atlas；本地顶面颜色平均保留，但不等同patch纹理混合。原版patch样本/手工UV、seamStats/edgeJump/AB接口未迁移，代码与运行未验收；高度混合是原文后续设想。 | 1781405550061687016 |
+| `src/penumbra.js` | `src/core/penumbra.js`, `src/light/penumbra.js`, `src/world/penumbra-layer.js`, `src/world/view.js`, `penumbra.html` | 部分覆盖 | 已补真实共享World顶面三场水面投影、世界尺度粗格、最高遮挡/内收合成及二维太阳方位高度控制；编辑/移动/释放通过。仅2.5D水面，洞/悬挑/形变表面及原版独立draw/距离指标接口未覆盖，视觉半影偏宽。 | 1305951750638231552, 1313840428685447170 |
 | `src/piperepair.js` | `src/core/infinite.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 793806535898136576 |
-| `src/portrait.js` | `ui.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 958371606350454784 |
-| `src/propanim.js` | `src/world/app.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1246074663546916873 |
-| `src/quadgrid.js` | `src/core/grid.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1147881669350891521, 1151770831619534848, 1332410042784641026 |
+| `src/portrait.js` | `src/core/part-random.js`, `ui.html` | 部分覆盖 | 本批188帧全核验；保留层级头像/卡片绘制，补镜像分支同起点/单次消费和异常恢复、显式种子与固定槽ID，实际头像/共用旗帜重绘/切页/手机换列验证通过。24个不同画板仅为确定性检查，不替代剪影IoU；原SLOTS/spec完整数据接口、原素材/兜帽锁甲与角色接入仍缺。 | 958371606350454784, 1010979395719319552 |
+| `src/propanim.js` | `src/life/effects.js`, `src/world/view.js`, `src/world/app.js` | 部分覆盖 | 306帧核验后确认已有uPops只对柱顶增长局部缩放，删除只冒灰；稳定逐道具身份、消失几何保留/缩没、错峰及原springTrack/scaleAt/bakeProps/costBoth接口未接。保留已有反馈，不计完整生命周期运行验收。 | 1246074663546916873 |
+| `src/quadgrid.js` | `src/core/grid.js`, `grids.html` | 已合并/迁移（静态确认） | 1068帧已复核；三角合并/共享边中点/细分与松弛主体保留，已有重构不重做。本批未新增完整生成动画、6度顶点启发式或无限拼接运行验收；signedArea/isConvex辅助导出和质量接口待核。 | 1147881669350891521, 1151770831619534848, 1332410042784641026 |
 | `src/quadtex.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1015149712469524480, 999185422403055616 |
 | `src/rayvis.js` | `src/world/navlayer.js` | 部分覆盖 | 导航线不等于近似视线遮挡查询。 | 798580832906739712 |
-| `src/rectpack.js` | `src/core/atlas.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1764958522398146667, 1593215065423245313, 1765041830461055127, 1765115069837221962 |
+| `src/rectpack.js` | `src/core/atlas.js`, `grids.html` | 部分覆盖 | 本组累计1101帧全核验；保留first-fit，补整数跨叶候选/树剪枝、key/句柄安全释放、实际搜索轨迹。9000候选+24000既有增删/6000层通过，存活槽稳定。非最优、不旋转/自动压缩，原3D树/recursiveFill/shelfPack完整兼容接口仍缺。 | 1764958522398146667, 1593215065423245313, 1765041830461055127, 1765115069837221962 |
 | `src/reflstreak.js` | `src/world/view.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1758250248483278925 |
 | `src/repeatbreak.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1061229717582475264, 1061227418961219585 |
-| `src/save.js` | `src/world/save.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
-| `src/savestring.js` | `src/world/save.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1198957499027795969 |
+| `src/save.js` | `src/world/save.js`, `src/world/app.js`, `save-mesh.html` | 已迁移/增强（本轮验证） | 321帧复核后修复坏输入原子拒绝、游程越界/尾随垃圾与空列元数据，北境场景身份可往返；兼容旧v5合法串。原作位格式、跨平台拓扑身份、自定义配色及天气/玩法状态仍未覆盖。 | 1198957499027795969 |
+| `src/savestring.js` | `src/world/save.js`, `src/world/app.js`, `save-mesh.html` | 已迁移/增强（本轮验证） | 321帧复核后修复坏输入原子拒绝、游程越界/尾随垃圾与空列元数据，北境场景身份可往返；兼容旧v5合法串。原作位格式、跨平台拓扑身份、自定义配色及天气/玩法状态仍未覆盖。 | 1198957499027795969 |
 | `src/scene.js` | `src/world/view.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 926903893866541057, 1215644531221311488, 1991103578011029507, 1313840428685447170, 1147881669350891521, 1458921394855718917, 1584623053061099520, 1447494168448753667, 1384958097542819845, 1849732997945110651, 931196707236392960, 1580846877855338497, 1580845127207387137, 1062374549407350790, 1244892370392489989 |
-| `src/shore.js` | `src/water/shore.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1991101097818403263, 1849732997945110651, 1849730611964973481, 1215644531221311488 |
-| `src/smear.js` | `src/world/view.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1727315611959865407 |
+| `src/shore.js` | `src/water/shore.js`, `src/core/shore-profile.js`, `src/core/shore-loops.js`, `shoreloops.html` | 已迁移/增强（本轮验证） | 已有真实边界/形变法线保留，新增规范绕序、角接分岛/水洞自接闭环分解，1024组合及共享World桥接验收通过。窄湾外推浪带交叠、精确拱底截面/泡沫mask仍缺。 | 1991101097818403263, 1849732997945110651, 1849730611964973481, 1215644531221311488, 1215642481162887168, 1666429884208381953 |
+| `src/smear.js` | `src/core/camera-motion.js`, `src/world/view.js` | 部分覆盖 | 两段337+303帧均全核验。历史叠加已有角度周界/关闭/resize修复，本批补30/60/120Hz留存一致性；原片强轮廓拖抹、速度场方向采样、CPU sharpness/audit接口未迁移。 | 1727315611959865407, 1727324352264474664 |
+| `src/smokefx.js` | `src/life/smoke.js`, `src/core/smoke-order.js`, `src/life/effects.js`, `smoke.html`, `fire.html` | 部分覆盖 | 六段共2197帧复核，保留烟雾两遍/UV/mip及火焰Max/二次收缩；补排序、投影UV、真实mip和火焰生命周期/GPU验收。当前火焰仍为软圆Points，原quad/noise轮廓与动态火光未完整迁移，透明相交近似。 | 1015140880666300416, 1015142746372366336, 1015149712469524480, 1015151731804721152, 1056990611738451968, 1056992291108413446 |
+| `src/snapshot64.js` | `src/world/island-snapshot.js`, `snapshot.html`, `src/campaign/campaign.js` | 部分覆盖 | 本次重扫发现原版新增模块。保留此前真实World 64² GPU快照/锐化验收；新增原版CPU合成岛及IoU/edgeEnergy/peakGradient/bandPixels/rmse对照接口未迁移。 | 911913981731885056 |
 | `src/spherefusion.js` | `src/world/scenes.js` | 部分覆盖 | 星球演示与平面 World 分离，球面建筑/地形融合尚未覆盖。 |  |
 | `src/spherehouse.js` | `src/sphere/planet.js` | 部分覆盖 | 缺少球面上的建筑形变与放置。 | 1768627849529893109, 1584623053061099520 |
-| `src/spheretown.js` | `src/sphere/planet.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1768627849529893109, 1338825080844021760, 1769641473895432220, 1769691526924292506, 1795831296952041691 |
-| `src/splice.js` | `src/world/scenes.js` | 部分覆盖 | 有融合造型，未覆盖预制多格 tile 的完整约束拼接。 | 1584623053061099520 |
+| `src/spheretown.js` | `src/sphere/planet.js`, `planet.html` | 部分覆盖 | 保留球面拓扑/足迹弹簧；显式模块选择和逐格尺寸诊断局部通过。多格约束仍冲突，完整模块目标形状、原海陆/河网/建筑及World接入未覆盖。 | 1768627849529893109, 1338825080844021760, 1769641473895432220, 1769691526924292506, 1795831296952041691 |
+| `src/splice.js` | `src/world/scenes.js`, `src/build/multicell.js`, `src/build/buildings.js`, `multicell.html`, `src/ui/house-project.js` | 部分覆盖 | 显式双格/整体编辑及工程JSON身份与回执持久化已补，完整重载后可继续编辑；统一编辑器撤销/通用模块身份、完整轮廓socket/旋转及多格联合约束待补。 本批453帧复核和双网格各6栋回归；视频不能证明双线性算法，任意轮廓插入与地形周边重新网格化尚未覆盖。 | 1584623053061099520 |
+| `src/squigglefield.js` | `src/core/ornament-field.js`, `src/ui/ornament.js`, `ornament.html`, `textures.html` | 部分覆盖 | 本批静态发现原版新增模块；映射到已有单贴图/镜像/展开成果。110513的63帧已在ornament-flags批学过，原注释6帧/持续蠕动说法不沿用。原桶加速/CPU诊断接口、完整卷草画稿与分层时序仍缺，不重复计学习。 | 1105131621391495176 |
+| `src/storydatum.js` | `src/build/buildings.js`, `src/core/world.js` | 部分覆盖 | 静态新增映射：已有共享World整数层和lv×L立面/层间饰带；任意非整数塔基的全局标高对齐、截短楼顶、measureFacade/windowRows与原塔群视觉仍缺。两条2016视频未逐帧，不计学习。 | 803190517534248960, 806856212260278272 |
 | `src/surfacedeco.js` | `src/life/vegetation.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1181464374839521280 |
-| `src/surfaceshadow.js` | `textures.html` | 部分覆盖 | 未覆盖投射高度与深度测试高度解耦的表面阴影。 | 1705195380457996629 |
+| `src/surfaceshadow.js` | `src/light/surface-shadow.js`, `src/world/view.js`, `surface-shadows.html` | 部分覆盖 | 635帧全核验。已补共享World地表2.5D高度图/局部凸起投射资格与独立深度比较、版本/太阳缓存、GPU双网格验收。原版engine两高度实际合为阈值之和，未照搬；src版具备独立prominence筛选但人为UV缝不迁移。纹理浮凸、屋檐/墙面、洞内、形变精确贴附/接缝及全API仍待补。 | 1704218784028905984, 1705195380457996629 |
 | `src/terrainmesh.js` | `src/terrain/terrainmesh.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1447488323845509121, 1063115611289645057 |
-| `src/texelsnap.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1241046107125399552, 1241096929490149376 |
-| `src/tileforce.js` |  | 未覆盖 | 压平台地放教堂不能替代先生成特定模块所需局部网格。 | 1751932427272909032, 1670794261669769217, 1579483114178768898 |
+| `src/texelsnap.js` | `src/core/texel-skip.js`, `textures.html`, `src/core/leaf-atlas.js`, `src/life/leaf-surface.js`, `src/life/vegetation.js`, `leaf-surface.html` | 已迁移/增强（本轮验证） | 新增128²/32²植物保留区、连续texel采样及实际球冠/灌木接入；完整bakeAtlas/audit/植物素材、全场景一张atlas及一般mipmap仍待迁移。对象球面经度导数绕缝、区域边界半texel夹紧和远处均值淡出仅本地近似。 | 1241096929490149376, 1241046107125399552, 1205420678859632640 |
+| `src/tileforce.js` | `src/core/module-patch.js`, `src/core/grid.js`, `patch.html`, `src/core/module-search.js`, `src/core/module-fit.js`, `src/core/module-audit.js`, `src/build/module-volume.js` | 部分覆盖 | 显式patch/搜索/2D匹配/有限样本诊断及共享World原子体量放置、支撑占用预检与撤回已验收；完整prefab/socket、形变碰撞、周边补网/接缝及联合WFC待续。 | 1751932427272909032, 1670794261669769217, 1579483114178768898 |
 | `src/tileplace.js` | `src/build/buildings.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 784847588893814785, 784847933686575104, 787319655648100352, 797844857821732864, 793806535898136576, 784848286272327680 |
-| `src/tilerepair.js` |  | 未覆盖 | 未覆盖更改占用后的局部 WFC 修复。 | 793806535898136576 |
-| `src/topoline.js` | `src/core/grid.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1384958097542819845 |
+| `src/tilerepair.js` | `src/core/wfc.js`, `wfc.html` | 已迁移/增强（本轮验证） | 独立socket局部修复已补；范围外不变、原值优先、扩区/预算/失败回滚。完整建筑多格tile与增量传播性能另列后续。 | 793806535898136576 |
+| `src/topoline.js` | `src/core/grid.js`, `grids.html` | 已迁移/增强（本轮验证） | 保留确定性对边遍历，新增有向格/出边判环、停止原因、真实中点段与坏twin拒绝；1254走法及实际Canvas通过。原随机转侧边不据视频照搬；手柄/连刷、完整高度绘制与飞岛支撑规则仍待接入。 | 1384958097542819845 |
 | `src/town.js` | `src/core/world.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
-| `src/townmesh.js` | `src/build/buildings.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1197909675443916803, 1189908238566903808, 1215642481162887168, 1258421104756097029, 1189902695303458816, 1238474550511308800, 1168571866405097472, 1237305125070426112, 1313840428685447170, 1580846877855338497, 931196707236392960, 1062374549407350790, 1580845127207387137 |
+| `src/townmesh.js` | `src/build/buildings.js`, `src/core/courtyards.js`, `src/world/worldmesh.js`, `garden.html` | 已迁移/增强（本轮验证） | 本批202帧庭院复核，保留共享建筑/小径，新增按真实第2层墙体识别围合；桥下开口/地面开口/重封闭双网格通过。原作矮墙分区、精细门拱/形变边界、完整建筑模块与植物视觉不计完成。 本批333帧确认早期grass plots有高层台地分区，原帖树是未来计划；现有地面庭院不能替代完整高层地块/石边带，列后续。 | 1197909675443916803, 1189908238566903808, 1215642481162887168, 1258421104756097029, 1189902695303458816, 1238474550511308800, 1168571866405097472, 1237305125070426112, 1313840428685447170, 1580846877855338497, 931196707236392960, 1062374549407350790, 1580845127207387137, 1178731576982724611 |
 | `src/trace.js` | `src/world/app.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1384958097542819845 |
-| `src/traffic.js` | `src/world/traffic.js`, `src/badnorth/battle.js` | 部分覆盖 | 本轮补齐稳定左车道并接入战斗；通道点线和拥挤压力测试仍待补齐。 | 880853661936734211, 886199305522085890, 795010582239997952 |
-| `src/triGraph.js` | `src/core/trigraph.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1677242779162877952 |
+| `src/traffic.js` | `src/world/traffic.js`, `src/badnorth/battle.js` | 部分覆盖 | 左侧目标/常驻点线和64人直走廊保留；新增按半径和、dt/速度限幅的分离及车道身体余量，真实Battle暂停不漂移。弯道/多岔、体型重路由和复杂拥挤压力测试待续。 | 880853661936734211, 886199305522085890, 795010582239997952 |
+| `src/triGraph.js` | `src/core/trigraph.js`, `trigraph.html` | 部分覆盖 | 保留增量Bowyer–Watson；本轮输入拒绝/确定性全查局部通过。原版withSuper/locate/clone/edgeMap、局部翻边和改动记录未完整对应；浮点鲁棒谓词仍缺。 | 1677242779162877952 |
 | `src/triflow.js` | `src/badnorth/flowfield.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 810157485638189056, 816743289500106752 |
 | `src/triisland.js` | `src/terrain/generate.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1654401054828638214, 1447483550257799171, 1258005604066627586 |
+| `src/uikit.js` | `src/core/playful-layout.js`, `ui.html`, `src/ui/icon-toolbar.js`, `src/core/ui-reveal.js`, `ornament.html` | 部分覆盖 | 本批两段753帧复核，保留UI实验；补键/种子确定扰动、旋转AABB间距与稳定原生按钮槽，确认菜单纠正横排并补延时清理/键盘/移动端。原layoutList/色彩/图标完整接口、单Move目标/地面标记/实际游戏命令仍缺；续审UI flair100帧/Icons306帧后，补可复用工具条单选/键盘/销毁和共享纹饰标题/外纹两轨本地样例；原徽章/逐部件时序、图稿和游戏指令仍缺，不计游戏运行完成。 | 1242824460325052417, 1016680972610359298, 1024679338292256769, 1201179450668441600 |
 | `src/unitbatch.js` | `src/badnorth/battle.js` | 部分覆盖 | 单位尚用独立对象，未覆盖批量实例化与剔除。 | 817323301357948928 |
 | `src/voxelao.js` | `src/light/bake.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 793557992931266561 |
-| `src/voxelflow.js` | `src/life/atmosphere.js` | 部分覆盖 | 风场已迁移，碰撞/体素软法线接口未完整覆盖。 | 931196707236392960 |
-| `src/voxelnav.js` | `src/world/layerednav.js`, `navigation.html` | 部分覆盖 | 本轮已补共享 World 多层节点/净空/门户边与演示；北境战斗的高度、拾取、攻击和预制模块精细内部门户仍待接入。 | 906425294533394432, 797119718477991936 |
-| `src/wind.js` | `src/life/atmosphere.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 926903893866541057, 926890207298899969 |
-| `src/wobbletex.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1699146321318314094 |
+| `src/voxelflow.js` | `src/life/atmosphere.js`, `src/core/world-probes.js`, `flow.html` | 部分覆盖 | 保留实际World分层避障与三线性采样，本批834帧对应风/雪复核；雪碰撞同步实际层占用。完整fieldFlow接口、体素软法线写回与形变碰撞仍未覆盖。 | 931196707236392960, 926903893866541057, 943230624369868800 |
+| `src/voxelnav.js` | `src/world/layerednav.js`, `src/world/battle-navigation.js`, `src/badnorth/battle.js`, `navigation.html` | 部分覆盖 | 分层战斗/流场、基本水平身体半径及连续扫掠已接入；精细模块内部门户、形变侧壁和斜坡脚高插值待补齐。 | 906425294533394432, 797119718477991936 |
+| `src/wake.js` | `src/life/boats.js`, `src/core/wake-sampling.js`, `wake-fog.html` | 部分覆盖 | 138帧复核，保留V形带状尾迹并补固定时间采样/相位保留/帧内插值，双网格30/60/120Hz计数年龄一致，旧轨迹留在世界空间；原Wake/Ship粒子、舷侧喷溅、KELVIN角度及靠岸行为/完整接口尚未迁移，不标原作完整验收。 | 901469409579061248 |
+| `src/wind.js` | `src/life/atmosphere.js`, `src/core/world-probes.js`, `flow.html` | 部分覆盖 | 516帧全核验；保留按层避障/三线性风场与共享uWind，双网格通洞/封洞及改风向运行复核。原片矢量受空间障碍影响，不能据画面恢复精确解算器；完整makeWindField/trace/sampleCurve接口和局部场GPU采样未迁移。 | 926903893866541057, 926890207298899969 |
+| `src/wobbletex.js` | `src/core/sediment.js`, `src/terrain/terrainmesh.js`, `src/world/view.js`, `sediment.html` | 已迁移/增强（本轮验证） | 新增可精确逆Y剪切/世界坐标层理、岩壁专用mask及实际GPU验收，保留旧窄条。原作坐标场/完整纹样未知，通用3D逆场、原CPU曲率/面积漂移/缝差指标接口未逐一迁移，反射/阴影/轮廓仍旧几何近似。 | 1699038611125985317, 1699146321318314094 |
 | `engine/backlit.js` | `src/world/outline.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1751945034851570056 |
 | `engine/birds.js` | `src/life/birds.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
-| `engine/blotch.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1703750394164199473, 1704246032626762189, 1696864977171189980, 1696896119794479541, 1786014232594485497, 1442695040888963407 |
+| `engine/blotch.js` | `src/terrain/blotch-pattern.js`, `src/world/view.js`, `src/terrain/terrainmesh.js`, `textures.html`, `blotches.html` | 部分覆盖 | 1052帧全核验，保留已有噪声/圆瓣草边成果并补地表标记，修复绿色屋顶误染、真实层高选层；实际View材质GPU双网格通过。原版createBlotchAtlas/createRimField、距离场受控bleed、完整swirl/density/streak/segments接口与反射同步未迁移，不以同职责当等价。 本批再核1156帧，补共享旋涡角度场、独立低频密度阈值/导数柔边及真实地形对照；原作细卷纹样与atlas、rim/反射接口仍未全迁移。 目视仍有偏强大环纹，未达到原片细密互卷边。 | 1696896119794479541, 1696864977171189980, 1703750394164199473, 1704246032626762189, 1786014232594485497, 1442695040888963407 |
 | `engine/bnbrush.js` | `src/life/vegetation.js` | 部分覆盖 | 着色笔触存在，预烘笔触图与轮廓能量对照未完整迁移。 |  |
-| `engine/bncanopy.js` | `src/life/vegetation.js` | 部分覆盖 | 缺少 surface nets 树冠与硬边松弛的完整烘焙输入。 |  |
+| `engine/bncanopy.js` | `src/core/canopy.js`, `src/life/vegetation.js`, `src/life/impostor.js` | 已迁移/增强（本轮验证） | 155帧复核，闭合球并集surface nets、三角形接缝松弛及真实树冠/烘焙输入通过；低分辨率歧义明确拒绝，原作MC/参数、美术及全局自交证明未复现。 |  |
 | `engine/butterflies.js` | `src/life/decor.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1273520600221433857 |
-| `engine/cage.js` | `src/terrain/shape.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1579478470098243584 |
-| `engine/contour.js` |  | 未覆盖 | 缺少不规则格等值线跨边连接验收。 | 1120036868966502401 |
-| `engine/flags.js` | `src/life/decor.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 926890207298899969, 926834721392340992, 958410200146497537 |
-| `engine/fog.js` | `src/life/atmosphere.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 906207980802252801 |
-| `engine/impostor.js` | `src/life/impostor.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1849427564034498642, 1852334860137849222, 926903893866541057, 1191990107785572352, 1205420678859632640 |
+| `engine/cage.js` | `src/terrain/shape.js`, `src/core/deformation-guard.js`, `src/world/worldmesh.js`, `overhang.html`, `src/terrain/terrainmesh.js`, `cage.html` | 已迁移/增强（本轮验证） | 保留既有XZ层级Taubin/笼形变形与面积/边长/扇形回退；新增分数层连续笼角点采样、沉积线复用及硬边输入。原完整cage拟合、扭曲壁面内部/跨切面3D相交与精确碰撞仍缺。 | 1579478470098243584, 1447488323845509121, 1708815475801505819 |
+| `engine/contour.js` | `src/core/contour.js`, `src/world/contour-overlay.js`, `src/world/view.js`, `contour.html` | 已迁移/增强（本轮验证） | 共享角点、跨边缓存交点、闭环/开放/分叉诊断及真实World覆盖层已补；语义平面诊断不等于形变后的泡沫岸线。 | 1120036868966502401 |
+| `engine/flags.js` | `src/core/banner.js`, `src/life/banner.js`, `src/badnorth/battle.js`, `src/life/decor.js`, `banners.html` | 已迁移/增强（本轮验证） | 保留已有风粒子/Bezier与暂停修复；54帧新核验后补六种透明旗尾/本地徽记并接入真实Battle，双网格暂停、共享风/曲线/资源释放及GPU alpha通过。原作完整徽记、精确画稿、跨帧率/布料碰撞仍待补；彩旗绳归因单列纠正，非屋顶旗证据。 | 926890207298899969, 926834721392340992, 958410200146497537 |
+| `engine/fog.js` | `src/life/atmosphere.js`, `src/core/fog-envelope.js`, `src/ui/environment-panel.js`, `wake-fog.html` | 部分覆盖 | 326帧核验，有限雾盘外边缘连续渐隐、默认浓度0.35及0..2相对漂移控制通过实际GPU验收；原createFogLayer软片、风场平流/高度场避障及体积遮挡未迁移，视频已加速，未推断原真实流速。 | 906207980802252801 |
+| `engine/impostor.js` | `src/life/impostor.js`, `src/life/leaf-surface.js`, `leaf-surface.html`, `src/core/anchored-billboard.js`, `src/life/vegetation.js`, `billboard-anchor.html`, `clouds.html` | 部分覆盖 | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 本轮611帧复核仅补近景球冠/灌木纹理alpha；远景impostor/草卡片未接同一叶纹，原有实现保留，不升级为整模块运行通过。 本批316帧后补可选实例轴固定中心，实际共享草材质GPU读回四视角中心不动；默认旧模式保留。原片墙根灌木卡片/纹理、atlas统一采样/原接口及生命周期尚未接，局部草实验不等同完整impostor模块。 续审阴云489帧后修复远云时钟/连续环带运动和背景深度，双网格GPU及首页独立开关通过；原片高耸云体/层次、统一风采样未实现，仍部分覆盖。 164帧运行时图集续审后补Baker局部release/失败回滚与真实GPU纹理验收；完整游戏对象注册/解绑、统一材质/atlas生命周期仍待接。 本批569帧复核后纠正octagonal=八水平视图的过强说法；共享锚点/正交方向与父组方位已修，双网格GPU误差<1e-6、正交差0/64步周界及云层时钟遮挡回归通过。原球面卡片/多俯仰、原云形层次及完整原接口继续部分覆盖。 | 1849427564034498642, 1852334860137849222, 926903893866541057, 1191990107785572352, 1205420678859632640, 1243228419162341379, 1593215065423245313 |
 | `engine/islands.js` | `src/badnorth/island.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
-| `engine/lightvol.js` | `src/light/lightvolume.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1580845127207387137, 1582757294672314368, 1580846877855338497, 1168168400155267072, 1168400155267072, 1237305125070426112 |
-| `engine/los.js` |  | 未覆盖 | 缺少导航图上的近似视线扇形查询。 | 810878197134950401 |
+| `engine/lightvol.js` | `src/core/voxel-ray.js`, `src/light/lightvolume.js`, `src/world/view.js`, `lightvolume.html` | 已迁移/增强（本轮验证） | 保留点光/太阳DDA与六向RGB；新增可选中心EDT距离场保守步进、DDA兜底、六向距离AO及梯度诊断，两网格与DDA渲染属性对照通过。体素中心距离不是形变表面SDF；笔触法线、命中UV/mega反馈、全方向传播和实时增量仍缺。 | 1580845127207387137, 1582757294672314368, 1580846877855338497, 1168168400155267072, 1168400155267072, 1237305125070426112 |
+| `engine/los.js` | `src/core/nav-visibility.js`, `src/world/visibility.js`, `src/world/view.js`, `visibility.html` | 已迁移/增强（本轮验证） | 分层导航门户的角度采样查询及World诊断已补；导航规则不等于光学遮挡，未接管战斗AI或箭矢精确碰撞。 | 810878197134950401 |
 | `engine/mesa.js` | `src/terrain/generate.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
 | `engine/meshcheck.js` | `grids.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1677242779162877952 |
 | `engine/noise.js` | `src/core/noise.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
 | `engine/normalsmooth.js` | `src/terrain/shape.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1062374549407350790, 929417420921556993 |
-| `engine/ornament.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1104771432440049664 |
-| `engine/outline.js` | `src/world/outline.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1482011744843223042, 1017355723171344385 |
+| `engine/ornament.js` | `src/core/ornament-field.js`, `src/ui/ornament.js`, `ornament.html`, `textures.html`, `src/core/ui-reveal.js` | 已迁移/增强（本轮验证） | 单张128²距离场、镜像UV、边区/中心独立阈值和uniform展开通过三尺寸GPU验收；保留旧演示。原作画稿/分层时序、九宫格不变形未复现，样例界面非游戏编辑器接入。 续审UI flair100帧，新增标题先显/先退、外纹后显/后退两轨本地时序及透明文字inert；单图集不变。没有原中心徽章/逐部件时序、白亮到金色材质或原画稿，局部通过不代表完整效果。 | 1104771432440049664, 1105131621391495176, 1024679338292256769 |
+| `engine/outline.js` | `src/world/outline.js`, `src/core/normal-contrast.js`, `src/world/view.js`, `normal-contrast.html` | 部分覆盖 | 保留已有外壳描边；本批384帧复核程序化法线map反差线，新增解析Voronoi法线场对比/物理像素覆盖与共享地形材质可选叠线，双网格GPU通过。不是后续三角反差迭代，也不是原完整normal atlas/笔触、UV接缝或engine几何法线+深度Sobel全部接口，仍部分覆盖。 | 1482011744843223042, 1017355723171344385 |
 | `engine/props.js` | `src/build/buildings.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1205416648397721601, 1205422438437273601, 1176516621223043073 |
-| `engine/reflection.js` | `src/water/shore.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
+| `engine/reflection.js` | `src/water/reflection.js`, `src/world/view.js`, `reflection.html` | 已迁移/增强（本轮验证） | 纠正原静态映射误指岸浪文件。保留实际WorldMesh翻转/颜色反射，补裁掉水面上方残影、受限深度淡出/线性中点及参数验收；不等于原作完整色块/遮挡算法，原版createFlatReflection等名API未保留。 | 1215644531221311488, 1758250248483278925 |
 | `engine/relax.js` | `src/sphere/planet.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1769641473895432220 |
-| `engine/rivers.js` | `src/terrain/generate.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1769691526924292506 |
+| `engine/rivers.js` | `src/terrain/generate.js` | 部分覆盖 | 保留DFS开挖/局部削岸；194帧核验纠正完成口径，完整球面河道约束坍缩＋其余BFS缓坡待实现。 | 1769691526924292506 |
 | `engine/roofs.js` | `src/build/buildings.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1205416648397721601 |
-| `engine/shorefield.js` | `src/water/shore.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1664566546683899905 |
-| `engine/snapshot.js` | `src/campaign/campaign.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
-| `engine/snow.js` | `src/life/atmosphere.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 943230624369868800, 943230620242796544, 823848950553780226 |
-| `engine/sphere.js` | `src/sphere/planet.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1338825080844021760, 1338829205157646336 |
+| `engine/shorefield.js` | `src/water/shore.js`, `src/core/shore-profile.js` | 已迁移/增强（本轮验证） | 已有chamfer栅格迁移到共享水层，本轮补起点阈值/硬步长上限和4M栅格预算；不是精确欧氏场，也未保留独立buildShoreDistance导出。 | 1664566546683899905 |
+| `engine/snapshot.js` | `src/world/island-snapshot.js`, `snapshot.html`, `src/campaign/campaign.js` | 已迁移/增强（本轮验证） | 350帧复核；双网格真实World 64²捕获、异常状态恢复、跨上下文显式上传及GPU alpha阈值通过。原作通道编码/内轮廓未知；战役图标仍程序近似，全量真实快照缓存与游戏接入待后续集成。 | 911913981731885056, 978211952504852480 |
+| `engine/snow.js` | `src/life/atmosphere.js`, `src/core/world-probes.js`, `flow.html` | 部分覆盖 | 318帧全核验；修复屋顶下空洞误用柱顶碰撞，雪片改读共享World实际solid层，重生避实心、dt校验；双网格即时封洞/重开通过。现有表面混白保留，不是物理堆积；Points方点/统一大小与亮度，软片、接触AO/完整冬景仍未复现。 续审冬季全景306帧，210为船群/士兵/血烟剪辑切换；完整冬季美术与战斗组合仅学习完成，未验收。 | 943230624369868800, 943230620242796544, 823848950553780226 |
+| `engine/sphere.js` | `src/core/trigraph.js`, `src/sphere/planet.js`, `planet.html` | 部分覆盖 | 保留随机/斥力/径向投影/重心松弛，补阶段独立快照、真实球面拓扑与平面抽样分离，局部逻辑/GPU通过。原project/unproject往返接口、动态重三角化/完整质量指标和原阶段动画仍缺，不以拓扑检查认证球面Delaunay。 | 1338829205157646336, 1338825080844021760 |
 | `engine/splash.js` | `src/life/effects.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1258421104756097029 |
-| `engine/spritepack.js` | `src/core/atlas.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1593215065423245313, 1852334860137849222, 1849427564034498642, 1478114309263839244 |
-| `engine/surface.js` | `textures.html` | 部分覆盖 | 顶面混色存在，手动 UV 与投射贴图混合未完整覆盖。 | 1781405550061687016, 1241096929490149376, 978211952504852480, 1714613599035863191, 1313841094069817344, 1699146321318314094, 929417420921556993, 1063115611289645057, 1699038611125985317 |
-| `engine/surfaceshadow.js` | `textures.html` | 部分覆盖 | 未覆盖投射高度与深度测试高度解耦的表面阴影。 | 1704218784028905984, 1705195380457996629 |
+| `engine/spritepack.js` | `src/core/atlas.js`, `src/life/impostor.js`, `atlas-live.html` | 部分覆盖 | 164帧全核验；保留共享稳定槽Atlas，补真实8视角烘焙整组预留、满板/异常回滚、release清padding及mip更新。GPU存活UV/像素不变、重复释放拒绝通过；原SpriteAtlas会整批重排，本地固定尺寸不自动扩容，原素材/单视角编号/残影、radialPack及完整兼容接口待补。 本批346帧纠正径向大小排序：原片三角UV样式图块/棋盘模型，矩形radialPack和旧圆盘螺旋不等于该流程。该片只完成学习/审核，UV分片/参数化/无重叠布局仍待实现验收。 | 1593215065423245313, 1852334860137849222, 1849427564034498642, 1478114309263839244 |
+| `engine/surface.js` | `src/terrain/field-pattern.js`, `src/terrain/terrainmesh.js`, `src/world/worldmesh.js`, `src/world/view.js`, `src/core/texel-skip.js`, `textures.html`, `fields.html`, `src/core/sediment.js`, `sediment.html` | 部分覆盖 | 新增共享World格块顶面方向田纹及放大线采样；原作手绘atlas/球面投射与岸带手工UV混合、完整surface API、缩小mipmap及接缝AB仍待补。已有笔触/顶面混色保留。 本轮补岩壁专用直/弯层理、坐标剪切与GPU三角剖分无缝；反射/阴影/轮廓不随新着色同步，原通用表面API/atlas混合仍待补。 本批补地形顶面笔触标记，避免屋顶/岩壁误染；完整atlas/rim采样仍待补。 | 1241096929490149376, 1714613599035863191, 1781405550061687016, 1699038611125985317, 1699146321318314094 |
+| `engine/surfaceshadow.js` | `src/light/surface-shadow.js`, `src/world/view.js`, `surface-shadows.html` | 部分覆盖 | 635帧全核验。已补共享World地表2.5D高度图/局部凸起投射资格与独立深度比较、版本/太阳缓存、GPU双网格验收。原版engine两高度实际合为阈值之和，未照搬；src版具备独立prominence筛选但人为UV缝不迁移。纹理浮凸、屋檐/墙面、洞内、形变精确贴附/接缝及全API仍待补。 | 1704218784028905984, 1705195380457996629 |
 | `engine/terrain.js` | `src/terrain/generate.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
-| `engine/vertexlight.js` | `src/sphere/planet.js` | 部分覆盖 | 缺少低分辨率高度立方体贴图单次查询光照。 | 1791049306213912823 |
+| `engine/vertexlight.js` | `src/core/cube-height.js`, `src/light/cube-height.js`, `src/sphere/planet.js`, `planet.html` | 已迁移/增强（本轮验证） | 273帧复核，真实6面低分辨率高度CubeTexture、顶点单次查询及球面实验通过；本地高度暗化解释不等同原作光照/投射阴影，游戏共享World球面融合未接入。 | 1791049306213912823 |
 | `engine/voxelshadow.js` | `src/light/bake.js` | 部分覆盖 | AO/阴影存在，逐顶点体素方向阴影未核实。 | 1190191289922465793 |
 | `engine/waterfall.js` | `src/water/waterfall.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1007587812462530561 |
-| `engine/watervol.js` | `src/water/watervol.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1758251637280268481 |
-| `engine/waves.js` | `src/water/shore.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1849732997945110651, 1849730611964973481, 1991103578011029507 |
-| `engine/worldmap.js` | `src/sphere/planet.js` | 部分覆盖 | 缺少球面三维噪声世界地图贴图演示。 | 1783792917183606829 |
+| `engine/watervol.js` | `src/water/watervol.js`, `src/water/land-distance.js`, `src/core/voxel-distance.js` | 已迁移/增强（本轮验证） | 保留已有平面叠层，补level1陆地/各向异性2D中心距离、版本缓存、空场无残影和8资源释放，pipeline补真实开关。仅本地浅水近似，不是一般SDF/完整反射；形变后mask与原作效果仍缺，原版createWaterVolume同名API未保留。 | 1758251637280268481 |
+| `engine/waves.js` | `src/water/shore.js`, `src/core/wave-cycle.js`, `waves.html` | 已迁移/增强（本轮验证） | 保留进退方向/独立周期，新增闭环分段浪峰及宽度，可在实际View开关对照。局部谐波是本地美术近似；全局泡沫mask、窄湾交叠和原版同名API仍缺。 | 1849732997945110651, 1849730611964973481, 1991103578011029507 |
+| `engine/worldmap.js` | `src/sphere/planet.js` | 部分覆盖 | 242帧全核验，原片球面海陆全景转镜/拉近岸缘；保留planet既有球面网格。配文仅Texture test，不证每帧重生或3D噪声唯一算法。球面海陆纹理/沙岸暗坡/纹理混合与worldmap完整接口未实现验收，本批仅学习。 | 1783792917183606829 |

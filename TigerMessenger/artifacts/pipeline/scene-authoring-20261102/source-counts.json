@@ -1,0 +1,17 @@
+{
+  "libraryJS": 70,
+  "gameVendorJS": 32,
+  "sharedDifferent": [
+    "ui/learnpanel.js",
+    "core/spatial.js",
+    "core/grid.js",
+    "world/navgraph.js",
+    "world/view.js",
+    "world/outline.js",
+    "world/app.js",
+    "world/scenes.js",
+    "life/effects.js",
+    "life/vegetation.js",
+    "life/atmosphere.js"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "wall": 5250,
+      "ribbon": 4542,
+      "other": 19158,
+      "version": 672,
+      "changedPixels": 7593,
+      "wobblePixels": 6243,
+      "triangulationMaxError": 0
+    },
+    {
+      "kind": "quad",
+      "wall": 6744,
+      "ribbon": 5724,
+      "other": 25104,
+      "version": 781,
+      "changedPixels": 6543,
+      "wobblePixels": 5772,
+      "triangulationMaxError": 0
+    }
+  ],
+  "errors": []
+}

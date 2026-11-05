@@ -1,0 +1,202 @@
+{
+  "id": "messenger-tide-letter",
+  "mode": "live",
+  "realCapture": true,
+  "port": 8931,
+  "via": "direct",
+  "captureClean": true,
+  "cropUsed": false,
+  "captureFlag": "cartonCapture=1",
+  "crop": null,
+  "generatedAt": "2026-11-04T19:17:24.024Z",
+  "shots": [
+    {
+      "shotId": "c0",
+      "file": "c0.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 413381,
+      "cameraFamily": "panorama",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s01",
+      "file": "s01.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 935235,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s02",
+      "file": "s02.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 965649,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s03",
+      "file": "s03.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 976299,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s04",
+      "file": "s04.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 954317,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s05",
+      "file": "s05.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 974752,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s06",
+      "file": "s06.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 951998,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s07",
+      "file": "s07.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 915874,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s08",
+      "file": "s08.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 241698,
+      "cameraFamily": "macro",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s09",
+      "file": "s09.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 344300,
+      "cameraFamily": "tele",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s10",
+      "file": "s10.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1002718,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s11",
+      "file": "s11.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 939967,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s12",
+      "file": "s12.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 941222,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s13",
+      "file": "s13.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 945481,
+      "cameraFamily": "cinematic",
+      "captureClean": true,
+      "airshipView": null
+    },
+    {
+      "shotId": "s14",
+      "file": "s14.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 644443,
+      "cameraFamily": "airshipPilot",
+      "captureClean": true,
+      "airshipView": {
+        "ok": true,
+        "state": "flying",
+        "viewMode": "pilot",
+        "isPilot": true,
+        "setView": {
+          "ok": true,
+          "state": "flying",
+          "viewMode": "pilot",
+          "changed": true
+        },
+        "api": true
+      }
+    },
+    {
+      "shotId": "s15",
+      "file": "s15.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 662463,
+      "cameraFamily": "panorama",
+      "captureClean": true,
+      "airshipView": null
+    }
+  ]
+}

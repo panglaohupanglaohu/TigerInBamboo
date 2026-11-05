@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>航点链 — 点按弧长走，格子是副产品</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --cool:#2f7d8f; --bad:#b3412f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:118ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,242,.97) 66%, rgba(238,243,242,0)); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.95);
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:20px; flex-wrap:wrap; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .no { color:#b3412f; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>白色航点<b>按弧长等距走</b>，白框格子是它的副产品</h1>
+  <p>同一条 S 形走廊（控制点故意疏密不均，右侧拐弯前挤了一串）。左：沿中线按弧长 1.0 重采样，
+     步距恒定、每段一个格子、相邻格共享边界；右：直接把控制点当航点，步距 0.32~2.69 差 8.4 倍。
+     注意左侧拐弯处点<b>看着</b>更密 —— 那是弦长 = 2R·sin(step/2R) 的错觉，弧长没变。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { measure, centerline, sampleByArc, sampleByControl, halfWidth } from './src/navribbon.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1d2f36', MUTED = '#5c727a', COOL = '#2f7d8f', BAD = '#b3412f';
+
+const m = measure(1.0);
+
+// 世界包围盒（含走廊宽度）
+function bbox(cells) {
+  let x0 = 1e9, z0 = 1e9, x1 = -1e9, z1 = -1e9;
+  for (const c of cells) for (const p of c.quad) {
+    x0 = Math.min(x0, p[0]); x1 = Math.max(x1, p[0]);
+    z0 = Math.min(z0, p[1]); z1 = Math.max(z1, p[1]);
+  }
+  return { x0, z0, x1, z1, w: x1 - x0, h: z1 - z0 };
+}
+
+function panel(px, py, pw, ph, title, sub, ok) {
+  ctx.fillStyle = 'rgba(255,255,255,.80)';
+  ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 10); ctx.fill();
+  ctx.strokeStyle = ok ? 'rgba(47,125,143,.45)' : 'rgba(179,65,47,.45)';
+  ctx.lineWidth = 1.4; ctx.stroke();
+  ctx.fillStyle = ok ? COOL : BAD;
+  ctx.font = '600 13.5px -apple-system,system-ui,sans-serif';
+  ctx.fillText(title, px + 14, py + 22);
+  ctx.fillStyle = MUTED;
+  ctx.font = '11.5px -apple-system,system-ui,sans-serif';
+  ctx.fillText(sub, px + 14, py + 40);
+}
+
+// 把一个世界坐标的走廊画进面板
+function frame(px, py, pw, ph, cellList) {
+  const b = bbox(cellList);
+  const pad = 22;
+  const k = Math.min((pw - pad * 2) / b.w, (ph - pad * 2) / b.h);
+  const ox = px + (pw - b.w * k) / 2 - b.x0 * k;
+  const oy = py + (ph - b.h * k) / 2 - b.z0 * k;
+  return { k, X: (x) => ox + x * k, Z: (z) => oy + z * k, box: b };
+}
+
+function drawBand(f, cells) {
+  // 走廊底色：把所有格子填上，就是带子本身
+  for (const c of cells) {
+    ctx.beginPath();
+    c.quad.forEach((p, i) => (i ? ctx.lineTo(f.X(p[0]), f.Z(p[1])) : ctx.moveTo(f.X(p[0]), f.Z(p[1]))));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(196,210,207,.55)';
+    ctx.fill();
+  }
+}
+
+function drawCells(f, cells) {
+  ctx.lineWidth = 1.7;
+  for (const c of cells) {
+    ctx.beginPath();
+    c.quad.forEach((p, i) => (i ? ctx.lineTo(f.X(p[0]), f.Z(p[1])) : ctx.moveTo(f.X(p[0]), f.Z(p[1]))));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(255,255,255,.42)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.95)';
+    ctx.stroke();
+  }
+}
+
+function dot(x, y, r = 3.4, fill = '#ffffff', ring = 'rgba(29,47,54,.55)') {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = fill; ctx.fill();
+  ctx.strokeStyle = ring; ctx.lineWidth = 1; ctx.stroke();
+}
+
+// —— 左：弧长重采样 ——
+const cx0 = 26, cy0 = 104, cw = 604, ch = 420;
+panel(cx0, cy0, cw, ch, '沿中线按弧长重采样  step = 1.000',
+      `点 ${m.arc.n} 个 · 步距 std ${m.arc.std.toFixed(4)} · 每段一格 ${m.cells.n} 格`, true);
+const fL = frame(cx0, cy0 + 46, cw, ch - 58, m.cellList);
+drawBand(fL, m.cellList);
+drawCells(fL, m.cellList);
+for (const p of m.pts) dot(fL.X(p.x), fL.Z(p.z));
+
+// —— 右：控制点当航点 ——
+const rx0 = 650, ry0 = 104, rw = 604, rh = 420;
+panel(rx0, ry0, rw, rh, '直接把控制点当航点（朴素）',
+      `点 ${m.ctrl.n} 个 · 步距 ${m.ctrl.min.toFixed(2)}~${m.ctrl.max.toFixed(2)}（比值 ${m.ctrl.ratio}×）`, false);
+
+// 控制点版本的格子：取弧长版的带宽曲线，但每段跨到下一个控制点
+const line = centerline();
+const ctrlCells = [];
+const cp = m.ctrlPts;
+for (let i = 0; i + 1 < cp.length; i++) {
+  const a = cp[i], b = cp[i + 1];
+  const wa = halfWidth(i / (cp.length - 1)), wb = halfWidth((i + 1) / (cp.length - 1));
+  ctrlCells.push({ quad: [
+    [a.x - a.nx * wa, a.z - a.nz * wa],
+    [b.x - b.nx * wb, b.z - b.nz * wb],
+    [b.x + b.nx * wb, b.z + b.nz * wb],
+    [a.x + a.nx * wa, a.z + a.nz * wa],
+  ]});
+}
+const fR = frame(rx0, ry0 + 46, rw, rh - 58, ctrlCells);
+drawBand(fR, ctrlCells);
+drawCells(fR, ctrlCells);
+for (const p of cp) dot(fR.X(p.x), fR.Z(p.z), 3.6, '#2f7d8f', 'rgba(255,255,255,.9)');
+// 标出最短/最长两段
+{
+  let mi = 0, ma = 0;
+  for (let i = 0; i + 1 < cp.length; i++) {
+    const g = Math.hypot(cp[i + 1].x - cp[i].x, cp[i + 1].z - cp[i].z);
+    const gm = Math.hypot(cp[mi + 1].x - cp[mi].x, cp[mi + 1].z - cp[mi].z);
+    const gx = Math.hypot(cp[ma + 1].x - cp[ma].x, cp[ma + 1].z - cp[ma].z);
+    if (g < gm) mi = i;
+    if (g > gx) ma = i;
+  }
+  const seg = (i, col, txt, dy) => {
+    const a = cp[i], b = cp[i + 1];
+    ctx.beginPath();
+    ctx.moveTo(fR.X(a.x), fR.Z(a.z)); ctx.lineTo(fR.X(b.x), fR.Z(b.z));
+    ctx.strokeStyle = col; ctx.lineWidth = 2.4; ctx.stroke();
+    const mx = (fR.X(a.x) + fR.X(b.x)) / 2, mz = (fR.Z(a.z) + fR.Z(b.z)) / 2;
+    ctx.fillStyle = col; ctx.font = '600 11.5px -apple-system,system-ui,sans-serif';
+    ctx.fillText(txt, mx + 4, mz + dy);
+  };
+  seg(mi, BAD, m.ctrl.min.toFixed(2), -8);
+  seg(ma, BAD, m.ctrl.max.toFixed(2), -8);
+}
+
+// —— 步距标尺：把每条 gap 按自身总长归一，均匀 vs 不均一眼可见 ——
+function ruler(px, py, pw, gaps, col) {
+  const total = gaps.reduce((s, v) => s + v, 0);
+  let x = px;
+  ctx.font = '11px -apple-system,system-ui,sans-serif';
+  for (const g of gaps) {
+    const w = (g / total) * pw;
+    ctx.fillStyle = col;
+    ctx.globalAlpha = 0.28 + 0.34 * ((g - Math.min(...gaps)) / ((Math.max(...gaps) - Math.min(...gaps)) || 1));
+    ctx.fillRect(x, py, Math.max(1, w - 0.6), 16);
+    ctx.globalAlpha = 1;
+    x += w;
+  }
+  ctx.strokeStyle = 'rgba(29,47,54,.25)';
+  ctx.strokeRect(px, py, pw, 16);
+  ctx.fillStyle = MUTED;
+  ctx.fillText(`步距标尺（按总长归一，每段一笔）：${gaps.length} 段`, px, py - 5);
+}
+
+const arcGaps = m.pts.slice(1).map((p, i) => p.s - m.pts[i].s);
+const ctrlGaps = [];
+for (let i = 1; i < m.ctrlPts.length; i++) {
+  ctrlGaps.push(Math.hypot(m.ctrlPts[i].x - m.ctrlPts[i - 1].x, m.ctrlPts[i].z - m.ctrlPts[i - 1].z));
+}
+ruler(cx0 + 14, cy0 + ch - 34, cw - 28, arcGaps, COOL);
+ruler(rx0 + 14, ry0 + rh - 34, rw - 28, ctrlGaps, BAD);
+
+// —— 弦长 vs 弧长：拐弯处点看着更密的证据 ——
+{
+  const px = 26, py = 546, pw = 1228, ph = 124;
+  ctx.fillStyle = 'rgba(255,255,255,.80)';
+  ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 10); ctx.fill();
+  ctx.strokeStyle = 'rgba(206,220,219,.95)'; ctx.lineWidth = 1.2; ctx.stroke();
+  ctx.fillStyle = INK; ctx.font = '600 13px -apple-system,system-ui,sans-serif';
+  ctx.fillText('为什么拐弯处点“看着”更密：弧长恒定，画出来的是弦', px + 14, py + 22);
+
+  // 抽 4 段样本：直段 / 缓弯 / 急弯
+  const picks = [];
+  for (let i = 0; i + 1 < m.pts.length; i++) picks.push({ i, ratio: m.cellList[i].chord / m.cellList[i].arc });
+  picks.sort((a, b) => b.ratio - a.ratio);
+  const show = [picks[0], picks[Math.floor(picks.length * 0.5)], picks[picks.length - 1]];
+  const xs = [px + 20, px + 420, px + 820];
+  show.forEach((s, j) => {
+    const a = m.pts[s.i], b = m.pts[s.i + 1];
+    const x = xs[j];
+    ctx.font = '11.5px -apple-system,system-ui,sans-serif';
+    ctx.fillStyle = MUTED;
+    ctx.fillText(j === 0 ? '最直的一段' : j === 1 ? '中等弯' : '最急的一段', x, py + 46);
+    ctx.fillStyle = INK;
+    ctx.font = '600 12.5px ui-monospace,SFMono-Regular,Menlo,monospace';
+    ctx.fillText(`弧 ${(b.s - a.s).toFixed(3)}  →  弦 ${m.cellList[s.i].chord.toFixed(3)}`, x, py + 66);
+    // 小弧线示意
+    const cx = x + 8, cy = py + 92;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + 60 * (m.cellList[s.i].chord), cy);
+    ctx.strokeStyle = COOL; ctx.lineWidth = 2.2; ctx.stroke();
+    dot(cx, cy, 3.2); dot(cx + 60 * m.cellList[s.i].chord, cy, 3.2);
+  });
+  ctx.fillStyle = MUTED;
+  ctx.font = '11.5px -apple-system,system-ui,sans-serif';
+  ctx.fillText(`走廊长 ${m.length} 世界单位；格子 ${m.cells.n} 个，共享边异常 ${m.cells.badShared} 对；` +
+               `格面积和 ${m.cells.areaSum} vs 弧长×带宽积分 ${m.cells.bandArea}（比值 ${(m.cells.areaSum / m.cells.bandArea).toFixed(3)} ≈ 弦/弧）`, px + 14, py + 114);
+}
+
+// 统计条
+const st = document.getElementById('stats');
+st.innerHTML = `
+  <span>走廊长度 <b>${m.length}</b></span>
+  <span>弧长步距 <b>${m.arc.mean.toFixed(4)}</b> ± <b>${m.arc.std.toFixed(4)}</b></span>
+  <span>弦长 ${m.chord.min.toFixed(3)}~${m.chord.max.toFixed(3)}（弧/弦 max <b>${m.chord.arcOverChordMax}</b>）</span>
+  <span>控制点步距 ${m.ctrl.min.toFixed(2)}~${m.ctrl.max.toFixed(2)} <span class="no">比值 ${m.ctrl.ratio}×</span></span>
+  <span>格子 <b>${m.cells.n}</b> · 共享边异常 <span class="${m.cells.badShared ? 'no' : 'ok'}">${m.cells.badShared}</span></span>
+  <span>带宽 ${m.cells.wMin}~${m.cells.wMax}</span>`;
+
+window.__navStats = {
+  length: m.length, arcN: m.arc.n, arcStd: m.arc.std,
+  chordMin: m.chord.min, chordMax: m.chord.max, arcOverChord: m.chord.arcOverChordMax,
+  ctrlN: m.ctrl.n, ctrlMin: m.ctrl.min, ctrlMax: m.ctrl.max, ctrlRatio: m.ctrl.ratio,
+  cells: m.cells.n, badShared: m.cells.badShared, bandArea: m.cells.bandArea, areaSum: m.cells.areaSum,
+};
+</script>
+</body>
+</html>

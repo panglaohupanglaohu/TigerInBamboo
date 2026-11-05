@@ -1,0 +1,58 @@
+{
+  "reports": [
+    {
+      "mixed": true,
+      "worldVersion": 0,
+      "frontier": [
+        [
+          5,
+          8,
+          16
+        ],
+        [
+          33,
+          4,
+          8
+        ],
+        [
+          103,
+          4,
+          8
+        ]
+      ],
+      "tests": 32,
+      "solverOK": true,
+      "deterministic": true
+    },
+    {
+      "mixed": false,
+      "worldVersion": 0,
+      "frontier": [
+        [
+          1,
+          8,
+          16
+        ],
+        [
+          2,
+          8,
+          16
+        ],
+        [
+          132,
+          8,
+          16
+        ],
+        [
+          171,
+          8,
+          16
+        ]
+      ],
+      "tests": 64,
+      "solverOK": true,
+      "deterministic": true
+    }
+  ],
+  "errors": []
+}

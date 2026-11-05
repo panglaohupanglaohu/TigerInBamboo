@@ -1,0 +1,19 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "cells": 147,
+      "ok": true,
+      "deterministic": true
+    },
+    {
+      "kind": "quad",
+      "cells": 206,
+      "ok": true,
+      "deterministic": true
+    }
+  ],
+  "seedChanges": true,
+  "pins": true,
+  "errors": []
+}

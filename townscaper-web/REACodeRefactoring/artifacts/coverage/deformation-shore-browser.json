@@ -1,0 +1,51 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "worldVersion": 672,
+      "shoreVertices": 806,
+      "waveVertices": 1612,
+      "polygons": [
+        {
+          "sides": 4,
+          "vertices": 148,
+          "maxBoundaryError": 0
+        },
+        {
+          "sides": 3,
+          "vertices": 140,
+          "maxBoundaryError": 5.782499910267186e-8
+        },
+        {
+          "sides": 5,
+          "vertices": 148,
+          "maxBoundaryError": 3.959917061968219e-8
+        }
+      ]
+    },
+    {
+      "grid": "quad",
+      "worldVersion": 781,
+      "shoreVertices": 872,
+      "waveVertices": 1744,
+      "polygons": [
+        {
+          "sides": 4,
+          "vertices": 148,
+          "maxBoundaryError": 0
+        },
+        {
+          "sides": 3,
+          "vertices": 140,
+          "maxBoundaryError": 5.782499910267186e-8
+        },
+        {
+          "sides": 5,
+          "vertices": 148,
+          "maxBoundaryError": 3.959917061968219e-8
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -297,6 +297,21 @@ def load_config() -> dict:
 
 app = FastAPI(title="世界古典美术拟生平台", version="0.1.0")
 
+@app.get("/api/workshop/learning-snapshot")
+def workshop_learning_snapshot(request: Request) -> Response:
+    from .learning_snapshot import learning_snapshot, SnapshotError
+    try:
+        snapshot = learning_snapshot(ROOT / "townscaper-web" / "REACodeRefactoring")
+    except SnapshotError as error:
+        return JSONResponse({"error": error.code}, status_code=error.status,
+                            headers={"Cache-Control": "no-store"})
+    etag = 'W/"' + snapshot["snapshotId"] + '"'
+    headers = {"ETag": etag, "Cache-Control": "no-cache"}
+    if request.headers.get("if-none-match") == etag:
+        return Response(status_code=304, headers=headers)
+    return JSONResponse(snapshot, headers=headers)
+
+
 @app.on_event("shutdown")
 async def _close_proxy_client() -> None:
     global _proxy_client
@@ -1211,6 +1226,15 @@ if TIGER_MESSENGER.is_dir():
         name="tiger_messenger",
     )
 
+
+# 工坊直接读取原能力库；这些同源路径必须先于 frontend 的兜底挂载。
+# 只开放工坊使用的库与来源视频，不开放整个仓库或 REACode 原版。
+for url_path, directory, mount_name in (
+    ("/townscaper-web/REACodeRefactoring", ROOT / "townscaper-web" / "REACodeRefactoring", "rea_capability_library"),
+    ("/REA-agent/gifs", ROOT / "REA-agent" / "gifs", "rea_source_videos"),
+):
+    if directory.is_dir():
+        app.mount(url_path, StaticFiles(directory=directory, html=True), name=mount_name)
 
 # 静态托管放在最后，API 路由优先匹配
 app.mount("/", StaticFiles(directory=FRONTEND, html=True), name="frontend")

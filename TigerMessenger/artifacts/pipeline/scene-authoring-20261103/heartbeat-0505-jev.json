@@ -1,0 +1,50 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "request_hash": "f07582a72329b3e48920769724da4c0ca915c98b283806876571fcb9c1def36d",
+  "model": "jev-1.14.0",
+  "answers": {
+    "missing_validation": {
+      "type": "noul",
+      "noul": 0.72
+    },
+    "next_step": {
+      "type": "choice",
+      "choice": "review",
+      "confidence": 0.7,
+      "probabilities": {
+        "dressing": 0,
+        "geometry": 0,
+        "lighting": 0,
+        "navigation": 0.24,
+        "review": 0.76
+      }
+    },
+    "target_gap": {
+      "type": "noul",
+      "noul": 0.46
+    }
+  },
+  "usage": {
+    "input_tokens": 737,
+    "output_tokens": 91,
+    "cost_usd": 0.00031,
+    "credits_remaining_usd": 4.870423
+  },
+  "elapsed_ms": 1309,
+  "cache_hit": false,
+  "next_step": "navigation",
+  "hard_gate_blockers": [
+    {
+      "name": "refreshed ledger and recipe recovery browser",
+      "required": true,
+      "passed": null
+    },
+    {
+      "name": "real model Worker execution",
+      "required": true,
+      "passed": null
+    }
+  ],
+  "auto_apply": false,
+  "scope": "Text evidence triage only. No image inspection, asset edits or release approval."
+}
