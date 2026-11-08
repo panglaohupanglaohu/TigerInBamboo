@@ -63,9 +63,14 @@
     .wall-enter:disabled { opacity: 0.48; cursor: not-allowed; }
     .wall-error { min-height: 18px; margin-top: 8px; color: var(--cinnabar); font-size: 12px; letter-spacing: 0.1em; }
 
-    /* 光点导航行：实验室与二次元并列 */
-    .orb-row { display: flex; justify-content: center; gap: 64px; }
+    /* 光点导航：宽屏并列，窄屏自动换行 */
+    .orb-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px 48px; max-width: 640px; margin: 0 auto; padding: 0 20px; }
     .orb-row .idea-orb { margin: 6px 0 0; }
+    .orb-row .orb-label { width: 108px; text-align: center; overflow-wrap: anywhere; }
+    .orb-row .idea-orb:focus-visible { outline: 2px solid var(--cinnabar); outline-offset: 8px; border-radius: 8px; }
+    @media (max-width: 520px) {
+      .orb-row { display: grid; grid-template-columns: repeat(2, 108px); justify-items: center; }
+    }
   </style>
 </head>
 <body class="home-page">
@@ -120,7 +125,7 @@
     </div>
   </main>
 
-  <!-- 光点导航：物种实验室 / 进入二次元，悬停闪烁 -->
+  <!-- 光点导航：实验室、二次元、工坊与漫画 -->
   <div class="orb-row">
     <a class="idea-orb" href="lab.html" aria-label="物种实验室">
       <span class="orb-ring"></span>
@@ -131,6 +136,16 @@
       <span class="orb-ring"></span>
       <span class="orb-core"></span>
       <span class="orb-label" data-i18n="animeTitle">进入二次元</span>
+    </a>
+    <a class="idea-orb" href="../TigerMessenger/pipeline.html#scene" aria-labelledby="workshop-orb-label">
+      <span class="orb-ring" aria-hidden="true"></span>
+      <span class="orb-core" aria-hidden="true"></span>
+      <span class="orb-label" id="workshop-orb-label" data-i18n="workshopTitle">系统工坊／学习工坊</span>
+    </a>
+    <a class="idea-orb" href="../CartonBook/" aria-labelledby="cartoonbook-orb-label">
+      <span class="orb-ring" aria-hidden="true"></span>
+      <span class="orb-core" aria-hidden="true"></span>
+      <span class="orb-label" id="cartoonbook-orb-label" data-i18n="cartoonbookTitle">CartoonBook</span>
     </a>
   </div>
 
@@ -160,6 +175,8 @@
         enter: "入 画",
         labTitle: "物种实验室",
         animeTitle: "进入二次元",
+        workshopTitle: "系统工坊／学习工坊",
+        cartoonbookTitle: "CartoonBook",
         footer: "拟生 · Artificial Life —— Tu & Terzopoulos《Artificial Fishes》遗法",
         welcome: "开源共建：欢迎来修改、提 Issue、参与讨论",
       },
@@ -178,6 +195,8 @@
         enter: "Enter",
         labTitle: "Species Lab",
         animeTitle: "Into the Anime World",
+        workshopTitle: "System / Learning Workshop",
+        cartoonbookTitle: "CartoonBook",
         footer: "Artificial Life — after Tu & Terzopoulos' “Artificial Fishes”",
         welcome: "Open source — contributions, issues and discussions are welcome",
       },
