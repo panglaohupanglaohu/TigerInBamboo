@@ -43,6 +43,15 @@
   dialog .cap .err { color: #ffcf8a; }
   dialog button { position: absolute; right: 10px; top: 8px; background: rgba(255,255,255,.15); color: #fff; border: 0; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
   @media (max-width: 600px) { .bar, main { padding-left: 16px; padding-right: 16px; } input[type=search] { min-width: 0; } }
+  .usage { border-top: 1px solid var(--line); padding-top: 8px; margin-top: auto; font-size: 13px; }
+  .usage summary { color: var(--accent); cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .usage p { margin: 7px 0; }
+  .usage ol { padding-left: 22px; }
+  .usage li { margin: 6px 0; }
+  .usage a { display: inline-block; color: var(--accent); margin: 4px 0; }
+  .usage-state { color: var(--muted); }
+  .learn-help { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; }
+  .learn-help p { margin: 5px 0; }
 </style>
 </head>
 <body>
@@ -56,12 +65,19 @@
   </div>
 </header>
 <main>
+  <aside class="learn-help" aria-label="学习笔记使用说明">
+    <b>怎么用这页</b>
+    <p>先按项目、主题或状态筛选 → 点缩略图看视频 → 展开每张卡片的「怎么用」→ 打开来源实验页，对照笔记调整与观察。</p>
+    <p>需要改造游戏时，再到系统工坊选择场景或物件、接入兼容能力、生成候选并验证。已学习、实验页可操作和游戏已接入是三个不同状态。</p>
+  </aside>
   <p class="count" id="count"></p>
   <div class="grid" id="grid"></div>
 </main>
 <dialog id="dlg"><button id="close">关闭</button><video id="vid" controls loop playsinline></video><div class="cap" id="cap"></div></dialog>
 <script src="learn/data.js"></script>
 <script src="learn/refactoring-status.js"></script>
+<script src="learn/pipeline.js"></script>
+<script src="learn/usage.js"></script>
 <script>
 const L = window.LEARN;
 const ORDER = ['done', 'game', 'both', 'engine', 'partial', 'ref', 'todo', 'na'];
@@ -112,6 +128,7 @@ function render() {
         <p class="txt">${esc(it.text)}</p>
         ${it.note ? `<p class="note">${esc(it.note)}</p>` : ''}
         ${it.where ? `<div class="where">代码：<code>${esc(it.where)}</code></div>` : ''}
+        ${window.learningUsage(it, esc)}
       </div></article>`);
   }
   document.getElementById('grid').innerHTML = h.join('');
