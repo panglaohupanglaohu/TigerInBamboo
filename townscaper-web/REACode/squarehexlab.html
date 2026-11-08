@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>方格的账，六边的脸 — 切角单元</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --accent:#2f7d8f; --warn:#b3412f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:120ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,242,.97) 70%, rgba(238,243,242,0)); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.95);
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:22px; flex-wrap:wrap; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .no { color:var(--warn); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>方格的数据，<b>切角</b>切出六边的脸 —— 代价写在共边上</h1>
+  <p>同一片岛、同一套格子（12×9，陆地 68 格、四邻 114 对，两版一字不差）。左：方格，边界是直线，格线直通；
+     右：每格切掉一对对角（t=0.5）变成六边形贴片，格间露缝，格内画等高线 —— 这才是原片里"圆角贴片 + 一圈圈等高线"的样子。
+     形状可以随便改，但<b>共边</b>改不得：切四角最像六边（内角距 120° 只剩 15°），共边却掉到 0.30，切到 0.5 直接归零、格子散成菱形。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { islandMask, cellPolygon, runMetrics, countAdjacency } from './src/squarehex.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1d2f36', MUTED = '#5c727a', ACCENT = '#2f7d8f', WARN = '#b3412f';
+
+const W = 12, H = 9, CELL = 42;
+const mask = islandMask(W, H, 7);
+const land = mask.reduce((a, b) => a + b, 0);
+const pairs = countAdjacency(mask, W, H);
+
+/* ---------- 画法 ---------- */
+
+function polyPath(poly, ox, oy, s) {
+  ctx.beginPath();
+  poly.forEach((p, i) => {
+    const x = ox + p.x * s, y = oy + p.y * s;
+    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+  });
+  ctx.closePath();
+}
+
+// 等高线：朝中心缩几个环（原片里台地就是靠这些环读出来的）
+function rings(poly, ox, oy, s, scale) {
+  const cx = poly.reduce((a, p) => a + p.x, 0) / poly.length;
+  const cy = poly.reduce((a, p) => a + p.y, 0) / poly.length;
+  ctx.strokeStyle = 'rgba(38,74,84,.20)';
+  ctx.lineWidth = 1;
+  for (let k = 1; k <= 3; k++) {
+    const t = 1 - k * (1 - scale);
+    if (t <= 0.12) break;
+    ctx.beginPath();
+    poly.forEach((p, i) => {
+      const x = ox + (cx + (p.x - cx) * t) * s;
+      const y = oy + (cy + (p.y - cy) * t) * s;
+      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    });
+    ctx.closePath();
+    ctx.stroke();
+  }
+}
+
+const PALETTE = ['#cfe3c4', '#c2dbb6', '#dbe7c9', '#c7dcc0', '#d6e5c8'];
+
+function drawMap(ox, oy, mode, cut, label, sub, tint) {
+  ctx.save();
+  // 底：海/纸
+  ctx.fillStyle = '#e3ece9';
+  ctx.beginPath(); ctx.roundRect(ox - 14, oy - 34, W * CELL + 28, H * CELL + 48, 10); ctx.fill();
+  ctx.strokeStyle = 'rgba(47,125,143,.28)'; ctx.lineWidth = 1; ctx.stroke();
+
+  ctx.fillStyle = INK; ctx.font = '600 12.5px -apple-system'; ctx.textAlign = 'left';
+  ctx.fillText(label, ox, oy - 14);
+  ctx.fillStyle = MUTED; ctx.font = '11.5px -apple-system';
+  ctx.fillText(sub, ox + 126, oy - 14);
+
+  // 水面：一层极淡的格线，保证"还是方格"
+  ctx.strokeStyle = 'rgba(47,125,143,.12)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= W; x++) {
+    ctx.beginPath(); ctx.moveTo(ox + x * CELL, oy); ctx.lineTo(ox + x * CELL, oy + H * CELL); ctx.stroke();
+  }
+  for (let y = 0; y <= H; y++) {
+    ctx.beginPath(); ctx.moveTo(ox, oy + y * CELL); ctx.lineTo(ox + W * CELL, oy + y * CELL); ctx.stroke();
+  }
+
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = y * W + x;
+      if (!mask[i]) continue;
+      const px = ox + x * CELL, py = oy + y * CELL;
+      // 切哪一对对角由格子下标定，逐格交替 —— 否则整片是一排斜条纹
+      const flip = mode === 'cut2' && ((x + y) % 2 === 1);
+      const poly = cellPolygon(cut, mode, flip);
+      // 缝：同形状放大 1.06 铺一层暗色，再盖上格子本体
+      polyPath(poly, px - CELL * 0.03, py - CELL * 0.03, CELL * 1.06);
+      ctx.fillStyle = 'rgba(28,58,66,.42)';
+      ctx.fill();
+      polyPath(poly, px, py, CELL);
+      ctx.fillStyle = tint(i);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(38,74,84,.38)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      rings(poly, px, py, CELL, 0.78);
+    }
+  }
+  ctx.restore();
+}
+
+/* ---------- 度量 ---------- */
+
+const mFlat = runMetrics(0, 'flat');
+const mCut2 = runMetrics(0.5, 'cut2');
+const mCut4 = runMetrics(0.35, 'cut4');
+const mDead = runMetrics(0.5, 'cut4');
+
+const tint = (i) => PALETTE[(i * 7 + 3) % PALETTE.length]; // 7 与 5 互质，五色都能出
+
+drawMap(24, 126, 'flat', 0, 'A · 方格', '4 顶点 / 4×90° / 面积 1.000 / 共边 1.000', tint);
+drawMap(652, 126, 'cut2', 0.5, 'B · 切一对角', '6 顶点 / 2×90°+4×135° / 面积 0.750 / 共边 0.500', tint);
+
+/* ---------- 底部：四档参数的小格子 + 数字 ---------- */
+
+const variants = [
+  { m: mFlat, name: '方格', tag: 'baseline', ok: true },
+  { m: mCut2, name: '切两角 t=.5', tag: '原片取这一档', ok: true },
+  { m: mCut4, name: '切四角 t=.35', tag: '最像六边', ok: true },
+  { m: mDead, name: '切四角 t=.50', tag: '共边归零', ok: false },
+];
+
+const bx = 24, by = 512, bw = 196, gap = 200;
+variants.forEach((v, k) => {
+  const ox = bx + k * gap, oy = by;
+  ctx.fillStyle = 'rgba(255,255,255,.86)';
+  ctx.beginPath(); ctx.roundRect(ox, oy, bw, 176, 9); ctx.fill();
+  ctx.strokeStyle = v.ok ? 'rgba(47,125,143,.40)' : 'rgba(179,65,47,.45)';
+  ctx.lineWidth = 1; ctx.stroke();
+
+  // 单个大单元（画在卡片上方居中）
+  const poly = cellPolygon(v.m.cut, v.m.mode);
+  const s = 74, px = ox + (bw - s) / 2, py = oy + 10;
+  ctx.fillStyle = 'rgba(38,74,84,.30)';
+  ctx.beginPath(); ctx.rect(px - 2, py - 2, s + 4, s + 4); ctx.fill();
+  polyPath(poly, px, py, s);
+  ctx.fillStyle = '#cfe3c4'; ctx.fill();
+  ctx.strokeStyle = 'rgba(38,74,84,.55)'; ctx.lineWidth = 1.3; ctx.stroke();
+  rings(poly, px, py, s, 0.78);
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = INK; ctx.font = '600 12px -apple-system';
+  ctx.fillText(v.name, ox + 14, oy + 104);
+  ctx.fillStyle = v.ok ? MUTED : WARN; ctx.font = '11px -apple-system';
+  ctx.fillText(v.tag, ox + 14, oy + 121);
+  ctx.fillStyle = MUTED; ctx.font = '11.5px -apple-system';
+  ctx.fillText(`顶点 ${v.m.verts} · 面积 ${v.m.area.toFixed(3)}`, ox + 14, oy + 141);
+  ctx.fillStyle = INK;
+  ctx.fillText(`角距 120° ${v.m.hexErr.toFixed(1)}°`, ox + 14, oy + 157);
+  ctx.fillStyle = v.m.shared > 0.01 ? INK : WARN;
+  ctx.font = '600 11.5px -apple-system';
+  ctx.fillText(`共边 ${v.m.shared.toFixed(3)}${v.ok ? '' : ' · 四邻断'}`, ox + 14, oy + 173);
+});
+
+// 右边一块结论板
+ctx.fillStyle = 'rgba(255,255,255,.86)';
+ctx.beginPath(); ctx.roundRect(828, 516, 428, 172, 9); ctx.fill();
+ctx.strokeStyle = 'rgba(47,125,143,.40)'; ctx.lineWidth = 1; ctx.stroke();
+ctx.textAlign = 'left';
+ctx.fillStyle = INK; ctx.font = '600 12.5px -apple-system';
+ctx.fillText('为什么停在"切一对角"', 846, 540);
+ctx.fillStyle = MUTED; ctx.font = '12px -apple-system';
+const lines = [
+  '切四角 t=.35 的内角最接近六边（135°，距 120° 仅 15°），',
+  '但它同时把另外两条边也咬了：共边 1.000 → 0.300，缝比格子还宽；',
+  '再切到 t=.50，四条轴对齐边长度全为 0，贴片只剩对角点接触 ——',
+  '邻接表从 114 对掉到 0 对，岛碎成一堆菱形。',
+  '',
+  '切一对角只动两条边：内角距 20°（比方格好 10°），共边仍有 0.500，',
+  '而面积 0.750 与切四角 t=.35 的 0.755 几乎相同 —— 同样的"六边感"，',
+  '一半的连通性代价。这才是"natural and readable, yet funky"的取舍点。',
+];
+lines.forEach((l, i) => {
+  ctx.fillStyle = l.startsWith('切一对角') ? INK : MUTED;
+  ctx.fillText(l, 846, 562 + i * 17);
+});
+
+/* ---------- 统计条 ---------- */
+
+document.getElementById('stats').innerHTML = [
+  `陆地格 <b>${land}</b>/${W * H} · 四邻 <b>${pairs}</b> 对（两版一致）`,
+  `顶点 4→<b>6</b> · 内角 4×90°→<b>2×90°+4×135°</b>`,
+  `角距正六边 30.0°→<span class="ok">20.0°</span> · 面积 1.000→<b>0.750</b>`,
+  `共边 1.000→<span class="ok">0.500</span>`,
+].join('');
+</script>
+</body>
+</html>

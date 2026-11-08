@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>岩类 tile 恒为 0 · socket 集缺的是"单边收口"</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 9px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 76%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:132ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:11.5px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:10px; flex-wrap:nowrap; white-space:nowrap; }
+  #stats b { color:var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <h1>为什么岩类 tile 一块都不出现：socket 集里没有一块"单边收口"的过渡块，岩石永远闭合不了</h1>
+  <p>上一轮 src/gridwfc.js 把原帖 1164926304640229376 的"确定性"做完了，note 里留了一句没解释的现象：<b>岩类 tile 0 块</b>，
+     当时归因于"边界锁 0"。这一页把它查清楚：<b>边界不是主因</b>（把边界放开，rock 仍然是 0）。
+     真正的根因在 tile 集本身 —— rock 的四条边都是 1 号接口，穷举下来<b>只有一侧（边 2）的候选集里只剩 rock 自己</b>，
+     于是任何有限岩块都必须沿那一侧无限延伸，最后撞上边界被消掉。修法不是调种子，是补"只在一侧带 1"的收口块。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { buildQuadGrid } from './src/quadgrid.js';
+import { BASE_TILES, RIM_TILES, CAP_TILES, solveGrid, rockSides } from './src/socketrock.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', RED = '#b4402f', GOOD = '#146c4a', LINE = '#dbe4e0';
+const F = (w, s) => `${w} ${s}px -apple-system,system-ui,"PingFang SC",sans-serif`;
+const txt = (s, x, y, color = INK, font = F(600, 12), align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.fillText(s, x, y);
+};
+const card = (x, y, w, h, fill = '#ffffff') => {
+  ctx.fillStyle = fill; ctx.strokeStyle = LINE; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.fill(); ctx.stroke();
+};
+
+/* ---------- 数据：同一张网格、同一 seed，六种配置 ---------- */
+const grid = buildQuadGrid({ radius: 11, hexSize: 1, seed: 1337, mergeRate: 0.9, relaxPasses: 40 });
+const c0 = grid.cells.reduce((b, c) => (Math.hypot(c.cx, c.cz) < Math.hypot(b.cx, b.cz) ? c : b));
+const pins = [{ cell: c0.id, tile: 'rock' }];
+for (const nb of c0.edgeNeighbors) if (nb >= 0) pins.push({ cell: nb, tile: 'rock' });
+
+const VAR = [
+  { k: 'A', name: '原 8 块 + 边界锁 0', o: { tiles: BASE_TILES, boundary: 'grass' } },
+  { k: 'B', name: '原 8 块 + 边界不锁', o: { tiles: BASE_TILES, boundary: 'open' } },
+  { k: 'C', name: '补 3 块过渡（1 在相对边）', o: { tiles: [...BASE_TILES, ...RIM_TILES], boundary: 'grass' } },
+  { k: 'D', name: '原 8 块 + 钉 5 格岩心', o: { tiles: BASE_TILES, boundary: 'grass', pins } },
+  { k: 'E', name: '补 4 块单边收口', o: { tiles: [...BASE_TILES, ...CAP_TILES], boundary: 'grass' } },
+  { k: 'F', name: '单边收口 + 钉 5 格岩心', o: { tiles: [...BASE_TILES, ...CAP_TILES], boundary: 'grass', pins } },
+].map((v) => ({ ...v, r: solveGrid(grid, { seed: 7, ...v.o }) }));
+
+const S_BASE = rockSides(BASE_TILES);
+const S_CAP = rockSides([...BASE_TILES, ...CAP_TILES]);
+const rimV = VAR[4].r;
+
+/* ---------- 示意图：中心一块 rock，四侧各能接什么 ---------- */
+function plusShape(x, y, cell, sides, { accent = RED, tag = '' } = {}) {
+  const pos = {
+    0: [x + cell + 6, y],                     // 边 0（右）
+    1: [x + cell + 6, y + cell + 6],          // 边 1（上）
+    2: [x, y],                                // 边 2（左）
+    3: [x + cell + 6, y + 2 * (cell + 6) + 6],// 边 3（下）
+  };
+  // 只画三个方块示意"中心 + 相邻侧"，其余用文字列表给全部四侧
+  const cellBox = (cx, cy, label, forced) => {
+    ctx.fillStyle = forced ? '#f3dcd6' : '#f6f8f7';
+    ctx.strokeStyle = forced ? accent : '#c7d3ce';
+    ctx.lineWidth = forced ? 1.6 : 1;
+    ctx.beginPath(); ctx.roundRect(cx, cy, cell, cell, 7); ctx.fill(); ctx.stroke();
+    txt(label, cx + cell / 2, cy + cell / 2 + 4, forced ? accent : MUTED, F(600, 11.5), 'center');
+  };
+  cellBox(x + cell + 6, y + cell + 6, 'rock', true);
+  cellBox(x + cell + 6, y, `边 2`, sides[2] === 1);
+  cellBox(x + cell + 6, y + 2 * (cell + 6), `边 0`, sides[0] === 1);
+  cellBox(x, y + cell + 6, `边 3`, sides[3] === 1);
+  cellBox(x + 2 * (cell + 6), y + cell + 6, `边 1`, sides[1] === 1);
+  return { x, y, cell };
+}
+
+function sideList(x, y, sides, lists, { accent = MUTED, mark = -1 } = {}) {
+  let yy = y;
+  for (let k = 0; k < 4; k++) {
+    const forced = sides[k] === 1;
+    txt(`边 ${k}`, x, yy, forced ? RED : MUTED, F(650, 11.5));
+    const s = `候选 ${sides[k]} 种：${lists[k].slice(0, 3).join(' / ')}${lists[k].length > 3 ? ' …' : ''}`;
+    txt(s, x + 42, yy, forced ? RED : INK, F(600, 11.5));
+    yy += 21;
+  }
+}
+
+/* ---------- 面板 A：原 8 块 ---------- */
+const A = { x: 18, y: 104, w: 724, h: 284 };
+card(A.x, A.y, A.w, A.h);
+txt('① 原 8 块：穷举"中心一块 rock 的四个邻居能接谁"', A.x + 14, A.y + 22, INK, F(650, 12.5));
+txt(`四个方向各取一根 × 4 侧 = ${S_BASE.combos} 种组合，但边 2 的候选集只有 ${S_BASE.perSide[S_BASE.forcedSide]} 种`,
+    A.x + 14, A.y + 40, MUTED, F(500, 11));
+plusShape(A.x + 20, A.y + 60, 58, S_BASE.perSide);
+sideList(A.x + 210, A.y + 74, S_BASE.perSide, S_BASE.lists);
+txt('边 2 只能接 rock 自己 → 有限岩块必须沿这一侧无限延伸 → 撞到边界被消掉，rock 恒 0',
+    A.x + 14, A.y + A.h - 16, RED, F(650, 11.5));
+
+/* ---------- 面板 B：补 4 块单边收口 ---------- */
+const Bc = { x: 18, y: 400, w: 724, h: 292 };
+card(Bc.x, Bc.y, Bc.w, Bc.h);
+txt('② 补 4 块"只在一侧带 1"的收口块：四个方向都能收住', Bc.x + 14, Bc.y + 22, INK, F(650, 12.5));
+txt(`候选 ${S_BASE.perSide.join(' / ')} → ${S_CAP.perSide.join(' / ')}；组合 ${S_BASE.combos} → ${S_CAP.combos}`,
+    Bc.x + 14, Bc.y + 40, MUTED, F(500, 11));
+plusShape(Bc.x + 20, Bc.y + 60, 58, S_CAP.perSide, { accent: GOOD });
+sideList(Bc.x + 210, Bc.y + 74, S_CAP.perSide, S_CAP.lists);
+txt(`但全局塌缩仍出不了 rock：均匀随机 + 最少熵优先时，草先把邻域占满 —— 收口块落位 ${rimV.counts.rockN || 0}/${rimV.counts.rockE || 0}/${rimV.counts.rockS || 0}/${rimV.counts.rockW || 0} 块，rock 本体 0 块`,
+    Bc.x + 14, Bc.y + Bc.h - 16, '#8a6a1f', F(600, 11.5));
+
+/* ---------- 右栏：六种配置 ---------- */
+const R = { x: 760, y: 104, w: 502, h: 262 };
+card(R.x, R.y, R.w, R.h);
+txt('③ 同一张网格（' + grid.cells.length + ' 格 / seed 7）六种配置', R.x + 14, R.y + 22, INK, F(650, 12.5));
+let yy = R.y + 48;
+txt('配置', R.x + 14, yy, MUTED, F(650, 11)); txt('rock', R.x + 384, yy, MUTED, F(650, 11), 'right');
+txt('接口冲突', R.x + R.w - 14, yy, MUTED, F(650, 11), 'right');
+yy += 8;
+ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(R.x + 14, yy); ctx.lineTo(R.x + R.w - 14, yy); ctx.stroke();
+yy += 22;
+for (const v of VAR) {
+  txt(`${v.k}  ${v.name}`, R.x + 14, yy, INK, F(600, 11.5));
+  const bad = !v.r.ok;
+  txt(bad ? '矛盾' : String(v.r.rockCells), R.x + 384, yy, bad ? RED : (v.r.rockCells ? GOOD : RED), F(650, 11.5), 'right');
+  txt(String(v.r.mismatch), R.x + R.w - 14, yy, MUTED, F(600, 11.5), 'right');
+  yy += 25;
+}
+/* ---------- 右栏下卡：修法 + 结论 ---------- */
+const R2 = { x: 760, y: 378, w: 502, h: 314 };
+card(R2.x, R2.y, R2.w, R2.h);
+txt('④ 结论：修 tile 集，不是调种子', R2.x + 14, R2.y + 22, INK, F(650, 12.5));
+yy = R2.y + 44;
+const notes = [
+  ['A vs B', '放开边界后 rock 还是 0 → 上一轮把锅甩给"边界锁 0"是错的'],
+  ['C vs E', '过渡块把 1 放在相对边，等于要求岩石沿那个方向一直延伸 —— 补了也没用'],
+  ['E', `收口块落位 ${(rimV.counts.rockN || 0) + (rimV.counts.rockE || 0) + (rimV.counts.rockS || 0) + (rimV.counts.rockW || 0)} 格，岩体仍 0 → 可满足 ≠ 会出现，塌缩顺序决定结果`],
+  ['D / F', '钉 5 格岩心直接矛盾：原集里根本没有能围住它的配置'],
+];
+for (const [k, s] of notes) {
+  txt(k, R2.x + 14, yy + 6, '#8a6a1f', F(650, 11.5));
+  const per = 33;                                  // 手写折行：卡宽 474，11.5px 中文约 11.5px/字
+  let ly = yy + 6;
+  for (let i = 0; i < s.length; i += per) {
+    txt(s.slice(i, i + per), R2.x + 64, ly, INK, F(500, 11.5));
+    ly += 17;
+  }
+  yy = ly + 3;
+}
+/* 四块收口块画出来：带 1 的那条边加粗描红，其余边灰 */
+const bx = R2.x + 16, by = R2.y + R2.h - 74, bs = 40;
+CAP_TILES.forEach((t, i) => {
+  const x = bx + i * 120;
+  ctx.fillStyle = '#f6f8f7'; ctx.strokeStyle = '#c7d3ce'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x, by, bs, bs, 6); ctx.fill(); ctx.stroke();
+  for (let e = 0; e < 4; e++) {
+    const [ax, ay, cx2, cy2] = e === 0 ? [x + bs, by, x + bs, by + bs]
+      : e === 1 ? [x + bs, by, x, by] : e === 2 ? [x, by, x, by + bs] : [x, by + bs, x + bs, by + bs];
+    ctx.strokeStyle = t.edges[e] === 1 ? RED : '#dfe7e4';
+    ctx.lineWidth = t.edges[e] === 1 ? 2.6 : 1;
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(cx2, cy2); ctx.stroke();
+  }
+  txt(t.name, x, by + bs + 15, INK, F(650, 11));
+  txt(`[${t.edges.join(',')}]`, x + 52, by + bs + 15, MUTED, F(600, 10.5));
+});
+
+/* ---------- 底条 ---------- */
+document.getElementById('stats').innerHTML = [
+  `网格 <b>${grid.cells.length}</b> 格`,
+  `边 2 候选 <b>${S_BASE.perSide[2]} → ${S_CAP.perSide[2]}</b> 种`,
+  `组合 <b>${S_BASE.combos} → ${S_CAP.combos}</b>`,
+  `rock 实测 <b>A ${VAR[0].r.rockCells} / B ${VAR[1].r.rockCells} / C ${VAR[2].r.rockCells} / E ${VAR[4].r.rockCells}</b>`,
+  `收口块落位 <b>${(rimV.counts.rockN || 0) + (rimV.counts.rockE || 0) + (rimV.counts.rockS || 0) + (rimV.counts.rockW || 0)}</b> 格`,
+  `接口冲突 <b>${VAR[0].r.mismatch}</b>`,
+].join(' · ');
+</script>
+</body>
+</html>

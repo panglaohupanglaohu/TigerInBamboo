@@ -1,10 +1,13 @@
 /** 1164926304640229376: "WFC running ... funky grid ... deterministic".
  * Socket CSP adapted to arbitrary polygon half-edges, not opposite quad edges.
  * Iterative backtracking avoids the original recursive solver's depth limit.
+ * Optional allowed[cellId] restricts tile IDs before pins; omitting it preserves
+ * the full catalog. Empty domains are contradictions, unknown IDs are errors.
  */
 const compare=(a,b)=>a<b?-1:a>b?1:0;
 const hash=(seed,id,decision)=>{let h=Math.imul(seed|0,374761393)^Math.imul(id|0,668265263)^Math.imul(decision,2246822519);h=Math.imul(h^(h>>>13),1274126177);return (h^(h>>>16))>>>0;};
-export function solveWFC(grid,{tiles,seed=1,pins={},preferred={},maxSteps=1000000,compatible=(a,b)=>a===b}={}){
+export function solveWFC(grid,{tiles,seed=1,pins={},allowed={},preferred={},maxSteps=1000000,compatible=(a,b)=>a===b,traceLimit=0}={}){
+  if(!Number.isInteger(traceLimit)||traceLimit<0||traceLimit>256)throw new RangeError('Invalid trace limit');
   if(!Array.isArray(tiles)||!tiles.length||!Number.isInteger(maxSteps)||maxSteps<1)throw new RangeError('Invalid WFC catalog/budget');
   if(tiles.some(t=>t.id===undefined||!Array.isArray(t.edges)))throw new TypeError('Invalid tile');
   if(grid.cells.some(c=>!Number.isInteger(c.id)||!Number.isInteger(c.n)||c.n<3||c.edgeNeighbors.length!==c.n))throw new TypeError('Invalid cell');
@@ -28,13 +31,19 @@ export function solveWFC(grid,{tiles,seed=1,pins={},preferred={},maxSteps=100000
   };
   const pick=()=>cells.filter(c=>domains.get(c.id).length>1).sort((a,b)=>domains.get(a.id).length-domains.get(b.id).length||a.id-b.id)[0];
   const push=c=>{decisions++;const d=domains.get(c.id),offset=hash(seed,c.id,decisions)%d.length;const options=d.slice(offset).concat(d.slice(0,offset)),old=options.findIndex(t=>String(t.id)===String(preferred[c.id]));if(old>0)options.unshift(options.splice(old,1)[0]);frames.push({id:c.id,options,index:0,mark:trail.length});};
-  const result=(ok,reason)=>({ok,reason,tiles:ok?Object.fromEntries(cells.map(c=>[c.id,String(domains.get(c.id)[0].id)])):{},steps,decisions,backtracks,contradictions});
+  // 865200072685912064: bounded playback of actual candidate domains, not fabricated animation.
+  const trace=[];let traceEvents=0;
+  const record=stage=>{if(!traceLimit)return;traceEvents++;if(trace.length>=traceLimit)return;
+    const snapshot=Object.fromEntries(cells.map(c=>[c.id,Object.freeze(domains.get(c.id).map(t=>String(t.id)))]));
+    trace.push(Object.freeze({stage,steps,decisions,domains:Object.freeze(snapshot)}));};
+  const result=(ok,reason)=>{record(reason);return {ok,reason,tiles:ok?Object.fromEntries(cells.map(c=>[c.id,String(domains.get(c.id)[0].id)])):{},steps,decisions,backtracks,contradictions,...(traceLimit?{trace:Object.freeze(trace.slice()),traceEvents,traceTruncated:traceEvents>trace.length}:{})};};
+  for(const[id,ids]of Object.entries(allowed)){if(!byCell.has(Number(id))||!Array.isArray(ids)||ids.some(x=>!byTile.has(String(x))))throw new Error('Unknown allowed domain');const keep=new Set(ids.map(String));domains.set(Number(id),domains.get(Number(id)).filter(t=>keep.has(String(t.id))));}
   for(const[id,tile]of Object.entries(pins)){const c=byCell.get(Number(id)),t=byTile.get(String(tile));if(!c||!t)throw Error('Unknown pin');domains.set(c.id,domains.get(c.id).filter(x=>x===t));}
   try{
-    if(!propagate(cells.map(c=>c.id)))return result(false,'contradiction');trail.length=0;const first=pick();if(!first)return result(true,'solved');push(first);
+    if(!propagate(cells.map(c=>c.id)))return result(false,'contradiction');trail.length=0;record('initial');const first=pick();if(!first)return result(true,'solved');push(first);
     while(frames.length){tick();const f=frames.at(-1);restore(f.mark);if(f.index===f.options.length){frames.pop();backtracks++;continue;}
-      set(f.id,[f.options[f.index++]]);if(!propagate([f.id])){contradictions++;backtracks++;continue;}
-      const c=pick();if(!c)return result(true,'solved');push(c);
+      set(f.id,[f.options[f.index++]]);if(!propagate([f.id])){contradictions++;backtracks++;record('contradiction');continue;}
+      record('decision');const c=pick();if(!c)return result(true,'solved');push(c);
     }return result(false,'contradiction');
   }catch(e){if(e===LIMIT)return result(false,'budget');throw e;}
 }

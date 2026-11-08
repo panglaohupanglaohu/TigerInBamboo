@@ -1,0 +1,4 @@
+import assert from'node:assert/strict';import{planLanding,berthBox,approachBox}from'../src/badnorth/landing-plan.js';import{obbOverlap}from'../src/core/obb.js';
+const cells=[{id:0,cx:0,cz:0,edgeNeighbors:[1]},{id:1,cx:1,cz:0,edgeNeighbors:[0]}],w={cells,top:c=>c.id===0?1:0,ground:c=>c.id===0?1:0};const a=planLanding(w,[],{random:()=>0});assert.ok(a);assert.equal(planLanding(w,[a],{random:()=>0}),null);assert.ok(planLanding(w,[],{random:()=>0}));assert.ok(obbOverlap(berthBox(a.stop,a.dir),berthBox(a.stop,a.dir)));console.log('PASS reserve/block/release, same berth intersects');
+
+const east=approachBox([-7,0],[1,0]),north=approachBox([0,-7],[0,1]);assert.equal(obbOverlap(berthBox([-7,0],[1,0]),berthBox([0,-7],[0,1])),false);assert.equal(obbOverlap(east,north),true);assert.equal(obbOverlap(east,approachBox([-7,2],[1,0])),false);console.log('PASS separated berths with crossing approaches rejected; parallel lanes clear');

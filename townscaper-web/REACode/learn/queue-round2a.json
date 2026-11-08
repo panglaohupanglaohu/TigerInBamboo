@@ -1,0 +1,331 @@
+{
+ "built": "2026-11-06T14:07:19.764Z",
+ "round": 2,
+ "total": 36,
+ "items": [
+  {
+   "id": "827561690896162816",
+   "topic": "grid",
+   "project": "badnorth",
+   "status": "both",
+   "date": "2017-02-03",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "1768627849529893109",
+   "topic": "grid",
+   "project": "next",
+   "status": "partial",
+   "date": "2024-03-15",
+   "hasMp4": true,
+   "text": "For reasons I will not be explaining at this point I've gone and put this on a sphere"
+  },
+  {
+   "id": "1751932427272909032",
+   "topic": "grid",
+   "project": "next",
+   "status": "partial",
+   "date": "2024-01-29",
+   "hasMp4": true,
+   "text": "I can now force specific modules to appear. To do this I first generate the specific bit of grid they need. A large module like this would be highly unlikely to appear by chance on a random grid."
+  },
+  {
+   "id": "1670725072540106755",
+   "topic": "grid",
+   "project": "next",
+   "status": "partial",
+   "date": "2023-06-19",
+   "hasMp4": true,
+   "text": "Here's a comparison showing no-, dumb- and hierarchical smoothing. The hierarchical smoothing helps preserve the intent of the input-tiles while smoothing out the jankyness from the weird underlying grid and from the limited slope angles in the input tileset"
+  },
+  {
+   "id": "1580158269267406849",
+   "topic": "grid",
+   "project": "next",
+   "status": "partial",
+   "date": "2022-10-12",
+   "hasMp4": true,
+   "text": "Can you make good looking foliage from Marching Cubes-blobs? Maybe?"
+  },
+  {
+   "id": "1481661852887265288",
+   "topic": "grid",
+   "project": "next",
+   "status": "partial",
+   "date": "2022-01-13",
+   "hasMp4": true,
+   "text": "Yet another light baker. Actually does some ray marching, but still pretty ad hoc. The textures are: 1. Normals (procedurally painted in big chunky strokes) 2. 3D Signed Distance Field 3. 3D Ambient Occlusion in positive and negative X,Y and Z"
+  },
+  {
+   "id": "1458921394855718917",
+   "topic": "grid",
+   "project": "next",
+   "status": "partial",
+   "date": "2021-11-11",
+   "hasMp4": true,
+   "text": "I'm exploring the Half Edge data structure. Feels like a really lightweight, powerful and versatile way of representing topology. A big thanks to everyone suggesting I look into it."
+  },
+  {
+   "id": "1332410042784641026",
+   "topic": "grid",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2020-11-27",
+   "hasMp4": true,
+   "text": "How the infinite grid is relaxed and kept seamless: The grid is made of Patches. Adjacent triplets form Clusters. Clusters and Patches are relaxed independently. Each Vert is a triangular interpolation its representation in the closest 2 Clusters and the Patch wherein it sits."
+  },
+  {
+   "id": "1313837640366596096",
+   "topic": "grid",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2020-10-07",
+   "hasMp4": true,
+   "text": "I just pushed an update to Townscaper. You can now build flying towns (if you find any of the perfect loops I've scattered across the grid) https:// store.steampowered.com/app/1291340/To wnscaper/ …"
+  },
+  {
+   "id": "1164926304640229376",
+   "topic": "grid",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2019-08-23",
+   "hasMp4": true,
+   "text": "WFC running at interactive speed on that funky grid. Next up is to make it deterministic"
+  },
+  {
+   "id": "1151770831619534848",
+   "topic": "grid",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2019-07-18",
+   "hasMp4": true,
+   "text": "I figured out how to make do with relaxation clusters of 3 instead of 7, which means I have to generate fewer unrelaxed patches before I can start relaxing, which makes it faster. Note also that the black and the white grid are *dual* to each other. This is an important concept"
+  },
+  {
+   "id": "1151137783785771008",
+   "topic": "grid",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2019-07-16",
+   "hasMp4": true,
+   "text": "As promised: an aperiodic infinite deterministic irregular relaxed quadrilateral grid."
+  },
+  {
+   "id": "1015149712469524480",
+   "topic": "grid",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2018-07-06",
+   "hasMp4": true,
+   "text": "I only sample my noise texture once per quad, but I scroll the UVs randomly forward or backward along the flow of the smoke. This further breaks up the recognizability of individual blobs and it creates some of that cool multi layered flow feeling thick smoke should have"
+  },
+  {
+   "id": "917405214638006273",
+   "topic": "grid",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2017-10-09",
+   "hasMp4": true,
+   "text": "A somewhat major breakthrough in my procedural generation: a heuristic for deliberately generating navigable levels"
+  },
+  {
+   "id": "827216768783495168",
+   "topic": "grid",
+   "project": "badnorth",
+   "status": "todo",
+   "date": "2017-02-02",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "1201179450668441600",
+   "topic": "tools",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2019-12-01",
+   "hasMp4": true,
+   "text": "Icons!"
+  },
+  {
+   "id": "1024679338292256769",
+   "topic": "tools",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2018-08-01",
+   "hasMp4": true,
+   "text": "Some UI flair"
+  },
+  {
+   "id": "1448039167057879048",
+   "topic": "terrain",
+   "project": "next",
+   "status": "both",
+   "date": "2021-10-12",
+   "hasMp4": true,
+   "text": "Imma talk about my new island generator at Sweden Game Conference (@SwedenGameArena) on Friday (no idea if its gonna be recorded). Naturally, I'm preparing by implementing some nice timing and visualization."
+  },
+  {
+   "id": "832633189277409280",
+   "topic": "terrain",
+   "project": "badnorth",
+   "status": "both",
+   "date": "2017-02-17",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "818857408848130048",
+   "topic": "terrain",
+   "project": "badnorth",
+   "status": "both",
+   "date": "2017-01-10",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "1671808851895627776",
+   "topic": "terrain",
+   "project": "next",
+   "status": "partial",
+   "date": "2023-06-22",
+   "hasMp4": true,
+   "text": "If your terrain generator supports overhangs you gotta flaunt it. I don't make the rules, but I do follow them."
+  },
+  {
+   "id": "1669315384619540487",
+   "topic": "terrain",
+   "project": "next",
+   "status": "partial",
+   "date": "2023-06-15",
+   "hasMp4": true,
+   "text": "The generator consistently spits out pretty cool islands now"
+  },
+  {
+   "id": "1447488323845509121",
+   "topic": "terrain",
+   "project": "next",
+   "status": "partial",
+   "date": "2021-10-11",
+   "hasMp4": true,
+   "text": "I'm able to do a couple of things here I've always wanted to, but never been able to before: - Properly combine seamless soft slopes with distinct sharp cliffs. - Erosion valid terrain with no local minimums. - Get the best of both square tiles and triangular tiles"
+  },
+  {
+   "id": "793545297376972801",
+   "topic": "terrain",
+   "project": "badnorth",
+   "status": "todo",
+   "date": "2016-11-01",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "781957658597269506",
+   "topic": "terrain",
+   "project": "badnorth",
+   "status": "todo",
+   "date": "2016-09-30",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "1447494168448753667",
+   "topic": "build",
+   "project": "next",
+   "status": "partial",
+   "date": "2021-10-11",
+   "hasMp4": true,
+   "text": "Long time fans of the show will not be surprised to learn that this is indeed running on tile based WFC. This time around, I'm getting the best of both worlds by using a mix of triangular and square tiles. (The squares are cut along each diagonal to create 4 triangles though)"
+  },
+  {
+   "id": "1205416648397721601",
+   "topic": "build",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2019-12-13",
+   "hasMp4": true,
+   "text": "New prop placement system! It tries to place as many props as it can without overlap. I use it for doors and windows too, which means they are no longer skewed when placed on skewed tiles, which means skewed tiles now look less awkward."
+  },
+  {
+   "id": "802496920790777856",
+   "topic": "build",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2016-11-26",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "815236105079398400",
+   "topic": "build",
+   "project": "badnorth",
+   "status": "todo",
+   "date": "2016-12-31",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "807256278154301441",
+   "topic": "build",
+   "project": "badnorth",
+   "status": "todo",
+   "date": "2016-12-09",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "999185422403055616",
+   "topic": "fx",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2018-05-23",
+   "hasMp4": true,
+   "text": "For my blood splatter UVs, I'm interpolating between sprite-space and skin-space using the fwidth of skin UV. This gives me a sprite-space map on the tummy (where the skin UVs are static) while the splatter on the face follows the actual motion of the head."
+  },
+  {
+   "id": "972829402873716737",
+   "topic": "fx",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2018-03-11",
+   "hasMp4": true,
+   "text": "If you're heading to GDC, come see my microtalk about the triangular flow fields we use for pathfinding and combat http:// schedule.gdconf.com/session/tech-t oolbox/854263 …"
+  },
+  {
+   "id": "906416813810049025",
+   "topic": "fx",
+   "project": "badnorth",
+   "status": "todo",
+   "date": "2017-09-09",
+   "hasMp4": true,
+   "text": "New cave tileset. These levels really challenge your spacial skills #screenshotsaturday #madewithunity @BadNorthGame"
+  },
+  {
+   "id": "1258421104756097029",
+   "topic": "water",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2020-05-07",
+   "hasMp4": true,
+   "text": "We were long overdue for some splashier splashes"
+  },
+  {
+   "id": "890611046435627008",
+   "topic": "nav",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2017-07-27",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  },
+  {
+   "id": "837027901853810688",
+   "topic": "combat",
+   "project": "badnorth",
+   "status": "both",
+   "date": "2017-03-01",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
+  }
+ ]
+}

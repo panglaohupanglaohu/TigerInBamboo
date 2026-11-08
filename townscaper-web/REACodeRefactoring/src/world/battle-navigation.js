@@ -1,3 +1,4 @@
+import{portalAim}from'../core/portal-aim.js';
 /** 906425294533394432 "It's like navigating a Swiss cheese";
  * 797119718477991936 "Got some basic navigation going".
  * Stateful route cache only: all occupancy remains in the shared World.
@@ -37,6 +38,13 @@ export class BattleNavigation {
     if(!Number.isFinite(tree.distance[from.id]))return null;
     const next=this.graph.nodes[tree.next[from.id]]??from;
     return {from,next,goal:this.graph.nodes[goal],arrived:from.id===goal,distance:tree.distance[from.id],tree};
+  }
+  steerTarget(unit,plan){
+    if(!plan||plan.arrived||plan.from.floor!==plan.next.floor)return plan?.next;
+    const edge=this.graph.adj[plan.from.id].find(e=>e.to===plan.next.id)?.portal?.edge;
+    if(edge===undefined)return plan.next;
+    const pts=plan.from.cell.pts,next=plan.next,following=this.graph.nodes[plan.tree.next[next.id]]??plan.goal;
+    return portalAim(unit,pts[edge],pts[(edge+1)%pts.length],next,following,{radius:unit.radius??this.radius})??next;
   }
   /** Swept horizontal footprint; derived directly from polygon portals.
    * Radius is the body cylinder's radius, not a second collision voxel field.

@@ -49,6 +49,18 @@
     <button id="helpclose">知道了</button>
   </div>
 </div>
+<script>
+// 防止实验页 iframe 套娃：本页被 wake-fog.html / flow.html 等实验页用 iframe 嵌的时候，
+// 页面里的链接（环境面板「更多能力实验」、底部徽标、学习面板）如果只改本 iframe 的地址，
+// 每点一次就多套一层，3D 场景按 80% 几何缩水（实测 720→547→438→308），头部长条越叠越多。
+// 这里在捕获阶段给没有 target 的链接补 target="_top"，让点击直接替换整个顶层页面。
+if (window.self !== window.top) {
+  addEventListener('click', (e) => {
+    const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (a && !a.target && !a.getAttribute('href').startsWith('#')) a.target = '_top';
+  }, true);
+}
+</script>
 <script src="learn/data.js"></script>
 <script src="learn/refactoring-status.js"></script>
 <script src="learn/pipeline.js"></script>

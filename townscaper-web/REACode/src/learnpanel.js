@@ -26,8 +26,9 @@ const GUIDE_RULES = [
 const PAGES = [
   ['GUIDE.md', '接手指南（给其他 LLM）', '规矩、完整目录、学一段视频的流程、可复用接口、踩过的坑、下一步'],
   ['pipeline.html', '完整管线图', '三条管线 + 融合点，每一步的视频、状态、代码'],
-  ['learn.html', '学习笔记', '237 段视频：原文 → 学到什么 → 代码位置，按项目 / 主题筛选'],
-  ['oldclips.html', '2016–17 老片', '只有视频没有原文的 75 条：看画面判读，逐条标「机制 / 展示 / 待定」并可导出'],
+  ['learn.html', '学习笔记', '全部视频：原文 → 学到什么 → 代码位置，按项目 / 主题筛选'],
+  ['learn/STATUS.md', '核对清单（自动生成）', '每条：id / 日期 / 主题 / 状态 / 落点 / 原文；已学的分「代码可追溯 / 仅文档」两档'],
+  ['oldclips.html', '2016–17 老片', '只有视频没有原文的老片：看画面判读，逐条标「机制 / 展示 / 待定」并可导出'],
   ['compare.html', '新旧对比', '学习前 / 学习后左右并排，也可换成 engine 场景'],
   ['engine/world.html', 'engine · 台地岛', '地形管线：台地、河流、岸浪、逆光边'],
   ['engine/terrain.html', 'engine · 四边形地形', '同一体素场读成地貌'],
@@ -134,28 +135,33 @@ export function mountLearnPanel(view, town) {
 
   // Progress is derived, never stored: learn/data.js is the only place a clip's
   // status is recorded, so the numbers on screen cannot drift from it.
+  // 口径和 learn.html / pipeline.html 保持一致：已学 = game+both+engine，
+  // 待学 = partial+todo；不把 partial 混进「已学」里凑百分比。
   const STATS = (() => {
     const items = (L && L.items) || [];
     const by = {};
     for (const it of items) by[it.status] = (by[it.status] || 0) + 1;
-    const implemented = ['game', 'engine', 'both', 'partial'];
-    const done = implemented.reduce((n, k) => n + (by[k] || 0), 0);
+    const doneKeys = ['game', 'engine', 'both'];
+    const done = doneKeys.reduce((n, k) => n + (by[k] || 0), 0);
+    const partial = by.partial || 0;
+    const todo = by.todo || 0;
+    const na = (by.na || 0) + (by.ref || 0);
     const total = items.length || 1;
     const recent = items
-      .filter((it) => implemented.includes(it.status) && it.where)
+      .filter((it) => doneKeys.includes(it.status) && it.where)
       .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
       .slice(0, 3);
-    return { by, done, total, pct: Math.round((done / total) * 100), recent, todo: by.todo || 0, na: (by.na || 0) + (by.ref || 0) };
+    return { by, done, partial, todo, na, total, pct: Math.round((done / total) * 100), recent };
   })();
 
   host.className = 'panel' + (innerWidth < 720 ? ' collapsed' : '');
   host.innerHTML = `
-    <div class="lp-head"><b>学习导航 · 管线</b><span>${L ? '已落地 ' + STATS.done + '/' + STATS.total + ' · 收起/展开' : ''}</span></div>
+    <div class="lp-head"><b>学习导航 · 管线</b><span>${L ? '已学 ' + STATS.done + '/' + STATS.total + ' · 待学 ' + (STATS.partial + STATS.todo) + ' · 收起/展开' : ''}</span></div>
     <div class="lp-body">
       <div style="margin:8px 10px 4px;padding:8px 10px;border:1px solid #2f4a52;border-radius:6px;background:#0e1a20">
         <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;color:#9fb6c0">
           <b style="color:#e6f1f5">逆向进度</b>
-          <span><b style="color:#8fe0c2;font-size:13px">${STATS.done}</b> / ${STATS.total} · ${STATS.pct}%</span>
+          <span><b style="color:#8fe0c2;font-size:13px">${STATS.done}</b> / ${STATS.total} · ${STATS.pct}%　<i style="font-style:normal;color:#e8b96a">还剩 ${STATS.partial + STATS.todo}</i></span>
         </div>
         <div style="height:6px;background:#1b2c34;border-radius:3px;margin:6px 0 8px;overflow:hidden">
           <div style="height:100%;width:${STATS.pct}%;background:linear-gradient(90deg,#3f8f7a,#8fe0c2)"></div>
@@ -165,7 +171,7 @@ export function mountLearnPanel(view, town) {
           <span>引擎实现 <b style="color:#e6f1f5">${STATS.by.engine || 0}</b></span>
           <span>两边都用 <b style="color:#e6f1f5">${STATS.by.both || 0}</b></span>
           <span>部分 <b style="color:#e6f1f5">${STATS.by.partial || 0}</b></span>
-          <span style="color:#7d939c">待做 ${STATS.todo} · 无关 ${STATS.na}</span>
+          <span style="color:#7d939c">待学：半成品 ${STATS.partial} + 没做 ${STATS.todo} · 不用学 ${STATS.na}</span>
         </div>
         <div style="margin-top:6px;font-size:10.5px;color:#7d939c;line-height:1.5">
           ${STATS.recent.map((it) => `<div>· ${it.date} <code style="color:#9fb6c0">${esc((it.where || '').split(' / ')[0])}</code></div>`).join('')}

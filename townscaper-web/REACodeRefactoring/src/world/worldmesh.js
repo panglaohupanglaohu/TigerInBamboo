@@ -105,6 +105,12 @@ export class WorldMesh {
   }
 
   /** 强制下次整体重建（开关烘焙 / 平滑、换场景时）。 */
+  setBakeLighting({enabled=true,strength=.62,bounce=.42}={}) {
+    if(typeof enabled!=='boolean'||![strength,bounce].every(Number.isFinite)||strength<0||strength>1||bounce<0||bounce>1)throw new RangeError('invalid layered bake settings');
+    const old=this.bakeLightingOptions??{strength:.62,bounce:.42};
+    if(this.bake===enabled&&old.strength===strength&&old.bounce===bounce)return;
+    this.bake=enabled;this.bakeLightingOptions={strength,bounce};this.invalidate();
+  }
   invalidate() { this.builtVersion = -1; this.full = true; }
 
   chunkKey(c) { return Math.floor(c.cx / CHUNK) * 1000 + Math.floor(c.cz / CHUNK); }
@@ -174,7 +180,7 @@ export class WorldMesh {
       dirtyCount++;
       const w = it.w;
       if (this.bake) {
-        bakeMs += bakeLighting(w, world, { L, shape, colorOf, region: it.box, res: this.bakeRes }).ms;
+        bakeMs += bakeLighting(w, world, { L, shape, colorOf, region: it.box, res: this.bakeRes, ...this.bakeLightingOptions }).ms;
       }
       // 法线：带上相邻块落在本块范围里的三角形
       const halo = { pos: [], soft: [] };
@@ -221,7 +227,7 @@ export class WorldMesh {
     this.posts = build.posts;
     this.garden = { yards: build.yardCells, paths: build.pathCells, openings: build.yardOpenings };
     this.chimneys = build.chimneys;   // 给植被层（后院灌木、小花）
-    this.buildStats = { modules: build.modules, doors: build.doors };   // 用到几种拼图块、开了几扇门
+    this.buildStats = { decoPlacements:build.decoPlacements,decoDrawn:build.decoDrawn,decoDropped:build.decoDropped,archBudgets:build.archBudgets, modules: build.modules, doors: build.doors, decorationGroups: build.decorationGroups, decoSolved:build.decoSolved,decoFailures:build.decoFailures,archCount:build.archCount, archSegments:build.archSegments };   // 用到几种拼图块、开了几扇门
 
     // 4. 岸浪要不要重建：陆地（第 1 层实心）、钢柱、海岸切面形状
     let land = '';

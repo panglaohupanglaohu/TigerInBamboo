@@ -85,3 +85,41 @@
 合批植物按材质mesh保留原plant的顶点区间，face.a命中回溯真实悬铃树/柏树/蜀葵对象；目录来自当前植物集合而不是前端硬编码数量。其他可见mesh只读注册为运行时网格；InstancedMesh按instanceId区分且边界带实例矩阵。没有语义拆分的建筑/地形仍显示“体素合并网格（只读）”，不能冒充已分离单栋建筑。运行时UUID型ID不是跨版本稳定编辑ID。
 选择模式阻止体素笔刷，暂停整场景apply/原始参数对照并隐藏建造面板；编辑/游玩先退出对象选择。当前只接选择、高亮和定位，移动/旋转/造型/叶色及对象修改保存尚未接通，选择不写配方/存档或定稿，不以网格只读选择冒充完整对象编辑器。
 重要：植物几何已合批，逻辑Group无渲染mesh。边界在工厂合批前以局部mesh数据保留；bindBatchedObjectOwners用WeakMap保存合批来源区间而不改变任何原几何/材质。后续对象变换仍需基线buffer/候选、撤销、版本恢复和定稿契约，不能只移动空Group。其他物件的语义归属逐类接入，点击只能证明命中对象，不能证明独立编辑能力。
+
+
+## 能力代码接入与本机 super agent（2026-11-06 用户要求：先让场景工坊能用）
+用户要求：能力库是踏踏实实的代码而不是 agent skill；super agent 的 Worker 要真正跑通；场景工坊与学习工坊联动。落地方式见 `src/scene-authoring/README.md` 末节。要点：
+- 新能力只在 `REACodeRefactoring/src/capabilities/` 写模块并在 registry 登记（meta/match/run + 来源视频），工坊刷新即出现在对应场景层，扫描即匹配物件，学习工坊对应视频出现「⚙ 能力代码」。不要再给工坊加只登记不执行的节点。
+- 右栏流程：扫描场景能力 →（可选）在实景中点选范围 → Router 建议加入管线 → ⚙ 生成候选 → 看原始/看候选 → 写入当前场景（确认后，可在原编辑器撤销）/ 存为草稿 / 放弃。验证 fail 的候选按钮禁用。
+- 原 Source 桥与 DSH 保留为右栏折叠的可选服务；本机执行链不依赖它们。自动测试仍用新浏览器上下文，不碰用户存档。
+
+
+## 系统工坊：球系统 / 场景 / 物件三层管线（sys-r1）
+
+pipeline.html 顶部四个标签：**球系统工坊 · 场景工坊 · 物件工坊 · 学习工坊**（`#planet` / `#scene` / `#object` / `#learning`）。
+三层都是同一个 super agent 框架：Router → 改造 Worker → 验证 Worker，Watchdog 看着两个 Worker，经验按层记在本机。
+
+| 层 | 作用对象 | 改造 Worker | 验证 Worker | 写入到 |
+| --- | --- | --- | --- | --- |
+| 球系统 | 星球配方（种子 / 海平面 / 网格细分 / 切图 / 分辨率） | `src/system-workshop/planet/transform-worker.js`：编译候选星球（compilePlanetV8，8 阶段） | `planet/verify-worker.js`：编译器 10 项检查 + 独立复算确定性 + 场景锚点不被淹 + 陆地比例 + 编译预算 | `tm.planet.final.v1`；`src/world/planetV8/runtime.js` 启动时只覆盖改过的配方项 |
+| 场景 | 场景 World（体素 + 显示层） | `scene-authoring/agent/transform-worker.js`（REACodeRefactoring/src/capabilities） | `agent/verify-worker.js`：范围 / 手工建筑 / 承托 / 通行 / 几何量 | 场景工作区（草稿 / 定稿） |
+| 物件 | 场景里每个可编辑物件的位置 / 朝向 / 大小 | `object/transform-worker.js` | `object/verify-worker.js`：数值 / 手工改动保留 / 位移预算 / 重叠不增加 / 不出界 / 隐藏不变 | 物件编辑记录（一步撤销，随场景草稿保存） |
+
+公共运行时：`src/scene-authoring/agent/runtime.js`（Watchdog、WorkerSlot、超时重建重试、经验）；
+球系统 / 物件层的编排：`src/system-workshop/tier-agent.js`；界面：`tier-workshop.js`。
+
+### 能力目录与占位
+
+`node tools/refactor/build-system-catalog.mjs <REACode> <REACodeRefactoring>` 生成
+`src/scene-authoring/catalog/system-catalog.json`：把重构前（8765 learn.html，285 条）与重构后（8769，259 条）的学习记录
+按三层工坊的分区放进各层管线泳道。每个节点取能拿到的最好一档：
+
+- ⚙ 能力代码：可执行（目前场景层 8 个、球系统 5 个、物件 3 个）
+- ● 重构版已实现 / ◐ 重构部分：REACodeRefactoring 有实现，待封装成能力代码
+- ○ 原版占位：只有 REACode 的实现，节点里标着原版文件位置；重构完成后重跑脚本，节点原地升级
+
+场景工坊左栏「系统目录 · 场景工坊」显示场景层的泳道；勾选 ⚙ 节点 = 插入场景管线。
+
+### 测试
+
+`node --test tests/system-workshop.test.mjs`（球系统海平面通过 / 淹没锚点失败 / 编译失败；物件松弛与手工改动保留；目录结构）。

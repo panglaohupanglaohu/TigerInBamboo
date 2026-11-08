@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>补丁各自松弛，接缝靠三角插值补回来</title>
+<style>
+  :root { --ink:#1e2b26; --muted:#5d6f68; --line:#dbe4dd; --warm:#8a6a1c; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eff4f0; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:110ch; }
+  header b { color:var(--warm); font-weight:650; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(239,244,240,.98) 70%, rgba(239,244,240,0)); }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #panel { position:fixed; z-index:2; right:18px; top:116px; width:360px;
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  #panel h2 { margin:0 0 8px; font-size:12.5px; letter-spacing:.04em; color:var(--muted); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:12px; }
+  th,td { padding:3px 2px; text-align:right; border-bottom:1px dashed var(--line); }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:600; font-size:11.5px; }
+  tr.on td { background:#f2f8f4; font-weight:650; }
+  .ok { color:var(--good); font-weight:650; }
+  .no { color:var(--bad); font-weight:650; }
+  #modes { display:flex; gap:6px; margin:10px 0 4px; }
+  #modes button { flex:1; padding:6px 4px; font:inherit; font-size:12px; cursor:pointer;
+    background:#fff; border:1px solid var(--line); border-radius:7px; color:var(--ink); }
+  #modes button.on { background:#1e2b26; color:#fff; border-color:#1e2b26; }
+  #more { margin-top:9px; font-size:11.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px; }
+  #more b { color:var(--ink); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:18px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  #legend { position:fixed; z-index:2; left:22px; top:678px; width:840px; display:flex; gap:26px;
+    font-size:11.5px; color:var(--muted); }
+  #legend .k { display:flex; align-items:center; gap:7px; white-space:nowrap; }
+  #legend .sw { width:18px; height:3px; border-radius:2px; flex:0 0 auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>补丁各自松弛，接缝靠「三角插值」补回来</h1>
+  <p>无限网格没法整图迭代松弛，只能按需生成小补丁、各自松弛。于是同一个顶点在相邻补丁里
+     有<b>好几份副本</b>，各松弛各的 → 交界处裂开。三种收尾方式的账：<b>raw</b> 各用各的副本（缝最大、格子最方）、
+     <b>consensus</b> 直接取副本平均（缝归零，但要等一整圈补丁都生成完）、
+     <b>blend</b> 用「三块补丁的重心插值」——权重只依赖<b>基准位置</b>，所以副本算出来同一个值，缝严格为 0，
+     而生成前只需要 3 块补丁。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="legend">
+  <div class="k"><span class="sw" style="background:#8c6b4f"></span>补丁边界（每块补丁自己的顶点副本）</div>
+  <div class="k"><span class="sw" style="background:#b4402f"></span>接缝缺口（同一顶点两侧副本的错开）</div>
+  <div class="k"><span class="sw" style="background:#2f7d5b"></span>插值后仍是同一位置（缝 0）</div>
+</div>
+
+<div id="panel">
+  <h2>三种收尾方式（同一份松弛结果）</h2>
+  <table id="tbl">
+    <thead><tr><th>方式</th><th>缝均</th><th>缝最大</th><th>方正°</th><th>面积</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="modes">
+    <button data-m="raw">raw</button>
+    <button data-m="consensus">consensus</button>
+    <button data-m="blend">blend</button>
+  </div>
+  <div id="hintline" style="margin:9px 0 0;font-size:12px;color:#5d6f68"></div>
+  <div id="more"></div>
+</div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { solve, measure, dualCheck, clusterCost, CFG } from './src/patchcluster.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1e2b26', MUTED = '#5d6f68', LINE = '#cfdad3', WARM = '#8c6b4f', BAD = '#b4402f', GOOD = '#2f7d5b';
+
+const MODES = ['raw', 'consensus', 'blend'];
+const M = {};
+for (const m of MODES) M[m] = measure(m);
+
+let mode = 'raw';
+const { M: world, pos } = solve('raw');
+
+// 世界居中：21 格 × 28px = 588
+const SPAN = CFG.PW * CFG.PX * CFG.S;
+const OX = 436 - SPAN / 2, OY = 414 - SPAN / 2;
+
+const TINT = ['#dfeee6', '#e8f1e2', '#dcecef', '#f0ece0', '#e6e9f2', '#eef0dc', '#e3ecdf', '#e9eef6', '#f1e9e6'];
+
+function draw() {
+  ctx.clearRect(0, 0, 1280, 800);
+  // 底：世界范围
+  ctx.save();
+  ctx.fillStyle = 'rgba(255,255,255,.55)';
+  ctx.fillRect(OX - 20, OY - 20, SPAN + 40, SPAN + 40);
+  ctx.strokeStyle = LINE; ctx.lineWidth = 1;
+  ctx.strokeRect(OX - 20, OY - 20, SPAN + 40, SPAN + 40);
+  ctx.restore();
+
+  const { patches, verts } = world;
+  const P = (k) => { const p = pos.get(k); return { x: OX + p.x, y: OY + p.y }; };
+
+  // 补丁底色 + 格子
+  patches.forEach((pt, idx) => {
+    ctx.beginPath();
+    const ring = [pt.ids.find((k) => k.endsWith(',0,0')), pt.ids.find((k) => k.endsWith(',' + CFG.PW + ',0')),
+      pt.ids.find((k) => k.endsWith(',' + CFG.PW + ',' + CFG.PH)), pt.ids.find((k) => k.endsWith(',0,' + CFG.PH))];
+    ring.forEach((k, n) => { const p = P(k); n ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); });
+    ctx.closePath();
+    ctx.fillStyle = TINT[idx % TINT.length];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(30,43,38,.10)';
+    ctx.lineWidth = 0;
+    ctx.stroke();
+  });
+
+  // 补丁编号（写在补丁内圈中心，标出这是 9 块各自松弛的补丁，不是一张整图）
+  ctx.fillStyle = 'rgba(30,43,38,.42)';
+  ctx.font = '600 11px -apple-system,system-ui,sans-serif';
+  ctx.textAlign = 'center';
+  patches.forEach((pt, idx) => {
+    const k = pt.ids.find((kk) => kk.endsWith(',' + (CFG.PW >> 1) + ',' + (CFG.PH >> 1)));
+    const p = P(k);
+    ctx.fillText('P' + (idx + 1), p.x, p.y + 4);
+  });
+  ctx.textAlign = 'left';
+
+  // 每块补丁的格子描边
+  for (const pt of patches) {
+    ctx.strokeStyle = mode === 'raw' ? '#9fb3a8' : '#a9bcb1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (const c of pt.cells) {
+      const p0 = P(c[0]), p1 = P(c[1]), p2 = P(c[2]), p3 = P(c[3]);
+      ctx.moveTo(p0.x, p0.y); ctx.lineTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.lineTo(p3.x, p3.y); ctx.closePath();
+    }
+    ctx.stroke();
+  }
+
+  // 补丁边界（粗）——raw 时能直接看出四块补丁各自的轮廓互不重合
+  ctx.lineWidth = 2.2;
+  ctx.strokeStyle = WARM;
+  for (const pt of patches) {
+    const ring = [pt.ids.find((k) => k.endsWith(',0,0')), pt.ids.find((k) => k.endsWith(',' + CFG.PW + ',0')),
+      pt.ids.find((k) => k.endsWith(',' + CFG.PW + ',' + CFG.PH)), pt.ids.find((k) => k.endsWith(',0,' + CFG.PH))];
+    ctx.beginPath();
+    ring.forEach((k, n) => { const p = P(k); n ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); });
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  // 接缝缺口：raw 画出每个共享顶点的各副本之间的最大错开
+  if (mode === 'raw') {
+    ctx.strokeStyle = BAD; ctx.lineWidth = 2;
+    for (const [, v] of verts) {
+      if (v.keys.length < 2) continue;
+      const ps = v.keys.map(P);
+      for (let a = 0; a < ps.length; a++)
+        for (let b = a + 1; b < ps.length; b++) {
+          const d = Math.hypot(ps[a].x - ps[b].x, ps[a].y - ps[b].y);
+          if (d < 1.2) continue;
+          ctx.beginPath(); ctx.moveTo(ps[a].x, ps[a].y); ctx.lineTo(ps[b].x, ps[b].y); ctx.stroke();
+        }
+    }
+    ctx.fillStyle = BAD;
+    for (const [, v] of verts) {
+      if (v.keys.length < 2) continue;
+      for (const k of v.keys) { const p = P(k); ctx.beginPath(); ctx.arc(p.x, p.y, 1.8, 0, 7); ctx.fill(); }
+    }
+  } else {
+    ctx.fillStyle = GOOD;
+    for (const [, v] of verts) {
+      if (v.keys.length < 2) continue;
+      const p = P(v.keys[0]);
+      ctx.beginPath(); ctx.arc(p.x, p.y, 2.2, 0, 7); ctx.fill();
+    }
+  }
+
+}
+
+function paintPanel() {
+  const tb = document.querySelector('#tbl tbody');
+  tb.innerHTML = MODES.map((m) => {
+    const d = M[m];
+    return `<tr class="${m === mode ? 'on' : ''}"><td>${m}</td>
+      <td>${d.gapMean.toFixed(2)}</td>
+      <td class="${d.gapMax > 1 ? 'no' : 'ok'}">${d.gapMax.toFixed(2)}</td>
+      <td>${d.devMean.toFixed(2)}</td><td>${d.areaMean.toFixed(3)}</td></tr>`;
+  }).join('');
+
+  const HINT = {
+    raw: 'raw：每块补丁用自己的顶点副本 —— 红线就是同一顶点两份位置之间的缺口',
+    consensus: 'consensus：共享顶点取全部副本平均 —— 缝归 0，但要先落齐一圈补丁',
+    blend: 'blend：权重由<b>基准位置</b>的重心坐标给 —— 缝 0，边缘格仍受自己那块补丁约束',
+  };
+  document.getElementById('hintline').innerHTML = HINT[mode];
+
+  const d = dualCheck(), c = clusterCost();
+  document.getElementById('more').innerHTML =
+    `单元 ${M.blend.cells} 格 / ${M.blend.patches} 块补丁 / 共享顶点 ${M.blend.seamVerts} 个<br>` +
+    `对偶：原格 V${d.single.V} E${d.single.E} F${d.single.F} → 对偶 V${d.dual.V} E${d.dual.E} F${d.dual.F}` +
+    `（<b>V/F 互换、E 不变</b>，欧拉 ${d.single.euler}→${d.dual.euler}）<br>` +
+    `生成量：三元组 cluster <b>${c.tri}</b> 块 vs 七元组 <b>${c.hept}</b> 块 = ${c.ratio.toFixed(2)}×`;
+
+  const c2 = M[mode];
+  document.getElementById('stats').innerHTML =
+    `<span>当前 <b>${mode}</b></span>` +
+    `<span>缝 均 <b>${c2.gapMean.toFixed(2)}</b>px / 最大 <b class="${c2.gapMax > 1 ? 'no' : 'ok'}">${c2.gapMax.toFixed(2)}</b>px</span>` +
+    `<span>方格偏差 均 <b>${c2.devMean.toFixed(2)}</b>° p95 <b>${c2.devP95.toFixed(2)}</b>°</span>` +
+    `<span>面积比 <b>${c2.areaMean.toFixed(3)}</b></span>` +
+    `<span>raw→blend 方正代价 <b>${(M.blend.devMean - M.raw.devMean).toFixed(2)}</b>°</span>` +
+    `<span>换来的缝 <b class="ok">${M.raw.gapMean.toFixed(2)}→0.00</b></span>`;
+}
+
+function setMode(m) {
+  mode = m;
+  const s = solve(m);
+  // 重画用的顶点位置表：直接替换 pos 内容
+  pos.clear();
+  for (const [k, v] of s.pos) pos.set(k, v);
+  document.querySelectorAll('#modes button').forEach((b) => b.classList.toggle('on', b.dataset.m === m));
+  draw(); paintPanel();
+}
+
+document.querySelectorAll('#modes button').forEach((b) => b.addEventListener('click', () => setMode(b.dataset.m)));
+setMode('raw');
+window.__ready = true;
+</script>
+</body>
+</html>

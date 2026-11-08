@@ -1,9 +1,10 @@
 import {bindBatchedObjectOwners} from '../scene-authoring/scene-objects.js';
+import {styleMat} from '../style/materials.js';
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 // Hollyhock spires (and the companions beside plane trees) are off: no flowers under the trees.
 const SHOW_HOLLYHOCKS=true;
-const v=(...a)=>new T.Vector3(...a),mat=c=>new T.MeshStandardMaterial({color:c,roughness:.89,side:T.DoubleSide});
+const v=(...a)=>new T.Vector3(...a),mat=c=>styleMat('morris.botany.plant','MeshStandardMaterial',{color:c,roughness:.89,side:T.DoubleSide});
 const transform=(g,p,s=[1,1,1],q=new T.Quaternion())=>g.applyMatrix4(new T.Matrix4().compose(v(...p),q,v(...s)));
 function taperedBranch(curve,segments,radius){const frames=curve.computeFrenetFrames(segments,false),p=[],ix=[],uv=[],sides=7;for(let j=0;j<=segments;j++){const t=j/segments,c=curve.getPoint(t),r=radius*(.08+.92*Math.pow(1-t,.7));for(let k=0;k<=sides;k++){const a=k/sides*Math.PI*2,q=c.clone().addScaledVector(frames.normals[j],Math.cos(a)*r).addScaledVector(frames.binormals[j],Math.sin(a)*r);p.push(q.x,q.y,q.z);uv.push(k/sides,t);if(j<segments&&k<sides){const n=j*(sides+1)+k;ix.push(n,n+sides+1,n+1,n+1,n+sides+1,n+sides+2);}}}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(ix);g.computeVertexNormals();return g;}
 function leafGeometry(){const shape=new T.Shape();for(let i=0;i<16;i++){const a=i/16*Math.PI*2,r=.65*(.66+.34*Math.cos(a*5));const x=Math.cos(a)*r,y=Math.sin(a)*r;i?shape.lineTo(x,y):shape.moveTo(x,y);}shape.closePath();const g=new T.ShapeGeometry(shape);g.rotateX(-Math.PI/2);return g;}

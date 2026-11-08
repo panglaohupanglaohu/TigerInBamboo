@@ -1,0 +1,5 @@
+import assert from'node:assert/strict';import{buildInfinite,verify}from'../src/core/infinite.js';
+const reports=[];for(const N of[2,3,4])for(const rings of[1,2]){const inf=buildInfinite({N,rings,passes:12});for(const mode of['raw','patch','cluster','blend']){const r=verify(inf,mode);assert.equal(r.invalid,0);assert.equal(r.flipped,0);assert.ok(r.comparisons>=r.border);reports.push({N,rings,mode,...r});}assert.throws(()=>verify(inf,'oops'));}
+// A mismatch only in the THIRD owner used to be invisible to the first-two-owner audit.
+const v={id:0,patches:[0,1,2]},inf={versions:{raw:()=>[0,0],blend:()=>[0,0]},verts:[v],quads:[],patches:[{id:0,quads:[]},{id:1,quads:[]},{id:2,quads:[]}],versionAt:(_v,p,m)=>[m==='raw'?0:p===2?2:0,0]};assert.equal(verify(inf,'blend').seam,2);assert.equal(verify(inf,'raw').seam,0);assert.equal(verify(inf).comparisons,3);
+console.log('PASS',reports.length,'real mode audits and third-owner/mode-specific regressions');console.log(reports.filter(r=>r.N===4&&r.rings===2));

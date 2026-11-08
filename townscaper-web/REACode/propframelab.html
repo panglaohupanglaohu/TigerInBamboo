@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>道具塞满不重叠 · 门窗用标准局部框所以不跟着歪</title>
+<style>
+  :root { --ink:#1e2b26; --muted:#5d6f68; --line:#dbe4dd; --warm:#8a6a1c; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eff3f6; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:112ch; }
+  header b { color:var(--warm); font-weight:650; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(239,243,246,.98) 70%, rgba(239,243,246,0)); }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #concl { position:fixed; z-index:2; right:18px; top:330px; width:250px;
+    background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  #concl h3 { margin:0 0 6px; font-size:12.5px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  #concl p { margin:0 0 7px; font-size:11.5px; color:var(--muted); line-height:1.5; }
+  #concl b { color:#1e2b26; }
+  #concl .no { color:#b4402f; font-weight:650; } #concl .ok { color:#146c4a; font-weight:650; }
+  #cmp { position:fixed; z-index:2; left:56px; top:520px; width:720px;
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:10px; padding:10px 14px; }
+  #cmp h2 { margin:0 0 6px; font-size:12.5px; letter-spacing:.04em; color:var(--muted); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:12px; }
+  th,td { padding:3px 2px; text-align:right; border-bottom:1px dashed var(--line); }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:600; font-size:11.5px; }
+  .ok { color:var(--good); font-weight:650; }
+  .no { color:var(--bad); font-weight:650; }
+  #note { margin-top:7px; font-size:11.5px; color:var(--muted); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:18px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  #side { position:fixed; z-index:2; right:18px; top:150px; width:250px; font-size:11.5px; color:var(--muted);
+    background:rgba(255,255,255,.9); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  #side b { color:var(--ink); }
+  #side .k { display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+  #side .sq { width:13px; height:13px; border-radius:2px; flex:0 0 auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>道具塞满不重叠；门窗换成「标准局部框」就不跟着斜格歪</h1>
+  <p>斜格（不规则四边形）在等距视图里到处都是。道具摆放先做<b>贪心塞满</b>：随机撒点，和已放下的重叠就丢，
+     所以每格的道具数只受面积限制、重叠恒为 0。门窗走同一套摆放系统，但<b>朝向不用格子的 u/v 基向量</b>，
+     改用标准局部框（只有平移、没有剪切）——左边一片门框被剪成平行四边形（角度最多偏 14.9°、面积少 1.4%），
+     右边一片框角回到 90°，看着就是"格子歪、道具正"。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="side">
+  <div class="k"><span class="sq" style="background:#c9a227"></span>门窗（每格最大的两只）</div>
+  <div class="k"><span class="sq" style="background:#8aa79a"></span>普通道具（石/箱/柴堆）</div>
+  <div class="k"><span class="sq" style="background:#6b8dbb"></span>斜格的 u / v 基向量</div>
+  <div style="margin-top:8px;border-top:1px solid var(--line);padding-top:8px">
+    红色括号 = 门窗框的内角偏差。<br>左图最大 <b id="s-l">–</b>，右图最大 <b id="s-r">–</b>。
+  </div>
+</div>
+
+<div id="concl">
+  <h3>三条账</h3>
+  <p><b>① 塞满靠拒绝采样</b>：每格 300 次撒点，撞上已放的就丢 —— 12 格落 95 只，重叠恒 0，覆盖率只受面积限。</p>
+  <p><b>② 门窗只是换了朝向</b>：位置仍取格内落脚点，框角从 <span class="no">14.94°</span> 回到 <span class="ok">0.00°</span>，面积比 <span class="no">0.966</span> → <span class="ok">1.000</span>。</p>
+  <p><b>③ 代价为零</b>：位置序列一模一样（道具数 95 vs 93），没有多算一次碰撞，只是没有把 u/v 基向量乘进去。</p>
+</div>
+
+<div id="cmp">
+  <h2>同一批格子、同一套撒点序列，只换「框怎么取」</h2>
+  <table id="tbl">
+    <thead><tr><th>口径</th><th>道具/格</th><th>覆盖率</th><th>重叠对</th><th>框角最大偏差</th><th>门窗面积比</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="note"></div>
+</div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { build, measure, CFG } from './src/propframe.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1e2b26', MUTED = '#5d6f68', LINE = '#cfd8de', WARM = '#c9a227', PROP = '#8aa79a', BASIS = '#6b8dbb', BAD = '#b4402f';
+
+const L = build('local'), S = build('std');
+const ML = measure('local'), MS = measure('std');
+
+const W = CFG.COLS * CFG.TILE;              // 416
+const H = CFG.ROWS * CFG.TILE * 0.88;       // ~275
+
+function poly(pts, fill, stroke, lw = 1) {
+  ctx.beginPath();
+  pts.forEach((p, n) => (n ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+  ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+}
+
+/** 画一片格子：斜格底色 + 道具 + 门窗 + 每个格子标夹角 */
+function grid(W_, ox, oy, label, accent) {
+  ctx.save();
+  ctx.translate(ox, oy);
+  ctx.fillStyle = 'rgba(255,255,255,.72)';
+  ctx.fillRect(-16, -34, W + 32, H + 50);
+
+  ctx.fillStyle = INK; ctx.font = '600 13px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText(label, -14, -14);
+  ctx.strokeStyle = accent; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(-14, -6); ctx.lineTo(60, -6); ctx.stroke();
+
+  for (const t of W_.tiles) {
+    poly(t.quad, '#eef3f6', '#b7c6cf', 1.2);
+    // u / v 基向量
+    const c = t.quad[0];
+    ctx.strokeStyle = BASIS; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(c.x + t.u.x, c.y + t.u.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(c.x + t.v.x, c.y + t.v.y); ctx.stroke();
+    // 道具
+    for (const p of t.props) poly(p.poly, PROP, 'rgba(30,43,38,.25)', 0.8);
+    // 门窗
+    for (const p of t.win) poly(p.poly, 'rgba(201,162,39,.55)', WARM, 1.6);
+  }
+  // 门窗框角标注：取第一只窗，画一条角弧
+  const t0 = W_.tiles[0], w0 = t0.win[0];
+  if (w0) {
+    const q = w0.poly, a = q[0], b = q[1], d = q[3];
+    const ang = Math.abs(Math.atan2(b.y - a.y, b.x - a.x) - Math.atan2(d.y - a.y, d.x - a.x));
+    const deg = (ang > Math.PI ? 2 * Math.PI - ang : ang) * 180 / Math.PI;
+    const dev = Math.abs(90 - deg);
+    const cx = (q[0].x + q[1].x + q[2].x + q[3].x) / 4;
+    const cy = (q[0].y + q[1].y + q[2].y + q[3].y) / 4;
+    ctx.strokeStyle = dev > 1 ? BAD : '#146c4a'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(a.x, a.y, 13, Math.atan2(d.y - a.y, d.x - a.x), Math.atan2(b.y - a.y, b.x - a.x)); ctx.stroke();
+    ctx.fillStyle = dev > 1 ? BAD : '#146c4a';
+    ctx.font = '600 11px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(dev.toFixed(1) + '°', cx, cy + 4);
+    ctx.textAlign = 'left';
+  }
+  // 格子夹角说明
+  ctx.fillStyle = MUTED; ctx.font = '11.5px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('格子夹角 90°−' + W_.tiles[0].skewDeg.toFixed(1) + '° 起（蓝短划为 u / v 基向量）', W / 2, H + 26);
+  ctx.textAlign = 'left';
+  ctx.restore();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, 1280, 800);
+  grid(L, 56, 210, 'A · 门窗跟着斜格 u/v 基向量 → 框被剪切', BAD);
+  grid(S, 560, 210, 'B · 门窗用标准局部框（只平移）→ 框仍是矩形', '#146c4a');
+}
+
+function paintPanel() {
+  const rows = [
+    ['A 本地框（跟着 u/v）', ML],
+    ['B 标准局部框', MS],
+  ];
+  document.querySelector('#tbl tbody').innerHTML = rows.map(([nm, d]) => `
+    <tr>
+      <td>${nm}</td><td>${d.perTile}</td><td>${d.coverage}%</td>
+      <td class="${d.overlapPairs === 0 ? 'ok' : 'no'}">${d.overlapPairs}</td>
+      <td class="${d.frameDevMax > 1 ? 'no' : 'ok'}">${d.frameDevMax.toFixed(2)}°</td>
+      <td class="${d.areaRatioMin < 0.999 ? 'no' : 'ok'}">${d.areaRatioMin.toFixed(3)}</td>
+    </tr>`).join('');
+
+  document.getElementById('note').innerHTML =
+    `格子斜度：均 ${ML.skewMean}° / 最大 ${ML.skewMax}°（两版一样，只为对照）　` +
+    `门窗框平均偏差 ${ML.frameDevMean.toFixed(2)}° → <b>${MS.frameDevMean.toFixed(2)}</b>°　` +
+    `两版道具数 ${ML.props} / ${MS.props}（同一撒点序列、只差框形状，数量差 ${Math.abs(MS.props - ML.props)} 只）`;
+
+  document.getElementById('s-l').textContent = ML.frameDevMax.toFixed(1) + '°';
+  document.getElementById('s-r').textContent = MS.frameDevMax.toFixed(1) + '°';
+
+  document.getElementById('stats').innerHTML =
+    `<span>格子 <b>${ML.tiles}</b> 块（4×3）</span>` +
+    `<span>道具 <b>${ML.props}</b> / <b>${MS.props}</b></span>` +
+    `<span>每格 <b>${ML.perTile}</b> 只</span>` +
+    `<span>重叠对 <b class="ok">${ML.overlapPairs}</b> / <b class="ok">${MS.overlapPairs}</b></span>` +
+    `<span>框角最大偏差 <b class="no">${ML.frameDevMax.toFixed(2)}°</b> → <b class="ok">${MS.frameDevMax.toFixed(2)}°</b></span>` +
+    `<span>门窗面积比 <b>${ML.areaRatioMean.toFixed(3)}</b> → <b>1.000</b></span>`;
+}
+
+draw(); paintPanel();
+window.__ready = true;
+</script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {styleMat} from '../style/materials.js';
 import {createMorrisPrincess,animateMorrisPrincess} from './morrisPrincess.js?v=morris-direct-v17';
 /** Owns one existing white horse. Actual route/bridge support is sampled on every step. */
 export function createMorrisPrincessPatrol({island,player,isStarted=()=>true,onMeet=()=>{},eventTarget=globalThis.window,documentTarget=globalThis.document}={}){
@@ -14,7 +15,7 @@ export function createMorrisPrincessPatrol({island,player,isStarted=()=>true,onM
   s=island.route.castlePatrol?0:routeLength-3;direction=island.route.castlePatrol?1:-1;speed=0;pause=force?2:1;mode='castle-stop';
   place();return true;
  }
- const reins=[];for(const sign of[-1,1]){const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(new Float32Array(25*3),3));const line=new T.Line(g,new T.LineBasicMaterial({color:0x463a25}));line.name='morris-princess-held-rein';horse.add(line);reins.push({line,sign});}
+ const reins=[];for(const sign of[-1,1]){const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(new Float32Array(25*3),3));const line=new T.Line(g,styleMat('morris.princessPatrol.line','LineBasicMaterial',{color:0x463a25}));line.name='morris-princess-held-rein';horse.add(line);reins.push({line,sign});}
  const messages=['这里的花径通往溪桥。慢些走，能听见鸟鸣。','我会沿山路巡游，再到半山琴庭停一停。你也可以骑马同行。','愿这片繁花陪伴你的旅途。我们路上见。'];
  const hint=documentTarget?.createElement('div'),panel=documentTarget?.createElement('section');
  if(hint){hint.id='morris-princess-hint';hint.style.cssText='position:fixed;left:50%;bottom:145px;transform:translateX(-50%);z-index:112;padding:10px 16px;background:#243d39ed;color:#efe1b6;border:1px solid #aa8c4b;border-radius:8px;font:14px system-ui;pointer-events:none';hint.hidden=true;documentTarget.body.append(hint);}

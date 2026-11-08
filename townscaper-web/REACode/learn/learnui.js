@@ -33,7 +33,7 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const md = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   const code = (s) => esc(s).replace(/((?:src|engine|learn)\/[\w./\-]+)/g, '<code>$1</code>');
-  metaEl.textContent = `已学 ${L.meta.total} / ${L.meta.corpus} 条 · ${L.meta.rounds} 轮 · ${L.meta.updated}`;
+  metaEl.textContent = `台账 ${L.meta.rounds} 轮 ${L.meta.ledger ?? L.meta.total} 条 · 全库已学 ${L.meta.total} / ${L.meta.corpus} · 更新 ${L.meta.updated}`;
 
   const sections = [
     { key: 'method', name: '怎么学的（方法）', sub: '抽帧 / 量参数 / 验证 / 并发' },
@@ -246,7 +246,7 @@
 
   function renderLog() {
     logEl.innerHTML = hist.slice(0, 12).map((h, i) => `<div class="msg u" data-hist="${i}" title="点一下重新看这条">${esc(h.q)}</div>`).join('')
-      + (hist.length ? '' : `<div class="msg a"><b>先看左边，也可以直接问</b>这里是 ${L.meta.rounds} 轮、${L.meta.total} 条的台账：每条都写了"原文说了什么 / 画面长什么样 / 怎么做 / 量到多少 / 落在哪 / 踩了什么坑"。</div>`);
+      + (hist.length ? '' : `<div class="msg a"><b>先看左边，也可以直接问</b>这里是 ${L.meta.rounds} 轮、${L.meta.ledger ?? L.meta.total} 条的台账：每条都写了"原文说了什么 / 画面长什么样 / 怎么做 / 量到多少 / 落在哪 / 踩了什么坑"。</div>`);
     logEl.scrollTop = logEl.scrollHeight;
   }
 

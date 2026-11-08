@@ -7,3 +7,4 @@ test('cliff transit shares the actual city rollout and cannot run over disabled 
  for(const search of ['?citadelRuntime=0','?citadelCliffTransit=0','?citadelTargetRemesh=0','?citadelTargetArchitecture=0'])assert.equal(targetCliffTransitEnabled(search,true),false);
  assert.equal(targetCliffTransitEnabled('',false),false);
 });
+test('embedded workshop can opt in to the same city as the bare game',()=>{assert.equal(targetCityRuntimeEnabled('?citadelRuntime=1',false),true);assert.equal(targetCityParams('?citadelRuntime=1',{standalone:false}).get('citadelTargetRemesh'),'1');assert.equal(targetCliffTransitEnabled('?citadelRuntime=1',false),true);});

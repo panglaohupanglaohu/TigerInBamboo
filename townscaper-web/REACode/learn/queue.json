@@ -1,182 +1,16 @@
 {
- "built": "2026-11-02T16:51:41.815Z",
- "total": 142,
+ "built": "2026-11-07T05:43:50.914Z",
+ "round": "2b",
+ "total": 20,
  "items": [
-  {
-   "id": "870296307889573889",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-06-01",
-   "hasMp4": true
-  },
-  {
-   "id": "901842167508992000",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-08-27",
-   "hasMp4": true
-  },
-  {
-   "id": "902069261304287232",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-08-28",
-   "hasMp4": true
-  },
-  {
-   "id": "903647529203634176",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-09-01",
-   "hasMp4": true
-  },
-  {
-   "id": "906416813810049025",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-09-09",
-   "hasMp4": true
-  },
-  {
-   "id": "912691357440978945",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-09-26",
-   "hasMp4": true
-  },
-  {
-   "id": "946660607008403456",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-12-29",
-   "hasMp4": true
-  },
-  {
-   "id": "972829402873716737",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-03-11",
-   "hasMp4": true
-  },
-  {
-   "id": "984813819280191488",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-04-13",
-   "hasMp4": true
-  },
-  {
-   "id": "995043346778415104",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-05-11",
-   "hasMp4": true
-  },
-  {
-   "id": "999191760944418817",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-05-23",
-   "hasMp4": true
-  },
-  {
-   "id": "1010979395719319552",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-06-24",
-   "hasMp4": true
-  },
-  {
-   "id": "1022573208590057472",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-07-26",
-   "hasMp4": true
-  },
-  {
-   "id": "1078792665980915714",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-12-28",
-   "hasMp4": true
-  },
-  {
-   "id": "999185422403055616",
-   "topic": "fx",
-   "project": "badnorth",
-   "status": "partial",
-   "date": "2018-05-23",
-   "hasMp4": true
-  },
-  {
-   "id": "917405214638006273",
-   "topic": "grid",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-10-09",
-   "hasMp4": true
-  },
-  {
-   "id": "938395867215728640",
-   "topic": "grid",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-12-06",
-   "hasMp4": true
-  },
-  {
-   "id": "1042732450730913793",
-   "topic": "grid",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-09-20",
-   "hasMp4": true
-  },
-  {
-   "id": "1301816247479345152",
-   "topic": "grid",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-09-04",
-   "hasMp4": true
-  },
-  {
-   "id": "1471817524148940807",
-   "topic": "grid",
-   "project": "next",
-   "status": "todo",
-   "date": "2021-12-17",
-   "hasMp4": true
-  },
-  {
-   "id": "1580158269267406849",
-   "topic": "grid",
-   "project": "next",
-   "status": "todo",
-   "date": "2022-10-12",
-   "hasMp4": true
-  },
   {
    "id": "1768627849529893109",
    "topic": "grid",
    "project": "next",
    "status": "partial",
    "date": "2024-03-15",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "For reasons I will not be explaining at this point I've gone and put this on a sphere"
   },
   {
    "id": "1751932427272909032",
@@ -184,7 +18,8 @@
    "project": "next",
    "status": "partial",
    "date": "2024-01-29",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "I can now force specific modules to appear. To do this I first generate the specific bit of grid they need. A large module like this would be highly unlikely to appear by chance on a random grid."
   },
   {
    "id": "1670725072540106755",
@@ -192,7 +27,17 @@
    "project": "next",
    "status": "partial",
    "date": "2023-06-19",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "Here's a comparison showing no-, dumb- and hierarchical smoothing. The hierarchical smoothing helps preserve the intent of the input-tiles while smoothing out the jankyness from the weird underlying grid and from the limited slope angles in the input tileset"
+  },
+  {
+   "id": "1580158269267406849",
+   "topic": "grid",
+   "project": "next",
+   "status": "partial",
+   "date": "2022-10-12",
+   "hasMp4": true,
+   "text": "Can you make good looking foliage from Marching Cubes-blobs? Maybe?"
   },
   {
    "id": "1481661852887265288",
@@ -200,7 +45,8 @@
    "project": "next",
    "status": "partial",
    "date": "2022-01-13",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "Yet another light baker. Actually does some ray marching, but still pretty ad hoc. The textures are: 1. Normals (procedurally painted in big chunky strokes) 2. 3D Signed Distance Field 3. 3D Ambient Occlusion in positive and negative X,Y and Z"
   },
   {
    "id": "1458921394855718917",
@@ -208,15 +54,8 @@
    "project": "next",
    "status": "partial",
    "date": "2021-11-11",
-   "hasMp4": true
-  },
-  {
-   "id": "1332410042784641026",
-   "topic": "grid",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2020-11-27",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "I'm exploring the Half Edge data structure. Feels like a really lightweight, powerful and versatile way of representing topology. A big thanks to everyone suggesting I look into it."
   },
   {
    "id": "1313837640366596096",
@@ -224,7 +63,8 @@
    "project": "townscaper",
    "status": "partial",
    "date": "2020-10-07",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "I just pushed an update to Townscaper. You can now build flying towns (if you find any of the perfect loops I've scattered across the grid) https:// store.steampowered.com/app/1291340/To wnscaper/ …"
   },
   {
    "id": "1164926304640229376",
@@ -232,15 +72,8 @@
    "project": "townscaper",
    "status": "partial",
    "date": "2019-08-23",
-   "hasMp4": true
-  },
-  {
-   "id": "1151770831619534848",
-   "topic": "grid",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2019-07-18",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "WFC running at interactive speed on that funky grid. Next up is to make it deterministic"
   },
   {
    "id": "1151137783785771008",
@@ -248,7 +81,8 @@
    "project": "townscaper",
    "status": "partial",
    "date": "2019-07-16",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "As promised: an aperiodic infinite deterministic irregular relaxed quadrilateral grid."
   },
   {
    "id": "1015149712469524480",
@@ -256,295 +90,26 @@
    "project": "badnorth",
    "status": "partial",
    "date": "2018-07-06",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "I only sample my noise texture once per quad, but I scroll the UVs randomly forward or backward along the flow of the smoke. This further breaks up the recognizability of individual blobs and it creates some of that cool multi layered flow feeling thick smoke should have"
   },
   {
-   "id": "1015140880666300416",
-   "topic": "light",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-07-06",
-   "hasMp4": true
-  },
-  {
-   "id": "1015142746372366336",
-   "topic": "light",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-07-06",
-   "hasMp4": true
-  },
-  {
-   "id": "1480635131614355459",
-   "topic": "light",
-   "project": "next",
-   "status": "todo",
-   "date": "2022-01-10",
-   "hasMp4": true
-  },
-  {
-   "id": "1707490932017279035",
-   "topic": "light",
-   "project": "next",
-   "status": "todo",
-   "date": "2023-09-28",
-   "hasMp4": true
-  },
-  {
-   "id": "1727315611959865407",
-   "topic": "light",
-   "project": "next",
-   "status": "partial",
-   "date": "2023-11-22",
-   "hasMp4": true
-  },
-  {
-   "id": "1590674061092212738",
-   "topic": "light",
-   "project": "next",
-   "status": "partial",
-   "date": "2022-11-10",
-   "hasMp4": true
-  },
-  {
-   "id": "1580846877855338497",
-   "topic": "light",
-   "project": "next",
-   "status": "partial",
-   "date": "2022-10-14",
-   "hasMp4": true
-  },
-  {
-   "id": "1580845127207387137",
-   "topic": "light",
-   "project": "next",
-   "status": "partial",
-   "date": "2022-10-14",
-   "hasMp4": true
-  },
-  {
-   "id": "1580835075629133825",
-   "topic": "light",
-   "project": "next",
-   "status": "partial",
-   "date": "2022-10-14",
-   "hasMp4": true
-  },
-  {
-   "id": "1313840428685447170",
-   "topic": "light",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2020-10-07",
-   "hasMp4": true
-  },
-  {
-   "id": "1305951750638231552",
-   "topic": "light",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2020-09-15",
-   "hasMp4": true
-  },
-  {
-   "id": "1298689301488775169",
-   "topic": "light",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2020-08-26",
-   "hasMp4": true
-  },
-  {
-   "id": "931196707236392960",
-   "topic": "light",
+   "id": "917405214638006273",
+   "topic": "grid",
    "project": "badnorth",
    "status": "partial",
-   "date": "2017-11-16",
-   "hasMp4": true
-  },
-  {
-   "id": "911913981731885056",
-   "topic": "terrain",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2017-09-24",
-   "hasMp4": true
-  },
-  {
-   "id": "1448039167057879048",
-   "topic": "terrain",
-   "project": "next",
-   "status": "todo",
-   "date": "2021-10-12",
-   "hasMp4": true
-  },
-  {
-   "id": "1579474420749725696",
-   "topic": "terrain",
-   "project": "next",
-   "status": "todo",
-   "date": "2022-10-10",
-   "hasMp4": true
-  },
-  {
-   "id": "1669315384619540487",
-   "topic": "terrain",
-   "project": "next",
-   "status": "todo",
-   "date": "2023-06-15",
-   "hasMp4": true
+   "date": "2017-10-09",
+   "hasMp4": true,
+   "text": "A somewhat major breakthrough in my procedural generation: a heuristic for deliberately generating navigable levels"
   },
   {
    "id": "1671808851895627776",
    "topic": "terrain",
    "project": "next",
-   "status": "todo",
+   "status": "partial",
    "date": "2023-06-22",
-   "hasMp4": true
-  },
-  {
-   "id": "1708815475801505819",
-   "topic": "terrain",
-   "project": "next",
-   "status": "todo",
-   "date": "2023-10-02",
-   "hasMp4": true
-  },
-  {
-   "id": "1670794261669769217",
-   "topic": "terrain",
-   "project": "next",
-   "status": "partial",
-   "date": "2023-06-19",
-   "hasMp4": true
-  },
-  {
-   "id": "1584623053061099520",
-   "topic": "terrain",
-   "project": "next",
-   "status": "partial",
-   "date": "2022-10-24",
-   "hasMp4": true
-  },
-  {
-   "id": "1447488323845509121",
-   "topic": "terrain",
-   "project": "next",
-   "status": "partial",
-   "date": "2021-10-11",
-   "hasMp4": true
-  },
-  {
-   "id": "1015151731804721152",
-   "topic": "texture",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-07-06",
-   "hasMp4": true
-  },
-  {
-   "id": "1056990611738451968",
-   "topic": "texture",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-10-29",
-   "hasMp4": true
-  },
-  {
-   "id": "1061221291137605633",
-   "topic": "texture",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-11-10",
-   "hasMp4": true
-  },
-  {
-   "id": "1427721874490933250",
-   "topic": "texture",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2021-08-17",
-   "hasMp4": true
-  },
-  {
-   "id": "1430227487376781317",
-   "topic": "texture",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2021-08-24",
-   "hasMp4": true
-  },
-  {
-   "id": "1712088611934371876",
-   "topic": "texture",
-   "project": "next",
-   "status": "todo",
-   "date": "2023-10-11",
-   "hasMp4": true
-  },
-  {
-   "id": "1710031224838771027",
-   "topic": "texture",
-   "project": "next",
-   "status": "partial",
-   "date": "2023-10-05",
-   "hasMp4": true
-  },
-  {
-   "id": "1482346496460828674",
-   "topic": "texture",
-   "project": "next",
-   "status": "partial",
-   "date": "2022-01-15",
-   "hasMp4": true
-  },
-  {
-   "id": "1061229717582475264",
-   "topic": "texture",
-   "project": "badnorth",
-   "status": "partial",
-   "date": "2018-11-10",
-   "hasMp4": true
-  },
-  {
-   "id": "1210969316071477248",
-   "topic": "build",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2019-12-28",
-   "hasMp4": true
-  },
-  {
-   "id": "1257213678056857600",
-   "topic": "build",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-05-04",
-   "hasMp4": true
-  },
-  {
-   "id": "1275089608758484992",
-   "topic": "build",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-06-22",
-   "hasMp4": true
-  },
-  {
-   "id": "1331905048801144836",
-   "topic": "build",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-11-26",
-   "hasMp4": true
-  },
-  {
-   "id": "1670720537662836736",
-   "topic": "build",
-   "project": "next",
-   "status": "partial",
-   "date": "2023-06-19",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "If your terrain generator supports overhangs you gotta flaunt it. I don't make the rules, but I do follow them."
   },
   {
    "id": "1447494168448753667",
@@ -552,127 +117,53 @@
    "project": "next",
    "status": "partial",
    "date": "2021-10-11",
-   "hasMp4": true
+   "hasMp4": true,
+   "text": "Long time fans of the show will not be surprised to learn that this is indeed running on tile based WFC. This time around, I'm getting the best of both worlds by using a mix of triangular and square tiles. (The squares are cut along each diagonal to create 4 triangles though)"
   },
   {
-   "id": "1246074663546916873",
-   "topic": "build",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2020-04-03",
-   "hasMp4": true
-  },
-  {
-   "id": "1205416648397721601",
-   "topic": "build",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2019-12-13",
-   "hasMp4": true
-  },
-  {
-   "id": "1181464374839521280",
-   "topic": "build",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2019-10-08",
-   "hasMp4": true
-  },
-  {
-   "id": "959530111187013632",
-   "topic": "life",
+   "id": "999185422403055616",
+   "topic": "fx",
    "project": "badnorth",
-   "status": "todo",
-   "date": "2018-02-02",
-   "hasMp4": true
-  },
-  {
-   "id": "1212732478458343424",
-   "topic": "life",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-01-02",
-   "hasMp4": true
-  },
-  {
-   "id": "1243228419162341379",
-   "topic": "life",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-03-26",
-   "hasMp4": true
-  },
-  {
-   "id": "1259838941299183619",
-   "topic": "life",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-05-11",
-   "hasMp4": true
-  },
-  {
-   "id": "1270725616430530566",
-   "topic": "life",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-06-10",
-   "hasMp4": true
-  },
-  {
-   "id": "1707490274425884929",
-   "topic": "life",
-   "project": "next",
    "status": "partial",
-   "date": "2023-09-28",
-   "hasMp4": true
+   "date": "2018-05-23",
+   "hasMp4": true,
+   "text": "For my blood splatter UVs, I'm interpolating between sprite-space and skin-space using the fwidth of skin UV. This gives me a sprite-space map on the tummy (where the skin UVs are static) while the splatter on the face follows the actual motion of the head."
   },
   {
-   "id": "1590669875869286400",
-   "topic": "life",
-   "project": "next",
-   "status": "partial",
-   "date": "2022-11-10",
-   "hasMp4": true
-  },
-  {
-   "id": "1290997501332525056",
-   "topic": "life",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2020-08-05",
-   "hasMp4": true
-  },
-  {
-   "id": "1241046107125399552",
-   "topic": "life",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2020-03-20",
-   "hasMp4": true
-  },
-  {
-   "id": "1191990107785572352",
-   "topic": "life",
-   "project": "townscaper",
-   "status": "partial",
-   "date": "2019-11-06",
-   "hasMp4": true
-  },
-  {
-   "id": "901469409579061248",
-   "topic": "water",
+   "id": "972829402873716737",
+   "topic": "fx",
    "project": "badnorth",
-   "status": "todo",
-   "date": "2017-08-26",
-   "hasMp4": true
+   "status": "partial",
+   "date": "2018-03-11",
+   "hasMp4": true,
+   "text": "If you're heading to GDC, come see my microtalk about the triangular flow fields we use for pathfinding and combat http:// schedule.gdconf.com/session/tech-t oolbox/854263 …"
   },
   {
-   "id": "1758250248483278925",
-   "topic": "water",
-   "project": "next",
+   "id": "906416813810049025",
+   "topic": "fx",
+   "project": "badnorth",
    "status": "partial",
-   "date": "2024-02-15",
-   "hasMp4": true
+   "date": "2017-09-09",
+   "hasMp4": true,
+   "text": "New cave tileset. These levels really challenge your spacial skills #screenshotsaturday #madewithunity @BadNorthGame"
+  },
+  {
+   "id": "1201179450668441600",
+   "topic": "tools",
+   "project": "townscaper",
+   "status": "partial",
+   "date": "2019-12-01",
+   "hasMp4": true,
+   "text": "Icons!"
+  },
+  {
+   "id": "1024679338292256769",
+   "topic": "tools",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2018-08-01",
+   "hasMp4": true,
+   "text": "Some UI flair"
   },
   {
    "id": "1258421104756097029",
@@ -680,415 +171,17 @@
    "project": "townscaper",
    "status": "partial",
    "date": "2020-05-07",
-   "hasMp4": true
-  },
-  {
-   "id": "1016680972610359298",
-   "topic": "tools",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-07-10",
-   "hasMp4": true
-  },
-  {
-   "id": "1024679338292256769",
-   "topic": "tools",
-   "project": "badnorth",
-   "status": "todo",
-   "date": "2018-08-01",
-   "hasMp4": true
-  },
-  {
-   "id": "1201179450668441600",
-   "topic": "tools",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2019-12-01",
-   "hasMp4": true
-  },
-  {
-   "id": "1242824460325052417",
-   "topic": "tools",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-03-25",
-   "hasMp4": true
-  },
-  {
-   "id": "1277554535297236994",
-   "topic": "tools",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2020-06-29",
-   "hasMp4": true
-  },
-  {
-   "id": "1430224300003545091",
-   "topic": "tools",
-   "project": "townscaper",
-   "status": "todo",
-   "date": "2021-08-24",
-   "hasMp4": true
-  },
-  {
-   "id": "1670064751181791233",
-   "topic": "tools",
-   "project": "next",
-   "status": "todo",
-   "date": "2023-06-17",
-   "hasMp4": true
-  },
-  {
-   "id": "1724449858369568780",
-   "topic": "tools",
-   "project": "next",
-   "status": "todo",
-   "date": "2023-11-14",
-   "hasMp4": true
-  },
-  {
-   "id": "1105131621391495176",
-   "topic": "tools",
-   "project": "badnorth",
-   "status": "partial",
-   "date": "2019-03-11",
-   "hasMp4": true
-  },
-  {
-   "id": "768886648625061889",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-08-25"
-  },
-  {
-   "id": "777501038274281472",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-09-18"
-  },
-  {
-   "id": "777596437534240768",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-09-18"
-  },
-  {
-   "id": "781027725452648448",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-09-28"
-  },
-  {
-   "id": "781957658597269506",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-09-30"
-  },
-  {
-   "id": "784847588893814785",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-10-08"
-  },
-  {
-   "id": "784847933686575104",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-10-08"
-  },
-  {
-   "id": "784848286272327680",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-10-08"
-  },
-  {
-   "id": "787319655648100352",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-10-15"
-  },
-  {
-   "id": "793545297376972801",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-01"
-  },
-  {
-   "id": "793557992931266561",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-01"
-  },
-  {
-   "id": "793806535898136576",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-02"
-  },
-  {
-   "id": "794993371261665280",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-05"
-  },
-  {
-   "id": "795010582239997952",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-05"
-  },
-  {
-   "id": "797119718477991936",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-11"
-  },
-  {
-   "id": "797844857821732864",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-13"
-  },
-  {
-   "id": "798580832906739712",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-15"
-  },
-  {
-   "id": "802496920790777856",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-26"
-  },
-  {
-   "id": "803190517534248960",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-11-28"
-  },
-  {
-   "id": "806856212260278272",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-12-08"
-  },
-  {
-   "id": "806904557502464000",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-12-08"
-  },
-  {
-   "id": "807135253215199233",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-12-09"
-  },
-  {
-   "id": "807256278154301441",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-12-09"
-  },
-  {
-   "id": "810157485638189056",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-12-17"
-  },
-  {
-   "id": "810878197134950401",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-12-19"
-  },
-  {
-   "id": "815236105079398400",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2016-12-31"
-  },
-  {
-   "id": "816332161036984320",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-03"
-  },
-  {
-   "id": "816743289500106752",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-04"
-  },
-  {
-   "id": "816748103193817088",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-04"
-  },
-  {
-   "id": "817323301357948928",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-06"
-  },
-  {
-   "id": "818857408848130048",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-10"
-  },
-  {
-   "id": "820977247083528192",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-16"
-  },
-  {
-   "id": "821321422140309504",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-17"
-  },
-  {
-   "id": "821680056514781186",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-18"
-  },
-  {
-   "id": "823848950553780226",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-01-24"
-  },
-  {
-   "id": "827215002448846848",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-02-02"
-  },
-  {
-   "id": "827216768783495168",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-02-02"
-  },
-  {
-   "id": "827561690896162816",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-02-03"
-  },
-  {
-   "id": "828984794407170048",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-02-07"
-  },
-  {
-   "id": "832633189277409280",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-02-17"
-  },
-  {
-   "id": "837027901853810688",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-03-01"
-  },
-  {
-   "id": "839067977781768193",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-03-07"
-  },
-  {
-   "id": "847717312912211970",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-03-31"
-  },
-  {
-   "id": "863019585162932224",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-05-12"
-  },
-  {
-   "id": "865200072685912064",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-05-18"
-  },
-  {
-   "id": "883447205176238083",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-07-07"
-  },
-  {
-   "id": "886199305522085890",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-07-15"
+   "hasMp4": true,
+   "text": "We were long overdue for some splashier splashes"
   },
   {
    "id": "890611046435627008",
-   "topic": "?",
-   "project": "?",
-   "status": "unreg",
-   "date": "2017-07-27"
+   "topic": "nav",
+   "project": "badnorth",
+   "status": "partial",
+   "date": "2017-07-27",
+   "hasMp4": true,
+   "text": "(无原文，仅有视频)"
   }
  ]
 }

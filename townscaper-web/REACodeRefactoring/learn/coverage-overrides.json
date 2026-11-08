@@ -392,12 +392,13 @@
       "src/light/lightvolume.js",
       "src/core/world-probes.js",
       "src/world/view.js",
-      "src/core/voxel-distance.js"
+      "src/core/voxel-distance.js",
+      "ao-stages.html"
     ],
     "status": "部分覆盖",
-    "gap": "共享体素烘焙与占用探针保留；213+41帧后补六方向体素RGB/法线采样与反弹指标，并实际运行。完整SDF/UV/mega-texture反馈、形变碰撞和体素软法线写回仍缺；不把局部近似称原作等价。 新增中心EDT和保守距离步进不等于形变表面SDF或软法线写回。",
+    "gap": "共享体素烘焙与占用探针保留；213+41帧后补六方向体素RGB/法线采样与反弹指标，并实际运行。完整SDF/UV/mega-texture反馈、形变碰撞和体素软法线写回仍缺；不把局部近似称原作等价。 新增中心EDT和保守距离步进不等于形变表面SDF或软法线写回。 后续551帧全核，WorldMesh实际遮蔽/反弹分离对照通过；原GPU动态纹理重投影仍缺。",
     "frameReview": true,
-    "evidence": "artifacts/coverage/directional-bounce-review.md"
+    "evidence": "artifacts/coverage/ao-stages-review.md"
   },
   "src/bouncegi.js": {
     "targets": [
@@ -1132,31 +1133,37 @@
     "targets": [
       "src/world/navgraph.js",
       "src/world/battle-navigation.js",
-      "river-nav.html"
+      "river-nav.html",
+      "src/terrain/river-network.js"
     ],
     "status": "部分覆盖",
     "frameReview": true,
     "evidence": "artifacts/coverage/river-nav-review.md",
-    "gap": "有向费用已保留并修复上坡误判，Battle/分层流场共用；复杂汇流/原球面流向及完整接口仍缺。"
+    "gap": "有向费用已保留并修复上坡误判，Battle/分层流场共用；复杂汇流/原球面流向及完整接口仍缺。 新河网有效版本时平床读显式父链，编辑/读档后失效回退启发式；完整流向持久化缺口保留。"
   },
   "engine/rivers.js": {
     "targets": [
-      "src/terrain/generate.js"
+      "src/terrain/generate.js",
+      "src/core/river-network.js",
+      "src/terrain/river-network.js",
+      "drainage.html"
     ],
     "status": "部分覆盖",
     "frameReview": true,
-    "evidence": "artifacts/coverage/river-nav-review.md",
-    "gap": "保留DFS开挖/局部削岸；194帧核验纠正完成口径，完整球面河道约束坍缩＋其余BFS缓坡待实现。"
+    "evidence": "artifacts/coverage/river-network-review.md",
+    "gap": "河网重建局部接入：迁移原版汇水累计策略，改用Priority-Flood出口树处理洼地；重新开槽并替换真实World河标记，平床导航读有效下游。双网格3种子共6组河格106/313/333和99/267/298，出口连通/单调/恢复通过。旧片不重计，173/285；完整球面坍缩/BFS缓坡、湖水和洞穴联合重建仍缺。 边界出口/计格汇水非完整真实水文，连续岩柱限定。"
   },
   "src/spheretown.js": {
     "targets": [
       "src/sphere/planet.js",
-      "planet.html"
+      "planet.html",
+      "src/core/river-network.js",
+      "src/terrain/river-network.js"
     ],
     "status": "部分覆盖",
     "frameReview": true,
     "evidence": "artifacts/coverage/sphere-relax-review.md",
-    "gap": "保留球面拓扑/足迹弹簧；显式模块选择和逐格尺寸诊断局部通过。多格约束仍冲突，完整模块目标形状、原海陆/河网/建筑及World接入未覆盖。"
+    "gap": "保留球面拓扑/足迹弹簧；显式模块选择和逐格尺寸诊断局部通过。多格约束仍冲突，完整模块目标形状、原海陆/河网/建筑及World接入未覆盖。 本次只迁移汇水累计策略至平面共享World出口树并通过双网格；原球面河网/海陆与完整World接入仍缺。"
   },
   "src/edgesmooth.js": {
     "targets": [
@@ -1170,11 +1177,18 @@
   },
   "src/archvoid.js": {
     "targets": [
-      "src/build/buildings.js"
+      "src/core/arch-profile.js",
+      "src/build/buildings.js",
+      "arches.html"
     ],
     "status": "部分覆盖",
-    "gap": "静态新增映射：已有方格对边支撑的椭圆式拱底/侧壁与下方空洞；未迁移楔石/键石、法向外推、桥面/拱脚构造及clearance/measure完整接口。两条2016视频未逐帧，不计学习。",
-    "frameReview": false
+    "frameReview": true,
+    "gap": "123+292帧全核，806有水渠爱好者配文且中途换红楼，纠正原版无文字/单场景说明。保留既有拱，迁移解析净空与有界弦误差角采样，60组逻辑和双网格8/16段/体素不变/恢复通过。楔石/键石、桥面/拱脚及完整clearance/measure接口、形变空间误差仍缺。",
+    "evidence": "artifacts/coverage/arch-profile-review.md",
+    "clips": [
+      "806904557502464000",
+      "802496920790777856"
+    ]
   },
   "src/storydatum.js": {
     "targets": [
@@ -1244,10 +1258,18 @@
     "gap": "新增水平凸格裁剪软盘与实际单位导航楼层接入，真实Battle双网格GPU/过滤/停止通过。原配文820是动画参考请求，非无文字软影教程；高度淡出是本地策略。光向偏移/坡向椭圆、形变斜坡贴合、跨格连续性及原measure接口仍缺。"
   },
   "src/navribbon.js": {
-    "targets": [],
-    "status": "未覆盖",
-    "frameReview": false,
-    "gap": "本批静态审计新出现模块：Catmull-Rom中线、弧长重采样、可变宽四边带与测量未迁移。现有navlayer/战斗命令线是导航显示，不能当弧长参数化走廊生成；2段素材未逐帧，本批不计学习。"
+    "targets": [
+      "src/core/path-samples.js",
+      "src/badnorth/battle.js"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "gap": "827215是单位等级，823848是尘粒AO，均非弧长教程。工程迁移仅既有分层折线3D等距命令点，实际双网格通过；原CatmullRom/宽度带/贴地走廊和完整接口仍缺，尘粒AO本批仅学习。",
+    "evidence": "artifacts/coverage/path-samples-review.md",
+    "clips": [
+      "827215002448846848",
+      "823848950553780226"
+    ]
   },
   "src/topoline.js": {
     "targets": [
@@ -1268,5 +1290,325 @@
     "gap": "1068帧已复核；三角合并/共享边中点/细分与松弛主体保留，已有重构不重做。本批未新增完整生成动画、6度顶点启发式或无限拼接运行验收；signedArea/isConvex辅助导出和质量接口待核。",
     "frameReview": true,
     "evidence": "artifacts/coverage/topoline-quad-review.md"
+  },
+  "src/levelflora.js": {
+    "targets": [
+      "src/core/level-flora.js",
+      "src/life/vegetation.js",
+      "level-flora.html"
+    ],
+    "status": "部分覆盖",
+    "clips": [
+      "959530111187013632"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/level-flora-review.md",
+    "gap": "迁移分层色组策略到共享World真实地被；保留落点、花树/风及默认外观。203帧实际两套生态，非原注释6帧；完整物种几何/生态密度/雨景和原buildFlora/measure接口未迁移。"
+  },
+  "src/squarehex.js": {
+    "targets": [
+      "src/core/corner-footprint.js",
+      "corner-cuts.html"
+    ],
+    "status": "部分覆盖",
+    "clips": [
+      "1471817524148940807"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/corner-cuts-review.md",
+    "gap": "迁移切角策略为共享格只读绘制轮廓；1328四边格样例和49格Canvas通过。不改拓扑/World/导航；原片连续地形不证明切角算法，原测量接口和完整岩岛生成仍缺。"
+  },
+  "src/shrubcard.js": {
+    "targets": [
+      "src/life/vegetation.js",
+      "billboard-anchor.html"
+    ],
+    "status": "部分覆盖",
+    "clips": [
+      "1191990107785572352"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/anchored-plots-review.md",
+    "gap": "静态对比确认既有地被四三角中心锚点/实际GPU对照已在此前316帧学习覆盖，本轮不重计；原版折卡深度侧看度量与真正墙根灌木卡片未迁移，当前墙根主体仍球团。"
+  },
+  "src/propframe.js": {
+    "targets": [
+      "src/core/opening-footprint.js",
+      "src/build/buildings.js",
+      "index.html"
+    ],
+    "status": "部分覆盖",
+    "clips": [
+      "1205416648397721601"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/opening-footprint-review.md",
+    "gap": "既有门窗已使用归一墙边和竖直轴，本批修实际1.6倍窗台外缘未计入放置包围导致越角。原版独立2D贪心/标准框度量未全迁移，World庭院家具饱和摆放/原美术仍缺。"
+  },
+  "src/terracecliff.js": {
+    "targets": [
+      "src/terrain/generate.js",
+      "src/core/terrace-profile.js",
+      "terraces.html"
+    ],
+    "status": "部分覆盖",
+    "clips": [
+      "815236105079398400",
+      "781957658597269506"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/terrace-profile-review.md",
+    "gap": "保留共享World已有噪声/量化；迁移classify诊断思想为不规则格同高连片/面积/逻辑阶差。双网格只读/修改检测/恢复通过；原片算法未知，原fieldSmooth/fieldTerrace对照未迁移，变形坡面/洞内/悬垂/薄平台面积及真正可走性不由此证明。"
+  },
+  "src/patchcluster.js": {
+    "targets": [
+      "src/core/infinite.js",
+      "grids.html"
+    ],
+    "status": "部分覆盖",
+    "clips": [
+      "1332410042784641026",
+      "1151770831619534848"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/infinite-verify-review.md",
+    "gap": "保留已有三块簇/块与两簇插值，修实际每mode全部owner验缝和逐块绘制，24逻辑/4模式Canvas通过。只簇接缝约.376，blend约4e-15；本地patch外边钉住故patch无缝。原版二维替代/3对7性能证明、按需流式生成与完整对偶动作仍未等价。"
+  },
+  "src/unitsnap.js": {
+    "targets": [
+      "src/world/battle-navigation.js",
+      "src/core/unit-ground-height.js",
+      "src/badnorth/battle.js",
+      "src/core/house-door-presence.js"
+    ],
+    "status": "部分覆盖",
+    "clips": [
+      "828984794407170048",
+      "890611046435627008"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/house-door-review.md",
+    "gap": "保留已有逐人navFloor/分层导航；修层高缓动为时间步可组合的指数方式，实际双网格4/6层与30/60/120Hz通过。828准确配文为防维京，非无文字；890新增666帧全核；实际房屋攻击/守卫补门楼层过滤，排除船上/坠落/死亡。原standHeight方格演示未迁移，真正斜坡脚高/完整动画和火球仍缺。"
+  },
+  "src/slotsolve.js": {
+    "targets": [
+      "src/core/wfc.js",
+      "wfc.html",
+      "wfc-trace.html"
+    ],
+    "status": "部分覆盖",
+    "clips": [
+      "865200072685912064"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/wfc-trace-review.md",
+    "gap": "复用既有半边WFC传播/回溯/局部修复，加最多256份不可变实际候选快照/显式截断与回看。908帧含收缩/冲突/重置，非原注释6帧静态。原图块/红色依赖链/自动时序动画及完整建筑模块接入未复现；独立原variants接口未迁移。"
+  },
+  "src/hiproof.js": {
+    "targets": [
+      "src/core/hip-roof.js",
+      "src/build/buildings.js",
+      "hip-roofs.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "gap": "README群体寻路配文，非无文字六帧教程。矩形屋脊长短边差迁移到实际独立四边房屋可选四檐顶，双网格开关/恢复通过；不规则四边仅双线性解释，完整多格四坡/复杂凹屋顶/原接口及寻路球点仍缺。",
+    "evidence": "artifacts/coverage/hip-roof-review.md",
+    "clips": [
+      "807256278154301441"
+    ]
+  },
+  "src/squadbanner.js": {
+    "targets": [
+      "src/core/banner.js",
+      "src/life/banner.js",
+      "src/badnorth/battle.js",
+      "squad-banners.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "gap": "原文And another one，23帧非六帧；共享本地骷髅/剑/三叉戟掩码接实际三队Bezier材质，GPU白像素/alpha/开关通过。原三格atlas、金饰盾纹、竖旗横杆及完整队色系统未迁移。",
+    "evidence": "artifacts/coverage/squad-banners-review.md",
+    "clips": [
+      "827216768783495168"
+    ]
+  },
+  "src/clouddeck.js": {
+    "targets": [
+      "src/core/cloud-depth.js",
+      "src/life/impostor.js",
+      "src/life/vegetation.js",
+      "clouds.html",
+      "src/core/cloud-motion.js",
+      "src/light/cloud-shadow.js",
+      "src/world/view.js",
+      "src/ui/environment-panel.js"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "gap": "近云投影接入共享World主材质及首页环境开关：复用真实云图集/实例锚点/时钟，沿阳光方向投影到不同高度的建筑与地形。双网格GPU开关恢复、自然31云团、隐藏停止通过。复用489帧不重计，173/285；固定轮廓近似，远云影/模糊/水与植被接收仍缺。 原高耸云体/真正几何三层及完整接口未复现；近云40单位回绕仍存在。",
+    "evidence": "artifacts/coverage/cloud-shadow-review.md",
+    "clips": [
+      "1243228419162341379"
+    ]
+  },
+  "src/voxelao.js": {
+    "targets": [
+      "src/light/bake.js",
+      "src/world/worldmesh.js",
+      "ao-stages.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "gap": "原文五阶段6解码帧全核，非四帧。保留本地分层烘焙，实际遮蔽/反弹分离、关闭与恢复通过；本地四选项不等于原flat/up/vertexAO/SSAO/directionalAO全流程，原六向算法与SSAO仍缺。",
+    "evidence": "artifacts/coverage/ao-stages-review.md",
+    "clips": [
+      "793557992931266561"
+    ]
+  },
+  "src/ballistic.js": {
+    "targets": [
+      "src/core/ballistic-table.js",
+      "src/badnorth/battle.js",
+      "ballistics.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "gap": "678帧全核，原Cost/Validity/半径实际变化，原注释24帧/静态参数不成立。保留现有无阻力游戏参数，提共享表/可调落角权重，修非格点目标垂直端点与越界夹取；1717例和双网格实际弓手通过。原表达式/独立Validity/drag及候选轨迹UI仍缺。",
+    "evidence": "artifacts/coverage/ballistic-table-review.md",
+    "clips": [
+      "987267068495003648"
+    ]
+  },
+  "src/surfacedeco.js": {
+    "targets": [
+      "src/core/surface-decoration.js",
+      "src/core/wfc.js",
+      "src/build/buildings.js",
+      "building-components.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "gap": "六类墙饰接实际建筑墙段：空/普通窗/长窗/门/装饰拱门/百叶，复用共享WFC并独立检查角色与邻窗规则；按墙宽用1–3槽，百叶只在相邻窗实际画出后绘制。双网格168/167墙段零求解失败，实绘217/300件，World不变与关闭恢复通过。旧505帧不重计，173/285；跨格整立面、真实拱洞及完整原接口仍缺。 候选碰撞拒绝23/43仍存在，旧模式保留；原六类规则非视频证明。",
+    "evidence": "artifacts/coverage/facade-decoration-review.md",
+    "clips": [
+      "1181464374839521280"
+    ]
+  },
+  "src/barycentric.js": {
+    "targets": [
+      "src/core/spatial.js",
+      "src/core/infinite.js",
+      "grids.html?t=infinite"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "gap": "815+478帧全核，原24帧/始终内部说明不成立。已有XZ预计算真正接入块/两簇缓存，修原点引用/退化传播；10264顶点漂移≤5.03e-15、24模式与真实页133预计算/5万查询通过。原3D任意平面、教学交互/完整参考接口及极瘦三角仍缺。",
+    "evidence": "artifacts/coverage/bary-prep-review.md",
+    "clips": [
+      "974579499802202113",
+      "974564862729838592"
+    ]
+  },
+  "src/boxtest.js": {
+    "targets": [
+      "src/core/obb.js",
+      "src/badnorth/landing-plan.js",
+      "src/badnorth/battle.js"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "clips": [
+      "974325184525201409"
+    ],
+    "evidence": "artifacts/coverage/landing-approach-review.md",
+    "gap": "已核504帧不重计。共享3D SAT接真实泊位及14单位固定朝向直线扫掠走廊预留，交叉/平行逻辑与双网格6船15对无交通过。地形岸礁碰撞、动态调度与原二维裁剪/深度和完整规划仍缺。"
+  },
+  "src/depfill.js": {
+    "targets": [
+      "src/core/depression-fill.js",
+      "src/terrain/drainage.js",
+      "src/terrain/generate.js",
+      "drainage.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "clips": [
+      "1447488323845509121",
+      "1442695040888963407"
+    ],
+    "evidence": "artifacts/coverage/drainage-generated-review.md",
+    "gap": "复用已核656帧不重计。Priority-Flood改接真实多边形邻接/堆/岩石体素，双网格29/25格、出口树、幂等/恢复通过，生成器可选接入。连续微坡、湖水、原规则网格统计/侵蚀与河道重算仍缺，未验收所有生成特征组合。 本批6组真实生成seed1/7/19双网格非上坡出口/幂等通过，失效河段清除逻辑通过（未重新生成河道）。"
+  },
+  "src/piercefloor.js": {
+    "targets": [
+      "src/core/arch-floor-budget.js",
+      "src/build/buildings.js",
+      "arches.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "clips": [
+      "802496920790777856"
+    ],
+    "evidence": "artifacts/coverage/arch-floor-budget-review.md",
+    "gap": "已学292帧不重计。保留原已有限高默认，楼板预算/可选厚度接真实拱底，1000组逻辑及双网格0.05/0.20、World不变与关闭恢复通过。原完整立面/过梁/挑檐连续率、穿层统计与碰撞仍缺。"
+  },
+  "src/flowfield.js": {
+    "targets": [
+      "src/badnorth/flowfield.js",
+      "src/world/battle-navigation.js",
+      "src/core/portal-aim.js",
+      "src/badnorth/battle.js"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "clips": [
+      "816748103193817088"
+    ],
+    "evidence": "artifacts/coverage/portal-group-review.md",
+    "gap": "479帧全核复用。已有共享分层流场保留；本次通口前视/碰撞内前进回退接真实24单位，双网格6秒最少推进4.22/4.77，穿洞/封洞及分层战斗回归通过。完整连续三角导航面内插值、坡高与原群体流体行为仍缺。"
+  },
+  "src/rayvis.js": {
+    "status": "部分覆盖",
+    "targets": [
+      "src/core/space-visibility.js",
+      "src/world/space-visibility.js",
+      "src/world/view.js",
+      "space-visibility.html"
+    ],
+    "frameReview": true,
+    "evidence": "artifacts/coverage/space-visibility-review.md",
+    "gap": "64帧全核，固定步长/斐波那契方向接实际共享World室内开阔度，双网格开关/缓存通过。仍可漏薄墙；完整灰度场/整楼烘焙与原接口未迁，不等于导航门户视线。"
+  },
+  "src/tileplace.js": {
+    "status": "部分覆盖",
+    "frameReview": true,
+    "evidence": "artifacts/coverage/space-visibility-review.md",
+    "gap": "本次新增67帧3D拼装全核，仅学习；既有通用共享WFC/建筑保留。原3D预制模块目录/联合空间约束、逐步拼装与待置零件动画未实现，其他所列片不据此声称全核。"
+  },
+  "src/islandpasses.js": {
+    "targets": [
+      "src/core/terrace-edges.js",
+      "src/world/terrace-edges.js",
+      "src/world/view.js",
+      "terraces.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "evidence": "artifacts/coverage/terrace-edges-review.md",
+    "gap": "原版新增islandpasses局部迁入：台地层界/顶面线框/格边岸界共用真实World多边形端点和当前笼形变，双网格616/488层界段、2005/1454线框段、166/117岸界段，逐点投影/只读/编辑刷新通过。复用649帧不重计，175/285；完整环追踪/最终倒角一致性仍缺，木梯模块尚未迁移。 原注释日期/六帧不符实际2023/649帧；线框为叠加，完整traceRings/interpContour接口与软坡联合生成仍缺。"
+  },
+  "src/terraceladder.js": {
+    "targets": [
+      "src/core/ladder-profile.js",
+      "src/world/navlayer.js",
+      "src/world/view.js",
+      "terraces.html"
+    ],
+    "status": "部分覆盖",
+    "frameReview": true,
+    "evidence": "artifacts/coverage/wood-ladders-review.md",
+    "gap": "跨层梯长策略接真实共享导航几何：梯脚/台沿来自当前笼形变，按3D锚点长度画双梁与等距踏棍，可切回旧台阶。1000逻辑例及双网格84/96把实际木梯、有限坐标/World和导航不变/关闭恢复通过。旧109帧不重计，175/285；原薄悬平台、端点体积接触和攀爬动作仍缺。 默认旧台阶保留；原模块完整接口、薄平台与碰撞/攀爬未复现。"
   }
 }

@@ -23,7 +23,7 @@
 <body>
 <canvas id="c"></canvas>
 <div id="ui">
-  <nav><a href="index.html">← 首页</a><a href="pipeline.html">管线</a><a href="planet.html">球面</a></nav>
+  <nav><a href="index.html" target="_top">← 首页</a><a href="pipeline.html" target="_top">管线</a><a href="planet.html">球面</a></nav>
   <h1>网格实验室</h1>
   <div class="row" id="tabs">
     <button data-t="kinds" class="on">三角 / 方格 / 混合</button>
@@ -141,7 +141,7 @@ function draw() {
     const at = inf.versions[infMode];
     V = view(boundsOf(inf.verts.map((v) => [v.x0, v.z0])));
     const pal = ['#cfe2d6', '#e3d7b8', '#d6d3e8', '#e6cfcf', '#cde0e6', '#e0e3c6', '#d9cce0'];
-    for (const P of inf.patches) for (const qd of P.quads) poly(qd.map((v) => V.P(...at(v))), pal[(P.q * 7 + P.r * 3 + 1000) % pal.length], '#2a3238', 0.9);
+    for (const P of inf.patches) for (const qd of P.quads) poly(qd.map((v) => V.P(...inf.versionAt(v,P.id,infMode))), pal[(P.q * 7 + P.r * 3 + 1000) % pal.length], '#2a3238', 0.9);
     // 块边界：只属于一块的边且两端都在边界上
     ctx.strokeStyle = '#d6503c'; ctx.lineWidth = 2;
     for (const qd of inf.quads) for (let i = 0; i < 4; i++) {
@@ -153,7 +153,7 @@ function draw() {
     for (const C of inf.clusters) poly(C.patches.map((i) => V.P(...inf.patches[i].center)), null, 'rgba(255,255,255,.6)', 1.2);
     ctx.setLineDash([]);
     const vr = verify(inf, infMode);
-    st.textContent = `${inf.patches.length} 块 · ${inf.clusters.length} 簇 · ${vr.quads} 格 · 翻折 ${vr.flipped} · 块边界点 ${vr.border} 个，两侧算出的位置最大差 ${vr.seam.toExponential(1)} · ${infStats.ms.toFixed(0)} ms`;
+    st.textContent = `${inf.patches.length} 块 · ${inf.clusters.length} 簇 · ${vr.quads} 格 · 翻折 ${vr.flipped} / 非法 ${vr.invalid} · 块边界点 ${vr.border} 个，全部${vr.comparisons}对表示最大差 ${vr.seam.toExponential(1)} · 重心预计算 ${inf.barycentricStats.prepared} / 查询 ${inf.barycentricStats.queries} · ${infStats.ms.toFixed(0)} ms`;
   } else if (tab === 'lines') {
     const g = get('townscaper');
     const hl = new Map();
@@ -238,7 +238,7 @@ function startAtlas(){if(atlasState.timer)return;atlasState.timer=setInterval(()
 function stopAtlas(){clearInterval(atlasState.timer);atlasState.timer=null;}
 addEventListener('pagehide',stopAtlas);
 resize(); setTab(new URLSearchParams(location.search).get('t') || 'kinds');
-window.gridLab = { selectLineCell(id){if(tab!=='lines')setTab('lines');const g=get('townscaper');picked=g.cells.find(c=>c.id===id);draw();}, setTab, atlasStep, resetAtlas, pauseAtlas(){atlasState.running=false;stopAtlas();if(tab==='atlas')setTab('atlas')}, get selectedGrid(){return tab==='kinds'?get(sub):null}, get gridKind(){return sub}, get atlas(){return atlasState.atlas}, get atlasLive(){return atlasState.live.slice()} };
+window.gridLab = { get infiniteReview(){return inf?{mode:infMode,report:verify(inf,infMode),barycentric:{...inf.barycentricStats},patches:inf.patches.length,clusters:inf.clusters.length}:null}, selectLineCell(id){if(tab!=='lines')setTab('lines');const g=get('townscaper');picked=g.cells.find(c=>c.id===id);draw();}, setTab, atlasStep, resetAtlas, pauseAtlas(){atlasState.running=false;stopAtlas();if(tab==='atlas')setTab('atlas')}, get selectedGrid(){return tab==='kinds'?get(sub):null}, get gridKind(){return sub}, get atlas(){return atlasState.atlas}, get atlasLive(){return atlasState.live.slice()} };
 </script>
 </body>
 </html>

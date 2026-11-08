@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {styleMat} from '../style/materials.js';
 import {morrisWaterGeometry} from './morrisPreservedRegions.js';
 import {installMorrisTownscaper} from './morrisTownscaper.js?v=apostles-r4';
 import {installMorrisCastlePatrol} from './morrisCastlePatrolRoute.js?v=reacode-refactor-r1';
@@ -19,7 +20,7 @@ export function createMorrisLakeTerrain(R,edge){
 }
 export function installMorrisLake({root,terrain,edge}){
  const geometry=morrisWaterGeometry(edge,terrain.lakeRatio,terrain.preservation,terrain.waterY);
- const water=new T.Mesh(geometry,new T.MeshStandardMaterial({color:0x578e9c,roughness:.32,metalness:.12,side:T.DoubleSide}));water.name='morris-flat-inner-lake-80-percent';water.position.y=terrain.waterY;water.receiveShadow=true;root.add(water);
+ const water=new T.Mesh(geometry,styleMat('morris.lake.water','MeshStandardMaterial',{color:0x578e9c,roughness:.32,metalness:.12,side:T.DoubleSide}));water.name='morris-flat-inner-lake-80-percent';water.position.y=terrain.waterY;water.receiveShadow=true;root.add(water);
  // Empty compatibility anchors keep existing camera tours working, without a castle or bridge mesh.
  const castle=new T.Group(),bridge=new T.Group();castle.position.set(0,terrain.waterY,0);bridge.position.set(edge(0)*.951,3.8,0);
  const a=Math.PI/2,r=edge(a)*.955,musicCourt={x:0,z:r,routeS:terrain.route.length/4};

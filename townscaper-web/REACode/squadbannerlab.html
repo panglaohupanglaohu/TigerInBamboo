@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>小队旗 — 一块图集 + 一个军色</title>
+<style>
+  :root { --ink:#1d2b36; --muted:#5d7280; --line:#d8e2e6; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#e8eef0; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(232,238,240,.96) 64%, rgba(232,238,240,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:104ch; }
+  header b { color:#2d5c86; font-weight:650; }
+  #panel { position:fixed; z-index:2; right:16px; top:112px; width:330px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  #panel h2 { margin:0 0 6px; font-size:11.5px; color:var(--muted); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-size:11.5px; font-variant-numeric:tabular-nums; }
+  th { text-align:right; font-weight:600; color:var(--muted); padding:2px 0 3px; border-bottom:1px solid var(--line); }
+  th:first-child { text-align:left; }
+  td { text-align:right; padding:3px 0; border-bottom:1px dashed #eef3f5; }
+  td:first-child { text-align:left; }
+  #panel .note { margin:7px 0 6px; font-size:11.5px; color:var(--muted); line-height:1.5; }
+  #panel .row { display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted); }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:2px 0 0; }
+  #stats { position:fixed; left:18px; bottom:12px; right:362px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:#146c4a; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>小队旗：一块图集 + 一个军色，几何与配色全队共用一份</h1>
+  <p>六帧里三面旗的底色是<b>同一个蓝</b>——军色全军只有一份，队与队的差别只在<b>图集第几格</b>
+     （骷髅 / 剑 / 三叉戟）。杆高、横杆、旗宽、垂坠、徽记居中位置都是常数，所以 24 个单位盾面上的小徽记
+     和旗面取的是<b>同一块像素</b>。旗面是 billboard：投影宽 = 宽 · cos(偏航)，偏航夹在 ±40°，
+     最侧也有 <b>0.766 宽</b>——旗永远读得出来。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="panel">
+  <h2>逐队实测</h2>
+  <table>
+    <thead><tr><th>队伍</th><th>徽记</th><th>单位</th><th>旗宽比</th><th>图集差</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="note" id="pnote">—</p>
+  <div class="row"><span>相机偏航（改它看旗变窄）</span><b id="ylab">0°</b></div>
+  <input type="range" id="yaw" min="0" max="90" step="1" value="0" />
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { buildAtlas, planScene, measure, bannerWidth, roleColor, css, CELL, POLE_H, BANNER_W, BANNER_H, CLAMP_DEG } from './src/squadbanner.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const atlas = buildAtlas();
+const scene = planScene();
+let camYaw = 0;
+
+/* ---------- 场景 ---------- */
+function bg() {
+  const g = ctx.createLinearGradient(0, 0, 0, 800);
+  g.addColorStop(0, '#e6edef'); g.addColorStop(0.62, '#dde6e8'); g.addColorStop(1, '#cfdadd');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 1280, 800);
+  // 几块石头台地，给旗子和人一个落脚处
+  ctx.fillStyle = 'rgba(176,190,196,.42)';
+  for (const sq of scene) {
+    ctx.beginPath();
+    ctx.ellipse(sq.cx, sq.cy + 16, 108, 30, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.fillStyle = 'rgba(198,209,213,.55)';
+  for (const sq of scene) {
+    ctx.beginPath();
+    ctx.ellipse(sq.cx - 8, sq.cy + 8, 92, 22, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawUnit(u) {
+  const s = u.scale;
+  ctx.save();
+  ctx.translate(u.x, u.y);
+  ctx.scale(s * 1.14, s * 1.14);
+  // 影子
+  ctx.fillStyle = 'rgba(52,68,78,.24)';
+  ctx.beginPath(); ctx.ellipse(0, 3, 9, 3.6, 0, 0, Math.PI * 2); ctx.fill();
+  // 腿
+  ctx.strokeStyle = css(u.body, 0.92); ctx.lineWidth = 3.2; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-3.2, -10); ctx.lineTo(-3.2, 0); ctx.moveTo(3.2, -10); ctx.lineTo(3.2, 0); ctx.stroke();
+  // 身体
+  ctx.fillStyle = css(u.body);
+  ctx.beginPath();
+  ctx.moveTo(-5.6, -11); ctx.lineTo(5.6, -11); ctx.lineTo(4.6, -26); ctx.lineTo(-4.6, -26);
+  ctx.closePath(); ctx.fill();
+  // 头盔
+  ctx.fillStyle = css(u.helmet);
+  ctx.beginPath(); ctx.ellipse(0, -29, 5.4, 5.8, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(40,56,66,.45)';
+  ctx.beginPath(); ctx.ellipse(0, -27.4, 5.4, 3.2, 0, 0, Math.PI); ctx.fill();
+  // 长矛
+  ctx.strokeStyle = 'rgba(228,224,212,.95)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(8, -2); ctx.lineTo(10.4, -40); ctx.stroke();
+  ctx.fillStyle = '#f2efe6';
+  ctx.beginPath(); ctx.moveTo(10.4, -46); ctx.lineTo(12, -39); ctx.lineTo(8.8, -39); ctx.closePath(); ctx.fill();
+  // 盾（队色 + 本队徽记那一格图集）
+  ctx.fillStyle = css(u.shield);
+  ctx.beginPath(); ctx.roundRect(-13.5, -24, 9, 12, 2.4); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.72)'; ctx.lineWidth = 0.9; ctx.stroke();
+  ctx.drawImage(atlas.canvas, u.cell * CELL, 0, CELL, CELL, -13.1, -23.2, 8.2, 10.4);
+  ctx.restore();
+}
+
+function drawBanner(sq) {
+  const bw = bannerWidth(sq.yaw + camYaw);
+  const w = bw.projected;
+  const cx = sq.banner.x;
+  const top = sq.banner.y;             // 横杆高度
+  const poleTop = top - 12;
+  // 杆
+  ctx.strokeStyle = '#8d8578'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(cx, sq.cy + 4); ctx.lineTo(cx, poleTop + 4); ctx.stroke();
+  // 杆顶金属球（比横杆更高）
+  ctx.fillStyle = '#c9a250';
+  ctx.beginPath(); ctx.arc(cx, poleTop - 4, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.55)';
+  ctx.beginPath(); ctx.arc(cx - 1.8, poleTop - 6, 2, 0, Math.PI * 2); ctx.fill();
+  // 横杆
+  ctx.strokeStyle = '#a49b8c'; ctx.lineWidth = 3.4;
+  ctx.beginPath(); ctx.moveTo(cx - w / 2 - 5, top); ctx.lineTo(cx + w / 2 + 5, top); ctx.stroke();
+  // 旗面（底边垂坠：两瓣正弦）
+  const field = css(roleColor(sq.hue, 'field'), 1);
+  const edge = css(sq.units4[0].shield, 1);
+  ctx.beginPath();
+  ctx.moveTo(cx - w / 2, top);
+  ctx.lineTo(cx + w / 2, top);
+  for (let i = 1; i <= 12; i++) {
+    const t = i / 12;
+    const x = cx + w / 2 - t * w;
+    ctx.lineTo(x, top + BANNER_H + Math.sin(t * Math.PI * 2) * 3.4 * (1 - t * 0.2));
+  }
+  ctx.closePath();
+  ctx.fillStyle = field; ctx.fill();
+  ctx.strokeStyle = edge; ctx.lineWidth = 2.6; ctx.stroke();
+  // 徽记：就是图集那一格
+  const e = Math.round(Math.min(w * 0.74, BANNER_H * 0.64));
+  const ex = Math.round(cx - e / 2), ey = Math.round(top + (BANNER_H - e) / 2 - 3);
+  ctx.drawImage(atlas.canvas, sq.emblem * CELL, 0, CELL, CELL, ex, ey, e, e);
+  return { w, ex, ey, e };
+}
+
+let bannerBoxes = [];
+function draw() {
+  bg();
+  for (const sq of scene) {
+    for (const u of sq.units4) drawUnit(u);
+  }
+  bannerBoxes = scene.map((sq) => ({ sq, ...drawBanner(sq) }));
+}
+
+/* ---------- 像素复核：旗宽与图集墨量 ---------- */
+function scanRow(y, cx, half) {
+  // 只在本队旗子附近扫：整行扫会把别队的旗和人也算进来（第一次就量出 606px）
+  const x0 = Math.max(0, Math.round(cx - half)), x1 = Math.min(1279, Math.round(cx + half));
+  const d = ctx.getImageData(x0, y, x1 - x0 + 1, 1).data;
+  const bgc = [d[4], d[5], d[6]];   // 窗口左端当背景
+  let min = 1e9, max = -1e9;
+  for (let i = 0; i < x1 - x0 + 1; i++) {
+    const x = x0 + i;
+    const j = i * 4;
+    if (Math.abs(d[j] - bgc[0]) + Math.abs(d[j + 1] - bgc[1]) + Math.abs(d[j + 2] - bgc[2]) > 34) {
+      min = Math.min(min, x); max = Math.max(max, x);
+    }
+  }
+  return max >= min ? { min, max, width: max - min + 1 } : null;
+}
+
+function probe() {
+  const px = [];
+  const ref = document.createElement('canvas');
+  for (const b of bannerBoxes) {
+    const row = scanRow(Math.round(b.sq.banner.y + BANNER_H * 0.82), b.sq.banner.x, BANNER_W * 0.85);
+    // 「旗面真的是图集那一格」的硬证据：把同一格图集按同一尺寸重绘一遍，逐像素比
+    const e = b.e;
+    ref.width = e; ref.height = e;
+    const rctx = ref.getContext('2d');
+    rctx.clearRect(0, 0, e, e);
+    // 参考图必须先铺同一块旗面底色，否则"图集透明处"会和旗面底色差出 150+
+    rctx.fillStyle = css(roleColor(b.sq.hue, 'field'), 1);
+    rctx.fillRect(0, 0, e, e);
+    rctx.drawImage(atlas.canvas, b.sq.emblem * CELL, 0, CELL, CELL, 0, 0, e, e);
+    const a = rctx.getImageData(0, 0, e, e).data;
+    const d = ctx.getImageData(b.ex, b.ey, e, e).data;
+    let sum = 0, n = 0;
+    for (let i = 0; i < d.length; i += 4) {
+      if (a[i + 3] < 24 && d[i + 3] === 0) continue;   // 两边都空的像素不计
+      sum += (Math.abs(d[i] - a[i]) + Math.abs(d[i + 1] - a[i + 1]) + Math.abs(d[i + 2] - a[i + 2])) / 3;
+      n++;
+    }
+    px.push({ name: b.sq.name, drawn: b.w, scanned: row ? row.width : -1, atlasDiff: n ? sum / n : -1 });
+  }
+  return px;
+}
+
+/* ---------- 面板 ---------- */
+function paintPanel() {
+  const m = measure(scene, atlas);
+  document.getElementById('rows').innerHTML = m.rows.map((r) => `
+    <tr><td>${r.name}</td><td>${r.emblem}</td><td>${r.units}</td>
+      <td>${r.wRatio.toFixed(3)}</td><td>${(window.__atlasDiff?.[r.name] ?? 0).toFixed(1)}</td></tr>`).join('');
+  document.getElementById('pnote').textContent =
+    `三面旗共用同一套几何（杆 ${POLE_H}px / 旗 ${BANNER_W}×${BANNER_H}px）与同一个军色，只有图集格不同；` +
+    `单位盾面 ${m.rows.reduce((a, r) => a + r.cellShare, 0)}/${m.unitTotal} 用的都是本队那一格。` +
+    `偏航夹 ±${CLAMP_DEG}° → 最窄 ${(Math.cos(CLAMP_DEG * Math.PI / 180)).toFixed(3)} 宽。`;
+}
+
+function paintStats() {
+  const m = measure(scene, atlas);
+  const px = probe();
+  const total = m.rows.reduce((s, r) => s + r.units, 0);
+  window.__atlasDiff = Object.fromEntries(px.map((p) => [p.name, p.atlasDiff]));
+  const diffMax = Math.max(...px.map((p) => p.atlasDiff));
+    document.getElementById('stats').innerHTML =
+    `<b>${m.rows.length} 小队 / ${total} 单位</b>` +
+    ` · 军色 <b>${m.hues} 个</b>（全军 212°）→ 单位身上只有 <b>${m.colors.body}+${m.colors.shield}+${m.colors.helmet}</b> 个颜色值，不是 ${total} 个` +
+    ` · 图集 <b>3 格</b> 旗面复用 <span class="ok">3/3</span>，盾面 <span class="ok">${m.rows.reduce((a, r) => a + r.cellShare, 0)}/${total}</span>` +
+    ` · 旗宽 = 宽·cos(偏航) 夹 ${CLAMP_DEG}° → 最窄 <b>${(Math.cos(CLAMP_DEG * Math.PI / 180)).toFixed(3)}</b>` +
+    `（实测 ${px.map((p) => p.scanned).join('/')}px vs 计算 ${px.map((p) => p.drawn.toFixed(0)).join('/')}px）` +
+    ` · 旗面↔图集逐像素差 <span class="ok">${diffMax.toFixed(2)}/255</span>`;
+}
+
+document.getElementById('yaw').oninput = (e) => {
+  camYaw = +e.target.value;
+  document.getElementById('ylab').textContent = `${camYaw}°`;
+  draw(); paintStats();
+};
+
+paintPanel(); draw(); paintStats();
+window.reaLab = {
+  measure: () => measure(scene, atlas),
+  probe: () => probe(),
+  setYaw: (v) => { camYaw = v; draw(); paintStats(); return probe(); },
+  stats: () => document.getElementById('stats').innerText,
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>灌木卡片 — 中心锚点把平板折成两片</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --accent:#2f7d8f; --warn:#b3412f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:118ch; }
+  header b { color:#8a5a12; font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,242,.97) 70%, rgba(238,243,242,0)); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.95);
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:22px; flex-wrap:wrap; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .no { color:var(--warn); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>灌木卡片不是平板：<b>加一个中心锚点</b>，4 顶点 2 三角变 5 顶点 4 三角</h1>
+  <p>同一张卡片被转到 0°→90°（转角由相机绕它走，卡片自己<b>不旋转</b> —— 原文 "without messing with the rotation"）。
+     上排是普通 billboard：侧到 90° 时投影宽度归零，整丛灌木塌成一条线；下排把中心顶点朝相机推出 0.28，
+     两个半片各歪一点，侧看最小宽度 0.280、两半片法线差 58.5°，于是"从任何角度都有一点厚度和明暗方向"。
+     代价只有 2 个三角，比再交叉一张卡片（+100% 三角）便宜。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { cardFrame, compareCard, foldAngle, shadeOf, halfNormals } from './src/shrubcard.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1d2f36', MUTED = '#5c727a', WARN = '#b3412f';
+
+const DEPTH = 0.28;
+const res = compareCard(DEPTH);
+const YAW = [0, 22.5, 45, 67.5, 90];
+
+function leaf(x, y, s, ang) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(ang);
+  ctx.beginPath();
+  ctx.ellipse(0, 0, s * 0.30, s * 0.62, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+// 一张卡片：投影后画两个半片（锚点把四边形折成两片）
+function drawCard(cx, cy, yawDeg, depth, scale, label, muted) {
+  const yaw = (yawDeg * Math.PI) / 180;
+  const f = cardFrame(yaw, depth, 1, 1);
+  const S = scale;
+  const P = (p) => ({ x: cx + p.x * S, y: cy + p.y * S });
+  const tl = P(f.flat[0]), tr = P(f.flat[1]), br = P(f.flat[2]), bl = P(f.flat[3]);
+  const a = P(f.anchor);
+  const { left, right } = halfNormals(depth);
+  const sl = shadeOf(left), sr = shadeOf(right);
+
+  // 桌面阴影
+  ctx.fillStyle = 'rgba(38,74,84,.12)';
+  ctx.beginPath();
+  ctx.ellipse(cx, cy + S * 0.62, S * 0.46 * Math.max(0.18, f.width), S * 0.075, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  const paint = (pts, shade, col) => {
+    ctx.beginPath();
+    pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+    ctx.closePath();
+    ctx.fillStyle = col;
+    ctx.globalAlpha = 1;
+    ctx.fill();
+    ctx.globalAlpha = 0.22;
+    ctx.fillStyle = '#0d2a22';
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  };
+
+  const green = (shade) => {
+    const g = Math.round(96 + 78 * (shade - 0.55) / 0.45);
+    return `rgb(${Math.round(g * 0.62)},${g},${Math.round(g * 0.66)})`;
+  };
+
+  paint([tl, bl, a], sl, green(sl));
+  paint([tr, br, a], sr, green(sr));
+
+  // 只描外轮廓 + 一条折线（锚点到中心），否则每片三角都描边会画成一个 X
+  ctx.beginPath();
+  [tl, tr, br, bl].forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+  ctx.closePath();
+  ctx.strokeStyle = 'rgba(20,58,44,.62)';
+  ctx.lineWidth = 1.3;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(tl.x, tl.y); ctx.lineTo(a.x, a.y); ctx.lineTo(tr.x, tr.y);
+  ctx.strokeStyle = 'rgba(20,58,44,.30)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // 几片叶子，让"是一丛灌木"而不是一个多边形
+  ctx.save();
+  ctx.beginPath();
+  [tl, bl, a, tr, br].forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+  ctx.closePath();
+  ctx.clip();
+  ctx.fillStyle = 'rgba(18,66,44,.42)';
+  leaf(cx - S * 0.10 + f.anchor.x * S, cy - S * 0.10, S * 0.30, -0.5);
+  leaf(cx + S * 0.06 + f.anchor.x * S, cy + S * 0.08, S * 0.26, 0.7);
+  ctx.restore();
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = muted ? MUTED : INK;
+  ctx.font = '600 11.5px -apple-system';
+  ctx.fillText(label, cx, cy + S * 0.86);
+  ctx.fillStyle = muted ? WARN : MUTED;
+  ctx.font = '11px -apple-system';
+  ctx.fillText(`宽 ${f.width.toFixed(3)}`, cx, cy + S * 0.86 + 15);
+}
+
+// 两排
+const rowY = [196, 414];
+const xs = [130, 372, 614, 856, 1098];
+const SCALE = 118;
+
+ctx.textAlign = 'left';
+ctx.fillStyle = INK; ctx.font = '600 13px -apple-system';
+ctx.fillText('A · 普通 billboard（depth = 0）', 40, 118);
+ctx.fillStyle = MUTED; ctx.font = '12px -apple-system';
+ctx.fillText('4 顶点 / 2 三角 / 两半片共面，法线夹角 0°', 268, 118);
+
+ctx.fillStyle = INK; ctx.font = '600 13px -apple-system';
+ctx.fillText('B · 加中心锚点（depth = 0.28）', 40, 336);
+ctx.fillStyle = MUTED; ctx.font = '12px -apple-system';
+ctx.fillText('5 顶点 / 4 三角 / 法线夹角 58.5°，左右明暗差 0.198', 268, 336);
+
+YAW.forEach((y, i) => {
+  drawCard(xs[i], rowY[0], y, 0, SCALE, `yaw ${y}°`, true);
+  drawCard(xs[i], rowY[1], y, DEPTH, SCALE, `yaw ${y}°`, false);
+});
+
+// 结论板
+ctx.textAlign = 'left';
+ctx.fillStyle = 'rgba(255,255,255,.86)';
+ctx.beginPath(); ctx.roundRect(40, 556, 1200, 150, 10); ctx.fill();
+ctx.strokeStyle = 'rgba(47,125,143,.35)'; ctx.lineWidth = 1; ctx.stroke();
+
+ctx.fillStyle = INK; ctx.font = '600 12.5px -apple-system';
+ctx.fillText('三件事同时发生，只多了 2 个三角', 60, 582);
+
+const rows = [
+  ['侧看最小宽度', '0.000（塌成一条线）', '0.280（= depth）', '从侧面也还是一片叶子'],
+  ['两半片法线夹角', '0°', '58.5°', '顶点一推，两个半片各自歪开'],
+  ['两半片亮度差', '0', '0.198', '方向感来自明暗，不来自转向'],
+];
+ctx.font = '11.5px -apple-system';
+rows.forEach((r, i) => {
+  const y = 606 + i * 26;
+  ctx.fillStyle = MUTED; ctx.fillText(r[0], 62, y);
+  ctx.fillStyle = WARN; ctx.fillText(r[1], 250, y);
+  ctx.fillStyle = '#146c4a'; ctx.fillText(r[2], 470, y);
+  ctx.fillStyle = MUTED; ctx.fillText(r[3], 700, y);
+});
+
+ctx.fillStyle = MUTED; ctx.font = '12px -apple-system';
+ctx.fillText('交叉两张卡片也能解决"侧面消失"，但三角翻倍；中心锚点只加 2 个三角 —— 这就是 "without too much overdraw"。', 62, 688);
+
+document.getElementById('stats').innerHTML = [
+  `顶点 <b>4→5</b> · 三角 <b>2→4</b>（交叉两张卡是 2→4 且宽高各多一张，这里只多 2 个三角）`,
+  `侧看最小宽度 0.000→<span class="ok">0.280</span>`,
+  `法线夹角 0°→<b>${foldAngle(DEPTH).toFixed(1)}°</b>`,
+  `亮度差 0→<b>0.198</b>`,
+  `67.5° 处宽度 0.383→<b>0.450</b>`,
+].join('');
+</script>
+</body>
+</html>

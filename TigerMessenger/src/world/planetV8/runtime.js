@@ -14,6 +14,17 @@ import {
   isPlanetSurfaceRidersV1,
   isTerrainSemanticShaderV1,
 } from "../../core/params.js";
+// 球系统工坊（系统工坊 · 球系统工坊）
+//   定稿 tm.planet.final.v1：只覆盖工坊里改过的配方项（row.changed）；没有定稿时游戏行为不变
+//   预览 ?planetPreview=<JSON>：只在工坊内嵌（authoringEmbed=1）时生效，用于候选星球实景预览
+const PLANET_KEYS = ["seed", "subdivision", "chartLimit", "resolution", "seaLevel"];
+function pickPlanetKeys(r) { const out = {}; for (const k of PLANET_KEYS) if (Number.isFinite(r?.[k])) out[k] = r[k]; return out; }
+function readPlanetWorkshopFinal() {
+  try { const row = JSON.parse(globalThis.localStorage?.getItem("tm.planet.final.v1") || "null"); return pickPlanetKeys(row?.changed); } catch { return {}; }
+}
+function readPlanetWorkshopPreview() {
+  try { const q = new URLSearchParams(globalThis.location?.search || ""); if (q.get("authoringEmbed") !== "1" || !q.get("planetPreview")) return null; return pickPlanetKeys(JSON.parse(q.get("planetPreview"))); } catch { return null; }
+}
 import { compilePlanetV8 } from "../../procgen/planet/planetCompilerV8.js?v=20260827-terrain-v11";
 import { createBufferGeometryFromMesh } from "../../procgen/three/bufferGeometryAdapter.js";
 import { compileCurvedWater } from "../waterV8/curvedWaterCompiler.js";
@@ -108,14 +119,20 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
   if (enabledWater && enabledTerrain && planet) planet.visible = false;
 
   if (enabledTerrain || enabledWater || enabledClouds) {
-    const compiled = compilePlanetV8({
+    const gameRecipe = {
       seed,
       radius,
       landformChain: isV9,
       subdivision: features.planetSubdivision ?? lod.subdivision,
       chartLimit: enabledTerrain ? (features.planetChartLimit ?? lod.chartLimit) : (features.planetChartLimit ?? 0),
       resolution: enabledTerrain ? (features.planetResolution ?? lod.resolution) : (features.planetResolution ?? 3),
-    });
+      seaLevel: 0,
+    };
+    const finalOverride = readPlanetWorkshopFinal(), previewOverride = readPlanetWorkshopPreview();
+    const recipe = { ...gameRecipe, ...finalOverride, ...(previewOverride || {}) };
+    const compiled = compilePlanetV8(recipe);
+    globalThis.__tmPlanetWorkshop = { gameRecipe, finalOverride, previewOverride, recipe, ok: !!compiled.ok, stage: compiled.stage,
+      layers: { terrain: !!enabledTerrain, water: !!enabledWater, clouds: !!enabledClouds, version: presentationVersion } };
     state.compiler = compiled;
     if (!compiled.ok) {
       root.userData.v8Error = compiled.report || compiled.stage;

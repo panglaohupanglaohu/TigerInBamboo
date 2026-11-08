@@ -57,7 +57,7 @@
 <main>
  <p><a href="../../TigerMessenger/pipeline.html">◈ 打开 Super-agent 场景管线工坊 · 七类能力插槽 / 实景实验</a></p>
   <p><a href="../../TigerMessenger/index.html?dev=1">场景创作工作台：进入游戏后展开右上角「场景创作」</a> · 莫里斯湖首批；Worker 尚未连接</p>
-  <nav><a href="index.html?scene=fusion">风与天气 · 首页实景控制</a><a href="index.html">← 场景</a><a href="architecture.html">系统全局</a><a href="learn.html">学习笔记</a><a href="GUIDE.md">接手指南</a><a href="PIPELINE.md">管线文档</a><a href="coverage.html">原版→重构映射</a></nav>
+  <nav><a href="index.html?scene=fusion" target="_top">风与天气 · 首页实景控制</a><a href="index.html" target="_top">← 场景</a><a href="architecture.html">系统全局</a><a href="learn.html">学习笔记</a><a href="GUIDE.md">接手指南</a><a href="PIPELINE.md">管线文档</a><a href="coverage.html">原版→重构映射</a></nav>
   <h1>REACode 重构版 · 管线与学习进度</h1>
   <p class="sub">重构版：将已登记视频按"管线"排了一遍，并标出每一步在本仓库里的实现位置：共享底座（网格、水、光照）→ 建筑管线（Townscaper）和地形管线（engine）→ 两者在第三个项目里融合，最终上到球面。下面先是判断，再是一条可以照着学、照着做的路线，最后是完整的管线图。▶ 都能播放对应原片。</p>
 
@@ -115,7 +115,7 @@ document.getElementById('lanes').innerHTML = P.lanes.map((lane) => `
     <h3>${esc(lane.name)}</h3><p class="note">${esc(lane.note)}</p>
     ${lane.groups.map(([g, steps]) => `<div class="g">${esc(g)}</div>` + steps.map((s) => `
       <div class="st"><span class="d" style="background:${P.statusColor[s.status]}" title="${P.statusName[s.status]}"></span>
-        <span>${esc(s.name)}<small><a href="refactoring-audit.html#clip-${s.id}">${window.REFACTOR_STATUS?.[s.id] || '待核查'}</a></small>${s.where ? `<small>${esc(s.where)}</small>` : ''}${s.toggle ? `<small><a href="index.html?on=${s.toggle === 'time' ? '' : s.toggle}${s.toggle === 'time' ? '&time=night' : ''}">在场景里看 →</a></small>` : ''}${s.tour ? `<small><a href="index.html?tour=${s.tour}">在场景里看 →</a></small>` : ''}${s.page ? `<small><a href="${s.page.startsWith('scene:') ? 'index.html?scene=' + s.page.slice(6) : s.page}">${s.page.startsWith('scene:') ? '切到场景 →' : '打开 ' + esc(s.page) + ' →'}</a></small>` : ''}</span>
+        <span>${esc(s.name)}<small><a href="refactoring-audit.html#clip-${s.id}">${window.REFACTOR_STATUS?.[s.id] || '待核查'}</a></small>${s.where ? `<small>${esc(s.where)}</small>` : ''}${s.toggle ? `<small><a href="index.html?on=${s.toggle === 'time' ? '' : s.toggle}${s.toggle === 'time' ? '&time=night' : ''}" target="_top">在场景里看 →</a></small>` : ''}${s.tour ? `<small><a href="index.html?tour=${s.tour}" target="_top">在场景里看 →</a></small>` : ''}${s.page ? `<small><a href="${s.page.startsWith('scene:') ? 'index.html?scene=' + s.page.slice(6) : s.page}">${s.page.startsWith('scene:') ? '切到场景 →' : '打开 ' + esc(s.page) + ' →'}</a></small>` : ''}</span>
         ${thumb(s.id, 'sm')}</div>`).join('')).join('')}
   </div>`).join('');
 

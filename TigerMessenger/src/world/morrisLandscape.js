@@ -1,4 +1,5 @@
 import {createMorrisLandformProfile} from './morrisLandformProfile.js?v=three-view-r9';
+import {styleMat} from '../style/materials.js';
 import * as T from 'three';
 import {createMorrisMountainRoute} from './morrisRoute30.js?v=three-view-r3';
 import {dressMorrisFacadeVines} from './morrisFlora.js?v=tapestry-r1-20261030';
@@ -64,7 +65,7 @@ export function createMorrisTerrain(R,edge){
  const height=(x,z,h=elevation(x,z))=>Math.sqrt(Math.max(1,(R+(h??-.75))**2-x*x-z*z))-R;
  return{expansion,elevation,naturalElevation,height,stream,levels,route,nearestWater,bridgeSightline,musicCourt,castle:{x:-14,z:5},landformReport:naturalElevation.report,layers:[{name:'外圈花草坪',range:'外围低地径向约1.4–4m'},{name:'环绕溪流缓丘',range:'中圈约4–9m'},{name:'中央山肩城堡',range:'城基径向10.5m'},{name:'中央错位主峰',range:'后置主峰、相连石脊与宽鞍部约25m；尖圆主峰、斜向短岩阶与五组错位宽肩向四周降低'}]};
 }
-function mesh(root,g,color,name){const m=new T.Mesh(g,new T.MeshStandardMaterial({color,roughness:.96,side:T.DoubleSide}));m.name=name;root.add(m);m.castShadow=true;m.receiveShadow=true;return m;}
+function mesh(root,g,color,name){const m=new T.Mesh(g,styleMat('morris.landscape.terrain','MeshStandardMaterial',{color,roughness:.96,side:T.DoubleSide}));m.name=name;root.add(m);m.castShadow=true;m.receiveShadow=true;return m;}
 function box(root,p,size,color,name){const m=mesh(root,new T.BoxGeometry(...size),color,name);m.position.set(...p);return m;}
 function roof(root,x,y,z,w,d,h,color){const p=[-w/2,0,-d/2,w/2,0,-d/2,0,h,-d/2,-w/2,0,d/2,w/2,0,d/2,0,h,d/2],g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setIndex([0,2,1,3,4,5,0,3,5,0,5,2,1,2,5,1,5,4]);g.computeVertexNormals();const m=mesh(root,g,color,'castle-handcrafted-gable-roof');m.position.set(x,y,z);}
 export function installMorrisLandscape({root,terrain,heightAt,R,edge,pathX=()=>10,canDress=()=>true,canFace=canDress}){
@@ -83,7 +84,7 @@ export function installMorrisLandscape({root,terrain,heightAt,R,edge,pathX=()=>1
   if(i<stream.length-1)for(let j=0;j<cross.length-1;j++){const n=i*cross.length+j;bedI.push(n,n+cross.length,n+1,n+1,n+cross.length,n+cross.length+1);}
  }
  const bedGeo=new T.BufferGeometry();bedGeo.setAttribute('position',new T.Float32BufferAttribute(bedP,3));bedGeo.setAttribute('color',new T.Float32BufferAttribute(bedC,3));bedGeo.setIndex(bedI);bedGeo.computeVertexNormals();
- const riverbed=new T.Mesh(bedGeo,new T.MeshStandardMaterial({vertexColors:true,roughness:1,side:T.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}));riverbed.name='morris-continuous-joined-creek-bed';riverbed.receiveShadow=true;root.add(riverbed);
+ const riverbed=new T.Mesh(bedGeo,styleMat('morris.landscape.riverbed','MeshStandardMaterial',{vertexColors:true,roughness:1,side:T.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}));riverbed.name='morris-continuous-joined-creek-bed';riverbed.receiveShadow=true;root.add(riverbed);
  const wg=new T.BufferGeometry();wg.setAttribute('position',new T.Float32BufferAttribute(waterP,3));wg.setIndex(waterI);wg.setAttribute('morrisCreekUv',new T.Float32BufferAttribute(waterUv,2));wg.setAttribute('morrisCreekDrop',new T.Float32BufferAttribute(waterDrop,1));wg.computeVertexNormals();const water=mesh(root,wg,0x24467a,'morris-real-downhill-creek');water.material.roughness=.35;water.material.metalness=.1;water.castShadow=false;
  const creekTime={value:0};water.material.customProgramCacheKey=()=>"morris-creek-tapestry-r23";water.material.onBeforeCompile=shader=>{shader.uniforms.uMorrisCreekT=creekTime;shader.vertexShader="attribute vec2 morrisCreekUv; attribute float morrisCreekDrop; varying vec2 vMorrisCreekUv; varying float vMorrisCreekDrop;\n"+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvMorrisCreekUv=morrisCreekUv;vMorrisCreekDrop=morrisCreekDrop;');shader.fragmentShader="uniform float uMorrisCreekT; varying vec2 vMorrisCreekUv; varying float vMorrisCreekDrop;\n"+shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
  {float mcU=vMorrisCreekUv.x,mcV=vMorrisCreekUv.y*200.0-uMorrisCreekT*1.6;float mcEdge=smoothstep(.30,.48,abs(mcU-.5));float mcBand=sin(mcV*1.1+sin(mcU*6.2832+mcV*.05)*1.6);vec3 mcDeep=vec3(.07,.14,.38),mcMid=vec3(.11,.22,.50),mcLight=vec3(.78,.85,.93);vec3 mcCol=mix(mcDeep,mcMid,smoothstep(.1,.3,mcBand));mcCol=mix(mcCol,mcLight,smoothstep(.9,.97,mcBand)*.9);float mcDrop=smoothstep(.22,.55,vMorrisCreekDrop);float mcFoam=max(mcEdge*step(.55,sin(mcV*3.3+mcU*21.0)),mcDrop*step(.2,sin(mcV*2.2+sin(mcU*17.0)*2.0)));diffuseColor.rgb=mix(mcCol,vec3(.95,.96,.93),clamp(mcFoam,0.,1.)*.9);}
@@ -113,7 +114,7 @@ export function installMorrisLandscape({root,terrain,heightAt,R,edge,pathX=()=>1
  }
  const bankRockGeometry=new T.IcosahedronGeometry(1,1),bp=bankRockGeometry.attributes.position;
  for(let j=0;j<bp.count;j++){const x=bp.getX(j),y=bp.getY(j),z=bp.getZ(j),r=1+.055*Math.sin(x*7+z*4)*Math.cos(y*6);bp.setXYZ(j,x*r,y*r,z*r);}bankRockGeometry.computeVertexNormals();
- const creekStones=new T.InstancedMesh(bankRockGeometry,new T.MeshStandardMaterial({color:0xa59f8e,roughness:1}),rockPoints.length),rockDummy=new T.Object3D();creekStones.name='morris-real-creek-bank-boulders';
+ const creekStones=new T.InstancedMesh(bankRockGeometry,styleMat('morris.landscape.creek-stones','MeshStandardMaterial',{color:0xa59f8e,roughness:1}),rockPoints.length),rockDummy=new T.Object3D();creekStones.name='morris-real-creek-bank-boulders';
  rockPoints.forEach((p,i)=>{const y=heightAt(p.x,p.z),ex=.35,normal=V(heightAt(p.x-ex,p.z)-heightAt(p.x+ex,p.z),2*ex,heightAt(p.x,p.z-ex)-heightAt(p.x,p.z+ex)).normalize();
   rockDummy.position.set(p.x,y-.22,p.z);rockDummy.quaternion.setFromUnitVectors(V(0,1,0),normal);rockDummy.rotateY(p.i*.8);rockDummy.scale.set(p.size,.62*p.size,.84*p.size);rockDummy.updateMatrix();creekStones.setMatrixAt(i,rockDummy.matrix);
   creekStones.setColorAt(i,new T.Color().setHex(i%3===0?0xb3ad9c:i%3===1?0x9c9686:0xc3bdab));

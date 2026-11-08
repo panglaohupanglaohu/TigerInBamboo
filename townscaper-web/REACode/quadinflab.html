@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>无限的不规则四边形网格 · 寻址生成 + 松弛的代价</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 9px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 76%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:132ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:11.5px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:10px; flex-wrap:nowrap; white-space:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>「infinite」加在哪儿：把网格生成改成按 (q,r) 寻址，位置函数化之后块与块之间就没有缝</h1>
+  <p>原帖 1151137783785771008 只多了一个词：<b>aperiodic infinite deterministic irregular relaxed quadrilateral grid</b>。
+     上一轮要的 src/quadgrid.js 是<b>一张有限 patch</b>（顶点塞进一个数组、边上一圈钉住），这一页补的是"无限"这半边：
+     顶点 = 三角晶格 + hash(seed,q,r) 抖动、合并与否 = hash 对每格的一次判定，两者都只依赖自己的索引，
+     所以任意原点、任意大小的 chunk 独立生成后，交界处是同一个点。代价也一起量出来：<b>松弛是扩散</b>，一旦要"拉方正"，边界就得冻住。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { buildChunk, measure, squareness, valenceReport, seamDiff } from './src/quadinf.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#a9791a', RED = '#b4402f',
+      GOOD = '#146c4a', LINE = '#dbe4e0';
+const F = (w, s) => `${w} ${s}px -apple-system,system-ui,"PingFang SC",sans-serif`;
+const txt = (s, x, y, color = INK, font = F(600, 12), align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.fillText(s, x, y);
+};
+const card = (x, y, w, h, fill = '#ffffff') => {
+  ctx.fillStyle = fill; ctx.strokeStyle = LINE; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.fill(); ctx.stroke();
+};
+
+const M = measure({ seed: 1337, relaxPasses: 160, halo: 2 });
+const VAL = valenceReport(buildChunk({ seed: 1337, q0: 0, r0: 0, w: 18, h: 14, halo: 2, relaxPasses: 160 }).quadsInWindow);
+
+/* ---------- 用 4 次独立调用拼出一整片：每块自己的原点 ---------- */
+const REG = [
+  { q0: 0, r0: 0, w: 9, h: 7, tint: '#f7f0df' },
+  { q0: 9, r0: 0, w: 9, h: 7, tint: '#edf4ea' },
+  { q0: 0, r0: 7, w: 9, h: 7, tint: '#f1edf6' },
+  { q0: 9, r0: 7, w: 9, h: 7, tint: '#e9f1f6' },
+];
+const chunkOf = (o, relax) => buildChunk({ seed: 1337, halo: 2, relaxPasses: relax, ...o });
+const RAW = REG.map((o) => chunkOf(o, 0));
+const REL = REG.map((o) => chunkOf(o, 160));
+
+/* 版面：A 未松弛（证明无缝合块）/ B 松弛（红点=两原点算出的同一点被拉开） */
+const A = { x: 18, y: 100, w: 724, h: 396 };
+const B = { x: 18, y: 506, w: 724, h: 230 };
+
+function fitBox(chunks, box, pad = 10) {
+  let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;
+  for (const ch of chunks) for (const v of ch.verts.values()) {
+    if (v.q < 0 || v.r < 0 || v.q > 18 || v.r > 14) continue;   // 只按窗口内的点定比例
+    x0 = Math.min(x0, v.x); x1 = Math.max(x1, v.x);
+    z0 = Math.min(z0, v.z); z1 = Math.max(z1, v.z);
+  }
+  const s = Math.min((box.w - pad * 2) / (x1 - x0), (box.h - pad * 2) / (z1 - z0));
+  const ox = box.x + (box.w - (x1 - x0) * s) / 2 - x0 * s;
+  const oy = box.y + (box.h + (z1 - z0) * s) / 2;
+  return { s, ox, oy };
+}
+
+function drawGrid(chunks, box, { clip = null, label = false } = {}) {
+  // 先筛出真正要画的块，再按它们定比例（否则 bbox 会被 halo / 没画的格子带偏）
+  const list = [];
+  chunks.forEach((ch, i) => {
+    const reg = REG[i];
+    for (const qd of ch.quads) {
+      if (qd.cq < reg.q0 || qd.cq >= reg.q0 + reg.w || qd.cr < reg.r0 || qd.cr >= reg.r0 + reg.h) continue;
+      if (clip && (qd.cq < clip.q0 || qd.cq >= clip.q1 || qd.cr < clip.r0 || qd.cr >= clip.r1)) continue;
+      list.push({ qd, i });
+    }
+  });
+  let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;
+  for (const { qd } of list) for (const v of qd.verts) {
+    x0 = Math.min(x0, v.x); x1 = Math.max(x1, v.x);
+    z0 = Math.min(z0, v.z); z1 = Math.max(z1, v.z);
+  }
+  const pad = 8;
+  const s = Math.min((box.w - pad * 2) / (x1 - x0), (box.h - pad * 2) / (z1 - z0));
+  const ox = box.x + (box.w - (x1 - x0) * s) / 2 - x0 * s;
+  const oy = box.y + (box.h + (z1 - z0) * s) / 2 + z0 * s - z0 * s;
+  const f = { s, ox, oy: box.y + (box.h + (z1 - z0) * s) / 2 };
+  {
+    for (const { qd, i } of list) {
+      const tintColor = REG[i].tint;
+      const p = qd.verts;
+      ctx.beginPath();
+      for (let k = 0; k < 4; k++) {
+        const X = f.ox + p[k].x * f.s, Y = f.oy - p[k].z * f.s;
+        k ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+      }
+      ctx.closePath();
+      const merged = qd.tag.includes('m');
+      ctx.fillStyle = tintColor;
+      ctx.fill();
+      ctx.strokeStyle = merged ? '#c19a5e' : '#5c8f7b';
+      ctx.lineWidth = 0.9;
+      ctx.stroke();
+    }
+  }
+  if (label) {
+    chunks.forEach((ch, i) => {
+      const reg = REG[i];
+      const c = ch.quads.find((qd) => qd.cq === reg.q0 + 1 && qd.cr === reg.r0 + 1);
+      if (!c) return;
+      const p = c.verts[0];
+      txt(`调用 ${'ABCD'[i]} (${reg.q0},${reg.r0})`, f.ox + p.x * f.s, f.oy - p.z * f.s,
+          '#8a7550', F(600, 11));
+    });
+  }
+  return f;
+}
+
+/* ---------- A：4 块独立生成、不松弛 ---------- */
+card(A.x, A.y, A.w, A.h);
+txt('① 4 次独立调用（原点 (0,0) / (9,0) / (0,7) / (9,7)），不松弛', A.x + 12, A.y + 20, INK, F(650, 12.5));
+txt(`共享边 ${M.sharedEdges} 条 / 只剩一条主的边 ${M.danglingEdges} 条（全在 halo 外圈）/ 三条以上 ${M.overEdges} 条 · 块内浅色底只是标"这是第几次调用"`,
+    A.x + 12, A.y + 37, MUTED, F(500, 11));
+const fa = drawGrid(RAW, { x: A.x + 8, y: A.y + 44, w: A.w - 16, h: A.h - 78 }, { label: true });
+
+/* 未松弛：两个不同原点算出的同一片区域，重叠顶点逐位相等 */
+const S0 = M.seamBefore;
+txt(`↳ 换个原点再算一遍：${S0.sharedVerts} 个重叠顶点里 ${S0.exactEqual} 个坐标逐位相等，最大偏差 ${S0.maxDiff.toFixed(6)}`,
+    A.x + 12, A.y + A.h - 8, GOOD, F(600, 11.5));
+
+/* ---------- B：同样的 4 块，松弛 160 遍 ---------- */
+card(B.x, B.y, B.w, B.h);
+txt('② 同一片格子松弛 160 遍：接缝处放大 7×6 格', B.x + 12, B.y + 20, INK, F(650, 12.5));
+txt('拉向正方这一步是扩散，边界必须冻住 —— 冻在不同位置，同一顶点就被拉开', B.x + 12, B.y + 37, MUTED, F(500, 11));
+const CLIP = { q0: 6, q1: 13, r0: 3, r1: 9 };
+const fb = drawGrid(REL, { x: B.x + 8, y: B.y + 54, w: B.w - 16, h: B.h - 96 }, { clip: CLIP });
+// 只有"画出来的那些格子"上的顶点才允许标红点（不裁就会有一圈浮在图外的点）
+const drawn = new Set();
+for (const ch of REL) for (const qd of ch.quads) {
+  if (qd.cq < CLIP.q0 || qd.cq >= CLIP.q1 || qd.cr < CLIP.r0 || qd.cr >= CLIP.r1) continue;
+  for (const v of qd.verts) drawn.add(v.key);
+}
+
+/* 红点：同一顶点在两块 chunk 里的落点不同 */
+const f1 = fb;   // 红点必须跟图用同一个变换，否则位置全错
+let dots = 0;
+{
+  // 直接比较"相邻两块各自松弛的结果"：把 B 面板按块重画一次并标出差异顶点
+  const pairs = [[0, 1], [0, 2], [1, 3], [2, 3]];
+  for (const [i, j] of pairs) {
+    const a = REL[i], b = REL[j];
+    const bm = new Map([...b.verts.values()].map((v) => [v.key, v]));
+    for (const va of a.verts.values()) {
+      const vb = bm.get(va.key);
+      if (!vb || !drawn.has(va.key)) continue;
+      const d = Math.hypot(va.x - vb.x, va.z - vb.z);
+      if (d <= 1e-9) continue;
+      const X = f1.ox + va.x * f1.s, Y = f1.oy - va.z * f1.s;
+      if (X < B.x + 8 || X > B.x + B.w - 8 || Y < B.y + 46 || Y > B.y + B.h - 26) continue;
+      if (dots >= 140) continue;
+      ctx.strokeStyle = 'rgba(180,64,47,.85)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(X, Y, 2.2, 0, 7); ctx.stroke();
+      dots++;
+    }
+  }
+}
+const S1 = M.seamAfter;
+txt(`↳ 红圈 = 相邻两块对同一顶点算出的落点差 > 0：${S1.sharedVerts} 个里只剩 ${S1.exactEqual} 个还相等，最大拉开 ${S1.maxDiff.toFixed(4)}（≈ ${(S1.maxDiff * 100).toFixed(1)}% 格宽）`,
+    B.x + 12, B.y + B.h - 8, RED, F(600, 11.5));
+
+/* ---------- 右栏三张卡 ---------- */
+const R = { x: 760, w: 502 };
+const cards = [
+  { y: 100, h: 208, title: '② 为什么能"无限"：三个决定都是局部的', rows: [
+      ['顶点位置', '三角晶格 + hash(seed,q,r) 抖动 ±0.30 格'],
+      ['合并/拆分', 'hash(seed,q,r) 一次判定，同格内两块三角合成菱形'],
+      ['中点 / 重心', '由顶点算，不查任何全局表'],
+      ['同参数重算', `${M.determinism.quads} 块格子逐位相同，差 ${M.determinism.differing} 个顶点`],
+      ['每单元块数', `${(M.quadsPerCell).toFixed(2)}（合并 ${M.mergedCells} / 拆分 ${M.splitCells} 格）`],
+    ] },
+  { y: 316, h: 190, title: '③ 非周期：抖动必须真的是"非周期函数"', rows: [
+      ['试了平移', `${M.aperiodic.tried} 个 (dq,dr)，|d| ≤ 9`],
+      ['能把点集映回自己', `${M.aperiodic.hits} 个`, 'no'],
+      ['对照（抖动=0）', `${M.aperiodicControl.hits}/${M.aperiodicControl.tried} 个`, 'no'],
+      ['说明', '同一个检验能抓出周期网格，抖动版一个都没命中'],
+    ] },
+  { y: 514, h: 222, title: '④ 松弛的上限是"顶点的价数"，不是迭代次数', rows: [
+      ['平均偏差 未松弛→160 遍', `${M.squareBefore.mean.toFixed(1)}° → ${M.squareAfter.mean.toFixed(1)}°`],
+      ['最大偏差', `${M.squareBefore.max.toFixed(0)}° → ${M.squareAfter.max.toFixed(0)}°`],
+      ['6 价角点（每格 60°）', `${VAL.val6.meanDev.toFixed(2)}°（理论下限 ${VAL.val6.idealDev.toFixed(0)}°）`, 'no'],
+      ['3 价角点', `${VAL.val3.meanDev.toFixed(1)}°（下限 ${VAL.val3.idealDev.toFixed(0)}°）`],
+      ['4 价角点', `${VAL.val4.meanDev.toFixed(1)}°（下限 0°，这部分才是没收敛完的）`],
+    ] },
+];
+for (const c of cards) {
+  card(R.x, c.y, R.w, c.h);
+  txt(c.title, R.x + 14, c.y + 22, INK, F(650, 12.5));
+  let yy = c.y + 44;
+  for (const [k, v, flag] of c.rows) {
+    txt(k, R.x + 14, yy, MUTED, F(600, 11.5));
+    txt(v, R.x + R.w - 14, yy, flag === 'no' ? RED : INK, F(600, 11.5), 'right');
+    yy += 30;
+  }
+}
+
+/* ---------- 底条 ---------- */
+document.getElementById('stats').innerHTML = [
+  `<b>${M.cells}</b> 单元 → <b>${M.quads}</b> 块四边形`,
+  `共享边 <b>${M.sharedEdges}</b> · 主边 <b>${M.danglingEdges}</b> · 三条以上 <b>${M.overEdges}</b>`,
+  `缝 <b>${S0.maxDiff.toFixed(6)}</b> → 松弛后 <b>${S1.maxDiff.toFixed(4)}</b>`,
+  `非周期 <b>0 / ${M.aperiodic.tried}</b> 命中（对照 ${M.aperiodicControl.hits}）`,
+  `正方度 <b>${M.squareBefore.mean.toFixed(1)}° → ${M.squareAfter.mean.toFixed(1)}°</b>`,
+  `同参数重算 <b>差 ${M.determinism.differing}</b> 个顶点`,
+].join(' · ');
+</script>
+</body>
+</html>

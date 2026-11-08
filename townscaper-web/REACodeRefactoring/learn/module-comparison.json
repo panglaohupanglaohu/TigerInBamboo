@@ -13,7 +13,7 @@
   },
   "pipeline.html": {
     "original": "pipeline.html",
-    "bodySimilarity": 0.5906,
+    "bodySimilarity": 0.57,
     "changedBody": true,
     "sha256": "5f2319cb80aa4ec4c6f750d1c203497efb43921b8d3f2ca17bf72f456872cd11"
   },
@@ -40,6 +40,12 @@
     "bodySimilarity": 0.0345,
     "changedBody": true,
     "sha256": "8114b13bb232d61f4a6d3873503cb132d80f06a993a6c5b7a67a5d320ce01014"
+  },
+  "level-flora.html": {
+    "original": "tools/player.html",
+    "bodySimilarity": 0.0399,
+    "changedBody": true,
+    "sha256": "2caa0091b40e54e3da750592981345aeae60adb0516a8ec9860a67e49d76d996"
   },
   "index.html": {
     "original": "index.html",
@@ -107,6 +113,12 @@
     "changedBody": true,
     "sha256": "9ae5e23c078cb739fa0c3bf97ebce5acfdfb076b4fdc1c6826a0db836db57952"
   },
+  "wfc-trace.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0738,
+    "changedBody": true,
+    "sha256": "fac0b903ddd421a6add07ad530995d0cc8be53c82033b30ee2690c0d2e91836a"
+  },
   "coverage.html": {
     "original": "compare.html",
     "bodySimilarity": 0.0878,
@@ -127,9 +139,9 @@
   },
   "grids.html": {
     "original": "engine/world.html",
-    "bodySimilarity": 0.0219,
+    "bodySimilarity": 0.0217,
     "changedBody": true,
-    "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+    "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
   },
   "overhang.html": {
     "original": "flow.html",
@@ -157,15 +169,21 @@
   },
   "architecture.html": {
     "original": "overview.html",
-    "bodySimilarity": 0.1221,
+    "bodySimilarity": 0.1213,
     "changedBody": true,
     "sha256": "94b034d9dc53a7456ae8416b0b7bb2a01c3f79822167438410dba3bd373f193e"
   },
   "clouds.html": {
-    "original": "tools/player.html",
-    "bodySimilarity": 0.0401,
+    "original": "compare.html",
+    "bodySimilarity": 0.1219,
     "changedBody": true,
-    "sha256": "618aa1069cba2b8207fc7660b6693eef3905ca07a0cc436ef6db8fbe340c16fa"
+    "sha256": "7dc5dccb5dee90a310e9a17a1bd69cc62635bc52cf40fd2cfcc6ed79307daa83"
+  },
+  "building-components.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0714,
+    "changedBody": true,
+    "sha256": "1f9fcde7f38a05180e5e64c34144c91f7b3425e3051bf6f7a93287eec86fe0e0"
   },
   "ornament.html": {
     "original": "engine/ornament.html",
@@ -187,7 +205,7 @@
   },
   "learn.html": {
     "original": "learn.html",
-    "bodySimilarity": 0.978,
+    "bodySimilarity": 0.8916,
     "changedBody": true,
     "sha256": "07a285459f2f907c3d0fbd88b6446b40663443b4df257bf8b778177e1f554ecd"
   },
@@ -239,11 +257,23 @@
     "changedBody": true,
     "sha256": "a814bb5ce9c73bebb32abef46b698a1111b9ee93a3dc8fedf2fb59f967cf4fc5"
   },
+  "unit-tiers.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.077,
+    "changedBody": true,
+    "sha256": "a4f8ad0028b407d5ab9633791bc4c604d5c0b7e79f56932cf5adbda0987d7ead"
+  },
   "waves.html": {
     "original": "overview.html",
-    "bodySimilarity": 0.0328,
+    "bodySimilarity": 0.0342,
     "changedBody": true,
     "sha256": "f1494004216d6e9c998c57300a2c2590328965d5077f2361f772571767e21a05"
+  },
+  "hip-roofs.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0361,
+    "changedBody": true,
+    "sha256": "54c4621942458c84e14a39a6bd87fc39f396563c81d33fbf73a920823cf02dd9"
   },
   "wall-palette.html": {
     "original": "compare.html",
@@ -256,6 +286,12 @@
     "bodySimilarity": 0.0931,
     "changedBody": true,
     "sha256": "d9b40df417bdf554518c8f1bfee7403c05dd67a696d5fbc4852c89e8508595c2"
+  },
+  "arches.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0709,
+    "changedBody": true,
+    "sha256": "96290197fa94b6ffca245f84adb49571a34692d5624759d7bd2f3a6ee9ebbb2c"
   },
   "normal-contrast.html": {
     "original": "engine/world.html",
@@ -275,11 +311,29 @@
     "changedBody": true,
     "sha256": "aa0d5b42474a4e9170bcdde32ac32996ff3abb2872c0c0458b58e7894e0f478b"
   },
+  "squad-banners.html": {
+    "original": "tools/player.html",
+    "bodySimilarity": 0.0424,
+    "changedBody": true,
+    "sha256": "4ea5a7b23bb1194f693674e9b7bf16886f7ccf86a00c1006917934bb1f6159d6"
+  },
   "palette-editor.html": {
     "original": "engine/worldmap.html",
     "bodySimilarity": 0.0672,
     "changedBody": true,
     "sha256": "81226fbf67a8fb3db46d60ed61e5e8b05c16ac35a42eb54a9c233bb05766c18a"
+  },
+  "drainage.html": {
+    "original": "engine/mandala.html",
+    "bodySimilarity": 0.076,
+    "changedBody": true,
+    "sha256": "a94e903fe3248b3409678fb9ec6d8505e8abaecabe4e8ca20b2bf183135eb97b"
+  },
+  "ballistics.html": {
+    "original": "engine/worldmap.html",
+    "bodySimilarity": 0.0747,
+    "changedBody": true,
+    "sha256": "71246f08f1c55f297364f503a4cae274455dda017c1038306874e577e3070af2"
   },
   "atlas-live.html": {
     "original": "src/rectpack.js",
@@ -311,11 +365,35 @@
     "changedBody": true,
     "sha256": "8116efe07ce9ee9b844970e6d4c784aa78537fd3c34929962ad5efc7afb8c564"
   },
+  "terraces.html": {
+    "original": "spherefusion.html",
+    "bodySimilarity": 0.0729,
+    "changedBody": true,
+    "sha256": "1ec2d8358993763eb74f98f60c819b56486987671ec2147d76cc24b4cf72038b"
+  },
   "fire.html": {
     "original": "engine/worldmap.html",
     "bodySimilarity": 0.1083,
     "changedBody": true,
     "sha256": "13323f1c6cef941ec34a9f7b87fafb7e1598385eb496959471c66f3a626fe956"
+  },
+  "corner-cuts.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0693,
+    "changedBody": true,
+    "sha256": "4abd8a49bebeec54b456f7eeab96c99abd352075b16e718db783c3ff265daf07"
+  },
+  "space-visibility.html": {
+    "original": "compare.html",
+    "bodySimilarity": 0.0854,
+    "changedBody": true,
+    "sha256": "444f6b43216e9acae4e2d47f13811c698bd42b9c08ffdd618f0ac48da888ee29"
+  },
+  "ao-stages.html": {
+    "original": "flow.html",
+    "bodySimilarity": 0.0488,
+    "changedBody": true,
+    "sha256": "0d6ebe1ca782631e8d23345835dae64287156046f6ebbd5ae988ce382fb998e1"
   },
   "adjacency.html": {
     "original": "tools/measure.html",
@@ -348,10 +426,10 @@
     "sha256": "98173d1a22d2c5a18224c17a77f9c714c8fd77ddf1513c0a0381534115305656"
   },
   "src/ui/environment-panel.js": {
-    "original": "engine/unitbatch.html",
-    "bodySimilarity": 0.0235,
+    "original": "engine/demo.html",
+    "bodySimilarity": 0.0292,
     "changedBody": true,
-    "sha256": "a8a789d7413230d4a07aa274f661abd41640013ec03d5ea88f7d814d8a0f4959"
+    "sha256": "56c90d1e92e978630d3c7c9769983426e9d38327a1cdbcb55de6a8887570119a"
   },
   "src/ui/walkthrough.js": {
     "original": "plantlab.html",
@@ -384,14 +462,14 @@
     "sha256": "b31e9c95eae13f287fb17f3af807be2d03d23d84dab5882e8464eb98f09d5d0e"
   },
   "src/ui/coverage-progress.js": {
-    "original": "compare.html",
-    "bodySimilarity": 0.0384,
+    "original": "engine/portrait.html",
+    "bodySimilarity": 0.051,
     "changedBody": true,
-    "sha256": "d2d565c916d0d31d415629e6e83008b69fcdaf8fb6d4b5a8808338059b69db0f"
+    "sha256": "4f21546ccaa082e488115b200860cad9d5d3b732e08cd74ef0235a0c1924e1c3"
   },
   "src/ui/learnpanel.js": {
     "original": "src/learnpanel.js",
-    "bodySimilarity": 0.7246,
+    "bodySimilarity": 0.7169,
     "changedBody": true,
     "sha256": "5c418a79d2c7254701790b9c5819206f2b7419bcd13f429073d7be3caf4c4c0a"
   },
@@ -419,11 +497,35 @@
     "changedBody": true,
     "sha256": "5e8d5a4be3b96bc6996648ba79034afc8b901721bb0bfca035656250b2466718"
   },
+  "src/core/opening-footprint.js": {
+    "original": "engine/props.js",
+    "bodySimilarity": 0.0294,
+    "changedBody": true,
+    "sha256": "1271974a2b4bf14ebc0a3ab6d68db5fb601dd6c53136cda2692d35122e423699"
+  },
   "src/core/ornament-field.js": {
     "original": "src/dfgrow.js",
     "bodySimilarity": 0.0467,
     "changedBody": true,
     "sha256": "ba54b213a48b683b6878acdafe1859d73569b0a01c458dea1ac5a6b340228315"
+  },
+  "src/core/hip-roof.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0586,
+    "changedBody": true,
+    "sha256": "c1b427312f807fc73d4c5be3486ffe8307ef33efb9cf26073d521904b539b833"
+  },
+  "src/core/ballistic-table.js": {
+    "original": "engine/reflection.js",
+    "bodySimilarity": 0.0277,
+    "changedBody": true,
+    "sha256": "455d4cb108a8ebb0364a770793b1deda541849c4ab4c171f006c160a773ccc53"
+  },
+  "src/core/space-visibility.js": {
+    "original": "src/rayvis.js",
+    "bodySimilarity": 0.0735,
+    "changedBody": true,
+    "sha256": "111820221de1fb5f07f448c7e1f1290a1b2a97de0bfbf106731a6ff4648645b9"
   },
   "src/core/combat-state.js": {
     "original": "engine/contour.js",
@@ -433,9 +535,9 @@
   },
   "src/core/spatial.js": {
     "original": "src/barycentric.js",
-    "bodySimilarity": 0.0273,
+    "bodySimilarity": 0.0253,
     "changedBody": true,
-    "sha256": "ec4d74c53c21b18f891d007ef4f738329ca5df1c1fbecbd37ea1811b6dab9a1f"
+    "sha256": "2163985bc64aa01b5c4e46632e1b4e677deff3fb8ca4016b61f93d737536c848"
   },
   "src/core/palette.js": {
     "original": "src/townmesh.js",
@@ -487,9 +589,9 @@
   },
   "src/core/obb.js": {
     "original": "src/boxtest.js",
-    "bodySimilarity": 0.0281,
+    "bodySimilarity": 0.0209,
     "changedBody": true,
-    "sha256": "06009814ad154d5809eff96a5a27f520cfefd8f82c33552baeb2d51a909dd494"
+    "sha256": "349fef7df2732e75e35fe4a4f6f2318ae06e26b0816411c21751f7fb76b2e4b0"
   },
   "src/core/world.js": {
     "original": "src/town.js",
@@ -551,11 +653,17 @@
     "changedBody": true,
     "sha256": "ee103f91836c8237f94371d2134ffce1154be3ec4f621d5ff601d07df7d88b34"
   },
-  "src/core/wfc.js": {
-    "original": "engine/repair.html",
-    "bodySimilarity": 0.023,
+  "src/core/corner-footprint.js": {
+    "original": "src/squarehex.js",
+    "bodySimilarity": 0.0892,
     "changedBody": true,
-    "sha256": "0e2eba4d6f820ac6ff97292b4156dbf6ab1543b8208f5eaf0f8f408f30101beb"
+    "sha256": "117e13b9debd6064ea2750b44327e0973125b51e58ae39da0d9c8ba480b3eb87"
+  },
+  "src/core/wfc.js": {
+    "original": "src/tilerepair.js",
+    "bodySimilarity": 0.0179,
+    "changedBody": true,
+    "sha256": "d11d3247a203d67dcc4ffea408ab62e59436a8a8048d9aebe95a2af03f3f4d2f"
   },
   "src/core/fog-envelope.js": {
     "original": "engine/reflection.js",
@@ -581,6 +689,12 @@
     "changedBody": true,
     "sha256": "3a6e0424135d19b940a4783c38e72ef0426fb6cc185987be5ca3cfcb86c68880"
   },
+  "src/core/level-flora.js": {
+    "original": "src/levelflora.js",
+    "bodySimilarity": 0.0247,
+    "changedBody": true,
+    "sha256": "56b18b0a1d658afb5a82b7b1ce9180c5b824836110bb9710544944c35881094a"
+  },
   "src/core/mountain-bake.js": {
     "original": "src/mountainlight.js",
     "bodySimilarity": 0.0186,
@@ -588,10 +702,10 @@
     "sha256": "d0158ed523de886722c7b35c7cae79cef976b56cd819dc397f720e099d235a9f"
   },
   "src/core/infinite.js": {
-    "original": "src/quadgrid.js",
-    "bodySimilarity": 0.019,
+    "original": "src/grid.js",
+    "bodySimilarity": 0.0169,
     "changedBody": true,
-    "sha256": "30f0e555bfe429c4aaa3842d1640c2483984711c7e9b357924e1d7827ecd79ff"
+    "sha256": "3b962217825eed2f8971f3e3fc25dad7c8900ea47f241c948f03ddf022195d9a"
   },
   "src/core/qa-replay.js": {
     "original": "src/palette.js",
@@ -617,11 +731,23 @@
     "changedBody": true,
     "sha256": "54379de28eb2498e9f0ed93a45accdfd5aa5f5a519fe9140cb84093bfe4fa6eb"
   },
+  "src/core/river-network.js": {
+    "original": "src/march.js",
+    "bodySimilarity": 0.0405,
+    "changedBody": true,
+    "sha256": "e8d8560eb4ba28b8a8d6464e6e2a509ccd265014682eccd6cd5913d250caf002"
+  },
   "src/core/playful-layout.js": {
     "original": "src/uikit.js",
     "bodySimilarity": 0.0862,
     "changedBody": true,
     "sha256": "673070479a65ca2dcab0137c1be95c1b02ad36890bf6b03090adf678da6b948f"
+  },
+  "src/core/ladder-profile.js": {
+    "original": "engine/bncanopy.js",
+    "bodySimilarity": 0.0453,
+    "changedBody": true,
+    "sha256": "e0057ec41c883b76299e1069d5f72da50a74c95c827d1e5d66ca1571a86fde60"
   },
   "src/core/combat-profile.js": {
     "original": "src/combatfx.js",
@@ -641,6 +767,18 @@
     "changedBody": true,
     "sha256": "68089f4e608b4ee642d81f5b8c1e0a4e8c3afc9064f92badb81e16c998a7dace"
   },
+  "src/core/unit-ground-height.js": {
+    "original": "src/unitsnap.js",
+    "bodySimilarity": 0.0516,
+    "changedBody": true,
+    "sha256": "495c503caab6d498a0a43336f8e2d92da6fe45d6cf4dd66375b1860519617aff"
+  },
+  "src/core/cloud-motion.js": {
+    "original": "game.html",
+    "bodySimilarity": 0.0465,
+    "changedBody": true,
+    "sha256": "4376629bb272d67ce5274fed71e43bb2148fb0ab1af2bc5c49d74af5a47d89d4"
+  },
   "src/core/rock-topology.js": {
     "original": "src/march.js",
     "bodySimilarity": 0.0333,
@@ -652,6 +790,24 @@
     "bodySimilarity": 0.0239,
     "changedBody": true,
     "sha256": "5b7da94632b34bf8c8f882b831ea6d4a077434ddf188fdf3d0a420678f4a6889"
+  },
+  "src/core/terrace-edges.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0394,
+    "changedBody": true,
+    "sha256": "cc41ee9b1160582b9adf37ca69169df23a089c2c3f2bee40139339271d2607e3"
+  },
+  "src/core/arch-profile.js": {
+    "original": "engine/reflection.js",
+    "bodySimilarity": 0.0307,
+    "changedBody": true,
+    "sha256": "d57b8c80004497da463efca577ecb9f9ca1d2a6151208cdbcabfc6842bfcad14"
+  },
+  "src/core/portal-aim.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0487,
+    "changedBody": true,
+    "sha256": "841aba3344965acb0fd3a6c170819f25ef4a60d0021e9bcd5cf38bbc93013eb5"
   },
   "src/core/wave-cycle.js": {
     "original": "engine/noise.js",
@@ -666,10 +822,16 @@
     "sha256": "8265765746a2189d90c8b3a74dab4b3b3f998015e709effe09266374234d6321"
   },
   "src/core/banner.js": {
-    "original": "engine/flags.js",
-    "bodySimilarity": 0.014,
+    "original": "src/squadbanner.js",
+    "bodySimilarity": 0.0147,
     "changedBody": true,
-    "sha256": "3d674684f4a384c5a706175beb3575a0f1546146525702733d1e913a811ce241"
+    "sha256": "fe5f05d831aac3ddb11a5f726bc1c95eb51f6f22395661f317935bffd8b48521"
+  },
+  "src/core/cloud-depth.js": {
+    "original": "game.html",
+    "bodySimilarity": 0.0748,
+    "changedBody": true,
+    "sha256": "03ae8d522a4fc6f9ae2fe2ae2ac9711b9de2bfcf2f03d69a8e8dd4784ecaaecd"
   },
   "src/core/module-search.js": {
     "original": "src/tileforce.js",
@@ -707,11 +869,23 @@
     "changedBody": true,
     "sha256": "3a9579f1b2fc37431fb0906e69b099022ba3a94876511b66854411899b1a903c"
   },
+  "src/core/terrace-profile.js": {
+    "original": "src/terracecliff.js",
+    "bodySimilarity": 0.0329,
+    "changedBody": true,
+    "sha256": "ff3be306975a2e19a9d29b05d8e0b497c6af80489bf44ff6e770e43db9def7c1"
+  },
   "src/core/doodle-layout.js": {
     "original": "src/doodlewall.js",
     "bodySimilarity": 0.0221,
     "changedBody": true,
     "sha256": "d354545fb65031433f260d903f51c3bcefebe79a6bd7c0825d08c8a3966003ea"
+  },
+  "src/core/house-door-presence.js": {
+    "original": "src/unitsnap.js",
+    "bodySimilarity": 0.0295,
+    "changedBody": true,
+    "sha256": "99ff60811af98db46238fb1b714383c40bae5718bd8721306e3b09f0f71c1d8a"
   },
   "src/core/edge-inset.js": {
     "original": "engine/bncanopy.js",
@@ -755,9 +929,21 @@
     "changedBody": true,
     "sha256": "ba7f04b974194cf8bdf09bc21a8055ac79559a9190533ccc7f3f895f7e30ac01"
   },
+  "src/core/unit-tier.js": {
+    "original": "src/navribbon.js",
+    "bodySimilarity": 0.0159,
+    "changedBody": true,
+    "sha256": "242b8e28ce24250ab3d2074deb69a65abec84378c60601e8b161e70079935a6a"
+  },
+  "src/core/depression-fill.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0192,
+    "changedBody": true,
+    "sha256": "455d99bd5daf7557e4603fe22a70e66d69c8e517a8fbbb4a54b8f24167b320d6"
+  },
   "src/core/anchored-billboard.js": {
-    "original": "engine/impostor.js",
-    "bodySimilarity": 0.0088,
+    "original": "src/shrubcard.js",
+    "bodySimilarity": 0.0245,
     "changedBody": true,
     "sha256": "3ac2d5b520c53062e51d0935f6134ad599ed5d9369acc72a53c555c374cb6f76"
   },
@@ -791,17 +977,35 @@
     "changedBody": true,
     "sha256": "e899936775f73373ad892cb0bafd94de051643378f6285f1745edac470f7ab4c"
   },
+  "src/core/building-components.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0334,
+    "changedBody": true,
+    "sha256": "3584f691d22a96fcfa73dd04a858e5661a8792050e34bc9deb1774e82746ef7f"
+  },
   "src/core/wake-sampling.js": {
     "original": "engine/reflection.js",
     "bodySimilarity": 0.0244,
     "changedBody": true,
     "sha256": "401987aa5b9aa755371b2921658a6f7f14b111e27d1bd252bd2dab4bf7234566"
   },
+  "src/core/path-samples.js": {
+    "original": "engine/snow.js",
+    "bodySimilarity": 0.0218,
+    "changedBody": true,
+    "sha256": "1764133af50b27e917c45f7556878e74e220d026fb481ba8411943e4e2b92c55"
+  },
   "src/core/noise.js": {
     "original": "engine/noise.js",
     "bodySimilarity": 0.8098,
     "changedBody": true,
     "sha256": "b79b31dad5e4f0df599cf1ce7886d75f0b10a44d6ad6eb163ac75ac4199d3498"
+  },
+  "src/core/surface-decoration.js": {
+    "original": "src/grouping.js",
+    "bodySimilarity": 0.0172,
+    "changedBody": true,
+    "sha256": "304d445b0e587e4c37a3977b6c42a2d4fbdf5551064aa90ccf8a64141b22c5b8"
   },
   "src/core/shore-loops.js": {
     "original": "src/dual.js",
@@ -815,6 +1019,12 @@
     "changedBody": true,
     "sha256": "78de575670dc414036b9432d84a32bce9392dda14e10827e6e4a9e1715077eb3"
   },
+  "src/core/arch-floor-budget.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0464,
+    "changedBody": true,
+    "sha256": "411003703903c2a5638fec7c14647d96ac7bf6287b7b8fa8c01ff1a5c5869030"
+  },
   "src/core/garden-paths.js": {
     "original": "src/edgeplant.js",
     "bodySimilarity": 0.0294,
@@ -826,6 +1036,48 @@
     "bodySimilarity": 0.0376,
     "changedBody": true,
     "sha256": "868f4458cec7f8d7b6d67830f0ceb35c9da23713b2ac11eb6bbc947e71bbaa9a"
+  },
+  "src/capabilities/registry.js": {
+    "original": "src/gridpatch.js",
+    "bodySimilarity": 0.0294,
+    "changedBody": true,
+    "sha256": "d43ef2c8041f1210df718aebe4f540dbd2d0044a5f6421bc759c910b80952873"
+  },
+  "src/capabilities/terrain.js": {
+    "original": "src/halfedge.js",
+    "bodySimilarity": 0.0196,
+    "changedBody": true,
+    "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a"
+  },
+  "src/capabilities/build.js": {
+    "original": "tmp/cap/bsheet2.html",
+    "bodySimilarity": 0.0075,
+    "changedBody": true,
+    "sha256": "e191a7c92b26878b6d0950f1657afa8a61b74bb26ccf846bd5c3aec411eb88f8"
+  },
+  "src/capabilities/layers.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0315,
+    "changedBody": true,
+    "sha256": "e500cbb290dbdbdd2320a44ddb574a675539e73ce72bf35a50ce031ec8c2971a"
+  },
+  "src/capabilities/verify.js": {
+    "original": "src/traffic.js",
+    "bodySimilarity": 0.021,
+    "changedBody": true,
+    "sha256": "8e64f7fa45230eadbf7315e21af88433c07f317cf61ca44480ce296fb9492a32"
+  },
+  "src/capabilities/layers-meta.js": {
+    "original": "src/grasscards.js",
+    "bodySimilarity": 0.0342,
+    "changedBody": true,
+    "sha256": "4b9fa7ca748f6f61465ea85520e9498c34e80fda5cdc65b99c3b8c9b18ac6fc6"
+  },
+  "src/capabilities/ops.js": {
+    "original": "src/dual.js",
+    "bodySimilarity": 0.0472,
+    "changedBody": true,
+    "sha256": "9dc630d94d72128044fa55f5d34db11799cf6d1a33cbb31af60a0e9a93bd0055"
   },
   "src/water/reflection.js": {
     "original": "engine/reflection.js",
@@ -857,6 +1109,12 @@
     "changedBody": true,
     "sha256": "71c7bd4d0b12934a0e248e1de1a16d238a01bc09b0c5eb38ee43dc11ccc994bc"
   },
+  "src/world/space-visibility.js": {
+    "original": "engine/backlit.js",
+    "bodySimilarity": 0.0777,
+    "changedBody": true,
+    "sha256": "abdede910efe3bbf8acbf861775a0d4262f9af2e1e4629d95e6a9f286fbc2d08"
+  },
   "src/world/penumbra-layer.js": {
     "original": "engine/watervol.js",
     "bodySimilarity": 0.0473,
@@ -877,21 +1135,27 @@
   },
   "src/world/navgraph.js": {
     "original": "src/surfacedeco.js",
-    "bodySimilarity": 0.0153,
+    "bodySimilarity": 0.0151,
     "changedBody": true,
-    "sha256": "9e2f992ffd4a2345a157295a185b7d6d4245c5bb74dbf82c7cc5204bdea222af"
+    "sha256": "64ced8e2222711bbdfc9cc957ed43de648fbee88ca881c11d912868878255863"
   },
   "src/world/navlayer.js": {
     "original": "src/frontier.js",
-    "bodySimilarity": 0.0206,
+    "bodySimilarity": 0.0302,
     "changedBody": true,
-    "sha256": "32e81fea0e35561bb25af91ad211526d11e6433546747d04acfb95cd0668af5d"
+    "sha256": "9f2e8eeb0ab8ba574e6929d76352d971d3700b614368ed3a52f195cc5ec75ecd"
   },
   "src/world/worldmesh.js": {
     "original": "src/townmesh.js",
-    "bodySimilarity": 0.0303,
+    "bodySimilarity": 0.0293,
     "changedBody": true,
-    "sha256": "c5662889453cb0fb6fa2607259cab49bcd6ae1608e6131f17b6f24b178c0c6f0"
+    "sha256": "6302dbd281cbd4103ba5d89fc2e7c289272a2f2b3b5a3f461224564ad0a42ac4"
+  },
+  "src/world/terrace-edges.js": {
+    "original": "engine/reflection.js",
+    "bodySimilarity": 0.0585,
+    "changedBody": true,
+    "sha256": "b468e6de14175123d98e33d87b41209ac89306d55e9b7b8a4bdeda3718315abe"
   },
   "src/world/contour-overlay.js": {
     "original": "engine/contour.js",
@@ -901,9 +1165,9 @@
   },
   "src/world/view.js": {
     "original": "src/scene.js",
-    "bodySimilarity": 0.3224,
+    "bodySimilarity": 0.3177,
     "changedBody": true,
-    "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+    "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
   },
   "src/world/outline.js": {
     "original": "engine/backlit.js",
@@ -969,7 +1233,7 @@
     "original": "src/holenav.js",
     "bodySimilarity": 0.0243,
     "changedBody": true,
-    "sha256": "f3ce06a3aff4af417a4ba71f27ea4df87b96da82d1ab8b557bee2918ef57fc91"
+    "sha256": "06a1a28cf82678ded4c0b3c9667f5dc5d014a50eadf0682730c0aee62cdb880e"
   },
   "src/sphere/planet.js": {
     "original": "src/spheretown.js",
@@ -1015,9 +1279,9 @@
   },
   "src/life/vegetation.js": {
     "original": "engine/world.html",
-    "bodySimilarity": 0.0281,
+    "bodySimilarity": 0.0279,
     "changedBody": true,
-    "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+    "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
   },
   "src/life/smoke.js": {
     "original": "src/smokefx.js",
@@ -1051,15 +1315,21 @@
   },
   "src/life/impostor.js": {
     "original": "engine/impostor.js",
-    "bodySimilarity": 0.0331,
+    "bodySimilarity": 0.0325,
     "changedBody": true,
-    "sha256": "3e466728d8769ad9103cb1c50e34c01f7182c25a0a06d74a0ba4288b607a42ba"
+    "sha256": "4240bcb290123bf3f91aadad0a77a2ed3fc376285efb24e8291f56137085c946"
   },
   "src/badnorth/flowfield.js": {
     "original": "src/flowfield.js",
     "bodySimilarity": 0.1765,
     "changedBody": true,
     "sha256": "b9397288bfb803cf54c09e899c69bae402856e030cd40a0563e4d80b6c5d8b0d"
+  },
+  "src/badnorth/landing-plan.js": {
+    "original": "src/dual.js",
+    "bodySimilarity": 0.0337,
+    "changedBody": true,
+    "sha256": "c0132edf0314dca8489d2ee2927a7784af6ef5758a4aa1cefcbbcff61b4c1fe2"
   },
   "src/badnorth/theme.js": {
     "original": "src/colorgamut.js",
@@ -1069,9 +1339,9 @@
   },
   "src/badnorth/battle.js": {
     "original": "engine/world.html",
-    "bodySimilarity": 0.0241,
+    "bodySimilarity": 0.0239,
     "changedBody": true,
-    "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+    "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
   },
   "src/badnorth/island.js": {
     "original": "src/campaignmap.js",
@@ -1092,16 +1362,28 @@
     "sha256": "03f343be9d035ea83c6341f50efc01f0dab6e385cb8d7e0a561194fa5cbb0d75"
   },
   "src/terrain/generate.js": {
-    "original": "engine/rivers.js",
-    "bodySimilarity": 0.286,
+    "original": "src/terrainmesh.js",
+    "bodySimilarity": 0.0348,
     "changedBody": true,
-    "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+    "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
   },
   "src/terrain/blotch-pattern.js": {
     "original": "engine/bncanopy.js",
     "bodySimilarity": 0.0405,
     "changedBody": true,
     "sha256": "0608d2dac81d69154d91ebcc48fcf53fae621212ba11958f6b477d010467d893"
+  },
+  "src/terrain/river-network.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.0256,
+    "changedBody": true,
+    "sha256": "31af65648c6c29b4f3d5b5a8b222a53775411a74a8bc3ba9f20d3c349eadb075"
+  },
+  "src/terrain/drainage.js": {
+    "original": "engine/contour.js",
+    "bodySimilarity": 0.026,
+    "changedBody": true,
+    "sha256": "d5eb067651312e3ea00fd27902b5838d7b036fcf240cf68a72faffcfe6a5cb5b"
   },
   "src/terrain/shape.js": {
     "original": "src/edgesmooth.js",
@@ -1139,6 +1421,12 @@
     "changedBody": true,
     "sha256": "7352617fae7e204c3eb0e9861fcd0b55ac0eb17a6f92e96272e43a25dce29482"
   },
+  "src/light/cloud-shadow.js": {
+    "original": "engine/backlit.js",
+    "bodySimilarity": 0.0547,
+    "changedBody": true,
+    "sha256": "56958392639bfa183c0f3e05f1997553464e89ab380b5546055805d522df3b36"
+  },
   "src/light/cube-height.js": {
     "original": "engine/vertexlight.js",
     "bodySimilarity": 0.1454,
@@ -1165,15 +1453,15 @@
   },
   "src/build/buildings.js": {
     "original": "src/townmesh.js",
-    "bodySimilarity": 0.0339,
+    "bodySimilarity": 0.0305,
     "changedBody": true,
-    "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+    "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
   },
   "src/build/lighthouse.js": {
-    "original": "engine/waterfall.js",
-    "bodySimilarity": 0.0889,
+    "original": "tmp/cap/bsheet2.html",
+    "bodySimilarity": 0.0036,
     "changedBody": true,
-    "sha256": "aad9304d45e602d7b3fd3d5a5d7d9e1b7ef4b777106b36ac477fe8fef3bf5308"
+    "sha256": "3dc35b28244f55e3ca2e49aac1a9e6dcb9540362eb92d49f49d43dc4fb53d5f8"
   },
   "src/build/multicell.js": {
     "original": "src/fusion.js",

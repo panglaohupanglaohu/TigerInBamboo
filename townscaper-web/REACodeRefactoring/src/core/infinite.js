@@ -1,3 +1,4 @@
+import {baryPrep} from './spatial.js';
 /**
  * infinite.js — 无限、确定、无缝的松弛四边形网格（Townscaper 的网格是"无限"的）。
  *
@@ -27,7 +28,7 @@ const hash = (q, r) => ((Math.imul(q, 73856093) ^ Math.imul(r, 19349663)) >>> 0)
 
 /**
  * 生成以原点为中心、rings 圈的块，返回 { verts, quads, patches, clusters, versions }。
- * mode: 'raw' 不松弛 / 'patch' 只按块松弛（接缝明显）/ 'cluster' 只按簇松弛 / 'blend' 块 + 两簇插值（最终）
+ * mode: 'raw' 不松弛 / 'patch' 只按块松弛（本地外圈钉住，边界无缝）/ 'cluster' 只按簇松弛 / 'blend' 块 + 两簇插值（最终）
  */
 export function buildInfinite({ N = 4, L = 1, rings = 2, passes = 60 } = {}) {
   const dirs = DIRS(N);
@@ -89,7 +90,7 @@ export function buildInfinite({ N = 4, L = 1, rings = 2, passes = 60 } = {}) {
   const clusterPos = clusters.map((C) => relaxGroup(C.patches.flatMap((i) => patches[i].quads)));
   // 每个顶点：所在块（取第一个）+ 包含这个块的最近两个簇
   const quadsAll = patches.flatMap((P) => P.quads);
-  const weights = new Map();
+  const weights = new Map(),baryCache=new Map(),barycentricStats={prepared:0,queries:0,degenerate:0};
   const blendAt = (v, pi) => {
     const P = patches[pi];
     const pp = patchPos[P.id].get(v.id);
@@ -98,10 +99,17 @@ export function buildInfinite({ N = 4, L = 1, rings = 2, passes = 60 } = {}) {
     if (cands.length < 2) return { p: pp, w: [1, 0, 0] };
     const c1 = cands[0].C, c2 = cands[1].C;
     // 重心坐标（块中心、簇 1 中心、簇 2 中心）
-    const A = P.center, B = c1.center, Cc = c2.center;
-    const det = (B[1] - Cc[1]) * (A[0] - Cc[0]) + (Cc[0] - B[0]) * (A[1] - Cc[1]);
-    let wa = ((B[1] - Cc[1]) * (v.x0 - Cc[0]) + (Cc[0] - B[0]) * (v.z0 - Cc[1])) / det;
-    let wb = ((Cc[1] - A[1]) * (v.x0 - Cc[0]) + (A[0] - Cc[0]) * (v.z0 - Cc[1])) / det;
+    const cacheKey=P.id+':'+c1.id+':'+c2.id;
+    if(!baryCache.has(cacheKey)){
+      const asPoint=p=>({x:p[0],z:p[1]});
+      let prepared=null;
+      try{prepared=baryPrep(asPoint(P.center),asPoint(c1.center),asPoint(c2.center));}
+      catch(e){if(!(e instanceof RangeError))throw e;barycentricStats.degenerate++;}
+      baryCache.set(cacheKey,prepared);barycentricStats.prepared++;
+    }
+    const query=baryCache.get(cacheKey);barycentricStats.queries++;
+    if(!query)return{p:pp,w:[1,0,0]}; // Collinear centres cannot define interpolation.
+    let[wa,wb]=query(v.x0,v.z0);
     wa = Math.max(0, wa); wb = Math.max(0, wb);
     let wc = Math.max(0, 1 - wa - wb);
     const s2 = wa + wb + wc || 1; wa /= s2; wb /= s2; wc /= s2;
@@ -116,20 +124,32 @@ export function buildInfinite({ N = 4, L = 1, rings = 2, passes = 60 } = {}) {
     cluster: (v) => { const C = clusters.find((c) => c.patches.includes(v.patches[0]) && clusterPos[c.id].has(v.id)); return C ? clusterPos[C.id].get(v.id) : [v.x0, v.z0]; },
     blend: (v) => final.get(v.id),
   };
-  return { verts, quads: quadsAll, patches, clusters, versions, weights, blendAt };
+  // Expose each owning patch representation: a shared final vertex alone can hide seams.
+  const versionAt = (v, pi, mode = 'blend') => {
+    if (!patches[pi] || !v.patches.includes(pi)) throw new RangeError('vertex does not belong to patch');
+    if (mode === 'raw') return [v.x0,v.z0];
+    if (mode === 'patch') return patchPos[pi].get(v.id);
+    if (mode === 'blend') return blendAt(v,pi).p;
+    if (mode === 'cluster') { const C=clusters.find(c=>c.patches.includes(pi)&&clusterPos[c.id].has(v.id)); return C ? clusterPos[C.id].get(v.id) : [v.x0,v.z0]; }
+    throw new RangeError('unknown infinite grid mode');
+  };
+  return { barycentricStats, verts, quads: quadsAll, patches, clusters, versions, weights, blendAt, versionAt };
 }
 
 /** 检查：翻折的格子数（有向面积 ≤ 0）、块边界两侧是否同一个点（无缝） */
 export function verify(inf, mode = 'blend') {
-  const at = inf.versions[mode];
-  let flipped = 0;
-  for (const qd of inf.quads) if (signedArea(qd.map((v) => { const [x, z] = at(v); return { x, z }; })) <= 0) flipped++;
-  // 无缝：块边界上的点，从相邻两块各自出发算一遍，应该是同一个位置
-  let seam = 0, border = 0;
-  for (const v of inf.verts) if (v.patches.length > 1) {
-    border++;
-    const a = inf.blendAt(v, v.patches[0]).p, b = inf.blendAt(v, v.patches[1]).p;
-    seam = Math.max(seam, Math.hypot(a[0] - b[0], a[1] - b[1]));
+  if (!Object.hasOwn(inf.versions,mode)) throw new RangeError('unknown infinite grid mode');
+  let flipped=0,invalid=0,seam=0,border=0,comparisons=0;
+  for(const P of inf.patches) for(const q of P.quads){
+    const pts=q.map(v=>inf.versionAt(v,P.id,mode));
+    if(!pts.every(p=>p?.length===2&&p.every(Number.isFinite))){invalid++;continue;}
+    if(signedArea(pts.map(([x,z])=>({x,z})))<=0)flipped++;
   }
-  return { quads: inf.quads.length, flipped, border, seam };
+  for(const v of inf.verts)if(v.patches.length>1){border++;
+    for(let i=0;i<v.patches.length;i++)for(let j=i+1;j<v.patches.length;j++){
+      const a=inf.versionAt(v,v.patches[i],mode),b=inf.versionAt(v,v.patches[j],mode);comparisons++;
+      const d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(Number.isFinite(d))seam=Math.max(seam,d);else invalid++;
+    }
+  }
+  return{quads:inf.quads.length,flipped,invalid,border,seam,comparisons};
 }

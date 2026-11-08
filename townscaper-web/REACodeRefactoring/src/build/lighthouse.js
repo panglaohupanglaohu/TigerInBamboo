@@ -60,7 +60,7 @@ export class Lighthouses {
     const L = this.L;
     for (const c of world.cells) {
       const t = world.top(c);
-      if (t < MIN_H) continue;
+      if (t < MIN_H || world.isRock(c, t)) continue;   // 岩柱不算塔：顶上必须是建筑
       let slim = true, sea = false;
       for (let i = 0; i < c.n; i++) {
         const o = world.neighbor(c, i);

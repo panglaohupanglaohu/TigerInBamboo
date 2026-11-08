@@ -11,6 +11,7 @@
 // occlude the town while every refactor shader keeps its world-Y conventions.
 // Vendor files are used unchanged (src/vendor/townscaper-rea-refactoring).
 import * as THREE from 'three';
+import {styleMat} from '../style/materials.js';
 import {WorldMesh} from '../vendor/townscaper-rea-refactoring/src/world/worldmesh.js';
 import {buildShore,makeSkirtMaterial,makeWaveMaterial} from '../vendor/townscaper-rea-refactoring/src/water/shore.js';
 import {OutlineLayers} from '../vendor/townscaper-rea-refactoring/src/world/outline.js';
@@ -57,7 +58,7 @@ export class MorrisTownStage{
   this.shadowCatcher=new THREE.Mesh(waterGeometry.clone(),new THREE.ShadowMaterial({opacity:.2,depthWrite:false,side:THREE.DoubleSide}));this.shadowCatcher.position.y=.002;this.shadowCatcher.receiveShadow=true;this.shadowCatcher.renderOrder=4;this.scene.add(this.shadowCatcher);
   // world mesh + material (view.js constructor)
   this.worldMesh=new WorldMesh(world,{levelHeight});
-  this.material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.92,metalness:0});
+  this.material=styleMat('morris.townStage.town-voxels','MeshStandardMaterial',{vertexColors:true,roughness:.92,metalness:0});
   this.nightUniform={value:0};this.pop=popShaderChunk();this.snowUniform={value:0};
   this.material.onBeforeCompile=shader=>{shader.uniforms.uNight=this.nightUniform;shader.uniforms.uTime=this.waterUniforms.uTime;shader.uniforms.uSnow=this.snowUniform;Object.assign(shader.uniforms,this.pop.uniforms);
    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float aGlow;\nvarying float vGlow;\nvarying float vUp;\nuniform float uTime;\n'+this.pop.pars).replace('#include <begin_vertex>','#include <begin_vertex>\nvGlow = aGlow;\nvUp = normalize(objectNormal).y;\n'+this.pop.body);
@@ -80,11 +81,11 @@ export class MorrisTownStage{
   this.waveMaterial=makeWaveMaterial();this.waveMaterial.uniforms.uTime=this.waterUniforms.uTime;this.waves=new THREE.Mesh(new THREE.BufferGeometry(),this.waveMaterial);this.waves.renderOrder=3;this.waves.frustumCulled=false;this.scene.add(this.waves);
   // hover quad + learning overlays (view.js #setupHover / #setupDebug)
   const hg=new THREE.BufferGeometry();hg.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(12),3));hg.setIndex([0,1,2,0,2,3]);
-  this.hover=new THREE.Mesh(hg,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide}));this.hover.visible=false;this.hover.renderOrder=3;this.scene.add(this.hover);
+  this.hover=new THREE.Mesh(hg,styleMat('morris.townStage.hover','MeshBasicMaterial',{color:0xffffff,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide}));this.hover.visible=false;this.hover.renderOrder=3;this.scene.add(this.hover);
   const seen=new Set(),arr=[];for(const c of grid.cells)for(let i=0;i<c.n;i++){const a=c.pts[i],b=c.pts[(i+1)%c.n],k=a.id<b.id?a.id+':'+b.id:b.id+':'+a.id;if(seen.has(k))continue;seen.add(k);arr.push(a.x,.015,a.z,b.x,.015,b.z);}
   const gg=new THREE.BufferGeometry();gg.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));
-  this.gridLines=new THREE.LineSegments(gg,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.55,depthWrite:false}));this.gridLines.renderOrder=5;this.gridLines.visible=false;this.scene.add(this.gridLines);
-  const lineMat=c=>new THREE.LineBasicMaterial({color:c,depthTest:false,transparent:true});
+  this.gridLines=new THREE.LineSegments(gg,styleMat('morris.townStage.grid-lines','LineBasicMaterial',{color:0xffffff,transparent:true,opacity:.55,depthWrite:false}));this.gridLines.renderOrder=5;this.gridLines.visible=false;this.scene.add(this.gridLines);
+  const lineMat=c=>styleMat('morris.townStage.debug-line','LineBasicMaterial',{color:c,depthTest:false,transparent:true});
   this.shoreLine=new THREE.LineSegments(new THREE.BufferGeometry(),lineMat(0xffd23a));this.seaLine=new THREE.LineSegments(new THREE.BufferGeometry(),lineMat(0x3a6dff));
   for(const l of[this.shoreLine,this.seaLine]){l.renderOrder=6;l.visible=false;l.frustumCulled=false;this.scene.add(l);}
   this.birdTimer=null;this.birdsReady=false;

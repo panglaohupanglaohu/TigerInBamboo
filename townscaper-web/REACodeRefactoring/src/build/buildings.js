@@ -1,3 +1,9 @@
+import {archFloorBudget} from '../core/arch-floor-budget.js';
+import {solveWallDecoration,solveFacadeDecoration} from '../core/surface-decoration.js';
+import { archProfile } from '../core/arch-profile.js';
+import { buildingComponents } from '../core/building-components.js';
+import { hipRoof } from '../core/hip-roof.js';
+import { openingFootprint, OPENING_FRAME, WINDOW_SILL_SCALE } from '../core/opening-footprint.js';
 /**
  * buildings.js — 建筑管线（Townscaper）：体素列 → 墙 / 基座 / 屋顶 / 支撑 / 门窗 / 后院。
  *
@@ -26,6 +32,9 @@ import { UP, DOWN, edgeOut } from '../core/meshwriter.js';
  * @returns {{ posts: {x:number,z:number}[], yards:number }}
  */
 export function buildBuildings(w, world, { L, debugModules = false }) {
+  let archCount=0,archSegments=0,decoSolved=0,decoFailures=0;
+  const archBudgets=[],decoDrawn={},decoPlacements=[];
+  let decoDropped=0;
   const cells = world.cells;
   const grid = world.grid;
   const n = cells.length;
@@ -115,32 +124,23 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
    * 开口始终是沿墙边的正矩形，不随格子歪斜。 */
   const placed = new Map();   // lv → [[x, z, halfWidth]]
   const GAP = 0.05, CORNER = 0.035;
-  const tryPlace = (c, i, t, lv, width) => {
+  const tryPlace = (c, i, t, lv, width, isDoor = false) => {
     const a = c.pts[i], b = c.pts[(i + 1) % c.n];
-    const len = Math.hypot(b.x - a.x, b.z - a.z) || 1;
-    const hw = width / 2 + 0.022;
-    if (t * len - hw < CORNER || (1 - t) * len - hw < CORNER) return false;
-    const x = mix(a.x, b.x, t), z = mix(a.z, b.z, t);
+    const footprint = openingFootprint(a,b,t,width,{door:isDoor,corner:CORNER});
+    if (!footprint) return false;
+    const {x,z,halfWidth:hw} = footprint;
     const list = placed.get(lv) || placed.set(lv, []).get(lv);
     for (const [px, pz, ph] of list) if (Math.hypot(px - x, pz - z) < ph + hw + GAP) return false;
     list.push([x, z, hw]);
     return true;
   };
 
-  /* ---- 表面装饰的"小 WFC"（1181464374839521280）：
-   * "an additional smaller WFC for surface decorations like windows and doors (who's awkward placement
-   *  otherwise explodes the permutation count)"
-   * 不把门窗塞进主模块的排列组合里，而是另起一层：每栋房子（同层连通的建筑格）每层挑一种窗型，
-   * 同一面上的窗型一致；整栋房子只开一扇门（在临步道的边里挑哈希最小的那条）。 */
-  const house = new Int32Array(n).fill(-1);
-  for (const c of cells) {
-    if (house[c.id] >= 0 || !world.isBuilt(c, 2)) continue;
-    const q = [c]; house[c.id] = c.id;
-    for (let k = 0; k < q.length; k++) for (const id of q[k].edgeNeighbors) {
-      if (id >= 0 && house[id] < 0 && world.isBuilt(cells[id], 2)) { house[id] = c.id; q.push(cells[id]); }
-    }
-  }
-  const windowStyle = (c, lv) => (hash01((house[c.id] + 7) * 977 + lv * 131) * 3) | 0;   // 0 单窗 1 双窗 2 高窗
+  /* ---- 本地表面装饰分组：沿实际建筑体素连通，码头与岩石不并楼。
+   * 悬空/断开的楼层也有独立身份；同一组同层共享窗型。
+   * 118146配文明确有独立小WFC；本地哈希/门候选规则还不是该求解器。 */
+  const decoration=buildingComponents(world);
+  const house=Int32Array.from(cells,c=>decoration.at(c,2));
+  const windowStyle = (c, lv) => (hash01((decoration.at(c,lv) + 7) * 977 + lv * 131) * 3) | 0;
   const door = new Map();   // house → 'cellId:edge'
   for (const c of cells) {
     if (house[c.id] < 0) continue;
@@ -160,14 +160,31 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
     const out = [nx, 0, nz];
     const P = (tt, y, o) => [mix(a.x, b.x, tt) + nx * o, y, mix(a.z, b.z, tt) + nz * o];
     const len = Math.hypot(b.x - a.x, b.z - a.z) || 1;
-    const hw = width / 2 / len, fw = 0.022 / len, ft = 0.022;
+    const hw = width / 2 / len, fw = OPENING_FRAME / len, ft = OPENING_FRAME;
     const t1 = t - hw, t2 = t + hw, y1 = y0 + height;
     w.quad(P(t1 - fw, y0 - ft, 0.008), P(t2 + fw, y0 - ft, 0.008), P(t2 + fw, y1 + ft, 0.008), P(t1 - fw, y1 + ft, 0.008), out, K.frame, 1);
     w.quad(P(t1, y0, 0.012), P(t2, y0, 0.012), P(t2, y1, 0.012), P(t1, y1, 0.012), out, isDoor ? K.door : K.glass, 1, isDoor ? 0 : 1);
     if (!isDoor) {
       const mw = 0.006 / len;
       w.quad(P(t - mw, y0, 0.016), P(t + mw, y0, 0.016), P(t + mw, y1, 0.016), P(t - mw, y1, 0.016), out, K.frame, 1);
-      w.quad(P(t1 - fw * 1.6, y0 - ft * 1.6, 0.03), P(t2 + fw * 1.6, y0 - ft * 1.6, 0.03), P(t2 + fw * 1.6, y0 - ft * 0.6, 0.03), P(t1 - fw * 1.6, y0 - ft * 0.6, 0.03), out, K.frame, 0.95);
+      w.quad(P(t1 - fw * WINDOW_SILL_SCALE, y0 - ft * WINDOW_SILL_SCALE, 0.03), P(t2 + fw * WINDOW_SILL_SCALE, y0 - ft * WINDOW_SILL_SCALE, 0.03), P(t2 + fw * WINDOW_SILL_SCALE, y0 - ft * 0.6, 0.03), P(t1 - fw * WINDOW_SILL_SCALE, y0 - ft * 0.6, 0.03), out, K.frame, 0.95);
+    }
+  };
+
+  const shutterPanel=(c,i,t,y,width,height)=>{
+    const a=c.pts[i],b=c.pts[(i+1)%c.n],[nx,nz]=edgeOut(c,i),len=Math.hypot(b.x-a.x,b.z-a.z),hw=width/len/2;
+    const P=(tt,yy,o)=>[mix(a.x,b.x,tt)+nx*o,yy,mix(a.z,b.z,tt)+nz*o];
+    w.quad(P(t-hw,y,.018),P(t+hw,y,.018),P(t+hw,y+height,.018),P(t-hw,y+height,.018),[nx,0,nz],K.door,.9);
+    for(let k=1;k<5;k++){const yy=y+height*k/5;w.quad(P(t-hw,yy-.003,.023),P(t+hw,yy-.003,.023),P(t+hw,yy+.003,.023),P(t-hw,yy+.003,.023),[nx,0,nz],K.frame,.8);}
+  };
+  const archedEntry=(c,i,t,y,width,height)=>{
+    const a=c.pts[i],b=c.pts[(i+1)%c.n],[nx,nz]=edgeOut(c,i),len=Math.hypot(b.x-a.x,b.z-a.z),rad=width/2,spring=y+height-rad,frame=OPENING_FRAME;
+    const P=(x,yy,o)=>[mix(a.x,b.x,t+x/len)+nx*o,yy,mix(a.z,b.z,t+x/len)+nz*o],out=[nx,0,nz];
+    for(const side of[-1,1]){const x=side*rad,xx=side*(rad+frame);w.quad(P(Math.min(x,xx),y,.008),P(Math.max(x,xx),y,.008),P(Math.max(x,xx),spring,.008),P(Math.min(x,xx),spring,.008),out,K.frame,1);}
+    w.quad(P(-rad,y,.012),P(rad,y,.012),P(rad,spring,.012),P(-rad,spring,.012),out,K.door,1);
+    for(let k=0;k<12;k++){const a=k*Math.PI/12,b=(k+1)*Math.PI/12,p=(angle,r,o)=>P(Math.cos(angle)*r,spring+Math.sin(angle)*r,o);
+      w.tri(P(0,spring,.012),p(a,rad,.012),p(b,rad,.012),out,K.door,1);
+      w.quad(p(a,rad,.008),p(a,rad+frame,.008),p(b,rad+frame,.008),p(b,rad,.008),out,K.frame,1);
     }
   };
 
@@ -193,6 +210,19 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
       const nb = nbr(c, i);
       const nbTop = nb ? tops[nb.id] : 0;
       const edgeLen = Math.hypot(c.pts[(i + 1) % c.n].x - c.pts[i].x, c.pts[(i + 1) % c.n].z - c.pts[i].z);
+      const wallDeco=new Map();
+      if(world.surfaceWFC){
+        let lo=2;
+        while(lo<=h){
+          if(!world.isBuilt(c,lo)||solid(nb,lo)){lo++;continue;}
+          let hi=lo;while(hi<h&&world.isBuilt(c,hi+1)&&!solid(nb,hi+1))hi++;
+          const hasDoor=lo===2&&door.get(house[c.id])?.key===c.id+':'+i;
+          const width=world.surfaceFacade?(edgeLen>=.70?3:hasDoor?1:edgeLen>=.46?2:1):2;
+          const solved=world.surfaceFacade?solveFacadeDecoration(hi-lo+1,{width,seed:c.id*131+i*17+lo*7,entry:hasDoor?(hash01(c.id*31+i)<.5?'arch':'door'):null}):solveWallDecoration(hi-lo+1,{width,seed:c.id*131+i*17+lo*7,doors:hasDoor?[0]:[]});
+          if(solved.ok&&solved.violations.length===0){decoSolved++;for(let lv=lo;lv<=hi;lv++)wallDeco.set(lv,solved.styles.slice((lv-lo)*width,(lv-lo+1)*width));}else decoFailures++;
+          lo=hi+1;
+        }
+      }
       for (let lv = 1; lv <= h; lv++) {
         if (!world.isBuilt(c, lv) || solid(nb, lv)) continue;
         if (lv === 1) { plinth(c, i); continue; }
@@ -207,10 +237,31 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
         }
         const hk = c.id * 131 + i * 17 + lv * 7;
         const isDoor = lv === 2 && door.get(house[c.id])?.key === c.id + ':' + i;
-        if (isDoor) {
-          if (tryPlace(c, i, 0.5, lv, 0.12)) opening(c, i, 0.5, y0 + 0.03, 0.12, 0.22, true);
+        if(world.surfaceFacade&&wallDeco.has(lv)){
+          const placedSlots=new Set();
+          const slots=[...wallDeco.get(lv).entries()].sort((a,b)=>Number(a[1].startsWith('shutter'))-Number(b[1].startsWith('shutter')));
+          for(const[x,style]of slots){
+            if(style==='none')continue;
+            const t=(x+.5)/wallDeco.get(lv).length,entry=style==='door'||style==='arch',shutter=style.startsWith('shutter'),tall=style==='window2',ww=entry?.12:shutter?.05:tall?.075:.085;
+            if(shutter&&!placedSlots.has(style==='shutterL'?x-1:x+1)){decoDropped++;continue;}
+            if(!tryPlace(c,i,t,lv,ww,entry)){decoDropped++;continue;}
+            placedSlots.add(x);
+            if(style==='arch')archedEntry(c,i,t,y0+.03,.12,.22);
+            else if(shutter)shutterPanel(c,i,t,y0+L*.4,ww,.14);
+            else opening(c,i,t,y0+(entry?.03:L*(tall?.28:.4)),ww,entry?.22:tall?.24:.14,entry);
+            decoPlacements.push({cell:c.id,edge:i,level:lv,slot:x,style,partner:shutter?(style==='shutterL'?x-1:x+1):null});
+            const kind=shutter?'shutter':style;decoDrawn[kind]=(decoDrawn[kind]??0)+1;
+          }
+        } else if (isDoor) {
+          if (tryPlace(c, i, 0.5, lv, 0.12, true)) opening(c, i, 0.5, y0 + 0.03, 0.12, 0.22, true);
+        } else if(wallDeco.has(lv)){
+          for(const[x,style]of wallDeco.get(lv).entries()){
+            if(style==='blank')continue;
+            const t=x===0?.25:.75,tall=style==='tall',ww=tall?.075:.085,hh=tall?.24:.14;
+            if(tryPlace(c,i,t,lv,ww))opening(c,i,t,y0+L*(tall?.28:.4),ww,hh,false);
+          }
         } else if (hash01(hk + 1) < 0.85) {
-          // 窗型由"小 WFC"定（同一栋同一层一致），能不能放下由道具放置决定
+          // Local component/layer hash, not a full surface-decoration WFC; placement checks remain separate.
           const st = windowStyle(c, lv), wy = y0 + L * 0.4;
           const cand = st === 1 ? [[0.3, 0.085, 0.14], [0.7, 0.085, 0.14]]
             : st === 2 ? [[0.5, 0.075, 0.24]]
@@ -271,16 +322,16 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
         const x0 = mix(A0.x, B0.x, u), z0 = mix(A0.z, B0.z, u), x1 = mix(A1.x, B1.x, u), z1 = mix(A1.z, B1.z, u);
         return [mix(x0, x1, v), y, mix(z0, z1, v)];
       };
-      const rise = Math.min((yBase - yFloor) * 0.75, L * 0.8);
-      const crown = yBase - 0.05;
-      const yAt = (u) => crown - rise * (1 - Math.sqrt(Math.max(0, 1 - (2 * u - 1) ** 2)));
+      const budget=archFloorBudget({base:yBase,floor:yFloor,storey:L,slab:world.archSlab??.05});
+      const {rise,crown}=budget;archBudgets.push({cell:c.id,level:lv,...budget});
+      const span=Math.max(Math.hypot(B0.x-A0.x,B0.z-A0.z),Math.hypot(B1.x-A1.x,B1.z-A1.z));
+      const profile=archProfile(span,rise,{tolerance:world.archTolerance??.0025});
+      archCount++;archSegments+=profile.segments;
       const soffit = wall.clone().multiplyScalar(0.72);
-      const S = 10;
-      for (let s = 0; s < S; s++) {
-        const u0 = s / S, u1 = (s + 1) / S, y0 = yAt(u0), y1 = yAt(u1);
-        const m = P((u0 + u1) / 2, 0.5, (y0 + y1) / 2);
+      for (let s = 0; s < profile.segments; s++) {
+        const p0=profile.points[s],p1=profile.points[s+1],u0=p0.u,u1=p1.u;
+        const y0=crown-rise+p0.height,y1=crown-rise+p1.height;
         w.quad(P(u0, 0, y0), P(u1, 0, y1), P(u1, 1, y1), P(u0, 1, y0), [0, -1, 0], soffit, 0.9);
-        void m;
         for (const [v, ei] of [[0, (i + 3) % 4], [1, (i + 1) % 4]]) {
           if (solid(nbr(c, ei), below)) continue;
           const [nx, nz] = edgeOut(c, ei);
@@ -361,7 +412,7 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
 
   const yardCells = new Set(), pathCells = new Set();
   for (let i = 0; i < n; i++) { if (yard[i]) yardCells.add(i); if (path[i]) pathCells.add(i); }
-  return { posts, yards, yardCells, pathCells, yardOpenings: courtyard.openComponents, chimneys, modules: sigs.size, doors: door.size };
+  return { archBudgets,decoPlacements,decoDrawn,decoDropped,decoSolved,decoFailures,archCount,archSegments,decorationGroups: decoration.components.length, posts, yards, yardCells, pathCells, yardOpenings: courtyard.openComponents, chimneys, modules: sigs.size, doors: door.size };
 }
 
 /**
@@ -397,7 +448,7 @@ function buildRoofs(w, world, { L, tops, K, wallColor, chimneys = [] }) {
       else if (cnt === 3) {
         const ge = (f.indexOf(0) + 2) % 4;
         if (f[(ge + 1) % 4] && f[(ge + 3) % 4]) f[ge] = 2;
-      } else if (cnt === 4) {
+      } else if (cnt === 4 && !world.hipRoofs) {
         const m = (i) => [(c.pts[i].x + c.pts[(i + 1) % 4].x) / 2, (c.pts[i].z + c.pts[(i + 1) % 4].z) / 2];
         const d02 = Math.hypot(m(0)[0] - m(2)[0], m(0)[1] - m(2)[1]);
         const d13 = Math.hypot(m(1)[0] - m(3)[0], m(1)[1] - m(3)[1]);
@@ -455,7 +506,19 @@ function buildRoofs(w, world, { L, tops, K, wallColor, chimneys = [] }) {
       const shade = 0.96 + 0.08 * hash01(c.id * 977 + 11);
       const roof = hash01(c.id * 13) < 0.5 ? K.roof : K.roofAlt;
       const P = (p) => [p.ox, p.y, p.oz];
-      for (let i = 0; i < c.n; i++) {
+      // Optional four-eave roof on isolated quads only. Existing joined roofs stay intact.
+      if (world.hipRoofs && c.n === 4 && flags.get(c.id).every(f => f === 1)) {
+        const edgeLength=i=>Math.hypot(cs[i].ox-cs[(i+1)%4].ox,cs[i].oz-cs[(i+1)%4].oz);
+        const width=(edgeLength(0)+edgeLength(2))/2, depth=(edgeLength(1)+edgeLength(3))/2;
+        const rise=Math.min(Math.min(width,depth)/2,cap)*slope;
+        const hip=hipRoof(width,depth,rise);
+        const map=([u,v,y])=>{
+          const weights=[(1-u)*(1-v),u*(1-v),u*v,(1-u)*v];
+          return [cs.reduce((sum,p,i)=>sum+p.ox*weights[i],0),base-.02+y,cs.reduce((sum,p,i)=>sum+p.oz*weights[i],0)];
+        };
+        for(const face of hip.faces)for(let i=1;i<face.length-1;i++)w.tri(map(face[0]),map(face[i]),map(face[i+1]),UP,roof,shade);
+        ctr.y=base-.02+rise;
+      } else for (let i = 0; i < c.n; i++) {
         w.tri(P(cs[i]), P(ms[i]), P(ctr), UP, roof, shade);
         w.tri(P(cs[i]), P(ctr), P(ms[(i + c.n - 1) % c.n]), UP, roof, shade);
       }

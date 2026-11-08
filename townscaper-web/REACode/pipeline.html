@@ -158,15 +158,15 @@
 </head>
 <body>
 <main>
-  <nav><a href="index.html">← 场景</a><a href="learn.html">学习笔记</a><a href="overview.html">总览</a><a href="PIPELINE.md">PIPELINE.md</a><a href="GUIDE.md">接手指南 GUIDE.md</a><button class="navopen" data-learn-open>📚 我学到了什么（12 轮 / 134 条）</button></nav>
+  <nav><a href="index.html">← 场景</a><a href="learn.html">学习笔记</a><a href="overview.html">总览</a><a href="PIPELINE.md">PIPELINE.md</a><a href="GUIDE.md">接手指南 GUIDE.md</a><button class="navopen" data-learn-open><span id="navLearned">📚 我学到了什么</span></button></nav>
   <h1>管线图与学习路线</h1>
-  <p class="sub">把 237 段视频按"管线"重新排了一遍：共享底座（网格、水、光照、导航）→ 建筑管线（Townscaper）和地形管线（engine）→ 两者在第三个项目里融合，最终上到球面。下面先是判断，再是"最近 12 轮新增了什么"，然后是一条可以照着学、照着做的路线（已扩到 11 步），最后是完整的管线图。<b>已学 134 / 237</b>；标「对照页」的都能直接打开，▶ 都能播放对应原片。</p>
+  <p class="sub">把 <b id="nCorpus">—</b> 段视频按"管线"重新排了一遍：共享底座（网格、水、光照、导航）→ 建筑管线（Townscaper）和地形管线（engine）→ 两者在第三个项目里融合，最终上到球面。下面先是判断，再是最近补进来的能力，然后是一条可以照着学、照着做的路线（<b id="nSteps">—</b> 步），最后是完整的管线图。<b id="nDone">—</b>；标「对照页」的都能直接打开，▶ 都能播放对应原片。</p>
 
   <div class="verdict" id="verdict"></div>
 
-  <h2>最近 12 轮新增（第 9–20 轮）</h2>
+  <h2 id="recentTitle">最近新增</h2>
   <p class="sub" id="recentNote"></p>
-  <button class="cta" data-learn-open>看全部 12 轮的逐条台账（原文 / 画面 / 做法 / 数字 / 踩的坑），并可以直接提问 →</button>
+  <button class="cta" data-learn-open id="ctaLearned">看逐条台账（原文 / 画面 / 做法 / 数字 / 踩的坑），并可以直接提问 →</button>
   <div class="recent" id="recent"></div>
 
   <h2>学习路线（按这个顺序学和做）</h2>
@@ -176,7 +176,7 @@
   <h2>完整管线图</h2>
   <div class="lanes" id="lanes"></div>
 </main>
-<button id="learnOpen" data-learn-open>📚 我学到了什么 · 12 轮 / 134 条</button>
+<button id="learnOpen" data-learn-open><span id="floatLearned">📚 我学到了什么</span></button>
 
 <div id="learnFloat" class="learn-float" hidden>
   <div id="learnPanel" class="learn-panel">
@@ -225,6 +225,27 @@ const thumb = (id, cls = '') => {
   return `<button class="thumb ${cls}" data-play="${id}" title="${esc(it ? it.date + ' · ' + it.text : id)}" style="background-image:url(learn/thumbs/${id}.jpg)"></button>`;
 };
 const code = (s) => esc(s).replace(/(src\/[\w./]+|engine\/[\w./]+)/g, '<code>$1</code>');
+
+// 页面上的数字全部现算，不写死：data.js 是状态的唯一来源，写死就会跟着漂。
+// corpus（285）来自 gifs 里实际的 mp4 数，记在 learned.js 的 meta.corpus；
+// 台账轮数同理。两者都不在 data.js 里，所以取不到时退回 items.length。
+const items = window.LEARN?.items ?? [];
+const doneN = items.filter((i) => ['game', 'both', 'engine'].includes(i.status)).length;
+const leftN = items.filter((i) => i.status === 'partial' || i.status === 'todo').length;
+const corpus = window.LEARNED?.meta?.corpus || items.length;
+const ledger = window.LEARNED?.meta?.ledger || 0;
+document.getElementById('nCorpus').textContent = corpus;
+document.getElementById('nSteps').textContent = P.roadmap.length;
+document.getElementById('nDone').textContent =
+  `已学 ${doneN} / ${corpus}　·　还剩 ${leftN} 条没学完`;
+document.getElementById('recentTitle').textContent =
+  `最近新增（${(P.recent || []).length} 条，数字抄自 learn/RUNLOG.md）`;
+if (ledger) {
+  document.getElementById('navLearned').textContent = `📚 我学到了什么（台账 ${ledger} 条）`;
+  document.getElementById('floatLearned').textContent = `📚 我学到了什么 · 台账 ${ledger} 条`;
+  document.getElementById('ctaLearned').textContent =
+    `看台账 ${ledger} 条的逐条记录（原文 / 画面 / 做法 / 数字 / 踩的坑），并可以直接提问 →`;
+}
 
 document.getElementById('verdict').innerHTML = `<b>判断：${esc(P.verdict.title)}</b>
   <div class="timeline">

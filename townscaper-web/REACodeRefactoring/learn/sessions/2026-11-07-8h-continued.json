@@ -1,0 +1,178 @@
+{
+  "status": "paused",
+  "startedAt": "2026-11-06T22:45:23Z",
+  "endsAt": "2026-11-07T06:45:23Z",
+  "durationHours": 8,
+  "automationId": "automation",
+  "otherAutomations": "保持暂停",
+  "baselineReviewed": 171,
+  "totalVideos": 285,
+  "originalModuleCount": 161,
+  "uncoveredModules": 0,
+  "sourceEvidence": [
+    "../REACode/learn/RUNLOG.md",
+    "../REACode/GUIDE.md"
+  ],
+  "queue": [
+    {
+      "source": "../REACode/src/levelflora.js",
+      "priority": 1,
+      "sourceModifiedAt": 1793957472.7996871,
+      "status": "部分迁移：分层色组实际World/GPU通过，原物种几何/生态组合仍缺"
+    },
+    {
+      "source": "../REACode/src/clouddeck.js",
+      "priority": 2,
+      "sourceModifiedAt": 1793957811.2595475,
+      "status": "部分：旧489帧复用，三组差速接实际远云；原云影/模糊/完整三层和美术缺口保留"
+    },
+    {
+      "source": "../REACode/src/shrubcard.js",
+      "priority": 3,
+      "sourceModifiedAt": 1793938702.3191028,
+      "status": "复用已有316帧中心锚点成果，原折卡/灌木主体待补，不重计学习"
+    },
+    {
+      "source": "../REACode/src/squarehex.js",
+      "priority": 4,
+      "sourceModifiedAt": 1793938615.5880105,
+      "status": "部分迁移：共享格只读切角轮廓，不接World/导航"
+    },
+    {
+      "source": "../REACode/src/slotsolve.js",
+      "priority": 5,
+      "sourceModifiedAt": 1793919550.9586825,
+      "status": "部分：共享WFC实际有界候选回看通过；原图块/链动画/完整建筑待补"
+    },
+    {
+      "source": "../REACode/src/unitsnap.js",
+      "priority": 6,
+      "sourceModifiedAt": 1793919792.550455,
+      "status": "部分：828/890全帧，逐人楼层缓动与房屋交互隔层通过；原坡面和动画仍缺"
+    },
+    {
+      "source": "../REACode/src/navribbon.js",
+      "priority": 7,
+      "sourceModifiedAt": 1793900845.3135211,
+      "status": "部分：真实Battle命令点3D弧长采样通过；尘粒AO仅学习，原宽度带/样条/贴地走廊仍缺"
+    },
+    {
+      "source": "../REACode/src/propframe.js",
+      "status": "部分：实际门窗全外缘已修，完整家具贪心/原接口待补"
+    },
+    {
+      "source": "../REACode/src/terracecliff.js",
+      "status": "部分：实际World只读逻辑台地报告，真实变形坡面/悬垂仍缺"
+    },
+    {
+      "source": "../REACode/src/patchcluster.js",
+      "status": "部分：保留既有无限网格，实际全owner分mode审核修复"
+    },
+    {
+      "source": "../REACode/src/hiproof.js",
+      "status": "部分：344帧核验，实际共享独立四边房屋四檐开关/几何恢复通过；复杂多格/原寻路仍缺"
+    },
+    {
+      "source": "../REACode/src/squadbanner.js",
+      "status": "部分：全23帧核验，本地三徽记接实际三队map，GPU/开关/状态不变通过；原盾纹/竖旗/atlas仍缺"
+    },
+    {
+      "source": "../REACode/src/voxelao.js",
+      "status": "部分：6帧五阶段+551帧分层AO已核，本地实际遮蔽/反弹对照通过；原SSAO/方向AO/GPU纹理仍缺"
+    },
+    {
+      "source": "../REACode/src/ballistic.js",
+      "status": "部分：678帧全核，共享查表/可调权重与真实目标端点修复通过；drag/表达式/Validity仍缺"
+    },
+    {
+      "source": "../REACode/src/surfacedeco.js",
+      "status": "部分：801帧两片全核；悬空/跨层装饰组件身份实际通过，小WFC与完整钢架规则待补"
+    },
+    {
+      "source": "../REACode/src/archvoid.js",
+      "status": "部分：415帧两片全核；解析净空/有界角分段接实际建筑通过；楔石/完整桥构待补"
+    },
+    {
+      "source": "../REACode/src/barycentric.js",
+      "status": "部分：1293帧全核；XZ预计算接真实块/簇缓存通过；3D任意平面/原演示接口仍缺"
+    },
+    {
+      "source": "../REACode/src/surfacedeco.js",
+      "status": "部分：独立竖墙CSP接真实建筑双网格通过；二维/六类继续缺口"
+    },
+    {
+      "source": "../REACode/src/surfacedeco.js",
+      "status": "部分：二维2列实际墙面接入通过，完整六类/跨格仍缺"
+    },
+    {
+      "source": "../REACode/src/depfill.js",
+      "status": "部分：共享地形Priority-Flood实际双网格通过，微坡/湖水/侵蚀和河道重算缺口保留"
+    },
+    {
+      "source": "../REACode/src/piercefloor.js",
+      "status": "部分：真实拱底楼板预算通过，完整楼层/挑檐/碰撞仍缺"
+    },
+    {
+      "source": "../REACode/src/boxtest.js",
+      "status": "部分：真实发船终点泊位预留双网格通过，完整扫掠/岸礁/原规划仍缺"
+    },
+    {
+      "source": "../REACode/src/boxtest.js",
+      "status": "部分：实际固定方向直线进场走廊预留通过，地形/动态避让仍缺"
+    },
+    {
+      "source": "../REACode/src/flowfield.js",
+      "status": "部分：通口前视/避让失败前进接真实24单位通过；完整连续面/坡高/群体流体仍缺"
+    },
+    {
+      "source": "../REACode/src/clouddeck.js",
+      "status": "部分：近云同图投影接共享World和首页；远云影/模糊/水植被接收仍缺"
+    },
+    {
+      "source": "../REACode/src/spheretown.js + engine/rivers.js",
+      "status": "部分：计格汇水/无环出口重建接实际World6组通过；原球面WFC/BFS/洞穴和湖水待补"
+    },
+    {
+      "source": "../REACode/src/surfacedeco.js",
+      "status": "部分：六类局部墙段实绘217/300件，百叶/装饰拱门实际接入通过；跨格整墙/真实洞口仍缺"
+    },
+    {
+      "source": "../REACode/src/rayvis.js + src/tileplace.js",
+      "status": "新增2片131帧；空间开阔度局部接实际World通过，原3D拼装仅学习"
+    },
+    {
+      "source": "../REACode/src/islandpasses.js + src/terraceladder.js",
+      "status": "原版并行新增，未覆盖；需读实际源与对应视频再迁移"
+    },
+    {
+      "source": "../REACode/src/islandpasses.js",
+      "status": "部分：共World格边＋笼投影三种遍实际通过；完整环/最终倒角接口仍缺，木梯未迁"
+    },
+    {
+      "source": "../REACode/src/terraceladder.js",
+      "status": "部分：84/96把实际木梯锚点/3D梁长/恢复通过；原薄平台、体积接触和攀爬仍缺"
+    }
+  ],
+  "policy": "先按README核原片，全帧核验；已有学习不重计；优先复用原实现接共享管线；实现/运行/学习分别记载。",
+  "lastProgressAt": "2026-11-07T14:46:08.010295+08:00",
+  "reviewedNow": 175,
+  "handoffPreparedAt": "2026-11-07T14:46:08.010295+08:00",
+  "handoff": "learn/accelerated-handoff.md",
+  "automationStatus": "PAUSED",
+  "automationConfirmation": "automation_update confirmed this automation PAUSED",
+  "newReviewedClips": 4,
+  "actualClipsPerElapsedHour": 0.5,
+  "measuredAt": "2026-11-07T06:39:39.032359+00:00",
+  "newReviewedFrameCount": 1114,
+  "newReviewedIds": [
+    "974325184525201409",
+    "816748103193817088",
+    "798580832906739712",
+    "787319655648100352"
+  ],
+  "locallyAcceptedNewClips": 3,
+  "learningOnlyNewClips": 1,
+  "pausedAt": "2026-11-07T14:46:08.010295+08:00",
+  "pauseReason": "8-hour authorized window expired",
+  "actualClipsPerWindowHour": 0.5
+}

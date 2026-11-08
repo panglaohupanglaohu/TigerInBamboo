@@ -69,6 +69,11 @@ const half = rows.filter((r) => r.status === 'partial');
 const todo = rows.filter((r) => r.status === 'todo');
 const skip = rows.filter((r) => r.status === 'na' || r.status === 'ref');
 
+const stamp = () => {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+};
 const snip = (s, n = 90) => (s || '').replace(/\s+/g, ' ').slice(0, n);
 
 console.log('总 mp4        ' + files.length);
@@ -90,7 +95,7 @@ if (doneBad.length) {
 const L = [];
 L.push('# 学习状态总表（自动生成，勿手改）');
 L.push('');
-L.push('生成时间：' + new Date().toISOString().slice(0, 16).replace('T', ' ') + '　·　由 `tools/report.mjs` 生成');
+L.push('生成时间：' + stamp() + '　·　由 `tools/report.mjs` 生成');
 L.push('');
 L.push('判定规则：`game/both/engine` 且 where 里的文件**真的包含这条帖子 ID** 才算学过；');
 L.push('`partial` 算没学完；`na/ref` 是不用学的；gifs 里有但 data.js 没登记的算「没看过」。');
@@ -117,6 +122,7 @@ const section = (title, list, extra) => {
 };
 
 section('✅ 学过（可追溯）', doneOk);
+if (doneDoc.length) section('📄 学过（仅文档记录，代码没写 ID）', doneDoc, (r) => '◌ ' + r.trace.why);
 if (doneBad.length) section('⚠️ 标了已学但查不到痕迹', doneBad, (r) => '✗ ' + r.trace.why);
 section('🟡 半成品', half);
 section('⬜ 有笔记、没代码', todo);
@@ -125,3 +131,35 @@ section('➖ 不用学', skip);
 
 fs.writeFileSync(MD, L.join('\n'));
 console.log('\n清单 -> ' + MD);
+
+// ---------- 顺手把 learn/learned.js 的 meta 数字同步一遍 ----------
+// 为什么放在这里：页面上「已学 X / 285」「台账 N 条」必须和 data.js 一致。
+// 之前这些数字是手写的（还写着 237 / 134），跑几轮就跟不上；改成每次出报告时重算。
+const LEDGER = ROOT + '/learn/learned.js';
+if (fs.existsSync(LEDGER)) {
+  let s = fs.readFileSync(LEDGER, 'utf8');
+  const block = s.match(/meta:\s*\{[\s\S]*?\n  \},/);
+  if (block) {
+    let rounds = 0, ledger = 0;
+    try {
+      const ctx2 = { window: {} };
+      vm.createContext(ctx2);
+      vm.runInContext(s, ctx2);
+      const G = ctx2.window.LEARNED;
+      rounds = (G.rounds || []).length;
+      ledger = (G.rounds || []).reduce((n, r) => n + (r.items || []).length, 0);
+    } catch (e) {
+      console.log('learned.js 解析失败，meta 未同步：' + e.message);
+    }
+    const now = stamp();
+    const nb = block[0]
+      .replace(/updated:\s*'[^']*'/, `updated: '${now}'`)
+      .replace(/total:\s*\d+/, `total: ${done.length}`)
+      .replace(/corpus:\s*\d+/, `corpus: ${files.length}`)
+      .replace(/rounds:\s*\d+/, `rounds: ${rounds}`)
+      .replace(/ledger:\s*\d+/, `ledger: ${ledger}`);
+    s = s.replace(block[0], nb);
+    fs.writeFileSync(LEDGER, s);
+    console.log('台账 meta 已同步：已学 ' + done.length + ' / ' + files.length + ' · 台账 ' + rounds + ' 轮 ' + ledger + ' 条');
+  }
+}

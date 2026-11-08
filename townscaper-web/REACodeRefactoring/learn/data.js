@@ -454,10 +454,10 @@ window.LEARN = {
       "topic": "terrain",
       "status": "partial",
       "where": "src/terrain/generate.js",
-      "note": "194帧全核验；已有DFS开挖/局部削岸保留，不能冒充球面河道约束坍缩＋其余BFS缓坡，完整生成本批待实现。",
+      "note": "194帧全核验；已有DFS开挖/局部削岸保留，不能冒充球面河道约束坍缩＋其余BFS缓坡，完整生成本批待实现。 复用194帧续作，汇水累计/出口树接共享World真实河网，双网格6组局部通过；完整球面WFC/BFS仍缺。",
       "project": "next",
       "decodedFrames": 194,
-      "reviewEvidence": "artifacts/coverage/river-nav-review.md",
+      "reviewEvidence": "artifacts/coverage/river-network-review.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -469,9 +469,9 @@ window.LEARN = {
           65,
           115
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "仅学习/差距审核，完整生成待实现"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "计格汇水/出口树重建接平面连续岩柱World，非原球面完整坍缩"
       }
     },
     {
@@ -1339,11 +1339,11 @@ window.LEARN = {
       "text": "The generator consistently spits out pretty cool islands now",
       "topic": "terrain",
       "status": "partial",
-      "where": "src/terrain/generate.js",
-      "note": "649帧全核验，多岛成果/构建过渡与转镜；完整软坡/模块联合生成和原美术质量仍待补，本批仅学习审核。",
+      "where": "src/terrain/generate.js · src/core/terrace-edges.js · terraces.html",
+      "note": "649帧全核验，多岛成果/构建过渡与转镜；完整软坡/模块联合生成和原美术质量仍待补，本批仅学习审核。 旧649帧续作：真实World共格边层界/线框/岸界及笼投影局部验收；原完整生成/倒角一致性未完成。",
       "project": "next",
       "decodedFrames": 649,
-      "reviewEvidence": "artifacts/coverage/grid-kinds-review.md",
+      "reviewEvidence": "artifacts/coverage/terrace-edges-review.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -1357,9 +1357,9 @@ window.LEARN = {
           375,
           540
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "仅多岛成果视频学习与差距审核"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "逻辑台地格边/笼投影诊断局部验收，非完整岛生成或最终倒角一致"
       }
     },
     {
@@ -1943,10 +1943,31 @@ window.LEARN = {
       "date": "2021-12-17",
       "text": "Some rocky islands. Trying to make the grid natural and readable, yet funky. Square, yet hex.",
       "topic": "grid",
-      "status": "done",
-      "where": "src/core/grid.js（buildMixedGrid）",
-      "note": "\"方，又带六边形味\"的岩岛：三角 + 方格混合网格",
-      "project": "next"
+      "status": "partial",
+      "where": "src/core/corner-footprint.js · corner-cuts.html",
+      "note": "556帧阶段生成/旋转岩岛。迁移Workbuddy切角作为共享格只读绘制轮廓实验，非原算法证明；不改World导航，完整岩岛模块生成未迁移。",
+      "project": "next",
+      "decodedFrames": 556,
+      "reviewEvidence": "artifacts/coverage/corner-cuts-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          555
+        ],
+        "nativeRevisits": [
+          17,
+          45,
+          100,
+          216,
+          339,
+          554
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "仅本地几何与Canvas轮廓，不是实际World地形/导航验收"
+      }
     },
     {
       "id": "1466059785703460870",
@@ -2749,11 +2770,11 @@ window.LEARN = {
       "text": "Some moody clouds",
       "topic": "life",
       "status": "partial",
-      "where": "src/life/vegetation.js · src/life/impostor.js · clouds.html",
-      "note": "489帧全核验；修复远云固定时钟，连续环带/远平面深度避免盖建筑；首页独立开关。双网格GPU/三场局部通过，原片高耸云体/层次、真实风平流仍缺。",
+      "where": "src/life/vegetation.js · src/life/impostor.js · clouds.html · src/light/cloud-shadow.js",
+      "note": "489帧全核验；修复远云固定时钟，连续环带/远平面深度避免盖建筑；首页独立开关。双网格GPU/三场局部通过，原片高耸云体/层次、真实风平流仍缺。 后续迁移：可选三组逆深度角速度接实际远云，GPU读回/开关通过；云影/模糊/完整三层仍缺，不重计489帧。 本次共享近云同图集世界高度投影/首页开关GPU局部通过；水/植被/远云影/模糊未完成。",
       "project": "townscaper",
       "decodedFrames": 489,
-      "reviewEvidence": "artifacts/coverage/clouds-winter-review.md",
+      "reviewEvidence": "artifacts/coverage/cloud-shadow-review.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -2770,7 +2791,7 @@ window.LEARN = {
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "本地远云运动/遮挡与入口局部通过，非原作完整云体等价"
+        "acceptanceScope": "近云固定轮廓投影及既有远云差速局部验收，非原作完整云景等价"
       }
     },
     {
@@ -3064,10 +3085,31 @@ window.LEARN = {
       "date": "2019-12-13",
       "text": "New prop placement system! It tries to place as many props as it can without overlap. I use it for doors and windows too, which means they are no longer skewed when placed on skewed tiles, which means skewed tiles now look less awkward.",
       "topic": "build",
-      "status": "done",
-      "where": "src/build/buildings.js（tryPlace）",
-      "note": "门窗按道具放置：尽量多放、互不重叠，开口不随格子歪斜",
-      "project": "townscaper"
+      "status": "partial",
+      "where": "src/core/opening-footprint.js · src/build/buildings.js",
+      "note": "261帧完整建屋/编辑，非旧注释6帧空格变面。保留既有正矩形门窗，修放置只计框宽遗漏1.6倍窗台外缘；2000旋转边界和三场GPU通过。完整家具贪心摆放仍缺。",
+      "project": "townscaper",
+      "decodedFrames": 261,
+      "reviewEvidence": "artifacts/coverage/opening-footprint-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          260
+        ],
+        "nativeRevisits": [
+          3,
+          4,
+          90,
+          154,
+          210,
+          260
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "实际建筑门窗全外缘安全距离局部通过；非全家具系统"
+      }
     },
     {
       "id": "1201179450668441600",
@@ -3254,10 +3296,27 @@ window.LEARN = {
       "date": "2019-10-31",
       "text": "It was real fun making the steel beam support structures. They have this neat artificial yet organic feel to them. Its a place where the WFC algorithm really shines and that would be hard or at least laborious to create with other systems.",
       "topic": "build",
-      "status": "done",
-      "where": "src/build/buildings.js",
-      "note": "悬空方块下长深色钢架：角柱 + 横梁 + 斜撑，立在水里的腿有泡沫圈",
-      "project": "townscaper"
+      "status": "partial",
+      "where": "src/build/buildings.js（保留已有钢架；本批仅学习）",
+      "note": "296帧全核：编辑/移除楼层显露长钢柱、横梁/斜撑。现有几何保留，完整钢架WFC仍缺，本批不计代码验收",
+      "project": "townscaper",
+      "decodedFrames": 296,
+      "reviewEvidence": "artifacts/coverage/building-components-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          295
+        ],
+        "nativeRevisits": [
+          38,
+          295
+        ],
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "仅学习，不计新算法迁移"
+      }
     },
     {
       "id": "1189109278361165825",
@@ -3274,10 +3333,28 @@ window.LEARN = {
       "date": "2019-10-08",
       "text": "I made some stairs, plus an additional smaller WFC for surface decorations like windows and doors (who's awkward placement otherwise explodes the permutation count) I'll give my first talk on this at Indicade in Paris on the 19th. Hope to see you there! https:// indiecade-europe.eu/en/programme/c onferences …",
       "topic": "build",
-      "status": "done",
-      "where": "src/build/buildings.js · src/world/navlayer.js",
-      "note": "楼梯放在导航图用到的崖脚；门窗另起一层小 WFC：每栋每层一种窗型、一扇门",
-      "project": "townscaper"
+      "status": "partial",
+      "where": "src/core/building-components.js · src/build/buildings.js · building-components.html",
+      "note": "全帧核验；悬空/跨层组件独立身份已接实际窗型，双网格通过；独立装饰WFC仍缺 旧片续作：六类1–3槽墙段WFC/实绘百叶与装饰圆拱接实际建筑，双网格局部验收；跨格整墙/真正洞口仍缺。",
+      "project": "townscaper",
+      "decodedFrames": 505,
+      "reviewEvidence": "artifacts/coverage/facade-decoration-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          504
+        ],
+        "nativeRevisits": [
+          128,
+          292,
+          504
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "六类局部墙段与实绘邻窗约束局部验收，非完整立面/物理洞口"
+      }
     },
     {
       "id": "1178731576982724611",
@@ -3335,10 +3412,31 @@ window.LEARN = {
       "date": "2019-09-02",
       "text": "A peek at my ambient occlusion approach. The occlusion lives in a layered mesh that's reprojected to a texture at each change. That texture is then blurred, and sampled in the vertex shader of whatever needs lighting.",
       "topic": "light",
-      "status": "done",
-      "where": "src/light/bake.js",
-      "note": "分层遮蔽：每层一张占用栅格 → 盒式模糊两遍 → 每个顶点沿法线外移采样",
-      "project": "townscaper"
+      "status": "partial",
+      "where": "src/world/worldmesh.js · src/light/bake.js · ao-stages.html",
+      "note": "551帧全核，保留分层烘焙，新增实际遮蔽/反弹分离对照及恢复验收；原GPU重投影/动态纹理仍缺。",
+      "project": "townscaper",
+      "decodedFrames": 551,
+      "reviewEvidence": "artifacts/coverage/ao-stages-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          550
+        ],
+        "nativeRevisits": [
+          30,
+          76,
+          153,
+          270,
+          450,
+          550
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "本地分层烘焙实际对照/恢复局部，不是原GPU管线"
+      }
     },
     {
       "id": "1168168400155267072",
@@ -3377,10 +3475,31 @@ window.LEARN = {
       "date": "2019-07-18",
       "text": "I figured out how to make do with relaxation clusters of 3 instead of 7, which means I have to generate fewer unrelaxed patches before I can start relaxing, which makes it faster. Note also that the black and the white grid are *dual* to each other. This is an important concept",
       "topic": "grid",
-      "status": "done",
-      "where": "src/core/infinite.js · grids.html",
-      "note": "3 块一簇松弛；黑白两张网格互为对偶",
-      "project": "townscaper"
+      "status": "partial",
+      "where": "src/core/infinite.js · grids.html?t=infinite",
+      "note": "532帧全核，保留现有三块簇/插值；修verify始终查blend及只查前两owner，实际只簇模式接缝原被隐藏，浏览器全owner逐模式验收。按块边界钉住实际无缝，不沿用旧说明。",
+      "project": "townscaper",
+      "decodedFrames": 532,
+      "reviewEvidence": "artifacts/coverage/infinite-verify-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          531
+        ],
+        "nativeRevisits": [
+          0,
+          38,
+          110,
+          300,
+          430,
+          531
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "无限网格分模式/全部owner接缝审计，非原作性能/按需无限流式等价"
+      }
     },
     {
       "id": "1151152046055272449",
@@ -3979,10 +4098,31 @@ window.LEARN = {
       "date": "2018-04-20",
       "text": "Using inspector expressions, I can live tweak the cost function of my projectile trajectory lookup tables. Very handy.",
       "topic": "fx",
-      "status": "done",
-      "where": "src/badnorth/battle.js（LUT / lookupShot）",
-      "note": "弹道查找表 + 代价函数：按 (距离, 高差) 预先找代价最小的出射角（飞行时间 + 落角偏离 45°），箭按真抛物线飞",
-      "project": "badnorth"
+      "status": "partial",
+      "where": "src/core/ballistic-table.js · src/badnorth/battle.js · ballistics.html",
+      "note": "678帧全核；Inspector代价/Validity动态编辑。保留无阻力游戏参数，提共享表/可调权重，修真实目标高差量化误差；双网格实际弓手发射通过。原表达式/drag/Validity仍缺。",
+      "project": "badnorth",
+      "decodedFrames": 678,
+      "reviewEvidence": "artifacts/coverage/ballistic-table-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          677
+        ],
+        "nativeRevisits": [
+          0,
+          126,
+          230,
+          450,
+          550,
+          677
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "局部无阻力共享表/实际弓手端点修复，不是原Inspector/阻力完整恢复"
+      }
     },
     {
       "id": "984813819280191488",
@@ -4060,30 +4200,84 @@ window.LEARN = {
       "date": "2018-03-16",
       "text": "For a given position, Barycentric Coordinates can be calculated with 1 subtraction and 1 dot product (if you've precalculated some nice vectors in the triangle)",
       "topic": "grid",
-      "status": "done",
-      "where": "src/core/spatial.js（baryPrep）",
-      "note": "重心坐标：预先算两个对偶向量，之后每个坐标 1 次减法 + 1 次点积",
-      "project": "badnorth"
+      "status": "partial",
+      "where": "src/core/spatial.js · src/core/infinite.js · grids.html?t=infinite",
+      "note": "全帧核验；XZ预计算真正接入块/簇插值缓存，快照原点/退化处理，10264顶点基线与真实页面通过；3D原gizmo未完整迁移。",
+      "project": "badnorth",
+      "decodedFrames": 815,
+      "reviewEvidence": "artifacts/coverage/bary-prep-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          814
+        ],
+        "nativeRevisits": [
+          0,
+          445,
+          814
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "同一局部XZ预计算接入，非原3D演示完整"
+      }
     },
     {
       "id": "974564862729838592",
       "date": "2018-03-16",
       "text": "I'm making some pedagogical gizmos for my GDC microtalk, like this illustration of Barycentric Coordinates. Gizmos > powerpoints.",
       "topic": "grid",
-      "status": "done",
-      "where": "grids.html（重心坐标）",
-      "note": "讲课用的重心坐标小工具：三角形 + 拖动的点 + 三个权重",
-      "project": "badnorth"
+      "status": "partial",
+      "where": "src/core/spatial.js · src/core/infinite.js · grids.html?t=infinite",
+      "note": "全帧核验；XZ预计算真正接入块/簇插值缓存，快照原点/退化处理，10264顶点基线与真实页面通过；3D原gizmo未完整迁移。",
+      "project": "badnorth",
+      "decodedFrames": 478,
+      "reviewEvidence": "artifacts/coverage/bary-prep-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          477
+        ],
+        "nativeRevisits": [
+          220,
+          477
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "同一局部XZ预计算接入，非原3D演示完整"
+      }
     },
     {
       "id": "974325184525201409",
       "date": "2018-03-15",
       "text": "We were having strange crashes when using Unity's Physics.OverlapBox. We solved it (hopefully) by making our own box-box test in two incredibly stressful hours. Behold, our beautiful viking raid planner:",
       "topic": "fx",
-      "status": "done",
-      "where": "src/core/obb.js",
-      "note": "自己写的盒-盒测试：分离轴 15 根，平行轴（叉积≈0）跳过；3000 对随机盒与撒点对照，漏判 0，2 次是棱对棱交叉撒点撒不到",
-      "project": "badnorth"
+      "status": "partial",
+      "where": "src/core/obb.js · src/badnorth/landing-plan.js · src/badnorth/battle.js",
+      "note": "504帧全核；核心接触策略/输入防NaN通过，实际规划消费者待接 后续已接真实发船泊位/固定朝向直线走廊预留，完整岸礁/动态避让仍缺。",
+      "project": "badnorth",
+      "decodedFrames": 504,
+      "reviewEvidence": "artifacts/coverage/landing-approach-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          503
+        ],
+        "nativeRevisits": [
+          60,
+          180,
+          503
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "3D SAT策略及实际泊位/直线进场走廊预留局部验收，非地形碰撞或完整原规划"
+      },
+      "supplementaryReviewEvidence": "artifacts/coverage/landing-plan-review.md"
     },
     {
       "id": "972829402873716737",
@@ -4105,7 +4299,8 @@ window.LEARN = {
       "note": "全308帧复核。补锚点/真实alpha翻转诊断、屏幕朝向死区与真实北境可选单方向精灵。保留原3D血斑/尸体；不是原作美术或完整动画系统。；续补受击摆动/逐单位UV血斑，证据sprite-hit-review.md，原作美术和精灵阴影待续。",
       "project": "badnorth",
       "decodedFrames": 308,
-      "reviewEvidence": "artifacts/coverage/sprites-review.md"
+      "reviewEvidence": "artifacts/coverage/sprites-review.md",
+      "supplementaryReviewEvidence": "artifacts/coverage/ballistic-table-review.md"
     },
     {
       "id": "959752525867036672",
@@ -4140,10 +4335,31 @@ window.LEARN = {
       "date": "2018-02-02",
       "text": "I've been tweaking the foliage system today. It now supports multiple grass types per level.",
       "topic": "life",
-      "status": "done",
-      "where": "src/life/vegetation.js",
-      "note": "每关多种草；画面里的小花是一大片一大片的白色碎点（已按此重做小花）",
-      "project": "badnorth"
+      "status": "partial",
+      "where": "src/core/level-flora.js · src/life/vegetation.js · level-flora.html",
+      "note": "203帧，准确日期2018-02-02；109帧硬切紫色雨景。迁移分层色组至共享World实际地被，保留落点和默认；完整物种/生态/雨景未复现。",
+      "project": "badnorth",
+      "decodedFrames": 203,
+      "reviewEvidence": "artifacts/coverage/level-flora-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          202
+        ],
+        "nativeRevisits": [
+          0,
+          70,
+          108,
+          109,
+          170,
+          202
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "仅地被分层色组；不含原多草型几何与生态组合"
+      }
     },
     {
       "id": "958410200146497537",
@@ -4598,9 +4814,30 @@ window.LEARN = {
       "text": "New cave tileset. These levels really challenge your spacial skills #screenshotsaturday #madewithunity @BadNorthGame",
       "topic": "fx",
       "status": "partial",
-      "where": "src/terrain/features.js",
-      "note": "新的洞窟图块：岩体里有拱洞、单位从洞里穿过；重构版只有造型，导航不走洞",
-      "project": "badnorth"
+      "where": "artifacts/coverage/cloud-depth-review.md",
+      "note": "725帧全核，紫色厚岩拱洞/多层战斗与船只，仅学习。保留既有分层导航，不冒充原tileset或完整关卡已实现。",
+      "project": "badnorth",
+      "decodedFrames": 725,
+      "reviewEvidence": "artifacts/coverage/cloud-depth-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          724
+        ],
+        "nativeRevisits": [
+          0,
+          123,
+          290,
+          410,
+          638,
+          724
+        ],
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "新洞穴素材仅学习；旧阴云策略迁移另行记载"
+      }
     },
     {
       "id": "906207980802252801",
@@ -4876,6 +5113,508 @@ window.LEARN = {
         "implementationVerified": false,
         "runtimeAccepted": false,
         "acceptanceScope": "仅全帧学习与战斗/暗斑差距复核"
+      }
+    },
+    {
+      "id": "821680056514781186",
+      "date": "2017-01-18",
+      "text": "By popular demand: Revenge of the Blues!",
+      "topic": "game",
+      "project": "badnorth",
+      "status": "partial",
+      "where": "src/badnorth/battle.js",
+      "decodedFrames": 763,
+      "reviewEvidence": "artifacts/coverage/unit-tiers-review.md",
+      "note": "早期复仇战斗763帧复核；仅学习，不能认证软影高度或坡面算法。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          762
+        ],
+        "nativeRevisits": [
+          40,
+          240,
+          470,
+          720
+        ],
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "仅学习"
+      }
+    },
+    {
+      "id": "827215002448846848",
+      "date": "2017-02-02",
+      "text": "Looking at unit tiers",
+      "topic": "game",
+      "project": "badnorth",
+      "status": "partial",
+      "where": "src/core/unit-tier.js · unit-tiers.html",
+      "decodedFrames": 524,
+      "reviewEvidence": "artifacts/coverage/unit-tiers-review.md",
+      "note": "原文单位等级，非无文字弧长教程；本地可选头盔/盾牌色阶与实际Battle通过，原雕饰/旗徽/升级机制未复现。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          523
+        ],
+        "nativeRevisits": [
+          40,
+          180,
+          260,
+          430
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "仅本地3D外观色阶，状态不变"
+      }
+    },
+    {
+      "id": "815236105079398400",
+      "date": "2016-12-31",
+      "text": "irregular is the new hex",
+      "project": "badnorth",
+      "topic": "terrain",
+      "status": "partial",
+      "decodedFrames": 185,
+      "reviewEvidence": "artifacts/coverage/terrace-profile-review.md",
+      "where": "src/core/terrace-profile.js · terraces.html",
+      "note": "原文irregular is the new hex，185帧；既有量化保留，新增真实World同高片/逻辑阶差面积诊断，非原算法恢复。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          184
+        ],
+        "nativeRevisits": [
+          0,
+          50,
+          120,
+          184
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "逻辑顶列诊断通过；不含实际变形坡面/洞内/悬垂面积"
+      }
+    },
+    {
+      "id": "781957658597269506",
+      "date": "2016-09-30",
+      "text": "（帖子无文字说明）",
+      "project": "other",
+      "topic": "terrain",
+      "status": "partial",
+      "decodedFrames": 109,
+      "reviewEvidence": "artifacts/coverage/wood-ladders-review.md",
+      "where": "src/terrain/generate.js · src/core/ladder-profile.js · src/world/navlayer.js · terraces.html",
+      "note": "109帧黄色薄平台/柱/梯洞与屋树旋转，仅学习；不等于可用顶列量化复现悬垂结构。 旧片续作：3D锚点梁长/等距踏棍接实际台地木梯，双网格模式恢复通过；原薄台/攀爬仍缺。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          108
+        ],
+        "nativeRevisits": [
+          0,
+          50,
+          108
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "真实台地梯锚点中心/长度与显示模式局部验收，非薄平台/体积接触或攀爬动作"
+      }
+    },
+    {
+      "id": "828984794407170048",
+      "date": "2017-02-07",
+      "text": "PRO TIP: Protect your real estate investments by keeping vikings off your homelands",
+      "project": "badnorth",
+      "topic": "game",
+      "status": "partial",
+      "decodedFrames": 387,
+      "reviewEvidence": "artifacts/coverage/unit-ground-review.md",
+      "where": "src/core/unit-ground-height.js · src/badnorth/battle.js",
+      "note": "387帧坡地接敌/火焰/房屋焦黑；保留已有每人navFloor，修高度缓动随帧率变化，30/60/120Hz真实Battle双楼层解析一致。原火球/动作/坡面未复现。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          386
+        ],
+        "nativeRevisits": [
+          20,
+          80,
+          150,
+          240,
+          300,
+          386
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "每人逻辑层高缓动局部，不是原坡面脚底/动画/火球等价"
+      }
+    },
+    {
+      "id": "865200072685912064",
+      "date": "2017-05-18",
+      "project": "other",
+      "topic": "grid",
+      "text": "I built a small browser demo to help explain how the WFC algorithm works.",
+      "status": "partial",
+      "decodedFrames": 908,
+      "reviewEvidence": "artifacts/coverage/wfc-trace-review.md",
+      "where": "src/core/wfc.js · wfc-trace.html",
+      "note": "908帧候选收缩/红色冲突/重置求解，非旧注释无文字6帧静态。复用共享求解器加有界不可变真实候选快照和回看页；默认解/修复/四分子格回归通过。原图片/动画/完整建筑接入仍缺。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          907
+        ],
+        "nativeRevisits": [
+          0,
+          18,
+          120,
+          360,
+          616,
+          795,
+          907
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "本地socket求解器真实候选记录与回放，非原图块/全部动作恢复"
+      }
+    },
+    {
+      "id": "890611046435627008",
+      "date": "2017-07-27",
+      "text": "Just a birthday gif from yours truly",
+      "project": "badnorth",
+      "topic": "game",
+      "status": "partial",
+      "decodedFrames": 666,
+      "reviewEvidence": "artifacts/coverage/house-door-review.md",
+      "where": "src/core/house-door-presence.js · src/badnorth/battle.js",
+      "note": "666帧全核，层间指令/阶梯支援/房屋遇袭和守卫。保留逐人层高，修房屋燃烧/守卫仅看XZ导致跨层干涉；双网格实际burn检查通过。原火焰/抛射/奖励动画仍缺。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          665
+        ],
+        "nativeRevisits": [
+          45,
+          150,
+          235,
+          360,
+          480,
+          610,
+          665
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "实际Battle房屋判定按门楼层过滤；非完整原玩法/美术"
+      }
+    },
+    {
+      "id": "823848950553780226",
+      "date": "2017-01-24",
+      "text": "O yes, I do have AO on my dust particles O yes, it does work on mobile",
+      "project": "badnorth",
+      "topic": "light",
+      "status": "partial",
+      "decodedFrames": 227,
+      "reviewEvidence": "artifacts/coverage/path-samples-review.md",
+      "where": "artifacts/coverage/path-samples-review.md",
+      "note": "227帧全核，尘粒AO仅学习；命令路径弧长采样是独立工程迁移，不冒充原尘粒实现。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          226
+        ],
+        "nativeRevisits": [
+          0,
+          35,
+          80,
+          100,
+          150,
+          226
+        ],
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "原尘粒AO待实现；独立命令点采样另行验收"
+      }
+    },
+    {
+      "id": "807256278154301441",
+      "date": "2016-12-09",
+      "text": "Looking at cheap swarm pathfinding. These dots could possibly be crabs or maybe recently dormant soviet under-water robots. Who knows.",
+      "project": "badnorth",
+      "topic": "game",
+      "status": "partial",
+      "decodedFrames": 344,
+      "reviewEvidence": "artifacts/coverage/hip-roof-review.md",
+      "where": "src/core/hip-roof.js · src/build/buildings.js",
+      "note": "344帧全核。原文群体寻路、图像塔楼及球点，纠正原版无文字六帧说明。共享独立四边房屋可选四檐顶真实重建通过；群体寻路及多格完整规则未验收。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          343
+        ],
+        "nativeRevisits": [
+          0,
+          49,
+          192,
+          215,
+          260,
+          343
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "仅屋顶局部策略迁移，非原群体寻路/全部原作建筑"
+      }
+    },
+    {
+      "id": "827216768783495168",
+      "date": "2017-02-02",
+      "text": "And another one",
+      "project": "badnorth",
+      "topic": "game",
+      "status": "partial",
+      "decodedFrames": 23,
+      "reviewEvidence": "artifacts/coverage/squad-banners-review.md",
+      "where": "src/core/banner.js · src/badnorth/battle.js",
+      "note": "23帧全核，三队徽记/雕饰盾。复用现有Bezier旗面新增可选本地骷髅/剑/三叉戟；真实GPU纹理与开关通过。金饰盾/竖旗/原图集仍缺。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          22
+        ],
+        "nativeRevisits": [
+          0,
+          11,
+          22
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "仅本地三徽记接实际旗材质，非原图集/盾牌和完整旗形"
+      }
+    },
+    {
+      "id": "793545297376972801",
+      "date": "2016-11-01",
+      "text": "I got multi tiles and voxel AO working. Would you play a game that takes place on a building like this? Maybe if it was infinitely tall?",
+      "project": "badnorth",
+      "topic": "game",
+      "status": "partial",
+      "decodedFrames": 102,
+      "reviewEvidence": "artifacts/coverage/multitile-ao-review.md",
+      "where": "artifacts/coverage/multitile-ao-review.md",
+      "note": "全102帧核验，逐片增长/完整结果切换/转镜/多结果；原多格3D约束/AO算法仅学习，保留既有共享World/WFC/整体编辑成果。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          101
+        ],
+        "nativeRevisits": [
+          0,
+          50,
+          67,
+          68,
+          96,
+          101
+        ],
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "仅学习，完整原3D模块联合约束/体素AO待迁移"
+      }
+    },
+    {
+      "id": "793557992931266561",
+      "project": "badnorth",
+      "topic": "light",
+      "date": "2016-11-01",
+      "text": "flat -> up normal -> vertex voxel AO -> SSAO -> directional AO (With textures and baked vertex colors, I could get rid of the SSAO)",
+      "status": "partial",
+      "decodedFrames": 6,
+      "reviewEvidence": "artifacts/coverage/ao-stages-review.md",
+      "where": "src/world/worldmesh.js · src/light/bake.js · ao-stages.html",
+      "note": "6帧全核，原五阶段仅学习；不将本地四选项冒充SSAO/方向AO。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          5
+        ],
+        "nativeRevisits": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "五阶段仅学习"
+      }
+    },
+    {
+      "id": "806904557502464000",
+      "date": "2016-12-08",
+      "text": "This one goes out to @CynicatPro @EnricLlagostera @gayasoft and all the other canal lovers out there",
+      "topic": "build",
+      "project": "townscaper",
+      "status": "partial",
+      "where": "src/core/arch-profile.js · src/build/buildings.js · arches.html",
+      "note": "全帧核验；现有拱轮廓保留，迁移解析净空/有界弦误差角分段至实际建筑，双网格通过；楔石/完整桥构仍缺。",
+      "decodedFrames": 123,
+      "reviewEvidence": "artifacts/coverage/arch-profile-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          122
+        ],
+        "nativeRevisits": [
+          17,
+          64,
+          90
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "共享拱底曲线采样局部，不是原桥梁/穿楼完整复现"
+      }
+    },
+    {
+      "id": "802496920790777856",
+      "date": "2016-11-26",
+      "text": "（帖子无文字说明）",
+      "topic": "build",
+      "project": "townscaper",
+      "status": "partial",
+      "where": "src/core/arch-profile.js · src/build/buildings.js · arches.html",
+      "note": "全帧核验；现有拱轮廓保留，迁移解析净空/有界弦误差角分段至实际建筑，双网格通过；楔石/完整桥构仍缺。",
+      "decodedFrames": 292,
+      "reviewEvidence": "artifacts/coverage/arch-profile-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          291
+        ],
+        "nativeRevisits": [
+          0,
+          185,
+          291
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "共享拱底曲线采样局部，不是原桥梁/穿楼完整复现"
+      }
+    },
+    {
+      "id": "816748103193817088",
+      "date": "2017-01-04",
+      "text": "I am flowing right on the nav mesh, so it depends",
+      "topic": "nav",
+      "project": "badnorth",
+      "decodedFrames": 479,
+      "reviewEvidence": "artifacts/coverage/portal-group-review.md",
+      "status": "partial",
+      "note": "479帧全核，两队随目标移动经坡道上/下台地；本批仅学习，连续导航面内流动/群体复现待补 后续迁移已接真实24单位通口前视/合法步回退，双网格6秒通过；此前仅学习状态已被此局部验收更新，完整面内/坡高仍缺。",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          478
+        ],
+        "nativeRevisits": [
+          165,
+          380
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "通口前视/合法前进回退接真实24单位局部验收，非完整连续三角面/坡高/群体流体"
+      }
+    },
+    {
+      "id": "798580832906739712",
+      "date": "2016-11-15",
+      "text": "Some dirt cheap (and highly inaccurate) ray marching. Might use it for visibility when indoors",
+      "topic": "light",
+      "project": "badnorth",
+      "status": "partial",
+      "where": "src/core/space-visibility.js · src/world/space-visibility.js · space-visibility.html",
+      "note": "64帧全核；原注释24帧不符。共享World空间射线开阔度局部通过，非灰度烘焙/精确光学视线或游戏AI。",
+      "decodedFrames": 64,
+      "reviewEvidence": "artifacts/coverage/space-visibility-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          63
+        ],
+        "nativeRevisits": [
+          7,
+          24,
+          42,
+          63
+        ],
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "共享World单点3D固定步长开阔度诊断"
+      }
+    },
+    {
+      "id": "787319655648100352",
+      "date": "2016-10-15",
+      "text": "More procedural tile placement. Now in 3D. Algorithm inspired by the work of @ExUtumno",
+      "topic": "build",
+      "project": "other",
+      "status": "partial",
+      "where": "src/core/wfc.js · src/build/buildings.js",
+      "note": "67帧全核，仅学习；底板上逐步拼装桥廊/围合楼体，空中零件待置。已有WFC/建筑保留，原3D模块库/动画未迁入。",
+      "decodedFrames": 67,
+      "reviewEvidence": "artifacts/coverage/space-visibility-review.md",
+      "reviewStages": {
+        "textRead": true,
+        "allFramesReviewed": true,
+        "frameRange": [
+          0,
+          66
+        ],
+        "nativeRevisits": [
+          15,
+          32,
+          51,
+          66
+        ],
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "仅学习，原3D拼装待迁移"
       }
     }
   ]

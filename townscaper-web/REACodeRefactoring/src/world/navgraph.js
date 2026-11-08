@@ -42,10 +42,12 @@ export function buildNav(world, { start = null } = {}) {
   // Local heuristic, not a reconstruction of the original solver. Height wins:
   // shortcuts between nearby meanders must not label an uphill step downstream.
   // Flat reaches use mouth distance; closed/equidistant reaches stay neutral.
+  const network=world.riverNetwork?.version===world.version?world.riverNetwork:null;
   const riverDirection = (a, b) => {
     if (!river[a.id] || !river[b.id]) return 0;
     const dh = hgt[b.id] - hgt[a.id];
     if (dh) return dh < 0 ? 1 : -1;
+    if(network)return network.parent[a.id]===b.id?1:network.parent[b.id]===a.id?-1:0;
     if (rd[a.id] < 0 || rd[b.id] < 0) return 0;
     return Math.sign(rd[a.id] - rd[b.id]);
   };

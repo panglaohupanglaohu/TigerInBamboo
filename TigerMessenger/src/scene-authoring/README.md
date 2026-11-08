@@ -27,3 +27,18 @@ pipeline.html 为游戏内管线工坊；REACodeRefactoring/pipeline.html 保留
 独立Source桥：tools/scene-authoring/source_bridge.py仅监听127.0.0.1:8933，精确允许游戏localhost/127.0.0.1:8931 Origin；只有health与requests两条路由，不提供通用原生管理代理。原生8932 bootstrap cookie只留Python内存，浏览器拿不到token。前端「检查本地服务」显示真实Source/deployment/暂停/模型目录状态，绝不把Source ready当Worker ready。显式「提交目标与场景快照」通过同源游戏capture拿到实际编码/参数/recipe并发送本机Source，不修改当前场景。纯服务失败不影响游戏。
 
 提交将请求ID和快照指纹写本机ledger，不重复存整份场景；相同快照重试复用ID，刷新后保留收件状态线索。原生请求去重仍为最终依据。模型未配置/执行器暂停时请求只保存在Source，不报告已完成改造。CORS拒绝未授权Origin，JSON/尺寸有界，不打印认证数据。当前模型接口未执行验证，不能把状态面板当模型连通验收。
+
+## 能力代码与本机 super agent（2026-11-06 起）
+
+能力库不再只是声明：`REACodeRefactoring/src/capabilities/registry.js` 导出可执行能力（meta / match / run，来源视频 ID 写在 meta.sources）。studio.js 启动时直接 import 它，`registerCodeCapabilities` 把每个能力登记为 `mode:'code'` 节点（同 ID 的旧配方节点如 effects.smoke 原地升级），配方用 `recipe.code` 携带所用能力描述，游戏页校验配方时据此登记。
+
+执行链（全部在浏览器本机，确定性，不依赖模型或 DSH）：
+- Router：`registry.routeGoal`——改造方向关键词 × 当前场景里确实能匹配到的物件，给出「加入管线」建议。
+- 改造 Worker：`agent/transform-worker.js`（module worker），用库里的 grid/world/save 在场景副本上 `matchAll` / `runPlan`，产出候选编码与逐步报告（执行了哪几处、理由）。
+- 验证 Worker：`agent/verify-worker.js` → `capabilities/verify.js`：改动范围（湖面可编辑掩码）、手工建筑保留、结构承托（3D 连通）、通行（导航图可达格）、几何量（外露面）。fail 的候选不能写入或存草稿。
+- Watchdog：`agent/orchestrator.js`，每个任务心跳 + 空闲/总时长超时；超时或崩溃即终止并重建 Worker、重试一次，时间线显示在右栏。
+- 经验沉淀：`tm.capability.experience.v1`（本机）记录每次执行的计划、报告、验证与你的决定（previewed / committed / draft / discarded）；检视器与学习工坊视频方法旁显示汇总。
+
+游戏侧只有 `capability-runtime.js` 一组固定命令（经 pipeline-bridge，`cap.*`）：state / preview / show（原始↔候选）/ revert / commit / highlight / pick / layers。预览不写本机存档；commit 由你确认，写入前把原样压进原编辑器撤销栈。显示层的 three.js 代码直接 import 库里的 `capabilities/layers.js`（灯室光束、体积浅水、烟），不复制。
+
+测试：`node TigerMessenger/tests/capability-code.test.mjs`；库侧 `node townscaper-web/REACodeRefactoring/tools/test-capabilities.mjs`。

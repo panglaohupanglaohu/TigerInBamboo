@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>同一座岛画三遍 · 等高线 / 线框 / 成图 共用同一批格边</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 9px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 72%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:120ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #note { position:fixed; z-index:2; left:44px; top:606px; width:1196px;
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    font-size:12px; color:var(--muted); }
+  #note b { color:var(--ink); }
+  #note .row { display:flex; gap:26px; margin-top:4px; }
+  #note .row span { white-space:nowrap; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:16px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>同一座岛画三遍：等高线 / 线框 / 成图，三遍共用同一批格边</h1>
+  <p>原片是同一座岛在几条流水线阶段上的截图（f03 那一帧画布上<b>只有土黄色的闭合线</b>，别的什么都没有）。
+     台地地形的等高线不是另画的一套曲线：相邻两格只差一层，层界就落在它们共享的那条<b>格边</b>上 ——
+     把"层号不同的相邻格"之间的边挑出来连起来就是等高线（左），挑出来再加上顶面边就是线框（中），
+     填上颜色就是成图（右）。右图并排量了用 marching squares 中点插值的做法：它把直角台沿倒成斜角，总长只剩 0.565。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="note">
+  <div id="l1"></div>
+  <div class="row" id="l2"></div>
+</div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { grid, contourSegs, traceRings, wireSegs, measure, CFG, levelOf } from './src/islandpasses.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#c79a1e', DEEP = '#8a6510', RED = '#b4402f', GOOD = '#146c4a';
+
+const H = grid(), N = H.length;
+const SEGS = contourSegs(H), WIRE = wireSegs(H), M = measure();
+const RINGS = traceRings(SEGS);
+
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.fillText(s, x, y);
+};
+const card = (x, y, w, h, fill = '#ffffff') => {
+  ctx.fillStyle = fill; ctx.strokeStyle = '#dbe4e0'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.fill(); ctx.stroke();
+};
+const seg = (a, b, color, w = 1.2) => {
+  ctx.strokeStyle = color; ctx.lineWidth = w;
+  ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+};
+
+/* ── ① 平面视图：只有等高线（原片 f03 的构图） ─────────────── */
+const PA = { x: 44, y: 152, w: 384, h: 444 };
+function drawContourPass() {
+  card(PA.x, PA.y, PA.w, PA.h, '#dbeae7');
+  const s = 9.4, ox = PA.x + (PA.w - N * s) / 2, oy = PA.y + 76;
+  const P = (i, j) => [ox + i * s, oy + j * s];
+
+  // 海面底色（整块）
+  ctx.fillStyle = '#c3dbd6';
+  ctx.fillRect(ox, oy, N * s, N * s);
+
+  // 只有线，什么都没有 —— 这就是这一遍的全部内容
+  for (const sg of SEGS) seg(P(...sg.a), P(...sg.b), GOLD, 2.1);
+
+  txt('① 等高线这一遍', PA.x + 16, PA.y + 26, INK, '650 13px -apple-system,system-ui,sans-serif');
+  txt('画布上只有闭合线：岸线 1 圈 + 台地层界 3 圈', PA.x + 16, PA.y + 46, MUTED,
+      '400 11.5px -apple-system,system-ui,sans-serif');
+  txt(`${SEGS.length} 段格边 · ${RINGS.length} 个环`, PA.x + 16, PA.y + PA.h - 14, MUTED,
+      '600 11.5px -apple-system,system-ui,sans-serif');
+}
+
+/* ── ② ③ 等距视图：线框 / 成图 ─────────────────────────────── */
+const PB = { x: 444, y: 152, w: 392, h: 444 };
+const PC = { x: 852, y: 152, w: 396, h: 444 };
+// 岛的包围盒（陆地格），等距投影按它的中心对中、按它的跨度定比例
+const BB = { x0: 5, x1: 31, y0: 6, y1: 30, cx: 18, cy: 18 };
+const SX = 7.2, SY = 3.6, SZ = 20;
+
+const iso = (P, cx, cy) => (x, y, z) => {
+  const px = (x - BB.cx) - (y - BB.cy);
+  const py = (x - BB.cx) + (y - BB.cy);
+  return [P.x + cx + px * SX, P.y + cy + py * SY - z * SZ];
+};
+
+function drawWirePass() {
+  card(PB.x, PB.y, PB.w, PB.h, '#fbfcfb');
+  const Q = iso(PB, PB.w / 2, 262);
+  // 顶面边（线框这一遍的全部几何）
+  for (const w of WIRE) {
+    seg(Q(w.a[0], w.a[1], w.z), Q(w.b[0], w.b[1], w.z), 'rgba(31,43,40,.52)', 0.95);
+  }
+  // 等高线段（同一批格边的竖直投影），用来对照"两遍共用"
+  for (const sg of SEGS) {
+    const z = (k) => (k < 0 ? 0 : k * CFG.STEP);
+    seg(Q(sg.a[0], sg.a[1], z(sg.k)), Q(sg.b[0], sg.b[1], z(sg.k)), 'rgba(190,140,20,.85)', 1.25);
+  }
+  txt('② 线框这一遍', PB.x + 16, PB.y + 26, INK, '650 13px -apple-system,system-ui,sans-serif');
+  txt(`陆地格顶面边 ${WIRE.length} 条（灰网格）+ 等高线 ${SEGS.length} 条（黄）`, PB.x + 16, PB.y + 46, MUTED,
+      '400 11.5px -apple-system,system-ui,sans-serif');
+  txt('两遍的顶点是同一批格角，一个都没多', PB.x + 16, PB.y + PB.h - 14, MUTED,
+      '600 11.5px -apple-system,system-ui,sans-serif');
+}
+
+function drawShadePass() {
+  card(PC.x, PC.y, PC.w, PC.h, '#fbfcfb');
+  const Q = iso(PC, PC.w / 2, 262);
+  const COL = ['#f2d264', '#e8c352', '#d9b145', '#c79a3c', '#b98c34'];
+  const WATER = '#c3dbd6';
+
+  // 海面（只铺岛周围一圈，不用整张 34×34 把岛压小）
+  const plate = [[BB.x0 - 1, BB.y0 - 1], [BB.x1 + 1, BB.y0 - 1],
+                 [BB.x1 + 1, BB.y1 + 1], [BB.x0 - 1, BB.y1 + 1]].map(([x, y]) => Q(x, y, 0));
+  ctx.beginPath(); plate.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+  ctx.closePath(); ctx.fillStyle = 'rgba(155,196,190,.55)'; ctx.fill();
+
+  const order = [];
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) order.push([x, y]);
+  order.sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]));
+
+  for (const [x, y] of order) {
+    const z = H[y][x], k = levelOf(z);
+    if (k < 0) continue;
+    // 侧面（朝 +x / +y）
+    for (const [dx, dy] of [[1, 0], [0, 1]]) {
+      const xx = x + dx, yy = y + dy;
+      const zz = (xx < N && yy < N) ? H[yy][xx] : -0.6;
+      if (zz >= z - 1e-6) continue;
+      const zl = Math.max(zz, 0);
+      const a = Q(x + dx, y + dy, z), b = Q(x + dx + (dx ? 0 : 1), y + dy + (dy ? 0 : 1), z);
+      const c = Q(x + dx + (dx ? 0 : 1), y + dy + (dy ? 0 : 1), zl), d = Q(x + dx, y + dy, zl);
+      ctx.beginPath(); [a, b, c, d].forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+      ctx.closePath();
+      ctx.fillStyle = z - zz >= CFG.STEP * 0.9 ? '#a8873a' : '#c1a05a'; ctx.fill();
+    }
+    const top = [Q(x, y, z), Q(x + 1, y, z), Q(x + 1, y + 1, z), Q(x, y + 1, z)];
+    ctx.beginPath(); top.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+    ctx.closePath();
+    ctx.fillStyle = COL[Math.min(COL.length - 1, k)]; ctx.fill();
+
+    // 水线白沫：自己高于水、邻居是海
+    let shore = false;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const xx = x + dx, yy = y + dy;
+      const zz = (xx >= 0 && yy >= 0 && xx < N && yy < N) ? H[yy][xx] : -0.6;
+      if (zz <= CFG.WATER) shore = true;
+    }
+    if (shore) {
+      ctx.beginPath(); top.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+      ctx.closePath(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.6; ctx.stroke();
+    }
+  }
+  txt('③ 成图这一遍', PC.x + 16, PC.y + 26, INK, '650 13px -apple-system,system-ui,sans-serif');
+  txt(`${M.land} 格陆地 / ${M.levels} 层台地，颜色按层号取`, PC.x + 16, PC.y + 46, MUTED,
+      '400 11.5px -apple-system,system-ui,sans-serif');
+  txt('和左边两遍是同一份高度场', PC.x + 16, PC.y + PC.h - 14, MUTED,
+      '600 11.5px -apple-system,system-ui,sans-serif');
+}
+
+function draw() {
+  const bg = ctx.createLinearGradient(0, 60, 0, 800);
+  bg.addColorStop(0, '#f1f5f3'); bg.addColorStop(1, '#e3eae7');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, 1280, 800);
+  drawContourPass();
+  drawWirePass();
+  drawShadePass();
+}
+
+function paint() {
+  document.getElementById('l1').innerHTML =
+    `三遍能对齐，是因为它们都从<b>同一批格边</b>出发：格边总数 ${M.grid_edges}，其中层号不同的 <b>${M.contourSegs}</b> 条就是等高线；` +
+    `陆地格顶面边去重后 ${M.wireEdges} 条就是线框（岸线那 ${M.shoreEdges} 条是它外圈的一部分）；填色就是成图。这一批的 ${M.contourSegs} 条等高线段<b>端点全是整数格角</b>` +
+    `（${M.onGridPct}%），连成 ${M.rings} 个环、其中闭合 ${M.closed} 个、开口 ${M.open} 个（环大小 ${M.ringSizes.join(' / ')} 段）。`;
+  document.getElementById('l2').innerHTML =
+    `<span class="no">反面：中点插值等高线</span>` +
+    `<span>${M.interpSegs} 段 / 总长 ${M.interpLen}</span>` +
+    `<span>格边版 ${M.contourSegs} 段 / 总长 ${M.crispLen}</span>` +
+    `<span>长度比 <b class="no">${M.lenRatio}</b></span>` +
+    `<span>插值点恒在两格心中点 → 段段斜切格子内部，直角台沿被倒成 45° 斜角</span>`;
+
+  document.getElementById('stats').innerHTML =
+    `<span>场 <b>${N}×${N}</b> 格 / 格边 ${M.grid_edges}</span>` +
+    `<span>陆地 <b>${M.land}</b> 格 / <b>${M.levels}</b> 层</span>` +
+    `<span>等高线 <b>${M.contourSegs}</b> 段 = 层界边</span>` +
+    `<span>落格边 <b class="ok">${M.onGridPct}%</b></span>` +
+    `<span>环 <b>${M.rings}</b>（闭 ${M.closed} / 开 ${M.open}）</span>` +
+    `<span>线框 <b>${M.wireEdges}</b> 条边（岸线 ${M.shoreEdges}）</span>` +
+    `<span>插值版总长 <b class="no">${M.lenRatio}×</b></span>`;
+}
+
+draw(); paint();
+window.__ready = true;
+</script>
+</body>
+</html>

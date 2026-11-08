@@ -1,5 +1,5 @@
 /**
- * pipeline.js — how the 237 clips fit together, as pipelines.
+ * pipeline.js — how the 285 clips fit together, as pipelines.
  *
  * Reading of the timeline (all from the clips' own text):
  *   Bad North (2017–2019)   square voxel islands; terrain, houses, units, wind
@@ -28,38 +28,25 @@ window.PIPELINE = {
       ['931196707236392960', 'Bad North：所有关卡共享一个虚拟体素空间，给光照烘焙、软法线、3D 贴图、碰撞、风模拟共用'],
     ],
   },
-  // 最近 12 轮（第 9–20 轮）新落地的能力。pipeline.html 顶部单独列一块，
+  // 自动批次跑完 14 轮之后新落地的能力。pipeline.html 顶部单独列一块，
   // 因为管线图/路线图是"结构"，看不出这些条目是什么时候补进去的。
-  recentNote: '第 9–22 轮新增：每一条都按原片逐帧学过、落地过、能量出数字；标"对照页"的可以直接打开看。',
+  // 数字一律抄自 learn/RUNLOG.md 当轮记录，不是重新估的。
+  recentNote: '自动批次 14 轮新增（第 23 轮以后）：每条都按原片逐帧看过、落地过、能量出数字；标"对照页"的可以直接打开看。',
   recent: [
-    { id: '1164926304640229376', name: '不规则网格上的 WFC：交互速度 + 确定性', where: 'src/gridwfc.js', page: 'alivelab.html', pageName: '对照页', status: 'partial', num: '1054 格 7.3ms（14.4 万格/秒）/ 正倒遍历逐格差 0' },
-    { id: '1313837640366596096', name: '完美环 → 飞行城镇（不用腿）', where: 'src/looptown.js', page: 'alivelab.html', pageName: '对照页', status: 'partial', num: '整圈 0 条腿 vs 缺口 45 条腿' },
-    { id: '1246074663546916873', name: '道具进出场：弹簧 + 错峰', where: 'src/propanim.js', page: 'alivelab.html', pageName: '对照页', status: 'partial', num: '0.57s 落定 / 过冲 7.1% / 消失 0.30s' },
-    { id: '1241046107125399552', name: '每两个像素一条线（32² 角落 + 2 texel 台阶）', where: 'src/texelsnap.js', page: 'plantlab.html', pageName: '对照页', status: 'partial', num: '边缘 5px → 1px（参考 1.0px）· 缩放漂移 0.51 → 0.36' },
-    { id: '1590669875869286400', name: '崖沿草带：只长在边上，卡片比格子小一个数量级', where: 'src/edgeplant.js · placeGrassBand', page: 'plantlab.html', pageName: '对照页', status: 'partial', num: '1723 片 · 岛宽 5.8%（参考 5.6%）· 边缘覆盖 100%' },
-    { id: '1707490274425884929', name: '崖沿小灌木（第 3 次加回来）', where: 'src/edgeplant.js · placeRimShrubs', page: 'plantlab.html', pageName: '对照页', status: 'partial', num: '352 坨 · 岛宽 3.5%（参考 3.3%）· 最小间距 3.2 格' },
-    { id: '1290997501332525056', name: '花园带：墙脚退 0.75 格一条带 + 等距球灌木', where: 'src/edgeplant.js · placeGardenPath', page: 'plantlab.html', pageName: '对照页', status: 'partial', num: '135 颗 · 带宽 0.125；判据与崖沿相反（自己低、邻格高）' },
-    { id: '1105131621391495176', name: '距离场逐件生长 / 擦除（阈值 −R→0）', where: 'src/dfgrow.js', page: 'plantlab.html', pageName: '对照页', status: 'partial', num: '9 件 5 层 · 擦/生 4.09:1（参考 4.1:1）· 满格墨量 15.56%' },
-    { id: '1061229717582475264', name: '同一张贴图四套设置打散平铺重复', where: 'src/repeatbreak.js', page: 'plantlab.html', pageName: '对照页', status: 'partial', num: '自相关峰 1.000 → 0.315 · 低频 std 0.215 → 0.196' },
-    { id: '1580835075629133825', name: '光反弹：视线因子求积（不是色渗）', where: 'src/bouncegi.js', page: 'bouncelab.html', pageName: '对照页', status: 'partial', num: '暗部 0.182 → 0.230 → 0.254（×1.26/×1.39）· 二跳 +10.2% · 22.7ms@64²' },
-    { id: '1481661852887265288', name: '大笔触法线：画上去的法线，几何不动', where: 'src/paintnormal.js', page: 'bouncelab.html', pageName: '对照页', status: 'partial', num: '25 块 · 块宽 25.6px · 倾斜 18.0° · 平面 74.8% 像素差 >5% · 轮廓变化 0' },
-    { id: '1758250248483278925', name: '水面反射：低分辨率镜像 + 竖向拉丝', where: 'src/reflstreak.js', page: 'bouncelab.html', pageName: '对照页', status: 'partial', num: '拉丝核 33×5px · 纵横比 6.6 · 竖梯度 0.62→0.53' },
-    { id: '1298689301488775169', name: '四档调试视图（flat / shaded / light only / AO）', where: 'bouncelab.html（① 右上）', page: 'bouncelab.html', pageName: '对照页', status: 'partial', num: '四档可切 · flat 平面梯度 0' },
-    { id: '1751932427272909032', name: '强制模块：先造它要的那块网格（诱导同构 + 合成 patch）', where: 'src/tileforce.js', page: 'decolab.html', pageName: '对照页', status: 'partial', num: '2074 格 6 处 / 合成 7 格·0 重叠 / 指定 6 环 0 次' },
-    { id: '1181464374839521280', name: '墙面装饰另开一套小 WFC', where: 'src/surfacedeco.js', page: 'decolab.html', pageName: '对照页', status: 'partial', num: '352 槽位 / 违约 0 / 搜索空间少 249 个数量级' },
-    { id: '1015149712469524480', name: '卡片贴图：每片随机偏移 + 沿各自流向滑', where: 'src/quadtex.js', page: 'decolab.html', pageName: '对照页', status: 'partial', num: '两片相似度 1.00 → 0.023' },
-    { id: '816748103193817088', name: '流场：一张方向场喂一群单位', where: 'src/flowfield.js', page: 'engine/navflow.html', pageName: '对照页', status: 'done', num: '300 单位 0.09ms vs 300×Dijkstra 10.6ms' },
-    { id: '1579478470098243584', name: '笼形变形（崖面不再规整）', where: 'engine/cage.js · C 键', page: 'engine/world.html', pageName: '场景', status: 'engine', num: 'maxShift 0.333 · repaired 0' },
-    { id: '959752525867036672', name: '顶点格（三角网格对偶）铺植被', where: 'src/dual.js · X 键', page: 'engine/world.html', pageName: '场景', status: 'engine', num: '1004 瓣 · 中位面积 0.0735' },
-    { id: '1007587812462530561', name: '瀑布（只取落进低处的掉级）', where: 'engine/waterfall.js · Z 键', page: 'engine/world.html', pageName: '场景', status: 'engine', num: '21 处候选 → 2 处可见' },
-    { id: '1017355723171344385', name: '描边线宽 × DPR（4k 不变细）', where: 'engine/outline.js', page: 'engine/world.html', pageName: '场景', status: 'engine', num: 'DPR2: 0.8 → 1.6' },
-    { id: '929417420921556993', name: '平滑/硬法线在最终光照里混合', where: 'engine/surface.js · uNormalMix', page: 'engine/world.html', pageName: '场景', status: 'engine', num: '近景 A/B 8.33%' },
-    { id: '793557992931266561', name: 'AO 四档：flat / up / 体素 / 方向', where: 'src/voxelao.js', page: 'engine/aoviz.html', pageName: '对照页', status: 'engine', num: 'AO 均值 0.944 · p05 0.52' },
-    { id: '1104771432440049664', name: '镜像距离场 UI 花边', where: 'engine/ornament.js', page: 'engine/ornament.html', pageName: '对照页', status: 'engine', num: '四种尺寸角部墨量 ±4%' },
-    { id: '1670790425232175108', name: '三种网格对照（方块/六边/三角）', where: 'src/gridmodes.js', page: 'engine/gridmodes.html', pageName: '对照页', status: 'engine', num: '主方向 2 / 3 / 3 · 面内角 90/120/45' },
-    { id: '1584623053061099520', name: '房子插进地形（参数域开洞）', where: 'src/splice.js', page: 'engine/splice.html', pageName: '对照页', status: 'engine', num: '1082 格面积守恒 1.7e-13' },
-    { id: '926890207298899969', name: '旗面沿风粒子轨迹（燕尾 + 徽记）', where: 'engine/flags.js · I 键', page: 'engine/world.html', pageName: '场景', status: 'engine', num: '84/91 顶点在动 · A/B 7.38%' },
-    { id: '1764958522398146667', name: '增量二叉树矩形打包', where: 'src/rectpack.js', status: 'engine', num: '填充 0.813 vs 货架 0.572' },
+    { id: '1471817524148940807', name: '方格切角成六边：一个格子两种读法', where: 'src/squarehex.js', page: 'squarehexlab.html', pageName: '对照页', status: 'done', num: '角距 30°→20° · 面积 0.750 · 共边 0.500（切四角更近六边但共边降到 0.300）' },
+    { id: '1191990107785572352', name: '灌木用中心锚点折卡：侧看不再是一条线', where: 'src/shrubcard.js', page: 'shrubcardlab.html', pageName: '对照页', status: 'done', num: '侧看最小宽度 0.000→0.280 · 法线夹角 58.5° · 三角 2→4' },
+    { id: '865200072685912064', name: '槽位求解：候选池 → 弧相容 → SOLVE', where: 'src/slotsolve.js', page: 'slotsolvelab.html', pageName: '对照页', status: 'done', num: '候选 27/格 → 弧相容 14.2/格 → SOLVE 1.00/格 · 142 条内部棱断 0 · 同 seed 80/80 相同' },
+    { id: '1447494168448753667', name: '台地单位逐人取自己那格的高度', where: 'src/unitsnap.js', page: 'unitsnaplab.html', pageName: '对照页', status: 'partial', num: '22 人跨 3 级、脚底天然差 1.80；整队共用中心高度 悬空 5/埋入 5 → 逐人取高 0/0' },
+    { id: '827215002448846848', name: '航点按弧长等距，不是按控制点', where: 'src/navribbon.js', page: 'navribbonlab.html', pageName: '对照页', status: 'done', num: '步距 1.000±0.000 · 16 格共享边异常 0 · 拿控制点当航点 8.41× 落差' },
+    { id: '821680056514781186', name: '贴地软影：半径、透明度、坡面拉长', where: 'src/blobshadow.js', page: 'blobshadowlab.html', pageName: '对照页', status: 'done', num: 'r 0.52→0.786 · α 0.46→0.313 · 26° 坡拉长 1.113× 而面积比 1.000 · 出框 0' },
+    { id: '781027725452648448', name: '房屋套件：比例参数化，不是逐件摆', where: 'src/housekit.js', page: 'housekitlab.html', pageName: '对照页', status: 'done', num: '一套参数出整排（见记录）' },
+    { id: '1671808851895627776', name: '悬垂地形：体素列叠层，前面能挡住后面', where: 'src/overhangterrain.js', page: 'overhanglab.html', pageName: '对照页', status: 'partial', num: '朝下面 82 · 海蚀洞深 14 格 · 缓坡 908 / 陡崖 310' },
+    { id: '1061221291137605633', name: '单图 8 向 D4 + 镜像折叠，铺任意尺寸', where: 'src/mirrordecor.js', page: 'mirrordecorlab.html', pageName: '对照页', status: 'done', num: '接缝实测 0（硬平铺 0.2697）' },
+    { id: '1482346496460828674', name: '对比贴图：迭代松弛让对比边不同、非对比边相近', where: 'src/contrasttex.js', page: 'contrasttexlab.html', pageName: '对照页', status: 'done', num: '非对比边 ΔE 32.0→0.74 · 对比边比值 24×' },
+    { id: '1447488323845509121', name: '填洼 priority-flood：从水面和边界向内淹', where: 'src/depfill.js', page: 'depfilllab.html', pageName: '对照页', status: 'done', num: '3296 格陆地抬 94 格 · 17 口湖 · 被困格 109→0（逐格抬最低邻居是假修复，只降到 102）' },
+    { id: '802496920790777856', name: '穿楼门洞只吃一层：洞顶 clamp 到楼板厚以下', where: 'src/piercefloor.js', page: 'piercefloorlab.html', pageName: '对照页', status: 'done', num: '贯穿层数 2→1 · 第一道挑檐切宽 4.32→0.00 · 代价 净高/净宽 0.79→0.50' },
+    { id: '807256278154301441', name: '四坡攒尖顶：方塔自动攒尖', where: 'src/hiproof.js', page: 'hiprooflab.html', pageName: '对照页', status: 'done', num: '6 塔坡角 31.6°~41.3° 而檐口高差 0.000 · 山墙 0 面 · 瓦面面积与双坡恒等（不能当判据）' },
+    { id: '827216768783495168', name: '小队旗：3 格徽记 + 一个军色', where: 'src/squadbanner.js', page: 'squadbannerlab.html', pageName: '对照页', status: 'done', num: '旗面与图集重绘差 0.19/255 · 24 人只有 3 个颜色值 · billboard 宽 0.766~1.0' },
   ],
   lanes: [
     {

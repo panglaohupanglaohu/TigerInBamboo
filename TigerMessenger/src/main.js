@@ -1723,6 +1723,8 @@ function batianTarget(id,label,object){
 }
 scene.userData.batianBattleScope='sequential';scene.userData.batianCommandMode=true;
 const batianTargets=[batianTarget('bookshop','书店镇',entryBookshop),batianTarget('apostles','十二门徒',scene.getObjectByName('g30-far-mountain')),batianTarget('citadel','高山圣城',messenger.landmarks.odysseyCitadel),batianTarget('old-port','旧港湾',messenger.landmarks.oldHarbor?.root||messenger.landmarks.harbor),batianTarget('swamp','湖沼',messenger.landmarks.moebiusSwamp),batianTarget('moss','苔庭',sceneHandles.find(h=>h.id==='saihoji')?.group||scene.getObjectByName('SaihojiSixScenes')),batianTarget('moon-lake','月湖',messenger.moonLake?.group),batianTarget('gate','叹息之门',messenger.landmarks.abandonedGate)].filter(Boolean);
+// 系统工坊（pipeline.html）场景选择：只读暴露各场景的方向与根对象，用于镜头定位；不改场景
+globalThis.__tmSceneTargets=()=>{const list=batianTargets.map(t=>({id:t.id,label:t.label,dir:t.dir,root:t.surfaceRoot}));const crystal=messenger?.landmarks?.moebius?.group;if(crystal?.isObject3D&&!list.some(t=>t.id==='crystal'))list.push({id:'crystal',label:'水晶城',dir:crystal.getWorldPosition(new THREE.Vector3()).normalize(),root:crystal});return list;};
 // 2026-10-15 (user): the fleet no longer attacks on its own at spawn; it waits for 集结出击 in the 霸天舰队 panel.
 // Demo tours (?tour=bookshop-battle / fleet-command) and ?batianAuto=1 keep the old automatic campaign.
 const batianAutoCampaign=['bookshop-battle','fleet-command'].includes(entryParams.get('tour'))||entryParams.get('batianAuto')==='1';

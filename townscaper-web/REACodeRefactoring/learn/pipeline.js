@@ -46,9 +46,9 @@ window.PIPELINE = {
               "page": "grids.html?t=infinite"
             },
             {
-              "name": "无限、确定、无缝的松弛四边形网格；3 块一簇",
+              "name": "三块簇/对偶532帧：实际各模式全部owner接缝审计",
               "id": "1151770831619534848",
-              "status": "done",
+              "status": "partial",
               "where": "src/core/infinite.js",
               "page": "grids.html?t=infinite"
             },
@@ -67,11 +67,11 @@ window.PIPELINE = {
               "page": "grids.html?t=lines"
             },
             {
-              "name": "重心坐标：1 次减法 + 1 次点积",
+              "name": "重心坐标：全帧核验/XZ预计算接真实块簇",
               "id": "974579499802202113",
-              "status": "done",
-              "where": "src/core/spatial.js（baryPrep）",
-              "page": "grids.html?t=bary"
+              "status": "partial",
+              "where": "src/core/spatial.js · src/core/infinite.js",
+              "page": "grids.html?t=infinite"
             },
             {
               "name": "通用三角图：确定性全查/坏输入拒绝；局部编辑接口待补",
@@ -123,10 +123,11 @@ window.PIPELINE = {
               "page": "hierarchy.html"
             },
             {
-              "name": "\"方，又带六边形味\"的岩岛：三角 + 方格混合网格",
+              "name": "Square yet hex：556帧；切角轮廓实验，原岩岛算法待补",
               "id": "1471817524148940807",
-              "status": "done",
-              "where": "src/core/grid.js（buildMixedGrid）"
+              "status": "partial",
+              "where": "src/core/corner-footprint.js",
+              "page": "corner-cuts.html"
             },
             {
               "name": "不规则三角底图：383帧已学，完整岛生成仍待补",
@@ -156,11 +157,11 @@ window.PIPELINE = {
               "page": "grids.html"
             },
             {
-              "name": "讲课用的重心坐标小工具：三角形 + 拖动的点 + 三个权重",
+              "name": "重心坐标：全帧核验/XZ预计算接真实块簇",
               "id": "974564862729838592",
-              "status": "done",
-              "where": "grids.html（重心坐标）",
-              "page": "grids.html"
+              "status": "partial",
+              "where": "src/core/spatial.js · src/core/infinite.js",
+              "page": "grids.html?t=infinite"
             },
             {
               "name": "局部规则/放射模板：324帧核验，单补丁共享接缝；复杂孔洞拒绝、多模板待补",
@@ -501,11 +502,12 @@ window.PIPELINE = {
           "光照",
           [
             {
-              "name": "分层 AO（地形 + 建筑一起烘焙）",
+              "name": "551帧分层AO：实际遮蔽/反弹分离对照",
               "id": "1168571866405097472",
-              "status": "done",
-              "where": "src/light/bake.js",
-              "toggle": "ao"
+              "status": "partial",
+              "where": "src/world/worldmesh.js · src/light/bake.js",
+              "toggle": "ao",
+              "page": "ao-stages.html"
             },
             {
               "name": "彩色反弹光",
@@ -840,6 +842,13 @@ window.PIPELINE = {
               "where": "src/core/nav-visibility.js · src/world/visibility.js · visibility.html",
               "page": "visibility.html",
               "toggle": "visibility"
+            },
+            {
+              "name": "三维空间开阔度：64帧全核，固定步长实际World局部验收",
+              "id": "798580832906739712",
+              "status": "partial",
+              "where": "src/core/space-visibility.js",
+              "page": "space-visibility.html"
             }
           ]
         ],
@@ -873,6 +882,18 @@ window.PIPELINE = {
               "status": "partial",
               "where": "src/core/module-audit.js",
               "page": "patch.html"
+            }
+          ]
+        ],
+        [
+          "WFC过程",
+          [
+            {
+              "id": "865200072685912064",
+              "status": "partial",
+              "name": "真实候选域过程回看",
+              "where": "src/core/wfc.js",
+              "page": "wfc-trace.html"
             }
           ]
         ]
@@ -916,11 +937,12 @@ window.PIPELINE = {
               "tour": "gable"
             },
             {
-              "name": "4 支撑：钢架",
+              "name": "296帧：钢架编辑全核，完整WFC待补",
               "id": "1189902695303458816",
-              "status": "done",
+              "status": "partial",
               "where": "src/build/buildings.js",
-              "tour": "stilt"
+              "tour": "stilt",
+              "page": "building-components.html"
             },
             {
               "name": "4 支撑：拱",
@@ -930,10 +952,11 @@ window.PIPELINE = {
               "tour": "arch"
             },
             {
-              "name": "5 门窗 = 道具放置：尽量多放、互不重叠（每层一张世界坐标占位表），开口沿墙边不随格子歪斜",
+              "name": "道具/门窗：261帧；实际窗台全外缘预留，完整家具待补",
               "id": "1205416648397721601",
-              "status": "done",
-              "where": "src/build/buildings.js（tryPlace）"
+              "status": "partial",
+              "where": "src/core/opening-footprint.js · src/build/buildings.js",
+              "page": "index.html?scene=town"
             },
             {
               "name": "6 围合庭院：按实际墙层识别开口，上层桥不再封院",
@@ -944,11 +967,12 @@ window.PIPELINE = {
               "page": "garden.html"
             },
             {
-              "name": "7 楼梯 + 表面装饰的\"小 WFC\"：每栋每层一种窗型、整栋只开一扇门；楼梯按导航图放在崖脚",
+              "name": "六类局部墙饰接实际建筑；跨格整立面/真实洞口待补",
               "id": "1181464374839521280",
-              "status": "done",
-              "where": "src/build/buildings.js · src/world/navlayer.js",
-              "toggle": "stairs"
+              "status": "partial",
+              "where": "src/core/surface-decoration.js · src/build/buildings.js",
+              "toggle": "stairs",
+              "page": "building-components.html"
             },
             {
               "name": "8 海鸥：排在屋脊上、只有停着有描边、挪动、倒影、扇翅滑翔绕镇飞",
@@ -1087,6 +1111,36 @@ window.PIPELINE = {
               "toggle": "lighthouse"
             }
           ]
+        ],
+        [
+          "早期拱洞逐帧与曲线分段",
+          [
+            {
+              "id": "806904557502464000",
+              "status": "partial",
+              "name": "123帧：水渠/穿楼拱洞，局部曲线验收",
+              "where": "src/core/arch-profile.js · src/build/buildings.js",
+              "page": "arches.html"
+            },
+            {
+              "id": "802496920790777856",
+              "status": "partial",
+              "name": "292帧：水渠/穿楼拱洞，局部曲线验收",
+              "where": "src/core/arch-profile.js · src/build/buildings.js",
+              "page": "arches.html"
+            }
+          ]
+        ],
+        [
+          "三维拼装学习待迁移",
+          [
+            {
+              "name": "67帧3D模块逐步拼装全核，仅学习",
+              "id": "787319655648100352",
+              "status": "partial",
+              "where": "原3D模块库与动画未迁移"
+            }
+          ]
         ]
       ]
     },
@@ -1114,11 +1168,11 @@ window.PIPELINE = {
               "page": "overhang.html"
             },
             {
-              "name": "3 河网：DFS开挖已保留；球面河道约束坍缩＋其余BFS待补",
+              "name": "3 河网：填洼/汇水累计重建接共享World；原球面联合坍缩待补",
               "id": "1769691526924292506",
               "status": "partial",
-              "where": "src/terrain/generate.js",
-              "page": "river-nav.html"
+              "where": "src/core/river-network.js · src/terrain/river-network.js",
+              "page": "drainage.html"
             },
             {
               "name": "边层级：共享切面显式硬边；模块/材质边语义待补",
@@ -1212,11 +1266,11 @@ window.PIPELINE = {
               "page": "wfc.html"
             },
             {
-              "name": "12 远景阴云：连续运动/背景深度/首页入口已验；原作云体层次待补",
+              "name": "近云同图投影/首页开关局部验收；远云影与模糊仍缺",
               "id": "1243228419162341379",
               "status": "partial",
-              "where": "src/life/vegetation.js · src/life/impostor.js",
-              "toggle": "moody",
+              "where": "src/light/cloud-shadow.js · src/life/impostor.js",
+              "toggle": "cloudshadow",
               "page": "clouds.html"
             },
             {
@@ -1269,6 +1323,49 @@ window.PIPELINE = {
               "status": "partial",
               "where": "src/terrain/generate.js",
               "page": "scene:terrain"
+            }
+          ]
+        ],
+        [
+          "台地逻辑诊断",
+          [
+            {
+              "id": "815236105079398400",
+              "status": "partial",
+              "where": "src/core/terrace-profile.js",
+              "page": "terraces.html",
+              "name": "185帧台地诊断"
+            },
+            {
+              "id": "781957658597269506",
+              "status": "partial",
+              "where": "src/core/terrace-profile.js",
+              "page": "terraces.html",
+              "name": "109帧黄色薄平台，仅学习"
+            }
+          ]
+        ],
+        [
+          "台地格边遍局部迁移",
+          [
+            {
+              "name": "同World端点＋笼投影：层界/线框/岸界局部通过",
+              "id": "1669315384619540487",
+              "status": "partial",
+              "where": "src/core/terrace-edges.js · src/world/terrace-edges.js",
+              "page": "terraces.html"
+            }
+          ]
+        ],
+        [
+          "跨层梯几何局部迁移",
+          [
+            {
+              "name": "实际台地木梯：3D梁长与等距踏棍；薄平台/攀爬待补",
+              "id": "781957658597269506",
+              "status": "partial",
+              "where": "src/core/ladder-profile.js · src/world/navlayer.js",
+              "page": "terraces.html"
             }
           ]
         ]
@@ -1368,10 +1465,11 @@ window.PIPELINE = {
               "toggle": "flow"
             },
             {
-              "name": "弹道查找表 + 代价函数，箭按真抛物线飞",
+              "name": "678帧弹道：共享查表/实际端点修复，原表达式待补",
               "id": "987267068495003648",
-              "status": "done",
-              "where": "src/badnorth/battle.js"
+              "status": "partial",
+              "where": "src/core/ballistic-table.js · src/badnorth/battle.js",
+              "page": "ballistics.html"
             },
             {
               "name": "血迹跟着身体（物体空间血斑）；可关掉血腥",
@@ -1381,10 +1479,11 @@ window.PIPELINE = {
               "toggle": "gore"
             },
             {
-              "name": "多洞的岛 / 洞窟图块（只有造型，单位不穿洞）",
+              "name": "洞穴725帧仅学习：厚岩拱洞/多层战斗",
               "id": "906416813810049025",
               "status": "partial",
-              "where": "src/terrain/features.js"
+              "where": "artifacts/coverage/cloud-depth-review.md",
+              "page": "artifacts/coverage/cloud-depth-review.md"
             },
             {
               "name": "窄道会车（简化：互相让开）",
@@ -1437,10 +1536,11 @@ window.PIPELINE = {
               "where": "src/badnorth/battle.js（#hit / #fallStep）"
             },
             {
-              "name": "自写盒-盒相交（分离轴）",
+              "name": "真实发船泊位/直线进场走廊预留局部通过；岸礁/动态避让待补",
               "id": "974325184525201409",
-              "status": "done",
-              "where": "src/core/obb.js"
+              "status": "partial",
+              "where": "src/badnorth/landing-plan.js · src/core/obb.js",
+              "page": "index.html?scene=badnorth"
             }
           ]
         ],
@@ -1520,6 +1620,121 @@ window.PIPELINE = {
               "name": "动画/战斗与单位接触软盘复核",
               "where": "src/core/unit-shadow.js · src/badnorth/battle.js",
               "page": "unit-shadows.html"
+            }
+          ]
+        ],
+        [
+          "单位等级与早期战斗复核",
+          [
+            {
+              "id": "821680056514781186",
+              "name": "复仇战斗：763帧；仅学习",
+              "status": "partial",
+              "page": "unit-tiers.html",
+              "where": "src/core/unit-tier.js · src/badnorth/battle.js"
+            },
+            {
+              "id": "827215002448846848",
+              "name": "单位等级：524帧；3D色阶局部通过",
+              "status": "partial",
+              "page": "unit-tiers.html",
+              "where": "src/core/unit-tier.js · src/badnorth/battle.js"
+            }
+          ]
+        ],
+        [
+          "单位层高",
+          [
+            {
+              "id": "828984794407170048",
+              "status": "partial",
+              "name": "坡地战斗387帧；每人层高缓动",
+              "where": "src/core/unit-ground-height.js",
+              "page": "index.html?scene=badnorth"
+            }
+          ]
+        ],
+        [
+          "分层房屋交互",
+          [
+            {
+              "id": "890611046435627008",
+              "status": "partial",
+              "name": "分层房屋攻击/守卫，666帧已核",
+              "where": "src/core/house-door-presence.js",
+              "page": "index.html?scene=badnorth"
+            }
+          ]
+        ],
+        [
+          "尘粒与路径归因核验",
+          [
+            {
+              "id": "823848950553780226",
+              "status": "partial",
+              "name": "尘粒AO227帧仅学习，原效果待实现",
+              "where": "artifacts/coverage/path-samples-review.md",
+              "page": "artifacts/coverage/path-samples-review.md"
+            }
+          ]
+        ],
+        [
+          "塔楼形态局部迁移",
+          [
+            {
+              "id": "807256278154301441",
+              "status": "partial",
+              "name": "344帧：塔楼四檐顶局部，原群体寻路待补",
+              "where": "src/core/hip-roof.js · src/build/buildings.js",
+              "page": "hip-roofs.html"
+            }
+          ]
+        ],
+        [
+          "三队旗徽局部迁移",
+          [
+            {
+              "id": "827216768783495168",
+              "status": "partial",
+              "name": "23帧三队旗徽：原盾纹仍缺",
+              "where": "src/core/banner.js · src/badnorth/battle.js",
+              "page": "squad-banners.html"
+            }
+          ]
+        ],
+        [
+          "多格高层建筑学习待迁移",
+          [
+            {
+              "id": "793545297376972801",
+              "status": "partial",
+              "name": "多格/体素AO102帧，仅学习",
+              "where": "artifacts/coverage/multitile-ao-review.md",
+              "page": "artifacts/coverage/multitile-ao-review.md"
+            }
+          ]
+        ],
+        [
+          "分层遮蔽学习/局部验收",
+          [
+            {
+              "id": "793557992931266561",
+              "status": "partial",
+              "name": "6帧遮蔽核验，原完整算法仍缺",
+              "where": "artifacts/coverage/ao-stages-review.md",
+              "page": "ao-stages.html"
+            }
+          ]
+        ],
+        [
+          "导航流动逐帧复核",
+          [
+            {
+              "id": "816748103193817088",
+              "status": "partial",
+              "name": "真实24单位通口前视/合法推进局部通过；完整连续面/坡高待补",
+              "where": "src/core/portal-aim.js · src/world/battle-navigation.js",
+              "page": "index.html?scene=badnorth"
             }
           ]
         ]
@@ -1978,11 +2193,12 @@ window.PIPELINE = {
           "地被",
           [
             {
-              "name": "2 每关多种草",
+              "name": "每层地被：203帧全核，实际World分层色组；完整草型待补",
               "id": "959530111187013632",
-              "status": "done",
-              "where": "src/life/vegetation.js（草 / 干草两套色）",
-              "toggle": "grass"
+              "status": "partial",
+              "where": "src/core/level-flora.js · src/life/vegetation.js",
+              "toggle": "grass",
+              "page": "level-flora.html"
             },
             {
               "name": "2b 坡上长草，帮助读出可走的地方",
@@ -2052,11 +2268,12 @@ window.PIPELINE = {
               }
             },
             {
-              "name": "2f 小花 = Bad North 式的白色碎点，一大片一大片撒在草地上（不是带茎的彩色花；画面见这段）",
+              "name": "每层地被：203帧全核，实际World分层色组；完整草型待补",
               "id": "959530111187013632",
-              "status": "done",
-              "where": "src/life/vegetation.js（flowerGeometry）",
-              "toggle": "flowers"
+              "status": "partial",
+              "where": "src/core/level-flora.js · src/life/vegetation.js",
+              "toggle": "flowers",
+              "page": "level-flora.html"
             }
           ]
         ],

@@ -1,7 +1,11 @@
 // Runtime references only. Selecting never changes geometry, recipes or saved versions.
 const records=new Map();
 const batchedOwners=new WeakMap();
-export function bindBatchedObjectOwners(mesh,ranges){batchedOwners.set(mesh,ranges);}
+const ownerRanges=new Map();
+// 合批网格里每个来源物件的顶点区间：选中时回溯归属，编辑时只改这一段顶点（object-edits.js）
+export function bindBatchedObjectOwners(mesh,ranges){batchedOwners.set(mesh,ranges);for(const r of ranges){const id=r.object.userData.authoringId;if(!id)continue;if(!ownerRanges.has(id))ownerRanges.set(id,[]);ownerRanges.get(id).push({mesh,start:r.start,end:r.end});}}
+export function getObjectRanges(id){return ownerRanges.get(id)||[];}
+export function listEditableObjectIds(){return [...ownerRanges.keys()];}
 export function resolveObjectHit(hit){
  const owner=batchedOwners.get(hit.object)?.find(r=>hit.face?.a>=r.start&&hit.face.a<r.end)?.object;
  if(owner)return records.get(owner.userData.authoringId)||null;
@@ -13,7 +17,7 @@ export function resolveObjectHit(hit){
  records.set(id,{id,name,kind:'mesh',kindName:object.userData.authoringKind||(instance===null?'场景网格（只读）':'实例物件（只读）'),object,bounds:{min:box.min.toArray(),max:box.max.toArray()}});
  return records.get(id);
 }
-export function describeSceneObject({id,name,kind,kindName}){return {id,name,kind,kindName:kindName||({'plane-tree':'悬铃树',cypress:'柏树',hollyhock:'蜀葵花丛'}[kind]||'场景对象')};}
+export function describeSceneObject({id,name,kind,kindName}){return {id,name,kind,editable:ownerRanges.has(id),kindName:kindName||({'plane-tree':'悬铃树',cypress:'柏树',hollyhock:'蜀葵花丛'}[kind]||'场景对象')};}
 export function registerSceneObjects(rows){
  for(const row of rows){if(records.has(row.id))throw Error('场景对象ID重复：'+row.id);records.set(row.id,row);}
  return ()=>{for(const row of rows)if(records.get(row.id)===row)records.delete(row.id);};

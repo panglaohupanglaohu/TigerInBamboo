@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {styleMat} from '../style/materials.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 // Flower sea removed: bouquets and bloom stems are not generated. Leaf rosettes remain.
@@ -46,7 +47,7 @@ function rosetteTexture(variant=0){
  const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=4;rosetteTexCache.set(variant,tex);return tex;
 }
 function rosetteGeometry(){const d=new T.PlaneGeometry(2.5,2.5);d.rotateX(-Math.PI/2);d.translate(0,.03,0);return d;}
-function rosetteMaterial(variant=0){return new T.MeshStandardMaterial({map:rosetteTexture(variant),alphaTest:.12,transparent:false,side:T.DoubleSide,roughness:.9});}
+function rosetteMaterial(variant=0){return styleMat('morris.flora.rosette','MeshStandardMaterial',{map:rosetteTexture(variant),alphaTest:.12,transparent:false,side:T.DoubleSide,roughness:.9});}
 export function createMorrisFlora({group,heightAt,pathDistance,random,linearScale=1,canPlant=()=>true}){
  const palette=[0xa93632,0xf2dfae,0xc35140,0xe8d3a0,0xc39743],flowerPoints=[],clumps=[],extent=19*linearScale;
  // Bouquets follow two interwoven flow fields. Each cluster has low leaves,
@@ -55,10 +56,10 @@ export function createMorrisFlora({group,heightAt,pathDistance,random,linearScal
   const count=4+Math.floor(random()*3);for(let j=0;j<count;j++){const a=j*2.399+yaw,r=.12+Math.sqrt(j/count)*.95,xx=x+Math.cos(a)*r,zz=z+Math.sin(a)*r;if(!canPlant(xx,zz)||pathDistance(xx,zz)<1.65)continue;flowerPoints.push({x:xx,z:zz,y:heightAt(xx,zz),scale:.85+random()*.60,kind:j%4===0?1:kind,yaw:a});}}
  const stemGeo=new T.CylinderGeometry(.014,.022,.58,5);stemGeo.translate(0,.29,0);const leaves=[];for(let j=0;j<4;j++){const a=j*2.4;leaves.push(apply(new T.SphereGeometry(1,5,3),[Math.cos(a)*.10,.12+j*.075,Math.sin(a)*.10],[.18,.025,.075],new T.Quaternion().setFromEuler(new T.Euler(.25,a,.4))));}
  if(!SHOW_FLOWER_SEA)flowerPoints.length=0;
- const greenGeo=mergeGeometries([stemGeo,...leaves],false),greenMat=new T.MeshStandardMaterial({color:0x435d3b,roughness:.88}),dummy=new T.Object3D();
+ const greenGeo=mergeGeometries([stemGeo,...leaves],false),greenMat=styleMat('morris.flora.green','MeshStandardMaterial',{color:0x435d3b,roughness:.88}),dummy=new T.Object3D();
  const greens=new T.InstancedMesh(greenGeo,greenMat,flowerPoints.length);greens.name='morris-clustered-bloom-stems-and-lance-leaves';greens.receiveShadow=true;group.add(greens);
  flowerPoints.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(0,p.yaw,0);dummy.scale.setScalar(p.scale);dummy.updateMatrix();greens.setMatrixAt(i,dummy.matrix);});greens.computeBoundingSphere();
- for(let k=0;k<5;k++){const points=flowerPoints.filter(p=>p.kind===k),petalEntries=[],heartEntries=[];points.forEach((p)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(0,p.yaw,0);dummy.scale.setScalar(p.scale);dummy.updateMatrix();petalEntries.push({matrix:dummy.matrix.clone(),x:p.x,z:p.z});dummy.position.y+=.61*p.scale;dummy.scale.set(p.scale,p.scale*.6,p.scale);dummy.updateMatrix();heartEntries.push({matrix:dummy.matrix.clone(),x:p.x,z:p.z});});chunkInstances(group,'morris-cupped-rose-and-ivory-daisy-bouquets',flowerGeometry(k===0||k===2?0:k===1||k===3?1:2),new T.MeshStandardMaterial({color:palette[k],roughness:.78,side:T.DoubleSide}),petalEntries,40);chunkInstances(group,'morris-bouquet-heart-buds',new T.SphereGeometry(.07,4,3),new T.MeshStandardMaterial({color:k===0||k===2?0x55402a:0xc09843,roughness:.8}),heartEntries,40);}
+ for(let k=0;k<5;k++){const points=flowerPoints.filter(p=>p.kind===k),petalEntries=[],heartEntries=[];points.forEach((p)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(0,p.yaw,0);dummy.scale.setScalar(p.scale);dummy.updateMatrix();petalEntries.push({matrix:dummy.matrix.clone(),x:p.x,z:p.z});dummy.position.y+=.61*p.scale;dummy.scale.set(p.scale,p.scale*.6,p.scale);dummy.updateMatrix();heartEntries.push({matrix:dummy.matrix.clone(),x:p.x,z:p.z});});chunkInstances(group,'morris-cupped-rose-and-ivory-daisy-bouquets',flowerGeometry(k===0||k===2?0:k===1||k===3?1:2),styleMat('morris.flora.bouquet','MeshStandardMaterial',{color:palette[k],roughness:.78,side:T.DoubleSide}),petalEntries,40);chunkInstances(group,'morris-bouquet-heart-buds',new T.SphereGeometry(.07,4,3),styleMat('morris.flora.bouquet-heart-buds','MeshStandardMaterial',{color:k===0||k===2?0x55402a:0xc09843,roughness:.8}),heartEntries,40);}
  const leafGeo=rosetteGeometry(),leafPoints=[];
  const feeding=linearScale>1?[[-24,21.3],[39.3,27.1],[-8.8,37.8]]:[[-6,4],[5,1],[0,-7]];
  // Tapestry verdure carpet: a dense jittered lattice of painted motif cards.
@@ -71,7 +72,7 @@ export function createMorrisFlora({group,heightAt,pathDistance,random,linearScal
  const starPts=[];for(let k=0;k<10;k++){const a=k/10*Math.PI*2,r=k%2?.055:.15;starPts.push(new T.Vector2(Math.cos(a)*r,Math.sin(a)*r));}const headGeo=new T.ShapeGeometry(new T.Shape(starPts),1);headGeo.rotateX(-Math.PI/2+.3);const stemG=new T.PlaneGeometry(.03,1);stemG.translate(0,.5,0);
  const bloomPts=[];for(const[x,z]of leafPoints){const n=random()<.5?1:2;for(let j=0;j<n;j++){const xx=x+(random()-.5)*1.6,zz=z+(random()-.5)*1.6;if(!canPlant(xx,zz)||pathDistance(xx,zz)<1.7)continue;bloomPts.push([xx,zz,.22+random()*.4]);}}
  const bloomColors=[0xb8322a,0xb8322a,0xcf4a35,0xf1e8d0,0xf1e8d0,0xe0ad35,0xd8b54a];
- const heads=new T.InstancedMesh(headGeo,new T.MeshStandardMaterial({roughness:.75,side:T.DoubleSide}),bloomPts.length),stems=new T.InstancedMesh(stemG,new T.MeshStandardMaterial({color:0x3b5a33,roughness:.9,side:T.DoubleSide}),bloomPts.length),bc=new T.Color();
+ const heads=new T.InstancedMesh(headGeo,styleMat('morris.flora.heads','MeshStandardMaterial',{roughness:.75,side:T.DoubleSide}),bloomPts.length),stems=new T.InstancedMesh(stemG,styleMat('morris.flora.stems','MeshStandardMaterial',{color:0x3b5a33,roughness:.9,side:T.DoubleSide}),bloomPts.length),bc=new T.Color();
  heads.name='morris-tapestry-raised-blooms';stems.name='morris-tapestry-bloom-stems';
  bloomPts.forEach(([x,z,h],i)=>{const y=heightAt(x,z);dummy.quaternion.identity();dummy.rotation.set(0,random()*6.28,0);dummy.position.set(x,y,z);dummy.scale.set(1,h,1);dummy.updateMatrix();stems.setMatrixAt(i,dummy.matrix);dummy.position.set(x,y+h,z);const s=.8+random()*.6;dummy.scale.set(s,s,s);dummy.updateMatrix();heads.setMatrixAt(i,dummy.matrix);heads.setColorAt(i,bc.set(bloomColors[Math.floor(random()*bloomColors.length)]));});
  heads.computeBoundingSphere();stems.computeBoundingSphere();group.add(heads,stems);
@@ -86,8 +87,8 @@ export function dressMorrisFacadeVines(castle){
   const points=[];for(let j=0;j<=16;j++){const t=j/16;points.push(V(x+Math.sin(t*8+i)*.22,.25+t*h,z+.035*Math.cos(t*5)));}stems.push(new T.TubeGeometry(new T.CatmullRomCurve3(points),24,.025,5,false));
   for(let j=0;j<16;j++){const t=.08+j*.054,y=.25+t*h,xx=x+Math.sin(t*8+i)*.22;for(const side of[-1,1])leaves.push({x:xx+side*.07,y,z:z+.03,yaw:side*.7+j*.11,s:.26+(j%3)*.045});if(j%2===0)blooms.push({x:xx+Math.sin(j)*.16,y:y+.16,z:z+.025,s:.45+(j%3)*.055});}
  }
- const sg=mergeGeometries(stems,false);stems.forEach(g=>g.dispose());const wood=new T.Mesh(sg,new T.MeshStandardMaterial({color:0x5e6540,roughness:.93}));wood.name='morris-facade-rose-climbing-stems';castle.add(wood);
- const foliage=new T.InstancedMesh(curvedLeaf(),new T.MeshStandardMaterial({vertexColors:true,side:T.DoubleSide,roughness:.82}),leaves.length),petals=new T.InstancedMesh(flowerGeometry(0),new T.MeshStandardMaterial({color:0xb04436,side:T.DoubleSide,roughness:.78}),blooms.length),hearts=new T.InstancedMesh(new T.SphereGeometry(.055,6,4),new T.MeshStandardMaterial({color:0xb79549,roughness:.83}),blooms.length),d=new T.Object3D();foliage.name='morris-facade-small-lobed-leaves';petals.name='morris-facade-climbing-red-roses';
+ const sg=mergeGeometries(stems,false);stems.forEach(g=>g.dispose());const wood=new T.Mesh(sg,styleMat('morris.flora.wood','MeshStandardMaterial',{color:0x5e6540,roughness:.93}));wood.name='morris-facade-rose-climbing-stems';castle.add(wood);
+ const foliage=new T.InstancedMesh(curvedLeaf(),styleMat('morris.flora.facade-rose-climbing-stems','MeshStandardMaterial',{vertexColors:true,side:T.DoubleSide,roughness:.82}),leaves.length),petals=new T.InstancedMesh(flowerGeometry(0),styleMat('morris.flora.petals','MeshStandardMaterial',{color:0xb04436,side:T.DoubleSide,roughness:.78}),blooms.length),hearts=new T.InstancedMesh(new T.SphereGeometry(.055,6,4),styleMat('morris.flora.hearts','MeshStandardMaterial',{color:0xb79549,roughness:.83}),blooms.length),d=new T.Object3D();foliage.name='morris-facade-small-lobed-leaves';petals.name='morris-facade-climbing-red-roses';
  leaves.forEach((p,i)=>{d.position.set(p.x,p.y,p.z);d.rotation.set(-Math.PI/2,0,p.yaw);d.scale.setScalar(p.s);d.updateMatrix();foliage.setMatrixAt(i,d.matrix);});blooms.forEach((p,i)=>{d.position.set(p.x,p.y,p.z);d.rotation.set(Math.PI/2,i*.4,0);d.scale.setScalar(p.s);d.updateMatrix();petals.setMatrixAt(i,d.matrix);d.position.z+=.61*p.s;d.rotation.set(0,0,0);d.updateMatrix();hearts.setMatrixAt(i,d.matrix);});for(const m of[foliage,petals,hearts]){m.computeBoundingSphere();m.receiveShadow=true;castle.add(m);}return{climbingRoseStems:4,facadeRoses:blooms.length,facadeLeafBlades:leaves.length};
 }
 
@@ -100,7 +101,7 @@ function understoryTexture(){if(understoryTex)return understoryTex;const c=docum
  g.save();g.translate(128,128);for(let k=0;k<11;k++){g.save();g.rotate(k*Math.PI*2/11);g.beginPath();g.moveTo(-4,0);g.bezierCurveTo(-30,-26,-20,-70,0,-78);g.bezierCurveTo(20,-70,30,-26,4,0);g.closePath();g.fillStyle='#b3262e';g.fill();g.strokeStyle='#6e1620';g.lineWidth=1.8;g.stroke();g.restore();}
  g.beginPath();g.arc(0,0,15,0,Math.PI*2);g.fillStyle='#e6c76a';g.fill();g.restore();
  understoryTex=new T.CanvasTexture(c);understoryTex.colorSpace=T.SRGBColorSpace;return understoryTex;}
-function understoryMaterial(){return new T.MeshStandardMaterial({map:understoryTexture(),alphaTest:.12,side:T.DoubleSide,roughness:.9});}
+function understoryMaterial(){return styleMat('morris.flora.understory','MeshStandardMaterial',{map:understoryTexture(),alphaTest:.12,side:T.DoubleSide,roughness:.9});}
 function standingGeometry(){const d=new T.PlaneGeometry(1.4,1.4);d.translate(0,.7,0);return d;}
 export function addPlaneTreeUnderstory({group,trees,heightAt,random}){
  const tiers=[{key:'lower',lift:0,stand:false,r:[2.4,3.8]},{key:'middle',lift:0,stand:true,r:[2.2,3.4]},{key:'upper',lift:.9,stand:true,r:[2.0,3.2]}];

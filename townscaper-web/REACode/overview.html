@@ -50,7 +50,7 @@
 <body>
 <main>
   <h1>REACode · 成果总览 <a href="index.html" style="font-size:15px;color:var(--accent);text-decoration:none;font-weight:600;margin-left:10px">← 回到场景</a></h1>
-  <p class="sub">素材是 Oskar Stålberg（@OskSta）的 237 段 GIF/视频和每段对应的原文说明。先读原文、再看画面，学到的东西落进两套代码：
+  <p class="sub">素材是 Oskar Stålberg（@OskSta）的 <b class="ovN">…</b> 段 GIF/视频和每段对应的原文说明。先读原文、再看画面，学到的东西落进两套代码：
     <b>Townscaper 复刻</b>（可玩的建城游戏）和 <b>engine</b>（地形、水、光照的实验场）。下面每个入口都能直接打开验证。</p>
 
   <div class="warn" id="filewarn">现在是直接双击打开的（<code>file://</code>），模块化页面会被浏览器拦下。请在本目录运行 <code>./start.sh</code>（或双击「启动.command」），它会起本地服务并自动打开这一页。只有「旧版单文件」可以直接双击。</div>
@@ -112,7 +112,7 @@
     <a class="card" href="learn.html">
       <div class="shot" style="background-image:url(learn/thumbs/1991101097818403263.jpg)"><span class="tag">学习笔记</span></div>
       <div class="body">
-        <h3>237 段视频：原文 → 学到什么 → 代码在哪</h3>
+        <h3><span class="ovN">…</span> 段视频：原文 → 学到什么 → 代码在哪</h3>
         <p>按主题、按状态筛选；点缩略图播放原视频。每条标明是用在了 Townscaper、engine、两边都用，还是还没做。</p>
         <span class="go">打开 learn.html →</span>
       </div>
@@ -180,6 +180,7 @@
   if (location.protocol === 'file:') document.getElementById('filewarn').style.display = 'block';
   const L = window.LEARN;
   if (L) {
+    for (const el of document.querySelectorAll('.ovN')) el.textContent = L.items.length;
     const count = {};
     for (const it of L.items) count[it.status] = (count[it.status] || 0) + 1;
     const order = ['game', 'both', 'engine', 'partial', 'ref', 'todo', 'na'];

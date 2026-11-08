@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>阴云 = 三层视差云带 + 云影是同一张云的投影</title>
+<style>
+  :root { --ink:#20303a; --muted:#5f7480; --line:#d7e0e5; --warm:#97651c; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#0e1b22; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:#4a6270; font-size:12.5px; max-width:106ch; }
+  header b { color:var(--warm); font-weight:650; }
+  header { position:fixed; z-index:3; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(236,242,245,.97) 70%, rgba(236,242,245,0)); }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #panel { position:fixed; z-index:3; right:16px; top:104px; width:322px;
+    background:rgba(252,253,254,.92); border:1px solid var(--line); border-radius:10px;
+    padding:11px 13px; font-size:12px; }
+  #panel h2 { margin:0 0 7px; font-size:12px; letter-spacing:.05em; color:var(--muted); font-weight:600; }
+  .lr { display:flex; align-items:center; gap:7px; padding:3px 0; border-bottom:1px dashed var(--line);
+    font-variant-numeric:tabular-nums; }
+  .lr:last-of-type { border-bottom:0; }
+  .lr i { width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+  .lr .nm { width:38px; font-weight:650; }
+  .lr .sp { color:var(--muted); font-size:11px; }
+  table { width:100%; border-collapse:collapse; margin-top:7px; font-variant-numeric:tabular-nums; }
+  td { padding:2px 0; }
+  td:last-child { text-align:right; font-weight:600; }
+  .ok { color:#146c4a; }
+  #btn { margin-top:9px; width:100%; padding:6px 10px; font:inherit; font-size:12px; cursor:pointer;
+    background:#fff; border:1px solid var(--line); border-radius:7px; color:var(--ink); }
+  #stats { position:fixed; z-index:3; left:18px; right:18px; bottom:12px;
+    font-size:12px; color:var(--muted); background:rgba(252,253,254,.95);
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:20px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <h1>阴云：三层云带各按自己的速度走，云影就是中层云的投影</h1>
+  <p>单层云平移会像换背景。这里三层云<b>速度 = 基准速度 / 深度</b>（3.2 / 2.0 / 1.0），
+     越近越大越暗也跑得越快；云底比云顶暗是被下方遮挡的散射，不靠整体压暗画面。
+     城镇上的暗带不是另画的，是中层云沿太阳方向偏移 <b>(+118, −226)</b> 后的密度，
+     所以宽度与云带宽窄必然一致 —— 用互相关把这张影子对回云图，峰就落在设定的偏移上。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="panel">
+  <h2>云层 / 速度</h2>
+  <div id="layers"></div>
+  <div id="cmp"></div>
+  <button id="btn">关掉云影（对照）</button>
+</div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { LAYERS, WIND, SUN_DX, SUN_DY, SHADOW_STRENGTH, makeLayer, density, shadowAt, measure, sweepRange } from './src/clouddeck.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const SPAN = 1500;
+const layers = LAYERS.map((l, i) => makeLayer(l, SPAN, 17 + i * 31));
+const SW = sweepRange(layers);
+
+const GROUND = 726;          // 码头基线
+const X0 = 150, X1 = 1010;   // 城镇横向范围（右侧让给面板）
+let shadowOn = true;
+let phase = 0;
+
+/* ---------- 建筑 ---------- */
+const WALLS = ['#48b9a4', '#e2604f', '#f0c14e', '#6dbb74', '#df8a8a', '#63a8cf'];
+const ROOFS = ['#c9503f', '#d76a45', '#b8493a', '#c96a52'];
+const hash = (i, s = 1) => {
+  let h = Math.imul(i + 1, 0x9e3779b1) ^ Math.imul(s + 7, 0x85ebca77);
+  h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+};
+
+function makeTown() {
+  const bs = [];
+  let x = X0;
+  let i = 0;
+  while (x < X1) {
+    const w = 54 + Math.round(hash(i, 3) * 46);
+    const h = 96 + Math.round(hash(i, 5) * 104);
+    const roofH = 26 + Math.round(hash(i, 7) * 26);
+    const hip = hash(i, 11) > 0.55;
+    bs.push({
+      x, w, h, roofH, hip,
+      wall: WALLS[(hash(i, 13) * WALLS.length) | 0],
+      roof: ROOFS[(hash(i, 17) * ROOFS.length) | 0],
+      win: 2 + ((hash(i, 19) * 2) | 0),
+    });
+    x += w + 4;
+    i++;
+  }
+  return bs;
+}
+const TOWN = makeTown();
+
+/** 每列屋顶高度，用来把影子裁在建筑上。 */
+const topAt = new Float32Array(1280).fill(-1);
+for (const b of TOWN) {
+  for (let x = b.x; x < Math.min(1280, b.x + b.w); x++) topAt[x] = GROUND - b.h - b.roofH;
+}
+
+function drawSky() {
+  const g = ctx.createLinearGradient(0, 80, 0, GROUND);
+  g.addColorStop(0, '#c9d6dd');
+  g.addColorStop(0.55, '#b3c4cd');
+  g.addColorStop(1, '#93a8b4');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 1280, 800);
+}
+
+/** 一层云：每团用竖向渐变（顶亮底暗）画两个椭圆：暗底在 y+0.35ry，亮顶在 y。 */
+function drawLayer(L, ph) {
+  ctx.save();
+  for (const p of L.puffs) {
+    let x = p.x + ph * L.speed;
+    x = ((x % L.span) + L.span) % L.span;
+    const a = L.alpha;
+    // 云底（偏下、偏暗）
+    const gb = ctx.createRadialGradient(x, p.y + p.ry * 0.28, p.rx * 0.05, x, p.y + p.ry * 0.28, p.rx);
+    gb.addColorStop(0, `rgba(119,134,148,${a * 0.78 * p.k})`);
+    gb.addColorStop(0.55, `rgba(132,147,160,${a * 0.42 * p.k})`);
+    gb.addColorStop(1, 'rgba(140,155,168,0)');
+    ctx.fillStyle = gb;
+    ctx.beginPath(); ctx.ellipse(x, p.y + p.ry * 0.28, p.rx, p.ry * 0.92, 0, 0, 7); ctx.fill();
+    // 云顶（偏上、偏亮）
+    const gt = ctx.createRadialGradient(x - p.rx * 0.18, p.y - p.ry * 0.42, p.rx * 0.05, x - p.rx * 0.18, p.y - p.ry * 0.42, p.rx * 0.82);
+    gt.addColorStop(0, `rgba(243,248,250,${a * 0.86 * p.k})`);
+    gt.addColorStop(0.5, `rgba(231,239,243,${a * 0.46 * p.k})`);
+    gt.addColorStop(1, 'rgba(231,239,243,0)');
+    ctx.fillStyle = gt;
+    ctx.beginPath(); ctx.ellipse(x - p.rx * 0.18, p.y - p.ry * 0.42, p.rx * 0.82, p.ry * 0.72, 0, 0, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawTown() {
+  // 码头/岸壁
+  ctx.fillStyle = '#6f7d84';
+  ctx.fillRect(X0 - 30, GROUND, X1 - X0 + 60, 62);
+  ctx.fillStyle = '#7d8b91';
+  ctx.fillRect(X0 - 30, GROUND, X1 - X0 + 60, 8);
+  for (const b of TOWN) {
+    ctx.fillStyle = b.wall;
+    ctx.fillRect(b.x, GROUND - b.h, b.w, b.h);
+    // 窗
+    const cols = b.w > 78 ? 3 : 2;
+    const pad = 12;
+    const ww = (b.w - pad * 2 - (cols - 1) * 10) / cols;
+    for (let r = 0; r < b.win; r++) {
+      for (let c = 0; c < cols; c++) {
+        const wx = b.x + pad + c * (ww + 10);
+        const wy = GROUND - b.h + 18 + r * 34;
+        ctx.fillStyle = 'rgba(34,52,64,.86)';
+        ctx.fillRect(wx, wy, ww, 18);
+        ctx.fillStyle = 'rgba(255,246,214,.34)';
+        ctx.fillRect(wx + 2, wy + 2, ww * 0.42, 6);
+      }
+    }
+    // 屋顶
+    ctx.fillStyle = b.roof;
+    if (b.hip) {
+      const inset = 10;
+      ctx.beginPath();
+      ctx.moveTo(b.x - 3, GROUND - b.h);
+      ctx.lineTo(b.x + b.w + 3, GROUND - b.h);
+      ctx.lineTo(b.x + b.w - inset, GROUND - b.h - b.roofH);
+      ctx.lineTo(b.x + inset, GROUND - b.h - b.roofH);
+      ctx.closePath(); ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(b.x - 3, GROUND - b.h);
+      ctx.lineTo(b.x + b.w + 3, GROUND - b.h);
+      ctx.lineTo(b.x + b.w / 2, GROUND - b.h - b.roofH - 8);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(255,255,255,.16)';
+    ctx.fillRect(b.x, GROUND - b.h, b.w, 4);
+  }
+}
+
+/** 云影：逐列盖一层冷暗色，透明度 = 该列云密度 × 强度。 */
+function drawShadow(ph) {
+  for (let x = X0 - 30; x < X1 + 30; x++) {
+    const s = shadowAt(layers, x, GROUND, ph);
+    if (s < 0.02) continue;
+    const top = topAt[x] > 0 ? topAt[x] : GROUND;
+    ctx.fillStyle = `rgba(32,48,66,${(SHADOW_STRENGTH * s).toFixed(3)})`;
+    ctx.fillRect(x, top, 1, GROUND + 62 - top);
+  }
+}
+
+function render(ph = phase) {
+  drawSky();
+  drawLayer(layers[0], ph);
+  drawLayer(layers[1], ph);
+  drawLayer(layers[2], ph);
+  drawTown();
+  if (shadowOn) drawShadow(ph);
+  renderPanel(ph);
+  renderStats(ph);
+}
+
+function renderPanel(ph) {
+  document.getElementById('layers').innerHTML = LAYERS.map((L) => {
+    const col = L.depth > 3 ? 'rgba(150,166,178,.9)' : L.depth > 1.5 ? 'rgba(110,128,142,.95)' : 'rgba(74,94,110,1)';
+    return `<div class="lr"><i style="background:${col}"></i><span class="nm">${L.name}</span>
+      <span class="sp">深度 ${L.depth.toFixed(1)} · ${(WIND / L.depth).toFixed(1)} px/s · α ${L.alpha}</span></div>`;
+  }).join('');
+
+  const m = measure(layers, ph);
+  document.getElementById('cmp').innerHTML = `<table>
+    <tr><td>速度比 近/远（= 深度比）</td><td class="ok">${m.speedRatio.toFixed(3)} / ${m.depthRatio.toFixed(3)}</td></tr>
+    <tr><td>影子对回云图的偏移</td><td class="ok">${m.matchOffset} px<span style="font-weight:400;color:#5f7480"> / 设定 ${SUN_DX}</span></td></tr>
+    <tr><td>匹配残差 RMSE</td><td>${m.matchRmse.toFixed(4)}</td></tr>
+    <tr><td>此刻云影覆盖城镇</td><td>${(m.shadowCover * 100).toFixed(1)}%</td></tr>
+    <tr><td>最暗处墙面压暗</td><td>${(m.groundDrop * 100).toFixed(0)}%</td></tr>
+    <tr><td>覆盖率摆动区间</td><td>${(SW.min * 100).toFixed(0)}% ~ ${(SW.max * 100).toFixed(0)}%</td></tr>
+  </table>`;
+}
+
+function renderStats(ph) {
+  const m = measure(layers, ph);
+  document.getElementById('stats').innerHTML =
+    `<span>云层 <b>${m.layers}</b> 层</span>` +
+    `<span>风速 <b>${WIND}</b> px/s（近层）· 远层 <b>${(WIND / 3.2).toFixed(1)}</b></span>` +
+    `<span>影带速度 <b>${m.shadowRunsAt}</b></span>` +
+    `<span>影云错位 <b>${m.matchOffset}</b> px（设定 ${SUN_DX}）· RMSE <b>${m.matchRmse.toFixed(4)}</b></span>` +
+    `<span>阴影覆盖 <b>${(m.shadowCover * 100).toFixed(0)}%</b>（摆动 ${(SW.min * 100).toFixed(0)}~${(SW.max * 100).toFixed(0)}%）</span>` +
+    `<span>墙面压暗 <b>${(m.groundDrop * 100).toFixed(0)}%</b></span>`;
+}
+
+document.getElementById('btn').addEventListener('click', (e) => {
+  shadowOn = !shadowOn;
+  e.target.textContent = shadowOn ? '关掉云影（对照）' : '打开云影';
+  render();
+});
+
+let t0 = performance.now();
+function tick(now) {
+  phase = (now - t0) / 1000;
+  render(phase);
+  requestAnimationFrame(tick);
+}
+render(0);
+requestAnimationFrame(tick);
+
+window.reaCloud = {
+  get stats() { return { ...measure(layers, phase), sweep: SW, sunDx: SUN_DX, sunDy: SUN_DY }; },
+  setPhase(p) { phase = p; t0 = performance.now() - p * 1000; render(p); return measure(layers, p); },
+  setShadow(v) { shadowOn = v; render(); },
+  topAt: (x) => topAt[x],
+  /**
+   * 像素级复核：同一行墙面上，有影处 / 无影处的亮度比。
+   * 只切换 shadowOn 重画同一帧，所以颜色、相位、构图全都对齐，差的就是影子。
+   */
+  shadowProbe(y = GROUND - 60) {
+    const row = () => {
+      const im = ctx.getImageData(0, y, 1280, 1).data;
+      const out = [];
+      for (let x = 0; x < 1280; x++) {
+        const i = x * 4;
+        out.push(0.2126 * im[i] + 0.7152 * im[i + 1] + 0.0722 * im[i + 2]);
+      }
+      return out;
+    };
+    const prev = shadowOn;
+    shadowOn = true; render(phase);
+    const on = row();
+    shadowOn = false; render(phase);
+    const off = row();
+    shadowOn = prev; render(phase);
+    let ds = 0, dc = 0, ls = 0, lc = 0;
+    for (let x = X0; x < X1; x++) {
+      if (!(topAt[x] > 0) || y < topAt[x]) continue;
+      const s = shadowAt(layers, x, GROUND, phase);
+      if (s > 0.6) { ds += on[x]; dc++; } else if (s < 0.15) { ls += on[x]; lc++; }
+    }
+    return { shadowedLum: +(ds / Math.max(1, dc)).toFixed(1), litLum: +(ls / Math.max(1, lc)).toFixed(1),
+      ratio: +((ds / Math.max(1, dc)) / Math.max(1e-6, ls / Math.max(1, lc))).toFixed(3),
+      cols: dc, litCols: lc };
+  },
+};
+</script>
+</body>
+</html>

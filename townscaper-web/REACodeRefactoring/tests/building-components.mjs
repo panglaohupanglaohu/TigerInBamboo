@@ -1,0 +1,4 @@
+import assert from'node:assert/strict';import{buildingComponents}from'../src/core/building-components.js';
+const cells=Array.from({length:4},(_,id)=>({id,edgeNeighbors:[id? id-1:-1,id<3?id+1:-1,-1,-1]})),set=new Set(['0:2','0:3','1:3','1:4','2:5','3:5','0:7']),world={cells,isBuilt:(c,l)=>set.has(c.id+':'+l)},before=[...set];
+let r=buildingComponents(world);assert.equal(r.components.length,3);assert.equal(r.at(cells[0],2),0);assert.equal(r.at(cells[1],4),0);assert.notEqual(r.at(cells[2],5),r.at(cells[0],7));assert.ok(r.at(cells[0],7)>=0);assert.equal(r.at(cells[0],1),-1);assert.equal(r.at(cells[2],2),-1);assert.deepEqual([...set],before);
+set.add('2:4');r=buildingComponents(world);assert.equal(r.components.length,2);assert.equal(r.at(cells[3],5),0);set.delete('2:4');assert.equal(buildingComponents(world).components.length,3);console.log('PASS 3D adjacency, floating separation, base ID, quay exclusion, connect/disconnect, read-only');

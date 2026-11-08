@@ -1,0 +1,2 @@
+import assert from'node:assert/strict';import{portalAim}from'../src/core/portal-aim.js';
+const p=portalAim({x:0,z:0},{x:1,z:-1},{x:1,z:1},{x:2,z:0},{x:3,z:1});assert.ok(p.x>1&&p.x<2&&p.z>.2);for(let i=0;i<1000;i++){const r=portalAim({x:0,z:0},{x:1,z:-1},{x:1,z:1},{x:2,z:0},{x:3,z:(i-500)/10});assert.ok(r&&Number.isFinite(r.x)&&r.z>-1&&r.z<1);}assert.equal(portalAim({x:0,z:0},{x:1,z:0},{x:1,z:.05},{x:2,z:0},{x:3,z:0}),null);console.log('PASS portal lookahead, corner margin, 1000 targets, narrow rejection');

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>每层一套草型 — 草型就是台地的高度图例</title>
+<style>
+  :root { --ink:#1e2b26; --muted:#5d6f68; --line:#dbe4dd; --warm:#8a6a1c; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#f0f4ef; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:104ch; }
+  header b { color:var(--warm); font-weight:650; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(240,244,239,.98) 68%, rgba(240,244,239,0)); }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #panel { position:fixed; z-index:2; right:18px; top:112px; width:392px;
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:10px;
+    padding:12px 14px; }
+  #panel h2 { margin:0 0 8px; font-size:12.5px; letter-spacing:.04em; color:var(--muted); font-weight:600; }
+  .row { display:flex; align-items:center; gap:6px; padding:4px 0; border-bottom:1px dashed var(--line); white-space:nowrap; }
+  .row:last-child { border-bottom:0; }
+  .lv { width:48px; font-weight:650; font-variant-numeric:tabular-nums; font-size:12.5px; }
+  .sw { width:14px; height:14px; border-radius:4px; flex:0 0 auto; border:1px solid rgba(0,0,0,.10); }
+  .nm { font-size:11.5px; margin-right:6px; }
+  .n { margin-left:auto; color:var(--muted); font-size:11px; font-variant-numeric:tabular-nums; }
+  #cmp { margin-top:10px; padding-top:8px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); }
+  #cmp table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }
+  #cmp td { padding:2px 0; }
+  #cmp td:last-child { text-align:right; color:var(--ink); font-weight:600; }
+  #cmp .bad { color:#b4402f; }
+  #cmp .good { color:#146c4a; }
+  #btn { margin-top:9px; width:100%; padding:6px 10px; font:inherit; font-size:12.5px; cursor:pointer;
+    background:#fff; border:1px solid var(--line); border-radius:7px; color:var(--ink); }
+  #btn:hover { background:#f4f8f3; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px;
+    font-size:12px; color:var(--muted); background:rgba(255,255,255,.95);
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:20px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .no { color:#b4402f; font-weight:650; }
+  #hint { position:fixed; z-index:2; left:22px; top:632px; width:820px;
+    display:flex; gap:14px; font-size:11.5px; color:var(--muted); }
+  #hint .it { flex:1; background:rgba(255,255,255,.86); border:1px solid var(--line);
+    border-radius:8px; padding:7px 9px; }
+  #hint .it b { display:block; color:var(--ink); font-size:12px; margin-bottom:2px; }
+  #hint .bar { height:5px; border-radius:3px; margin-bottom:5px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>每层一套草型 = 把高度写成图例</h1>
+  <p>等距视角里台地高差只有 8px 量级，肉眼读不出层级。原帖的做法是让<b>草型和台地层绑定</b>：
+     最低一级是白花草甸，往上换高草/蕨、圆叶灌木/石南、松与裸岩。同一层内部草型是<b>成丛</b>的
+     （一丛 1 格左右，丛内统一一个草型），不是逐格随机——逐格随机会让"层"这条边界碎掉。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="panel">
+  <h2>每层草型 / 丛数</h2>
+  <div id="levels"></div>
+  <div id="cmp"></div>
+  <button id="btn">对照：全岛共用一套 palette</button>
+</div>
+
+<div id="hint"></div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { buildTerrain, buildFlora, measure, SPECIES, PALETTES, GLOBAL_PALETTE, LEVEL_H } from './src/levelflora.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1e2b26', MUTED = '#5d6f68';
+
+const SX = 24, SY = 12, SZ = 22;
+const OX = 438, OY = 214;      // 地形屏幕原点（格 0,0 的顶面角）
+const iso = (x, y, z) => ({ X: OX + (x - y) * SX, Y: OY + (x + y) * SY - z * SZ });
+
+const terr = buildTerrain(18, 7);
+let mode = 'perLevel';
+let flora = buildFlora(terr, { mode });
+let M = measure(terr, flora);
+
+const LEVEL_TOP = ['#e6eede', '#dce8d3', '#d2e2cb', '#c9dbc4'];
+const SIDE_R = ['#c8cdc2', '#bfc6ba', '#b6beb2', '#adb6aa'];
+const SIDE_L = ['#b3b9ad', '#aab1a5', '#a1a99d', '#98a195'];
+
+function quad(a, b, c, d, fill) {
+  ctx.beginPath();
+  ctx.moveTo(a.X, a.Y); ctx.lineTo(b.X, b.Y); ctx.lineTo(c.X, c.Y); ctx.lineTo(d.X, d.Y);
+  ctx.closePath();
+  ctx.fillStyle = fill; ctx.fill();
+}
+
+function cellAt(x, y) { return terr.byKey.get(y * terr.n + x); }
+
+function drawTerrain() {
+  const cells = terr.cells.filter((c) => c.land).sort((a, b) => (a.x + a.y) - (b.x + b.y) || a.x - b.x);
+  for (const c of cells) {
+    const h = c.height, lv = Math.min(3, c.level);
+    // 只画"邻居没盖住"的立面
+    const nx = cellAt(c.x + 1, c.y), ny = cellAt(c.x, c.y + 1);
+    const hx = nx && nx.land ? nx.height : -1, hy = ny && ny.land ? ny.height : -1;
+    if (hx < h || !nx || !nx.land) {
+      const t = h, b = Math.max(-1, hx);
+      if (t > b) quad(iso(c.x + 1, c.y, t), iso(c.x + 1, c.y + 1, t), iso(c.x + 1, c.y + 1, b), iso(c.x + 1, c.y, b), SIDE_R[lv]);
+    }
+    if (hy < h || !ny || !ny.land) {
+      const t = h, b = Math.max(-1, hy);
+      if (t > b) quad(iso(c.x, c.y + 1, t), iso(c.x + 1, c.y + 1, t), iso(c.x + 1, c.y + 1, b), iso(c.x, c.y + 1, b), SIDE_L[lv]);
+    }
+    quad(iso(c.x, c.y, h), iso(c.x + 1, c.y, h), iso(c.x + 1, c.y + 1, h), iso(c.x, c.y + 1, h), LEVEL_TOP[lv]);
+  }
+}
+
+/** 一个草型个体画在 (wx,wy) 的地面上，s 是尺寸缩放。 */
+function drawSpecies(sp, wx, wy, z, s) {
+  const S = SPECIES[sp];
+  const p = iso(wx, wy, z);
+  const k = s * 7.2;
+  ctx.save();
+  ctx.translate(p.X, p.Y);
+  switch (S.shape) {
+    case 'dots': {
+      ctx.fillStyle = S.base;
+      ctx.beginPath(); ctx.ellipse(0, 0, k * 0.55, k * 0.28, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = S.col;
+      for (const [dx, dy, r] of [[-k * .22, -1.5, .20], [k * .16, -2.6, .17], [-k * .02, 0.4, .15]]) {
+        ctx.beginPath(); ctx.arc(dx, dy, k * r, 0, 7); ctx.fill();
+      }
+      ctx.fillStyle = S.hi;
+      ctx.beginPath(); ctx.arc(-k * .24, -2.2, k * .09, 0, 7); ctx.fill();
+      break;
+    }
+    case 'tuft': {
+      ctx.strokeStyle = S.col; ctx.lineWidth = 1.15; ctx.lineCap = 'round';
+      for (const [dx, lean, hh] of [[-2.6, -.9, .55], [0, .1, .78], [2.4, .8, .5]]) {
+        ctx.beginPath(); ctx.moveTo(dx * k * .35, 0);
+        ctx.quadraticCurveTo(dx * k * .4, -k * hh * .6, dx * k * .4 + lean * k * .2, -k * hh);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = S.hi;
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(k * .1, -k * .3, k * .16, -k * .5); ctx.stroke();
+      break;
+    }
+    case 'blade': {
+      ctx.strokeStyle = S.base; ctx.lineWidth = 1.1; ctx.lineCap = 'round';
+      for (let i = 0; i < 3; i++) {
+        const dx = (i - 1) * k * .3;
+        ctx.beginPath(); ctx.moveTo(dx, 0);
+        ctx.quadraticCurveTo(dx * 1.3, -k * .5, dx * 1.9, -k * .95);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = S.col; ctx.lineWidth = 1.4;
+      for (let i = 0; i < 3; i++) {
+        const dx = (i - 1) * k * .3 + 0.6;
+        ctx.beginPath(); ctx.moveTo(dx, 0);
+        ctx.quadraticCurveTo(dx * 1.2, -k * .6, dx * 1.7, -k * 1.15);
+        ctx.stroke();
+      }
+      break;
+    }
+    case 'fan': {
+      ctx.strokeStyle = S.col; ctx.lineWidth = 1.25; ctx.lineCap = 'round';
+      for (const [a0, a1, r] of [[-2.5, -1.0, .85], [-2.9, -2.2, .6], [-1.3, -0.4, .62]]) {
+        ctx.beginPath(); ctx.ellipse(0, 0, k * r * .5, k * r, 0, a0, a1); ctx.stroke();
+      }
+      ctx.strokeStyle = S.hi; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-k * .05, -k * .95); ctx.stroke();
+      break;
+    }
+    case 'puff': {
+      ctx.fillStyle = S.base;
+      ctx.beginPath(); ctx.ellipse(0, 0.6, k * .55, k * .24, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = S.col;
+      ctx.beginPath(); ctx.arc(0, -k * .28, k * .42, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.arc(-k * .3, -k * .12, k * .27, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.arc(k * .28, -k * .16, k * .3, 0, 7); ctx.fill();
+      ctx.fillStyle = S.hi;
+      ctx.beginPath(); ctx.arc(-k * .12, -k * .45, k * .19, 0, 7); ctx.fill();
+      break;
+    }
+    case 'conifer': {
+      ctx.fillStyle = S.base;
+      ctx.beginPath(); ctx.ellipse(0, 0.4, k * .3, k * .13, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#6b543a';
+      ctx.fillRect(-k * .05, -k * .3, k * .1, k * .32);
+      for (const [w, y0, y1] of [[.34, -.25, -.95], [.27, -.55, -1.3], [.19, -.9, -1.62]]) {
+        ctx.fillStyle = S.col;
+        ctx.beginPath();
+        ctx.moveTo(-k * w, -k * y0 * 0 + k * y0); ctx.lineTo(k * w, k * y0); ctx.lineTo(0, k * y1);
+        ctx.closePath(); ctx.fill();
+      }
+      ctx.fillStyle = S.hi;
+      ctx.beginPath(); ctx.moveTo(0, -k * 1.62); ctx.lineTo(-k * .1, -k * 1.0); ctx.lineTo(0, -k * .95); ctx.closePath(); ctx.fill();
+      break;
+    }
+  }
+  ctx.restore();
+}
+
+function drawFlora() {
+  // 按格插入 painter 序列：草长在自己那一格的地面上
+  const order = new Map();
+  for (const cl of flora.clusters) order.set((cl.cy | 0) * terr.n + (cl.cx | 0), cl);
+  const cells = terr.cells.filter((c) => c.land).sort((a, b) => (a.x + a.y) - (b.x + b.y) || a.x - b.x);
+  for (const c of cells) {
+    drawTerrainCell(c);
+    const cl = order.get(c.y * terr.n + c.x);
+    if (!cl) continue;
+    for (const it of cl.items) drawSpecies(it.sp, it.x, it.y, c.height, it.s);
+  }
+}
+
+function drawTerrainCell(c) {
+  const h = c.height, lv = Math.min(3, c.level);
+  const nx = cellAt(c.x + 1, c.y), ny = cellAt(c.x, c.y + 1);
+  const hx = nx && nx.land ? nx.height : -1, hy = ny && ny.land ? ny.height : -1;
+  if (hx < h) quad(iso(c.x + 1, c.y, h), iso(c.x + 1, c.y + 1, h), iso(c.x + 1, c.y + 1, Math.max(-1, hx)), iso(c.x + 1, c.y, Math.max(-1, hx)), SIDE_R[lv]);
+  if (hy < h) quad(iso(c.x, c.y + 1, h), iso(c.x + 1, c.y + 1, h), iso(c.x + 1, c.y + 1, Math.max(-1, hy)), iso(c.x, c.y + 1, Math.max(-1, hy)), SIDE_L[lv]);
+  quad(iso(c.x, c.y, h), iso(c.x + 1, c.y, h), iso(c.x + 1, c.y + 1, h), iso(c.x, c.y + 1, h), LEVEL_TOP[lv]);
+}
+
+function drawWater() {
+  const p0 = iso(-1.5, -1.5, 0), p1 = iso(terr.n + 1.5, terr.n + 1.5, 0);
+  ctx.fillStyle = 'rgba(122,168,178,.16)';
+  ctx.fillRect(p0.X - 20, p0.Y - 6, (p1.X - p0.X) + 40, 26);
+}
+
+function render() {
+  ctx.clearRect(0, 0, 1280, 800);
+  const g = ctx.createLinearGradient(0, 0, 0, 800);
+  g.addColorStop(0, '#f4f7f2'); g.addColorStop(1, '#e6eee9');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 1280, 800);
+  drawFlora();
+  renderPanel();
+  renderHint();
+  renderStats();
+}
+
+function swatch(sp) {
+  const S = SPECIES[sp];
+  return `<span class="sw" style="background:${S.col}"></span>`;
+}
+
+function renderPanel() {
+  document.getElementById('levels').innerHTML = M.byLevel.map((l) =>
+    `<div class="row"><span class="lv">第 ${l.level} 级</span>
+      ${l.species.map((s) => swatch(s) + `<span class="nm">${SPECIES[s].name}</span>`).join('')}
+      <span class="n">${l.cells} 格 · ${l.clusters} 丛</span></div>`).join('');
+
+  const perLevel = M.mode === 'perLevel';
+  document.getElementById('cmp').innerHTML = `
+    <table>
+      <tr><td>草型总数</td><td>${M.speciesUsed}</td></tr>
+      <tr><td>跨层共用的草型</td><td class="${perLevel ? 'good' : 'bad'}">${M.sharedSpecies}
+        ${M.sharedDetail.length ? '（' + M.sharedDetail.join('、') + '）' : ''}</td></tr>
+      <tr><td>凭草型反推层高</td><td class="${perLevel ? 'good' : 'bad'}">${(M.levelFromSpecies * 100).toFixed(1)}%
+        <span class="n">/ 基线 ${(M.baseline * 100).toFixed(0)}%</span></td></tr>
+      <tr><td>平均成丛直径</td><td>${M.meanSpread.toFixed(2)} 格</td></tr>
+      <tr><td>植被覆盖率</td><td>${(M.cover * 100).toFixed(1)}%</td></tr>
+    </table>`;
+  document.getElementById('btn').textContent = perLevel
+    ? '对照：全岛共用一套 palette'
+    : '回到：每层一套 palette';
+}
+
+function renderStats() {
+  const ok = M.mode === 'perLevel';
+  document.getElementById('stats').innerHTML =
+    `<span>台地 <b>${M.levels}</b> 级</span>` +
+    `<span>陆地 <b>${M.landCells}</b> 格</span>` +
+    `<span>草型 <b>${M.speciesUsed}</b> 种 / 丛 <b>${M.clusters}</b></span>` +
+    `<span>跨层共用 <b class="${ok ? 'ok' : 'no'}">${M.sharedSpecies}</b></span>` +
+    `<span>反推层高 <b class="${ok ? 'ok' : 'no'}">${(M.levelFromSpecies * 100).toFixed(1)}%</b>（瞎猜 ${(M.baseline * 100).toFixed(0)}%）</span>` +
+    `<span>丛径 <b>${M.meanSpread.toFixed(2)}</b> 格 · 覆盖 <b>${(M.cover * 100).toFixed(1)}%</b></span>`;
+}
+
+function renderHint() {
+  document.getElementById('hint').innerHTML = M.byLevel.map((l) =>
+    `<div class="it"><span class="bar" style="background:${LEVEL_TOP[Math.min(3, l.level)]}"></span>
+      <b>第 ${l.level} 级（面高 ${(l.level * LEVEL_H).toFixed(1)}）</b>
+      ${l.species.map((s) => SPECIES[s].name).join(' / ')} · ${l.clusters} 丛</div>`).join('');
+}
+
+document.getElementById('btn').addEventListener('click', () => {
+  mode = mode === 'perLevel' ? 'global' : 'perLevel';
+  flora = buildFlora(terr, { mode });
+  M = measure(terr, flora);
+  render();
+});
+
+render();
+
+window.reaFlora = { get stats() { return M; }, setMode(m) { mode = m; flora = buildFlora(terr, { mode }); M = measure(terr, flora); render(); return M; } };
+</script>
+</body>
+</html>

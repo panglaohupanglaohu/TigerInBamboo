@@ -19,11 +19,29 @@ const NODES=[
 ];
 export const CAPABILITIES=NODES.map(c=>({...c,source:CAPABILITY_SOURCES[c.id].modules.map(m=>'REACodeRefactoring/'+m.path).concat((CAPABILITY_SOURCES[c.id].gameModules||[]).map(m=>'TigerMessenger/'+m.path)).join(' · '),provenance:CAPABILITY_SOURCES[c.id]}));
 export const DEFAULT_SETTINGS={waves:true,reflection:true,time:'day',outline:true,grid:false,vegetation:true,birds:true,fog:false,snow:false,fire:true};
-export function makeRecipe(){return {version:1,scene:'morris-lake',goal:'保留湖上建筑群，探索水、光与生命的组合',nodes:CAPABILITIES.filter(c=>!c.legacy&&!c.scanned).map(c=>({id:c.id,enabled:true})),settings:{...DEFAULT_SETTINGS}};}
+export function makeRecipe(){return {version:1,scene:'morris-lake',goal:'保留湖上建筑群，探索水、光与生命的组合',nodes:CAPABILITIES.filter(c=>!c.legacy&&!c.scanned&&(!c.code||NODES.some(n=>n.id===c.id))).map(c=>({id:c.id,enabled:true})),settings:{...DEFAULT_SETTINGS}};}
+/**
+ * 代码能力（REACodeRefactoring/src/capabilities/registry.js describeCapabilities）登记为可执行节点：mode 'code'。
+ * 与已有同 ID 的配方节点（如 effects.smoke）合并：保留原来源说明，执行方式升级为代码。
+ * 配方里带 recipe.code（所用代码能力的描述），游戏页与恢复旧配方时据此登记，不依赖先扫描。
+ */
+const CODE_FIELDS=['id','layer','kind','name','summary','kind2','sources','targets','keywords','params','layer3d'];
+export function registerCodeCapabilities(target,metas){
+ if(!Array.isArray(metas)||metas.length>200)throw Error('代码能力列表无效');
+ for(const m of metas){if(typeof m?.id!=='string'||!/^[a-z]+\.[a-z0-9.-]+$/.test(m.id)||typeof m.name!=='string')throw Error('代码能力字段无效');
+  const meta=Object.fromEntries(CODE_FIELDS.filter(k=>k in m).map(k=>[k,structuredClone(m[k])]));
+  const row={code:true,mode:'code',codeMeta:meta,layerId:meta.layer,kind:meta.kind,name:meta.name,description:meta.summary,icon:meta.kind2==='geometry'?'⚙':'◍',color:meta.kind2==='geometry'?'#e3b36b':'#8fc7c9',controls:[],checks:meta.kind2==='geometry'?'范围 / 手工建筑 / 承托 / 通行 / 几何量（验证 Worker）':'显示层：不改体素，实景观察',sourceVideos:meta.sources||[]};
+  const old=target.find(c=>c.id===meta.id);
+  if(old){if(!old.code){Object.assign(old,row,{name:old.name.includes('·')?old.name:row.name,provenance:old.provenance});}else Object.assign(old,row);continue;}
+  target.push({id:meta.id,...row,source:'REACodeRefactoring/src/capabilities',provenance:{note:'能力代码：REACodeRefactoring/src/capabilities（match / run / 验证）。',modules:[],records:(meta.sources||[]).map(id=>({id,lane:'code',laneName:'能力代码',group:meta.kind,name:meta.name,where:'src/capabilities',status:'代码',project:'REACodeRefactoring'}))}});
+ }
+}
+export const codeMetaOf=recipe=>CAPABILITIES.filter(c=>c.code&&recipe.nodes.some(n=>n.id===c.id)).map(c=>c.codeMeta);
 export function validateRecipe(recipe){
  if(recipe?.discovered)registerScannedCapabilities(CAPABILITIES,recipe.discovered);
+ if(recipe?.code)registerCodeCapabilities(CAPABILITIES,recipe.code);
  if(recipe?.version!==1||recipe.scene!=='morris-lake'||!Array.isArray(recipe.nodes))throw Error('管线格式或场景不匹配');
- const ids=new Set();for(const n of recipe.nodes){if(!CAPABILITIES.some(c=>c.id===n.id)||ids.has(n.id)||typeof n.enabled!=='boolean')throw Error('能力无效或重复');ids.add(n.id);}
+ const ids=new Set();for(const n of recipe.nodes){if(!CAPABILITIES.some(c=>c.id===n.id)||ids.has(n.id)||typeof n.enabled!=='boolean')throw Error('能力无效或重复');if(n.params!==undefined&&(typeof n.params!=='object'||Object.values(n.params).some(v=>!Number.isFinite(v))))throw Error('能力参数无效');ids.add(n.id);}
  for(const [k,v]of Object.entries(recipe.settings||{})){if(!(k in DEFAULT_SETTINGS)||(k==='time'?!['day','dusk','night'].includes(v):typeof v!=='boolean'))throw Error('能力参数无效');}
  return recipe;
 }

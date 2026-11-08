@@ -1,5 +1,6 @@
 // REACode scene/shore integration in the island's local tangent frame.
 import * as THREE from 'three';
+import {styleMat} from '../style/materials.js';
 import {buildShore,makeSkirtMaterial,makeWaveMaterial} from '../vendor/townscaper-rea/shore.js';
 import {buildShoreWaves,makeShoreWaveMaterial} from '../vendor/townscaper-rea/engine/waves.js';
 import {createBacklitRim} from '../vendor/townscaper-rea/engine/backlit.js';
@@ -16,7 +17,7 @@ export function createMorrisTownEffects({root,water,builder,town,grid,index,scal
  birds.group.name='morris-townscaper-gulls';group.add(birds.group);
  let birdTimer=null,birdsReady=false,lastBirdTime=performance.now()/1000;
  const scheduleBirds=()=>{if(birdTimer!==null)clearTimeout(birdTimer);birdTimer=setTimeout(()=>{birdTimer=null;birds.refresh(state.mesh.geometry);},birdsReady?450:0);birdsReady=true;};
-    state.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.92, metalness: 0.0 });
+    state.material = styleMat('morris.townscaperEffects.town-voxels','MeshStandardMaterial',{ vertexColors: true, roughness: 0.92, metalness: 0.0 });
     // Night: window glass glows (aGlow is baked per vertex by the mesher).
     state.nightUniform = { value: 0 };
     state.material.onBeforeCompile = (shader) => {
@@ -114,12 +115,12 @@ export function createMorrisTownEffects({root,water,builder,town,grid,index,scal
  const makeMesh=(mat,order)=>{const m=new THREE.Mesh(new THREE.BufferGeometry(),mat);m.renderOrder=order;m.frustumCulled=false;group.add(m);return m;};
  const skirt=makeMesh(makeSkirtMaterial(new THREE.Color('#9fd0d3')),2),waves=makeMesh(makeWaveMaterial(),3),modernWaves=makeMesh(makeShoreWaveMaterial(),3);
  waves.material.uniforms.uTime=time;modernWaves.material.uniforms.uTime=time;modernWaves.visible=false;
- const line=(color)=>{const m=new THREE.LineSegments(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color,depthTest:false}));m.visible=false;m.renderOrder=6;group.add(m);return m;};
+ const line=(color)=>{const m=new THREE.LineSegments(new THREE.BufferGeometry(),styleMat('morris.townscaperEffects.edge-line','LineBasicMaterial',{color,depthTest:false}));m.visible=false;m.renderOrder=6;group.add(m);return m;};
  const shoreLine=line(0xffd23a),seaLine=line(0x3a6dff),gridLines=line(0xffffff);const gp=[],seen=new Set();for(const c of grid.cells)for(let i=0;i<4;i++){const a=c.pts[i],b=c.pts[(i+1)%4],key=[a.id,b.id].sort((x,y)=>x-y).join(':');if(!seen.has(key)){seen.add(key);gp.push(a.x,.015,a.z,b.x,.015,b.z);}}gridLines.geometry.setAttribute('position',new THREE.Float32BufferAttribute(gp,3));
  const catcher=new THREE.Mesh(water.geometry.clone(),new THREE.ShadowMaterial({opacity:.2,depthWrite:false,side:THREE.DoubleSide}));catcher.position.y=water.position.y+.006;catcher.receiveShadow=true;catcher.renderOrder=4;root.add(catcher);
  const rim=createBacklitRim(state.mesh);group.add(rim.mesh);rim.mesh.visible=false;
  const volume=createWaterVolume({extent:30,top:-.05,bottom:-1.6});for(const m of volume.group.children){m.geometry.dispose();m.geometry=water.geometry.clone();m.geometry.scale(1/scale,1/scale,1/scale);m.geometry.rotateX(Math.PI/2);}volume.group.visible=false;group.add(volume.group);
- const hover=makeMesh(new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide}),5);hover.geometry.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(18),3));hover.visible=false;
+ const hover=makeMesh(styleMat('morris.townscaperEffects.hover','MeshBasicMaterial',{color:0xffffff,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide}),5);hover.geometry.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(18),3));hover.visible=false;
  const flags={waves:true,shorewaves:false,reflection:true,ao:true,bounce:true,shadows:true,shorelines:false,grid:false,lightonly:false,backlit:false,watervol:false};
  const replace=(o,g)=>{o.geometry.dispose();o.geometry=g;};
  function rebuild(){if(!builder.rebuild())return;state.mesh.geometry=builder.geometry;state.reflection.geometry=builder.geometry;rim.mesh.geometry=builder.geometry;const shore=buildShore(town,grid,index,{posts:builder.posts});replace(skirt,shore.skirt);replace(waves,shore.waves);replace(shoreLine,shore.shoreLine);replace(seaLine,shore.seaLine);replace(modernWaves,buildShoreWaves(town,grid));scheduleBirds();}

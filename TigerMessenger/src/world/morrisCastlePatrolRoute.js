@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {styleMat} from '../style/materials.js';
 /**
  * Castle-in-lake patrol support for the Morris Townscaper town.
  * - seeds one courtyard castle + causeway on a fresh town;
@@ -67,7 +68,7 @@ export function installMorrisCastlePatrol({root,terrain,edge,town,scale=3,suppor
  const removeConnector=()=>{if(!connector)return;const index=supports.indexOf(connector);if(index>=0)supports.splice(index,1);connector.geometry.dispose();connector.material.dispose();connector.removeFromParent();connector=null;};
  function makeConnector(a,b){
   const dx=b.x-a.x,dz=b.z-a.z,length=Math.hypot(dx,dz)+1.6;
-  const mesh=new T.Mesh(new T.BoxGeometry(2.4,.3,length),new T.MeshStandardMaterial({color:0xb9a98a,roughness:.95}));
+  const mesh=new T.Mesh(new T.BoxGeometry(2.4,.3,length),styleMat('morris.castlePatrolRoute.connector','MeshStandardMaterial',{color:0xb9a98a,roughness:.95}));
   mesh.name='morris-castle-patrol-causeway-link';mesh.position.set((a.x+b.x)/2,terrain.waterY+1.35,(a.z+b.z)/2);
   mesh.rotation.y=Math.atan2(dx,dz);mesh.castShadow=mesh.receiveShadow=true;root.add(mesh);supports.push(mesh);return mesh;
  }

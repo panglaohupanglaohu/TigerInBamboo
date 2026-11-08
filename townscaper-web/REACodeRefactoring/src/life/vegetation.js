@@ -1,3 +1,5 @@
+import { cloudDepth } from '../core/cloud-depth.js';
+import { levelFloraPalette } from '../core/level-flora.js';
 /**
  * vegetation.js — 植被管线：落点 → 地被（草丛）→ 边缘灌木 → 树林 → 风 + 描边。
  *
@@ -433,6 +435,7 @@ export class Vegetation {
   }
   setTuftAnchor(on) { if(typeof on!=='boolean')throw new TypeError('Tuft anchor toggle'); this.uTuftAnchor.value=on?1:0; }
   set clouds(on) { if (this.cloudField) this.cloudField.mesh.visible = on; }
+  setCloudDepthMotion(on) { if(typeof on!=='boolean')throw new TypeError('cloud depth toggle');if(this.backdrop)this.backdrop.material.uniforms.uDepthMotion.value=on?1:0; }
   set moody(on) { if (this.backdrop) this.backdrop.mesh.visible = on; }
   // 叶状轮廓打开时，墨线由镂空边缘画（贴着叶边）；关掉时退回反向外壳墨线
   #syncInk() {
@@ -591,7 +594,7 @@ export class Vegetation {
       const g = world.ground(c);
       const pts = c.pts.map((p) => at(p, g));
       const y = g * L;
-      const palette = kind === 'dry' ? COLORS.dry : COLORS.grass;
+      const palette = this.levelFlora ? levelFloraPalette(g) : kind === 'dry' ? COLORS.dry : COLORS.grass;
       // 叶丛长在"东西的边上"：崖顶边（身后是崖下 → 外轮廓加粗）、崖脚（贴着更高的邻居）、坡上
       // （1590669875869286400 画面：一簇簇堆在崖脚和崖顶；1063115611289645057：坡上撒小团帮助读出可走的地方）
       for (let i = 0; i < c.n; i++) {
@@ -607,10 +610,10 @@ export class Vegetation {
         // 往格子里收一点
         const ccx = pts.reduce((a, p) => a + p[0], 0) / pts.length, ccz = pts.reduce((a, p) => a + p[1], 0) / pts.length;
         const k = higher ? 0.18 : 0.12;
-        addClump(ex + (ccx - ex) * k, ez + (ccz - ez) * k, y, higher ? COLORS.dry.concat(palette) : palette, lower ? 1 : 0, higher ? 1.3 : 0.95);
+        addClump(ex + (ccx - ex) * k, ez + (ccz - ez) * k, y, higher && !this.levelFlora ? COLORS.dry.concat(palette) : palette, lower ? 1 : 0, higher ? 1.3 : 0.95);
         }
       }
-      if (kind === 'slope' && rnd() < 0.7) { const [x, z] = randomIn(pts); addClump(x, z, y, COLORS.grass, 0, 0.8); }
+      if (kind === 'slope' && rnd() < 0.7) { const [x, z] = randomIn(pts); addClump(x, z, y, this.levelFlora ? palette : COLORS.grass, 0, 0.8); }
       // 开阔草地上偶尔一簇（林下更少）
       if (kind === 'grass' && rnd() < (treeCells.has(c.id) ? 0.05 : 0.12)) { const [x, z] = randomIn(pts); addClump(x, z, y, palette, 0, 0.85); }
       // 小花：Bad North 式的白色碎点，一大片一大片（959530111187013632）
@@ -742,7 +745,8 @@ export class Vegetation {
           const yaw = brng() * Math.PI * 2;
           q.setFromAxisAngle(up, yaw);
           m.compose(v.set(cx + Math.cos(a) * r, 0.6 + brng() * 2.2, cz + Math.sin(a) * r), q, sc.setScalar(2.6 + brng() * 2.4));
-          this.backdrop.set(nB++, m, grey.clone().multiplyScalar(0.9 + brng() * 0.15), yaw);
+          this.backdrop.set(nB, m, grey.clone().multiplyScalar(0.9 + brng() * 0.15), yaw, cloudDepth(nB));
+          nB++;
         }
       }
       this.backdrop.commit(nB);

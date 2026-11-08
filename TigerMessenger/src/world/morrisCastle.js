@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {styleMat} from '../style/materials.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 // Morris castle restyled to the Highland citadel (高山圣城) vocabulary: pale blue-grey walls,
@@ -11,7 +12,7 @@ function archShape(w,h){const r=w/2,sy=h-r,s=new T.Shape();s.moveTo(-r,0);s.line
 export function createMorrisCastle({root,position=new T.Vector3()}={}){
  const castle=new T.Group();castle.name='morris-handcrafted-castle';castle.position.copy(position);root?.add(castle);
  const materials=new Map(),supports=[],detailBatches=new Map(),detailCounts={masonry:0,windowSurrounds:0,roofTiles:0,footings:0};
- function material(color){if(!materials.has(color)){const m=new T.MeshStandardMaterial({color,roughness:color===WARM_GLASS?.55:.93});if(color===WARM_GLASS){m.emissive.setHex(0xff8a3d);m.emissiveIntensity=.32;}materials.set(color,m);}return materials.get(color);}
+ function material(color){if(!materials.has(color)){const m=styleMat('morris.castle.masonry','MeshStandardMaterial',{color,roughness:color===WARM_GLASS?.55:.93});if(color===WARM_GLASS){m.emissive.setHex(0xff8a3d);m.emissiveIntensity=.32;}materials.set(color,m);}return materials.get(color);}
  function mesh(g,color,name,p=[0,0,0]){const m=new T.Mesh(g,material(color));m.name=name;m.position.set(...p);m.castShadow=m.receiveShadow=true;castle.add(m);return m;}
  function box(p,s,color,name){return mesh(new T.BoxGeometry(...s),color,name,p);}
  function detail(g,p,color,rotation=0){g.deleteAttribute('uv');g.rotateY(rotation);g.translate(...p);if(!detailBatches.has(color))detailBatches.set(color,[]);detailBatches.get(color).push(g);}

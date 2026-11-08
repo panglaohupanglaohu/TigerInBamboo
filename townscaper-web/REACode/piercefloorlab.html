@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>穿楼门洞「只吃一层」：洞顶 clamp 到楼板底，挑檐整条横穿</title>
+<style>
+  :root { --ink:#241f22; --muted:#6b6167; --line:#e4dbdf; --warm:#8a6a1c; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#f0eeef; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.3px; max-width:118ch; }
+  header b { color:var(--warm); font-weight:650; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(240,238,239,.98) 72%, rgba(240,238,239,0)); }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #cmp { position:fixed; z-index:2; left:958px; top:150px; width:292px;
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  #cmp h2 { margin:0 0 6px; font-size:12.2px; letter-spacing:.04em; color:var(--muted); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:11.4px; }
+  th,td { padding:3px 1px; text-align:right; border-bottom:1px dashed var(--line); }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:600; font-size:10.8px; }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+  #note { margin-top:7px; font-size:11.2px; color:var(--muted); }
+  #note b { color:var(--ink); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:10px; font-size:11.8px; color:var(--muted);
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:16px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <h1>穿楼门洞 = 一条竖向预算：洞口只吃它起步那一层，洞顶 clamp 到该层楼板底面</h1>
+  <p>把券形布尔减掉整面墙，洞顶会跟着券顶跑：这张立面上它越过第一道楼板 <b>1.62</b>、捅进第二层，
+     第一道白色挑檐被切掉 <b>4.32</b> 宽（占立面 39%），整条楼层带断成两截——原片里挑檐是整条横穿的。
+     改成竖向预算后洞顶压在楼板底（越过 0.00）、贯穿层数 1、挑檐断 0 处；代价是券被截平，
+     净高/净宽从 0.79 掉到 0.50，所以真想要高券就得把首层加高（原片第一层确实比上面高）。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="cmp">
+  <h2>同一面墙 · 两种挖法</h2>
+  <table id="tbl">
+    <thead><tr><th>做法</th><th>洞顶</th><th>越楼板</th><th>穿层</th><th>挑檐断</th><th>连续率</th><th>被切宽</th><th>净高/宽</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="note"></div>
+</div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { CFG, measure, openingTop, windows, slabBottom } from './src/piercefloor.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#241f22', MUTED = '#6b6167';
+const M = measure();
+
+const S = 34;                       // 每米像素
+const BASE = 636;                   // 地平线
+const H = CFG.FLOORS * CFG.STOREY;  // 墙高
+const WALL = '#d98a92', WALL_D = '#c9787f', WHITE = '#f6efea', WHITE_D = '#e4d8d2';
+const DARK = '#4a3b3f';
+
+function facade(cx, mode, label, accent) {
+  const X = (x) => cx + x * S;
+  const Y = (y) => BASE - y * S;
+  const half = CFG.WID / 2;
+
+  // 地面
+  ctx.fillStyle = 'rgba(36,31,34,.07)';
+  ctx.fillRect(X(-half) - 26, BASE, CFG.WID * S + 52, 12);
+
+  // 墙体 + 女儿墙
+  ctx.fillStyle = WALL; ctx.fillRect(X(-half), Y(H), CFG.WID * S, H * S);
+  ctx.fillStyle = WALL_D; ctx.fillRect(X(-half), Y(H + 0.5), CFG.WID * S, 0.5 * S);
+  ctx.fillStyle = WHITE; ctx.fillRect(X(-half) - 4, Y(H + 0.78), CFG.WID * S + 8, 0.28 * S);
+
+  // 洞口（先挖，再叠构件）
+  ctx.beginPath();
+  ctx.moveTo(X(-CFG.SPAN / 2), Y(0));
+  for (let i = 0; i <= 120; i++) {
+    const x = -CFG.SPAN / 2 + (CFG.SPAN * i) / 120;
+    ctx.lineTo(X(x), Y(openingTop(x, mode)));
+  }
+  ctx.lineTo(X(CFG.SPAN / 2), Y(0));
+  ctx.closePath();
+  ctx.fillStyle = DARK; ctx.fill();
+
+  // 洞内的台地与内墙（给一点进深感）
+  ctx.save(); ctx.clip();
+  ctx.fillStyle = '#3d3034';
+  for (let s = 0; s < 6; s++) {
+    const y = s * 0.55;
+    ctx.fillRect(X(-CFG.SPAN / 2), Y(y), CFG.SPAN * S, 0.14 * S);
+  }
+  ctx.fillStyle = 'rgba(246,239,234,.10)';
+  ctx.fillRect(X(-CFG.SPAN / 2), Y(CFG.RISE), 0.5 * S, CFG.RISE * S);
+  ctx.restore();
+
+  // 券石：沿券线一排楔石；被截平的那些不画，改画过梁
+  const nV = 13, halfA = CFG.SPAN / 2;
+  for (let i = 0; i < nV; i++) {
+    const t0 = -1 + (2 * i) / nV, t1 = -1 + (2 * (i + 1)) / nV;
+    const x0 = t0 * halfA, x1 = t1 * halfA;
+    const y0 = openingTop(x0, mode), y1 = openingTop(x1, mode);
+    if (y0 <= 0 && y1 <= 0) continue;
+    ctx.beginPath();
+    ctx.moveTo(X(x0), Y(y0));
+    ctx.lineTo(X(x1), Y(y1));
+    ctx.lineTo(X(x1), Y(y1 + 0.30));
+    ctx.lineTo(X(x0), Y(y0 + 0.30));
+    ctx.closePath();
+    ctx.fillStyle = i % 2 ? WHITE : WHITE_D;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(74,59,63,.35)'; ctx.lineWidth = 0.7; ctx.stroke();
+  }
+
+  // 键石：券顶正中一块（clipped 版就压在截平的那条线上，等于过梁上的压顶石）
+  const topY = openingTop(0, mode);
+  ctx.fillStyle = WHITE_D;
+  ctx.strokeStyle = 'rgba(74,59,63,.35)'; ctx.lineWidth = 0.7;
+  ctx.fillRect(X(-0.44), Y(topY + 0.56), 0.88 * S, 0.26 * S);
+  ctx.strokeRect(X(-0.44), Y(topY + 0.56), 0.88 * S, 0.26 * S);
+
+  // 楼层挑檐 + 楼板
+  for (let k = 1; k < CFG.FLOORS; k++) {
+    const yb = slabBottom(k), yt = k * CFG.STOREY;
+    const cut = openingTop(0, mode) > yb + 1e-6;
+    const x0 = cut ? -Math.sqrt(Math.max(0, 1 - (yb / CFG.RISE) ** 2)) * halfA : 0;
+    // 没被切到的两段
+    const segs = cut
+      ? [[-half, x0], [-x0 === 0 ? half : Math.abs(x0), half]]
+      : [[-half, half]];
+    for (const [a, b] of segs) {
+      if (b - a < 0.02) continue;
+      ctx.fillStyle = WHITE;
+      ctx.fillRect(X(a) - 4, Y(yt), (b - a) * S + 8, (yt - yb) * S + 3);
+      ctx.fillStyle = 'rgba(36,31,34,.10)';
+      ctx.fillRect(X(a) - 4, Y(yb) + (yt - yb) * S - 1, (b - a) * S + 8, 2);
+    }
+    if (cut) {
+      // 缺口：红色虚线标出被切掉的宽度
+      ctx.setLineDash([4, 3]); ctx.strokeStyle = 'rgba(180,64,47,.95)'; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(X(x0), Y(yb + 0.05)); ctx.lineTo(X(-x0), Y(yb + 0.05)); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // 窗
+  for (const w of windows()) {
+    const wx = X(w.x - w.w / 2), wy = Y(w.y + w.h);
+    ctx.fillStyle = '#5e4d52';
+    ctx.fillRect(wx, wy, w.w * S, w.h * S);
+    ctx.fillStyle = WHITE;
+    ctx.fillRect(wx - 3, wy + w.h * S, w.w * S + 6, 4);
+  }
+
+  // 布尔版的"多吃掉的那一块"用红斜线标出来
+  if (mode === 'raw') {
+    ctx.save();
+    ctx.beginPath();
+    for (let i = 0; i <= 80; i++) {
+      const x = -halfA + (CFG.SPAN * i) / 80;
+      const y = openingTop(x, 'raw');
+      const yc = Math.min(y, slabBottom(1));
+      if (i === 0) ctx.moveTo(X(x), Y(yc)); else ctx.lineTo(X(x), Y(yc));
+    }
+    for (let i = 80; i >= 0; i--) {
+      const x = -halfA + (CFG.SPAN * i) / 80;
+      ctx.lineTo(X(x), Y(openingTop(x, 'raw')));
+    }
+    ctx.closePath();
+    ctx.clip();
+    ctx.strokeStyle = 'rgba(180,64,47,.55)'; ctx.lineWidth = 1.2;
+    for (let d = -600; d < 900; d += 14) {
+      ctx.beginPath(); ctx.moveTo(X(-half) + d, Y(0)); ctx.lineTo(X(-half) + d + 600, Y(9)); ctx.stroke();
+    }
+    ctx.restore();
+    ctx.strokeStyle = '#b4402f'; ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    for (let i = 0; i <= 80; i++) {
+      const x = -halfA + (CFG.SPAN * i) / 80;
+      const yc = Math.min(openingTop(x, 'raw'), slabBottom(1));
+      if (i === 0) ctx.moveTo(X(x), Y(yc)); else ctx.lineTo(X(x), Y(yc));
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#b4402f'; ctx.font = '600 10.5px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(`+${(openingTop(0, 'raw') - slabBottom(1)).toFixed(2)} 捅进第二层`, X(-CFG.SPAN / 2) - 132, Y(slabBottom(1) + 1.15));
+  }
+
+  ctx.fillStyle = INK; ctx.font = '600 13px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText(label, X(-half), Y(H + 1.4));
+  ctx.strokeStyle = accent; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(X(-half), Y(H + 1.15)); ctx.lineTo(X(-half) + 66, Y(H + 1.15)); ctx.stroke();
+
+  // 高度标尺
+  ctx.fillStyle = MUTED; ctx.font = '10.5px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'right';
+  for (let k = 0; k <= CFG.FLOORS; k++) {
+    const y = k * CFG.STOREY;
+    ctx.fillText(y.toFixed(1), X(-half) - 8, Y(y) + 3);
+    ctx.strokeStyle = 'rgba(36,31,34,.10)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(X(-half) - 6, Y(y)); ctx.lineTo(X(-half), Y(y)); ctx.stroke();
+  }
+}
+
+function paint() {
+  document.querySelector('#tbl tbody').innerHTML = [['A 布尔挖洞', M.raw], ['B 只吃一层', M.clipped]]
+    .map(([nm, d]) => `<tr>
+      <td><b>${nm}</b></td>
+      <td class="${d.overSlab > 0 ? 'no' : 'ok'}">${d.top.toFixed(2)}</td>
+      <td class="${d.overSlab > 0 ? 'no' : 'ok'}">${d.overSlab.toFixed(2)}</td>
+      <td class="${d.pierced > 1 ? 'no' : 'ok'}">${d.pierced}</td>
+      <td class="${d.breaks ? 'no' : 'ok'}">${d.breaks}/${d.lines}</td>
+      <td class="${d.continuity > 0.99 ? 'ok' : 'no'}">${d.continuity.toFixed(3)}</td>
+      <td>${d.cutW.toFixed(2)}</td>
+      <td>${d.ratio.toFixed(2)}</td></tr>`).join('');
+
+  document.getElementById('note').innerHTML =
+    `洞顶 clamp 到 <b>${slabBottom(1).toFixed(2)}</b>（第一道楼板底 = ${CFG.STOREY} − ${CFG.SLAB}），` +
+    `于是逐点比券顶低最多 <b>${M.raw.overSlab.toFixed(2)}</b>。挑檐被切宽 ${M.raw.cutW.toFixed(2)} → ` +
+    `<b class="ok">${M.clipped.cutW.toFixed(2)}</b>，贯穿层数 ${M.raw.pierced} → <b class="ok">${M.clipped.pierced}</b>。` +
+    `代价：净高/净宽 ${M.raw.ratio.toFixed(2)} → <b>${M.clipped.ratio.toFixed(2)}</b>，券变矮扁——` +
+    `要保住 0.79 的比例，只能把首层加高到 ≥ ${(CFG.RISE + CFG.SLAB).toFixed(2)}（原片首层确实比上面高）。`;
+
+  document.getElementById('stats').innerHTML =
+    `<span>层高 ${CFG.STOREY} · 楼板 ${CFG.SLAB} · ${CFG.FLOORS} 层</span>` +
+    `<span>洞口 ${CFG.SPAN}×${CFG.RISE}</span>` +
+    `<span>洞顶 <b>${M.raw.top.toFixed(2)}</b> → <b class="ok">${M.clipped.top.toFixed(2)}</b></span>` +
+    `<span>贯穿层数 <b class="no">${M.raw.pierced}</b> → <b class="ok">${M.clipped.pierced}</b></span>` +
+    `<span>挑檐断 <b class="no">${M.raw.breaks}</b> → <b class="ok">${M.clipped.breaks}</b> 处</span>` +
+    `<span>被切宽 ${M.raw.cutW.toFixed(2)} → ${M.clipped.cutW.toFixed(2)}</span>` +
+    `<span>净高/宽 ${M.raw.ratio.toFixed(2)} → ${M.clipped.ratio.toFixed(2)}</span>`;
+}
+
+ctx.clearRect(0, 0, 1280, 800);
+facade(300, 'raw', 'A · 布尔挖洞：洞顶跟着券走，挑檐被切断', '#b4402f');
+facade(735, 'clipped', 'B · 只吃一层：洞顶压到楼板底，挑檐整条横穿', '#146c4a');
+paint();
+window.__ready = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>跨层木梯 · 梯长 = sqrt(H² + run²)，梯脚落台面、梯顶搭台沿</title>
+<style>
+  :root { --ink:#241f14; --muted:#6b6146; --line:#e3dcc6; --warm:#9a6a12; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#f4f2ea; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 9px;
+    background:linear-gradient(180deg, rgba(244,242,234,.99) 72%, rgba(244,242,234,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:118ch; }
+  header b { color:var(--warm); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #side { position:fixed; z-index:2; right:18px; top:150px; width:298px;
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:10px; padding:11px 13px; }
+  #side h2 { margin:0 0 7px; font-size:12.5px; letter-spacing:.04em; color:var(--muted); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:11.5px; }
+  th,td { padding:3px 1px; text-align:right; border-bottom:1px dashed var(--line); }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:600; font-size:11px; }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+  #note { margin-top:8px; font-size:11.5px; color:var(--muted); line-height:1.5; }
+  #note b { color:var(--ink); }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:16px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <h1>跨层木梯：梯长不是层高，梯脚踩下层台面、梯顶搭上层台沿</h1>
+  <p>黄色四级台地剖面（<b>等比：竖向与横向同尺度，图上角度就是真角度</b>），三处崖面各立一把木梯 A / B / C。
+     梯子必须斜着才靠得住崖面，一旦有水平退让 <b>run</b>，梯顶到梯脚的真实距离就是 <b>sqrt(H² + run²)</b>，比层高 H 长；
+     把层高当梯长做出来，梯顶就短一截（红色缺口）。原片两把梯子都很陡、看不出倾角差，这里把 run 拉开到 0.22~0.62。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="side">
+  <h2>三把梯子的几何账</h2>
+  <table id="tbl">
+    <thead><tr><th>梯</th><th>run</th><th>梯长 L</th><th>倾角</th><th>当 H 用<br>的缺口</th><th>踏棍</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="note"></div>
+</div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { ladders, measure, CFG, topZ } from './src/terraceladder.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#241f14', MUTED = '#6b6146', RED = '#b4402f', GREEN = '#146c4a';
+
+const S = 104, OX = 120, OY = 600;                 // 等比：SX = SZ
+const X = (x) => OX + x * S;
+const Y = (z) => OY - z * S;
+const T = CFG.TERRACES;
+const LS = ladders(), M = measure();
+const H = CFG.H;
+
+function poly(pts, fill, stroke, w = 1.4, close = true) {
+  ctx.beginPath();
+  pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+  if (close) ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = w; ctx.stroke(); }
+}
+const seg = (a, b, color, w = 1.4, dash = null) => {
+  ctx.save(); if (dash) ctx.setLineDash(dash);
+  ctx.strokeStyle = color; ctx.lineWidth = w;
+  ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore();
+};
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.fillText(s, x, y);
+};
+const card = (x, y, w, h) => {
+  ctx.fillStyle = 'rgba(255,255,255,.94)';
+  ctx.strokeStyle = '#e3dcc6'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.fill(); ctx.stroke();
+};
+
+/* ── 主图：台地剖面 ───────────────────────────────────────── */
+function drawIsland() {
+  const prof = [[X(0), Y(0)]];
+  for (const t of T) { prof.push([X(t.x0), Y(t.k)]); prof.push([X(t.x1), Y(t.k)]); }
+  const body = [...prof, [X(8.0), 744], [X(6.2), 730], [X(4.4), 742], [X(2.2), 728], [X(0), 738]];
+  poly(body, '#f2d264', '#6b4f17', 1.8);
+
+  ctx.save();
+  ctx.beginPath();
+  body.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+  ctx.closePath(); ctx.clip();
+  const g = ctx.createLinearGradient(0, Y(3), 0, 744);
+  g.addColorStop(0, 'rgba(255,236,160,0)'); g.addColorStop(1, 'rgba(150,110,20,.30)');
+  ctx.fillStyle = g; ctx.fillRect(0, Y(3), 1280, 800 - Y(3));
+  ctx.restore();
+
+  for (const t of T) {
+    if (t.k === 0) continue;
+    ctx.fillStyle = 'rgba(150,108,20,.18)';
+    ctx.fillRect(X(t.x0) - 4, Y(t.k), 8, Y(t.k - 1) - Y(t.k));
+    seg([X(t.x0), Y(t.k)], [X(t.x0), Y(t.k - 1)], 'rgba(90,66,18,.50)', 1.2);
+  }
+  for (const t of T) {
+    seg([X(t.x0), Y(t.k)], [X(t.x1), Y(t.k)], '#ffe98a', 4.4);
+    seg([X(t.x0), Y(t.k)], [X(t.x1), Y(t.k)], 'rgba(107,79,23,.50)', 1);
+    if (t.k > 0)
+      txt('L' + t.k, X((t.x0 + t.x1) / 2), Y(t.k) - 9, 'rgba(107,79,23,.72)',
+          '600 11.5px -apple-system,system-ui,sans-serif', 'center');
+  }
+  txt('L0 · z = 0', X(1.25), Y(0) - 10, 'rgba(107,79,23,.72)',
+      '600 11.5px -apple-system,system-ui,sans-serif', 'center');
+}
+
+function drawLadder(l, opt = {}) {
+  const k = opt.k || 1;                       // 缩放（主图 1）
+  const ax = opt.ax, ay = opt.ay;             // 屏幕原点（主图用 X/Y，内嵌用 inset 变换）
+  const P = opt.P || ((x, z) => [X(x), Y(z)]);
+  const foot = P(l.foot.x, l.foot.z), head = P(l.head.x, l.head.z);
+  const px = -l.uz, pz = l.ux, rw = CFG.RAIL;
+  const oA = [rw * px, rw * pz], oB = [-rw * px, -rw * pz];
+
+  ctx.strokeStyle = '#c08a4a'; ctx.lineWidth = 2.2 * k;
+  for (const r of l.rungs) {
+    const a = P(r.x + oA[0], r.z + oA[1]), b = P(r.x + oB[0], r.z + oB[1]);
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  }
+  for (const o of [oA, oB]) {
+    const a = P(l.foot.x + o[0], l.foot.z + o[1]), b = P(l.head.x + o[0], l.head.z + o[1]);
+    seg(a, b, '#8a5a2b', 3.0 * k);
+  }
+  const fa = P(l.foot.x + oA[0], l.foot.z + oA[1]), fb = P(l.foot.x + oB[0], l.foot.z + oB[1]);
+  seg(fa, fb, '#6d4520', 3.4 * k);
+  // 梯顶搭上台沿的那条角线
+  const lip = P(l.lip.x, l.lip.z);
+  ctx.fillStyle = GREEN;
+  ctx.beginPath(); ctx.arc(lip[0], lip[1], 3.2 * k, 0, 7); ctx.fill();
+}
+
+function drawMain() {
+  drawIsland();
+  LS.forEach((l) => drawLadder(l));
+  // 最斜的 C 上标出"把 H 当梯长"的缺口，细节看左侧放大
+  const c = LS[2];
+  const s = c.short;
+  seg([X(s.x), Y(s.z)], [X(c.lip.x), Y(c.lip.z)], RED, 2.4, [4, 3]);
+  ctx.fillStyle = RED; ctx.beginPath(); ctx.arc(X(s.x), Y(s.z), 2.8, 0, 7); ctx.fill();
+  txt('缺口 ' + c.shortGap.toFixed(3), X(c.lip.x) + 12, Y(c.lip.z) - 34, RED,
+      '650 11.5px -apple-system,system-ui,sans-serif');
+
+  // A 的梯头正好在放大卡下方，标签改放右侧，避免压住卡片
+  LS.forEach((l, i) => {
+    const id = ['A', 'B', 'C'][i];
+    const right = i === 0;
+    txt(`${id} · ${l.angle.toFixed(1)}°`,
+        X(l.head.x) + (right ? 12 : -12), Y(l.head.z) - 12, '#7a4a14',
+        '650 12.5px -apple-system,system-ui,sans-serif', right ? 'left' : 'right');
+  });
+}
+
+/* ── 左侧：C 的放大图（等比，H / run / 角 / 缺口 都在图上）──── */
+function drawInset() {
+  const bx = 44, by = 128, bw = 486, bh = 336;
+  card(bx, by, bw, bh);
+  txt('C 放大（等比）', bx + 16, by + 24, INK, '650 12.5px -apple-system,system-ui,sans-serif');
+  txt('每个量都在图上，不靠表格换算', bx + 16, by + 42, MUTED,
+      '400 11.5px -apple-system,system-ui,sans-serif');
+
+  const c = LS[2], kk = 168;
+  const lipX = bx + 300, lipY = by + 96;
+  const P = (x, z) => [lipX + (x - c.edgeX) * kk, lipY + (c.zHigh - z) * kk];
+  const foot = P(c.foot.x, c.foot.z), lip = P(c.lip.x, c.lip.z);
+
+  // 上下两级台面 + 崖面
+  seg([foot[0] - 20, foot[1]], [lip[0], foot[1]], '#e8c85a', 6);
+  seg([lip[0], lip[1]], [lip[0] + 96, lip[1]], '#ffe98a', 6);
+  seg([lip[0], lip[1]], [lip[0], foot[1] + 6], 'rgba(120,92,30,.75)', 2.2);
+  txt('下层台面', foot[0] - 14, foot[1] + 20, MUTED, '600 11px -apple-system,system-ui,sans-serif', 'right');
+  txt('上层台面', lip[0] + 12, lip[1] - 10, MUTED, '600 11px -apple-system,system-ui,sans-serif');
+
+  drawLadder(c, { k: 1.55, P });
+
+  // H：崖面右侧竖直虚线
+  const hx = lip[0] + 26;
+  seg([hx, lip[1]], [hx, foot[1]], '#8a7a55', 1.3, [5, 4]);
+  seg([lip[0], lip[1]], [hx + 8, lip[1]], '#8a7a55', 1.3, [5, 4]);
+  seg([lip[0], foot[1]], [hx + 8, foot[1]], '#8a7a55', 1.3, [5, 4]);
+  ctx.save(); ctx.translate(hx + 12, (lip[1] + foot[1]) / 2); ctx.rotate(-Math.PI / 2);
+  txt('H = 1.00', 0, 0, '#8a7a55', '650 11.5px -apple-system,system-ui,sans-serif', 'center');
+  ctx.restore();
+
+  // run：下层台面上的水平虚线
+  const ry = foot[1] + 44;
+  seg([foot[0], ry], [lip[0], ry], '#8a7a55', 1.3, [5, 4]);
+  seg([foot[0], foot[1] + 6], [foot[0], ry + 5], '#8a7a55', 1.1, [4, 3]);
+  txt('run = ' + c.run.toFixed(2), (foot[0] + lip[0]) / 2, ry + 16, '#8a7a55',
+      '650 11.5px -apple-system,system-ui,sans-serif', 'center');
+
+  // 倾角弧：从竖直线转到梯梁
+  const ang = Math.atan2(c.run, H);
+  ctx.strokeStyle = '#7a4a14'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.arc(foot[0], foot[1], 56, -Math.PI / 2, -Math.PI / 2 - ang, true); ctx.stroke();
+  txt(c.angle.toFixed(1) + '°', foot[0] - 26, foot[1] - 52, '#7a4a14',
+      '650 12px -apple-system,system-ui,sans-serif', 'right');
+
+  // 缺口：把 H 当梯长
+  const sp = P(c.short.x, c.short.z);
+  seg(sp, lip, RED, 2.6, [4, 3]);
+  ctx.fillStyle = RED; ctx.beginPath(); ctx.arc(sp[0], sp[1], 3.2, 0, 7); ctx.fill();
+  txt(`把 H 当梯长 → 缺 ${c.shortGap.toFixed(3)}`, bx + 16, by + bh - 16, RED,
+      '600 11.5px -apple-system,system-ui,sans-serif');
+  txt(`L = √(1² + ${c.run.toFixed(2)}²) = ${c.L.toFixed(3)}`, bx + 262, by + 42, '#7a4a14',
+      '650 11.5px -apple-system,system-ui,sans-serif');
+}
+
+function draw() {
+  const sky = ctx.createLinearGradient(0, 60, 0, 800);
+  sky.addColorStop(0, '#f8f6ef'); sky.addColorStop(1, '#e7e3d2');
+  ctx.fillStyle = sky; ctx.fillRect(0, 0, 1280, 800);
+  drawMain();
+  drawInset();
+  txt('绿点 = 梯顶搭住的台沿角线；红虚线 = 把层高当梯长时差的那一截',
+      44, 508, MUTED, '400 11.5px -apple-system,system-ui,sans-serif');
+}
+
+function paint() {
+  document.querySelector('#tbl tbody').innerHTML = LS.map((l) => `<tr>
+    <td>${l.id}</td><td>${l.run.toFixed(2)}</td><td>${l.L.toFixed(3)}</td>
+    <td>${l.angle.toFixed(1)}°</td><td class="no">${l.shortGap.toFixed(3)}</td><td>${l.rungCount}</td></tr>`).join('');
+
+  document.getElementById('note').innerHTML =
+    `梯脚离台面 <b>${M.footOn}/${M.n}</b> 把误差 0.000；台沿到梯梁垂距 <b>${M.lipOn}/${M.n}</b> 也是 0.000 —— ` +
+    `"落地"和"搭沿"是两条独立的硬约束，只对一条就会穿墙或悬空。` +
+    `梯长 ${M.lenMin}~${M.lenMax}（层高恒 1.0、踏棍恒 0.26 一根），倾角越大缺口越大 ` +
+    `${M.gapMin} → <b>${M.gapMax}</b>。`;
+
+  document.getElementById('stats').innerHTML =
+    `<span>台地 <b>${T.length}</b> 级 / 层高 <b>${H.toFixed(1)}</b></span>` +
+    `<span>梯 <b>${M.n}</b> 把（原片 2 把都很陡，本页拉开到 3 把）</span>` +
+    `<span>梯脚落地 <b class="ok">${M.footOn}/${M.n}</b></span>` +
+    `<span>梯顶搭沿 <b class="ok">${M.lipOn}/${M.n}</b></span>` +
+    `<span>梯长 <b>${M.lenMin}~${M.lenMax}</b></span>` +
+    `<span>倾角 <b>${M.angMin}°~${M.angMax}°</b></span>` +
+    `<span>当 H 用的缺口 <b class="no">${M.gapMax}</b></span>`;
+}
+
+draw(); paint();
+window.__ready = true;
+</script>
+</body>
+</html>

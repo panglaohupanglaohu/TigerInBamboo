@@ -1,0 +1,1 @@
+import assert from'node:assert/strict';import{cloudDepth,CLOUD_DEPTHS}from'../src/core/cloud-depth.js';assert(Object.isFrozen(CLOUD_DEPTHS));assert.deepEqual(Array.from({length:6},(_,i)=>cloudDepth(i)),[3.2,2,1,3.2,2,1]);for(const v of[-1,.5,NaN])assert.throws(()=>cloudDepth(v));console.log('PASS immutable depth groups, repeating assignments, invalid index');

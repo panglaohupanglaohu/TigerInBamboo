@@ -7,13 +7,19 @@
  *
  * 盒子 = { c: [x,y,z] 中心, u: [[ax],[ay],[az]] 三个单位轴, e: [hx,hy,hz] 半尺寸 }。
  * 15 根候选分离轴：A 的 3 轴、B 的 3 轴、两两叉积 9 根；任何一根上两盒投影不重叠 → 不相交。
- * 叉积接近 0（两轴平行）时跳过，避免除零 / 误判——这正是很多实现"奇怪崩溃 / 误报"的来源。
+ * 叉积接近 0（两轴平行）时跳过，避免除零 / 误判；原视频/配文并未证明 Unity 崩溃的具体原因。
  */
 
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 
-export function obbOverlap(A, B) {
+function validateBox(b){
+ if(!b||!b.c||!b.e||!b.u||b.c.length!==3||b.e.length!==3||b.u.length!==3||![...b.c,...b.e,...b.u.flat()].every(Number.isFinite)||b.e.some(x=>x<0)||b.u.some(a=>a.length!==3||Math.abs(dot(a,a)-1)>1e-6)||Math.abs(dot(b.u[0],b.u[1]))>1e-6||Math.abs(dot(b.u[0],b.u[2]))>1e-6||Math.abs(dot(b.u[1],b.u[2]))>1e-6)throw new RangeError('finite orthonormal OBB required');
+}
+export function obbOverlap(A, B, {touching=true,epsilon=0}={}) {
+ validateBox(A);validateBox(B);
+ if(typeof touching!=='boolean'||!Number.isFinite(epsilon)||epsilon<0)throw new RangeError('invalid overlap policy');
+ if(!touching&&(A.e.some(x=>x===0)||B.e.some(x=>x===0)))return false;
   const T = [B.c[0] - A.c[0], B.c[1] - A.c[1], B.c[2] - A.c[2]];
   const axes = [...A.u, ...B.u];
   for (const a of A.u) for (const b of B.u) {
@@ -23,7 +29,7 @@ export function obbOverlap(A, B) {
   for (const L of axes) {
     const ra = A.e[0] * Math.abs(dot(A.u[0], L)) + A.e[1] * Math.abs(dot(A.u[1], L)) + A.e[2] * Math.abs(dot(A.u[2], L));
     const rb = B.e[0] * Math.abs(dot(B.u[0], L)) + B.e[1] * Math.abs(dot(B.u[1], L)) + B.e[2] * Math.abs(dot(B.u[2], L));
-    if (Math.abs(dot(T, L)) > ra + rb) return false;
+    if (touching ? Math.abs(dot(T,L)) > ra+rb+epsilon : Math.abs(dot(T,L)) >= ra+rb-epsilon) return false;
   }
   return true;
 }
@@ -37,7 +43,7 @@ export function makeBox(c, e, [rx, ry, rz] = [0, 0, 0]) {
     [-cy * sz + sy * sx * cz, cx * cz, sy * sz + cy * sx * cz],
     [sy * cx, -sx, cy * cx],
   ];
-  return { c, e, u: m };
+  const box={c:[...c],e:[...e],u:m};validateBox(box);return box;
 }
 
 /** 慢但可靠的对照：在 A 里撒点，看有没有点落在 B 里（只用于测试） */

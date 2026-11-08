@@ -1,0 +1,3 @@
+import assert from'node:assert/strict';import{easeUnitGroundHeight as step}from'../src/core/unit-ground-height.js';
+for(const floor of[1,2,8])for(const start of[-1,4,7]){const expected=floor*.5+(start-floor*.5)*Math.exp(-10);for(const hz of[30,60,120]){let y=start;for(let i=0;i<hz;i++)y=step(y,floor,.5,1/hz);assert.ok(Math.abs(y-expected)<1e-12);}assert.equal(step(start,floor,.5,0),start);assert.equal(step(start,floor,.5,1,0),start);}
+assert.equal(step(0,2,.5,100),1);for(const dt of[-1,NaN,Infinity])assert.throws(()=>step(0,1,.5,dt));console.log('PASS per-unit floor, 30/60/120Hz analytic equality, freeze, long dt and invalid inputs');

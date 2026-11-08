@@ -1,3 +1,4 @@
+import {CLOUD_DRIFT_GLSL} from '../core/cloud-motion.js';
 /**
  * impostor.js — 八方位 impostor（树林）+ 共用 impostor 的云。
  *
@@ -115,6 +116,8 @@ export class ImpostorField {
     this.yaw = new THREE.InstancedBufferAttribute(new Float32Array(max), 1);
     g.setAttribute('aColor', this.color);
     g.setAttribute('aYaw', this.yaw);
+    this.depth = new THREE.InstancedBufferAttribute(new Float32Array(max).fill(1), 1);
+    g.setAttribute('aCloudDepth', this.depth);
     const fr = [];
     for (let i = 0; i < VIEWS; i++) fr.push(new THREE.Vector4(...baked.frames.slice(i * 4, i * 4 + 4)));
     this.material = new THREE.ShaderMaterial({
@@ -125,11 +128,15 @@ export class ImpostorField {
         uTex: { value: texture }, uFrames: { value: fr }, uSize: { value: baked.size },
         uCenter: { value: baked.center }, uTime, uLight,
         uOrbit: { value: new THREE.Vector3(0, 0, .002) },
+        uDepthMotion: { value: 0 },
       },
       defines: { CLOUD: cloud ? 1 : 0, HORIZON: horizon ? 1 : 0, VIEWS },
       vertexShader: /* glsl */ `
+        ${CLOUD_DRIFT_GLSL}
         attribute vec3 aColor;
         attribute float aYaw;
+        attribute float aCloudDepth;
+        uniform float uDepthMotion;
         uniform float uSize;
         uniform vec3 uCenter;
         uniform float uTime;
@@ -153,13 +160,14 @@ export class ImpostorField {
             // 1243228419162341379 "Some moody clouds": local continuous
             // ring drift, not an inferred original weather solver. No hard wrap
             // across the island; preserve distance from the World bounds centre.
-            float angle = uTime * uOrbit.z;
+            float depth = mix(1.0, max(1.0, aCloudDepth), uDepthMotion);
+            float angle = uTime * uOrbit.z / depth;
             vec2 turn = normalize(vec2(cos(angle), sin(angle)));
             vec2 d = center.xz - uOrbit.xy;
             center.xz = uOrbit.xy + vec2(turn.x*d.x-turn.y*d.y,
                                          turn.y*d.x+turn.x*d.y);
           #else
-            center.x += mod(uTime * 0.12 + aYaw * 7.0, 40.0) - 20.0;   // 沿风向慢慢飘，飘出去从另一边回来
+            center.x += cloudDrift(uTime,aYaw);   // 沿风向慢慢飘，飘出去从另一边回来
           #endif
           #endif
           // Orthographic rays are parallel; camera position must not make
@@ -229,7 +237,9 @@ export class ImpostorField {
     if (cloud) this.mesh.renderOrder = 9;
   }
 
-  set(i, matrix, color, yaw) {
+  set(i, matrix, color, yaw, depth = 1) {
+    if(!Number.isFinite(depth)||depth<1)throw new RangeError('cloud depth must be finite and >=1');
+    this.depth.setX(i, depth);
     this.mesh.setMatrixAt(i, matrix);
     if (color) this.color.setXYZ(i, color.r, color.g, color.b);
     this.yaw.setX(i, yaw);
@@ -240,6 +250,7 @@ export class ImpostorField {
     this.mesh.instanceMatrix.needsUpdate = true;
     this.color.needsUpdate = true;
     this.yaw.needsUpdate = true;
+    this.depth.needsUpdate = true;
   }
 }
 

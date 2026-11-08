@@ -1,12 +1,17 @@
 # AUTO-RUNBOOK — 无人值守学习一条片子批次
 
 > 这份文件是定时任务唯一的说明书。每次运行都从「第 1 步」开始，不要凭记忆。
-> 目标：把 142 段没学完的片子学完，一批 12 条，账要能对上。
+> 目标：把没学完的片子学完，一批 12 条，账要能对上。
+> **当前轮次：第 2b 轮**（todo 已清零；剩 **22 条 partial** 全是“有代码但没学透”，2 批收尾）。
+> 旧队列存档在 `learn/queue-round1.json`、`learn/queue-round2a.json`，不要再用。
+> 这 22 条不要重写模块，做法是：找到 `where` 里的现有文件，对着原文补齐缺的那一半，补完加实证数字再记 game。
 
 ## 0. 身份与位置
 
 - 代码根：`/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACode`
-- 待学队列：`learn/queue.json`（142 条，已按主题排好：fx → grid → light → terrain → texture → build → life → water → tools → 48 条老片）
+- 待学队列：`learn/queue.json`（第 2b 轮 22 条全 partial：grid 11 → terrain 3 → build 1 → fx 3 → tools 2 → water 1 → nav 1）
+- 队列里 5 条 `status: both` 的属于“复核项”：代码里查不到帖子 ID，先核对是否真做了，没做就写代码，做了就补 ID 注释
+- 队列里有 7 条 2016–17 老片**没有原文**（`text` 是「(无原文，仅有视频)」），只能靠画面判读，允许只做最小机制实验
 - 进度状态：`learn/progress.json`
 - 帖子原文：`learn/data.js`（`window.LEARN.items[].text`）
 - 抽帧结果：`tmp/cap/<id>/f00.png …`

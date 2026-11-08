@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>可通行 ≠ 连通 · 台地关卡的可走性判定与台阶修补</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 9px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 74%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:126ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:18px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>可通行 ≠ 连通：先在格图上保证连起来，再用「单步落差」判定人能不能真的走上去</h1>
+  <p>原帖 917405214638006273 只有一句「a heuristic for deliberately generating navigable levels」，帧里是一张没有路径线的调试底图，
+     所以这一页按原文那句话做最小实验：左图是上一轮 src/campaignmap.js 那半件事（BFS 最短路，保证 start→finish 在图上连着），
+     它在量化台地上平均要<b>穿 5.00 条崖边</b>——跨一层就是 0.90 的垂直落差，超过人能跨的 0.62。
+     右图是同一张岛补上台阶之后：每条崖边在低侧放一级台阶（0.90 拆成两级 0.45 踏步），最短路于是能一脚不落地走完。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { CFG, demo, walkRoute, quantH, measure } from './src/walkreach.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#b5851f', GOLD2 = '#87611a',
+      RED = '#b4402f', GOOD = '#146c4a', LINE = '#dbe4e0';
+
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.fillText(s, x, y);
+};
+const card = (x, y, w, h, fill = '#ffffff') => {
+  ctx.fillStyle = fill; ctx.strokeStyle = LINE; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.fill(); ctx.stroke();
+};
+
+const D = demo();
+const M = measure();
+const { T, a, b, path, cross, stair } = D;
+const walk0 = walkRoute(T, D.eff0, a, b);       // 允许绕行的可走路线（补台阶之前）
+const eff1 = D.eff1;
+
+/* 台地层色：低处偏沙、高处偏青绿 */
+const LAND = ['#e3dcbe', '#d9e0c0', '#c6d8bd', '#b0cdb7', '#9cc2b2', '#8bb7ad', '#7facaa'];
+const SEA = '#cfe0e4';
+
+const MAP_A = { x: 34, y: 148, w: 396, h: 306 };
+const MAP_B = { x: 442, y: 148, w: 396, h: 306 };
+const S = Math.floor(Math.min((MAP_A.w - 12) / T.W, (MAP_A.h - 12) / T.H) * 10) / 10;   // 每格像素
+const OX = (M) => M.x + (M.w - T.W * S) / 2;
+const OY = (M) => M.y + 26 + (M.h - 26 - T.H * S) / 2;
+const PX = (M, k) => OX(M) + (k % T.W) * S + S / 2;
+const PY = (M, k) => OY(M) + ((k - k % T.W) / T.W) * S + S / 2;
+
+function drawTerrain(M) {
+  for (let j = 0; j < T.H; j++) for (let i = 0; i < T.W; i++) {
+    const k = j * T.W + i;
+    const lv = T.lvl[k];
+    ctx.fillStyle = T.h[k] <= CFG.water + 1e-6 ? SEA : LAND[Math.max(0, Math.min(LAND.length - 1, lv))];
+    ctx.fillRect(OX(M) + i * S, OY(M) + j * S, S + .5, S + .5);
+  }
+}
+const polyline = (M, pts, color, w, dash = []) => {
+  if (!pts || pts.length < 2) return;
+  ctx.save(); ctx.setLineDash(dash); ctx.strokeStyle = color; ctx.lineWidth = w;
+  ctx.lineJoin = 'round'; ctx.beginPath();
+  pts.forEach((k, n) => n ? ctx.lineTo(PX(M, k), PY(M, k)) : ctx.moveTo(PX(M, k), PY(M, k)));
+  ctx.stroke(); ctx.restore();
+};
+const dot = (M, k, r, fill, stroke = '#ffffff', lw = 1.4) => {
+  ctx.beginPath(); ctx.arc(PX(M, k), PY(M, k), r, 0, 7);
+  ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke();
+};
+
+/* ── 左：图连通最短路（不看高度） ───────────────────────── */
+function drawMapA() {
+  card(MAP_A.x, MAP_A.y, MAP_A.w, MAP_A.h);
+  txt('① 图连通：忽略高度的 BFS 最短路', MAP_A.x + 12, MAP_A.y + 18);
+  drawTerrain(MAP_A);
+  polyline(MAP_A, path, '#2f3a37', 2.0);
+  for (const [p, q] of cross) {
+    const mid = [ (PX(MAP_A, p) + PX(MAP_A, q)) / 2, (PY(MAP_A, p) + PY(MAP_A, q)) / 2 ];
+    ctx.beginPath(); ctx.arc(mid[0], mid[1], 6.2, 0, 7);
+    ctx.fillStyle = 'rgba(180,64,47,.16)'; ctx.fill();
+    ctx.strokeStyle = RED; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(mid[0] - 4, mid[1] - 4); ctx.lineTo(mid[0] + 4, mid[1] + 4);
+    ctx.moveTo(mid[0] + 4, mid[1] - 4); ctx.lineTo(mid[0] - 4, mid[1] + 4);
+    ctx.stroke();
+  }
+  dot(MAP_A, a, 4.4, GOOD); dot(MAP_A, b, 4.4, RED);
+  txt('起点', PX(MAP_A, a) - 6, PY(MAP_A, a) - 8, GOOD, '700 11px sans-serif', 'right');
+  txt('终点', PX(MAP_A, b) - 9, PY(MAP_A, b) + 4, RED, '700 11px sans-serif', 'right');
+  txt(`${path.length} 格 · 跨崖 ${cross.length} 处 · 单步最大落差 0.90`,
+      MAP_A.x + 12, MAP_A.y + MAP_A.h - 12, MUTED, '600 11.5px sans-serif');
+}
+
+/* ── 右：同一张岛，崖边放台阶之后 ─────────────────────────── */
+function drawMapB() {
+  card(MAP_B.x, MAP_B.y, MAP_B.w, MAP_B.h);
+  txt('② 可走：补台阶后同一张岛（同一批格子）', MAP_B.x + 12, MAP_B.y + 18);
+  drawTerrain(MAP_B);
+  /* 可走范围（可走分量）淡底 */
+  ctx.save();
+  for (let k = 0; k < D.comp1.length; k++) if (D.comp1[k]) {
+    ctx.fillStyle = 'rgba(20,108,74,.13)';
+    ctx.fillRect(OX(MAP_B) + (k % T.W) * S, OY(MAP_B) + ((k - k % T.W) / T.W) * S, S, S);
+  }
+  ctx.restore();
+  polyline(MAP_B, path, GOOD, 2.0);
+  if (walk0) polyline(MAP_B, walk0, 'rgba(95,111,106,.75)', 1.4, [4, 3]);
+  for (const k of stair) {
+    const x = OX(MAP_B) + (k % T.W) * S, y = OY(MAP_B) + ((k - k % T.W) / T.W) * S;
+    ctx.fillStyle = '#e8c66a'; ctx.fillRect(x, y, S, S);
+    ctx.strokeStyle = GOLD2; ctx.lineWidth = 1;
+    ctx.strokeRect(x + .5, y + .5, S - 1, S - 1);
+    ctx.beginPath();
+    for (let t = 1; t <= 2; t++) {
+      ctx.moveTo(x + 1, y + (S / 3) * t); ctx.lineTo(x + S - 1, y + (S / 3) * t);
+    }
+    ctx.stroke();
+  }
+  dot(MAP_B, a, 4.4, GOOD); dot(MAP_B, b, 4.4, RED);
+  txt(`${path.length} 格 · 台阶 ${stair.size} 级 · 单步最大落差 0.45`,
+      MAP_B.x + 12, MAP_B.y + MAP_B.h - 12, MUTED, '600 11.5px sans-serif');
+  txt(walk0
+      ? `灰虚线 = 补台阶前人要绕的路（${walk0.length} 格 / ${(walk0.length / path.length).toFixed(2)}×）`
+      : '灰虚线：补台阶前没有可走路线（终点走不到）',
+      MAP_B.x + 12, MAP_B.y + MAP_B.h - 30, MUTED, '600 11px sans-serif');
+}
+
+/* ── 右栏：单步落差条形图 + 对照表 ─────────────────────────── */
+const PROF = { x: 860, y: 148, w: 384, h: 330 };
+function drawProfile() {
+  card(PROF.x, PROF.y, PROF.w, PROF.h);
+  txt('沿最短路逐格的落差（每条 = 一次上/下台）', PROF.x + 14, PROF.y + 20);
+  const rises = [];
+  for (let s = 0; s + 1 < path.length; s++) {
+    rises.push({ i: s, d0: Math.abs(quantH(T, path[s + 1]) - quantH(T, path[s])),
+                 d1: Math.abs(eff1[path[s + 1]] - eff1[path[s]]) });
+  }
+  const NW = rises.length, bx = PROF.x + 46, by = PROF.y + 58, bw = PROF.w - 78, bh = 132;
+  const yOf = (v) => by + bh - (v / 1.0) * bh;              // 0..1.0 高度尺
+  ctx.strokeStyle = '#e8eeec'; ctx.lineWidth = 1;
+  for (let g = 0; g <= 4; g++) {                            // 每 0.25 一条横线
+    const y = yOf(g * 0.25);
+    ctx.beginPath(); ctx.moveTo(bx, y); ctx.lineTo(bx + bw, y); ctx.stroke();
+    txt((g * 0.25).toFixed(2), bx - 6, y + 4, MUTED, '500 10.5px sans-serif', 'right');
+  }
+  const st = bw / NW;
+  rises.forEach((r) => {
+    const x = bx + r.i * st;
+    if (r.d0 > 1e-6) { ctx.fillStyle = 'rgba(180,64,47,.55)'; ctx.fillRect(x + .6, yOf(r.d0), Math.max(1.6, st - 1.2), by + bh - yOf(r.d0)); }
+    if (r.d1 > 1e-6) { ctx.fillStyle = 'rgba(20,108,74,.85)'; ctx.fillRect(x + .6, yOf(r.d1), Math.max(1.6, st - 1.2) * 0.52, by + bh - yOf(r.d1)); }
+  });
+  ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = RED; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(bx, yOf(CFG.climb)); ctx.lineTo(bx + bw, yOf(CFG.climb)); ctx.stroke(); ctx.restore();
+  txt('上限 0.62', bx + bw, yOf(CFG.climb) - 5, RED, '700 11px sans-serif', 'right');
+  txt('0', PROF.x + 14, by + bh + 4, MUTED, '500 10.5px sans-serif');
+
+  const lg = PROF.y + PROF.h - 96;
+  ctx.fillStyle = 'rgba(180,64,47,.55)'; ctx.fillRect(PROF.x + 16, lg - 8, 9, 9);
+  txt('修补前：跨崖那一步是 0.90（越线 = 走不上去）', PROF.x + 32, lg, INK, '600 11.5px sans-serif');
+  ctx.fillStyle = 'rgba(20,108,74,.85)'; ctx.fillRect(PROF.x + 16, lg + 14, 5, 9);
+  txt('修补后：同一处拆成两级 0.45 踏步（贴住上限下方）', PROF.x + 32, lg + 22, INK, '600 11.5px sans-serif');
+  txt('台沿坡角 42.0° > 可走 31.8°：当斜坡走需 1.26 格进深，', PROF.x + 16, lg + 46, MUTED, '600 11px sans-serif');
+  txt('一格放不下 → 同一条路线只能用台阶，不能改成斜坡。', PROF.x + 16, lg + 62, MUTED, '600 11px sans-serif');
+}
+
+const TAB = { x: 860, y: 492, w: 384, h: 172 };
+function drawTable() {
+  card(TAB.x, TAB.y, TAB.w, TAB.h);
+  txt('24 张同参数地图的对照', TAB.x + 14, TAB.y + 21);
+  const rows = [
+    ['图连通（不看高度）', `${Math.round(M.graphRate * 24)} / 24`, '100%', GOLD],
+    ['最短路直达（能走完）', `${Math.round(M.directRateBefore * 24)} / 24`, `→ ${Math.round(M.directRateAfter * 24)} / 24`, GOOD],
+    ['平均跨崖边 / 台阶数', M.cliffCrossAvg.toFixed(2), `→ ${M.stairsAvg.toFixed(2)} 级`, INK],
+    ['单步最大落差 / 上限 0.62', M.riseBeforeMax.toFixed(2), `→ ${M.riseAfterMax.toFixed(2)}`, INK],
+    ['全岛可达格占比', `${(M.reachBefore * 100).toFixed(1)}%`, `→ ${(M.reachAfter * 100).toFixed(1)}%`, INK],
+    ['绕行代价（步行/图路）', `${M.detourAvg.toFixed(3)}×`, `最坏 ${M.detourMax.toFixed(2)}×`, RED],
+  ];
+  rows.forEach((r, n) => {
+    const y = TAB.y + 46 + n * 21;
+    txt(r[0], TAB.x + 16, y, MUTED, '500 11.5px sans-serif');
+    txt(r[1], TAB.x + 232, y, r[3], '700 12px sans-serif', 'right');
+    txt(r[2], TAB.x + TAB.w - 16, y, r[3], '700 12px sans-serif', 'right');
+  });
+}
+
+/* ── 地图下方：三条结论（顺带补掉 466~600 的空白） ─────────── */
+function drawTakeaways() {
+  const X = 34, Y = 458, W = 804, H = 152;
+  card(X, Y, W, H);
+  txt('三条能带走的结论', X + 16, Y + 22);
+  const rows = [
+    ['①', '「连通」不看高度。BFS 的输入只有邻接关系，0.90 的台沿对它等于平地 —— 所以它给的路线会直接穿崖。'],
+    ['②', '台阶不是更缓的坡。0.90 当斜坡走要 1.26 格进深（一格放不下），台阶用两级 0.45 踏步吃在同一格里。'],
+    ['③', '台阶只修路线经过的崖边。全岛还有 5.5% 的高台没人路过，也就没有台阶 —— 可达率停在 94.5% 而不是 100%。'],
+  ];
+  rows.forEach((r, n) => {
+    const y = Y + 50 + n * 28;
+    txt(r[0], X + 18, y, GOLD, '700 13px sans-serif');
+    txt(r[1], X + 40, y, INK, '500 12.5px sans-serif');
+  });
+  txt('数字全部由 src/walkreach.js 的 measure() 现算；种子 1518 与右侧表格同一套参数。',
+      X + 16, Y + H - 9, MUTED, '500 11px sans-serif');
+}
+
+drawMapA(); drawMapB(); drawProfile(); drawTable(); drawTakeaways();
+
+document.getElementById('stats').innerHTML =
+  `<span>格宽 <b>1.0</b> · 层高 <b>0.90</b> · 可跨落差 <b>0.62</b></span>` +
+  `<span>图连通 <b>100%</b></span>` +
+  `<span>最短路直达 <b class="no">${Math.round(M.directRateBefore * 24)}/24</b> → <b class="ok">${Math.round(M.directRateAfter * 24)}/24</b></span>` +
+  `<span>跨崖 <b>${M.cliffCrossAvg.toFixed(2)}</b> 处/图</span>` +
+  `<span>台阶 <b>${M.stairsAvg.toFixed(2)}</b> 级/图</span>` +
+  `<span>可达 <b>${(M.reachBefore * 100).toFixed(1)}%</b> → <b class="ok">${(M.reachAfter * 100).toFixed(1)}%</b></span>` +
+  `<span>种子 <b>${D.seed}</b></span>`;
+
+/* 供 shot.mjs 回读：数字全部来自模块，不是页面里另算的 */
+window.reaWalkReach = {
+  path: path.length, crossings: cross.length, stairs: stair.size,
+  walkLen: walk0 ? walk0.length : -1,
+  detour: walk0 ? +(walk0.length / path.length).toFixed(3) : null,
+  reach: { before: +M.reachBefore.toFixed(3), after: +M.reachAfter.toFixed(3) },
+  direct: { before: +M.directRateBefore.toFixed(3), after: +M.directRateAfter.toFixed(3) },
+  rise: { before: M.riseBeforeMax, after: M.riseAfterMax },
+};
+</script>
+</body>
+</html>

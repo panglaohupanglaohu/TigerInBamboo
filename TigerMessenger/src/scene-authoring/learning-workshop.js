@@ -5,7 +5,7 @@ import {decodeLearningSnapshot} from './learning-snapshot.js';
 import {mountLearningProgress} from './learning-progress.js';
 import {scanPipelineText} from './capability-scanner.js';
 // Reuse current REACodeRefactoring data; never copy the stale sidebar snapshot.
-export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}),onAddCapability=()=>{},onLocateCapability=()=>{}}={}){
+export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}),onAddCapability=()=>{},onLocateCapability=()=>{},onAddCode=null}={}){
  const host=document.getElementById('learning-workshop'),root=new URL('../townscaper-web/REACodeRefactoring/',location.href);let loaded=false,mode='architecture',catalog=[],data=null,lastUpdate=0;
  const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
  const link=(text,path)=>{const a=el('a',text);a.href=new URL(path,root).href;a.target='_blank';a.rel='noopener';return a;};
@@ -32,9 +32,11 @@ export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}
  const dialog=document.createElement('dialog'),close=el('button','关闭视频'),video=el('video'),caption=el('p');video.controls=true;video.loop=true;video.playsInline=true;close.onclick=()=>dialog.close();dialog.onclose=()=>{video.pause();video.removeAttribute('src');video.load();};dialog.append(close,video,caption);host.append(dialog);
  function play(id){caption.textContent='原始来源 / '+id;video.src=new URL('../REA-agent/gifs/'+id+'.mp4',location.href).href;video.onerror=()=>caption.textContent='本地视频未找到：'+id+'。请在原素材目录恢复文件；此状态不计为已观看。';dialog.showModal();video.play().catch(()=>{});}
  function actions(row,entry){
-  const usage=getUsage(entry),state=el('p',usage.present?'已在当前场景管线':'可加入当前场景管线 · 尚待执行适配');row.append(state);
+  const usage=getUsage(entry),state=el('p',usage.code?.length?'已有能力代码，可在场景中执行':usage.present?'已在当前场景管线':'可加入当前场景管线 · 尚待执行适配');row.append(state);
   const add=el('button',usage.present?'定位场景中的此能力 →':'＋ 加入当前场景管线');add.onclick=()=>{if(usage.present)onLocateCapability(entry.id);else onAddCapability(entry);activate(false);};row.append(add);
   for(const adapter of usage.adapters){const locate=el('button','查看场景适配：'+adapter.name);locate.onclick=()=>{onLocateCapability(adapter.id);activate(false);};row.append(locate);}
+  // 学习 → 场景：这条方法若已有能力代码（REACodeRefactoring/src/capabilities），直接显示可执行入口与执行经验
+  for(const code of usage.code||[]){const x=code.exp,b=el('button',(code.present?'⚙ 定位能力代码：':'⚙ 加入能力代码：')+code.name);b.onclick=()=>{code.present?onLocateCapability(code.id):onAddCode?.(code.id);activate(false);};row.append(b,el('small',x.runs?`场景经验：执行 ${x.runs} 次 · 验证通过 ${x.passed} · 不通过 ${x.failed} · 写入 ${x.committed}${x.lastFailure?' · 最近失败：'+x.lastFailure:''}`:'场景经验：尚未执行','muted'));}
  }
  function render(){
   if(!loaded)return;for(const [id,b]of tabs){b.classList.toggle('primary',mode===id);b.setAttribute('aria-pressed',String(mode===id));}content.replaceChildren();content.classList.toggle('learning-video-grid',mode==='videos');const q=search.value.trim().toLowerCase(),match=value=>JSON.stringify(value).toLowerCase().includes(q);
@@ -52,7 +54,7 @@ export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}
  search.oninput=render;
  async function ensure(){if(loaded&&Date.now()-lastUpdate<60000)return;return progress.refresh();}
  const sceneTab=document.getElementById('scene-workshop-tab'),learnTab=document.getElementById('learning-workshop-tab');
- function activate(learning){for(const id of ['save-recipe','export','connection'])document.getElementById(id).hidden=learning;host.hidden=!learning;for(const node of document.querySelectorAll('body>.intro,body>main'))node.hidden=learning;sceneTab.setAttribute('aria-selected',String(!learning));learnTab.setAttribute('aria-selected',String(learning));document.title=(learning?'学习工坊':'场景工坊')+' · Super-agent';history.replaceState(null,'',learning?'#learning':'#scene');if(learning){if(loaded)render();ensure();}}
+ function activate(learning){for(const id of ['save-recipe','export','connection'])document.getElementById(id).hidden=learning;host.hidden=!learning;for(const node of document.querySelectorAll('#system-workshop,body>.intro,body>main'))node.hidden=learning;document.getElementById('system-tab')?.setAttribute('aria-pressed',String(!learning));learnTab.setAttribute('aria-pressed',String(learning));sceneTab.setAttribute('aria-selected',String(!learning));learnTab.setAttribute('aria-selected',String(learning));document.title=learning?'学习工坊 · 学习管线':'系统工坊 · 编辑管线';history.replaceState(null,'',learning?'#learning':'#scene');if(learning){if(loaded)render();ensure();}}
  sceneTab.onclick=()=>activate(false);learnTab.onclick=()=>activate(true);activate(location.hash==='#learning');
  return {async openSource(query,section='pipeline'){activate(true);await ensure();mode=section;search.value=query;render();},refresh:render,showScene:()=>activate(false)};
 }

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>台地 = 高度场量化 · 台面全平台面间是崖壁</title>
+<style>
+  :root { --ink:#1e2b26; --muted:#5d6f68; --line:#dbe4dd; --warm:#8a6a1c; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef2f4; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:112ch; }
+  header b { color:var(--warm); font-weight:650; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,242,244,.98) 70%, rgba(238,242,244,0)); }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #cmp { position:fixed; z-index:2; left:56px; top:556px; width:800px;
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:10px; padding:11px 14px; }
+  #cmp h2 { margin:0 0 7px; font-size:12.5px; letter-spacing:.04em; color:var(--muted); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:12px; }
+  th,td { padding:3px 2px; text-align:right; border-bottom:1px dashed var(--line); }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:600; font-size:11.5px; }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+  #note { margin-top:7px; font-size:11.5px; color:var(--muted); }
+  #side { position:fixed; z-index:2; right:18px; top:150px; width:214px; font-size:11.5px; color:var(--muted);
+    background:rgba(255,255,255,.9); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  #side b { color:var(--ink); }
+  #side .k { display:flex; align-items:center; gap:7px; margin-bottom:5px; }
+  #side .sq { width:13px; height:13px; border-radius:2px; flex:0 0 auto; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:18px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <h1>台地 = 把高度场量化成层，台面之间自然成了崖壁</h1>
+  <p>连续噪声地形上每一点都有一点坡度：没有平面、也没有墙，单位和房子只能"贴着坡滑"。
+     把高度量化到层高 step（<b>h_q = floor(h/step)·step + step/2</b>，抖动只挪层界、不改高度）之后，
+     地形自己分裂成<b>台面</b>（邻格高差≈0）和<b>崖壁</b>（一格跨一级）两种面；水线被切得很硬，
+     白沫才有明确的落脚边。左图连续、右图量化，同一座岛、同一套高度。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="side">
+  <div class="k"><span class="sq" style="background:#cfd8dc"></span>台面（坡角 &lt; 8°）</div>
+  <div class="k"><span class="sq" style="background:#8f9ba1"></span>崖壁（一格跨一级）</div>
+  <div class="k"><span class="sq" style="background:#5f8fa8"></span>海面</div>
+  <div class="k"><span class="sq" style="background:#ffffff"></span>水线白沫</div>
+  <div class="k"><span class="sq" style="background:#2b3b5c;border-radius:50%"></span>站在台面上的单位</div>
+</div>
+
+<div id="cmp">
+  <h2>同一座岛：连续高度场 vs 量化台地</h2>
+  <table id="tbl">
+    <thead><tr><th>版本</th><th>陆地格</th><th>台面占比</th><th>崖壁占比</th><th>坡角中位</th><th>坡角 P90</th><th>台地层数</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="note"></div>
+</div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { heights, measure, CFG } from './src/terracecliff.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1e2b26', MUTED = '#5d6f68';
+
+const SX = 9, SY = 4.5, SZ = 22;
+const N = CFG.N, STEP = CFG.STEP, WATER = CFG.WATER;
+
+const SM = measure('smooth'), TR = measure('terrace');
+const HS = heights('smooth'), HT = heights('terrace');
+
+const proj = (x, y, z) => ({ x: (x - y) * SX, y: (x + y) * SY - z * SZ });
+
+/** 站在台面上的单位：坡角 < 8° 的格上放一个 */
+function units(h) {
+  const out = [];
+  for (let y = 0; y < N; y++)
+    for (let x = 0; x < N; x++) {
+      const z = h[y][x];
+      if (z <= WATER) continue;
+      let g = 0;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const xx = x + dx, yy = y + dy;
+        const zz = (xx >= 0 && yy >= 0 && xx < N && yy < N) ? h[yy][xx] : WATER - 1;
+        g = Math.max(g, Math.abs(z - zz));
+      }
+      if (g < STEP * 0.12 && ((x * 7 + y * 13) % 9 === 0)) out.push({ x, y, z });
+    }
+  return out;
+}
+
+function drawIsland(h, ox, oy, label, accent, smoothMode) {
+  ctx.save();
+  ctx.translate(ox, oy);
+
+  // 海面底板
+  ctx.fillStyle = 'rgba(95,143,168,.22)';
+  ctx.beginPath();
+  const c0 = proj(0, 0, 0), c1 = proj(N, 0, 0), c2 = proj(N, N, 0), c3 = proj(0, N, 0);
+  [c0, c1, c2, c3].forEach((p, n) => (n ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+  ctx.closePath(); ctx.fill();
+
+  ctx.fillStyle = INK; ctx.font = '600 13px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText(label, -250, -152);
+  ctx.strokeStyle = accent; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(-250, -144); ctx.lineTo(-176, -144); ctx.stroke();
+
+  // 按 (x+y) 升序画，先侧面后顶面
+  const order = [];
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) order.push([x, y]);
+  order.sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]));
+
+  for (const [x, y] of order) {
+    const z = h[y][x];
+    const top = proj(x + 0.5, y + 0.5, Math.max(z, 0));
+    const half = (hx, hy) => ({ x: (hx - hy) * SX / 2, y: (hx + hy) * SY / 2 });
+
+    // 侧面：朝 +x 与 +y 两个方向（等距里朝向观者的两面）
+    for (const [dx, dy] of [[1, 0], [0, 1]]) {
+      const xx = x + dx, yy = y + dy;
+      const zz = (xx >= 0 && yy >= 0 && xx < N && yy < N) ? h[yy][xx] : -0.6;
+      if (zz >= z - 0.001) continue;
+      if (smoothMode && z - zz < 0.30) continue;   // 连续版只画真正的落差，不然一片鱼鳞
+      const a = proj(x + (dx ? 1 : 0), y + (dy ? 1 : 0), 0);
+      const b = proj(x + (dx ? 1 : 0) + (dx ? 0 : 1), y + (dy ? 1 : 0) + (dy ? 0 : 1), 0);
+      const a2 = proj(x + (dx ? 1 : 0), y + (dy ? 1 : 0), z);
+      const b2 = proj(x + (dx ? 1 : 0) + (dx ? 0 : 1), y + (dy ? 1 : 0) + (dy ? 0 : 1), z);
+      const zLow = Math.max(zz, WATER - 0.4);
+      const a3 = proj(x + (dx ? 1 : 0), y + (dy ? 1 : 0), zLow);
+      const b3 = proj(x + (dx ? 1 : 0) + (dx ? 0 : 1), y + (dy ? 1 : 0) + (dy ? 0 : 1), zLow);
+      ctx.beginPath();
+      [a2, b2, b3, a3].forEach((p, n) => (n ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+      ctx.closePath();
+      const wall = z - zLow > STEP * 0.8;
+      ctx.fillStyle = wall ? '#8d9aa1' : '#bcc7cc';
+      ctx.fill();
+      if (!smoothMode) { ctx.strokeStyle = 'rgba(30,43,38,.10)'; ctx.lineWidth = 0.6; ctx.stroke(); }
+    }
+
+    if (z <= WATER) continue;
+
+    // 顶面
+    const pts = [
+      proj(x, y, z), proj(x + 1, y, z), proj(x + 1, y + 1, z), proj(x, y + 1, z),
+    ];
+    let g = 0;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const xx = x + dx, yy = y + dy;
+      const zz = (xx >= 0 && yy >= 0 && xx < N && yy < N) ? h[yy][xx] : WATER - 1;
+      g = Math.max(g, Math.abs(z - zz));
+    }
+    const flat = g < STEP * 0.12;
+    ctx.beginPath();
+    pts.forEach((p, n) => (n ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+    ctx.closePath();
+    if (smoothMode) {
+      const t = Math.max(0, Math.min(1, z / 3.2));
+      const r = Math.round(232 - t * 46), g2 = Math.round(238 - t * 34), b = Math.round(240 - t * 26);
+      ctx.fillStyle = `rgb(${r},${g2},${b})`;
+      ctx.fill();
+    } else {
+      ctx.fillStyle = flat ? '#e9eff1' : '#d7e0e4';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(30,43,38,.16)'; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+
+    // 水线白沫：自己在水面以上、边上就是海
+    let shore = false;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const xx = x + dx, yy = y + dy;
+      const zz = (xx >= 0 && yy >= 0 && xx < N && yy < N) ? h[yy][xx] : WATER - 1;
+      if (zz <= WATER) shore = true;
+    }
+    if (shore) {
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      pts.forEach((p, n) => (n ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+      ctx.closePath(); ctx.stroke();
+    }
+
+    // 单位
+    if (flat && ((x * 7 + y * 13) % 9 === 0)) {
+      ctx.fillStyle = '#2b3b5c';
+      ctx.beginPath(); ctx.arc(top.x, top.y - 4, 2.2, 0, 7); ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, 1280, 800);
+  drawIsland(HS, 318, 288, 'A · 连续高度场（原样 fBm 岛）', '#b4402f', true);
+  drawIsland(HT, 918, 288, 'B · 高度量化成台地（同一座岛）', '#146c4a', false);
+}
+
+function paint() {
+  document.querySelector('#tbl tbody').innerHTML = [
+    ['A 连续高度场', SM], ['B 量化台地', TR],
+  ].map(([nm, d]) => `<tr>
+    <td>${nm}</td><td>${d.land}</td>
+    <td class="${d.flatPct > 20 ? 'ok' : 'no'}">${d.flatPct}%</td>
+    <td class="${d.cliffPct > 20 ? 'ok' : 'no'}">${d.cliffPct}%</td>
+    <td>${d.angMed}°</td><td>${d.angP90}°</td><td>${d.levels}</td></tr>`).join('');
+
+  document.getElementById('note').innerHTML =
+    `量化只改高度的<b>取值</b>（${CFG.STEP} 一格层高），不改岛形：陆地格 ${SM.land} → ${TR.land}、` +
+    `层数 ${TR.levels} 级。台面 ${SM.flatPct}% → <b>${TR.flatPct}%</b>、崖壁 ${SM.cliffPct}% → <b>${TR.cliffPct}%</b>，` +
+    `坡角中位 ${SM.angMed}° → <b>${TR.angMed}°</b>。量化后有 ${TR.flatPct}% 的地能站人，连续版只有 ${SM.flatPct}%。`;
+
+  document.getElementById('stats').innerHTML =
+    `<span>场 ${CFG.N}×${CFG.N} 格</span>` +
+    `<span>层高 <b>${CFG.STEP}</b></span>` +
+    `<span>台面 <b class="no">${SM.flatPct}%</b> → <b class="ok">${TR.flatPct}%</b></span>` +
+    `<span>崖壁 <b class="no">${SM.cliffPct}%</b> → <b class="ok">${TR.cliffPct}%</b></span>` +
+    `<span>岸线格 ${SM.shore} → ${TR.shore}</span>` +
+    `<span>坡角中位 ${SM.angMed}° → ${TR.angMed}°</span>`;
+}
+
+draw(); paint();
+window.__ready = true;
+</script>
+</body>
+</html>

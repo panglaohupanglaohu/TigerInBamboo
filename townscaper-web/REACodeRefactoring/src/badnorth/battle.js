@@ -1,3 +1,8 @@
+import {planLanding} from './landing-plan.js';
+import { PROJECTILE_GRAVITY, defaultBallisticTable, createBallisticTable } from '../core/ballistic-table.js';
+import { samplePath } from '../core/path-samples.js';
+import { atHouseDoor } from '../core/house-door-presence.js';
+import { easeUnitGroundHeight } from '../core/unit-ground-height.js';
 import { unitTierAppearance } from '../core/unit-tier.js';
 import { createBannerTexture } from '../life/banner.js';
 import { UnitShadowBatch } from '../life/unit-shadow-batch.js';
@@ -38,25 +43,7 @@ import { buildLayeredFlowField } from './flowfield.js';
  * 预先对 (水平距离, 高差) 的网格，在一排出射角里找能打到、且代价最小的那一个（代价 = 飞行时间 + 落角偏离 45° 的惩罚）；
  * 射箭时查表得到出射角和速度，按真实抛物线飞。画面里是一扇扇抛物线 + Inspector 里的 Cost Function。
  */
-const G = 6, LUT = (() => {
-  const t = new Map();
-  for (let d = 0; d <= 60; d++) for (let h = -30; h <= 30; h++) {
-    const dx = d * 0.1, dy = h * 0.1;
-    let best = null;
-    for (let a = 10; a <= 80; a += 2) {
-      const th = (a * Math.PI) / 180, c = Math.cos(th), den = 2 * c * c * (dx * Math.tan(th) - dy);
-      if (den <= 0 || dx < 0.05) continue;
-      const v = Math.sqrt((G * dx * dx) / den);
-      if (v > 9) continue;
-      const time = dx / (v * c), vyEnd = v * Math.sin(th) - G * time, impact = Math.atan2(-vyEnd, v * c);
-      const cost = time + 0.6 * Math.abs(impact - Math.PI / 4);
-      if (!best || cost < best.cost) best = { cost, th, v, time };
-    }
-    t.set(d * 100 + h, best);
-  }
-  return t;
-})();
-const lookupShot = (dx, dy) => LUT.get(Math.min(60, Math.round(dx * 10)) * 100 + Math.max(-30, Math.min(30, Math.round(dy * 10))));
+const G = PROJECTILE_GRAVITY;
 
 const MAX = 260;
 const TEAM = { DEF: 0, VIK: 1 };
@@ -171,6 +158,7 @@ export class Battle {
     this.ring.visible = false;
     this.passageDots.visible = false;
     this.path.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3));
+    this.commandPathSamples = null;
     this.hud.style.display = 'none';
     this.view.effects.fireSources = this.view.worldMesh.chimneys || [];
   }
@@ -230,13 +218,21 @@ export class Battle {
     const uv = new Float32Array((SEG + 1) * 2 * 2);
     for(let i=0;i<=SEG;i++)uv.set([i/SEG,1,i/SEG,0],i*4);
     geo.setAttribute('uv',new THREE.BufferAttribute(uv,2));
-    const map=createBannerTexture({color,tail:['fork','triple','swallow'][style%3],emblem:['tree','tower','sun'][style%3]});
+    const map=createBannerTexture({color,tail:['fork','triple','swallow'][style%3],emblem:(this.squadEmblems?['skull','sword','trident']:['tree','tower','sun'])[style%3]});
     const cloth = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: '#ffffff', map, alphaTest:.5, side: THREE.DoubleSide }));
     cloth.frustumCulled = false;
     g.add(pole);
     this.group.add(g, cloth);
     g.userData = { cloth, SEG, parts: null };
     return g;
+  }
+  setSquadEmblems(on) {
+    on=!!on;if(!!this.squadEmblems===on)return;this.squadEmblems=on;
+    for(const sq of this.squads){
+      const style=sq.id%3,cloth=sq.flag.userData.cloth,old=cloth.material.map;
+      cloth.material.map=createBannerTexture({color:FLAG[style],tail:['fork','triple','swallow'][style],emblem:(on?['skull','sword','trident']:['tree','tower','sun'])[style]});
+      cloth.material.needsUpdate=true;old?.dispose();
+    }
   }
   #updateFlag(f, dt) {
     const { cloth, SEG } = f.userData;
@@ -294,17 +290,11 @@ export class Battle {
 
   /* ------------------------------------------------------------ 维京长船 */
   #launchWave() {
-    const w = this.world, cells = w.cells;
+    const plan=planLanding(this.world,this.boats);
+    this.lastLandingPlan=plan?'reserved':'blocked';
+    if(!plan)return;
     this.wave++;
-    // 靠岸点：沙滩 / 低台（≤2 层）且挨着海
-    const landings = cells.filter((c) => { const t = w.top(c); return t >= 1 && t <= 2 && t === w.ground(c) && c.edgeNeighbors.some((id) => id >= 0 && w.top(cells[id]) === 0); });
-    if (!landings.length) return;
-    const land = landings[(Math.random() * landings.length) | 0];
-    const sea = cells[land.edgeNeighbors.find((id) => id >= 0 && w.top(cells[id]) === 0)];
-    const dx = sea.cx - land.cx, dz = sea.cz - land.cz, dl = Math.hypot(dx, dz) || 1;
-    const dir = [dx / dl, dz / dl];
-    const stop = [sea.cx + dir[0] * 0.25, sea.cz + dir[1] * 0.25];
-    const from = [stop[0] + dir[0] * 14, stop[1] + dir[1] * 14];
+    const {land,dir,stop,from}=plan;
     const mesh = this.#longship();
     this.group.add(mesh);
     const boat = { mesh, from, stop, dir, t: 0, state: 'in', land, crew: [], stains: [], trail: [] };
@@ -366,12 +356,13 @@ export class Battle {
     const plan=lead?this.navigation.plan(lead,goal,sq.goalFloor??this.world.top(goal)):null;
     const graph=this.navigation.graph;
     for(let id=plan?.from.id??-1,k=0;id>=0&&k<graph.nodes.length;k++){
-      const a=graph.nodes[id],next=plan.tree.next[id];pts.push(a.x,a.floor*this.L+.05,a.z);
-      if(next<0)break;const b=graph.nodes[next];
-      for(let j=1;j<4;j++)pts.push(a.x+(b.x-a.x)*j/4,(a.floor+(b.floor-a.floor)*j/4)*this.L+.05,a.z+(b.z-a.z)*j/4);
+      const a=graph.nodes[id],next=plan.tree.next[id];pts.push([a.x,a.floor*this.L+.05,a.z]);
+      if(next<0)break;
       id=next;
     }
-    this.path.geometry.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+    const samples=samplePath(pts,{spacing:.15,maxSamples:65536});
+    this.commandPathSamples=samples; // Render-only diagnostic; AI still follows the existing layered route.
+    this.path.geometry.setAttribute('position', new THREE.Float32BufferAttribute(samples.points.flat(), 3));
     this.pathT = 2.5;
   }
   #hud(msg) {
@@ -504,7 +495,8 @@ export class Battle {
       const plan=this.navigation.plan(u,goal,goalFloor??w.top(goal));
       if(!plan)continue; // Never fall back to a straight line through blocked voxels.
       const here=plan.from.cell,next=plan.next.cell;
-      let tx=next.cx,tz=next.cz;
+      const aim=this.navigation.steerTarget(u,plan);
+      let tx=aim?.x??next.cx,tz=aim?.z??next.cz;
       if(!plan.arrived){
         const nav=this.#nav(goal);
         if(this._trafficVersion!==w.version){this._traffic=narrowCells(w,nav);this._trafficVersion=w.version;}
@@ -520,17 +512,18 @@ export class Battle {
         const s = Math.min(d, speed * dt) / d;
         // Local overlap separation supplements the stable lane target above.
         const separation = localSeparation(u,alive,dt,{heightTolerance:this.L*.6});
-        this.navigation.move(u,u.x+dx*s+separation.x,u.z+dz*s+separation.z,plan);
+        if(!this.navigation.move(u,u.x+dx*s+separation.x,u.z+dz*s+separation.z,plan))
+          this.navigation.move(u,u.x+dx*s,u.z+dz*s,plan);
         u.face = Math.atan2(dx, dz);
       }
-      const gy = u.navFloor*this.L;
-      u.y += (gy - u.y) * Math.min(1, dt * 10);
+      u.y = easeUnitGroundHeight(u.y,u.navFloor,this.L,dt);
     }
     // 小屋：维京人在门口站够 4 秒 → 着火
     for (const h of this.houses) {
       if (h.lost || !h.door) continue;
-      const vikNear = alive.some((u) => u.team === TEAM.VIK && !u.onBoat && Math.hypot(u.x - h.door.cx, u.z - h.door.cz) < 0.5);
-      const defNear = alive.some((u) => u.team === TEAM.DEF && Math.hypot(u.x - h.door.cx, u.z - h.door.cz) < 0.7);
+      const floor = w.top(h.door);
+      const vikNear = alive.some((u) => u.team === TEAM.VIK && atHouseDoor(u,h.door,{floor,levelHeight:L,radius:.5}));
+      const defNear = alive.some((u) => u.team === TEAM.DEF && atHouseDoor(u,h.door,{floor,levelHeight:L,radius:.7}));
       h.burn = vikNear && !defNear ? h.burn + dt : Math.max(0, h.burn - dt * 0.5);
       if (h.burn > 4) {
         h.lost = true;
@@ -650,6 +643,10 @@ export class Battle {
     }
   }
 
+  setProjectileImpactWeight(impactWeight) {
+    if((this.projectileTable??defaultBallisticTable).impactWeight===impactWeight){this.projectileTable??=defaultBallisticTable;return;}
+    const next=createBallisticTable({impactWeight});this.projectileTable=next;
+  }
   #shoot(u, foe) {
     const m = new THREE.Mesh(this.arrowGeo, this.arrowMat);
     this.group.add(m);
@@ -657,7 +654,7 @@ export class Battle {
     const to = [foe.x + (Math.random() - 0.5) * lead, foe.y + 0.08*(foe.bodyScale??1), foe.z + (Math.random() - 0.5) * lead];
     const from = [u.x, u.y + 0.15*(u.bodyScale??1), u.z];
     const dist = Math.hypot(to[0] - from[0], to[2] - from[2]);
-    const shot = lookupShot(dist, to[1] - from[1]);
+    const shot = (this.projectileTable??defaultBallisticTable).lookup(dist, to[1] - from[1]);
     if (!shot) { this.group.remove(m); return; }   // 查表没有解：够不着
     this.arrows.push({ mesh: m, from, to, t: 0, dur: shot.time, shot, target: foe, stuck: false });
   }

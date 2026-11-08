@@ -1,3 +1,4 @@
+import {ladderProfile} from '../core/ladder-profile.js';
 /**
  * navlayer.js — 把 navgraph 画出来：
  *   楼梯（默认开）：落差 1 层的区域之间一架三级台阶，贴着高的那一侧崖壁（1181464374839521280）
@@ -20,7 +21,7 @@ export class NavLayer {
     this.lines.renderOrder = this.nodes.renderOrder = 20;
     this.lines.visible = this.nodes.visible = false;
     this.group.add(this.stairs, this.lines, this.nodes);
-    this.nav = null;
+    this.nav = null;this.woodLadders=false;this.ladderDiagnostics=[];
   }
 
   set showGraph(on) { this.lines.visible = this.nodes.visible = on; }
@@ -28,7 +29,7 @@ export class NavLayer {
 
   refresh(world, shape) {
     const nav = (this.nav = buildNav(world));
-    const L = this.L;
+    const L = this.L;this.ladderDiagnostics=[];this.stairs.material.color.set(this.woodLadders?0x85664c:0xbfb197);
     const at = (p, s) => (shape ? shape.at(p, s) : [p.x, p.z]);
 
     // ---- 楼梯 ----
@@ -36,6 +37,12 @@ export class NavLayer {
     const bp = box.attributes.position.array, bn = box.attributes.normal.array;
     const pos = [], nor = [];
     const m = new THREE.Matrix4(), nm = new THREE.Matrix3(), v = new THREE.Vector3();
+    const rod=(a,b,thickness)=>{
+      const dir=new THREE.Vector3(b.x-a.x,b.y-a.y,b.z-a.z),length=dir.length();dir.normalize();
+      let side=new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0));if(side.length()<1e-6)side.set(1,0,0);side.normalize();const forward=new THREE.Vector3().crossVectors(side,dir).normalize();
+      m.makeBasis(side,dir,forward);m.scale(new THREE.Vector3(thickness,length,thickness));m.setPosition((a.x+b.x)/2,(a.y+b.y)/2,(a.z+b.z)/2);nm.getNormalMatrix(m);
+      for(let j=0;j<bp.length;j+=3){v.set(bp[j],bp[j+1],bp[j+2]).applyMatrix4(m);pos.push(v.x,v.y,v.z);v.set(bn[j],bn[j+1],bn[j+2]).applyMatrix3(nm).normalize();nor.push(v.x,v.y,v.z);}
+    };
     for (const s of nav.stairs) {
       const c = s.low, h = nav.hgt[c.id], i = s.edge;
       const a = c.pts[i], b = c.pts[(i + 1) % c.n];
@@ -51,6 +58,13 @@ export class NavLayer {
       for (const p of c.pts) { const [x, z] = at(p, h); ccx += x / c.n; ccz += z / c.n; }
       if ((ccx - mx) * vx + (ccz - mz) * vz < 0) { vx = -vx; vz = -vz; }
       const rise = s.rise || 1, width = Math.min(0.36, len * 0.6), steps = rise * 3, depth = 0.11;
+      if(this.woodLadders){
+        const [tax,taz]=at(a,h+rise),[tbx,tbz]=at(b,h+rise),run=Math.min(.22,Math.hypot(ccx-mx,ccz-mz)*.65);
+        const foot={x:mx+vx*run,y:h*L,z:mz+vz*run},lip={x:(tax+tbx)/2,y:(h+rise)*L,z:(taz+tbz)/2};
+        const side=Math.hypot(lip.x-foot.x,lip.z-foot.z)>1e-8?{x:lip.z-foot.z,y:0,z:foot.x-lip.x}:{x:ux/len,y:0,z:uz/len};
+        const profile=ladderProfile(foot,lip,{side,width:Math.min(.18,len*.4)});
+        this.ladderDiagnostics.push({cell:c.id,edge:i,...profile});for(const rail of profile.rails)rod(rail.a,rail.b,.018);for(const rung of profile.rungs)rod(rung.a,rung.b,.014);continue;
+      }
       for (let k = 0; k < steps; k++) {
         const top = h * L + (rise * L * (steps - k)) / steps;          // 最靠墙的一级最高
         const cx = mx + vx * (depth * (k + 0.5)), cz = mz + vz * (depth * (k + 0.5));

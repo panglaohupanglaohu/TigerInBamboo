@@ -21,9 +21,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -48,9 +48,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -71,9 +71,9 @@
         {
           "path": "src/world/navgraph.js",
           "original": "src/surfacedeco.js",
-          "bodySimilarity": 0.0153,
+          "bodySimilarity": 0.0151,
           "changedBody": true,
-          "sha256": "9e2f992ffd4a2345a157295a185b7d6d4245c5bb74dbf82c7cc5204bdea222af"
+          "sha256": "64ced8e2222711bbdfc9cc957ed43de648fbee88ca881c11d912868878255863"
         }
       ],
       "frameReview": false,
@@ -99,28 +99,42 @@
       "id": "987267068495003648",
       "video": true,
       "description": "2018-04-20]  Using inspector expressions, I can live tweak the cost function of my projectile trajectory lookup tables. Very handy.",
-      "historicalStatus": "done",
-      "where": "src/badnorth/battle.js（LUT / lookupShot）",
+      "historicalStatus": "partial",
+      "where": "src/core/ballistic-table.js · src/badnorth/battle.js · ballistics.html",
       "references": [
         "src/badnorth/battle.js"
       ],
       "changedReferences": [
         "src/badnorth/battle.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
+          "path": "ballistics.html",
+          "original": "engine/worldmap.html",
+          "bodySimilarity": 0.0747,
+          "changedBody": true,
+          "sha256": "71246f08f1c55f297364f503a4cae274455dda017c1038306874e577e3070af2"
+        },
+        {
+          "path": "src/core/ballistic-table.js",
+          "original": "engine/reflection.js",
+          "bodySimilarity": 0.0277,
+          "changedBody": true,
+          "sha256": "455d4cb108a8ebb0364a770793b1deda541849c4ab4c171f006c160a773ccc53"
+        },
+        {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/ballistic-table-review.md",
+      "decodedFrames": 678
     },
     {
       "id": "984813819280191488",
@@ -149,9 +163,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -250,8 +264,8 @@
       "id": "974579499802202113",
       "video": true,
       "description": "2018-03-16]  For a given position, Barycentric Coordinates can be calculated with 1 subtraction and 1 dot product (if you've precalculated some nice vectors in the triangle)",
-      "historicalStatus": "done",
-      "where": "src/core/spatial.js（baryPrep）",
+      "historicalStatus": "partial",
+      "where": "src/core/spatial.js · src/core/infinite.js · grids.html?t=infinite",
       "references": [
         "grids.html",
         "src/core/spatial.js"
@@ -260,34 +274,41 @@
         "grids.html",
         "src/core/spatial.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/spatial.js",
           "original": "src/barycentric.js",
-          "bodySimilarity": 0.0273,
+          "bodySimilarity": 0.0253,
           "changedBody": true,
-          "sha256": "ec4d74c53c21b18f891d007ef4f738329ca5df1c1fbecbd37ea1811b6dab9a1f"
+          "sha256": "2163985bc64aa01b5c4e46632e1b4e677deff3fb8ca4016b61f93d737536c848"
+        },
+        {
+          "path": "src/core/infinite.js",
+          "original": "src/grid.js",
+          "bodySimilarity": 0.0169,
+          "changedBody": true,
+          "sha256": "3b962217825eed2f8971f3e3fc25dad7c8900ea47f241c948f03ddf022195d9a"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/bary-prep-review.md",
+      "decodedFrames": 815
     },
     {
       "id": "974564862729838592",
       "video": true,
       "description": "2018-03-16]  I'm making some pedagogical gizmos for my GDC microtalk, like this illustration of Barycentric Coordinates. Gizmos > powerpoints.",
-      "historicalStatus": "done",
-      "where": "grids.html（重心坐标）",
+      "historicalStatus": "partial",
+      "where": "src/core/spatial.js · src/core/infinite.js · grids.html?t=infinite",
       "references": [
         "grids.html",
         "src/core/spatial.js"
@@ -296,54 +317,75 @@
         "grids.html",
         "src/core/spatial.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/spatial.js",
           "original": "src/barycentric.js",
-          "bodySimilarity": 0.0273,
+          "bodySimilarity": 0.0253,
           "changedBody": true,
-          "sha256": "ec4d74c53c21b18f891d007ef4f738329ca5df1c1fbecbd37ea1811b6dab9a1f"
+          "sha256": "2163985bc64aa01b5c4e46632e1b4e677deff3fb8ca4016b61f93d737536c848"
+        },
+        {
+          "path": "src/core/infinite.js",
+          "original": "src/grid.js",
+          "bodySimilarity": 0.0169,
+          "changedBody": true,
+          "sha256": "3b962217825eed2f8971f3e3fc25dad7c8900ea47f241c948f03ddf022195d9a"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/bary-prep-review.md",
+      "decodedFrames": 478
     },
     {
       "id": "974325184525201409",
       "video": true,
       "description": "2018-03-15]  We were having strange crashes when using Unity's Physics.OverlapBox. We solved it (hopefully) by making our own box-box test in two incredibly stressful hours. Behold, our beautiful viking raid planner:",
-      "historicalStatus": "done",
-      "where": "src/core/obb.js",
+      "historicalStatus": "partial",
+      "where": "src/core/obb.js · src/badnorth/landing-plan.js · src/badnorth/battle.js",
       "references": [
         "src/core/obb.js"
       ],
       "changedReferences": [
         "src/core/obb.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
           "path": "src/core/obb.js",
           "original": "src/boxtest.js",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0209,
           "changedBody": true,
-          "sha256": "06009814ad154d5809eff96a5a27f520cfefd8f82c33552baeb2d51a909dd494"
+          "sha256": "349fef7df2732e75e35fe4a4f6f2318ae06e26b0816411c21751f7fb76b2e4b0"
+        },
+        {
+          "path": "src/badnorth/landing-plan.js",
+          "original": "src/dual.js",
+          "bodySimilarity": 0.0337,
+          "changedBody": true,
+          "sha256": "c0132edf0314dca8489d2ee2927a7784af6ef5758a4aa1cefcbbcff61b4c1fe2"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "original": "engine/world.html",
+          "bodySimilarity": 0.0239,
+          "changedBody": true,
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/obb-policy-review.md",
+      "decodedFrames": 504
     },
     {
       "id": "972829402873716737",
@@ -372,9 +414,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -422,9 +464,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -462,9 +504,9 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "gridpatch.html",
@@ -490,9 +532,9 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         }
       ],
       "frameReview": true,
@@ -503,37 +545,53 @@
       "id": "959530111187013632",
       "video": true,
       "description": "2018-02-02]  I've been tweaking the foliage system today. It now supports multiple grass types per level.",
-      "historicalStatus": "done",
-      "where": "src/life/vegetation.js",
+      "historicalStatus": "partial",
+      "where": "src/core/level-flora.js · src/life/vegetation.js · level-flora.html",
       "references": [
+        "src/core/level-flora.js",
         "src/life/vegetation.js",
         "src/badnorth/battle.js"
       ],
       "changedReferences": [
+        "src/core/level-flora.js",
         "src/life/vegetation.js",
         "src/badnorth/battle.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
+          "path": "level-flora.html",
+          "original": "tools/player.html",
+          "bodySimilarity": 0.0399,
+          "changedBody": true,
+          "sha256": "2caa0091b40e54e3da750592981345aeae60adb0516a8ec9860a67e49d76d996"
+        },
+        {
+          "path": "src/core/level-flora.js",
+          "original": "src/levelflora.js",
+          "bodySimilarity": 0.0247,
+          "changedBody": true,
+          "sha256": "56b18b0a1d658afb5a82b7b1ce9180c5b824836110bb9710544944c35881094a"
+        },
+        {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/level-flora-review.md",
+      "decodedFrames": 203
     },
     {
       "id": "958410200146497537",
@@ -572,10 +630,10 @@
         },
         {
           "path": "src/core/banner.js",
-          "original": "engine/flags.js",
-          "bodySimilarity": 0.014,
+          "original": "src/squadbanner.js",
+          "bodySimilarity": 0.0147,
           "changedBody": true,
-          "sha256": "3d674684f4a384c5a706175beb3575a0f1546146525702733d1e913a811ce241"
+          "sha256": "fe5f05d831aac3ddb11a5f726bc1c95eb51f6f22395661f317935bffd8b48521"
         },
         {
           "path": "src/life/banner.js",
@@ -587,9 +645,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -652,16 +710,16 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -695,9 +753,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/life/atmosphere.js",
@@ -732,9 +790,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -900,9 +958,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/life/atmosphere.js",
@@ -934,9 +992,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": false,
@@ -995,9 +1053,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -1022,9 +1080,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -1091,9 +1149,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -1160,11 +1218,13 @@
       "where": "src/world/layerednav.js · src/world/battle-navigation.js · src/badnorth/battle.js",
       "references": [
         "navigation.html",
+        "src/capabilities/terrain.js",
         "src/world/layerednav.js",
         "src/world/battle-navigation.js"
       ],
       "changedReferences": [
         "navigation.html",
+        "src/capabilities/terrain.js",
         "src/world/layerednav.js",
         "src/world/battle-navigation.js"
       ],
@@ -1179,6 +1239,13 @@
           "sha256": "98173d1a22d2c5a18224c17a77f9c714c8fd77ddf1513c0a0381534115305656"
         },
         {
+          "path": "src/capabilities/terrain.js",
+          "original": "src/halfedge.js",
+          "bodySimilarity": 0.0196,
+          "changedBody": true,
+          "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a"
+        },
+        {
           "path": "src/world/layerednav.js",
           "original": "src/holenav.js",
           "bodySimilarity": 0.0376,
@@ -1190,14 +1257,14 @@
           "original": "src/holenav.js",
           "bodySimilarity": 0.0243,
           "changedBody": true,
-          "sha256": "f3ce06a3aff4af417a4ba71f27ea4df87b96da82d1ab8b557bee2918ef57fc91"
+          "sha256": "06a1a28cf82678ded4c0b3c9667f5dc5d014a50eadf0682730c0aee62cdb880e"
         },
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -1209,23 +1276,27 @@
       "video": true,
       "description": "2017-09-09]  New cave tileset. These levels really challenge your spacial skills #screenshotsaturday #madewithunity @BadNorthGame",
       "historicalStatus": "partial",
-      "where": "src/terrain/features.js",
-      "references": [],
-      "changedReferences": [],
+      "where": "artifacts/coverage/cloud-depth-review.md",
+      "references": [
+        "src/capabilities/terrain.js"
+      ],
+      "changedReferences": [
+        "src/capabilities/terrain.js"
+      ],
       "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
-          "path": "src/terrain/features.js",
-          "original": "src/overhangterrain.js",
-          "bodySimilarity": 0.0278,
+          "path": "src/capabilities/terrain.js",
+          "original": "src/halfedge.js",
+          "bodySimilarity": 0.0196,
           "changedBody": true,
-          "sha256": "03f343be9d035ea83c6341f50efc01f0dab6e385cb8d7e0a561194fa5cbb0d75"
+          "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/cloud-depth-review.md",
+      "decodedFrames": 725
     },
     {
       "id": "906207980802252801",
@@ -1288,9 +1359,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -1339,9 +1410,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -1375,9 +1446,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -1413,9 +1484,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/life/boats.js",
@@ -1427,9 +1498,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -1440,16 +1511,35 @@
       "id": "890611046435627008",
       "video": true,
       "description": "2017-07-27]  Just a birthday gif from yours truly",
-      "historicalStatus": "未登记",
-      "where": "",
-      "references": [],
-      "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "historicalStatus": "partial",
+      "where": "src/core/house-door-presence.js · src/badnorth/battle.js",
+      "references": [
+        "src/core/house-door-presence.js"
+      ],
+      "changedReferences": [
+        "src/core/house-door-presence.js"
+      ],
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "src/core/house-door-presence.js",
+          "original": "src/unitsnap.js",
+          "bodySimilarity": 0.0295,
+          "changedBody": true,
+          "sha256": "99ff60811af98db46238fb1b714383c40bae5718bd8721306e3b09f0f71c1d8a"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "original": "engine/world.html",
+          "bodySimilarity": 0.0239,
+          "changedBody": true,
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/house-door-review.md",
+      "decodedFrames": 666
     },
     {
       "id": "886199305522085890",
@@ -1478,9 +1568,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -1529,9 +1619,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -1586,9 +1676,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -1599,16 +1689,35 @@
       "id": "865200072685912064",
       "video": true,
       "description": "2017-05-18]  I built a small browser demo to help explain how the WFC algorithm works. Give it a go: http:// oskarstalberg.com/game/wave/wave .html …",
-      "historicalStatus": "未登记",
-      "where": "",
-      "references": [],
-      "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "historicalStatus": "partial",
+      "where": "src/core/wfc.js · wfc-trace.html",
+      "references": [
+        "src/core/wfc.js"
+      ],
+      "changedReferences": [
+        "src/core/wfc.js"
+      ],
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "wfc-trace.html",
+          "original": "compare.html",
+          "bodySimilarity": 0.0738,
+          "changedBody": true,
+          "sha256": "fac0b903ddd421a6add07ad530995d0cc8be53c82033b30ee2690c0d2e91836a"
+        },
+        {
+          "path": "src/core/wfc.js",
+          "original": "src/tilerepair.js",
+          "bodySimilarity": 0.0179,
+          "changedBody": true,
+          "sha256": "d11d3247a203d67dcc4ffea408ab62e59436a8a8048d9aebe95a2af03f3f4d2f"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/wfc-trace-review.md",
+      "decodedFrames": 908
     },
     {
       "id": "863019585162932224",
@@ -1708,16 +1817,35 @@
       "id": "828984794407170048",
       "video": true,
       "description": "2017-02-07]  PRO TIP: Protect your real estate investments by keeping vikings off your homelands",
-      "historicalStatus": "未登记",
-      "where": "",
-      "references": [],
-      "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "historicalStatus": "partial",
+      "where": "src/core/unit-ground-height.js · src/badnorth/battle.js",
+      "references": [
+        "src/core/unit-ground-height.js"
+      ],
+      "changedReferences": [
+        "src/core/unit-ground-height.js"
+      ],
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "src/core/unit-ground-height.js",
+          "original": "src/unitsnap.js",
+          "bodySimilarity": 0.0516,
+          "changedBody": true,
+          "sha256": "495c503caab6d498a0a43336f8e2d92da6fe45d6cf4dd66375b1860519617aff"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "original": "engine/world.html",
+          "bodySimilarity": 0.0239,
+          "changedBody": true,
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/unit-ground-review.md",
+      "decodedFrames": 387
     },
     {
       "id": "827561690896162816",
@@ -1738,61 +1866,119 @@
       "id": "827216768783495168",
       "video": true,
       "description": "2017-02-02]  And another one",
-      "historicalStatus": "未登记",
-      "where": "",
-      "references": [],
-      "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "historicalStatus": "partial",
+      "where": "src/core/banner.js · src/badnorth/battle.js",
+      "references": [
+        "src/core/banner.js"
+      ],
+      "changedReferences": [
+        "src/core/banner.js"
+      ],
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "src/core/banner.js",
+          "original": "src/squadbanner.js",
+          "bodySimilarity": 0.0147,
+          "changedBody": true,
+          "sha256": "fe5f05d831aac3ddb11a5f726bc1c95eb51f6f22395661f317935bffd8b48521"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "original": "engine/world.html",
+          "bodySimilarity": 0.0239,
+          "changedBody": true,
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/squad-banners-review.md",
+      "decodedFrames": 23
     },
     {
       "id": "827215002448846848",
       "video": true,
       "description": "2017-02-02]  Looking at unit tiers",
-      "historicalStatus": "未登记",
-      "where": "",
-      "references": [],
-      "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "historicalStatus": "partial",
+      "where": "src/core/unit-tier.js · unit-tiers.html",
+      "references": [
+        "src/core/unit-tier.js"
+      ],
+      "changedReferences": [
+        "src/core/unit-tier.js"
+      ],
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "unit-tiers.html",
+          "original": "compare.html",
+          "bodySimilarity": 0.077,
+          "changedBody": true,
+          "sha256": "a4f8ad0028b407d5ab9633791bc4c604d5c0b7e79f56932cf5adbda0987d7ead"
+        },
+        {
+          "path": "src/core/unit-tier.js",
+          "original": "src/navribbon.js",
+          "bodySimilarity": 0.0159,
+          "changedBody": true,
+          "sha256": "242b8e28ce24250ab3d2074deb69a65abec84378c60601e8b161e70079935a6a"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/unit-tiers-review.md",
+      "decodedFrames": 524
     },
     {
       "id": "823848950553780226",
       "video": true,
       "description": "2017-01-24]  O yes, I do have AO on my dust particles O yes, it does work on mobile",
-      "historicalStatus": "未登记",
-      "where": "",
-      "references": [],
-      "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "historicalStatus": "partial",
+      "where": "artifacts/coverage/path-samples-review.md",
+      "references": [
+        "src/core/path-samples.js"
+      ],
+      "changedReferences": [
+        "src/core/path-samples.js"
+      ],
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "src/core/path-samples.js",
+          "original": "engine/snow.js",
+          "bodySimilarity": 0.0218,
+          "changedBody": true,
+          "sha256": "1764133af50b27e917c45f7556878e74e220d026fb481ba8411943e4e2b92c55"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/path-samples-review.md",
+      "decodedFrames": 227
     },
     {
       "id": "821680056514781186",
       "video": true,
       "description": "2017-01-18]  By popular demand: Revenge of the Blues!",
-      "historicalStatus": "未登记",
-      "where": "",
+      "historicalStatus": "partial",
+      "where": "src/badnorth/battle.js",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "src/badnorth/battle.js",
+          "original": "engine/world.html",
+          "bodySimilarity": 0.0239,
+          "changedBody": true,
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/unit-tiers-review.md",
+      "decodedFrames": 763
     },
     {
       "id": "821321422140309504",
@@ -1808,9 +1994,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -1885,16 +2071,16 @@
       "id": "816748103193817088",
       "video": true,
       "description": "2017-01-04]  I'm flowing right on the nav mesh, so it depends",
-      "historicalStatus": "未登记",
+      "historicalStatus": "partial",
       "where": "",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
+      "review": "部分实现（历史登记）",
       "refactored": false,
       "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/drainage-generated-review.md",
+      "decodedFrames": 479
     },
     {
       "id": "816743289500106752",
@@ -1930,16 +2116,35 @@
       "id": "815236105079398400",
       "video": true,
       "description": "2016-12-31]  irregular is the new hex",
-      "historicalStatus": "未登记",
-      "where": "",
-      "references": [],
-      "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "historicalStatus": "partial",
+      "where": "src/core/terrace-profile.js · terraces.html",
+      "references": [
+        "src/core/terrace-profile.js"
+      ],
+      "changedReferences": [
+        "src/core/terrace-profile.js"
+      ],
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "terraces.html",
+          "original": "spherefusion.html",
+          "bodySimilarity": 0.0729,
+          "changedBody": true,
+          "sha256": "1ec2d8358993763eb74f98f60c819b56486987671ec2147d76cc24b4cf72038b"
+        },
+        {
+          "path": "src/core/terrace-profile.js",
+          "original": "src/terracecliff.js",
+          "bodySimilarity": 0.0329,
+          "changedBody": true,
+          "sha256": "ff3be306975a2e19a9d29b05d8e0b497c6af80489bf44ff6e770e43db9def7c1"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/terrace-profile-review.md",
+      "decodedFrames": 185
     },
     {
       "id": "810878197134950401",
@@ -2003,16 +2208,31 @@
       "id": "807256278154301441",
       "video": true,
       "description": "2016-12-09]  Looking at cheap swarm pathfinding. These dots could possibly be crabs or maybe recently dormant soviet under-water robots. Who knows.",
-      "historicalStatus": "未登记",
-      "where": "",
+      "historicalStatus": "partial",
+      "where": "src/core/hip-roof.js · src/build/buildings.js",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "src/core/hip-roof.js",
+          "original": "engine/contour.js",
+          "bodySimilarity": 0.0586,
+          "changedBody": true,
+          "sha256": "c1b427312f807fc73d4c5be3486ffe8307ef33efb9cf26073d521904b539b833"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "original": "src/townmesh.js",
+          "bodySimilarity": 0.0305,
+          "changedBody": true,
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/hip-roof-review.md",
+      "decodedFrames": 344
     },
     {
       "id": "807135253215199233",
@@ -2033,16 +2253,38 @@
       "id": "806904557502464000",
       "video": true,
       "description": "2016-12-08]  This one goes out to @CynicatPro @EnricLlagostera @gayasoft and all the other canal lovers out there",
-      "historicalStatus": "未登记",
-      "where": "",
+      "historicalStatus": "partial",
+      "where": "src/core/arch-profile.js · src/build/buildings.js · arches.html",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "arches.html",
+          "original": "compare.html",
+          "bodySimilarity": 0.0709,
+          "changedBody": true,
+          "sha256": "96290197fa94b6ffca245f84adb49571a34692d5624759d7bd2f3a6ee9ebbb2c"
+        },
+        {
+          "path": "src/core/arch-profile.js",
+          "original": "engine/reflection.js",
+          "bodySimilarity": 0.0307,
+          "changedBody": true,
+          "sha256": "d57b8c80004497da463efca577ecb9f9ca1d2a6151208cdbcabfc6842bfcad14"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "original": "src/townmesh.js",
+          "bodySimilarity": 0.0305,
+          "changedBody": true,
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/arch-profile-review.md",
+      "decodedFrames": 123
     },
     {
       "id": "806856212260278272",
@@ -2078,31 +2320,86 @@
       "id": "802496920790777856",
       "video": true,
       "description": "2016-11-26]  （帖子无文字说明）",
-      "historicalStatus": "未登记",
-      "where": "",
+      "historicalStatus": "partial",
+      "where": "src/core/arch-profile.js · src/build/buildings.js · arches.html",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "arches.html",
+          "original": "compare.html",
+          "bodySimilarity": 0.0709,
+          "changedBody": true,
+          "sha256": "96290197fa94b6ffca245f84adb49571a34692d5624759d7bd2f3a6ee9ebbb2c"
+        },
+        {
+          "path": "src/core/arch-profile.js",
+          "original": "engine/reflection.js",
+          "bodySimilarity": 0.0307,
+          "changedBody": true,
+          "sha256": "d57b8c80004497da463efca577ecb9f9ca1d2a6151208cdbcabfc6842bfcad14"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "original": "src/townmesh.js",
+          "bodySimilarity": 0.0305,
+          "changedBody": true,
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/arch-profile-review.md",
+      "decodedFrames": 292
     },
     {
       "id": "798580832906739712",
       "video": true,
       "description": "2016-11-15]  Some dirt cheap (and highly inaccurate) ray marching. Might use it for visibility when indoors",
-      "historicalStatus": "未登记",
-      "where": "",
-      "references": [],
-      "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "historicalStatus": "partial",
+      "where": "src/core/space-visibility.js · src/world/space-visibility.js · space-visibility.html",
+      "references": [
+        "src/core/space-visibility.js"
+      ],
+      "changedReferences": [
+        "src/core/space-visibility.js"
+      ],
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "visibility.html",
+          "original": "engine/gridmodes.html",
+          "bodySimilarity": 0.0422,
+          "changedBody": true,
+          "sha256": "32b214181ab217268b210b025b25fdddc9e1fc4665a220869d99779c5501f5c9"
+        },
+        {
+          "path": "space-visibility.html",
+          "original": "compare.html",
+          "bodySimilarity": 0.0854,
+          "changedBody": true,
+          "sha256": "444f6b43216e9acae4e2d47f13811c698bd42b9c08ffdd618f0ac48da888ee29"
+        },
+        {
+          "path": "src/core/space-visibility.js",
+          "original": "src/rayvis.js",
+          "bodySimilarity": 0.0735,
+          "changedBody": true,
+          "sha256": "111820221de1fb5f07f448c7e1f1290a1b2a97de0bfbf106731a6ff4648645b9"
+        },
+        {
+          "path": "src/world/space-visibility.js",
+          "original": "engine/backlit.js",
+          "bodySimilarity": 0.0777,
+          "changedBody": true,
+          "sha256": "abdede910efe3bbf8acbf861775a0d4262f9af2e1e4629d95e6a9f286fbc2d08"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/space-visibility-review.md",
+      "decodedFrames": 64
     },
     {
       "id": "797844857821732864",
@@ -2157,14 +2454,14 @@
           "original": "src/holenav.js",
           "bodySimilarity": 0.0243,
           "changedBody": true,
-          "sha256": "f3ce06a3aff4af417a4ba71f27ea4df87b96da82d1ab8b557bee2918ef57fc91"
+          "sha256": "06a1a28cf82678ded4c0b3c9667f5dc5d014a50eadf0682730c0aee62cdb880e"
         },
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -2251,10 +2548,10 @@
         },
         {
           "path": "src/core/wfc.js",
-          "original": "engine/repair.html",
-          "bodySimilarity": 0.023,
+          "original": "src/tilerepair.js",
+          "bodySimilarity": 0.0179,
           "changedBody": true,
-          "sha256": "0e2eba4d6f820ac6ff97292b4156dbf6ab1543b8208f5eaf0f8f408f30101beb"
+          "sha256": "d11d3247a203d67dcc4ffea408ab62e59436a8a8048d9aebe95a2af03f3f4d2f"
         }
       ],
       "frameReview": true,
@@ -2265,46 +2562,83 @@
       "id": "793557992931266561",
       "video": true,
       "description": "2016-11-01]  flat -> up normal -> vertex voxel AO -> SSAO -> directional AO (With textures and baked vertex colors, I could get rid of the SSAO)",
-      "historicalStatus": "未登记",
-      "where": "",
+      "historicalStatus": "partial",
+      "where": "src/world/worldmesh.js · src/light/bake.js · ao-stages.html",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "ao-stages.html",
+          "original": "flow.html",
+          "bodySimilarity": 0.0488,
+          "changedBody": true,
+          "sha256": "0d6ebe1ca782631e8d23345835dae64287156046f6ebbd5ae988ce382fb998e1"
+        },
+        {
+          "path": "src/world/worldmesh.js",
+          "original": "src/townmesh.js",
+          "bodySimilarity": 0.0293,
+          "changedBody": true,
+          "sha256": "6302dbd281cbd4103ba5d89fc2e7c289272a2f2b3b5a3f461224564ad0a42ac4"
+        },
+        {
+          "path": "src/light/bake.js",
+          "original": "src/mesh.js",
+          "bodySimilarity": 0.023,
+          "changedBody": true,
+          "sha256": "2edc43f5acb1da16b133390223a98f5559e7b6fc87896b88043f6ef6f8b750a5"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/ao-stages-review.md",
+      "decodedFrames": 6
     },
     {
       "id": "793545297376972801",
       "video": true,
       "description": "2016-11-01]  I got multi tiles and voxel AO working. Would you play a game that takes place on a building like this? Maybe if it was infinitely tall?",
-      "historicalStatus": "未登记",
-      "where": "",
+      "historicalStatus": "partial",
+      "where": "artifacts/coverage/multitile-ao-review.md",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
+      "review": "部分实现（历史登记）",
       "refactored": false,
       "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/multitile-ao-review.md",
+      "decodedFrames": 102
     },
     {
       "id": "787319655648100352",
       "video": true,
       "description": "2016-10-15]  More procedural tile placement. Now in 3D. Algorithm inspired by the work of @ExUtumno",
-      "historicalStatus": "未登记",
-      "where": "",
+      "historicalStatus": "partial",
+      "where": "src/core/wfc.js · src/build/buildings.js",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "src/core/wfc.js",
+          "original": "src/tilerepair.js",
+          "bodySimilarity": 0.0179,
+          "changedBody": true,
+          "sha256": "d11d3247a203d67dcc4ffea408ab62e59436a8a8048d9aebe95a2af03f3f4d2f"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "original": "src/townmesh.js",
+          "bodySimilarity": 0.0305,
+          "changedBody": true,
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/space-visibility-review.md",
+      "decodedFrames": 67
     },
     {
       "id": "784848286272327680",
@@ -2355,16 +2689,45 @@
       "id": "781957658597269506",
       "video": true,
       "description": "2016-09-30]  （帖子无文字说明）",
-      "historicalStatus": "未登记",
-      "where": "",
+      "historicalStatus": "partial",
+      "where": "src/terrain/generate.js · src/core/ladder-profile.js · src/world/navlayer.js · terraces.html",
       "references": [],
       "changedReferences": [],
-      "review": "沿用实现 / 待核查",
-      "refactored": false,
-      "codeEvidence": [],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "review": "已重构 · 部分实现",
+      "refactored": true,
+      "codeEvidence": [
+        {
+          "path": "terraces.html",
+          "original": "spherefusion.html",
+          "bodySimilarity": 0.0729,
+          "changedBody": true,
+          "sha256": "1ec2d8358993763eb74f98f60c819b56486987671ec2147d76cc24b4cf72038b"
+        },
+        {
+          "path": "src/core/ladder-profile.js",
+          "original": "engine/bncanopy.js",
+          "bodySimilarity": 0.0453,
+          "changedBody": true,
+          "sha256": "e0057ec41c883b76299e1069d5f72da50a74c95c827d1e5d66ca1571a86fde60"
+        },
+        {
+          "path": "src/world/navlayer.js",
+          "original": "src/frontier.js",
+          "bodySimilarity": 0.0302,
+          "changedBody": true,
+          "sha256": "9f2e8eeb0ab8ba574e6929d76352d971d3700b614368ed3a52f195cc5ec75ecd"
+        },
+        {
+          "path": "src/terrain/generate.js",
+          "original": "src/terrainmesh.js",
+          "bodySimilarity": 0.0348,
+          "changedBody": true,
+          "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
+        }
+      ],
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/wood-ladders-review.md",
+      "decodedFrames": 109
     },
     {
       "id": "781027725452648448",
@@ -2461,7 +2824,7 @@
         {
           "path": "waves.html",
           "original": "overview.html",
-          "bodySimilarity": 0.0328,
+          "bodySimilarity": 0.0342,
           "changedBody": true,
           "sha256": "f1494004216d6e9c998c57300a2c2590328965d5077f2361f772571767e21a05"
         },
@@ -2482,9 +2845,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -2513,7 +2876,7 @@
         {
           "path": "waves.html",
           "original": "overview.html",
-          "bodySimilarity": 0.0328,
+          "bodySimilarity": 0.0342,
           "changedBody": true,
           "sha256": "f1494004216d6e9c998c57300a2c2590328965d5077f2361f772571767e21a05"
         },
@@ -2561,7 +2924,7 @@
         {
           "path": "waves.html",
           "original": "overview.html",
-          "bodySimilarity": 0.0328,
+          "bodySimilarity": 0.0342,
           "changedBody": true,
           "sha256": "f1494004216d6e9c998c57300a2c2590328965d5077f2361f772571767e21a05"
         },
@@ -2582,9 +2945,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -2724,16 +3087,16 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/life/impostor.js",
           "original": "engine/impostor.js",
-          "bodySimilarity": 0.0331,
+          "bodySimilarity": 0.0325,
           "changedBody": true,
-          "sha256": "3e466728d8769ad9103cb1c50e34c01f7182c25a0a06d74a0ba4288b607a42ba"
+          "sha256": "4240bcb290123bf3f91aadad0a77a2ed3fc376285efb24e8291f56137085c946"
         }
       ],
       "frameReview": true,
@@ -2783,9 +3146,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -2812,7 +3175,7 @@
         {
           "path": "waves.html",
           "original": "overview.html",
-          "bodySimilarity": 0.0328,
+          "bodySimilarity": 0.0342,
           "changedBody": true,
           "sha256": "f1494004216d6e9c998c57300a2c2590328965d5077f2361f772571767e21a05"
         },
@@ -2864,16 +3227,16 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/life/impostor.js",
           "original": "engine/impostor.js",
-          "bodySimilarity": 0.0331,
+          "bodySimilarity": 0.0325,
           "changedBody": true,
-          "sha256": "3e466728d8769ad9103cb1c50e34c01f7182c25a0a06d74a0ba4288b607a42ba"
+          "sha256": "4240bcb290123bf3f91aadad0a77a2ed3fc376285efb24e8291f56137085c946"
         }
       ],
       "frameReview": true,
@@ -2924,16 +3287,16 @@
         {
           "path": "src/world/navgraph.js",
           "original": "src/surfacedeco.js",
-          "bodySimilarity": 0.0153,
+          "bodySimilarity": 0.0151,
           "changedBody": true,
-          "sha256": "9e2f992ffd4a2345a157295a185b7d6d4245c5bb74dbf82c7cc5204bdea222af"
+          "sha256": "64ced8e2222711bbdfc9cc957ed43de648fbee88ca881c11d912868878255863"
         },
         {
           "path": "src/world/navlayer.js",
           "original": "src/frontier.js",
-          "bodySimilarity": 0.0206,
+          "bodySimilarity": 0.0302,
           "changedBody": true,
-          "sha256": "32e81fea0e35561bb25af91ad211526d11e6433546747d04acfb95cd0668af5d"
+          "sha256": "9f2e8eeb0ab8ba574e6929d76352d971d3700b614368ed3a52f195cc5ec75ecd"
         }
       ],
       "frameReview": true,
@@ -3104,14 +3467,14 @@
         },
         {
           "path": "src/terrain/generate.js",
-          "original": "engine/rivers.js",
-          "bodySimilarity": 0.286,
+          "original": "src/terrainmesh.js",
+          "bodySimilarity": 0.0348,
           "changedBody": true,
-          "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+          "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
         }
       ],
       "frameReview": true,
-      "reviewEvidence": "artifacts/coverage/river-nav-review.md",
+      "reviewEvidence": "artifacts/coverage/river-network-review.md",
       "decodedFrames": 194
     },
     {
@@ -3206,9 +3569,9 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/atlas.js",
@@ -3242,9 +3605,9 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/atlas.js",
@@ -3278,9 +3641,9 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/atlas.js",
@@ -3301,16 +3664,25 @@
       "historicalStatus": "partial",
       "where": "src/water/watervol.js · src/water/land-distance.js",
       "references": [
+        "src/capabilities/layers-meta.js",
         "src/water/watervol.js",
         "src/world/view.js"
       ],
       "changedReferences": [
+        "src/capabilities/layers-meta.js",
         "src/water/watervol.js",
         "src/world/view.js"
       ],
       "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
+        {
+          "path": "src/capabilities/layers-meta.js",
+          "original": "src/grasscards.js",
+          "bodySimilarity": 0.0342,
+          "changedBody": true,
+          "sha256": "4b9fa7ca748f6f61465ea85520e9498c34e80fda5cdc65b99c3b8c9b18ac6fc6"
+        },
         {
           "path": "src/water/watervol.js",
           "original": "engine/watervol.js",
@@ -3328,9 +3700,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -3369,9 +3741,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -3407,9 +3779,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/world/outline.js",
@@ -3523,9 +3895,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -3557,9 +3929,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -3665,9 +4037,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -3715,9 +4087,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -3731,9 +4103,11 @@
       "historicalStatus": "partial",
       "where": "src/terrain/features.js · shape.js · src/core/deformation-guard.js",
       "references": [
+        "src/capabilities/terrain.js",
         "src/terrain/features.js"
       ],
       "changedReferences": [
+        "src/capabilities/terrain.js",
         "src/terrain/features.js"
       ],
       "review": "已重构 · 部分实现",
@@ -3745,6 +4119,13 @@
           "bodySimilarity": 0.0354,
           "changedBody": true,
           "sha256": "794658423c7e5f565c4e219bbf240585d697de7b0050854d38bf5ee5327ec14b"
+        },
+        {
+          "path": "src/capabilities/terrain.js",
+          "original": "src/halfedge.js",
+          "bodySimilarity": 0.0196,
+          "changedBody": true,
+          "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a"
         },
         {
           "path": "src/terrain/features.js",
@@ -3822,9 +4203,9 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         }
       ],
       "frameReview": true,
@@ -3852,9 +4233,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/light/surface-shadow.js",
@@ -3900,9 +4281,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/terrain/blotch-pattern.js",
@@ -3937,9 +4318,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/light/surface-shadow.js",
@@ -3987,9 +4368,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/terrain/blotch-pattern.js",
@@ -4039,9 +4420,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/terrain/terrainmesh.js",
@@ -4091,9 +4472,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/terrain/terrainmesh.js",
@@ -4161,9 +4542,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/terrain/blotch-pattern.js",
@@ -4234,11 +4615,13 @@
       "where": "src/core/rock-topology.js · terrain/features.js · terrainmesh.js",
       "references": [
         "overhang.html",
+        "src/capabilities/terrain.js",
         "src/terrain/features.js",
         "src/terrain/terrainmesh.js"
       ],
       "changedReferences": [
         "overhang.html",
+        "src/capabilities/terrain.js",
         "src/terrain/features.js",
         "src/terrain/terrainmesh.js"
       ],
@@ -4258,6 +4641,13 @@
           "bodySimilarity": 0.0333,
           "changedBody": true,
           "sha256": "7835134fcf91cf5057edc5dd9b1a027c3a1a91ae7ed85de712f777a94ce2a92d"
+        },
+        {
+          "path": "src/capabilities/terrain.js",
+          "original": "src/halfedge.js",
+          "bodySimilarity": 0.0196,
+          "changedBody": true,
+          "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a"
         },
         {
           "path": "src/terrain/features.js",
@@ -4286,10 +4676,12 @@
       "where": "src/terrain/features.js · src/core/module-audit.js",
       "references": [
         "src/core/module-audit.js",
+        "src/capabilities/terrain.js",
         "src/terrain/features.js"
       ],
       "changedReferences": [
         "src/core/module-audit.js",
+        "src/capabilities/terrain.js",
         "src/terrain/features.js"
       ],
       "review": "已重构（代码对比确认）",
@@ -4301,6 +4693,13 @@
           "bodySimilarity": 0.0107,
           "changedBody": true,
           "sha256": "3a9579f1b2fc37431fb0906e69b099022ba3a94876511b66854411899b1a903c"
+        },
+        {
+          "path": "src/capabilities/terrain.js",
+          "original": "src/halfedge.js",
+          "bodySimilarity": 0.0196,
+          "changedBody": true,
+          "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a"
         },
         {
           "path": "src/terrain/features.js",
@@ -4334,9 +4733,9 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/grid.js",
@@ -4449,22 +4848,36 @@
       "video": true,
       "description": "2023-06-15]  The generator consistently spits out pretty cool islands now",
       "historicalStatus": "partial",
-      "where": "src/terrain/generate.js",
+      "where": "src/terrain/generate.js · src/core/terrace-edges.js · terraces.html",
       "references": [],
       "changedReferences": [],
       "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
-          "path": "src/terrain/generate.js",
-          "original": "engine/rivers.js",
-          "bodySimilarity": 0.286,
+          "path": "terraces.html",
+          "original": "spherefusion.html",
+          "bodySimilarity": 0.0729,
           "changedBody": true,
-          "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+          "sha256": "1ec2d8358993763eb74f98f60c819b56486987671ec2147d76cc24b4cf72038b"
+        },
+        {
+          "path": "src/core/terrace-edges.js",
+          "original": "engine/contour.js",
+          "bodySimilarity": 0.0394,
+          "changedBody": true,
+          "sha256": "cc41ee9b1160582b9adf37ca69169df23a089c2c3f2bee40139339271d2607e3"
+        },
+        {
+          "path": "src/terrain/generate.js",
+          "original": "src/terrainmesh.js",
+          "bodySimilarity": 0.0348,
+          "changedBody": true,
+          "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
         }
       ],
       "frameReview": true,
-      "reviewEvidence": "artifacts/coverage/grid-kinds-review.md",
+      "reviewEvidence": "artifacts/coverage/terrace-edges-review.md",
       "decodedFrames": 649
     },
     {
@@ -4594,10 +5007,10 @@
       "codeEvidence": [
         {
           "path": "src/terrain/generate.js",
-          "original": "engine/rivers.js",
-          "bodySimilarity": 0.286,
+          "original": "src/terrainmesh.js",
+          "bodySimilarity": 0.0348,
           "changedBody": true,
-          "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+          "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
         }
       ],
       "frameReview": false,
@@ -4631,9 +5044,9 @@
         {
           "path": "src/life/impostor.js",
           "original": "engine/impostor.js",
-          "bodySimilarity": 0.0331,
+          "bodySimilarity": 0.0325,
           "changedBody": true,
-          "sha256": "3e466728d8769ad9103cb1c50e34c01f7182c25a0a06d74a0ba4288b607a42ba"
+          "sha256": "4240bcb290123bf3f91aadad0a77a2ed3fc376285efb24e8291f56137085c946"
         }
       ],
       "frameReview": true,
@@ -4658,9 +5071,9 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         }
       ],
       "frameReview": true,
@@ -4685,9 +5098,9 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         }
       ],
       "frameReview": false,
@@ -4702,10 +5115,12 @@
       "where": "src/build/multicell.js · src/world/scenes.js · multicell.html",
       "references": [
         "src/ui/walkthrough.js",
+        "src/capabilities/terrain.js",
         "src/world/scenes.js"
       ],
       "changedReferences": [
         "src/ui/walkthrough.js",
+        "src/capabilities/terrain.js",
         "src/world/scenes.js"
       ],
       "review": "已重构 · 部分实现",
@@ -4724,6 +5139,13 @@
           "bodySimilarity": 0.02,
           "changedBody": true,
           "sha256": "82e68ec317bc39ce8dd5ca7a93016aebcddc6d48c59517b3e5f5177fd8abde95"
+        },
+        {
+          "path": "src/capabilities/terrain.js",
+          "original": "src/halfedge.js",
+          "bodySimilarity": 0.0196,
+          "changedBody": true,
+          "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a"
         },
         {
           "path": "src/world/scenes.js",
@@ -4778,9 +5200,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/light/lightvolume.js",
@@ -4830,16 +5252,16 @@
         {
           "path": "src/world/navgraph.js",
           "original": "src/surfacedeco.js",
-          "bodySimilarity": 0.0153,
+          "bodySimilarity": 0.0151,
           "changedBody": true,
-          "sha256": "9e2f992ffd4a2345a157295a185b7d6d4245c5bb74dbf82c7cc5204bdea222af"
+          "sha256": "64ced8e2222711bbdfc9cc957ed43de648fbee88ca881c11d912868878255863"
         },
         {
           "path": "src/world/navlayer.js",
           "original": "src/frontier.js",
-          "bodySimilarity": 0.0206,
+          "bodySimilarity": 0.0302,
           "changedBody": true,
-          "sha256": "32e81fea0e35561bb25af91ad211526d11e6433546747d04acfb95cd0668af5d"
+          "sha256": "9f2e8eeb0ab8ba574e6929d76352d971d3700b614368ed3a52f195cc5ec75ecd"
         }
       ],
       "frameReview": true,
@@ -4871,9 +5293,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/light/lightvolume.js",
@@ -4912,9 +5334,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/light/lightvolume.js",
@@ -4962,9 +5384,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/light/lightvolume.js",
@@ -5003,16 +5425,16 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/life/impostor.js",
           "original": "engine/impostor.js",
-          "bodySimilarity": 0.0331,
+          "bodySimilarity": 0.0325,
           "changedBody": true,
-          "sha256": "3e466728d8769ad9103cb1c50e34c01f7182c25a0a06d74a0ba4288b607a42ba"
+          "sha256": "4240bcb290123bf3f91aadad0a77a2ed3fc376285efb24e8291f56137085c946"
         }
       ],
       "frameReview": true,
@@ -5046,9 +5468,9 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         }
       ],
       "frameReview": false,
@@ -5185,10 +5607,10 @@
         },
         {
           "path": "src/terrain/generate.js",
-          "original": "engine/rivers.js",
-          "bodySimilarity": 0.286,
+          "original": "src/terrainmesh.js",
+          "bodySimilarity": 0.0348,
           "changedBody": true,
-          "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+          "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
         }
       ],
       "frameReview": true,
@@ -5381,9 +5803,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": false,
@@ -5421,25 +5843,34 @@
       "id": "1471817524148940807",
       "video": true,
       "description": "2021-12-17]  Some rocky islands. Trying to make the grid natural and readable, yet funky. Square, yet hex.",
-      "historicalStatus": "done",
-      "where": "src/core/grid.js（buildMixedGrid）",
+      "historicalStatus": "partial",
+      "where": "src/core/corner-footprint.js · corner-cuts.html",
       "references": [
         "grids.html",
-        "src/core/grid.js"
+        "src/core/grid.js",
+        "src/core/corner-footprint.js"
       ],
       "changedReferences": [
         "grids.html",
-        "src/core/grid.js"
+        "src/core/grid.js",
+        "src/core/corner-footprint.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
+        },
+        {
+          "path": "corner-cuts.html",
+          "original": "compare.html",
+          "bodySimilarity": 0.0693,
+          "changedBody": true,
+          "sha256": "4abd8a49bebeec54b456f7eeab96c99abd352075b16e718db783c3ff265daf07"
         },
         {
           "path": "src/core/grid.js",
@@ -5447,11 +5878,18 @@
           "bodySimilarity": 0.0412,
           "changedBody": true,
           "sha256": "8276f979671a438ceac79643ecd26a00efde21a5c546d5871f4144560a1f443d"
+        },
+        {
+          "path": "src/core/corner-footprint.js",
+          "original": "src/squarehex.js",
+          "bodySimilarity": 0.0892,
+          "changedBody": true,
+          "sha256": "117e13b9debd6064ea2750b44327e0973125b51e58ae39da0d9c8ba480b3eb87"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/corner-cuts-review.md",
+      "decodedFrames": 556
     },
     {
       "id": "1466059785703460870",
@@ -5560,9 +5998,9 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/grid.js",
@@ -5573,10 +6011,10 @@
         },
         {
           "path": "src/terrain/generate.js",
-          "original": "engine/rivers.js",
-          "bodySimilarity": 0.286,
+          "original": "src/terrainmesh.js",
+          "bodySimilarity": 0.0348,
           "changedBody": true,
-          "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+          "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
         }
       ],
       "frameReview": true,
@@ -5661,10 +6099,10 @@
         },
         {
           "path": "src/terrain/generate.js",
-          "original": "engine/rivers.js",
-          "bodySimilarity": 0.286,
+          "original": "src/terrainmesh.js",
+          "bodySimilarity": 0.0348,
           "changedBody": true,
-          "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+          "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
         }
       ],
       "frameReview": true,
@@ -5684,10 +6122,10 @@
       "codeEvidence": [
         {
           "path": "src/terrain/generate.js",
-          "original": "engine/rivers.js",
-          "bodySimilarity": 0.286,
+          "original": "src/terrainmesh.js",
+          "bodySimilarity": 0.0348,
           "changedBody": true,
-          "sha256": "a94305f6b97dbe2f887d02a8ee5482634d6122a1d73858d3d88e9f2ef98aa625"
+          "sha256": "b360331fcb45d0abfa7b8fd283702e54a1b683027a31eaab65d21f509f0523ec"
         }
       ],
       "frameReview": false,
@@ -5759,9 +6197,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -5822,9 +6260,9 @@
         {
           "path": "src/world/worldmesh.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0303,
+          "bodySimilarity": 0.0293,
           "changedBody": true,
-          "sha256": "c5662889453cb0fb6fa2607259cab49bcd6ae1608e6131f17b6f24b178c0c6f0"
+          "sha256": "6302dbd281cbd4103ba5d89fc2e7c289272a2f2b3b5a3f461224564ad0a42ac4"
         }
       ],
       "frameReview": true,
@@ -5851,9 +6289,9 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/grid.js",
@@ -6073,9 +6511,9 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/grid.js",
@@ -6086,10 +6524,10 @@
         },
         {
           "path": "src/core/infinite.js",
-          "original": "src/quadgrid.js",
-          "bodySimilarity": 0.019,
+          "original": "src/grid.js",
+          "bodySimilarity": 0.0169,
           "changedBody": true,
-          "sha256": "30f0e555bfe429c4aaa3842d1640c2483984711c7e9b357924e1d7827ecd79ff"
+          "sha256": "3b962217825eed2f8971f3e3fc25dad7c8900ea47f241c948f03ddf022195d9a"
         }
       ],
       "frameReview": false,
@@ -6103,10 +6541,14 @@
       "historicalStatus": "done",
       "where": "src/build/lighthouse.js（开关「灯塔」）",
       "references": [
+        "src/capabilities/build.js",
+        "src/capabilities/layers-meta.js",
         "src/world/view.js",
         "src/build/lighthouse.js"
       ],
       "changedReferences": [
+        "src/capabilities/build.js",
+        "src/capabilities/layers-meta.js",
         "src/world/view.js",
         "src/build/lighthouse.js"
       ],
@@ -6114,18 +6556,32 @@
       "refactored": true,
       "codeEvidence": [
         {
+          "path": "src/capabilities/build.js",
+          "original": "tmp/cap/bsheet2.html",
+          "bodySimilarity": 0.0075,
+          "changedBody": true,
+          "sha256": "e191a7c92b26878b6d0950f1657afa8a61b74bb26ccf846bd5c3aec411eb88f8"
+        },
+        {
+          "path": "src/capabilities/layers-meta.js",
+          "original": "src/grasscards.js",
+          "bodySimilarity": 0.0342,
+          "changedBody": true,
+          "sha256": "4b9fa7ca748f6f61465ea85520e9498c34e80fda5cdc65b99c3b8c9b18ac6fc6"
+        },
+        {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/build/lighthouse.js",
-          "original": "engine/waterfall.js",
-          "bodySimilarity": 0.0889,
+          "original": "tmp/cap/bsheet2.html",
+          "bodySimilarity": 0.0036,
           "changedBody": true,
-          "sha256": "aad9304d45e602d7b3fd3d5a5d7d9e1b7ef4b777106b36ac477fe8fef3bf5308"
+          "sha256": "3dc35b28244f55e3ca2e49aac1a9e6dcb9540362eb92d49f49d43dc4fb53d5f8"
         }
       ],
       "frameReview": false,
@@ -6146,9 +6602,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": false,
@@ -6193,7 +6649,7 @@
         {
           "path": "src/ui/learnpanel.js",
           "original": "src/learnpanel.js",
-          "bodySimilarity": 0.7246,
+          "bodySimilarity": 0.7169,
           "changedBody": true,
           "sha256": "5c418a79d2c7254701790b9c5819206f2b7419bcd13f429073d7be3caf4c4c0a"
         },
@@ -6214,9 +6670,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/light/penumbra.js",
@@ -6307,9 +6763,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/light/penumbra.js",
@@ -6337,9 +6793,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": false,
@@ -6366,16 +6822,16 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/infinite.js",
-          "original": "src/quadgrid.js",
-          "bodySimilarity": 0.019,
+          "original": "src/grid.js",
+          "bodySimilarity": 0.0169,
           "changedBody": true,
-          "sha256": "30f0e555bfe429c4aaa3842d1640c2483984711c7e9b357924e1d7827ecd79ff"
+          "sha256": "3b962217825eed2f8971f3e3fc25dad7c8900ea47f241c948f03ddf022195d9a"
         }
       ],
       "frameReview": false,
@@ -6437,9 +6893,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": false,
@@ -6491,16 +6947,16 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": true,
@@ -6525,9 +6981,9 @@
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": false,
@@ -6729,9 +7185,9 @@
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": false,
@@ -6788,9 +7244,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/life/effects.js",
@@ -6833,9 +7289,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": false,
@@ -6847,7 +7303,7 @@
       "video": true,
       "description": "2020-03-26]  Some moody clouds",
       "historicalStatus": "partial",
-      "where": "src/life/vegetation.js · src/life/impostor.js · clouds.html",
+      "where": "src/life/vegetation.js · src/life/impostor.js · clouds.html · src/light/cloud-shadow.js",
       "references": [
         "src/life/vegetation.js",
         "src/life/atmosphere.js",
@@ -6863,17 +7319,17 @@
       "codeEvidence": [
         {
           "path": "clouds.html",
-          "original": "tools/player.html",
-          "bodySimilarity": 0.0401,
+          "original": "compare.html",
+          "bodySimilarity": 0.1219,
           "changedBody": true,
-          "sha256": "618aa1069cba2b8207fc7660b6693eef3905ca07a0cc436ef6db8fbe340c16fa"
+          "sha256": "7dc5dccb5dee90a310e9a17a1bd69cc62635bc52cf40fd2cfcc6ed79307daa83"
         },
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/life/atmosphere.js",
@@ -6885,13 +7341,20 @@
         {
           "path": "src/life/impostor.js",
           "original": "engine/impostor.js",
-          "bodySimilarity": 0.0331,
+          "bodySimilarity": 0.0325,
           "changedBody": true,
-          "sha256": "3e466728d8769ad9103cb1c50e34c01f7182c25a0a06d74a0ba4288b607a42ba"
+          "sha256": "4240bcb290123bf3f91aadad0a77a2ed3fc376285efb24e8291f56137085c946"
+        },
+        {
+          "path": "src/light/cloud-shadow.js",
+          "original": "engine/backlit.js",
+          "bodySimilarity": 0.0547,
+          "changedBody": true,
+          "sha256": "56958392639bfa183c0f3e05f1997553464e89ab380b5546055805d522df3b36"
         }
       ],
       "frameReview": true,
-      "reviewEvidence": "artifacts/coverage/clouds-winter-review.md",
+      "reviewEvidence": "artifacts/coverage/cloud-shadow-review.md",
       "decodedFrames": 489
     },
     {
@@ -7002,9 +7465,9 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/life/leaf-surface.js",
@@ -7076,9 +7539,9 @@
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": true,
@@ -7198,9 +7661,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": true,
@@ -7257,9 +7720,9 @@
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": true,
@@ -7381,9 +7844,9 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/life/leaf-surface.js",
@@ -7401,28 +7864,37 @@
       "id": "1205416648397721601",
       "video": true,
       "description": "2019-12-13]  New prop placement system! It tries to place as many props as it can without overlap. I use it for doors and windows too, which means they are no longer skewed when placed on skewed tiles, which means skewed tiles now look less awkward.",
-      "historicalStatus": "done",
-      "where": "src/build/buildings.js（tryPlace）",
+      "historicalStatus": "partial",
+      "where": "src/core/opening-footprint.js · src/build/buildings.js",
       "references": [
+        "src/core/opening-footprint.js",
         "src/build/buildings.js"
       ],
       "changedReferences": [
+        "src/core/opening-footprint.js",
         "src/build/buildings.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
+          "path": "src/core/opening-footprint.js",
+          "original": "engine/props.js",
+          "bodySimilarity": 0.0294,
+          "changedBody": true,
+          "sha256": "1271974a2b4bf14ebc0a3ab6d68db5fb601dd6c53136cda2692d35122e423699"
+        },
+        {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/opening-footprint-review.md",
+      "decodedFrames": 261
     },
     {
       "id": "1201179450668441600",
@@ -7583,9 +8055,9 @@
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": true,
@@ -7635,17 +8107,17 @@
         },
         {
           "path": "src/core/anchored-billboard.js",
-          "original": "engine/impostor.js",
-          "bodySimilarity": 0.0088,
+          "original": "src/shrubcard.js",
+          "bodySimilarity": 0.0245,
           "changedBody": true,
           "sha256": "3ac2d5b520c53062e51d0935f6134ad599ed5d9369acc72a53c555c374cb6f76"
         },
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         }
       ],
       "frameReview": true,
@@ -7670,9 +8142,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": false,
@@ -7686,20 +8158,29 @@
       "historicalStatus": "done",
       "where": "src/build/buildings.js",
       "references": [
+        "src/capabilities/terrain.js",
         "src/build/buildings.js"
       ],
       "changedReferences": [
+        "src/capabilities/terrain.js",
         "src/build/buildings.js"
       ],
       "review": "已重构（代码对比确认）",
       "refactored": true,
       "codeEvidence": [
         {
+          "path": "src/capabilities/terrain.js",
+          "original": "src/halfedge.js",
+          "bodySimilarity": 0.0196,
+          "changedBody": true,
+          "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a"
+        },
+        {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": false,
@@ -7710,28 +8191,28 @@
       "id": "1189902695303458816",
       "video": true,
       "description": "2019-10-31]  It was real fun making the steel beam support structures. They have this neat artificial yet organic feel to them. Its a place where the WFC algorithm really shines and that would be hard or at least laborious to create with other systems.",
-      "historicalStatus": "done",
-      "where": "src/build/buildings.js",
+      "historicalStatus": "partial",
+      "where": "src/build/buildings.js（保留已有钢架；本批仅学习）",
       "references": [
         "src/build/buildings.js"
       ],
       "changedReferences": [
         "src/build/buildings.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/building-components-review.md",
+      "decodedFrames": 296
     },
     {
       "id": "1189109278361165825",
@@ -7747,9 +8228,9 @@
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": false,
@@ -7760,46 +8241,58 @@
       "id": "1181464374839521280",
       "video": true,
       "description": "2019-10-08]  I made some stairs, plus an additional smaller WFC for surface decorations like windows and doors (who's awkward placement otherwise explodes the permutation count) I'll give my first talk on this at Indicade in Paris on the 19th. Hope to see you there! https:// indiecade-europe.eu/en/programme/c onferences …",
-      "historicalStatus": "done",
-      "where": "src/build/buildings.js · src/world/navlayer.js",
+      "historicalStatus": "partial",
+      "where": "src/core/building-components.js · src/build/buildings.js · building-components.html",
       "references": [
         "src/world/navgraph.js",
-        "src/world/navlayer.js",
-        "src/build/buildings.js"
+        "src/world/navlayer.js"
       ],
       "changedReferences": [
         "src/world/navgraph.js",
-        "src/world/navlayer.js",
-        "src/build/buildings.js"
+        "src/world/navlayer.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
+          "path": "building-components.html",
+          "original": "compare.html",
+          "bodySimilarity": 0.0714,
+          "changedBody": true,
+          "sha256": "1f9fcde7f38a05180e5e64c34144c91f7b3425e3051bf6f7a93287eec86fe0e0"
+        },
+        {
+          "path": "src/core/building-components.js",
+          "original": "engine/contour.js",
+          "bodySimilarity": 0.0334,
+          "changedBody": true,
+          "sha256": "3584f691d22a96fcfa73dd04a858e5661a8792050e34bc9deb1774e82746ef7f"
+        },
+        {
           "path": "src/world/navgraph.js",
           "original": "src/surfacedeco.js",
-          "bodySimilarity": 0.0153,
+          "bodySimilarity": 0.0151,
           "changedBody": true,
-          "sha256": "9e2f992ffd4a2345a157295a185b7d6d4245c5bb74dbf82c7cc5204bdea222af"
+          "sha256": "64ced8e2222711bbdfc9cc957ed43de648fbee88ca881c11d912868878255863"
         },
         {
           "path": "src/world/navlayer.js",
           "original": "src/frontier.js",
-          "bodySimilarity": 0.0206,
+          "bodySimilarity": 0.0302,
           "changedBody": true,
-          "sha256": "32e81fea0e35561bb25af91ad211526d11e6433546747d04acfb95cd0668af5d"
+          "sha256": "9f2e8eeb0ab8ba574e6929d76352d971d3700b614368ed3a52f195cc5ec75ecd"
         },
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/facade-decoration-review.md",
+      "decodedFrames": 505
     },
     {
       "id": "1178731576982724611",
@@ -7819,16 +8312,16 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         },
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": true,
@@ -7853,9 +8346,9 @@
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": false,
@@ -7881,8 +8374,8 @@
       "id": "1168571866405097472",
       "video": true,
       "description": "2019-09-02]  A peek at my ambient occlusion approach. The occlusion lives in a layered mesh that's reprojected to a texture at each change. That texture is then blurred, and sampled in the vertex shader of whatever needs lighting.",
-      "historicalStatus": "done",
-      "where": "src/light/bake.js",
+      "historicalStatus": "partial",
+      "where": "src/world/worldmesh.js · src/light/bake.js · ao-stages.html",
       "references": [
         "src/ui/walkthrough.js",
         "src/light/bake.js"
@@ -7891,15 +8384,29 @@
         "src/ui/walkthrough.js",
         "src/light/bake.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
+        {
+          "path": "ao-stages.html",
+          "original": "flow.html",
+          "bodySimilarity": 0.0488,
+          "changedBody": true,
+          "sha256": "0d6ebe1ca782631e8d23345835dae64287156046f6ebbd5ae988ce382fb998e1"
+        },
         {
           "path": "src/ui/walkthrough.js",
           "original": "plantlab.html",
           "bodySimilarity": 0.02,
           "changedBody": true,
           "sha256": "82e68ec317bc39ce8dd5ca7a93016aebcddc6d48c59517b3e5f5177fd8abde95"
+        },
+        {
+          "path": "src/world/worldmesh.js",
+          "original": "src/townmesh.js",
+          "bodySimilarity": 0.0293,
+          "changedBody": true,
+          "sha256": "6302dbd281cbd4103ba5d89fc2e7c289272a2f2b3b5a3f461224564ad0a42ac4"
         },
         {
           "path": "src/light/bake.js",
@@ -7909,9 +8416,9 @@
           "sha256": "2edc43f5acb1da16b133390223a98f5559e7b6fc87896b88043f6ef6f8b750a5"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/ao-stages-review.md",
+      "decodedFrames": 551
     },
     {
       "id": "1168168400155267072",
@@ -7960,10 +8467,10 @@
         },
         {
           "path": "src/core/wfc.js",
-          "original": "engine/repair.html",
-          "bodySimilarity": 0.023,
+          "original": "src/tilerepair.js",
+          "bodySimilarity": 0.0179,
           "changedBody": true,
-          "sha256": "0e2eba4d6f820ac6ff97292b4156dbf6ab1543b8208f5eaf0f8f408f30101beb"
+          "sha256": "d11d3247a203d67dcc4ffea408ab62e59436a8a8048d9aebe95a2af03f3f4d2f"
         }
       ],
       "frameReview": true,
@@ -7984,9 +8491,9 @@
         {
           "path": "src/build/buildings.js",
           "original": "src/townmesh.js",
-          "bodySimilarity": 0.0339,
+          "bodySimilarity": 0.0305,
           "changedBody": true,
-          "sha256": "d2ee695af4a8b08d5b7611a124b922796f4fad358c7c9016080082c341d5c33b"
+          "sha256": "48e20b20c1e679d1081f7372692b749ee4ea73f8a0bf61d1a0a29d06e24db991"
         }
       ],
       "frameReview": false,
@@ -7997,8 +8504,8 @@
       "id": "1151770831619534848",
       "video": true,
       "description": "2019-07-18]  I figured out how to make do with relaxation clusters of 3 instead of 7, which means I have to generate fewer unrelaxed patches before I can start relaxing, which makes it faster. Note also that the black and the white grid are *dual* to each other. This is an important concept",
-      "historicalStatus": "done",
-      "where": "src/core/infinite.js · grids.html",
+      "historicalStatus": "partial",
+      "where": "src/core/infinite.js · grids.html?t=infinite",
       "references": [
         "grids.html",
         "src/core/grid.js",
@@ -8009,15 +8516,15 @@
         "src/core/grid.js",
         "src/core/infinite.js"
       ],
-      "review": "已重构（代码对比确认）",
+      "review": "已重构 · 部分实现",
       "refactored": true,
       "codeEvidence": [
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/grid.js",
@@ -8028,15 +8535,15 @@
         },
         {
           "path": "src/core/infinite.js",
-          "original": "src/quadgrid.js",
-          "bodySimilarity": 0.019,
+          "original": "src/grid.js",
+          "bodySimilarity": 0.0169,
           "changedBody": true,
-          "sha256": "30f0e555bfe429c4aaa3842d1640c2483984711c7e9b357924e1d7827ecd79ff"
+          "sha256": "3b962217825eed2f8971f3e3fc25dad7c8900ea47f241c948f03ddf022195d9a"
         }
       ],
-      "frameReview": false,
-      "reviewEvidence": null,
-      "decodedFrames": 0
+      "frameReview": true,
+      "reviewEvidence": "artifacts/coverage/infinite-verify-review.md",
+      "decodedFrames": 532
     },
     {
       "id": "1151152046055272449",
@@ -8073,16 +8580,16 @@
         {
           "path": "grids.html",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0219,
+          "bodySimilarity": 0.0217,
           "changedBody": true,
-          "sha256": "d846874d61c20d9d4c2e7733bfb96486fded8fb156ad602442490b5251f74c8e"
+          "sha256": "ee751606c87fc060603ce0c25b21c46d2c2c054e21264675cee1fbad018b4204"
         },
         {
           "path": "src/core/infinite.js",
-          "original": "src/quadgrid.js",
-          "bodySimilarity": 0.019,
+          "original": "src/grid.js",
+          "bodySimilarity": 0.0169,
           "changedBody": true,
-          "sha256": "30f0e555bfe429c4aaa3842d1640c2483984711c7e9b357924e1d7827ecd79ff"
+          "sha256": "3b962217825eed2f8971f3e3fc25dad7c8900ea47f241c948f03ddf022195d9a"
         }
       ],
       "frameReview": false,
@@ -8127,9 +8634,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/world/app.js",
@@ -8402,9 +8909,9 @@
         {
           "path": "src/life/vegetation.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0281,
+          "bodySimilarity": 0.0279,
           "changedBody": true,
-          "sha256": "6fcd022375d4ca4d66fd6ea3b7146b9617acd26393e4a7a3f1f0ef36df64cf71"
+          "sha256": "1f7bfa99e926e31a93f93cc7040d5a616b01c32ccc046562c48033b7c651a11f"
         }
       ],
       "frameReview": false,
@@ -8760,9 +9267,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": false,
@@ -8830,9 +9337,11 @@
       "historicalStatus": "done",
       "where": "src/life/smoke.js · smoke.html",
       "references": [
+        "src/capabilities/layers-meta.js",
         "src/life/smoke.js"
       ],
       "changedReferences": [
+        "src/capabilities/layers-meta.js",
         "src/life/smoke.js"
       ],
       "review": "已重构（代码对比确认）",
@@ -8844,6 +9353,13 @@
           "bodySimilarity": 0.0853,
           "changedBody": true,
           "sha256": "6c26b3513f3747582175f88b269833d7b4e7504bc81935f5bad0722a92eeb3d7"
+        },
+        {
+          "path": "src/capabilities/layers-meta.js",
+          "original": "src/grasscards.js",
+          "bodySimilarity": 0.0342,
+          "changedBody": true,
+          "sha256": "4b9fa7ca748f6f61465ea85520e9498c34e80fda5cdc65b99c3b8c9b18ac6fc6"
         },
         {
           "path": "src/life/smoke.js",
@@ -8864,9 +9380,11 @@
       "historicalStatus": "done",
       "where": "src/life/smoke.js · smoke.html",
       "references": [
+        "src/capabilities/layers-meta.js",
         "src/life/smoke.js"
       ],
       "changedReferences": [
+        "src/capabilities/layers-meta.js",
         "src/life/smoke.js"
       ],
       "review": "已重构（代码对比确认）",
@@ -8878,6 +9396,13 @@
           "bodySimilarity": 0.0853,
           "changedBody": true,
           "sha256": "6c26b3513f3747582175f88b269833d7b4e7504bc81935f5bad0722a92eeb3d7"
+        },
+        {
+          "path": "src/capabilities/layers-meta.js",
+          "original": "src/grasscards.js",
+          "bodySimilarity": 0.0342,
+          "changedBody": true,
+          "sha256": "4b9fa7ca748f6f61465ea85520e9498c34e80fda5cdc65b99c3b8c9b18ac6fc6"
         },
         {
           "path": "src/life/smoke.js",
@@ -8899,10 +9424,12 @@
       "where": "src/life/smoke.js · src/core/smoke-order.js · smoke.html",
       "references": [
         "src/core/smoke-order.js",
+        "src/capabilities/layers-meta.js",
         "src/life/smoke.js"
       ],
       "changedReferences": [
         "src/core/smoke-order.js",
+        "src/capabilities/layers-meta.js",
         "src/life/smoke.js"
       ],
       "review": "已重构（代码对比确认）",
@@ -8921,6 +9448,13 @@
           "bodySimilarity": 0.0148,
           "changedBody": true,
           "sha256": "f6dc82b6b11f37a902dbb4575437e1bd2e7a6769336ee1b8ad3ffa466c9e4814"
+        },
+        {
+          "path": "src/capabilities/layers-meta.js",
+          "original": "src/grasscards.js",
+          "bodySimilarity": 0.0342,
+          "changedBody": true,
+          "sha256": "4b9fa7ca748f6f61465ea85520e9498c34e80fda5cdc65b99c3b8c9b18ac6fc6"
         },
         {
           "path": "src/life/smoke.js",
@@ -8941,11 +9475,13 @@
       "historicalStatus": "done",
       "where": "src/life/smoke.js · src/core/smoke-order.js · smoke.html",
       "references": [
+        "src/capabilities/layers-meta.js",
         "src/world/view.js",
         "src/life/smoke.js",
         "src/badnorth/battle.js"
       ],
       "changedReferences": [
+        "src/capabilities/layers-meta.js",
         "src/world/view.js",
         "src/life/smoke.js",
         "src/badnorth/battle.js"
@@ -8968,11 +9504,18 @@
           "sha256": "f6dc82b6b11f37a902dbb4575437e1bd2e7a6769336ee1b8ad3ffa466c9e4814"
         },
         {
+          "path": "src/capabilities/layers-meta.js",
+          "original": "src/grasscards.js",
+          "bodySimilarity": 0.0342,
+          "changedBody": true,
+          "sha256": "4b9fa7ca748f6f61465ea85520e9498c34e80fda5cdc65b99c3b8c9b18ac6fc6"
+        },
+        {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         },
         {
           "path": "src/life/smoke.js",
@@ -8984,9 +9527,9 @@
         {
           "path": "src/badnorth/battle.js",
           "original": "engine/world.html",
-          "bodySimilarity": 0.0241,
+          "bodySimilarity": 0.0239,
           "changedBody": true,
-          "sha256": "e96ff4a01df8136648ac17807e11b05e733d12ba296933daa9fef65d2a94f600"
+          "sha256": "27a11651034226470651dd0a5661172e439d1abc3f82a28c4191307fa8881789"
         }
       ],
       "frameReview": true,
@@ -9114,9 +9657,9 @@
         {
           "path": "src/world/view.js",
           "original": "src/scene.js",
-          "bodySimilarity": 0.3224,
+          "bodySimilarity": 0.3177,
           "changedBody": true,
-          "sha256": "7a7224c20292631ca9c6f9672fbcc6331817b9a29c3f92ec7984648b6ff25a43"
+          "sha256": "cb60ffb21b20d05d42ae4093fc868df93f8913617f942055702ff1fd185128f8"
         }
       ],
       "frameReview": false,

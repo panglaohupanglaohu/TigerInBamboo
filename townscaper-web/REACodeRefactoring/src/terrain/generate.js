@@ -1,3 +1,5 @@
+import {rebuildRiverNetwork} from './river-network.js';
+import {fillTerrainDepressions} from './drainage.js';
 /**
  * generate.js — 地形管线：在共享网格上生成岛屿（岩石体素）。
  *
@@ -18,8 +20,9 @@ import { addFeatures } from './features.js';
 import { fbm, ridged, clamp01, smoothstep, makeRng } from '../core/noise.js';
 
 export function generateTerrain(world, {
-  seed = 7, maxLevels = 8, towers = 3, canyons = true, rivers = 2, caves = 2, beach = true, features = true,
+  seed = 7, maxLevels = 8, towers = 3, canyons = true, rivers = 2, caves = 2, beach = true, features = true, drainage = false, riverNetwork = false,
 } = {}) {
+  if(riverNetwork && (caves!==0 || features || drainage))throw new RangeError('riverNetwork generation requires caves=0, features=false, drainage=false; protects channel topology');
   const cells = world.cells;
   const rng = makeRng(seed);
   let span = 0;
@@ -84,7 +87,8 @@ export function generateTerrain(world, {
   for (const c of cells) if (level[c.id]) world.fill(c, level[c.id], { rock: true });
 
   // 6) 河流
-  const riverCells = rivers > 0 ? carveRivers(world, { seed: seed + 5, count: rivers }) : [];
+  const network = riverNetwork ? rebuildRiverNetwork(world, riverNetwork===true?{}:riverNetwork) : null;
+  const riverCells = network ? [...world.river.keys()].filter(id=>world.river[id]) : rivers > 0 ? carveRivers(world, { seed: seed + 5, count: rivers }) : [];
 
   // 7) 洞窟
   const rim = cells.filter((c) => world.top(c) >= 4 && c.edgeNeighbors.some((_, i) => { const o = nb(c, i); return !o || world.top(o) === 0; }));
@@ -109,8 +113,11 @@ export function generateTerrain(world, {
   const feat = features ? addFeatures(world, { seed }) : null;
   world.features = feat;
 
+  world.drainage = drainage ? fillTerrainDepressions(world) : null;
   world.touch();
-  return { rivers: riverCells.length, features: feat };
+  if(world.drainage)world.drainage.version=world.version;
+  if(network)network.version=world.version;
+  return { riverNetwork:network, drainage:world.drainage, rivers: drainage?world.river.reduce((a,b)=>a+b,0):riverCells.length, features: feat };
 }
 
 /**

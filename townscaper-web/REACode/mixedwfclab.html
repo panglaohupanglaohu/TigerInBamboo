@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>三角 / 方形混排 WFC · 把方形切成 4 个三角形之后</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 76%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:128ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:16px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>混排 WFC：方形 tile 就是「4 个三角形绑成一块」——世界里只剩一种变量、一条规则</h1>
+  <p>原帖 1447494168448753667：<i>“I'm getting the best of both worlds by using a mix of triangular and square tiles.
+     (The squares are cut along each diagonal to create 4 triangles though)”</i>
+     —— 括号里那句才是重点。这一页把同一片 16×10 的地皮按两种表示各解一遍：<b>左</b>=把方形切成 4 个三角形
+     （450 个面、27 种边标签 tile）；<b>右</b>=方形不切、当成一个 4 边的刚性模块（160 个格、方形只有 4 种模块）。
+     两边的 socket 规则完全一样（相邻边标签相等），差别只在"方形是不是一个整体"。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { measure, grid, solve, solveFaces } from './src/mixedwfc.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#a9791a', RED = '#b4402f', GOOD = '#146c4a', LINE = '#dbe4e0';
+
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.fillText(s, x, y);
+};
+const card = (x, y, w, h, fill = '#ffffff') => {
+  ctx.fillStyle = fill; ctx.strokeStyle = LINE; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.fill(); ctx.stroke();
+};
+
+const M = measure();
+const G = grid(M.cfg);
+const CUT = solveFaces(G);
+const SOL = solve(G, { grouped: true });
+
+const CELL = 33;
+const CL = ['#cfe0d6', '#bfd3c9', '#aec6bd'];   // 边标签 0/1/2 的底色
+
+function faceColor(t) {
+  const [a, b, c] = [0, 1, 2].map((i) => Math.floor(i / 1));
+  return `rgb(${168 + 26 * ((t / 9 | 0) % 3)},${196 + 16 * ((t / 3 | 0) % 3)},${186 + 14 * (t % 3)})`;
+}
+
+/* ---------- 左：切法，450 个三角形 ---------- */
+function drawCut(ox, oy) {
+  const P = (i, j) => [ox + i * CELL, oy + j * CELL];
+  G.faces.forEach((f, fi) => {
+    const pts = f.v.map((vi) => {
+      const v = G.verts[vi];
+      return [ox + v.x * CELL, oy + v.y * CELL];
+    });
+    ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < 3; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.closePath();
+    ctx.fillStyle = faceColor(CUT.assign[fi]); ctx.fill();
+    ctx.strokeStyle = 'rgba(31,43,40,.22)'; ctx.lineWidth = 0.7; ctx.stroke();
+  });
+  // 方形格：4 个三角形拼成一块 → 金框
+  for (const cell of G.cells) {
+    if (cell.kind !== 'SQ') continue;
+    ctx.strokeStyle = GOLD; ctx.lineWidth = 1.8;
+    ctx.strokeRect(ox + cell.i * CELL, oy + cell.j * CELL, CELL, CELL);
+  }
+  // 三角格：单条对角线（浅色虚线，示意它不是方形）
+  ctx.strokeStyle = 'rgba(31,43,40,.18)'; ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+  for (const cell of G.cells) {
+    if (cell.kind === 'SQ') continue;
+    const x = ox + cell.i * CELL, y = oy + cell.j * CELL;
+    ctx.beginPath();
+    if (((cell.i + cell.j) & 1) === 0) { ctx.moveTo(x, y); ctx.lineTo(x + CELL, y + CELL); }
+    else { ctx.moveTo(x + CELL, y); ctx.lineTo(x, y + CELL); }
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+}
+
+/* ---------- 右：不切，方形是一个刚性 4 边模块 ---------- */
+function drawSolid(ox, oy) {
+  const deadSet = new Set(SOL.dead);
+  for (let v = 0; v < G.cells.length; v++) {
+    const cell = G.cells[v];
+    const x = ox + cell.i * CELL, y = oy + cell.j * CELL;
+    const isDead = deadSet.has(v);
+    if (cell.kind === 'SQ') {
+      // 4 个象限：一个模块 = 4 个 tile 一起定
+      const t4 = [0, 1, 2, 3].map((q) => (SOL.assign[v] * 7 + q * 11) % 27);
+      const cx = x + CELL / 2, cy = y + CELL / 2;
+      const corners = [[x, y], [x + CELL, y], [x + CELL, y + CELL], [x, y + CELL]];
+      for (let q = 0; q < 4; q++) {
+        const a = corners[q], b = corners[(q + 1) % 4];
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+        ctx.closePath(); ctx.fillStyle = faceColor(t4[q]); ctx.fill();
+        ctx.strokeStyle = 'rgba(31,43,40,.22)'; ctx.lineWidth = 0.7; ctx.stroke();
+      }
+      ctx.strokeStyle = GOLD; ctx.lineWidth = 1.8; ctx.strokeRect(x, y, CELL, CELL);
+    } else {
+      const t = SOL.assign[v];
+      ctx.beginPath();
+      if (((cell.i + cell.j) & 1) === 0) {
+        ctx.moveTo(x, y); ctx.lineTo(x + CELL, y); ctx.lineTo(x + CELL, y + CELL);
+      } else {
+        ctx.moveTo(x, y); ctx.lineTo(x + CELL, y); ctx.lineTo(x, y + CELL);
+      }
+      ctx.closePath(); ctx.fillStyle = faceColor(t); ctx.fill();
+      ctx.strokeStyle = 'rgba(31,43,40,.22)'; ctx.lineWidth = 0.7; ctx.stroke();
+      ctx.beginPath();
+      if (((cell.i + cell.j) & 1) === 0) { ctx.moveTo(x, y); ctx.lineTo(x, y + CELL); ctx.lineTo(x + CELL, y + CELL); }
+      else { ctx.moveTo(x + CELL, y); ctx.lineTo(x + CELL, y + CELL); ctx.lineTo(x, y + CELL); }
+      ctx.closePath(); ctx.fillStyle = faceColor(t); ctx.fill();
+      ctx.strokeStyle = 'rgba(31,43,40,.22)'; ctx.lineWidth = 0.7; ctx.stroke();
+    }
+    if (isDead) {
+      ctx.strokeStyle = RED; ctx.lineWidth = 2;
+      ctx.strokeRect(x + 1, y + 1, CELL - 2, CELL - 2);
+      ctx.beginPath(); ctx.arc(x + CELL / 2, y + CELL / 2, 3, 0, Math.PI * 2);
+      ctx.fillStyle = RED; ctx.fill();
+    }
+  }
+}
+
+/* ================= 版面 ================= */
+ctx.clearRect(0, 0, 1280, 800);
+
+card(30, 100, 590, 440);
+txt('A · 切法：450 个三角形，27 种 tile', 46, 124, GOOD, '650 12.5px -apple-system,system-ui,sans-serif');
+txt('金框 = 一个方形（由 4 个三角形拼成）；虚线 = 三角格的对角线', 46, 146, MUTED, '500 11px -apple-system,system-ui,sans-serif');
+drawCut(52, 176);
+txt(`死路 ${M.cutDeadEnds} 格 · 约束违背 ${M.cutViolations} 条`, 46, 524, GOOD, '650 12px -apple-system,system-ui,sans-serif');
+
+card(632, 100, 618, 440);
+txt('B · 不切：方形是一个 4 边刚性模块（160 格）', 648, 124, RED, '650 12.5px -apple-system,system-ui,sans-serif');
+txt('红框红点 = 该格没有任何一个模块能与已定邻居相容（撞死路）', 648, 146, MUTED, '500 11px -apple-system,system-ui,sans-serif');
+drawSolid(660, 176);
+txt(`死路 ${M.solidDeadEnds} 格 · 贪心违背 ${M.solidGreedyViolations} 条 → 修复 ${M.solidRounds} 轮仍剩 ${M.solidViolations}`, 648, 524, RED, '650 12px -apple-system,system-ui,sans-serif');
+
+/* 对照表 */
+card(30, 552, 1220, 176);
+txt('同一片地皮、同一条 socket 规则，差在"方形是不是一个整体"', 46, 576, INK, '650 12.5px -apple-system,system-ui,sans-serif');
+const cols = [46, 300, 470, 640, 980];
+const head = ['指标', 'A 切法', 'B 不切', '', '说明'];
+head.forEach((h, i) => { if (h) txt(h, cols[i], 600, i === 1 ? GOOD : i === 2 ? RED : MUTED, '650 11px -apple-system,system-ui,sans-serif'); });
+const rows = [
+  ['变量个数', `${M.faces} 个三角面`, `${M.cells} 个格（其中 ${M.sqCells} 个方形）`, '每格一个模块 vs 每面一个 tile'],
+  ['取值空间', '27 种（边标签全组合）', '方形 4 种 / 三角 27 种', '方形被 4 条边绑死，可选项极少'],
+  ['顺序塌缩死路', `${M.cutDeadEnds} 格`, `${M.solidDeadEnds} 格`, '撞死路的格必须先回溯或退让'],
+  ['约束违背', `${M.cutViolations} 条 / ${M.constraints}`, `${M.solidGreedyViolations} → ${M.solidViolations} 条`, 'B 修复 3 轮只降了 9 条，卡在局部极小'],
+  ['候选均值', M.cutCandAvg.toFixed(1), '—', '每面还剩多少种 tile 可选'],
+  ['跨类型边（方形↔三角）', `${M.crossKind} 条`, `${M.crossKind} 条`, `需要单独写的兼容规则：${M.specialRules} 条`],
+];
+let y = 620;
+rows.forEach((r, i) => {
+  txt(r[0], cols[0], y, INK, '600 11.5px -apple-system,system-ui,sans-serif');
+  txt(r[1], cols[1], y, GOOD, '650 11.5px -apple-system,system-ui,sans-serif');
+  txt(r[2], cols[2], y, RED, '650 11.5px -apple-system,system-ui,sans-serif');
+  txt(r[3], cols[4], y, MUTED, '500 11px -apple-system,system-ui,sans-serif');
+  y += 19;
+});
+
+document.getElementById('stats').innerHTML =
+  `<span>帖子 <b>1447494168448753667</b></span>
+   <span>格 <b>${M.cells}</b>（方 ${M.sqCells} / 三角 ${M.trCells}）→ 面 <b>${M.faces}</b></span>
+   <span>约束 <b>${M.constraints}</b> 条 · 跨类型 <b>${M.crossKind}</b> · 特例 <b class="ok">${M.specialRules}</b></span>
+   <span>切法：死路 <b class="ok">${M.cutDeadEnds}</b> · 违背 <b class="ok">${M.cutViolations}</b></span>
+   <span>不切：死路 <b class="no">${M.solidDeadEnds}</b> · 违背 <b class="no">${M.solidGreedyViolations}→${M.solidViolations}</b></span>
+   <span>确定性 <b>${M.cutDeterministic}/${M.cutTotal}</b></span>`;
+
+window.reaMixed = { M, cut: CUT.assign, solid: SOL.assign };
+</script>
+</body>
+</html>

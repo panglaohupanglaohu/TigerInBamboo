@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>树冠是一坨等值面 · 从 metaball 团块长叶簇</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 76%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:128ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:12px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:8px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:16px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>树冠不是「一堆球」，而是一坨等值面：metaball 团块 → 低模面包 → 叶簇</h1>
+  <p>原帖 1580158269267406849 只有一句 <i>“Can you make good looking foliage from Marching Cubes-blobs? Maybe?”</i>，
+     帧里（f02/f04）树冠确实是一坨<b>融合的圆包</b>：外轮廓是一圈大弧夹小弧、内部没有一条交线、明暗是低模面片。
+     所以这一页做三件事并把差别量出来：① 同一批 lump 用 metaball 场取 iso（左）；② 同一批 lump 各自画圆（中，参考读法）；
+     ③ 轮廓 r(θ) 剖面叠在一起（右）。下面再把叶片卡片撒进团块里，量覆盖率和越界。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { canopy, profile, profileUnion, scatterCards, compare, measure, ISO } from './src/foliageblob.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#a9791a', RED = '#b4402f', GOOD = '#146c4a',
+      LINE = '#dbe4e0', LEAF = '#4d7a4a', LEAF2 = '#6f9a58', LEAF3 = '#33603c';
+
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.fillText(s, x, y);
+};
+const card = (x, y, w, h, fill = '#ffffff') => {
+  ctx.fillStyle = fill; ctx.strokeStyle = LINE; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.fill(); ctx.stroke();
+};
+const tag = (x, y, s, color = MUTED) => txt(s, x, y, color, '650 11px -apple-system,system-ui,sans-serif');
+
+const M = measure(21);
+const R = 78;
+const lumpsA = canopy(252, 292, R, 21 + 74);
+const lumpsB = canopy(700, 292, R, 21 + 74);
+/* 面板上的数字用"画出来的这棵"现算，不借 measure() 里另一棵树的值 */
+const CA = compare(lumpsA, 252, 292);
+
+/* ---------- 轮廓多边形：把 r(θ) 压到 nv 个顶点（低模面包的来源） ---------- */
+function outline(lumps, ox, oy, nv = 26) {
+  const prof = profile(lumps, ox, oy, 720);
+  const pts = [];
+  for (let i = 0; i < nv; i++) {
+    const idx = Math.round((i / nv) * 720) % 720;
+    const th = (idx / 720) * Math.PI * 2;
+    const r = prof[idx];
+    pts.push([ox + Math.cos(th) * r, oy + Math.sin(th) * r]);
+  }
+  return pts;
+}
+
+function drawFaceted(lumps, ox, oy, nv = 26) {
+  const pts = outline(lumps, ox, oy, nv);
+  // 每个面 = (中心, p_i, p_{i+1})，亮度取该边法线与光向的点积 → 低模面片
+  const lx = -0.55, ly = -0.83;
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i], b = pts[(i + 1) % pts.length];
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+    let nx = mx - ox, ny = my - oy;
+    const nl = Math.hypot(nx, ny) || 1; nx /= nl; ny /= nl;
+    const lit = Math.max(0, nx * lx + ny * ly);
+    const k = 0.42 + 0.58 * lit;
+    const c = `rgb(${Math.round(64 + 74 * k)},${Math.round(96 + 86 * k)},${Math.round(58 + 58 * k)})`;
+    ctx.fillStyle = c; ctx.strokeStyle = c; ctx.lineWidth = 0.6;
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+  ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.closePath();
+  ctx.strokeStyle = LEAF3; ctx.lineWidth = 2.2; ctx.stroke();
+  return pts.length;
+}
+
+/* ---------- B：同一批 lump 各自画圆（"一堆球"的读法） ---------- */
+function drawSeparate(lumps) {
+  let arcs = 0;
+  const sorted = [...lumps].sort((a, b) => a.r - b.r);
+  for (const L of sorted) {
+    const g = ctx.createRadialGradient(L.x - L.r * 0.35, L.y - L.r * 0.4, L.r * 0.15, L.x, L.y, L.r);
+    g.addColorStop(0, L.main ? '#8fb676' : '#7ea767');
+    g.addColorStop(1, L.main ? '#2f5a3a' : '#3a6440');
+    ctx.beginPath(); ctx.arc(L.x, L.y, L.r, 0, Math.PI * 2);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = '#26463a'; ctx.lineWidth = 1.6; ctx.stroke();
+  }
+  for (let i = 0; i < lumps.length; i++) {
+    for (let j = i + 1; j < lumps.length; j++) {
+      const d = Math.hypot(lumps[i].x - lumps[j].x, lumps[i].y - lumps[j].y);
+      if (d < lumps[i].r + lumps[j].r && d > Math.abs(lumps[i].r - lumps[j].r)) arcs++;
+    }
+  }
+  return arcs;
+}
+
+/* ---------- C：两种读法的 r(θ) 剖面 ---------- */
+/* 注意：采样原点是树冠自己的中心 (ox,oy)，画图的圆心是 (cx,cy)。
+   第一版把两者混成一个参数，射线打空 → 两种读法都退化成同一个圆。 */
+function drawProfile(lumps, ox, oy, cx, cy, rr) {
+  const pA = profile(lumps, ox, oy, 720);
+  const pB = profileUnion(lumps, ox, oy, 720);
+  const k = rr / Math.max(...pA, ...pB);
+  ctx.strokeStyle = '#e8efea'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.stroke();
+  const line = (p, color, w) => {
+    ctx.beginPath();
+    for (let i = 0; i <= 720; i++) {
+      const th = (i % 720) / 720 * Math.PI * 2;
+      const x = cx + Math.cos(th) * p[i % 720] * k;
+      const y = cy + Math.sin(th) * p[i % 720] * k;
+      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = w; ctx.stroke();
+  };
+  line(pB, '#b4402f', 1.6);     // 一堆球：锯齿
+  line(pA, '#146c4a', 2.4);     // 一坨：光滑
+  // 标一处凹口
+  let worst = 0, wi = 0;
+  for (let i = 0; i < 720; i++) { const v = pA[i] - pB[i]; if (v < worst) { worst = v; wi = i; } }
+  const th = (wi / 720) * Math.PI * 2;
+  const x = cx + Math.cos(th) * pA[wi] * k, y = cy + Math.sin(th) * pA[wi] * k;
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y);
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = '#8a9a94'; ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(x, y, 3.4, 0, Math.PI * 2); ctx.fillStyle = GOLD; ctx.fill();
+}
+
+/* ================= 版面：1280×800 ================= */
+ctx.clearRect(0, 0, 1280, 800);
+
+/* A */
+card(30, 100, 396, 348);
+tag(46, 124, 'A · metaball 场取 iso=0.35（一坨）', GOOD);
+const facetCount = drawFaceted(lumpsA, 228, 288, 26);
+tag(46, 146, `${facetCount} 个面片 · 内部交线 0 条`, MUTED);
+txt(`凹口 ${CA.notchDepth.toFixed(3)}`, 46, 428, INK, '650 11.5px -apple-system,system-ui,sans-serif');
+txt(`最大转角 ${CA.maxTurnDeg.toFixed(1)}°`, 150, 428, INK, '650 11.5px -apple-system,system-ui,sans-serif');
+txt(`面积 ${CA.blobArea.toLocaleString()}`, 276, 428, INK, '650 11.5px -apple-system,system-ui,sans-serif');
+
+/* B */
+card(438, 100, 396, 348);
+tag(454, 124, 'B · 同一批 lump 各自画圆（一堆球）', RED);
+const arcs = drawSeparate(lumpsB);
+// 把几条内部交线高亮出来（本来就是描边）
+tag(454, 146, `${arcs} 条内部交线 · 每条都要自己描边`, MUTED);
+txt(`凹口 ${CA.unionNotch.toFixed(3)}`, 454, 428, INK, '650 11.5px -apple-system,system-ui,sans-serif');
+txt(`最大转角 ${CA.unionTurnDeg.toFixed(0)}°`, 558, 428, INK, '650 11.5px -apple-system,system-ui,sans-serif');
+txt(`面积 ${CA.unionArea.toLocaleString()}`, 690, 428, INK, '650 11.5px -apple-system,system-ui,sans-serif');
+
+/* C */
+card(846, 100, 404, 348);
+tag(862, 124, 'C · 两种读法的 r(θ) 剖面（同一批包）', INK);
+tag(862, 148, '红=圆并集的锯齿，绿=metaball 的圆弧', MUTED);
+drawProfile(lumpsA, 252, 292, 1048, 286, 104);
+ctx.strokeStyle = GOOD; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(868, 424); ctx.lineTo(894, 424); ctx.stroke();
+txt(`metaball ${CA.maxTurnDeg.toFixed(1)}°`, 900, 428, MUTED, '600 11px -apple-system,system-ui,sans-serif');
+ctx.strokeStyle = RED; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(1042, 424); ctx.lineTo(1068, 424); ctx.stroke();
+txt(`圆并集 ${CA.unionTurnDeg.toFixed(0)}°`, 1074, 428, MUTED, '600 11px -apple-system,system-ui,sans-serif');
+
+/* D 叶片卡片撒进团块 */
+card(30, 462, 592, 246);
+tag(46, 486, 'D · 叶片卡片撒进团块：中心必须落在 iso>1 内', LEAF3);
+const small = canopy(210, 588, 52, 63);
+const S = scatterCards(small, 150, 526, 272, 652, 8.5, 9, 3.1);
+for (const L of small) {
+  ctx.beginPath(); ctx.arc(L.x, L.y, L.r, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(77,122,74,.20)'; ctx.fill();
+}
+for (const c of S.cards) {
+  ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.a);
+  ctx.beginPath(); ctx.ellipse(0, 0, c.s * 1.35, c.s * 0.72, 0, 0, Math.PI * 2);
+  ctx.fillStyle = c.s > 3 ? '#5b8a4e' : '#6f9a58'; ctx.fill();
+  ctx.restore();
+}
+tag(292, 500, `卡片 ${M.cards} 张`, INK);
+tag(292, 522, `覆盖率 ${(M.cardCover * 100).toFixed(1)}%`, MUTED);
+tag(292, 544, `最近间距 ${M.cardSpacing.toFixed(2)}px`, MUTED);
+tag(292, 566, `越界 ${M.cardOut} 张`, M.cardOut === 0 ? GOOD : RED);
+tag(292, 596, '团块本身就是"叶量"的容器：', MUTED);
+tag(292, 614, '先有体积，再谈贴片。', MUTED);
+tag(292, 646, `5 棵树 ${M.lumpsTotal} 个包 / 平均凹口 ${M.avgNotch.toFixed(3)}`, MUTED);
+
+/* E 数字结论 */
+card(640, 462, 610, 246);
+tag(656, 486, '同一批包，两种读法差在哪', INK);
+const rows = [
+  ['轮廓环数', '1', '1', '都是 1 环（并集没断开）'],
+  ['内部交线弧', '0', `${arcs} 条`, '每条要单独描边、单独明暗'],
+  ['凹口深度 min/max', CA.notchDepth.toFixed(3), CA.unionNotch.toFixed(3), '越接近 1 = 凹口越浅'],
+  ['轮廓最大转角', `${CA.maxTurnDeg.toFixed(1)}°`, `${CA.unionTurnDeg.toFixed(0)}°`, '锯齿 vs 圆弧'],
+  ['面积', `${CA.blobArea.toLocaleString()}`, `${CA.unionArea.toLocaleString()}`, `比值 ${CA.fillRatio.toFixed(3)}（凹口被填）`],
+  ['面积 / Σ圆面积', CA.discRatio.toFixed(3), '1.000', '重叠被吞掉 41% 才算"一坨"'],
+];
+let y = 536;
+txt('指标', 656, 512, MUTED, '650 11px -apple-system,system-ui,sans-serif');
+txt('A metaball', 806, 512, GOOD, '650 11px -apple-system,system-ui,sans-serif');
+txt('B 一堆球', 908, 512, RED, '650 11px -apple-system,system-ui,sans-serif');
+for (const r of rows) {
+  ctx.strokeStyle = '#eef3f1'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(656, y + 8); ctx.lineTo(1234, y + 8); ctx.stroke();
+  txt(r[0], 656, y, INK, '600 11.5px -apple-system,system-ui,sans-serif');
+  txt(r[1], 806, y, GOOD, '650 11.5px -apple-system,system-ui,sans-serif');
+  txt(r[2], 908, y, RED, '650 11.5px -apple-system,system-ui,sans-serif');
+  txt(r[3], 982, y, MUTED, '500 11px -apple-system,system-ui,sans-serif');
+  y += 25;
+}
+
+/* 底条 */
+document.getElementById('stats').innerHTML =
+  `<span>帖子 <b>1580158269267406849</b></span>
+   <span>树冠 <b>${M.trees}</b> 棵 / lump <b>${M.lumpsTotal}</b> 个</span>
+   <span>iso <b>${ISO}</b> · 支撑 <b>1.55r</b></span>
+   <span>轮廓转角 <b>${CA.maxTurnDeg.toFixed(1)}°</b> vs 一堆球 <b>${CA.unionTurnDeg.toFixed(0)}°</b></span>
+   <span>面积比 <b>${CA.fillRatio.toFixed(3)}</b></span>
+   <span>叶卡 <b>${M.cards}</b> 张 · 越界 <b class="ok">${M.cardOut}</b></span>
+   <span>度量 <b>src/foliageblob.js · measure()</b></span>`;
+
+window.reaFoliage = { M, facetCount, arcs };
+</script>
+</body>
+</html>

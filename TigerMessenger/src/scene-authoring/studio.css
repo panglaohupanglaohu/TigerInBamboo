@@ -29,3 +29,143 @@ header{position:sticky;top:0;z-index:300;background:var(--bg)}.pipeline-layer{fl
 
 #scene-object-browser{order:2;border:1px solid #567e73;background:#172c2b;border-radius:8px;padding:14px;margin:12px 0}#scene-object-browser h2{font-size:16px;margin:0 0 5px}.object-heading{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.object-heading>div{flex:1;min-width:160px}#scene-object-scope{margin:0;font-size:12px;color:#b9dcd1}#scene-object-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}#scene-object-list button{padding:10px 14px}#scene-object-list button[aria-pressed=true]{background:#b8d8bc;color:#16332c;border-color:#b8d8bc}#scene-object-status{font-size:12px;line-height:1.7;margin:10px 0 0;color:#bdd2cd}
 #scene-object-directory{width:100%;font-size:12px}#scene-object-directory summary{cursor:pointer;color:#b9dcd1;margin-bottom:8px}#scene-object-directory input,#scene-object-directory select{box-sizing:border-box;width:100%;padding:9px;margin:5px 0;background:#142224;color:#dce9e4;border:1px solid #496661;border-radius:5px}#game.object-picking{cursor:crosshair}#pick-scene-object[aria-pressed=true]{background:#b8d8bc;color:#16332c}
+/* super agent 面板（agent-panel.js） */
+.agent-panel{display:grid;gap:8px}
+.agent-panel h3{font-size:13px;margin:2px 0 4px}.agent-panel h4{font-size:11px;letter-spacing:1px;color:var(--muted);font-weight:500;margin:10px 0 4px}
+.agent-scope,.agent-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.agent-scope span{font-size:11px;color:var(--accent)}
+.agent-actions button.primary,#generate{background:#b8d8bc;color:#102018;border-color:#b8d8bc;font-weight:600}
+.agent-note{font-size:11.5px;color:#cfe0d6}
+.route-row,.match-row{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center;padding:5px 0;border-bottom:1px dashed var(--line);font-size:11.5px}
+.route-row small,.match-row small{grid-column:1;letter-spacing:0;font-size:10.5px}
+.match-row span{font-size:11px;color:#cfe0d6}
+.step-report,.verify-report{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:11.5px}
+.step-report li{display:grid;grid-template-columns:1fr auto;gap:2px 6px}.step-report small{grid-column:1;letter-spacing:0;font-size:10.5px}
+.verify-report li{display:grid;gap:1px;padding:4px 6px;border-radius:4px;background:#1c2a2b}.verify-report b{font-weight:600}
+.verify-report .check-pass b{color:#9fe0a8}.verify-report .check-warn b{color:#f0cf7a}.verify-report .check-fail b{color:#f19a8e}
+.agent-timeline{margin:0;padding-left:16px;font-size:10.5px;color:var(--muted);max-height:150px;overflow:auto}.agent-timeline .bad{color:#f19a8e}
+.agent-exp{font-size:10.5px!important}
+.cap-matches h3{font-size:12px;margin:10px 0 4px}.cap-sources{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;align-items:center}.cap-sources button{font-size:10.5px;padding:2px 6px}
+details.source-service{margin-top:12px}details.source-service summary{font-size:11px;color:var(--muted);cursor:pointer}
+/* 物件编辑面板（object-edit-panel.js） */
+.object-edit{display:grid;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.object-edit h3{font-size:13px;margin:0}.object-edit button.on{background:#b8d8bc;color:#102018}
+.object-pad{display:grid;grid-template-columns:repeat(3,40px);gap:4px;align-items:center;justify-items:center}.object-pad small{font-size:10px;letter-spacing:0}
+.object-pad button{width:40px;padding:4px 0}
+.object-row{display:flex;flex-wrap:wrap;gap:6px}
+.object-edit .control input{width:100%}
+/* 风格分区（style-panel.js） */
+#style-dock{border:1px solid var(--line);border-radius:6px;padding:6px 10px;margin-top:8px}#style-dock summary{cursor:pointer;font-size:12px}
+.style-body{display:grid;gap:10px;margin-top:8px}.style-head{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.style-head p{flex-basis:100%;margin:0;font-size:11.5px}
+.style-sec h4{font-size:11px;letter-spacing:1px;color:var(--muted);font-weight:500;margin:4px 0}
+.style-swatches{display:flex;flex-wrap:wrap;gap:4px}.style-swatches input[type=color]{width:26px;height:22px;padding:0;border:1px solid var(--line);border-radius:4px;background:none}
+.style-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:4px 10px}.style-grid label{display:flex;justify-content:space-between;align-items:center;font-size:11px}
+.style-role{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;padding:3px 0;border-bottom:1px dashed var(--line)}
+
+/* 系统工坊（src/system-workshop）：球系统 / 物件工坊、目录泳道 */
+.workshop-nav{display:flex;gap:4px}.workshop-nav button[aria-selected=true]{background:var(--accent);color:#152c23;border-color:var(--accent)}
+#planet-workshop:not([hidden]),#object-workshop:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px}
+#planet-workshop{padding:20px 28px}#object-workshop{margin:4px 0 18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.tier-main{min-width:0}.tier-head .goal{margin-top:6px}.tier-head-actions{display:flex;gap:8px;margin:10px 0}
+.tier-agent{border-left:1px solid var(--line);padding-left:16px}
+.tier-lanes{display:grid;gap:10px;margin-top:12px}
+.tier-lane{border:1px solid var(--line);border-radius:6px;background:#162225}
+.tier-lane>header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:12px}
+.tier-lane>header b{font-weight:500}.lane-counts{display:flex;gap:8px;font-size:10.5px}.lane-counts i{font-style:normal}
+.lane-body{display:flex;flex-wrap:wrap;gap:8px;padding:9px 10px}
+.tier-node{width:230px;border:1px solid #3b4e50;border-top:3px solid #e3b36b;border-radius:5px;padding:8px 9px;background:#1b292b}.tier-node.on{outline:1px solid var(--accent)}
+.tier-node p{font-size:10.5px;margin:4px 0}.tier-node-head{display:flex;gap:7px;align-items:center;font-size:12px}.tier-node-head strong{font-weight:500}
+.tier-param{display:grid;grid-template-columns:70px 1fr 36px;gap:6px;align-items:center;font-size:10.5px;color:var(--muted);margin-top:4px}.tier-param input[type=range]{width:100%}.tier-param output{color:var(--ink);text-align:right}
+.tier-param:has(input[type=checkbox]){grid-template-columns:1fr auto}
+.lane-chips{display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start;flex:1;min-width:200px}
+.chip{font-size:10.5px;padding:2px 8px;border-radius:11px;background:#1e2d2f;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.exec-code{color:#e3b36b}.exec-refactored{color:#a9d8a6}.exec-partial{color:#d7cf8e}.exec-original{color:#9fb4c8}.exec-reference{color:var(--muted)}
+.chip.exec-original{border-style:dashed}.chip.more{color:var(--muted)}
+.tier-lanes.compact .tier-lane>header{padding:5px 8px;font-size:11px}.tier-lanes.compact .lane-body{padding:6px 8px}.tier-lanes.compact .tier-node{width:100%;padding:5px 7px}.tier-lanes.compact .lane-chips{min-width:0}.tier-lanes.compact .chip{max-width:100%}
+#scene-system-catalog{margin-top:14px}#scene-system-catalog summary{cursor:pointer;font-size:12px}
+.tier-detail{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}.tier-detail h3{font-size:14px;font-weight:500;margin:4px 0}
+.catalog-where{border:1px solid var(--line);border-radius:5px;padding:7px 9px;margin:7px 0;font-size:11px}.catalog-where code{display:block;color:#9bb0ad;font-size:10px;margin:4px 0;overflow-wrap:anywhere}.catalog-where a{color:var(--accent);font-size:10.5px}
+.inspector .catalog-where code{margin-top:4px}
+.planet-preview{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0}.planet-preview .planet-stats{grid-column:1/-1}
+.planet-map{margin:0}.planet-map canvas{width:100%;aspect-ratio:2/1;border:1px solid var(--line);border-radius:5px;background:#0c1214;image-rendering:pixelated}.planet-map figcaption{font-size:10.5px;color:var(--muted)}
+.verify-checks{list-style:none;padding:0;margin:6px 0;display:grid;gap:4px}.verify-checks li{display:grid;gap:1px;font-size:11px}.verify-checks small{letter-spacing:0;font-size:10.5px}
+.check-pass b{color:#a9d8a6}.check-warn b{color:#e2cf7f}.check-fail b{color:#f19a8e}
+@media(max-width:1000px){#planet-workshop:not([hidden]),#object-workshop:not([hidden]){grid-template-columns:1fr}.tier-agent{border-left:0;padding-left:0}.planet-preview{grid-template-columns:1fr}}
+@media(max-width:700px){#planet-workshop{padding:12px}.tier-node{width:100%}.workshop-nav{flex-wrap:wrap}}
+.tier-agent{align-self:start;align-content:start;position:sticky;top:10px;max-height:calc(100vh - 20px);overflow:auto}.lane-body{align-items:flex-start}
+
+/* ===== 系统工坊 sys-r2：顶部 系统工坊 | 学习工坊；左能力库 · 上管线区域（三条子管线）· 下实景浏览器 ===== */
+.top-nav{display:flex;gap:6px}.top-nav button{padding:8px 16px;font-size:13px}.top-nav button[aria-pressed=true]{background:#e3b36b;border-color:#e3b36b;color:#1d2a2c;font-weight:600}
+#system-workshop:not([hidden]){display:grid;grid-template-columns:270px minmax(0,1fr);min-height:calc(100vh - 64px)}
+.sys-library{border-right:1px solid var(--line);background:#141e20;padding:14px 12px;position:sticky;top:64px;align-self:start;max-height:calc(100vh - 64px);overflow:auto}
+.sys-library input{width:100%;margin:8px 0;background:#1c2b2c;color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:7px 9px}
+.cap-scope{display:flex;gap:5px;margin-bottom:8px}.cap-scope button{font-size:11px;padding:4px 9px}.cap-scope button.on{background:#e3b36b;color:#1d2a2c;border-color:#e3b36b}
+.cap-list details{border-top:1px solid var(--line);padding:5px 0}.cap-list summary{cursor:pointer;display:flex;justify-content:space-between;gap:6px;font-size:12px;padding:3px 0}.cap-list summary small{letter-spacing:0;font-size:10px}
+.cap-tier-title{font-size:12px;font-weight:500;margin:12px 0 4px;color:#e3b36b}
+.cap-item{border:1px dashed #3f5254;border-radius:6px;padding:6px 8px;margin:5px 0;cursor:pointer;background:#172224}.cap-item.runnable{border:1px solid #c58b34;background:#1d2a2b;cursor:grab}.cap-item.open{outline:1px solid var(--accent)}
+.cap-item-head{display:flex;gap:6px;align-items:baseline;font-size:12px}.cap-item-head b{font-weight:500;flex:1;min-width:0;overflow-wrap:anywhere}.cap-tier{font-size:9.5px;letter-spacing:0;color:#e3b36b}.cap-item p{font-size:10.5px;margin:4px 0}
+.cap-owners{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:10.5px;color:var(--muted);margin:6px 0 2px}.cap-owners button{font-size:10.5px;padding:1px 7px;border-radius:10px}.cap-owners button.on{background:#e3b36b;color:#1d2a2c;border-color:#e3b36b}.cap-owners button.shared{border-style:dashed;border-color:#c58b34}
+.cap-item button.link{background:none;border:0;color:var(--accent);padding:2px 0;font-size:10.5px}
+body.cap-dragging #pipeline,body.cap-dragging .tier-lanes{outline:2px dashed #c58b34;outline-offset:3px}.drop-over{outline:2px solid #e3b36b!important}
+.sys-main{min-width:0;display:flex;flex-direction:column}
+.pipe-region{border-bottom:1px solid var(--line);background:#121b1d;padding:0 16px 12px;max-height:56vh;overflow:auto}
+.pipe-tabs{position:sticky;top:0;z-index:5;background:#121b1d;display:flex;align-items:flex-end;gap:4px;border-bottom:1px solid var(--line);padding-top:10px;margin-bottom:10px}
+.pipe-tabs button[role=tab]{border-radius:6px 6px 0 0;border-bottom:0;background:transparent;color:var(--muted);padding:8px 16px;font-size:13px}.pipe-tabs button[aria-selected=true]{background:#1b292b;color:var(--ink);border-color:var(--line);font-weight:600;margin-bottom:-1px;padding-bottom:9px}
+.pipe-tabs .scene{display:flex;align-items:center;gap:6px;min-width:0;padding-bottom:6px}.pipe-tabs .scene span{display:none}.pipe-tabs .scene select{padding:4px 6px;font-size:12px}
+body[data-tier=planet] .pipe-tabs .scene{display:none}
+.scene-pane:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px}.scene-pane .workspace{padding:0}.scene-pane .inspector{border-left:1px solid var(--line);padding:0 0 0 14px;background:none}
+.scene-pane #pipeline{max-height:none}
+#planet-workshop:not([hidden]),#object-workshop:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;padding:0;margin:0;border:0}
+.tier-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.tier-head .goal{flex:1;min-width:260px;margin:0}.tier-head-actions{margin:0}.tier-scope{font-size:11px;color:var(--muted)}
+.object-scope{display:flex;flex-wrap:wrap;gap:5px;width:100%}.object-scope button{font-size:11px;padding:4px 9px}.object-scope button.on{background:#e3b36b;color:#1d2a2c;border-color:#e3b36b}
+.tier-pipe-head{display:flex;gap:10px;align-items:baseline;font-size:12px}.tier-pipe-head b{font-weight:500}
+.tier-lanes{gap:6px}.tier-lane{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:stretch}.tier-lane>header{flex-direction:column;align-items:flex-start;border-bottom:0;border-right:1px solid var(--line);gap:2px}
+.tier-lane .lane-body{flex-wrap:nowrap;overflow-x:auto;align-items:stretch}.tier-lane.empty .lane-body{padding:6px 10px}.tier-node{flex:0 0 230px}
+.drop-hint{display:flex;align-items:center;border:1px dashed #4b5d5f;border-radius:5px;padding:6px 12px;color:var(--muted);font-size:11px;white-space:nowrap}
+.tier-node-head{justify-content:flex-start}.tier-node-head strong{flex:1}.node-remove{padding:0 6px;font-size:11px;line-height:18px}
+.tier-agent{position:static;max-height:none;border-left:1px solid var(--line);padding-left:14px}.tier-watchdog summary{cursor:pointer;font-size:11px;color:var(--muted)}
+.viewer-region{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;padding:12px 16px 20px;flex:1}
+.viewer-main{min-width:0;display:flex;flex-direction:column}.viewer-main .viewport{height:clamp(420px,62vh,900px)}
+.viewer-side{min-width:0;display:flex;flex-direction:column;gap:12px;max-height:calc(62vh + 90px);overflow:auto}
+.viewer-side #scene-object-browser{margin:0}.viewer-side .studio-docks{margin:0}
+.tier-side{display:none}body[data-tier=planet] .tier-side[data-tier=planet],body[data-tier=object] .tier-side[data-tier=object]{display:block}
+body[data-tier=planet] .viewer-side #scene-object-browser,body[data-tier=planet] .viewer-side .studio-docks{display:none}
+.planet-preview{grid-template-columns:1fr}.planet-shots{display:grid;grid-template-columns:1fr 1fr;gap:6px}.planet-shots figure{margin:0}.planet-shots img{width:100%;border-radius:4px;border:1px solid var(--line);min-height:40px;background:#0c1214}.planet-shots figcaption,.planet-layers{font-size:10.5px}
+.planet-map canvas{cursor:crosshair}
+#planet-cam:not([hidden]){display:flex;gap:3px;margin-left:10px}#planet-cam button{padding:2px 7px}
+@media(max-width:1100px){#system-workshop:not([hidden]){grid-template-columns:1fr}.sys-library{position:static;max-height:300px}.scene-pane:not([hidden]),#planet-workshop:not([hidden]),#object-workshop:not([hidden]),.viewer-region{grid-template-columns:1fr}.tier-agent,.scene-pane .inspector{border-left:0;padding-left:0}.pipe-region{max-height:none}}
+.tier-lane>header{padding:5px 8px;font-size:11.5px}.tier-lane .lane-counts{gap:6px;font-size:10px;white-space:nowrap}.tier-lane .lane-body{padding:5px 8px;gap:6px}.tier-lane.empty{opacity:.85}.tier-lane .drop-hint{padding:4px 10px}
+.cap-item-head b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.cap-item.open .cap-item-head b{display:block}
+.scene-banner{margin:0 0 10px;padding:8px 12px;border:1px dashed #c58b34;border-radius:6px;font-size:12px;color:#e8d3a8;background:#2a2418}
+.pipe-tabs .scene select{max-width:280px}.pipe-tabs .scene button{font-size:11px;padding:4px 9px}
+body[data-tier=planet] #scene-banner{display:none}
+.cap-sets{border-top:0!important}.cap-set{border-color:#e3b36b;background:#22301f}.cap-set .cap-icon{color:#e3b36b}
+.cap-list summary[draggable=true]{cursor:grab}.tier-pipe-head button.small{font-size:11px;padding:2px 9px;margin-left:6px}
+.tier-lane.drop-yes{outline:2px solid #e3b36b}.tier-lane.drop-no{outline:2px dashed #b25a4f;opacity:.75;cursor:not-allowed}
+/* 通用场景（书店镇等）：场景管线换成材质色表管线；风格与草稿在实景旁 */
+#gscene-workshop{display:none}
+body[data-tier=scene][data-scene-edit=view] #gscene-workshop{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+body[data-scene-edit=view] #scene-pane{display:none!important}
+body[data-tier=scene][data-scene-edit=view] .tier-side[data-tier=gscene]{display:block}
+body[data-scene-edit=view] .viewer-side .studio-docks{display:none}
+.swatch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;margin:6px 0}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px}.swatch input{width:44px;height:28px;padding:0;border:1px solid var(--line);border-radius:4px;background:none}
+.gscene-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}.gscene-actions input{flex:1;min-width:120px;background:#1c2b2c;color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:5px 8px}
+.draft-list{list-style:none;padding:0;margin:6px 0;display:grid;gap:6px}.draft-list li{border:1px solid var(--line);border-radius:5px;padding:6px 8px;font-size:11px;display:grid;gap:3px}.draft-list li.final{border-color:#e3b36b}
+.object-rename{display:flex;gap:6px;margin:4px 0}.object-rename input{flex:1;background:#1c2b2c;color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:5px 8px}
+/* 能力「?」怎么用 */
+.cap-help{flex:0 0 auto;width:18px;height:18px;padding:0;border-radius:50%;font-size:11px;line-height:16px;border:1px solid #6e8a86;background:#1c2b2c;color:#cfe3de;cursor:help}
+.cap-help:hover,.cap-help:focus{background:#e3b36b;color:#1d2a2c;border-color:#e3b36b}
+.cap-usage-tip{position:fixed;z-index:1000;background:#0f1a1c;color:#e8efe9;border:1px solid #e3b36b;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.55;box-shadow:0 8px 24px #0008;pointer-events:none}
+.cap-usage-tip b{font-weight:600}.cap-usage-tip p{margin:4px 0}.cap-usage-tip ol{margin:6px 0;padding-left:18px}.cap-usage-tip li{margin:2px 0}
+.cap-usage-ex{margin-top:6px;padding:6px 8px;border-radius:5px;background:#1b2a2c;border-left:3px solid #e3b36b}.cap-usage-ex p{margin:2px 0}
+
+/* 待完成节点：能力集合里还没做好的能力，整组拖入时一起进管线，执行时跳过 */
+.tier-node.pending{border-style:dashed;opacity:.72;background:transparent;padding:6px 8px}
+.tier-node.pending .tier-node-head strong{font-weight:500;color:var(--muted,#9aa)}
+.pending-tag{font-size:11px;padding:1px 6px;border-radius:999px;border:1px dashed currentColor;color:#d9a441;white-space:nowrap}
+.pending-lane{border-style:dashed}
+#planet-cam .cam-hint{margin-left:8px;font-size:11px;opacity:.65;white-space:nowrap}
+/* 扫描能力库 */
+.section-title .cap-scan{margin-left:auto;font-size:12px;padding:3px 9px;border-radius:7px;border:1px solid rgba(232,180,107,.55);background:transparent;color:#e8b46b;cursor:pointer;white-space:nowrap}
+.section-title .cap-scan:disabled{opacity:.6;cursor:wait}
+.cap-scan-note{font-size:12px;line-height:1.5;margin:4px 0 8px;color:#bfe0c8}

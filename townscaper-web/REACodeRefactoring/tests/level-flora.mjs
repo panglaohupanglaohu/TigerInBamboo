@@ -1,0 +1,2 @@
+import assert from 'node:assert/strict';import{levelFloraPalette as p}from'../src/core/level-flora.js';
+for(let i=0;i<100;i++){assert.equal(p(i).length,2);assert.equal(p(i),p(i+4));assert.ok(Object.isFrozen(p(i)));}for(const x of [-1,1.5,NaN,Infinity,'1'])assert.throws(()=>p(x));assert.equal(new Set([0,1,2,3].flatMap(p)).size,8);console.log('PASS level palettes bounds, repeat policy and immutable groups');

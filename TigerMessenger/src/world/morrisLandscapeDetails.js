@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {styleMat} from '../style/materials.js';
 import {mergeGeometries,mergeVertices}from'three/addons/utils/BufferGeometryUtils.js';
 // Bridge remains tied to the existing walkable deck; stone is real geometry.
 export function dressMorrisBridge({bridge,deckY}){
@@ -56,7 +57,7 @@ export function dressMorrisBridge({bridge,deckY}){
    const z=end*(3.24+j*.12),g=new T.DodecahedronGeometry(1,0);g.scale(.21,.18,.27);g.rotateY(j*.7);g.translate(side*(2.02+j*.06),deckY(z)-.18,z);add(g,j%2?0xcdb98d:0xdccb9f,'bridge-embedded-bank-stones');
   }
  }
- for(const[color,b]of buckets){const g=mergeGeometries(b.geos,false);b.geos.forEach(g=>g.dispose());const m=new T.Mesh(g,new T.MeshStandardMaterial({color,roughness:.94,side:T.DoubleSide}));m.name=b.name;m.userData.morrisBridgeDetail=revision;m.castShadow=m.receiveShadow=true;bridge.add(m);}
+ for(const[color,b]of buckets){const g=mergeGeometries(b.geos,false);b.geos.forEach(g=>g.dispose());const m=new T.Mesh(g,styleMat('morris.landscapeDetails.detail','MeshStandardMaterial',{color,roughness:.94,side:T.DoubleSide}));m.name=b.name;m.userData.morrisBridgeDetail=revision;m.castShadow=m.receiveShadow=true;bridge.add(m);}
  const minimumCoreThickness=Math.min(...Array.from({length:257},(_,i)=>{const z=-4+i/32;return deckY(z)-.025-archBottom(z);}));
  bridge.userData.morrisBridgeDetail={revision,halfSpan,deckCrown,archRise:rise,minimumCoreThickness,clearWalkWidth:3.2,archBottomSamples:Array.from({length:65},(_,i)=>{const z=-4+i/8;return[z,archBottom(z)];})};
  return{revision,archBarrel:true,solidParapets:true,closedArchCore:true,continuousCoping:true,deckCrown,archRise:rise,minimumCoreThickness,walkWidth:3.2,span:8,archStones:52,masonryPieces,mergedStoneBatches:buckets.size,terrainBankContactVerified:false};
@@ -82,7 +83,7 @@ export function installMorrisRockShoulders({root,heightAt,R=160,canDress=()=>tru
  if(!allowed)continue;const range=Math.max(...sample)-Math.min(...sample);if(range>5.0)continue;
  candidates.push({x:xx,z:zz,y:heightAt(xx,zz)-random()*.4,yaw,wx,wz,h:1.55+range*.22+random()*.4,spacing:4.8+random()*3.8,rank:slope+.018*h+random()*.8,footprintSamples:12});}
  candidates.sort((a,b)=>b.rank-a.rank);for(const p of candidates){if(points.some(q=>Math.hypot(p.x-q.x,p.z-q.z)<Math.min(p.spacing,q.spacing)))continue;points.push(p);if(points.length>=36)break;}
- const mesh=new T.InstancedMesh(weatheredRockGeometry(),new T.MeshStandardMaterial({vertexColors:true,roughness:.98,flatShading:false}),points.length),d=new T.Object3D();mesh.name='morris-embedded-weathered-central-rock-shoulders';
+ const mesh=new T.InstancedMesh(weatheredRockGeometry(),styleMat('morris.landscapeDetails.weathered-rock','MeshStandardMaterial',{vertexColors:true,roughness:.98,flatShading:false}),points.length),d=new T.Object3D();mesh.name='morris-embedded-weathered-central-rock-shoulders';
  const seated=[];for(const p of points){
   const gx=(heightAt(p.x+.8,p.z)-heightAt(p.x-.8,p.z))/1.6,gz=(heightAt(p.x,p.z+.8)-heightAt(p.x,p.z-.8))/1.6;
   const tilt=new T.Quaternion().setFromUnitVectors(new T.Vector3(0,1,0),new T.Vector3(-gx,1,-gz).normalize());
@@ -113,7 +114,7 @@ export function installMorrisCoastRocks({root,heightAt,edge,R=160,canDress=()=>t
  const g=weatheredRockGeometry(),p=g.attributes.position,c=[],light=new T.Color(0xbfb8a6),dark=new T.Color(0x8a8474);
  for(let j=0;j<p.count;j++){const x=p.getX(j),y=p.getY(j),z=p.getZ(j),f=1+.025*Math.sin(x*9+z*6)*Math.cos(y*7);p.setXYZ(j,x*f,y*f,z*f);const col=dark.clone().lerp(light,.42+.25*y+.12*Math.sin(x*6+z*4));c.push(col.r,col.g,col.b);}
  g.setAttribute('color',new T.Float32BufferAttribute(c,3));g.computeVertexNormals();
- const mesh=new T.InstancedMesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:false}),points.length),d=new T.Object3D();
+ const mesh=new T.InstancedMesh(g,styleMat('morris.landscapeDetails.rock-scatter','MeshStandardMaterial',{vertexColors:true,roughness:1,flatShading:false}),points.length),d=new T.Object3D();
  mesh.name='morris-closed-warm-rocky-coast';mesh.castShadow=mesh.receiveShadow=true;
  const seated=[];for(const q of points){d.position.set(q.x,q.y,q.z);d.rotation.set(q.pitch,q.yaw,q.roll);d.scale.set(q.sx,q.sy,q.sz);d.updateMatrix();let sink=0;const v=new T.Vector3();for(let j=0;j<p.count;j++)if(p.getY(j)<-.72){v.fromBufferAttribute(p,j).applyMatrix4(d.matrix);sink=Math.max(sink,v.y-heightAt(v.x,v.z)+.12);}q.y-=sink;d.position.y=q.y;d.updateMatrix();let allowed=true;for(let j=0;j<p.count;j++){v.fromBufferAttribute(p,j).applyMatrix4(d.matrix);if(!canDress(v.x,v.z)){allowed=false;break;}}if(!allowed)continue;mesh.setMatrixAt(seated.length,d.matrix);seated.push(q);}mesh.count=seated.length;mesh.userData.placementAudit={seed:0x434f4131,points:seated,transformedVertexProtection:true};mesh.computeBoundingSphere();root.add(mesh);
  return{mesh,count:seated.length,scope:'closed coast volumes, protected footprint samples; no navigation acceptance'};

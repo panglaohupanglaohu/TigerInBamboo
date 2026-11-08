@@ -1,0 +1,3 @@
+import assert from'node:assert/strict';import{hipRoof}from'../src/core/hip-roof.js';
+for(const[w,d,h]of[[1,1,.4],[2,1,.5],[1,3,.7],[.3,.8,.2]]){const r=hipRoof(w,d,h);assert.equal(r.faces.length,4);assert.equal(r.ridgeLength,Math.abs(w-d));let area=0;for(const f of r.faces){for(const[u,v,y]of f)assert.ok(u>=0&&u<=1&&v>=0&&v<=1&&(y===0||y===h));let a=0;for(let i=0;i<f.length;i++){const p=f[i],q=f[(i+1)%f.length];a+=p[0]*q[1]-q[0]*p[1]}assert.ok(a>0);area+=a/2;}assert.ok(Math.abs(area-1)<1e-12);if(w===d)assert.deepEqual(r.ridge[0],r.ridge[1]);}
+for(const args of[[0,1,1],[1,NaN,1],[1,1,-1]])assert.throws(()=>hipRoof(...args));console.log('PASS rectangular hip ridge/axis/footprint coverage/winding/bounds');

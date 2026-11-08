@@ -157,3 +157,50 @@ morrisBotany在原材质合批保持顺序和geometry不变的同时，为每个
 证据：live-scene-picking-20261106四项S07/S18/S19/S20 PASS，真实pointer分别选中桥边树、柏树1（不是直接发选择ID冒充点击）。最终live-scene-picking-final-20261106九项S07/S18/S19/S20/S21/S08/S13/L05/G01 PASS/pageErrors0。S21为独立无bootstrap Three fixture，验证合批区间边界、不同实例ID和边界minX 2.5/11.5、geometry坐标不变；不当真实游戏测试。S20实际World/settings/recipe/localStorage不变；选中柏树与绿色框的最终截图实看。S18/S19已适配辅助目录而非原按钮。
 最终本地51PASS：20261105T223903780856Z（skip-browser）。独立原HEAD植物工厂geometry/index属性SHA、材质/transform/原report对照仍PASS，result-raycast-owner-map.json为新增来源映射后的独立证据，原result保留。相关文件改前拷贝scene-picking-baseline-20261105T222933Z，未回滚并行改动。JEV实际紧凑调用在最终定向目录iteration-evidence/iteration-jev.json；Guide/Test已重写旧“树专用入口”说明并加S20/S21。非36整套，不谎称全部通过。
 未访问用户profile/恢复建筑存档、未改原REA/.workbuddy，无模型执行/自动造山/提交发布。下一步先36整套；继续变换编辑时利用合批来源范围建立不可变基线buffers、候选、对象历史、草稿恢复/定稿及Source目标scope，不能只改空Group或仅发无objectId的目标。通用UUID对象尚无稳定跨版本身份，编辑器保持未开放。旧启动/学习超时与Worker/P2缺口继续保留。
+
+## 2026-11-06 23:10上海 用户接手指令：能力代码化 + 本机 super agent 跑通（Claude）
+用户要求先把场景工坊改到能用：能力是代码不是 skill，Router/改造 Worker/验证 Worker/Watchdog 真正运行，场景工坊与学习工坊联动。
+新增 REACodeRefactoring/src/capabilities（ops/terrain/build/layers-meta/layers/registry/verify + README，tools/test-capabilities.mjs 8/8 通过），8 个能力：石拱/天桥、崖顶悬垂、海中石柱、穿山隧道、海边灯塔（改体素），灯室光束、体积浅水、烟囱炊烟（显示层）；src/build/lighthouse.js 仅加一行：岩柱顶不算灯塔。
+TigerMessenger 新增 capability-runtime.js（cap.* 固定命令）、agent-panel.js、agent/{orchestrator,transform-worker,verify-worker,world-cache,rea}.js、tests/capability-code.test.mjs（3 PASS）；修改 studio.js/pipeline-model.js/capability-library.js/pipeline-bridge.js/learning-workshop.js/morrisTownscaper.js/pipeline.html/studio.css/README。改前核对设备 mtime 未变，带 expectedMtime 写入。
+证据：容器内隔离副本 Playwright 端到端（测试岛注入新上下文 localStorage）：连接 → 扫描 7/8 能力 359 处 → Router 4 条建议 → 生成候选（石拱 2、灯塔 1、浅水层、烟层）→ 验证 5 项（范围/建筑/承托/通行/几何量）pass+warn → 原始/候选对照截图 → 写入后工作区存档变化、经验 previewed/committed，pageErrors 0。用户 8931 实服（内置浏览器空存档 profile）确认：游戏连接、能力 Worker 就绪、扫描完成，无错误。未碰用户 Chrome 存档。
+未做：第 8 轮的半影/左行/隧道导航改动因设备 REA 已被并行修改未部署；未跑 36 项浏览器整套。下一步：在用户真实湖上建筑群上实测匹配质量，按经验调整能力规则；把更多已学方法写成能力模块。
+
+## 2026-11-07 · sys-r1 系统工坊：球系统 / 场景 / 物件三层管线 + super agent
+
+- pipeline.html 改为系统工坊四个标签（球系统 / 场景 / 物件 / 学习）；场景与物件共用实景，iframe 不重载。
+- 公共 super agent 运行时抽出到 `src/scene-authoring/agent/runtime.js`；球系统、物件层用 `src/system-workshop/tier-agent.js`。
+- 球系统：5 个能力代码（海平面 / 重解地形 / 地表分辨率 / 切图数 / 网格细分）；候选星球在 Worker 里编译，验证独立复算。
+  实测：海平面 +0.5 通过（陆地 76%→65%）；+1.5 失败（saihoji-moss-garden 被淹，不能写入）；网格细分 2 级失败（编译停在 landform-chain）。
+  定稿写入 `tm.planet.final.v1`，`planetV8/runtime.js` 只覆盖改过的配方项；没有定稿时游戏行为不变。
+- 物件：3 个能力代码（同类尺寸变化 / 朝向变化 / 间距松弛）。莫西斯湖实测：192 个可编辑植物，占地重叠 56→24 对，最大移动 0.35，验证全过；
+  实景预览、对照原样、放弃恢复、写入（一步撤销）均在隔离浏览器上下文验证，未碰用户存档。
+- 能力目录 `system-catalog.json`：REACode 原版 285 条 + 重构版 259 条按三层分区放进泳道，原版占位节点标原版文件位置。
+- 未验：球系统定稿后游戏星球场景的画面（需进星球场景对照）；物件层只有莫西斯湖的合批植物可编辑。
+
+## 2026-11-07 · sys-r3 系统工坊新布局（按画布定稿）
+
+- 顶部并列：系统工坊（编辑管线）｜学习工坊（学习管线）。
+- 系统工坊：左栏能力库（三条子管线共用，⚙ 可拖入；○●◐ 占位只列来源；能力卡可调配归属 / 标公用，存 `tm.capability.ownership.v1`）；
+  上方管线区域三条子管线（球系统 / 场景 / 物件），每条按分区泳道排，管线里只放能执行的节点；下方一个实景游戏，三条管线共用。
+- 球系统管线：实景切到绕星球中心的轨道镜头（去掉雾，看整颗星球）；候选可「在实景中预览（重载游戏）」，前后同镜头截图对照；配方以游戏实际配方为基线。
+- 物件管线：在实景或对象目录里选中物件 → 自动切到物件管线，范围可选「只改它 / 同类物件 / 整个场景」，验证新增「作用范围」检查。
+- 已测（隔离浏览器）：星球扫描 / 执行 / 验证 / 实景预览 / 放弃恢复；物件选中悬铃树 → 同类 4 棵尺寸与朝向变化，验证全过。
+- 未验：编译地形默认关（planetTerrainV1），星球配方改动在默认游戏里主要体现在云和海；天色随游戏时间变化，前后截图可能有色差。
+
+## 2026-11-07 · sys-r5 全部场景可选 + 通用场景编辑插件 + 能力集合
+
+- 场景下拉列出游戏登记的全部场景（main.js 只读暴露 `__tmSceneTargets`）；选中后实景镜头飞过去。
+- 通用场景编辑插件 `src/scene-authoring/generic-scene.js`（参考 GenAIWorkPipeline：先登记、原件不动只存增量、接入检查 passed=true/false/null）：
+  物件自动登记、对象目录 / 物件编辑 / 物件管线 / 实景点选、存档 `tm.scene-objects.edits.v1:<场景>` 启动回放。旋转缩放绕包围盒中心；未命名网格按结构件处理，批量能力默认不动。
+  书店镇实测：登记 29 个（5 个有名字），「自然化同类」只动有名字的 5 个，建筑不散架。
+- 能力集合：左栏预置集合、分区标题整组拖入、「存为能力集合」；拖到不对应的泳道时不显示「+」并说明原因。
+- 球系统编译失败的说明改成中文（例：网格细分 2 级 → 地形链要求场景锚点连成一块陆地）；网格细分默认 1 级、标注实验。
+- 未做：通用插件的风格与场景草稿 / 定稿；体素场景管线仍只作用于莫西斯湖。
+
+## 2026-11-07 · sys-r6 通用场景插件补齐：风格 / 草稿定稿 / 场景管线 / 水晶城 / 物件命名
+
+- 场景管线（通用场景）：作用在场景材质色表上——风格统一（主色归并）、整体色调、套用风格包（莫里斯色板）；验证：明度预算、明暗层次、颜色数。书店镇实测风格统一 21 种材质改色，四项通过。
+- 风格面板：逐个材质改色、预览、保存、恢复原色；跨场景共用的材质先为本场景复制一份。
+- 草稿 / 定稿：存物件改动 + 风格 + 物件名；确认定稿后游戏启动时用它（`tm.scene.versions.v1`）。
+- 水晶城：main.js 场景表补上 `messenger.landmarks.moebius.group`，接入通用插件（58 个物件、1570 种材质）。
+- 物件命名：未命名网格按「颜色 + 形状」自动命名，同款归一类可批量；对象面板可改名，改过名的同名物件被当作一类。

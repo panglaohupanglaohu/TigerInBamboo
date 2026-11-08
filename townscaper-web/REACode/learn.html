@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>学习笔记 · 237 段视频</title>
+<title>学习笔记 · 视频原文与代码位置</title>
 <style>
   :root {
     --bg: #eef4f3; --ink: #1d2f36; --muted: #5d7279; --card: #fff; --line: #d6e2e1; --accent: #2f7f8a;
@@ -43,12 +43,20 @@
   dialog .cap .err { color: #ffcf8a; }
   dialog button { position: absolute; right: 10px; top: 8px; background: rgba(255,255,255,.15); color: #fff; border: 0; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
   @media (max-width: 600px) { .bar, main { padding-left: 16px; padding-right: 16px; } input[type=search] { min-width: 0; } }
+  /* 顶部进度条：数字全部由 data.js 现算，不写死 */
+  #prog { gap: 8px; font-size: 12.5px; color: var(--muted); }
+  #prog .track { flex: 1 1 220px; max-width: 340px; height: 8px; border-radius: 4px; background: #dbe6e5; overflow: hidden; display: flex; }
+  #prog .track i { display: block; height: 100%; }
+  #prog b { color: var(--ink); }
+  #prog .pill { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 2px 10px; }
+  #prog .pill i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
 </style>
 </head>
 <body>
 <header>
   <div class="bar">
-    <div class="row"><a class="back" href="index.html">← 场景</a><a class="back" href="overview.html">总览</a><a class="back" href="pipeline.html">管线图</a><h1>学习笔记 · 237 段视频</h1><input type="search" id="q" placeholder="搜原文 / 笔记 / 帖子 ID…" /></div>
+    <div class="row"><a class="back" href="index.html">← 场景</a><a class="back" href="overview.html">总览</a><a class="back" href="pipeline.html">管线图</a><a class="back" href="learn/STATUS.md">核对清单</a><h1>学习笔记 · <span id="h1n">…</span> 段视频</h1><input type="search" id="q" placeholder="搜原文 / 笔记 / 帖子 ID…" /></div>
+    <div class="row" id="prog"></div>
     <div class="row" id="status"><span class="lab">状态</span></div>
     <div class="row" id="projects"><span class="lab">项目</span></div>
     <div class="row" id="topics"><span class="lab">主题</span></div>
@@ -66,6 +74,27 @@ const ORDER = ['game', 'both', 'engine', 'partial', 'ref', 'todo', 'na'];
 const state = { status: new Set(), topic: new Set(), project: new Set(), q: '' };
 const topicName = Object.fromEntries(L.topics);
 const projName = Object.fromEntries(L.projects);
+
+// ---- 顶部进度：只从 data.js 数，页面不存第二份真相 ----
+const DONE = ['game', 'both', 'engine'];
+const CNT = {};
+for (const it of L.items) CNT[it.status] = (CNT[it.status] || 0) + 1;
+const DONE_N = DONE.reduce((n, k) => n + (CNT[k] || 0), 0);
+const LEFT_N = (CNT.partial || 0) + (CNT.todo || 0);
+const SKIP_N = (CNT.na || 0) + (CNT.ref || 0);
+const total = L.items.length;
+document.getElementById('h1n').textContent = total;
+document.title = `学习笔记 · ${total} 段视频`;
+document.getElementById('prog').innerHTML = `
+  <span class="pill"><i style="background:var(--game)"></i>已学 <b>${DONE_N}</b> / ${total}</span>
+  <div class="track" title="已学 / 半成品 / 有笔记没代码 / 不用学">
+    ${DONE.map((k) => CNT[k] ? `<i style="flex:${CNT[k]} 1 0;background:var(--${k})"></i>` : '').join('')}
+    ${CNT.partial ? `<i style="flex:${CNT.partial} 1 0;background:var(--partial)"></i>` : ''}
+    ${CNT.todo ? `<i style="flex:${CNT.todo} 1 0;background:var(--todo)"></i>` : ''}
+    ${SKIP_N ? `<i style="flex:${SKIP_N} 1 0;background:var(--na)"></i>` : ''}
+  </div>
+  <span class="pill">还剩 <b>${LEFT_N}</b> 条没学完（半成品 ${CNT.partial || 0} + 有笔记没代码 ${CNT.todo || 0}）</span>
+  <span>不用学 ${SKIP_N} 条</span>`;
 
 // hash: #status=game,both&topic=water
 for (const part of location.hash.slice(1).split('&')) {
@@ -99,7 +128,7 @@ function render() {
     (!state.project.size || state.project.has(it.project)) &&
     (!state.q || (it.id + it.text + it.note + it.where).toLowerCase().includes(state.q)))
     .sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status) || b.date.localeCompare(a.date));
-  document.getElementById('count').textContent = `显示 ${items.length} / ${L.items.length} 条（已学的排在前面）`;
+  document.getElementById('count').textContent = `显示 ${items.length} / ${L.items.length} 条（已学的排在前面）　·　全库还剩 ${LEFT_N} 条没学完`;
   const h = [];
   for (const it of items) {
     h.push(`<article class="item">

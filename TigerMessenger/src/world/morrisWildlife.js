@@ -1,6 +1,7 @@
 import * as T from 'three';
+import {styleMat} from '../style/materials.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z),mat=c=>new T.MeshStandardMaterial({color:c,roughness:.95});
+const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z),mat=c=>styleMat('morris.wildlife.animal','MeshStandardMaterial',{color:c,roughness:.95});
 function ball(root,m,p,s){const o=new T.Mesh(new T.SphereGeometry(1,16,10),m);o.position.set(...p);o.scale.set(...s);root.add(o);return o;}
 function compact(root){root.updateWorldMatrix(true,true);const buckets=new Map(),inv=root.matrixWorld.clone().invert();for(const o of [...root.children])if(o.isMesh){const g=o.geometry.clone().applyMatrix4(inv.clone().multiply(o.matrixWorld));if(!buckets.has(o.material))buckets.set(o.material,[]);buckets.get(o.material).push(g);o.geometry.dispose();root.remove(o);}for(const[m,gs]of buckets){const mesh=new T.Mesh(mergeGeometries(gs,false),m);gs.forEach(g=>g.dispose());mesh.castShadow=true;root.add(mesh);}}
 function strand(root,material,pts,r=.006){const g=new T.TubeGeometry(new T.CatmullRomCurve3(pts.map(p=>V(...p))),Math.max(3,pts.length*2),r,4,false);const m=new T.Mesh(g,material);root.add(m);return m;}

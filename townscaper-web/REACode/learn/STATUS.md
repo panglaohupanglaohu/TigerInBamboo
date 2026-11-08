@@ -1,6 +1,6 @@
 # 学习状态总表（自动生成，勿手改）
 
-生成时间：2026-11-05 23:19　·　由 `tools/report.mjs` 生成
+生成时间：2026-11-07 11:15　·　由 `tools/report.mjs` 生成
 
 判定规则：`game/both/engine` 且 where 里的文件**真的包含这条帖子 ID** 才算学过；
 `partial` 算没学完；`na/ref` 是不用学的；gifs 里有但 data.js 没登记的算「没看过」。
@@ -8,14 +8,14 @@
 | 口径 | 数量 |
 |---|---|
 | 视频总数 | 285 |
-| 学过（含可追溯校验） | 177（144 代码可追溯 / 29 仅文档 / 4 无痕） |
-| 半成品 partial | 23 |
-| 有笔记未实现 todo | 22 |
+| 学过（含可追溯校验） | 193（158 代码可追溯 / 30 仅文档 / 5 无痕） |
+| 半成品 partial | 22 |
+| 有笔记未实现 todo | 0 |
 | 未登记（没看过） | 0 |
-| 不用学 na+ref | 63 |
-| **还剩** | **45** |
+| 不用学 na+ref | 70 |
+| **还剩** | **22** |
 
-## ✅ 学过（可追溯）（144）
+## ✅ 学过（可追溯）（158）
 
 | id | 日期 | 主题 | 状态 | 落点 | 原文 |
 |---|---|---|---|---|---|
@@ -66,11 +66,14 @@
 | 1482346496460828674 | 2022-01-15 | texture | game | src/contrasttex.js / contrasttexlab.html | I created a dedicated contrast texture system for the lines: an iterative simulation on th |
 | 1482011744843223042 | 2022-01-14 | texture | engine | engine/outline.js · engine/world.html | Ok, I stumbled on a pretty cool art style now. Here, I'm creating pixel thin lines from co |
 | 1478114309263839244 | 2022-01-03 | texture | engine | engine/spritepack.js · engine/atlasorder.html | Yeah that's good enough for now. I quite like how the radial (instead of directional) size |
+| 1471817524148940807 | 2021-12-17 | grid | game | src/squarehex.js / squarehexlab.html | Some rocky islands. Trying to make the grid natural and readable, yet funky. Square, yet h |
 | 1447496205282549761 | 2021-10-11 | grid | both | src/gridmodes.js · engine/gridmodes.html | The base graph is just a humble irregular triangle grid |
+| 1447488323845509121 | 2021-10-11 | terrain | game | src/depfill.js / depfilllab.html | I'm able to do a couple of things here I've always wanted to, but never been able to befor |
 | 1447483550257799171 | 2021-10-11 | terrain | both | src/triisland.js · engine/triisland.html | I regret to inform you that I've relapsed into procedural island generation |
 | 1384958097542819845 | 2021-04-21 | grid | game | src/trace.js · src/scene.js · src/app.js | I wrote a script to trace topologically straight lines across the Townscaper grid. I think |
 | 1338829205157646336 | 2020-12-15 | grid | engine | engine/sphere.js · engine/sphere.html | Apparently, one way to do Delaunay Triangulation on a sphere is to do it on a Stereographi |
 | 1338825080844021760 | 2020-12-15 | grid | both | src/spheretown.js · engine/sphere.html · engine/sphere.js | Apropos of nothing, a take on the ancient issue of generating nice triangulated spheres 1. |
+| 1332410042784641026 | 2020-11-27 | grid | game | src/patchcluster.js / patchclusterlab.html | How the infinite grid is relaxed and kept seamless: The grid is made of Patches. Adjacent  |
 | 1313841094069817344 | 2020-10-07 | light | engine | engine/surface.js · engine/world.html | Because I'm quite proud of my lighting (and because Townscaper is basically just a tech de |
 | 1313840428685447170 | 2020-10-07 | light | game | src/penumbra.js / penumbralab.html | I added some sunlight (with shadows) and a gizmo to control it |
 | 1310503825510367232 | 2020-09-28 | build | engine | engine/mixedpersp.html | Ok, I tried the mixed perspective. Note how houses further away are smaller, yet the verti |
@@ -79,6 +82,7 @@
 | 1273520600221433857 | 2020-06-18 | life | engine | engine/butterflies.js · engine/world.html | Butterflies fly quite different from birds. Mine loosely orbit a potential landing spot, a |
 | 1258005604066627586 | 2020-05-06 | grid | both | src/triisland.js · engine/triisland.html | Here's that but in Townscaper. And Triangular. |
 | 1244892370392489989 | 2020-03-31 | water | game | src/birds.js · src/scene.js | Better Birdies: 🐦 More bird shaped 🐦 Only has outlines when sitting 🐦 Shuffle about mor |
+| 1243228419162341379 | 2020-03-26 | life | game | src/clouddeck.js / clouddecklab.html | Some moody clouds |
 | 1242824460325052417 | 2020-03-25 | tools | game | src/uikit.js / uikitlab.html | Finally making some proper UI. Turns out you can make a boring list of buttons playful by  |
 | 1241096929490149376 | 2020-03-20 | texture | both | src/texelsnap.js · engine/surface.js | It has been brought to my attention that not all of you are familiar with my every-other-p |
 | 1238474550511308800 | 2020-03-13 | build | game | src/townmesh.js | I needed some more greenery, so now if you build an enclosed area it becomes a backyard! |
@@ -86,11 +90,14 @@
 | 1215644531221311488 | 2020-01-10 | water | both | src/scene.js 倒影 / engine | The technical solution is almost the same as in Bad North. One big difference is that the  |
 | 1205422438437273601 | 2019-12-13 | build | engine | engine/props.js · engine/props.html | For doors and windows, I use som stencil buffer shenanigans to punch holes in the zbuffer. |
 | 1205420678859632640 | 2019-12-13 | grid | both | src/grasscards.js · engine/impostor.js · engine/world.html | For the plants, I dug up this ol' trick: alpha is view angle modulated by leaf texture map |
+| 1205416648397721601 | 2019-12-13 | build | game | src/propframe.js / propframelab.html | New prop placement system! It tries to place as many props as it can without overlap. I us |
 | 1197909675443916803 | 2019-11-22 | light | game | src/townmesh.js | Turns out my monitor was too saturated, making me make my colors too dull. This should be  |
+| 1191990107785572352 | 2019-11-06 | life | game | src/shrubcard.js / shrubcardlab.html | Ah, the timeless problem of shrubbery that look good from all angles without too much over |
 | 1190191289922465793 | 2019-11-01 | light | engine | engine/voxelshadow.js · engine/world.html | Trying out some per vertex voxel based shadows. Not great not terrible. Looks better when  |
 | 1189908238566903808 | 2019-10-31 | build | game | src/townmesh.js #underside | However, if you are more careful in providing structural support you'll get curvy brick ar |
 | 1189902695303458816 | 2019-10-31 | build | game | src/townmesh.js #underside | It was real fun making the steel beam support structures. They have this neat artificial y |
 | 1168571866405097472 | 2019-09-02 | light | both | src/lighting.js · src/townmesh.js #bakeLighting | A peek at my ambient occlusion approach. The occlusion lives in a layered mesh that's repr |
+| 1151770831619534848 | 2019-07-18 | grid | game | src/patchcluster.js / patchclusterlab.html | I figured out how to make do with relaxation clusters of 3 instead of 7, which means I hav |
 | 1147881669350891521 | 2019-07-07 | grid | game | src/quadgrid.js | I present: Fairly even irregular quads grid in a hex Todo: 1. Heuristic to reduce (or elim |
 | 1105131621391495176 | 2019-03-11 | tools | game | src/squigglefield.js / src/dfgrow.js | Squiggly distance fields, now with animation! Versatile, flexible, but quite laborious |
 | 1104771432440049664 | 2019-03-10 | texture | both | src/dfgrow.js · engine/ornament.html · engine/ornament.js | Squiggly distance fields on mirrored UVs for fast and easy UI decorations. Distance field  |
@@ -107,6 +114,8 @@
 | 1017355723171344385 | 2018-07-12 | light | engine | engine/outline.js | Making some thicker outlines for all you 4k high ballers out there |
 | 1016680972610359298 | 2018-07-10 | tools | game | src/uikit.js / uikitlab.html | This is what the confirm popup looks like: |
 | 1015151731804721152 | 2018-07-06 | texture | both | src/smokefx.js | I change the mip level of the noise texture throughout the smoke trail. This aids the tran |
+| 1015142746372366336 | 2018-07-06 | light | both | src/smokefx.js / smokelab.html | I solve the problems of z-depth and draw order by drawing the effect in 2 passes. The firs |
+| 1015140880666300416 | 2018-07-06 | light | both | src/smokefx.js / smokelab.html | Smoke effect. A full billowy base tied together by a crisp outline seamlessly transitioned |
 | 1007587812462530561 | 2018-06-15 | water | engine | engine/waterfall.js · engine/world.html | Proper games have waterfalls. I'm glad to report that @BadNorthGame is now a proper game. |
 | 999191760944418817 | 2018-05-23 | fx | game | src/combatfx.js / combatlab.html | Adding the option of disabling gore made me realized just how much I rely on blood for env |
 | 995043346778415104 | 2018-05-11 | fx | game | src/combatfx.js / combatlab.html | The pathfinding in some levels does get a bit convoluted |
@@ -118,6 +127,7 @@
 | 974325184525201409 | 2018-03-15 | fx | both | src/boxtest.js · engine/boxtest.html | We were having strange crashes when using Unity's Physics.OverlapBox. We solved it (hopefu |
 | 969860566322958336 | 2018-03-03 | fx | game | src/dirsprites.js | My unit sprites have 1 direction, so they need to be directionally ambiguous. They are mos |
 | 959752525867036672 | 2018-02-03 | grid | both | src/dual.js · engine/world.html | A great unexpected joy in this project has been writing my own navmesh. It's an oddly rela |
+| 959530111187013632 | 2018-02-02 | life | game | src/levelflora.js / levelfloralab.html | I've been tweaking the foliage system today. It now supports multiple grass types per leve |
 | 958410200146497537 | 2018-01-30 | fx | engine | engine/flags.js | The approach is versatile enough that I can use it for the ingame banners too |
 | 958371606350454784 | 2018-01-30 | fx | game | src/portrait.js | The beginnings of a portrait generator. It currently runs on 5 examples (all male and with |
 | 946660607008403456 | 2017-12-29 | fx | game | src/combatfx.js / combatlab.html | While @rtm223 is away on holiday I'm taking some time to focus on the important things, li |
@@ -145,14 +155,18 @@
 | 847717312912211970 | 2017-03-31 | build | both | src/partsprites.js | (无原文，仅有视频) |
 | 828984794407170048 | 2017-02-07 | combat | game | src/unitsnap.js / unitsnaplab.html | (无原文，仅有视频) |
 | 827215002448846848 | 2017-02-02 | grid | game | src/navribbon.js / navribbonlab.html | (无原文，仅有视频) |
+| 827216768783495168 | 2017-02-02 | grid | game | src/squadbanner.js + squadbannerlab.html | (无原文，仅有视频) |
 | 823848950553780226 | 2017-01-24 | grid | game | src/navribbon.js / navribbonlab.html | (无原文，仅有视频) |
 | 821680056514781186 | 2017-01-18 | terrain | game | src/blobshadow.js / blobshadowlab.html | (无原文，仅有视频) |
 | 821321422140309504 | 2017-01-17 | terrain | game | src/blobshadow.js / blobshadowlab.html | (无原文，仅有视频) |
 | 820977247083528192 | 2017-01-16 | terrain | game | src/blobshadow.js / blobshadowlab.html | (无原文，仅有视频) |
 | 816743289500106752 | 2017-01-04 | tools | both | src/triflow.js / flowfield.js / navgrid.js | (无原文，仅有视频) |
+| 815236105079398400 | 2016-12-31 | build | game | src/terracecliff.js / terraceclifflab.html | (无原文，仅有视频) |
+| 807256278154301441 | 2016-12-09 | build | game | src/hiproof.js + hiprooflab.html | (无原文，仅有视频) |
 | 806856212260278272 | 2016-12-08 | build | game | src/storydatum.js / storydatumlab.html | (无原文，仅有视频) |
 | 806904557502464000 | 2016-12-08 | build | game | src/archvoid.js / archvoidlab.html | (无原文，仅有视频) |
 | 803190517534248960 | 2016-11-28 | build | game | src/storydatum.js / storydatumlab.html | (无原文，仅有视频) |
+| 802496920790777856 | 2016-11-26 | build | game | src/archvoid.js / src/piercefloor.js + piercefloorlab.html | (无原文，仅有视频) |
 | 797119718477991936 | 2016-11-11 | build | both | src/holenav.js / src/voxelnav.js / src/navgrid.js / src/cheesenav.js / src/tileplace.js / src/rayvis.js / src/triflow.js / engine/los.js | (无原文，仅有视频) |
 | 795010582239997952 | 2016-11-05 | build | both | src/adjacency.js / src/traffic.js | (无原文，仅有视频) |
 | 793806535898136576 | 2016-11-02 | build | both | src/piperepair.js / src/tilerepair.js | (无原文，仅有视频) |
@@ -164,16 +178,52 @@
 | 781027725452648448 | 2016-09-28 | build | game | src/housekit.js + housekitlab.html | (无原文，仅有视频) |
 | 777596437534240768 | 2016-09-18 | grid | both | src/mipfilter.js | (无原文，仅有视频) |
 
-## ⚠️ 标了已学但查不到痕迹（4）
+## 📄 学过（仅文档记录，代码没写 ID）（30）
 
 | id | 日期 | 主题 | 状态 | 落点 | 原文 |
 |---|---|---|---|---|---|
+| 1991099314714902634 | 2025-11-19 | water | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/shore.js / engine/waves.js | Got some pretty sweet new shore waves going |
+| 1707490932017279035 | 2023-09-28 | light | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/grasscards.js / src/edgeplant.js | They are of course 100% texture, painted onto a fairly low, poly mesh. I keep thinking I'm |
+| 1707490274425884929 | 2023-09-28 | life | ◌ 代码里没有，仅 LEARNING.md 记过 | src/reflstreak.js / src/grasscards.js / src/edgeplant.js / src/texelsnap.js | I added back the lil' shrubbery at the edges of things for like the 3rd time |
+| 1664566546683899905 | 2023-06-02 | water | ◌ 代码里没有，仅 LEARNING.md 记过 | src/shore.js / engine/shorefield.js | Here's a distance field-like mesh skirt solution very similar to Townscaper and Bad North. |
+| 1590669875869286400 | 2022-11-10 | life | ◌ 代码里没有，仅 LEARNING.md 记过 | src/reflstreak.js / src/grasscards.js / src/edgeplant.js / src/texelsnap.js | An early look at grass billboards. I really like how they add a completely new kind of sha |
+| 1401145625572425728 | 2021-06-05 | tools | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/townmesh.js | Meshes in Townscaper are kept small to rely on Unity's dynamic mesh batching. This approac |
+| 1305948413872267265 | 2020-09-15 | light | ◌ 代码里没有，仅 LEARNING.md 记过 | src/scene.js | I'm exploring cast shadows. They have to be quite subtle and soft to fit the style. It doe |
+| 1302686201401442309 | 2020-09-06 | grid | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/quadgrid.js | A smoothing and inversion bug I came across while playing with the grid generation. The in |
+| 1290997501332525056 | 2020-08-05 | life | ◌ 代码里没有，仅 LEARNING.md 记过 | src/reflstreak.js / src/grasscards.js / src/edgeplant.js / src/texelsnap.js | #Townscaper is now properly released on Mac on Steam! To celebrate the occasion, I added s |
+| 1260586697538113537 | 2020-05-13 | build | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/app.js | Making a trailer is a ton of work. But the good news is I can use the undo/redo stack for  |
+| 1246074663546916873 | 2020-04-03 | build | ◌ 代码里没有，仅 LEARNING.md 记过 | src/edgesmooth.js / src/surfacedeco.js / src/propanim.js / src/repeatbreak.js | The props now animate when they appear and disappear. This was much trickier than I antici |
+| 1241046107125399552 | 2020-03-20 | life | ◌ 代码里没有，仅 LEARNING.md 记过 | src/reflstreak.js / src/grasscards.js / src/edgeplant.js / src/texelsnap.js | I moved my plants to a 32² corner on the 128² texture I'm using for everything else. Plus  |
+| 1237293295887319040 | 2020-03-10 | texture | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/town.js | More colors! I had been assuming the combinatorics would go crazy and that all my assumpti |
+| 1215642481162887168 | 2020-01-10 | water | ◌ 代码里没有，仅 LEARNING.md 记过 | src/scene.js | Ok I went ahead and put this whole project on water. Long time fans of the show know this  |
+| 1200520827898343425 | 2019-11-29 | texture | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/town.js | DnD hopefulls needn't fear no more, for I've now made the backend of letting you tune your |
+| 1198957499027795969 | 2019-11-25 | tools | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/save.js | That bit of text up top is the save data for the current construction. I think I've packed |
+| 1181464374839521280 | 2019-10-08 | build | ◌ 代码里没有，仅 LEARNING.md 记过 | src/edgesmooth.js / src/surfacedeco.js / src/propanim.js / src/repeatbreak.js | I made some stairs, plus an additional smaller WFC for surface decorations like windows an |
+| 1178731576982724611 | 2019-09-30 | life | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/townmesh.js | I made some grassy plots. I'm real happy with the shapes they make. Eventually, they'll gr |
+| 1176516621223043073 | 2019-09-24 | build | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/townmesh.js | Getting a feel for the style and density of windows. Here you can also see what I'm going  |
+| 1168168400155267072 | 2019-09-01 | light | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/townmesh.js #bakeLighting | Got some very basic lighting in there. Since this ain't proper voxels I had to do a new ta |
+| 1061229717582475264 | 2018-11-10 | texture | ◌ 代码里没有，仅 LEARNING.md 记过 | src/edgesmooth.js / src/surfacedeco.js / src/propanim.js / src/repeatbreak.js | But you can break up that repetition by using a few different ones with different settings |
+| 839067977781768193 | 2017-03-07 | fx | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/combatfx.js | (无原文，仅有视频) |
+| 817323301357948928 | 2017-01-06 | tools | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/triflow.js / flowfield.js / navgrid.js | (无原文，仅有视频) |
+| 816748103193817088 | 2017-01-04 | tools | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/triflow.js / flowfield.js / navgrid.js | (无原文，仅有视频) |
+| 816332161036984320 | 2017-01-03 | tools | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/ballistic.js | (无原文，仅有视频) |
+| 810878197134950401 | 2016-12-19 | build | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/holenav.js / src/voxelnav.js / src/navgrid.js / src/cheesenav.js / src/tileplace.js / src/rayvis.js / src/triflow.js / engine/los.js | (无原文，仅有视频) |
+| 810157485638189056 | 2016-12-17 | build | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/holenav.js / src/voxelnav.js / src/navgrid.js / src/cheesenav.js / src/tileplace.js / src/rayvis.js / src/triflow.js / engine/los.js | (无原文，仅有视频) |
+| 807135253215199233 | 2016-12-09 | build | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/holenav.js / src/voxelnav.js / src/navgrid.js / src/cheesenav.js / src/tileplace.js / src/rayvis.js / src/triflow.js / engine/los.js | (无原文，仅有视频) |
+| 798580832906739712 | 2016-11-15 | build | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/holenav.js / src/voxelnav.js / src/navgrid.js / src/cheesenav.js / src/tileplace.js / src/rayvis.js / src/triflow.js / engine/los.js | (无原文，仅有视频) |
+| 797844857821732864 | 2016-11-13 | build | ◌ 代码里没有，仅 STUDY-INDEX.md 记过 | src/holenav.js / src/voxelnav.js / src/navgrid.js / src/cheesenav.js / src/tileplace.js / src/rayvis.js / src/triflow.js / engine/los.js | (无原文，仅有视频) |
+
+## ⚠️ 标了已学但查不到痕迹（5）
+
+| id | 日期 | 主题 | 状态 | 落点 | 原文 |
+|---|---|---|---|---|---|
+| 1448039167057879048 | 2021-10-12 | terrain | ✗ 无 where | - | Imma talk about my new island generator at Sweden Game Conference (@SwedenGameArena) on Fr |
 | 837027901853810688 | 2017-03-01 | combat | ✗ 文件里没这条 ID | src/shore.js / src/reflstreak.js | (无原文，仅有视频) |
 | 832633189277409280 | 2017-02-17 | terrain | ✗ 文件里没这条 ID | src/shore.js / src/reflstreak.js | (无原文，仅有视频) |
 | 827561690896162816 | 2017-02-03 | grid | ✗ 文件里没这条 ID | src/combatfx.js | (无原文，仅有视频) |
 | 818857408848130048 | 2017-01-10 | terrain | ✗ 文件里没这条 ID | src/shore.js / voxelao.js | (无原文，仅有视频) |
 
-## 🟡 半成品（23）
+## 🟡 半成品（22）
 
 | id | 日期 | 主题 | 状态 | 落点 | 原文 |
 |---|---|---|---|---|---|
@@ -182,57 +232,33 @@
 | 1671808851895627776 | 2023-06-22 | terrain | partial | src/overhangterrain.js | If your terrain generator supports overhangs you gotta flaunt it. I don't make the rules,  |
 | 1670725072540106755 | 2023-06-19 | grid | partial | src/edgesmooth.js | Here's a comparison showing no-, dumb- and hierarchical smoothing. The hierarchical smooth |
 | 1669315384619540487 | 2023-06-15 | terrain | partial | src/overhangterrain.js | The generator consistently spits out pretty cool islands now |
+| 1580158269267406849 | 2022-10-12 | grid | partial | - | Can you make good looking foliage from Marching Cubes-blobs? Maybe? |
 | 1481661852887265288 | 2022-01-13 | grid | partial | src/paintnormal.js · bouncelab.html（③） | Yet another light baker. Actually does some ray marching, but still pretty ad hoc. The tex |
 | 1458921394855718917 | 2021-11-11 | grid | partial | src/halfedge.js · src/scene.js | I'm exploring the Half Edge data structure. Feels like a really lightweight, powerful and  |
-| 1447488323845509121 | 2021-10-11 | terrain | partial | src/overhangterrain.js | I'm able to do a couple of things here I've always wanted to, but never been able to befor |
-| 1332410042784641026 | 2020-11-27 | grid | partial | src/quadgrid.js | How the infinite grid is relaxed and kept seamless: The grid is made of Patches. Adjacent  |
+| 1447494168448753667 | 2021-10-11 | build | partial | src/gridmodes.js / src/unitsnap.js / src/wake.js | Long time fans of the show will not be surprised to learn that this is indeed running on t |
 | 1313837640366596096 | 2020-10-07 | grid | partial | src/looptown.js · alivelab.html ③ | I just pushed an update to Townscaper. You can now build flying towns (if you find any of  |
-| 1258421104756097029 | 2020-05-07 | water | partial | src/shore.js | We were long overdue for some splashier splashes |
-| 1205416648397721601 | 2019-12-13 | build | partial | src/rectpack.js | New prop placement system! It tries to place as many props as it can without overlap. I us |
+| 1258421104756097029 | 2020-05-07 | water | partial | src/gridmodes.js / src/unitsnap.js / src/wake.js | We were long overdue for some splashier splashes |
 | 1201179450668441600 | 2019-12-01 | tools | partial | - | Icons! |
 | 1164926304640229376 | 2019-08-23 | grid | partial | src/gridwfc.js · alivelab.html ② | WFC running at interactive speed on that funky grid. Next up is to make it deterministic |
-| 1151770831619534848 | 2019-07-18 | grid | partial | src/quadgrid.js | I figured out how to make do with relaxation clusters of 3 instead of 7, which means I hav |
 | 1151137783785771008 | 2019-07-16 | grid | partial | src/quadgrid.js | As promised: an aperiodic infinite deterministic irregular relaxed quadrilateral grid. |
 | 1024679338292256769 | 2018-08-01 | tools | partial | - | Some UI flair |
 | 1015149712469524480 | 2018-07-06 | grid | partial | src/quadtex.js · decolab.html ③ | I only sample my noise texture once per quad, but I scroll the UVs randomly forward or bac |
 | 999185422403055616 | 2018-05-23 | fx | partial | src/quadtex.js · stretchTable() · decolab.html ③ | For my blood splatter UVs, I'm interpolating between sprite-space and skin-space using the |
 | 972829402873716737 | 2018-03-11 | fx | partial | src/combatfx.js | If you're heading to GDC, come see my microtalk about the triangular flow fields we use fo |
 | 917405214638006273 | 2017-10-09 | grid | partial | src/campaignmap.js · campaignmaplab.html ③ | A somewhat major breakthrough in my procedural generation: a heuristic for deliberately ge |
-| 890611046435627008 | 2017-07-27 | nav | partial | src/unitsnap.js / unitsnaplab.html / src/unitbatch.js | (无原文，仅有视频) |
-| 802496920790777856 | 2016-11-26 | build | partial | src/archvoid.js | (无原文，仅有视频) |
+| 906416813810049025 | 2017-09-09 | fx | partial | （无） | New cave tileset. These levels really challenge your spacial skills #screenshotsaturday #m |
+| 890611046435627008 | 2017-07-27 | nav | partial | src/gridmodes.js / src/unitsnap.js / src/wake.js | (无原文，仅有视频) |
+| 781957658597269506 | 2016-09-30 | terrain | partial | （无） | (无原文，仅有视频) |
 
-## ⬜ 有笔记、没代码（22）
+## ⬜ 有笔记、没代码（0）
 
-| id | 日期 | 主题 | 状态 | 落点 | 原文 |
-|---|---|---|---|---|---|
-| 1724449858369568780 | 2023-11-14 | tools | todo | - | Ok, here's a small example. The button toggles a ScriptableObject bool. The FloatSelectNod |
-| 1707490932017279035 | 2023-09-28 | light | todo | - | They are of course 100% texture, painted onto a fairly low, poly mesh. I keep thinking I'm |
-| 1580158269267406849 | 2022-10-12 | grid | todo | - | Can you make good looking foliage from Marching Cubes-blobs? Maybe? |
-| 1579474420749725696 | 2022-10-10 | terrain | todo | - | I'm back on the island generation |
-| 1480635131614355459 | 2022-01-10 | light | todo | - | More experiments in procedural texturing of procedural islands. Still very early, but I do |
-| 1471817524148940807 | 2021-12-17 | grid | todo | - | Some rocky islands. Trying to make the grid natural and readable, yet funky. Square, yet h |
-| 1448039167057879048 | 2021-10-12 | terrain | todo | - | Imma talk about my new island generator at Sweden Game Conference (@SwedenGameArena) on Fr |
-| 1447494168448753667 | 2021-10-11 | build | todo | src/halfedge.js | Long time fans of the show will not be surprised to learn that this is indeed running on t |
-| 1331905048801144836 | 2020-11-26 | build | todo | - | Townscaper now has lighthouses! This pattern required more code rewrite than seems reasona |
-| 1270725616430530566 | 2020-06-10 | life | todo | - | You all keep pestering me to release this when I hadn't even added butterflies yet. But do |
-| 1259838941299183619 | 2020-05-11 | life | todo | - | In code, these are called "Italian Wires" |
-| 1243228419162341379 | 2020-03-26 | life | todo | - | Some moody clouds |
-| 1191990107785572352 | 2019-11-06 | life | todo | src/townmesh.js | Ah, the timeless problem of shrubbery that look good from all angles without too much over |
-| 1015142746372366336 | 2018-07-06 | light | todo | - | I solve the problems of z-depth and draw order by drawing the effect in 2 passes. The firs |
-| 1015140880666300416 | 2018-07-06 | light | todo | - | Smoke effect. A full billowy base tied together by a crisp outline seamlessly transitioned |
-| 959530111187013632 | 2018-02-02 | life | todo | - | I've been tweaking the foliage system today. It now supports multiple grass types per leve |
-| 906416813810049025 | 2017-09-09 | fx | todo | - | New cave tileset. These levels really challenge your spacial skills #screenshotsaturday #m |
-| 827216768783495168 | 2017-02-02 | grid | todo | - | (无原文，仅有视频) |
-| 815236105079398400 | 2016-12-31 | build | todo | - | (无原文，仅有视频) |
-| 807256278154301441 | 2016-12-09 | build | todo | - | (无原文，仅有视频) |
-| 793545297376972801 | 2016-11-01 | terrain | todo | - | (无原文，仅有视频) |
-| 781957658597269506 | 2016-09-30 | terrain | todo | - | (无原文，仅有视频) |
+（无）
 
 ## 🕳 有视频、没登记（0）
 
 （无）
 
-## ➖ 不用学（63）
+## ➖ 不用学（70）
 
 | id | 日期 | 主题 | 状态 | 落点 | 原文 |
 |---|---|---|---|---|---|
@@ -240,6 +266,7 @@
 | 1798310423554658732 | 2024-06-05 | show | na | - | （帖子无文字说明） |
 | 1727324352264474664 | 2023-11-22 | show | na | - | Yeah that actually looks pretty good. I did not expect that. |
 | 1727315611959865407 | 2023-11-22 | light | ref | src/smear.js · alivelab.html ⑤ | I've shipped two whole games with orbital cameras and not once have I previously though ab |
+| 1724449858369568780 | 2023-11-14 | tools | ref | - | Ok, here's a small example. The button toggles a ScriptableObject bool. The FloatSelectNod |
 | 1712088611934371876 | 2023-10-11 | texture | ref | - | Another take on a palette authoring tool |
 | 1708815475801505819 | 2023-10-02 | terrain | ref | - | a cool cliff I came across |
 | 1707497006640365880 | 2023-09-28 | show | na | - | And here's a couple more being generated |
@@ -251,7 +278,9 @@
 | 1590674061092212738 | 2022-11-10 | light | ref | src/contrast.js（对比贴图，已有半条） | In the vertex shader, my grass gets to sample that contrast texture both where they stand, |
 | 1580846877855338497 | 2022-10-14 | light | ref | src/lighting.js · diffuseBounce() | Here's the slowed down bounce sequence. You can see how the mega texture and the light vol |
 | 1580845127207387137 | 2022-10-14 | light | ref | src/lighting.js · buildSDF / bakeSixDirVolume | 1st texture here is an sdf volume. The distance lives in the alpha, but RG actually refere |
+| 1579474420749725696 | 2022-10-10 | terrain | ref | - | I'm back on the island generation |
 | 1489193847422865410 | 2022-02-03 | show | na | - | （帖子无文字说明） |
+| 1480635131614355459 | 2022-01-10 | light | ref | - | More experiments in procedural texturing of procedural islands. Still very early, but I do |
 | 1466059785703460870 | 2021-12-01 | show | na | - | Oh. What's this? A free Townscaper web demo, playable straight in the browser: http:// osk |
 | 1459169210752507904 | 2021-11-12 | show | na | - | And another |
 | 1430227487376781317 | 2021-08-24 | texture | ref | - | Plus you can change the in-game textures now! So I guess the game is now (in the most libe |
@@ -262,10 +291,13 @@
 | 1371191380773629956 | 2021-03-14 | show | na | - | Yeah this is gonna be pretty good |
 | 1370772056279805953 | 2021-03-13 | show | na | - | （帖子无文字说明） |
 | 1344290848180203523 | 2020-12-30 | show | na | - | A rare look at Townscapers sophisticated QA process |
+| 1331905048801144836 | 2020-11-26 | build | ref | - | Townscaper now has lighthouses! This pattern required more code rewrite than seems reasona |
 | 1298689301488775169 | 2020-08-26 | light | ref | bouncelab.html（① 右上四个按钮） | Flat texture, shaded, lighting only, and my AO baking mesh. I'm thinking of adding some li |
 | 1279107097108635649 | 2020-07-03 | build | ref | src/townmesh.js | Here's a tour of the puzzle pieces that make up #Townscaper. To date, there are 545 of the |
 | 1277554535297236994 | 2020-06-29 | tools | ref | - | Ok I'm gonna try something that probably wont work: if you wanna help me translate Townsca |
 | 1275089608758484992 | 2020-06-22 | build | ref | - | It has not escaped some of you that I have yet to release Townscaper. I have an important  |
+| 1270725616430530566 | 2020-06-10 | life | ref | - | You all keep pestering me to release this when I hadn't even added butterflies yet. But do |
+| 1259838941299183619 | 2020-05-11 | life | ref | - | In code, these are called "Italian Wires" |
 | 1257213678056857600 | 2020-05-04 | build | ref | - | Alrighty. First 20 people to reply gets a b e t a k e y *steam on windows for now |
 | 1239901715266244609 | 2020-03-17 | show | na | - | If you're hunkered down hiding from the virus (as you should be) and need something to do, |
 | 1212732478458343424 | 2020-01-02 | life | ref | - | Added some flags. Gotta make it homely and welcoming. |
@@ -297,5 +329,6 @@
 | 877995885250138119 | 2017-06-22 | show | na | - | （帖子无文字说明） |
 | 870558914345041921 | 2017-06-02 | show | na | - | I think we've all had days like this |
 | 794993371261665280 | 2016-11-05 | show | ref | - | (无原文，仅有视频) |
+| 793545297376972801 | 2016-11-01 | terrain | ref | - | (无原文，仅有视频) |
 | 777501038274281472 | 2016-09-18 | show | ref | - | (无原文，仅有视频) |
 | 768886648625061889 | 2016-08-25 | show | ref | - | (无原文，仅有视频) |

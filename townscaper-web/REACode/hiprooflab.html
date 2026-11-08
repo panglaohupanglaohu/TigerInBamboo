@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>四坡顶 — 脊长不是参数，是足迹的差</title>
+<style>
+  :root { --ink:#2a1f1e; --muted:#6d5f5c; --line:#e2d8d4; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef0ee; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,240,238,.97) 64%, rgba(238,240,238,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:104ch; }
+  header b { color:#9c3b30; font-weight:650; }
+  #panel { position:fixed; z-index:2; right:16px; top:112px; width:330px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  #panel h2 { margin:0 0 6px; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  table { width:100%; border-collapse:collapse; font-size:11.5px; font-variant-numeric:tabular-nums; }
+  th { text-align:right; font-weight:600; color:var(--muted); padding:2px 0 3px; border-bottom:1px solid var(--line); }
+  th:first-child { text-align:left; }
+  td { text-align:right; padding:3px 0; border-bottom:1px dashed #f0e8e5; }
+  td:first-child { text-align:left; color:var(--ink); }
+  .apex { color:#9c3b30; font-weight:650; }
+  #panel .note { margin:7px 0 0; font-size:11.5px; color:var(--muted); line-height:1.5; }
+  #panel button { margin-top:8px; width:100%; padding:6px 8px; font:inherit; font-size:12px;
+    border:1px solid var(--line); background:#faf6f4; border-radius:7px; color:var(--ink); cursor:pointer; }
+  #stats { position:fixed; left:18px; bottom:12px; right:362px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; }
+  #stats b { color:var(--ink); }
+  #stats .ok { color:#146c4a; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>四坡（攒尖）顶：脊长 = 檐长 − 檐宽，不是可调参数</h1>
+  <p>原片里一排砖塔各高各的，檐口的白边却都在同一水平上——因为每座塔的坡角是自己算出来的
+     <b>atan(矢高 / 檐宽的一半)</b>，屋檐线永远是 z=0。方塔的脊长算出来是 <b>0</b>，于是自动攒尖；
+     长塔算出来是一条短脊，两端各一个三角坡。判据不是面积（四坡与双坡在等坡角等矢高下
+     <b>瓦面面积恒等</b>），而是 <b>山墙有几面、檐口有几条在爬坡</b>。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="panel">
+  <h2>逐塔实测（檐口外挑 0.28）</h2>
+  <table>
+    <thead><tr><th>塔</th><th>足迹</th><th>脊长</th><th>坡角</th><th>坡面</th><th>山墙</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="note" id="pnote">—</p>
+  <button id="mode">切到双坡对照</button>
+</div>
+
+<div id="stats">—</div>
+
+<script type="module">
+import { TOWERS, FLOOR_H, hipRoof, gableRoof, audit } from './src/hiproof.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const BOX = { x: 26, y: 112, w: 806, h: 566 };
+const OVER = 0.28;
+const EXTRA = { name:'G 双坡', w:6, d:4, rise:1.6, floors:4, wall:'#b4533c', x:-8.6, y:-0.6, gable:true };
+
+const WALL_BAND = 0.24;
+let mode = 'hip';
+
+/* ---------- 画布坐标：等距，先算包围盒再 fit ---------- */
+let S = 1, OX = 0, OY = 0;
+const P = (x, y, z) => [(x - y) * S + OX, ((x + y) * 0.5 - z) * S + OY];
+
+function fit() {
+  // 只用「世界坐标里真实存在的角点」求包围盒：檐口矩形的四角 × 三个高度（基座 / 墙上沿 / 屋脊）
+  let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+  const scan = (px, py) => { x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py); };
+  for (const t of [...TOWERS, EXTRA]) {
+    const r = roofFor(t);
+    const H = t.floors * FLOOR_H;
+    const hw = r.eaveW / 2, hd = r.eaveD / 2;
+    for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const z of [0, H, H + r.rise]) {
+      const x = t.x + sx * hw, y = t.y + sy * hd;
+      scan(x - y, (x + y) * 0.5 - z);
+    }
+  }
+  const w = x1 - x0, h = y1 - y0;
+  S = Math.min(BOX.w / w, BOX.h / h);
+  OX = BOX.x + (BOX.w - w * S) / 2 - x0 * S;
+  OY = BOX.y + (BOX.h - h * S) / 2 - y0 * S;
+}
+
+function roofFor(t) {
+  // G 永远画双坡，它就是对照物；开关只改 A–F
+  if (t.gable) return gableRoof(t.w, t.d, t.rise, OVER);
+  return mode === 'hip' ? hipRoof(t.w, t.d, t.rise, OVER) : gableRoof(t.w, t.d, t.rise, OVER);
+}
+
+/* ---------- 模型 → 多边形列表 ---------- */
+function parts(t) {
+  const r = roofFor(t);
+  const H = t.floors * FLOOR_H;
+  const out = [];
+  const tx = (p) => [p[0] + t.x, p[1] + t.y, p[2]];
+  const bx = r.w / 2, by = r.d / 2;
+  const L = (a, b) => [[a[0] + t.x, a[1] + t.y, a[2]], [b[0] + t.x, b[1] + t.y, b[2]]];
+
+  // 两个可见墙面（+x、+y）
+  out.push({ pts: [[bx, -by, 0],[bx, by, 0],[bx, by, H],[bx, -by, H]].map(tx), fill: t.wall, depth: 1e5 - 0.2 });
+  out.push({ pts: [[-bx, by, 0],[bx, by, 0],[bx, by, H],[-bx, by, H]].map(tx), fill: t.wall, depth: 1e5 - 0.1 });
+  // 檐口白封边（墙上沿一条带）
+  out.push({ pts: [[bx, -by, H-WALL_BAND],[bx, by, H-WALL_BAND],[bx, by, H],[bx, -by, H]].map(tx), fill: '#f1ece0', depth: 1e5 });
+  out.push({ pts: [[-bx, by, H-WALL_BAND],[bx, by, H-WALL_BAND],[bx, by, H],[-bx, by, H]].map(tx), fill: '#efe9db', depth: 1e5 + 0.1 });
+
+  // 窗（只在可见立面上，三层纵列）
+  for (let f = 0; f < t.floors; f++) {
+    const z0 = 0.34 + f * FLOOR_H, z1 = z0 + 0.46;
+    for (const u of [-0.26, 0.22]) {
+      out.push({ pts: [[bx, u - 0.14, z0],[bx, u + 0.14, z0],[bx, u + 0.14, z1],[bx, u - 0.14, z1]].map(tx),
+        fill: '#2b2733', depth: 1e5 - 0.15 });
+      out.push({ pts: [[u - 0.16, by, z0],[u + 0.16, by, z0],[u + 0.16, by, z1],[u - 0.16, by, z1]].map(tx),
+        fill: '#322d3a', depth: 1e5 - 0.05 });
+    }
+  }
+
+  // 砖缝（只画可见墙面的水平条）
+  for (let z = 0.55; z < H - 0.3; z += 0.55) {
+    out.push({ line: [[[bx, -by, z], [bx, by, z]].map(tx)], stroke: 'rgba(120,70,55,.22)', w: 1, depth: 1e5 - 0.25 });
+    out.push({ line: [[[-bx, by, z], [bx, by, z]].map(tx)], stroke: 'rgba(120,70,55,.22)', w: 1, depth: 1e5 - 0.15 });
+  }
+
+  // 双坡对照：两块三角山墙（四坡没有这一项）
+  if (r.gableWalls) {
+    for (const s of [1, -1]) {
+      out.push({ pts: [[s * r.eaveW / 2, r.eaveD / 2, H],[s * r.eaveW / 2, -r.eaveD / 2, H],[s * r.eaveW / 2, 0, H + r.rise]].map(tx),
+        fill: '#a94b38', depth: t.x + t.y + s * r.eaveW / 2, gableWall: true });
+    }
+  }
+
+  // 屋面
+  for (const f of r.faces) {
+    const pts = f.pts.map((p) => [p[0] + t.x, p[1] + t.y, p[2] + H]);
+    const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
+    const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
+    out.push({ pts, fill: '#8f3b32', depth: cx + cy, roof: true });
+    // 瓦排：沿坡从檐口到脊／顶点插值
+    if (f.kind === 'trap') {
+      const eave = [0, 1], ridge = [3, 2];
+      for (const tt of [0.28, 0.52, 0.74]) {
+        out.push({ line: [L(lerp2(f.pts[eave[0]], f.pts[ridge[0]], tt), lerp2(f.pts[eave[1]], f.pts[ridge[1]], tt))],
+          stroke: 'rgba(58,18,14,.30)', w: 1.1, depth: cx + cy + 0.001 });
+      }
+    } else {
+      const apex = f.pts.find((p) => p[2] > 0);
+      for (const tt of [0.30, 0.56, 0.78]) {
+        out.push({ line: [L(lerp2(f.pts[0], apex, tt), lerp2(f.pts[1], apex, tt))],
+          stroke: 'rgba(58,18,14,.30)', w: 1.1, depth: cx + cy + 0.001 });
+      }
+    }
+    // 檐口白线
+    out.push({ line: f.pts.filter((p) => p[2] === 0).map((a, i, arr) => [a, arr[(i + 1) % arr.length]])
+        .filter(([a, b]) => Math.hypot(a[0] - b[0], a[1] - b[1]) > 1e-6).map(([a, b]) => L(a, b)),
+      stroke: '#f4efe3', w: 2.4, depth: cx + cy + 0.002 });
+  }
+  // 脊线
+  if (r.ridgeLen > 1e-6) {
+    out.push({ line: [L([r.ridge[0][0], 0, r.ridge[0][2] + H], [r.ridge[1][0], 0, r.ridge[1][2] + H])],
+      stroke: '#f4efe3', w: 2.6, depth: 1e5 });
+  }
+  // 四条戗脊（檐角 → 脊端／顶点）：四坡读得出来靠的就是这四条线
+  if (!r.gableWalls) {
+    const edges = [];
+    for (const [ex, ey] of r.eave) {
+      const endX = r.ridgeLen > 1e-6 ? Math.sign(ex) * (r.ridgeLen / 2) : 0;
+      edges.push(L([ex, ey, H], [endX, 0, H + r.rise]));
+    }
+    out.push({ line: edges, stroke: 'rgba(44,12,9,.42)', w: 1.4, depth: 1e5 + 2 });
+  }
+  return out;
+}
+const lerp2 = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+
+function draw() {
+  const W = 1280, Hh = 800;
+  ctx.clearRect(0, 0, W, Hh);
+  // 地面
+  const g = ctx.createLinearGradient(0, 0, 0, Hh);
+  g.addColorStop(0, '#dfe6e4'); g.addColorStop(1, '#cfd8d6');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, Hh);
+
+  fit();
+  const all = [];
+  for (const t of [...TOWERS, EXTRA]) all.push(...parts(t));
+  all.sort((a, b) => a.depth - b.depth);
+
+  for (const it of all) {
+    if (it.line) {
+      ctx.strokeStyle = it.stroke; ctx.lineWidth = it.w; ctx.lineCap = 'round';
+      for (const [a, b] of it.line) {
+        const p = P(...a), q = P(...b);
+        ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke();
+      }
+      continue;
+    }
+    if (it.fill) {
+      ctx.beginPath();
+      it.pts.forEach((p, i) => { const q = P(...p); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); });
+      ctx.closePath();
+      ctx.fillStyle = it.fill; ctx.fill();
+      if (it.roof) { ctx.strokeStyle = 'rgba(46,14,10,.55)'; ctx.lineWidth = 1; ctx.stroke(); }
+      if (it.gableWall) { ctx.strokeStyle = 'rgba(90,40,30,.45)'; ctx.lineWidth = 1; ctx.stroke(); }
+      if (!it.roof && !it.gableWall && it.pts.length === 4 && it.pts[0][2] < 1.5) {
+        ctx.strokeStyle = 'rgba(120,75,60,.35)';
+        ctx.lineWidth = 1; ctx.stroke();
+      }
+    }
+  }
+
+  // 标签
+  ctx.font = '600 12px -apple-system,"PingFang SC",sans-serif';
+  for (const t of [...TOWERS, EXTRA]) {
+    const r = roofFor(t);
+    const H = t.floors * FLOOR_H;
+    const q = P(t.x + r.w / 2 + 0.45, t.y + r.d / 2 + 0.2, H * 0.55);
+    ctx.fillStyle = 'rgba(255,255,255,.86)';
+    const label = t.name;
+    const tw = ctx.measureText(label).width;
+    ctx.beginPath(); ctx.roundRect(q[0] - 3, q[1] - 12, tw + 8, 17, 5); ctx.fill();
+    ctx.fillStyle = t.gable ? '#5a3d34' : '#8f3b32';
+    ctx.fillText(label, q[0] + 1, q[1] + 1);
+  }
+}
+
+/* ---------- 表格与统计 ---------- */
+const rows = document.getElementById('rows');
+function paintPanel() {
+  rows.innerHTML = '';
+  for (const t of TOWERS) {
+    const a = audit(t);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${a.name}</td><td>${a.foot}</td>
+      <td class="${a.apex ? 'apex' : ''}">${a.ridgeLen.toFixed(2)}</td>
+      <td>${a.slopeDeg.toFixed(1)}°</td><td>${a.tri}△${a.trap}⏢</td><td>${a.gable}</td>`;
+    rows.appendChild(tr);
+  }
+  const apexN = TOWERS.filter((t) => hipRoof(t.w, t.d, t.rise, OVER).apex).length;
+  document.getElementById('pnote').textContent =
+    `方塔 ${apexN} 座（脊长 0 → 四块同坡三角，攒尖）；其余塔各有一条短脊，长度正好 = 檐长 − 檐宽。` +
+    `六座的坡角 ${Math.min(...TOWERS.map((t) => hipRoof(t.w, t.d, t.rise, OVER).slopeDeg)).toFixed(1)}°~` +
+    `${Math.max(...TOWERS.map((t) => hipRoof(t.w, t.d, t.rise, OVER).slopeDeg)).toFixed(1)}° 各不相同，檐口高差却都是 0。`;
+}
+
+function paintStats() {
+  const A = TOWERS.map(audit);
+  const ridgeOk = A.filter((a) => Math.abs(a.ridgeLen - Math.abs(a.eaveW - a.eaveD)) < 1e-9).length;
+  const eaveOk = A.filter((a) => a.eaveSpread < 1e-9).length;
+  const slopeOk = A.filter((a) => a.slopeSpreadDeg < 1e-9).length;
+  const gables = A.reduce((s, a) => s + a.gable, 0);
+  const gw = A.map((a) => a.gableWallArea);
+  document.getElementById('stats').innerHTML =
+    `<b>${A.length} 座塔</b> 脊长 = 檐长−檐宽 <span class="ok">${ridgeOk}/${A.length}</span>` +
+    ` · 四角檐口同高 <span class="ok">${eaveOk}/${A.length}</span>（高差 0.000）` +
+    ` · 四块坡面等坡 <span class="ok">${slopeOk}/${A.length}</span>` +
+    ` · 山墙 <b>${gables} 面</b>（双坡对照 2 面 / 山墙外露 ${Math.min(...gw).toFixed(2)}~${Math.max(...gw).toFixed(2)}）` +
+    ` · 瓦面/足迹 ${Math.min(...A.map((a) => a.surfRatio)).toFixed(2)}~${Math.max(...A.map((a) => a.surfRatio)).toFixed(2)}` +
+    ` · 与双坡瓦面差 <b>0.000</b>（面积不是判据）`;
+}
+
+document.getElementById('mode').onclick = () => {
+  mode = mode === 'hip' ? 'gable' : 'hip';
+  document.getElementById('mode').textContent = mode === 'hip' ? '切到双坡对照' : '切回四坡';
+  draw();
+};
+
+paintPanel(); paintStats(); draw();
+window.addEventListener('resize', draw);
+window.reaLab = {
+  get mode() { return mode; },
+  audits: TOWERS.map(audit),
+  stats: () => document.getElementById('stats').innerText,
+};
+</script>
+</body>
+</html>

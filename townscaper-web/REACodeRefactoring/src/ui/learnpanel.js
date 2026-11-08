@@ -31,7 +31,7 @@ const PAGES = [
   ['refactoring-audit.html', '重构审核清单（285 段）', '历史实现状态、README 原文、代码差异与待复核项目'],
   ['architecture.html', '系统全局（架构图）', '每一层的模块、数据流、和原 REACode 的对应关系'],
   ['pipeline.html', '管线图与学习路线', '判断 + 9 步路线 + 四条管线，每一步的视频、状态、代码'],
-  ['learn.html', '学习笔记', '237 段视频：原文 → 学到什么 → 代码位置'],
+  ['learn.html', '学习笔记', '素材原文 → 学习记录 → 代码位置'],
   ['index.html?scene=badnorth', '北境 · Bad North', '守岛打维京人：长船登陆、选中小队（时间变慢）下令、血 / 尸体 / 箭粘在船上；1–6 换季节'],
   ['campaign.html', 'Bad North 战役地图', '节点散开 → 剔除 → 随机游走主路 → 支路 → 分区 → 64² 岛屿快照'],
   ['planet.html', '球面网格 → 小星球', '随机点 → 散开 → 球极投影 Delaunay → 松弛 → 台阶星球 + 防蘑菇化'],
@@ -152,7 +152,7 @@ export function mountLearnPanel(view, town, { getScene = () => '', loadScene = (
   const flow = P.lanes.map((l) => `<span style="background:${l.color}">${l.name.split(' ')[0].replace('（基础能力）', '')}</span>`).join('→');
   host.className = 'panel' + (innerWidth < 720 ? ' collapsed' : '');
   host.innerHTML = `
-    <div class="lp-head"><b>重构版 · 系统与管线</b><span>${L ? L.items.length + ' 段视频' : ''} · 收起/展开</span></div>
+    <div class="lp-head"><b>重构版 · 系统与管线</b><span>${L ? L.items.length + ' 条素材记录' : ''} · 收起/展开</span></div>
     <div class="lp-body">
       ${archHtml()}
       <div class="lp-verdict"><b>判断</b>${esc(P.verdict.title)}。

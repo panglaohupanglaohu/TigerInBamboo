@@ -3,9 +3,9 @@ export function createVersionStore(storage, key='tm.scene-authoring.v1') {
  const read=()=>JSON.parse(storage.getItem(key)||'{"versions":[],"finals":{}}');
  return {
   read,
-  save(scene, data, goal='', validation=null,recipe=null,settings=null) {
+  save(scene, data, goal='', validation=null,recipe=null,settings=null,objects=null,style=null) {
    if(typeof data!=='string'||!data.length)throw Error('场景编码为空');
-   const state=read(), row={id:crypto.randomUUID(),scene,data,goal,validation,time:Date.now(),origin:'manual',...(recipe?{recipe:structuredClone(recipe)}:{}),...(settings?{settings:structuredClone(settings)}:{})};
+   const state=read(), row={id:crypto.randomUUID(),scene,data,goal,validation,time:Date.now(),origin:'manual',...(recipe?{recipe:structuredClone(recipe)}:{}),...(settings?{settings:structuredClone(settings)}:{}),...(objects&&Object.keys(objects).length?{objects:structuredClone(objects)}:{}),...(style&&Object.keys(style).length?{style:structuredClone(style)}:{})};
    state.versions.push(row);storage.setItem(key,JSON.stringify(state));return row;
   },
   finalize(id) {

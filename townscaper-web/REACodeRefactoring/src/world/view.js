@@ -1,3 +1,6 @@
+import {TerraceEdgeOverlay} from './terrace-edges.js';
+import {SpaceVisibilityOverlay} from './space-visibility.js';
+import {CloudShadow,CLOUD_SHADOW_GLSL} from '../light/cloud-shadow.js';
 /**
  * scene.js — renderer, camera rig, water and picking.
  *
@@ -98,6 +101,7 @@ export class View {
     this.colorVolumeMin={value:new THREE.Vector3(.18,.2,.35)};
     this.colorVolumeMax={value:new THREE.Vector3(.35,.5,.65)};
     this.groundSurfaceShadow = new GroundSurfaceShadow(this);
+    this.cloudShadow = new CloudShadow(this);
     this.blotchLevel = { value: levelHeight };
     this.blotchStyleMode = { value: 0 };
     this.blotchStyle = { value: new THREE.Vector4(2.3,.55,.9,1) };
@@ -125,19 +129,19 @@ export class View {
       shader.uniforms.uStrataMode = this.strataMode;
       shader.uniforms.uStrata = this.strataUniform;
       shader.uniforms.uGI = this.giOn;
-      Object.assign(shader.uniforms, this.pop.uniforms);
+      Object.assign(shader.uniforms, this.pop.uniforms, this.cloudShadow.uniforms);
       shader.vertexShader = shader.vertexShader
         .replace('#include <common>', '#include <common>\nattribute float aMountainTone;\nvarying float vMountainTone;\nattribute vec3 aField;\nvarying vec3 vField;\nattribute float aGlow;\nattribute float aVox;\nattribute vec3 aGI;\nvarying vec3 vGI;\nvarying float vGlow;\nvarying float vVox;\nvarying float vUp;\nvarying vec3 vWPos;\nuniform float uTime;\n' + this.pop.pars)
         .replace('#include <begin_vertex>', '#include <begin_vertex>\nvMountainTone=aMountainTone;\nvField = aField;\nvGlow = aGlow;\nvVox = aVox;\nvGI = aGI;\nvUp = normalize(objectNormal).y;\nvWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;\n' + this.pop.body);
       shader.fragmentShader = shader.fragmentShader
-        .replace('#include <common>', '#include <common>\nuniform float uMountainMode;\nvarying float vMountainTone;\nuniform float uFields;\nvarying vec3 vField;\nuniform float uNight;\nuniform float uSnow;\nuniform float uNormMix;\nuniform float uVoxOn;\nuniform float uBlotch;\nuniform float uGI;\nvarying vec3 vGI;\nvarying float vGlow;\nvarying float vVox;\nvarying float vUp;\nvarying vec3 vWPos;\n' + BLOTCH_GLSL + FIELD_GLSL + SEDIMENT_GLSL + SURFACE_SHADOW_GLSL + COLOR_VOLUME_GLSL + PALETTE_PATCH_GLSL + NORMAL_CONTRAST_GLSL)
+        .replace('#include <common>', '#include <common>\nuniform float uMountainMode;\nvarying float vMountainTone;\nuniform float uFields;\nvarying vec3 vField;\nuniform float uNight;\nuniform float uSnow;\nuniform float uNormMix;\nuniform float uVoxOn;\nuniform float uBlotch;\nuniform float uGI;\nvarying vec3 vGI;\nvarying float vGlow;\nvarying float vVox;\nvarying float vUp;\nvarying vec3 vWPos;\n' + BLOTCH_GLSL + FIELD_GLSL + SEDIMENT_GLSL + SURFACE_SHADOW_GLSL + COLOR_VOLUME_GLSL + PALETTE_PATCH_GLSL + NORMAL_CONTRAST_GLSL + CLOUD_SHADOW_GLSL)
         // 平滑法线和硬法线在最终光照里混合：硬法线由屏幕空间导数算（每个面一个），和插值来的平滑法线按 uNormMix 混
         .replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\nvec3 hardN = normalize(cross(dFdx(-vViewPosition), dFdy(-vViewPosition)));\nif (dot(hardN, normal) < 0.0) hardN = -hardN;\nnormal = normalize(mix(hardN, normal, uNormMix));')
         // 逐顶点体素阴影：顶点朝太阳在体素里走，被挡住就暗
         .replace('#include <lights_fragment_begin>', '#include <lights_fragment_begin>\n')
         .replace('#include <aomap_fragment>', '#include <aomap_fragment>\nreflectedLight.directDiffuse *= 1.0 - uVoxOn * vVox * 0.75;\nreflectedLight.indirectDiffuse = mix(reflectedLight.indirectDiffuse, vGI * diffuseColor.rgb * 0.9, uGI * 0.7);')
         .replace('#include <color_fragment>', '#include <color_fragment>\nif(uColorVolumeOn>.5 && vField.z>.5 && vField.z<1.5) diffuseColor.rgb=uColorVolumeOn>1.5?palettePatch(vec2(bn(vWPos.xz*.3),clamp(vWPos.y/6.,0.,1.))):colorVolumeSample(vec3(bn(vWPos.xz*.3),.5,clamp(vWPos.y/6.,0.,1.)));\nif(uStrataMode>.5 && vField.z< -1.5) discard;\nif(uStrataMode>.5 && vField.z< -.5) diffuseColor.rgb=sedimentColor(diffuseColor.rgb,vWPos);\nif(uSurfaceShadowStrength>0. && vField.z>.5 && vField.z<1.5 && vUp>.8) diffuseColor.rgb*=surfaceShadowTone(vWPos);\nif (uFields > 0.5) diffuseColor.rgb *= fieldTone(vField);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.93, 0.95, 0.98), uSnow * smoothstep(0.55, 0.85, vUp));\nif (uBlotch > 0.5 && vField.z > 0.5 && vField.z < 1.5 && vUp > 0.8 && diffuseColor.g > diffuseColor.r * 0.82 && diffuseColor.g > diffuseColor.b * 1.05) diffuseColor.rgb *= blotchTone(vWPos);')
-        .replace('#include <opaque_fragment>', 'if(uMountainMode>.5 && vField.z<-.5){float tone=1.;if(uMountainMode>1.5)tone=uMountainMode<2.5?vMountainTone:.66+.42*max(0.,dot(normal,normalize((viewMatrix*vec4(-.62,.62,-.48,0.)).xyz)));outgoingLight=diffuseColor.rgb*tone;}\nif(uNormalContrast.x>.5 && abs(vField.z)>.5) outgoingLight=mix(outgoingLight,vec3(.025,.045,.05),normalContrastInk(vWPos)*.85);\n#include <opaque_fragment>')
+        .replace('#include <opaque_fragment>', 'if(uMountainMode>.5 && vField.z<-.5){float tone=1.;if(uMountainMode>1.5)tone=uMountainMode<2.5?vMountainTone:.66+.42*max(0.,dot(normal,normalize((viewMatrix*vec4(-.62,.62,-.48,0.)).xyz)));outgoingLight=diffuseColor.rgb*tone;}\nif(uNormalContrast.x>.5 && abs(vField.z)>.5) outgoingLight=mix(outgoingLight,vec3(.025,.045,.05),normalContrastInk(vWPos)*.85);\noutgoingLight*=cloudShadowTone(vWPos);\n#include <opaque_fragment>')
         .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.72, 0.32) * vGlow * uNight * 1.6;');
     };
     this.mesh = new THREE.Mesh(this.worldMesh.geometry, this.material);
@@ -194,6 +198,9 @@ export class View {
     this.scene.add(this.contourOverlay.mesh);
     this.visibilityOverlay = new VisibilityOverlay(this.town, { levelHeight });
     this.scene.add(this.visibilityOverlay.group);
+    this.spaceVisibility=new SpaceVisibilityOverlay(this.town,this.index,{levelHeight});
+    this.scene.add(this.spaceVisibility.group);
+    this.terraceEdges=new TerraceEdgeOverlay(this);this.scene.add(this.terraceEdges.lines);
     this.doodleOverlay = new DoodleOverlay(this.town, { levelHeight });
     this.scene.add(this.doodleOverlay.mesh);
     this.resize();
@@ -493,6 +500,9 @@ export class View {
     switch (name) {
       case 'normalcontrast': this.normalContrast.value.x=on?1:0; break;
       case 'grid': this.gridLines.visible = on; break;
+      case 'woodladders': this.navLayer.woodLadders=on;this.navLayer.refresh(this.town,this.worldMesh.shape);break;
+      case 'terraceedges': this.terraceEdges.setMode(on?'steps':'off'); break;
+      case 'rayvis': this.spaceVisibility.setVisible(on); break;
       case 'visibility': this.visibilityOverlay.setVisible(on); break;
       case 'contours': this.contourOverlay.setVisible(on); break;
       case 'shorelines': this.shoreLine.visible = on; this.seaLine.visible = on; break;
@@ -504,6 +514,7 @@ export class View {
       case 'grass': case 'shrubs': case 'trees': case 'flowers': this.vegetation.setLayer(name, on); break;
       case 'leafy': this.vegetation.leafyOn = on; break;
       case 'impostor': this.vegetation.impostor = on; break;
+      case 'cloudshadow': this.cloudShadow.setEnabled(on); break;
       case 'clouds': this.vegetation.clouds = on; break;
       case 'moody': this.vegetation.moody = on; break;
       case 'wind': this.atmosphere.showArrows = on; break;
@@ -716,6 +727,8 @@ export class View {
     this.penumbra?.refresh();
     this.contourOverlay.refresh();
     this.visibilityOverlay.refresh();
+    this.spaceVisibility.refresh();
+    this.terraceEdges.refresh();
     this.doodleOverlay.refresh();
     this.lighthouses.update();   // 玩法层（badnorth/battle.js）
     if (this.worldMesh.rebuild()) {
@@ -763,6 +776,7 @@ export class View {
     this.decor.update(dt);
     this.outline.update(this.renderer, this.camera, this.sunDir);
     this.groundSurfaceShadow.refresh();
+    this.cloudShadow.update();
     this.renderer.render(this.scene, this.camera);
     this.#smear(dt);
   }

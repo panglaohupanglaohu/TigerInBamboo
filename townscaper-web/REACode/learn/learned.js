@@ -21,11 +21,12 @@
  */
 window.LEARNED = {
   meta: {
-    updated: '2026-11-01 09:55',
-    total: 134,
-    corpus: 237,
-    rounds: 12,
-    note: '第 9–20 轮（含被并发轮次覆盖的条目）。每一条都先抽帧看，再落地，再用 gl.readPixels / 单元测试量一遍；没量到的会写"未量化"，不编数。',
+    updated: '2026-11-07 11:15',
+    total: 193,
+    corpus: 285,
+    rounds: 9,
+    ledger: 36,
+    note: '台账逐条写了 9 轮 36 条（第 9–20 轮里最有内容的那些）；其余批次的过程记在 learn/RUNLOG.md，状态记在 learn/data.js。total / corpus 由 tools/report.mjs 按 data.js 与 gifs/ 现算，不是手写。每一条都先抽帧看，再落地，再用 gl.readPixels / 单元测试量一遍；没量到的写「未量化」，不编数。',
   },
 
   // ---------- 方法论：提问里最常问"你怎么学的" ----------

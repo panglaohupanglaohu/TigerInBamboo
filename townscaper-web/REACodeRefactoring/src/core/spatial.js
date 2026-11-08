@@ -64,13 +64,17 @@ export function buildCellIndex(grid, bucket = 2) {
  * 向量 g_b 垂直于 ca、长度使 g_b·(b−a) = 1；g_c 同理。于是 wb = g_b·(p−a)，wc = g_c·(p−a)，wa = 1 − wb − wc。
  */
 export function baryPrep(a, b, c) {
-  const e1x = b.x - a.x, e1z = b.z - a.z, e2x = c.x - a.x, e2z = c.z - a.z;
-  const det = e1x * e2z - e1z * e2x;
-  const gbx = e2z / det, gbz = -e2x / det;     // ⊥ (c−a)，且 g_b·(b−a) = 1
-  const gcx = -e1z / det, gcz = e1x / det;     // ⊥ (b−a)，且 g_c·(c−a) = 1
-  return (x, z) => {
-    const px = x - a.x, pz = z - a.z;          // 1 次减法（向量）
-    const wb = gbx * px + gbz * pz, wc = gcx * px + gcz * pz;   // 各 1 次点积
-    return [1 - wb - wc, wb, wc];
+  const ax=a.x,az=a.z;
+  if(![ax,az,b.x,b.z,c.x,c.z].every(Number.isFinite))throw new RangeError('finite XZ triangle required');
+  const e1x=b.x-ax,e1z=b.z-az,e2x=c.x-ax,e2z=c.z-az;
+  const scale=Math.max(Math.abs(e1x),Math.abs(e1z),Math.abs(e2x),Math.abs(e2z));
+  const x1=e1x/scale,z1=e1z/scale,x2=e2x/scale,z2=e2z/scale,det=x1*z2-z1*x2;
+  if(!Number.isFinite(det)||Math.abs(det)<=64*Number.EPSILON)throw new RangeError('degenerate XZ triangle');
+  const gbx=z2/det/scale,gbz=-x2/det/scale;
+  const gcx=-z1/det/scale,gcz=x1/det/scale;
+  return (x,z)=>{
+    if(!Number.isFinite(x)||!Number.isFinite(z))throw new RangeError('finite XZ query required');
+    const px=x-ax,pz=z-az,wb=gbx*px+gbz*pz,wc=gcx*px+gcz*pz;
+    return[1-wb-wc,wb,wc];
   };
 }

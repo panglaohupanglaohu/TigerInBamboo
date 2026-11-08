@@ -1,8 +1,9 @@
 import * as T from 'three';
+import {styleMat} from '../style/materials.js';
 import {organicEllipsoidSurface} from './morrisOrganicMesh.js?v=horse-organic-r1';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 const v=(x,y,z)=>new T.Vector3(x,y,z);
-const material=(color,roughness=.9,metalness=0)=>new T.MeshStandardMaterial({color,roughness,metalness});
+const material=(color,roughness=.9,metalness=0)=>styleMat('morris.princess.costume','MeshStandardMaterial',{color,roughness,metalness});
 /** Authored mounted character; ornaments are computed botanical motifs, not a target-image plane. */
 export function createMorrisPrincess(){
  const root=new T.Group();root.name='morris-princess-mounted';root.userData.noDistanceCulling=true;

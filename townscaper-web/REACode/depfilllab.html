@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>无局部极小 = 从海往里灌水，把洼地填到溢出口</title>
+<style>
+  :root { --ink:#1b2723; --muted:#5b6d66; --line:#d8e2db; --warm:#8a6a1c; --bad:#b4402f; --good:#146c4a; --blue:#2f6f92; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef2f4; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.3px; max-width:116ch; }
+  header b { color:var(--warm); font-weight:650; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,242,244,.98) 72%, rgba(238,242,244,0)); }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #cmp { position:fixed; z-index:2; left:756px; top:120px; width:492px;
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:10px; padding:10px 13px; }
+  #cmp h2 { margin:0 0 6px; font-size:12.3px; letter-spacing:.04em; color:var(--muted); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:11.6px; }
+  th,td { padding:3px 2px; text-align:right; border-bottom:1px dashed var(--line); }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:600; font-size:11px; }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+  #note { margin-top:6px; font-size:11.3px; color:var(--muted); }
+  #side { position:fixed; z-index:2; left:756px; top:352px; width:492px; font-size:11.3px; color:var(--muted);
+    background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:10px; padding:9px 13px; }
+  #side b { color:var(--ink); }
+  #side .k { display:flex; align-items:center; gap:7px; margin-bottom:4px; }
+  #side .sq { width:13px; height:13px; border-radius:2px; flex:0 0 auto; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:10px; font-size:11.8px; color:var(--muted);
+    background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:16px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <h1>「冲蚀过的地形不能留下局部极小」 = 从海往里灌水，把每个洼地填到它自己的溢出口</h1>
+  <p>量化成台地之后坑底成了四面更高的格子：水落进去出不来，河流画不出、寻路当死胡同。
+     <b>逐格抬到最低邻居</b>能让"严格洼底"数字归零，但救不回来几个格（指标骗人）；
+     正确做法是 <b>Priority-Flood</b>：从水面/地图边界出发、用最小堆按高程向外蔓延，邻居比当前水位低就抬到水位（+ε），
+     于是每个洼地变成一个平面湖，湖边的格一定有"只降不升"的通向海的路。左图原始、右图填洼后，红点=被困住的格。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+
+<div id="cmp">
+  <h2>同一座岛 · 三种版本</h2>
+  <table id="tbl">
+    <thead><tr><th>版本</th><th>严格洼底</th><th>被困格</th><th>排水率</th><th>抬升格</th><th>均抬</th><th>最大填深</th><th>台阶边</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="note"></div>
+</div>
+
+<div id="side">
+  <div class="k"><span class="sq" style="background:#c8d6c0"></span>陆地（按台地层上色，越亮越高）</div>
+  <div class="k"><span class="sq" style="background:#4e7f9a"></span>海 / 填出来的湖面</div>
+  <div class="k"><span class="sq" style="background:#b4402f;border-radius:50%"></span>被困住的格（水排不出去）</div>
+  <div class="k"><span class="sq" style="background:#146c4a;border-radius:50%"></span>被填的格（抬到溢出口）</div>
+</div>
+
+<div id="stats"></div>
+
+<script type="module">
+import { measure, CFG, drained } from './src/depfill.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1b2723', MUTED = '#5b6d66';
+
+const M = measure(7);
+const N = CFG.N, WATER = CFG.WATER;
+const { H, PF } = M;
+const DRAIN_RAW = drained(H);
+
+const MAP = 330, MC = MAP / N;      // 每格像素
+const AX = 64, AY = 120, BX = 410, BY = 120;
+
+const hcol = (h) => {
+  const lv = Math.max(0, Math.round(h / CFG.STEP));
+  const t = Math.min(1, lv / 9);
+  // 低处苔绿 → 中段枯草 → 高处灰岩，三档线性插值
+  const stops = [[168, 190, 150], [206, 206, 160], [214, 219, 222]];
+  const f = t * 2, i = Math.min(1, Math.floor(f)), k = f - i;
+  const a = stops[i], b = stops[i + 1];
+  return `rgb(${Math.round(a[0] + (b[0] - a[0]) * k)},${Math.round(a[1] + (b[1] - a[1]) * k)},${Math.round(a[2] + (b[2] - a[2]) * k)})`;
+};
+
+function drawMap(Hs, ox, oy, label, accent, mode) {
+  ctx.save();
+  ctx.translate(ox, oy);
+  ctx.fillStyle = 'rgba(78,127,154,.16)';
+  ctx.fillRect(-6, -6, MAP + 12, MAP + 12);
+
+  for (let y = 0; y < N; y++)
+    for (let x = 0; x < N; x++) {
+      const h = Hs[y][x];
+      const px = x * MC, py = y * MC;
+      if (h <= WATER) { ctx.fillStyle = '#4e7f9a'; }
+      else ctx.fillStyle = hcol(h);
+      ctx.fillRect(px, py, MC + 0.6, MC + 0.6);
+      // 台地层界：只在跨级处描一条细线，读得出"一级一级"
+      if (h > WATER && (x < N - 1) && Hs[y][x + 1] > WATER &&
+          Math.abs(Hs[y][x + 1] - h) >= CFG.STEP * 0.9) {
+        ctx.strokeStyle = 'rgba(27,39,35,.22)'; ctx.lineWidth = 0.8;
+        ctx.beginPath(); ctx.moveTo(px + MC, py); ctx.lineTo(px + MC, py + MC); ctx.stroke();
+      }
+    }
+
+  if (mode === 'raw') {
+    // 被困住的格：红点
+    for (let y = 0; y < N; y++)
+      for (let x = 0; x < N; x++) {
+        if (!(Hs[y][x] > WATER) || DRAIN_RAW.seen[y][x]) continue;
+        ctx.fillStyle = 'rgba(180,64,47,.92)';
+        ctx.beginPath(); ctx.arc(x * MC + MC / 2, y * MC + MC / 2, Math.max(1.3, MC * 0.30), 0, 7); ctx.fill();
+      }
+  } else {
+    for (let y = 0; y < N; y++)
+      for (let x = 0; x < N; x++) {
+        if (PF[y][x] - H[y][x] <= CFG.EPS * 4) continue;
+        ctx.fillStyle = 'rgba(78,127,154,.92)';
+        ctx.fillRect(x * MC, y * MC, MC + 0.6, MC + 0.6);
+      }
+    // 湖面轮廓
+    ctx.strokeStyle = 'rgba(20,108,74,.95)'; ctx.lineWidth = 1.2;
+    for (let y = 0; y < N; y++)
+      for (let x = 0; x < N; x++) {
+        if (PF[y][x] - H[y][x] <= CFG.EPS * 4) continue;
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const xx = x + dx, yy = y + dy;
+          const inside = xx >= 0 && yy >= 0 && xx < N && yy < N && PF[yy][xx] - H[yy][xx] > CFG.EPS * 4;
+          if (inside) continue;
+          const ex = (x + (dx > 0 ? 1 : 0)) * MC, ey = (y + (dy > 0 ? 1 : 0)) * MC;
+          ctx.beginPath();
+          if (dx) { ctx.moveTo(ex, ey); ctx.lineTo(ex, ey + MC); }
+          else { ctx.moveTo(ex, ey); ctx.lineTo(ex + MC, ey); }
+          ctx.stroke();
+        }
+      }
+  }
+
+  ctx.strokeStyle = 'rgba(27,39,35,.28)'; ctx.lineWidth = 1;
+  ctx.strokeRect(0, 0, MAP, MAP);
+
+  ctx.fillStyle = INK; ctx.font = '600 13px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText(label, 0, -12);
+  ctx.strokeStyle = accent; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(0, -4); ctx.lineTo(72, -4); ctx.stroke();
+  ctx.restore();
+}
+
+/** 沿最大那口湖的行切一刀：原始剖面 vs 填后水面 */
+function drawSection() {
+  const lake = M.lakes[0];
+  const row = Math.round(lake.cy);
+  const x0 = Math.max(0, Math.round(lake.cx) - 13), x1 = Math.min(N, x0 + 26);
+  const y0 = 482, hh = 196, padL = 74, padR = 30;
+  const w = 1280 - padL - padR;
+  const bw = w / (x1 - x0);
+  const zmax = 6.5;
+  const surf = lake.surf;
+  const zy = (z) => y0 + hh - 26 - (z / zmax) * (hh - 52);
+
+  ctx.fillStyle = 'rgba(255,255,255,.9)';
+  ctx.strokeStyle = 'rgba(216,226,219,1)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(46, y0, 1188, hh, 10); ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle = INK; ctx.font = '600 12.5px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText(`沿第 ${row} 行切一刀：坑底 → 溢出口（最大的湖，${lake.area} 格，填深 ${lake.deep.toFixed(2)}）`, 62, y0 + 22);
+  ctx.font = '11.3px -apple-system,system-ui,sans-serif'; ctx.fillStyle = MUTED;
+  ctx.fillText('灰 = 原始台地剖面（台阶），蓝 = 被填出来的水', 62, y0 + 38);
+
+  // 原始台地剖面
+  ctx.beginPath();
+  ctx.moveTo(padL, zy(0));
+  for (let x = x0; x < x1; x++) {
+    const h = Math.max(0, H[row][x]);
+    ctx.lineTo(padL + (x - x0) * bw, zy(h));
+    ctx.lineTo(padL + (x - x0 + 1) * bw, zy(h));
+  }
+  ctx.lineTo(padL + (x1 - x0) * bw, zy(0));
+  ctx.closePath();
+  ctx.fillStyle = '#cfd8d2'; ctx.fill();
+  ctx.strokeStyle = '#8c9a93'; ctx.lineWidth = 1.1; ctx.stroke();
+
+  // 水面：逐列一块，顶 = 填后高程（≈ 溢出口），底 = 原始坑底
+  ctx.fillStyle = 'rgba(78,127,154,.58)';
+  ctx.strokeStyle = 'rgba(47,111,146,.75)'; ctx.lineWidth = 0.8;
+  for (let x = x0; x < x1; x++) {
+    const f = PF[row][x], h = H[row][x];
+    if (f - h <= CFG.EPS * 4) continue;
+    const px = padL + (x - x0) * bw;
+    ctx.beginPath();
+    ctx.rect(px, zy(f), bw + 0.5, zy(h) - zy(f));
+    ctx.fill(); ctx.stroke();
+  }
+
+  // 溢出口水位线
+  // 水位线只画在湖的跨度上（画通栏会跟台地面重合成第二条地平线）
+  let lx0 = x1, lx1 = x0;
+  for (let x = x0; x < x1; x++) if (PF[row][x] - H[row][x] > CFG.EPS * 4) { lx0 = Math.min(lx0, x); lx1 = Math.max(lx1, x + 1); }
+  if (lx1 > lx0) {
+    ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(47,111,146,.95)'; ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(padL + (lx0 - x0) * bw - 10, zy(surf));
+    ctx.lineTo(padL + (lx1 - x0) * bw + 10, zy(surf));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#2f6f92'; ctx.font = '600 11px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(`溢出口 ${surf.toFixed(2)}`, padL + ((lx0 + lx1) / 2 - x0) * bw, zy(surf) - 7);
+    ctx.textAlign = 'left';
+  }
+
+  // 坑底标注（最低那一格）
+  let low = null;
+  for (let x = x0; x < x1; x++) if (PF[row][x] - H[row][x] > CFG.EPS * 4 && (!low || H[row][x] < low.h)) low = { x, h: H[row][x] };
+  if (low) {
+    const px = padL + (low.x - x0) * bw + bw / 2;
+    ctx.strokeStyle = '#b4402f'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(px, zy(low.h)); ctx.lineTo(px, zy(low.h) + 16); ctx.stroke();
+    ctx.fillStyle = '#b4402f'; ctx.font = '11px -apple-system,system-ui,sans-serif';
+    ctx.fillText(`坑底 ${low.h.toFixed(2)}`, px - 20, zy(low.h) + 28);
+  }
+
+  // 纵轴
+  ctx.fillStyle = MUTED; ctx.font = '10.5px -apple-system,system-ui,sans-serif'; ctx.textAlign = 'right';
+  for (let z = 0; z <= zmax; z += 2) {
+    ctx.fillText(z.toFixed(0), padL - 8, zy(z) + 3);
+    ctx.strokeStyle = 'rgba(27,39,35,.07)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, zy(z)); ctx.lineTo(padL + (x1 - x0) * bw, zy(z)); ctx.stroke();
+  }
+}
+
+function paint() {
+  const rows = [['A 原始', M.raw, false], ['B 逐格抬到最低邻居', M.naive, true], ['C Priority-Flood', M.flood, true]];
+  document.querySelector('#tbl tbody').innerHTML = rows.map(([nm, d], i) => {
+    const trapped = d.drain.land - d.drain.ok;
+    return `<tr>
+      <td><b>${nm}</b></td>
+      <td class="${d.minima === 0 ? 'ok' : 'no'}">${d.minima}</td>
+      <td class="${trapped === 0 ? 'ok' : 'no'}">${trapped}</td>
+      <td class="${d.drain.pct > 99.9 ? 'ok' : ''}">${d.drain.pct.toFixed(1)}%</td>
+      <td>${d.lift.raised}</td>
+      <td>${d.lift.mean.toFixed(2)}</td>
+      <td>${d.lift.max.toFixed(2)}</td>
+      <td>${d.steps}</td></tr>`;
+  }).join('');
+
+  const trapRaw = M.raw.drain.land - M.raw.drain.ok;
+  const trapNaive = M.naive.drain.land - M.naive.drain.ok;
+  document.getElementById('note').innerHTML =
+    `朴素法只把 ${M.naive.lift.raised} 个"严格洼底"抬平，<b class="no">被困格只从 ${trapRaw} 降到 ${trapNaive}</b>——` +
+    `指标归零了，水照样出不去。Priority-Flood 抬 ${M.flood.lift.raised} 格、` +
+    `<b class="ok">被困格 ${trapRaw} → ${M.flood.drain.land - M.flood.drain.ok}</b>，` +
+    `填出 ${M.lakes.length} 口湖，台阶边 ${M.raw.steps} → ${M.flood.steps}（只抬不削，台地还在）。`;
+
+  document.getElementById('stats').innerHTML =
+    `<span>场 ${N}×${N} · 陆地 ${M.raw.drain.land} 格</span>` +
+    `<span>严格洼底 <b class="no">${M.raw.minima}</b> → <b class="ok">${M.flood.minima}</b></span>` +
+    `<span>被困格 <b class="no">${trapRaw}</b> → <b class="ok">${M.flood.drain.land - M.flood.drain.ok}</b></span>` +
+    `<span>排水率 ${M.raw.drain.pct.toFixed(1)}% → <b>${M.flood.drain.pct.toFixed(1)}%</b></span>` +
+    `<span>填出湖 ${M.lakes.length} 口 / ${M.flood.lift.raised} 格</span>` +
+    `<span>最大填深 <b>${M.flood.lift.max.toFixed(2)}</b></span>` +
+    `<span>台阶边 ${M.raw.steps} → ${M.flood.steps}</span>`;
+}
+
+ctx.clearRect(0, 0, 1280, 800);
+drawMap(H, AX, AY, 'A · 原始：量化台地 + 洼地', '#b4402f', 'raw');
+drawMap(PF, BX, BY, 'B · 填洼后：每口洼地一个湖面', '#146c4a', 'flood');
+drawSection();
+paint();
+window.__ready = true;
+window.__stats = () => document.getElementById('stats').innerText;
+</script>
+</body>
+</html>

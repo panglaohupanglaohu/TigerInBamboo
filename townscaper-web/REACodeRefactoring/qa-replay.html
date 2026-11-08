@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>重构 · 建筑编辑压力回放</title>
 <style>body{margin:0;background:#eef4f3;color:#20343c;font:14px system-ui}header{padding:12px}iframe{width:100%;height:76vh;border:0}#status{white-space:pre-wrap}button,select{padding:6px;margin:4px}</style>
-<header><a href="pipeline.html">← 管线</a> · <b>真实共享World · 建筑编辑压力回放</b><p>1344290848180203523 展示复杂悬空建筑的增删重组。此页用本地确定性序列检查有限顶点、法线、颜色和三角索引，退化面单独报告；不是原作QA算法，也不证明无穿插/漏面。</p>
+<header><a href="pipeline.html" target="_top">← 管线</a> · <b>真实共享World · 建筑编辑压力回放</b><p>1344290848180203523 展示复杂悬空建筑的增删重组。此页用本地确定性序列检查有限顶点、法线、颜色和三角索引，退化面单独报告；不是原作QA算法，也不证明无穿插/漏面。</p>
 <label>网格<select id="grid"><option value="mixed">三角＋方格</option><option value="quad">四边格</option></select></label><button id="run" disabled>回放16步并恢复</button><span id="status">加载共享场景…</span></header><iframe id="scene" title="QA共享场景"></iframe>
 <script type="module">
 import{runWorldQA}from'./src/core/qa-replay.js';
